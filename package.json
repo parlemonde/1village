@@ -7,8 +7,12 @@
   "license": "private",
   "private": true,
   "scripts": {
-    "build:server": "tsc --project tsconfig.json",
+    "build:next": "next build",
+    "build:server": "tsc --project server/tsconfig.json",
+    "build": "rm -rf dist && NODE_ENV=production yarn build:next && yarn build:server",
     "start-dev": "yarn build:server && node dist/server/app.js",
+    "lint": "yarn eslint src && yarn eslint server",
+    "test-type": "yarn tsc -p .",
     "start": "NODE_ENV=production node dist/server/app.js",
     "dev": "nodemon"
   },

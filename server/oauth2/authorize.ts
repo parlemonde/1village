@@ -43,10 +43,10 @@ export const clients: Client[] = [{ id: "1GUzjSRL16l-a8fPxuR7dZ4b", secret: "C1X
 export const tokens: ClientToken[] = [];
 
 export function authorize(req: Request, res: Response): void {
-  // if (!req.cookies || !req.cookies["access-token"]) {
-  //   // not logged-in, redirect to login page.
-  //   res.redirect("/login" + serializeToQueryUrl({ continue: req.url }));
-  // }
+  if (!req.cookies || !req.cookies["access-token"]) {
+    // not logged-in, redirect to login page.
+    res.redirect("/login" + serializeToQueryUrl({ continue: req.url }));
+  }
   // todo: check user say yes to grant access to the third application.
   const data = req.body.response_type !== undefined ? req.body : req.query;
   if (!authorizeValidator(data)) {

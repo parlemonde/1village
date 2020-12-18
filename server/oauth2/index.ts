@@ -8,9 +8,7 @@ import { authorize } from "./authorize";
 import { token } from "./token";
 
 const oauth2Router = Router();
-oauth2Router.use(morgan("dev") as RequestHandler);
-oauth2Router.use(jsonify);
-oauth2Router.get("/authorize", handleErrors(authorize));
-oauth2Router.post("/token", handleErrors(token));
+oauth2Router.get("/authorize", morgan("dev") as RequestHandler, jsonify, handleErrors(authorize));
+oauth2Router.post("/token", morgan("dev") as RequestHandler, jsonify, handleErrors(token));
 
 export { oauth2Router };

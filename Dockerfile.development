@@ -10,8 +10,8 @@ RUN yarn set version berry
 RUN yarn install
 
 # Bundle app source
-# COPY public ./public
-# COPY src ./src
+COPY public ./public
+COPY src ./src
 COPY server ./server
 COPY types ./types
 COPY .env ./
@@ -19,10 +19,9 @@ COPY .eslintignore ./
 COPY .eslintrc.js ./
 COPY .prettierrc.js ./
 COPY nodemon.json ./
-# COPY next-env.d.ts ./
-# COPY next.config.js ./
+COPY next-env.d.ts ./
+COPY next.config.js ./
 COPY tsconfig.json ./
-# COPY tsconfig.server.json ./
 RUN mkdir dist
 
 ENV DOCKER 1
