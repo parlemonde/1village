@@ -20,7 +20,7 @@ clientController.get("", async (_req: Request, res: Response) => {
 // --- Get one client. ---
 clientController.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id || "";
-  const client = await getRepository(Client).findOne(id);
+  const client = await getRepository(Client).findOne({ where: { id } });
   if (client === undefined) {
     next();
     return;
@@ -101,7 +101,7 @@ clientController.put("/:id", async (req: Request, res: Response, next: NextFunct
 // --- Delete a client. ---
 clientController.delete("/:id", async (req: Request, res: Response) => {
   const id = req.params.id || "";
-  await getRepository(Client).delete(id);
+  await getRepository(Client).delete({ id });
   res.status(204).send();
 });
 

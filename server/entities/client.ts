@@ -7,7 +7,7 @@ export class Client {
 
   // Argon hash
   @Column({ type: "varchar", length: 95, nullable: false })
-  public secret: string;
+  public secret?: string;
 
   @Column({ type: "varchar", length: 25, nullable: false })
   public name: string;
@@ -18,9 +18,8 @@ export class Client {
   @Column({ type: "boolean", default: false })
   public isConfidential: boolean;
 
-  public withoutSecret(): Omit<Client, "secret"> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { secret, ...rest } = this;
-    return rest;
+  public withoutSecret(): Client {
+    delete this.secret;
+    return this;
   }
 }

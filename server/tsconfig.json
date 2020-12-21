@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "..",
     "module": "commonjs",
     "target": "es6",
-    "outDir": "../dist/server",
+    "outDir": "../dist",
     "isolatedModules": false,
     "noEmit": false,
     "strict": true,
