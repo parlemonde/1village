@@ -6,11 +6,14 @@ import express, { Router, Response, RequestHandler } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import next from "next";
+import { Connection } from "typeorm";
 
+import { controllerRouter } from "./controllers";
 import { handleErrors } from "./middlewares/handleErrors";
 import { jsonify } from "./middlewares/jsonify";
 import { removeTrailingSlash } from "./middlewares/trailingSlash";
 import { oauth2Router } from "./oauth2";
+import { connectToDatabase } from "./utils/database";
 import { logger } from "./utils/logger";
 import { onError, normalizePort, getDefaultDirectives } from "./utils/server";
 
@@ -21,6 +24,13 @@ const frontendHandler = next({ dev: isDevENV });
 const handle = frontendHandler.getRequestHandler();
 
 async function start() {
+  // Connect to DB
+  const connection: Connection | null = await connectToDatabase();
+  if (connection === null) {
+    throw new Error("Could not connect to database...");
+  }
+  logger.info(`Database connection established: ${connection.isConnected}`);
+
   // Prepare frontend routes
   await frontendHandler.prepare();
 
@@ -57,6 +67,7 @@ async function start() {
   backRouter.get("/", (_, res: Response) => {
     res.status(200).send("Hello World 1Village!");
   });
+  backRouter.use(controllerRouter);
   backRouter.use((_, res: Response) => {
     res.status(404).send("Error 404 - Not found.");
   });
@@ -89,4 +100,7 @@ async function start() {
   });
 }
 
-start();
+start().catch((e: Error) => {
+  console.error(e);
+  process.exit(0);
+});

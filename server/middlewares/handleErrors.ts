@@ -32,10 +32,12 @@ export function handleErrors(fn: RequestHandler): RequestHandler {
       if (!(err instanceof AppError)) {
         logger.error(JSON.stringify(err.stack));
       }
+      const errorCode = err instanceof AppError ? err.errorCode : ErrorCode.UNKNOWN;
+      const errorResponseStatus = errorCode === 0 ? 500 : errorCode <= 4 ? 401 : 400;
       res.setHeader("Content-Type", "application/json");
-      res.status(500).send(
+      res.status(errorResponseStatus).send(
         stringify({
-          errorCode: err instanceof AppError ? err.errorCode : ErrorCode.UNKNOWN,
+          errorCode,
           message: err.message,
         }),
       );

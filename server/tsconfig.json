@@ -7,10 +7,13 @@
     "isolatedModules": false,
     "noEmit": false,
     "strict": true,
+    "strictPropertyInitialization": false,
     "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": ["**/*.ts", "../types/**/*.ts"],
   "files": ["../types/express.d.ts"]

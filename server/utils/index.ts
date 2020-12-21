@@ -37,6 +37,13 @@ export function generateTemporaryPassword(length: number): string {
     .join("");
 }
 
+export function valueOrDefault<T>(value: T | undefined, defaultValue: T): T {
+  if (value === undefined) {
+    return defaultValue;
+  }
+  return value;
+}
+
 export function getBase64File(path: string): string {
   return fs.readFileSync(path).toString("base64");
 }
