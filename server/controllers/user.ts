@@ -5,7 +5,9 @@ import { getRepository } from "typeorm";
 
 import { User, UserType } from "../entities/user";
 import { AppError, ErrorCode } from "../middlewares/handleErrors";
+import { getAccessToken } from "../oauth2/lib/tokens";
 import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
+import { logger } from "../utils/logger";
 import { generateTemporaryPassword, valueOrDefault, isPasswordValid } from "../utils";
 
 import { Controller } from "./controller";
@@ -125,6 +127,147 @@ userController.delete("/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   await getRepository(User).delete({ id });
   res.status(204).send();
+});
+
+// --- Verify email. ---
+type VerifyData = {
+  email: string;
+  verifyToken: string;
+};
+const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
+  type: "object",
+  properties: {
+    email: { type: "string", format: "email" },
+    verifyToken: { type: "string" },
+  },
+  required: ["email", "verifyToken"],
+  additionalProperties: false,
+};
+const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
+userController.post("/verify-email", async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!verifyUserValidator(data)) {
+    sendInvalidDataError(verifyUserValidator);
+    return;
+  }
+
+  const user = await getRepository(User).findOne({ where: { email: data.email } });
+  if (!user) {
+    next();
+    return;
+  }
+
+  let isverifyTokenCorrect: boolean = false;
+  try {
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || "", data.verifyToken);
+  } catch (e) {
+    logger.error(JSON.stringify(e));
+  }
+  if (!isverifyTokenCorrect) {
+    throw new AppError("Invalid verify token", ErrorCode.INVALID_PASSWORD);
+  }
+
+  // save user
+  user.accountRegistration = 0;
+  user.verificationHash = "";
+  await getRepository(User).save(user);
+
+  // login user
+  const { accessToken } = await getAccessToken(user.id, false);
+  res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
+  res.sendJSON({ user: user.withoutPassword(), accessToken });
+});
+
+// --- Reset pwd. ---
+type ResetData = {
+  email: string;
+};
+const RESET_SCHEMA: JSONSchemaType<ResetData> = {
+  type: "object",
+  properties: {
+    email: { type: "string", format: "email" },
+  },
+  required: ["email"],
+  additionalProperties: false,
+};
+const resetUserValidator = ajv.compile(RESET_SCHEMA);
+userController.post("/reset-password", async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!resetUserValidator(data)) {
+    sendInvalidDataError(resetUserValidator);
+    return;
+  }
+
+  const user = await getRepository(User).findOne({ where: { email: data.email } });
+  if (!user) {
+    next();
+    return;
+  }
+
+  // update user
+  const temporaryPassword = generateTemporaryPassword(12);
+  user.verificationHash = await argon2.hash(temporaryPassword);
+  await getRepository(User).save(user);
+
+  // send mail with verification password
+  // await sendMail(Email.RESET_PASSWORD, user.email, { resetCode: temporaryPassword }, req.body.languageCode || undefined);
+  res.sendJSON({ success: true });
+});
+
+// --- Update pwd. ---
+type UpdateData = {
+  email: string;
+  verifyToken: string;
+  password: string;
+};
+const UPDATE_SCHEMA: JSONSchemaType<UpdateData> = {
+  type: "object",
+  properties: {
+    email: { type: "string", format: "email" },
+    verifyToken: { type: "string" },
+    password: { type: "string" },
+  },
+  required: ["email", "verifyToken", "password"],
+  additionalProperties: false,
+};
+const updateUserValidator = ajv.compile(UPDATE_SCHEMA);
+userController.post("/update-password", async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!updateUserValidator(data)) {
+    sendInvalidDataError(updateUserValidator);
+    return;
+  }
+
+  const user = await getRepository(User).findOne({ where: { email: data.email } });
+  if (!user) {
+    next();
+    return;
+  }
+
+  let isverifyTokenCorrect: boolean = false;
+  try {
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || "", data.verifyToken);
+  } catch (e) {
+    logger.error(JSON.stringify(e));
+  }
+  if (!isverifyTokenCorrect) {
+    throw new AppError("Invalid reset token", ErrorCode.INVALID_PASSWORD);
+  }
+
+  // update password
+  const password = data.password;
+  if (!isPasswordValid(password)) {
+    throw new AppError("Invalid password", ErrorCode.PASSWORD_NOT_STRONG);
+  }
+  user.passwordHash = await argon2.hash(password);
+  user.accountRegistration = 0;
+  user.verificationHash = "";
+  await getRepository(User).save(user);
+
+  // login user
+  const { accessToken } = await getAccessToken(user.id, false);
+  res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
+  res.sendJSON({ user: user.withoutPassword(), accessToken });
 });
 
 export { userController };

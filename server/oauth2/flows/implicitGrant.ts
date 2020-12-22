@@ -1,17 +1,11 @@
 import { JSONSchemaType } from "ajv";
 import { Response } from "express";
+import { getRepository } from "typeorm";
 
+import { Client } from "../../entities/client";
 import { ajv, sendInvalidDataError } from "../../utils/jsonSchemaValidator";
 import { serializeToQueryUrl } from "../../utils";
-import { getAccessToken } from "../lib/getAccessToken";
-
-// TODO: DB
-type Client = {
-  id: string;
-  secret: string;
-  redirect_uri: string;
-};
-export const clients: Client[] = [];
+import { getAccessToken } from "../lib/tokens";
 
 type AuthorizeParams = {
   response_type: "token";
@@ -33,7 +27,7 @@ const AUTHORIZE_SCHEMA: JSONSchemaType<AuthorizeParams> = {
   additionalProperties: false,
 };
 const authorizeValidator = ajv.compile(AUTHORIZE_SCHEMA);
-export function implicitGrantAuthorize(data: unknown, res: Response): void {
+export async function implicitGrantAuthorize(data: unknown, res: Response): Promise<void> {
   if (!authorizeValidator(data)) {
     sendInvalidDataError(authorizeValidator);
     return;
@@ -43,8 +37,12 @@ export function implicitGrantAuthorize(data: unknown, res: Response): void {
     return;
   }
   // Check client_id and client redirect_url
-  const client = clients.find((c) => c.id === data.client_id);
-  if (client === undefined || client.redirect_uri !== data.redirect_uri) {
+  const client = await getRepository(Client).findOne({
+    where: {
+      id: data.client_id,
+    },
+  });
+  if (client === undefined || client.redirectUri !== data.redirect_uri) {
     res.redirect(
       data.redirect_uri +
         serializeToQueryUrl({
@@ -56,7 +54,7 @@ export function implicitGrantAuthorize(data: unknown, res: Response): void {
   }
   // Grant access
   const userId = 18; //todo
-  const { accessToken } = getAccessToken(userId, false);
+  const { accessToken } = await getAccessToken(userId, false);
   res.redirect(
     data.redirect_uri +
       serializeToQueryUrl({

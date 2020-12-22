@@ -8,7 +8,7 @@ import { AppError, ErrorCode } from "../middlewares/handleErrors";
 import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
 import { logger } from "../utils/logger";
 
-import { getAccessToken } from "./lib/getAccessToken";
+import { getAccessToken } from "./lib/tokens";
 
 const secret: string = process.env.APP_SECRET || "";
 
@@ -67,7 +67,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     await getRepository(User).save(user);
   }
 
-  const { accessToken, refreshToken } = getAccessToken(user.id, !!data.getRefreshToken);
+  const { accessToken, refreshToken } = await getAccessToken(user.id, !!data.getRefreshToken);
   res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
   if (data.getRefreshToken) {
     res.cookie("refresh-token", refreshToken, { maxAge: 24 * 60 * 60000, expires: new Date(Date.now() + 24 * 60 * 60000), httpOnly: true });

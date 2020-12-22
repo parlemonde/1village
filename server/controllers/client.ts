@@ -98,6 +98,20 @@ clientController.put("/:id", async (req: Request, res: Response, next: NextFunct
   res.sendJSON(client.withoutSecret());
 });
 
+// --- Update client secret. ---
+clientController.post("/:id/secret", async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id || "";
+  const client = await getRepository(Client).findOne({ where: { id } });
+  if (client === undefined) {
+    next();
+    return;
+  }
+  const clientSecret = generateTemporaryPassword(60);
+  client.secret = await argon2.hash(clientSecret);
+  await getRepository(Client).save(client);
+  res.sendJSON({ ...client, secret: clientSecret });
+});
+
 // --- Delete a client. ---
 clientController.delete("/:id", async (req: Request, res: Response) => {
   const id = req.params.id || "";

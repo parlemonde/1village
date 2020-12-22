@@ -1,7 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+import type { Client as ClientInterface } from "../../types/client.type";
+
 @Entity()
-export class Client {
+export class Client implements ClientInterface {
   @PrimaryGeneratedColumn("uuid")
   public id: string;
 

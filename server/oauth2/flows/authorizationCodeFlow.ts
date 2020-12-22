@@ -1,26 +1,13 @@
 import { JSONSchemaType } from "ajv";
 import crypto from "crypto";
-import { Response } from "express";
+import { Response, Request } from "express";
+import { getRepository, MoreThan } from "typeorm";
 
+import { Client } from "../../entities/client";
+import { Token } from "../../entities/token";
 import { ajv, sendInvalidDataError } from "../../utils/jsonSchemaValidator";
 import { generateTemporaryPassword, serializeToQueryUrl } from "../../utils";
-import { getAccessToken } from "../lib/getAccessToken";
-
-// TODO: DB
-type Client = {
-  id: string;
-  secret: string;
-};
-export const clients: Client[] = [];
-type ClientToken = {
-  client_id: string;
-  token: string;
-  created_at: number;
-  redirect_uri: string;
-  code_challenge?: string;
-  userId: number;
-};
-export const tokens: ClientToken[] = [];
+import { getAccessToken } from "../lib/tokens";
 
 type AuthorizeParams = {
   response_type: "code";
@@ -46,7 +33,7 @@ const AUTHORIZE_SCHEMA: JSONSchemaType<AuthorizeParams> = {
   additionalProperties: false,
 };
 const authorizeValidator = ajv.compile(AUTHORIZE_SCHEMA);
-export function codeFlowAuthorize(data: unknown, res: Response): void {
+export async function codeFlowAuthorize(data: unknown, res: Response): Promise<void> {
   if (!authorizeValidator(data)) {
     sendInvalidDataError(authorizeValidator);
     return;
@@ -56,7 +43,8 @@ export function codeFlowAuthorize(data: unknown, res: Response): void {
     return;
   }
   // Check client_id
-  if (clients.findIndex((c) => c.id === data.client_id) === -1) {
+  const client = await getRepository(Client).findOne({ where: { id: data.client_id } });
+  if (client === undefined) {
     res.redirect(
       data.redirect_uri +
         serializeToQueryUrl({
@@ -67,17 +55,15 @@ export function codeFlowAuthorize(data: unknown, res: Response): void {
     return;
   }
   // Generate code
-  const newToken: ClientToken = {
-    client_id: data.client_id,
-    created_at: new Date().getTime(),
-    token: generateTemporaryPassword(20),
-    redirect_uri: data.redirect_uri,
-    userId: 12, // TODO
-  };
+  const newToken = new Token();
+  newToken.clientId = data.client_id;
+  newToken.token = generateTemporaryPassword(20);
+  newToken.redirectUri = data.redirect_uri;
+  newToken.userId = 12; // todo
   if (data.code_challenge && data.code_challenge_method === "S256") {
-    newToken.code_challenge = data.code_challenge;
+    newToken.codeChallenge = data.code_challenge;
   }
-  tokens.push(newToken);
+  await getRepository(Token).save(newToken);
   res.redirect(
     data.redirect_uri +
       serializeToQueryUrl({
@@ -113,11 +99,11 @@ const TOKEN_SCHEMA: JSONSchemaType<TokenParams> = {
     code_verifier: { type: "string", nullable: true },
     redirect_uri: { type: "string", nullable: true },
   },
-  required: ["grant_type", "client_id", "code"],
+  required: ["grant_type", "code"],
   additionalProperties: false,
 };
 const tokenValidator = ajv.compile(TOKEN_SCHEMA);
-export function codeFlowToken(data: unknown, res: Response): void {
+export async function codeFlowToken(data: unknown, req: Request, res: Response): Promise<void> {
   if (!tokenValidator(data)) {
     sendInvalidDataError(tokenValidator);
     return;
@@ -128,19 +114,28 @@ export function codeFlowToken(data: unknown, res: Response): void {
     return;
   }
 
-  const retreivedTokenIndex = tokens.findIndex((t) => t.token === data.code && t.client_id === data.client_id && t.redirect_uri === data.redirect_uri && t.created_at + 600000 > new Date().getTime());
-  const client = clients.find((c) => c.id === data.client_id);
-  if (retreivedTokenIndex === -1 || !client || (client.secret !== data.client_secret && !isValidChallenge(tokens[retreivedTokenIndex].code_challenge, data.code_verifier))) {
+  const retreivedToken = await getRepository(Token).findOne({
+    where: {
+      token: data.code,
+      clientId: data.client_id,
+      redirectUri: data.redirect_uri,
+      date: MoreThan(new Date().getTime() - 600000),
+    },
+  });
+
+  if (retreivedToken === undefined || (!req.appClient && !isValidChallenge(retreivedToken.codeChallenge || "", data.code_verifier))) {
     res.sendJSON({
       error: "access_denied",
     });
     return;
   }
 
-  const userId = tokens[retreivedTokenIndex].userId;
-  const { accessToken, refreshToken } = getAccessToken(userId, true);
+  const userId = retreivedToken.userId;
+  const { accessToken, refreshToken } = await getAccessToken(userId, true, data.client_id);
 
-  tokens.splice(retreivedTokenIndex, 1);
+  await getRepository(Token).delete({
+    id: retreivedToken.id,
+  });
 
   res.sendJSON({
     access_token: accessToken,

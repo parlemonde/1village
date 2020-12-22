@@ -62,3 +62,8 @@ export function serializeToQueryUrl(obj: { [key: string]: string | number | bool
       .join("&");
   return str;
 }
+
+export function decodeBase64(base64Encoded: string): string {
+  const buffer = Buffer.from(base64Encoded, "base64");
+  return buffer.toString("utf-8");
+}
