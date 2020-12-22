@@ -12,7 +12,7 @@ import { Controller } from "./controller";
 const clientController = new Controller("/clients");
 
 // --- Get all clients. ---
-clientController.get("", async (_req: Request, res: Response) => {
+clientController.getSecure("", async (_req: Request, res: Response) => {
   const clients = await getRepository(Client).find();
   res.sendJSON(clients.map((c) => c.withoutSecret()));
 });

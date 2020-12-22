@@ -33,7 +33,7 @@ const AUTHORIZE_SCHEMA: JSONSchemaType<AuthorizeParams> = {
   additionalProperties: false,
 };
 const authorizeValidator = ajv.compile(AUTHORIZE_SCHEMA);
-export async function codeFlowAuthorize(data: unknown, res: Response): Promise<void> {
+export async function codeFlowAuthorize(data: unknown, userId: number, res: Response): Promise<void> {
   if (!authorizeValidator(data)) {
     sendInvalidDataError(authorizeValidator);
     return;
@@ -59,7 +59,7 @@ export async function codeFlowAuthorize(data: unknown, res: Response): Promise<v
   newToken.clientId = data.client_id;
   newToken.token = generateTemporaryPassword(20);
   newToken.redirectUri = data.redirect_uri;
-  newToken.userId = 12; // todo
+  newToken.userId = userId;
   if (data.code_challenge && data.code_challenge_method === "S256") {
     newToken.codeChallenge = data.code_challenge;
   }

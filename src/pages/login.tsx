@@ -1,4 +1,8 @@
+import { useRouter } from "next/router";
+import qs from "query-string";
 import React from "react";
+
+import { UserServiceContext } from "src/contexts/userContext";
 
 type User = {
   username: string;
@@ -6,10 +10,22 @@ type User = {
 };
 
 const Login: React.FC = () => {
+  const router = useRouter();
+  const { login } = React.useContext(UserServiceContext);
+  const redirect = React.useRef<string>("/");
+
   const [user, setUser] = React.useState<User>({
     username: "",
     password: "",
   });
+
+  React.useEffect(() => {
+    try {
+      redirect.current = decodeURI((qs.parse(window.location.search).redirect as string) || "/");
+    } catch (e) {
+      redirect.current = "/";
+    }
+  }, []);
 
   const updateUsername = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setUser((u) => ({ ...u, username: e.target.value }));
@@ -18,9 +34,12 @@ const Login: React.FC = () => {
     setUser((u) => ({ ...u, password: e.target.value }));
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // todo post login(user)
+    const response = await login(user.username, user.password, false);
+    if (response.success) {
+      router.push(redirect.current);
+    }
   };
 
   return (

@@ -9,6 +9,8 @@ import next from "next";
 import { Connection } from "typeorm";
 
 import { controllerRouter } from "./controllers";
+import { authenticate } from "./middlewares/authenticate";
+import { crsfProtection } from "./middlewares/csrfCheck";
 import { handleErrors } from "./middlewares/handleErrors";
 import { jsonify } from "./middlewares/jsonify";
 import { removeTrailingSlash } from "./middlewares/trailingSlash";
@@ -56,6 +58,7 @@ async function start() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
+  app.use(crsfProtection());
 
   // [3] --- Add oauth2 router ---
   app.use("/", oauth2Router);
@@ -80,8 +83,9 @@ async function start() {
   app.get(
     "*",
     morgan("dev"),
+    handleErrors(authenticate()),
     handleErrors((req, res) => {
-      // req.csrfToken = req.getCsrfToken(); TODO
+      req.csrfToken = req.getCsrfToken();
       handle(req, res).catch((e) => console.error(e));
     }),
   );

@@ -27,7 +27,7 @@ const AUTHORIZE_SCHEMA: JSONSchemaType<AuthorizeParams> = {
   additionalProperties: false,
 };
 const authorizeValidator = ajv.compile(AUTHORIZE_SCHEMA);
-export async function implicitGrantAuthorize(data: unknown, res: Response): Promise<void> {
+export async function implicitGrantAuthorize(data: unknown, userId: number, res: Response): Promise<void> {
   if (!authorizeValidator(data)) {
     sendInvalidDataError(authorizeValidator);
     return;
@@ -53,7 +53,6 @@ export async function implicitGrantAuthorize(data: unknown, res: Response): Prom
     return;
   }
   // Grant access
-  const userId = 18; //todo
   const { accessToken } = await getAccessToken(userId, false);
   res.redirect(
     data.redirect_uri +

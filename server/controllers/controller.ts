@@ -1,5 +1,7 @@
 import { Router, RequestHandler } from "express";
 
+import { UserType } from "../entities/user";
+import { authenticate } from "../middlewares/authenticate";
 import { handleErrors } from "../middlewares/handleErrors";
 
 // todo: Add user type. and authenticate
@@ -15,6 +17,10 @@ export class Controller {
 
   public get(path: string, handler: RequestHandler): void {
     this.router.get(path, handleErrors(handler));
+  }
+
+  public getSecure(path: string, handler: RequestHandler): void {
+    this.router.get(path, handleErrors(authenticate(UserType.PLMO_ADMIN)), handleErrors(handler));
   }
 
   public post(path: string, handler: RequestHandler): void {
