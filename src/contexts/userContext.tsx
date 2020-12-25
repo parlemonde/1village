@@ -28,7 +28,11 @@ interface UserServiceProviderProps {
   children: React.ReactNode;
 }
 
-export const UserServiceProvider: React.FunctionComponent<UserServiceProviderProps> = ({ user: initialUser, csrfToken, children }: UserServiceProviderProps) => {
+export const UserServiceProvider: React.FunctionComponent<UserServiceProviderProps> = ({
+  user: initialUser,
+  csrfToken,
+  children,
+}: UserServiceProviderProps) => {
   const [user, setUser] = useState<User | null>(initialUser);
   const router = useRouter();
   const headers = React.useMemo(

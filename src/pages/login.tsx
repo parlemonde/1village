@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import qs from "query-string";
 import React from "react";
 
+import { Input } from "src/components/Input";
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserServiceContext } from "src/contexts/userContext";
 import styles from "src/styles/login.module.scss";
@@ -48,30 +49,35 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-gradiant">
-      <KeepRatio ratio={0.45} width="80%" maxWidth="1200px" className={styles.LoginContainer}>
+      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" className={styles.LoginContainer}>
         <div className={styles.LoginPanel}>
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.5em" }}>
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.8em" }}>
             <Logo style={{ width: "2.4em", height: "auto" }} />
             <h1 className="title" style={{ marginLeft: "0.5em" }}>
               1 Village
             </h1>
           </div>
-          <p>Se connecter</p>
-          <form onSubmit={onSubmit}>
-            <div>
-              <label htmlFor="username" style={{ marginRight: "1rem" }}>
-                Adresse email
-              </label>
-              <input id="username" name="username" type="text" value={user.username} onChange={updateUsername} />
-            </div>
-            <br />
-            <div>
-              <label htmlFor="password" style={{ marginRight: "1rem" }}>
-                Mot de passe
-              </label>
-              <input id="password" name="password" type="password" onChange={updatePassword} />
-            </div>
-            <br />
+          <p style={{ marginBottom: "3em" }}>Se connecter</p>
+          <form onSubmit={onSubmit} style={{ width: "95%", maxWidth: "300px" }}>
+            <Input
+              label="Adresse email"
+              placeholder="Entrez votre adresse email"
+              name="username"
+              value={user.username}
+              fullWidth
+              onChange={updateUsername}
+              style={{ marginBottom: "2em" }}
+            />
+            <Input
+              label="Mot de passe"
+              placeholder="Entrez votre mot de passe"
+              name="password"
+              type="password"
+              value={user.password}
+              fullWidth
+              onChange={updatePassword}
+              style={{ marginBottom: "2em" }}
+            />
             <button>Se connecter</button>
           </form>
         </div>

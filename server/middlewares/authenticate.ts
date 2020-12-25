@@ -53,7 +53,9 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
 
     // authenticate
     try {
-      const decoded: string | { userId: number; iat: number; exp: number } = jwt.verify(token, secret) as string | { userId: number; iat: number; exp: number };
+      const decoded: string | { userId: number; iat: number; exp: number } = jwt.verify(token, secret) as
+        | string
+        | { userId: number; iat: number; exp: number };
       let data: { userId: number; iat: number; exp: number };
       if (typeof decoded === "string") {
         try {

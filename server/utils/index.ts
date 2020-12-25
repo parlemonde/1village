@@ -24,7 +24,9 @@ export function getHeader(req: Request, header: string): string | undefined {
 }
 
 export function isPasswordValid(password: string): boolean {
-  return password !== undefined && password !== null && password.length >= 8 && /\d+/.test(password) && /[a-z]+/.test(password) && /[A-Z]+/.test(password);
+  return (
+    password !== undefined && password !== null && password.length >= 8 && /\d+/.test(password) && /[a-z]+/.test(password) && /[A-Z]+/.test(password)
+  );
 }
 
 export function generateTemporaryPassword(length: number): string {
