@@ -11,6 +11,7 @@ services:
     env_file:
       - .env
     volumes:
+      - ./public:/app/public
       - ./src:/app/src
       - ./server:/app/server
       - ./types:/app/types

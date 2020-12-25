@@ -18,6 +18,7 @@ COPY .env ./
 COPY .eslintignore ./
 COPY .eslintrc.js ./
 COPY .prettierrc.js ./
+COPY .svgrrc.js ./
 COPY nodemon.json ./
 COPY next-env.d.ts ./
 COPY next.config.js ./

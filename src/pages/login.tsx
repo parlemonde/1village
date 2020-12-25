@@ -6,6 +6,7 @@ import React from "react";
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserServiceContext } from "src/contexts/userContext";
 import styles from "src/styles/login.module.scss";
+import Logo from "src/svg/logo.svg";
 
 type User = {
   username: string;
@@ -47,10 +48,15 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-gradiant">
-      <KeepRatio ratio={0.3874} width="80%" maxWidth="1200px" className={styles.LoginContainer}>
+      <KeepRatio ratio={0.45} width="80%" maxWidth="1200px" className={styles.LoginContainer}>
         <div className={styles.LoginPanel}>
-          <h1 className="title">1 Village</h1>
-          <h3>Se connecter</h3>
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.5em" }}>
+            <Logo style={{ width: "2.4em", height: "auto" }} />
+            <h1 className="title" style={{ marginLeft: "0.5em" }}>
+              1 Village
+            </h1>
+          </div>
+          <p>Se connecter</p>
           <form onSubmit={onSubmit}>
             <div>
               <label htmlFor="username" style={{ marginRight: "1rem" }}>
