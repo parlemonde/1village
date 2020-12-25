@@ -1,0 +1,22 @@
+@import "variables";
+
+.LoginContainer {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+}
+
+.LoginPanel {
+  display: inline-flex;
+  width: 50%;
+  height: 100%;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.LoginPanel--blue {
+  background-color: $primary-color;
+}

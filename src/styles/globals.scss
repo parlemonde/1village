@@ -1,0 +1,46 @@
+@import "variables";
+
+h1 {
+  font-size: 1.64em;
+  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-weight: 600;
+}
+
+h1.title {
+  font-family: "Alegreya Sans", "Times New Roman", Times, serif;
+  font-weight: 500;
+  color: $primary-color;
+}
+
+h2 {
+  font-size: 1.357em;
+  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.07em;
+  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-weight: 500;
+}
+
+a,
+button {
+  font-size: 1.07em;
+  font-weight: 500;
+}
+
+p.main {
+  font-weight: 500;
+}
+p.less {
+  font-size: 0.857em;
+}
+
+.bg-gradiant {
+  width: 100vw;
+  height: 100vh;
+  background: rgb(224, 195, 252);
+  background: -o-linear-gradient(315deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
+  background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
+}

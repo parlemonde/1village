@@ -1,8 +1,11 @@
+import classnames from "classnames";
 import { useRouter } from "next/router";
 import qs from "query-string";
 import React from "react";
 
+import { KeepRatio } from "src/components/KeepRatio";
 import { UserServiceContext } from "src/contexts/userContext";
+import styles from "src/styles/login.module.scss";
 
 type User = {
   username: string;
@@ -43,25 +46,31 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Login:</h1>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="username" style={{ marginRight: "1rem" }}>
-            Username
-          </label>
-          <input id="username" name="username" type="text" value={user.username} onChange={updateUsername} />
+    <div className="bg-gradiant">
+      <KeepRatio ratio={0.3874} width="80%" maxWidth="1200px" className={styles.LoginContainer}>
+        <div className={styles.LoginPanel}>
+          <h1 className="title">1 Village</h1>
+          <h3>Se connecter</h3>
+          <form onSubmit={onSubmit}>
+            <div>
+              <label htmlFor="username" style={{ marginRight: "1rem" }}>
+                Adresse email
+              </label>
+              <input id="username" name="username" type="text" value={user.username} onChange={updateUsername} />
+            </div>
+            <br />
+            <div>
+              <label htmlFor="password" style={{ marginRight: "1rem" }}>
+                Mot de passe
+              </label>
+              <input id="password" name="password" type="password" onChange={updatePassword} />
+            </div>
+            <br />
+            <button>Se connecter</button>
+          </form>
         </div>
-        <br />
-        <div>
-          <label htmlFor="password" style={{ marginRight: "1rem" }}>
-            Password
-          </label>
-          <input id="password" name="password" type="password" onChange={updatePassword} />
-        </div>
-        <br />
-        <button>Login!</button>
-      </form>
+        <div className={classnames(styles.LoginPanel, styles["LoginPanel--blue"])}></div>
+      </KeepRatio>
     </div>
   );
 };

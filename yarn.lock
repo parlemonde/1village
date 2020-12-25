@@ -330,6 +330,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/classnames@npm:^2":
+  version: 2.2.11
+  resolution: "@types/classnames@npm:2.2.11"
+  checksum: 5bbd4fd0f803a46424152ecc89cfb88464af4d655634de8a98ec54977b0b6d9da107e799c24a2b66f0133438e84bac51b2275134cf028edea749fb018f731e89
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.34
   resolution: "@types/connect@npm:3.4.34"
@@ -573,6 +580,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: e6e6613c800aeda63e2331e753e8d21df1a2c9aa7a4bc71ed792a848e4811fc96e609759089355314a2318c76eff1f161499cd242044838ab1e6f56e463ebb9c
+  languageName: node
+  linkType: hard
+
+"@types/sass@npm:^1":
+  version: 1.16.0
+  resolution: "@types/sass@npm:1.16.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: e95d14da2d05dea49e913db55922857234b01f2b1b513dd8cc556b64ffa6d89fb81ce4c1f21a6b4cd20f39d61455975e623ed681502b3d06b2d24a2ddd03a21e
   languageName: node
   linkType: hard
 
@@ -2347,7 +2363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:3.4.3, chokidar@npm:^3.2.2, chokidar@npm:^3.4.1":
+"chokidar@npm:3.4.3, chokidar@npm:>=2.0.0 <4.0.0, chokidar@npm:^3.2.2, chokidar@npm:^3.4.1":
   version: 3.4.3
   resolution: "chokidar@npm:3.4.3"
   dependencies:
@@ -2441,7 +2457,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:2.2.6":
+"classnames@npm:2.2.6, classnames@npm:^2.2.6":
   version: 2.2.6
   resolution: "classnames@npm:2.2.6"
   checksum: 490eaeca5931846737ffd33e472a701d268d5b8bc5717dd4cf108a127b06e86e05350e06799abbbe763a0e4c945b4217f6700b7ae00ddc703505682c370e5cf2
@@ -7507,6 +7523,7 @@ fsevents@~2.1.2:
   resolution: "plm_oauth@workspace:."
   dependencies:
     "@types/body-parser": ^1.19.0
+    "@types/classnames": ^2
     "@types/cookie-parser": ^1.4.2
     "@types/cors": ^2.8.9
     "@types/eslint": ^7.2.6
@@ -7522,6 +7539,7 @@ fsevents@~2.1.2:
     "@types/query-string": ^6
     "@types/react": ^17
     "@types/react-dom": ^17
+    "@types/sass": ^1
     "@types/uuid": ^8.3.0
     "@types/webpack": ^4.41.25
     "@typescript-eslint/eslint-plugin": ^4.9.1
@@ -7532,6 +7550,7 @@ fsevents@~2.1.2:
     argon2: ^0.27.1
     axios: ^0.21.0
     body-parser: ^1.19.0
+    classnames: ^2.2.6
     cookie-parser: ^1.4.5
     cors: ^2.8.5
     crypto: ^1.0.1
@@ -7563,6 +7582,7 @@ fsevents@~2.1.2:
     react-query: ^2.26.4
     react-query-devtools: ^2.6.3
     safe-buffer: ^5.2.1
+    sass: ^1.30.0
     typeorm: ^0.2.29
     typescript: ^4.1.2
     uuid: ^8.3.2
@@ -8559,6 +8579,17 @@ fsevents@~2.1.2:
     sass:
       optional: true
   checksum: 6ff9bafd127a33aae35850433d9bb7d6b2b2cf50f44fa02ea189436700d4c20a66d5d33f93b3e693712589eed72f67f6e7dee893e2835d663c4fe72bb58422b0
+  languageName: node
+  linkType: hard
+
+"sass@npm:^1.30.0":
+  version: 1.30.0
+  resolution: "sass@npm:1.30.0"
+  dependencies:
+    chokidar: ">=2.0.0 <4.0.0"
+  bin:
+    sass: sass.js
+  checksum: 8bbaf43df42290902d0d325bcbaef5e43409ad5bd4de8447d0f94dc7e6571aec191c26045e06de2d1c38d22cf7ee33b58b9f1a99e4451743d9841f40ab837d10
   languageName: node
   linkType: hard
 

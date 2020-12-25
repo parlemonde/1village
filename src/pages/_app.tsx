@@ -1,9 +1,12 @@
 import "nprogress/nprogress.css";
 
-import "src/styles/globals.css";
+import "src/styles/reset.scss";
+// eslint-disable-next-line arca/import-ordering
+import "src/styles/fonts.scss";
+import "src/styles/globals.scss";
 
-import App from "next/app";
 import type { AppProps, AppContext, AppInitialProps } from "next/app";
+import App from "next/app";
 import Head from "next/head";
 import NProgress from "nprogress";
 import { ReactQueryDevtools } from "react-query-devtools";
