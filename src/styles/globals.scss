@@ -1,7 +1,7 @@
 @import "variables";
 
 h1 {
-  font-size: 1.64em;
+  font-size: 1.8em;
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 600;
 }
@@ -21,12 +21,6 @@ h2 {
 h3 {
   font-size: 1.07em;
   font-family: "Roboto", "Times New Roman", Times, serif;
-  font-weight: 500;
-}
-
-a,
-button {
-  font-size: 1.07em;
   font-weight: 500;
 }
 
@@ -93,4 +87,25 @@ input::placeholder {
 }
 .Input:hover:not(.Input--disabled):before {
   border-bottom: 2px solid $font-color;
+}
+
+a {
+  font-size: 1em;
+  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-weight: 400;
+  cursor: pointer;
+}
+a:hover,
+a:focus-visible {
+  border-bottom: 1px solid $font-color;
+}
+a.small {
+  font-size: 0.857em;
+}
+
+a.text-primary:hover {
+  border-bottom: 1px solid $primary-color;
+}
+.text-primary {
+  color: $primary-color;
 }

@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import qs from "query-string";
 import React from "react";
 
+import { Button } from "src/components/Button";
+import { Checkbox } from "src/components/Checkbox";
 import { Input } from "src/components/Input";
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserServiceContext } from "src/contexts/userContext";
@@ -12,6 +14,7 @@ import Logo from "src/svg/logo.svg";
 type User = {
   username: string;
   password: string;
+  remember: boolean;
 };
 
 const Login: React.FC = () => {
@@ -22,6 +25,7 @@ const Login: React.FC = () => {
   const [user, setUser] = React.useState<User>({
     username: "",
     password: "",
+    remember: false,
   });
 
   React.useEffect(() => {
@@ -41,7 +45,7 @@ const Login: React.FC = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await login(user.username, user.password, false);
+    const response = await login(user.username, user.password, user.remember);
     if (response.success) {
       router.push(redirect.current);
     }
@@ -50,9 +54,9 @@ const Login: React.FC = () => {
   return (
     <div className="bg-gradiant">
       <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" className={styles.LoginContainer}>
-        <div className={styles.LoginPanel}>
+        <div className={styles.LoginPanel} style={{ overflow: "scroll" }}>
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.8em" }}>
-            <Logo style={{ width: "2.4em", height: "auto" }} />
+            <Logo style={{ width: "2.6em", height: "auto" }} />
             <h1 className="title" style={{ marginLeft: "0.5em" }}>
               1 Village
             </h1>
@@ -66,7 +70,7 @@ const Login: React.FC = () => {
               value={user.username}
               fullWidth
               onChange={updateUsername}
-              style={{ marginBottom: "2em" }}
+              style={{ marginBottom: "1.5em" }}
             />
             <Input
               label="Mot de passe"
@@ -76,12 +80,30 @@ const Login: React.FC = () => {
               value={user.password}
               fullWidth
               onChange={updatePassword}
-              style={{ marginBottom: "2em" }}
+              style={{ marginBottom: "1.5em" }}
             />
-            <button>Se connecter</button>
+            <Checkbox
+              label="Se souvenir de moi"
+              color="primary"
+              style={{ marginBottom: "1.5em" }}
+              isChecked={user.remember}
+              onToggle={() => {
+                setUser((u) => ({ ...u, remember: !u.remember }));
+              }}
+            />
+            <div style={{ width: "100%", textAlign: "center", marginBottom: "1em" }}>
+              <Button type="submit" color="primary" variant="inverted">
+                Se connecter
+              </Button>
+            </div>
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <a className="small text-primary">Mot de passe oublié ?</a>
+            </div>
           </form>
         </div>
-        <div className={classnames(styles.LoginPanel, styles["LoginPanel--blue"])}></div>
+        <div className={classnames(styles.LoginPanel, styles["LoginPanel--blue"])}>
+          <img src="/family_values_best_friends.png" width="90%" height="auto" style={{ maxWidth: "600px" }} />
+        </div>
       </KeepRatio>
     </div>
   );

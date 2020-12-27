@@ -25,6 +25,7 @@ export const Input: React.FC<InputProps> = ({
   const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
   const id = `input-${name}`;
+  const helperId = `input-helper-${name}`;
   return (
     <div style={style}>
       <label htmlFor={id} style={{ display: "block", margin: "0 0 0.3em 0.1em" }}>
@@ -50,8 +51,10 @@ export const Input: React.FC<InputProps> = ({
           onBlur={() => {
             setIsFocused(false);
           }}
+          aria-describedby={helperId}
         />
       </div>
+      <span id={helperId}></span>
     </div>
   );
 };

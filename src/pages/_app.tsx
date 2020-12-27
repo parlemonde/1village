@@ -2,6 +2,8 @@ import "nprogress/nprogress.css";
 
 import "src/styles/reset.scss";
 // eslint-disable-next-line arca/import-ordering
+import "src/styles/buttons.scss";
+import "src/styles/checkbox.scss";
 import "src/styles/fonts.scss";
 import "src/styles/globals.scss";
 
