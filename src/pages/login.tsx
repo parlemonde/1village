@@ -17,6 +17,13 @@ type User = {
   remember: boolean;
 };
 
+const errorMessages = {
+  0: "Une erreur inconnue est survenue. Veuillez réessayer plus tard...",
+  1: "Adresse e-mail ou pseudo invalide.",
+  2: "Mot de passe invalide.",
+  3: "Compte bloqué, trop de tentatives de connexion. Veuillez réinitialiser votre mot de passe.",
+};
+
 const Login: React.FC = () => {
   const router = useRouter();
   const { login } = React.useContext(UserServiceContext);
@@ -27,6 +34,7 @@ const Login: React.FC = () => {
     password: "",
     remember: false,
   });
+  const [errorCode, setErrorCode] = React.useState(-1);
 
   React.useEffect(() => {
     try {
@@ -38,9 +46,15 @@ const Login: React.FC = () => {
 
   const updateUsername = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setUser((u) => ({ ...u, username: e.target.value }));
+    if (errorCode === 1) {
+      setErrorCode(-1);
+    }
   };
   const updatePassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setUser((u) => ({ ...u, password: e.target.value }));
+    if (errorCode === 1) {
+      setErrorCode(-1);
+    }
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,6 +62,8 @@ const Login: React.FC = () => {
     const response = await login(user.username, user.password, user.remember);
     if (response.success) {
       router.push(redirect.current);
+    } else {
+      setErrorCode(response.errorCode || 0);
     }
   };
 
@@ -63,6 +79,11 @@ const Login: React.FC = () => {
           </div>
           <p style={{ marginBottom: "3em" }}>Se connecter</p>
           <form onSubmit={onSubmit} style={{ width: "95%", maxWidth: "300px" }}>
+            {(errorCode === 0 || errorCode === 3) && (
+              <p className="less text-alert text-center" style={{ marginBottom: "1em" }}>
+                {errorMessages[errorCode]}
+              </p>
+            )}
             <Input
               label="Adresse email"
               placeholder="Entrez votre adresse email"
@@ -71,6 +92,8 @@ const Login: React.FC = () => {
               fullWidth
               onChange={updateUsername}
               style={{ marginBottom: "1.5em" }}
+              error={errorCode === 1}
+              helperText={errorCode === 1 ? errorMessages[1] : null}
             />
             <Input
               label="Mot de passe"
@@ -81,6 +104,8 @@ const Login: React.FC = () => {
               fullWidth
               onChange={updatePassword}
               style={{ marginBottom: "1.5em" }}
+              error={errorCode === 2}
+              helperText={errorCode === 2 ? errorMessages[2] : null}
             />
             <Checkbox
               label="Se souvenir de moi"

@@ -47,7 +47,6 @@ input {
   outline: none;
   border-radius: 0;
   border: none;
-  border-bottom: 1px solid $font-detail;
   box-shadow: none;
   height: 1.8em;
   font-size: 1em;
@@ -79,6 +78,13 @@ input::placeholder {
   border-bottom: 2px solid $primary-color;
   pointer-events: none;
 }
+.Input--secondary.Input::after {
+  border-bottom: 2px solid $secondary-color;
+}
+.Input--error.Input::before,
+.Input--error.Input::after {
+  border-bottom: 2px solid $bg-help !important;
+}
 .Input--hovered::after {
   transform: scaleX(1);
 }
@@ -108,4 +114,19 @@ a.text-primary:hover {
 }
 .text-primary {
   color: $primary-color;
+}
+.text-secondary {
+  color: $secondary-color;
+}
+.text-alert,
+.text-help {
+  color: $bg-help;
+}
+.text-success {
+  color: $bg-success;
+}
+
+.text-center {
+  width: 100%;
+  text-align: center;
 }

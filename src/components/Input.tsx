@@ -3,7 +3,10 @@ import React from "react";
 
 interface InputProps {
   name: string;
+  color?: "primary" | "secondary";
   label: string;
+  error?: boolean;
+  helperText?: string | null;
   style?: React.CSSProperties;
   fullWidth?: boolean;
   placeholder?: string;
@@ -15,7 +18,10 @@ interface InputProps {
 export const Input: React.FC<InputProps> = ({
   name,
   label,
+  color = "primary",
+  error = false,
   type = "text",
+  helperText = null,
   style,
   placeholder,
   value,
@@ -32,7 +38,7 @@ export const Input: React.FC<InputProps> = ({
         {label}
       </label>
       <div
-        className={classnames("Input", {
+        className={classnames("Input", `Input--${error ? "error" : color}`, {
           "Input--focused": isFocused,
         })}
         style={{ position: "relative" }}
@@ -54,7 +60,9 @@ export const Input: React.FC<InputProps> = ({
           aria-describedby={helperId}
         />
       </div>
-      <span id={helperId}></span>
+      <p id={helperId} style={{ marginTop: "0.1em" }} className={classnames(error ? "text-help" : "", "less")}>
+        {helperText}
+      </p>
     </div>
   );
 };
