@@ -10,7 +10,6 @@ import TextField from "@material-ui/core/TextField";
 
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserServiceContext } from "src/contexts/userContext";
-import styles from "src/styles/login.module.scss";
 import Logo from "src/svg/logo.svg";
 
 type User = {
@@ -71,9 +70,9 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-gradiant">
-      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="500px" className={styles.LoginContainer}>
-        <div className={styles.LoginPanel}>
-          <form onSubmit={onSubmit} className={styles.LoginForm}>
+      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="500px" className="LoginContainer">
+        <div className="LoginPanel">
+          <form onSubmit={onSubmit} className="LoginForm">
             <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.8rem" }}>
               <Logo style={{ width: "2.6rem", height: "auto" }} />
               <h1 className="title" style={{ margin: "0 0 0 0.5rem" }}>
@@ -137,7 +136,7 @@ const Login: React.FC = () => {
             </div>
           </form>
         </div>
-        <div className={classnames(styles.LoginPanel, styles["LoginPanel--blue"])}>
+        <div className={classnames("LoginPanel", "LoginPanel--blue")}>
           <img src="/family_values_best_friends.png" width="90%" height="auto" style={{ maxWidth: "600px" }} />
         </div>
       </KeepRatio>
