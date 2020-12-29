@@ -1,5 +1,7 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript, DocumentInitialProps, DocumentContext } from "next/document";
 import React from "react";
+
+import { ServerStyleSheets } from "@material-ui/core/styles";
 
 const APP_URL = process.env.NEXT_PUBLIC_HOST_URL || "https://1village.parlemonde.org";
 const APP_NAME = "1 Village";
@@ -7,6 +9,24 @@ const APP_DESCRIPTION = "1 Village, desc...";
 const PRIMARY_COLOR = "#4c3ed9";
 
 class MyDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
+    // Render app and page and get the context of the page with collected side effects.
+    const sheets = new ServerStyleSheets();
+    const originalRenderPage = ctx.renderPage;
+
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+      });
+
+    const initialProps = await Document.getInitialProps(ctx);
+    return {
+      ...initialProps,
+      // Styles fragment is rendered after the app and page rendering finish.
+      styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+    };
+  }
+
   render(): JSX.Element {
     return (
       <Html lang="fr">

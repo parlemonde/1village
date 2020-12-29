@@ -1,9 +1,5 @@
 import "nprogress/nprogress.css";
 
-import "src/styles/reset.scss";
-// eslint-disable-next-line arca/import-ordering
-import "src/styles/buttons.scss";
-import "src/styles/checkbox.scss";
 import "src/styles/fonts.scss";
 import "src/styles/globals.scss";
 
@@ -15,7 +11,11 @@ import { ReactQueryDevtools } from "react-query-devtools";
 import { QueryCache, ReactQueryCacheProvider } from "react-query";
 import React from "react";
 
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider } from "@material-ui/core/styles";
+
 import { UserServiceProvider } from "src/contexts/userContext";
+import theme from "src/styles/theme";
 import type { User } from "types/user.type";
 
 interface MyAppOwnProps {
@@ -56,21 +56,32 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
     };
   }, [router.events]);
 
+  React.useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector("#jss-server-side");
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
   return (
     <>
       <Head>
         <title>1 Village</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <ReactQueryCacheProvider queryCache={queryCache}>
-        <UserServiceProvider user={user} csrfToken={csrfToken}>
-          <main>
-            <Component {...pageProps} />
-          </main>
-        </UserServiceProvider>
-        {/* Dev only, it won't appear after build for prod. */}
-        <ReactQueryDevtools />
-      </ReactQueryCacheProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ReactQueryCacheProvider queryCache={queryCache}>
+          <UserServiceProvider user={user} csrfToken={csrfToken}>
+            <main>
+              <Component {...pageProps} />
+            </main>
+          </UserServiceProvider>
+          {/* Dev only, it won't appear after build for prod. */}
+          <ReactQueryDevtools />
+        </ReactQueryCacheProvider>
+      </ThemeProvider>
     </>
   );
 };

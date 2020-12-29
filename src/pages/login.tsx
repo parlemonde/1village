@@ -3,9 +3,11 @@ import { useRouter } from "next/router";
 import qs from "query-string";
 import React from "react";
 
-import { Button } from "src/components/Button";
-import { Checkbox } from "src/components/Checkbox";
-import { Input } from "src/components/Input";
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import TextField from "@material-ui/core/TextField";
+
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserServiceContext } from "src/contexts/userContext";
 import styles from "src/styles/login.module.scss";
@@ -69,33 +71,34 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-gradiant">
-      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" className={styles.LoginContainer}>
-        <div className={styles.LoginPanel} style={{ overflow: "scroll" }}>
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.8em" }}>
-            <Logo style={{ width: "2.6em", height: "auto" }} />
-            <h1 className="title" style={{ marginLeft: "0.5em" }}>
-              1 Village
-            </h1>
-          </div>
-          <p style={{ marginBottom: "3em" }}>Se connecter</p>
-          <form onSubmit={onSubmit} style={{ width: "95%", maxWidth: "300px" }}>
+      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="500px" className={styles.LoginContainer}>
+        <div className={styles.LoginPanel}>
+          <form onSubmit={onSubmit} className={styles.LoginForm}>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.8rem" }}>
+              <Logo style={{ width: "2.6rem", height: "auto" }} />
+              <h1 className="title" style={{ margin: "0 0 0 0.5rem" }}>
+                1 Village
+              </h1>
+            </div>
+            <p style={{ marginBottom: "2rem" }}>Se connecter</p>
             {(errorCode === 0 || errorCode === 3) && (
-              <p className="less text-alert text-center" style={{ marginBottom: "1em" }}>
+              <p className="less text-error text-center" style={{ margin: "0 0 1rem 0" }}>
                 {errorMessages[errorCode]}
               </p>
             )}
-            <Input
+            <TextField
               label="Adresse email"
               placeholder="Entrez votre adresse email"
               name="username"
               value={user.username}
               fullWidth
               onChange={updateUsername}
-              style={{ marginBottom: "1.5em" }}
+              style={{ marginBottom: "1.5rem" }}
               error={errorCode === 1}
               helperText={errorCode === 1 ? errorMessages[1] : null}
+              InputLabelProps={{ shrink: true }}
             />
-            <Input
+            <TextField
               label="Mot de passe"
               placeholder="Entrez votre mot de passe"
               name="password"
@@ -103,21 +106,29 @@ const Login: React.FC = () => {
               value={user.password}
               fullWidth
               onChange={updatePassword}
-              style={{ marginBottom: "1.5em" }}
+              style={{ marginBottom: "1.5rem" }}
               error={errorCode === 2}
               helperText={errorCode === 2 ? errorMessages[2] : null}
+              InputLabelProps={{ shrink: true }}
             />
-            <Checkbox
-              label="Se souvenir de moi"
-              color="primary"
-              style={{ marginBottom: "1.5em" }}
-              isChecked={user.remember}
-              onToggle={() => {
-                setUser((u) => ({ ...u, remember: !u.remember }));
-              }}
-            />
-            <div style={{ width: "100%", textAlign: "center", marginBottom: "1em" }}>
-              <Button type="submit" color="primary" variant="inverted">
+            <div className="full-width">
+              <FormControlLabel
+                label="Se souvenir de moi"
+                style={{ marginBottom: "1.5rem", cursor: "pointer" }}
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={user.remember}
+                    onChange={() => {
+                      setUser((u) => ({ ...u, remember: !u.remember }));
+                    }}
+                  />
+                }
+              />
+            </div>
+
+            <div style={{ width: "100%", textAlign: "center", marginBottom: "1rem" }}>
+              <Button type="submit" color="primary" variant="outlined">
                 Se connecter
               </Button>
             </div>

@@ -65,7 +65,7 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
     if (response.error) {
       return {
         success: false,
-        errorCode: response.data.errorCode || 0,
+        errorCode: response.data?.errorCode || 0,
       };
     }
 
@@ -121,7 +121,7 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
     if (response.error) {
       return {
         success: false,
-        errorCode: response.data.errorCode || 0,
+        errorCode: response.data?.errorCode || 0,
       };
     }
     setUser(response.data.user || null);
@@ -149,7 +149,7 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
     if (response.error) {
       return {
         success: false,
-        errorCode: response.data.errorCode || 0,
+        errorCode: response.data?.errorCode || 0,
       };
     }
     setUser(response.data.user || null);
@@ -177,7 +177,7 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
     if (response.error) {
       return {
         success: false,
-        errorCode: response.data.errorCode || 0,
+        errorCode: response.data?.errorCode || 0,
       };
     }
     setUser(response.data.user || null);

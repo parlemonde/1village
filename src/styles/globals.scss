@@ -1,7 +1,13 @@
 @import "variables";
 
+body {
+  font-size: 1rem !important;
+  color: $font-color !important;
+  font-weight: 400 !important;
+}
+
 h1 {
-  font-size: 1.8em;
+  font-size: 1.8rem;
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 600;
 }
@@ -13,22 +19,24 @@ h1.title {
 }
 
 h2 {
-  font-size: 1.357em;
+  font-size: 1.357rem;
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 600;
 }
 
 h3 {
-  font-size: 1.07em;
+  font-size: 1.07rem;
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 500;
 }
 
 p.main {
+  font-size: 1rem;
   font-weight: 500;
 }
 p.less {
-  font-size: 0.857em;
+  font-size: 0.875rem;
+  line-height: 0.875rem;
 }
 
 label:hover {
@@ -43,60 +51,8 @@ label:hover {
   background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
 }
 
-input {
-  outline: none;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
-  height: 1.8em;
-  font-size: 1em;
-  font-family: "Roboto", "Times New Roman", Times, serif;
-  font-weight: 400;
-  color: $font-color;
-}
-input::placeholder {
-  color: $font-detail;
-}
-.Input::before {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  content: "\00a0";
-  position: absolute;
-  transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  border-bottom: 1px solid $font-detail;
-  pointer-events: none;
-}
-.Input::after {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  content: "";
-  position: absolute;
-  transform: scaleX(0);
-  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-  border-bottom: 2px solid $primary-color;
-  pointer-events: none;
-}
-.Input--secondary.Input::after {
-  border-bottom: 2px solid $secondary-color;
-}
-.Input--error.Input::before,
-.Input--error.Input::after {
-  border-bottom: 2px solid $bg-help !important;
-}
-.Input--hovered::after {
-  transform: scaleX(1);
-}
-.Input--focused::after {
-  transform: scaleX(1);
-}
-.Input:hover:not(.Input--disabled):before {
-  border-bottom: 2px solid $font-color;
-}
-
 a {
-  font-size: 1em;
+  font-size: 1rem;
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 400;
   cursor: pointer;
@@ -106,7 +62,7 @@ a:focus-visible {
   border-bottom: 1px solid $font-color;
 }
 a.small {
-  font-size: 0.857em;
+  font-size: 0.875rem;
 }
 
 a.text-primary:hover {
@@ -119,13 +75,18 @@ a.text-primary:hover {
   color: $secondary-color;
 }
 .text-alert,
+.text-error {
+  color: $bg-error;
+}
 .text-help {
   color: $bg-help;
 }
 .text-success {
   color: $bg-success;
 }
-
+.full-width {
+  width: 100%;
+}
 .text-center {
   width: 100%;
   text-align: center;
