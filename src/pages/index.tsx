@@ -1,13 +1,14 @@
 import Link from "next/link";
 import React from "react";
 
+import { Base } from "src/components/Base";
 import { UserServiceContext } from "src/contexts/userContext";
 
 const Home: React.FC = () => {
   const { isLoggedIn, user } = React.useContext(UserServiceContext);
 
   return (
-    <div>
+    <Base>
       <h2>Hello, World!</h2>
       {isLoggedIn ? (
         <p>Hello {user.pseudo}, you are logged in!</p>
@@ -19,7 +20,7 @@ const Home: React.FC = () => {
           </Link>
         </p>
       )}
-    </div>
+    </Base>
   );
 };
 

@@ -75,9 +75,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
         <CssBaseline />
         <ReactQueryCacheProvider queryCache={queryCache}>
           <UserServiceProvider user={user} csrfToken={csrfToken}>
-            <main>
-              <Component {...pageProps} />
-            </main>
+            <Component {...pageProps} />
           </UserServiceProvider>
           {/* Dev only, it won't appear after build for prod. */}
           <ReactQueryDevtools />

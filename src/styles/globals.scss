@@ -91,3 +91,127 @@ a.text-primary:hover {
   width: 100%;
   text-align: center;
 }
+
+$headerHeight: 50px;
+$menuWidth: 250px;
+$verticalSpacing: 20px;
+$horizontalSpacing: 30px;
+.AppContainer {
+  width: 100vw;
+  min-height: 100vh;
+}
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: $bg-page;
+  background: linear-gradient(180deg, $bg-page 90%, rgba($bg-page, 0) 100%);
+}
+.HeaderContainer {
+  background-color: white;
+  height: $headerHeight;
+  margin: $verticalSpacing $horizontalSpacing;
+  border-radius: 10px;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 1rem;
+  position: relative;
+}
+main {
+  padding-top: $headerHeight + 2 * $verticalSpacing;
+  padding-left: $menuWidth + 2 * $horizontalSpacing;
+}
+.AppContent {
+  background-color: white;
+  width: calc(100% - #{$horizontalSpacing});
+  min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing});
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+}
+nav {
+  position: fixed;
+  top: $headerHeight + 2 * $verticalSpacing;
+  left: 0;
+}
+.Menu {
+  background-color: white;
+  height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
+  width: $menuWidth;
+  margin: 0 $horizontalSpacing $verticalSpacing $horizontalSpacing;
+  border-radius: 10px;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+}
+@media only screen and (min-width: 1400px) {
+  .AppContainer {
+    width: 94vw;
+    margin: auto;
+  }
+  header {
+    left: 3vw;
+    width: 94vw;
+  }
+  nav {
+    left: 3vw;
+  }
+}
+@media only screen and (min-width: 2000px) {
+  .AppContainer {
+    width: 80vw;
+    margin: auto;
+  }
+  header {
+    left: 10vw;
+    width: 80vw;
+  }
+  nav {
+    left: 10vw;
+  }
+}
+
+.topSearch {
+  background-color: $bg-page;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 0.5rem;
+  padding-left: 0.2rem;
+  height: 2rem;
+  width: 18rem;
+  margin: auto 0;
+  position: absolute;
+  left: $menuWidth + $horizontalSpacing;
+
+  .MuiInputBase-root {
+    margin-left: 0.1rem;
+    flex: 1;
+  }
+}
+
+.userData {
+  margin: auto 0;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  right: 0.5rem;
+
+  svg {
+    fill: $font-color;
+  }
+}
