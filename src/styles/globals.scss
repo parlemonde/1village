@@ -1,5 +1,6 @@
 @import "variables";
 
+// Use important to override Material UI styles.
 body {
   font-size: 1rem !important;
   color: $font-color !important;
@@ -11,7 +12,6 @@ h1 {
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 600;
 }
-
 h1.title {
   font-family: "Alegreya Sans", "Times New Roman", Times, serif;
   font-weight: 500;
@@ -30,19 +30,68 @@ h3 {
   font-weight: 500;
 }
 
-p.main {
-  font-size: 1rem;
-  font-weight: 500;
-}
-p.less {
-  font-size: 0.875rem;
-  line-height: 0.875rem;
-}
-
 label:hover {
   cursor: text;
 }
 
+// Text style
+.text {
+  font-size: 1rem;
+  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-weight: 400;
+}
+.text--bold {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.text--small {
+  font-size: 0.875rem;
+  line-height: 0.875rem;
+}
+.text--primary {
+  color: $primary-color;
+}
+.text--secondary {
+  color: $secondary-color;
+}
+.text--alert,
+.text--error {
+  color: $bg-error;
+}
+.text--help {
+  color: $bg-help;
+}
+.text--success {
+  color: $bg-success;
+}
+a.text {
+  cursor: pointer;
+}
+a.text:hover,
+a.text:focus-visible {
+  border-bottom: 1px solid $font-color;
+}
+a.text-primary:hover {
+  border-bottom: 1px solid $primary-color;
+}
+a.text--primary:hover {
+  border-bottom: 1px solid $primary-color;
+}
+a.text--secondary:hover {
+  border-bottom: 1px solid $secondary-color;
+}
+a.text--alert,
+a.text--error:hover {
+  border-bottom: 1px solid $bg-error;
+}
+a.text--help:hover {
+  border-bottom: 1px solid $bg-help;
+}
+a.text--success:hover {
+  border-bottom: 1px solid $bg-success;
+}
+
+// misc
 .bg-gradiant {
   width: 100vw;
   height: 100vh;
@@ -51,57 +100,12 @@ label:hover {
   background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
 }
 
-a.text {
-  font-size: 1rem;
-  font-family: "Roboto", "Times New Roman", Times, serif;
-  font-weight: 400;
-  cursor: pointer;
-}
-a.text:hover,
-a.text:focus-visible {
-  border-bottom: 1px solid $font-color;
-}
-a.text.small {
-  font-size: 0.875rem;
-}
-
-a.text-primary:hover {
-  border-bottom: 1px solid $primary-color;
-}
-.text-primary {
-  color: $primary-color;
-}
-.text-secondary {
-  color: $secondary-color;
-}
-.text-alert,
-.text-error {
-  color: $bg-error;
-}
-.text-help {
-  color: $bg-help;
-}
-.text-success {
-  color: $bg-success;
-}
 .full-width {
   width: 100%;
 }
 .text-center {
   width: 100%;
   text-align: center;
-}
-.userData {
-  margin: auto 0;
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  right: 0.5rem;
-
-  svg {
-    fill: $font-color;
-  }
 }
 .absolute-center {
   position: absolute;
@@ -113,7 +117,12 @@ a.text-primary:hover {
   align-items: center;
   justify-content: center;
 }
-.withShadow {
+.flex-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.with-shadow {
   -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
   -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
   box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);

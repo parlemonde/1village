@@ -1,4 +1,3 @@
-import classnames from "classnames";
 import { useRouter } from "next/router";
 import qs from "query-string";
 import React from "react";
@@ -70,10 +69,10 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-gradiant">
-      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="500px" className="LoginContainer">
-        <div className="LoginPanel">
-          <form onSubmit={onSubmit} className="LoginForm">
-            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: "0.8rem" }}>
+      <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="500px" className="login__container">
+        <div className="login__panel">
+          <form onSubmit={onSubmit} className="login__form">
+            <div className="flex-center" style={{ marginBottom: "0.8rem" }}>
               <Logo style={{ width: "2.6rem", height: "auto" }} />
               <h1 className="title" style={{ margin: "0 0 0 0.5rem" }}>
                 1 Village
@@ -126,17 +125,17 @@ const Login: React.FC = () => {
               />
             </div>
 
-            <div style={{ width: "100%", textAlign: "center", marginBottom: "1rem" }}>
+            <div className="text-center" style={{ marginBottom: "1rem" }}>
               <Button type="submit" color="primary" variant="outlined">
                 Se connecter
               </Button>
             </div>
-            <div style={{ width: "100%", textAlign: "center" }}>
-              <a className="text small text-primary">Mot de passe oublié ?</a>
+            <div className="text-center">
+              <a className="text text--small text--primary">Mot de passe oublié ?</a>
             </div>
           </form>
         </div>
-        <div className={classnames("LoginPanel", "LoginPanel--blue")}>
+        <div className="login__panel login__panel--with-blue-background">
           <img src="/family_values_best_friends.png" width="90%" height="auto" style={{ maxWidth: "600px" }} />
         </div>
       </KeepRatio>

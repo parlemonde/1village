@@ -9,7 +9,7 @@ $verticalSpacing: 20px;
 $horizontalSpacing: 25px;
 
 // ---- APP CONTAINER ----
-.AppContainer {
+.app-container {
   width: 100vw;
   min-height: 100vh;
 }
@@ -23,7 +23,7 @@ header {
   background: $bg-page;
   z-index: 10;
 }
-.HeaderContainer {
+.header__container {
   background-color: white;
   height: $headerHeight;
   margin: $verticalSpacing $horizontalSpacing 0 $horizontalSpacing;
@@ -35,7 +35,19 @@ header {
   padding: 0 1rem;
   position: relative;
 }
-.topSearch {
+.header__user {
+  margin: auto 0;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  right: 0.5rem;
+
+  svg {
+    fill: $font-color;
+  }
+}
+.header__search {
   background-color: $bg-page;
   border-radius: 1rem;
   display: flex;
@@ -56,7 +68,7 @@ header {
 }
 
 // ---- LEFT NAVIGATION ----
-nav.LeftNavigation {
+.navigation {
   position: fixed;
   top: $headerHeight + 2 * $verticalSpacing;
   left: 0;
@@ -64,7 +76,7 @@ nav.LeftNavigation {
   height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
   overflow: auto;
 }
-.Menu {
+.navigation__content {
   background-color: white;
   min-height: 100%;
   width: $menuWidth;
@@ -72,12 +84,12 @@ nav.LeftNavigation {
   border-radius: 10px;
 }
 
-// ---- MAIN CONTENT ----
+// ---- APP CONTENT ----
 main {
   padding-top: $headerHeight + 2 * $verticalSpacing;
   padding-left: $menuWidth + 2 * $horizontalSpacing;
 }
-.AppContent {
+.app-content {
   background-color: white;
   width: calc(100% - #{$horizontalSpacing});
   min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing});
@@ -87,26 +99,26 @@ main {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.AppContent--narrower {
+.app-content--narrower {
   width: calc(100% - #{2 * $horizontalSpacing + $rightMenuWidth});
 }
-.AppContent--smaller {
+.app-content--smaller {
   min-height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing + $topNavigationHeight});
 }
 
-// ---- TOP NAVIGATION ----
-div.TopNavigation {
+// ---- SUB HEADER ----
+.sub-header {
   margin-right: $horizontalSpacing;
   height: $topNavigationHeight;
   margin-bottom: $verticalSpacing;
 }
 
 // ---- RIGHT NAVIGATION ----
-.RightNavigation {
+.right-navigation {
   position: sticky;
   top: $headerHeight + 2 * $verticalSpacing;
 }
-.RightNavigation > div {
+.right-navigation > div {
   position: absolute;
   top: 0;
   right: $horizontalSpacing;
@@ -115,58 +127,62 @@ div.TopNavigation {
   overflow: hidden;
   padding-bottom: 4px;
 }
-.RightNavigation--smaller > div {
+.right-navigation--smaller > div {
   height: calc(100vh - #{$headerHeight + 4 * $verticalSpacing + $topNavigationHeight});
 }
 
-@media only screen and (max-width: 1080px) {
-  .HeaderContainer {
+@include for-small-screen {
+  .header__container {
     margin: $verticalSpacing/2 $horizontalSpacing/2 0 $horizontalSpacing/2;
   }
+
+  .navigation {
+    top: $headerHeight + $verticalSpacing;
+    height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
+  }
+  .navigation__content {
+    width: $menuWidthSmaller;
+    margin: 0 $horizontalSpacing / 2;
+  }
+  .navigation__button {
+    font-size: 0.9rem !important;
+  }
+
   main {
     padding-top: $headerHeight + $verticalSpacing;
     padding-left: $menuWidthSmaller + $horizontalSpacing;
   }
-  .AppContent {
+  .app-content {
     width: calc(100% - #{$horizontalSpacing / 2});
     min-height: calc(100vh - #{$headerHeight + $verticalSpacing});
   }
-  .AppContent--narrower {
+  .app-content--narrower {
     width: calc(100% - #{$horizontalSpacing + $rightMenuWidth});
   }
-  .AppContent--smaller {
+  .app-content--smaller {
     min-height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing + $topNavigationHeight});
   }
-  nav.LeftNavigation {
-    top: $headerHeight + $verticalSpacing;
-    height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
-  }
-  .RightNavigation {
+
+  .right-navigation {
     top: $headerHeight + $verticalSpacing;
   }
-  .RightNavigation > div {
+  .right-navigation > div {
     right: $horizontalSpacing / 2;
     height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
   }
-  .RightNavigation--smaller > div {
+  .right-navigation--smaller > div {
     height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $topNavigationHeight});
   }
-  div.TopNavigation {
+
+  .sub-header {
     margin-right: $horizontalSpacing / 2;
     margin-bottom: $verticalSpacing / 2;
     margin-top: $verticalSpacing / 2;
   }
-  .Menu {
-    width: $menuWidthSmaller;
-    margin: 0 $horizontalSpacing / 2;
-  }
-  .menuButton {
-    font-size: 0.9rem !important;
-  }
 }
 
-@media only screen and (min-width: 1400px) {
-  .AppContainer {
+@include for-laptop-screen-up {
+  .app-container {
     width: 96vw;
     margin: auto;
   }
@@ -174,13 +190,12 @@ div.TopNavigation {
     left: 2vw;
     width: 96vw;
   }
-  nav.LeftNavigation {
+  .navigation {
     left: 2vw;
   }
 }
-
-@media only screen and (min-width: 2000px) {
-  .AppContainer {
+@include for-big-screen-up {
+  .app-container {
     width: 80vw;
     margin: auto;
   }
@@ -188,7 +203,7 @@ div.TopNavigation {
     left: 10vw;
     width: 80vw;
   }
-  nav.LeftNavigation {
+  .navigation {
     left: 10vw;
   }
 }

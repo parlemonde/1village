@@ -1,13 +1,13 @@
 @import "variables";
 
-.LoginContainer {
+.login__container {
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
 }
 
-.LoginPanel {
+.login__panel {
   display: inline-flex;
   width: 50%;
   height: 100%;
@@ -17,8 +17,12 @@
   flex-direction: column;
   overflow: auto;
 }
+.login__panel--with-blue-background {
+  background-color: $primary-color;
+  justify-content: center;
+}
 
-.LoginForm {
+.login__form {
   display: flex;
   margin: auto 0;
   padding: 1rem 0;
@@ -27,9 +31,4 @@
   flex-direction: column;
   width: 95%;
   max-width: 300px;
-}
-
-.LoginPanel--blue {
-  background-color: $primary-color;
-  justify-content: center;
 }

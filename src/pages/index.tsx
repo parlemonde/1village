@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   const { isLoggedIn, user } = React.useContext(UserServiceContext);
 
   return (
-    <Base topMenu={<SubHeader />}>
+    <Base subHeader={<SubHeader />}>
       <h2>Hello, World!</h2>
       {isLoggedIn ? (
         <p>Hello {user.pseudo}, you are logged in!</p>

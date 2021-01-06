@@ -2,34 +2,34 @@ import className from "classnames";
 import React from "react";
 
 import { Header } from "./Header";
-import { Menu } from "./Menu";
+import { Navigation } from "./Navigation";
 
 interface BaseProps {
   children: React.ReactNode | React.ReactNodeArray;
   rightNav?: React.ReactNode | React.ReactNodeArray;
-  topMenu?: React.ReactNode | React.ReactNodeArray;
+  subHeader?: React.ReactNode | React.ReactNodeArray;
 }
 
-export const Base: React.FC<BaseProps> = ({ children, rightNav, topMenu }: BaseProps) => {
+export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader }: BaseProps) => {
   return (
-    <div className="AppContainer">
+    <div className="app-container">
       <Header />
-      <Menu />
+      <Navigation />
       <main>
-        {topMenu && <div className="TopNavigation">{topMenu}</div>}
+        {subHeader && <div className="sub-header">{subHeader}</div>}
         {rightNav && (
           <aside
-            className={className("RightNavigation", {
-              "RightNavigation--smaller": !!topMenu,
+            className={className("right-navigation", {
+              "right-navigation--smaller": !!subHeader,
             })}
           >
             <div>{rightNav}</div>
           </aside>
         )}
         <div
-          className={className("AppContent withShadow", {
-            "AppContent--narrower": !!rightNav,
-            "AppContent--smaller": !!topMenu,
+          className={className("app-content with-shadow", {
+            "app-content--narrower": !!rightNav,
+            "app-content--smaller": !!subHeader,
           })}
         >
           {children}
