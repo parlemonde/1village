@@ -51,17 +51,17 @@ label:hover {
   background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
 }
 
-a {
+a.text {
   font-size: 1rem;
   font-family: "Roboto", "Times New Roman", Times, serif;
   font-weight: 400;
   cursor: pointer;
 }
-a:hover,
-a:focus-visible {
+a.text:hover,
+a.text:focus-visible {
   border-bottom: 1px solid $font-color;
 }
-a.small {
+a.text.small {
   font-size: 0.875rem;
 }
 
@@ -91,120 +91,6 @@ a.text-primary:hover {
   width: 100%;
   text-align: center;
 }
-
-$headerHeight: 50px;
-$menuWidth: 250px;
-$verticalSpacing: 20px;
-$horizontalSpacing: 30px;
-.AppContainer {
-  width: 100vw;
-  min-height: 100vh;
-}
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: $bg-page;
-  background: linear-gradient(180deg, $bg-page 90%, rgba($bg-page, 0) 100%);
-}
-.HeaderContainer {
-  background-color: white;
-  height: $headerHeight;
-  margin: $verticalSpacing $horizontalSpacing;
-  border-radius: 10px;
-  overflow: hidden;
-  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 1rem;
-  position: relative;
-}
-main {
-  padding-top: $headerHeight + 2 * $verticalSpacing;
-  padding-left: $menuWidth + 2 * $horizontalSpacing;
-}
-.AppContent {
-  background-color: white;
-  width: calc(100% - #{$horizontalSpacing});
-  min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing});
-  margin: 0;
-  padding: 0;
-  overflow: auto;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-}
-nav {
-  position: fixed;
-  top: $headerHeight + 2 * $verticalSpacing;
-  left: 0;
-  padding-bottom: 4px;
-  height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
-  overflow: auto;
-}
-.Menu {
-  background-color: white;
-  min-height: 100%;
-  width: $menuWidth;
-  margin: 0 $horizontalSpacing;
-  border-radius: 10px;
-  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
-}
-@media only screen and (min-width: 1400px) {
-  .AppContainer {
-    width: 94vw;
-    margin: auto;
-  }
-  header {
-    left: 3vw;
-    width: 94vw;
-  }
-  nav {
-    left: 3vw;
-  }
-}
-@media only screen and (min-width: 2000px) {
-  .AppContainer {
-    width: 80vw;
-    margin: auto;
-  }
-  header {
-    left: 10vw;
-    width: 80vw;
-  }
-  nav {
-    left: 10vw;
-  }
-}
-
-.topSearch {
-  background-color: $bg-page;
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-right: 0.5rem;
-  padding-left: 0.2rem;
-  height: 2rem;
-  width: 18rem;
-  margin: auto 0;
-  position: absolute;
-  left: $menuWidth + $horizontalSpacing;
-
-  .MuiInputBase-root {
-    margin-left: 0.1rem;
-    flex: 1;
-  }
-}
-
 .userData {
   margin: auto 0;
   position: absolute;
@@ -217,7 +103,6 @@ nav {
     fill: $font-color;
   }
 }
-
 .absolute-center {
   position: absolute;
   top: 0px;
@@ -227,4 +112,9 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.withShadow {
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
+  box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
 }

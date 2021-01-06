@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="HeaderContainer">
+      <div className="HeaderContainer withShadow">
         <Logo style={{ width: "40px", height: "auto" }} />
         <h1 className="title" style={{ margin: "0 0 0 0.5rem" }}>
           1 Village

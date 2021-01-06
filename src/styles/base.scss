@@ -1,0 +1,194 @@
+@import "variables";
+
+$headerHeight: 50px;
+$menuWidth: 250px;
+$menuWidthSmaller: 200px;
+$rightMenuWidth: 200px;
+$topNavigationHeight: 45px;
+$verticalSpacing: 20px;
+$horizontalSpacing: 25px;
+
+// ---- APP CONTAINER ----
+.AppContainer {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+// ---- HEADER ----
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: $bg-page;
+  z-index: 10;
+}
+.HeaderContainer {
+  background-color: white;
+  height: $headerHeight;
+  margin: $verticalSpacing $horizontalSpacing 0 $horizontalSpacing;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 1rem;
+  position: relative;
+}
+.topSearch {
+  background-color: $bg-page;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 0.5rem;
+  padding-left: 0.2rem;
+  height: 2rem;
+  width: 18rem;
+  margin: auto 0;
+  position: absolute;
+  left: $menuWidth + $horizontalSpacing;
+
+  .MuiInputBase-root {
+    margin-left: 0.1rem;
+    flex: 1;
+  }
+}
+
+// ---- LEFT NAVIGATION ----
+nav.LeftNavigation {
+  position: fixed;
+  top: $headerHeight + 2 * $verticalSpacing;
+  left: 0;
+  padding-bottom: 4px;
+  height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
+  overflow: auto;
+}
+.Menu {
+  background-color: white;
+  min-height: 100%;
+  width: $menuWidth;
+  margin: 0 $horizontalSpacing;
+  border-radius: 10px;
+}
+
+// ---- MAIN CONTENT ----
+main {
+  padding-top: $headerHeight + 2 * $verticalSpacing;
+  padding-left: $menuWidth + 2 * $horizontalSpacing;
+}
+.AppContent {
+  background-color: white;
+  width: calc(100% - #{$horizontalSpacing});
+  min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing});
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.AppContent--narrower {
+  width: calc(100% - #{2 * $horizontalSpacing + $rightMenuWidth});
+}
+.AppContent--smaller {
+  min-height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing + $topNavigationHeight});
+}
+
+// ---- TOP NAVIGATION ----
+div.TopNavigation {
+  margin-right: $horizontalSpacing;
+  height: $topNavigationHeight;
+  margin-bottom: $verticalSpacing;
+}
+
+// ---- RIGHT NAVIGATION ----
+.RightNavigation {
+  position: sticky;
+  top: $headerHeight + 2 * $verticalSpacing;
+}
+.RightNavigation > div {
+  position: absolute;
+  top: 0;
+  right: $horizontalSpacing;
+  width: $rightMenuWidth;
+  height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
+  overflow: hidden;
+  padding-bottom: 4px;
+}
+.RightNavigation--smaller > div {
+  height: calc(100vh - #{$headerHeight + 4 * $verticalSpacing + $topNavigationHeight});
+}
+
+@media only screen and (max-width: 1080px) {
+  .HeaderContainer {
+    margin: $verticalSpacing/2 $horizontalSpacing/2 0 $horizontalSpacing/2;
+  }
+  main {
+    padding-top: $headerHeight + $verticalSpacing;
+    padding-left: $menuWidthSmaller + $horizontalSpacing;
+  }
+  .AppContent {
+    width: calc(100% - #{$horizontalSpacing / 2});
+    min-height: calc(100vh - #{$headerHeight + $verticalSpacing});
+  }
+  .AppContent--narrower {
+    width: calc(100% - #{$horizontalSpacing + $rightMenuWidth});
+  }
+  .AppContent--smaller {
+    min-height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing + $topNavigationHeight});
+  }
+  nav.LeftNavigation {
+    top: $headerHeight + $verticalSpacing;
+    height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
+  }
+  .RightNavigation {
+    top: $headerHeight + $verticalSpacing;
+  }
+  .RightNavigation > div {
+    right: $horizontalSpacing / 2;
+    height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
+  }
+  .RightNavigation--smaller > div {
+    height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $topNavigationHeight});
+  }
+  div.TopNavigation {
+    margin-right: $horizontalSpacing / 2;
+    margin-bottom: $verticalSpacing / 2;
+    margin-top: $verticalSpacing / 2;
+  }
+  .Menu {
+    width: $menuWidthSmaller;
+    margin: 0 $horizontalSpacing / 2;
+  }
+  .menuButton {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .AppContainer {
+    width: 96vw;
+    margin: auto;
+  }
+  header {
+    left: 2vw;
+    width: 96vw;
+  }
+  nav.LeftNavigation {
+    left: 2vw;
+  }
+}
+
+@media only screen and (min-width: 2000px) {
+  .AppContainer {
+    width: 80vw;
+    margin: auto;
+  }
+  header {
+    left: 10vw;
+    width: 80vw;
+  }
+  nav.LeftNavigation {
+    left: 10vw;
+  }
+}

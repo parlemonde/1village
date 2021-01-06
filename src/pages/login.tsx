@@ -132,7 +132,7 @@ const Login: React.FC = () => {
               </Button>
             </div>
             <div style={{ width: "100%", textAlign: "center" }}>
-              <a className="small text-primary">Mot de passe oublié ?</a>
+              <a className="text small text-primary">Mot de passe oublié ?</a>
             </div>
           </form>
         </div>
