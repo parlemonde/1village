@@ -3,9 +3,9 @@ import * as argon2 from "argon2";
 import { NextFunction, Request, Response } from "express";
 import { getRepository } from "typeorm";
 
+import { getAccessToken } from "../authentication/lib/tokens";
 import { User, UserType } from "../entities/user";
 import { AppError, ErrorCode } from "../middlewares/handleErrors";
-import { getAccessToken } from "../oauth2/lib/tokens";
 import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
 import { logger } from "../utils/logger";
 import { generateTemporaryPassword, valueOrDefault, isPasswordValid } from "../utils";

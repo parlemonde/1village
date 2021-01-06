@@ -8,13 +8,13 @@ import morgan from "morgan";
 import next from "next";
 import { Connection } from "typeorm";
 
+import { authRouter } from "./authentication";
 import { controllerRouter } from "./controllers";
 import { authenticate } from "./middlewares/authenticate";
 import { crsfProtection } from "./middlewares/csrfCheck";
 import { handleErrors } from "./middlewares/handleErrors";
 import { jsonify } from "./middlewares/jsonify";
 import { removeTrailingSlash } from "./middlewares/trailingSlash";
-import { oauth2Router } from "./oauth2";
 import { connectToDatabase } from "./utils/database";
 import { logger } from "./utils/logger";
 import { onError, normalizePort, getDefaultDirectives } from "./utils/server";
@@ -60,8 +60,8 @@ async function start() {
   app.use(cookieParser());
   app.use(crsfProtection());
 
-  // [3] --- Add oauth2 router ---
-  app.use("/", oauth2Router);
+  // [3] --- Add authentication router ---
+  app.use("/", authRouter);
 
   // [4] --- Add backend API ---
   const backRouter = Router();

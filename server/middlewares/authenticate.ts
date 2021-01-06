@@ -2,8 +2,8 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 
+import { getNewAccessToken } from "../authentication/lib/tokens";
 import { UserType, User } from "../entities/user";
-import { getNewAccessToken } from "../oauth2/lib/tokens";
 import { getHeader } from "../utils";
 
 const secret: string = process.env.APP_SECRET || "";

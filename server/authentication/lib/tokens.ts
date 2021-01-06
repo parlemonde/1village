@@ -10,7 +10,6 @@ const secret: string = process.env.APP_SECRET || "";
 export async function getAccessToken(
   userId: number,
   withRefreshToken: boolean = false,
-  clientId: string | null = null,
 ): Promise<{
   accessToken: string;
   refreshToken: string;
@@ -22,7 +21,6 @@ export async function getAccessToken(
     const token = new Token();
     token.token = await argon2.hash(rToken);
     token.userId = userId;
-    token.clientId = clientId;
     await getRepository(Token).save(token);
     refreshToken = `${token.id}-${rToken}`;
   }
@@ -35,7 +33,6 @@ export async function getAccessToken(
 
 export async function getNewAccessToken(
   refreshToken: string,
-  clientId: string | null = null,
 ): Promise<{
   accessToken: string;
   refreshToken: string;
@@ -49,7 +46,7 @@ export async function getNewAccessToken(
       date: MoreThan(expiredDate),
     },
   });
-  if (token === undefined || !(await argon2.verify(token.token, refreshToken.slice(refreshTokenID.length + 1))) || token.clientId !== clientId) {
+  if (token === undefined || !(await argon2.verify(token.token, refreshToken.slice(refreshTokenID.length + 1)))) {
     await revokeRefreshToken(refreshToken);
     return null;
   }
