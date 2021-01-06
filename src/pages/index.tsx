@@ -9,15 +9,14 @@ const Home: React.FC = () => {
   const { isLoggedIn, user } = React.useContext(UserServiceContext);
 
   return (
-    <Base subHeader={<SubHeader />}>
-      <h2>Hello, World!</h2>
+    <Base subHeader={<SubHeader />} style={{ padding: "0 1.2rem" }}>
+      <h1>Suggestions d’activités </h1>
       {isLoggedIn ? (
-        <p>Hello {user.pseudo}, you are logged in!</p>
+        <p>Bonjour {user.pseudo}, tu es connecté !</p>
       ) : (
         <p>
-          Not logged :/{" "}
           <Link href="/login">
-            <a>loggin ?</a>
+            <a>Se connecter ?</a>
           </Link>
         </p>
       )}

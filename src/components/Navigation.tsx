@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -78,23 +79,29 @@ export const Navigation: React.FC = () => {
         </div>
         <div style={{ padding: "0 5%", position: "relative" }}>
           {tabs.map((tab, index) => (
-            <Button
-              component="a"
-              onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                event.preventDefault();
-                router.push(tab.path);
-              }}
-              href={tab.path}
-              key={tab.path}
-              color="primary"
-              startIcon={tab.icon}
-              variant={index === selectedTab ? "contained" : "outlined"}
-              className="navigation__button full-width"
-              style={{ justifyContent: "flex-start", paddingRight: "0.1rem", marginBottom: "0.4rem", width: index === selectedTab ? "112%" : "100%" }}
-              disableElevation
-            >
-              {tab.label}
-            </Button>
+            <Link key={tab.path} href={tab.path} prefetch={false}>
+              <Button
+                component="a"
+                onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                  event.preventDefault();
+                  router.push(tab.path);
+                }}
+                href={tab.path}
+                color="primary"
+                startIcon={tab.icon}
+                variant={index === selectedTab ? "contained" : "outlined"}
+                className="navigation__button full-width"
+                style={{
+                  justifyContent: "flex-start",
+                  paddingRight: "0.1rem",
+                  marginBottom: "0.4rem",
+                  width: index === selectedTab ? "112%" : "100%",
+                }}
+                disableElevation
+              >
+                {tab.label}
+              </Button>
+            </Link>
           ))}
         </div>
       </div>

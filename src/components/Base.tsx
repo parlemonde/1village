@@ -8,9 +8,10 @@ interface BaseProps {
   children: React.ReactNode | React.ReactNodeArray;
   rightNav?: React.ReactNode | React.ReactNodeArray;
   subHeader?: React.ReactNode | React.ReactNodeArray;
+  style?: React.CSSProperties;
 }
 
-export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader }: BaseProps) => {
+export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader, style }: BaseProps) => {
   return (
     <div className="app-container">
       <Header />
@@ -31,6 +32,7 @@ export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader }: Bas
             "app-content--narrower": !!rightNav,
             "app-content--smaller": !!subHeader,
           })}
+          style={style}
         >
           {children}
         </div>
