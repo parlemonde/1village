@@ -4,14 +4,14 @@ import React from "react";
 
 import Button from "@material-ui/core/Button";
 
-import AgendaIcon from "src/svg/agendaIcon.svg";
-import GameIcon from "src/svg/gameIcon.svg";
-import HomeIcon from "src/svg/homeIcon.svg";
-import KeyIcon from "src/svg/keyIcon.svg";
-import Map from "src/svg/map.svg";
-import QuestionIcon from "src/svg/questionIcon.svg";
-import TargetIcon from "src/svg/targetIcon.svg";
-import UserIcon from "src/svg/userIcon.svg";
+import AgendaIcon from "src/svg/navigation/agenda-icon.svg";
+import GameIcon from "src/svg/navigation/game-icon.svg";
+import HomeIcon from "src/svg/navigation/home-icon.svg";
+import KeyIcon from "src/svg/navigation/key-icon.svg";
+import Map from "src/svg/navigation/map.svg";
+import QuestionIcon from "src/svg/navigation/question-icon.svg";
+import TargetIcon from "src/svg/navigation/target-icon.svg";
+import UserIcon from "src/svg/navigation/user-icon.svg";
 
 interface Tab {
   label: string;

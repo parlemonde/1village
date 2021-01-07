@@ -5,6 +5,84 @@ __metadata:
   version: 4
   cacheKey: 7
 
+"1village@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "1village@workspace:."
+  dependencies:
+    "@material-ui/core": ^4.11.2
+    "@material-ui/icons": ^4.11.2
+    "@svgr/webpack": ^5.5.0
+    "@types/body-parser": ^1.19.0
+    "@types/classnames": ^2
+    "@types/cookie-parser": ^1.4.2
+    "@types/cors": ^2.8.9
+    "@types/eslint": ^7.2.6
+    "@types/eslint-plugin-prettier": ^3.1.0
+    "@types/express": ^4.17.9
+    "@types/json-stable-stringify": ^1.0.32
+    "@types/jsonwebtoken": ^8.5.0
+    "@types/md5": ^2
+    "@types/morgan": ^1.9.2
+    "@types/mysql": ^2
+    "@types/node": ^14.14.12
+    "@types/nprogress": ^0
+    "@types/prettier": ^2.1.5
+    "@types/query-string": ^6
+    "@types/react": ^17
+    "@types/react-dom": ^17
+    "@types/sass": ^1
+    "@types/uuid": ^8.3.0
+    "@types/webpack": ^4.41.25
+    "@typescript-eslint/eslint-plugin": ^4.9.1
+    "@typescript-eslint/parser": ^4.9.1
+    "@yarnpkg/pnpify": ^2.4.0
+    ajv: beta
+    ajv-formats: ^1.5.1
+    argon2: ^0.27.1
+    axios: ^0.21.0
+    body-parser: ^1.19.0
+    classnames: ^2.2.6
+    cookie-parser: ^1.4.5
+    cors: ^2.8.5
+    crypto: ^1.0.1
+    csrf: ^3.1.0
+    dotenv: ^8.2.0
+    eslint: ^7.15.0
+    eslint-config-prettier: ^7.0.0
+    eslint-import-resolver-node: ^0.3.4
+    eslint-import-resolver-typescript: ^2.3.0
+    eslint-import-resolver-webpack: ^0.13.0
+    eslint-plugin-arca: ^0.9.5
+    eslint-plugin-import: ^2.22.1
+    eslint-plugin-prettier: ^3.2.0
+    eslint-plugin-react: ^7.21.5
+    eslint-plugin-react-hooks: ^4.2.0
+    express: ^4.17.1
+    helmet: ^4.2.0
+    json-stable-stringify: ^1.0.1
+    jsonwebtoken: ^8.5.1
+    md5: ^2.3.0
+    morgan: ^1.10.0
+    mysql: ^2.18.1
+    next: ^10.0.3
+    nodemon: ^2.0.6
+    nprogress: ^0.2.0
+    prettier: ^2.2.1
+    query-string: ^6.13.7
+    react: ^17.0.1
+    react-dom: ^17.0.1
+    react-query: ^2.26.4
+    react-query-devtools: ^2.6.3
+    safe-buffer: ^5.2.1
+    sass: ^1.30.0
+    typeorm: ^0.2.29
+    typescript: ^4.1.2
+    uuid: ^8.3.2
+    webpack: ^5.11.0
+    winston: ^3.3.3
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/toolbox-core@npm:^2.6.0, @ampproject/toolbox-core@npm:^2.7.1":
   version: 2.7.1
   resolution: "@ampproject/toolbox-core@npm:2.7.1"
@@ -9396,84 +9474,6 @@ fsevents@~2.1.2:
   checksum: 5687db874734b997e7bc75a7a97ad297cc36cb3b63fe8adcaffceb542410fd1ebc144f1ede2348378f481dac73aa9e4ac7bff958c9bae3ffdd6b23c3e186e1b5
   languageName: node
   linkType: hard
-
-"plm_oauth@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "plm_oauth@workspace:."
-  dependencies:
-    "@material-ui/core": ^4.11.2
-    "@material-ui/icons": ^4.11.2
-    "@svgr/webpack": ^5.5.0
-    "@types/body-parser": ^1.19.0
-    "@types/classnames": ^2
-    "@types/cookie-parser": ^1.4.2
-    "@types/cors": ^2.8.9
-    "@types/eslint": ^7.2.6
-    "@types/eslint-plugin-prettier": ^3.1.0
-    "@types/express": ^4.17.9
-    "@types/json-stable-stringify": ^1.0.32
-    "@types/jsonwebtoken": ^8.5.0
-    "@types/md5": ^2
-    "@types/morgan": ^1.9.2
-    "@types/mysql": ^2
-    "@types/node": ^14.14.12
-    "@types/nprogress": ^0
-    "@types/prettier": ^2.1.5
-    "@types/query-string": ^6
-    "@types/react": ^17
-    "@types/react-dom": ^17
-    "@types/sass": ^1
-    "@types/uuid": ^8.3.0
-    "@types/webpack": ^4.41.25
-    "@typescript-eslint/eslint-plugin": ^4.9.1
-    "@typescript-eslint/parser": ^4.9.1
-    "@yarnpkg/pnpify": ^2.4.0
-    ajv: beta
-    ajv-formats: ^1.5.1
-    argon2: ^0.27.1
-    axios: ^0.21.0
-    body-parser: ^1.19.0
-    classnames: ^2.2.6
-    cookie-parser: ^1.4.5
-    cors: ^2.8.5
-    crypto: ^1.0.1
-    csrf: ^3.1.0
-    dotenv: ^8.2.0
-    eslint: ^7.15.0
-    eslint-config-prettier: ^7.0.0
-    eslint-import-resolver-node: ^0.3.4
-    eslint-import-resolver-typescript: ^2.3.0
-    eslint-import-resolver-webpack: ^0.13.0
-    eslint-plugin-arca: ^0.9.5
-    eslint-plugin-import: ^2.22.1
-    eslint-plugin-prettier: ^3.2.0
-    eslint-plugin-react: ^7.21.5
-    eslint-plugin-react-hooks: ^4.2.0
-    express: ^4.17.1
-    helmet: ^4.2.0
-    json-stable-stringify: ^1.0.1
-    jsonwebtoken: ^8.5.1
-    md5: ^2.3.0
-    morgan: ^1.10.0
-    mysql: ^2.18.1
-    next: ^10.0.3
-    nodemon: ^2.0.6
-    nprogress: ^0.2.0
-    prettier: ^2.2.1
-    query-string: ^6.13.7
-    react: ^17.0.1
-    react-dom: ^17.0.1
-    react-query: ^2.26.4
-    react-query-devtools: ^2.6.3
-    safe-buffer: ^5.2.1
-    sass: ^1.30.0
-    typeorm: ^0.2.29
-    typescript: ^4.1.2
-    uuid: ^8.3.2
-    webpack: ^5.11.0
-    winston: ^3.3.3
-  languageName: unknown
-  linkType: soft
 
 "pluralize@npm:^7.0.0":
   version: 7.0.0

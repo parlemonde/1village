@@ -4,7 +4,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 
 import { KeepRatio } from "src/components/KeepRatio";
-import PelicoSearch from "src/svg/PelicoSearch.svg";
+import PelicoSearch from "src/svg/pelico/pelico-search.svg";
 
 const Custom404: React.FunctionComponent = () => {
   return (

@@ -2,7 +2,7 @@ import React from "react";
 
 import Cible from "src/svg/cible.svg";
 import Jumelles from "src/svg/jumelles.svg";
-import PelicoSouriant from "src/svg/pelico_souriant.svg";
+import PelicoSouriant from "src/svg/pelico/pelico-souriant.svg";
 
 export const SubHeader: React.FC = () => {
   return (
