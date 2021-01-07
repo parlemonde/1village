@@ -4,7 +4,10 @@ import { UserType } from "../entities/user";
 import { authenticate } from "../middlewares/authenticate";
 import { handleErrors } from "../middlewares/handleErrors";
 
-// todo: Add user type. and authenticate
+type RouteOptions = {
+  path: string;
+  userType?: UserType;
+};
 
 export class Controller {
   public router: Router;
@@ -15,23 +18,19 @@ export class Controller {
     this.name = name;
   }
 
-  public get(path: string, handler: RequestHandler): void {
-    this.router.get(path, handleErrors(handler));
+  public get(options: RouteOptions, handler: RequestHandler): void {
+    this.router.get(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
 
-  public getSecure(path: string, handler: RequestHandler): void {
-    this.router.get(path, handleErrors(authenticate(UserType.PLMO_ADMIN)), handleErrors(handler));
+  public post(options: RouteOptions, handler: RequestHandler): void {
+    this.router.post(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
 
-  public post(path: string, handler: RequestHandler): void {
-    this.router.post(path, handleErrors(handler));
+  public put(options: RouteOptions, handler: RequestHandler): void {
+    this.router.put(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
 
-  public put(path: string, handler: RequestHandler): void {
-    this.router.put(path, handleErrors(handler));
-  }
-
-  public delete(path: string, handler: RequestHandler): void {
-    this.router.delete(path, handleErrors(handler));
+  public delete(options: RouteOptions, handler: RequestHandler): void {
+    this.router.delete(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
 }

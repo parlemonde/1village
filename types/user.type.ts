@@ -1,7 +1,7 @@
 export enum UserType {
   CLASS = 0,
   ADMIN = 1,
-  PLMO_ADMIN = 2,
+  SUPER_ADMIN = 2,
 }
 
 export interface User {

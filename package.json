@@ -1,18 +1,17 @@
 {
-  "name": "plm_oauth",
+  "name": "1village",
   "version": "1.0.0",
-  "description": "OAuth2 for ParLeMonde",
+  "description": "1Village, application de Par Le Monde",
   "main": "dist/app.js",
-  "author": "David Robert-Ansart",
-  "license": "private",
-  "private": true,
+  "author": "Par Le Monde",
+  "license": "GNU GPLv3",
   "scripts": {
     "build:next": "next build",
     "build:server": "tsc --project server/tsconfig.json",
     "build": "rm -rf dist && NODE_ENV=production yarn build:next && yarn build:server",
     "start-dev": "yarn build:server && node dist/server/app.js",
     "lint": "yarn eslint src && yarn eslint server",
-    "test-type": "yarn tsc -p .",
+    "test-type": "yarn tsc -p . && yarn tsc --project server/tsconfig.json --noEmit",
     "start": "NODE_ENV=production node dist/server/app.js",
     "dev": "nodemon"
   },

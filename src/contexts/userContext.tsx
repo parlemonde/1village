@@ -42,6 +42,12 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
     [csrfToken],
   );
 
+  React.useEffect(() => {
+    if (user === null && router.pathname !== "/login") {
+      router.push("/login");
+    }
+  }, [user, router]);
+
   /**
    * Login the user with username and password.
    * Return a number 0 -> success or not.

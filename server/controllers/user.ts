@@ -14,16 +14,18 @@ import { Controller } from "./controller";
 
 const userController = new Controller("/users");
 // --- Get all users. ---
-userController.get("", async (_req: Request, res: Response) => {
+userController.get({ path: "", userType: UserType.SUPER_ADMIN }, async (_req: Request, res: Response) => {
   const users = await getRepository(User).find();
   res.sendJSON(users.map((u) => u.withoutPassword()));
 });
 
 // --- Get one user. ---
-userController.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
-  if (user === undefined) {
+  const isSelfProfile = req.user && req.user.id === id;
+  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  if (user === undefined || (!isSelfProfile && !isAdmin)) {
     next();
     return;
   }
@@ -53,7 +55,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   additionalProperties: false,
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
-userController.post("", async (req: Request, res: Response) => {
+userController.post({ path: "" }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
@@ -68,7 +70,11 @@ userController.post("", async (req: Request, res: Response) => {
   user.pseudo = data.pseudo;
   user.level = data.level || "";
   user.school = data.school || "";
-  user.type = valueOrDefault(data.type, UserType.CLASS);
+  if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
+    user.type = valueOrDefault(data.type, UserType.CLASS);
+  } else {
+    user.type = UserType.CLASS;
+  }
   user.accountRegistration = data.password === undefined ? 3 : 0;
   user.passwordHash = data.password ? await argon2.hash(data.password) : "";
   const temporaryPassword = generateTemporaryPassword(20);
@@ -100,10 +106,12 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
-  if (user === undefined) {
+  const isSelfProfile = req.user && req.user.id === id;
+  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  if (user === undefined || (!isSelfProfile && !isAdmin)) {
     next();
     return;
   }
@@ -123,7 +131,7 @@ userController.put("/:id", async (req: Request, res: Response, next: NextFunctio
 });
 
 // --- Delete an user. ---
-userController.delete("/:id", async (req: Request, res: Response) => {
+userController.delete({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   await getRepository(User).delete({ id });
   res.status(204).send();
@@ -144,7 +152,7 @@ const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
   additionalProperties: false,
 };
 const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
-userController.post("/verify-email", async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: "/verify-email" }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!verifyUserValidator(data)) {
     sendInvalidDataError(verifyUserValidator);
@@ -191,7 +199,7 @@ const RESET_SCHEMA: JSONSchemaType<ResetData> = {
   additionalProperties: false,
 };
 const resetUserValidator = ajv.compile(RESET_SCHEMA);
-userController.post("/reset-password", async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: "/reset-password" }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!resetUserValidator(data)) {
     sendInvalidDataError(resetUserValidator);
@@ -231,7 +239,7 @@ const UPDATE_SCHEMA: JSONSchemaType<UpdateData> = {
   additionalProperties: false,
 };
 const updateUserValidator = ajv.compile(UPDATE_SCHEMA);
-userController.post("/update-password", async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: "/update-password" }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateUserValidator(data)) {
     sendInvalidDataError(updateUserValidator);
