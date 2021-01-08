@@ -3,8 +3,6 @@ import Ajv, { ValidateFunction, DefinedError } from "ajv";
 
 import { AppError, ErrorCode } from "../middlewares/handleErrors";
 
-// eslint-disable-next-line no-console
-console.log("-- test -- init Ajv! -- remove this later. This message should appear only once.");
 const ajv = new Ajv();
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

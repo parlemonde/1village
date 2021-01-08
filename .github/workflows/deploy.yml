@@ -1,0 +1,57 @@
+# This workflow deploy the app on prod.
+name: Deployment
+
+# Triggered on every push on master
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Create ssh key
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ../private.key
+          eval "$(ssh-agent -s)"
+          sudo chmod 600 ../private.key
+          ssh-add ../private.key
+          rm -rf ~/.ssh/known_hosts
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+
+      # Add env file
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_NEXT_PUBLIC_BASE_APP: /api
+          envkey_NEXT_PUBLIC_HOST_URL: ${{ secrets.HOST }}
+          file_name: .env
+
+      # Add IP to AWS sevurity group
+      - name: Add IP to AWS security group
+        uses: sohelamin/aws-security-group-add-ip-action@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "eu-west-3"
+          aws-security-group-id: ${{ secrets.AWS_SECURITY_GROUP_ID }}
+          port: "22"
+          description: "GitHub Action"
+
+      # Build and deploy the docker image on the server
+      - name: Build and deploy the docker image on the server
+        run: bash ./build.sh
+        shell: bash
+        env:
+          server: ${{secrets.SERVER}}
+          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
