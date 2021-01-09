@@ -6,6 +6,7 @@ import express, { Router, Response, RequestHandler } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import next from "next";
+import path from "path";
 import { Connection } from "typeorm";
 
 import { authRouter } from "./authentication";
@@ -77,6 +78,7 @@ async function start() {
   app.use("/api", backRouter);
 
   // [5] --- Add frontend ---
+  app.use(express.static(path.join(__dirname, "../../public"))); // app.js is located at ./dist/server and public at ./public
   app.get("/_next/*", (req, res) => {
     handle(req, res).catch((e) => console.error(e));
   });
@@ -85,6 +87,10 @@ async function start() {
     morgan("dev"),
     handleErrors(authenticate()),
     handleErrors((req, res) => {
+      if (req.user === undefined && req.path !== "/login") {
+        res.redirect("/login");
+        return;
+      }
       req.csrfToken = req.getCsrfToken();
       handle(req, res).catch((e) => console.error(e));
     }),
