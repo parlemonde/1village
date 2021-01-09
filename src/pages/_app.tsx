@@ -34,11 +34,12 @@ const queryCache = new QueryCache({
   },
 });
 
+NProgress.configure({ showSpinner: false });
+
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user, csrfToken }: MyAppProps) => {
   const onRouterChangeStart = (): void => {
-    NProgress.configure({ showSpinner: false });
     NProgress.start();
   };
   const onRouterChangeComplete = (): void => {
@@ -69,7 +70,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   return (
     <>
       <Head>
-        <title>1 Village</title>
+        <title>1Village</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>

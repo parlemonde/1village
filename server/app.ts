@@ -87,7 +87,7 @@ async function start() {
     morgan("dev"),
     handleErrors(authenticate()),
     handleErrors((req, res) => {
-      if (req.user === undefined && req.path !== "/login") {
+      if (req.user === undefined && req.path !== "/login" && req.path !== "/") {
         res.redirect("/login");
         return;
       }

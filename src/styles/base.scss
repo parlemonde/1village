@@ -3,7 +3,7 @@
 $headerHeight: 50px;
 $menuWidth: 250px;
 $menuWidthSmaller: 200px;
-$rightMenuWidth: 200px;
+$rightMenuWidth: 220px;
 $topNavigationHeight: 45px;
 $verticalSpacing: 20px;
 $horizontalSpacing: 25px;
@@ -124,7 +124,7 @@ main {
   right: $horizontalSpacing;
   width: $rightMenuWidth;
   height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
-  overflow: hidden;
+  overflow: auto;
   padding-bottom: 4px;
 }
 .right-navigation--smaller > div {

@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
       <div className="header__container with-shadow">
         <Logo style={{ width: "40px", height: "auto" }} />
         <h1 className="title" style={{ margin: "0 0 0 0.5rem" }}>
-          1 Village
+          1Village
         </h1>
         <div className="header__search">
           <IconButton aria-label="search" size="small">

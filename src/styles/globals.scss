@@ -34,6 +34,13 @@ label:hover {
   cursor: text;
 }
 
+// NProgress bar
+#nprogress .bar {
+  z-index: 1000 !important;
+  background-color: $primary-color !important;
+  height: 1px;
+}
+
 // Text style
 .text {
   font-size: 1rem;
@@ -56,13 +63,16 @@ label:hover {
 }
 .text--alert,
 .text--error {
-  color: $bg-error;
+  color: $error-color;
 }
 .text--help {
-  color: $bg-help;
+  color: $help-color;
 }
 .text--success {
-  color: $bg-success;
+  color: $success-color;
+}
+.text--bold {
+  font-weight: 600;
 }
 a.text {
   cursor: pointer;
@@ -82,13 +92,13 @@ a.text--secondary:hover {
 }
 a.text--alert,
 a.text--error:hover {
-  border-bottom: 1px solid $bg-error;
+  border-bottom: 1px solid $error-color;
 }
 a.text--help:hover {
-  border-bottom: 1px solid $bg-help;
+  border-bottom: 1px solid $help-color;
 }
 a.text--success:hover {
-  border-bottom: 1px solid $bg-success;
+  border-bottom: 1px solid $success-color;
 }
 
 // misc
@@ -98,6 +108,22 @@ a.text--success:hover {
   background: rgb(224, 195, 252);
   background: -o-linear-gradient(315deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
   background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
+}
+.bg-primary {
+  background-color: $primary-color;
+}
+.bg-secondary {
+  background-color: $secondary-color;
+}
+.bg-help {
+  background-color: $help-color;
+}
+.bg-error,
+.bg-alert {
+  background-color: $error-color;
+}
+.bg-success {
+  background-color: $success-color;
 }
 
 .full-width {

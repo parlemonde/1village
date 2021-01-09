@@ -43,7 +43,7 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
   );
 
   React.useEffect(() => {
-    if (user === null && router.pathname !== "/login") {
+    if (user === null && router.pathname !== "/login" && router.pathname !== "/") {
       router.push("/login");
     }
   }, [user, router]);

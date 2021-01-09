@@ -75,7 +75,7 @@ const Login: React.FC = () => {
             <div className="flex-center" style={{ marginBottom: "0.8rem" }}>
               <Logo style={{ width: "2.6rem", height: "auto" }} />
               <h1 className="title" style={{ margin: "0 0 0 0.5rem" }}>
-                1 Village
+                1Village
               </h1>
             </div>
             <p style={{ marginBottom: "2rem" }}>Se connecter</p>

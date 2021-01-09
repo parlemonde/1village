@@ -4,8 +4,8 @@ import React from "react";
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
 const APP_URL = process.env.NEXT_PUBLIC_HOST_URL || "https://1village.parlemonde.org";
-const APP_NAME = "1 Village";
-const APP_DESCRIPTION = "1 Village, desc...";
+const APP_NAME = "1Village";
+const APP_DESCRIPTION = "1Village description...";
 const PRIMARY_COLOR = "#4c3ed9";
 
 class MyDocument extends Document {

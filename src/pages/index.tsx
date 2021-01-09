@@ -1,11 +1,20 @@
 import React from "react";
 
+import { RightNavigation } from "src/components/Accueil/RightNavigation";
+import { SubHeader } from "src/components/Accueil/SubHeader";
+import { VideoPresentation } from "src/components/Accueil/VideoPresentation";
 import { Base } from "src/components/Base";
-import { SubHeader } from "src/components/SubHeader";
+import { UserServiceContext } from "src/contexts/userContext";
 
 const Home: React.FC = () => {
+  const { isLoggedIn } = React.useContext(UserServiceContext);
+
+  if (!isLoggedIn) {
+    return <VideoPresentation />;
+  }
+
   return (
-    <Base subHeader={<SubHeader />} style={{ padding: "0 1.2rem" }}>
+    <Base subHeader={<SubHeader />} rightNav={<RightNavigation />} style={{ padding: "0 1.2rem" }}>
       <h1>Suggestions d’activités </h1>
     </Base>
   );
