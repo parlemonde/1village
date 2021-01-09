@@ -1,6 +1,9 @@
+import * as argon2 from "argon2";
 import mysql from "mysql";
 import path from "path";
-import { Connection, createConnection, ConnectionOptions } from "typeorm";
+import { Connection, createConnection, ConnectionOptions, getRepository } from "typeorm";
+
+import { User, UserType } from "../entities/user";
 
 import { sleep } from "./index";
 import { logger } from "./logger";
@@ -76,6 +79,28 @@ async function createMySQLDB(): Promise<void> {
   }
 }
 
+async function createSuperAdminUser(): Promise<void> {
+  if (!process.env.ADMIN_PSEUDO || !process.env.ADMIN_PASSWORD) {
+    return;
+  }
+  const adminPseudo = process.env.ADMIN_PSEUDO;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const count = await getRepository(User).count({ where: { pseudo: adminPseudo } });
+  if (count > 0) {
+    return;
+  }
+  const user = new User();
+  user.email = "admin.1village@parlemonde.org";
+  user.pseudo = adminPseudo;
+  user.level = "";
+  user.school = "Asso Par Le Monde";
+  user.type = UserType.SUPER_ADMIN;
+  user.passwordHash = await argon2.hash(adminPassword);
+  user.accountRegistration = 0;
+  await getRepository(User).save(user);
+  logger.info("Super user Admin created!");
+}
+
 // async function createSequences(connection: Connection): Promise<void> {
 //   await connection.transaction(async (manager: EntityManager) => {
 //     await manager.query(`CREATE TABLE sequence (id INT NOT NULL)`);
@@ -94,6 +119,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
       return null;
     }
     const connection = await createConnection(config);
+    await createSuperAdminUser();
     return connection;
   } catch (e) {
     logger.error(e);
