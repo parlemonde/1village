@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 
 import { AxiosReturnType, axiosRequest } from "src/utils/axiosRequest";
 import type { User } from "types/user.type";
@@ -24,16 +24,17 @@ export const UserServiceContext = React.createContext<UserServiceContextValue>(u
 
 interface UserServiceProviderProps {
   user: User | null;
+  setUser(user: User | null): void;
   csrfToken: string;
   children: React.ReactNode;
 }
 
 export const UserServiceProvider: React.FunctionComponent<UserServiceProviderProps> = ({
-  user: initialUser,
+  user,
+  setUser,
   csrfToken,
   children,
 }: UserServiceProviderProps) => {
-  const [user, setUser] = useState<User | null>(initialUser);
   const router = useRouter();
   const headers = React.useMemo(
     () => ({

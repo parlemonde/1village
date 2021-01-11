@@ -160,7 +160,7 @@ main {
     width: calc(100% - #{$horizontalSpacing + $rightMenuWidth});
   }
   .app-content--smaller {
-    min-height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing + $topNavigationHeight});
+    min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $topNavigationHeight});
   }
 
   .right-navigation {

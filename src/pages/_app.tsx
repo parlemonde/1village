@@ -16,6 +16,8 @@ import React from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 
+import { Header } from "src/components/Header";
+import { Navigation } from "src/components/Navigation";
 import { UserServiceProvider } from "src/contexts/userContext";
 import theme from "src/styles/theme";
 import type { User } from "types/user.type";
@@ -38,7 +40,9 @@ NProgress.configure({ showSpinner: false });
 
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
-} = ({ Component, pageProps, router, user, csrfToken }: MyAppProps) => {
+} = ({ Component, pageProps, router, user: initialUser, csrfToken }: MyAppProps) => {
+  const [user, setUser] = React.useState<User | null>(initialUser);
+
   const onRouterChangeStart = (): void => {
     NProgress.start();
   };
@@ -76,8 +80,16 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ReactQueryCacheProvider queryCache={queryCache}>
-          <UserServiceProvider user={user} csrfToken={csrfToken}>
-            <Component {...pageProps} />
+          <UserServiceProvider user={user} setUser={setUser} csrfToken={csrfToken}>
+            {user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
+              <div className="app-container">
+                <Header />
+                <Navigation />
+                <Component {...pageProps} />
+              </div>
+            ) : (
+              <Component {...pageProps} />
+            )}
           </UserServiceProvider>
           {/* Dev only, it won't appear after build for prod. */}
           <ReactQueryDevtools />
@@ -97,9 +109,9 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps 
   };
   if (ctxRequest === null) {
     // client code
-    const initialData = JSON.parse(window.document.getElementById("__NEXT_DATA__")?.innerText);
-    initialData.csrfToken = initialData?.props?.csrfToken || null;
-    initialData.user = initialData?.props?.user || null;
+    const data = JSON.parse(window.document.getElementById("__NEXT_DATA__")?.innerText);
+    initialData.csrfToken = data?.props?.csrfToken || null;
+    initialData.user = data?.props?.user || null;
   } else {
     // server code
     initialData.csrfToken = ctxRequest?.csrfToken || null;
