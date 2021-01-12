@@ -79,7 +79,7 @@ export const Header: React.FC = () => {
                 </MenuItem>
               </Menu>
             </div>
-            <img src={getGravatarUrl(user.email)} width="40px" height="40px" style={{ borderRadius: "20px" }} />
+            <img alt="Image de profil" src={getGravatarUrl(user.email)} width="40px" height="40px" style={{ borderRadius: "20px" }} />
           </div>
         )}
       </div>

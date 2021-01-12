@@ -4,6 +4,7 @@ import "src/styles/base.scss";
 import "src/styles/fonts.scss";
 import "src/styles/globals.scss";
 import "src/styles/login.scss";
+import "src/styles/mon-compte.scss";
 
 import App from "next/app";
 import type { AppProps, AppContext, AppInitialProps } from "next/app";

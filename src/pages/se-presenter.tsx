@@ -4,7 +4,7 @@ import { Base } from "src/components/Base";
 
 const Presentation: React.FC = () => {
   return (
-    <Base style={{ padding: "0 1.2rem" }}>
+    <Base>
       <h1>Se présenter</h1>
     </Base>
   );

@@ -14,7 +14,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <Base subHeader={<SubHeader />} rightNav={<RightNavigation />} style={{ padding: "0 1.2rem" }}>
+    <Base subHeader={<SubHeader />} rightNav={<RightNavigation />}>
       <h1>Suggestions d’activités </h1>
     </Base>
   );

@@ -94,7 +94,7 @@ main {
   width: calc(100% - #{$horizontalSpacing});
   min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing});
   margin: 0;
-  padding: 0;
+  padding: 0.5rem 1.2rem;
   overflow: auto;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
