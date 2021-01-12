@@ -131,7 +131,9 @@ userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
   user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
-  user.type = valueOrDefault(data.type, user.type);
+  if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
+    user.type = valueOrDefault(data.type, user.type);
+  }
   await getRepository(User).save(user);
   res.sendJSON(user.withoutPassword());
 });

@@ -17,14 +17,14 @@ interface UserServiceContextValue {
   verifyEmail(user: Partial<User>): UserServiceFunc;
   logout(): Promise<void>;
   deleteAccount(): Promise<boolean>;
-  setUser: (value: React.SetStateAction<User>) => void;
+  setUser: (value: React.SetStateAction<User | null>) => void;
 }
 
 export const UserServiceContext = React.createContext<UserServiceContextValue>(undefined);
 
 interface UserServiceProviderProps {
   user: User | null;
-  setUser(user: User | null): void;
+  setUser(user: React.SetStateAction<User | null>): void;
   csrfToken: string;
   children: React.ReactNode;
 }
