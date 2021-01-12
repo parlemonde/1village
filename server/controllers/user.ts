@@ -36,6 +36,7 @@ userController.get({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
 type CreateUserData = {
   email: string;
   pseudo: string;
+  teacherName?: string;
   level?: string;
   school?: string;
   password?: string;
@@ -46,6 +47,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   properties: {
     email: { type: "string", format: "email" },
     pseudo: { type: "string" },
+    teacherName: { type: "string", nullable: true },
     level: { type: "string", nullable: true },
     school: { type: "string", nullable: true },
     password: { type: "string", nullable: true },
@@ -68,6 +70,7 @@ userController.post({ path: "" }, async (req: Request, res: Response) => {
   const user = new User();
   user.email = data.email;
   user.pseudo = data.pseudo;
+  user.teacherName = data.teacherName || "";
   user.level = data.level || "";
   user.school = data.school || "";
   if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
@@ -89,6 +92,7 @@ userController.post({ path: "" }, async (req: Request, res: Response) => {
 type EditUserData = {
   email?: string;
   pseudo?: string;
+  teacherName?: string;
   level?: string;
   school?: string;
   type?: UserType;
@@ -98,6 +102,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   properties: {
     email: { type: "string", format: "email", nullable: true },
     pseudo: { type: "string", nullable: true },
+    teacherName: { type: "string", nullable: true },
     level: { type: "string", nullable: true },
     school: { type: "string", nullable: true },
     type: { type: "number", nullable: true, enum: [0, 1, 2] },
@@ -123,6 +128,7 @@ userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
 
   user.email = valueOrDefault(data.email, user.email);
   user.pseudo = valueOrDefault(data.pseudo, user.pseudo);
+  user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
   user.type = valueOrDefault(data.type, user.type);

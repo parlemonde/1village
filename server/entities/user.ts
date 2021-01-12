@@ -16,6 +16,9 @@ export class User implements UserInterface {
   public pseudo: string;
 
   @Column({ type: "varchar", length: 50, default: "" })
+  public teacherName: string;
+
+  @Column({ type: "varchar", length: 50, default: "" })
   public level: string;
 
   @Column({ type: "varchar", length: 200, default: "" })
