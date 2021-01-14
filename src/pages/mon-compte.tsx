@@ -146,10 +146,11 @@ const Presentation: React.FC = () => {
         return;
       }
       await updatePwd();
-    } else if (save === "pwd") {
+    } else if (save === "delete") {
       deleteAccount();
     } else {
       setNewUser(user);
+      setDeleteConfirm("");
     }
     setEditMode(newEditMode);
   };

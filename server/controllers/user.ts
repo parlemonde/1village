@@ -149,6 +149,49 @@ userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
   res.sendJSON(user.withoutPassword());
 });
 
+// --- Update user password ---
+type UpdatePwdData = {
+  password: string;
+  newPassword: string;
+};
+const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
+  type: "object",
+  properties: {
+    password: { type: "string" },
+    newPassword: { type: "string" },
+  },
+  required: ["password", "newPassword"],
+  additionalProperties: false,
+};
+const updatePwdValidator = ajv.compile(PWD_SCHEMA);
+userController.put({ path: "/:id/password", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id, 10) || 0;
+  const user = await getRepository(User).findOne({ where: { id } });
+  const isSelfProfile = req.user && req.user.id === id;
+  if (user === undefined || !isSelfProfile) {
+    next();
+    return;
+  }
+  const data = req.body;
+  if (!updatePwdValidator(data)) {
+    sendInvalidDataError(updatePwdValidator);
+    return;
+  }
+  let isPasswordCorrect: boolean = false;
+  try {
+    isPasswordCorrect = await argon2.verify(user.passwordHash || "", data.password);
+  } catch (e) {
+    logger.error(JSON.stringify(e));
+  }
+  if (isPasswordCorrect) {
+    user.passwordHash = await argon2.hash(data.newPassword);
+    await getRepository(User).save(user);
+  } else {
+    throw new AppError("Mot de passe invalide", ErrorCode.INVALID_PASSWORD);
+  }
+  res.sendJSON({ success: true });
+});
+
 // --- Delete an user. ---
 userController.delete({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
