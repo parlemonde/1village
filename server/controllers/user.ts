@@ -152,6 +152,14 @@ userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
 // --- Delete an user. ---
 userController.delete({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
+  const user = await getRepository(User).findOne({ where: { id } });
+  const isSelfProfile = req.user && req.user.id === id;
+  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+    res.status(204).send();
+    return;
+  }
+
   await getRepository(User).delete({ id });
   res.status(204).send();
 });

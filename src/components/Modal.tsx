@@ -48,6 +48,7 @@ interface ModalProps {
   open?: boolean;
   onClose?(): void;
   onConfirm?(): void;
+  color?: "primary" | "secondary";
   ariaLabelledBy: string;
   ariaDescribedBy: string;
   noCloseButton?: boolean;
@@ -68,6 +69,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   onConfirm = null,
   ariaLabelledBy,
   ariaDescribedBy,
+  color = "secondary",
   title = "",
   children = <div />,
   cancelLabel = "",
@@ -100,7 +102,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
         {children}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary" variant="outlined">
+        <Button onClick={onClose} color={color} variant="outlined">
           {cancelLabel || "Annuler"}
         </Button>
         {onConfirm !== null && error && (
@@ -109,7 +111,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
           </RedButton>
         )}
         {onConfirm !== null && !error && (
-          <Button onClick={onConfirm} disabled={disabled} color="secondary" variant="contained">
+          <Button onClick={onConfirm} disabled={disabled} color={color} variant="contained">
             {confirmLabel || "Non"}
           </Button>
         )}

@@ -25,7 +25,7 @@ const getGravatarUrl = (email: string): string => {
 };
 
 const Presentation: React.FC = () => {
-  const { user, setUser, axiosLoggedRequest } = React.useContext(UserServiceContext);
+  const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserServiceContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User>(user);
   const [pwd, setPwd] = React.useState({
@@ -33,6 +33,7 @@ const Presentation: React.FC = () => {
     confirmNew: "",
     current: "",
   });
+  const [deleteConfirm, setDeleteConfirm] = React.useState("");
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
   const [errors, setErrors] = React.useState({
@@ -113,7 +114,26 @@ const Presentation: React.FC = () => {
     setIsLoading(false);
   };
 
-  const updateEditMode = (newEditMode: number, save: "user" | "pwd" | null = null) => async () => {
+  const deleteAccount = async () => {
+    setIsLoading(true);
+    const response = await axiosLoggedRequest({
+      method: "DELETE",
+      url: `/users/${user.id}`,
+    });
+    if (response.error) {
+      enqueueSnackbar("Une erreur inconnue est survenue...", {
+        variant: "error",
+      });
+    } else {
+      logout();
+      enqueueSnackbar("Compte supprimé avec succès", {
+        variant: "success",
+      });
+    }
+    setIsLoading(false);
+  };
+
+  const updateEditMode = (newEditMode: number, save: "user" | "pwd" | "delete" | null = null) => async () => {
     if (save === "user") {
       await checkEmailAndPseudo();
       if (errors.email || errors.pseudo) {
@@ -126,6 +146,8 @@ const Presentation: React.FC = () => {
         return;
       }
       await updatePwd();
+    } else if (save === "pwd") {
+      deleteAccount();
     } else {
       setNewUser(user);
     }
@@ -250,7 +272,7 @@ const Presentation: React.FC = () => {
           </Button>
         </div>
         <div style={{ margin: "1rem 0.5rem" }}>
-          <RedButton variant="contained" color="secondary" size="small">
+          <RedButton variant="contained" color="secondary" size="small" onClick={updateEditMode(3)}>
             Supprimer mon compte
           </RedButton>
         </div>
@@ -307,6 +329,44 @@ const Presentation: React.FC = () => {
               error={errors.pwdConfirm}
               helperText={errors.pwdConfirm ? "Mots de passe différents." : null}
               onBlur={checkPassword}
+            />
+          </div>
+        </Modal>
+
+        <Modal
+          open={editMode === 3}
+          confirmLabel="Supprimer"
+          error
+          onClose={updateEditMode(-1)}
+          onConfirm={updateEditMode(-1, "delete")}
+          title="Supprimer mon compte"
+          fullWidth
+          disabled={deleteConfirm.toLowerCase() !== "supprimer"}
+          color="primary"
+          maxWidth="sm"
+          ariaLabelledBy="delete-user"
+          ariaDescribedBy="delete-user-desc"
+        >
+          <div>
+            <Alert severity="error" style={{ marginBottom: "1rem" }}>
+              Attention! Êtes-vous sur de vouloir supprimer votre compte ? Cette action est <strong>irréversible</strong>.
+              <br />
+              Pour supprimer votre compte, veuillez taper <strong>supprimer</strong> ci-dessous et cliquez sur supprimer.
+            </Alert>
+            <TextField
+              value={deleteConfirm}
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label=""
+              placeholder="Tapez 'supprimer' ici"
+              onChange={(event) => {
+                setDeleteConfirm(event.target.value);
+              }}
+              className="full-width"
+              error={true}
+              style={{ marginTop: "0.75rem" }}
             />
           </div>
         </Modal>
