@@ -32,6 +32,17 @@ userController.get({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
   res.sendJSON(user.withoutPassword());
 });
 
+// --- Check user pseudo ---
+userController.get({ path: "/pseudo/:pseudo" }, async (req: Request, res: Response, next: NextFunction) => {
+  const pseudo = req.params.pseudo || "";
+  if (!pseudo) {
+    res.sendJSON({ available: true });
+  }
+  res.sendJSON({
+    available: (await getRepository(User).count({ where: { pseudo } })) === 0,
+  });
+});
+
 // --- Create an user. ---
 type CreateUserData = {
   email: string;

@@ -7,8 +7,13 @@ interface PanelInputProps {
   defaultValue?: string;
   label: string;
   placeholder?: string;
-  onChange?(newValue: string): void;
   isEditMode?: boolean;
+  errorMsg?: string;
+  helperText?: string;
+  hasError?: boolean;
+  type?: string;
+  onChange?(newValue: string): void;
+  onBlur?(): void | Promise<void>;
 }
 
 export const PanelInput: React.FC<PanelInputProps> = ({
@@ -16,8 +21,13 @@ export const PanelInput: React.FC<PanelInputProps> = ({
   defaultValue = "",
   label,
   placeholder = "",
+  isEditMode = true,
+  errorMsg,
+  helperText,
+  type = "text",
+  hasError = false,
   onChange = () => {},
-  isEditMode = false,
+  onBlur = () => {},
 }: PanelInputProps) => {
   return (
     <div className="flex-center" style={{ margin: "0.5rem" }}>
@@ -35,6 +45,10 @@ export const PanelInput: React.FC<PanelInputProps> = ({
           onChange={(event) => {
             onChange(event.target.value);
           }}
+          type={type}
+          onBlur={onBlur}
+          error={hasError}
+          helperText={hasError ? errorMsg : helperText}
         />
       ) : (
         <span style={{ marginLeft: "0.5rem" }}>{value || defaultValue}</span>

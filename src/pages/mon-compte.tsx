@@ -5,14 +5,18 @@ import React from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import NoSsr from "@material-ui/core/NoSsr";
+import { TextField } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 import { Base } from "src/components/Base";
+import { Modal } from "src/components/Modal";
 import { EditButton } from "src/components/buttons/EditButton";
 import { HelpButton } from "src/components/buttons/HelpButton";
 import { RedButton } from "src/components/buttons/RedButton";
 import { PanelInput } from "src/components/mon-compte/PanelInput";
 import { UserServiceContext } from "src/contexts/userContext";
+import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from "src/utils/accountChecks";
 import type { User } from "types/user.type";
 
 const getGravatarUrl = (email: string): string => {
@@ -24,20 +28,39 @@ const Presentation: React.FC = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserServiceContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User>(user);
+  const [pwd, setPwd] = React.useState({
+    new: "",
+    confirmNew: "",
+    current: "",
+  });
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [errors, setErrors] = React.useState({
+    email: false,
+    pseudo: false,
+    pwd: false,
+    pwdConfirm: false,
+  });
 
   if (!user) {
     return <div></div>;
   }
 
-  const updateEditMode = (newEditMode: number, save: boolean = false) => async () => {
-    if (save) {
-      await updateUser();
-    } else {
-      setNewUser(user);
-    }
-    setEditMode(newEditMode);
+  // checks
+  const checkEmailAndPseudo = async () => {
+    const pseudoValid = await isPseudoValid(newUser.pseudo, user.pseudo);
+    setErrors((e) => ({
+      ...e,
+      email: !isEmailValid(newUser.email),
+      pseudo: !pseudoValid,
+    }));
+  };
+  const checkPassword = () => {
+    setErrors((e) => ({
+      ...e,
+      pwd: pwd.new.length > 0 && !isPasswordValid(pwd.new),
+      pwdConfirm: pwd.confirmNew.length > 0 && !isConfirmPasswordValid(pwd.new, pwd.confirmNew),
+    }));
   };
 
   const updateUser = async () => {
@@ -66,6 +89,47 @@ const Presentation: React.FC = () => {
       });
     }
     setIsLoading(false);
+  };
+  const updatePwd = async () => {
+    setIsLoading(true);
+    const response = await axiosLoggedRequest({
+      method: "PUT",
+      url: `/users/${user.id}/password`,
+      data: {
+        password: pwd.current,
+        newPassword: pwd.new,
+      },
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar("Une erreur inconnue est survenue...", {
+        variant: "error",
+      });
+    } else {
+      enqueueSnackbar("Mot de passe mis à jour avec succès !", {
+        variant: "success",
+      });
+    }
+    setIsLoading(false);
+  };
+
+  const updateEditMode = (newEditMode: number, save: "user" | "pwd" | null = null) => async () => {
+    if (save === "user") {
+      await checkEmailAndPseudo();
+      if (errors.email || errors.pseudo) {
+        return;
+      }
+      await updateUser();
+    } else if (save === "pwd") {
+      checkPassword();
+      if (errors.pwd || errors.pwdConfirm || pwd.new.length === 0 || pwd.confirmNew.length === 0) {
+        return;
+      }
+      await updatePwd();
+    } else {
+      setNewUser(user);
+    }
+    setEditMode(newEditMode);
   };
 
   return (
@@ -119,7 +183,7 @@ const Presentation: React.FC = () => {
             <Button size="small" variant="contained" style={{ margin: "0.5rem" }} onClick={updateEditMode(-1)}>
               Annuler
             </Button>
-            <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, true)}>
+            <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, "user")}>
               Enregistrer
             </Button>
           </div>
@@ -144,6 +208,9 @@ const Presentation: React.FC = () => {
           onChange={(pseudo) => {
             setNewUser((u) => ({ ...u, pseudo }));
           }}
+          errorMsg="Pseudo indisponible"
+          hasError={errors.pseudo}
+          onBlur={checkEmailAndPseudo}
         />
         <PanelInput
           value={newUser.email}
@@ -154,9 +221,12 @@ const Presentation: React.FC = () => {
           onChange={(email) => {
             setNewUser((u) => ({ ...u, email }));
           }}
+          errorMsg="Email invalide"
+          hasError={errors.email}
+          onBlur={checkEmailAndPseudo}
         />
         <div style={{ margin: "1rem 0.5rem" }}>
-          <Button variant="contained" color="secondary" size="small">
+          <Button variant="contained" color="secondary" size="small" onClick={updateEditMode(2)}>
             Modifier le mot de passe
           </Button>
         </div>
@@ -165,7 +235,7 @@ const Presentation: React.FC = () => {
             <Button size="small" variant="contained" style={{ margin: "0.5rem" }} onClick={updateEditMode(-1)}>
               Annuler
             </Button>
-            <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, true)}>
+            <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, "user")}>
               Enregistrer
             </Button>
           </div>
@@ -186,7 +256,63 @@ const Presentation: React.FC = () => {
         </div>
       </div>
 
-      <Backdrop style={{ zIndex: 100, color: "#fff" }} open={isLoading}>
+      <NoSsr>
+        <Modal
+          open={editMode === 2}
+          confirmLabel="Modifier"
+          onClose={updateEditMode(-1)}
+          onConfirm={updateEditMode(-1, "pwd")}
+          title="Changer de mot de passe"
+          fullWidth
+          maxWidth="sm"
+          ariaLabelledBy="update-pwd"
+          ariaDescribedBy="update-pwd-desc"
+        >
+          <div id="update-pwd-desc">
+            <TextField
+              value={pwd.current}
+              type="password"
+              label="Mot de passe actuel"
+              onChange={(event) => {
+                setPwd((p) => ({ ...p, current: event.target.value }));
+              }}
+              className="full-width"
+            />
+            <TextField
+              value={pwd.new}
+              type="password"
+              label="Nouveau mot de passe"
+              onChange={(event) => {
+                setPwd((p) => ({ ...p, new: event.target.value }));
+              }}
+              className="full-width"
+              style={{ marginTop: "0.75rem" }}
+              error={errors.pwd}
+              helperText={
+                errors.pwd
+                  ? "Mot de passe trop faible. Il doit contenir au moins 8 charactères avec des lettres minuscules, majuscules et des chiffres."
+                  : null
+              }
+              onBlur={checkPassword}
+            />
+            <TextField
+              value={pwd.confirmNew}
+              type="password"
+              label="Confirmer le mot de passe"
+              onChange={(event) => {
+                setPwd((p) => ({ ...p, confirmNew: event.target.value }));
+              }}
+              className="full-width"
+              style={{ marginTop: "0.75rem" }}
+              error={errors.pwdConfirm}
+              helperText={errors.pwdConfirm ? "Mots de passe différents." : null}
+              onBlur={checkPassword}
+            />
+          </div>
+        </Modal>
+      </NoSsr>
+
+      <Backdrop style={{ zIndex: 2000, color: "#fff" }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>
