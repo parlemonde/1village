@@ -4,10 +4,12 @@ import "src/styles/base.scss";
 import "src/styles/fonts.scss";
 import "src/styles/globals.scss";
 import "src/styles/login.scss";
+import "src/styles/mon-compte.scss";
 
 import App from "next/app";
 import type { AppProps, AppContext, AppInitialProps } from "next/app";
 import Head from "next/head";
+import { SnackbarProvider } from "notistack";
 import NProgress from "nprogress";
 import { ReactQueryDevtools } from "react-query-devtools";
 import { QueryCache, ReactQueryCacheProvider } from "react-query";
@@ -79,21 +81,29 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ReactQueryCacheProvider queryCache={queryCache}>
-          <UserServiceProvider user={user} setUser={setUser} csrfToken={csrfToken}>
-            {user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
-              <div className="app-container">
-                <Header />
-                <Navigation />
+        <SnackbarProvider
+          maxSnack={3}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <ReactQueryCacheProvider queryCache={queryCache}>
+            <UserServiceProvider user={user} setUser={setUser} csrfToken={csrfToken}>
+              {user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
+                <div className="app-container">
+                  <Header />
+                  <Navigation />
+                  <Component {...pageProps} />
+                </div>
+              ) : (
                 <Component {...pageProps} />
-              </div>
-            ) : (
-              <Component {...pageProps} />
-            )}
-          </UserServiceProvider>
-          {/* Dev only, it won't appear after build for prod. */}
-          <ReactQueryDevtools />
-        </ReactQueryCacheProvider>
+              )}
+            </UserServiceProvider>
+            {/* Dev only, it won't appear after build for prod. */}
+            <ReactQueryDevtools />
+          </ReactQueryCacheProvider>
+        </SnackbarProvider>
       </ThemeProvider>
     </>
   );

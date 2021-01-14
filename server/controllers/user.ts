@@ -32,10 +32,22 @@ userController.get({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
   res.sendJSON(user.withoutPassword());
 });
 
+// --- Check user pseudo ---
+userController.get({ path: "/pseudo/:pseudo" }, async (req: Request, res: Response, next: NextFunction) => {
+  const pseudo = req.params.pseudo || "";
+  if (!pseudo) {
+    res.sendJSON({ available: true });
+  }
+  res.sendJSON({
+    available: (await getRepository(User).count({ where: { pseudo } })) === 0,
+  });
+});
+
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
   pseudo: string;
+  teacherName?: string;
   level?: string;
   school?: string;
   password?: string;
@@ -46,6 +58,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   properties: {
     email: { type: "string", format: "email" },
     pseudo: { type: "string" },
+    teacherName: { type: "string", nullable: true },
     level: { type: "string", nullable: true },
     school: { type: "string", nullable: true },
     password: { type: "string", nullable: true },
@@ -68,6 +81,7 @@ userController.post({ path: "" }, async (req: Request, res: Response) => {
   const user = new User();
   user.email = data.email;
   user.pseudo = data.pseudo;
+  user.teacherName = data.teacherName || "";
   user.level = data.level || "";
   user.school = data.school || "";
   if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
@@ -89,6 +103,7 @@ userController.post({ path: "" }, async (req: Request, res: Response) => {
 type EditUserData = {
   email?: string;
   pseudo?: string;
+  teacherName?: string;
   level?: string;
   school?: string;
   type?: UserType;
@@ -98,6 +113,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   properties: {
     email: { type: "string", format: "email", nullable: true },
     pseudo: { type: "string", nullable: true },
+    teacherName: { type: "string", nullable: true },
     level: { type: "string", nullable: true },
     school: { type: "string", nullable: true },
     type: { type: "number", nullable: true, enum: [0, 1, 2] },
@@ -123,16 +139,70 @@ userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
 
   user.email = valueOrDefault(data.email, user.email);
   user.pseudo = valueOrDefault(data.pseudo, user.pseudo);
+  user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
-  user.type = valueOrDefault(data.type, user.type);
+  if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
+    user.type = valueOrDefault(data.type, user.type);
+  }
   await getRepository(User).save(user);
   res.sendJSON(user.withoutPassword());
+});
+
+// --- Update user password ---
+type UpdatePwdData = {
+  password: string;
+  newPassword: string;
+};
+const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
+  type: "object",
+  properties: {
+    password: { type: "string" },
+    newPassword: { type: "string" },
+  },
+  required: ["password", "newPassword"],
+  additionalProperties: false,
+};
+const updatePwdValidator = ajv.compile(PWD_SCHEMA);
+userController.put({ path: "/:id/password", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id, 10) || 0;
+  const user = await getRepository(User).findOne({ where: { id } });
+  const isSelfProfile = req.user && req.user.id === id;
+  if (user === undefined || !isSelfProfile) {
+    next();
+    return;
+  }
+  const data = req.body;
+  if (!updatePwdValidator(data)) {
+    sendInvalidDataError(updatePwdValidator);
+    return;
+  }
+  let isPasswordCorrect: boolean = false;
+  try {
+    isPasswordCorrect = await argon2.verify(user.passwordHash || "", data.password);
+  } catch (e) {
+    logger.error(JSON.stringify(e));
+  }
+  if (isPasswordCorrect) {
+    user.passwordHash = await argon2.hash(data.newPassword);
+    await getRepository(User).save(user);
+  } else {
+    throw new AppError("Mot de passe invalide", ErrorCode.INVALID_PASSWORD);
+  }
+  res.sendJSON({ success: true });
 });
 
 // --- Delete an user. ---
 userController.delete({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
+  const user = await getRepository(User).findOne({ where: { id } });
+  const isSelfProfile = req.user && req.user.id === id;
+  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+    res.status(204).send();
+    return;
+  }
+
   await getRepository(User).delete({ id });
   res.status(204).send();
 });

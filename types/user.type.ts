@@ -7,6 +7,7 @@ export enum UserType {
 export interface User {
   id: number;
   email: string;
+  teacherName: string;
   pseudo: string;
   school: string;
   level: string;
