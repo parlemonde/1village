@@ -1,9 +1,9 @@
 import React from "react";
 
-import { RightNavigation } from "src/components/Accueil/RightNavigation";
-import { SubHeader } from "src/components/Accueil/SubHeader";
-import { VideoPresentation } from "src/components/Accueil/VideoPresentation";
 import { Base } from "src/components/Base";
+import { RightNavigation } from "src/components/accueil/RightNavigation";
+import { SubHeader } from "src/components/accueil/SubHeader";
+import { VideoPresentation } from "src/components/accueil/VideoPresentation";
 import { UserServiceContext } from "src/contexts/userContext";
 
 const Home: React.FC = () => {

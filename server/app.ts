@@ -11,6 +11,7 @@ import { Connection } from "typeorm";
 
 import { authRouter } from "./authentication";
 import { controllerRouter } from "./controllers";
+import { UserType } from "./entities/user";
 import { authenticate } from "./middlewares/authenticate";
 import { crsfProtection } from "./middlewares/csrfCheck";
 import { handleErrors } from "./middlewares/handleErrors";
@@ -89,6 +90,10 @@ async function start() {
     handleErrors((req, res) => {
       if (req.user === undefined && req.path !== "/login" && req.path !== "/") {
         res.redirect("/login");
+        return;
+      }
+      if (req.path.slice(1, 6) === "admin" && (!req.user || req.user.type < UserType.ADMIN)) {
+        res.redirect("/");
         return;
       }
       req.csrfToken = req.getCsrfToken();

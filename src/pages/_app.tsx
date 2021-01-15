@@ -20,6 +20,8 @@ import { ThemeProvider } from "@material-ui/core/styles";
 
 import { Header } from "src/components/Header";
 import { Navigation } from "src/components/Navigation";
+import { AdminHeader } from "src/components/admin/AdminHeader";
+import { AdminNavigation } from "src/components/admin/AdminNavigation";
 import { UserServiceProvider } from "src/contexts/userContext";
 import theme from "src/styles/theme";
 import type { User } from "types/user.type";
@@ -73,6 +75,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
     }
   }, []);
 
+  const isOnAdmin = router.pathname.slice(1, 6) === "admin";
+
   return (
     <>
       <Head>
@@ -90,7 +94,17 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
         >
           <ReactQueryCacheProvider queryCache={queryCache}>
             <UserServiceProvider user={user} setUser={setUser} csrfToken={csrfToken}>
-              {user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
+              {isOnAdmin ? (
+                <div>
+                  <AdminHeader />
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <AdminNavigation />
+                    <div style={{ flex: 1 }}>
+                      <Component {...pageProps} />
+                    </div>
+                  </div>
+                </div>
+              ) : user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
                 <div className="app-container">
                   <Header />
                   <Navigation />

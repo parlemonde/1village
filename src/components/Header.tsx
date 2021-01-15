@@ -1,4 +1,5 @@
 import md5 from "md5";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -6,11 +7,13 @@ import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { Button } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import { UserServiceContext } from "src/contexts/userContext";
 import Logo from "src/svg/logo.svg";
+import { UserType } from "types/user.type";
 
 const getGravatarUrl = (email: string): string => {
   const hash = md5(email.trim().toLowerCase());
@@ -49,10 +52,17 @@ export const Header: React.FC = () => {
           <IconButton aria-label="search" size="small">
             <SearchIcon />
           </IconButton>
-          <InputBase placeholder="Rechercher" />
+          <InputBase placeholder="Rechercher" inputProps={{ "aria-label": "search" }} />
         </div>
         {user && (
           <div className="header__user">
+            {user.type >= UserType.ADMIN && (
+              <Link href="/admin/villages">
+                <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: "1rem" }}>
+                  {"Aller à l'interface Admin"}
+                </Button>
+              </Link>
+            )}
             <div>
               <IconButton aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleMenu}>
                 <SettingsIcon />
