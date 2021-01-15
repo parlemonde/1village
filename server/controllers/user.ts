@@ -14,17 +14,17 @@ import { Controller } from "./controller";
 
 const userController = new Controller("/users");
 // --- Get all users. ---
-userController.get({ path: "", userType: UserType.SUPER_ADMIN }, async (_req: Request, res: Response) => {
+userController.get({ path: "", userType: UserType.ADMIN }, async (_req: Request, res: Response) => {
   const users = await getRepository(User).find();
   res.sendJSON(users.map((u) => u.withoutPassword()));
 });
 
 // --- Get one user. ---
-userController.get({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -68,7 +68,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   additionalProperties: false,
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
-userController.post({ path: "" }, async (req: Request, res: Response) => {
+userController.post({ path: "", userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
@@ -84,10 +84,10 @@ userController.post({ path: "" }, async (req: Request, res: Response) => {
   user.teacherName = data.teacherName || "";
   user.level = data.level || "";
   user.school = data.school || "";
-  if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
-    user.type = valueOrDefault(data.type, UserType.CLASS);
+  if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
+    user.type = valueOrDefault(data.type, UserType.TEACHER);
   } else {
-    user.type = UserType.CLASS;
+    user.type = UserType.TEACHER;
   }
   user.accountRegistration = data.password === undefined ? 3 : 0;
   user.passwordHash = data.password ? await argon2.hash(data.password) : "";
@@ -122,11 +122,11 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -142,7 +142,7 @@ userController.put({ path: "/:id", userType: UserType.CLASS }, async (req: Reque
   user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
-  if (req.user !== undefined && req.user.type === UserType.SUPER_ADMIN) {
+  if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
   }
   await getRepository(User).save(user);
@@ -164,7 +164,7 @@ const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
   additionalProperties: false,
 };
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
-userController.put({ path: "/:id/password", userType: UserType.CLASS }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: "/:id/password", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -193,11 +193,11 @@ userController.put({ path: "/:id/password", userType: UserType.CLASS }, async (r
 });
 
 // --- Delete an user. ---
-userController.delete({ path: "/:id", userType: UserType.CLASS }, async (req: Request, res: Response) => {
+userController.delete({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type === UserType.SUPER_ADMIN;
+  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
     res.status(204).send();
     return;

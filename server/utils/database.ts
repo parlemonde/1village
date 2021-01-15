@@ -97,6 +97,7 @@ async function createSuperAdminUser(): Promise<void> {
   user.type = UserType.SUPER_ADMIN;
   user.passwordHash = await argon2.hash(adminPassword);
   user.accountRegistration = 0;
+  user.countryCode = "fr";
   await getRepository(User).save(user);
   logger.info("Super user Admin created!");
 }

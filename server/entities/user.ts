@@ -1,6 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 
 import { User as UserInterface, UserType } from "../../types/user.type";
+
+import { Village } from "./village";
 
 export { UserType };
 
@@ -36,9 +38,19 @@ export class User implements UserInterface {
   @Column({
     type: "enum",
     enum: UserType,
-    default: 0,
+    default: UserType.TEACHER,
   })
   type: UserType;
+
+  @ManyToOne(() => Village, (village: Village) => village.users)
+  @JoinColumn({ name: "villageId" })
+  public village: Village | null;
+
+  @Column({ nullable: true })
+  public villageId: number | null;
+
+  @Column({ type: "varchar", length: 2, nullable: false })
+  public countryCode: string;
 
   public withoutPassword(): User {
     delete this.passwordHash;
