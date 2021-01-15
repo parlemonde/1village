@@ -74,7 +74,7 @@ __metadata:
     react-query: ^2.26.4
     react-query-devtools: ^2.6.3
     safe-buffer: ^5.2.1
-    sass: ^1.30.0
+    sass: ^1.32.2
     typeorm: ^0.2.29
     typescript: ^4.1.2
     uuid: ^8.3.2
@@ -10612,14 +10612,14 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.30.0":
-  version: 1.30.0
-  resolution: "sass@npm:1.30.0"
+"sass@npm:^1.32.2":
+  version: 1.32.2
+  resolution: "sass@npm:1.32.2"
   dependencies:
     chokidar: ">=2.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: 8bbaf43df42290902d0d325bcbaef5e43409ad5bd4de8447d0f94dc7e6571aec191c26045e06de2d1c38d22cf7ee33b58b9f1a99e4451743d9841f40ab837d10
+  checksum: 4e5b89eb673aa1b4d2f805ee6e352e40b296ebbcf528cd25fbb90f3d3e6ecd6fd0b9b7f6ef94190e39cb0b18d3942e30b08396246e45509500750c1879a295bd
   languageName: node
   linkType: hard
 

@@ -86,7 +86,7 @@
     "react-query": "^2.26.4",
     "react-query-devtools": "^2.6.3",
     "safe-buffer": "^5.2.1",
-    "sass": "^1.30.0",
+    "sass": "^1.32.2",
     "typeorm": "^0.2.29",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"
