@@ -8,7 +8,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
 
 import { KeepRatio } from "src/components/KeepRatio";
-import { UserServiceContext } from "src/contexts/userContext";
+import { UserContext } from "src/contexts/userContext";
 import Logo from "src/svg/logo.svg";
 
 type User = {
@@ -26,7 +26,7 @@ const errorMessages = {
 
 const Login: React.FC = () => {
   const router = useRouter();
-  const { login } = React.useContext(UserServiceContext);
+  const { login } = React.useContext(UserContext);
   const redirect = React.useRef<string>("/");
 
   const [user, setUser] = React.useState<User>({

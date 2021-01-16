@@ -1,9 +1,16 @@
+import Link from "next/link";
 import React from "react";
+
+import MaterialLink from "@material-ui/core/Link";
 
 const Stats: React.FC = () => {
   return (
-    <div>
-      <h1>Statistiques</h1>
+    <div className="admin--container">
+      <Link href="/admin/stats">
+        <MaterialLink href="/admin/stats">
+          <h1 style={{ marginBottom: "1rem" }}>Statistiques</h1>
+        </MaterialLink>
+      </Link>
     </div>
   );
 };

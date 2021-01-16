@@ -11,7 +11,7 @@ import { Button } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-import { UserServiceContext } from "src/contexts/userContext";
+import { UserContext } from "src/contexts/userContext";
 import Logo from "src/svg/logo.svg";
 import { UserType } from "types/user.type";
 
@@ -22,7 +22,7 @@ const getGravatarUrl = (email: string): string => {
 
 export const Header: React.FC = () => {
   const router = useRouter();
-  const { user, logout } = React.useContext(UserServiceContext);
+  const { user, logout } = React.useContext(UserContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 

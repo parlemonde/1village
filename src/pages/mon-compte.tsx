@@ -15,7 +15,7 @@ import { EditButton } from "src/components/buttons/EditButton";
 import { HelpButton } from "src/components/buttons/HelpButton";
 import { RedButton } from "src/components/buttons/RedButton";
 import { PanelInput } from "src/components/mon-compte/PanelInput";
-import { UserServiceContext } from "src/contexts/userContext";
+import { UserContext } from "src/contexts/userContext";
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from "src/utils/accountChecks";
 import type { User } from "types/user.type";
 
@@ -25,7 +25,7 @@ const getGravatarUrl = (email: string): string => {
 };
 
 const Presentation: React.FC = () => {
-  const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserServiceContext);
+  const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User>(user);
   const [pwd, setPwd] = React.useState({

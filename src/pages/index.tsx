@@ -4,10 +4,10 @@ import { Base } from "src/components/Base";
 import { RightNavigation } from "src/components/accueil/RightNavigation";
 import { SubHeader } from "src/components/accueil/SubHeader";
 import { VideoPresentation } from "src/components/accueil/VideoPresentation";
-import { UserServiceContext } from "src/contexts/userContext";
+import { UserContext } from "src/contexts/userContext";
 
 const Home: React.FC = () => {
-  const { isLoggedIn } = React.useContext(UserServiceContext);
+  const { isLoggedIn } = React.useContext(UserContext);
 
   if (!isLoggedIn) {
     return <VideoPresentation />;

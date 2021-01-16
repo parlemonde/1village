@@ -1,13 +1,14 @@
 import "nprogress/nprogress.css";
 
+import "src/styles/admin.scss";
 import "src/styles/base.scss";
 import "src/styles/fonts.scss";
 import "src/styles/globals.scss";
 import "src/styles/login.scss";
 import "src/styles/mon-compte.scss";
 
-import App from "next/app";
 import type { AppProps, AppContext, AppInitialProps } from "next/app";
+import App from "next/app";
 import Head from "next/head";
 import { SnackbarProvider } from "notistack";
 import NProgress from "nprogress";
@@ -22,7 +23,7 @@ import { Header } from "src/components/Header";
 import { Navigation } from "src/components/Navigation";
 import { AdminHeader } from "src/components/admin/AdminHeader";
 import { AdminNavigation } from "src/components/admin/AdminNavigation";
-import { UserServiceProvider } from "src/contexts/userContext";
+import { UserContextProvider } from "src/contexts/userContext";
 import theme from "src/styles/theme";
 import type { User } from "types/user.type";
 
@@ -103,7 +104,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           }}
         >
           <ReactQueryCacheProvider queryCache={queryCache}>
-            <UserServiceProvider user={user} setUser={setUser} csrfToken={csrfToken}>
+            <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken}>
               {isOnAdmin ? (
                 <div>
                   <AdminHeader />
@@ -123,7 +124,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
               ) : (
                 <Component {...pageProps} />
               )}
-            </UserServiceProvider>
+            </UserContextProvider>
             {/* Dev only, it won't appear after build for prod. */}
             <ReactQueryDevtools />
           </ReactQueryCacheProvider>

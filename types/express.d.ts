@@ -1,6 +1,6 @@
 declare namespace Express {
   interface Request {
-    user?: import("../../server/entities/user").User;
+    user?: import("../server/entities/user").User;
     appClient?: import("./client.type").Client;
     getCsrfToken(): string;
     csrfToken: string;

@@ -5,36 +5,36 @@ import React from "react";
 import { AxiosReturnType, axiosRequest } from "src/utils/axiosRequest";
 import type { User } from "types/user.type";
 
-type UserServiceFunc = Promise<{ success: boolean; errorCode: number }>;
+type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
-interface UserServiceContextValue {
+interface UserContextValue {
   user: User | null;
   isLoggedIn: boolean;
-  login(username: string, password: string, remember: boolean): UserServiceFunc;
+  login(username: string, password: string, remember: boolean): UserContextFunc;
   axiosLoggedRequest(req: AxiosRequestConfig): Promise<AxiosReturnType>;
-  signup(user: User, inviteCode?: string): UserServiceFunc;
-  updatePassword(user: Partial<User>): UserServiceFunc;
-  verifyEmail(user: Partial<User>): UserServiceFunc;
+  signup(user: User, inviteCode?: string): UserContextFunc;
+  updatePassword(user: Partial<User>): UserContextFunc;
+  verifyEmail(user: Partial<User>): UserContextFunc;
   logout(): Promise<void>;
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
 }
 
-export const UserServiceContext = React.createContext<UserServiceContextValue>(undefined);
+export const UserContext = React.createContext<UserContextValue>(undefined);
 
-interface UserServiceProviderProps {
+interface UserContextProviderProps {
   user: User | null;
   setUser(user: React.SetStateAction<User | null>): void;
   csrfToken: string;
   children: React.ReactNode;
 }
 
-export const UserServiceProvider: React.FunctionComponent<UserServiceProviderProps> = ({
+export const UserContextProvider: React.FunctionComponent<UserContextProviderProps> = ({
   user,
   setUser,
   csrfToken,
   children,
-}: UserServiceProviderProps) => {
+}: UserContextProviderProps) => {
   const router = useRouter();
   const headers = React.useMemo(
     () => ({
@@ -214,7 +214,7 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
   const isLoggedIn = user !== null;
 
   return (
-    <UserServiceContext.Provider
+    <UserContext.Provider
       value={{
         user,
         isLoggedIn,
@@ -229,6 +229,6 @@ export const UserServiceProvider: React.FunctionComponent<UserServiceProviderPro
       }}
     >
       {children}
-    </UserServiceContext.Provider>
+    </UserContext.Provider>
   );
 };
