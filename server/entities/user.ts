@@ -42,7 +42,7 @@ export class User implements UserInterface {
   })
   type: UserType;
 
-  @ManyToOne(() => Village, (village: Village) => village.users)
+  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: "SET NULL" })
   @JoinColumn({ name: "villageId" })
   public village: Village | null;
 

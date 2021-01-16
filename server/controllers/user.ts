@@ -47,22 +47,26 @@ userController.get({ path: "/pseudo/:pseudo" }, async (req: Request, res: Respon
 type CreateUserData = {
   email: string;
   pseudo: string;
+  countryCode: string;
   teacherName?: string;
   level?: string;
   school?: string;
   password?: string;
   type?: UserType;
+  villageId?: number;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: "object",
   properties: {
     email: { type: "string", format: "email" },
     pseudo: { type: "string" },
+    countryCode: { type: "string" },
     teacherName: { type: "string", nullable: true },
     level: { type: "string", nullable: true },
     school: { type: "string", nullable: true },
     password: { type: "string", nullable: true },
-    type: { type: "number", nullable: true, enum: [0, 1, 2] },
+    type: { type: "number", nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    villageId: { type: "number", nullable: true },
   },
   required: ["email", "pseudo"],
   additionalProperties: false,
@@ -84,6 +88,8 @@ userController.post({ path: "", userType: UserType.ADMIN }, async (req: Request,
   user.teacherName = data.teacherName || "";
   user.level = data.level || "";
   user.school = data.school || "";
+  user.villageId = data.villageId || null;
+  user.countryCode = data.countryCode;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, UserType.TEACHER);
   } else {
@@ -103,20 +109,24 @@ userController.post({ path: "", userType: UserType.ADMIN }, async (req: Request,
 type EditUserData = {
   email?: string;
   pseudo?: string;
+  countryCode?: string;
   teacherName?: string;
   level?: string;
   school?: string;
   type?: UserType;
+  villageId?: number | null;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: "object",
   properties: {
     email: { type: "string", format: "email", nullable: true },
     pseudo: { type: "string", nullable: true },
+    countryCode: { type: "string", nullable: true },
     teacherName: { type: "string", nullable: true },
     level: { type: "string", nullable: true },
     school: { type: "string", nullable: true },
-    type: { type: "number", nullable: true, enum: [0, 1, 2] },
+    type: { type: "number", nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    villageId: { type: "number", nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -142,6 +152,8 @@ userController.put({ path: "/:id", userType: UserType.TEACHER }, async (req: Req
   user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
+  user.villageId = valueOrDefault(data.villageId, user.villageId, true);
+  user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
   }

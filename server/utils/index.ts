@@ -39,8 +39,10 @@ export function generateTemporaryPassword(length: number): string {
     .join("");
 }
 
-export function valueOrDefault<T>(value: T | undefined, defaultValue: T): T {
-  if (value === undefined) {
+export function valueOrDefault<T>(value: T | null | undefined, defaultValue: T, nullable?: false): T;
+export function valueOrDefault<T>(value: T | null | undefined, defaultValue: T, nullable: true): T | null;
+export function valueOrDefault<T>(value: T | null | undefined, defaultValue: T, nullable: boolean = false): T | null {
+  if (value === undefined || (value === null && !nullable)) {
     return defaultValue;
   }
   return value;
