@@ -44,10 +44,17 @@ label:hover {
 }
 
 // NProgress bar
-#nprogress .bar {
-  z-index: 1000 !important;
-  background-color: $primary-color !important;
-  height: 1px;
+body {
+  #nprogress .bar {
+    z-index: 2000 !important;
+    background-color: $primary-color !important;
+    height: 1px;
+  }
+  &.admin {
+    #nprogress .bar {
+      background-color: white !important;
+    }
+  }
 }
 
 // Text style

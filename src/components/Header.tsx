@@ -64,7 +64,13 @@ export const Header: React.FC = () => {
               </Link>
             )}
             <div>
-              <IconButton aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleMenu}>
+              <IconButton
+                style={{ width: "40px", height: "40px", margin: "0 0.2rem" }}
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+              >
                 <SettingsIcon />
               </IconButton>
               <Menu

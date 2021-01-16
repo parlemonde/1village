@@ -77,11 +77,21 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
 
   const isOnAdmin = router.pathname.slice(1, 6) === "admin";
 
+  React.useEffect(() => {
+    const $body = document.getElementsByTagName("body")[0];
+    if (isOnAdmin && $body && !$body.classList.contains("admin")) {
+      $body.classList.add("admin");
+    }
+    if (!isOnAdmin && $body && $body.classList.contains("admin")) {
+      $body.classList.remove("admin");
+    }
+  }, [isOnAdmin]);
+
   return (
     <>
       <Head>
-        <title>1Village</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <title key="app-title">1Village{isOnAdmin ? " - Admin" : ""}</title>
+        <meta key="app-viewport" name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
