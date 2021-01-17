@@ -16,6 +16,13 @@ export function serializeToQueryUrl(obj: { [key: string]: string | number | bool
   return str;
 }
 
+export function getQueryString(q: string | string[]): string {
+  if (Array.isArray(q)) {
+    return q[0];
+  }
+  return q;
+}
+
 /**
  * Returns a function, that, as long as it continues to be invoked, will not
  * be triggered. The function will be called after it stops being called for
