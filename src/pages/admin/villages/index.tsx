@@ -92,10 +92,10 @@ const Villages: React.FC = () => {
             postCount: 0,
           }))}
           columns={[
-            { key: "name", label: "Nom du village" },
+            { key: "name", label: "Nom du village", sortable: true },
             { key: "countries", label: "Pays" },
-            { key: "userCount", label: "Nombre de classes" },
-            { key: "postCount", label: "Nombre de posts" },
+            { key: "userCount", label: "Nombre de classes", sortable: true },
+            { key: "postCount", label: "Nombre de posts", sortable: true },
           ]}
           actions={actions}
         />

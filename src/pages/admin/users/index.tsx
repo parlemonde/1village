@@ -20,6 +20,7 @@ import { useCountries } from "src/services/useCountries";
 import { useUsers, useUserRequests } from "src/services/useUsers";
 import { useVillages } from "src/services/useVillages";
 import { countryToFlag } from "src/utils";
+import type { Village } from "types/village.type";
 
 const userTypeNames = {
   0: "Professeur",
@@ -110,12 +111,12 @@ const Users: React.FC = () => {
             type: <Chip size="small" label={userTypeNames[u.type]} />,
           }))}
           columns={[
-            { key: "pseudo", label: "Pseudo" },
-            { key: "email", label: "Email" },
-            { key: "school", label: "École" },
-            { key: "village", label: "Village" },
-            { key: "country", label: "Pays" },
-            { key: "type", label: "Rôle" },
+            { key: "pseudo", label: "Pseudo", sortable: true },
+            { key: "email", label: "Email", sortable: true },
+            { key: "school", label: "École", sortable: true },
+            { key: "village", label: "Village", sortable: true },
+            { key: "country", label: "Pays", sortable: true },
+            { key: "type", label: "Rôle", sortable: true },
           ]}
           actions={actions}
         />

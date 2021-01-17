@@ -4,7 +4,9 @@ import NoSsr from "@material-ui/core/NoSsr";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Table from "@material-ui/core/Table";
 import { makeStyles, createStyles, withStyles, Theme as MaterialTheme } from "@material-ui/core/styles";
 
@@ -23,6 +25,17 @@ const useTableStyles = makeStyles((theme: MaterialTheme) =>
     button: {
       color: "white",
     },
+    visuallyHidden: {
+      border: 0,
+      clip: "rect(0 0 0 0)",
+      height: 1,
+      margin: -1,
+      overflow: "hidden",
+      padding: 0,
+      position: "absolute",
+      top: 20,
+      width: 1,
+    },
   }),
 );
 
@@ -40,16 +53,54 @@ const StyledTableRow = withStyles(() =>
   }),
 )(TableRow);
 
+function paginate<T>(array: T[], page_size: number, page_number: number): T[] {
+  // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+  return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+
+interface TableOptions {
+  limit?: number;
+  page?: number;
+  order?: string;
+  sort?: "asc" | "desc";
+  search?: string;
+}
 interface AdminTableProps {
   "aria-label"?: string;
   emptyPlaceholder: React.ReactNode | React.ReactNodeArray;
   data: Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }>;
-  columns: Array<{ key: string; label: string }>;
+  columns: Array<{ key: string; label: string; sortable?: boolean }>;
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
 }
 
 export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel, emptyPlaceholder, data, columns, actions }: AdminTableProps) => {
   const classes = useTableStyles();
+  const [options, setTableOptions] = React.useState<TableOptions>({
+    page: 1,
+    limit: 10,
+    sort: "asc",
+  });
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setTableOptions({ ...options, page: newPage + 1 });
+  };
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTableOptions({ ...options, page: 1, limit: parseInt(event.target.value, 10) });
+  };
+  const onSortBy = (name: string) => () => {
+    if (options.order === name) {
+      setTableOptions({ ...options, page: 1, sort: options.sort === "asc" ? "desc" : "asc" });
+    } else {
+      setTableOptions({ ...options, page: 1, order: name });
+    }
+  };
+
+  const usePagination = options.page !== undefined && options.limit !== undefined;
+  const displayedData = React.useMemo(() => {
+    const useSort = options.sort && options.order;
+    const sortedData = useSort ? data.sort((a, b) => (a[options.order] >= b[options.order] ? 1 : -1)) : data;
+    return usePagination ? paginate(sortedData, options.limit || 10, options.page || 1) : sortedData;
+  }, [data, options.sort, options.order, options.limit, options.page, usePagination]);
+
   return (
     <NoSsr>
       <Table size="medium" aria-label={ariaLabel}>
@@ -67,7 +118,16 @@ export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel,
               <TableRow>
                 {columns.map((c) => (
                   <TableCell key={c.key} style={{ color: "white", fontWeight: "bold" }}>
-                    {c.label}
+                    {c.sortable ? (
+                      <TableSortLabel active={options.order === c.label} direction={options.sort} onClick={onSortBy(c.label)}>
+                        {c.label}
+                        {options.order === c.label ? (
+                          <span className={classes.visuallyHidden}>{options.sort === "desc" ? "sorted descending" : "sorted ascending"}</span>
+                        ) : null}
+                      </TableSortLabel>
+                    ) : (
+                      c.label
+                    )}
                   </TableCell>
                 ))}
                 {actions && (
@@ -78,7 +138,7 @@ export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel,
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((d, index) => (
+              {displayedData.map((d, index) => (
                 <StyledTableRow key={d.id}>
                   {columns.map((c) => (
                     <TableCell key={`${d.id}_${c.key}`}>{d[c.key] !== undefined ? d[c.key] : ""}</TableCell>
@@ -90,6 +150,18 @@ export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel,
                   )}
                 </StyledTableRow>
               ))}
+              {usePagination && (
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={data.length}
+                    rowsPerPage={options.limit || 10}
+                    page={(options.page || 1) - 1}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              )}
             </TableBody>
           </>
         )}
