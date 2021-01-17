@@ -43,7 +43,7 @@ const StyledTableRow = withStyles(() =>
 interface AdminTableProps {
   "aria-label"?: string;
   emptyPlaceholder: React.ReactNode | React.ReactNodeArray;
-  data: Array<{ id: string | number; [key: string]: string | boolean | number }>;
+  data: Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }>;
   columns: Array<{ key: string; label: string }>;
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
 }

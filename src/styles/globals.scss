@@ -90,6 +90,9 @@ body {
 .text--bold {
   font-weight: 600;
 }
+.text--detail {
+  color: $font-detail;
+}
 
 a {
   font-size: 1rem;
