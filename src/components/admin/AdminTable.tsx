@@ -81,7 +81,7 @@ export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel,
               {data.map((d, index) => (
                 <StyledTableRow key={d.id}>
                   {columns.map((c) => (
-                    <TableCell key={`${d.id}_${c.key}`}>{d[c.key] || ""}</TableCell>
+                    <TableCell key={`${d.id}_${c.key}`}>{d[c.key] !== undefined ? d[c.key] : ""}</TableCell>
                   ))}
                   {actions && (
                     <TableCell align="right" padding="none" style={{ minWidth: "96px" }}>

@@ -13,13 +13,24 @@ import EditIcon from "@material-ui/icons/Edit";
 import { Modal } from "src/components/Modal";
 import { AdminTable } from "src/components/admin/AdminTable";
 import { AdminTile } from "src/components/admin/AdminTile";
+import { useCountries } from "src/services/useCountries";
 import { useVillages, useVillageRequests } from "src/services/useVillages";
+import { countryToFlag } from "src/utils";
 
 const Villages: React.FC = () => {
   const router = useRouter();
+  const { countries } = useCountries();
+  const countryMap = countries.reduce<{ [key: string]: string }>((acc, country) => {
+    acc[country.isoCode] = country.name;
+    return acc;
+  }, {});
   const { villages } = useVillages();
   const { deleteVillage } = useVillageRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
+
+  const countriesToText = (countries: string[]) => {
+    return countries.map((isoCode) => `${countryToFlag(isoCode)} ${countryMap[isoCode.toUpperCase()] || ""}`).join(" - ");
+  };
 
   const actions = (id: number, index: number) => (
     <>
@@ -76,11 +87,15 @@ const Villages: React.FC = () => {
           }
           data={villages.map((v) => ({
             ...v,
-            countries: v.countries.join(", "),
+            countries: countriesToText(v.countries),
+            userCount: 0,
+            postCount: 0,
           }))}
           columns={[
             { key: "name", label: "Nom du village" },
             { key: "countries", label: "Pays" },
+            { key: "userCount", label: "Nombre de classes" },
+            { key: "postCount", label: "Nombre de posts" },
           ]}
           actions={actions}
         />
