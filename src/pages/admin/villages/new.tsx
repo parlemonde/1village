@@ -6,45 +6,26 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import MaterialLink from "@material-ui/core/Link";
 import { Button, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 
+import { CountrySelector } from "src/components/CountrySelector";
 import { AdminTile } from "src/components/admin/AdminTile";
-import { useCountries } from "src/services/useCountries";
 import { useVillageRequests } from "src/services/useVillages";
-import { countryToFlag } from "src/utils";
-import type { Country } from "types/country.type";
-
-type CountryOption = Country & {
-  firstLetter: string;
-};
 
 const NewVillage: React.FC = () => {
   const router = useRouter();
-  const { countries } = useCountries();
   const { addVillage } = useVillageRequests();
-  const options: CountryOption[] = countries.map((option) => {
-    const firstLetter = option.name[0].toUpperCase();
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-      ...option,
-    };
-  });
 
-  const [village, setVillage] = React.useState<{ name: string; country1: CountryOption | null; country2: CountryOption | null }>({
+  const [village, setVillage] = React.useState<{ name: string; countries: string[] }>({
     name: "",
-    country1: null,
-    country2: null,
+    countries: ["", ""],
   });
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!village.name || !village.country1 || !village.country2) {
+    if (!village.name || !village.countries[0] || !village.countries[1]) {
       return;
     }
-    const result = await addVillage({
-      name: village.name,
-      countries: [village.country1.isoCode, village.country2.isoCode],
-    });
+    const result = await addVillage(village);
     if (result !== null) {
       router.push("/admin/villages");
     }
@@ -73,67 +54,21 @@ const NewVillage: React.FC = () => {
             }}
             style={{ marginBottom: "1rem" }}
           />
-          <Autocomplete
-            id="vl-ct-1"
-            options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-            groupBy={(option) => option.firstLetter}
-            value={village.country1}
-            onChange={(_event, newValue: CountryOption | null) => {
-              setVillage((v) => ({ ...v, country1: newValue }));
+          <CountrySelector
+            value={village.countries[0]}
+            onChange={(newValue: string) => {
+              setVillage((v) => ({ ...v, countries: [newValue, village.countries[1]] }));
             }}
-            getOptionSelected={(option, value) => option.isoCode === value.isoCode}
-            getOptionLabel={(option) => option.name}
+            label="Pays 1"
             style={{ width: "100%", marginBottom: "1rem" }}
-            renderOption={(option) => (
-              <>
-                <span style={{ marginRight: "0.6rem" }}>{countryToFlag(option.isoCode)}</span>
-                {option.name}
-              </>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "off", // disable autocomplete and autofill
-                }}
-                label="Pays 1"
-                type="search"
-              />
-            )}
-            autoHighlight
-            blurOnSelect
           />
-          <Autocomplete
-            id="vl-ct-2"
-            options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-            groupBy={(option) => option.firstLetter}
-            value={village.country2}
-            onChange={(_event, newValue: CountryOption | null) => {
-              setVillage((v) => ({ ...v, country2: newValue }));
+          <CountrySelector
+            value={village.countries[1]}
+            onChange={(newValue: string) => {
+              setVillage((v) => ({ ...v, countries: [village.countries[0], newValue] }));
             }}
-            getOptionSelected={(option, value) => option.isoCode === value.isoCode}
-            getOptionLabel={(option) => option.name}
+            label="Pays 1"
             style={{ width: "100%", marginBottom: "1rem" }}
-            renderOption={(option) => (
-              <>
-                <span style={{ marginRight: "0.6rem" }}>{countryToFlag(option.isoCode)}</span>
-                {option.name}
-              </>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "off", // disable autocomplete and autofill
-                }}
-                type="search"
-                label="Pays 2"
-              />
-            )}
-            autoHighlight
-            blurOnSelect
           />
           <div className="text-center" style={{ margin: "2rem 0 1rem 0" }}>
             <Button color="primary" variant="contained" type="submit">
