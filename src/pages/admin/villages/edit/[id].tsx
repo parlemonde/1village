@@ -125,8 +125,9 @@ const EditVillage: React.FC = () => {
                 {...params}
                 inputProps={{
                   ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
+                  autoComplete: "off", // disable autocomplete and autofill
                 }}
+                type="search"
                 label="Pays 1"
               />
             )}
@@ -155,8 +156,9 @@ const EditVillage: React.FC = () => {
                 {...params}
                 inputProps={{
                   ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
+                  autoComplete: "off", // disable autocomplete and autofill
                 }}
+                type="search"
                 label="Pays 2"
               />
             )}

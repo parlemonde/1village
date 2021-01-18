@@ -95,9 +95,10 @@ const NewVillage: React.FC = () => {
                 {...params}
                 inputProps={{
                   ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
+                  autoComplete: "off", // disable autocomplete and autofill
                 }}
                 label="Pays 1"
+                type="search"
               />
             )}
             autoHighlight
@@ -125,8 +126,9 @@ const NewVillage: React.FC = () => {
                 {...params}
                 inputProps={{
                   ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
+                  autoComplete: "off", // disable autocomplete and autofill
                 }}
+                type="search"
                 label="Pays 2"
               />
             )}
