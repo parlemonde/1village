@@ -8,6 +8,14 @@ export enum UserType {
   SUPER_ADMIN = 4,
 }
 
+export const userTypeNames = {
+  [UserType.TEACHER]: "Professeur",
+  [UserType.OBSERVATOR]: "Observateur",
+  [UserType.MEDIATOR]: "Médiateur",
+  [UserType.ADMIN]: "Admin",
+  [UserType.SUPER_ADMIN]: "Super admin",
+};
+
 export interface User {
   id: number;
   email: string;

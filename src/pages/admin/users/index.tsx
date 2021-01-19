@@ -20,15 +20,8 @@ import { useCountries } from "src/services/useCountries";
 import { useUsers, useUserRequests } from "src/services/useUsers";
 import { useVillages } from "src/services/useVillages";
 import { countryToFlag } from "src/utils";
+import { userTypeNames } from "types/user.type";
 import type { Village } from "types/village.type";
-
-const userTypeNames = {
-  0: "Professeur",
-  1: "Observateur",
-  2: "Médiateur",
-  3: "Admin",
-  4: "Super admin",
-};
 
 const Users: React.FC = () => {
   const router = useRouter();
@@ -47,7 +40,7 @@ const Users: React.FC = () => {
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
-  const actions = (id: number, index: number) => (
+  const actions = (id: number) => (
     <>
       <Tooltip title="Modifier">
         <IconButton
@@ -64,7 +57,7 @@ const Users: React.FC = () => {
           <IconButton
             aria-label="delete"
             onClick={() => {
-              setDeleteIndex(index);
+              setDeleteIndex(users.findIndex((u) => u.id === id));
             }}
           >
             <DeleteIcon />

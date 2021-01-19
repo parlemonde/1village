@@ -32,7 +32,7 @@ const Villages: React.FC = () => {
     return countries.map((isoCode) => `${countryToFlag(isoCode)} ${countryMap[isoCode.toUpperCase()] || ""}`).join(" - ");
   };
 
-  const actions = (id: number, index: number) => (
+  const actions = (id: number) => (
     <>
       <Tooltip title="Modifier">
         <IconButton
@@ -48,7 +48,7 @@ const Villages: React.FC = () => {
         <IconButton
           aria-label="delete"
           onClick={() => {
-            setDeleteIndex(index);
+            setDeleteIndex(villages.findIndex((v) => v.id === id));
           }}
         >
           <DeleteIcon />
