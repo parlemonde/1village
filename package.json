@@ -16,6 +16,9 @@
     "start": "NODE_ENV=production node dist/server/app.js",
     "dev": "nodemon"
   },
+  "resolutions": {
+    "react-is": "^17.0.1"
+  },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
     "@types/body-parser": "^1.19.0",
@@ -41,6 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.12.0",
     "@yarnpkg/pnpify": "^2.4.0",
+    "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-import-resolver-node": "^0.3.4",
@@ -54,7 +58,8 @@
     "nodemon": "^2.0.6",
     "prettier": "^2.2.1",
     "typescript": "^4.1.2",
-    "webpack": "^5.11.0"
+    "webpack": "^5.11.0",
+    "webpack-bundle-analyzer": "^4.3.0"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
