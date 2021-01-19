@@ -21,7 +21,7 @@ const EditVillage: React.FC = () => {
   const villageId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) || 0, [router]);
   const [village, setVillage] = React.useState<Village | null>(null);
 
-  const getTheme = React.useCallback(async () => {
+  const getVillage = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
       method: "GET",
       url: `/villages/${villageId}`,
@@ -34,8 +34,8 @@ const EditVillage: React.FC = () => {
   }, [axiosLoggedRequest, router, villageId]);
 
   React.useEffect(() => {
-    getTheme().catch((e) => console.error(e));
-  }, [getTheme]);
+    getVillage().catch((e) => console.error(e));
+  }, [getVillage]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

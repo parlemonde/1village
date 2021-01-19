@@ -79,7 +79,7 @@ const NewUser: React.FC = () => {
       });
       return;
     }
-    const result = await addUser(newUser);
+    const result = await addUser({ ...newUser, villageId: newUser.villageId || null });
     if (result !== null) {
       router.push("/admin/users");
     }
@@ -143,6 +143,23 @@ const NewUser: React.FC = () => {
             style={{ marginBottom: "1rem" }}
           />
           <FormControl style={{ width: "100%", marginBottom: "1rem" }}>
+            <InputLabel id="type-select">Rôle</InputLabel>
+            <Select
+              labelId="type-select"
+              id="type-simple-select"
+              value={newUser.type}
+              onChange={(event) => {
+                setNewUser((u) => ({ ...u, type: event.target.value as number }));
+              }}
+            >
+              {[UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN].map((type) => (
+                <MenuItem key={type} value={type}>
+                  {userTypeNames[type]}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl style={{ width: "100%", marginBottom: "1rem" }}>
             <InputLabel id="village-select">{newUser.type === UserType.TEACHER ? Required("Village") : "Village"}</InputLabel>
             <Select
               labelId="village-select"
@@ -169,23 +186,6 @@ const NewUser: React.FC = () => {
             filterCountries={newUser.villageId ? villages.find((v) => v.id === newUser.villageId)?.countries || undefined : undefined}
             style={{ width: "100%", marginBottom: "1rem" }}
           />
-          <FormControl style={{ width: "100%", marginBottom: "1rem" }}>
-            <InputLabel id="type-select">Rôle</InputLabel>
-            <Select
-              labelId="type-select"
-              id="type-simple-select"
-              value={newUser.type}
-              onChange={(event) => {
-                setNewUser((u) => ({ ...u, type: event.target.value as number }));
-              }}
-            >
-              {[UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN].map((type) => (
-                <MenuItem key={type} value={type}>
-                  {userTypeNames[type]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
           <div className="text-center" style={{ margin: "2rem 0 1rem 0" }}>
             <Button color="primary" variant="contained" type="submit">
               {"Ajouter l'utilisateur !"}
