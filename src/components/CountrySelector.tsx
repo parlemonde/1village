@@ -12,35 +12,50 @@ type CountryOption = Country & {
 };
 
 interface CountrySelectorProps {
-  label: string;
+  label: string | React.ReactNode;
   value?: string;
   onChange?(newValue: string): void;
+  filterCountries?: string[];
   style?: React.CSSProperties;
 }
 
-export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value = "", onChange, style }: CountrySelectorProps) => {
+export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value = "", onChange, filterCountries, style }: CountrySelectorProps) => {
   const { countries } = useCountries();
   const options: CountryOption[] = React.useMemo(
     () =>
-      countries.map((option) => {
-        const firstLetter = option.name[0].toUpperCase();
-        return {
-          firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-          ...option,
-        };
-      }),
-    [countries],
+      countries
+        .filter(filterCountries ? (c) => filterCountries.find((c2) => c2.toLowerCase() === c.isoCode.toLowerCase()) : () => true)
+        .map((option) => {
+          const firstLetter = option.name[0].toUpperCase();
+          return {
+            firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+            ...option,
+          };
+        }),
+    [countries, filterCountries],
   );
   const [option, setOption] = React.useState<CountryOption | null>(null);
 
+  const prevFilter = React.useRef<string[]>(filterCountries);
   React.useEffect(() => {
-    if (value && value.length == 2) {
+    const shouldUpdateValue = (prevFilter.current || []).join(",") !== (filterCountries || []).join(",");
+    if (shouldUpdateValue) {
+      prevFilter.current = filterCountries;
+    }
+
+    if (value && value.length == 2 && (filterCountries || countries.map((c) => c.isoCode)).find((c2) => c2.toLowerCase() === value.toLowerCase())) {
       const newOption = options.find((o) => o.isoCode.toLowerCase() === value.toLowerCase()) || null;
       setOption(newOption);
+      if (shouldUpdateValue && onChange) {
+        onChange(newOption.isoCode || "");
+      }
     } else {
       setOption(null);
+      if (shouldUpdateValue && onChange) {
+        onChange("");
+      }
     }
-  }, [options, value]);
+  }, [options, value, countries, filterCountries, onChange]);
 
   const onChangeOption = React.useCallback(
     (_event: React.ChangeEvent<unknown>, newOption: CountryOption | null) => {
