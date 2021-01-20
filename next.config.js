@@ -1,6 +1,6 @@
 /* eslint-disable */
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin')
+// const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin')
 
 module.exports = {
   distDir: "./dist/next",
@@ -17,7 +17,7 @@ module.exports = {
     //     openAnalyzer: true,
     //   })
     // );
-    config.plugins.push(new DuplicatePackageCheckerPlugin());
+    // config.plugins.push(new DuplicatePackageCheckerPlugin());
     return config;
   },
 };
