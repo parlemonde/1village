@@ -180,3 +180,12 @@ a.text--success:hover {
   -moz-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
   box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
 }
+
+#village-demande-modal {
+  .MuiDialog-paper {
+    overflow: visible;
+    .MuiDialogContent-root {
+      overflow: visible;
+    }
+  }
+}

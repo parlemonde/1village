@@ -61,6 +61,9 @@ interface ModalProps {
   noCloseOutsideModal?: boolean;
   error?: boolean;
   disabled?: boolean;
+  noTitle?: boolean;
+  noCancelButton?: boolean;
+  id?: string;
 }
 
 export const Modal: React.FunctionComponent<ModalProps> = ({
@@ -80,6 +83,9 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   error = false,
   disabled = false,
   noCloseButton = false,
+  noCancelButton = false,
+  noTitle = false,
+  id,
 }: ModalProps) => {
   return (
     <Dialog
@@ -89,22 +95,27 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
       aria-describedby={ariaDescribedBy}
       fullWidth={fullWidth}
       maxWidth={maxWidth}
+      id={id}
     >
-      <DialogTitle id={ariaLabelledBy} onClose={noCloseButton ? undefined : onClose}>
-        {title}
-      </DialogTitle>
+      {noTitle === false && (
+        <DialogTitle id={ariaLabelledBy} onClose={noCloseButton ? undefined : onClose}>
+          {title}
+        </DialogTitle>
+      )}
       <DialogContent
         style={{
           paddingTop: "16px",
-          borderTop: "1px solid rgba(0, 0, 0, 0.12)",
+          borderTop: noTitle ? "none" : "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
         {children}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color={color} variant="outlined">
-          {cancelLabel || "Annuler"}
-        </Button>
+        {noCancelButton === false && (
+          <Button onClick={onClose} color={color} variant="outlined">
+            {cancelLabel || "Annuler"}
+          </Button>
+        )}
         {onConfirm !== null && error && (
           <RedButton onClick={onConfirm} disabled={disabled} variant="contained">
             {confirmLabel || "Oui"}

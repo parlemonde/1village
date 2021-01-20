@@ -12,6 +12,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import { UserContext } from "src/contexts/userContext";
+import { VillageContext } from "src/contexts/villageContext";
 import Logo from "src/svg/logo.svg";
 import { UserType } from "types/user.type";
 
@@ -23,6 +24,7 @@ const getGravatarUrl = (email: string): string => {
 export const Header: React.FC = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
+  const { village, showSelectVillageModal } = React.useContext(VillageContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -56,6 +58,16 @@ export const Header: React.FC = () => {
         </div>
         {user && (
           <div className="header__user">
+            {user.type > UserType.TEACHER && (
+              <div style={{ border: "1px solid #80cbc4", borderRadius: "12px" }}>
+                <span className="text text--small" style={{ margin: "0 0.6rem" }}>
+                  {village ? village.name : "Village non choisi !"}
+                </span>
+                <Button variant="contained" color="secondary" size="small" style={{ margin: "-1px -1px 0 0" }} onClick={showSelectVillageModal}>
+                  {village ? "Changer" : "Choisir un village"}
+                </Button>
+              </div>
+            )}
             {user.type >= UserType.ADMIN && (
               <Link href="/admin/villages">
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: "1rem" }}>

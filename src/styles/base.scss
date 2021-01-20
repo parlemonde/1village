@@ -135,6 +135,10 @@ main {
   .header__container {
     margin: $verticalSpacing/2 $horizontalSpacing/2 0 $horizontalSpacing/2;
   }
+  .header__search {
+    left: $menuWidthSmaller + $horizontalSpacing/2;
+    width: 10rem;
+  }
 
   .navigation {
     top: $headerHeight + $verticalSpacing;

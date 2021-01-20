@@ -24,6 +24,7 @@ import { Navigation } from "src/components/Navigation";
 import { AdminHeader } from "src/components/admin/AdminHeader";
 import { AdminNavigation } from "src/components/admin/AdminNavigation";
 import { UserContextProvider } from "src/contexts/userContext";
+import { VillageContextProvider } from "src/contexts/villageContext";
 import theme from "src/styles/theme";
 import type { User } from "types/user.type";
 
@@ -116,11 +117,13 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                   </div>
                 </div>
               ) : user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
-                <div className="app-container">
-                  <Header />
-                  <Navigation />
-                  <Component {...pageProps} />
-                </div>
+                <VillageContextProvider>
+                  <div className="app-container">
+                    <Header />
+                    <Navigation />
+                    <Component {...pageProps} />
+                  </div>
+                </VillageContextProvider>
               ) : (
                 <Component {...pageProps} />
               )}

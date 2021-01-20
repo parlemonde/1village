@@ -33,7 +33,7 @@ userController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Req
 });
 
 // --- Check user pseudo ---
-userController.get({ path: "/pseudo/:pseudo" }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: "/pseudo/:pseudo" }, async (req: Request, res: Response) => {
   const pseudo = req.params.pseudo || "";
   if (!pseudo) {
     res.sendJSON({ available: true });

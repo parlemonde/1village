@@ -80,7 +80,7 @@ const Login: React.FC = () => {
             </div>
             <p style={{ marginBottom: "2rem" }}>Se connecter</p>
             {(errorCode === 0 || errorCode === 3) && (
-              <p className="less text-error text-center" style={{ margin: "0 0 1rem 0" }}>
+              <p className="text text--small text--error text-center" style={{ margin: "0 0 1rem 0" }}>
                 {errorMessages[errorCode]}
               </p>
             )}
