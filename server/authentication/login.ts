@@ -54,8 +54,12 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     logger.error(JSON.stringify(e));
   }
 
-  if (user.accountRegistration && user.accountRegistration >= 3) {
+  if (user.accountRegistration && user.accountRegistration === 4) {
     throw new AppError("Account blocked. Please reset password", ErrorCode.ACCOUNT_BLOCKED);
+  }
+
+  if (user.accountRegistration && user.accountRegistration === 10) {
+    throw new AppError("Please use SSO", ErrorCode.USE_SSO);
   }
 
   if (!isPasswordCorrect) {

@@ -25,10 +25,26 @@
 .login__form {
   display: flex;
   margin: auto 0;
-  padding: 1rem 0;
+  padding: 1rem 0 0 0;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
   width: 95%;
   max-width: 300px;
+}
+
+.login__divider {
+  margin: 2rem 0;
+  width: 100%;
+  position: relative;
+  height: 1px;
+  background-color: $font-color;
+
+  .login__or {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: -0.8rem;
+    left: 0;
+  }
 }

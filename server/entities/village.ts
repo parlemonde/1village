@@ -9,6 +9,9 @@ export class Village implements VillageInterface {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  @Column({ type: "integer", nullable: true })
+  public plmoId: number | null;
+
   @Column({ type: "varchar", length: 40, nullable: false })
   public name: string;
 

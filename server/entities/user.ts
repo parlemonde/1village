@@ -27,7 +27,7 @@ export class User implements UserInterface {
   public school: string;
 
   @Column({ default: 0 })
-  public accountRegistration?: number;
+  public accountRegistration?: number; // 0 to 3 -> Ok, 4 -> Account blocked, 10 -> Account use PLM SSO
 
   @Column({ type: "varchar", length: 95 })
   public passwordHash?: string;
