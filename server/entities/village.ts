@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
 import type { Village as VillageInterface } from "../../types/village.type";
 
+import { Activity } from "./activity";
 import { User } from "./user";
 
 @Entity()
@@ -16,8 +17,11 @@ export class Village implements VillageInterface {
   public name: string;
 
   @Column("simple-array")
-  countries: string[];
+  public countries: string[];
 
   @OneToMany(() => User, (user: User) => user.village)
-  users: User[];
+  public users: User[];
+
+  @OneToMany(() => Activity, (activity: Activity) => activity.village)
+  public activities: Activity[];
 }
