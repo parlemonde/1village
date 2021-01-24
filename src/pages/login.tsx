@@ -8,11 +8,12 @@ import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import TextField from "@material-ui/core/TextField";
+import { NoSsr } from "@material-ui/core";
 
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserContext } from "src/contexts/userContext";
 import Logo from "src/svg/logo.svg";
-import { ssoHost, ssoHostName, clientId } from "src/utils";
+import { ssoHost, ssoHostName, clientId, generateTemporaryToken } from "src/utils";
 
 type User = {
   username: string;
@@ -67,8 +68,13 @@ const Login: React.FC = () => {
     } catch (e) {
       redirect.current = "/";
     }
-    if (urlQueryParams.state && decodeURI(urlQueryParams.state as string) === "1234" && urlQueryParams.code) {
-      loginSSO(decodeURI(urlQueryParams.code as string)).catch();
+    if (urlQueryParams.state && urlQueryParams.code) {
+      const state = window.sessionStorage.getItem("oauth-state") || "";
+      if (state === decodeURI(urlQueryParams.state as string)) {
+        loginSSO(decodeURI(urlQueryParams.code as string)).catch();
+      } else {
+        setErrorCode(0);
+      }
     }
   }, [loginSSO]);
 
@@ -102,9 +108,11 @@ const Login: React.FC = () => {
       return;
     }
     setIsLoading(true);
+    const state = generateTemporaryToken();
+    window.sessionStorage.setItem("oauth-state", state);
     const url = `${ssoHost}/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${
       window.location.href.split("?")[0]
-    }&state=${"1234"}`;
+    }&state=${state}`;
     window.location.replace(url);
   };
 
@@ -174,20 +182,22 @@ const Login: React.FC = () => {
               <a className="text text--small text--primary">Mot de passe oublié ?</a>
             </div>
 
-            {ssoHost.length && clientId && (
-              <>
-                <div className="login__divider">
-                  <div className="login__or">
-                    <span style={{ fontSize: "1.2rem", padding: "0.25rem", backgroundColor: "white" }}>OU</span>
+            <NoSsr>
+              {ssoHost.length && clientId && process.browser && window.location.href.split("?")[0] !== "https://1v.parlemonde.org/login" && (
+                <>
+                  <div className="login__divider">
+                    <div className="login__or">
+                      <span style={{ fontSize: "1.2rem", padding: "0.25rem", backgroundColor: "white" }}>OU</span>
+                    </div>
                   </div>
-                </div>
-                <div className="text-center" style={{ marginBottom: "1rem" }}>
-                  <Button color="primary" variant="contained" size="small" onClick={loginSso}>
-                    Se connecter avec {ssoHostName}
-                  </Button>
-                </div>
-              </>
-            )}
+                  <div className="text-center" style={{ marginBottom: "1rem" }}>
+                    <Button color="primary" variant="contained" size="small" onClick={loginSso}>
+                      Se connecter avec {ssoHostName}
+                    </Button>
+                  </div>
+                </>
+              )}
+            </NoSsr>
           </form>
         </div>
         <div className="login__panel login__panel--with-blue-background">

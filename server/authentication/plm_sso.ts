@@ -42,6 +42,6 @@ export async function loginWithPlmSSO(req: Request, res: Response, next: NextFun
   }
   const { accessToken, refreshToken } = await getAccessToken(user.id, true);
   res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
-  // res.cookie("refresh-token", refreshToken, { maxAge: 24 * 60 * 60000, expires: new Date(Date.now() + 24 * 60 * 60000), httpOnly: true });
+  res.cookie("refresh-token", refreshToken, { maxAge: 24 * 60 * 60000, expires: new Date(Date.now() + 24 * 60 * 60000), httpOnly: true });
   res.sendJSON({ user, accessToken, refreshToken: refreshToken });
 }
