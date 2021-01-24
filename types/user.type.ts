@@ -24,6 +24,7 @@ export interface User {
   school: string;
   level: string;
   type: UserType;
+  accountRegistration: number;
 
   // village relation
   villageId: number | null;

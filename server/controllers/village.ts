@@ -4,6 +4,8 @@ import { getRepository } from "typeorm";
 
 import { UserType } from "../entities/user";
 import { Village } from "../entities/village";
+import { createVillagesFromPLM } from "../legacy-plm/api";
+import { AppError, ErrorCode } from "../middlewares/handleErrors";
 import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
 import { valueOrDefault } from "../utils";
 
@@ -98,6 +100,15 @@ villageController.delete({ path: "/:id", userType: UserType.TEACHER }, async (re
   const id = parseInt(req.params.id, 10) || 0;
   await getRepository(Village).delete({ id });
   res.status(204).send();
+});
+
+//--- import ParLeMonde villages ---
+villageController.post({ path: "/import/plm", userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+  const count = await createVillagesFromPLM();
+  if (count === null) {
+    throw new AppError("Unkown error", ErrorCode.UNKNOWN);
+  }
+  res.sendJSON({ success: true, count });
 });
 
 export { villageController };

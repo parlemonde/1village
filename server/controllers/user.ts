@@ -16,7 +16,7 @@ const userController = new Controller("/users");
 // --- Get all users. ---
 userController.get({ path: "", userType: UserType.ADMIN }, async (_req: Request, res: Response) => {
   const users = await getRepository(User).find();
-  res.sendJSON(users.map((u) => u.withoutPassword()));
+  res.sendJSON(users);
 });
 
 // --- Get one user. ---
@@ -29,7 +29,7 @@ userController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Req
     next();
     return;
   }
-  res.sendJSON(user.withoutPassword());
+  res.sendJSON(user);
 });
 
 // --- Check user pseudo ---
@@ -102,7 +102,9 @@ userController.post({ path: "", userType: UserType.ADMIN }, async (req: Request,
   // todo: send mail with verification password to validate the email adress.
 
   await getRepository(User).save(user);
-  res.sendJSON(user.withoutPassword());
+  delete user.passwordHash;
+  delete user.verificationHash;
+  res.sendJSON(user);
 });
 
 // --- Edit an user. ---
@@ -147,18 +149,20 @@ userController.put({ path: "/:id", userType: UserType.TEACHER }, async (req: Req
     return;
   }
 
-  user.email = valueOrDefault(data.email, user.email);
-  user.pseudo = valueOrDefault(data.pseudo, user.pseudo);
+  if (user.accountRegistration !== 10) {
+    user.email = valueOrDefault(data.email, user.email);
+    user.pseudo = valueOrDefault(data.pseudo, user.pseudo);
+  }
   user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
-  user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
+    user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   }
   await getRepository(User).save(user);
-  res.sendJSON(user.withoutPassword());
+  res.sendJSON(user);
 });
 
 // --- Update user password ---
@@ -178,11 +182,14 @@ const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
 userController.put({ path: "/:id/password", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await getRepository(User).findOne({ where: { id } });
+  const user = await getRepository(User).createQueryBuilder().addSelect("User.passwordHash").where("User.id = :id", { id }).getOne();
   const isSelfProfile = req.user && req.user.id === id;
   if (user === undefined || !isSelfProfile) {
     next();
     return;
+  }
+  if (user.accountRegistration === 10) {
+    throw new AppError("Use SSO", ErrorCode.USE_SSO);
   }
   const data = req.body;
   if (!updatePwdValidator(data)) {
@@ -241,7 +248,11 @@ userController.post({ path: "/verify-email" }, async (req: Request, res: Respons
     return;
   }
 
-  const user = await getRepository(User).findOne({ where: { email: data.email } });
+  const user = await getRepository(User)
+    .createQueryBuilder()
+    .addSelect("User.verificationHash")
+    .where("User.email = :email", { email: data.email })
+    .getOne();
   if (!user) {
     next();
     return;
@@ -265,7 +276,8 @@ userController.post({ path: "/verify-email" }, async (req: Request, res: Respons
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
   res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
-  res.sendJSON({ user: user.withoutPassword(), accessToken });
+  delete user.verificationHash;
+  res.sendJSON({ user: user, accessToken });
 });
 
 // --- Reset pwd. ---
@@ -292,6 +304,9 @@ userController.post({ path: "/reset-password" }, async (req: Request, res: Respo
   if (!user) {
     next();
     return;
+  }
+  if (user.accountRegistration === 10) {
+    throw new AppError("Use SSO", ErrorCode.USE_SSO);
   }
 
   // update user
@@ -328,10 +343,18 @@ userController.post({ path: "/update-password" }, async (req: Request, res: Resp
     return;
   }
 
-  const user = await getRepository(User).findOne({ where: { email: data.email } });
+  const user = await getRepository(User)
+    .createQueryBuilder()
+    .addSelect("User.verificationHash")
+    .where("User.email = :email", { email: data.email })
+    .getOne();
   if (!user) {
     next();
     return;
+  }
+
+  if (user.accountRegistration === 10) {
+    throw new AppError("Use SSO", ErrorCode.USE_SSO);
   }
 
   let isverifyTokenCorrect: boolean = false;
@@ -357,7 +380,9 @@ userController.post({ path: "/update-password" }, async (req: Request, res: Resp
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
   res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
-  res.sendJSON({ user: user.withoutPassword(), accessToken });
+  delete user.passwordHash;
+  delete user.verificationHash;
+  res.sendJSON({ user, accessToken });
 });
 
 export { userController };

@@ -11,6 +11,7 @@ interface UserContextValue {
   user: User | null;
   isLoggedIn: boolean;
   login(username: string, password: string, remember: boolean): UserContextFunc;
+  loginWithSso(code: string): UserContextFunc;
   axiosLoggedRequest(req: AxiosRequestConfig): Promise<AxiosReturnType>;
   signup(user: User, inviteCode?: string): UserContextFunc;
   updatePassword(user: Partial<User>): UserContextFunc;
@@ -76,6 +77,29 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
       };
     }
 
+    setUser(response.data.user || null);
+    return {
+      success: true,
+      errorCode: 0,
+    };
+  };
+
+  const loginWithSso = async (code: string): Promise<{ success: boolean; errorCode: number }> => {
+    const response = await axiosRequest({
+      method: "POST",
+      url: "/login-sso-plm",
+      headers,
+      data: {
+        code,
+      },
+      baseURL: "",
+    });
+    if (response.error) {
+      return {
+        success: false,
+        errorCode: response.data?.errorCode || 0,
+      };
+    }
     setUser(response.data.user || null);
     return {
       success: true,
@@ -219,6 +243,7 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
         user,
         isLoggedIn,
         login,
+        loginWithSso,
         axiosLoggedRequest,
         signup,
         updatePassword,

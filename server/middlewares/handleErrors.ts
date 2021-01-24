@@ -9,6 +9,8 @@ export enum ErrorCode {
   INVALID_PASSWORD = 2,
   ACCOUNT_BLOCKED = 3,
   PASSWORD_NOT_STRONG = 4,
+  USE_SSO = 5,
+  DONT_USO_SSO = 6,
   INVALID_DATA = 10,
 }
 

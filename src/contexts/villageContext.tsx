@@ -107,10 +107,15 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
         disabled={selectedVillageIndex === -1}
         noCloseButton={village === null}
         noCloseOutsideModal={village === null}
-        noCancelButton
+        noCancelButton={village !== null}
         onClose={() => {
-          setIsModalOpen(false);
+          if (village === null) {
+            logout();
+          } else {
+            setIsModalOpen(false);
+          }
         }}
+        cancelLabel="Se déconnecter"
         onConfirm={() => {
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);

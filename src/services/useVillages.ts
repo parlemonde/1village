@@ -105,9 +105,34 @@ export const useVillageRequests = () => {
     [axiosLoggedRequest, queryCache, enqueueSnackbar],
   );
 
+  const importVillages = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: "POST",
+      url: `/villages/import/plm`,
+    });
+    if (response.error) {
+      enqueueSnackbar("Une erreur est survenue...", {
+        variant: "error",
+      });
+      return;
+    }
+    enqueueSnackbar(
+      response.data.count === 0
+        ? "Aucun nouveau village importé!"
+        : response.data.count === 1
+        ? "1 village importé avec succès!"
+        : `${response.data.count} villages importés avec succès!`,
+      {
+        variant: "success",
+      },
+    );
+    queryCache.invalidateQueries("villages");
+  }, [axiosLoggedRequest, queryCache, enqueueSnackbar]);
+
   return {
     addVillage,
     editVillage,
     deleteVillage,
+    importVillages,
   };
 };

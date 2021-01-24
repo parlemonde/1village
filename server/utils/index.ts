@@ -1,3 +1,5 @@
+import base64url from "base64url";
+import crypto from "crypto";
 import { Request } from "express";
 import fs from "fs";
 
@@ -30,13 +32,7 @@ export function isPasswordValid(password: string): boolean {
 }
 
 export function generateTemporaryPassword(length: number): string {
-  const pwdChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  return Array(length)
-    .fill(pwdChars)
-    .map(function (x) {
-      return x[Math.floor(Math.random() * x.length)];
-    })
-    .join("");
+  return base64url(crypto.randomBytes(length)).slice(0, length);
 }
 
 export function valueOrDefault<T>(value: T | null | undefined, defaultValue: T, nullable?: false): T;
