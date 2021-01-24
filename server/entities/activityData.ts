@@ -10,8 +10,8 @@ export class ActivityData implements ActivityDataInterface {
   public id: number;
 
   // activity
-  @ManyToOne(() => Activity, (activity: Activity) => activity.data, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "villageId" })
+  @ManyToOne(() => Activity, (activity: Activity) => activity.content, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "activityId" })
   public activity: Activity;
 
   @Column({ nullable: false })
@@ -20,9 +20,9 @@ export class ActivityData implements ActivityDataInterface {
   @Column({ default: 0 })
   public order: number;
 
-  @Column({ type: "varchar", length: "8", select: false })
+  @Column({ type: "varchar", length: "8" })
   public key: "text" | "video" | "image" | "json";
 
-  @Column({ type: "varchar", length: 3000, default: "", select: false })
+  @Column({ type: "varchar", length: 3000, default: "" })
   public value: string;
 }

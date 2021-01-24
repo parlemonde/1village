@@ -15,8 +15,8 @@ export interface Activity {
   updateDate: Date;
   deleteDate: Date;
 
-  // data relation
-  data: ActivityData[];
+  // activity content
+  content: ActivityData[] | null;
 
   // user relation
   userId: number;

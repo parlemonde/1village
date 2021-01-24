@@ -41,7 +41,7 @@ export class Activity implements ActivityInterface {
 
   // data relation
   @OneToMany(() => ActivityData, (d: ActivityData) => d.activity)
-  public data: ActivityData[];
+  public content: ActivityData[] | null;
 
   // user relation
   @ManyToOne(() => User, (user: User) => user.activities, { onDelete: "CASCADE" })
