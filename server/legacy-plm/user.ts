@@ -1,9 +1,10 @@
 import stringSimilarity from "string-similarity";
 import { getRepository } from "typeorm";
 
-import { User, UserType } from "../../entities/user";
-import { Village } from "../../entities/village";
-import { countries } from "../../utils/iso-3166-countries-french";
+import { User, UserType } from "../entities/user";
+import { Village } from "../entities/village";
+import { countries } from "../utils/iso-3166-countries-french";
+import { logger } from "../utils/logger";
 
 export type PLM_User = {
   ID: string; // number in string
@@ -35,42 +36,18 @@ export type PLM_User = {
   db_error: string;
 };
 
-async function getVillage(id: number, name: string): Promise<Village | null> {
-  // First find the village
-  const dbVillage = await getRepository(Village).findOne({
-    where: [{ plmoId: id }, { name }],
-  });
-  if (dbVillage) {
-    return dbVillage;
-  }
-  const allVillages = await getRepository(Village).find();
-  const similarities = stringSimilarity.findBestMatch(
-    name,
-    allVillages.map((v) => v.name),
-  );
-  if (similarities.bestMatch.rating > 0.88) {
-    return allVillages[similarities.bestMatchIndex] || null;
-  }
-
-  // Otherwise create it.
-  const villageCountries = (name.toLowerCase().startsWith("village monde") ? name.slice(14) : name).split(/[-–]/).filter((s) => s.length > 0);
-  if (villageCountries.length === 2) {
-    const c1 = stringSimilarity.findBestMatch(
-      villageCountries[0].trim(),
-      countries.map((c) => c.name),
-    );
-    const c2 = stringSimilarity.findBestMatch(
-      villageCountries[1].trim(),
-      countries.map((c) => c.name),
-    );
-    if (c1.bestMatch.rating > 0.88 && c2.bestMatch.rating > 0.88) {
-      const newVillage = new Village();
-      newVillage.countries = [countries[c1.bestMatchIndex].isoCode, countries[c2.bestMatchIndex].isoCode];
-      newVillage.name = name;
-      newVillage.plmoId = id;
-      await getRepository(Village).save(newVillage);
-      return newVillage;
+async function getVillage(plmId: number): Promise<Village | null> {
+  try {
+    // Find the village
+    const dbVillage = await getRepository(Village).findOne({
+      where: { plmId },
+    });
+    if (dbVillage) {
+      return dbVillage;
     }
+  } catch (error) {
+    logger.error(error);
+    logger.error(`Error with village (${plmId})`);
   }
   return null;
 }
@@ -78,16 +55,26 @@ async function getVillage(id: number, name: string): Promise<Village | null> {
 export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   // 1- Find village
   let village: Village | null = null;
+  let userType = UserType.TEACHER;
   if (plmUser.groups && plmUser.groups.length === 1) {
-    village = await getVillage(parseInt(plmUser.groups[0].id, 10) || -1, plmUser.groups[0].name);
+    village = await getVillage(parseInt(plmUser.groups[0].id, 10) || -1);
+  }
+  if (plmUser.groups && plmUser.groups.length > 1) {
+    userType = UserType.OBSERVATOR;
+    if (plmUser.groups.some((g) => parseInt(g.is_mod, 10) === 1)) {
+      userType = UserType.MEDIATOR;
+    }
+    if (plmUser.groups.some((g) => parseInt(g.is_admin, 10) === 1)) {
+      userType = UserType.ADMIN;
+    }
   }
 
   // 2- Find country
   let country: string | null = null;
   if (plmUser.role && plmUser.role.title) {
     const c = stringSimilarity.findBestMatch(
-      plmUser.role.title.trim(),
-      countries.map((c) => c.name),
+      plmUser.role.title.trim().toLowerCase(),
+      countries.map((c) => c.name.toLowerCase()),
     );
     if (c.bestMatch.rating > 0.88) {
       country = countries[c.bestMatchIndex].isoCode;
@@ -110,10 +97,13 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.school = "";
   user.villageId = village?.id || null;
   user.countryCode = country;
-  user.type = UserType.TEACHER;
+  user.type = userType;
   user.passwordHash = "";
   user.verificationHash = "";
   user.accountRegistration = 10;
   await getRepository(User).save(user);
+
+  delete user.passwordHash;
+  delete user.verificationHash;
   return user;
 }

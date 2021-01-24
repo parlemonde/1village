@@ -96,8 +96,12 @@ export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel,
 
   const usePagination = options.page !== undefined && options.limit !== undefined;
   const displayedData = React.useMemo(() => {
-    const useSort = options.sort && options.order;
-    const sortedData = useSort ? data.sort((a, b) => (a[options.order] >= b[options.order] ? 1 : -1)) : data;
+    const useSort = options.sort !== undefined && options.order !== undefined;
+    const sortedData = useSort
+      ? data.sort((a, b) => {
+          return a[options.order] >= b[options.order] ? (options.sort === "asc" ? 1 : -1) : options.sort === "asc" ? -1 : 1;
+        })
+      : data;
     return usePagination ? paginate(sortedData, options.limit || 10, options.page || 1) : sortedData;
   }, [data, options.sort, options.order, options.limit, options.page, usePagination]);
 
@@ -119,7 +123,7 @@ export const AdminTable: React.FC<AdminTableProps> = ({ "aria-label": ariaLabel,
                 {columns.map((c) => (
                   <TableCell key={c.key} style={{ color: "white", fontWeight: "bold" }}>
                     {c.sortable ? (
-                      <TableSortLabel active={options.order === c.label} direction={options.sort} onClick={onSortBy(c.label)}>
+                      <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
                         {c.label}
                         {options.order === c.label ? (
                           <span className={classes.visuallyHidden}>{options.sort === "desc" ? "sorted descending" : "sorted ascending"}</span>

@@ -40,9 +40,12 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     return;
   }
 
-  const user = await getRepository(User).findOne({
-    where: [{ email: data.username }, { pseudo: data.username }],
-  });
+  const user = await getRepository(User)
+    .createQueryBuilder()
+    .addSelect("User.passwordHash")
+    .where("User.email = :username OR User.pseudo = :username", { username: data.username })
+    .getOne();
+
   if (user === undefined) {
     throw new AppError("Invalid username", ErrorCode.INVALID_USERNAME);
   }
@@ -54,19 +57,19 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     logger.error(JSON.stringify(e));
   }
 
-  if (user.accountRegistration && user.accountRegistration === 4) {
+  if (user.accountRegistration === 4) {
     throw new AppError("Account blocked. Please reset password", ErrorCode.ACCOUNT_BLOCKED);
   }
 
-  if (user.accountRegistration && user.accountRegistration === 10) {
+  if (user.accountRegistration === 10) {
     throw new AppError("Please use SSO", ErrorCode.USE_SSO);
   }
 
   if (!isPasswordCorrect) {
-    user.accountRegistration = (user.accountRegistration || 0) + 1;
+    user.accountRegistration += 1;
     await getRepository(User).save(user);
     throw new AppError("Invalid password", ErrorCode.INVALID_PASSWORD);
-  } else {
+  } else if (user.accountRegistration > 0 && user.accountRegistration < 4) {
     user.accountRegistration = 0;
     await getRepository(User).save(user);
   }
@@ -76,5 +79,6 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   if (data.getRefreshToken) {
     res.cookie("refresh-token", refreshToken, { maxAge: 24 * 60 * 60000, expires: new Date(Date.now() + 24 * 60 * 60000), httpOnly: true });
   }
-  res.sendJSON({ user: user.withoutPassword(), accessToken, refreshToken: refreshToken });
+  delete user.passwordHash;
+  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken });
 }

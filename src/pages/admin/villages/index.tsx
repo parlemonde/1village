@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import IconButton from "@material-ui/core/IconButton";
 import MaterialLink from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -9,13 +11,14 @@ import { Button, NoSsr } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { Modal } from "src/components/Modal";
 import { AdminTable } from "src/components/admin/AdminTable";
 import { AdminTile } from "src/components/admin/AdminTile";
 import { useCountries } from "src/services/useCountries";
 import { useVillages, useVillageRequests } from "src/services/useVillages";
-import { countryToFlag } from "src/utils";
+import { countryToFlag, ssoHostName } from "src/utils";
 
 const Villages: React.FC = () => {
   const router = useRouter();
@@ -25,11 +28,18 @@ const Villages: React.FC = () => {
     return acc;
   }, {});
   const { villages } = useVillages();
-  const { deleteVillage } = useVillageRequests();
+  const { deleteVillage, importVillages } = useVillageRequests();
+  const [isLoading, setIsLoading] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
   const countriesToText = (countries: string[]) => {
     return countries.map((isoCode) => `${countryToFlag(isoCode)} ${countryMap[isoCode.toUpperCase()] || ""}`).join(" - ");
+  };
+
+  const onImportVillages = async () => {
+    setIsLoading(true);
+    await importVillages();
+    setIsLoading(false);
   };
 
   const actions = (id: number) => (
@@ -67,11 +77,16 @@ const Villages: React.FC = () => {
       <AdminTile
         title="Liste des villages"
         toolbarButton={
-          <Link href="/admin/villages/new">
-            <Button component="a" href="/admin/villages/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
-              Ajouter un village
+          <>
+            <Button variant="contained" style={{ flexShrink: 0, marginRight: "0.5rem" }} startIcon={<GetAppIcon />} onClick={onImportVillages}>
+              Importer depuis {ssoHostName}
             </Button>
-          </Link>
+            <Link href="/admin/villages/new">
+              <Button component="a" href="/admin/villages/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
+                Ajouter un village
+              </Button>
+            </Link>
+          </>
         }
       >
         <AdminTable
@@ -122,6 +137,9 @@ const Villages: React.FC = () => {
           </div>
         </Modal>
       </NoSsr>
+      <Backdrop style={{ zIndex: 2000, color: "#fff" }} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };

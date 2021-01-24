@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import { KeepRatio } from "src/components/KeepRatio";
 import { UserContext } from "src/contexts/userContext";
 import Logo from "src/svg/logo.svg";
+import { ssoHost, ssoHostName, clientId } from "src/utils";
 
 type User = {
   username: string;
@@ -24,12 +25,9 @@ const errorMessages = {
   1: "Adresse e-mail ou pseudo invalide.",
   2: "Mot de passe invalide.",
   3: "Compte bloqué, trop de tentatives de connexion. Veuillez réinitialiser votre mot de passe.",
-  5: "Veuillez utiliser le login avec prof.parlemonde.org pour votre compte",
+  5: `Veuillez utiliser le login avec ${ssoHostName} pour votre compte`,
   6: "Veuillez utiliser le login par email/mot de passe pour votre compte",
 };
-
-const ssoHost = process.env.NEXT_PUBLIC_PLM_HOST || "";
-const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || "";
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -176,17 +174,19 @@ const Login: React.FC = () => {
               <a className="text text--small text--primary">Mot de passe oublié ?</a>
             </div>
 
-            <div className="login__divider">
-              <div className="login__or">
-                <span style={{ fontSize: "1.2rem", padding: "0.25rem", backgroundColor: "white" }}>OU</span>
-              </div>
-            </div>
             {ssoHost.length && clientId && (
-              <div className="text-center" style={{ marginBottom: "1rem" }}>
-                <Button color="primary" variant="contained" size="small" onClick={loginSso}>
-                  Se connecter avec prof.parlemonde.org
-                </Button>
-              </div>
+              <>
+                <div className="login__divider">
+                  <div className="login__or">
+                    <span style={{ fontSize: "1.2rem", padding: "0.25rem", backgroundColor: "white" }}>OU</span>
+                  </div>
+                </div>
+                <div className="text-center" style={{ marginBottom: "1rem" }}>
+                  <Button color="primary" variant="contained" size="small" onClick={loginSso}>
+                    Se connecter avec {ssoHostName}
+                  </Button>
+                </div>
+              </>
             )}
           </form>
         </div>

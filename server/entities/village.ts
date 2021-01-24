@@ -10,9 +10,9 @@ export class Village implements VillageInterface {
   public id: number;
 
   @Column({ type: "integer", nullable: true })
-  public plmoId: number | null;
+  public plmId: number | null;
 
-  @Column({ type: "varchar", length: 40, nullable: false })
+  @Column({ type: "varchar", length: 80, nullable: false })
   public name: string;
 
   @Column("simple-array")

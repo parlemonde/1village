@@ -17,7 +17,7 @@ export class User implements UserInterface {
   @Column({ type: "varchar", length: 50, unique: true })
   public pseudo: string;
 
-  @Column({ type: "varchar", length: 50, default: "" })
+  @Column({ type: "varchar", length: 60, default: "" })
   public teacherName: string;
 
   @Column({ type: "varchar", length: 50, default: "" })
@@ -27,12 +27,12 @@ export class User implements UserInterface {
   public school: string;
 
   @Column({ default: 0 })
-  public accountRegistration?: number; // 0 to 3 -> Ok, 4 -> Account blocked, 10 -> Account use PLM SSO
+  public accountRegistration: number; // 0 to 3 -> Ok, 4 -> Account blocked, 10 -> Account use PLM SSO
 
-  @Column({ type: "varchar", length: 95 })
+  @Column({ type: "varchar", length: 95, select: false })
   public passwordHash?: string;
 
-  @Column({ type: "varchar", length: 95, default: "" })
+  @Column({ type: "varchar", length: 95, default: "", select: false })
   public verificationHash?: string;
 
   @Column({
@@ -51,11 +51,4 @@ export class User implements UserInterface {
 
   @Column({ type: "varchar", length: 2, nullable: false })
   public countryCode: string;
-
-  public withoutPassword(): User {
-    delete this.passwordHash;
-    delete this.verificationHash;
-    delete this.accountRegistration;
-    return this;
-  }
 }

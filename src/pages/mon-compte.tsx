@@ -13,10 +13,12 @@ import { Base } from "src/components/Base";
 import { Modal } from "src/components/Modal";
 import { EditButton } from "src/components/buttons/EditButton";
 import { HelpButton } from "src/components/buttons/HelpButton";
+import { QuestionButton } from "src/components/buttons/QuestionButton";
 import { RedButton } from "src/components/buttons/RedButton";
 import { PanelInput } from "src/components/mon-compte/PanelInput";
 import { UserContext } from "src/contexts/userContext";
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from "src/utils/accountChecks";
+import { ssoHostName } from "src/utils";
 import type { User } from "types/user.type";
 
 const getGravatarUrl = (email: string): string => {
@@ -215,7 +217,13 @@ const Presentation: React.FC = () => {
 
       <div className="account__panel">
         <h2>Identifiants de connection</h2>
-        <div className="account__panel-edit-button">{editMode !== 1 && <EditButton onClick={updateEditMode(1)} />}</div>
+        <div className="account__panel-edit-button">
+          {user.accountRegistration === 10 ? (
+            <QuestionButton helpMessage={`Vos identifiants de connection sont gérés par ${ssoHostName}`} />
+          ) : (
+            editMode !== 1 && <EditButton onClick={updateEditMode(1)} />
+          )}
+        </div>
         {editMode === 1 && (
           <Alert severity="warning" style={{ margin: "0.5rem 0", backgroundColor: "white", border: "1px solid #E1C7D1" }}>
             <AlertTitle>Attention !</AlertTitle>
@@ -248,20 +256,24 @@ const Presentation: React.FC = () => {
           hasError={errors.email}
           onBlur={checkEmailAndPseudo}
         />
-        <div style={{ margin: "1rem 0.5rem" }}>
-          <Button variant="contained" color="secondary" size="small" onClick={updateEditMode(2)}>
-            Modifier le mot de passe
-          </Button>
-        </div>
-        {editMode === 1 && (
-          <div className="text-center">
-            <Button size="small" variant="contained" style={{ margin: "0.5rem" }} onClick={updateEditMode(-1)}>
-              Annuler
-            </Button>
-            <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, "user")}>
-              Enregistrer
-            </Button>
-          </div>
+        {user.accountRegistration !== 10 && (
+          <>
+            <div style={{ margin: "1rem 0.5rem" }}>
+              <Button variant="contained" color="secondary" size="small" onClick={updateEditMode(2)}>
+                Modifier le mot de passe
+              </Button>
+            </div>
+            {editMode === 1 && (
+              <div className="text-center">
+                <Button size="small" variant="contained" style={{ margin: "0.5rem" }} onClick={updateEditMode(-1)}>
+                  Annuler
+                </Button>
+                <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, "user")}>
+                  Enregistrer
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </div>
 
