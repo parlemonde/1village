@@ -33,6 +33,8 @@ jobs:
         with:
           envkey_NEXT_PUBLIC_BASE_APP: /api
           envkey_NEXT_PUBLIC_HOST_URL: ${{ secrets.STAGING_HOST }}
+          envkey_NEXT_PUBLIC_PLM_HOST: https://prof.parlemonde.org
+          envkey_NEXT_PUBLIC_CLIENT_ID: ${{ secrets.STAGING_CLIENT_ID }}
           file_name: .env
 
       # Add ip to aws security group
