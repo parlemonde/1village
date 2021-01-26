@@ -1,7 +1,9 @@
+export type ActivityDataType = "text" | "video" | "image" | "json" | "data" | "h5p";
+
 export interface ActivityData {
   id: number;
   activityId: number;
   order: number;
-  key: "text" | "video" | "image" | "json";
+  key: ActivityDataType;
   value: string;
 }

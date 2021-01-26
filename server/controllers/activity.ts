@@ -2,7 +2,7 @@ import { JSONSchemaType } from "ajv";
 import { NextFunction, Request, Response } from "express";
 import { getRepository, getManager } from "typeorm";
 
-import { ActivityData } from "../entities/activityData";
+import { ActivityData, ActivityDataType } from "../entities/activityData";
 import { Activity, ActivityType } from "../entities/activity";
 import { UserType } from "../entities/user";
 import { AppError, ErrorCode } from "../middlewares/handleErrors";
@@ -37,7 +37,7 @@ type CreateActivityData = {
   type: ActivityType;
   villageId?: number;
   content?: Array<{
-    key: "text" | "video" | "image" | "json";
+    key: ActivityDataType;
     value: string;
   }>;
   responseActivityId?: number;
@@ -56,7 +56,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
       items: {
         type: "object",
         properties: {
-          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json"] },
+          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "data", "h5p"] },
           value: { type: "string", nullable: false },
         },
         required: ["key", "value"],
@@ -122,7 +122,7 @@ activityController.post({ path: "", userType: UserType.TEACHER }, async (req: Re
 // --- Add content to an activity ---
 type AddActivityData = {
   content?: Array<{
-    key: "text" | "video" | "image" | "json";
+    key: ActivityDataType;
     value: string;
   }>;
 };
@@ -134,7 +134,7 @@ const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
       items: {
         type: "object",
         properties: {
-          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json"] },
+          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "data", "h5p"] },
           value: { type: "string", nullable: false },
         },
         required: ["key", "value"],
