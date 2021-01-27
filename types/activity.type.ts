@@ -11,9 +11,9 @@ export enum ActivityType {
 export interface Activity {
   id: number;
   type: ActivityType;
-  createDate: Date;
-  updateDate: Date;
-  deleteDate: Date;
+  createDate?: Date;
+  updateDate?: Date;
+  deleteDate?: Date;
 
   // activity content
   content: ActivityData[] | null;

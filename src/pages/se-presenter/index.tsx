@@ -17,7 +17,7 @@ const suggestions = [
   {
     title: "Présentation thématique",
     button: "Présentation thématique",
-    href: "/se-presenter/presentation/1",
+    href: "/se-presenter/thematique/1",
     text:
       "Nulla nec dolor sed nisl maximus suscipit ut at eros. Proin vitae neque a nulla ullamcorper pretium. Proin eget vehicula elit. Etiam non ipsum in quam placerat vestibulum fringilla vel quam. Sed finibus, augue non tristique rhoncus, leo felis imperdiet turpis, id congue turpis diam at magna. Mauris ut ligula porta, elementum elit quis, rutrum turpis.",
     icon: ImageIcon,
@@ -32,7 +32,7 @@ const activities = [
   },
   {
     label: "Présentation thématique",
-    href: "/se-presenter/presentation/1",
+    href: "/se-presenter/thematique/1",
     icon: ImageIcon,
   },
 ];

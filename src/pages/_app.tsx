@@ -7,8 +7,8 @@ import "src/styles/globals.scss";
 import "src/styles/login.scss";
 import "src/styles/mon-compte.scss";
 
-import type { AppProps, AppContext, AppInitialProps } from "next/app";
 import App from "next/app";
+import type { AppProps, AppContext, AppInitialProps } from "next/app";
 import Head from "next/head";
 import { SnackbarProvider } from "notistack";
 import NProgress from "nprogress";
@@ -23,6 +23,7 @@ import { Header } from "src/components/Header";
 import { Navigation } from "src/components/Navigation";
 import { AdminHeader } from "src/components/admin/AdminHeader";
 import { AdminNavigation } from "src/components/admin/AdminNavigation";
+import { ActivityContextProvider } from "src/contexts/activityContext";
 import { UserContextProvider } from "src/contexts/userContext";
 import { VillageContextProvider } from "src/contexts/villageContext";
 import theme from "src/styles/theme";
@@ -118,11 +119,13 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 </div>
               ) : user !== null && router.pathname !== "/login" && router.pathname !== "/404" ? (
                 <VillageContextProvider>
-                  <div className="app-container">
-                    <Header />
-                    <Navigation />
-                    <Component {...pageProps} />
-                  </div>
+                  <ActivityContextProvider>
+                    <div className="app-container">
+                      <Header />
+                      <Navigation />
+                      <Component {...pageProps} />
+                    </div>
+                  </ActivityContextProvider>
                 </VillageContextProvider>
               ) : (
                 <Component {...pageProps} />
