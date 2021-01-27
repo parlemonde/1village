@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 
 import { User as UserInterface, UserType } from "../../types/user.type";
 
+import { Activity } from "./activity";
 import { Village } from "./village";
 
 export { UserType };
@@ -51,4 +52,7 @@ export class User implements UserInterface {
 
   @Column({ type: "varchar", length: 2, nullable: false })
   public countryCode: string;
+
+  @OneToMany(() => Activity, (activity: Activity) => activity.user)
+  public activities: Activity[];
 }

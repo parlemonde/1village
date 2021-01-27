@@ -2,12 +2,12 @@ import React from "react";
 
 import { Base } from "src/components/Base";
 
-const Presentation: React.FC = () => {
+const MascotteStep1: React.FC = () => {
   return (
     <Base>
-      <h1>Se présenter</h1>
+      <h1>Ma mascotte</h1>
     </Base>
   );
 };
 
-export default Presentation;
+export default MascotteStep1;

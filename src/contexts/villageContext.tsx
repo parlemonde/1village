@@ -74,6 +74,11 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
     let userVillage: Village | null = null;
     if (user !== null && user.villageId) {
       userVillage = await getVillage(user.villageId);
+    } else {
+      const previousSelectedVillageId = parseInt(window.sessionStorage.getItem("villageId"), 10) || null;
+      if (previousSelectedVillageId !== null) {
+        userVillage = await getVillage(previousSelectedVillageId);
+      }
     }
     setVillage(userVillage);
     if (userVillage === null && user.type > UserType.TEACHER) {
@@ -119,6 +124,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
         onConfirm={() => {
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
+            window.sessionStorage.setItem("villageId", `${villages[selectedVillageIndex].id}`);
           }
           setIsModalOpen(false);
         }}
