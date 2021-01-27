@@ -4,7 +4,7 @@ import { ActivityData as ActivityDataInterface, ActivityDataType } from "../../t
 
 import { Activity } from "./activity";
 
-export { ActivityDataType };
+export type { ActivityDataType };
 
 @Entity()
 export class ActivityData implements ActivityDataInterface {
