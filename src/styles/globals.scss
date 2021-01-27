@@ -206,3 +206,18 @@ a.text--success:hover {
   @include multiLineEllipsis($lineHeight: 1rem, $bgColor: white);
   max-height: 1rem; // 1 line. -> override this for more lines.
 }
+
+.custom-steps--container {
+  .MuiStepLabel-label.MuiStepLabel-alternativeLabel {
+    margin-top: 0.25rem !important;
+    color: $primary-color;
+  }
+  .MuiStepLabel-label.MuiStepLabel-active {
+    color: $primary-color !important;
+    font-weight: 500;
+  }
+  .MuiStepLabel-label.MuiStepLabel-completed {
+    color: $success-color !important;
+    font-weight: 500;
+  }
+}
