@@ -50,12 +50,31 @@
   border-radius: 5px;
   cursor: text;
 }
+.text-preview {
+  margin: 1.5rem 0rem 1rem 0;
+  padding: 0.5rem 0.5rem;
+  border: 1px dashed $secondary-color;
+  border-radius: 5px;
+}
 
+.text-editor__toolbar-container {
+  top: calc(143px + 0.5rem);
+  position: unset; // for ie
+  position: sticky;
+  transform: translate(-0.5rem, -0.5rem);
+  z-index: 20;
+}
+@include for-small-screen {
+  .text-editor__toolbar-container {
+    top: calc(123px + 0.5rem);
+  }
+}
 .text-editor__toolbar {
   display: none;
   position: absolute;
   top: 0;
   z-index: 20;
+  min-width: 511px;
   transform: translateY(calc(-100% - 5px));
   left: -1px;
 }
@@ -77,5 +96,19 @@
   100% {
     display: block;
     opacity: 1;
+  }
+}
+
+.image-editor {
+  margin: 1.5rem 0rem 1rem 0;
+  padding: 0.5rem 1.2rem;
+  min-height: 4rem;
+  position: relative;
+  border: 1px dashed $primary-color;
+  border-radius: 5px;
+  display: flex;
+
+  div {
+    flex: 1;
   }
 }

@@ -5,10 +5,21 @@ import { Activity, ActivityType } from "types/activity.type";
 import { UserContext } from "./userContext";
 import { VillageContext } from "./villageContext";
 
+export type ExtendedActivity = Activity & {
+  data: { [key: string]: string | number | boolean };
+  processedContent: Array<{
+    id: number;
+    type: "text" | "video" | "image";
+    value: string;
+  }>;
+};
+
 interface ActivityContextValue {
-  activity: Activity | null;
-  updateActivity(newActivity: Partial<Activity>): void;
+  activity: ExtendedActivity | null;
+  updateActivity(newActivity: Partial<ExtendedActivity>): void;
   createNewActivity(type: ActivityType, initialData?: { [key: string]: string | number | boolean }): boolean;
+  addContent(type: "text" | "video" | "image", value?: string): void;
+  deleteContent(index: number): void;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
@@ -21,9 +32,9 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
-  const [activity, setActivity] = React.useState<Activity | null>(null);
+  const [activity, setActivity] = React.useState<ExtendedActivity | null>(null);
 
-  const updateActivity = React.useCallback((newActivity: Partial<Activity>) => {
+  const updateActivity = React.useCallback((newActivity: Partial<ExtendedActivity>) => {
     setActivity((a) => ({ ...a, ...newActivity }));
   }, []);
 
@@ -32,29 +43,52 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       if (user === null || village === null) {
         return false;
       }
-      const activity: Activity = {
+      const activity: ExtendedActivity = {
         id: 0,
         type: type,
         userId: user.id,
         villageId: village.id,
-        content: initialData
-          ? [
-              {
-                id: 0,
-                activityId: 0,
-                order: 0,
-                key: "data",
-                value: JSON.stringify(initialData),
-              },
-            ]
-          : [],
+        content: [],
         responseActivityId: null,
         responseType: null,
+        data: initialData || {},
+        processedContent: [{ type: "text", id: 0, value: "" }],
       };
       setActivity(activity);
       return true;
     },
     [user, village],
+  );
+
+  const activityContent = activity?.processedContent || null;
+
+  const addContent = React.useCallback(
+    (type: "text" | "video" | "image", value: string = "") => {
+      if (activityContent === null) {
+        return;
+      }
+      const newId = Math.max(1, ...activityContent.map((p) => p.id)) + 1;
+      const newContent = activityContent;
+      newContent.push({
+        id: newId,
+        type,
+        value,
+      });
+      updateActivity({ processedContent: newContent });
+    },
+    [updateActivity, activityContent],
+  );
+
+  const deleteContent = React.useCallback(
+    (index: number) => {
+      if (activityContent === null) {
+        return;
+      }
+      const newContent = [...activityContent];
+      newContent.splice(index, 1);
+      updateActivity({ processedContent: newContent });
+    },
+    [updateActivity, activityContent],
   );
 
   return (
@@ -63,6 +97,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         activity,
         updateActivity,
         createNewActivity,
+        addContent,
+        deleteContent,
       }}
     >
       {children}

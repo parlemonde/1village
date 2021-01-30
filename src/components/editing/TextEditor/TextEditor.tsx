@@ -156,21 +156,23 @@ const TextEditor: React.FC<TextEditorProps> = ({ value = "", onChange = () => {}
         }
       }}
     >
-      <div
-        className={classnames("text-editor__toolbar", {
-          "text-editor__toolbar--visible": hasFocus,
-        })}
-      >
-        <Paper elevation={0} className={classes.paper}>
-          <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
-          <Divider flexItem orientation="vertical" className={classes.divider} />
-          <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
-          <Divider flexItem orientation="vertical" className={classes.divider} />
-          <TitleChoice value={currentHeader as "unstyle" | "header-one" | "header-two"} onChange={toggleBlockType} />
-          <Divider flexItem orientation="vertical" className={classes.divider} />
-          <ColorPicker value={currentColor} onChange={setInlineColor} />
-          <EmojiPicker onChange={addEmoji} />
-        </Paper>
+      <div className="text-editor__toolbar-container">
+        <div
+          className={classnames("text-editor__toolbar", {
+            "text-editor__toolbar--visible": hasFocus,
+          })}
+        >
+          <Paper elevation={0} className={classes.paper}>
+            <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
+            <Divider flexItem orientation="vertical" className={classes.divider} />
+            <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
+            <Divider flexItem orientation="vertical" className={classes.divider} />
+            <TitleChoice value={currentHeader as "unstyle" | "header-one" | "header-two"} onChange={toggleBlockType} />
+            <Divider flexItem orientation="vertical" className={classes.divider} />
+            <ColorPicker value={currentColor} onChange={setInlineColor} />
+            <EmojiPicker onChange={addEmoji} />
+          </Paper>
+        </div>
       </div>
       {displayPlaceholder && (
         <div style={{ position: "absolute", color: "#777777" }}>Commencez à écrire ici, ou ajoutez une vidéo, un son ou une image.</div>
