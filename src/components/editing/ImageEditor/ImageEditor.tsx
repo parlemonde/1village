@@ -5,7 +5,6 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Alert } from "@material-ui/lab";
 
 import { Modal } from "src/components/Modal";
-import { axiosRequest } from "src/utils/axiosRequest";
 import { isValidHttpUrl } from "src/utils";
 
 interface ImageEditorProps {
