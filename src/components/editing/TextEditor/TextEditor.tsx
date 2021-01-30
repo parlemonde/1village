@@ -174,9 +174,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ value = "", onChange = () => {}
           </Paper>
         </div>
       </div>
-      {displayPlaceholder && (
-        <div style={{ position: "absolute", color: "#777777" }}>Commencez à écrire ici, ou ajoutez une vidéo, un son ou une image.</div>
-      )}
+      {displayPlaceholder && <div style={{ position: "absolute", color: "#777777" }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>}
 
       <div
         onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {

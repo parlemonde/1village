@@ -1,3 +1,3 @@
 import dynamic from "next/dynamic";
 
-export const TextEditor = dynamic(() => import("./ImageEditor"), { ssr: false });
+export const ImageEditor = dynamic(() => import("./ImageEditor"), { ssr: false });

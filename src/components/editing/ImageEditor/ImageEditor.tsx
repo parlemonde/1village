@@ -44,22 +44,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ id, value = "", onChange = ()
     [onChange],
   );
 
-  const displayPreview = async () => {
-    const response = await axiosRequest({
-      method: "GET",
+  const displayPreview = () => {
+    setPreview({
+      mode: 1,
       url: tempImageUrl,
     });
-    if (response.error) {
-      setPreview({
-        mode: 2,
-        url: "",
-      });
-    } else {
-      setPreview({
-        mode: 1,
-        url: tempImageUrl,
-      });
-    }
   };
   const resetPreview = () => {
     setPreview({
@@ -98,7 +87,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ id, value = "", onChange = ()
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                borderRight: "1px solid #999999",
+                borderRight: "1px dashed #4c3ed9",
               }}
             ></div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>

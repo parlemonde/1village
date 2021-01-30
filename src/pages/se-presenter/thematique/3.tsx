@@ -6,7 +6,9 @@ import { Button } from "@material-ui/core";
 import { Base } from "src/components/Base";
 import { Steps } from "src/components/Steps";
 import { BackButton } from "src/components/buttons/BackButton";
+import { ImagePreview } from "src/components/editing/ImagePreview";
 import { TextPreview } from "src/components/editing/TextPreview";
+import { VideoPreview } from "src/components/editing/VideoPreview";
 import { ActivityContext } from "src/contexts/activityContext";
 
 const PresentationStep3: React.FC = () => {
@@ -44,6 +46,12 @@ const PresentationStep3: React.FC = () => {
           {activity.processedContent.map((p) => {
             if (p.type === "text") {
               return <TextPreview value={p.value} key={p.id} />;
+            }
+            if (p.type === "image") {
+              return <ImagePreview value={p.value} key={p.id} />;
+            }
+            if (p.type === "video") {
+              return <VideoPreview value={p.value} key={p.id} />;
             }
             return null;
           })}
