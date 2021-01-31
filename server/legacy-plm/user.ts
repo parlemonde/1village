@@ -56,10 +56,12 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   // 1- Find village
   let village: Village | null = null;
   let userType = UserType.TEACHER;
-  if (plmUser.groups && plmUser.groups.length === 1) {
-    village = await getVillage(parseInt(plmUser.groups[0].id, 10) || -1);
+  const userGroups = (plmUser.groups || []).filter((g) => parseInt(g.id, 10) !== 2 && parseInt(g.id, 10) !== 10);
+
+  if (userGroups.length === 1) {
+    village = await getVillage(parseInt(userGroups[0].id, 10) || -1);
   }
-  if (plmUser.groups && plmUser.groups.length > 1) {
+  if (userGroups.length > 1) {
     userType = UserType.OBSERVATOR;
     if (plmUser.groups.some((g) => parseInt(g.is_mod, 10) === 1)) {
       userType = UserType.MEDIATOR;

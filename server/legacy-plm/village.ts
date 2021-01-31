@@ -56,7 +56,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
       await getRepository(Village).save(newVillage);
       return true;
     }
-  }
+  }();
 
   const newVillage = new Village();
   newVillage.countries = ["FR", "FR"];
