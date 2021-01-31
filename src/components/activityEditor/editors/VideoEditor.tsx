@@ -7,11 +7,12 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Alert } from "@material-ui/lab";
 
 import { Modal } from "src/components/Modal";
-import { DeleteButton } from "src/components/buttons/DeleteButton";
-// import { Steps } from "src/components/Steps";
 import { isValidHttpUrl } from "src/utils";
 
 import type { EditorProps } from "../editing.types";
+
+// import { Steps } from "src/components/Steps";
+import { EditorContainer } from "./EditorContainer";
 
 export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [videoUrl, setVideoUrl] = React.useState(value);
@@ -80,43 +81,41 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
   };
 
   return (
-    <div>
-      <div className="image-editor">
-        <DeleteButton
-          color="primary"
-          style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }}
-          confirmLabel="Voulez-vous vraiment supprimer cette vidéo ?"
-          confirmTitle="Supprimer"
-          onDelete={onDelete}
-        />
-        {videoUrl && (
-          <>
-            <div className="text-center" style={{ height: "9rem", borderRight: "1px dashed #4c3ed9" }}>
-              <div
-                style={{
-                  display: "inline-block",
-                  width: "16rem",
-                  height: "9rem",
-                }}
-              >
-                <ReactPlayer width="100%" height="100%" light url={videoUrl} controls />
-              </div>
+    <EditorContainer
+      deleteButtonProps={{
+        confirmLabel: "Voulez-vous vraiment supprimer cette vidéo ?",
+        confirmTitle: "Supprimer",
+        onDelete,
+      }}
+      className="image-editor"
+    >
+      {videoUrl && (
+        <>
+          <div className="text-center" style={{ height: "9rem", borderRight: "1px dashed #4c3ed9" }}>
+            <div
+              style={{
+                display: "inline-block",
+                width: "16rem",
+                height: "9rem",
+              }}
+            >
+              <ReactPlayer width="100%" height="100%" light url={videoUrl} controls />
             </div>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <Button
-                variant="outlined"
-                size="small"
-                color="primary"
-                onClick={() => {
-                  setCurrentStep(1);
-                }}
-              >
-                {"Changer de vidéo"}
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              color="primary"
+              onClick={() => {
+                setCurrentStep(1);
+              }}
+            >
+              {"Changer de vidéo"}
+            </Button>
+          </div>
+        </>
+      )}
       <Modal
         open={currentStep > 0}
         fullWidth
@@ -230,6 +229,6 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
           </div>
         </div>
       </Modal>
-    </div>
+    </EditorContainer>
   );
 };

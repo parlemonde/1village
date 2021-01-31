@@ -17,9 +17,8 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
 
-import { DeleteButton } from "src/components/buttons/DeleteButton";
-
 import type { EditorProps } from "../../editing.types";
+import { EditorContainer } from "../EditorContainer";
 
 import { ColorPicker } from "./toolbar/ColorPicker";
 import { EmojiPicker } from "./toolbar/EmojiPicker";
@@ -145,14 +144,15 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
   }, [value]);
 
   return (
-    <div style={{ position: "relative" }}>
-      <DeleteButton
-        color="primary"
-        style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }}
-        confirmLabel={displayPlaceholder ? "" : "Voulez-vous vraiment supprimer ce texte ?"}
-        confirmTitle="Supprimer"
-        onDelete={onDelete}
-      />
+    <EditorContainer
+      deleteButtonProps={{
+        confirmLabel: displayPlaceholder ? "" : "Voulez-vous vraiment supprimer ce texte ?",
+        confirmTitle: "Supprimer",
+        onDelete,
+      }}
+      noPadding
+      noMinHeight
+    >
       <div
         ref={editorContainerRef}
         className="text-editor"
@@ -199,6 +199,6 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
           />
         </div>
       </div>
-    </div>
+    </EditorContainer>
   );
 };

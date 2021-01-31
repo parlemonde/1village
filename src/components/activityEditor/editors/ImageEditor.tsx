@@ -5,10 +5,11 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Alert } from "@material-ui/lab";
 
 import { Modal } from "src/components/Modal";
-import { DeleteButton } from "src/components/buttons/DeleteButton";
 import { isValidHttpUrl } from "src/utils";
 
 import type { EditorProps } from "../editing.types";
+
+import { EditorContainer } from "./EditorContainer";
 
 export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [imageUrl, setImageUrl] = React.useState(value);
@@ -70,43 +71,41 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
   };
 
   return (
-    <div>
-      <div className="image-editor">
-        <DeleteButton
-          color="primary"
-          style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }}
-          confirmLabel="Voulez-vous vraiment supprimer cette image ?"
-          confirmTitle="Supprimer"
-          onDelete={onDelete}
-        />
-        {imageUrl && (
-          <>
-            <div
-              style={{
-                width: "15rem",
-                height: "10rem",
-                backgroundImage: `url(${imageUrl})`,
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                borderRight: "1px dashed #4c3ed9",
+    <EditorContainer
+      deleteButtonProps={{
+        confirmLabel: "Voulez-vous vraiment supprimer cette image ?",
+        confirmTitle: "Supprimer",
+        onDelete,
+      }}
+      className="image-editor"
+    >
+      {imageUrl && (
+        <>
+          <div
+            style={{
+              width: "15rem",
+              height: "10rem",
+              backgroundImage: `url(${imageUrl})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              borderRight: "1px dashed #4c3ed9",
+            }}
+          ></div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              color="primary"
+              onClick={() => {
+                setIsModalOpen(true);
               }}
-            ></div>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <Button
-                variant="outlined"
-                size="small"
-                color="primary"
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
-              >
-                {"Changer d'image"}
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
+            >
+              {"Changer d'image"}
+            </Button>
+          </div>
+        </>
+      )}
       <Modal
         open={isModalOpen}
         fullWidth
@@ -193,6 +192,6 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
           </div>
         </div>
       </Modal>
-    </div>
+    </EditorContainer>
   );
 };
