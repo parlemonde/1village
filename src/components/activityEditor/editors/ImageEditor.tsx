@@ -10,7 +10,7 @@ import { isValidHttpUrl } from "src/utils";
 
 import type { EditorProps } from "../editing.types";
 
-const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [imageUrl, setImageUrl] = React.useState(value);
   const [tempImageUrl, setTempImageUrl] = React.useState("");
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
@@ -196,5 +196,3 @@ const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {
     </div>
   );
 };
-
-export default ImageEditor;

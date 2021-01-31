@@ -1,7 +1,7 @@
 import ReactPlayer from "react-player";
 import React from "react";
 
-import type { PreviewProps } from "../editing.types";
+import type { PreviewProps } from "../../editing.types";
 
 const VideoPreview: React.FC<PreviewProps> = ({ value }: PreviewProps) => {
   return (

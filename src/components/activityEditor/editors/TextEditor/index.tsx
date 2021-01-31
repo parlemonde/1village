@@ -19,7 +19,7 @@ import { Divider } from "@material-ui/core";
 
 import { DeleteButton } from "src/components/buttons/DeleteButton";
 
-import type { EditorProps } from "../editing.types";
+import type { EditorProps } from "../../editing.types";
 
 import { ColorPicker } from "./toolbar/ColorPicker";
 import { EmojiPicker } from "./toolbar/EmojiPicker";
@@ -48,7 +48,7 @@ function blockStyleFn(block: ContentBlock): string {
   return "";
 }
 
-const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {}, onDelete }: EditorProps) => {
+export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {}, onDelete }: EditorProps) => {
   const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<Editor>(null);
@@ -202,5 +202,3 @@ const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {}, on
     </div>
   );
 };
-
-export default TextEditor;

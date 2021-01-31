@@ -26,19 +26,20 @@ type InlineProps = {
 };
 
 export const TextAlignButtons: React.FC<InlineProps> = ({ value, onChange }: InlineProps) => {
-  const handleAlignment = (_event: React.MouseEvent<HTMLElement>, newAlignment: "left" | "center" | "right" | undefined) => {
+  const handleAlignment = (newAlignment: "left" | "center" | "right" | undefined) => (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     onChange(newAlignment);
   };
 
   return (
-    <StyledToggleButtonGroup size="small" exclusive value={value} onChange={handleAlignment} aria-label="text alignment">
-      <ToggleButton value="left" aria-label="left aligned">
+    <StyledToggleButtonGroup size="small" exclusive value={value} aria-label="text alignment">
+      <ToggleButton value="left" aria-label="left aligned" onMouseDown={handleAlignment("left")}>
         <FormatAlignLeftIcon />
       </ToggleButton>
-      <ToggleButton value="center" aria-label="centered">
+      <ToggleButton value="center" aria-label="centered" onMouseDown={handleAlignment("center")}>
         <FormatAlignCenterIcon />
       </ToggleButton>
-      <ToggleButton value="right" aria-label="right aligned">
+      <ToggleButton value="right" aria-label="right aligned" onMouseDown={handleAlignment("right")}>
         <FormatAlignRightIcon />
       </ToggleButton>
     </StyledToggleButtonGroup>

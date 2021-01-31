@@ -83,7 +83,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }: Col
     <ClickAwayListener onClickAway={handleClickAway}>
       <div>
         <StyledToggleButtonGroup size="small" aria-label="text color">
-          <ToggleButton value="bold" aria-label="bold" onClick={handleClick}>
+          <ToggleButton value="bold" aria-label="bold" onMouseDown={handleClick}>
             <FormatColorTextIcon style={{ color: value || "rgb(46, 52, 59)" }} />
           </ToggleButton>
         </StyledToggleButtonGroup>

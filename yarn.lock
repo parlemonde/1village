@@ -33,6 +33,7 @@ __metadata:
     "@types/react": ^17
     "@types/react-dom": ^17
     "@types/sass": ^1
+    "@types/sortablejs": ^1
     "@types/string-similarity": ^4
     "@types/uuid": ^8.3.0
     "@types/webpack": ^4.41.25
@@ -84,9 +85,11 @@ __metadata:
     react-player: ^2.8.2
     react-query: ^2.26.4
     react-query-devtools: ^2.6.3
+    react-sortablejs: ^6.0.0
     resize-observer-polyfill: ^1.5.1
     safe-buffer: ^5.2.1
     sass: ^1.32.2
+    sortablejs: ^1.13.0
     string-similarity: ^4.0.4
     typeorm: ^0.2.29
     typescript: ^4.1.2
@@ -2211,6 +2214,13 @@ __metadata:
     "@types/mime": "*"
     "@types/node": "*"
   checksum: 39db4c0f0f1c459588609496f92c2cb084b7feca8b9f96ac5032e371f8a0f4923c32dc9b7fd005b8bb6d10aad5d9118238da4869647672441571ff20bcbe4ea4
+  languageName: node
+  linkType: hard
+
+"@types/sortablejs@npm:^1":
+  version: 1.10.6
+  resolution: "@types/sortablejs@npm:1.10.6"
+  checksum: 1a98669c88ea125b55df919235f9c55fe177222c5089a3ff5b77f1bc61400c6273849d43d22d77d6f2b0d5d528252bdca52eced3492474071a89758ffaca795d
   languageName: node
   linkType: hard
 
@@ -10323,6 +10333,21 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"react-sortablejs@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "react-sortablejs@npm:6.0.0"
+  dependencies:
+    classnames: ^2.2.6
+    tiny-invariant: ^1.1.0
+  peerDependencies:
+    "@types/sortablejs": ^1.10.0
+    react: ^16.9.0
+    react-dom: ^16.9.0
+    sortablejs: ^1.10.0
+  checksum: 9f00f40d2a6de18e65ec4c4c80e6fb66bd39042fdc7a476a4718834276255bc606c46612506696ea586f064b75d5ee01274e7b6cf33ee6cb92d312ff7821e25f
+  languageName: node
+  linkType: hard
+
 "react-transition-group@npm:^4.4.0":
   version: 4.4.1
   resolution: "react-transition-group@npm:4.4.1"
@@ -11212,6 +11237,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"sortablejs@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "sortablejs@npm:1.13.0"
+  checksum: 96bef6c83baebc6e5c259d9141af3700636cdbea3af47b3986dda03d04c8e5ca33e3a8139358c1d60a1d5d65670faecb66882949f53f66068b7f363f34e6d0cb
+  languageName: node
+  linkType: hard
+
 "source-list-map@npm:^2.0.0, source-list-map@npm:^2.0.1":
   version: 2.0.1
   resolution: "source-list-map@npm:2.0.1"
@@ -11997,6 +12029,13 @@ fsevents@~2.1.2:
   dependencies:
     setimmediate: ^1.0.4
   checksum: 9e10d036d61b81eef9679b8ed452000eecbc309ea67067120a124a451b58ac4e5d348ca24152351770b5058117732dc8c665fff0b984f8eb0d857b9e13c33f42
+  languageName: node
+  linkType: hard
+
+"tiny-invariant@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "tiny-invariant@npm:1.1.0"
+  checksum: 64318fbd77c451cfff23b57b9f3aef56594d9cea051a87dc538c9b371f97e8d474eaa2a7cbd60b8aa23f852393152495e8651b197607465fdf9c8ff134043b1b
   languageName: node
   linkType: hard
 

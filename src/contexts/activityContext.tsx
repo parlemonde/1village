@@ -1,5 +1,6 @@
 import React from "react";
 
+import type { EditorTypes, EditorContent } from "src/components/activityEditor/editing.types";
 import { Activity, ActivityType } from "types/activity.type";
 
 import { UserContext } from "./userContext";
@@ -7,18 +8,14 @@ import { VillageContext } from "./villageContext";
 
 export type ExtendedActivity = Activity & {
   data: { [key: string]: string | number | boolean };
-  processedContent: Array<{
-    id: number;
-    type: "text" | "video" | "image";
-    value: string;
-  }>;
+  processedContent: Array<EditorContent>;
 };
 
 interface ActivityContextValue {
   activity: ExtendedActivity | null;
   updateActivity(newActivity: Partial<ExtendedActivity>): void;
   createNewActivity(type: ActivityType, initialData?: { [key: string]: string | number | boolean }): boolean;
-  addContent(type: "text" | "video" | "image", value?: string): void;
+  addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
 }
 
@@ -63,7 +60,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const activityContent = activity?.processedContent || null;
 
   const addContent = React.useCallback(
-    (type: "text" | "video" | "image", value: string = "") => {
+    (type: EditorTypes, value: string = "") => {
       if (activityContent === null) {
         return;
       }

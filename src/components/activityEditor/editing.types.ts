@@ -1,3 +1,11 @@
+export type EditorTypes = "text" | "video" | "image";
+
+export type EditorContent = {
+  id: number;
+  type: EditorTypes;
+  value: string;
+};
+
 export interface EditorProps {
   id: number;
   value?: string;

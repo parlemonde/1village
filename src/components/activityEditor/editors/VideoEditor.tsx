@@ -13,7 +13,7 @@ import { isValidHttpUrl } from "src/utils";
 
 import type { EditorProps } from "../editing.types";
 
-const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [videoUrl, setVideoUrl] = React.useState(value);
   const [tempVideoUrl, setTempVideoUrl] = React.useState("");
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
@@ -233,5 +233,3 @@ const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {
     </div>
   );
 };
-
-export default VideoEditor;
