@@ -17,6 +17,8 @@ __metadata:
     "@types/classnames": ^2
     "@types/cookie-parser": ^1.4.2
     "@types/cors": ^2.8.9
+    "@types/draft-js": ^0
+    "@types/draftjs-to-html": ^0
     "@types/eslint": ^7.2.6
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/express": ^4.17.9
@@ -31,6 +33,7 @@ __metadata:
     "@types/react": ^17
     "@types/react-dom": ^17
     "@types/sass": ^1
+    "@types/sortablejs": ^1
     "@types/string-similarity": ^4
     "@types/uuid": ^8.3.0
     "@types/webpack": ^4.41.25
@@ -48,6 +51,9 @@ __metadata:
     cors: ^2.8.5
     csrf: ^3.1.0
     dotenv: ^8.2.0
+    draft-js: ^0.11.7
+    draftjs-to-html: ^0.9.1
+    draftjs-utils: ^0.10.2
     duplicate-package-checker-webpack-plugin: ^3.0.0
     eslint: ^7.15.0
     eslint-config-prettier: ^7.0.0
@@ -61,6 +67,8 @@ __metadata:
     eslint-plugin-react-hooks: ^4.2.0
     express: ^4.17.1
     helmet: ^4.2.0
+    html-to-draftjs: ^1.5.0
+    immutable: ^4.0.0-rc.12
     json-stable-stringify: ^1.0.1
     jsonwebtoken: ^8.5.1
     md5: ^2.3.0
@@ -74,11 +82,14 @@ __metadata:
     query-string: ^6.13.7
     react: ^17.0.1
     react-dom: ^17.0.1
+    react-player: ^2.8.2
     react-query: ^2.26.4
     react-query-devtools: ^2.6.3
+    react-sortablejs: ^6.0.0
     resize-observer-polyfill: ^1.5.1
     safe-buffer: ^5.2.1
     sass: ^1.32.2
+    sortablejs: ^1.13.0
     string-similarity: ^4.0.4
     typeorm: ^0.2.29
     typescript: ^4.1.2
@@ -1915,6 +1926,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/draft-js@npm:*, @types/draft-js@npm:^0":
+  version: 0.10.44
+  resolution: "@types/draft-js@npm:0.10.44"
+  dependencies:
+    "@types/react": "*"
+    immutable: ~3.7.4
+  checksum: 038c24df07765b92c8d3c2d517fa1c5ae798ff2f04144e3f4ced68c95c61487d793b6d1e852aa5b5bc4432f403e6da99cbf4e4555b9104fee832cffc12c6b8bd
+  languageName: node
+  linkType: hard
+
+"@types/draftjs-to-html@npm:^0":
+  version: 0.8.0
+  resolution: "@types/draftjs-to-html@npm:0.8.0"
+  dependencies:
+    "@types/draft-js": "*"
+  checksum: d8c496bd7d082b910c5293f0475b175cf0a92a4af3a1d8472f53124db076ec8902a38dbea09071d3165b050fec280fbeb0fb6ad56dab2c10902baa5d76a54a91
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.38.0":
   version: 1.39.4
   resolution: "@types/emscripten@npm:1.39.4"
@@ -2184,6 +2214,13 @@ __metadata:
     "@types/mime": "*"
     "@types/node": "*"
   checksum: 39db4c0f0f1c459588609496f92c2cb084b7feca8b9f96ac5032e371f8a0f4923c32dc9b7fd005b8bb6d10aad5d9118238da4869647672441571ff20bcbe4ea4
+  languageName: node
+  linkType: hard
+
+"@types/sortablejs@npm:^1":
+  version: 1.10.6
+  resolution: "@types/sortablejs@npm:1.10.6"
+  checksum: 1a98669c88ea125b55df919235f9c55fe177222c5089a3ff5b77f1bc61400c6273849d43d22d77d6f2b0d5d528252bdca52eced3492474071a89758ffaca795d
   languageName: node
   linkType: hard
 
@@ -4520,6 +4557,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:^3.6.4":
+  version: 3.8.3
+  resolution: "core-js@npm:3.8.3"
+  checksum: 3c67d1732d505f6afaf836f18038dae8267e8c0e8e84e1c679bac67589e66d0807c24750c7d8b1118cc386c3d66a1d96f20d9cb0f6a879b19cfc04e9f073fe78
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:1.0.2, core-util-is@npm:^1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -4596,7 +4640,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:3.0.6, cross-fetch@npm:^3.0.6":
+"cross-fetch@npm:3.0.6, cross-fetch@npm:^3.0.4, cross-fetch@npm:^3.0.6":
   version: 3.0.6
   resolution: "cross-fetch@npm:3.0.6"
   dependencies:
@@ -4949,7 +4993,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.2.2":
+"deepmerge@npm:^4.0.0, deepmerge@npm:^4.2.2":
   version: 4.2.2
   resolution: "deepmerge@npm:4.2.2"
   checksum: 85abf8e0045ee280996e7d2396979c877ef0741e413b716e42441110e0a83ac08098b2a49cea035510060bf667c0eae3189b2a52349f5fa4b000c211041637b1
@@ -5251,6 +5295,37 @@ __metadata:
   version: 8.2.0
   resolution: "dotenv@npm:8.2.0"
   checksum: 16cb89cbd7b98b053899b8aba8c5044c8fb61a2db8a81fe70360b75035fce5fed53bd7a34d772be717d0880c0321122a4c09423f518025e1b52d96791521b1a7
+  languageName: node
+  linkType: hard
+
+"draft-js@npm:^0.11.7":
+  version: 0.11.7
+  resolution: "draft-js@npm:0.11.7"
+  dependencies:
+    fbjs: ^2.0.0
+    immutable: ~3.7.4
+    object-assign: ^4.1.1
+  peerDependencies:
+    react: ">=0.14.0"
+    react-dom: ">=0.14.0"
+  checksum: b16acd275dadd9c85014722cc3181b6827fab34d7f9b2ca8be8ba793f6f6436f18dff040912d75d3408ecda8004219050f2d4f5be02674decf659e1c6e1953e5
+  languageName: node
+  linkType: hard
+
+"draftjs-to-html@npm:^0.9.1":
+  version: 0.9.1
+  resolution: "draftjs-to-html@npm:0.9.1"
+  checksum: c358d74cf033ef55e15f096b350cd96336fde132c50e346147df66830d81879f33df3dd8ca5b7c0ed693039401926389e27a696066bf54c7d1a66b9528d73f32
+  languageName: node
+  linkType: hard
+
+"draftjs-utils@npm:^0.10.2":
+  version: 0.10.2
+  resolution: "draftjs-utils@npm:0.10.2"
+  peerDependencies:
+    draft-js: ^0.11.x
+    immutable: 3.x.x || 4.x.x
+  checksum: 2e149f92e86e09d76f2fafe609dbd320028d362573f4b8965e67041be978c06c1f110eb7e337c26fe9496cb6181ba8a63a18d156829c95138fe972f8435911e0
   languageName: node
   linkType: hard
 
@@ -6092,6 +6167,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fbjs-css-vars@npm:^1.0.0":
+  version: 1.0.2
+  resolution: "fbjs-css-vars@npm:1.0.2"
+  checksum: 2f0c717cc2502932102b67d9dbfa75eeed8e5b6a655e12badfac2557907e635337a0a29acca262d0027bef87a8f63b52d0a2b065012eeaee1f0016f749b37b9a
+  languageName: node
+  linkType: hard
+
+"fbjs@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "fbjs@npm:2.0.0"
+  dependencies:
+    core-js: ^3.6.4
+    cross-fetch: ^3.0.4
+    fbjs-css-vars: ^1.0.0
+    loose-envify: ^1.0.0
+    object-assign: ^4.1.0
+    promise: ^7.1.1
+    setimmediate: ^1.0.5
+    ua-parser-js: ^0.7.18
+  checksum: 8f88a343840e38f5851f24e28f52094d945406ae4239211d286fa5b17da3e14f21a4a975a6c8889afade0d6642b5e969d0d26d026915632884bdf4853cfbcde7
+  languageName: node
+  linkType: hard
+
 "fecha@npm:^4.2.0":
   version: 4.2.0
   resolution: "fecha@npm:4.2.0"
@@ -6836,6 +6934,16 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"html-to-draftjs@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "html-to-draftjs@npm:1.5.0"
+  peerDependencies:
+    draft-js: ^0.10.x || ^0.11.x
+    immutable: 3.x.x || 4.x.x
+  checksum: 0c847832e29a54ee0b08bebe0a884e1afc960eb0166444d980b031f7f457801a65cb5303e6277475584a579da918404c744b81e8bff803a91731e2951813f426
+  languageName: node
+  linkType: hard
+
 "htmlparser2@npm:4.1.0":
   version: 4.1.0
   resolution: "htmlparser2@npm:4.1.0"
@@ -6985,6 +7093,20 @@ fsevents@~2.1.2:
   version: 5.1.8
   resolution: "ignore@npm:5.1.8"
   checksum: b08e3d5b5d94eca13475f29a5d47d221060e9cdd7e38d7647088e29d90130669a970fecbc4cdb41b8fa295c6673740c729d3dc05dadc381f593efb42282cbf9f
+  languageName: node
+  linkType: hard
+
+"immutable@npm:^4.0.0-rc.12":
+  version: 4.0.0-rc.12
+  resolution: "immutable@npm:4.0.0-rc.12"
+  checksum: 8510ebe1cf9ce47b913bc17a72d9fc5cbbe5a121fdd63ac33693e5e47aef27bb3b3e31ca77d6f4928b6a80c41cfcc08f6f928bc1bd06448a1b6df11ee1781c0b
+  languageName: node
+  linkType: hard
+
+"immutable@npm:~3.7.4":
+  version: 3.7.6
+  resolution: "immutable@npm:3.7.6"
+  checksum: 33fb106a330bae44cea58a2bc51c667850ea198396f329787718ab9ae70f6302734d0beb81e22de06876e38807f813a81bb09628e096ef89d9b5e06185edd16a
   languageName: node
   linkType: hard
 
@@ -7913,6 +8035,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"load-script@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "load-script@npm:1.0.0"
+  checksum: 9f907ee20dfe8068af210be73a072dd61a287566a23b5666b9c6b9957e66eb33cc7c6a790308cf307c373d7ff75265ab1dde779c3fff90d65535fb3a1c0a167a
+  languageName: node
+  linkType: hard
+
 "loader-runner@npm:^2.4.0":
   version: 2.4.0
   resolution: "loader-runner@npm:2.4.0"
@@ -8074,7 +8203,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -8202,6 +8331,13 @@ fsevents@~2.1.2:
   version: 0.3.0
   resolution: "media-typer@npm:0.3.0"
   checksum: be1c825782df7f38eebd451d778f6407bb15a59c8807a69e7f2ad74a25440e474536441c6bf583fdf2803ea23b866e91ff68f565cda297211dd89147758c8df3
+  languageName: node
+  linkType: hard
+
+"memoize-one@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "memoize-one@npm:5.1.1"
+  checksum: e7c4a9cceca71334bf09c38818c375a280dc6e8ec03a92701c16199763269ce756b7b0b370f4b464c071045349fb7b3e4a3cc7460a3f46a277f394d8634a6eb5
   languageName: node
   linkType: hard
 
@@ -9860,7 +9996,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"promise@npm:^7.3.1":
+"promise@npm:^7.1.1, promise@npm:^7.3.1":
   version: 7.3.1
   resolution: "promise@npm:7.3.1"
   dependencies:
@@ -10133,10 +10269,32 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.0.1":
+  version: 3.2.0
+  resolution: "react-fast-compare@npm:3.2.0"
+  checksum: 6fe65c889eb4f326e97769135f97b3d63ac68737866f9c37f9625c9de4f5eaa9abed6f748eb3fd6a66808392118842916309cab7cfa99c67991f0c837433d6d2
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^17.0.1":
   version: 17.0.1
   resolution: "react-is@npm:17.0.1"
   checksum: 5a83dfc78e7adcb93d632bf367b0733db650e3abd2e9c57c33b87e50d201212c1884b0d7bcf13e692f1556189fa1b87f9f3e0ba10fe858fd6aebe83ed4fcd1ea
+  languageName: node
+  linkType: hard
+
+"react-player@npm:^2.8.2":
+  version: 2.8.2
+  resolution: "react-player@npm:2.8.2"
+  dependencies:
+    deepmerge: ^4.0.0
+    load-script: ^1.0.0
+    memoize-one: ^5.1.1
+    prop-types: ^15.7.2
+    react-fast-compare: ^3.0.1
+  peerDependencies:
+    react: ">=16.6.0"
+  checksum: 53349133172875aa7e0cd8dab99d58dbe32d51027cc4e0a0b1610d213be7279c24cde2f500786c49bdc1218dff56dee03b78a2e984ec69507daf5bc86f162415
   languageName: node
   linkType: hard
 
@@ -10172,6 +10330,21 @@ fsevents@~2.1.2:
   version: 0.8.3
   resolution: "react-refresh@npm:0.8.3"
   checksum: 38f06df8e0a20701b96e5d680838a3528d66cfb53db79843d30cb9517df3262ec596607147439975267bf0634bee77101db37298ea79b5742cc28664632f3c76
+  languageName: node
+  linkType: hard
+
+"react-sortablejs@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "react-sortablejs@npm:6.0.0"
+  dependencies:
+    classnames: ^2.2.6
+    tiny-invariant: ^1.1.0
+  peerDependencies:
+    "@types/sortablejs": ^1.10.0
+    react: ^16.9.0
+    react-dom: ^16.9.0
+    sortablejs: ^1.10.0
+  checksum: 9f00f40d2a6de18e65ec4c4c80e6fb66bd39042fdc7a476a4718834276255bc606c46612506696ea586f064b75d5ee01274e7b6cf33ee6cb92d312ff7821e25f
   languageName: node
   linkType: hard
 
@@ -10877,7 +11050,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"setimmediate@npm:^1.0.4":
+"setimmediate@npm:^1.0.4, setimmediate@npm:^1.0.5":
   version: 1.0.5
   resolution: "setimmediate@npm:1.0.5"
   checksum: 87884d8add4779fe47ccf763396a5bf875640ae34d80a10802da4de5c25d87647c12f6e7748fd5b8c143b57201caf2a5a781631456c228825f166ca305c12f20
@@ -11061,6 +11234,13 @@ fsevents@~2.1.2:
     source-map-resolve: ^0.5.0
     use: ^3.1.0
   checksum: c30b63a732bf37dbd2147bf57b4d9eac651ab7b313d1521f73855154b2c2f5a3f2ad18bd47e21cc64b6991f868ecb2a99f8da973ca86da39956f1f0f720b7033
+  languageName: node
+  linkType: hard
+
+"sortablejs@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "sortablejs@npm:1.13.0"
+  checksum: 96bef6c83baebc6e5c259d9141af3700636cdbea3af47b3986dda03d04c8e5ca33e3a8139358c1d60a1d5d65670faecb66882949f53f66068b7f363f34e6d0cb
   languageName: node
   linkType: hard
 
@@ -11852,6 +12032,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"tiny-invariant@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "tiny-invariant@npm:1.1.0"
+  checksum: 64318fbd77c451cfff23b57b9f3aef56594d9cea051a87dc538c9b371f97e8d474eaa2a7cbd60b8aa23f852393152495e8651b197607465fdf9c8ff134043b1b
+  languageName: node
+  linkType: hard
+
 "tiny-warning@npm:^1.0.2":
   version: 1.0.3
   resolution: "tiny-warning@npm:1.0.3"
@@ -12168,6 +12355,13 @@ typescript@^4.1.2:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 017af992148346e671d5b83b041773825888e9c94db8d2b9472cdbb6d6f0ee85927817473121524d319f8be6ffe5a6904d27ff6ef21356d2274fcadd52e17938
+  languageName: node
+  linkType: hard
+
+"ua-parser-js@npm:^0.7.18":
+  version: 0.7.23
+  resolution: "ua-parser-js@npm:0.7.23"
+  checksum: ce6ce4f53f2905519eb427b12ab441c2f72dd162073a925b4e052b6ebbc0f2325554ac44175d58a125e1919888e1226364603e7ea2d797e8210238a20f81802d
   languageName: node
   linkType: hard
 
