@@ -1,7 +1,9 @@
 import ReactPlayer from "react-player";
 import React from "react";
 
-const VideoPreview: React.FC<{ value: string }> = ({ value }: { value: string }) => {
+import type { PreviewProps } from "../editing.types";
+
+const VideoPreview: React.FC<PreviewProps> = ({ value }: PreviewProps) => {
   return (
     <div className="text-preview text-center">
       <div

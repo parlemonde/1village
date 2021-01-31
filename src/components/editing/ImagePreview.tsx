@@ -1,6 +1,8 @@
 import React from "react";
 
-export const ImagePreview: React.FC<{ value: string }> = ({ value }: { value: string }) => {
+import type { PreviewProps } from "./editing.types";
+
+export const ImagePreview: React.FC<PreviewProps> = ({ value }: PreviewProps) => {
   return (
     <div className="text-preview text-center">
       <div

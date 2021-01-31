@@ -17,16 +17,13 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
 
+import type { EditorProps } from "../editing.types";
+
 import { ColorPicker } from "./toolbar/ColorPicker";
 import { EmojiPicker } from "./toolbar/EmojiPicker";
 import { InlineButtons } from "./toolbar/InlineButtons";
 import { TextAlignButtons } from "./toolbar/TextAlignButtons";
 import { TitleChoice } from "./toolbar/TitleChoice";
-
-interface TextEditorProps {
-  value?: string;
-  onChange?(newValue: string): void;
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,7 +46,7 @@ function blockStyleFn(block: ContentBlock): string {
   return "";
 }
 
-const TextEditor: React.FC<TextEditorProps> = ({ value = "", onChange = () => {} }: TextEditorProps) => {
+const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {} }: EditorProps) => {
   const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<Editor>(null);

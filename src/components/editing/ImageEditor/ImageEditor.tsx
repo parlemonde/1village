@@ -7,14 +7,9 @@ import { Alert } from "@material-ui/lab";
 import { Modal } from "src/components/Modal";
 import { isValidHttpUrl } from "src/utils";
 
-interface ImageEditorProps {
-  id: number;
-  value?: string;
-  onChange?(newValue: string): void;
-  onDelete?(): void;
-}
+import type { EditorProps } from "../editing.types";
 
-const ImageEditor: React.FC<ImageEditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: ImageEditorProps) => {
+const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [imageUrl, setImageUrl] = React.useState(value);
   const [tempImageUrl, setTempImageUrl] = React.useState("");
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({

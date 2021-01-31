@@ -10,14 +10,9 @@ import { Modal } from "src/components/Modal";
 // import { Steps } from "src/components/Steps";
 import { isValidHttpUrl } from "src/utils";
 
-interface VidoeEditorProps {
-  id: number;
-  value?: string;
-  onChange?(newValue: string): void;
-  onDelete?(): void;
-}
+import type { EditorProps } from "../editing.types";
 
-const VideoEditor: React.FC<VidoeEditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: VidoeEditorProps) => {
+const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [videoUrl, setVideoUrl] = React.useState(value);
   const [tempVideoUrl, setTempVideoUrl] = React.useState("");
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
