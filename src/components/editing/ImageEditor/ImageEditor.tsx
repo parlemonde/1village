@@ -5,6 +5,7 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Alert } from "@material-ui/lab";
 
 import { Modal } from "src/components/Modal";
+import { DeleteButton } from "src/components/buttons/DeleteButton";
 import { isValidHttpUrl } from "src/utils";
 
 import type { EditorProps } from "../editing.types";
@@ -71,6 +72,13 @@ const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {
   return (
     <div>
       <div className="image-editor">
+        <DeleteButton
+          color="primary"
+          style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }}
+          confirmLabel="Voulez-vous vraiment supprimer cette image ?"
+          confirmTitle="Supprimer"
+          onDelete={onDelete}
+        />
         {imageUrl && (
           <>
             <div

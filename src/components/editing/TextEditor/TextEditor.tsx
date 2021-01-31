@@ -17,6 +17,8 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
 
+import { DeleteButton } from "src/components/buttons/DeleteButton";
+
 import type { EditorProps } from "../editing.types";
 
 import { ColorPicker } from "./toolbar/ColorPicker";
@@ -46,7 +48,7 @@ function blockStyleFn(block: ContentBlock): string {
   return "";
 }
 
-const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {} }: EditorProps) => {
+const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {}, onDelete }: EditorProps) => {
   const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<Editor>(null);
@@ -143,49 +145,59 @@ const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {} }: 
   }, [value]);
 
   return (
-    <div
-      ref={editorContainerRef}
-      className="text-editor"
-      onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
-        if (editorRef.current) {
-          event.preventDefault();
-          editorRef.current.focus();
-        }
-      }}
-    >
-      <div className="text-editor__toolbar-container">
-        <div
-          className={classnames("text-editor__toolbar", {
-            "text-editor__toolbar--visible": hasFocus,
-          })}
-        >
-          <Paper elevation={0} className={classes.paper}>
-            <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
-            <Divider flexItem orientation="vertical" className={classes.divider} />
-            <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
-            <Divider flexItem orientation="vertical" className={classes.divider} />
-            <TitleChoice value={currentHeader as "unstyle" | "header-one" | "header-two"} onChange={toggleBlockType} />
-            <Divider flexItem orientation="vertical" className={classes.divider} />
-            <ColorPicker value={currentColor} onChange={setInlineColor} />
-            <EmojiPicker onChange={addEmoji} />
-          </Paper>
-        </div>
-      </div>
-      {displayPlaceholder && <div style={{ position: "absolute", color: "#777777" }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>}
-
+    <div style={{ position: "relative" }}>
+      <DeleteButton
+        color="primary"
+        style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }}
+        confirmLabel={displayPlaceholder ? "" : "Voulez-vous vraiment supprimer ce texte ?"}
+        confirmTitle="Supprimer"
+        onDelete={onDelete}
+      />
       <div
+        ref={editorContainerRef}
+        className="text-editor"
         onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
-          event.stopPropagation();
+          if (editorRef.current) {
+            event.preventDefault();
+            editorRef.current.focus();
+          }
         }}
       >
-        <Editor
-          customStyleMap={getCustomStyleMap()}
-          ref={editorRef}
-          editorState={editorState}
-          onChange={onEditorChange}
-          handleKeyCommand={handleKeyCommand}
-          blockStyleFn={blockStyleFn}
-        />
+        <div className="text-editor__toolbar-container">
+          <div
+            className={classnames("text-editor__toolbar", {
+              "text-editor__toolbar--visible": hasFocus,
+            })}
+          >
+            <Paper elevation={0} className={classes.paper}>
+              <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
+              <Divider flexItem orientation="vertical" className={classes.divider} />
+              <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
+              <Divider flexItem orientation="vertical" className={classes.divider} />
+              <TitleChoice value={currentHeader as "unstyle" | "header-one" | "header-two"} onChange={toggleBlockType} />
+              <Divider flexItem orientation="vertical" className={classes.divider} />
+              <ColorPicker value={currentColor} onChange={setInlineColor} />
+              <EmojiPicker onChange={addEmoji} />
+            </Paper>
+          </div>
+        </div>
+        {displayPlaceholder && (
+          <div style={{ position: "absolute", color: "#777777" }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>
+        )}
+        <div
+          onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
+            event.stopPropagation();
+          }}
+        >
+          <Editor
+            customStyleMap={getCustomStyleMap()}
+            ref={editorRef}
+            editorState={editorState}
+            onChange={onEditorChange}
+            handleKeyCommand={handleKeyCommand}
+            blockStyleFn={blockStyleFn}
+          />
+        </div>
       </div>
     </div>
   );

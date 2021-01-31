@@ -64,7 +64,17 @@ const PresentationStep2: React.FC = () => {
           <h1>{themes[data.theme as number].title}</h1>
           {activity.processedContent.map((p, index) => {
             if (p.type === "text") {
-              return <TextEditor key={p.id} value={p.value} onChange={onChangeContent(index)} />;
+              return (
+                <TextEditor
+                  key={p.id}
+                  id={p.id}
+                  value={p.value}
+                  onChange={onChangeContent(index)}
+                  onDelete={() => {
+                    deleteContent(index);
+                  }}
+                />
+              );
             }
             if (p.type === "image") {
               return (

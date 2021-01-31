@@ -7,6 +7,7 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Alert } from "@material-ui/lab";
 
 import { Modal } from "src/components/Modal";
+import { DeleteButton } from "src/components/buttons/DeleteButton";
 // import { Steps } from "src/components/Steps";
 import { isValidHttpUrl } from "src/utils";
 
@@ -81,6 +82,13 @@ const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {
   return (
     <div>
       <div className="image-editor">
+        <DeleteButton
+          color="primary"
+          style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }}
+          confirmLabel="Voulez-vous vraiment supprimer cette vidéo ?"
+          confirmTitle="Supprimer"
+          onDelete={onDelete}
+        />
         {videoUrl && (
           <>
             <div className="text-center" style={{ height: "9rem", borderRight: "1px dashed #4c3ed9" }}>
