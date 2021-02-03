@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -17,6 +18,7 @@ const PresentationStep3: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = activity?.data || null;
+  const isEdit = activity !== null && activity.id !== 0;
 
   React.useEffect(() => {
     if ((data === null || !("theme" in data) || data.theme === -1) && !("activity-id" in router.query)) {
@@ -40,19 +42,34 @@ const PresentationStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: "100%", padding: "0.5rem 1rem 1rem 1rem" }}>
-        <BackButton href="/se-presenter/thematique/2" />
+        <BackButton href="/se-presenter/thematique/2" label={isEdit ? "Modifier" : "Retour"} />
         <Steps steps={["Choix du thème", "Présentation", "Prévisualisation"]} activeStep={2} />
         <div style={{ margin: "0 auto 1rem auto", width: "100%", maxWidth: "900px" }}>
-          <h1>Pré-visualisez votre présentation et publiez la</h1>
+          <h1>Pré-visualisez votre présentation{!isEdit && " et publiez la"}</h1>
           <p className="text" style={{ fontSize: "1.1rem" }}>
-            Voici une pré-visualisation de votre présentation. Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde
-            !
+            Voici la pré-visualisation de votre présentation.
+            {isEdit
+              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
+              : " Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !"}
           </p>
-          <div style={{ width: "100%", textAlign: "right", margin: "1rem 0" }}>
-            <Button variant="outlined" color="primary" onClick={onPublish}>
-              Publier
-            </Button>
-          </div>
+          {isEdit ? (
+            <div style={{ width: "100%", display: "flex", justifyContent: "space-between", margin: "1rem 0" }}>
+              <Link href="/se-presenter/thematique/2">
+                <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/2">
+                  {"Modifier à l'étape précédente"}
+                </Button>
+              </Link>
+              <Button variant="outlined" color="primary" onClick={onPublish}>
+                Enregistrer les changements
+              </Button>
+            </div>
+          ) : (
+            <div style={{ width: "100%", textAlign: "right", margin: "1rem 0" }}>
+              <Button variant="outlined" color="primary" onClick={onPublish}>
+                Publier
+              </Button>
+            </div>
+          )}
           <SimpleActivityPreview />
         </div>
       </div>

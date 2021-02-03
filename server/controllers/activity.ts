@@ -12,24 +12,36 @@ import { getQueryString } from "../utils";
 import { Controller } from "./controller";
 
 const activityController = new Controller("/activities");
+
+const getActivities = async (villageId?: number) => {
+  let builder = getRepository(Activity).createQueryBuilder("activity").leftJoinAndSelect("activity.content", "activityData");
+  if (villageId !== undefined) {
+    builder = builder.where("`activity`.`villageId` = :villageId", { villageId });
+  }
+  const activities = await builder.orderBy("`activity`.`createDate`", "DESC").addOrderBy("`activityData`.`order`", "ASC").getMany();
+  return activities;
+};
+const getActivity = async (id: number) => {
+  const activity = await getRepository(Activity)
+    .createQueryBuilder("activity")
+    .leftJoinAndSelect("activity.content", "activityData")
+    .where("`activity`.`id` = :id", { id })
+    .orderBy("`activity`.`createDate`", "DESC")
+    .addOrderBy("`activityData`.`order`", "ASC")
+    .getOne();
+  return activity;
+};
+
 // --- Get all activities. ---
 activityController.get({ path: "", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  let activities: Activity[] = [];
-  if (req.query.villageId) {
-    activities = await getRepository(Activity).find({
-      where: { villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 },
-      relations: ["content"],
-    });
-  } else {
-    activities = await getRepository(Activity).find({ relations: ["content"] });
-  }
+  const activities = await getActivities(req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined);
   res.sendJSON(activities);
 });
 
 // --- Get one activity. ---
 activityController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ["content"] });
+  const activity = await getActivity(id);
   if (activity === undefined) {
     next();
     return;
@@ -186,11 +198,108 @@ activityController.post({ path: "/:id/content", userType: UserType.TEACHER }, as
     return activityData;
   });
   await getManager().transaction(async (transactionalEntityManager) => {
-    await transactionalEntityManager.save(content);
     activity.updateDate = new Date();
     await transactionalEntityManager.save(activity);
+    await transactionalEntityManager.save(content);
   });
   res.sendJSON(content);
+});
+
+// --- update all activity content
+type UpdateActivityData = {
+  content: Array<{
+    key?: ActivityDataType;
+    value: string;
+    id?: number;
+  }>;
+};
+const UPDATE_DATA_SCHEMA: JSONSchemaType<UpdateActivityData> = {
+  type: "object",
+  properties: {
+    content: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          key: { type: "string", nullable: true, enum: ["text", "video", "image", "json", "h5p"] },
+          value: { type: "string", nullable: false },
+          id: { type: "number", nullable: true },
+        },
+        required: ["value"],
+      },
+      nullable: true,
+    },
+  },
+  required: ["content"],
+  additionalProperties: false,
+};
+const updateActivityDataValidator = ajv.compile(UPDATE_DATA_SCHEMA);
+activityController.put({ path: "/:id/content", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!updateActivityDataValidator(data)) {
+    sendInvalidDataError(updateActivityDataValidator);
+    return;
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ["content"] });
+  if (activity === undefined || req.user === undefined) {
+    next();
+    return;
+  }
+  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+    next();
+    return;
+  }
+
+  const mapIndex = data.content.reduce<{ [key: number]: number }>((acc, c, index) => {
+    if (c.id) {
+      acc[c.id] = index;
+    }
+    return acc;
+  }, {});
+
+  // 1-- new and updated content
+  const newContent: ActivityData[] = [];
+  const updatedContent: ActivityData[] = [];
+  for (let index = 0; index < data.content.length; index++) {
+    const c = data.content[index];
+    if (c.id === undefined && c.key !== undefined) {
+      const activityData = new ActivityData();
+      activityData.order = index;
+      activityData.key = c.key;
+      activityData.value = c.value;
+      activityData.activityId = activity.id;
+      newContent.push(activityData);
+    }
+    if (c.id !== undefined && mapIndex[c.id] !== undefined) {
+      const activityData = new ActivityData();
+      activityData.order = index;
+      activityData.value = c.value;
+      activityData.activityId = activity.id;
+      activityData.id = c.id;
+      updatedContent.push(activityData);
+    }
+  }
+  // 2-- deleted content
+  const deletedContent = (activity.content || []).map((c) => c.id).filter((id) => mapIndex[id] === undefined);
+
+  await getManager().transaction(async (transactionalEntityManager) => {
+    activity.updateDate = new Date();
+    await transactionalEntityManager.save(activity);
+    if (newContent.length) {
+      await transactionalEntityManager.save(newContent);
+    }
+    if (updatedContent.length) {
+      await transactionalEntityManager.save(updatedContent);
+    }
+    if (deletedContent.length) {
+      await transactionalEntityManager.createQueryBuilder().delete().from(ActivityData).where("`id` IN (:...ids)", { ids: deletedContent }).execute();
+    }
+  });
+
+  // send new activity
+  res.sendJSON(await getActivity(id));
 });
 
 // --- Edit an activity content ---

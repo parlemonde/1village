@@ -3,7 +3,7 @@ import React from "react";
 
 import ArrowRight from "src/svg/arrow-right.svg";
 
-export const BackButton: React.FC<{ href?: string }> = ({ href }: { href?: string }) => {
+export const BackButton: React.FC<{ href?: string; label?: string }> = ({ href, label = "Retour" }: { href?: string; label?: string }) => {
   const router = useRouter();
 
   const onBack = () => {
@@ -20,7 +20,7 @@ export const BackButton: React.FC<{ href?: string }> = ({ href }: { href?: strin
         <span style={{ marginRight: "0.5rem" }}>
           <ArrowRight style={{ height: "0.6rem", width: "0.6rem", transform: "rotate(180deg)" }} />
         </span>
-        Retour
+        {label}
       </a>
     </div>
   );

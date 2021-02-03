@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
+import { useQueryCache } from "react-query";
 import React from "react";
 
 import type { EditorTypes, EditorContent } from "src/components/activityEditor/editing.types";
+import { AxiosReturnType } from "src/utils/axiosRequest";
 import { getQueryString } from "src/utils";
 import { Activity, ActivityType } from "types/activity.type";
 
@@ -11,6 +13,7 @@ import { VillageContext } from "./villageContext";
 export type ExtendedActivity = Activity & {
   data: { [key: string]: string | number | boolean };
   processedContent: Array<EditorContent>;
+  dataId: number;
 };
 
 interface ActivityContextValue {
@@ -30,6 +33,7 @@ interface ActivityContextProviderProps {
 
 export function getExtendedActivity(activity: Activity): ExtendedActivity {
   let data: { [key: string]: string | number | boolean } = {};
+  let dataId = 0;
   const processedContent: Array<EditorContent> = [];
   activity.content.forEach((c) => {
     if (c.key === "h5p") {
@@ -39,6 +43,7 @@ export function getExtendedActivity(activity: Activity): ExtendedActivity {
       const decodedValue = JSON.parse(c.value);
       if (decodedValue.type && decodedValue.type === "data") {
         data = decodedValue.data || {};
+        dataId = c.id;
         // } else {
         // processedContent.push() // todo
       }
@@ -53,15 +58,19 @@ export function getExtendedActivity(activity: Activity): ExtendedActivity {
   return {
     ...activity,
     data,
+    dataId,
     processedContent,
   };
 }
 
 export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
   const router = useRouter();
+  const queryCache = useQueryCache();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [activity, setActivity] = React.useState<ExtendedActivity | null>(null);
+
+  const currentActivityId = activity === null ? null : activity.id;
 
   const getActivity = React.useCallback(
     async (id: number) => {
@@ -79,10 +88,13 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   );
   React.useEffect(() => {
     if ("activity-id" in router.query) {
-      setActivity(null);
-      getActivity(parseInt(getQueryString(router.query["activity-id"]), 10)).catch();
+      const newActivityId = parseInt(getQueryString(router.query["activity-id"]), 10);
+      if (currentActivityId === null || currentActivityId !== newActivityId) {
+        setActivity(null);
+        getActivity(newActivityId).catch();
+      }
     }
-  }, [getActivity, router]);
+  }, [getActivity, router, currentActivityId]);
 
   const updateActivity = React.useCallback((newActivity: Partial<ExtendedActivity>) => {
     setActivity((a) => (a === null ? a : { ...a, ...newActivity }));
@@ -102,6 +114,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         responseActivityId: null,
         responseType: null,
         data: initialData || {},
+        dataId: 0,
         processedContent: [{ type: "text", id: 0, value: "" }],
       };
       setActivity(activity);
@@ -117,7 +130,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       if (activityContent === null) {
         return;
       }
-      const newId = Math.max(1, ...activityContent.map((p) => p.id)) + 1;
+      const newId = Math.max(1, activity.dataId || 0, ...activityContent.map((p) => p.id)) + 1;
       const newContent = activityContent;
       newContent.push({
         id: newId,
@@ -126,7 +139,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       });
       updateActivity({ processedContent: newContent });
     },
-    [updateActivity, activityContent],
+    [updateActivity, activity, activityContent],
   );
 
   const deleteContent = React.useCallback(
@@ -182,12 +195,60 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     }
   }, [axiosLoggedRequest, activity]);
 
-  const save = React.useCallback(async () => {
-    if (activity?.id === 0) {
-      return await createActivity();
+  const editActivity = React.useCallback(async () => {
+    const mapIndex = activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
+      acc[c.id] = i;
+      return acc;
+    }, {});
+    const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
+      .map((p) => {
+        if (p.type === "text" || p.type === "image" || p.type === "video") {
+          const d: { key: string; value: string; id?: number } = {
+            key: p.type,
+            value: p.value,
+          };
+          if (mapIndex[p.id] !== undefined && p.id !== activity.dataId) {
+            d.id = p.id;
+          }
+          return d;
+        }
+        return null;
+      })
+      .filter((c) => c !== null);
+    content.push({
+      key: "json",
+      value: JSON.stringify({
+        type: "data",
+        data: activity.data,
+      }),
+      id: activity.dataId,
+    });
+
+    const response = await axiosLoggedRequest({
+      method: "PUT",
+      url: `/activities/${activity.id}/content`,
+      data: {
+        content,
+      },
+    });
+    if (response.error) {
+      return false;
     }
-    return false;
-  }, [createActivity, activity]);
+    setActivity(getExtendedActivity(response.data));
+    return true;
+  }, [axiosLoggedRequest, activity]);
+
+  const save = React.useCallback(async () => {
+    if (activity === null) {
+      return false;
+    }
+    queryCache.invalidateQueries("activities");
+    if (activity.id === 0) {
+      return await createActivity();
+    } else {
+      return await editActivity();
+    }
+  }, [queryCache, createActivity, editActivity, activity]);
 
   return (
     <ActivityContext.Provider
