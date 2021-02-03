@@ -1,3 +1,5 @@
+import md5 from "md5";
+
 /**
  * Returns a query string with the given parameters.
  */
@@ -98,3 +100,12 @@ export function isValidHttpUrl(value: string): boolean {
   }
   return url.protocol === "http:" || url.protocol === "https:";
 }
+
+export const getGravatarUrl = (email: string): string => {
+  const hash = md5(email.trim().toLowerCase());
+  return `https://www.gravatar.com/avatar/${hash}?s40&r=g&d=identicon`;
+};
+
+export const toDate = (date: string): string => {
+  return Intl.DateTimeFormat("fr", { year: "numeric", month: "numeric", day: "numeric" }).format(new Date(date));
+};

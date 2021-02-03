@@ -67,3 +67,11 @@ export function decodeBase64(base64Encoded: string): string {
   const buffer = Buffer.from(base64Encoded, "base64");
   return buffer.toString("utf-8");
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+export function getQueryString(q: any): string {
+  if (Array.isArray(q)) {
+    return q[0] as string;
+  }
+  return q as string;
+}

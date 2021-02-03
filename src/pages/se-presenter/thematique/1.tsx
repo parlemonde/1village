@@ -47,7 +47,7 @@ const PresentationStep1: React.FC = () => {
   return (
     <Base>
       <div style={{ width: "100%", padding: "0.5rem 1rem 1rem 1rem" }}>
-        <BackButton />
+        <BackButton href="/se-presenter" />
         <Steps steps={["Choix du thème", "Présentation", "Prévisualisation"]} activeStep={0} />
         <div style={{ margin: "0 auto 1rem auto", width: "100%", maxWidth: "900px" }}>
           <h1>Choisissez le thème de votre présentation</h1>

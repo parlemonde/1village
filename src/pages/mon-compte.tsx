@@ -1,4 +1,3 @@
-import md5 from "md5";
 import { useSnackbar } from "notistack";
 import React from "react";
 
@@ -18,13 +17,9 @@ import { RedButton } from "src/components/buttons/RedButton";
 import { PanelInput } from "src/components/mon-compte/PanelInput";
 import { UserContext } from "src/contexts/userContext";
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from "src/utils/accountChecks";
+import { getGravatarUrl } from "src/utils";
 import { ssoHostName } from "src/utils";
 import type { User } from "types/user.type";
-
-const getGravatarUrl = (email: string): string => {
-  const hash = md5(email.trim().toLowerCase());
-  return `https://www.gravatar.com/avatar/${hash}?s40&r=g&d=identicon`;
-};
 
 const Presentation: React.FC = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);

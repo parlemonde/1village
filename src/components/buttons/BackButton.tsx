@@ -3,11 +3,15 @@ import React from "react";
 
 import ArrowRight from "src/svg/arrow-right.svg";
 
-export const BackButton: React.FC = () => {
+export const BackButton: React.FC<{ href?: string }> = ({ href }: { href?: string }) => {
   const router = useRouter();
 
   const onBack = () => {
-    router.back();
+    if (href) {
+      router.push(href);
+    } else {
+      router.back();
+    }
   };
 
   return (

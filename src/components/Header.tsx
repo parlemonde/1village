@@ -1,4 +1,3 @@
-import md5 from "md5";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -14,12 +13,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import { UserContext } from "src/contexts/userContext";
 import { VillageContext } from "src/contexts/villageContext";
 import Logo from "src/svg/logo.svg";
+import { getGravatarUrl } from "src/utils";
 import { UserType } from "types/user.type";
-
-const getGravatarUrl = (email: string): string => {
-  const hash = md5(email.trim().toLowerCase());
-  return `https://www.gravatar.com/avatar/${hash}?s40&r=g&d=identicon`;
-};
 
 export const Header: React.FC = () => {
   const router = useRouter();

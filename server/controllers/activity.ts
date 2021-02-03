@@ -7,13 +7,22 @@ import { Activity, ActivityType } from "../entities/activity";
 import { UserType } from "../entities/user";
 import { AppError, ErrorCode } from "../middlewares/handleErrors";
 import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
+import { getQueryString } from "../utils";
 
 import { Controller } from "./controller";
 
 const activityController = new Controller("/activities");
 // --- Get all activities. ---
-activityController.get({ path: "", userType: UserType.TEACHER }, async (_req: Request, res: Response) => {
-  const activities = await getRepository(Activity).find({ relations: ["content"] });
+activityController.get({ path: "", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  let activities: Activity[] = [];
+  if (req.query.villageId) {
+    activities = await getRepository(Activity).find({
+      where: { villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 },
+      relations: ["content"],
+    });
+  } else {
+    activities = await getRepository(Activity).find({ relations: ["content"] });
+  }
   res.sendJSON(activities);
 });
 
@@ -56,7 +65,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
       items: {
         type: "object",
         properties: {
-          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "data", "h5p"] },
+          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "h5p"] },
           value: { type: "string", nullable: false },
         },
         required: ["key", "value"],
@@ -134,7 +143,7 @@ const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
       items: {
         type: "object",
         properties: {
-          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "data", "h5p"] },
+          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "h5p"] },
           value: { type: "string", nullable: false },
         },
         required: ["key", "value"],

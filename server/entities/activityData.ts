@@ -25,6 +25,6 @@ export class ActivityData implements ActivityDataInterface {
   @Column({ type: "varchar", length: "8" })
   public key: ActivityDataType;
 
-  @Column({ type: "varchar", length: 3000, default: "" })
+  @Column({ type: "text" })
   public value: string;
 }

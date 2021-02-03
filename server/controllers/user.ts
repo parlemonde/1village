@@ -8,14 +8,19 @@ import { User, UserType } from "../entities/user";
 import { AppError, ErrorCode } from "../middlewares/handleErrors";
 import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
 import { logger } from "../utils/logger";
-import { generateTemporaryPassword, valueOrDefault, isPasswordValid } from "../utils";
+import { generateTemporaryPassword, valueOrDefault, isPasswordValid, getQueryString } from "../utils";
 
 import { Controller } from "./controller";
 
 const userController = new Controller("/users");
 // --- Get all users. ---
-userController.get({ path: "", userType: UserType.ADMIN }, async (_req: Request, res: Response) => {
-  const users = await getRepository(User).find();
+userController.get({ path: "", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  let users: User[] = [];
+  if (req.query.villageId) {
+    users = await getRepository(User).find({ where: [{ villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 }, { villageId: null }] });
+  } else {
+    users = await getRepository(User).find();
+  }
   res.sendJSON(users);
 });
 
