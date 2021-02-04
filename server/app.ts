@@ -79,6 +79,7 @@ async function start() {
   app.use("/api", backRouter);
 
   // [5] --- Add frontend ---
+  app.get("/country-flags/*", handleErrors(authenticate(UserType.TEACHER)), express.static(path.join(__dirname, "../../public/country-flags")));
   app.use(express.static(path.join(__dirname, "../../public"))); // app.js is located at ./dist/server and public at ./public
   app.get("/_next/*", (req, res) => {
     handle(req, res).catch((e) => console.error(e));

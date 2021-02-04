@@ -46,9 +46,13 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity }: Activity
           <p className="text">
             Votre classe a <strong>{titles[activity.type]}</strong>
           </p>
-          <p className="text text--small">
-            Publié le {toDate(activity.createDate as string)} <span>{user.countryCode}</span>
-          </p>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+            <img
+              style={{ marginLeft: "0.6rem", width: "auto", height: "0.9rem", borderRadius: "4px" }}
+              src={`/country-flags/${user.countryCode}.svg`}
+            />
+          </div>
         </div>
         {ActivityIcon && <ActivityIcon style={{ fill: "#4c3ed9", margin: "0 0.65rem" }} height="45px" />}
       </div>
