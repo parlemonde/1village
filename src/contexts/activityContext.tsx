@@ -3,7 +3,6 @@ import { useQueryCache } from "react-query";
 import React from "react";
 
 import type { EditorTypes, EditorContent } from "src/components/activityEditor/editing.types";
-import { AxiosReturnType } from "src/utils/axiosRequest";
 import { getQueryString } from "src/utils";
 import { Activity, ActivityType } from "types/activity.type";
 

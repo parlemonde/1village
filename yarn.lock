@@ -22,6 +22,7 @@ __metadata:
     "@types/eslint": ^7.2.6
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/express": ^4.17.9
+    "@types/html-to-text": ^6
     "@types/json-stable-stringify": ^1.0.32
     "@types/jsonwebtoken": ^8.5.0
     "@types/md5": ^2
@@ -68,6 +69,7 @@ __metadata:
     express: ^4.17.1
     helmet: ^4.2.0
     html-to-draftjs: ^1.5.0
+    html-to-text: ^6.0.0
     immutable: ^4.0.0-rc.12
     json-stable-stringify: ^1.0.1
     jsonwebtoken: ^8.5.1
@@ -2008,6 +2010,13 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 80cd74784e9b40495b683b6b285be58bd7515f3b86923a72483fb8a6dec15ef159e651c460a215e9ad4e9620deec7345020fe33535c4eb12d81152b74b0278d0
+  languageName: node
+  linkType: hard
+
+"@types/html-to-text@npm:^6":
+  version: 6.0.0
+  resolution: "@types/html-to-text@npm:6.0.0"
+  checksum: cefce8eeddee68a43b82db0095bf5572d8c3b62be75b62ae04d63d888d576748ddab38c321fd37b829f7689722faa36c1da9c2d08eabbd180ad3d09300a9bb97
   languageName: node
   linkType: hard
 
@@ -6884,7 +6893,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"he@npm:1.2.0":
+"he@npm:1.2.0, he@npm:^1.2.0":
   version: 1.2.0
   resolution: "he@npm:1.2.0"
   bin:
@@ -6944,7 +6953,22 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"htmlparser2@npm:4.1.0":
+"html-to-text@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "html-to-text@npm:6.0.0"
+  dependencies:
+    deepmerge: ^4.2.2
+    he: ^1.2.0
+    htmlparser2: ^4.1.0
+    lodash: ^4.17.20
+    minimist: ^1.2.5
+  bin:
+    html-to-text: bin/cli.js
+  checksum: a3356379581a9af4d782fbb267f5ca3dee784b71818509f84003c34ded53488704162693efd3b211fda1349b679bf316f0bd4fe3fb3f01565fe1e8fa23a9c9d0
+  languageName: node
+  linkType: hard
+
+"htmlparser2@npm:4.1.0, htmlparser2@npm:^4.1.0":
   version: 4.1.0
   resolution: "htmlparser2@npm:4.1.0"
   dependencies:

@@ -11,8 +11,8 @@ import UserIcon from "src/svg/navigation/user-icon.svg";
 import { getGravatarUrl, toDate } from "src/utils";
 import { ActivityType } from "types/activity.type";
 
+import { PresentationCard } from "./PresentationCard";
 import { ActivityCardProps } from "./activity-card.types";
-import { PresentationCard } from "./presentationCard";
 
 const titles = {
   [ActivityType.PRESENTATION]: "créé une présentation",
