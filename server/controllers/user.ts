@@ -122,6 +122,7 @@ type EditUserData = {
   school?: string;
   type?: UserType;
   villageId?: number | null;
+  accountRegistration?: number;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: "object",
@@ -134,6 +135,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     school: { type: "string", nullable: true },
     type: { type: "number", nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: "number", nullable: true },
+    accountRegistration: { type: "number", nullable: true },
   },
   required: [],
   additionalProperties: false,

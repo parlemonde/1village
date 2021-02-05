@@ -6,7 +6,7 @@ import { VillageContext } from "src/contexts/villageContext";
 import { serializeToQueryUrl } from "src/utils";
 import type { User } from "types/user.type";
 
-export const useUsers = (): { users: User[] } => {
+export const useVillageUsers = (): { users: User[] } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 

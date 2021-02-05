@@ -10,12 +10,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 interface FilterSelectProps {
   options: { key: string | number; label: string }[];
   name: string;
+  value: number;
+  onChange(newValue: number): void;
 }
 
-export const FilterSelect: React.FC<FilterSelectProps> = ({ name, options }: FilterSelectProps) => {
+export const FilterSelect: React.FC<FilterSelectProps> = ({ value, onChange, name, options }: FilterSelectProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedOptionIndex, setSelectedOptionIndex] = React.useState<number>(0);
-  const selectedOption = options.length <= selectedOptionIndex ? null : options[selectedOptionIndex];
+  const selectedOption = options.length <= value ? null : options[value];
 
   return (
     <div style={{ position: "relative", marginLeft: "0.5rem" }}>
@@ -98,7 +99,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({ name, options }: Fil
                         style={{ padding: "0", marginRight: "0.5rem" }}
                         checked={selectedOption.key === option.key}
                         onChange={() => {
-                          setSelectedOptionIndex(index);
+                          onChange(index);
                           setIsOpen(false);
                         }}
                         name={`${option.key}`}

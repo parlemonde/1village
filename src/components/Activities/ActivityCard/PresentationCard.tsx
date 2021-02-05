@@ -4,11 +4,19 @@ import React from "react";
 
 import { Button } from "@material-ui/core";
 
-import { RedButton } from "../buttons/RedButton";
+import { RedButton } from "../../buttons/RedButton";
 
 import { ActivityCardProps } from "./activity-card.types";
 
-export const PresentationCard: React.FC<ActivityCardProps> = ({ activity }: ActivityCardProps) => {
+const themes = [
+  "Présentation de notre école",
+  "Présentation de notre environnement",
+  "Présentation de notre lieu de vie",
+  "Présentation d’un loisir",
+  "Présentation d’un plat",
+];
+
+export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf, showEditButtons }: ActivityCardProps) => {
   const firstImage = React.useMemo(() => activity.processedContent.find((c) => c.type === "image"), [activity.processedContent]);
   const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === "text"), [activity.processedContent]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : "";
@@ -37,6 +45,7 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity }: Acti
         </div>
       )}
       <div style={{ margin: "0.25rem", flex: 1 }}>
+        {activity.data.theme !== undefined && <h3 style={{ margin: "0 0.5rem 0.5rem" }}>{themes[activity.data.theme as number]}</h3>}
         <div style={{ margin: "0 0.5rem 1rem", height: `${firstImage ? 4 : 2}rem`, textAlign: "justify" }}>
           <div className="text multine-with-ellipsis" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}
@@ -44,20 +53,24 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity }: Acti
         </div>
         <div style={{ textAlign: "right" }}>
           <Button color="primary" variant="outlined">
-            Voir la présentation
+            Regarder la présentation
           </Button>
-          <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>
-            <Button
-              component="a"
-              href={`se-presenter/thematique/3?activity-id=${activity.id}`}
-              color="secondary"
-              variant="contained"
-              style={{ marginLeft: "0.25rem" }}
-            >
-              Modifier
-            </Button>
-          </Link>
-          <RedButton style={{ marginLeft: "0.25rem" }}>Supprimer</RedButton>
+          {isSelf && showEditButtons && (
+            <>
+              <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>
+                <Button
+                  component="a"
+                  href={`se-presenter/thematique/3?activity-id=${activity.id}`}
+                  color="secondary"
+                  variant="contained"
+                  style={{ marginLeft: "0.25rem" }}
+                >
+                  Modifier
+                </Button>
+              </Link>
+              <RedButton style={{ marginLeft: "0.25rem" }}>Supprimer</RedButton>
+            </>
+          )}
         </div>
       </div>
     </div>
