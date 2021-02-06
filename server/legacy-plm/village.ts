@@ -1,9 +1,9 @@
-import stringSimilarity from "string-similarity";
-import { getRepository } from "typeorm";
+import stringSimilarity from 'string-similarity';
+import { getRepository } from 'typeorm';
 
-import { Village } from "../entities/village";
-import { countries } from "../utils/iso-3166-countries-french";
-import { logger } from "../utils/logger";
+import { Village } from '../entities/village';
+import { countries } from '../utils/iso-3166-countries-french';
+import { logger } from '../utils/logger';
 
 export type PLM_Village = {
   id: string; // number in string
@@ -36,7 +36,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
 
   // get countries and create village
   logger.info(`Try to create village with name: ${name}`);
-  const villageCountries = (name.toLowerCase().startsWith("village monde") ? name.slice(14) : name).split(/[-–]/).filter((s) => s.length > 0);
+  const villageCountries = (name.toLowerCase().startsWith('village monde') ? name.slice(14) : name).split(/[-–]/).filter((s) => s.length > 0);
   if (villageCountries.length === 2) {
     const c1 = stringSimilarity.findBestMatch(
       villageCountries[0].trim().toLowerCase(),
@@ -59,7 +59,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   }
 
   const newVillage = new Village();
-  newVillage.countries = ["FR", "FR"];
+  newVillage.countries = ['FR', 'FR'];
   newVillage.name = name;
   newVillage.plmId = plmId;
   await getRepository(Village).save(newVillage);

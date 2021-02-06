@@ -1,45 +1,45 @@
-import { JSONSchemaType } from "ajv";
-import { NextFunction, Request, Response } from "express";
-import { getRepository, getManager } from "typeorm";
+import { JSONSchemaType } from 'ajv';
+import { NextFunction, Request, Response } from 'express';
+import { getRepository, getManager } from 'typeorm';
 
-import { ActivityData, ActivityDataType } from "../entities/activityData";
-import { Activity, ActivityType } from "../entities/activity";
-import { UserType } from "../entities/user";
-import { AppError, ErrorCode } from "../middlewares/handleErrors";
-import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
-import { getQueryString } from "../utils";
+import { ActivityData, ActivityDataType } from '../entities/activityData';
+import { Activity, ActivityType } from '../entities/activity';
+import { UserType } from '../entities/user';
+import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
+import { getQueryString } from '../utils';
 
-import { Controller } from "./controller";
+import { Controller } from './controller';
 
-const activityController = new Controller("/activities");
+const activityController = new Controller('/activities');
 
 const getActivities = async (villageId?: number) => {
-  let builder = getRepository(Activity).createQueryBuilder("activity").leftJoinAndSelect("activity.content", "activityData");
+  let builder = getRepository(Activity).createQueryBuilder('activity').leftJoinAndSelect('activity.content', 'activityData');
   if (villageId !== undefined) {
-    builder = builder.where("`activity`.`villageId` = :villageId", { villageId });
+    builder = builder.where('`activity`.`villageId` = :villageId', { villageId });
   }
-  const activities = await builder.orderBy("`activity`.`createDate`", "DESC").addOrderBy("`activityData`.`order`", "ASC").getMany();
+  const activities = await builder.orderBy('`activity`.`createDate`', 'DESC').addOrderBy('`activityData`.`order`', 'ASC').getMany();
   return activities;
 };
 const getActivity = async (id: number) => {
   const activity = await getRepository(Activity)
-    .createQueryBuilder("activity")
-    .leftJoinAndSelect("activity.content", "activityData")
-    .where("`activity`.`id` = :id", { id })
-    .orderBy("`activity`.`createDate`", "DESC")
-    .addOrderBy("`activityData`.`order`", "ASC")
+    .createQueryBuilder('activity')
+    .leftJoinAndSelect('activity.content', 'activityData')
+    .where('`activity`.`id` = :id', { id })
+    .orderBy('`activity`.`createDate`', 'DESC')
+    .addOrderBy('`activityData`.`order`', 'ASC')
     .getOne();
   return activity;
 };
 
 // --- Get all activities. ---
-activityController.get({ path: "", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const activities = await getActivities(req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined);
   res.sendJSON(activities);
 });
 
 // --- Get one activity. ---
-activityController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await getActivity(id);
   if (activity === undefined) {
@@ -65,37 +65,37 @@ type CreateActivityData = {
   responseType?: ActivityType;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
-  type: "object",
+  type: 'object',
   properties: {
     type: {
-      type: "number",
+      type: 'number',
       enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
-    villageId: { type: "number", nullable: true },
+    villageId: { type: 'number', nullable: true },
     content: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "object",
+        type: 'object',
         properties: {
-          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "h5p"] },
-          value: { type: "string", nullable: false },
+          key: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'json', 'h5p'] },
+          value: { type: 'string', nullable: false },
         },
-        required: ["key", "value"],
+        required: ['key', 'value'],
       },
       nullable: true,
     },
-    responseActivityId: { type: "number", nullable: true },
+    responseActivityId: { type: 'number', nullable: true },
     responseType: {
-      type: "number",
+      type: 'number',
       nullable: true,
       enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
   },
-  required: ["type"],
+  required: ['type'],
   additionalProperties: false,
 };
 const createActivityValidator = ajv.compile(CREATE_SCHEMA);
-activityController.post({ path: "", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createActivityValidator(data)) {
     sendInvalidDataError(createActivityValidator);
@@ -103,12 +103,12 @@ activityController.post({ path: "", userType: UserType.TEACHER }, async (req: Re
   }
 
   if (!req.user) {
-    throw new AppError("Forbidden", ErrorCode.UNKNOWN);
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
   const villageId = data.villageId || req.user.villageId || null;
   if (villageId === null) {
-    throw new AppError("Invalid data, missing village Id", ErrorCode.INVALID_DATA);
+    throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
 
   const activity = new Activity();
@@ -148,17 +148,17 @@ type AddActivityData = {
   }>;
 };
 const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
-  type: "object",
+  type: 'object',
   properties: {
     content: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "object",
+        type: 'object',
         properties: {
-          key: { type: "string", nullable: false, enum: ["text", "video", "image", "json", "h5p"] },
-          value: { type: "string", nullable: false },
+          key: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'json', 'h5p'] },
+          value: { type: 'string', nullable: false },
         },
-        required: ["key", "value"],
+        required: ['key', 'value'],
       },
       nullable: true,
     },
@@ -167,7 +167,7 @@ const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
   additionalProperties: false,
 };
 const addActivityDataValidator = ajv.compile(ADD_DATA_SCHEMA);
-activityController.post({ path: "/:id/content", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.post({ path: '/:id/content', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!addActivityDataValidator(data)) {
     sendInvalidDataError(addActivityDataValidator);
@@ -175,7 +175,7 @@ activityController.post({ path: "/:id/content", userType: UserType.TEACHER }, as
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ["content"] });
+  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
   if (activity === undefined || req.user === undefined) {
     next();
     return;
@@ -214,27 +214,27 @@ type UpdateActivityData = {
   }>;
 };
 const UPDATE_DATA_SCHEMA: JSONSchemaType<UpdateActivityData> = {
-  type: "object",
+  type: 'object',
   properties: {
     content: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "object",
+        type: 'object',
         properties: {
-          key: { type: "string", nullable: true, enum: ["text", "video", "image", "json", "h5p"] },
-          value: { type: "string", nullable: false },
-          id: { type: "number", nullable: true },
+          key: { type: 'string', nullable: true, enum: ['text', 'video', 'image', 'json', 'h5p'] },
+          value: { type: 'string', nullable: false },
+          id: { type: 'number', nullable: true },
         },
-        required: ["value"],
+        required: ['value'],
       },
       nullable: true,
     },
   },
-  required: ["content"],
+  required: ['content'],
   additionalProperties: false,
 };
 const updateActivityDataValidator = ajv.compile(UPDATE_DATA_SCHEMA);
-activityController.put({ path: "/:id/content", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.put({ path: '/:id/content', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateActivityDataValidator(data)) {
     sendInvalidDataError(updateActivityDataValidator);
@@ -242,7 +242,7 @@ activityController.put({ path: "/:id/content", userType: UserType.TEACHER }, asy
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ["content"] });
+  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
   if (activity === undefined || req.user === undefined) {
     next();
     return;
@@ -294,7 +294,7 @@ activityController.put({ path: "/:id/content", userType: UserType.TEACHER }, asy
       await transactionalEntityManager.save(updatedContent);
     }
     if (deletedContent.length) {
-      await transactionalEntityManager.createQueryBuilder().delete().from(ActivityData).where("`id` IN (:...ids)", { ids: deletedContent }).execute();
+      await transactionalEntityManager.createQueryBuilder().delete().from(ActivityData).where('`id` IN (:...ids)', { ids: deletedContent }).execute();
     }
   });
 
@@ -307,15 +307,15 @@ type EditActivityData = {
   value: string;
 };
 const Edit_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    value: { type: "string", nullable: false },
+    value: { type: 'string', nullable: false },
   },
-  required: ["value"],
+  required: ['value'],
   additionalProperties: false,
 };
 const editActivityDataValidator = ajv.compile(Edit_DATA_SCHEMA);
-activityController.put({ path: "/:activityId/content/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.put({ path: '/:activityId/content/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!editActivityDataValidator(data)) {
     sendInvalidDataError(editActivityDataValidator);
@@ -349,20 +349,20 @@ type OrderActivityData = {
   order: number[];
 };
 const ORDER_DATA_SCHEMA: JSONSchemaType<OrderActivityData> = {
-  type: "object",
+  type: 'object',
   properties: {
     order: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "number",
+        type: 'number',
       },
     },
   },
-  required: ["order"],
+  required: ['order'],
   additionalProperties: false,
 };
 const editOrderActivityDataValidator = ajv.compile(ORDER_DATA_SCHEMA);
-activityController.put({ path: "/:id/content-order", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.put({ path: '/:id/content-order', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!editOrderActivityDataValidator(data)) {
     sendInvalidDataError(editOrderActivityDataValidator);
@@ -370,7 +370,7 @@ activityController.put({ path: "/:id/content-order", userType: UserType.TEACHER 
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ["content"] });
+  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
   if (activity === undefined || req.user === undefined) {
     next();
     return;
@@ -380,7 +380,7 @@ activityController.put({ path: "/:id/content-order", userType: UserType.TEACHER 
     return;
   }
   if (data.order.length !== (activity.content?.length || 0)) {
-    throw new AppError("Invalid data, length of content is invalid.", ErrorCode.INVALID_DATA);
+    throw new AppError('Invalid data, length of content is invalid.', ErrorCode.INVALID_DATA);
   }
 
   const content = data.order.map((activityDataId, index) => {
@@ -398,7 +398,7 @@ activityController.put({ path: "/:id/content-order", userType: UserType.TEACHER 
 });
 
 // --- Delete an activity content ---
-activityController.delete({ path: "/:activityId/content/:id", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+activityController.delete({ path: '/:activityId/content/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const activityId = parseInt(req.params.activityId, 10) || 0;
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await getRepository(Activity).findOne({ where: { id: activityId } });
@@ -421,7 +421,7 @@ activityController.delete({ path: "/:activityId/content/:id", userType: UserType
 });
 
 // --- Delete an activity --- (Soft delete)
-activityController.delete({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await getRepository(Activity).findOne({ where: { id } });
   if (activity === undefined || req.user === undefined) {

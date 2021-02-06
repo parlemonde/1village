@@ -1,26 +1,26 @@
-import { JSONSchemaType } from "ajv";
-import { NextFunction, Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { JSONSchemaType } from 'ajv';
+import { NextFunction, Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 
-import { UserType } from "../entities/user";
-import { Village } from "../entities/village";
-import { createVillagesFromPLM } from "../legacy-plm/api";
-import { AppError, ErrorCode } from "../middlewares/handleErrors";
-import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
-import { valueOrDefault } from "../utils";
+import { UserType } from '../entities/user';
+import { Village } from '../entities/village';
+import { createVillagesFromPLM } from '../legacy-plm/api';
+import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
+import { valueOrDefault } from '../utils';
 
-import { Controller } from "./controller";
+import { Controller } from './controller';
 
-const villageController = new Controller("/villages");
+const villageController = new Controller('/villages');
 
 //--- Get all villages ---
-villageController.get({ path: "", userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
+villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
   const villages = await getRepository(Village).find();
   res.sendJSON(villages);
 });
 
 //--- Get one village ---
-villageController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+villageController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
     return;
@@ -40,16 +40,16 @@ type CreateVillageData = {
   countries: string[];
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateVillageData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    name: { type: "string" },
-    countries: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 2, uniqueItems: true },
+    name: { type: 'string' },
+    countries: { type: 'array', items: { type: 'string' }, minItems: 2, maxItems: 2, uniqueItems: true },
   },
-  required: ["name", "countries"],
+  required: ['name', 'countries'],
   additionalProperties: false,
 };
 const createVillageValidator = ajv.compile(CREATE_SCHEMA);
-villageController.post({ path: "", userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+villageController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createVillageValidator(data)) {
     sendInvalidDataError(createVillageValidator);
@@ -68,16 +68,16 @@ type UpdateVillageData = {
   countries?: string[];
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdateVillageData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    name: { type: "string", nullable: true },
-    countries: { type: "array", items: { type: "string" }, minItems: 2, maxItems: 2, uniqueItems: true, nullable: true },
+    name: { type: 'string', nullable: true },
+    countries: { type: 'array', items: { type: 'string' }, minItems: 2, maxItems: 2, uniqueItems: true, nullable: true },
   },
   required: [],
   additionalProperties: false,
 };
 const updateVillageValidator = ajv.compile(UPDATE_SCHEMA);
-villageController.put({ path: "/:id", userType: UserType.ADMIN }, async (req: Request, res: Response, next: NextFunction) => {
+villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateVillageValidator(data)) {
     sendInvalidDataError(updateVillageValidator);
@@ -96,17 +96,17 @@ villageController.put({ path: "/:id", userType: UserType.ADMIN }, async (req: Re
 });
 
 //--- delete a village ---
-villageController.delete({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+villageController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   await getRepository(Village).delete({ id });
   res.status(204).send();
 });
 
 //--- import ParLeMonde villages ---
-villageController.post({ path: "/import/plm", userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+villageController.post({ path: '/import/plm', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const count = await createVillagesFromPLM();
   if (count === null) {
-    throw new AppError("Unkown error", ErrorCode.UNKNOWN);
+    throw new AppError('Unkown error', ErrorCode.UNKNOWN);
   }
   res.sendJSON({ success: true, count });
 });

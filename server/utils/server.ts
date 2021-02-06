@@ -1,12 +1,12 @@
 /* eslint-disable sort-keys */
-import { logger } from "./logger";
+import { logger } from './logger';
 
 /**
  * Return a valid port number.
  * @param val
  */
 function normalizePort(val: number | string): boolean | number {
-  if (typeof val === "number") {
+  if (typeof val === 'number') {
     return Number(val) || false;
   }
   const parsedPort = parseInt(val, 10);
@@ -24,18 +24,18 @@ function normalizePort(val: number | string): boolean | number {
  * @param error
  */
 function onError(error: Error & { syscall: string; code: string }): void {
-  if (error.syscall !== "listen") {
+  if (error.syscall !== 'listen') {
     throw error;
   }
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case "EACCES":
-      logger.error("Elevated privileges required.");
+    case 'EACCES':
+      logger.error('Elevated privileges required.');
       process.exit(1);
       break;
-    case "EADDRINUSE":
-      logger.error("Port is already in use.");
+    case 'EADDRINUSE':
+      logger.error('Port is already in use.');
       process.exit(1);
       break;
     default:
@@ -45,20 +45,20 @@ function onError(error: Error & { syscall: string; code: string }): void {
 
 export function getDefaultDirectives(): { [directiveName: string]: Iterable<string> } {
   return {
-    "default-src": ["'self'"],
-    "base-uri": ["'self'"],
-    "block-all-mixed-content": [],
-    "font-src": ["'self'"],
-    "frame-ancestors": ["'self'"],
-    "frame-src": ["https:"],
-    "connect-src": ["'self'", "http:", "https:", "data:", "blob:"],
-    "img-src": ["'self'", "http:", "https:", "data:", "blob:"],
-    "object-src": ["'none'"],
-    "script-src": ["'self'", "https:"],
-    "script-src-attr": ["'none'"],
-    "style-src": ["'self'", "'unsafe-inline'"],
-    "media-src": ["*", "data:", "https:"],
-    "upgrade-insecure-requests": [],
+    'default-src': ["'self'"],
+    'base-uri': ["'self'"],
+    'block-all-mixed-content': [],
+    'font-src': ["'self'"],
+    'frame-ancestors': ["'self'"],
+    'frame-src': ['https:'],
+    'connect-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
+    'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
+    'object-src': ["'none'"],
+    'script-src': ["'self'", 'https:'],
+    'script-src-attr': ["'none'"],
+    'style-src': ["'self'", "'unsafe-inline'"],
+    'media-src': ['*', 'data:', 'https:'],
+    'upgrade-insecure-requests': [],
   };
 }
 

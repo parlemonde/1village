@@ -1,7 +1,7 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import stringify from "json-stable-stringify";
+import { NextFunction, Request, RequestHandler, Response } from 'express';
+import stringify from 'json-stable-stringify';
 
-import { logger } from "../utils/logger";
+import { logger } from '../utils/logger';
 
 export enum ErrorCode {
   UNKNOWN = 0,
@@ -36,7 +36,7 @@ export function handleErrors(fn: RequestHandler): RequestHandler {
       }
       const errorCode = err instanceof AppError ? err.errorCode : ErrorCode.UNKNOWN;
       const errorResponseStatus = errorCode === 0 ? 500 : errorCode <= 4 ? 401 : 400;
-      res.setHeader("Content-Type", "application/json");
+      res.setHeader('Content-Type', 'application/json');
       res.status(errorResponseStatus).send(
         stringify({
           errorCode,

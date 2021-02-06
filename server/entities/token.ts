@@ -1,11 +1,11 @@
-import { Column, Entity, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Token {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column({ type: "varchar", length: 95 })
+  @Column({ type: 'varchar', length: 95 })
   public token: string;
 
   @Column()

@@ -1,8 +1,8 @@
-import { Router, RequestHandler } from "express";
+import { Router, RequestHandler } from 'express';
 
-import { UserType } from "../entities/user";
-import { authenticate } from "../middlewares/authenticate";
-import { handleErrors } from "../middlewares/handleErrors";
+import { UserType } from '../entities/user';
+import { authenticate } from '../middlewares/authenticate';
+import { handleErrors } from '../middlewares/handleErrors';
 
 type RouteOptions = {
   path: string;

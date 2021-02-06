@@ -1,10 +1,10 @@
-import stringSimilarity from "string-similarity";
-import { getRepository } from "typeorm";
+import stringSimilarity from 'string-similarity';
+import { getRepository } from 'typeorm';
 
-import { User, UserType } from "../entities/user";
-import { Village } from "../entities/village";
-import { countries } from "../utils/iso-3166-countries-french";
-import { logger } from "../utils/logger";
+import { User, UserType } from '../entities/user';
+import { Village } from '../entities/village';
+import { countries } from '../utils/iso-3166-countries-french';
+import { logger } from '../utils/logger';
 
 export type PLM_User = {
   ID: string; // number in string
@@ -84,7 +84,7 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   }
   // last fallback
   if (country === null) {
-    country = "FR";
+    country = 'FR';
   }
   if (village !== null && !village.countries.includes(country)) {
     country = village.countries[0];
@@ -95,13 +95,13 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.email = plmUser.user_email;
   user.pseudo = plmUser.user_login;
   user.teacherName = plmUser.display_name;
-  user.level = "";
-  user.school = "";
+  user.level = '';
+  user.school = '';
   user.villageId = village?.id || null;
   user.countryCode = country;
   user.type = userType;
-  user.passwordHash = "";
-  user.verificationHash = "";
+  user.passwordHash = '';
+  user.verificationHash = '';
   user.accountRegistration = 10;
   await getRepository(User).save(user);
 

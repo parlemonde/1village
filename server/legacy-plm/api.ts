@@ -1,23 +1,23 @@
-import axios from "axios";
-import { getRepository } from "typeorm";
+import axios from 'axios';
+import { getRepository } from 'typeorm';
 
-import { User } from "../entities/user";
-import { logger } from "../utils/logger";
+import { User } from '../entities/user';
+import { logger } from '../utils/logger';
 
-import { PLM_User, createPLMUserToDB } from "./user";
-import { PLM_Village, createVillages } from "./village";
+import { PLM_User, createPLMUserToDB } from './user';
+import { PLM_Village, createVillages } from './village';
 
-const plmSsoUrl = process.env.PLM_HOST || "";
-const client_id = process.env.CLIENT_ID || "";
-const client_secret = process.env.CLIENT_SECRET || "";
+const plmSsoUrl = process.env.PLM_HOST || '';
+const client_id = process.env.CLIENT_ID || '';
+const client_secret = process.env.CLIENT_SECRET || '';
 
 export async function getUserFromPLM(code: string): Promise<User | null> {
   try {
     const ssoResponse = await axios({
-      method: "POST",
+      method: 'POST',
       url: `${plmSsoUrl}/oauth/token`,
       data: {
-        grant_type: "authorization_code",
+        grant_type: 'authorization_code',
         client_id,
         client_secret,
         redirect_uri: `${process.env.HOST_URL}/login`,
@@ -26,7 +26,7 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
     });
     const { access_token } = ssoResponse.data as { access_token: string };
     const userResponse = await axios({
-      method: "GET",
+      method: 'GET',
       url: `${plmSsoUrl}/oauth/me?access_token=${access_token}`,
     });
     const plmUser = userResponse.data as PLM_User;
@@ -39,7 +39,7 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
     return user;
   } catch (error) {
     logger.error(error);
-    logger.error(JSON.stringify(error?.response?.data) || "");
+    logger.error(JSON.stringify(error?.response?.data) || '');
     return null;
   }
 }
@@ -47,14 +47,14 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
 export async function createVillagesFromPLM(): Promise<number | null> {
   try {
     const villageRequest = await axios({
-      method: "GET",
+      method: 'GET',
       url: `${plmSsoUrl}/wp-json/api/v1/villages?client_id=${client_id}&client_secret=${client_secret}`,
     });
     const villages = villageRequest.data as PLM_Village[];
     return await createVillages(villages);
   } catch (error) {
     logger.error(error);
-    logger.error(JSON.stringify(error?.response?.data) || "");
+    logger.error(JSON.stringify(error?.response?.data) || '');
     return null;
   }
 }

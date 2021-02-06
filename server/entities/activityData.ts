@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import { ActivityData as ActivityDataInterface, ActivityDataType } from "../../types/activityData.type";
+import { ActivityData as ActivityDataInterface, ActivityDataType } from '../../types/activityData.type';
 
-import { Activity } from "./activity";
+import { Activity } from './activity';
 
 export type { ActivityDataType };
 
@@ -12,8 +12,8 @@ export class ActivityData implements ActivityDataInterface {
   public id: number;
 
   // activity
-  @ManyToOne(() => Activity, (activity: Activity) => activity.content, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "activityId" })
+  @ManyToOne(() => Activity, (activity: Activity) => activity.content, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'activityId' })
   public activity: Activity;
 
   @Column({ nullable: false })
@@ -22,9 +22,9 @@ export class ActivityData implements ActivityDataInterface {
   @Column({ default: 0 })
   public order: number;
 
-  @Column({ type: "varchar", length: "8" })
+  @Column({ type: 'varchar', length: '8' })
   public key: ActivityDataType;
 
-  @Column({ type: "text" })
+  @Column({ type: 'text' })
   public value: string;
 }

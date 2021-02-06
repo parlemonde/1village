@@ -8,13 +8,13 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Activity as ActivityInterface, ActivityType } from "../../types/activity.type";
+import { Activity as ActivityInterface, ActivityType } from '../../types/activity.type';
 
-import { ActivityData } from "./activityData";
-import { User } from "./user";
-import { Village } from "./village";
+import { ActivityData } from './activityData';
+import { User } from './user';
+import { Village } from './village';
 
 export { ActivityType };
 
@@ -24,7 +24,7 @@ export class Activity implements ActivityInterface {
   public id: number;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: ActivityType,
     default: ActivityType.PRESENTATION,
   })
@@ -44,31 +44,31 @@ export class Activity implements ActivityInterface {
   public content: ActivityData[] | null;
 
   // user relation
-  @ManyToOne(() => User, (user: User) => user.activities, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "userId" })
+  @ManyToOne(() => User, (user: User) => user.activities, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   public user: User | null;
 
   @Column({ nullable: false })
   public userId: number;
 
   // village relation
-  @ManyToOne(() => Village, (village: Village) => village.activities, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "villageId" })
+  @ManyToOne(() => Village, (village: Village) => village.activities, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'villageId' })
   public village: Village | null;
 
   @Column({ nullable: false })
   public villageId: number;
 
   // Answer other activity
-  @ManyToOne(() => Activity, { onDelete: "SET NULL" })
-  @JoinColumn({ name: "responseActivityId" })
+  @ManyToOne(() => Activity, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'responseActivityId' })
   public responseActivity: Activity | null;
 
   @Column({ nullable: true })
   public responseActivityId: number | null;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: ActivityType,
     nullable: true,
   })

@@ -1,4 +1,4 @@
-import { createLogger, format, transports } from "winston";
+import { createLogger, format, transports } from 'winston';
 
 /**
  * Class to display messages:
@@ -13,7 +13,7 @@ import { createLogger, format, transports } from "winston";
  */
 const logger = createLogger({
   format: format.combine(format.colorize(), format.simple()),
-  level: "debug",
+  level: 'debug',
   transports: [new transports.Console()],
 });
 

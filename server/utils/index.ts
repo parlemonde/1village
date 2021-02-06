@@ -1,7 +1,7 @@
-import base64url from "base64url";
-import crypto from "crypto";
-import { Request } from "express";
-import fs from "fs";
+import base64url from 'base64url';
+import crypto from 'crypto';
+import { Request } from 'express';
+import fs from 'fs';
 
 /**
  * Pause the program for x milliseconds.
@@ -17,7 +17,7 @@ export function sleep(ms: number): Promise<void> {
 
 export function getHeader(req: Request, header: string): string | undefined {
   const headers: string | string[] | undefined = req.headers[header];
-  if (typeof headers === "string") {
+  if (typeof headers === 'string') {
     return headers;
   } else if (headers !== undefined) {
     return headers[0] || undefined;
@@ -45,27 +45,27 @@ export function valueOrDefault<T>(value: T | null | undefined, defaultValue: T, 
 }
 
 export function getBase64File(path: string): string {
-  return fs.readFileSync(path).toString("base64");
+  return fs.readFileSync(path).toString('base64');
 }
 
 export function serializeToQueryUrl(obj: { [key: string]: string | number | boolean }): string {
   if (Object.keys(obj).length === 0) {
-    return "";
+    return '';
   }
   const str =
-    "?" +
+    '?' +
     Object.keys(obj)
       .reduce<string[]>(function (a, k) {
         a.push(`${k}=${encodeURIComponent(obj[k])}`);
         return a;
       }, [])
-      .join("&");
+      .join('&');
   return str;
 }
 
 export function decodeBase64(base64Encoded: string): string {
-  const buffer = Buffer.from(base64Encoded, "base64");
-  return buffer.toString("utf-8");
+  const buffer = Buffer.from(base64Encoded, 'base64');
+  return buffer.toString('utf-8');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types

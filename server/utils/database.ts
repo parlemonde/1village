@@ -1,26 +1,26 @@
-import * as argon2 from "argon2";
-import mysql from "mysql";
-import path from "path";
-import { Connection, createConnection, ConnectionOptions, getRepository } from "typeorm";
+import * as argon2 from 'argon2';
+import mysql from 'mysql';
+import path from 'path';
+import { Connection, createConnection, ConnectionOptions, getRepository } from 'typeorm';
 
-import { User, UserType } from "../entities/user";
+import { User, UserType } from '../entities/user';
 
-import { sleep } from "./index";
-import { logger } from "./logger";
+import { sleep } from './index';
+import { logger } from './logger';
 
-const DEFAULT_TYPE = "mysql" as const;
-const DEFAULT_PORT = "3306";
-const DEFAULT_NAME = "village";
+const DEFAULT_TYPE = 'mysql' as const;
+const DEFAULT_PORT = '3306';
+const DEFAULT_NAME = 'village';
 
 const getDBConfig = (): ConnectionOptions | null => {
-  if (!process.env.DB_TYPE || (process.env.DB_TYPE !== "mysql" && process.env.DB_TYPE !== "mariadb")) {
+  if (!process.env.DB_TYPE || (process.env.DB_TYPE !== 'mysql' && process.env.DB_TYPE !== 'mariadb')) {
     return null;
   }
 
   let connectionOptions: ConnectionOptions;
   if (process.env.DATABASE_URL) {
     connectionOptions = {
-      type: (process.env.DB_TYPE || DEFAULT_TYPE) as "mariadb" | "mysql",
+      type: (process.env.DB_TYPE || DEFAULT_TYPE) as 'mariadb' | 'mysql',
       url: process.env.DATABASE_URL,
     };
   } else {
@@ -29,7 +29,7 @@ const getDBConfig = (): ConnectionOptions | null => {
       host: process.env.DB_HOST,
       password: process.env.DB_PASS,
       port: parseInt(process.env.DB_PORT || DEFAULT_PORT, 10),
-      type: (process.env.DB_TYPE || DEFAULT_TYPE) as "mariadb" | "mysql",
+      type: (process.env.DB_TYPE || DEFAULT_TYPE) as 'mariadb' | 'mysql',
       username: process.env.DB_USER,
       extra: process.env.DB_SSL
         ? {
@@ -40,12 +40,12 @@ const getDBConfig = (): ConnectionOptions | null => {
   }
 
   return {
-    charset: "utf8mb4_unicode_ci",
-    logging: process.env.NODE_ENV !== "production",
-    entities: [path.join(__dirname, "../entities/*.js")],
+    charset: 'utf8mb4_unicode_ci',
+    logging: process.env.NODE_ENV !== 'production',
+    entities: [path.join(__dirname, '../entities/*.js')],
     subscribers: [],
     synchronize: true,
-    timezone: "utc",
+    timezone: 'utc',
     ...connectionOptions,
   };
 };
@@ -65,10 +65,10 @@ function query(q: string, connection: mysql.Connection): Promise<void> {
 async function createMySQLDB(): Promise<void> {
   try {
     const connection = mysql.createConnection({
-      charset: "utf8mb4_unicode_ci",
+      charset: 'utf8mb4_unicode_ci',
       host: process.env.DB_HOST,
       password: process.env.DB_PASS,
-      timezone: "utc",
+      timezone: 'utc',
       user: process.env.DB_USER,
     });
     const dbName: string = process.env.DB_NAME || DEFAULT_NAME;
@@ -90,16 +90,16 @@ async function createSuperAdminUser(): Promise<void> {
     return;
   }
   const user = new User();
-  user.email = "admin.1village@parlemonde.org";
+  user.email = 'admin.1village@parlemonde.org';
   user.pseudo = adminPseudo;
-  user.level = "";
-  user.school = "Asso Par Le Monde";
+  user.level = '';
+  user.school = 'Asso Par Le Monde';
   user.type = UserType.SUPER_ADMIN;
   user.passwordHash = await argon2.hash(adminPassword);
   user.accountRegistration = 0;
-  user.countryCode = "fr";
+  user.countryCode = 'fr';
   await getRepository(User).save(user);
-  logger.info("Super user Admin created!");
+  logger.info('Super user Admin created!');
 }
 
 // async function createSequences(connection: Connection): Promise<void> {
@@ -116,7 +116,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
   try {
     const config = getDBConfig();
     if (config === null) {
-      logger.error("Could not connect to dabase. Config file for database is not correct!");
+      logger.error('Could not connect to dabase. Config file for database is not correct!');
       return null;
     }
     const connection = await createConnection(config);
@@ -124,8 +124,8 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
     return connection;
   } catch (e) {
     logger.error(e);
-    logger.info("Could not connect to database. Retry in 10 seconds...");
-    if ((e.message || "").split(":")[0] === "ER_BAD_DB_ERROR") {
+    logger.info('Could not connect to database. Retry in 10 seconds...');
+    if ((e.message || '').split(':')[0] === 'ER_BAD_DB_ERROR') {
       await createMySQLDB();
     }
     await sleep(10000);

@@ -1,10 +1,10 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { activityController } from "./activity";
+import { activityController } from './activity';
 // import all controllers
-import { countryController } from "./countries";
-import { userController } from "./user";
-import { villageController } from "./village";
+import { countryController } from './countries';
+import { userController } from './user';
+import { villageController } from './village';
 
 const controllerRouter = Router();
 const controllers = [userController, villageController, countryController, activityController];

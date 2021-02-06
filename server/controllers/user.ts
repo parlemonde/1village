@@ -1,20 +1,20 @@
-import { JSONSchemaType } from "ajv";
-import * as argon2 from "argon2";
-import { NextFunction, Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { JSONSchemaType } from 'ajv';
+import * as argon2 from 'argon2';
+import { NextFunction, Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 
-import { getAccessToken } from "../authentication/lib/tokens";
-import { User, UserType } from "../entities/user";
-import { AppError, ErrorCode } from "../middlewares/handleErrors";
-import { ajv, sendInvalidDataError } from "../utils/jsonSchemaValidator";
-import { logger } from "../utils/logger";
-import { generateTemporaryPassword, valueOrDefault, isPasswordValid, getQueryString } from "../utils";
+import { getAccessToken } from '../authentication/lib/tokens';
+import { User, UserType } from '../entities/user';
+import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
+import { logger } from '../utils/logger';
+import { generateTemporaryPassword, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
 
-import { Controller } from "./controller";
+import { Controller } from './controller';
 
-const userController = new Controller("/users");
+const userController = new Controller('/users');
 // --- Get all users. ---
-userController.get({ path: "", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   let users: User[] = [];
   if (req.query.villageId) {
     users = await getRepository(User).find({ where: [{ villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 }, { villageId: null }] });
@@ -25,7 +25,7 @@ userController.get({ path: "", userType: UserType.TEACHER }, async (req: Request
 });
 
 // --- Get one user. ---
-userController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -38,8 +38,8 @@ userController.get({ path: "/:id", userType: UserType.TEACHER }, async (req: Req
 });
 
 // --- Check user pseudo ---
-userController.get({ path: "/pseudo/:pseudo" }, async (req: Request, res: Response) => {
-  const pseudo = req.params.pseudo || "";
+userController.get({ path: '/pseudo/:pseudo' }, async (req: Request, res: Response) => {
+  const pseudo = req.params.pseudo || '';
   if (!pseudo) {
     res.sendJSON({ available: true });
   }
@@ -61,38 +61,38 @@ type CreateUserData = {
   villageId?: number;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    email: { type: "string", format: "email" },
-    pseudo: { type: "string" },
-    countryCode: { type: "string" },
-    teacherName: { type: "string", nullable: true },
-    level: { type: "string", nullable: true },
-    school: { type: "string", nullable: true },
-    password: { type: "string", nullable: true },
-    type: { type: "number", nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
-    villageId: { type: "number", nullable: true },
+    email: { type: 'string', format: 'email' },
+    pseudo: { type: 'string' },
+    countryCode: { type: 'string' },
+    teacherName: { type: 'string', nullable: true },
+    level: { type: 'string', nullable: true },
+    school: { type: 'string', nullable: true },
+    password: { type: 'string', nullable: true },
+    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    villageId: { type: 'number', nullable: true },
   },
-  required: ["email", "pseudo"],
+  required: ['email', 'pseudo'],
   additionalProperties: false,
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
-userController.post({ path: "", userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
     return;
   }
   if (data.password !== undefined && !isPasswordValid(data.password)) {
-    throw new AppError("Invalid password", ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
   }
 
   const user = new User();
   user.email = data.email;
   user.pseudo = data.pseudo;
-  user.teacherName = data.teacherName || "";
-  user.level = data.level || "";
-  user.school = data.school || "";
+  user.teacherName = data.teacherName || '';
+  user.level = data.level || '';
+  user.school = data.school || '';
   user.villageId = data.villageId || null;
   user.countryCode = data.countryCode;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
@@ -101,7 +101,7 @@ userController.post({ path: "", userType: UserType.ADMIN }, async (req: Request,
     user.type = UserType.TEACHER;
   }
   user.accountRegistration = data.password === undefined ? 3 : 0;
-  user.passwordHash = data.password ? await argon2.hash(data.password) : "";
+  user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryPassword(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
   // todo: send mail with verification password to validate the email adress.
@@ -125,23 +125,23 @@ type EditUserData = {
   accountRegistration?: number;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    email: { type: "string", format: "email", nullable: true },
-    pseudo: { type: "string", nullable: true },
-    countryCode: { type: "string", nullable: true },
-    teacherName: { type: "string", nullable: true },
-    level: { type: "string", nullable: true },
-    school: { type: "string", nullable: true },
-    type: { type: "number", nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
-    villageId: { type: "number", nullable: true },
-    accountRegistration: { type: "number", nullable: true },
+    email: { type: 'string', format: 'email', nullable: true },
+    pseudo: { type: 'string', nullable: true },
+    countryCode: { type: 'string', nullable: true },
+    teacherName: { type: 'string', nullable: true },
+    level: { type: 'string', nullable: true },
+    school: { type: 'string', nullable: true },
+    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    villageId: { type: 'number', nullable: true },
+    accountRegistration: { type: 'number', nullable: true },
   },
   required: [],
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -178,25 +178,25 @@ type UpdatePwdData = {
   newPassword: string;
 };
 const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    password: { type: "string" },
-    newPassword: { type: "string" },
+    password: { type: 'string' },
+    newPassword: { type: 'string' },
   },
-  required: ["password", "newPassword"],
+  required: ['password', 'newPassword'],
   additionalProperties: false,
 };
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
-userController.put({ path: "/:id/password", userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await getRepository(User).createQueryBuilder().addSelect("User.passwordHash").where("User.id = :id", { id }).getOne();
+  const user = await getRepository(User).createQueryBuilder().addSelect('User.passwordHash').where('User.id = :id', { id }).getOne();
   const isSelfProfile = req.user && req.user.id === id;
   if (user === undefined || !isSelfProfile) {
     next();
     return;
   }
   if (user.accountRegistration === 10) {
-    throw new AppError("Use SSO", ErrorCode.USE_SSO);
+    throw new AppError('Use SSO', ErrorCode.USE_SSO);
   }
   const data = req.body;
   if (!updatePwdValidator(data)) {
@@ -205,7 +205,7 @@ userController.put({ path: "/:id/password", userType: UserType.TEACHER }, async 
   }
   let isPasswordCorrect: boolean = false;
   try {
-    isPasswordCorrect = await argon2.verify(user.passwordHash || "", data.password);
+    isPasswordCorrect = await argon2.verify(user.passwordHash || '', data.password);
   } catch (e) {
     logger.error(JSON.stringify(e));
   }
@@ -213,13 +213,13 @@ userController.put({ path: "/:id/password", userType: UserType.TEACHER }, async 
     user.passwordHash = await argon2.hash(data.newPassword);
     await getRepository(User).save(user);
   } else {
-    throw new AppError("Mot de passe invalide", ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Mot de passe invalide', ErrorCode.INVALID_PASSWORD);
   }
   res.sendJSON({ success: true });
 });
 
 // --- Delete an user. ---
-userController.delete({ path: "/:id", userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -239,16 +239,16 @@ type VerifyData = {
   verifyToken: string;
 };
 const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    email: { type: "string", format: "email" },
-    verifyToken: { type: "string" },
+    email: { type: 'string', format: 'email' },
+    verifyToken: { type: 'string' },
   },
-  required: ["email", "verifyToken"],
+  required: ['email', 'verifyToken'],
   additionalProperties: false,
 };
 const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
-userController.post({ path: "/verify-email" }, async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: '/verify-email' }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!verifyUserValidator(data)) {
     sendInvalidDataError(verifyUserValidator);
@@ -257,8 +257,8 @@ userController.post({ path: "/verify-email" }, async (req: Request, res: Respons
 
   const user = await getRepository(User)
     .createQueryBuilder()
-    .addSelect("User.verificationHash")
-    .where("User.email = :email", { email: data.email })
+    .addSelect('User.verificationHash')
+    .where('User.email = :email', { email: data.email })
     .getOne();
   if (!user) {
     next();
@@ -267,22 +267,22 @@ userController.post({ path: "/verify-email" }, async (req: Request, res: Respons
 
   let isverifyTokenCorrect: boolean = false;
   try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || "", data.verifyToken);
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
   } catch (e) {
     logger.error(JSON.stringify(e));
   }
   if (!isverifyTokenCorrect) {
-    throw new AppError("Invalid verify token", ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
   user.accountRegistration = 0;
-  user.verificationHash = "";
+  user.verificationHash = '';
   await getRepository(User).save(user);
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
-  res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
   delete user.verificationHash;
   res.sendJSON({ user: user, accessToken });
 });
@@ -292,15 +292,15 @@ type ResetData = {
   email: string;
 };
 const RESET_SCHEMA: JSONSchemaType<ResetData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    email: { type: "string", format: "email" },
+    email: { type: 'string', format: 'email' },
   },
-  required: ["email"],
+  required: ['email'],
   additionalProperties: false,
 };
 const resetUserValidator = ajv.compile(RESET_SCHEMA);
-userController.post({ path: "/reset-password" }, async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: '/reset-password' }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!resetUserValidator(data)) {
     sendInvalidDataError(resetUserValidator);
@@ -313,7 +313,7 @@ userController.post({ path: "/reset-password" }, async (req: Request, res: Respo
     return;
   }
   if (user.accountRegistration === 10) {
-    throw new AppError("Use SSO", ErrorCode.USE_SSO);
+    throw new AppError('Use SSO', ErrorCode.USE_SSO);
   }
 
   // update user
@@ -333,17 +333,17 @@ type UpdateData = {
   password: string;
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdateData> = {
-  type: "object",
+  type: 'object',
   properties: {
-    email: { type: "string", format: "email" },
-    verifyToken: { type: "string" },
-    password: { type: "string" },
+    email: { type: 'string', format: 'email' },
+    verifyToken: { type: 'string' },
+    password: { type: 'string' },
   },
-  required: ["email", "verifyToken", "password"],
+  required: ['email', 'verifyToken', 'password'],
   additionalProperties: false,
 };
 const updateUserValidator = ajv.compile(UPDATE_SCHEMA);
-userController.post({ path: "/update-password" }, async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: '/update-password' }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateUserValidator(data)) {
     sendInvalidDataError(updateUserValidator);
@@ -352,8 +352,8 @@ userController.post({ path: "/update-password" }, async (req: Request, res: Resp
 
   const user = await getRepository(User)
     .createQueryBuilder()
-    .addSelect("User.verificationHash")
-    .where("User.email = :email", { email: data.email })
+    .addSelect('User.verificationHash')
+    .where('User.email = :email', { email: data.email })
     .getOne();
   if (!user) {
     next();
@@ -361,32 +361,32 @@ userController.post({ path: "/update-password" }, async (req: Request, res: Resp
   }
 
   if (user.accountRegistration === 10) {
-    throw new AppError("Use SSO", ErrorCode.USE_SSO);
+    throw new AppError('Use SSO', ErrorCode.USE_SSO);
   }
 
   let isverifyTokenCorrect: boolean = false;
   try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || "", data.verifyToken);
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
   } catch (e) {
     logger.error(JSON.stringify(e));
   }
   if (!isverifyTokenCorrect) {
-    throw new AppError("Invalid reset token", ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid reset token', ErrorCode.INVALID_PASSWORD);
   }
 
   // update password
   const password = data.password;
   if (!isPasswordValid(password)) {
-    throw new AppError("Invalid password", ErrorCode.PASSWORD_NOT_STRONG);
+    throw new AppError('Invalid password', ErrorCode.PASSWORD_NOT_STRONG);
   }
   user.passwordHash = await argon2.hash(password);
   user.accountRegistration = 0;
-  user.verificationHash = "";
+  user.verificationHash = '';
   await getRepository(User).save(user);
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
-  res.cookie("access-token", accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
   delete user.passwordHash;
   delete user.verificationHash;
   res.sendJSON({ user, accessToken });
