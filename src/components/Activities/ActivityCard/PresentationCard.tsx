@@ -4,19 +4,12 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { bgPage } from 'src/styles/variables.const';
 
 import { RedButton } from '../../buttons/RedButton';
 
 import { ActivityCardProps } from './activity-card.types';
-
-const themes = [
-  'Présentation de notre école',
-  'Présentation de notre environnement',
-  'Présentation de notre lieu de vie',
-  'Présentation d’un loisir',
-  'Présentation d’un plat',
-];
 
 export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf, showEditButtons }: ActivityCardProps) => {
   const firstImage = React.useMemo(() => activity.processedContent.find((c) => c.type === 'image'), [activity.processedContent]);
@@ -47,7 +40,9 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1 }}>
-        {activity.data.theme !== undefined && <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{themes[activity.data.theme as number]}</h3>}
+        {activity.data.theme !== undefined && (
+          <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{PRESENTATION_THEMATIQUE[activity.data.theme as number].cardTitle}</h3>
+        )}
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}

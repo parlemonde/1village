@@ -1,35 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityType } from 'types/activity.type';
-
-const themes = [
-  {
-    label: 'Présentation de l’école',
-    description: 'Présentez votre école à vos Pélicopains',
-  },
-  {
-    label: 'Présentation de votre environnement',
-    description: 'Présentez vos paysages, votre nature à vos Pélicopains',
-  },
-  {
-    label: 'Présentation de votre lieu de vie',
-    description: 'Présentez votre ville/village/quartier à vos Pélicopains',
-  },
-  {
-    label: 'Présentation d’un loisir',
-    description: 'Présentez votre activité préférée à vos Pélicopains',
-  },
-  {
-    label: 'Présentation d’un plat',
-    description: 'Présentez votre plat préféré ou emblématique à vos Pélicopains',
-  },
-];
 
 const PresentationStep1: React.FC = () => {
   const router = useRouter();
@@ -55,7 +33,7 @@ const PresentationStep1: React.FC = () => {
             Dans cette activité, nous vous proposons de faire une présentation générale aux Pélicopains sur le thème de votre choix.
           </p>
           <div>
-            {themes.map((t, index) => (
+            {PRESENTATION_THEMATIQUE.map((t, index) => (
               <ThemeChoiceButton key={index} label={t.label} description={t.description} onClick={onClick(index)} />
             ))}
           </div>
