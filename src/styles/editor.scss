@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 .public-DraftStyleDefault-block {
   position: relative;
@@ -92,6 +92,10 @@
   padding: 0.5rem 0.5rem;
   min-height: 4rem;
   cursor: text;
+}
+.activity-data {
+  margin: 1rem 0rem;
+  padding: 0;
 }
 .text-preview {
   margin: 1.5rem 0rem 1rem 0;

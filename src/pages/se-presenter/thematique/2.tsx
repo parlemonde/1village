@@ -7,7 +7,7 @@ import { Button } from '@material-ui/core';
 import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityEditor } from 'src/components/activityEditor';
+import { SimpleActivityEditor } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 

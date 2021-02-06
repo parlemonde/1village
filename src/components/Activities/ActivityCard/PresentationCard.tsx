@@ -49,9 +49,11 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
           </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <Button color="primary" variant="outlined">
-            Regarder la présentation
-          </Button>
+          <Link href={`/activity/${activity.id}`}>
+            <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`}>
+              Regarder la présentation
+            </Button>
+          </Link>
           {isSelf && showEditButtons && (
             <>
               <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>

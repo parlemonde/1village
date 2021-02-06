@@ -6,7 +6,7 @@ import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { SubHeader } from 'src/components/accueil/SubHeader';
 import { VillageContext } from 'src/contexts/villageContext';
 
-import { Activities } from '../Activities';
+import { Activities } from '../activities/List';
 
 export const Accueil: React.FC = () => {
   const { village } = React.useContext(VillageContext);

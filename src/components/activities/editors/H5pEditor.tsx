@@ -62,7 +62,7 @@ export const H5pEditor: React.FC<EditorProps> = ({ id, value = '', onChange = ()
         fullWidth
         noCloseOutsideModal
         maxWidth="md"
-        title="Choisir une image"
+        title="Choisir le contenu"
         confirmLabel="Choisir"
         onConfirm={() => {
           const url = extractSrcValue(inputValue);

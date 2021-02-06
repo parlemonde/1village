@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { FilterArgs } from 'src/components/accueil/Filters';
-import { ExtendedActivity } from 'src/contexts/activityContext';
+import { ExtendedActivity } from 'src/components/activities/editing.types';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';

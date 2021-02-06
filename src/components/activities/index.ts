@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
-import { SimpleActivityPreview } from './SimpleActivityPreview';
+import { SimpleActivityView } from './SimpleActivityView';
 
 const SimpleActivityEditor = dynamic(() => import('./SimpleActivityEditor'), { ssr: false });
 
-export { SimpleActivityEditor, SimpleActivityPreview };
+export { SimpleActivityEditor, SimpleActivityView };

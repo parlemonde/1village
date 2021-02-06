@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Activities } from 'src/components/Activities';
 import { Base } from 'src/components/Base';
+import { Activities } from 'src/components/activities/List';
 
 const MesActivites: React.FC = () => {
   return (

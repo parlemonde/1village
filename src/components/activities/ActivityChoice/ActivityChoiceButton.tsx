@@ -3,7 +3,7 @@ import React from 'react';
 
 import ButtonBase from '@material-ui/core/ButtonBase';
 
-import { KeepRatio } from '../KeepRatio';
+import { KeepRatio } from '../../KeepRatio';
 
 interface ActivityChoiceButtonProps {
   label: string;

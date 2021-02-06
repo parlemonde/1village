@@ -2,18 +2,12 @@ import { useRouter } from 'next/router';
 import { useQueryCache } from 'react-query';
 import React from 'react';
 
-import type { EditorTypes, EditorContent } from 'src/components/activityEditor/editing.types';
+import type { ExtendedActivity, EditorTypes, EditorContent } from 'src/components/activities/editing.types';
 import { getQueryString } from 'src/utils';
 import { Activity, ActivityType } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
-
-export type ExtendedActivity = Activity & {
-  data: { [key: string]: string | number | boolean };
-  processedContent: Array<EditorContent>;
-  dataId: number;
-};
 
 interface ActivityContextValue {
   activity: ExtendedActivity | null;

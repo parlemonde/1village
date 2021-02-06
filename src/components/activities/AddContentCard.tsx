@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ButtonBase, Card } from '@material-ui/core';
+import AppsIcon from '@material-ui/icons/Apps';
 
 import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
@@ -95,6 +96,7 @@ export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () 
               addContent('h5p');
             }}
           >
+            <AppsIcon color="primary" style={{ height: '1.25rem' }} />
             <span className="text text--small" style={{ marginTop: '0.1rem' }}>
               h5p
             </span>

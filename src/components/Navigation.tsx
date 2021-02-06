@@ -62,7 +62,10 @@ export const Navigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = React.useState(-1);
 
   React.useEffect(() => {
-    const index = tabs.findIndex((tab) => tab.path.split('/')[1] === router.pathname.split('/')[1]);
+    let index = tabs.findIndex((tab) => tab.path.split('/')[1] === router.pathname.split('/')[1]);
+    if (router.pathname.split('/')[1] === 'activity') {
+      index = 0;
+    }
     setSelectedTab(index);
   }, [router.pathname]);
 

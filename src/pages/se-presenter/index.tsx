@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { ActivityChoice } from 'src/components/ActivityChoice';
 import { Base } from 'src/components/Base';
 import { SuggestionCarousel } from 'src/components/SuggestionCarousel';
+import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ImageIcon from 'src/svg/image.svg';
 
 const suggestions = [
