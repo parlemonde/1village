@@ -35,17 +35,13 @@ export function getExtendedActivity(activity: Activity): ExtendedActivity {
   let dataId = 0;
   const processedContent: Array<EditorContent> = [];
   activity.content.forEach((c) => {
-    if (c.key === 'h5p') {
-      return; // not yet handled
-    }
     if (c.key === 'json') {
       const decodedValue = JSON.parse(c.value);
       if (decodedValue.type && decodedValue.type === 'data') {
         data = decodedValue.data || {};
         dataId = c.id;
-        // } else {
-        // processedContent.push() // todo
       }
+      // other json for not data not yet handled
     } else {
       processedContent.push({
         type: c.key,
@@ -156,7 +152,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const createActivity = React.useCallback(async () => {
     const content: Array<{ key: string; value: string }> = activity.processedContent
       .map((p) => {
-        if (p.type === 'text' || p.type === 'image' || p.type === 'video') {
+        if (p.type === 'text' || p.type === 'image' || p.type === 'video' || p.type === 'h5p') {
           return {
             key: p.type,
             value: p.value,
@@ -201,7 +197,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     }, {});
     const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
       .map((p) => {
-        if (p.type === 'text' || p.type === 'image' || p.type === 'video') {
+        if (p.type === 'text' || p.type === 'image' || p.type === 'video' || p.type === 'h5p') {
           const d: { key: string; value: string; id?: number } = {
             key: p.type,
             value: p.value,

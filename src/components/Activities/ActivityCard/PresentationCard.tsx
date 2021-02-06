@@ -1,4 +1,3 @@
-import { htmlToText } from 'html-to-text';
 import Link from 'next/link';
 import React from 'react';
 
@@ -6,6 +5,7 @@ import { Button } from '@material-ui/core';
 
 import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { bgPage } from 'src/styles/variables.const';
+import { htmlToText } from 'src/utils';
 
 import { RedButton } from '../../buttons/RedButton';
 

@@ -2,9 +2,11 @@ import React from 'react';
 
 import { ButtonBase, Card } from '@material-ui/core';
 
+import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
 import TextIcon from 'src/svg/editor/text_icon.svg';
 import VideoIcon from 'src/svg/editor/video_icon.svg';
+import { UserType } from 'types/user.type';
 
 import type { EditorTypes } from './editing.types';
 
@@ -15,6 +17,9 @@ interface AddContentCardProps {
 }
 
 export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () => {} }) => {
+  const { user } = React.useContext(UserContext);
+  const isPelico = user.type >= UserType.MEDIATOR;
+
   return (
     <Card style={{ display: 'inline-block' }}>
       <div style={{ display: 'inline-flex', padding: '0.2rem 1rem', alignItems: 'center' }}>
@@ -76,6 +81,25 @@ export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () 
             Vidéo
           </span>
         </ButtonBase>
+        {isPelico && (
+          <ButtonBase
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              margin: '0 0.5rem',
+              padding: '0.2rem',
+              borderRadius: '5px',
+            }}
+            onClick={() => {
+              addContent('h5p');
+            }}
+          >
+            <span className="text text--small" style={{ marginTop: '0.1rem' }}>
+              h5p
+            </span>
+          </ButtonBase>
+        )}
       </div>
     </Card>
   );

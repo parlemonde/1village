@@ -1,4 +1,4 @@
-export type EditorTypes = 'text' | 'video' | 'image';
+export type EditorTypes = 'text' | 'video' | 'image' | 'h5p';
 
 export type EditorContent = {
   id: number;

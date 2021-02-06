@@ -109,3 +109,16 @@ export const getGravatarUrl = (email: string): string => {
 export const toDate = (date: string): string => {
   return Intl.DateTimeFormat('fr', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(date));
 };
+
+function addDotToElement(element: HTMLElement): void {
+  const innerText = element.innerText || '';
+  if (innerText.length > 0 && !/\W/im.test(innerText.slice(-1))) {
+    element.innerText = `${innerText}.`;
+  }
+}
+export function htmlToText(html: string): string {
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  [...tmp.children].forEach(addDotToElement);
+  return tmp.textContent || tmp.innerText || '';
+}

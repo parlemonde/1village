@@ -9,8 +9,8 @@ import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
 
-import App from 'next/app';
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
+import App from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
@@ -29,6 +29,7 @@ import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import theme from 'src/styles/theme';
+import { initH5p } from 'src/utils/initH5p';
 import type { User } from 'types/user.type';
 
 interface MyAppOwnProps {
@@ -79,6 +80,9 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
+  // Let all h5p iframe to automatically resize.
+  React.useEffect(initH5p, []);
 
   const isOnAdmin = router.pathname.slice(1, 6) === 'admin';
 

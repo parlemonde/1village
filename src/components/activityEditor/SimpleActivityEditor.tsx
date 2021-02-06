@@ -5,6 +5,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 
 import { AddContentCard } from './AddContentCard';
 import type { EditorContent } from './editing.types';
+import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor';
 import { TextEditor } from './editors/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
@@ -55,6 +56,19 @@ const SimpleActivityEditor: React.FC = () => {
           if (p.type === 'video') {
             return (
               <VideoEditor
+                key={p.id}
+                id={p.id}
+                value={p.value}
+                onChange={onChangeContent(index)}
+                onDelete={() => {
+                  deleteContent(index);
+                }}
+              />
+            );
+          }
+          if (p.type === 'h5p') {
+            return (
+              <H5pEditor
                 key={p.id}
                 id={p.id}
                 value={p.value}
