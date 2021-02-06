@@ -1,4 +1,4 @@
-import type { Village } from "./village.type";
+import type { Village } from './village.type';
 
 export enum UserType {
   TEACHER = 0,
@@ -9,11 +9,11 @@ export enum UserType {
 }
 
 export const userTypeNames = {
-  [UserType.TEACHER]: "Professeur",
-  [UserType.OBSERVATOR]: "Observateur",
-  [UserType.MEDIATOR]: "Médiateur",
-  [UserType.ADMIN]: "Admin",
-  [UserType.SUPER_ADMIN]: "Super admin",
+  [UserType.TEACHER]: 'Professeur',
+  [UserType.OBSERVATOR]: 'Observateur',
+  [UserType.MEDIATOR]: 'Médiateur',
+  [UserType.ADMIN]: 'Admin',
+  [UserType.SUPER_ADMIN]: 'Super admin',
 };
 
 export interface User {

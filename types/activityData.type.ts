@@ -1,4 +1,4 @@
-export type ActivityDataType = "text" | "video" | "image" | "json" | "h5p";
+export type ActivityDataType = 'text' | 'video' | 'image' | 'json' | 'h5p';
 
 export interface ActivityData {
   id: number;

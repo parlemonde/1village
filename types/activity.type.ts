@@ -1,4 +1,4 @@
-import type { ActivityData } from "./activityData.type";
+import type { ActivityData } from './activityData.type';
 
 export enum ActivityType {
   PRESENTATION = 0,

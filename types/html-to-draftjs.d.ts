@@ -1,1 +1,1 @@
-declare module "html-to-draftjs";
+declare module 'html-to-draftjs';

@@ -1,1 +1,1 @@
-declare module "draftjs-utils";
+declare module 'draftjs-utils';
