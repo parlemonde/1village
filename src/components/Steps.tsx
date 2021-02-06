@@ -8,6 +8,8 @@ import Step from "@material-ui/core/Step";
 import { withStyles } from "@material-ui/core/styles";
 import CheckIcon from "@material-ui/icons/Check";
 
+import { primaryColor, primaryColorLight2, successColor } from "src/styles/variables.const";
+
 const DotConnector = withStyles({
   alternativeLabel: {
     top: "16.5px",
@@ -19,7 +21,7 @@ const DotConnector = withStyles({
     width: "5px",
     height: "5px",
     borderRadius: "2.5px",
-    backgroundColor: "#b3b5fc",
+    backgroundColor: primaryColorLight2,
   },
 })(StepConnector);
 
@@ -27,15 +29,15 @@ const StepIcon = ({ icon, active, completed }: StepIconProps) => {
   return (
     <div
       style={{
-        backgroundColor: active ? "#4c3ed9" : "white",
-        color: completed ? "#008000" : active ? "white" : "#4c3ed9",
+        backgroundColor: active ? primaryColor : "white",
+        color: completed ? successColor : active ? "white" : primaryColor,
         width: "38px",
         height: "38px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "50%",
-        border: completed ? "1px solid #008000" : "1px solid #4c3ed9",
+        border: completed ? `1px solid ${successColor}` : `1px solid ${primaryColor}`,
       }}
     >
       {completed ? <CheckIcon /> : icon}
@@ -51,7 +53,7 @@ interface Steps {
 export const Steps: React.FC<Steps> = ({ steps, activeStep = 0 }: Steps) => {
   return (
     <div className="custom-steps--container" style={{ position: "relative" }}>
-      <div style={{ position: "absolute", top: "43px", left: "10%", right: "10%", borderTop: "1px solid #b3b5fc", zIndex: 0 }}></div>
+      <div style={{ position: "absolute", top: "43px", left: "10%", right: "10%", borderTop: `1px solid ${primaryColorLight2}`, zIndex: 0 }}></div>
       <Stepper activeStep={activeStep} alternativeLabel connector={<DotConnector />} style={{ zIndex: 1, position: "relative", background: "none" }}>
         {steps.map((label) => (
           <Step key={label}>

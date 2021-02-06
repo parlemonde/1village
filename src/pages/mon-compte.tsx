@@ -16,9 +16,10 @@ import { QuestionButton } from "src/components/buttons/QuestionButton";
 import { RedButton } from "src/components/buttons/RedButton";
 import { PanelInput } from "src/components/mon-compte/PanelInput";
 import { UserContext } from "src/contexts/userContext";
+import { helpColor } from "src/styles/variables.const";
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from "src/utils/accountChecks";
-import { getGravatarUrl } from "src/utils";
 import { ssoHostName } from "src/utils";
+import { getGravatarUrl } from "src/utils";
 import type { User } from "types/user.type";
 
 const Presentation: React.FC = () => {
@@ -220,7 +221,7 @@ const Presentation: React.FC = () => {
           )}
         </div>
         {editMode === 1 && (
-          <Alert severity="warning" style={{ margin: "0.5rem 0", backgroundColor: "white", border: "1px solid #E1C7D1" }}>
+          <Alert severity="warning" style={{ margin: "0.5rem 0", backgroundColor: "white", border: `1px solid ${helpColor}` }}>
             <AlertTitle>Attention !</AlertTitle>
             Votre <strong>pseudo</strong> et votre <strong>email</strong> sont vos identifiants de connection.
           </Alert>
@@ -380,7 +381,7 @@ const Presentation: React.FC = () => {
         </Modal>
       </NoSsr>
 
-      <Backdrop style={{ zIndex: 2000, color: "#fff" }} open={isLoading}>
+      <Backdrop style={{ zIndex: 2000, color: "white" }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>

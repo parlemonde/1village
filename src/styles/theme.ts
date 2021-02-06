@@ -1,23 +1,25 @@
 import { frFR } from "@material-ui/core/locale";
 import { createMuiTheme } from "@material-ui/core/styles";
 
+import { primaryColor, secondaryColor, successColor, errorColor, bgPage } from "./variables.const";
+
 const theme = createMuiTheme(
   {
     palette: {
       primary: {
-        main: "#4c3ed9",
+        main: primaryColor,
       },
       secondary: {
-        main: "#80cbc4",
+        main: secondaryColor,
       },
       background: {
-        default: "#f5f5f5",
+        default: bgPage,
       },
       error: {
-        main: "#d93939",
+        main: errorColor,
       },
       success: {
-        main: "#008000",
+        main: successColor,
       },
     },
     typography: {
@@ -35,11 +37,11 @@ const theme = createMuiTheme(
       },
       h3: {
         fontSize: "1.07rem",
-        fontWeight: "normal",
-        margin: 500,
+        fontWeight: 600,
+        margin: 0,
       },
       button: {
-        fontSize: "1rem",
+        fontSize: "0.95rem",
       },
     },
     overrides: {

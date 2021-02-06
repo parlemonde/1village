@@ -17,6 +17,8 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
 
+import { fontDetailColor } from "src/styles/variables.const";
+
 import type { EditorProps } from "../../editing.types";
 import { EditorContainer } from "../EditorContainer";
 
@@ -182,7 +184,7 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
           </div>
         </div>
         {displayPlaceholder && (
-          <div style={{ position: "absolute", color: "#777777" }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>
+          <div style={{ position: "absolute", color: fontDetailColor }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>
         )}
         <div
           onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {

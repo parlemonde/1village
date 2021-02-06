@@ -73,7 +73,7 @@ const PresentationStep3: React.FC = () => {
           <SimpleActivityPreview />
         </div>
       </div>
-      <Backdrop style={{ zIndex: 2000, color: "#fff" }} open={isLoading}>
+      <Backdrop style={{ zIndex: 2000, color: "white" }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>

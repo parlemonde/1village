@@ -1,5 +1,6 @@
 import React from "react";
 
+import { primaryColorLight } from "src/styles/variables.const";
 import Cible from "src/svg/cible.svg";
 import Jumelles from "src/svg/jumelles.svg";
 import PelicoSouriant from "src/svg/pelico/pelico-souriant.svg";
@@ -19,7 +20,7 @@ export const SubHeader: React.FC = () => {
       <div
         style={{
           flex: 1,
-          backgroundColor: "#DEDFFF",
+          backgroundColor: primaryColorLight,
           height: "100%",
           borderTopLeftRadius: "10px",
           borderBottomLeftRadius: "10px",
@@ -35,7 +36,7 @@ export const SubHeader: React.FC = () => {
       </div>
       <div style={{ height: "100%" }}>
         <svg style={{ width: "auto", height: "100%" }} viewBox="0 0 32 46" fill="none">
-          <path d="M32 23L0 46L0 0L32 23Z" fill="#DEDFFF" />
+          <path d="M32 23L0 46L0 0L32 23Z" fill={primaryColorLight} />
         </svg>
       </div>
       <div style={{ margin: "0 2rem", display: "flex", alignItems: "center" }}>

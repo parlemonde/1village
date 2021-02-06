@@ -9,6 +9,7 @@ import { Button } from "@material-ui/core";
 
 import { KeepRatio } from "src/components/KeepRatio";
 import { useResizeObserver } from "src/hooks/useResizeObserver";
+import { bgPage } from "src/styles/variables.const";
 
 const StyledTab = withStyles({
   root: {
@@ -78,7 +79,7 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                 style={{
                   width: "100%",
                   height: "100%",
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: bgPage,
                   backgroundImage: selectedSuggestion && selectedSuggestion.imageUrl ? `url(${selectedSuggestion.imageUrl})` : null,
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",

@@ -204,7 +204,7 @@ const Login: React.FC = () => {
           <img src="/family_values_best_friends.png" width="90%" height="auto" style={{ maxWidth: "600px" }} />
         </div>
       </KeepRatio>
-      <Backdrop style={{ zIndex: 2000, color: "#fff" }} open={isLoading}>
+      <Backdrop style={{ zIndex: 2000, color: "white" }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>

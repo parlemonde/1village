@@ -4,6 +4,8 @@ import React from "react";
 
 import { Button } from "@material-ui/core";
 
+import { bgPage } from "src/styles/variables.const";
+
 import { RedButton } from "../../buttons/RedButton";
 
 import { ActivityCardProps } from "./activity-card.types";
@@ -35,7 +37,7 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
             style={{
               height: "100%",
               width: "100%",
-              backgroundColor: "#f5f5f5",
+              backgroundColor: bgPage,
               backgroundImage: `url(${firstImage.value})`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",

@@ -5,6 +5,8 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Alert } from "@material-ui/lab";
 
 import { Modal } from "src/components/Modal";
+import { primaryColor } from "src/styles/variables.const";
+import { fontDetailColor, bgPage } from "src/styles/variables.const";
 import { isValidHttpUrl } from "src/utils";
 
 import type { EditorProps } from "../editing.types";
@@ -89,7 +91,7 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
-              borderRight: "1px dashed #4c3ed9",
+              borderRight: `1px dashed ${primaryColor}`,
             }}
           ></div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -158,7 +160,7 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
               />
               <Divider style={{ marginTop: "2rem" }} />
               <div className="text-center" style={{ margin: "-0.8rem 0 1.5rem 0" }}>
-                <span style={{ backgroundColor: "white", padding: "0 0.5rem", color: "#666666", fontSize: "1.1rem" }}>Ou</span>
+                <span style={{ backgroundColor: "white", padding: "0 0.5rem", color: fontDetailColor, fontSize: "1.1rem" }}>Ou</span>
               </div>
               <div className="text-center">
                 <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: "pointer" }}>
@@ -171,7 +173,7 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
             </div>
           </div>
           <div style={{ flex: "1", padding: "0.5rem" }}>
-            <div style={{ width: "100%", height: "100%", backgroundColor: "#f5f5f5", padding: "0.5rem" }}>
+            <div style={{ width: "100%", height: "100%", backgroundColor: bgPage, padding: "0.5rem" }}>
               <div className="text-center text text--bold" style={{ height: "10%" }}>
                 Aperçu
               </div>

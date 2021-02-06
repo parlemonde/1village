@@ -12,6 +12,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 import { UserContext } from "src/contexts/userContext";
 import { VillageContext } from "src/contexts/villageContext";
+import { secondaryColor } from "src/styles/variables.const";
 import Logo from "src/svg/logo.svg";
 import { getGravatarUrl } from "src/utils";
 import { UserType } from "types/user.type";
@@ -54,7 +55,7 @@ export const Header: React.FC = () => {
         {user && (
           <div className="header__user">
             {user.type > UserType.TEACHER && (
-              <div style={{ border: "1px solid #80cbc4", borderRadius: "12px" }}>
+              <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: "12px" }}>
                 <span className="text text--small" style={{ margin: "0 0.6rem" }}>
                   {village ? village.name : "Village non choisi !"}
                 </span>

@@ -3,10 +3,12 @@ import React from "react";
 
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
+import { primaryColor } from "src/styles/variables.const";
+
 const APP_URL = process.env.NEXT_PUBLIC_HOST_URL || "https://1village.parlemonde.org";
 const APP_NAME = "1Village";
 const APP_DESCRIPTION = "1Village description...";
-const PRIMARY_COLOR = "#4c3ed9";
+const PRIMARY_COLOR = primaryColor;
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {

@@ -1,15 +1,14 @@
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 
-const red = "#d93939";
-const darkerRed = "#ad2d2d";
+import { errorColor, errorColorDarker } from "src/styles/variables.const";
 
 export const RedButton = withStyles(() => ({
   root: {
     color: "white",
-    backgroundColor: red,
+    backgroundColor: errorColor,
     "&:hover": {
-      backgroundColor: darkerRed,
+      backgroundColor: errorColorDarker,
     },
   },
 }))(Button);

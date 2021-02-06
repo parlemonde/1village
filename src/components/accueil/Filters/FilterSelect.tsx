@@ -7,6 +7,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
+import { primaryColor } from "src/styles/variables.const";
+
 interface FilterSelectProps {
   options: { key: string | number; label: string }[];
   name: string;
@@ -21,7 +23,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({ value, onChange, nam
   return (
     <div style={{ position: "relative", marginLeft: "0.5rem" }}>
       <div
-        style={{ display: "inline-block", cursor: "pointer", border: "1px solid #4c3ed9", borderRadius: "5px" }}
+        style={{ display: "inline-block", cursor: "pointer", border: `1px solid ${primaryColor}`, borderRadius: "5px" }}
         onClick={() => {
           setIsOpen(true);
         }}
@@ -55,7 +57,7 @@ export const FilterSelect: React.FC<FilterSelectProps> = ({ value, onChange, nam
           <div
             style={{
               display: "inline-block",
-              border: "1px solid #4c3ed9",
+              border: `1px solid ${primaryColor}`,
               borderRadius: "5px",
               position: "absolute",
               top: 0,

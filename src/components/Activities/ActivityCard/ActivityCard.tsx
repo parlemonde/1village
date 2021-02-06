@@ -3,6 +3,7 @@ import React from "react";
 import Paper from "@material-ui/core/Paper";
 
 import { Flag } from "src/components/Flag";
+import { primaryColor } from "src/styles/variables.const";
 import GameIcon from "src/svg/navigation/game-icon.svg";
 import KeyIcon from "src/svg/navigation/key-icon.svg";
 import QuestionIcon from "src/svg/navigation/question-icon.svg";
@@ -56,7 +57,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, user, isSe
             )}
           </div>
         </div>
-        {ActivityIcon && <ActivityIcon style={{ fill: "#4c3ed9", margin: "0 0.65rem" }} height="45px" />}
+        {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: "0 0.65rem" }} height="45px" />}
       </div>
       <div className="activity-card__content">
         {activity.type === ActivityType.PRESENTATION && (

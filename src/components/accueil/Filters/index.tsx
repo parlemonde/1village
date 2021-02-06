@@ -4,13 +4,14 @@ import Checkbox, { CheckboxProps } from "@material-ui/core/Checkbox";
 import { withStyles } from "@material-ui/core/styles";
 
 import { Flag } from "src/components/Flag";
+import { successColor } from "src/styles/variables.const";
 import PelicoReflechit from "src/svg/pelico/pelico_reflechit.svg";
 
 import { FilterSelect } from "./FilterSelect";
 
 const GreenCheckbox = withStyles({
   checked: {
-    color: "#008000",
+    color: successColor,
   },
 })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 

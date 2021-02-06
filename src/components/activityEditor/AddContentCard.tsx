@@ -8,6 +8,8 @@ import VideoIcon from "src/svg/editor/video_icon.svg";
 
 import type { EditorTypes } from "./editing.types";
 
+// import { primaryColor } from "src/styles/variables.const";
+
 interface AddContentCardProps {
   addContent?(type: EditorTypes): void;
 }
@@ -19,7 +21,7 @@ export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () 
         <span className="text text--bold" style={{ margin: "0 0.5rem" }}>
           Ajouter à votre description :
         </span>
-        {/* <Divider flexItem orientation="vertical" style={{ margin: "0 1rem", backgroundColor: "#4c3ed9" }} /> */}
+        {/* <Divider flexItem orientation="vertical" style={{ margin: "0 1rem", backgroundColor: primaryColor }} /> */}
         <ButtonBase
           style={{
             display: "flex",
