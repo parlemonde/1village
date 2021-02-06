@@ -1,7 +1,8 @@
 import { useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
-import { ExtendedActivity, getExtendedActivity } from 'src/contexts/activityContext';
+import { ExtendedActivity } from 'src/components/activities/editing.types';
+import { getExtendedActivity } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
