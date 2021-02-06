@@ -1,29 +1,29 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import React from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React from 'react';
 
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import MaterialLink from "@material-ui/core/Link";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MaterialLink from '@material-ui/core/Link';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-import { CountrySelector } from "src/components/CountrySelector";
-import { AdminTile } from "src/components/admin/AdminTile";
-import { useUserRequests } from "src/services/useUsers";
-import { useVillages } from "src/services/useVillages";
-import { isPseudoValid, isEmailValid } from "src/utils/accountChecks";
-import { User, UserType, userTypeNames } from "types/user.type";
+import { CountrySelector } from 'src/components/CountrySelector';
+import { AdminTile } from 'src/components/admin/AdminTile';
+import { useUserRequests } from 'src/services/useUsers';
+import { useVillages } from 'src/services/useVillages';
+import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
+import { User, UserType, userTypeNames } from 'types/user.type';
 
 const Required = (label: string) => (
   <>
     {label}
-    <span className="text text--error" style={{ marginLeft: "0.2rem" }}>
+    <span className="text text--error" style={{ marginLeft: '0.2rem' }}>
       *
     </span>
   </>
@@ -35,14 +35,14 @@ const NewUser: React.FC = () => {
   const { addUser } = useUserRequests();
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<Partial<User>>({
-    email: "",
-    pseudo: "",
-    teacherName: "",
-    school: "",
-    level: "",
+    email: '',
+    pseudo: '',
+    teacherName: '',
+    school: '',
+    level: '',
     type: UserType.TEACHER,
     villageId: 0,
-    countryCode: "",
+    countryCode: '',
   });
   const [errors, setErrors] = React.useState({
     email: false,
@@ -50,7 +50,7 @@ const NewUser: React.FC = () => {
   });
 
   const checkEmailAndPseudo = async () => {
-    const pseudoValid = await isPseudoValid(newUser.pseudo, "");
+    const pseudoValid = await isPseudoValid(newUser.pseudo, '');
     setErrors((e) => ({
       ...e,
       email: newUser.email && !isEmailValid(newUser.email),
@@ -60,28 +60,28 @@ const NewUser: React.FC = () => {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const requiredFields: Extract<keyof User, string>[] = ["email", "pseudo", "countryCode"];
+    const requiredFields: Extract<keyof User, string>[] = ['email', 'pseudo', 'countryCode'];
     if (newUser.type === UserType.TEACHER) {
-      requiredFields.push("villageId");
+      requiredFields.push('villageId');
     }
     for (const field of requiredFields) {
       if (!newUser[field]) {
-        enqueueSnackbar("Certain champs requis (*) sont non remplis!", {
-          variant: "warning",
+        enqueueSnackbar('Certain champs requis (*) sont non remplis!', {
+          variant: 'warning',
         });
         return;
       }
     }
     await checkEmailAndPseudo();
     if (errors.email || errors.pseudo) {
-      enqueueSnackbar("Email et/ou pseudo invalide", {
-        variant: "warning",
+      enqueueSnackbar('Email et/ou pseudo invalide', {
+        variant: 'warning',
       });
       return;
     }
     const result = await addUser({ ...newUser, villageId: newUser.villageId || null });
     if (result !== null) {
-      router.push("/admin/users");
+      router.push('/admin/users');
     }
   };
 
@@ -91,7 +91,7 @@ const NewUser: React.FC = () => {
 
   return (
     <div className="admin--container">
-      <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: "1rem" }}>
+      <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
         <Link href="/admin/users">
           <MaterialLink href="/admin/users">
             <h1>Utilisateurs</h1>
@@ -100,24 +100,24 @@ const NewUser: React.FC = () => {
         <h1>Nouveau</h1>
       </Breadcrumbs>
       <AdminTile title="Ajouter un utilisateur">
-        <form autoComplete="off" style={{ width: "100%", padding: "1rem" }} onSubmit={onSubmit}>
+        <form autoComplete="off" style={{ width: '100%', padding: '1rem' }} onSubmit={onSubmit}>
           <TextField
             className="full-width"
-            label={Required("Email")}
+            label={Required('Email')}
             value={newUser.email}
-            onChange={updateUserField("email")}
-            style={{ marginBottom: "1rem" }}
-            helperText={errors.email ? "Email invalide" : ""}
+            onChange={updateUserField('email')}
+            style={{ marginBottom: '1rem' }}
+            helperText={errors.email ? 'Email invalide' : ''}
             error={errors.email}
             onBlur={checkEmailAndPseudo}
           />
           <TextField
             className="full-width"
-            label={Required("Pseudo")}
+            label={Required('Pseudo')}
             value={newUser.pseudo}
-            onChange={updateUserField("pseudo")}
-            style={{ marginBottom: "1rem" }}
-            helperText={errors.pseudo ? "Pseudo indisponible" : ""}
+            onChange={updateUserField('pseudo')}
+            style={{ marginBottom: '1rem' }}
+            helperText={errors.pseudo ? 'Pseudo indisponible' : ''}
             error={errors.pseudo}
             onBlur={checkEmailAndPseudo}
           />
@@ -125,24 +125,24 @@ const NewUser: React.FC = () => {
             className="full-width"
             label="Nom du professeur"
             value={newUser.teacherName}
-            onChange={updateUserField("teacherName")}
-            style={{ marginBottom: "1rem" }}
+            onChange={updateUserField('teacherName')}
+            style={{ marginBottom: '1rem' }}
           />
           <TextField
             className="full-width"
             label="École"
             value={newUser.school}
-            onChange={updateUserField("school")}
-            style={{ marginBottom: "1rem" }}
+            onChange={updateUserField('school')}
+            style={{ marginBottom: '1rem' }}
           />
           <TextField
             className="full-width"
             label="Niveau de la classe"
             value={newUser.level}
-            onChange={updateUserField("level")}
-            style={{ marginBottom: "1rem" }}
+            onChange={updateUserField('level')}
+            style={{ marginBottom: '1rem' }}
           />
-          <FormControl style={{ width: "100%", marginBottom: "1rem" }}>
+          <FormControl style={{ width: '100%', marginBottom: '1rem' }}>
             <InputLabel id="type-select">Rôle</InputLabel>
             <Select
               labelId="type-select"
@@ -159,8 +159,8 @@ const NewUser: React.FC = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl style={{ width: "100%", marginBottom: "1rem" }}>
-            <InputLabel id="village-select">{newUser.type === UserType.TEACHER ? Required("Village") : "Village"}</InputLabel>
+          <FormControl style={{ width: '100%', marginBottom: '1rem' }}>
+            <InputLabel id="village-select">{newUser.type === UserType.TEACHER ? Required('Village') : 'Village'}</InputLabel>
             <Select
               labelId="village-select"
               id="village-simple-select"
@@ -178,15 +178,15 @@ const NewUser: React.FC = () => {
             </Select>
           </FormControl>
           <CountrySelector
-            label={Required("Pays")}
+            label={Required('Pays')}
             value={newUser.countryCode}
             onChange={(countryCode) => {
               setNewUser((u) => ({ ...u, countryCode }));
             }}
             filterCountries={newUser.villageId ? villages.find((v) => v.id === newUser.villageId)?.countries || undefined : undefined}
-            style={{ width: "100%", marginBottom: "1rem" }}
+            style={{ width: '100%', marginBottom: '1rem' }}
           />
-          <div className="text-center" style={{ margin: "2rem 0 1rem 0" }}>
+          <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>
             <Button color="primary" variant="contained" type="submit">
               {"Ajouter l'utilisateur !"}
             </Button>
@@ -194,7 +194,7 @@ const NewUser: React.FC = () => {
         </form>
       </AdminTile>
       <Link href="/admin/users">
-        <Button variant="outlined" style={{ margin: "1rem 0" }} component="a" href="/admin/users">
+        <Button variant="outlined" style={{ margin: '1rem 0' }} component="a" href="/admin/users">
           Retour
         </Button>
       </Link>

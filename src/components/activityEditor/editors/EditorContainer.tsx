@@ -1,9 +1,9 @@
-import classnames from "classnames";
-import React from "react";
+import classnames from 'classnames';
+import React from 'react';
 
-import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
-import { DeleteButton } from "src/components/buttons/DeleteButton";
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
 
 interface EditorContainerProps {
   deleteButtonProps: {
@@ -26,14 +26,14 @@ export const EditorContainer: React.FC<EditorContainerProps> = ({
 }: EditorContainerProps) => {
   return (
     <div className="editor editor--with-drag-handle">
-      <DeleteButton {...deleteButtonProps} color="primary" style={{ position: "absolute", zIndex: 20, right: "0.5rem", top: "0.5rem" }} />
+      <DeleteButton {...deleteButtonProps} color="primary" style={{ position: 'absolute', zIndex: 20, right: '0.5rem', top: '0.5rem' }} />
       <div className="drag-handle">
         <DragIndicatorIcon />
       </div>
       <div
-        className={classnames(className, "editor__container", {
-          "editor__container--without-padding": noPadding,
-          "editor__container--without-min-height": noMinHeight,
+        className={classnames(className, 'editor__container', {
+          'editor__container--without-padding': noPadding,
+          'editor__container--without-min-height': noMinHeight,
         })}
       >
         {children}

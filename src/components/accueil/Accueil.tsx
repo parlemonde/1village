@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { Base } from "src/components/Base";
-import { Filters, FilterArgs } from "src/components/accueil/Filters";
-import { RightNavigation } from "src/components/accueil/RightNavigation";
-import { SubHeader } from "src/components/accueil/SubHeader";
-import { VillageContext } from "src/contexts/villageContext";
+import { Base } from 'src/components/Base';
+import { Filters, FilterArgs } from 'src/components/accueil/Filters';
+import { RightNavigation } from 'src/components/accueil/RightNavigation';
+import { SubHeader } from 'src/components/accueil/SubHeader';
+import { VillageContext } from 'src/contexts/villageContext';
 
-import { Activities } from "../Activities";
+import { Activities } from '../Activities';
 
 export const Accueil: React.FC = () => {
   const { village } = React.useContext(VillageContext);

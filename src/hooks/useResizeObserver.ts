@@ -1,5 +1,5 @@
-import React from "react";
-import ResizeObserver from "resize-observer-polyfill";
+import React from 'react';
+import ResizeObserver from 'resize-observer-polyfill';
 
 type Dimensions = {
   width: number;

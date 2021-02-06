@@ -1,9 +1,9 @@
-import { useSnackbar } from "notistack";
-import { useQueryCache, useQuery, QueryFunction } from "react-query";
-import React from "react";
+import { useSnackbar } from 'notistack';
+import { useQueryCache, useQuery, QueryFunction } from 'react-query';
+import React from 'react';
 
-import { UserContext } from "src/contexts/userContext";
-import type { Village } from "types/village.type";
+import { UserContext } from 'src/contexts/userContext';
+import type { Village } from 'types/village.type';
 
 export const useVillages = (): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
@@ -11,19 +11,19 @@ export const useVillages = (): { villages: Village[]; setVillages(newVillages: V
 
   const getVillages: QueryFunction<Village[]> = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
-      method: "GET",
-      url: `/villages`,
+      method: 'GET',
+      url: '/villages',
     });
     if (response.error) {
       return [];
     }
     return response.data;
   }, [axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<Village[], unknown>(["villages"], getVillages);
+  const { data, isLoading, error } = useQuery<Village[], unknown>(['villages'], getVillages);
 
   const setVillages = React.useCallback(
     (newVillages: Village[]) => {
-      queryCache.setQueryData(["villages"], newVillages);
+      queryCache.setQueryData(['villages'], newVillages);
     },
     [queryCache],
   );
@@ -41,22 +41,22 @@ export const useVillageRequests = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const addVillage = React.useCallback(
-    async (newVillage: Pick<Village, "name" | "countries">) => {
+    async (newVillage: Pick<Village, 'name' | 'countries'>) => {
       const response = await axiosLoggedRequest({
-        method: "POST",
-        url: "/villages",
+        method: 'POST',
+        url: '/villages',
         data: newVillage,
       });
       if (response.error) {
-        enqueueSnackbar("Une erreur est survenue...", {
-          variant: "error",
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
         });
         return null;
       }
-      enqueueSnackbar("Village créé avec succès!", {
-        variant: "success",
+      enqueueSnackbar('Village créé avec succès!', {
+        variant: 'success',
       });
-      queryCache.invalidateQueries("villages");
+      queryCache.invalidateQueries('villages');
       return response.data as Village;
     },
     [axiosLoggedRequest, queryCache, enqueueSnackbar],
@@ -66,20 +66,20 @@ export const useVillageRequests = () => {
     async (updatedVillage: Village) => {
       const { id, ...rest } = updatedVillage;
       const response = await axiosLoggedRequest({
-        method: "PUT",
+        method: 'PUT',
         url: `/villages/${id}`,
         data: rest,
       });
       if (response.error) {
-        enqueueSnackbar("Une erreur est survenue...", {
-          variant: "error",
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
         });
         return null;
       }
-      enqueueSnackbar("Village modifié avec succès!", {
-        variant: "success",
+      enqueueSnackbar('Village modifié avec succès!', {
+        variant: 'success',
       });
-      queryCache.invalidateQueries("villages");
+      queryCache.invalidateQueries('villages');
       return response.data as Village;
     },
     [axiosLoggedRequest, queryCache, enqueueSnackbar],
@@ -88,45 +88,45 @@ export const useVillageRequests = () => {
   const deleteVillage = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
-        method: "DELETE",
+        method: 'DELETE',
         url: `/villages/${id}`,
       });
       if (response.error) {
-        enqueueSnackbar("Une erreur est survenue...", {
-          variant: "error",
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
         });
         return;
       }
-      enqueueSnackbar("Village supprimé avec succès!", {
-        variant: "success",
+      enqueueSnackbar('Village supprimé avec succès!', {
+        variant: 'success',
       });
-      queryCache.invalidateQueries("villages");
+      queryCache.invalidateQueries('villages');
     },
     [axiosLoggedRequest, queryCache, enqueueSnackbar],
   );
 
   const importVillages = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
-      method: "POST",
-      url: `/villages/import/plm`,
+      method: 'POST',
+      url: '/villages/import/plm',
     });
     if (response.error) {
-      enqueueSnackbar("Une erreur est survenue...", {
-        variant: "error",
+      enqueueSnackbar('Une erreur est survenue...', {
+        variant: 'error',
       });
       return;
     }
     enqueueSnackbar(
       response.data.count === 0
-        ? "Aucun nouveau village importé!"
+        ? 'Aucun nouveau village importé!'
         : response.data.count === 1
-        ? "1 village importé avec succès!"
+        ? '1 village importé avec succès!'
         : `${response.data.count} villages importés avec succès!`,
       {
-        variant: "success",
+        variant: 'success',
       },
     );
-    queryCache.invalidateQueries("villages");
+    queryCache.invalidateQueries('villages');
   }, [axiosLoggedRequest, queryCache, enqueueSnackbar]);
 
   return {

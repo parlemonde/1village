@@ -1,12 +1,12 @@
-import Link from "next/link";
-import React from "react";
+import Link from 'next/link';
+import React from 'react';
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import { Button } from "@material-ui/core";
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import { Button } from '@material-ui/core';
 
 interface ElevationScrollProps {
   children: React.ReactElement;
@@ -42,7 +42,7 @@ export const AdminHeader: React.FC = () => {
               1Village - Administrateur
             </Typography>
             <Link href="/">
-              <Button component="a" href="/" variant="contained" size="small" style={{ margin: "0 1rem" }}>
+              <Button component="a" href="/" variant="contained" size="small" style={{ margin: '0 1rem' }}>
                 Aller au village
               </Button>
             </Link>

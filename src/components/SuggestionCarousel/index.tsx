@@ -1,3 +1,3 @@
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
-export const SuggestionCarousel = dynamic(() => import("./SuggestionCarousel"), { ssr: false });
+export const SuggestionCarousel = dynamic(() => import('./SuggestionCarousel'), { ssr: false });

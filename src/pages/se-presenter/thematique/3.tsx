@@ -1,16 +1,16 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import Backdrop from "@material-ui/core/Backdrop";
-import Button from "@material-ui/core/Button";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from '@material-ui/core/Backdrop';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { Base } from "src/components/Base";
-import { Steps } from "src/components/Steps";
-import { SimpleActivityPreview } from "src/components/activityEditor";
-import { BackButton } from "src/components/buttons/BackButton";
-import { ActivityContext } from "src/contexts/activityContext";
+import { Base } from 'src/components/Base';
+import { Steps } from 'src/components/Steps';
+import { SimpleActivityPreview } from 'src/components/activityEditor';
+import { BackButton } from 'src/components/buttons/BackButton';
+import { ActivityContext } from 'src/contexts/activityContext';
 
 const PresentationStep3: React.FC = () => {
   const router = useRouter();
@@ -21,8 +21,8 @@ const PresentationStep3: React.FC = () => {
   const isEdit = activity !== null && activity.id !== 0;
 
   React.useEffect(() => {
-    if ((data === null || !("theme" in data) || data.theme === -1) && !("activity-id" in router.query)) {
-      router.push("/");
+    if ((data === null || !('theme' in data) || data.theme === -1) && !('activity-id' in router.query)) {
+      router.push('/');
     }
   }, [data, router]);
 
@@ -30,30 +30,30 @@ const PresentationStep3: React.FC = () => {
     setIsLoading(true);
     const success = await save();
     if (success) {
-      router.push("/");
+      router.push('/');
     }
     setIsLoading(false);
   };
 
-  if (data === null || !("theme" in data) || data.theme === -1) {
+  if (data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
   return (
     <Base>
-      <div style={{ width: "100%", padding: "0.5rem 1rem 1rem 1rem" }}>
-        <BackButton href="/se-presenter/thematique/2" label={isEdit ? "Modifier" : "Retour"} />
-        <Steps steps={["Choix du thème", "Présentation", "Prévisualisation"]} activeStep={2} />
-        <div style={{ margin: "0 auto 1rem auto", width: "100%", maxWidth: "900px" }}>
-          <h1>Pré-visualisez votre présentation{!isEdit && " et publiez la"}</h1>
-          <p className="text" style={{ fontSize: "1.1rem" }}>
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <BackButton href="/se-presenter/thematique/2" label={isEdit ? 'Modifier' : 'Retour'} />
+        <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={2} />
+        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
+          <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez la'}</h1>
+          <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre présentation.
             {isEdit
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : " Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !"}
+              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
-            <div style={{ width: "100%", display: "flex", justifyContent: "space-between", margin: "1rem 0" }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
               <Link href="/se-presenter/thematique/2">
                 <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/2">
                   {"Modifier à l'étape précédente"}
@@ -64,7 +64,7 @@ const PresentationStep3: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <div style={{ width: "100%", textAlign: "right", margin: "1rem 0" }}>
+            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
               <Button variant="outlined" color="primary" onClick={onPublish}>
                 Publier
               </Button>
@@ -73,7 +73,7 @@ const PresentationStep3: React.FC = () => {
           <SimpleActivityPreview />
         </div>
       </div>
-      <Backdrop style={{ zIndex: 2000, color: "white" }} open={isLoading}>
+      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>

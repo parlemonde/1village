@@ -1,20 +1,20 @@
-import React from "react";
+import React from 'react';
 
-import { withStyles, Theme } from "@material-ui/core/styles";
-import FormatBoldIcon from "@material-ui/icons/FormatBold";
-import FormatItalicIcon from "@material-ui/icons/FormatItalic";
-import FormatUnderlinedIcon from "@material-ui/icons/FormatUnderlined";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import ToggleButton from "@material-ui/lab/ToggleButton";
+import { withStyles, Theme } from '@material-ui/core/styles';
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 
 const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
   grouped: {
     margin: theme.spacing(0.5),
-    border: "none",
-    "&:not(:first-child)": {
+    border: 'none',
+    '&:not(:first-child)': {
       borderRadius: theme.shape.borderRadius,
     },
-    "&:first-child": {
+    '&:first-child': {
       borderRadius: theme.shape.borderRadius,
     },
   },
@@ -26,15 +26,15 @@ type InlineProps = {
     ITALIC: boolean;
     UNDERLINE: boolean;
   };
-  onChange(type: "BOLD" | "ITALIC" | "UNDERLINE", value: boolean): void;
+  onChange(type: 'BOLD' | 'ITALIC' | 'UNDERLINE', value: boolean): void;
 };
 
 export const InlineButtons: React.FC<InlineProps> = ({ value, onChange }: InlineProps) => {
   const formats = React.useMemo(
     () =>
       Object.keys(value)
-        .filter((key) => ["BOLD", "ITALIC", "UNDERLINE"].includes(key))
-        .filter((key) => value[key as "BOLD" | "ITALIC" | "UNDERLINE"]),
+        .filter((key) => ['BOLD', 'ITALIC', 'UNDERLINE'].includes(key))
+        .filter((key) => value[key as 'BOLD' | 'ITALIC' | 'UNDERLINE']),
     [value],
   );
 
@@ -45,7 +45,7 @@ export const InlineButtons: React.FC<InlineProps> = ({ value, onChange }: Inline
         aria-label="bold"
         onMouseDown={(event: React.MouseEvent<HTMLElement>) => {
           event.preventDefault();
-          onChange("BOLD", !value.BOLD);
+          onChange('BOLD', !value.BOLD);
         }}
       >
         <FormatBoldIcon />
@@ -55,7 +55,7 @@ export const InlineButtons: React.FC<InlineProps> = ({ value, onChange }: Inline
         aria-label="italic"
         onMouseDown={(event: React.MouseEvent<HTMLElement>) => {
           event.preventDefault();
-          onChange("ITALIC", !value.ITALIC);
+          onChange('ITALIC', !value.ITALIC);
         }}
       >
         <FormatItalicIcon />
@@ -65,7 +65,7 @@ export const InlineButtons: React.FC<InlineProps> = ({ value, onChange }: Inline
         aria-label="underline"
         onMouseDown={(event: React.MouseEvent<HTMLElement>) => {
           event.preventDefault();
-          onChange("UNDERLINE", !value.UNDERLINE);
+          onChange('UNDERLINE', !value.UNDERLINE);
         }}
       >
         <FormatUnderlinedIcon />

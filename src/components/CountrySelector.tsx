@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { useCountries } from "src/services/useCountries";
-import { countryToFlag } from "src/utils";
-import { Country } from "types/country.type";
+import { useCountries } from 'src/services/useCountries';
+import { countryToFlag } from 'src/utils';
+import { Country } from 'types/country.type';
 
 type CountryOption = Country & {
   firstLetter: string;
@@ -19,7 +19,7 @@ interface CountrySelectorProps {
   style?: React.CSSProperties;
 }
 
-export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value = "", onChange, filterCountries, style }: CountrySelectorProps) => {
+export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value = '', onChange, filterCountries, style }: CountrySelectorProps) => {
   const { countries } = useCountries();
   const options: CountryOption[] = React.useMemo(
     () =>
@@ -28,7 +28,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value =
         .map((option) => {
           const firstLetter = option.name[0].toUpperCase();
           return {
-            firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
             ...option,
           };
         }),
@@ -38,7 +38,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value =
 
   const prevFilter = React.useRef<string[]>(filterCountries);
   React.useEffect(() => {
-    const shouldUpdateValue = (prevFilter.current || []).join(",") !== (filterCountries || []).join(",");
+    const shouldUpdateValue = (prevFilter.current || []).join(',') !== (filterCountries || []).join(',');
     if (shouldUpdateValue) {
       prevFilter.current = filterCountries;
     }
@@ -47,12 +47,12 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value =
       const newOption = options.find((o) => o.isoCode.toLowerCase() === value.toLowerCase()) || null;
       setOption(newOption);
       if (shouldUpdateValue && onChange) {
-        onChange(newOption.isoCode || "");
+        onChange(newOption.isoCode || '');
       }
     } else {
       setOption(null);
       if (shouldUpdateValue && onChange) {
-        onChange("");
+        onChange('');
       }
     }
   }, [options, value, countries, filterCountries, onChange]);
@@ -63,7 +63,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value =
         setOption(newOption);
       }
       if (onChange) {
-        onChange(newOption ? newOption.isoCode : "");
+        onChange(newOption ? newOption.isoCode : '');
       }
     },
     [value, onChange],
@@ -80,7 +80,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value =
       style={style}
       renderOption={(option) => (
         <>
-          <span style={{ marginRight: "0.6rem" }}>{countryToFlag(option.isoCode)}</span>
+          <span style={{ marginRight: '0.6rem' }}>{countryToFlag(option.isoCode)}</span>
           {option.name}
         </>
       )}
@@ -89,7 +89,7 @@ export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value =
           {...params}
           inputProps={{
             ...params.inputProps,
-            autoComplete: "off", // disable autocomplete and autofill
+            autoComplete: 'off', // disable autocomplete and autofill
           }}
           label={label}
           type="search"

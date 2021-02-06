@@ -1,18 +1,18 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import MaterialLink from "@material-ui/core/Link";
-import { Button, TextField } from "@material-ui/core";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import MaterialLink from '@material-ui/core/Link';
+import { Button, TextField } from '@material-ui/core';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-import { CountrySelector } from "src/components/CountrySelector";
-import { AdminTile } from "src/components/admin/AdminTile";
-import { UserContext } from "src/contexts/userContext";
-import { useVillageRequests } from "src/services/useVillages";
-import { getQueryString } from "src/utils";
-import type { Village } from "types/village.type";
+import { CountrySelector } from 'src/components/CountrySelector';
+import { AdminTile } from 'src/components/admin/AdminTile';
+import { UserContext } from 'src/contexts/userContext';
+import { useVillageRequests } from 'src/services/useVillages';
+import { getQueryString } from 'src/utils';
+import type { Village } from 'types/village.type';
 
 const EditVillage: React.FC = () => {
   const router = useRouter();
@@ -23,11 +23,11 @@ const EditVillage: React.FC = () => {
 
   const getVillage = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
-      method: "GET",
+      method: 'GET',
       url: `/villages/${villageId}`,
     });
     if (response.error) {
-      router.push("/admin/villages");
+      router.push('/admin/villages');
     } else {
       setVillage(response.data);
     }
@@ -44,7 +44,7 @@ const EditVillage: React.FC = () => {
     }
     const result = await editVillage(village);
     if (result !== null) {
-      router.push("/admin/villages");
+      router.push('/admin/villages');
     }
   };
 
@@ -54,7 +54,7 @@ const EditVillage: React.FC = () => {
 
   return (
     <div className="admin--container">
-      <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: "1rem" }}>
+      <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
         <Link href="/admin/villages">
           <MaterialLink href="/admin/villages">
             <h1>Villages</h1>
@@ -63,7 +63,7 @@ const EditVillage: React.FC = () => {
         <h1>{village.name}</h1>
       </Breadcrumbs>
       <AdminTile title="Modifier un village">
-        <form autoComplete="off" style={{ width: "100%", padding: "1rem" }} onSubmit={onSubmit}>
+        <form autoComplete="off" style={{ width: '100%', padding: '1rem' }} onSubmit={onSubmit}>
           <TextField
             className="full-width"
             name="vl-n"
@@ -73,7 +73,7 @@ const EditVillage: React.FC = () => {
             onChange={(event) => {
               setVillage((v) => ({ ...v, name: event.target.value }));
             }}
-            style={{ marginBottom: "1rem" }}
+            style={{ marginBottom: '1rem' }}
           />
           <CountrySelector
             value={village.countries[0]}
@@ -81,7 +81,7 @@ const EditVillage: React.FC = () => {
               setVillage((v) => ({ ...v, countries: [newValue, village.countries[1]] }));
             }}
             label="Pays 1"
-            style={{ width: "100%", marginBottom: "1rem" }}
+            style={{ width: '100%', marginBottom: '1rem' }}
           />
           <CountrySelector
             value={village.countries[1]}
@@ -89,9 +89,9 @@ const EditVillage: React.FC = () => {
               setVillage((v) => ({ ...v, countries: [village.countries[0], newValue] }));
             }}
             label="Pays 2"
-            style={{ width: "100%", marginBottom: "1rem" }}
+            style={{ width: '100%', marginBottom: '1rem' }}
           />
-          <div className="text-center" style={{ margin: "2rem 0 1rem 0" }}>
+          <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>
             <Button color="primary" variant="contained" type="submit">
               Mettre à jour le village
             </Button>
@@ -99,7 +99,7 @@ const EditVillage: React.FC = () => {
         </form>
       </AdminTile>
       <Link href="/admin/villages">
-        <Button variant="outlined" style={{ margin: "1rem 0" }} component="a" href="/admin/villages">
+        <Button variant="outlined" style={{ margin: '1rem 0' }} component="a" href="/admin/villages">
           Retour
         </Button>
       </Link>

@@ -1,5 +1,5 @@
-import className from "classnames";
-import React from "react";
+import className from 'classnames';
+import React from 'react';
 
 interface BaseProps {
   children: React.ReactNode | React.ReactNodeArray;
@@ -14,17 +14,17 @@ export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader, style
       {subHeader && <div className="sub-header">{subHeader}</div>}
       {rightNav && (
         <aside
-          className={className("right-navigation", {
-            "right-navigation--smaller": !!subHeader,
+          className={className('right-navigation', {
+            'right-navigation--smaller': !!subHeader,
           })}
         >
           <div>{rightNav}</div>
         </aside>
       )}
       <div
-        className={className("app-content with-shadow", {
-          "app-content--narrower": !!rightNav,
-          "app-content--smaller": !!subHeader,
+        className={className('app-content with-shadow', {
+          'app-content--narrower': !!rightNav,
+          'app-content--smaller': !!subHeader,
         })}
         style={style}
       >

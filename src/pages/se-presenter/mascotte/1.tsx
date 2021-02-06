@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { Base } from "src/components/Base";
+import { Base } from 'src/components/Base';
 
 const MascotteStep1: React.FC = () => {
   return (

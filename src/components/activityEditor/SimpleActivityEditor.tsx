@@ -1,13 +1,13 @@
-import { ReactSortable } from "react-sortablejs";
-import React from "react";
+import { ReactSortable } from 'react-sortablejs';
+import React from 'react';
 
-import { ActivityContext } from "src/contexts/activityContext";
+import { ActivityContext } from 'src/contexts/activityContext';
 
-import { AddContentCard } from "./AddContentCard";
-import type { EditorContent } from "./editing.types";
-import { ImageEditor } from "./editors/ImageEditor";
-import { TextEditor } from "./editors/TextEditor";
-import { VideoEditor } from "./editors/VideoEditor";
+import { AddContentCard } from './AddContentCard';
+import type { EditorContent } from './editing.types';
+import { ImageEditor } from './editors/ImageEditor';
+import { TextEditor } from './editors/TextEditor';
+import { VideoEditor } from './editors/VideoEditor';
 
 const SimpleActivityEditor: React.FC = () => {
   const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
@@ -26,7 +26,7 @@ const SimpleActivityEditor: React.FC = () => {
     <div>
       <ReactSortable list={activity.processedContent} setList={setContentOrder} handle=".drag-handle">
         {activity.processedContent.map((p, index) => {
-          if (p.type === "text") {
+          if (p.type === 'text') {
             return (
               <TextEditor
                 key={p.id}
@@ -39,7 +39,7 @@ const SimpleActivityEditor: React.FC = () => {
               />
             );
           }
-          if (p.type === "image") {
+          if (p.type === 'image') {
             return (
               <ImageEditor
                 key={p.id}
@@ -52,7 +52,7 @@ const SimpleActivityEditor: React.FC = () => {
               />
             );
           }
-          if (p.type === "video") {
+          if (p.type === 'video') {
             return (
               <VideoEditor
                 key={p.id}
@@ -68,7 +68,7 @@ const SimpleActivityEditor: React.FC = () => {
           return null;
         })}
       </ReactSortable>
-      <div className="text-center" style={{ margin: "2rem 0 1rem 0" }}>
+      <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>
         <AddContentCard addContent={addContent} />
       </div>
     </div>

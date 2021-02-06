@@ -1,29 +1,29 @@
-import ReactPlayer from "react-player";
-import React from "react";
+import ReactPlayer from 'react-player';
+import React from 'react';
 
-import { Button, Divider, TextField, Tooltip } from "@material-ui/core";
-import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { Alert } from "@material-ui/lab";
+import { Button, Divider, TextField, Tooltip } from '@material-ui/core';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { Alert } from '@material-ui/lab';
 
-import { Modal } from "src/components/Modal";
-import { fontDetailColor, bgPage } from "src/styles/variables.const";
-import { primaryColor } from "src/styles/variables.const";
-import { isValidHttpUrl } from "src/utils";
+import { Modal } from 'src/components/Modal';
+import { fontDetailColor, bgPage } from 'src/styles/variables.const';
+import { primaryColor } from 'src/styles/variables.const';
+import { isValidHttpUrl } from 'src/utils';
 
-import type { EditorProps } from "../editing.types";
+import type { EditorProps } from '../editing.types';
 
 // import { Steps } from "src/components/Steps";
-import { EditorContainer } from "./EditorContainer";
+import { EditorContainer } from './EditorContainer';
 
-export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [videoUrl, setVideoUrl] = React.useState(value);
-  const [tempVideoUrl, setTempVideoUrl] = React.useState("");
+  const [tempVideoUrl, setTempVideoUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
-    url: "",
+    url: '',
     mode: 0,
   }); // 0 no preview, 1: preview, 2: error
-  const [currentStep, setCurrentStep] = React.useState(value === "" ? 1 : 0);
+  const [currentStep, setCurrentStep] = React.useState(value === '' ? 1 : 0);
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
 
@@ -45,14 +45,14 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
     } else {
       setPreview({
         mode: 2,
-        url: "",
+        url: '',
       });
     }
   };
   const resetPreview = () => {
     setPreview({
       mode: 0,
-      url: "",
+      url: '',
     });
   };
 
@@ -77,7 +77,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
       });
     } else {
       setFile(null);
-      setTempVideoUrl("");
+      setTempVideoUrl('');
       resetPreview();
     }
   };
@@ -85,26 +85,26 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
   return (
     <EditorContainer
       deleteButtonProps={{
-        confirmLabel: "Voulez-vous vraiment supprimer cette vidéo ?",
-        confirmTitle: "Supprimer",
+        confirmLabel: 'Voulez-vous vraiment supprimer cette vidéo ?',
+        confirmTitle: 'Supprimer',
         onDelete,
       }}
       className="image-editor"
     >
       {videoUrl && (
         <>
-          <div className="text-center" style={{ height: "9rem", borderRight: `1px dashed ${primaryColor}` }}>
+          <div className="text-center" style={{ height: '9rem', borderRight: `1px dashed ${primaryColor}` }}>
             <div
               style={{
-                display: "inline-block",
-                width: "16rem",
-                height: "9rem",
+                display: 'inline-block',
+                width: '16rem',
+                height: '9rem',
               }}
             >
               <ReactPlayer width="100%" height="100%" light url={videoUrl} controls />
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Button
               variant="outlined"
               size="small"
@@ -113,7 +113,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
                 setCurrentStep(1);
               }}
             >
-              {"Changer de vidéo"}
+              {'Changer de vidéo'}
             </Button>
           </div>
         </>
@@ -139,16 +139,16 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
         ariaLabelledBy={`video-edit-${id}`}
         ariaDescribedBy={`video-edit-${id}-desc`}
       >
-        <div style={{ padding: "0.5rem" }}>
+        <div style={{ padding: '0.5rem' }}>
           <Alert icon={<ArrowRightAltIcon />} severity="info">
-            Créer une vidéo sur{" "}
+            Créer une vidéo sur{' '}
             <a className="text text--bold" href="https://clap.parlemonde.org" target="_blank" rel="noreferrer">
               Clap!
             </a>
           </Alert>
         </div>
-        <div style={{ display: "flex", width: "100%", height: "20rem" }}>
-          <div style={{ flex: 1, height: "100%", padding: "4rem 0.5rem" }}>
+        <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
+          <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem' }}>
             <div id={`image-edit-${id}-desc`}>
               {/* <Steps steps={["Choisir la vidéo", "Paramètres"]} activeStep={0} /> */}
               {currentStep === 1 && (
@@ -158,7 +158,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
                     variant="outlined"
                     color="secondary"
                     fullWidth
-                    value={file === null ? tempVideoUrl : ""}
+                    value={file === null ? tempVideoUrl : ''}
                     onBlur={() => {
                       if (isValidHttpUrl(tempVideoUrl)) {
                         displayPreview();
@@ -171,15 +171,15 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
                         setFile(null);
                         resetPreview();
                         if (inputFile.current) {
-                          inputFile.current.value = "";
+                          inputFile.current.value = '';
                         }
                       }
                       setTempVideoUrl(event.target.value);
                     }}
                   />
-                  <Divider style={{ marginTop: "2rem" }} />
-                  <div className="text-center" style={{ margin: "-0.8rem 0 1.5rem 0" }}>
-                    <span style={{ backgroundColor: "white", padding: "0 0.5rem", color: fontDetailColor, fontSize: "1.1rem" }}>Ou</span>
+                  <Divider style={{ marginTop: '2rem' }} />
+                  <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
+                    <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
                   </div>
                   <div className="text-center">
                     <Tooltip title="Bientôt disponible !" aria-label="available soon">
@@ -190,7 +190,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
                           variant="outlined"
                           color="secondary"
                           startIcon={<CloudUploadIcon />}
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: 'pointer' }}
                         >
                           <>
                             Importer
@@ -199,7 +199,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
                               type="file"
                               multiple={false}
                               accept="video/*"
-                              style={{ display: "none" }}
+                              style={{ display: 'none' }}
                               onChange={onFileSelect}
                             />
                           </>
@@ -216,17 +216,17 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = "", onChange = 
               )}
             </div>
           </div>
-          <div style={{ flex: "1", padding: "0.5rem" }}>
-            <div style={{ width: "100%", height: "100%", backgroundColor: bgPage, padding: "0.5rem" }}>
-              <div className="text-center text text--bold" style={{ height: "10%" }}>
+          <div style={{ flex: '1', padding: '0.5rem' }}>
+            <div style={{ width: '100%', height: '100%', backgroundColor: bgPage, padding: '0.5rem' }}>
+              <div className="text-center text text--bold" style={{ height: '10%' }}>
                 Aperçu
               </div>
               {preview.mode === 1 && (
-                <div style={{ width: "100%", height: "90%" }}>
+                <div style={{ width: '100%', height: '90%' }}>
                   <ReactPlayer width="100%" height="100%" light url={preview.url} controls />
                 </div>
               )}
-              {preview.mode === 2 && <Alert severity="error">{"Erreur: impossible de lire cette vidéo."}</Alert>}
+              {preview.mode === 2 && <Alert severity="error">{'Erreur: impossible de lire cette vidéo.'}</Alert>}
             </div>
           </div>
         </div>

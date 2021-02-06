@@ -1,10 +1,10 @@
-import { useQuery, QueryFunction } from "react-query";
-import React from "react";
+import { useQuery, QueryFunction } from 'react-query';
+import React from 'react';
 
-import { ExtendedActivity, getExtendedActivity } from "src/contexts/activityContext";
-import { UserContext } from "src/contexts/userContext";
-import { VillageContext } from "src/contexts/villageContext";
-import { serializeToQueryUrl } from "src/utils";
+import { ExtendedActivity, getExtendedActivity } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { serializeToQueryUrl } from 'src/utils';
 
 export const useActivities = (): { activities: ExtendedActivity[] } => {
   const { village } = React.useContext(VillageContext);
@@ -17,7 +17,7 @@ export const useActivities = (): { activities: ExtendedActivity[] } => {
       return [];
     }
     const response = await axiosLoggedRequest({
-      method: "GET",
+      method: 'GET',
       url: `/activities${serializeToQueryUrl({ villageId })}`,
     });
     if (response.error) {
@@ -25,7 +25,7 @@ export const useActivities = (): { activities: ExtendedActivity[] } => {
     }
     return response.data.map(getExtendedActivity);
   }, [villageId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(["activities", { villageId }], getActivities);
+  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(['activities', { villageId }], getActivities);
 
   return {
     activities: isLoading || error ? [] : data,

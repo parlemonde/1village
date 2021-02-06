@@ -1,27 +1,27 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
-import IconButton from "@material-ui/core/IconButton";
-import MaterialLink from "@material-ui/core/Link";
-import NoSsr from "@material-ui/core/NoSsr";
-import Tooltip from "@material-ui/core/Tooltip";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import MaterialLink from '@material-ui/core/Link';
+import NoSsr from '@material-ui/core/NoSsr';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
-import { Modal } from "src/components/Modal";
-import { AdminTable } from "src/components/admin/AdminTable";
-import { AdminTile } from "src/components/admin/AdminTile";
-import { UserContext } from "src/contexts/userContext";
-import { useCountries } from "src/services/useCountries";
-import { useUsers, useUserRequests } from "src/services/useUsers";
-import { useVillages } from "src/services/useVillages";
-import { countryToFlag } from "src/utils";
-import { userTypeNames } from "types/user.type";
-import type { Village } from "types/village.type";
+import { Modal } from 'src/components/Modal';
+import { AdminTable } from 'src/components/admin/AdminTable';
+import { AdminTile } from 'src/components/admin/AdminTile';
+import { UserContext } from 'src/contexts/userContext';
+import { useCountries } from 'src/services/useCountries';
+import { useUsers, useUserRequests } from 'src/services/useUsers';
+import { useVillages } from 'src/services/useVillages';
+import { countryToFlag } from 'src/utils';
+import { userTypeNames } from 'types/user.type';
+import type { Village } from 'types/village.type';
 
 const Users: React.FC = () => {
   const router = useRouter();
@@ -71,7 +71,7 @@ const Users: React.FC = () => {
     <div className="admin--container">
       <Link href="/admin/users">
         <MaterialLink href="/admin/users">
-          <h1 style={{ marginBottom: "1rem" }}>Utilisateurs</h1>
+          <h1 style={{ marginBottom: '1rem' }}>Utilisateurs</h1>
         </MaterialLink>
       </Link>
       <AdminTile
@@ -90,26 +90,26 @@ const Users: React.FC = () => {
             id: u.id,
             pseudo: u.pseudo,
             email: u.email,
-            school: u.school || <span style={{ color: "grey" }}>Non renseignée</span>,
+            school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
             country: u.countryCode ? (
-              `${countryToFlag(u.countryCode)} ${countryMap[u.countryCode.toUpperCase()] || ""}`
+              `${countryToFlag(u.countryCode)} ${countryMap[u.countryCode.toUpperCase()] || ''}`
             ) : (
-              <span style={{ color: "grey" }}>Non renseigné</span>
+              <span style={{ color: 'grey' }}>Non renseigné</span>
             ),
             village: u.villageId ? (
-              villageMap[u.villageId]?.name || <span style={{ color: "grey" }}>Non assigné</span>
+              villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
             ) : (
-              <span style={{ color: "grey" }}>Non assigné</span>
+              <span style={{ color: 'grey' }}>Non assigné</span>
             ),
             type: <Chip size="small" label={userTypeNames[u.type]} />,
           }))}
           columns={[
-            { key: "pseudo", label: "Pseudo", sortable: true },
-            { key: "email", label: "Email", sortable: true },
-            { key: "school", label: "École", sortable: true },
-            { key: "village", label: "Village", sortable: true },
-            { key: "country", label: "Pays", sortable: true },
-            { key: "type", label: "Rôle", sortable: true },
+            { key: 'pseudo', label: 'Pseudo', sortable: true },
+            { key: 'email', label: 'Email', sortable: true },
+            { key: 'school', label: 'École', sortable: true },
+            { key: 'village', label: 'Village', sortable: true },
+            { key: 'country', label: 'Pays', sortable: true },
+            { key: 'type', label: 'Rôle', sortable: true },
           ]}
           actions={actions}
         />

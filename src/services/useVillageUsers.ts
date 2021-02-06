@@ -1,10 +1,10 @@
-import { useQuery, QueryFunction } from "react-query";
-import React from "react";
+import { useQuery, QueryFunction } from 'react-query';
+import React from 'react';
 
-import { UserContext } from "src/contexts/userContext";
-import { VillageContext } from "src/contexts/villageContext";
-import { serializeToQueryUrl } from "src/utils";
-import type { User } from "types/user.type";
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { serializeToQueryUrl } from 'src/utils';
+import type { User } from 'types/user.type';
 
 export const useVillageUsers = (): { users: User[] } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
@@ -17,7 +17,7 @@ export const useVillageUsers = (): { users: User[] } => {
       return [];
     }
     const response = await axiosLoggedRequest({
-      method: "GET",
+      method: 'GET',
       url: `/users${serializeToQueryUrl({ villageId })}`,
     });
     if (response.error) {
@@ -26,7 +26,7 @@ export const useVillageUsers = (): { users: User[] } => {
     return response.data;
   }, [villageId, axiosLoggedRequest]);
 
-  const { data, isLoading, error } = useQuery<User[], unknown>(["village-users", { villageId }], getUsers);
+  const { data, isLoading, error } = useQuery<User[], unknown>(['village-users', { villageId }], getUsers);
 
   return {
     users: isLoading || error ? [] : data,

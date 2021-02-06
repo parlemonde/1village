@@ -1,17 +1,17 @@
-import { useRouter } from "next/router";
-import React from "react";
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
-import Toolbar from "@material-ui/core/Toolbar";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import GroupIcon from "@material-ui/icons/Group";
-import InsertChartOutlinedOutlinedIcon from "@material-ui/icons/InsertChartOutlinedOutlined";
-import LanguageIcon from "@material-ui/icons/Language";
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Toolbar from '@material-ui/core/Toolbar';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import GroupIcon from '@material-ui/icons/Group';
+import InsertChartOutlinedOutlinedIcon from '@material-ui/icons/InsertChartOutlinedOutlined';
+import LanguageIcon from '@material-ui/icons/Language';
 
 const drawerWidth = 220;
 
@@ -25,12 +25,12 @@ const useStyles = makeStyles(() =>
       width: drawerWidth,
     },
     drawerContainer: {
-      overflow: "auto",
+      overflow: 'auto',
     },
   }),
 );
 
-const tabs = ["villages", "users", "stats"];
+const tabs = ['villages', 'users', 'stats'];
 
 export const AdminNavigation: React.FC = () => {
   const classes = useStyles();
@@ -38,7 +38,7 @@ export const AdminNavigation: React.FC = () => {
   const [selectedTab, setSelectedTab] = React.useState(-1);
 
   React.useEffect(() => {
-    const index = tabs.findIndex((tab) => tab === router.pathname.split("/")[2]);
+    const index = tabs.findIndex((tab) => tab === router.pathname.split('/')[2]);
     setSelectedTab(index);
   }, [router.pathname]);
 
@@ -57,13 +57,13 @@ export const AdminNavigation: React.FC = () => {
       <Toolbar />
       <div className={classes.drawerContainer}>
         <List>
-          <ListItem button selected={selectedTab === 0} onClick={goToPath("/admin/villages")}>
+          <ListItem button selected={selectedTab === 0} onClick={goToPath('/admin/villages')}>
             <ListItemIcon>
               <LanguageIcon />
             </ListItemIcon>
             <ListItemText primary="Villages" />
           </ListItem>
-          <ListItem button selected={selectedTab === 1} onClick={goToPath("/admin/users")}>
+          <ListItem button selected={selectedTab === 1} onClick={goToPath('/admin/users')}>
             <ListItemIcon>
               <GroupIcon />
             </ListItemIcon>
@@ -72,7 +72,7 @@ export const AdminNavigation: React.FC = () => {
         </List>
         <Divider />
         <List>
-          <ListItem button selected={selectedTab === 2} onClick={goToPath("/admin/stats")}>
+          <ListItem button selected={selectedTab === 2} onClick={goToPath('/admin/stats')}>
             <ListItemIcon>
               <InsertChartOutlinedOutlinedIcon />
             </ListItemIcon>

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import TextField from "@material-ui/core/TextField";
+import TextField from '@material-ui/core/TextField';
 
 interface PanelInputProps {
   value: string;
@@ -18,19 +18,19 @@ interface PanelInputProps {
 
 export const PanelInput: React.FC<PanelInputProps> = ({
   value,
-  defaultValue = "",
+  defaultValue = '',
   label,
-  placeholder = "",
+  placeholder = '',
   isEditMode = true,
   errorMsg,
   helperText,
-  type = "text",
+  type = 'text',
   hasError = false,
   onChange = () => {},
   onBlur = () => {},
 }: PanelInputProps) => {
   return (
-    <div className="flex-center" style={{ margin: "0.5rem" }}>
+    <div className="flex-center" style={{ margin: '0.5rem' }}>
       <label className="text text--bold" style={{ flexShrink: 0 }}>
         {label}
       </label>
@@ -51,7 +51,7 @@ export const PanelInput: React.FC<PanelInputProps> = ({
           helperText={hasError ? errorMsg : helperText}
         />
       ) : (
-        <span style={{ marginLeft: "0.5rem" }}>{value || defaultValue}</span>
+        <span style={{ marginLeft: '0.5rem' }}>{value || defaultValue}</span>
       )}
     </div>
   );

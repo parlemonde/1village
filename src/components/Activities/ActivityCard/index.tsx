@@ -1,3 +1,3 @@
-import { ActivityCard } from "./ActivityCard";
+import { ActivityCard } from './ActivityCard';
 
 export { ActivityCard };

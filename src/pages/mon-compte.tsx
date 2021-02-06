@@ -1,37 +1,37 @@
-import { useSnackbar } from "notistack";
-import React from "react";
+import { useSnackbar } from 'notistack';
+import React from 'react';
 
-import Backdrop from "@material-ui/core/Backdrop";
-import Button from "@material-ui/core/Button";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import NoSsr from "@material-ui/core/NoSsr";
-import { TextField } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import Backdrop from '@material-ui/core/Backdrop';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import NoSsr from '@material-ui/core/NoSsr';
+import { TextField } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
-import { Base } from "src/components/Base";
-import { Modal } from "src/components/Modal";
-import { EditButton } from "src/components/buttons/EditButton";
-import { HelpButton } from "src/components/buttons/HelpButton";
-import { QuestionButton } from "src/components/buttons/QuestionButton";
-import { RedButton } from "src/components/buttons/RedButton";
-import { PanelInput } from "src/components/mon-compte/PanelInput";
-import { UserContext } from "src/contexts/userContext";
-import { helpColor } from "src/styles/variables.const";
-import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from "src/utils/accountChecks";
-import { ssoHostName } from "src/utils";
-import { getGravatarUrl } from "src/utils";
-import type { User } from "types/user.type";
+import { Base } from 'src/components/Base';
+import { Modal } from 'src/components/Modal';
+import { EditButton } from 'src/components/buttons/EditButton';
+import { HelpButton } from 'src/components/buttons/HelpButton';
+import { QuestionButton } from 'src/components/buttons/QuestionButton';
+import { RedButton } from 'src/components/buttons/RedButton';
+import { PanelInput } from 'src/components/mon-compte/PanelInput';
+import { UserContext } from 'src/contexts/userContext';
+import { helpColor } from 'src/styles/variables.const';
+import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
+import { ssoHostName } from 'src/utils';
+import { getGravatarUrl } from 'src/utils';
+import type { User } from 'types/user.type';
 
 const Presentation: React.FC = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User>(user);
   const [pwd, setPwd] = React.useState({
-    new: "",
-    confirmNew: "",
-    current: "",
+    new: '',
+    confirmNew: '',
+    current: '',
   });
-  const [deleteConfirm, setDeleteConfirm] = React.useState("");
+  const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
   const [errors, setErrors] = React.useState({
@@ -72,19 +72,19 @@ const Presentation: React.FC = () => {
       email: newUser.email,
     };
     const response = await axiosLoggedRequest({
-      method: "PUT",
+      method: 'PUT',
       url: `/users/${user.id}`,
       data: updatedValues,
     });
     if (response.error) {
       setNewUser(user);
-      enqueueSnackbar("Une erreur inconnue est survenue...", {
-        variant: "error",
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
       });
     } else {
       setUser({ ...user, ...updatedValues });
-      enqueueSnackbar("Compte mis à jour avec succès !", {
-        variant: "success",
+      enqueueSnackbar('Compte mis à jour avec succès !', {
+        variant: 'success',
       });
     }
     setIsLoading(false);
@@ -92,7 +92,7 @@ const Presentation: React.FC = () => {
   const updatePwd = async () => {
     setIsLoading(true);
     const response = await axiosLoggedRequest({
-      method: "PUT",
+      method: 'PUT',
       url: `/users/${user.id}/password`,
       data: {
         password: pwd.current,
@@ -101,12 +101,12 @@ const Presentation: React.FC = () => {
     });
     if (response.error) {
       setNewUser(user);
-      enqueueSnackbar("Une erreur inconnue est survenue...", {
-        variant: "error",
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
       });
     } else {
-      enqueueSnackbar("Mot de passe mis à jour avec succès !", {
-        variant: "success",
+      enqueueSnackbar('Mot de passe mis à jour avec succès !', {
+        variant: 'success',
       });
     }
     setIsLoading(false);
@@ -115,40 +115,40 @@ const Presentation: React.FC = () => {
   const deleteAccount = async () => {
     setIsLoading(true);
     const response = await axiosLoggedRequest({
-      method: "DELETE",
+      method: 'DELETE',
       url: `/users/${user.id}`,
     });
     if (response.error) {
-      enqueueSnackbar("Une erreur inconnue est survenue...", {
-        variant: "error",
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
       });
     } else {
       logout();
-      enqueueSnackbar("Compte supprimé avec succès", {
-        variant: "success",
+      enqueueSnackbar('Compte supprimé avec succès', {
+        variant: 'success',
       });
     }
     setIsLoading(false);
   };
 
-  const updateEditMode = (newEditMode: number, save: "user" | "pwd" | "delete" | null = null) => async () => {
-    if (save === "user") {
+  const updateEditMode = (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) => async () => {
+    if (save === 'user') {
       await checkEmailAndPseudo();
       if (errors.email || errors.pseudo) {
         return;
       }
       await updateUser();
-    } else if (save === "pwd") {
+    } else if (save === 'pwd') {
       checkPassword();
       if (errors.pwd || errors.pwdConfirm || pwd.new.length === 0 || pwd.confirmNew.length === 0) {
         return;
       }
       await updatePwd();
-    } else if (save === "delete") {
+    } else if (save === 'delete') {
       deleteAccount();
     } else {
       setNewUser(user);
-      setDeleteConfirm("");
+      setDeleteConfirm('');
     }
     setEditMode(newEditMode);
   };
@@ -160,18 +160,18 @@ const Presentation: React.FC = () => {
         <h2>Paramètres du profil</h2>
         <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
 
-        <div style={{ margin: "0.5rem" }}>
-          <label className="text text--bold" style={{ display: "block" }}>
+        <div style={{ margin: '0.5rem' }}>
+          <label className="text text--bold" style={{ display: 'block' }}>
             Photo de profil :
           </label>
-          <div style={{ display: "flex", alignItems: "flex-start", marginTop: "0.5rem" }}>
-            <img alt="Image de profil" src={getGravatarUrl(user.email)} width="50px" height="50px" style={{ borderRadius: "25px" }} />
+          <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
+            <img alt="Image de profil" src={getGravatarUrl(user.email)} width="50px" height="50px" style={{ borderRadius: '25px' }} />
           </div>
         </div>
 
         <PanelInput
           value={newUser.school}
-          defaultValue={"non renseignée"}
+          defaultValue={'non renseignée'}
           label="École :"
           placeholder="Nom de votre école"
           isEditMode={editMode === 0}
@@ -181,7 +181,7 @@ const Presentation: React.FC = () => {
         />
         <PanelInput
           value={newUser.level}
-          defaultValue={"non renseigné"}
+          defaultValue={'non renseigné'}
           label="Niveau de la classe :"
           placeholder="Niveau de votre classe"
           isEditMode={editMode === 0}
@@ -191,7 +191,7 @@ const Presentation: React.FC = () => {
         />
         <PanelInput
           value={newUser.teacherName}
-          defaultValue={"non renseigné"}
+          defaultValue={'non renseigné'}
           label="Nom du professeur :"
           placeholder="Nom du professeur"
           isEditMode={editMode === 0}
@@ -201,10 +201,10 @@ const Presentation: React.FC = () => {
         />
         {editMode === 0 && (
           <div className="text-center">
-            <Button size="small" variant="contained" style={{ margin: "0.5rem" }} onClick={updateEditMode(-1)}>
+            <Button size="small" variant="contained" style={{ margin: '0.5rem' }} onClick={updateEditMode(-1)}>
               Annuler
             </Button>
-            <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, "user")}>
+            <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
               Enregistrer
             </Button>
           </div>
@@ -221,14 +221,14 @@ const Presentation: React.FC = () => {
           )}
         </div>
         {editMode === 1 && (
-          <Alert severity="warning" style={{ margin: "0.5rem 0", backgroundColor: "white", border: `1px solid ${helpColor}` }}>
+          <Alert severity="warning" style={{ margin: '0.5rem 0', backgroundColor: 'white', border: `1px solid ${helpColor}` }}>
             <AlertTitle>Attention !</AlertTitle>
             Votre <strong>pseudo</strong> et votre <strong>email</strong> sont vos identifiants de connection.
           </Alert>
         )}
         <PanelInput
           value={newUser.pseudo}
-          defaultValue={""}
+          defaultValue={''}
           label="Pseudo de la classe :"
           placeholder="Pseudo de la classe"
           isEditMode={editMode === 1}
@@ -241,7 +241,7 @@ const Presentation: React.FC = () => {
         />
         <PanelInput
           value={newUser.email}
-          defaultValue={""}
+          defaultValue={''}
           label="Email du professeur :"
           placeholder="Email du professeur"
           isEditMode={editMode === 1}
@@ -254,17 +254,17 @@ const Presentation: React.FC = () => {
         />
         {user.accountRegistration !== 10 && (
           <>
-            <div style={{ margin: "1rem 0.5rem" }}>
+            <div style={{ margin: '1rem 0.5rem' }}>
               <Button variant="contained" color="secondary" size="small" onClick={updateEditMode(2)}>
                 Modifier le mot de passe
               </Button>
             </div>
             {editMode === 1 && (
               <div className="text-center">
-                <Button size="small" variant="contained" style={{ margin: "0.5rem" }} onClick={updateEditMode(-1)}>
+                <Button size="small" variant="contained" style={{ margin: '0.5rem' }} onClick={updateEditMode(-1)}>
                   Annuler
                 </Button>
-                <Button size="small" variant="contained" color="secondary" style={{ margin: "0.2rem" }} onClick={updateEditMode(-1, "user")}>
+                <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
                   Enregistrer
                 </Button>
               </div>
@@ -275,12 +275,12 @@ const Presentation: React.FC = () => {
 
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
-        <div style={{ margin: "1rem 0.5rem" }}>
+        <div style={{ margin: '1rem 0.5rem' }}>
           <Button variant="contained" color="secondary" size="small">
             Télécharger toutes mes données
           </Button>
         </div>
-        <div style={{ margin: "1rem 0.5rem" }}>
+        <div style={{ margin: '1rem 0.5rem' }}>
           <RedButton variant="contained" color="secondary" size="small" onClick={updateEditMode(3)}>
             Supprimer mon compte
           </RedButton>
@@ -292,7 +292,7 @@ const Presentation: React.FC = () => {
           open={editMode === 2}
           confirmLabel="Modifier"
           onClose={updateEditMode(-1)}
-          onConfirm={updateEditMode(-1, "pwd")}
+          onConfirm={updateEditMode(-1, 'pwd')}
           title="Changer de mot de passe"
           fullWidth
           maxWidth="sm"
@@ -317,11 +317,11 @@ const Presentation: React.FC = () => {
                 setPwd((p) => ({ ...p, new: event.target.value }));
               }}
               className="full-width"
-              style={{ marginTop: "0.75rem" }}
+              style={{ marginTop: '0.75rem' }}
               error={errors.pwd}
               helperText={
                 errors.pwd
-                  ? "Mot de passe trop faible. Il doit contenir au moins 8 charactères avec des lettres minuscules, majuscules et des chiffres."
+                  ? 'Mot de passe trop faible. Il doit contenir au moins 8 charactères avec des lettres minuscules, majuscules et des chiffres.'
                   : null
               }
               onBlur={checkPassword}
@@ -334,9 +334,9 @@ const Presentation: React.FC = () => {
                 setPwd((p) => ({ ...p, confirmNew: event.target.value }));
               }}
               className="full-width"
-              style={{ marginTop: "0.75rem" }}
+              style={{ marginTop: '0.75rem' }}
               error={errors.pwdConfirm}
-              helperText={errors.pwdConfirm ? "Mots de passe différents." : null}
+              helperText={errors.pwdConfirm ? 'Mots de passe différents.' : null}
               onBlur={checkPassword}
             />
           </div>
@@ -347,17 +347,17 @@ const Presentation: React.FC = () => {
           confirmLabel="Supprimer"
           error
           onClose={updateEditMode(-1)}
-          onConfirm={updateEditMode(-1, "delete")}
+          onConfirm={updateEditMode(-1, 'delete')}
           title="Supprimer mon compte"
           fullWidth
-          disabled={deleteConfirm.toLowerCase() !== "supprimer"}
+          disabled={deleteConfirm.toLowerCase() !== 'supprimer'}
           color="primary"
           maxWidth="sm"
           ariaLabelledBy="delete-user"
           ariaDescribedBy="delete-user-desc"
         >
           <div>
-            <Alert severity="error" style={{ marginBottom: "1rem" }}>
+            <Alert severity="error" style={{ marginBottom: '1rem' }}>
               Attention! Êtes-vous sur de vouloir supprimer votre compte ? Cette action est <strong>irréversible</strong>.
               <br />
               Pour supprimer votre compte, veuillez taper <strong>supprimer</strong> ci-dessous et cliquez sur supprimer.
@@ -375,13 +375,13 @@ const Presentation: React.FC = () => {
               }}
               className="full-width"
               error={true}
-              style={{ marginTop: "0.75rem" }}
+              style={{ marginTop: '0.75rem' }}
             />
           </div>
         </Modal>
       </NoSsr>
 
-      <Backdrop style={{ zIndex: 2000, color: "white" }} open={isLoading}>
+      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>

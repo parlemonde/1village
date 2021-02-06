@@ -1,20 +1,20 @@
-import Link from "next/link";
-import { useSnackbar } from "notistack";
-import React from "react";
+import Link from 'next/link';
+import { useSnackbar } from 'notistack';
+import React from 'react';
 
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
-import { Modal } from "src/components/Modal";
-import PelicoVacances from "src/svg/pelico/pelico_vacances.svg";
-import { UserType } from "types/user.type";
-import { Village } from "types/village.type";
+import { Modal } from 'src/components/Modal';
+import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
+import { UserType } from 'types/user.type';
+import { Village } from 'types/village.type';
 
-import { UserContext } from "./userContext";
+import { UserContext } from './userContext';
 
 interface VillageContextValue {
   village: Village | null;
@@ -39,7 +39,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
   const getVillage = React.useCallback(
     async (villageId: number) => {
       const response = await axiosLoggedRequest({
-        method: "GET",
+        method: 'GET',
         url: `/villages/${villageId}`,
       });
       if (response.error) {
@@ -51,8 +51,8 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
   );
   const getVillages = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
-      method: "GET",
-      url: "/villages",
+      method: 'GET',
+      url: '/villages',
     });
     if (response.error) {
       return setVillages([]);
@@ -75,7 +75,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
     if (user !== null && user.villageId) {
       userVillage = await getVillage(user.villageId);
     } else {
-      const previousSelectedVillageId = parseInt(window.sessionStorage.getItem("villageId"), 10) || null;
+      const previousSelectedVillageId = parseInt(window.sessionStorage.getItem('villageId'), 10) || null;
       if (previousSelectedVillageId !== null) {
         userVillage = await getVillage(previousSelectedVillageId);
       }
@@ -94,7 +94,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
 
   const onAskVillage = () => {
     enqueueSnackbar("Votre demande d'assignation à un village a bien été envoyé à un administrateur !", {
-      variant: "success",
+      variant: 'success',
     });
   };
 
@@ -124,7 +124,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
         onConfirm={() => {
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
-            window.sessionStorage.setItem("villageId", `${villages[selectedVillageIndex].id}`);
+            window.sessionStorage.setItem('villageId', `${villages[selectedVillageIndex].id}`);
           }
           setIsModalOpen(false);
         }}
@@ -149,7 +149,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
               <Select
                 labelId="select-village"
                 id="select-village-outlined"
-                value={selectedVillageIndex === -1 ? "" : selectedVillageIndex}
+                value={selectedVillageIndex === -1 ? '' : selectedVillageIndex}
                 onChange={(event) => {
                   setSelectedVillageIndex(event.target.value as number);
                 }}
@@ -164,7 +164,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
             </FormControl>
             {village === null && user.type >= UserType.ADMIN && (
               <>
-                <Divider style={{ margin: "1rem 0" }} />
+                <Divider style={{ margin: '1rem 0' }} />
                 <Link href="/admin/villages">
                   <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                     {"Aller à l'interface admin"}
@@ -188,12 +188,12 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
         onClose={logout}
         id="village-demande-modal"
       >
-        <div id="demande-village-desc" style={{ position: "relative" }}>
-          <PelicoVacances style={{ height: "6rem", width: "6rem", position: "absolute", top: "-0.5rem", left: "-4rem" }} />
-          <div style={{ width: "100%", padding: "1rem", textAlign: "center" }}>
+        <div id="demande-village-desc" style={{ position: 'relative' }}>
+          <PelicoVacances style={{ height: '6rem', width: '6rem', position: 'absolute', top: '-0.5rem', left: '-4rem' }} />
+          <div style={{ width: '100%', padding: '1rem', textAlign: 'center' }}>
             <h2>{"Mince, votre classe n'est pas dans un village !"}</h2>
-            <Button variant="contained" color="primary" size="small" style={{ margin: "1rem" }} onClick={onAskVillage}>
-              {"Demander à être assigné à un village"}
+            <Button variant="contained" color="primary" size="small" style={{ margin: '1rem' }} onClick={onAskVillage}>
+              {'Demander à être assigné à un village'}
             </Button>
           </div>
         </div>

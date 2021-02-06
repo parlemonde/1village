@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface KeepRatioProps {
   ratio: number;
@@ -10,18 +10,18 @@ interface KeepRatioProps {
 }
 
 export const KeepRatio: React.FC<KeepRatioProps> = ({
-  width = "100%",
-  maxWidth = "100%",
+  width = '100%',
+  maxWidth = '100%',
   minHeight = 0,
   ratio,
-  className = "",
+  className = '',
   children,
 }: KeepRatioProps) => {
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width, maxWidth }}>
-        <div style={{ width: "100%", paddingBottom: `${ratio * 100}%`, minHeight, position: "relative" }}>
-          <div className={className} style={{ position: "absolute", top: "0", left: "0", width: "100%", height: "100%" }}>
+        <div style={{ width: '100%', paddingBottom: `${ratio * 100}%`, minHeight, position: 'relative' }}>
+          <div className={className} style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
             {children}
           </div>
         </div>

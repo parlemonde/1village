@@ -1,20 +1,20 @@
-import md5 from "md5";
+import md5 from 'md5';
 
 /**
  * Returns a query string with the given parameters.
  */
 export function serializeToQueryUrl(obj: { [key: string]: string | number | boolean }): string {
   if (Object.keys(obj).length === 0) {
-    return "";
+    return '';
   }
   const str =
-    "?" +
+    '?' +
     Object.keys(obj)
       .reduce(function (a, k) {
-        a.push(k + "=" + encodeURIComponent(obj[k]));
+        a.push(k + '=' + encodeURIComponent(obj[k]));
         return a;
       }, [])
-      .join("&");
+      .join('&');
   return str;
 }
 
@@ -56,24 +56,24 @@ export function debounce<T extends (args: unknown | unknown[]) => unknown | unkn
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
 export function countryToFlag(isoCode: string): string {
-  return typeof String.fromCodePoint !== "undefined"
+  return typeof String.fromCodePoint !== 'undefined'
     ? isoCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
     : isoCode;
 }
 
-export const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || "";
-export const ssoHost = process.env.NEXT_PUBLIC_PLM_HOST || "";
-export const ssoHostName = ssoHost.replace(/(^\w+:|^)\/\//, "");
+export const clientId = process.env.NEXT_PUBLIC_CLIENT_ID || '';
+export const ssoHost = process.env.NEXT_PUBLIC_PLM_HOST || '';
+export const ssoHostName = ssoHost.replace(/(^\w+:|^)\/\//, '');
 
 /**
  * Returns a random token. Browser only!
  * @param length length of the returned token.
  */
 export function generateTemporaryToken(length: number = 40): string {
-  const validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const cryptoObj = !process.browser
     ? null
-    : window.crypto || "msCrypto" in window
+    : window.crypto || 'msCrypto' in window
     ? (window as Window & typeof globalThis & { msCrypto: Crypto }).msCrypto
     : null; // for IE 11
   if (!cryptoObj) {
@@ -82,7 +82,7 @@ export function generateTemporaryToken(length: number = 40): string {
       .map(function (x) {
         return x[Math.floor(Math.random() * x.length)];
       })
-      .join("");
+      .join('');
   }
   let array = new Uint8Array(length);
   cryptoObj.getRandomValues(array);
@@ -98,7 +98,7 @@ export function isValidHttpUrl(value: string): boolean {
   } catch (_) {
     return false;
   }
-  return url.protocol === "http:" || url.protocol === "https:";
+  return url.protocol === 'http:' || url.protocol === 'https:';
 }
 
 export const getGravatarUrl = (email: string): string => {
@@ -107,5 +107,5 @@ export const getGravatarUrl = (email: string): string => {
 };
 
 export const toDate = (date: string): string => {
-  return Intl.DateTimeFormat("fr", { year: "numeric", month: "numeric", day: "numeric" }).format(new Date(date));
+  return Intl.DateTimeFormat('fr', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(date));
 };

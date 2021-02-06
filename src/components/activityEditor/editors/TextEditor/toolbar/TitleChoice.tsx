@@ -1,25 +1,25 @@
-import React from "react";
+import React from 'react';
 
-import { withStyles, Theme } from "@material-ui/core/styles";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import ToggleButton from "@material-ui/lab/ToggleButton";
+import { withStyles, Theme } from '@material-ui/core/styles';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 
 const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
   grouped: {
     margin: theme.spacing(0.5),
-    border: "none",
-    "&:not(:first-child)": {
+    border: 'none',
+    '&:not(:first-child)': {
       borderRadius: theme.shape.borderRadius,
     },
-    "&:first-child": {
+    '&:first-child': {
       borderRadius: theme.shape.borderRadius,
     },
   },
 }))(ToggleButtonGroup);
 
 type TitleChoiceProps = {
-  value: "unstyle" | "header-one" | "header-two";
-  onChange(value: "header-one" | "header-two"): void;
+  value: 'unstyle' | 'header-one' | 'header-two';
+  onChange(value: 'header-one' | 'header-two'): void;
 };
 
 export const TitleChoice: React.FC<TitleChoiceProps> = ({ value, onChange }: TitleChoiceProps) => {
@@ -30,7 +30,7 @@ export const TitleChoice: React.FC<TitleChoiceProps> = ({ value, onChange }: Tit
         value="header-one"
         onMouseDown={(event: React.MouseEvent<HTMLElement>) => {
           event.preventDefault();
-          onChange("header-one");
+          onChange('header-one');
         }}
       >
         Titre 1
@@ -40,7 +40,7 @@ export const TitleChoice: React.FC<TitleChoiceProps> = ({ value, onChange }: Tit
         value="header-two"
         onMouseDown={(event: React.MouseEvent<HTMLElement>) => {
           event.preventDefault();
-          onChange("header-two");
+          onChange('header-two');
         }}
       >
         Titre 2

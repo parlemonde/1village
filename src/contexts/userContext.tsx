@@ -1,9 +1,9 @@
-import type { AxiosRequestConfig } from "axios";
-import { useRouter } from "next/router";
-import React from "react";
+import type { AxiosRequestConfig } from 'axios';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import { AxiosReturnType, axiosRequest } from "src/utils/axiosRequest";
-import type { User } from "types/user.type";
+import { AxiosReturnType, axiosRequest } from 'src/utils/axiosRequest';
+import type { User } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
@@ -39,14 +39,14 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
   const router = useRouter();
   const headers = React.useMemo(
     () => ({
-      "csrf-token": csrfToken,
+      'csrf-token': csrfToken,
     }),
     [csrfToken],
   );
 
   React.useEffect(() => {
-    if (user === null && router.pathname !== "/login" && router.pathname !== "/") {
-      router.push("/login");
+    if (user === null && router.pathname !== '/login' && router.pathname !== '/') {
+      router.push('/login');
     }
   }, [user, router]);
 
@@ -60,15 +60,15 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
    */
   const login = async (username: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
     const response = await axiosRequest({
-      method: "POST",
-      url: "/login",
+      method: 'POST',
+      url: '/login',
       headers,
       data: {
         username,
         password,
         getRefreshToken: remember,
       },
-      baseURL: "",
+      baseURL: '',
     });
     if (response.error) {
       return {
@@ -86,13 +86,13 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
 
   const loginWithSso = async (code: string): Promise<{ success: boolean; errorCode: number }> => {
     const response = await axiosRequest({
-      method: "POST",
-      url: "/login-sso-plm",
+      method: 'POST',
+      url: '/login-sso-plm',
       headers,
       data: {
         code,
       },
-      baseURL: "",
+      baseURL: '',
     });
     if (response.error) {
       return {
@@ -110,18 +110,18 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
   const logout = async (): Promise<void> => {
     // reject access token and server will delete cookies
     await axiosRequest({
-      method: "POST",
+      method: 'POST',
       headers,
-      url: "/logout",
-      baseURL: "",
+      url: '/logout',
+      baseURL: '',
     });
     setUser(null);
-    router.push("/");
+    router.push('/');
   };
 
   const deleteAccount = async (): Promise<boolean> => {
     const response = await axiosRequest({
-      method: "DELETE",
+      method: 'DELETE',
       headers,
       url: `users/${user.id}`,
     });
@@ -129,7 +129,7 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
       return false;
     }
     setUser(null);
-    router.push("/");
+    router.push('/');
     return true;
   };
 
@@ -141,9 +141,9 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
    */
   const signup = async (user: User, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
     const response = await axiosRequest({
-      method: "POST",
+      method: 'POST',
       headers,
-      url: "/users",
+      url: '/users',
       data: {
         inviteCode,
         ...user,
@@ -170,9 +170,9 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
    */
   const updatePassword = async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
     const response = await axiosRequest({
-      method: "POST",
+      method: 'POST',
       headers,
-      url: "/users/update-password",
+      url: '/users/update-password',
       data: {
         ...user,
       },
@@ -198,9 +198,9 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
    */
   const verifyEmail = async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
     const response = await axiosRequest({
-      method: "POST",
+      method: 'POST',
       headers,
-      url: "/users/verify-email",
+      url: '/users/verify-email',
       data: {
         ...user,
       },

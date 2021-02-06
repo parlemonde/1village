@@ -41,6 +41,7 @@ module.exports = {
         },
       },
     ],
+    "quotes": ["error", "single", { "avoidEscape": true }],
     "no-console": ["error", { allow: ["warn", "error"] }],
     "arca/import-ordering": ["error", ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"]],
     "arca/newline-after-import-section": ["error", ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"]],

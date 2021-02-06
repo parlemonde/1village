@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import type { FilterArgs } from "src/components/accueil/Filters";
-import { ExtendedActivity } from "src/contexts/activityContext";
-import { UserContext } from "src/contexts/userContext";
-import { useActivities } from "src/services/useActivities";
-import { useVillageUsers } from "src/services/useVillageUsers";
-import { UserType } from "types/user.type";
+import type { FilterArgs } from 'src/components/accueil/Filters';
+import { ExtendedActivity } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
+import { useActivities } from 'src/services/useActivities';
+import { useVillageUsers } from 'src/services/useVillageUsers';
+import { UserType } from 'types/user.type';
 
-import { ActivityCard } from "./ActivityCard";
+import { ActivityCard } from './ActivityCard';
 
 interface ActivitiesProps {
   onlySelf?: boolean;

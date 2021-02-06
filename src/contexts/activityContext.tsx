@@ -1,13 +1,13 @@
-import { useRouter } from "next/router";
-import { useQueryCache } from "react-query";
-import React from "react";
+import { useRouter } from 'next/router';
+import { useQueryCache } from 'react-query';
+import React from 'react';
 
-import type { EditorTypes, EditorContent } from "src/components/activityEditor/editing.types";
-import { getQueryString } from "src/utils";
-import { Activity, ActivityType } from "types/activity.type";
+import type { EditorTypes, EditorContent } from 'src/components/activityEditor/editing.types';
+import { getQueryString } from 'src/utils';
+import { Activity, ActivityType } from 'types/activity.type';
 
-import { UserContext } from "./userContext";
-import { VillageContext } from "./villageContext";
+import { UserContext } from './userContext';
+import { VillageContext } from './villageContext';
 
 export type ExtendedActivity = Activity & {
   data: { [key: string]: string | number | boolean };
@@ -35,12 +35,12 @@ export function getExtendedActivity(activity: Activity): ExtendedActivity {
   let dataId = 0;
   const processedContent: Array<EditorContent> = [];
   activity.content.forEach((c) => {
-    if (c.key === "h5p") {
+    if (c.key === 'h5p') {
       return; // not yet handled
     }
-    if (c.key === "json") {
+    if (c.key === 'json') {
       const decodedValue = JSON.parse(c.value);
-      if (decodedValue.type && decodedValue.type === "data") {
+      if (decodedValue.type && decodedValue.type === 'data') {
         data = decodedValue.data || {};
         dataId = c.id;
         // } else {
@@ -74,11 +74,11 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const getActivity = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
-        method: "GET",
+        method: 'GET',
         url: `/activities/${id}`,
       });
       if (response.error) {
-        router.push("/");
+        router.push('/');
       } else {
         setActivity(getExtendedActivity(response.data));
       }
@@ -86,8 +86,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     [router, axiosLoggedRequest],
   );
   React.useEffect(() => {
-    if ("activity-id" in router.query) {
-      const newActivityId = parseInt(getQueryString(router.query["activity-id"]), 10);
+    if ('activity-id' in router.query) {
+      const newActivityId = parseInt(getQueryString(router.query['activity-id']), 10);
       if (currentActivityId === null || currentActivityId !== newActivityId) {
         setActivity(null);
         getActivity(newActivityId).catch();
@@ -114,7 +114,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         responseType: null,
         data: initialData || {},
         dataId: 0,
-        processedContent: [{ type: "text", id: 0, value: "" }],
+        processedContent: [{ type: 'text', id: 0, value: '' }],
       };
       setActivity(activity);
       return true;
@@ -125,7 +125,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const activityContent = activity?.processedContent || null;
 
   const addContent = React.useCallback(
-    (type: EditorTypes, value: string = "") => {
+    (type: EditorTypes, value: string = '') => {
       if (activityContent === null) {
         return;
       }
@@ -156,7 +156,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const createActivity = React.useCallback(async () => {
     const content: Array<{ key: string; value: string }> = activity.processedContent
       .map((p) => {
-        if (p.type === "text" || p.type === "image" || p.type === "video") {
+        if (p.type === 'text' || p.type === 'image' || p.type === 'video') {
           return {
             key: p.type,
             value: p.value,
@@ -166,13 +166,13 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       })
       .filter((c) => c !== null);
     content.push({
-      key: "json",
+      key: 'json',
       value: JSON.stringify({
-        type: "data",
+        type: 'data',
         data: activity.data,
       }),
     });
-    const data: Omit<Partial<Activity>, "content"> & { content: Array<{ key: string; value: string }> } = {
+    const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
       type: activity.type,
       villageId: activity.villageId,
       content,
@@ -182,8 +182,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     //   data.responseType = activity.responseType;
     // }
     const response = await axiosLoggedRequest({
-      method: "POST",
-      url: "/activities",
+      method: 'POST',
+      url: '/activities',
       data,
     });
     if (response.error) {
@@ -201,7 +201,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     }, {});
     const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
       .map((p) => {
-        if (p.type === "text" || p.type === "image" || p.type === "video") {
+        if (p.type === 'text' || p.type === 'image' || p.type === 'video') {
           const d: { key: string; value: string; id?: number } = {
             key: p.type,
             value: p.value,
@@ -215,16 +215,16 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       })
       .filter((c) => c !== null);
     content.push({
-      key: "json",
+      key: 'json',
       value: JSON.stringify({
-        type: "data",
+        type: 'data',
         data: activity.data,
       }),
       id: activity.dataId,
     });
 
     const response = await axiosLoggedRequest({
-      method: "PUT",
+      method: 'PUT',
       url: `/activities/${activity.id}/content`,
       data: {
         content,
@@ -241,7 +241,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     if (activity === null) {
       return false;
     }
-    queryCache.invalidateQueries("activities");
+    queryCache.invalidateQueries('activities');
     if (activity.id === 0) {
       return await createActivity();
     } else {

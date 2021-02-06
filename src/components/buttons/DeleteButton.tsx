@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-import { Modal } from "../Modal";
+import { Modal } from '../Modal';
 
 interface DeleteButtonProps {
-  size?: "small" | "medium";
-  color?: "primary" | "secondary" | "red";
+  size?: 'small' | 'medium';
+  color?: 'primary' | 'secondary' | 'red';
   confirmLabel?: string;
   confirmTitle?: string;
   style?: React.CSSProperties;
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     red: {
       backgroundColor: theme.palette.error.main,
-      color: "white",
-      "&:hover": {
+      color: 'white',
+      '&:hover': {
         backgroundColor: theme.palette.error.light,
       },
     },
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const DeleteButton: React.FC<DeleteButtonProps> = ({
-  size = "small",
-  color = "primary",
+  size = 'small',
+  color = 'primary',
   confirmLabel,
   confirmTitle,
   onDelete = () => {},
@@ -55,7 +55,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
           }
         }}
         size={size}
-        color={color === "red" ? undefined : color}
+        color={color === 'red' ? undefined : color}
         className={classes[color]}
         style={style}
         aria-label="delete"
@@ -64,7 +64,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
       </IconButton>
       <Modal
         open={isModalOpen}
-        title={confirmTitle || "Supprimer ?"}
+        title={confirmTitle || 'Supprimer ?'}
         confirmLabel="Supprimer"
         onClose={() => {
           setIsModalOpen(false);

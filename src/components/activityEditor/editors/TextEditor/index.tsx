@@ -1,6 +1,6 @@
-import classnames from "classnames";
-import { Editor, RichUtils, DraftHandleValue, ContentState, convertToRaw, EditorState, Modifier, DraftEditorCommand, ContentBlock } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import classnames from 'classnames';
+import { Editor, RichUtils, DraftHandleValue, ContentState, convertToRaw, EditorState, Modifier, DraftEditorCommand, ContentBlock } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import {
   setBlockData,
   getSelectedBlock,
@@ -9,31 +9,31 @@ import {
   getCustomStyleMap,
   getSelectionCustomInlineStyle,
   toggleCustomInlineStyle,
-} from "draftjs-utils";
-import htmlToDraft from "html-to-draftjs";
-import React from "react";
+} from 'draftjs-utils';
+import htmlToDraft from 'html-to-draftjs';
+import React from 'react';
 
-import Paper from "@material-ui/core/Paper";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Divider } from "@material-ui/core";
+import Paper from '@material-ui/core/Paper';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Divider } from '@material-ui/core';
 
-import { fontDetailColor } from "src/styles/variables.const";
+import { fontDetailColor } from 'src/styles/variables.const';
 
-import type { EditorProps } from "../../editing.types";
-import { EditorContainer } from "../EditorContainer";
+import type { EditorProps } from '../../editing.types';
+import { EditorContainer } from '../EditorContainer';
 
-import { ColorPicker } from "./toolbar/ColorPicker";
-import { EmojiPicker } from "./toolbar/EmojiPicker";
-import { InlineButtons } from "./toolbar/InlineButtons";
-import { TextAlignButtons } from "./toolbar/TextAlignButtons";
-import { TitleChoice } from "./toolbar/TitleChoice";
+import { ColorPicker } from './toolbar/ColorPicker';
+import { EmojiPicker } from './toolbar/EmojiPicker';
+import { InlineButtons } from './toolbar/InlineButtons';
+import { TextAlignButtons } from './toolbar/TextAlignButtons';
+import { TitleChoice } from './toolbar/TitleChoice';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      display: "flex",
+      display: 'flex',
       border: `1px solid ${theme.palette.divider}`,
-      flexWrap: "wrap",
+      flexWrap: 'wrap',
     },
     divider: {
       margin: theme.spacing(1, 0.5),
@@ -42,14 +42,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function blockStyleFn(block: ContentBlock): string {
-  const blockAlignment = block.getData() && block.getData().get("text-align");
+  const blockAlignment = block.getData() && block.getData().get('text-align');
   if (blockAlignment) {
     return `${blockAlignment}-aligned-block`;
   }
-  return "";
+  return '';
 }
 
-export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () => {}, onDelete }: EditorProps) => {
+export const TextEditor: React.FC<EditorProps> = ({ value = '', onChange = () => {}, onDelete }: EditorProps) => {
   const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<Editor>(null);
@@ -78,9 +78,9 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
     const newEditorState = RichUtils.handleKeyCommand(editorState, command);
     if (newEditorState) {
       onEditorChange(newEditorState);
-      return "handled";
+      return 'handled';
     }
-    return "not-handled";
+    return 'not-handled';
   };
 
   // --- Current values ---
@@ -88,14 +88,14 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
     const currentBlock: ContentBlock = getSelectedBlock(editorState);
     return {
       currentInlineStyle: getSelectionInlineStyle(editorState),
-      currentAlignment: currentBlock.getData().get("text-align") || "left",
+      currentAlignment: currentBlock.getData().get('text-align') || 'left',
       currentHeader: currentBlock.getType(),
-      currentColor: (getSelectionCustomInlineStyle(editorState, ["COLOR"]).COLOR || "-").split("-")[1] || "",
+      currentColor: (getSelectionCustomInlineStyle(editorState, ['COLOR']).COLOR || '-').split('-')[1] || '',
     };
   }, [editorState]);
 
   // ----- Inline style -----
-  const setInlineStyle = (inlineStyle: "BOLD" | "ITALIC" | "UNDERLINE", value: boolean) => {
+  const setInlineStyle = (inlineStyle: 'BOLD' | 'ITALIC' | 'UNDERLINE', value: boolean) => {
     if (currentInlineStyle[inlineStyle] !== value) {
       onEditorChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
     }
@@ -104,13 +104,13 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
   // --- Color style ---
   const setInlineColor = (value: string) => {
     // default text color
-    if (value === "rgb(46, 52, 59)") {
+    if (value === 'rgb(46, 52, 59)') {
       if (currentColor) {
-        onEditorChange(toggleCustomInlineStyle(editorState, "color", currentColor));
+        onEditorChange(toggleCustomInlineStyle(editorState, 'color', currentColor));
       }
     } else {
       if (currentColor !== value) {
-        onEditorChange(toggleCustomInlineStyle(editorState, "color", value));
+        onEditorChange(toggleCustomInlineStyle(editorState, 'color', value));
       }
     }
   };
@@ -121,8 +121,8 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
   };
 
   // --- Text Align ---
-  const setBlockAlignmentData = (value: "left" | "center" | "right") => {
-    onEditorChange(setBlockData(editorState, { "text-align": value === "left" ? undefined : value }));
+  const setBlockAlignmentData = (value: 'left' | 'center' | 'right') => {
+    onEditorChange(setBlockData(editorState, { 'text-align': value === 'left' ? undefined : value }));
   };
 
   // --- Emoji ---
@@ -133,7 +133,7 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
       emoji,
       editorState.getCurrentInlineStyle(),
     );
-    onEditorChange(EditorState.push(editorState, contentState, "insert-characters"));
+    onEditorChange(EditorState.push(editorState, contentState, 'insert-characters'));
   };
 
   const hasFocus = React.useMemo(() => {
@@ -142,14 +142,14 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
   }, [editorState]);
 
   const displayPlaceholder = React.useMemo(() => {
-    return !value || value.length === 0 || value === "<p></p>" || value === "<p></p>\n";
+    return !value || value.length === 0 || value === '<p></p>' || value === '<p></p>\n';
   }, [value]);
 
   return (
     <EditorContainer
       deleteButtonProps={{
-        confirmLabel: displayPlaceholder ? "" : "Voulez-vous vraiment supprimer ce texte ?",
-        confirmTitle: "Supprimer",
+        confirmLabel: displayPlaceholder ? '' : 'Voulez-vous vraiment supprimer ce texte ?',
+        confirmTitle: 'Supprimer',
         onDelete,
       }}
       noPadding
@@ -167,8 +167,8 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
       >
         <div className="text-editor__toolbar-container">
           <div
-            className={classnames("text-editor__toolbar", {
-              "text-editor__toolbar--visible": hasFocus,
+            className={classnames('text-editor__toolbar', {
+              'text-editor__toolbar--visible': hasFocus,
             })}
           >
             <Paper elevation={0} className={classes.paper}>
@@ -176,7 +176,7 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
               <Divider flexItem orientation="vertical" className={classes.divider} />
               <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
               <Divider flexItem orientation="vertical" className={classes.divider} />
-              <TitleChoice value={currentHeader as "unstyle" | "header-one" | "header-two"} onChange={toggleBlockType} />
+              <TitleChoice value={currentHeader as 'unstyle' | 'header-one' | 'header-two'} onChange={toggleBlockType} />
               <Divider flexItem orientation="vertical" className={classes.divider} />
               <ColorPicker value={currentColor} onChange={setInlineColor} />
               <EmojiPicker onChange={addEmoji} />
@@ -184,7 +184,7 @@ export const TextEditor: React.FC<EditorProps> = ({ value = "", onChange = () =>
           </div>
         </div>
         {displayPlaceholder && (
-          <div style={{ position: "absolute", color: fontDetailColor }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>
+          <div style={{ position: 'absolute', color: fontDetailColor }}>Commencez à écrire ici, ou ajoutez une vidéo ou une image.</div>
         )}
         <div
           onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {

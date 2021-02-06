@@ -1,5 +1,5 @@
-import type { ExtendedActivity } from "src/contexts/activityContext";
-import type { User } from "types/user.type";
+import type { ExtendedActivity } from 'src/contexts/activityContext';
+import type { User } from 'types/user.type';
 
 export interface ActivityCardProps {
   activity: ExtendedActivity;

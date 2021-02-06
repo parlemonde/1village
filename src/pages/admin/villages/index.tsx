@@ -1,24 +1,24 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import IconButton from "@material-ui/core/IconButton";
-import MaterialLink from "@material-ui/core/Link";
-import Tooltip from "@material-ui/core/Tooltip";
-import { Button, NoSsr } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import GetAppIcon from "@material-ui/icons/GetApp";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import MaterialLink from '@material-ui/core/Link';
+import Tooltip from '@material-ui/core/Tooltip';
+import { Button, NoSsr } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
-import { Modal } from "src/components/Modal";
-import { AdminTable } from "src/components/admin/AdminTable";
-import { AdminTile } from "src/components/admin/AdminTile";
-import { useCountries } from "src/services/useCountries";
-import { useVillages, useVillageRequests } from "src/services/useVillages";
-import { countryToFlag, ssoHostName } from "src/utils";
+import { Modal } from 'src/components/Modal';
+import { AdminTable } from 'src/components/admin/AdminTable';
+import { AdminTile } from 'src/components/admin/AdminTile';
+import { useCountries } from 'src/services/useCountries';
+import { useVillages, useVillageRequests } from 'src/services/useVillages';
+import { countryToFlag, ssoHostName } from 'src/utils';
 
 const Villages: React.FC = () => {
   const router = useRouter();
@@ -33,7 +33,7 @@ const Villages: React.FC = () => {
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
   const countriesToText = (countries: string[]) => {
-    return countries.map((isoCode) => `${countryToFlag(isoCode)} ${countryMap[isoCode.toUpperCase()] || ""}`).join(" - ");
+    return countries.map((isoCode) => `${countryToFlag(isoCode)} ${countryMap[isoCode.toUpperCase()] || ''}`).join(' - ');
   };
 
   const onImportVillages = async () => {
@@ -71,14 +71,14 @@ const Villages: React.FC = () => {
     <div className="admin--container">
       <Link href="/admin/villages">
         <MaterialLink href="/admin/villages">
-          <h1 style={{ marginBottom: "1rem" }}>Villages</h1>
+          <h1 style={{ marginBottom: '1rem' }}>Villages</h1>
         </MaterialLink>
       </Link>
       <AdminTile
         title="Liste des villages"
         toolbarButton={
           <>
-            <Button variant="contained" style={{ flexShrink: 0, marginRight: "0.5rem" }} startIcon={<GetAppIcon />} onClick={onImportVillages}>
+            <Button variant="contained" style={{ flexShrink: 0, marginRight: '0.5rem' }} startIcon={<GetAppIcon />} onClick={onImportVillages}>
               Importer depuis {ssoHostName}
             </Button>
             <Link href="/admin/villages/new">
@@ -107,10 +107,10 @@ const Villages: React.FC = () => {
             postCount: 0,
           }))}
           columns={[
-            { key: "name", label: "Nom du village", sortable: true },
-            { key: "countries", label: "Pays" },
-            { key: "userCount", label: "Nombre de classes", sortable: true },
-            { key: "postCount", label: "Nombre de posts", sortable: true },
+            { key: 'name', label: 'Nom du village', sortable: true },
+            { key: 'countries', label: 'Pays' },
+            { key: 'userCount', label: 'Nombre de classes', sortable: true },
+            { key: 'postCount', label: 'Nombre de posts', sortable: true },
           ]}
           actions={actions}
         />
@@ -137,7 +137,7 @@ const Villages: React.FC = () => {
           </div>
         </Modal>
       </NoSsr>
-      <Backdrop style={{ zIndex: 2000, color: "white" }} open={isLoading}>
+      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>
