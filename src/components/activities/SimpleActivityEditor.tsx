@@ -32,7 +32,7 @@ const SimpleActivityEditor: React.FC = () => {
               <TextEditor
                 key={p.id}
                 id={p.id}
-                value={p.value}
+                value={p.value as string}
                 onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
@@ -58,7 +58,7 @@ const SimpleActivityEditor: React.FC = () => {
               <VideoEditor
                 key={p.id}
                 id={p.id}
-                value={p.value}
+                value={p.value as string}
                 onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
@@ -71,7 +71,7 @@ const SimpleActivityEditor: React.FC = () => {
               <H5pEditor
                 key={p.id}
                 id={p.id}
-                value={p.value}
+                value={p.value as string}
                 onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);

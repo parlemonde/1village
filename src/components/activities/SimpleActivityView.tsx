@@ -11,16 +11,16 @@ export const SimpleActivityView: React.FC<ActivityViewProps> = ({ activity, isPr
     <div>
       {activity.processedContent.map((p) => {
         if (p.type === 'text') {
-          return <TextView id={p.id} value={p.value} key={p.id} isPreview={isPreview} />;
+          return <TextView id={p.id} value={p.value as string} key={p.id} isPreview={isPreview} />;
         }
         if (p.type === 'image') {
-          return <ImageView id={p.id} value={p.value} key={p.id} isPreview={isPreview} />;
+          return <ImageView id={p.id} value={p.value as string} key={p.id} isPreview={isPreview} />;
         }
         if (p.type === 'video') {
-          return <VideoView id={p.id} value={p.value} key={p.id} isPreview={isPreview} />;
+          return <VideoView id={p.id} value={p.value as string} key={p.id} isPreview={isPreview} />;
         }
         if (p.type === 'h5p') {
-          return <H5pView id={p.id} value={p.value} key={p.id} isPreview={isPreview} />;
+          return <H5pView id={p.id} value={p.value as string} key={p.id} isPreview={isPreview} />;
         }
         return null;
       })}

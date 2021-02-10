@@ -227,7 +227,10 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
     async (req: AxiosRequestConfig): Promise<AxiosReturnType> => {
       const response = await axiosRequest({
         ...req,
-        headers,
+        headers: {
+          ...headers,
+          ...(req.headers ?? {}),
+        },
       });
       // if (response.error) ...
       return response;

@@ -1,4 +1,5 @@
 import { Router, RequestHandler } from 'express';
+import multer from 'multer';
 
 import { UserType } from '../entities/user';
 import { authenticate } from '../middlewares/authenticate';
@@ -10,6 +11,7 @@ type RouteOptions = {
 };
 
 export class Controller {
+  private uploadMiddleware = multer({ storage: multer.memoryStorage() });
   public router: Router;
   public name: string;
 
@@ -32,5 +34,14 @@ export class Controller {
 
   public delete(options: RouteOptions, handler: RequestHandler): void {
     this.router.delete(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
+  }
+
+  public upload(options: RouteOptions & { multerFieldName: string }, handler: RequestHandler): void {
+    this.router.post(
+      options.path,
+      this.uploadMiddleware.single(options.multerFieldName),
+      handleErrors(authenticate(options.userType)),
+      handleErrors(handler),
+    );
   }
 }

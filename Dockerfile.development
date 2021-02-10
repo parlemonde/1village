@@ -1,12 +1,15 @@
-FROM node:12.13-alpine
+FROM node:12.13-slim
+
+RUN apt-get update
+
+# Needed for nodemon!
+RUN apt-get install -yq lsof procps
 
 # Create app directory
 WORKDIR /app
 
 # Install app dependencies
 COPY package.json ./
-RUN npm install -g yarn
-RUN yarn set version berry
 RUN yarn install
 
 # Bundle app source

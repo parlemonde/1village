@@ -13,8 +13,13 @@ import type { EditorProps } from '../editing.types';
 
 import { EditorContainer } from './EditorContainer';
 
-export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
-  const [imageUrl, setImageUrl] = React.useState(value);
+export const ImageEditor: React.FC<EditorProps<string | File>> = ({
+  id,
+  value = '',
+  onChange = () => {},
+  onDelete = () => {},
+}: EditorProps<string | File>) => {
+  const [imageUrl, setImageUrl] = React.useState(typeof value === 'string' ? value : URL.createObjectURL(value));
   const [tempImageUrl, setTempImageUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
@@ -29,15 +34,15 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
   React.useEffect(() => {
     if (prevValue.current !== value) {
       prevValue.current = value;
-      setImageUrl(value);
+      setImageUrl(typeof value === 'string' ? value : URL.createObjectURL(value));
     }
   }, [value]);
 
   const onChangeImage = React.useCallback(
-    (newValue: string) => {
+    (newValue: string | File) => {
       prevValue.current = newValue;
       onChange(newValue);
-      setImageUrl(newValue);
+      setImageUrl(typeof newValue === 'string' ? newValue : URL.createObjectURL(newValue));
     },
     [onChange],
   );
@@ -116,7 +121,7 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         title="Choisir une image"
         confirmLabel="Choisir"
         onConfirm={() => {
-          onChangeImage(tempImageUrl);
+          onChangeImage(file === null ? tempImageUrl : file);
           setIsModalOpen(false);
           resetPreview();
         }}

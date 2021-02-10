@@ -143,25 +143,77 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     [updateActivity, activityContent],
   );
 
+  const uploadImage = React.useCallback(
+    async (image: File) => {
+      const formData = new FormData();
+      formData.append('image', image);
+      const response = await axiosLoggedRequest({
+        method: 'POST',
+        url: '/images',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (response.error) {
+        return '';
+      } else {
+        return response.data.url;
+      }
+    },
+    [axiosLoggedRequest],
+  );
+
+  const getAPIContent = React.useCallback(
+    async (isEdit: boolean) => {
+      const mapIndex = isEdit
+        ? {}
+        : activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
+            acc[c.id] = i;
+            return acc;
+          }, {});
+      const content: Array<{ key: string; value: string; id?: number }> = (
+        await Promise.all(
+          activity.processedContent.map(async (p) => {
+            let data: { key: string; value: string; id?: number } | null = null;
+            if (p.type === 'text' || p.type === 'image' || p.type === 'video' || p.type === 'h5p') {
+              if (typeof p.value === 'string') {
+                data = {
+                  key: p.type,
+                  value: p.value,
+                };
+              } else if (p.type === 'image') {
+                const url = await uploadImage(p.value);
+                if (url) {
+                  data = {
+                    key: p.type,
+                    value: url,
+                  };
+                }
+              }
+            }
+            if (data !== null && mapIndex[p.id] !== undefined && p.id !== activity.dataId) {
+              data.id = p.id;
+            }
+            return data;
+          }),
+        )
+      ).filter((c) => c !== null);
+      content.push({
+        key: 'json',
+        value: JSON.stringify({
+          type: 'data',
+          data: activity.data,
+        }),
+        id: isEdit ? activity.dataId : undefined,
+      });
+      return content;
+    },
+    [uploadImage, activity],
+  );
+
   const createActivity = React.useCallback(async () => {
-    const content: Array<{ key: string; value: string }> = activity.processedContent
-      .map((p) => {
-        if (p.type === 'text' || p.type === 'image' || p.type === 'video' || p.type === 'h5p') {
-          return {
-            key: p.type,
-            value: p.value,
-          };
-        }
-        return null;
-      })
-      .filter((c) => c !== null);
-    content.push({
-      key: 'json',
-      value: JSON.stringify({
-        type: 'data',
-        data: activity.data,
-      }),
-    });
+    const content = await getAPIContent(false);
     const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
       type: activity.type,
       villageId: activity.villageId,
@@ -182,37 +234,10 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       setActivity(getExtendedActivity(response.data));
       return true;
     }
-  }, [axiosLoggedRequest, activity]);
+  }, [axiosLoggedRequest, getAPIContent, activity]);
 
   const editActivity = React.useCallback(async () => {
-    const mapIndex = activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
-      acc[c.id] = i;
-      return acc;
-    }, {});
-    const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
-      .map((p) => {
-        if (p.type === 'text' || p.type === 'image' || p.type === 'video' || p.type === 'h5p') {
-          const d: { key: string; value: string; id?: number } = {
-            key: p.type,
-            value: p.value,
-          };
-          if (mapIndex[p.id] !== undefined && p.id !== activity.dataId) {
-            d.id = p.id;
-          }
-          return d;
-        }
-        return null;
-      })
-      .filter((c) => c !== null);
-    content.push({
-      key: 'json',
-      value: JSON.stringify({
-        type: 'data',
-        data: activity.data,
-      }),
-      id: activity.dataId,
-    });
-
+    const content = await getAPIContent(true);
     const response = await axiosLoggedRequest({
       method: 'PUT',
       url: `/activities/${activity.id}/content`,
@@ -225,7 +250,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     }
     setActivity(getExtendedActivity(response.data));
     return true;
-  }, [axiosLoggedRequest, activity]);
+  }, [getAPIContent, axiosLoggedRequest, activity]);
 
   const save = React.useCallback(async () => {
     if (activity === null) {
