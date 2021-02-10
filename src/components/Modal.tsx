@@ -8,9 +8,11 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, withStyles, WithStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import { CircularProgress } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { RedButton } from 'src/components/buttons/RedButton';
+import { bgPage } from 'src/styles/variables.const';
 
 const styles = (theme: MaterialTheme) =>
   createStyles({
@@ -64,6 +66,7 @@ interface ModalProps {
   noTitle?: boolean;
   noCancelButton?: boolean;
   id?: string;
+  loading?: boolean;
 }
 
 export const Modal: React.FunctionComponent<ModalProps> = ({
@@ -85,6 +88,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   noCloseButton = false,
   noCancelButton = false,
   noTitle = false,
+  loading = false,
   id,
 }: ModalProps) => {
   return (
@@ -127,6 +131,22 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
           </Button>
         )}
       </DialogActions>
+      {loading && (
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            backgroundColor: bgPage,
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress color="primary" />
+        </div>
+      )}
     </Dialog>
   );
 };

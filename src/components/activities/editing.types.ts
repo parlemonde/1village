@@ -11,19 +11,19 @@ export type EditorTypes = 'text' | 'video' | 'image' | 'h5p';
 export type EditorContent = {
   id: number;
   type: EditorTypes;
-  value: string | File;
+  value: string;
 };
 
-export interface EditorProps<ValueType = string> {
+export interface EditorProps {
   id: number;
-  value?: ValueType;
-  onChange?(newValue: ValueType): void;
+  value?: string;
+  onChange?(newValue: string): void;
   onDelete?(): void;
 }
 
-export interface ViewProps<ValueType = string> {
+export interface ViewProps {
   id: number;
-  value?: ValueType;
+  value?: string;
   isPreview: boolean;
 }
 

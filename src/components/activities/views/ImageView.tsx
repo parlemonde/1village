@@ -3,7 +3,7 @@ import React from 'react';
 
 import type { ViewProps } from '../editing.types';
 
-export const ImageView: React.FC<ViewProps<string | File>> = ({ value, isPreview }: ViewProps<string | File>) => {
+export const ImageView: React.FC<ViewProps> = ({ value, isPreview }: ViewProps) => {
   return (
     <div
       className={classnames('text-center', {
@@ -17,17 +17,14 @@ export const ImageView: React.FC<ViewProps<string | File>> = ({ value, isPreview
             display: 'inline-block',
             width: '15rem',
             height: '10rem',
-            backgroundImage: `url(${typeof value === 'string' ? value : URL.createObjectURL(value)})`,
+            backgroundImage: `url(${value})`,
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
           }}
         ></div>
       ) : (
-        <img
-          style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block', margin: '0 auto' }}
-          src={typeof value === 'string' ? value : URL.createObjectURL(value)}
-        />
+        <img style={{ width: '100%', maxWidth: '600px', height: 'auto', display: 'block', margin: '0 auto' }} src={value} />
       )}
     </div>
   );
