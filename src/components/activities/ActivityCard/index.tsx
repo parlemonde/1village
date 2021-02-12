@@ -32,7 +32,14 @@ const icons = {
   [ActivityType.QUESTION]: QuestionIcon,
 };
 
-export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, user, isSelf = false, showEditButtons = false }: ActivityCardProps) => {
+export const ActivityCard: React.FC<ActivityCardProps> = ({
+  activity,
+  user,
+  isSelf = false,
+  noButtons = false,
+  showEditButtons = false,
+  onDelete = () => {},
+}: ActivityCardProps) => {
   if (!user) {
     return null;
   }
@@ -61,7 +68,14 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, user, isSe
       </div>
       <div className="activity-card__content">
         {activity.type === ActivityType.PRESENTATION && (
-          <PresentationCard activity={activity} user={user} isSelf={isSelf} showEditButtons={showEditButtons} />
+          <PresentationCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            onDelete={onDelete}
+          />
         )}
       </div>
     </Paper>

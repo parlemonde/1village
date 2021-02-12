@@ -1,4 +1,5 @@
-import { useQuery, QueryFunction } from 'react-query';
+import { useSnackbar } from 'notistack';
+import { useQueryCache, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
 import { ExtendedActivity } from 'src/components/activities/editing.types';
@@ -30,5 +31,37 @@ export const useActivity = (activityId: number): { activity: ExtendedActivity | 
 
   return {
     activity: isLoading || error ? null : data,
+  };
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const useActivityRequests = () => {
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const queryCache = useQueryCache();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const deleteActivity = React.useCallback(
+    async (id: number) => {
+      const response = await axiosLoggedRequest({
+        method: 'DELETE',
+        url: `/activities/${id}`,
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+        return;
+      }
+      enqueueSnackbar('Activité supprimée avec succès!', {
+        variant: 'success',
+      });
+      queryCache.invalidateQueries('activity');
+      queryCache.invalidateQueries('activities');
+    },
+    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+  );
+
+  return {
+    deleteActivity,
   };
 };

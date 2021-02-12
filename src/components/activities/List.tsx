@@ -4,8 +4,11 @@ import type { FilterArgs } from 'src/components/accueil/Filters';
 import { ExtendedActivity } from 'src/components/activities/editing.types';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
+import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { UserType } from 'types/user.type';
+
+import { Modal } from '../Modal';
 
 import { ActivityCard } from './ActivityCard';
 
@@ -24,7 +27,9 @@ const DEFAULT_FILTERS: FilterArgs = {
 export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filters = DEFAULT_FILTERS }: ActivitiesProps) => {
   const { user } = React.useContext(UserContext);
   const { activities } = useActivities();
+  const { deleteActivity } = useActivityRequests();
   const { users } = useVillageUsers();
+  const [deleteIndex, setDeleteIndex] = React.useState(-1);
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -66,6 +71,14 @@ export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filter
     return activities.filter((a) => a.userId === userId).filter(activityFilter);
   }, [onlySelf, userId, activities, activityFilter]);
 
+  const activityToDelete = deleteIndex === -1 ? null : filteredActivities[deleteIndex];
+  const onDeleteActivity = async () => {
+    if (activityToDelete !== null) {
+      await deleteActivity(activityToDelete.id);
+    }
+    setDeleteIndex(-1);
+  };
+
   return (
     <div>
       {filteredActivities.map((activity, index) => (
@@ -75,8 +88,34 @@ export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filter
           user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
           key={index}
           showEditButtons={onlySelf}
+          onDelete={() => {
+            setDeleteIndex(index);
+          }}
         />
       ))}
+      <Modal
+        open={deleteIndex !== -1}
+        error
+        fullWidth
+        maxWidth="sm"
+        title="Confirmer la suppression"
+        onClose={() => {
+          setDeleteIndex(-1);
+        }}
+        onConfirm={onDeleteActivity}
+        ariaDescribedBy="delete-action-desc"
+        ariaLabelledBy="delete-action-title"
+      >
+        <div>Voulez vous vraiment supprimer cette activité ?</div>
+        {activityToDelete && (
+          <ActivityCard
+            activity={activityToDelete}
+            isSelf={user && activityToDelete.userId === user.id}
+            user={userMap[activityToDelete.userId] !== undefined ? users[userMap[activityToDelete.userId]] : undefined}
+            noButtons
+          />
+        )}
+      </Modal>
     </div>
   );
 };

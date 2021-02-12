@@ -6,4 +6,6 @@ export interface ActivityCardProps {
   user?: User;
   isSelf?: boolean;
   showEditButtons?: boolean;
+  noButtons?: boolean;
+  onDelete?(): void;
 }

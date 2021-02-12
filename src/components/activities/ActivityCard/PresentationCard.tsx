@@ -11,7 +11,7 @@ import { RedButton } from '../../buttons/RedButton';
 
 import { ActivityCardProps } from './activity-card.types';
 
-export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf, showEditButtons }: ActivityCardProps) => {
+export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf, noButtons, showEditButtons, onDelete }: ActivityCardProps) => {
   const firstImage = React.useMemo(() => activity.processedContent.find((c) => c.type === 'image'), [activity.processedContent]);
   const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
@@ -48,29 +48,33 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
             {firstText}
           </div>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <Link href={`/activity/${activity.id}`}>
-            <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`}>
-              Regarder la présentation
-            </Button>
-          </Link>
-          {isSelf && showEditButtons && (
-            <>
-              <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>
-                <Button
-                  component="a"
-                  href={`se-presenter/thematique/3?activity-id=${activity.id}`}
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginLeft: '0.25rem' }}
-                >
-                  Modifier
-                </Button>
-              </Link>
-              <RedButton style={{ marginLeft: '0.25rem' }}>Supprimer</RedButton>
-            </>
-          )}
-        </div>
+        {noButtons || (
+          <div style={{ textAlign: 'right' }}>
+            <Link href={`/activity/${activity.id}`}>
+              <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`}>
+                Regarder la présentation
+              </Button>
+            </Link>
+            {isSelf && showEditButtons && (
+              <>
+                <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>
+                  <Button
+                    component="a"
+                    href={`se-presenter/thematique/3?activity-id=${activity.id}`}
+                    color="secondary"
+                    variant="contained"
+                    style={{ marginLeft: '0.25rem' }}
+                  >
+                    Modifier
+                  </Button>
+                </Link>
+                <RedButton style={{ marginLeft: '0.25rem' }} onClick={onDelete}>
+                  Supprimer
+                </RedButton>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
