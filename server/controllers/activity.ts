@@ -9,6 +9,7 @@ import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { getQueryString } from '../utils';
 
+import { commentController } from './comment';
 import { Controller } from './controller';
 
 const activityController = new Controller('/activities');
@@ -436,5 +437,8 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
   await getRepository(Activity).softDelete({ id });
   res.status(204).send();
 });
+
+// --- Add comment controllers
+activityController.router.use(`/:id${commentController.name}`, commentController.router);
 
 export { activityController };
