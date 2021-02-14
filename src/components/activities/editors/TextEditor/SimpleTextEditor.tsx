@@ -17,7 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Divider } from '@material-ui/core';
 
-import { fontDetailColor, primaryColor, primaryColorLight } from 'src/styles/variables.const';
+import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
