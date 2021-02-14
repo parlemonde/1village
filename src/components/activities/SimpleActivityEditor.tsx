@@ -7,7 +7,7 @@ import { AddContentCard } from './AddContentCard';
 import type { EditorContent } from './editing.types';
 import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor';
-import { TextEditor } from './editors/TextEditor';
+import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
 const SimpleActivityEditor: React.FC = () => {

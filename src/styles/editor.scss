@@ -92,6 +92,12 @@
   padding: 0.5rem 0.5rem;
   min-height: 4rem;
   cursor: text;
+
+  &--with-border {
+    padding: 0;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+  }
 }
 .activity-data {
   margin: 1rem 0rem;

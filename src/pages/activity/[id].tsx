@@ -6,17 +6,19 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
+import { AddComment } from 'src/components/activities/comments/AddComment';
+import { CommentCard } from 'src/components/activities/comments/CommentCard';
 import { SimpleActivityView } from 'src/components/activities';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
+import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import { primaryColorLight, primaryColorLight2 } from 'src/styles/variables.const';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { getQueryString } from 'src/utils';
 import { getGravatarUrl, toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
+import { User, UserType } from 'types/user.type';
 
 const titles = {
   [ActivityType.PRESENTATION]: 'Présentation',
@@ -28,52 +30,42 @@ const titles = {
 
 const Activity: React.FC = () => {
   const router = useRouter();
-  const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) || 0, [router]);
+  const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
   const { user } = React.useContext(UserContext);
   const { activity } = useActivity(activityId);
+  const { comments } = useComments(activityId);
   const { users } = useVillageUsers();
 
-  const activityUser = React.useMemo(() => {
-    if (activity === null) {
-      return null;
-    }
-    return users.find((u) => u.id === activity.userId) || null;
-  }, [activity, users]);
+  const usersMap = React.useMemo(() => {
+    return users.reduce<{ [key: number]: User }>((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {});
+  }, [users]);
+  const activityUser = activity === null ? null : usersMap[activity.userId] ?? null;
   const userIsPelico = activityUser !== null && activityUser.type >= UserType.MEDIATOR;
   const userIsSelf = activityUser !== null && user !== null && activityUser.id === user.id;
 
-  if (activity === null) {
+  if (activity === null || user === null) {
     return null;
   }
 
   return (
     <Base>
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.5rem' }}>
+      <div className="activity__back-container">
         <Link href="/">
-          <a
-            href="/"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '1px 0.5rem',
-              backgroundColor: primaryColorLight,
-              borderRadius: '0.7rem',
-            }}
-          >
-            <HomeIcon style={{ height: '1rem', width: 'auto', margin: '0 0.2rem 0.1rem 0' }} />
+          <a href="/" className="activity__back-button">
+            <HomeIcon className="activity__back-button-icon" />
             Accueil
           </a>
         </Link>
         <ChevronRightIcon />
-        <span
-          style={{ display: 'inline-flex', alignItems: 'center', padding: '1px 0.5rem', backgroundColor: primaryColorLight2, borderRadius: '0.7rem' }}
-        >
-          Activité - {titles[activity.type]}
-        </span>
+        <span className="activity__back-button activity__back-button--lighter">Activité - {titles[activity.type]}</span>
       </div>
-      <div style={{ display: 'block', margin: '0 auto 2rem auto', maxWidth: '800px' }}>
+
+      <div className="activity__container">
         {activityUser !== null && (
-          <div style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
+          <div className="activity__header">
             <img
               alt="Image de profil"
               src={getGravatarUrl(activityUser.email)}
@@ -94,8 +86,18 @@ const Activity: React.FC = () => {
             </div>
           </div>
         )}
-
         {activity.type === ActivityType.PRESENTATION && <SimpleActivityView activity={activity} />}
+
+        <div className="activity__divider">
+          <div className="activity__divider--text">
+            <h2>Réaction des Pélicopains</h2>
+          </div>
+        </div>
+
+        {comments.map((comment) => (
+          <CommentCard key={comment.id} activityId={activityId} comment={comment} user={usersMap[comment.userId] ?? null} />
+        ))}
+        <AddComment activityId={activityId} />
       </div>
     </Base>
   );

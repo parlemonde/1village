@@ -1,6 +1,7 @@
 import 'nprogress/nprogress.css';
 
 import 'src/styles/activity-card.scss';
+import 'src/styles/activity.scss';
 import 'src/styles/admin.scss';
 import 'src/styles/base.scss';
 import 'src/styles/editor.scss';
@@ -9,8 +10,8 @@ import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
 
-import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import App from 'next/app';
+import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
@@ -113,29 +114,29 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
         >
           <ReactQueryCacheProvider queryCache={queryCache}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken}>
-              {isOnAdmin ? (
-                <div>
-                  <AdminHeader />
-                  <div style={{ display: 'flex', width: '100%' }}>
-                    <AdminNavigation />
-                    <div style={{ flex: 1 }}>
-                      <Component {...pageProps} />
+              <VillageContextProvider>
+                <ActivityContextProvider>
+                  {isOnAdmin ? (
+                    <div>
+                      <AdminHeader />
+                      <div style={{ display: 'flex', width: '100%' }}>
+                        <AdminNavigation />
+                        <div style={{ flex: 1 }}>
+                          <Component {...pageProps} />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
-                <VillageContextProvider>
-                  <ActivityContextProvider>
+                  ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
                     <div className="app-container">
                       <Header />
                       <Navigation />
                       <Component {...pageProps} />
                     </div>
-                  </ActivityContextProvider>
-                </VillageContextProvider>
-              ) : (
-                <Component {...pageProps} />
-              )}
+                  ) : (
+                    <Component {...pageProps} />
+                  )}
+                </ActivityContextProvider>
+              </VillageContextProvider>
             </UserContextProvider>
             {/* Dev only, it won't appear after build for prod. */}
             <ReactQueryDevtools />

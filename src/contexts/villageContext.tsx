@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
@@ -28,6 +29,7 @@ interface VillageContextProviderProps {
 }
 
 export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ children }: VillageContextProviderProps) => {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const [village, setVillage] = React.useState<Village | null>(null);
@@ -35,6 +37,8 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(false);
+
+  const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 
   const getVillage = React.useCallback(
     async (villageId: number) => {
@@ -72,7 +76,11 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
 
   const setUserVillage = React.useCallback(async () => {
     let userVillage: Village | null = null;
-    if (user !== null && user.villageId) {
+    if (user === null) {
+      setVillage(null);
+      return;
+    }
+    if (user.villageId) {
       userVillage = await getVillage(user.villageId);
     } else {
       const previousSelectedVillageId = parseInt(window.sessionStorage.getItem('villageId'), 10) || null;
@@ -89,8 +97,18 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
     }
   }, [getVillage, showSelectVillageModal, user]);
   React.useEffect(() => {
-    setUserVillage().catch();
-  }, [setUserVillage]);
+    if (user === null) {
+      setIsModalOpen(false);
+      setShowUnassignedModal(false);
+      setVillage(null);
+    }
+    if (isOnAdmin) {
+      setIsModalOpen(false);
+      setShowUnassignedModal(false);
+    } else {
+      setUserVillage().catch();
+    }
+  }, [user, isOnAdmin, setUserVillage]);
 
   const onAskVillage = () => {
     enqueueSnackbar("Votre demande d'assignation à un village a bien été envoyé à un administrateur !", {
@@ -132,7 +150,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
         {(villages || []).length === 0 ? (
           <>
             <p>Aucun village existe !</p>
-            {user.type >= UserType.ADMIN ? (
+            {user !== null && user.type >= UserType.ADMIN ? (
               <Link href="/admin/villages">
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}
@@ -162,7 +180,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
                 ))}
               </Select>
             </FormControl>
-            {village === null && user.type >= UserType.ADMIN && (
+            {village === null && user !== null && user.type >= UserType.ADMIN && (
               <>
                 <Divider style={{ margin: '1rem 0' }} />
                 <Link href="/admin/villages">
