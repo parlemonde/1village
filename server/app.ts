@@ -53,6 +53,9 @@ async function start() {
       contentSecurityPolicy: {
         directives,
       },
+      referrerPolicy: {
+        policy: 'strict-origin-when-cross-origin',
+      },
     }),
   );
   app.use(cors() as RequestHandler);

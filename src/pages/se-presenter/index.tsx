@@ -11,7 +11,7 @@ const suggestions = [
     button: 'Mascotte',
     href: '/se-presenter/mascotte/1',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed gravida risus. Nullam gravida cursus efficitur. Cras euismod purus non libero elementum pulvinar. Cras id tempus dui, ac lacinia augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque quam nisi, vehicula nec lobortis id, rhoncus blandit est.',
+      'Créez votre mascotte pour présenter votre classe à vos Pélicopains. Créez-la à votre image, elle vous représentera dans votre village-monde !',
     icon: ImageIcon,
   },
   {
@@ -19,7 +19,7 @@ const suggestions = [
     button: 'Présentation thématique',
     href: '/se-presenter/thematique/1',
     text:
-      'Nulla nec dolor sed nisl maximus suscipit ut at eros. Proin vitae neque a nulla ullamcorper pretium. Proin eget vehicula elit. Etiam non ipsum in quam placerat vestibulum fringilla vel quam. Sed finibus, augue non tristique rhoncus, leo felis imperdiet turpis, id congue turpis diam at magna. Mauris ut ligula porta, elementum elit quis, rutrum turpis.',
+      'Partagez un aspect de votre quotidien ou de votre culture aux Pelicopains ! Présentez en vidéo, image, texte et son votre école, votre environnement, votre plat favori, vos jeux de récréation et plus encore.',
     icon: ImageIcon,
   },
 ];

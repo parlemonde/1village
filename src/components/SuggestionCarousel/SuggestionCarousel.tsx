@@ -47,7 +47,7 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
     if (intervalRef.current) {
       window.clearInterval(intervalRef.current);
     }
-    intervalRef.current = window.setInterval(updateTab, 4000);
+    intervalRef.current = window.setInterval(updateTab, 8000);
     return () => {
       window.clearInterval(intervalRef.current);
     };
