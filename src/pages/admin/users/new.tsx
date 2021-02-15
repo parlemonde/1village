@@ -37,7 +37,9 @@ const NewUser: React.FC = () => {
   const [newUser, setNewUser] = React.useState<Partial<User>>({
     email: '',
     pseudo: '',
-    teacherName: '',
+    city: '',
+    address: '',
+    postalCode: '',
     school: '',
     level: '',
     type: UserType.TEACHER,
@@ -123,9 +125,23 @@ const NewUser: React.FC = () => {
           />
           <TextField
             className="full-width"
-            label="Nom du professeur"
-            value={newUser.teacherName}
-            onChange={updateUserField('teacherName')}
+            label="Adresse de l'école"
+            value={newUser.address}
+            onChange={updateUserField('address')}
+            style={{ marginBottom: '1rem' }}
+          />
+          <TextField
+            className="full-width"
+            label="Ville de l'école"
+            value={newUser.city}
+            onChange={updateUserField('city')}
+            style={{ marginBottom: '1rem' }}
+          />
+          <TextField
+            className="full-width"
+            label="Code postal"
+            value={newUser.postalCode}
+            onChange={updateUserField('postalCode')}
             style={{ marginBottom: '1rem' }}
           />
           <TextField

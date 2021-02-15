@@ -19,10 +19,13 @@ export const userTypeNames = {
 export interface User {
   id: number;
   email: string;
-  teacherName: string;
   pseudo: string;
   school: string;
   level: string;
+  city: string;
+  postalCode: string;
+  address: string;
+
   type: UserType;
   accountRegistration: number;
 

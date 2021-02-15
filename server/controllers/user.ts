@@ -53,7 +53,6 @@ type CreateUserData = {
   email: string;
   pseudo: string;
   countryCode: string;
-  teacherName?: string;
   level?: string;
   school?: string;
   password?: string;
@@ -66,7 +65,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     email: { type: 'string', format: 'email' },
     pseudo: { type: 'string' },
     countryCode: { type: 'string' },
-    teacherName: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
     password: { type: 'string', nullable: true },
@@ -90,7 +88,6 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   const user = new User();
   user.email = data.email;
   user.pseudo = data.pseudo;
-  user.teacherName = data.teacherName || '';
   user.level = data.level || '';
   user.school = data.school || '';
   user.villageId = data.villageId || null;
@@ -117,9 +114,11 @@ type EditUserData = {
   email?: string;
   pseudo?: string;
   countryCode?: string;
-  teacherName?: string;
   level?: string;
   school?: string;
+  city?: string;
+  postalCode?: string;
+  address?: string;
   type?: UserType;
   villageId?: number | null;
   accountRegistration?: number;
@@ -130,9 +129,11 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     email: { type: 'string', format: 'email', nullable: true },
     pseudo: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
-    teacherName: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
+    city: { type: 'string', nullable: true },
+    postalCode: { type: 'string', nullable: true },
+    address: { type: 'string', nullable: true },
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
@@ -160,7 +161,9 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
     user.email = valueOrDefault(data.email, user.email);
     user.pseudo = valueOrDefault(data.pseudo, user.pseudo);
   }
-  user.teacherName = valueOrDefault(data.teacherName, user.teacherName);
+  user.address = valueOrDefault(data.address, user.address);
+  user.city = valueOrDefault(data.city, user.city);
+  user.postalCode = valueOrDefault(data.postalCode, user.postalCode);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);

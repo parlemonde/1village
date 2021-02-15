@@ -144,9 +144,23 @@ const EditUser: React.FC = () => {
           />
           <TextField
             className="full-width"
-            label="Nom du professeur"
-            value={user.teacherName}
-            onChange={updateUserField('teacherName')}
+            label="Adresse de l'école"
+            value={user.address}
+            onChange={updateUserField('address')}
+            style={{ marginBottom: '1rem' }}
+          />
+          <TextField
+            className="full-width"
+            label="Ville de l'école"
+            value={user.city}
+            onChange={updateUserField('city')}
+            style={{ marginBottom: '1rem' }}
+          />
+          <TextField
+            className="full-width"
+            label="Code postal"
+            value={user.postalCode}
+            onChange={updateUserField('postalCode')}
             style={{ marginBottom: '1rem' }}
           />
           <TextField className="full-width" label="École" value={user.school} onChange={updateUserField('school')} style={{ marginBottom: '1rem' }} />

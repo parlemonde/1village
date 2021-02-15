@@ -67,7 +67,9 @@ const Presentation: React.FC = () => {
     const updatedValues = {
       school: newUser.school,
       level: newUser.level,
-      teacherName: newUser.teacherName,
+      city: newUser.city,
+      postalCode: newUser.postalCode,
+      address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
     };
@@ -190,13 +192,33 @@ const Presentation: React.FC = () => {
           }}
         />
         <PanelInput
-          value={newUser.teacherName}
+          value={newUser.address}
           defaultValue={'non renseigné'}
-          label="Nom du professeur :"
-          placeholder="Nom du professeur"
+          label="Adresse de l'école :"
+          placeholder="Adresse"
           isEditMode={editMode === 0}
-          onChange={(teacherName) => {
-            setNewUser((u) => ({ ...u, teacherName }));
+          onChange={(address) => {
+            setNewUser((u) => ({ ...u, address }));
+          }}
+        />
+        <PanelInput
+          value={newUser.city}
+          defaultValue={'non renseigné'}
+          label="Ville :"
+          placeholder="Ville"
+          isEditMode={editMode === 0}
+          onChange={(city) => {
+            setNewUser((u) => ({ ...u, city }));
+          }}
+        />
+        <PanelInput
+          value={newUser.postalCode}
+          defaultValue={'non renseigné'}
+          label="Code postal :"
+          placeholder="Code postal"
+          isEditMode={editMode === 0}
+          onChange={(postalCode) => {
+            setNewUser((u) => ({ ...u, postalCode }));
           }}
         />
         {editMode === 0 && (
@@ -275,11 +297,11 @@ const Presentation: React.FC = () => {
 
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
-        <div style={{ margin: '1rem 0.5rem' }}>
+        {/* <div style={{ margin: '1rem 0.5rem' }}>
           <Button variant="contained" color="secondary" size="small">
             Télécharger toutes mes données
           </Button>
-        </div>
+        </div> */}
         <div style={{ margin: '1rem 0.5rem' }}>
           <RedButton variant="contained" color="secondary" size="small" onClick={updateEditMode(3)}>
             Supprimer mon compte

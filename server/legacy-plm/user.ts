@@ -52,6 +52,10 @@ async function getVillage(plmId: number): Promise<Village | null> {
   return null;
 }
 
+function getMetaValue(plmUser: PLM_User, key: string): string {
+  return (plmUser.meta ?? []).find((meta) => meta.key.toLowerCase() === key.toLowerCase())?.value ?? '';
+}
+
 export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   // 1- Find village
   let village: Village | null = null;
@@ -94,9 +98,11 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   const user = new User();
   user.email = plmUser.user_email;
   user.pseudo = plmUser.user_login;
-  user.teacherName = plmUser.display_name;
   user.level = '';
-  user.school = '';
+  user.school = getMetaValue(plmUser, 'Nom de votre école');
+  user.city = getMetaValue(plmUser, 'Ville de votre école') || getMetaValue(plmUser, 'Académie');
+  user.postalCode = getMetaValue(plmUser, 'Code postal de votre école');
+  user.address = getMetaValue(plmUser, "Adresse de l'école");
   user.villageId = village?.id || null;
   user.countryCode = country;
   user.type = userType;

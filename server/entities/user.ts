@@ -12,20 +12,26 @@ export class User implements UserInterface {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column({ type: 'varchar', length: 150, unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true })
   public email: string;
 
   @Column({ type: 'varchar', length: 50, unique: true })
   public pseudo: string;
 
-  @Column({ type: 'varchar', length: 60, default: '' })
-  public teacherName: string;
-
   @Column({ type: 'varchar', length: 50, default: '' })
   public level: string;
 
-  @Column({ type: 'varchar', length: 200, default: '' })
+  @Column({ type: 'varchar', length: 255, default: '' })
   public school: string;
+
+  @Column({ type: 'varchar', length: 128, default: '' })
+  public city: string;
+
+  @Column({ type: 'varchar', length: 10, default: '' })
+  public postalCode: string;
+
+  @Column({ type: 'varchar', length: 255, default: '' })
+  public address: string;
 
   @Column({ default: 0 })
   public accountRegistration: number; // 0 to 3 -> Ok, 4 -> Account blocked, 10 -> Account use PLM SSO
