@@ -52,7 +52,11 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         <img alt="Image de profil" src={getGravatarUrl(user.email)} width="40px" height="40px" style={{ borderRadius: '20px', margin: '0.25rem' }} />
         <div className="activity-card__header_info">
           <p className="text">
-            {userIsPelico ? 'Pelico a ' : isSelf ? 'Votre classe a ' : 'La classe de ??? à ??? a '}
+            {userIsPelico
+              ? 'Pelico a '
+              : isSelf
+              ? 'Votre classe a '
+              : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode} a `}
             <strong>{titles[activity.type]}</strong>
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>

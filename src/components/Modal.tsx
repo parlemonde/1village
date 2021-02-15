@@ -54,8 +54,9 @@ interface ModalProps {
   ariaLabelledBy: string;
   ariaDescribedBy: string;
   noCloseButton?: boolean;
-  title?: string;
+  title?: React.ReactNode | React.ReactNodeArray;
   children?: React.ReactNode | React.ReactNodeArray;
+  actions?: React.ReactNode | React.ReactNodeArray;
   cancelLabel?: string;
   confirmLabel?: string;
   fullWidth?: boolean;
@@ -89,6 +90,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   noCancelButton = false,
   noTitle = false,
   loading = false,
+  actions,
   id,
 }: ModalProps) => {
   return (
@@ -115,20 +117,26 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
         {children}
       </DialogContent>
       <DialogActions>
-        {noCancelButton === false && (
-          <Button onClick={onClose} color={color} variant="outlined">
-            {cancelLabel || 'Annuler'}
-          </Button>
-        )}
-        {onConfirm !== null && error && (
-          <RedButton onClick={onConfirm} disabled={disabled} variant="contained">
-            {confirmLabel || 'Oui'}
-          </RedButton>
-        )}
-        {onConfirm !== null && !error && (
-          <Button onClick={onConfirm} disabled={disabled} color={color} variant="contained">
-            {confirmLabel || 'Non'}
-          </Button>
+        {actions ? (
+          actions
+        ) : (
+          <>
+            {noCancelButton === false && (
+              <Button onClick={onClose} color={color} variant="outlined">
+                {cancelLabel || 'Annuler'}
+              </Button>
+            )}
+            {onConfirm !== null && error && (
+              <RedButton onClick={onConfirm} disabled={disabled} variant="contained">
+                {confirmLabel || 'Oui'}
+              </RedButton>
+            )}
+            {onConfirm !== null && !error && (
+              <Button onClick={onConfirm} disabled={disabled} color={color} variant="contained">
+                {confirmLabel || 'Non'}
+              </Button>
+            )}
+          </>
         )}
       </DialogActions>
       {loading && (

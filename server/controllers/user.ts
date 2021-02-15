@@ -167,6 +167,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
+  user.firstLogin = false;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);

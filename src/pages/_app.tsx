@@ -10,8 +10,8 @@ import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
 
-import App from 'next/app';
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
+import App from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
@@ -24,6 +24,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import { Header } from 'src/components/Header';
 import { Navigation } from 'src/components/Navigation';
+import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
@@ -131,6 +132,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       <Header />
                       <Navigation />
                       <Component {...pageProps} />
+                      <WelcomeModal />
                     </div>
                   ) : (
                     <Component {...pageProps} />

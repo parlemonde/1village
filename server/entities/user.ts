@@ -42,6 +42,9 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 95, default: '', select: false })
   public verificationHash?: string;
 
+  @Column({ type: 'bool', default: true })
+  public firstLogin: boolean;
+
   @Column({
     type: 'enum',
     enum: UserType,

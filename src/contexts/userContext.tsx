@@ -218,6 +218,8 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
     };
   };
 
+  const isLoggedIn = React.useMemo(() => user !== null, [user]);
+
   /**
    * Do an Axios logged request to the backend with the csrf token.
    * @param req
@@ -237,8 +239,6 @@ export const UserContextProvider: React.FunctionComponent<UserContextProviderPro
     },
     [headers],
   );
-
-  const isLoggedIn = user !== null;
 
   return (
     <UserContext.Provider

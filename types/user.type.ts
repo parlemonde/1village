@@ -26,6 +26,8 @@ export interface User {
   postalCode: string;
   address: string;
 
+  firstLogin: boolean;
+
   type: UserType;
   accountRegistration: number;
 
