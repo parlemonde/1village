@@ -27,6 +27,10 @@ export const WelcomeModal: React.FC = () => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
   const [newUser, setNewUser] = React.useState<Partial<User>>(user);
+  const [updateAsked, setUpdateAsked] = React.useState({
+    village: false,
+    country: false,
+  });
 
   React.useEffect(() => {
     setNewUser(user);
@@ -70,6 +74,40 @@ export const WelcomeModal: React.FC = () => {
       setUser({ ...user, ...updatedValues, firstLogin: false });
     }
     setIsLoading(false);
+  };
+
+  const sendError = (error: 'village' | 'country') => async () => {
+    // do not ask twice
+    if (updateAsked[error]) {
+      enqueueSnackbar(
+        error === 'country' ? 'Une demande de changement de pays à été envoyé !' : 'Une demande de changement de village à été envoyé !',
+        {
+          variant: 'success',
+        },
+      );
+      return;
+    }
+
+    const response = await axiosLoggedRequest({
+      method: 'POST',
+      url: '/users/ask-update',
+      data: {
+        error,
+      },
+    });
+    if (response.error) {
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      enqueueSnackbar(
+        error === 'country' ? 'Une demande de changement de pays à été envoyé !' : 'Une demande de changement de village à été envoyé !',
+        {
+          variant: 'success',
+        },
+      );
+      setUpdateAsked({ ...updateAsked, [error]: true });
+    }
   };
 
   return (
@@ -135,16 +173,7 @@ export const WelcomeModal: React.FC = () => {
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
               {village.name}
             </h2>
-            <Button
-              size="small"
-              variant="outlined"
-              style={{ marginTop: '2rem' }}
-              onClick={() => {
-                enqueueSnackbar('Une demande de changement de village à été envoyé !', {
-                  variant: 'success',
-                });
-              }}
-            >
+            <Button size="small" variant="outlined" style={{ marginTop: '2rem' }} onClick={sendError('village')}>
               {"Ce n'est pas mon village !"}
             </Button>
           </div>
@@ -157,16 +186,7 @@ export const WelcomeModal: React.FC = () => {
               <span style={{ marginRight: '0.5rem' }}>{userCountry?.name}</span>
               {userCountry?.isoCode && <Flag country={userCountry?.isoCode}></Flag>}
             </h2>
-            <Button
-              size="small"
-              variant="outlined"
-              style={{ marginTop: '2rem' }}
-              onClick={() => {
-                enqueueSnackbar('Une demande de changement de pays à été envoyé !', {
-                  variant: 'success',
-                });
-              }}
-            >
+            <Button size="small" variant="outlined" style={{ marginTop: '2rem' }} onClick={sendError('country')}>
               {"Ce n'est pas mon pays !"}
             </Button>
           </div>

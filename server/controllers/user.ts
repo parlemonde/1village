@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
+import { Email, sendMail } from '../emails';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -394,6 +395,53 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
   delete user.passwordHash;
   delete user.verificationHash;
   res.sendJSON({ user, accessToken });
+});
+
+// Error data
+type ErrorData = {
+  error: 'village' | 'country';
+};
+const ERROR_SCHEMA: JSONSchemaType<ErrorData> = {
+  type: 'object',
+  properties: {
+    error: { type: 'string', enum: ['country', 'village'] },
+  },
+  required: ['error'],
+  additionalProperties: false,
+};
+const errorUserValidator = ajv.compile(ERROR_SCHEMA);
+userController.post({ path: '/ask-update' }, async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!errorUserValidator(data)) {
+    sendInvalidDataError(errorUserValidator);
+    return;
+  }
+
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  if (process.env.ADMIN_EMAIL) {
+    sendMail(data.error === 'village' ? Email.INVALID_VILLAGE : Email.INVALID_COUNTRY, process.env.ADMIN_EMAIL, {
+      userName: req.user.pseudo,
+      userEmail: req.user.email,
+    });
+  }
+  if (process.env.ADMIN_EMAIL_1) {
+    sendMail(data.error === 'village' ? Email.INVALID_VILLAGE : Email.INVALID_COUNTRY, process.env.ADMIN_EMAIL_1, {
+      userName: req.user.pseudo,
+      userEmail: req.user.email,
+    });
+  }
+  if (process.env.ADMIN_EMAIL_2) {
+    sendMail(data.error === 'village' ? Email.INVALID_VILLAGE : Email.INVALID_COUNTRY, process.env.ADMIN_EMAIL_2, {
+      userName: req.user.pseudo,
+      userEmail: req.user.email,
+    });
+  }
+
+  res.sendJSON({ success: true });
 });
 
 export { userController };

@@ -1,0 +1,17 @@
+1Village - Par Le Monde
+--------------------------------------
+
+Bonjour admin 1village,
+
+Une classe n'a pas ou n'est pas dans son village monde qui lui est attribué !
+Une erreur de synchronization avec prof.parlmonde.org est certainement survenue...
+
+Pseudo / Nom de la classe : {{userName}}
+Email du professeur de la classe: {{userEmail}}
+
+Vous pouvez corriger ça sur 1village admin: {{frontUrl}}/admin
+
+Merci !
+
+--------------------------------------
+La plateforme 1Village.
