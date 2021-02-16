@@ -3,6 +3,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import MobileStepper from '@material-ui/core/MobileStepper';
+import { Checkbox } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
@@ -32,6 +33,7 @@ export const WelcomeModal: React.FC = () => {
     village: false,
     country: false,
   });
+  const [cguChecked, setCguChecked] = React.useState(false);
 
   React.useEffect(() => {
     setNewUser(user);
@@ -140,7 +142,7 @@ export const WelcomeModal: React.FC = () => {
                 size="small"
                 color={currentStep >= 2 ? 'primary' : 'default'}
                 variant={currentStep >= 2 ? 'contained' : 'text'}
-                disabled={currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)}
+                disabled={(currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)) || (currentStep === 2 && !cguChecked)}
                 onClick={() => {
                   if (currentStep !== 3) {
                     setCurrentStep(currentStep + 1);
@@ -197,9 +199,22 @@ export const WelcomeModal: React.FC = () => {
           </div>
         )}
         {currentStep === 2 && (
-          <div style={{ height: '20rem', overflow: 'scroll', maxWidth: '800px', margin: '0 auto' }}>
-            <CGU />
-          </div>
+          <>
+            <div style={{ height: '19rem', overflow: 'scroll', maxWidth: '800px', margin: '0 auto' }}>
+              <CGU />
+            </div>
+            <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
+              <label style={{ cursor: 'pointer' }}>
+                <Checkbox
+                  checked={cguChecked}
+                  onChange={(event) => {
+                    setCguChecked(event.target.checked);
+                  }}
+                />
+                <span>{"J'accepte les conditions générales d'utilisation du site"}</span>
+              </label>
+            </div>
+          </>
         )}
         {currentStep === 3 && (
           <>
