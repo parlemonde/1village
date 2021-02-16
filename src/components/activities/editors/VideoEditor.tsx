@@ -99,6 +99,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
                 display: 'inline-block',
                 width: '16rem',
                 height: '9rem',
+                backgroundColor: 'black',
               }}
             >
               <ReactPlayer width="100%" height="100%" light url={videoUrl} controls />
@@ -148,7 +149,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
           </Alert>
         </div>
         <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
-          <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem' }}>
+          <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem', minWidth: 0 }}>
             <div id={`image-edit-${id}-desc`}>
               {/* <Steps steps={["Choisir la vidéo", "Paramètres"]} activeStep={0} /> */}
               {currentStep === 1 && (
@@ -216,13 +217,13 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
               )}
             </div>
           </div>
-          <div style={{ flex: '1', padding: '0.5rem' }}>
+          <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
             <div style={{ width: '100%', height: '100%', backgroundColor: bgPage, padding: '0.5rem' }}>
               <div className="text-center text text--bold" style={{ height: '10%' }}>
                 Aperçu
               </div>
               {preview.mode === 1 && (
-                <div style={{ width: '100%', height: '90%' }}>
+                <div style={{ width: '100%', height: '90%', backgroundColor: 'black' }}>
                   <ReactPlayer width="100%" height="100%" light url={preview.url} controls />
                 </div>
               )}
