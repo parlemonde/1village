@@ -16,6 +16,7 @@ import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { ActivityType } from 'types/activity.type';
 import { User, UserType } from 'types/user.type';
 
+import { CGU } from './CGU';
 import { Flag } from './Flag';
 import { ActivityCard } from './activities/ActivityCard';
 
@@ -132,24 +133,24 @@ export const WelcomeModal: React.FC = () => {
           <MobileStepper
             style={{ backgroundColor: 'unset' }}
             variant="dots"
-            steps={3}
+            steps={4}
             activeStep={currentStep}
             nextButton={
               <Button
                 size="small"
-                color={currentStep === 2 ? 'primary' : 'default'}
-                variant={currentStep === 2 ? 'contained' : 'text'}
-                disabled={currentStep === 2 && (!newUser.city || !newUser.address || !newUser.postalCode)}
+                color={currentStep >= 2 ? 'primary' : 'default'}
+                variant={currentStep >= 2 ? 'contained' : 'text'}
+                disabled={currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)}
                 onClick={() => {
-                  if (currentStep !== 2) {
+                  if (currentStep !== 3) {
                     setCurrentStep(currentStep + 1);
                   } else {
                     updateUser();
                   }
                 }}
               >
-                {currentStep === 2 ? 'Terminer' : 'Suivant'}
-                {currentStep !== 2 && <KeyboardArrowRight />}
+                {currentStep === 2 ? 'Accepter' : currentStep === 3 ? 'Terminer' : 'Suivant'}
+                {currentStep < 2 && <KeyboardArrowRight />}
               </Button>
             }
             backButton={
@@ -196,6 +197,11 @@ export const WelcomeModal: React.FC = () => {
           </div>
         )}
         {currentStep === 2 && (
+          <div style={{ height: '20rem', overflow: 'scroll', maxWidth: '800px', margin: '0 auto' }}>
+            <CGU />
+          </div>
+        )}
+        {currentStep === 3 && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
               <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />

@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 // Use important to override Material UI styles.
 body {
@@ -18,24 +18,24 @@ h6 {
 }
 h1 {
   font-size: 1.4rem;
-  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 600;
 }
 h1.title {
-  font-family: "Alegreya Sans", "Times New Roman", Times, serif;
+  font-family: 'Alegreya Sans', 'Times New Roman', Times, serif;
   font-weight: 500;
   color: $primary-color;
 }
 
 h2 {
   font-size: 1.2rem;
-  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 600;
 }
 
 h3 {
   font-size: 1.07rem;
-  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 500;
 }
 
@@ -60,7 +60,7 @@ body {
 // Text style
 .text {
   font-size: 1rem;
-  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 400;
 }
 .text--bold {
@@ -93,10 +93,15 @@ body {
 .text--detail {
   color: $font-detail;
 }
+.text--orange-background {
+  background-color: rgb(243, 121, 52);
+  color: white;
+  display: inline-block;
+}
 
 a {
   font-size: 1rem;
-  font-family: "Roboto", "Times New Roman", Times, serif;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 400;
   color: $font-color;
   text-decoration: none;
