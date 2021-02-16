@@ -81,8 +81,8 @@ export const WelcomeModal: React.FC = () => {
     if (updateAsked[error]) {
       enqueueSnackbar(
         error === 'country'
-          ? 'Une demande de changement de pays à été envoyé à un administrateur !'
-          : 'Une demande de changement de village à été envoyé à un administrateur !',
+          ? 'Une demande de changement de pays a été envoyé à un administrateur !'
+          : 'Une demande de changement de village a été envoyé à un administrateur !',
         {
           variant: 'success',
         },
@@ -104,8 +104,8 @@ export const WelcomeModal: React.FC = () => {
     } else {
       enqueueSnackbar(
         error === 'country'
-          ? 'Une demande de changement de pays à été envoyé à un administrateur !'
-          : 'Une demande de changement de village à été envoyé à un administrateur !',
+          ? 'Une demande de changement de pays a été envoyé à un administrateur !'
+          : 'Une demande de changement de village a été envoyé à un administrateur !',
         {
           variant: 'success',
         },
@@ -200,7 +200,7 @@ export const WelcomeModal: React.FC = () => {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
               <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />
               <span className="text text--bold">
-                Suite à votre première connection, Pelico à récupéré les informations suivantes sur votre classe. Pouvez les mettre à jour si
+                Suite à votre première connection, Pelico a récupéré les informations suivantes sur votre classe. Pouvez les mettre à jour si
                 nécessaire ?
               </span>
             </div>

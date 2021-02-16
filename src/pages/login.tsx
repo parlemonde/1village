@@ -183,7 +183,7 @@ const Login: React.FC = () => {
             </div>
 
             <NoSsr>
-              {ssoHost.length && clientId && process.browser && window.location.href.split('?')[0] !== 'https://1v.parlemonde.org/login' && (
+              {ssoHost.length && clientId && (
                 <>
                   <div className="login__divider">
                     <div className="login__or">
