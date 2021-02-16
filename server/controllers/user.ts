@@ -59,6 +59,7 @@ type CreateUserData = {
   password?: string;
   type?: UserType;
   villageId?: number;
+  firstLogin?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -71,6 +72,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     password: { type: 'string', nullable: true },
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
+    firstLogin: { type: 'boolean', nullable: true },
   },
   required: ['email', 'pseudo'],
   additionalProperties: false,
@@ -123,6 +125,7 @@ type EditUserData = {
   type?: UserType;
   villageId?: number | null;
   accountRegistration?: number;
+  firstLogin?: boolean;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
@@ -138,6 +141,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
+    firstLogin: { type: 'boolean', nullable: true },
   },
   required: [],
   additionalProperties: false,
