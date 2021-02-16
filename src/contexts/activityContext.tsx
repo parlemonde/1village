@@ -148,9 +148,9 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       const mapIndex = isEdit
         ? {}
         : activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
-            acc[c.id] = i;
-            return acc;
-          }, {});
+          acc[c.id] = i;
+          return acc;
+        }, {});
       const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
         .map((p) => {
           let data: { key: string; value: string; id?: number } | null = null;
