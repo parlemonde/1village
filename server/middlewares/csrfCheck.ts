@@ -12,8 +12,8 @@ export function crsfProtection(): RequestHandler {
     let secret: string | null = req.cookies ? req.cookies['csrf-secret'] || null : null;
     if (secret === null) {
       secret = tokens.secretSync();
-      // save new secret in cookie for 2 hours.
-      res.cookie('csrf-secret', secret, { expires: new Date(Date.now() + 120 * 60000), httpOnly: true });
+      // save new secret in cookie for 4 hours.
+      res.cookie('csrf-secret', secret, { expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
     }
 
     // get token from header ['csrf-token'] or set it to null;

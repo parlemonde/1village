@@ -80,7 +80,9 @@ export const WelcomeModal: React.FC = () => {
     // do not ask twice
     if (updateAsked[error]) {
       enqueueSnackbar(
-        error === 'country' ? 'Une demande de changement de pays à été envoyé !' : 'Une demande de changement de village à été envoyé !',
+        error === 'country'
+          ? 'Une demande de changement de pays à été envoyé à un administrateur !'
+          : 'Une demande de changement de village à été envoyé à un administrateur !',
         {
           variant: 'success',
         },
@@ -101,7 +103,9 @@ export const WelcomeModal: React.FC = () => {
       });
     } else {
       enqueueSnackbar(
-        error === 'country' ? 'Une demande de changement de pays à été envoyé !' : 'Une demande de changement de village à été envoyé !',
+        error === 'country'
+          ? 'Une demande de changement de pays à été envoyé à un administrateur !'
+          : 'Une demande de changement de village à été envoyé à un administrateur !',
         {
           variant: 'success',
         },

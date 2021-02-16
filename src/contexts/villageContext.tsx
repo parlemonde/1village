@@ -110,10 +110,31 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
     }
   }, [user, isOnAdmin, setUserVillage]);
 
-  const onAskVillage = () => {
-    enqueueSnackbar("Votre demande d'assignation à un village a bien été envoyé à un administrateur !", {
-      variant: 'success',
-    });
+  const alreadyAsked = React.useRef(false);
+  const onAskVillage = async () => {
+    if (alreadyAsked.current) {
+      enqueueSnackbar("Votre demande d'assignation à un village a bien été envoyé à un administrateur !", {
+        variant: 'success',
+      });
+    } else {
+      const response = await axiosLoggedRequest({
+        method: 'POST',
+        url: '/users/ask-update',
+        data: {
+          error: 'village',
+        },
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur inconnue est survenue...', {
+          variant: 'error',
+        });
+      } else {
+        enqueueSnackbar("Votre demande d'assignation à un village a bien été envoyé à un administrateur !", {
+          variant: 'success',
+        });
+        alreadyAsked.current = true;
+      }
+    }
   };
 
   return (

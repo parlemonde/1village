@@ -31,7 +31,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       // send new token
       token = newTokens.accessToken;
-      res.cookie('access-token', newTokens.accessToken, { maxAge: 60 * 60000, expires: new Date(Date.now() + 60 * 60000), httpOnly: true });
+      res.cookie('access-token', newTokens.accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
     } else {
       token = getHeader(req, 'x-access-token') || getHeader(req, 'authorization') || '';
     }
