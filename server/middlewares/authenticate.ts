@@ -61,7 +61,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
         try {
           data = JSON.parse(decoded);
         } catch (e) {
-          if (req.method === 'GET') {
+          if (req.method === 'GET' && userType === undefined) {
             req.user = undefined;
             res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
             res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
@@ -85,7 +85,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       req.user = user;
     } catch (_e) {
-      if (req.method === 'GET') {
+      if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
         res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
         res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
