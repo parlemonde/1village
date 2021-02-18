@@ -50,21 +50,21 @@ const MascotteStep1: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter" />
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
-        <div style={{ lineHeight: '70px' }}>
+        <div style={{ margin:"0 10% 0 10%", lineHeight: "70px" }}>
           <h1>Qui est dans votre classe ?</h1>
           <TextField variant="outlined" style={{ width: '100%' }} value={activity.data.presentation} disabled />
           <div className="se-presenter-step-one">
             <span>Nous sommes </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.totalStudent} onChange={dataChange('totalStudent')} /> <span> élèves, dont </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.girlStudent} onChange={dataChange('girlStudent')} /> <span> filles et </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.boyStudent} onChange={dataChange('boyStudent')} />{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.girlStudent} onChange={dataChange('girlStudent')} /> <span> filles et </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.boyStudent} onChange={dataChange('boyStudent')} />{' '}
             <span> garçons.</span>
             <br />
-            <span>En moyenne, l’âge des élèves de notre classe est </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.meanAge} onChange={dataChange('meanAge')} /> <span> ans.</span>
+            <span>En moyenne, l’âge des élèves de notre classe est </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.meanAge} onChange={dataChange('meanAge')} /> <span> ans.</span>
             <br />
-            <span>Nous avons </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.totalTeacher} onChange={dataChange('totalTeacher')} /> <span> professeurs, dont </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.womanTeacher} onChange={dataChange('womanTeacher')} /> <span> femmes et </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.manTeacher} onChange={dataChange('manTeacher')} />{' '}
+            <span>Nous avons </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.totalTeacher} onChange={dataChange('totalTeacher')} /> <span> professeurs, dont </span>{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.womanTeacher} onChange={dataChange('womanTeacher')} /> <span> femmes et </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.manTeacher} onChange={dataChange('manTeacher')} />{' '}
             <span> hommes.</span> <br />
-            <span>Dans notre école, il y a </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.numberClassroom} onChange={dataChange('numberClassroom')} /> <span> classes et </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.totalSchoolStudent} onChange={dataChange('totalSchoolStudent')} /> <span> élèves.</span>
+            <span>Dans notre école, il y a </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.numberClassroom} onChange={dataChange('numberClassroom')} /> <span> classes et </span>{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.totalSchoolStudent} onChange={dataChange('totalSchoolStudent')} /> <span> élèves.</span>
           </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Link href="/se-presenter/mascotte/2">

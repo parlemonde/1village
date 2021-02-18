@@ -46,7 +46,7 @@ export const ImageModal: React.FC<EditorProps> = ({
       onChange(newValue);
       setImageUrl(typeof newValue === 'string' ? newValue : URL.createObjectURL(newValue));
     },
-    [onChange],
+    [onChange, setImageUrl],
   );
 
   const uploadImage = async () => {
