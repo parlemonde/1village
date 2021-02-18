@@ -54,7 +54,7 @@ const MascotteStep1: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter" />
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
-        <div style={{ lineHeight: '70px' }}>
+        <div style={{ margin: '0 10% 0 10%', lineHeight: '70px' }}>
           <h1>Qui est dans votre classe ?</h1>
           <TextField variant="outlined" style={{ width: '100%' }} value={activity.data.presentation} disabled />
           <div className="se-presenter-step-one">
@@ -78,19 +78,27 @@ const MascotteStep1: React.FC = () => {
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              size="small"
               value={activity.data.boyStudent}
               onChange={dataChange('boyStudent')}
             />{' '}
             <span> garçons.</span>
             <br />
             <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.meanAge} onChange={dataChange('meanAge')} />{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              size="small"
+              value={activity.data.meanAge}
+              onChange={dataChange('meanAge')}
+            />{' '}
             <span> ans.</span>
             <br />
             <span>Nous avons </span>{' '}
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              size="small"
               value={activity.data.totalTeacher}
               onChange={dataChange('totalTeacher')}
             />{' '}
@@ -98,6 +106,7 @@ const MascotteStep1: React.FC = () => {
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              size="small"
               value={activity.data.womanTeacher}
               onChange={dataChange('womanTeacher')}
             />{' '}
@@ -105,6 +114,7 @@ const MascotteStep1: React.FC = () => {
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              size="small"
               value={activity.data.manTeacher}
               onChange={dataChange('manTeacher')}
             />{' '}
@@ -113,6 +123,7 @@ const MascotteStep1: React.FC = () => {
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              size="small"
               value={activity.data.numberClassroom}
               onChange={dataChange('numberClassroom')}
             />{' '}
@@ -120,6 +131,7 @@ const MascotteStep1: React.FC = () => {
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              size="small"
               value={activity.data.totalSchoolStudent}
               onChange={dataChange('totalSchoolStudent')}
             />{' '}
