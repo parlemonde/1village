@@ -24,8 +24,16 @@ const MascotteStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter" />
-        <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={2} />
+        <BackButton href="/se-presenter/mascotte/2" />
+        <Steps
+          steps={[
+            'Votre classe',
+            'Votre mascotte : ' + activity.data.mascotteName ?? 'mascotteName',
+            'Description de votre mascotte',
+            'Prévisualiser',
+          ]}
+          activeStep={2}
+        />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Dites-en plus sur vous-mêmes et votre mascotte ! Souvenez-vous {activity.data.mascotteName ?? 'mascotteName'} vous représente.</h1>
           <div>
@@ -56,8 +64,8 @@ const MascotteStep3: React.FC = () => {
             </Grid>
           </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Link href="/se-presenter/mascotte/3">
-              <Button component="a" href="/se-presenter/mascotte/3" variant="outlined" color="primary">
+            <Link href="/se-presenter/mascotte/4">
+              <Button component="a" href="/se-presenter/mascotte/4" variant="outlined" color="primary">
                 Étape suivante
               </Button>
             </Link>

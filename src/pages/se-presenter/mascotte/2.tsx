@@ -24,12 +24,12 @@ const MascotteStep2: React.FC = () => {
     }
   }, [activity, router]);
 
-  if (!activity) return <Base>Redirecting...</Base>;
+  if (!activity) router.push('/se-presenter/mascotte/1');
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter" />
+        <BackButton href="/se-presenter/mascotte/1" />
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={1} />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Qui êtes-vous ? Choisissez une mascotte pour vous représenter collectivement !</h1>

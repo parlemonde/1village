@@ -18,26 +18,27 @@ const MascotteStep1: React.FC = () => {
   const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    createNewActivity(ActivityType.PRESENTATION, {
-      presentation: '',
-      totalStudent: 0,
-      girlStudent: 0,
-      boyStudent: 0,
-      meanAge: 0,
-      totalTeacher: 0,
-      womanTeacher: 0,
-      manTeacher: 0,
-      numberClassroom: 0,
-      totalSchoolStudent: 0,
-      mascotteName: '',
-      mascotteDescription: '',
-      personality1: '',
-      personality2: '',
-      personality3: '',
-      countries: '',
-      languages: '',
-      currencies: '',
-    });
+    if (!activity)
+      createNewActivity(ActivityType.PRESENTATION, {
+        presentation: '',
+        totalStudent: 0,
+        girlStudent: 0,
+        boyStudent: 0,
+        meanAge: 0,
+        totalTeacher: 0,
+        womanTeacher: 0,
+        manTeacher: 0,
+        numberClassroom: 0,
+        totalSchoolStudent: 0,
+        mascotteName: '',
+        mascotteDescription: '',
+        personality1: '',
+        personality2: '',
+        personality3: '',
+        countries: '',
+        languages: '',
+        currencies: '',
+      });
   }, [createNewActivity]);
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,17 +58,72 @@ const MascotteStep1: React.FC = () => {
           <h1>Qui est dans votre classe ?</h1>
           <TextField variant="outlined" style={{ width: '100%' }} value={activity.data.presentation} disabled />
           <div className="se-presenter-step-one">
-            <span>Nous sommes </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.totalStudent} onChange={dataChange('totalStudent')} /> <span> élèves, dont </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.girlStudent} onChange={dataChange('girlStudent')} /> <span> filles et </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.boyStudent} onChange={dataChange('boyStudent')} />{' '}
+            <span>Nous sommes </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              size="small"
+              value={activity.data.totalStudent}
+              onChange={dataChange('totalStudent')}
+            />{' '}
+            <span> élèves, dont </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              size="small"
+              value={activity.data.girlStudent}
+              onChange={dataChange('girlStudent')}
+            />{' '}
+            <span> filles et </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              value={activity.data.boyStudent}
+              onChange={dataChange('boyStudent')}
+            />{' '}
             <span> garçons.</span>
             <br />
-            <span>En moyenne, l’âge des élèves de notre classe est </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.meanAge} onChange={dataChange('meanAge')} /> <span> ans.</span>
+            <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.meanAge} onChange={dataChange('meanAge')} />{' '}
+            <span> ans.</span>
             <br />
-            <span>Nous avons </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.totalTeacher} onChange={dataChange('totalTeacher')} /> <span> professeurs, dont </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.womanTeacher} onChange={dataChange('womanTeacher')} /> <span> femmes et </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.manTeacher} onChange={dataChange('manTeacher')} />{' '}
+            <span>Nous avons </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              value={activity.data.totalTeacher}
+              onChange={dataChange('totalTeacher')}
+            />{' '}
+            <span> professeurs, dont </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              value={activity.data.womanTeacher}
+              onChange={dataChange('womanTeacher')}
+            />{' '}
+            <span> femmes et </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              value={activity.data.manTeacher}
+              onChange={dataChange('manTeacher')}
+            />{' '}
             <span> hommes.</span> <br />
-            <span>Dans notre école, il y a </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.numberClassroom} onChange={dataChange('numberClassroom')} /> <span> classes et </span>{' '}
-            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.totalSchoolStudent} onChange={dataChange('totalSchoolStudent')} /> <span> élèves.</span>
+            <span>Dans notre école, il y a </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              value={activity.data.numberClassroom}
+              onChange={dataChange('numberClassroom')}
+            />{' '}
+            <span> classes et </span>{' '}
+            <TextField
+              className="se-presenter-step-one__textfield"
+              type="number"
+              value={activity.data.totalSchoolStudent}
+              onChange={dataChange('totalSchoolStudent')}
+            />{' '}
+            <span> élèves.</span>
           </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Link href="/se-presenter/mascotte/2">

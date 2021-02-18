@@ -28,11 +28,21 @@ const MascotteStep4: React.FC = () => {
     setIsLoading(false);
   };
 
+  if (!activity) router.push('/se-presenter/mascotte/1');
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter/mascotte/3" label={isEdit ? 'Modifier' : 'Retour'} />
-        <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', "Prévisualiser"]} activeStep={3} />
+        <Steps
+          steps={[
+            'Votre classe',
+            'Votre mascotte : ' + activity.data.mascotteName ?? 'mascotteName',
+            'Description de votre mascotte',
+            'Prévisualiser',
+          ]}
+          activeStep={3}
+        />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Pré-visualisez votre mascotte{!isEdit && ' et publiez la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
