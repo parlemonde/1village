@@ -2,27 +2,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField, Avatar, Grid, Box } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Button, TextField, Grid, Box } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { AvatarEditor } from 'src/components/activities/editors/ImageEditor/AvatarEditor';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
-const useStyles = makeStyles((theme) => ({
-  large: {
-    width: theme.spacing(18),
-    height: theme.spacing(18),
-  },
-}));
-
 const MascotteStep2: React.FC = () => {
   const router = useRouter();
-  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
-  const classes = useStyles();
-
+  const { activity, updateActivity } = React.useContext(ActivityContext);
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: event.target.value };
     updateActivity({ data: newData });
@@ -47,9 +37,7 @@ const MascotteStep2: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Box display="flex" justifyContent="center" m={4}>
-                  <Avatar alt="Ma Mascotte" className={classes.large}>
-                    <AddIcon style={{ fontSize: '80px' }} />
-                  </Avatar>
+                  <AvatarEditor />
                 </Box>
                 <p>Images de votre mascotte</p>
               </Grid>
