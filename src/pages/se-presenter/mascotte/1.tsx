@@ -31,6 +31,7 @@ const MascotteStep1: React.FC = () => {
         numberClassroom: 0,
         totalSchoolStudent: 0,
         mascotteName: '',
+        mascotteImage: '',
         mascotteDescription: '',
         personality1: '',
         personality2: '',
@@ -39,7 +40,7 @@ const MascotteStep1: React.FC = () => {
         languages: '',
         currencies: '',
       });
-  }, [createNewActivity]);
+  }, [createNewActivity, activity]);
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: event.target.value };

@@ -37,7 +37,7 @@ const MascotteStep2: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Box display="flex" justifyContent="center" m={4}>
-                  <AvatarEditor />
+                  <AvatarEditor onChange={dataChange('mascotteImage')} />
                 </Box>
                 <p>Images de votre mascotte</p>
               </Grid>
