@@ -1,20 +1,27 @@
 import React from 'react';
 
-import { Button, Divider, TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Divider, TextField, Avatar } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Alert } from '@material-ui/lab';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
-import { primaryColor } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
 import type { EditorProps } from '../editing.types';
 
-import { EditorContainer } from './EditorContainer';
+const useStyles = makeStyles((theme) => ({
+  large: {
+    width: theme.spacing(18),
+    height: theme.spacing(18),
+  },
+}));
 
-export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const AvatarEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+  const classes = useStyles();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [imageUrl, setImageUrl] = React.useState(typeof value === 'string' ? value : URL.createObjectURL(value));
   const [tempImageUrl, setTempImageUrl] = React.useState('');
@@ -22,7 +29,7 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
     url: '',
     mode: 0,
   }); // 0 no preview, 1: preview, 2: error
-  const [isModalOpen, setIsModalOpen] = React.useState(value === '');
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [isModalLoading, setIsModalLoading] = React.useState(false);
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
@@ -98,41 +105,10 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
   };
 
   return (
-    <EditorContainer
-      deleteButtonProps={{
-        confirmLabel: 'Voulez-vous vraiment supprimer cette image ?',
-        confirmTitle: 'Supprimer',
-        onDelete,
-      }}
-      className="image-editor"
-    >
-      {imageUrl && (
-        <>
-          <div
-            style={{
-              width: '15rem',
-              height: '10rem',
-              backgroundImage: `url(${imageUrl})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              borderRight: `1px dashed ${primaryColor}`,
-            }}
-          ></div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => {
-                setIsModalOpen(true);
-              }}
-            >
-              {"Changer d'image"}
-            </Button>
-          </div>
-        </>
-      )}
+    <>
+      <Avatar alt={'avatar'} src={imageUrl} className={classes.large} onClick={() => setIsModalOpen(true)}>
+        {imageUrl || <AddIcon style={{ fontSize: '80px' }} />}
+      </Avatar>
       <Modal
         open={isModalOpen}
         fullWidth
@@ -224,6 +200,6 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
           </div>
         </div>
       </Modal>
-    </EditorContainer>
+    </>
   );
 };

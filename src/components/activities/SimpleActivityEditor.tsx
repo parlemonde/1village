@@ -6,7 +6,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { AddContentCard } from './AddContentCard';
 import type { EditorContent } from './editing.types';
 import { H5pEditor } from './editors/H5pEditor';
-import { ImageEditor } from './editors/ImageEditor';
+import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
