@@ -21,6 +21,14 @@ const MascotteStep1: React.FC = () => {
     createNewActivity(ActivityType.PRESENTATION, {
       presentation: '',
       totalStudent: 0,
+      girlStudent: 0,
+      boyStudent: 0,
+      meanAge: 0,
+      totalTeacher: 0,
+      womanTeacher: 0,
+      manTeacher: 0,
+      numberClassroom: 0,
+      totalSchoolStudent: 0,
       mascotteName: '',
       mascotteDescription: '',
       personality1: '',
@@ -48,17 +56,19 @@ const MascotteStep1: React.FC = () => {
         <div style={{ lineHeight: '70px' }}>
           <h1>Qui est dans votre classe ?</h1>
           <TextField variant="outlined" style={{ width: '100%' }} value={activity.data.presentation} disabled />
-          <span>Nous sommes </span> <TextField style={{ display: 'inline' }} type="number" /> <span> élèves, dont </span>{' '}
-          <TextField style={{ display: 'inline' }} type="number" /> <span> filles et </span> <TextField style={{ display: 'inline' }} type="number" />{' '}
-          <span> garçons.</span>
-          <br />
-          <span>En moyenne, l’âge des élèves de notre classe est </span> <TextField style={{ display: 'inline' }} type="number" /> <span> ans.</span>
-          <br />
-          <span>Nous avons </span> <TextField style={{ display: 'inline' }} type="number" /> <span> professeurs, dont </span>{' '}
-          <TextField style={{ display: 'inline' }} type="number" /> <span> femmes et </span> <TextField style={{ display: 'inline' }} type="number" />{' '}
-          <span> hommes.</span> <br />
-          <span>Dans notre école, il y a </span> <TextField style={{ display: 'inline' }} type="number" /> <span> classes et </span>{' '}
-          <TextField style={{ display: 'inline' }} type="number" /> <span> élèves.</span>
+          <div className="se-presenter-step-one">
+            <span>Nous sommes </span> <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.totalStudent} onChange={dataChange('totalStudent')} /> <span> élèves, dont </span>{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" size="small" value={activity.data.girlStudent} onChange={dataChange('girlStudent')} /> <span> filles et </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.boyStudent} onChange={dataChange('boyStudent')} />{' '}
+            <span> garçons.</span>
+            <br />
+            <span>En moyenne, l’âge des élèves de notre classe est </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.meanAge} onChange={dataChange('meanAge')} /> <span> ans.</span>
+            <br />
+            <span>Nous avons </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.totalTeacher} onChange={dataChange('totalTeacher')} /> <span> professeurs, dont </span>{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.womanTeacher} onChange={dataChange('womanTeacher')} /> <span> femmes et </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.manTeacher} onChange={dataChange('manTeacher')} />{' '}
+            <span> hommes.</span> <br />
+            <span>Dans notre école, il y a </span> <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.numberClassroom} onChange={dataChange('numberClassroom')} /> <span> classes et </span>{' '}
+            <TextField className="se-presenter-step-one__textfield" type="number" value={activity.data.totalSchoolStudent} onChange={dataChange('totalSchoolStudent')} /> <span> élèves.</span>
+          </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Link href="/se-presenter/mascotte/2">
               <Button component="a" href="/se-presenter/mascotte/2" variant="outlined" color="primary">
