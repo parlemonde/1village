@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,8 +19,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MascotteStep2: React.FC = () => {
-  const { addContent } = React.useContext(ActivityContext);
+  const router = useRouter();
+  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const classes = useStyles();
+
+  const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newData = { ...activity.data, [key]: event.target.value };
+    updateActivity({ data: newData });
+  };
+
+  React.useEffect(() => {
+    if (!activity) {
+      router.push('/se-presenter/mascotte/1');
+    }
+  }, [activity, router]);
+
+  if (!activity) return <Base>Redirecting...</Base>;
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -39,19 +55,44 @@ const MascotteStep2: React.FC = () => {
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
-                <TextField id="outlined-basic" label="nom" variant="outlined" />
+                <TextField value={activity.data.mascotteName} onChange={dataChange('mascotteName')} label="nom" variant="outlined" />
                 <p>Quel animal est votre mascotte et pourquoi l’avoir choisi ?</p>
-                <TextField id="outlined-basic" label="description" multiline variant="outlined" style={{ width: '100%' }} />
+                <TextField
+                  value={activity.data.mascotteDescription}
+                  onChange={dataChange('mascotteDescription')}
+                  label="description"
+                  multiline
+                  variant="outlined"
+                  style={{ width: '100%' }}
+                />
                 <p>3 traits de personnalités de votre mascotte (et donc des élèves !)</p>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
-                    <TextField id="outlined-basic" label="1" variant="outlined" style={{ width: '100%' }} />
+                    <TextField
+                      value={activity.data.personality1}
+                      onChange={dataChange('personality1')}
+                      label="1"
+                      variant="outlined"
+                      style={{ width: '100%' }}
+                    />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <TextField id="outlined-basic" label="2" variant="outlined" style={{ width: '100%' }} />
+                    <TextField
+                      value={activity.data.personality2}
+                      onChange={dataChange('personality2')}
+                      label="2"
+                      variant="outlined"
+                      style={{ width: '100%' }}
+                    />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <TextField id="outlined-basic" label="3" variant="outlined" style={{ width: '100%' }} />
+                    <TextField
+                      value={activity.data.personality3}
+                      onChange={dataChange('personality3')}
+                      label="3"
+                      variant="outlined"
+                      style={{ width: '100%' }}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
