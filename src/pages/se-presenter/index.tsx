@@ -9,7 +9,7 @@ const suggestions = [
   {
     title: 'Créer sa mascotte',
     button: 'Mascotte',
-    href: '/se-presenter/mascotte/0',
+    href: '/se-presenter/mascotte/1',
     text:
       'Créez votre mascotte pour présenter votre classe à vos Pélicopains. Créez-la à votre image, elle vous représentera dans votre village-monde !',
     icon: ImageIcon,
@@ -27,7 +27,7 @@ const suggestions = [
 const activities = [
   {
     label: 'Créer sa mascotte',
-    href: '/se-presenter/mascotte/0',
+    href: '/se-presenter/mascotte/1',
     icon: ImageIcon,
   },
   {
