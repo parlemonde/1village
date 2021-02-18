@@ -1,0 +1,13 @@
+.se-presenter-step-one .MuiFormControl-root{
+    display: inline-block;
+}
+.se-presenter-step-one {
+    &__textfield {
+        .MuiInputBase-input {
+            padding-top: 6px;
+            padding-bottom: 6px;
+            width: 51px;
+            text-align: right;
+        }
+    } 
+}
