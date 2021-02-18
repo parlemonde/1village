@@ -11,15 +11,22 @@ import { isValidHttpUrl } from 'src/utils';
 
 import type { EditorProps } from '../../editing.types';
 
-export const ImageModal: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const ImageModal: React.FC<EditorProps> = ({
+  isModalOpen,
+  setIsModalOpen,
+  imageUrl,
+  setImageUrl,
+  id,
+  value = '',
+  onChange = () => {},
+  onDelete = () => {},
+}: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const [imageUrl, setImageUrl] = React.useState(typeof value === 'string' ? value : URL.createObjectURL(value));
   const [tempImageUrl, setTempImageUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
     mode: 0,
   }); // 0 no preview, 1: preview, 2: error
-  const [isModalOpen, setIsModalOpen] = React.useState(value === '');
   const [isModalLoading, setIsModalLoading] = React.useState(false);
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
@@ -31,7 +38,7 @@ export const ImageModal: React.FC<EditorProps> = ({ id, value = '', onChange = (
       prevValue.current = value;
       setImageUrl(typeof value === 'string' ? value : URL.createObjectURL(value));
     }
-  }, [value]);
+  }, [value, setImageUrl]);
 
   const onChangeImage = React.useCallback(
     (newValue: string) => {
@@ -39,7 +46,7 @@ export const ImageModal: React.FC<EditorProps> = ({ id, value = '', onChange = (
       onChange(newValue);
       setImageUrl(typeof newValue === 'string' ? newValue : URL.createObjectURL(newValue));
     },
-    [onChange],
+    [onChange, setImageUrl],
   );
 
   const uploadImage = async () => {
