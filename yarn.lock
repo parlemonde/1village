@@ -20,6 +20,7 @@ __metadata:
     "@types/cpx": ^1
     "@types/draft-js": ^0
     "@types/draftjs-to-html": ^0
+    "@types/earcut": ^2
     "@types/eslint": ^7.2.6
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/express": ^4.17.9
@@ -52,6 +53,7 @@ __metadata:
     axios: ^0.21.0
     base64url: ^3.0.1
     body-parser: ^1.19.0
+    camera-controls: ^1.26.0
     classnames: ^2.2.6
     cookie-parser: ^1.4.5
     cors: ^2.8.5
@@ -62,6 +64,7 @@ __metadata:
     draftjs-to-html: ^0.9.1
     draftjs-utils: ^0.10.2
     duplicate-package-checker-webpack-plugin: ^3.0.0
+    earcut: ^2.2.2
     eslint: ^7.15.0
     eslint-config-prettier: ^7.0.0
     eslint-import-resolver-node: ^0.3.4
@@ -102,6 +105,8 @@ __metadata:
     sharp: ^0.27.1
     sortablejs: ^1.13.0
     string-similarity: ^4.0.4
+    three: ^0.125.2
+    three-conic-polygon-geometry: ^1.4.2
     typeorm: ^0.2.29
     typescript: ^4.1.2
     uuid: ^8.3.2
@@ -1876,6 +1881,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@turf/boolean-point-in-polygon@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "@turf/boolean-point-in-polygon@npm:6.3.0"
+  dependencies:
+    "@turf/helpers": ^6.3.0
+    "@turf/invariant": ^6.3.0
+  checksum: 4948b1a9deb504df09f133ef56091ef33fb10a68039eb164ed1f2f8997dfdcd92fab55c5baf4a660644772e99c91ed92d857708a03f31ec0556415eb33ac5185
+  languageName: node
+  linkType: hard
+
+"@turf/helpers@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "@turf/helpers@npm:6.3.0"
+  checksum: be72e760e86e831e50dafbf3a1aacd94c188e8cb69b5b67e4dbea0fe17c3065f0f1e35c08c24e7b40594f8c38d1595e9eb1d0749452efe4fb12525c3e81ea78c
+  languageName: node
+  linkType: hard
+
+"@turf/invariant@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "@turf/invariant@npm:6.3.0"
+  dependencies:
+    "@turf/helpers": ^6.3.0
+  checksum: e140fa10003937360b12e812ee822d3270d63d21df58a938b6e3525d446346f407b4dfa97d2b9aac23d2d47d2495b3ac491142259fb43da57728df3e728b2bbb
+  languageName: node
+  linkType: hard
+
 "@types/anymatch@npm:*":
   version: 1.3.1
   resolution: "@types/anymatch@npm:1.3.1"
@@ -1962,6 +1993,13 @@ __metadata:
   dependencies:
     "@types/draft-js": "*"
   checksum: d8c496bd7d082b910c5293f0475b175cf0a92a4af3a1d8472f53124db076ec8902a38dbea09071d3165b050fec280fbeb0fb6ad56dab2c10902baa5d76a54a91
+  languageName: node
+  linkType: hard
+
+"@types/earcut@npm:^2":
+  version: 2.1.1
+  resolution: "@types/earcut@npm:2.1.1"
+  checksum: ef87855eefa58dd8974208c73cca09b0f00fea27779e0dc2c22e94d696ac06d83930c20bee91db1a17d49d2369b64c64e9c1541810a9905608d52c62665b8001
   languageName: node
   linkType: hard
 
@@ -4144,6 +4182,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"camera-controls@npm:^1.26.0":
+  version: 1.26.0
+  resolution: "camera-controls@npm:1.26.0"
+  peerDependencies:
+    three: ^0.123.0
+  checksum: 29d7fc1ea27314bb326e49a0d524d0e391a8da5c60d69e41c831a1fa70e7c0c6ef182693ccae7e272913d1750f1de0f0d85311b60ef180b70fdc9157de08fa0f
+  languageName: node
+  linkType: hard
+
 "caniuse-lite@npm:^1.0.30001093, caniuse-lite@npm:^1.0.30001113, caniuse-lite@npm:^1.0.30001154, caniuse-lite@npm:^1.0.30001165":
   version: 1.0.30001165
   resolution: "caniuse-lite@npm:1.0.30001165"
@@ -5079,6 +5126,132 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-array@npm:1, d3-array@npm:^1.2.0":
+  version: 1.2.4
+  resolution: "d3-array@npm:1.2.4"
+  checksum: ab114c72ccdcb3f53807574c003816ad6ac65c2c2db2b17b18e2678f1141881dfa0ddab60af63d73e428c826e4580b6cb9e93cb776c777c79fec9f75057d8fbd
+  languageName: node
+  linkType: hard
+
+"d3-array@npm:>=2.5, d3-array@npm:^2.0, d3-array@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "d3-array@npm:2.11.0"
+  dependencies:
+    internmap: ^1.0.0
+  checksum: d58eb9c53fcbcb896ec3c67b5eae0f752450baa0b3f382e0a4981823ac3f5fe11688174ab8b626579330e643971cb06f3b73aa4ccb5697cc861d76f7989d6ca0
+  languageName: node
+  linkType: hard
+
+"d3-collection@npm:1":
+  version: 1.0.7
+  resolution: "d3-collection@npm:1.0.7"
+  checksum: c26d13e9bb06945c439d39e66eb905aa94e0cb9a0d6d6a17e1f74f3d6fdfe06978479b1eb1d08a431cfa4bc344607aa8c30ca2aa3ad3be152d0ca45c9a765da7
+  languageName: node
+  linkType: hard
+
+"d3-color@npm:1":
+  version: 1.4.1
+  resolution: "d3-color@npm:1.4.1"
+  checksum: a579fdc2f4ec50980e32d0ac5212c3023ee9c6a7555ae698278f05c9f7d06322f83dde01253f672f9f9fd05d8860f0256d25aee999a0d32cf4111d731413f5da
+  languageName: node
+  linkType: hard
+
+"d3-delaunay@npm:5":
+  version: 5.3.0
+  resolution: "d3-delaunay@npm:5.3.0"
+  dependencies:
+    delaunator: 4
+  checksum: 834a9e3f04f3e69abec8cf5251fe34ff65c6cfd99802a271480cd46cfe0784b1f38bffde6c346c68b75446e64fccadd1beff82209b99d32f37a716131afe8966
+  languageName: node
+  linkType: hard
+
+"d3-format@npm:1":
+  version: 1.4.5
+  resolution: "d3-format@npm:1.4.5"
+  checksum: ba111c97fc96c902c27e9fded2c9c75d3624d24d490965334ecfbd10783dca15b9a428a7baf303329abdb9516191304d4ae5e2b3bd03e9edccc1e1d75e35be16
+  languageName: node
+  linkType: hard
+
+"d3-geo-voronoi@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "d3-geo-voronoi@npm:1.6.0"
+  dependencies:
+    d3-array: ^2.0
+    d3-delaunay: 5
+    d3-geo: ^1.0
+    d3-tricontour: 0.1.0
+  checksum: b68edec5401ed3d5713661ebc3cc04f1ee2c4aca44dd8d7132c09f528f64c48382f91bbf0a5caf5d0fd796d5ca440027c6299ea8af96b575a109d42326d813a1
+  languageName: node
+  linkType: hard
+
+"d3-geo@npm:^1.0":
+  version: 1.12.1
+  resolution: "d3-geo@npm:1.12.1"
+  dependencies:
+    d3-array: 1
+  checksum: e0fe99d832e574d438db4638df11f726a85942e48f520d01074d2e3132ef07b3a60ffcb4ea8d41a70b089c6d4c70dc818237974621a6dec3db92908d1193441c
+  languageName: node
+  linkType: hard
+
+"d3-geo@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "d3-geo@npm:2.0.1"
+  dependencies:
+    d3-array: ">=2.5"
+  checksum: 62c9953e654d84316b57e3b6079604be40a6ee5a107bbf37c2e3802791bea91eff46bc886ef89b9e34a38f17146f9a061000c6d438fee2e36e96d800d5f4a611
+  languageName: node
+  linkType: hard
+
+"d3-interpolate@npm:1":
+  version: 1.4.0
+  resolution: "d3-interpolate@npm:1.4.0"
+  dependencies:
+    d3-color: 1
+  checksum: beea08fb3a712ccb992082c058a96a108f31692bbcecbf8029539ff378747b666fd0f33798b313835a2cb019e399a30fd1f5b643822f1cc0be3c86b4fe4730c7
+  languageName: node
+  linkType: hard
+
+"d3-scale@npm:1":
+  version: 1.0.7
+  resolution: "d3-scale@npm:1.0.7"
+  dependencies:
+    d3-array: ^1.2.0
+    d3-collection: 1
+    d3-color: 1
+    d3-format: 1
+    d3-interpolate: 1
+    d3-time: 1
+    d3-time-format: 2
+  checksum: 9cbdac0d901731cc6bb2dcdd65aad860e7a58a46b733a78590fa6dcb89e906be6d3ec0a3a0f6e9c4b477fc5a346c0caf584f33dbe298582cb8a459c04e595870
+  languageName: node
+  linkType: hard
+
+"d3-time-format@npm:2":
+  version: 2.3.0
+  resolution: "d3-time-format@npm:2.3.0"
+  dependencies:
+    d3-time: 1
+  checksum: 88fb8b929229deffbcfdce4dccca9da1d8930079f9a7b302184bf7e7c5dc358c4ad2367013ef54b9e53c8cc932519ae69d1f98d53f9f2d4f102d93ad99208e33
+  languageName: node
+  linkType: hard
+
+"d3-time@npm:1":
+  version: 1.1.0
+  resolution: "d3-time@npm:1.1.0"
+  checksum: d083c2181bbd1207f5fc8a0bfc2a8c1a44a56b3781dd6ef73a70f1d82aa74f49d1b410d4afc8e1a10db459fd60fdc75191ac89b8cdf4ee2705d7f3a1f0034fac
+  languageName: node
+  linkType: hard
+
+"d3-tricontour@npm:0.1.0":
+  version: 0.1.0
+  resolution: "d3-tricontour@npm:0.1.0"
+  dependencies:
+    d3-delaunay: 5
+    d3-scale: 1
+  checksum: a7f8e587faacda957025def8590e6255315b229c387122eb5b4e4fd08481c6da07d5164c97932b4976b0b2b0e42bfcd79c1482f6d7b561d7326d04a8ca9eb645
+  languageName: node
+  linkType: hard
+
 "d@npm:1, d@npm:^1.0.1":
   version: 1.0.1
   resolution: "d@npm:1.0.1"
@@ -5247,6 +5420,13 @@ __metadata:
     is-descriptor: ^1.0.2
     isobject: ^3.0.1
   checksum: 00c7ec53b5040507016736922a9678b3247bc85e0ea0429e47d6ca6a993890f9dc338fb19d5bf6f8c0ca29016a68aa7e7da5c35d4ed8b3646347d86a3b2b4b01
+  languageName: node
+  linkType: hard
+
+"delaunator@npm:4, delaunator@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "delaunator@npm:4.0.1"
+  checksum: 0d7ba5ef6efaadccd0e17a01087f22f27a818279b9050d09032799052f59f0991d332f884a20ec9b839035077c732e6f894143d14207723c9b276c01a579d397
   languageName: node
   linkType: hard
 
@@ -5573,6 +5753,13 @@ __metadata:
     lodash: ^4.17.4
     semver: ^5.4.1
   checksum: a021a857ec3870511043bf63e2e74149a5bb0dc4897cac199fb7a69f871adce24c2c763306575f890f385590050801c6cebddce68b6ea146e56544b26c893436
+  languageName: node
+  linkType: hard
+
+"earcut@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "earcut@npm:2.2.2"
+  checksum: 030e091437c4fae34c4538e0886a1d7c68f67c3ec3ba793210b280df24b329221ed81179e300742abf7aa2c394332a77395133c5163717b1806cebab6aa6c88c
   languageName: node
   linkType: hard
 
@@ -7536,6 +7723,13 @@ fsevents@~2.1.2:
     has: ^1.0.3
     side-channel: ^1.0.2
   checksum: 02b2bcc612fbbaa5de71acec354a7bb50d8b3b2d2df775b6df61ea41419f92b69e0562f80125d7fa3667c9fb485cc88726f8a181fb544d880c79564f0f7d7d1e
+  languageName: node
+  linkType: hard
+
+"internmap@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "internmap@npm:1.0.0"
+  checksum: 158fac8f41b158d362c49b55c970a3a56ae299bb2c82b1292306b578e175114504d18529d57028049bf2a222e7f828dce245344cf8de0e2770b6041066354ed8
   languageName: node
   linkType: hard
 
@@ -12654,6 +12848,29 @@ resolve@^1.1.7:
   dependencies:
     any-promise: ^1.0.0
   checksum: c3cbda4f5f0ee82d6a282b3a2ed3f890fad65b5c855d61f8f1946c6daf7e0d7a1e84377ded30b16ae2bedd13f02ba35266af3ca018272b08629c85753b1cd682
+  languageName: node
+  linkType: hard
+
+"three-conic-polygon-geometry@npm:^1.4.2":
+  version: 1.4.2
+  resolution: "three-conic-polygon-geometry@npm:1.4.2"
+  dependencies:
+    "@turf/boolean-point-in-polygon": ^6.3.0
+    d3-array: ^2.11.0
+    d3-geo: ^2.0.1
+    d3-geo-voronoi: ^1.6.0
+    delaunator: ^4.0.1
+    earcut: ^2.2.2
+  peerDependencies:
+    three: ">=0.72.0"
+  checksum: a52ca948708541201faab6be602090d93c98f4b7cbae7316011cf9bfc5e3bc44550554a0b8b6748aa2e87f4850616ef88d5247b556923096927a400aa2dd23dd
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.125.2":
+  version: 0.125.2
+  resolution: "three@npm:0.125.2"
+  checksum: e7b6398d140b9bec8e82301de735c018f5b576c9b565c97017ce6a4be5d6291da2a8c02d0711f44478f949ea51bd7925516207acd036c69ab379ebf0664496d9
   languageName: node
   linkType: hard
 
