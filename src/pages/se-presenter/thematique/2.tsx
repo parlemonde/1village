@@ -32,7 +32,7 @@ const PresentationStep2: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {activity.id === 0 && <BackButton href="/se-presenter/thematique/1" />}
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={1} />
-        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
+        <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme as number].title}</h1>
           <SimpleActivityEditor />
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>

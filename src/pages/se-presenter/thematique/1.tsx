@@ -27,7 +27,7 @@ const PresentationStep1: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter" />
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={0} />
-        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
+        <div className="width-900">
           <h1>Choisissez le thème de votre présentation</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Dans cette activité, nous vous proposons de faire une présentation générale aux Pélicopains sur le thème de votre choix.

@@ -15,6 +15,7 @@ import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 import { PresentationCard } from './PresentationCard';
+import { QuestionCard } from './QuestionCard';
 import { ActivityCardProps } from './activity-card.types';
 
 const titles = {
@@ -80,6 +81,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             showEditButtons={showEditButtons}
             onDelete={onDelete}
           />
+        )}
+        {activity.type === ActivityType.QUESTION && (
+          <QuestionCard activity={activity} user={user} isSelf={isSelf} noButtons={noButtons} showEditButtons={showEditButtons} onDelete={onDelete} />
         )}
       </div>
     </Paper>

@@ -44,7 +44,7 @@ const PresentationStep3: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter/thematique/2" label={isEdit ? 'Modifier' : 'Retour'} />
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={2} />
-        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
+        <div className="width-900">
           <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre présentation.
