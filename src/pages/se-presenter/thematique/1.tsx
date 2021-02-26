@@ -13,13 +13,10 @@ import { ActivityType } from 'types/activity.type';
 const PresentationStep1: React.FC = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const currentActivityId = parseInt(getQueryString(router.query['edit']) ?? '-1', 10) ?? -1;
 
   const onClick = (index: number) => () => {
     // Check if we don't need to create an activity
-    let currentActivityId = -1;
-    if ('edit' in router.query) {
-      currentActivityId = parseInt(getQueryString(router.query['edit']), 10) ?? -1;
-    }
     if (currentActivityId !== -1 && activity !== null && activity.id === currentActivityId && activity.type === ActivityType.PRESENTATION) {
       updateActivity({ data: { theme: index } });
       router.push('/se-presenter/thematique/2');
@@ -37,7 +34,7 @@ const PresentationStep1: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter" />
+        {currentActivityId === -1 && <BackButton href="/se-presenter" />}
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={0} />
         <div className="width-900">
           <h1>Choisissez le thème de votre présentation</h1>
