@@ -13,7 +13,7 @@ export const QuestionCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
 
   return (
     <div>
-      <p style={{ margin: '0.75rem' }}>
+      <div style={{ margin: '0.75rem' }}>
         {processedContent.map((c, index) => (
           <p key={c.id} style={{ margin: questionsCount > 1 ? '0 0 1rem 0' : 0 }}>
             {questionsCount > 1 && (
@@ -28,7 +28,7 @@ export const QuestionCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
             <span>{c.value}</span>
           </p>
         ))}
-      </p>
+      </div>
       {showEditButtons ? (
         <div style={{ width: '100%', textAlign: 'right', padding: '0.25rem' }}>
           <Link href={`/poser-une-question/3?activity-id=${activity.id}`}>

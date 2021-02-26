@@ -14,14 +14,70 @@ import { Controller } from './controller';
 
 const activityController = new Controller('/activities');
 
-const getActivities = async (villageId?: number) => {
-  let builder = getRepository(Activity).createQueryBuilder('activity').leftJoinAndSelect('activity.content', 'activityData');
+type ActivityGetter = {
+  limit?: number;
+  page?: number;
+  villageId?: number;
+  type?: number;
+  countries?: string[];
+  pelico?: boolean;
+};
+const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, countries = [], pelico = true }: ActivityGetter) => {
+  // get ids
+  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
   if (villageId !== undefined) {
-    builder = builder.where('`activity`.`villageId` = :villageId', { villageId });
+    subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
   }
-  const activities = await builder.orderBy('`activity`.`createDate`', 'DESC').addOrderBy('`activityData`.`order`', 'ASC').getMany();
+  if (type !== 0) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type - 1}` });
+  }
+  if (pelico) {
+    if (countries.length > 0) {
+      subQueryBuilder = subQueryBuilder
+        .innerJoin('activity.user', 'user')
+        .andWhere('((user.countryCode IN (:countries) AND user.type <= :userType) OR user.type >= :userType2)', {
+          countries,
+          userType: UserType.OBSERVATOR,
+          userType2: UserType.MEDIATOR,
+        });
+    } else {
+      subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type >= :userType2', {
+        userType2: UserType.MEDIATOR,
+      });
+    }
+  } else {
+    if (countries.length > 0) {
+      subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type <= :userType', {
+        countries,
+        userType: UserType.OBSERVATOR,
+      });
+    } else {
+      return [];
+    }
+  }
+
+  const ids = (
+    await subQueryBuilder
+      .orderBy('activity.createDate', 'DESC')
+      .limit(limit)
+      .offset(page * limit)
+      .getRawMany()
+  ).map((row) => row.id);
+  if (ids.length === 0) {
+    return [];
+  }
+
+  // select activities and their content
+  const activities = await getRepository(Activity)
+    .createQueryBuilder('activity')
+    .leftJoinAndSelect('activity.content', 'activityData', 'activity.id = activityData.activityId')
+    .where('activity.id IN (:ids)', { ids })
+    .orderBy('activity.createDate', 'DESC')
+    .addOrderBy('activityData.order', 'ASC')
+    .getMany();
   return activities;
 };
+
 const getActivity = async (id: number) => {
   const activity = await getRepository(Activity)
     .createQueryBuilder('activity')
@@ -35,7 +91,14 @@ const getActivity = async (id: number) => {
 
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  const activities = await getActivities(req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined);
+  const activities = await getActivities({
+    limit: req.query.limit ? parseInt(getQueryString(req.query.limit), 10) || 200 : undefined,
+    page: req.query.page ? parseInt(getQueryString(req.query.page), 10) || 0 : undefined,
+    villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined,
+    countries: req.query.countries ? getQueryString(req.query.countries).split(',') : undefined,
+    pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
+    type: req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : undefined,
+  });
   res.sendJSON(activities);
 });
 
