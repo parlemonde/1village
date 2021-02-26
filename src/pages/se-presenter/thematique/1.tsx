@@ -7,13 +7,25 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
 const PresentationStep1: React.FC = () => {
   const router = useRouter();
-  const { createNewActivity } = React.useContext(ActivityContext);
+  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
 
   const onClick = (index: number) => () => {
+    // Check if we don't need to create an activity
+    let currentActivityId = -1;
+    if ('edit' in router.query) {
+      currentActivityId = parseInt(getQueryString(router.query['edit']), 10) ?? -1;
+    }
+    if (currentActivityId !== -1 && activity !== null && activity.id === currentActivityId && activity.type === ActivityType.PRESENTATION) {
+      updateActivity({ data: { theme: index } });
+      router.push('/se-presenter/thematique/2');
+      return;
+    }
+
     const success = createNewActivity(ActivityType.PRESENTATION, {
       theme: index,
     });

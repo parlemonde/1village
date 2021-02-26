@@ -24,10 +24,8 @@ export interface EditorProps {
 export interface ViewProps {
   id: number;
   value?: string;
-  isPreview: boolean;
 }
 
 export interface ActivityViewProps {
   activity: ExtendedActivity;
-  isPreview?: boolean;
 }

@@ -72,15 +72,7 @@ const Question3: React.FC = () => {
               </Button>
             </div>
           )}
-          <div
-            style={{
-              border: `1px dashed ${successColor}`,
-              padding: '0.5rem',
-              borderRadius: '5px',
-              position: 'relative',
-              minHeight: 'calc(34px + 1rem)',
-            }}
-          >
+          <div className="preview-block">
             <EditButton
               onClick={() => {
                 router.push('/poser-une-question/2');

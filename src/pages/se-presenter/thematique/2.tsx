@@ -19,7 +19,7 @@ const PresentationStep2: React.FC = () => {
 
   React.useEffect(() => {
     if (data === null || !('theme' in data) || data.theme === -1) {
-      router.push('/');
+      router.push('/se-presenter/thematique/1');
     }
   }, [data, router]);
 
@@ -30,7 +30,7 @@ const PresentationStep2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {activity.id === 0 && <BackButton href="/se-presenter/thematique/1" />}
+        {activity !== null && <BackButton href={`/se-presenter/thematique/1?edit=${activity.id}`} />}
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={1} />
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme as number].title}</h1>

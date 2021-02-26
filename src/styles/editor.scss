@@ -103,11 +103,13 @@
   margin: 1rem 0rem;
   padding: 0;
 }
-.text-preview {
-  margin: 1.5rem 0rem 1rem 0;
-  padding: 0.5rem 0.5rem;
-  border: 1px dashed $secondary-color;
+.preview-block {
+  border: 1px dashed $success-color;
+  padding: 0.5rem;
   border-radius: 5px;
+  position: relative;
+  min-height: calc(34px + 1rem);
+  margin-bottom: 1rem;
 }
 
 .text-editor__toolbar-container {
