@@ -4,6 +4,7 @@ import { getRepository, getManager } from 'typeorm';
 
 import { ActivityData, ActivityDataType } from '../entities/activityData';
 import { Activity, ActivityType } from '../entities/activity';
+import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -22,6 +23,40 @@ type ActivityGetter = {
   countries?: string[];
   pelico?: boolean;
   userId?: number;
+};
+const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
+  if (ids.length === 0) {
+    return {};
+  }
+  const queryBuilder = await getRepository(Activity)
+    .createQueryBuilder('activity')
+    .select('activity.id')
+    .addSelect('IFNULL(`commentCount`, 0) + IFNULL(`activityCount`, 0)', 'comments')
+    .leftJoin(
+      (qb) => {
+        qb.select('comment.activityId', 'cid').addSelect('COUNT(comment.id)', 'commentCount').from(Comment, 'comment').groupBy('comment.activityId');
+        return qb;
+      },
+      'comments',
+      '`comments`.`cid` = activity.id',
+    )
+    .leftJoin(
+      (qb) => {
+        qb.select('activity.responseActivityId', 'aid')
+          .addSelect('COUNT(activity.id)', 'activityCount')
+          .from(Activity, 'activity')
+          .groupBy('activity.responseActivityId');
+        return qb;
+      },
+      'activities',
+      '`activities`.`aid` = activity.id',
+    )
+    .where('activity.id in (:ids)', { ids })
+    .getRawMany();
+  return queryBuilder.reduce((acc, row) => {
+    acc[row.activity_id] = parseInt(row.comments, 10) || 0;
+    return acc;
+  }, {});
 };
 const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, countries = [], pelico = true, userId }: ActivityGetter) => {
   // get ids
@@ -80,6 +115,15 @@ const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, count
     .orderBy('activity.createDate', 'DESC')
     .addOrderBy('activityData.order', 'ASC')
     .getMany();
+
+  const comments = await getActivitiesCommentCount(ids);
+  for (const activity of activities) {
+    if (comments[activity.id] !== undefined) {
+      activity.commentCount = comments[activity.id];
+    } else {
+      activity.commentCount = 0;
+    }
+  }
   return activities;
 };
 
