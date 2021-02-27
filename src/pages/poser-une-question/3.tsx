@@ -11,11 +11,15 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { successColor } from 'src/styles/variables.const';
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { Activity, ActivityType } from 'types/activity.type';
 
 const Question3: React.FC = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
+  const { activity, save, deleteContent } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
@@ -28,12 +32,48 @@ const Question3: React.FC = () => {
     }
   }, [router, processedContent]);
 
-  const onPublish = async () => {
-    setIsLoading(true);
-    const success = await save();
-    if (success) {
-      router.push('/poser-une-question/success');
+  const createQuestionActivity = async (question: string): Promise<boolean> => {
+    const data = {
+      type: ActivityType.QUESTION,
+      villageId: village?.id,
+      content: [
+        {
+          key: 'text',
+          value: question,
+        },
+        {
+          key: 'json',
+          value: JSON.stringify({
+            type: 'data',
+            data: {},
+          }),
+        },
+      ],
+    };
+    const response = await axiosLoggedRequest({
+      method: 'POST',
+      url: '/activities',
+      data,
+    });
+    if (response.error) {
+      return false;
+    } else {
+      return true;
     }
+  };
+
+  const onPublish = async () => {
+    if (!activity) {
+      return;
+    }
+
+    setIsLoading(true);
+    if (activity.id === 0) {
+      await Promise.all(processedContent.map((question) => createQuestionActivity(question.value)));
+    } else {
+      await save();
+    }
+    router.push('/poser-une-question/success');
     setIsLoading(false);
   };
 

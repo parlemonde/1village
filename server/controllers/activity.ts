@@ -21,8 +21,9 @@ type ActivityGetter = {
   type?: number;
   countries?: string[];
   pelico?: boolean;
+  userId?: number;
 };
-const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, countries = [], pelico = true }: ActivityGetter) => {
+const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, countries = [], pelico = true, userId }: ActivityGetter) => {
   // get ids
   let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
   if (villageId !== undefined) {
@@ -31,7 +32,11 @@ const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, count
   if (type !== 0) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type - 1}` });
   }
-  if (pelico) {
+  if (userId !== undefined) {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
+      userId,
+    });
+  } else if (pelico) {
     if (countries.length > 0) {
       subQueryBuilder = subQueryBuilder
         .innerJoin('activity.user', 'user')
@@ -98,6 +103,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     countries: req.query.countries ? getQueryString(req.query.countries).split(',') : undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
     type: req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : undefined,
+    userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
   });
   res.sendJSON(activities);
 });

@@ -30,6 +30,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filter
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
     pelico: filters.pelico,
     type: filters.type,
+    userId: onlySelf ? user?.id ?? 0 : undefined,
   });
   const { deleteActivity } = useActivityRequests();
   const { users } = useVillageUsers();

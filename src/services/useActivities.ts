@@ -13,9 +13,10 @@ export type Args = {
   countries?: string[];
   pelico?: boolean;
   type?: number;
+  userId?: number;
 };
 
-export const useActivities = ({ pelico, countries, ...args }: Args): { activities: ExtendedActivity[] } => {
+export const useActivities = ({ pelico, countries, userId, ...args }: Args): { activities: ExtendedActivity[] } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
@@ -33,6 +34,9 @@ export const useActivities = ({ pelico, countries, ...args }: Args): { activitie
       countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
     };
+    if (userId !== undefined) {
+      query.userId = userId;
+    }
     const response = await axiosLoggedRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl(query)}`,
@@ -41,8 +45,11 @@ export const useActivities = ({ pelico, countries, ...args }: Args): { activitie
       return [];
     }
     return response.data.map(getExtendedActivity);
-  }, [args, countries, pelico, villageId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(['activities', { ...args, countries, pelico, villageId }], getActivities);
+  }, [args, countries, pelico, userId, villageId, axiosLoggedRequest]);
+  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(
+    ['activities', { ...args, userId, countries, pelico, villageId }],
+    getActivities,
+  );
 
   const prevData = React.useRef<ExtendedActivity[]>([]);
   React.useEffect(() => {
