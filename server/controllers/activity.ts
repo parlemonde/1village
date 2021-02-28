@@ -4,6 +4,7 @@ import { getRepository, getManager } from 'typeorm';
 
 import { ActivityData, ActivityDataType } from '../entities/activityData';
 import { Activity, ActivityType } from '../entities/activity';
+import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -14,14 +15,118 @@ import { Controller } from './controller';
 
 const activityController = new Controller('/activities');
 
-const getActivities = async (villageId?: number) => {
-  let builder = getRepository(Activity).createQueryBuilder('activity').leftJoinAndSelect('activity.content', 'activityData');
-  if (villageId !== undefined) {
-    builder = builder.where('`activity`.`villageId` = :villageId', { villageId });
+type ActivityGetter = {
+  limit?: number;
+  page?: number;
+  villageId?: number;
+  type?: number;
+  countries?: string[];
+  pelico?: boolean;
+  userId?: number;
+};
+const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
+  if (ids.length === 0) {
+    return {};
   }
-  const activities = await builder.orderBy('`activity`.`createDate`', 'DESC').addOrderBy('`activityData`.`order`', 'ASC').getMany();
+  const queryBuilder = await getRepository(Activity)
+    .createQueryBuilder('activity')
+    .select('activity.id')
+    .addSelect('IFNULL(`commentCount`, 0) + IFNULL(`activityCount`, 0)', 'comments')
+    .leftJoin(
+      (qb) => {
+        qb.select('comment.activityId', 'cid').addSelect('COUNT(comment.id)', 'commentCount').from(Comment, 'comment').groupBy('comment.activityId');
+        return qb;
+      },
+      'comments',
+      '`comments`.`cid` = activity.id',
+    )
+    .leftJoin(
+      (qb) => {
+        qb.select('activity.responseActivityId', 'aid')
+          .addSelect('COUNT(activity.id)', 'activityCount')
+          .from(Activity, 'activity')
+          .groupBy('activity.responseActivityId');
+        return qb;
+      },
+      'activities',
+      '`activities`.`aid` = activity.id',
+    )
+    .where('activity.id in (:ids)', { ids })
+    .getRawMany();
+  return queryBuilder.reduce((acc, row) => {
+    acc[row.activity_id] = parseInt(row.comments, 10) || 0;
+    return acc;
+  }, {});
+};
+const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, countries = [], pelico = true, userId }: ActivityGetter) => {
+  // get ids
+  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
+  if (villageId !== undefined) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
+  }
+  if (type !== 0) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type - 1}` });
+  }
+  if (userId !== undefined) {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
+      userId,
+    });
+  } else if (pelico) {
+    if (countries.length > 0) {
+      subQueryBuilder = subQueryBuilder
+        .innerJoin('activity.user', 'user')
+        .andWhere('((user.countryCode IN (:countries) AND user.type <= :userType) OR user.type >= :userType2)', {
+          countries,
+          userType: UserType.OBSERVATOR,
+          userType2: UserType.MEDIATOR,
+        });
+    } else {
+      subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type >= :userType2', {
+        userType2: UserType.MEDIATOR,
+      });
+    }
+  } else {
+    if (countries.length > 0) {
+      subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type <= :userType', {
+        countries,
+        userType: UserType.OBSERVATOR,
+      });
+    } else {
+      return [];
+    }
+  }
+
+  const ids = (
+    await subQueryBuilder
+      .orderBy('activity.createDate', 'DESC')
+      .limit(limit)
+      .offset(page * limit)
+      .getRawMany()
+  ).map((row) => row.id);
+  if (ids.length === 0) {
+    return [];
+  }
+
+  // select activities and their content
+  const activities = await getRepository(Activity)
+    .createQueryBuilder('activity')
+    .leftJoinAndSelect('activity.content', 'activityData', 'activity.id = activityData.activityId')
+    .where('activity.id IN (:ids)', { ids })
+    .orderBy('activity.createDate', 'DESC')
+    .addOrderBy('activityData.order', 'ASC')
+    .getMany();
+
+  const comments = await getActivitiesCommentCount(ids);
+  for (const activity of activities) {
+    if (comments[activity.id] !== undefined) {
+      activity.commentCount = comments[activity.id];
+    } else {
+      activity.commentCount = 0;
+    }
+  }
   return activities;
 };
+
 const getActivity = async (id: number) => {
   const activity = await getRepository(Activity)
     .createQueryBuilder('activity')
@@ -35,7 +140,15 @@ const getActivity = async (id: number) => {
 
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  const activities = await getActivities(req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined);
+  const activities = await getActivities({
+    limit: req.query.limit ? parseInt(getQueryString(req.query.limit), 10) || 200 : undefined,
+    page: req.query.page ? parseInt(getQueryString(req.query.page), 10) || 0 : undefined,
+    villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined,
+    countries: req.query.countries ? getQueryString(req.query.countries).split(',') : undefined,
+    pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
+    type: req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : undefined,
+    userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
+  });
   res.sendJSON(activities);
 });
 
@@ -331,7 +444,8 @@ activityController.put({ path: '/:activityId/content/:id', userType: UserType.TE
     next();
     return;
   }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+  const isQuestionDataChange = activity.type === ActivityType.QUESTION && activityData.key === 'json';
+  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN && !isQuestionDataChange) {
     next();
     return;
   }

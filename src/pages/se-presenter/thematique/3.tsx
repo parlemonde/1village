@@ -6,10 +6,12 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const PresentationStep3: React.FC = () => {
@@ -22,7 +24,7 @@ const PresentationStep3: React.FC = () => {
 
   React.useEffect(() => {
     if ((data === null || !('theme' in data) || data.theme === -1) && !('activity-id' in router.query)) {
-      router.push('/');
+      router.push('/se-presenter/thematique/1');
     }
   }, [data, router]);
 
@@ -30,7 +32,7 @@ const PresentationStep3: React.FC = () => {
     setIsLoading(true);
     const success = await save();
     if (success) {
-      router.push('/');
+      router.push('/se-presenter/success');
     }
     setIsLoading(false);
   };
@@ -70,7 +72,29 @@ const PresentationStep3: React.FC = () => {
               </Button>
             </div>
           )}
-          <SimpleActivityView activity={activity} isPreview />
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push(`/se-presenter/thematique/1?edit=${activity.id}`);
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p style={{ margin: '0.5rem 0' }}>
+              <strong>Thème : </strong> {PRESENTATION_THEMATIQUE[(data?.theme as number | null) ?? 0]?.cardTitle}
+            </p>
+          </div>
+
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/thematique/2');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <SimpleActivityView activity={activity} />
+          </div>
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

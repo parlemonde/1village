@@ -52,7 +52,7 @@ const Question2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/poser-une-question/1" />
+        {activity.id === 0 && <BackButton href="/poser-une-question/1" />}
         <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={1} />
         <div className="width-900">
           <h1>Vos questions</h1>
@@ -83,7 +83,7 @@ const Question2: React.FC = () => {
               </div>
             ))}
 
-          {activity && activity.processedContent.length < 3 && (
+          {activity && activity.processedContent.length < 3 && activity.id === 0 && (
             <div className="text-center">
               <Card style={{ display: 'inline-block' }}>
                 <ButtonBase onClick={onAddQuestion}>

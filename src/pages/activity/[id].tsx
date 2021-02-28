@@ -28,6 +28,14 @@ const titles = {
   [ActivityType.QUESTION]: 'Question',
 };
 
+const labels = {
+  [ActivityType.PRESENTATION]: 'Réagir à cette activité par :',
+  [ActivityType.DEFI]: 'Réagir à cette activité par :',
+  [ActivityType.GAME]: 'Réagir à cette activité par :',
+  [ActivityType.ENIGME]: 'Réagir à cette activité par :',
+  [ActivityType.QUESTION]: 'Répondre à cette question par :',
+};
+
 const Activity: React.FC = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
@@ -74,7 +82,13 @@ const Activity: React.FC = () => {
               style={{ borderRadius: '20px', margin: '0.25rem' }}
             />
             <div className="activity-card__header_info">
-              <h2>{userIsPelico ? 'Pelico' : userIsSelf ? 'Votre classe' : 'La classe de ??? à ???'}</h2>
+              <h2>
+                {userIsPelico
+                  ? 'Pelico'
+                  : userIsSelf
+                  ? 'Votre classe'
+                  : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`}
+              </h2>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
                 {userIsPelico ? (
@@ -87,6 +101,7 @@ const Activity: React.FC = () => {
           </div>
         )}
         {activity.type === ActivityType.PRESENTATION && <SimpleActivityView activity={activity} />}
+        {activity.type === ActivityType.QUESTION && <p>{activity.processedContent[0]?.value}</p>}
 
         <div className="activity__divider">
           <div className="activity__divider--text">
@@ -97,7 +112,7 @@ const Activity: React.FC = () => {
         {comments.map((comment) => (
           <CommentCard key={comment.id} activityId={activityId} comment={comment} user={usersMap[comment.userId] ?? null} />
         ))}
-        <AddComment activityId={activityId} />
+        <AddComment activityId={activityId} label={labels[activity.type]} />
       </div>
     </Base>
   );
