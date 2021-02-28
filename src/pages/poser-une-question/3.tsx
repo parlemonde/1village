@@ -13,13 +13,13 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { Activity, ActivityType } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 
 const Question3: React.FC = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { activity, save, deleteContent } = React.useContext(ActivityContext);
+  const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);

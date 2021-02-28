@@ -444,7 +444,8 @@ activityController.put({ path: '/:activityId/content/:id', userType: UserType.TE
     next();
     return;
   }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+  const isQuestionDataChange = activity.type === ActivityType.QUESTION && activityData.key === 'json';
+  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN && !isQuestionDataChange) {
     next();
     return;
   }

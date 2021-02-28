@@ -5,11 +5,13 @@ import { Button } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { ExtendedActivity } from 'src/components/activities/editing.types';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
+import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
 import { getGravatarUrl } from 'src/utils';
@@ -29,6 +31,7 @@ const Question1: React.FC = () => {
     pelico: true,
     type: 4,
   });
+  const { updatedActivityData } = useActivityRequests();
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -41,12 +44,10 @@ const Question1: React.FC = () => {
   const questions = React.useMemo(() => {
     const q: Array<{ q: string; activityIndex: number }> = [];
     for (let i = 0, n = activities.length; i < n; i++) {
-      for (const content of activities[i].processedContent) {
-        q.push({
-          q: content.value,
-          activityIndex: i,
-        });
-      }
+      q.push({
+        q: activities[i].processedContent[0].value,
+        activityIndex: i,
+      });
     }
     return q;
   }, [activities]);
@@ -56,6 +57,22 @@ const Question1: React.FC = () => {
     if (success) {
       router.push('/poser-une-question/2');
     }
+  };
+
+  const onAskSame = (activity: ExtendedActivity, askSame: number[]) => async () => {
+    if (!user || !user.id) {
+      return;
+    }
+
+    const index = askSame.findIndex((i) => i === user.id);
+    if (index !== -1) {
+      askSame.splice(index, 1);
+    } else {
+      askSame.push(user.id);
+    }
+    await updatedActivityData(activity, {
+      askSame: askSame.join(','),
+    });
   };
 
   return (
@@ -79,9 +96,17 @@ const Question1: React.FC = () => {
           )}
 
           {questions.map((question, index) => {
-            const questionUser = users[userMap[activities[question.activityIndex].userId]];
+            const activity = activities[question.activityIndex];
+            if (!activity) {
+              return null;
+            }
+            const questionUser = users[userMap[activity.userId]];
+            if (!questionUser) {
+              return null;
+            }
             const isSelf = questionUser?.id === user?.id;
             const isPelico = questionUser?.type ?? UserType.TEACHER >= UserType.MEDIATOR;
+            const askSame = !activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0);
             return (
               <div key={index} style={{ display: 'flex', alignItems: 'flex-start', margin: '1rem 0' }}>
                 {questionUser && (
@@ -107,9 +132,16 @@ const Question1: React.FC = () => {
                   </p>
                   {!isSelf && (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                      <Button style={{ backgroundColor: 'white' }}>
-                        <span className="text text--bold text--primary">Je me pose la même question</span>
-                      </Button>
+                      <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                        <Button style={{ backgroundColor: 'white' }} onClick={onAskSame(activity, askSame)}>
+                          <span className="text text--bold text--primary">Je me pose la même question</span>
+                        </Button>
+                        {askSame.length > 0 && (
+                          <span className="text text--primary" style={{ marginLeft: '0.25rem' }}>
+                            + {askSame.length}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>

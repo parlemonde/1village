@@ -1,4 +1,3 @@
-import classnames from 'classnames';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
