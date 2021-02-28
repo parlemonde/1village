@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useQueryCache } from 'react-query';
 import React from 'react';
 
 import Backdrop from '@material-ui/core/Backdrop';
@@ -17,6 +18,7 @@ import { ActivityType } from 'types/activity.type';
 
 const Question3: React.FC = () => {
   const router = useRouter();
+  const queryCache = useQueryCache();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
@@ -70,6 +72,7 @@ const Question3: React.FC = () => {
     setIsLoading(true);
     if (activity.id === 0) {
       await Promise.all(processedContent.map((question) => createQuestionActivity(question.value)));
+      queryCache.invalidateQueries('activities');
     } else {
       await save();
     }
