@@ -13,12 +13,12 @@ import { ActivityType, ActivitySubType } from 'types/activity.type';
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
-  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
-      createNewActivity(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
+      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
         presentation: '',
         totalStudent: 0,
         girlStudent: 0,
@@ -40,7 +40,7 @@ const MascotteStep1: React.FC = () => {
         currencies: [],
       });
     }
-  }, [createNewActivity, activity]);
+  });
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: Number(event.target.value) };

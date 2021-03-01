@@ -20,7 +20,7 @@ type ActivityGetter = {
   page?: number;
   villageId?: number;
   type?: number;
-  subType?: number;
+  subType?: number | null;
   countries?: string[];
   pelico?: boolean;
   userId?: number;
@@ -59,17 +59,26 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
     return acc;
   }, {});
 };
-const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, subType = 0, countries = [], pelico = true, userId }: ActivityGetter) => {
+const getActivities = async ({
+  limit = 200,
+  page = 0,
+  villageId,
+  type = 0,
+  subType = null,
+  countries = [],
+  pelico = true,
+  userId,
+}: ActivityGetter) => {
   // get ids
   let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
   if (villageId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
   }
-  if (type !== 0) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type - 1}` });
+  if (type !== -1) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type}` });
   }
-  if (subType !== 0) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType: `${subType - 1}` });
+  if (subType !== null) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType: `${subType}` });
   }
   if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {

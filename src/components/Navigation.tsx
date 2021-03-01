@@ -33,7 +33,7 @@ const tabs: Tab[] = [
     label: 'Se présenter',
     path: '/se-presenter',
     icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'Créer une énigme',

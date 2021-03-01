@@ -3,6 +3,7 @@ import { useQueryCache } from 'react-query';
 import React from 'react';
 
 import type { ExtendedActivity, EditorTypes, EditorContent } from 'src/components/activities/editing.types';
+import { serializeToQueryUrl } from 'src/utils';
 import { getQueryString } from 'src/utils';
 import { Activity, ActivityType, ActivitySubType } from 'types/activity.type';
 
@@ -16,6 +17,7 @@ interface ActivityContextValue {
   addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
   save(): Promise<boolean>;
+  createActivityIfNotExist(type: ActivityType, subType: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }): void;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
@@ -75,6 +77,26 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     },
     [router, axiosLoggedRequest],
   );
+
+  const createActivityIfNotExist = React.useCallback(
+    async (type: ActivityType, subType: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }) => {
+      if (user === null || village === null) {
+        return;
+      }
+      const userId = user.id;
+      const villageId = village.id;
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
+      });
+      if (response.data && response.data.length > 0) setActivity(getExtendedActivity(response.data[0]));
+      else {
+        createNewActivity(type, subType, initialData);
+      }
+    },
+    [],
+  );
+
   React.useEffect(() => {
     if ('activity-id' in router.query) {
       const newActivityId = parseInt(getQueryString(router.query['activity-id']), 10);
@@ -90,7 +112,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   }, []);
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, subType?: ActivitySubType, initialData?: { [key: string]: string | number | boolean }) => {
+    (type: ActivityType, subType?: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }) => {
       if (user === null || village === null) {
         return false;
       }
@@ -237,6 +259,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         createNewActivity,
         addContent,
         deleteContent,
+        createActivityIfNotExist,
         save,
       }}
     >
