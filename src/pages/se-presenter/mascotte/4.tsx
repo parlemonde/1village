@@ -8,8 +8,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityView } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep4: React.FC = () => {
@@ -43,7 +43,7 @@ const MascotteStep4: React.FC = () => {
           ]}
           activeStep={3}
         />
-        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
+        <div className="width-900">
           <h1>Pré-visualisez votre mascotte{!isEdit && ' et publiez la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre présentation.
@@ -69,7 +69,58 @@ const MascotteStep4: React.FC = () => {
               </Button>
             </div>
           )}
-          <SimpleActivityView activity={activity} isPreview />
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/mascotte/1');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p>
+              Nous sommes {activity.data.totalStudent} élèves, dont {activity.data.girlStudent} filles et {activity.data.boyStudent} garçons.
+            </p>
+            <p>En moyenne, l’âge des élèves de notre classe est {activity.data.meanAge} ans.</p>
+            <p>
+              Nous avons {activity.data.totalTeacher} professeurs, dont {activity.data.womanTeacher} femmes et {activity.data.manTeacher} hommes.
+            </p>
+            <p>
+              Dans notre école, il y a {activity.data.numberClassroom} classes et {activity.data.totalSchoolStudent} élèves.
+            </p>
+          </div>
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/mascotte/2');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
+            <p>{activity.data.mascotteDescription}</p>
+            <p>
+              {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
+            </p>
+          </div>
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/mascotte/3');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p>
+              {activity.data.mascotteName}, comme les élèves de notre classe, parle {[].concat(activity.data.languages).map(naturalJoinArray)}
+            </p>
+            <p>
+              {activity.data.mascotteName}, comme les élèves de notre classe, utilise comme monnaie{' '}
+              {[].concat(activity.data.currencies).map(naturalJoinArray)}.
+            </p>
+            <p>
+              {activity.data.mascotteName} est allé ou rêve d’aller dans ces pays : {[].concat(activity.data.countries).map(naturalJoinArray)}
+            </p>
+          </div>
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -77,6 +128,19 @@ const MascotteStep4: React.FC = () => {
       </Backdrop>
     </Base>
   );
+};
+
+const naturalJoinArray = (element: string, index: number, array: Array<string>) => {
+  if (array.length < 2) {
+    return element;
+  }
+  if (index === array.length - 1) {
+    return element + ' et ';
+  }
+  if (index === array.length) {
+    return element;
+  }
+  return element + ', ';
 };
 
 export default MascotteStep4;

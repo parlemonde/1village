@@ -17,6 +17,7 @@ const MascotteStep1: React.FC = () => {
   React.useEffect(() => {
     if (!activity)
       createNewActivity(ActivityType.PRESENTATION, {
+        subtype: 'MASCOTTE',
         presentation: '',
         totalStudent: 0,
         girlStudent: 0,
