@@ -56,6 +56,9 @@ type CreateUserData = {
   countryCode: string;
   level?: string;
   school?: string;
+  city?: string;
+  postalCode?: string;
+  address?: string;
   password?: string;
   type?: UserType;
   villageId?: number;
@@ -69,6 +72,9 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     countryCode: { type: 'string' },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
+    city: { type: 'string', nullable: true },
+    postalCode: { type: 'string', nullable: true },
+    address: { type: 'string', nullable: true },
     password: { type: 'string', nullable: true },
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
@@ -93,6 +99,9 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.pseudo = data.pseudo;
   user.level = data.level || '';
   user.school = data.school || '';
+  user.address = data.address || '';
+  user.city = data.city || '';
+  user.postalCode = data.postalCode || '';
   user.villageId = data.villageId || null;
   user.countryCode = data.countryCode;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
