@@ -61,7 +61,7 @@ const MascotteStep4: React.FC = () => {
   }, [updateActivity]);
 
   React.useEffect(() => {
-    if (activity || !activity.processedContent || activity.processedContent.length !== 0) {
+    if (!activity || !activity.processedContent || activity.processedContent.length !== 0) {
       return;
     }
     addContent(
