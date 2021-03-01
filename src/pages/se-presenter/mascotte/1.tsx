@@ -40,7 +40,7 @@ const MascotteStep1: React.FC = () => {
         currencies: [],
       });
     }
-  });
+  }, [activity, createActivityIfNotExist]);
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: Number(event.target.value) };

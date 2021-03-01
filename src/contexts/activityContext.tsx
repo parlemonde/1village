@@ -78,25 +78,6 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     [router, axiosLoggedRequest],
   );
 
-  const createActivityIfNotExist = React.useCallback(
-    async (type: ActivityType, subType: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }) => {
-      if (user === null || village === null) {
-        return;
-      }
-      const userId = user.id;
-      const villageId = village.id;
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
-      });
-      if (response.data && response.data.length > 0) setActivity(getExtendedActivity(response.data[0]));
-      else {
-        createNewActivity(type, subType, initialData);
-      }
-    },
-    [],
-  );
-
   React.useEffect(() => {
     if ('activity-id' in router.query) {
       const newActivityId = parseInt(getQueryString(router.query['activity-id']), 10);
@@ -133,6 +114,25 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       return true;
     },
     [user, village],
+  );
+
+  const createActivityIfNotExist = React.useCallback(
+    async (type: ActivityType, subType: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }) => {
+      if (user === null || village === null) {
+        return;
+      }
+      const userId = user.id;
+      const villageId = village.id;
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
+      });
+      if (response.data && response.data.length > 0) setActivity(getExtendedActivity(response.data[0]));
+      else {
+        createNewActivity(type, subType, initialData);
+      }
+    },
+    [user, village, axiosLoggedRequest, createNewActivity],
   );
 
   const activityContent = activity?.processedContent || null;
