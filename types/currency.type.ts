@@ -1,8 +1,8 @@
 export interface Currency {
-  AlphabeticCode: string;
-  Currency: string;
-  Entity: string;
-  MinorUnit: string;
-  NumericCode: number | null;
-  WithdrawalDate: string;
+  alphabeticCode: string;
+  currency: string;
+  entity: string;
+  minorUnit: string;
+  numericCode: number | null;
+  withdrawalDate: string;
 }
