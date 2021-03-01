@@ -12,12 +12,16 @@ const useStyles = makeStyles((theme) => ({
 
 type AvatarViewProps = {
   value: string;
+  onClick: () => void;
+  children: React.ReactNode;
 };
-export const AvatarView: React.FC<AvatarViewProps> = ({ value }: AvatarViewProps) => {
+export const AvatarView: React.FC<AvatarViewProps> = ({ value, children, onClick = () => {} }: AvatarViewProps) => {
   const classes = useStyles();
   return (
     <Box display="flex" justifyContent="center" m={4}>
-      <Avatar alt={'avatar'} className={classes.large} src={value} />
+      <Avatar alt={'avatar'} className={classes.large} src={value} onClick={onClick}>
+        {children}
+      </Avatar>
     </Box>
   );
 };
