@@ -134,14 +134,21 @@ const MascotteStep4: React.FC = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p>
-              {activity.data.mascotteName}, comme les élèves de notre classe, parle {[].concat(displayableLanguages).map(naturalJoinArray)}.
+              {activity.data.mascotteName}, comme les élèves de notre classe,
+              {displayableLanguages.length > 0
+                ? ' parle : ' + [].concat(displayableLanguages).map(naturalJoinArray) + '.'
+                : ' ne parle aucune langue.'}
             </p>
             <p>
-              {activity.data.mascotteName}, comme les élèves de notre classe, utilise comme monnaie{' '}
-              {[].concat(displayableCurrencies).map(naturalJoinArray)}.
+              {activity.data.mascotteName}, comme les élèves de notre classe,
+              {displayableCurrencies.length > 0
+                ? ' utilise comme monnaie : ' + [].concat(displayableCurrencies).map(naturalJoinArray) + '.'
+                : " n'utilise aucune monnaie."}
+              .
             </p>
             <p>
-              {activity.data.mascotteName} est allé ou rêve d’aller dans ces pays : {[].concat(displayableCountries).map(naturalJoinArray)}.
+              {activity.data.mascotteName} est allé ou rêve d’aller dans
+              {displayableCountries.length > 0 ? ' ces pays : ' + [].concat(displayableCountries).map(naturalJoinArray) + '.' : ' aucun pays.'}
             </p>
           </div>
         </div>
