@@ -9,6 +9,7 @@ import { htmlToText } from 'src/utils';
 
 import { RedButton } from '../../buttons/RedButton';
 
+import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
 export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf, noButtons, showEditButtons, onDelete }: ActivityCardProps) => {
@@ -50,11 +51,16 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
         </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
-            <Link href={`/activity/${activity.id}`}>
-              <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`}>
-                Regarder la présentation
-              </Button>
-            </Link>
+            {!showEditButtons && (
+              <>
+                <CommentIcon count={activity.commentCount} />
+                <Link href={`/activity/${activity.id}`}>
+                  <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`}>
+                    Regarder la présentation
+                  </Button>
+                </Link>
+              </>
+            )}
             {isSelf && showEditButtons && (
               <>
                 <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>

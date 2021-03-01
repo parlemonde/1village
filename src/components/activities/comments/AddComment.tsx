@@ -39,9 +39,10 @@ const Reactions = [
 
 interface AddCommentProps {
   activityId: number | null;
+  label?: string;
 }
 
-export const AddComment: React.FC<AddCommentProps> = ({ activityId }: AddCommentProps) => {
+export const AddComment: React.FC<AddCommentProps> = ({ activityId, label }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
@@ -60,6 +61,7 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId }: AddComment
     await addComment(newComment);
     setIsLoading(false);
     setDisplayEditor(false);
+    setNewComment('');
   };
 
   return (
@@ -98,7 +100,7 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId }: AddComment
         </div>
       ) : (
         <div className="activity__comment-react">
-          <span className="text text--bold">Réagir à cette activité par :</span>
+          <span className="text text--bold">{label || 'Réagir à cette activité par :'}</span>
           <div className="text-center">
             <div className="activity__comment-react-actions">
               {Reactions.map((R, index) =>
