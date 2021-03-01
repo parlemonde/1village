@@ -6,6 +6,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
+import { MascotteActivityView } from 'src/components/activities/MascotteActivityView';
 import { AddComment } from 'src/components/activities/comments/AddComment';
 import { CommentCard } from 'src/components/activities/comments/CommentCard';
 import { SimpleActivityView } from 'src/components/activities';
@@ -15,9 +16,9 @@ import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import { getQueryString } from 'src/utils';
 import { getGravatarUrl, toDate } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { getQueryString } from 'src/utils';
+import { ActivitySubType, ActivityType } from 'types/activity.type';
 import { User, UserType } from 'types/user.type';
 
 const titles = {
@@ -100,7 +101,8 @@ const Activity: React.FC = () => {
             </div>
           </div>
         )}
-        {activity.type === ActivityType.PRESENTATION && <SimpleActivityView activity={activity} />}
+        {activity.type === ActivityType.PRESENTATION && activity.subType !== ActivitySubType.MASCOTTE && <SimpleActivityView activity={activity} />}
+        {activity.type === ActivityType.PRESENTATION && activity.subType === ActivitySubType.MASCOTTE && <MascotteActivityView activity={activity} />}
         {activity.type === ActivityType.QUESTION && <p>{activity.processedContent[0]?.value}</p>}
 
         <div className="activity__divider">

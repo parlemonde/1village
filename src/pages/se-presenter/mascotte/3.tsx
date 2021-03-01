@@ -17,7 +17,6 @@ const MascotteStep3: React.FC = () => {
   const { activity, updateActivity } = React.useContext(ActivityContext);
 
   const dataChange = (key: string) => (newValue: string[]) => {
-    console.log(key, newValue);
     const newData = { ...activity.data, [key]: newValue };
     updateActivity({ data: newData });
   };
