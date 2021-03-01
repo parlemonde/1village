@@ -43,13 +43,21 @@ const MascotteStep1: React.FC = () => {
   }, [createNewActivity, activity]);
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newData = { ...activity.data, [key]: event.target.value };
+    const newData = { ...activity.data, [key]: Number(event.target.value) };
     updateActivity({ data: newData });
   };
 
   if (!user) return <Base>Not authorized</Base>;
   if (!activity) return <Base>Loading...</Base>;
 
+  const validSum = (x:number, y:number, z:number) => {
+    console.log(x, " ", y, " ", z);
+    console.log(typeof x);
+    console.log(typeof y);
+    console.log(typeof z);
+    return x + y !== z;
+  }
+  
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -66,6 +74,8 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.totalStudent}
               onChange={dataChange('totalStudent')}
+              helperText={validSum(activity.data.girlStudent, activity.data.boyStudent, activity.data.totalStudent) ? "Le compte n'est pas bon": ""}
+              error={validSum(activity.data.girlStudent, activity.data.boyStudent, activity.data.totalStudent)}
             />{' '}
             <span> élèves, dont </span>{' '}
             <TextField
@@ -102,6 +112,9 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.totalTeacher}
               onChange={dataChange('totalTeacher')}
+              helperText={validSum(activity.data.womanTeacher, activity.data.manTeacher, activity.data.totalTeacher) ? "Le compte n'est pas bon": ""}
+              error={validSum(activity.data.womanTeacher, activity.data.manTeacher, activity.data.totalTeacher)}
+
             />{' '}
             <span> professeurs, dont </span>{' '}
             <TextField
