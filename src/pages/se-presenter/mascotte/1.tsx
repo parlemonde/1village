@@ -52,15 +52,16 @@ const MascotteStep1: React.FC = () => {
   if (!user) return <Base>Not authorized</Base>;
   if (!activity) return <Base>Loading...</Base>;
 
-  const invalidSum = (x: number, y: number, z: number) => {
-    return x + y !== z;
+  const isValidSum = (x: number, y: number, z: number) => {
+    if (x < 0 || y < 0) return false;
+    return x + y === z;
   };
 
   const errorMessage = (women: number, men: number, total: number) => {
     if (isError && total === 0) {
       return 'Ce champ est obligatoire';
     }
-    if (isError && invalidSum(women, men, total)) {
+    if (isError && !isValidSum(women, men, total)) {
       return "Le compte n'est pas bon";
     }
     return '';
@@ -68,8 +69,8 @@ const MascotteStep1: React.FC = () => {
 
   const isValid = () => {
     return (
-      !invalidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) &&
-      !invalidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) &&
+      isValidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) &&
+      isValidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) &&
       activity.data.totalStudent !== 0 &&
       activity.data.totalTeacher !== 0
     );
@@ -121,7 +122,7 @@ const MascotteStep1: React.FC = () => {
               helperText={errorMessage(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number)}
               error={
                 isError &&
-                (invalidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) ||
+                (!isValidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) ||
                   activity.data.totalStudent === 0)
               }
             />{' '}
@@ -169,7 +170,7 @@ const MascotteStep1: React.FC = () => {
               )}
               error={
                 isError &&
-                (invalidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) ||
+                (!isValidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) ||
                   activity.data.totalTeacher === 0)
               }
             />{' '}
