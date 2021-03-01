@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Grid, Backdrop, Avatar, Box } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -15,7 +15,16 @@ import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
 
+const useStyles = makeStyles((theme) => ({
+  large: {
+    width: theme.spacing(18),
+    height: theme.spacing(18),
+  },
+}));
+
 const MascotteStep4: React.FC = () => {
+  const classes = useStyles();
+
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { countries } = useCountries();
@@ -51,7 +60,13 @@ const MascotteStep4: React.FC = () => {
     setIsLoading(false);
   };
 
-  if (!activity) router.push('/se-presenter/mascotte/1');
+  React.useEffect(() => {
+    if (!activity) {
+      router.push('/se-presenter/mascotte/1');
+    }
+  }, [activity, router]);
+
+  if (!activity) return <Base>Redirecting ...</Base>;
 
   return (
     <Base>
@@ -119,11 +134,20 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
-            <p>{activity.data.mascotteDescription}</p>
-            <p>
-              {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
-            </p>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={3}>
+                <Box display="flex" justifyContent="center" m={4}>
+                  <Avatar alt={'avatar'} className={classes.large} src={activity.data.mascotteImage} />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
+                <p>{activity.data.mascotteDescription}</p>
+                <p>
+                  {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
+                </p>
+              </Grid>
+            </Grid>
           </div>
           <div className="preview-block">
             <EditButton
