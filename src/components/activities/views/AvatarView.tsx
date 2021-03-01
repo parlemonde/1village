@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 type AvatarViewProps = {
   value: string;
-  size?: string;
+  size?: 'large' | 'medium';
   onClick?: () => void;
   children?: React.ReactNode;
 };
