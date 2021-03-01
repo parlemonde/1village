@@ -115,7 +115,7 @@ const MascotteStep1: React.FC = () => {
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
-              min="0"
+              inputProps={{ min: 0 }}
               size="small"
               value={activity.data.totalStudent}
               onChange={dataChange('totalStudent')}
@@ -133,6 +133,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.girlStudent}
               onChange={dataChange('girlStudent')}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> filles et </span>{' '}
             <TextField
@@ -141,6 +142,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.boyStudent}
               onChange={dataChange('boyStudent')}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> garçons.</span>
             <br />
@@ -153,6 +155,7 @@ const MascotteStep1: React.FC = () => {
               onChange={dataChange('meanAge')}
               helperText={isError && activity.data.meanAge === 0 ? 'Ce champ est obligatoire' : ''}
               error={isError && activity.data.meanAge === 0}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> ans.</span>
             <br />
@@ -173,6 +176,7 @@ const MascotteStep1: React.FC = () => {
                 (!isValidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) ||
                   activity.data.totalTeacher === 0)
               }
+              inputProps={{ min: 0 }}
             />{' '}
             <span> professeurs, dont </span>{' '}
             <TextField
@@ -181,6 +185,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.womanTeacher}
               onChange={dataChange('womanTeacher')}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> femmes et </span>{' '}
             <TextField
@@ -189,6 +194,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.manTeacher}
               onChange={dataChange('manTeacher')}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> hommes.</span> <br />
             <span>Dans notre école, il y a </span>{' '}
@@ -200,6 +206,7 @@ const MascotteStep1: React.FC = () => {
               onChange={dataChange('numberClassroom')}
               helperText={isError && activity.data.numberClassroom === 0 ? 'Ce champ est obligatoire' : ''}
               error={isError && activity.data.numberClassroom === 0}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> classes et </span>{' '}
             <TextField
@@ -210,6 +217,7 @@ const MascotteStep1: React.FC = () => {
               onChange={dataChange('totalSchoolStudent')}
               helperText={isError && activity.data.totalSchoolStudent === 0 ? 'Ce champ est obligatoire' : ''}
               error={isError && activity.data.totalSchoolStudent === 0}
+              inputProps={{ min: 0 }}
             />{' '}
             <span> élèves.</span>
           </div>
