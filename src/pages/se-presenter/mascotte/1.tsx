@@ -9,9 +9,14 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { ActivityType, ActivitySubType } from 'types/activity.type';
+import { useCountries } from 'src/services/useCountries';
+import { Country } from 'types/country.type';
+
+
 
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
+  const { countries } = useCountries();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
@@ -19,7 +24,7 @@ const MascotteStep1: React.FC = () => {
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
       createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
-        presentation: "Nous sommes la classe de " + user.level + " de " + user.city + " de l'école " + user.school + " en " + user.countryCode + ".",
+        presentation: "Nous sommes la classe de " + user.level + " de " + user.city + " de l'école " + user.school + " en " + countries.filter(c => c.isoCode === user.countryCode)[0]?.name  + ".",
         totalStudent: 0,
         girlStudent: 0,
         boyStudent: 0,
@@ -82,7 +87,8 @@ const MascotteStep1: React.FC = () => {
     }
   };
 
-  const labelPrez = "Nous sommes la classe de " + user.level + " de " + user.city + " de l'école " + user.school + " en " + user.countryCode + ".";
+  const labelPrez = "Nous sommes la classe de \"" + user.level + "\" de \"" + user.city + "\" de l'école \"" + user.school + "\" en \"" + countries.filter(c => c.isoCode === user.countryCode)[0]?.name + "\".";
+
 
   return (
     <Base>
@@ -91,7 +97,7 @@ const MascotteStep1: React.FC = () => {
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
         <div style={{ margin: '0 10% 0 10%', lineHeight: '70px' }}>
           <h1>Qui est dans votre classe ?</h1>
-          <TextField variant="outlined" style={{ width: '100%' }} label={"Exemple: \"" + labelPrez + "\""} onChange={dataChange('presentation')} />
+          <TextField variant="outlined" style={{ width: '100%' }} label={"Exemple: "  + labelPrez} onChange={dataChange('presentation')} />
           <div className="se-presenter-step-one">
             <span>Nous sommes </span>{' '}
             <TextField
