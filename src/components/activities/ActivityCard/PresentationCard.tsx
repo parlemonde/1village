@@ -16,7 +16,6 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
   const firstImage = React.useMemo(() => activity.processedContent.find((c) => c.type === 'image'), [activity.processedContent]);
   const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
-  const isMascotte = activity.data.subtype === 'MASCOTTE';
 
   return (
     <div
@@ -64,12 +63,10 @@ export const PresentationCard: React.FC<ActivityCardProps> = ({ activity, isSelf
             )}
             {isSelf && showEditButtons && (
               <>
-                <Link
-                  href={isMascotte ? `se-presenter/mascotte/4?activity-id=${activity.id}` : `se-presenter/thematique/3?activity-id=${activity.id}`}
-                >
+                <Link href={`se-presenter/thematique/3?activity-id=${activity.id}`}>
                   <Button
                     component="a"
-                    href={isMascotte ? `se-presenter/mascotte/4?activity-id=${activity.id}` : `se-presenter/thematique/3?activity-id=${activity.id}`}
+                    href={`se-presenter/thematique/3?activity-id=${activity.id}`}
                     color="secondary"
                     variant="contained"
                     style={{ marginLeft: '0.25rem' }}

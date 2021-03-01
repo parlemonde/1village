@@ -11,9 +11,10 @@ import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { getGravatarUrl, toDate } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivitySubType, ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
+import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { ActivityCardProps } from './activity-card.types';
@@ -72,7 +73,10 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem' }} height="45px" />}
       </div>
       <div className="activity-card__content">
-        {activity.type === ActivityType.PRESENTATION && (
+        {activity.type === ActivityType.PRESENTATION && activity.subType === ActivitySubType.MASCOTTE && (
+          <MascotteCard activity={activity} user={user} isSelf={isSelf} noButtons={noButtons} showEditButtons={showEditButtons} onDelete={onDelete} />
+        )}
+        {activity.type === ActivityType.PRESENTATION && activity.subType !== ActivitySubType.MASCOTTE && (
           <PresentationCard
             activity={activity}
             user={user}

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, Grid, Backdrop } from '@material-ui/core';
+import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -17,7 +17,7 @@ import { useLanguages } from 'src/services/useLanguages';
 
 const MascotteStep4: React.FC = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
+  const { activity, addContent, save, updateActivity } = React.useContext(ActivityContext);
   const { countries } = useCountries();
   const { languages } = useLanguages();
   const { currencies } = useCurrencies();
@@ -50,12 +50,67 @@ const MascotteStep4: React.FC = () => {
     }
     setIsLoading(false);
   };
-
   React.useEffect(() => {
     if (!activity) {
       router.push('/se-presenter/mascotte/1');
     }
-  }, [activity, router]);
+  }, [activity, router, addContent, updateActivity]);
+
+  React.useEffect(() => {
+    updateActivity({ processedContent: [] });
+  }, [updateActivity]);
+
+  React.useEffect(() => {
+    if (!activity.processedContent || activity.processedContent.length !== 0) {
+      return;
+    }
+    addContent(
+      'text',
+      `<p>
+    Nous sommes ${activity.data.totalStudent} élèves, dont ${activity.data.girlStudent} filles et ${activity.data.boyStudent} garçons.
+  </p>
+  <p>En moyenne, l’âge des élèves de notre classe est ${activity.data.meanAge} ans.</p>
+  <p>
+    Nous avons ${activity.data.totalTeacher} professeurs, dont ${activity.data.womanTeacher} femmes et ${activity.data.manTeacher} hommes.
+  </p>
+  <p>
+    Dans notre école, il y a ${activity.data.numberClassroom} classes et ${activity.data.totalSchoolStudent} élèves.
+  </p>`,
+    );
+    addContent(
+      'text',
+      `<p>Notre mascotte s’appelle ${activity.data.mascotteName}, elle nous représente.</p>
+      <p>${activity.data.mascotteDescription}</p>
+      <p>
+        ${activity.data.mascotteName} est ${activity.data.personality1}, ${activity.data.personality2} et ${activity.data.personality3}
+      </p>`,
+    );
+
+    addContent(
+      'text',
+      `<p>
+      ${activity.data.mascotteName}, comme les élèves de notre classe,
+      ${
+        displayableLanguages.length > 0
+          ? ' parle : ' + [].concat(displayableLanguages).map(naturalJoinArray).join('') + '.'
+          : ' ne parle aucune langue.'
+      }
+    </p>
+    <p>
+      ${activity.data.mascotteName}, comme les élèves de notre classe,
+      ${
+        displayableCurrencies.length > 0
+          ? ' utilise comme monnaie : ' + [].concat(displayableCurrencies).map(naturalJoinArray).join('') + '.'
+          : " n'utilise aucune monnaie."
+      }
+      .
+    </p>
+    <p>
+      ${activity.data.mascotteName} est allé ou rêve d’aller dans
+      ${displayableCountries.length > 0 ? ' ces pays : ' + [].concat(displayableCountries).map(naturalJoinArray).join('') + '.' : ' aucun pays.'}
+    </p>`,
+    );
+  }, [activity, addContent, displayableCountries, displayableCurrencies, displayableLanguages]);
 
   if (!activity) return <Base>Redirecting ...</Base>;
 
@@ -82,11 +137,6 @@ const MascotteStep4: React.FC = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/se-presenter/thematique/2">
-                <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/2">
-                  {"Modifier à l'étape précédente"}
-                </Button>
-              </Link>
               <Button variant="outlined" color="primary" onClick={onPublish}>
                 Enregistrer les changements
               </Button>
@@ -106,16 +156,7 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p>
-              Nous sommes {activity.data.totalStudent} élèves, dont {activity.data.girlStudent} filles et {activity.data.boyStudent} garçons.
-            </p>
-            <p>En moyenne, l’âge des élèves de notre classe est {activity.data.meanAge} ans.</p>
-            <p>
-              Nous avons {activity.data.totalTeacher} professeurs, dont {activity.data.womanTeacher} femmes et {activity.data.manTeacher} hommes.
-            </p>
-            <p>
-              Dans notre école, il y a {activity.data.numberClassroom} classes et {activity.data.totalSchoolStudent} élèves.
-            </p>
+            <div dangerouslySetInnerHTML={{ __html: activity.processedContent[0] && activity.processedContent[0].value }}></div>
           </div>
           <div className="preview-block">
             <EditButton
@@ -127,14 +168,12 @@ const MascotteStep4: React.FC = () => {
             />
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
-                <AvatarView value={activity.data.mascotteImage as string} />
+                <Box display="flex" justifyContent="center" m={0}>
+                  <AvatarView value={activity.data.mascotteImage as string} />
+                </Box>
               </Grid>
               <Grid item xs={12} md={9}>
-                <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
-                <p>{activity.data.mascotteDescription}</p>
-                <p>
-                  {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: activity.processedContent[1] && activity.processedContent[1].value }}></div>
               </Grid>
             </Grid>
           </div>
@@ -146,23 +185,7 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p>
-              {activity.data.mascotteName}, comme les élèves de notre classe,
-              {displayableLanguages.length > 0
-                ? ' parle : ' + [].concat(displayableLanguages).map(naturalJoinArray) + '.'
-                : ' ne parle aucune langue.'}
-            </p>
-            <p>
-              {activity.data.mascotteName}, comme les élèves de notre classe,
-              {displayableCurrencies.length > 0
-                ? ' utilise comme monnaie : ' + [].concat(displayableCurrencies).map(naturalJoinArray) + '.'
-                : " n'utilise aucune monnaie."}
-              .
-            </p>
-            <p>
-              {activity.data.mascotteName} est allé ou rêve d’aller dans
-              {displayableCountries.length > 0 ? ' ces pays : ' + [].concat(displayableCountries).map(naturalJoinArray) + '.' : ' aucun pays.'}
-            </p>
+            <div dangerouslySetInnerHTML={{ __html: activity.processedContent[2] && activity.processedContent[2].value }}></div>
           </div>
         </div>
       </div>

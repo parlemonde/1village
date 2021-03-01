@@ -8,7 +8,7 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivitySubType, ActivityType } from 'types/activity.type';
 
 const PresentationStep1: React.FC = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const PresentationStep1: React.FC = () => {
       return;
     }
 
-    const success = createNewActivity(ActivityType.PRESENTATION, {
+    const success = createNewActivity(ActivityType.PRESENTATION, ActivitySubType.THEMATIQUE, {
       theme: index,
     });
     if (success) {

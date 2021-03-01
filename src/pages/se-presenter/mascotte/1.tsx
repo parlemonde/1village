@@ -8,18 +8,17 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { ActivityType } from 'types/activity.type';
+import { ActivityType, ActivitySubType } from 'types/activity.type';
 
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
-  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    if (!activity || activity.type !== ActivityType.PRESENTATION)
-      createNewActivity(ActivityType.PRESENTATION, {
-        subtype: 'MASCOTTE',
+    if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
+      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
         presentation: "Nous sommes la classe de " + user.level + " de " + user.city + " de l'école " + user.school + " en " + user.countryCode + ".",
         totalStudent: 0,
         girlStudent: 0,
@@ -40,7 +39,8 @@ const MascotteStep1: React.FC = () => {
         languages: [],
         currencies: [],
       });
-  }, [createNewActivity, activity]);
+    }
+  }, [activity, createActivityIfNotExist]);
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: key === 'presentation' ? event.target.value : Number(event.target.value) };
@@ -82,7 +82,7 @@ const MascotteStep1: React.FC = () => {
     }
   };
 
-  const labelPrez = "" + activity.data.presentation;
+  const labelPrez = "Nous sommes la classe de " + user.level + " de " + user.city + " de l'école " + user.school + " en " + user.countryCode + ".";
 
   return (
     <Base>

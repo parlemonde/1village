@@ -11,7 +11,14 @@ import { isValidHttpUrl } from 'src/utils';
 
 import type { EditorProps } from '../../editing.types';
 
-export const ImageModal: React.FC<EditorProps> = ({
+interface ImageModalProps extends EditorProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (val: boolean) => void;
+  imageUrl: string;
+  setImageUrl: (val: string) => void;
+}
+
+export const ImageModal: React.FC<ImageModalProps> = ({
   isModalOpen,
   setIsModalOpen,
   imageUrl,
@@ -20,7 +27,7 @@ export const ImageModal: React.FC<EditorProps> = ({
   value = '',
   onChange = () => {},
   onDelete = () => {},
-}: EditorProps) => {
+}: ImageModalProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [tempImageUrl, setTempImageUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
