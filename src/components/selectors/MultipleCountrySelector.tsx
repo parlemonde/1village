@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useCountries } from 'src/services/useCountries';
-import { countryToFlag } from 'src/utils';
 import { Country } from 'types/country.type';
 
 type CountryOption = Country & {
@@ -14,7 +13,7 @@ type CountryOption = Country & {
 interface MultipleCountrySelectorProps {
   label: string | React.ReactNode;
   value?: string;
-  onChange?(newValue: string): void;
+  onChange?(newValue: string[] | null): void;
   filterCountries?: string[];
   style?: React.CSSProperties;
 }
@@ -53,7 +52,7 @@ export const MultipleCountrySelector: React.FC<MultipleCountrySelectorProps> = (
         setOption(newOption);
       }
       if (onChange) {
-        onChange(newOption ? newOption.map((o) => o.isoCode).join(',') : '');
+        onChange(newOption ? newOption.map((o) => o.isoCode) : null);
       }
     },
     [value, onChange],

@@ -2,22 +2,26 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, TextField, Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
-import { MultipleCountrySelector } from 'src/components/MultipleCountrySelector';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
+import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
+import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
+import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep3: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
 
-  const dataChange = (key: string) => (newValue: string) => {
+  const dataChange = (key: string) => (newValue: string[]) => {
+    console.log(key, newValue);
     const newData = { ...activity.data, [key]: newValue };
     updateActivity({ data: newData });
   };
+
   React.useEffect(() => {
     if (!activity) {
       router.push('/se-presenter/mascotte/1');
@@ -45,14 +49,14 @@ const MascotteStep3: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <p>Quelles langues parle {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?</p>
-                <MultipleCountrySelector
+                <MultipleLanguageSelector
                   label={'langues'}
                   style={{ width: '100%', marginBottom: '1rem' }}
                   value={activity.data.languages}
                   onChange={dataChange('languages')}
                 />
                 <p>Quelles monnaies utilise {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?</p>
-                <MultipleCountrySelector
+                <MultipleCurrencySelector
                   label={'monnaies'}
                   style={{ width: '100%', marginBottom: '1rem' }}
                   value={activity.data.currencies}

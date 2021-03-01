@@ -1,8 +1,7 @@
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, TextField, Grid } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -11,8 +10,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { ActivityType } from 'types/activity.type';
 
-const TextEditor = dynamic(() => import('src/components/activities/editors/TextEditor'), { ssr: false });
-
 const MascotteStep1: React.FC = () => {
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
@@ -20,6 +17,7 @@ const MascotteStep1: React.FC = () => {
   React.useEffect(() => {
     if (!activity)
       createNewActivity(ActivityType.PRESENTATION, {
+        subtype: 'MASCOTTE',
         presentation: '',
         totalStudent: 0,
         girlStudent: 0,
