@@ -23,17 +23,20 @@ const MascotteStep4: React.FC = () => {
   const { currencies } = useCurrencies();
 
   const displayableCountries: string[] = React.useMemo(
-    () => countries.filter((country) => (activity.data.countries as string[]).includes(country.isoCode)).map((country) => country.name),
+    () => activity && countries.filter((country) => (activity.data.countries as string[]).includes(country.isoCode)).map((country) => country.name),
     [countries, activity],
   );
 
   const displayableLanguages: string[] = React.useMemo(
-    () => languages.filter((language) => (activity.data.languages as string[]).includes(language.alpha3_b)).map((language) => language.french),
+    () =>
+      activity &&
+      languages.filter((language) => (activity.data.languages as string[]).includes(language.alpha3_b)).map((language) => language.french),
     [languages, activity],
   );
 
   const displayableCurrencies: string[] = React.useMemo(
     () =>
+      activity &&
       currencies.filter((currency) => (activity.data.currencies as string[]).includes(currency.alphabeticCode)).map((currency) => currency.currency),
     [currencies, activity],
   );
@@ -50,8 +53,9 @@ const MascotteStep4: React.FC = () => {
     }
     setIsLoading(false);
   };
+
   React.useEffect(() => {
-    if (!activity) {
+    if (!activity && !('activity-id' in router.query)) {
       router.push('/se-presenter/mascotte/1');
     }
   }, [activity, router, addContent, updateActivity]);
