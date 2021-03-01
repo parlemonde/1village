@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, Grid, Box } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 
 import { AvatarView } from 'src/components/activities/views/AvatarView';
 
@@ -20,12 +20,10 @@ export const MascotteCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
       }}
     >
       <div style={{ margin: '0.25rem', flex: 1 }}>
-        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Notre Mascotte {activity.data.mascotteName}</h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
-          <Box display="flex" justifyContent="left" mt={3} ml={4}>
-            <AvatarView size="medium" value={activity.data.mascotteImage as string} />
-          </Box>
-        </div>
+        <Box alignItems="center" flexDirection="horizontal" display="flex" justifyContent="left" m={2}>
+          <AvatarView size="medium" value={activity.data.mascotteImage as string} />
+          <h3 style={{ marginLeft: '1rem' }}>Notre Mascotte {activity.data.mascotteName}</h3>
+        </Box>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
             {!showEditButtons && (
