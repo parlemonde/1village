@@ -17,7 +17,7 @@ const MascotteStep1: React.FC = () => {
   const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    if (!activity) {
+    if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
       createNewActivity(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
         presentation: '',
         totalStudent: 0,
