@@ -77,30 +77,49 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <span>Nous sommes </span>
-            {activity.data.totalStudent}
-            <span> élèves, dont </span>
-            {activity.data.girlStudent}
-            <span> filles et </span>
-            {activity.data.boyStudent}
-            <span> garçons.</span>
-            <br />
-            <span>En moyenne, l’âge des élèves de notre classe est </span>
-            {activity.data.meanAge}
-            <span> ans.</span>
-            <br />
-            <span>Nous avons </span>
-            {activity.data.totalTeacher}
-            <span> professeurs, dont </span>
-            {activity.data.womanTeacher}
-            <span> femmes et </span>
-            {activity.data.manTeacher}
-            <span> hommes.</span> <br />
-            <span>Dans notre école, il y a </span>
-            {activity.data.numberClassroom}
-            <span> classes et </span>
-            {activity.data.totalSchoolStudent}
-            <span> élèves.</span>
+            <p>
+              Nous sommes {activity.data.totalStudent} élèves, dont {activity.data.girlStudent} filles et {activity.data.boyStudent} garçons.
+            </p>
+            <p>En moyenne, l’âge des élèves de notre classe est {activity.data.meanAge} ans.</p>
+            <p>
+              Nous avons {activity.data.totalTeacher} professeurs, dont {activity.data.womanTeacher} femmes et {activity.data.manTeacher} hommes.
+            </p>
+            <p>
+              Dans notre école, il y a {activity.data.numberClassroom} classes et {activity.data.totalSchoolStudent} élèves.
+            </p>
+          </div>
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/mascotte/2');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
+            <p>{activity.data.mascotteDescription}</p>
+            <p>
+              {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
+            </p>
+          </div>
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/mascotte/3');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p>
+              {activity.data.mascotteName}, comme les élèves de notre classe, parle {[].concat(activity.data.languages).map(naturalJoinArray)}
+            </p>
+            <p>
+              {activity.data.mascotteName}, comme les élèves de notre classe, utilise comme monnaie{' '}
+              {[].concat(activity.data.currencies).map(naturalJoinArray)}.
+            </p>
+            <p>
+              {activity.data.mascotteName} est allé ou rêve d’aller dans ces pays : {[].concat(activity.data.countries).map(naturalJoinArray)}
+            </p>
           </div>
         </div>
       </div>
@@ -109,6 +128,19 @@ const MascotteStep4: React.FC = () => {
       </Backdrop>
     </Base>
   );
+};
+
+const naturalJoinArray = (element: string, index: number, array: Array<string>) => {
+  if (array.length < 2) {
+    return element;
+  }
+  if (index === array.length - 1) {
+    return element + ' et ';
+  }
+  if (index === array.length) {
+    return element;
+  }
+  return element + ', ';
 };
 
 export default MascotteStep4;
