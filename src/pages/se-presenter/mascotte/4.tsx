@@ -70,7 +70,11 @@ const MascotteStep4: React.FC = () => {
     }
     addContent(
       'text',
-      `<p>
+      `
+  <p>
+    Nous sommes ${activity.data.presentation}.
+  </p>
+  <p>
     Nous sommes ${activity.data.totalStudent} élèves, dont ${activity.data.girlStudent} filles et ${activity.data.boyStudent} garçons.
   </p>
   <p>En moyenne, l’âge des élèves de notre classe est ${activity.data.meanAge} ans.</p>

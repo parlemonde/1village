@@ -21,7 +21,7 @@ const MascotteStep1: React.FC = () => {
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
       createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
-        presentation: 'Nous sommes la classe de ',
+        presentation: '',
         totalStudent: 0,
         girlStudent: 0,
         boyStudent: 0,
@@ -84,7 +84,7 @@ const MascotteStep1: React.FC = () => {
   };
 
   const labelPrez =
-    'Nous sommes la classe de "' +
+    'la classe de ' +
     user.level +
     '" de "' +
     user.city +
@@ -101,10 +101,11 @@ const MascotteStep1: React.FC = () => {
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
         <div style={{ margin: '0 10% 0 10%', lineHeight: '70px' }}>
           <h1>Qui est dans votre classe ?</h1>
+          <span>Nous sommes </span>
           <TextField
             variant="outlined"
             style={{ width: '100%' }}
-            label={'Exemple: ' + labelPrez}
+            label={labelPrez}
             value={activity.data.presentation}
             onChange={dataChange('presentation')}
           />
