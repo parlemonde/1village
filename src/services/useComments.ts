@@ -62,6 +62,7 @@ export const useCommentRequests = (activityId: number | null) => {
         return null;
       }
       queryCache.invalidateQueries('comments');
+      queryCache.invalidateQueries('activities');
       return response.data as Comment;
     },
     [activityId, axiosLoggedRequest, queryCache, enqueueSnackbar],
@@ -107,6 +108,7 @@ export const useCommentRequests = (activityId: number | null) => {
         return;
       }
       queryCache.invalidateQueries('comments');
+      queryCache.invalidateQueries('activities');
     },
     [activityId, axiosLoggedRequest, queryCache, enqueueSnackbar],
   );

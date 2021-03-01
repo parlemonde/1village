@@ -14,7 +14,7 @@ export async function getAccessToken(
   accessToken: string;
   refreshToken: string;
 }> {
-  const accessToken = jwt.sign({ userId }, secret, { expiresIn: '1h' });
+  const accessToken = jwt.sign({ userId }, secret, { expiresIn: '4h' });
   let refreshToken = '';
   if (withRefreshToken) {
     const rToken = generateTemporaryPassword(30);

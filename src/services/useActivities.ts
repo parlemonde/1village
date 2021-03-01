@@ -7,7 +7,16 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 
-export const useActivities = (): { activities: ExtendedActivity[] } => {
+export type Args = {
+  limit?: number;
+  page?: number;
+  countries?: string[];
+  pelico?: boolean;
+  type?: number;
+  userId?: number;
+};
+
+export const useActivities = ({ pelico, countries, userId, ...args }: Args): { activities: ExtendedActivity[] } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
@@ -17,18 +26,38 @@ export const useActivities = (): { activities: ExtendedActivity[] } => {
     if (!villageId) {
       return [];
     }
+    const query: {
+      [key: string]: string | number | boolean;
+    } = {
+      ...args,
+      villageId,
+      countries: countries.join(','),
+      pelico: pelico ? 'true' : 'false',
+    };
+    if (userId !== undefined) {
+      query.userId = userId;
+    }
     const response = await axiosLoggedRequest({
       method: 'GET',
-      url: `/activities${serializeToQueryUrl({ villageId })}`,
+      url: `/activities${serializeToQueryUrl(query)}`,
     });
     if (response.error) {
       return [];
     }
     return response.data.map(getExtendedActivity);
-  }, [villageId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(['activities', { villageId }], getActivities);
+  }, [args, countries, pelico, userId, villageId, axiosLoggedRequest]);
+  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(
+    ['activities', { ...args, userId, countries, pelico, villageId }],
+    getActivities,
+  );
 
+  const prevData = React.useRef<ExtendedActivity[]>([]);
+  React.useEffect(() => {
+    if (data !== undefined) {
+      prevData.current = data;
+    }
+  }, [data]);
   return {
-    activities: isLoading || error ? [] : data,
+    activities: isLoading || error ? prevData.current : data,
   };
 };

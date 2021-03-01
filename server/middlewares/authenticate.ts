@@ -61,7 +61,14 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
         try {
           data = JSON.parse(decoded);
         } catch (e) {
-          res.status(401).send('invalid access token');
+          if (req.method === 'GET' && userType === undefined) {
+            req.user = undefined;
+            res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+            res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+            next();
+          } else {
+            res.status(401).send('invalid access token');
+          }
           return;
         }
       } else {
@@ -78,7 +85,14 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       req.user = user;
     } catch (_e) {
-      res.status(401).send('invalid access token');
+      if (req.method === 'GET' && userType === undefined) {
+        req.user = undefined;
+        res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+        res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+        next();
+      } else {
+        res.status(401).send('invalid access token');
+      }
       return;
     }
     next();

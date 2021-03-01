@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 $headerHeight: 50px;
 $menuWidth: 250px;
@@ -83,6 +83,11 @@ header {
   margin: 0 $horizontalSpacing;
   border-radius: 10px;
 }
+.navigation__cgu-link {
+  position: absolute;
+  bottom: -1.5rem;
+  right: $horizontalSpacing;
+}
 
 // ---- APP CONTENT ----
 main {
@@ -150,6 +155,10 @@ main {
   }
   .navigation__button {
     font-size: 0.9rem !important;
+  }
+  .navigation__cgu-link {
+    right: $horizontalSpacing / 2;
+    font-size: 0.8rem !important;
   }
 
   main {

@@ -73,4 +73,6 @@ export class Activity implements ActivityInterface {
     nullable: true,
   })
   public responseType: ActivityType | null;
+
+  public commentCount?: number;
 }

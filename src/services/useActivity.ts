@@ -40,6 +40,30 @@ export const useActivityRequests = () => {
   const queryCache = useQueryCache();
   const { enqueueSnackbar } = useSnackbar();
 
+  const updatedActivityData = React.useCallback(
+    async (activity: ExtendedActivity, data: { [key: string]: string | number | boolean }) => {
+      const response = await axiosLoggedRequest({
+        method: 'PUT',
+        url: `/activities/${activity.id}/content/${activity.dataId}`,
+        data: {
+          value: JSON.stringify({
+            type: 'data',
+            data,
+          }),
+        },
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+        return;
+      }
+      queryCache.invalidateQueries('activity');
+      queryCache.invalidateQueries('activities');
+    },
+    [axiosLoggedRequest, enqueueSnackbar, queryCache],
+  );
+
   const deleteActivity = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
@@ -62,6 +86,7 @@ export const useActivityRequests = () => {
   );
 
   return {
+    updatedActivityData,
     deleteActivity,
   };
 };
