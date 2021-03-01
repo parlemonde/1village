@@ -12,6 +12,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep2: React.FC = () => {
   const router = useRouter();
+  const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: event.target.value };
@@ -28,6 +29,20 @@ const MascotteStep2: React.FC = () => {
   }, [activity, router]);
 
   if (!activity) return <Base>Redirecting ...</Base>;
+
+  const onNext = () => {
+    if (!isValid()) {
+      setIsError(true);
+    } else {
+      router.push('/se-presenter/mascotte/3');
+    }
+  };
+
+  const isValid = (): boolean => {
+    if (activity.data.mascotteName === '') return false;
+    if (activity.data.mascotteDescription === '') return false;
+    return true;
+  };
 
   return (
     <Base>
@@ -46,9 +61,18 @@ const MascotteStep2: React.FC = () => {
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
-                <TextField value={activity.data.mascotteName} onChange={dataChange('mascotteName')} label="nom" variant="outlined" />
+                <TextField
+                  error={isError && activity.data.mascotteName === ''}
+                  helperText={isError && activity.data.mascotteName === '' && 'entrez un nom pour votre mascotte'}
+                  value={activity.data.mascotteName}
+                  onChange={dataChange('mascotteName')}
+                  label="nom"
+                  variant="outlined"
+                />
                 <p>Quel animal est votre mascotte et pourquoi l’avoir choisi ?</p>
                 <TextField
+                  error={isError && activity.data.mascotteDescription === ''}
+                  helperText={isError && activity.data.mascotteDescription === '' && 'entrez une description pour votre mascotte'}
                   value={activity.data.mascotteDescription}
                   onChange={dataChange('mascotteDescription')}
                   label="description"
@@ -60,7 +84,9 @@ const MascotteStep2: React.FC = () => {
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
                     <TextField
+                      error={isError && activity.data.personality1 === ''}
                       value={activity.data.personality1}
+                      helperText={isError && activity.data.personality1 === '' && 'entrez une personnalité pour votre mascotte'}
                       onChange={dataChange('personality1')}
                       label="1"
                       variant="outlined"
@@ -69,6 +95,8 @@ const MascotteStep2: React.FC = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
+                      error={isError && activity.data.personality2 === ''}
+                      helperText={isError && activity.data.personality2 === '' && 'entrez une personnalité pour votre mascotte'}
                       value={activity.data.personality2}
                       onChange={dataChange('personality2')}
                       label="2"
@@ -78,6 +106,8 @@ const MascotteStep2: React.FC = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
+                      error={isError && activity.data.personality3 === ''}
+                      helperText={isError && activity.data.personality3 === '' && 'entrez une personnalité pour votre mascotte'}
                       value={activity.data.personality3}
                       onChange={dataChange('personality3')}
                       label="3"
@@ -90,11 +120,9 @@ const MascotteStep2: React.FC = () => {
             </Grid>
           </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Link href="/se-presenter/mascotte/3">
-              <Button component="a" href="/se-presenter/mascotte/3" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
+            <Button component="a" onClick={onNext} variant="outlined" color="primary">
+              Étape suivante
+            </Button>
           </div>
         </div>
       </div>
