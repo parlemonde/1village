@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Grid, Backdrop, Avatar, Box } from '@material-ui/core';
+import { Button, Grid, Backdrop } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { AvatarView } from 'src/components/activities/views/AvatarView';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -15,16 +15,7 @@ import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
 
-const useStyles = makeStyles((theme) => ({
-  large: {
-    width: theme.spacing(18),
-    height: theme.spacing(18),
-  },
-}));
-
 const MascotteStep4: React.FC = () => {
-  const classes = useStyles();
-
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { countries } = useCountries();
@@ -136,9 +127,7 @@ const MascotteStep4: React.FC = () => {
             />
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
-                <Box display="flex" justifyContent="center" m={4}>
-                  <Avatar alt={'avatar'} className={classes.large} src={activity.data.mascotteImage} />
-                </Box>
+                <AvatarView value={activity.data.mascotteImage as string} />
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
