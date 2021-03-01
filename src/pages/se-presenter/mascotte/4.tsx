@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, Grid, Backdrop } from '@material-ui/core';
+import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -127,7 +127,9 @@ const MascotteStep4: React.FC = () => {
             />
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
-                <AvatarView value={activity.data.mascotteImage as string} />
+                <Box display="flex" justifyContent="center" m={0}>
+                  <AvatarView value={activity.data.mascotteImage as string} />
+                </Box>
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
