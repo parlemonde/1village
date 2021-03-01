@@ -20,7 +20,7 @@ export const MascotteCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
       }}
     >
       <div style={{ margin: '0.25rem', flex: 1 }}>
-        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Notre Mascotte</h3>
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Notre Mascotte {activity.data.mascotteName}</h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
           <Box display="flex" justifyContent="center" m={0}>
             <AvatarView size="medium" value={activity.data.mascotteImage as string} />
