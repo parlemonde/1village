@@ -34,9 +34,9 @@ const MascotteStep1: React.FC = () => {
         personality1: '',
         personality2: '',
         personality3: '',
-        countries: '',
-        languages: '',
-        currencies: '',
+        countries: [],
+        languages: [],
+        currencies: [],
       });
   }, [createNewActivity, activity]);
 

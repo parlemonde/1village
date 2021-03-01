@@ -11,10 +11,33 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { useCountries } from 'src/services/useCountries';
+import { useCurrencies } from 'src/services/useCurrencies';
+import { useLanguages } from 'src/services/useLanguages';
 
 const MascotteStep4: React.FC = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
+  const { countries } = useCountries();
+  const { languages } = useLanguages();
+  const { currencies } = useCurrencies();
+
+  const displayableCountries: string[] = React.useMemo(
+    () => countries.filter((country) => (activity.data.countries as string[]).includes(country.isoCode)).map((country) => country.name),
+    [countries, activity],
+  );
+
+  const displayableLanguages: string[] = React.useMemo(
+    () => languages.filter((language) => (activity.data.languages as string[]).includes(language.alpha3_b)).map((language) => language.french),
+    [languages, activity],
+  );
+
+  const displayableCurrencies: string[] = React.useMemo(
+    () =>
+      currencies.filter((currency) => (activity.data.currencies as string[]).includes(currency.alphabeticCode)).map((currency) => currency.currency),
+    [currencies, activity],
+  );
+
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0;
@@ -111,14 +134,14 @@ const MascotteStep4: React.FC = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p>
-              {activity.data.mascotteName}, comme les élèves de notre classe, parle {[].concat(activity.data.languages).map(naturalJoinArray)}
+              {activity.data.mascotteName}, comme les élèves de notre classe, parle {[].concat(displayableLanguages).map(naturalJoinArray)}.
             </p>
             <p>
               {activity.data.mascotteName}, comme les élèves de notre classe, utilise comme monnaie{' '}
-              {[].concat(activity.data.currencies).map(naturalJoinArray)}.
+              {[].concat(displayableCurrencies).map(naturalJoinArray)}.
             </p>
             <p>
-              {activity.data.mascotteName} est allé ou rêve d’aller dans ces pays : {[].concat(activity.data.countries).map(naturalJoinArray)}
+              {activity.data.mascotteName} est allé ou rêve d’aller dans ces pays : {[].concat(displayableCountries).map(naturalJoinArray)}.
             </p>
           </div>
         </div>
@@ -134,10 +157,10 @@ const naturalJoinArray = (element: string, index: number, array: Array<string>) 
   if (array.length < 2) {
     return element;
   }
-  if (index === array.length - 1) {
+  if (index === array.length - 2) {
     return element + ' et ';
   }
-  if (index === array.length) {
+  if (index === array.length - 1) {
     return element;
   }
   return element + ', ';

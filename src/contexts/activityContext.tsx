@@ -12,7 +12,7 @@ import { VillageContext } from './villageContext';
 interface ActivityContextValue {
   activity: ExtendedActivity | null;
   updateActivity(newActivity: Partial<ExtendedActivity>): void;
-  createNewActivity(type: ActivityType, initialData?: { [key: string]: string | number | boolean }): boolean;
+  createNewActivity(type: ActivityType, initialData?: { [key: string]: string | number | boolean | string[] }): boolean;
   addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
   save(): Promise<boolean>;
