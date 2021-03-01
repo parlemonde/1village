@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { getRepository, getManager } from 'typeorm';
 
 import { ActivityData, ActivityDataType } from '../entities/activityData';
-import { Activity, ActivityType } from '../entities/activity';
+import { Activity, ActivityType, ActivitySubType } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -20,6 +20,7 @@ type ActivityGetter = {
   page?: number;
   villageId?: number;
   type?: number;
+  subType?: number;
   countries?: string[];
   pelico?: boolean;
   userId?: number;
@@ -58,7 +59,7 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
     return acc;
   }, {});
 };
-const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, countries = [], pelico = true, userId }: ActivityGetter) => {
+const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, subType = 0, countries = [], pelico = true, userId }: ActivityGetter) => {
   // get ids
   let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
   if (villageId !== undefined) {
@@ -66,6 +67,9 @@ const getActivities = async ({ limit = 200, page = 0, villageId, type = 0, count
   }
   if (type !== 0) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type - 1}` });
+  }
+  if (subType !== 0) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType: `${subType - 1}` });
   }
   if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
@@ -147,6 +151,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     countries: req.query.countries ? getQueryString(req.query.countries).split(',') : undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
     type: req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : undefined,
+    subType: req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : undefined,
     userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
   });
   res.sendJSON(activities);
@@ -170,6 +175,7 @@ activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req:
 // --- Create an activity ---
 type CreateActivityData = {
   type: ActivityType;
+  subType?: ActivitySubType;
   villageId?: number;
   content?: Array<{
     key: ActivityDataType;
@@ -184,6 +190,11 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     type: {
       type: 'number',
       enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+    },
+    subType: {
+      type: 'number',
+      enum: [ActivitySubType.THEMATIQUE, ActivitySubType.MASCOTTE],
+      nullable: true,
     },
     villageId: { type: 'number', nullable: true },
     content: {
@@ -229,6 +240,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.villageId = villageId;
   activity.userId = req.user.id;
   activity.type = data.type;
+  activity.subType = data.subType || data.subType == 0 ? data.subType : null;
   if (data.responseActivityId && data.responseType) {
     activity.responseActivityId = data.responseActivityId;
     activity.responseType = data.responseType;

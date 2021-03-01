@@ -4,7 +4,7 @@ import React from 'react';
 
 import type { ExtendedActivity, EditorTypes, EditorContent } from 'src/components/activities/editing.types';
 import { getQueryString } from 'src/utils';
-import { Activity, ActivityType } from 'types/activity.type';
+import { Activity, ActivityType, ActivitySubType } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -12,7 +12,7 @@ import { VillageContext } from './villageContext';
 interface ActivityContextValue {
   activity: ExtendedActivity | null;
   updateActivity(newActivity: Partial<ExtendedActivity>): void;
-  createNewActivity(type: ActivityType, initialData?: { [key: string]: string | number | boolean | string[] }): boolean;
+  createNewActivity(type: ActivityType, subType?: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }): boolean;
   addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
   save(): Promise<boolean>;
@@ -90,13 +90,14 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   }, []);
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, initialData?: { [key: string]: string | number | boolean }) => {
+    (type: ActivityType, subType?: ActivitySubType, initialData?: { [key: string]: string | number | boolean }) => {
       if (user === null || village === null) {
         return false;
       }
       const activity: ExtendedActivity = {
         id: 0,
         type: type,
+        subType: subType,
         userId: user.id,
         villageId: village.id,
         content: [],
@@ -183,13 +184,10 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     const content = getAPIContent(false);
     const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
       type: activity.type,
+      subType: activity.subType,
       villageId: activity.villageId,
       content,
     };
-    // if (activity.responseActivityId !== undefined) {
-    //   data.responseActivityId = activity.responseActivityId;
-    //   data.responseType = activity.responseType;
-    // }
     const response = await axiosLoggedRequest({
       method: 'POST',
       url: '/activities',

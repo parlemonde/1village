@@ -8,9 +8,15 @@ export enum ActivityType {
   GAME = 4,
 }
 
+export enum ActivitySubType {
+  THEMATIQUE = 0,
+  MASCOTTE = 1,
+}
+
 export interface Activity {
   id: number;
   type: ActivityType;
+  subType?: ActivitySubType | null;
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
