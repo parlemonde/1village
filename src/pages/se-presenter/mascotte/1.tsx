@@ -20,7 +20,7 @@ const MascotteStep1: React.FC = () => {
     if (!activity || activity.type !== ActivityType.PRESENTATION)
       createNewActivity(ActivityType.PRESENTATION, {
         subtype: 'MASCOTTE',
-        presentation: '',
+        presentation: "Nous sommes la classe de " + user.level + " de " + user.city + " de l'école " + user.school + " en " + user.countryCode + ".",
         totalStudent: 0,
         girlStudent: 0,
         boyStudent: 0,
@@ -43,7 +43,7 @@ const MascotteStep1: React.FC = () => {
   }, [createNewActivity, activity]);
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newData = { ...activity.data, [key]: Number(event.target.value) };
+    const newData = { ...activity.data, [key]: key === 'presentation' ? event.target.value : Number(event.target.value) };
     updateActivity({ data: newData });
   };
 
@@ -51,12 +51,13 @@ const MascotteStep1: React.FC = () => {
   if (!activity) return <Base>Loading...</Base>;
 
   const invalidSum = (x: number, y: number, z: number) => {
+    console.log(user);
     return x + y !== z;
   };
 
   const errorMessage = (women: number, men: number, total: number) => {
     if (isError && total === 0) {
-      return 'Veuillez renseigner le champ';
+      return 'Ce champ est obligatoire';
     }
     if (isError && invalidSum(women, men, total)) {
       return "Le compte n'est pas bon";
@@ -81,6 +82,8 @@ const MascotteStep1: React.FC = () => {
     }
   };
 
+  const labelPrez = "" + activity.data.presentation;
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -88,12 +91,13 @@ const MascotteStep1: React.FC = () => {
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
         <div style={{ margin: '0 10% 0 10%', lineHeight: '70px' }}>
           <h1>Qui est dans votre classe ?</h1>
-          <TextField variant="outlined" style={{ width: '100%' }} value={activity.data.presentation} disabled />
+          <TextField variant="outlined" style={{ width: '100%' }} label={"Exemple: \"" + labelPrez + "\""} onChange={dataChange('presentation')} />
           <div className="se-presenter-step-one">
             <span>Nous sommes </span>{' '}
             <TextField
               className="se-presenter-step-one__textfield"
               type="number"
+              min="0"
               size="small"
               value={activity.data.totalStudent}
               onChange={dataChange('totalStudent')}
@@ -129,7 +133,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.meanAge}
               onChange={dataChange('meanAge')}
-              helperText={isError && activity.data.meanAge === 0 ? 'Veuillez renseigner le champ' : ''}
+              helperText={isError && activity.data.meanAge === 0 ? 'Ce champ est obligatoire' : ''}
               error={isError && activity.data.meanAge === 0}
             />{' '}
             <span> ans.</span>
@@ -176,7 +180,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.numberClassroom}
               onChange={dataChange('numberClassroom')}
-              helperText={isError && activity.data.numberClassroom === 0 ? 'Veuillez renseigner le champ' : ''}
+              helperText={isError && activity.data.numberClassroom === 0 ? 'Ce champ est obligatoire' : ''}
               error={isError && activity.data.numberClassroom === 0}
             />{' '}
             <span> classes et </span>{' '}
@@ -186,7 +190,7 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.totalSchoolStudent}
               onChange={dataChange('totalSchoolStudent')}
-              helperText={isError && activity.data.totalSchoolStudent === 0 ? 'Veuillez renseigner le champ' : ''}
+              helperText={isError && activity.data.totalSchoolStudent === 0 ? 'Ce champ est obligatoire' : ''}
               error={isError && activity.data.totalSchoolStudent === 0}
             />{' '}
             <span> élèves.</span>
