@@ -9,6 +9,7 @@ import 'src/styles/fonts.scss';
 import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
+import 'src/styles/se-presenter.scss';
 
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import App from 'next/app';
@@ -135,8 +136,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       <WelcomeModal />
                     </div>
                   ) : (
-                    <Component {...pageProps} />
-                  )}
+                        <Component {...pageProps} />
+                      )}
                 </ActivityContextProvider>
               </VillageContextProvider>
             </UserContextProvider>

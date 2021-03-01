@@ -3,8 +3,9 @@ import { useQueryCache } from 'react-query';
 import React from 'react';
 
 import type { ExtendedActivity, EditorTypes, EditorContent } from 'src/components/activities/editing.types';
+import { serializeToQueryUrl } from 'src/utils';
 import { getQueryString } from 'src/utils';
-import { Activity, ActivityType } from 'types/activity.type';
+import { Activity, ActivityType, ActivitySubType } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -12,10 +13,11 @@ import { VillageContext } from './villageContext';
 interface ActivityContextValue {
   activity: ExtendedActivity | null;
   updateActivity(newActivity: Partial<ExtendedActivity>): void;
-  createNewActivity(type: ActivityType, initialData?: { [key: string]: string | number | boolean }): boolean;
+  createNewActivity(type: ActivityType, subType?: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }): boolean;
   addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
   save(): Promise<boolean>;
+  createActivityIfNotExist(type: ActivityType, subType: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }): void;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
@@ -75,6 +77,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     },
     [router, axiosLoggedRequest],
   );
+
   React.useEffect(() => {
     if ('activity-id' in router.query) {
       const newActivityId = parseInt(getQueryString(router.query['activity-id']), 10);
@@ -90,13 +93,14 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   }, []);
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, initialData?: { [key: string]: string | number | boolean }) => {
+    (type: ActivityType, subType?: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }) => {
       if (user === null || village === null) {
         return false;
       }
       const activity: ExtendedActivity = {
         id: 0,
         type: type,
+        subType: subType,
         userId: user.id,
         villageId: village.id,
         content: [],
@@ -110,6 +114,25 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       return true;
     },
     [user, village],
+  );
+
+  const createActivityIfNotExist = React.useCallback(
+    async (type: ActivityType, subType: ActivitySubType, initialData?: { [key: string]: string | number | boolean | string[] }) => {
+      if (user === null || village === null) {
+        return;
+      }
+      const userId = user.id;
+      const villageId = village.id;
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
+      });
+      if (response.data && response.data.length > 0) setActivity(getExtendedActivity(response.data[0]));
+      else {
+        createNewActivity(type, subType, initialData);
+      }
+    },
+    [user, village, axiosLoggedRequest, createNewActivity],
   );
 
   const activityContent = activity?.processedContent || null;
@@ -183,13 +206,10 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     const content = getAPIContent(false);
     const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
       type: activity.type,
+      subType: activity.subType,
       villageId: activity.villageId,
       content,
     };
-    // if (activity.responseActivityId !== undefined) {
-    //   data.responseActivityId = activity.responseActivityId;
-    //   data.responseType = activity.responseType;
-    // }
     const response = await axiosLoggedRequest({
       method: 'POST',
       url: '/activities',
@@ -239,6 +259,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         createNewActivity,
         addContent,
         deleteContent,
+        createActivityIfNotExist,
         save,
       }}
     >

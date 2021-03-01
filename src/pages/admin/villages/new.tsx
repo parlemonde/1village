@@ -7,8 +7,8 @@ import MaterialLink from '@material-ui/core/Link';
 import { Button, TextField } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-import { CountrySelector } from 'src/components/CountrySelector';
 import { AdminTile } from 'src/components/admin/AdminTile';
+import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { useVillageRequests } from 'src/services/useVillages';
 
 const NewVillage: React.FC = () => {

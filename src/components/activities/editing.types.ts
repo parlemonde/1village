@@ -1,7 +1,7 @@
 import { Activity } from 'types/activity.type';
 
 export type ExtendedActivity = Activity & {
-  data: { [key: string]: string | number | boolean };
+  data: { [key: string]: string | number | boolean | string[] };
   processedContent: Array<EditorContent>;
   dataId: number;
 };
