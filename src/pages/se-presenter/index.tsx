@@ -40,12 +40,16 @@ const activities = [
 const Presentation: React.FC = () => {
   return (
     <Base>
-      <h1>{"Suggestions d'activités"}</h1>
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <SuggestionCarousel suggestions={suggestions} />
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <div className="width-900">
+          <h1>{"Suggestions d'activités"}</h1>
+          <div style={{ padding: '1rem', textAlign: 'center' }}>
+            <SuggestionCarousel suggestions={suggestions} />
+          </div>
+          <h1>Choisissez votre présentation</h1>
+          <ActivityChoice activities={activities} />
+        </div>
       </div>
-      <h1>Choisissez votre présentation</h1>
-      <ActivityChoice activities={activities} />
     </Base>
   );
 };

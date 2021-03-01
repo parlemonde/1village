@@ -17,10 +17,15 @@ const MascotteStep3: React.FC = () => {
   const dataChange = (key: string) => (newValue: string) => {
     const newData = { ...activity.data, [key]: newValue };
     updateActivity({ data: newData });
-    console.log(activity);
   };
+  React.useEffect(() => {
+    if (!activity) {
+      router.push('/se-presenter/mascotte/1');
+    }
+  }, [activity, router]);
 
-  if (!activity) router.push('/se-presenter/mascotte/1');
+  if (!activity) return <Base>Redirecting ...</Base>;
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

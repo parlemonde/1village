@@ -14,6 +14,7 @@ export interface Activity {
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
+  commentCount?: number;
 
   // activity content
   content: ActivityData[] | null;

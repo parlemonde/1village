@@ -82,11 +82,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
       ) : (
         <Paper elevation={2} className="activity__comment-card">
           <span className="text text--bold">
-            {isPelico
-              ? 'Pelico'
-              : isSelf
-              ? 'Votre classe'
-              : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode} a `}
+            {isPelico ? 'Pelico' : isSelf ? 'Votre classe' : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`}
           </span>
           <div dangerouslySetInnerHTML={{ __html: comment.text }} />
           {isSelf && (

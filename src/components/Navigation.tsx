@@ -83,43 +83,50 @@ export const Navigation: React.FC = () => {
 
   return (
     <nav className="navigation">
-      <div className="navigation__content with-shadow">
-        <div style={{ padding: '10% 15%', position: 'relative' }}>
-          <Map width="100%" height="100%" />
-          <div className="absolute-center">
-            <Button className="navigation__button" color="primary" variant="contained">
-              Voir sur la carte
-            </Button>
+      <div style={{ position: 'relative' }}>
+        <div className="navigation__content with-shadow">
+          <div style={{ padding: '10% 15%', position: 'relative' }}>
+            <Map width="100%" height="100%" />
+            <div className="absolute-center">
+              <Button className="navigation__button" color="primary" variant="contained">
+                Voir sur la carte
+              </Button>
+            </div>
+          </div>
+          <div style={{ padding: '0 5%', position: 'relative' }}>
+            {tabs.map((tab, index) => (
+              <Link key={tab.path} href={tab.path}>
+                <Button
+                  component="a"
+                  onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                    event.preventDefault();
+                    router.push(tab.path);
+                  }}
+                  href={tab.path}
+                  color="primary"
+                  startIcon={tab.icon}
+                  variant={index === selectedTab ? 'contained' : 'outlined'}
+                  className="navigation__button full-width"
+                  style={{
+                    justifyContent: 'flex-start',
+                    paddingRight: '0.1rem',
+                    marginBottom: '0.4rem',
+                    width: index === selectedTab ? '112%' : '100%',
+                  }}
+                  disableElevation
+                  disabled={tab.disabled && !isModerateur}
+                >
+                  {tab.label}
+                </Button>
+              </Link>
+            ))}
           </div>
         </div>
-        <div style={{ padding: '0 5%', position: 'relative' }}>
-          {tabs.map((tab, index) => (
-            <Link key={tab.path} href={tab.path} prefetch={false}>
-              <Button
-                component="a"
-                onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                  event.preventDefault();
-                  router.push(tab.path);
-                }}
-                href={tab.path}
-                color="primary"
-                startIcon={tab.icon}
-                variant={index === selectedTab ? 'contained' : 'outlined'}
-                className="navigation__button full-width"
-                style={{
-                  justifyContent: 'flex-start',
-                  paddingRight: '0.1rem',
-                  marginBottom: '0.4rem',
-                  width: index === selectedTab ? '112%' : '100%',
-                }}
-                disableElevation
-                disabled={tab.disabled && !isModerateur}
-              >
-                {tab.label}
-              </Button>
-            </Link>
-          ))}
-        </div>
+        <Link href="/cgu">
+          <a href="/cgu" className="navigation__cgu-link text text--small">
+            {"Conditions générales d'utilisation"}
+          </a>
+        </Link>
       </div>
     </nav>
   );

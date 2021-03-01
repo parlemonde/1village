@@ -17,14 +17,17 @@ const MascotteStep2: React.FC = () => {
     const newData = { ...activity.data, [key]: event.target.value };
     updateActivity({ data: newData });
   };
-
+  const imageChange = (image: string) => {
+    const newData = { ...activity.data, mascotteImage: image };
+    updateActivity({ data: newData });
+  };
   React.useEffect(() => {
     if (!activity) {
       router.push('/se-presenter/mascotte/1');
     }
   }, [activity, router]);
 
-  if (!activity) router.push('/se-presenter/mascotte/1');
+  if (!activity) return <Base>Redirecting ...</Base>;
 
   return (
     <Base>
@@ -37,7 +40,7 @@ const MascotteStep2: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Box display="flex" justifyContent="center" m={4}>
-                  <AvatarEditor />
+                  <AvatarEditor onChange={imageChange} />
                 </Box>
                 <p>Images de votre mascotte</p>
               </Grid>
