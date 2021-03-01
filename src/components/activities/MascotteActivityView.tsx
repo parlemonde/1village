@@ -18,7 +18,9 @@ export const MascotteActivityView: React.FC<ActivityViewProps> = ({ activity }: 
           </Box>
         </Grid>
         <Grid item xs={12} md={8}>
-          <TextView id={activity.processedContent[1].id} value={activity.processedContent[1].value} key={activity.processedContent[1].id} />
+          <Box display="flex" m={2}>
+            <TextView id={activity.processedContent[1].id} value={activity.processedContent[1].value} key={activity.processedContent[1].id} />
+          </Box>
         </Grid>
       </Grid>
       <TextView id={activity.processedContent[2].id} value={activity.processedContent[2].value} key={activity.processedContent[2].id} />
