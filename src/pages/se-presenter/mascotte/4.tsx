@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Button, Grid, Backdrop } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { AvatarView } from 'src/components/activities/views/AvatarView';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -51,7 +51,13 @@ const MascotteStep4: React.FC = () => {
     setIsLoading(false);
   };
 
-  if (!activity) router.push('/se-presenter/mascotte/1');
+  React.useEffect(() => {
+    if (!activity) {
+      router.push('/se-presenter/mascotte/1');
+    }
+  }, [activity, router]);
+
+  if (!activity) return <Base>Redirecting ...</Base>;
 
   return (
     <Base>
@@ -119,11 +125,18 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
-            <p>{activity.data.mascotteDescription}</p>
-            <p>
-              {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
-            </p>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={3}>
+                <AvatarView value={activity.data.mascotteImage as string} />
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <p>Notre mascotte s’appelle {activity.data.mascotteName}, elle nous représente.</p>
+                <p>{activity.data.mascotteDescription}</p>
+                <p>
+                  {activity.data.mascotteName} est {activity.data.personality1}, {activity.data.personality2} et {activity.data.personality3}
+                </p>
+              </Grid>
+            </Grid>
           </div>
           <div className="preview-block">
             <EditButton

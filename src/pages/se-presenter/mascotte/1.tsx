@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Button, TextField } from '@material-ui/core';
@@ -11,6 +11,8 @@ import { UserContext } from 'src/contexts/userContext';
 import { ActivityType, ActivitySubType } from 'types/activity.type';
 
 const MascotteStep1: React.FC = () => {
+  const router = useRouter();
+  const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
 
@@ -48,12 +50,35 @@ const MascotteStep1: React.FC = () => {
   if (!user) return <Base>Not authorized</Base>;
   if (!activity) return <Base>Loading...</Base>;
 
-  const validSum = (x: number, y: number, z: number) => {
-    console.log(x, ' ', y, ' ', z);
-    console.log(typeof x);
-    console.log(typeof y);
-    console.log(typeof z);
+  const invalidSum = (x: number, y: number, z: number) => {
     return x + y !== z;
+  };
+
+  const errorMessage = (women: number, men: number, total: number) => {
+    if (isError && total === 0) {
+      return 'Veuillez renseigner le champ';
+    }
+    if (isError && invalidSum(women, men, total)) {
+      return "Le compte n'est pas bon";
+    }
+    return '';
+  };
+
+  const isValid = () => {
+    return (
+      !invalidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) &&
+      !invalidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) &&
+      activity.data.totalStudent !== 0 &&
+      activity.data.totalTeacher !== 0
+    );
+  };
+
+  const onNext = () => {
+    if (isValid()) {
+      router.push('/se-presenter/mascotte/2');
+    } else {
+      setIsError(true);
+    }
   };
 
   return (
@@ -72,8 +97,12 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.totalStudent}
               onChange={dataChange('totalStudent')}
-              helperText={validSum(activity.data.girlStudent, activity.data.boyStudent, activity.data.totalStudent) ? "Le compte n'est pas bon" : ''}
-              error={validSum(activity.data.girlStudent, activity.data.boyStudent, activity.data.totalStudent)}
+              helperText={errorMessage(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number)}
+              error={
+                isError &&
+                (invalidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) ||
+                  activity.data.totalStudent === 0)
+              }
             />{' '}
             <span> élèves, dont </span>{' '}
             <TextField
@@ -100,6 +129,8 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.meanAge}
               onChange={dataChange('meanAge')}
+              helperText={isError && activity.data.meanAge === 0 ? 'Veuillez renseigner le champ' : ''}
+              error={isError && activity.data.meanAge === 0}
             />{' '}
             <span> ans.</span>
             <br />
@@ -110,8 +141,16 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.totalTeacher}
               onChange={dataChange('totalTeacher')}
-              helperText={validSum(activity.data.womanTeacher, activity.data.manTeacher, activity.data.totalTeacher) ? "Le compte n'est pas bon" : ''}
-              error={validSum(activity.data.womanTeacher, activity.data.manTeacher, activity.data.totalTeacher)}
+              helperText={errorMessage(
+                activity.data.womanTeacher as number,
+                activity.data.manTeacher as number,
+                activity.data.totalTeacher as number,
+              )}
+              error={
+                isError &&
+                (invalidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) ||
+                  activity.data.totalTeacher === 0)
+              }
             />{' '}
             <span> professeurs, dont </span>{' '}
             <TextField
@@ -137,6 +176,8 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.numberClassroom}
               onChange={dataChange('numberClassroom')}
+              helperText={isError && activity.data.numberClassroom === 0 ? 'Veuillez renseigner le champ' : ''}
+              error={isError && activity.data.numberClassroom === 0}
             />{' '}
             <span> classes et </span>{' '}
             <TextField
@@ -145,15 +186,15 @@ const MascotteStep1: React.FC = () => {
               size="small"
               value={activity.data.totalSchoolStudent}
               onChange={dataChange('totalSchoolStudent')}
+              helperText={isError && activity.data.totalSchoolStudent === 0 ? 'Veuillez renseigner le champ' : ''}
+              error={isError && activity.data.totalSchoolStudent === 0}
             />{' '}
             <span> élèves.</span>
           </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Link href="/se-presenter/mascotte/2">
-              <Button component="a" href="/se-presenter/mascotte/2" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
+            <Button component="a" onClick={onNext} variant="outlined" color="primary">
+              Étape suivante
+            </Button>
           </div>
         </div>
       </div>
