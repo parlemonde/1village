@@ -27,7 +27,7 @@ export const ImageModal: React.FC<ImageModalProps> = ({
   value = '',
   onChange = () => {},
   onDelete = () => {},
-}: EditorProps) => {
+}: ImageModalProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [tempImageUrl, setTempImageUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
