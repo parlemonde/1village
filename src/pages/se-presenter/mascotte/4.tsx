@@ -8,8 +8,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityView } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep4: React.FC = () => {
@@ -43,7 +43,7 @@ const MascotteStep4: React.FC = () => {
           ]}
           activeStep={3}
         />
-        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
+        <div className="width-900">
           <h1>Pré-visualisez votre mascotte{!isEdit && ' et publiez la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre présentation.
@@ -69,7 +69,39 @@ const MascotteStep4: React.FC = () => {
               </Button>
             </div>
           )}
-          <SimpleActivityView activity={activity} isPreview />
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/se-presenter/mascotte/1');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <span>Nous sommes </span>
+            {activity.data.totalStudent}
+            <span> élèves, dont </span>
+            {activity.data.girlStudent}
+            <span> filles et </span>
+            {activity.data.boyStudent}
+            <span> garçons.</span>
+            <br />
+            <span>En moyenne, l’âge des élèves de notre classe est </span>
+            {activity.data.meanAge}
+            <span> ans.</span>
+            <br />
+            <span>Nous avons </span>
+            {activity.data.totalTeacher}
+            <span> professeurs, dont </span>
+            {activity.data.womanTeacher}
+            <span> femmes et </span>
+            {activity.data.manTeacher}
+            <span> hommes.</span> <br />
+            <span>Dans notre école, il y a </span>
+            {activity.data.numberClassroom}
+            <span> classes et </span>
+            {activity.data.totalSchoolStudent}
+            <span> élèves.</span>
+          </div>
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
