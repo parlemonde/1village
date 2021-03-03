@@ -29,4 +29,10 @@ export const PRESENTATION_THEMATIQUE = [
     title: 'Faites une présentation libre d’un plat',
     cardTitle: 'Présentation d’un plat',
   },
+  {
+    label: 'Présentation libre',
+    description: 'Faites une présentation libre',
+    title: 'Faites une présentation libre',
+    cardTitle: 'Présentation libre',
+  },
 ];

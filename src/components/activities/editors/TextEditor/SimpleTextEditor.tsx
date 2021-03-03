@@ -48,11 +48,12 @@ function blockStyleFn(block: ContentBlock): string {
 
 interface SimpleTextEditorProps {
   value: string;
-  onChange?(newValue: string): void;
+  onChange?(newValue: string, newLength: number): boolean | void;
   placeholder?: string;
   inlineToolbar?: boolean;
   withBorder?: boolean;
   noBlock?: boolean;
+  maxLen?: number;
 }
 
 export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
@@ -62,6 +63,7 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
   inlineToolbar = false,
   withBorder = false,
   noBlock = false,
+  maxLen,
 }: SimpleTextEditorProps) => {
   const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
@@ -80,11 +82,76 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
     }
   }, [value]);
 
+  // -- text length
+  const getLengthOfSelectedText = () => {
+    const currentSelection = editorState.getSelection();
+    const isCollapsed = currentSelection.isCollapsed();
+    let length = 0;
+    if (!isCollapsed) {
+      const currentContent = editorState.getCurrentContent();
+      const startKey = currentSelection.getStartKey();
+      const endKey = currentSelection.getEndKey();
+      const startBlock = currentContent.getBlockForKey(startKey);
+      const isStartAndEndBlockAreTheSame = startKey === endKey;
+      const startBlockTextLength = startBlock.getLength();
+      const startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+      const endSelectedTextLength = currentSelection.getEndOffset();
+      const keyAfterEnd = currentContent.getKeyAfter(endKey);
+      if (isStartAndEndBlockAreTheSame) {
+        length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+      } else {
+        let currentKey = startKey;
+        while (currentKey && currentKey !== keyAfterEnd) {
+          if (currentKey === startKey) {
+            length += startSelectedTextLength + 1;
+          } else if (currentKey === endKey) {
+            length += endSelectedTextLength;
+          } else {
+            length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+          }
+          currentKey = currentContent.getKeyAfter(currentKey);
+        }
+      }
+    }
+    return length;
+  };
+
+  const handleBeforeInput = (): DraftHandleValue => {
+    if (!maxLen) {
+      return 'not-handled';
+    }
+
+    const currentContent = editorState.getCurrentContent();
+    const currentContentLength = currentContent.getPlainText('').length;
+    const selectedTextLength = getLengthOfSelectedText();
+    if (currentContentLength - selectedTextLength > maxLen - 1) {
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
+  const handlePastedText = (pastedText: string): DraftHandleValue => {
+    if (!maxLen) {
+      return 'not-handled';
+    }
+
+    const currentContent = editorState.getCurrentContent();
+    const currentContentLength = currentContent.getPlainText('').length;
+    const selectedTextLength = getLengthOfSelectedText();
+    if (currentContentLength + pastedText.length - selectedTextLength > maxLen) {
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
   const onEditorChange = (newEditorState: EditorState) => {
-    setEditorState(newEditorState);
     const newHTMLValue = draftToHtml(convertToRaw(newEditorState.getCurrentContent()));
     previousValue.current = newHTMLValue;
-    onChange(newHTMLValue);
+    const content = editorState.getCurrentContent();
+    const success = onChange(newHTMLValue, content.getPlainText('').length);
+    if (success === undefined || success) {
+      setEditorState(newEditorState);
+    }
   };
 
   const handleKeyCommand = (command: DraftEditorCommand, editorState: EditorState): DraftHandleValue => {
@@ -225,6 +292,8 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
             editorState={editorState}
             onChange={onEditorChange}
             handleKeyCommand={handleKeyCommand}
+            handleBeforeInput={handleBeforeInput}
+            handlePastedText={handlePastedText}
             blockStyleFn={blockStyleFn}
           />
         </div>
