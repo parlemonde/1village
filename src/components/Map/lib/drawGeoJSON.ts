@@ -26,6 +26,6 @@ function coordsToPos([longitude, latitude]: number[], radius = 1): THREE.Vector3
 function getCountry(coords: number[][], radius?: number): THREE.Line {
   const points = coords.map((c) => coordsToPos(c, radius));
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+  const material = new THREE.LineBasicMaterial({ color: 0x000000 });
   return new THREE.Line(geometry, material);
 }

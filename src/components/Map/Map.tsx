@@ -1,41 +1,59 @@
 import CameraControls from 'camera-controls';
 import React from 'react';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+// import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
 
 import { getCountries } from './lib/drawGeoJSON';
 
 CameraControls.install({ THREE: THREE });
+const loader = new GLTFLoader();
 
-const renderScene = () => {
+const loadGLB = async (path: string): Promise<THREE.Group> => {
+  return new Promise((resolve) => {
+    loader.load(
+      path,
+      (gltf) => {
+        resolve(gltf.scene);
+      },
+      (xhr) => {
+        // eslint-disable-next-line no-console
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+      },
+      (error) => {
+        console.error('An error happened loading the map...');
+        console.error(error);
+        resolve(new THREE.Group());
+      },
+    );
+  });
+};
+
+const renderScene = async () => {
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(45, 2, 0.01, 1000);
   camera.position.z = 10;
 
-  const loader = new GLTFLoader();
-  const dracoLoader = new DRACOLoader(); // provide a DRACOLoader instance to decode compressed mesh data
-  dracoLoader.setDecoderPath('/examples/js/libs/draco/');
-  loader.setDRACOLoader(dracoLoader);
+  const [earth, decors] = await Promise.all([loadGLB('/earth/EARTH_HighPoly.glb'), loadGLB('/earth/Decors.glb')]);
+  scene.add(earth);
+  scene.add(decors);
 
-  // Load a glTF resource
-  loader.load(
-    '/earth/EARTH_HighPoly.glb',
-    (gltf) => {
-      scene.add(gltf.scene);
-    },
-    (xhr) => {
-      // eslint-disable-next-line no-console
-      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-    },
-    (error) => {
-      console.error('An error happened loading the map...');
-      console.error(error);
-    },
-  );
   scene.add(new THREE.AmbientLight(0x888888));
   scene.add(new THREE.AmbientLight(0x888888));
+  const light1 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
+  light1.position.set(20, 0, 0);
+  scene.add(light1);
+  const light2 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
+  light2.position.set(-20, 0, 0);
+  scene.add(light2);
+
+  const light3 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
+  light3.position.set(0, 20, 0);
+  scene.add(light3);
+  const light4 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
+  light4.position.set(0, -20, 0);
+  scene.add(light4);
 
   const countries = getCountries(5.06);
   countries.forEach((c) => {
@@ -70,9 +88,9 @@ const Map: React.FC = () => {
     }
   }, []);
 
-  React.useEffect(() => {
+  const init = React.useCallback(async () => {
     if (ref.current) {
-      const { scene, camera } = renderScene();
+      const { scene, camera } = await renderScene();
       dataRef.current = { scene, camera };
 
       const canvas = ref.current;
@@ -87,14 +105,21 @@ const Map: React.FC = () => {
       rendererRef.current.outputEncoding = THREE.sRGBEncoding;
 
       cameraControlRef.current = new CameraControls(camera, rendererRef.current.domElement);
-      animationFrame.current = requestAnimationFrame(render);
     }
+  }, []);
+
+  React.useEffect(() => {
+    init()
+      .then(() => {
+        animationFrame.current = requestAnimationFrame(render);
+      })
+      .catch();
     return () => {
       if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current);
       }
     };
-  }, [render]);
+  }, [init, render]);
 
   return <canvas ref={ref} style={{ width: '100%', height: '500px' }}></canvas>;
 };
