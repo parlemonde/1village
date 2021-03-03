@@ -63,8 +63,8 @@ export const QuestionCard: React.FC<ActivityCardProps> = ({ activity, noButtons,
       ) : noButtons ? null : (
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button onClick={onAskSame}>
-              <span className="text text--bold text--primary">Je me pose la même question</span>
+            <Button style={{ padding: '6px 8px' }} onClick={onAskSame} color="primary" variant={askSame.includes(user?.id) ? 'contained' : 'text'}>
+              <span className="text text--bold">Je me pose la même question</span>
             </Button>
             {askSame.length > 0 && <span className="text text--primary">+ {askSame.length}</span>}
           </div>

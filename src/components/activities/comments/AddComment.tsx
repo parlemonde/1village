@@ -6,8 +6,8 @@ import { Button, ButtonBase, CircularProgress, Tooltip } from '@material-ui/core
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import TextIcon from 'src/svg/editor/text_icon.svg';
-import EnigmeIcon from 'src/svg/navigation/enigme-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
+import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { getGravatarUrl } from 'src/utils';
@@ -25,7 +25,7 @@ const Reactions = [
   },
   {
     label: 'Énigme',
-    icon: EnigmeIcon,
+    icon: KeyIcon,
   },
   {
     label: 'Défi',

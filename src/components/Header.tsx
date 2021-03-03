@@ -42,10 +42,14 @@ export const Header: React.FC = () => {
   return (
     <header>
       <div className="header__container with-shadow">
-        <Logo style={{ width: '40px', height: 'auto' }} />
-        <h1 className="title" style={{ margin: '0 0 0 0.5rem' }}>
-          1Village
-        </h1>
+        <Link href="/">
+          <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <Logo style={{ width: '40px', height: 'auto' }} />
+            <h1 className="title" style={{ margin: '0 0 0 0.5rem' }}>
+              1Village
+            </h1>
+          </a>
+        </Link>
         <div className="header__search">
           <IconButton aria-label="search" size="small">
             <SearchIcon />

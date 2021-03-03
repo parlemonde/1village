@@ -133,8 +133,13 @@ const Question1: React.FC = () => {
                   {!isSelf && (
                     <div style={{ width: '100%', textAlign: 'right' }}>
                       <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                        <Button style={{ backgroundColor: 'white' }} onClick={onAskSame(activity, askSame)}>
-                          <span className="text text--bold text--primary">Je me pose la même question</span>
+                        <Button
+                          style={askSame.includes(user?.id) ? {} : { padding: '6px 16px', backgroundColor: 'white' }}
+                          onClick={onAskSame(activity, askSame)}
+                          color="primary"
+                          variant={askSame.includes(user?.id) ? 'contained' : 'text'}
+                        >
+                          <span className="text text--bold">Je me pose la même question</span>
                         </Button>
                         {askSame.length > 0 && (
                           <span className="text text--primary" style={{ marginLeft: '0.25rem' }}>
