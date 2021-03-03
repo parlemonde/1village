@@ -12,7 +12,7 @@ type CountryOption = Country & {
 
 interface MultipleCountrySelectorProps {
   label: string | React.ReactNode;
-  value?: string;
+  value?: string[];
   onChange?(newValue: string[] | null): void;
   filterCountries?: string[];
   style?: React.CSSProperties;
@@ -20,7 +20,7 @@ interface MultipleCountrySelectorProps {
 
 export const MultipleCountrySelector: React.FC<MultipleCountrySelectorProps> = ({
   label,
-  value = '',
+  value = [],
   onChange,
   filterCountries,
   style,

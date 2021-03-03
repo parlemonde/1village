@@ -12,7 +12,7 @@ type LanguageOption = Language & {
 
 interface MultipleLanguageSelectorProps {
   label: string | React.ReactNode;
-  value?: string;
+  value?: string[];
   onChange?(newValue: string[] | null): void;
   filterLanguages?: string[];
   style?: React.CSSProperties;
@@ -20,7 +20,7 @@ interface MultipleLanguageSelectorProps {
 
 export const MultipleLanguageSelector: React.FC<MultipleLanguageSelectorProps> = ({
   label,
-  value = '',
+  value = [],
   onChange,
   filterLanguages,
   style,
