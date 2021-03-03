@@ -12,7 +12,7 @@ type CurrencyOption = Currency & {
 
 interface MultipleCurrencySelectorProps {
   label: string | React.ReactNode;
-  value?: string;
+  value?: string[];
   onChange?(newValue: string[] | null): void;
   filterCurrencies?: string[];
   style?: React.CSSProperties;
@@ -20,7 +20,7 @@ interface MultipleCurrencySelectorProps {
 
 export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> = ({
   label,
-  value = '',
+  value = [],
   onChange,
   filterCurrencies,
   style,
