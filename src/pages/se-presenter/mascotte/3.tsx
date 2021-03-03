@@ -51,21 +51,21 @@ const MascotteStep3: React.FC = () => {
                 <MultipleLanguageSelector
                   label={'langues'}
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={activity.data.languages}
+                  value={activity.data.languages as string[]}
                   onChange={dataChange('languages')}
                 />
                 <p>Quelles monnaies utilise {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?</p>
                 <MultipleCurrencySelector
                   label={'monnaies'}
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={activity.data.currencies}
+                  value={activity.data.currencies as string[]}
                   onChange={dataChange('currencies')}
                 />
                 <p>Dans quel pays {activity.data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller ?</p>
                 <MultipleCountrySelector
                   label={'pays'}
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={activity.data.countries}
+                  value={activity.data.countries as string[]}
                   onChange={dataChange('countries')}
                 />
               </Grid>
