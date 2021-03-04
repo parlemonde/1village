@@ -17,6 +17,12 @@ const MascotteStep1: React.FC = () => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
+  const labelPresentation =
+    `la classe${user.level ? ' ' + user.level : ''}` +
+    `${user.city ? ' à ' + user.city : ''}` +
+    `${user.school ? " de l'école " + user.school : ''}` +
+    `${user.postalCode ? ' (' + user.postalCode + ')' : ''}` +
+    `${user.countryCode ? ', ' + countries.filter((country) => country.isoCode === user.countryCode)[0]?.name : ''}`;
 
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
@@ -43,6 +49,13 @@ const MascotteStep1: React.FC = () => {
       });
     }
   }, [activity, countries, user, createActivityIfNotExist]);
+
+  const ensurePresentationDefined = (key: string, defaultValue: string) => () => {
+    if (activity.data.presentation === '') {
+      const newData = { ...activity.data, [key]: key === 'presentation' ? defaultValue : activity.data.presentation };
+      updateActivity({ data: newData });
+    }
+  };
 
   const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...activity.data, [key]: key === 'presentation' ? event.target.value : Number(event.target.value) };
@@ -84,17 +97,6 @@ const MascotteStep1: React.FC = () => {
     }
   };
 
-  const labelPrez =
-    'la classe de ' +
-    user.level +
-    '" de "' +
-    user.city +
-    '" de l\'école "' +
-    user.school +
-    '" en "' +
-    countries.filter((c) => c.isoCode === user.countryCode)[0]?.name +
-    '".';
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -106,8 +108,9 @@ const MascotteStep1: React.FC = () => {
           <TextField
             variant="outlined"
             style={{ width: '100%' }}
-            label={labelPrez}
+            label={labelPresentation}
             value={activity.data.presentation}
+            onClick={ensurePresentationDefined('presentation', labelPresentation)}
             onChange={dataChange('presentation')}
           />
           <div className="se-presenter-step-one">

@@ -22,7 +22,7 @@ const MascotteStep2: React.FC = () => {
     updateActivity({ data: newData });
   };
   React.useEffect(() => {
-    if (!activity) {
+    if (!activity && !('activity-id' in router.query)) {
       router.push('/se-presenter/mascotte/1');
     }
   }, [activity, router]);
