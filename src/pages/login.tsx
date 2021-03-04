@@ -133,6 +133,22 @@ const Login: React.FC = () => {
                 {errorMessages[errorCode as 0] || errorMessages[0]}
               </p>
             )}
+            <NoSsr>
+              {ssoHost.length && clientId && (
+                <>
+                  <div className="text-center" style={{ marginBottom: '1rem' }}>
+                    <Button color="primary" variant="contained" size="small" onClick={loginSso}>
+                      Se connecter avec {ssoHostName}
+                    </Button>
+                  </div>
+                  <div className="login__divider">
+                    <div className="login__or">
+                      <span style={{ fontSize: '1.2rem', padding: '0.25rem', backgroundColor: 'white' }}>OU</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </NoSsr>
             <TextField
               label="Adresse email"
               placeholder="Entrez votre adresse email"
@@ -181,23 +197,6 @@ const Login: React.FC = () => {
             <div className="text-center">
               <a className="text text--small text--primary">Mot de passe oublié ?</a>
             </div>
-
-            <NoSsr>
-              {ssoHost.length && clientId && (
-                <>
-                  <div className="login__divider">
-                    <div className="login__or">
-                      <span style={{ fontSize: '1.2rem', padding: '0.25rem', backgroundColor: 'white' }}>OU</span>
-                    </div>
-                  </div>
-                  <div className="text-center" style={{ marginBottom: '1rem' }}>
-                    <Button color="primary" variant="contained" size="small" onClick={loginSso}>
-                      Se connecter avec {ssoHostName}
-                    </Button>
-                  </div>
-                </>
-              )}
-            </NoSsr>
           </form>
         </div>
         <div className="login__panel login__panel--with-blue-background">

@@ -24,6 +24,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
   const { user: selfUser } = React.useContext(UserContext);
   const { editComment, deleteComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
+  const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
 
@@ -44,6 +45,11 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
     setDisplayEditor(false);
   };
 
+  const onCommentChange = (value: string, length: number) => {
+    setNewComment(value);
+    setNewCommentLength(length);
+  };
+
   return (
     <div className="activity__comment-container">
       <img
@@ -57,7 +63,18 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
 
       {displayEditor && isSelf ? (
         <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative' }}>
-          <TextEditor value={newComment} onChange={setNewComment} placeholder="Écrivez votre réaction ici" inlineToolbar withBorder noBlock />
+          <TextEditor
+            maxLen={400}
+            value={newComment}
+            onChange={onCommentChange}
+            placeholder="Écrivez votre réaction ici"
+            inlineToolbar
+            withBorder
+            noBlock
+          />
+          <div style={{ width: '100%', textAlign: 'right' }}>
+            <span className="text text--primary">{newCommentLength}/400</span>
+          </div>
           <div style={{ width: '100%', textAlign: 'right', marginTop: '0.5rem' }}>
             <Button
               size="small"
