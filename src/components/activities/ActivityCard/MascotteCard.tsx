@@ -26,16 +26,6 @@ export const MascotteCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
         </Box>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
-            {!showEditButtons && (
-              <>
-                <CommentIcon count={activity.commentCount} />
-                <Link href={`/activity/${activity.id}`}>
-                  <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`}>
-                    Regarder la présentation
-                  </Button>
-                </Link>
-              </>
-            )}
             {isSelf && showEditButtons && (
               <>
                 <Link href={`se-presenter/mascotte/4?activity-id=${activity.id}`}>
@@ -54,6 +44,12 @@ export const MascotteCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
                 </RedButton>
               </>
             )}
+            <CommentIcon count={activity.commentCount} />
+            <Link href={`/activity/${activity.id}`}>
+              <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
+                Regarder la présentation
+              </Button>
+            </Link>
           </div>
         )}
       </div>

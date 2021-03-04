@@ -85,7 +85,6 @@ export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filter
             activity={activityToDelete}
             isSelf={user && activityToDelete.userId === user.id}
             user={userMap[activityToDelete.userId] !== undefined ? users[userMap[activityToDelete.userId]] : undefined}
-            noButtons
           />
         )}
       </Modal>
