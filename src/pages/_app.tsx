@@ -136,8 +136,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       <WelcomeModal />
                     </div>
                   ) : (
-                        <Component {...pageProps} />
-                      )}
+                    <Component {...pageProps} />
+                  )}
                 </ActivityContextProvider>
               </VillageContextProvider>
             </UserContextProvider>
