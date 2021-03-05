@@ -123,6 +123,7 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId, label }: Add
               {Reactions.map((R, index) =>
                 index === 0 ? (
                   <ButtonBase
+                    key={index}
                     className="activity__comment-react-button"
                     onClick={() => {
                       setDisplayEditor(true);

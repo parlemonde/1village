@@ -1,29 +1,33 @@
+import { useSnackbar } from 'notistack';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import { Button, Divider, TextField, Tooltip } from '@material-ui/core';
+import { Button, Divider, TextField } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Alert } from '@material-ui/lab';
 
 import { Modal } from 'src/components/Modal';
-import { fontDetailColor, bgPage } from 'src/styles/variables.const';
+import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
+import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
 import type { EditorProps } from '../editing.types';
 
-// import { Steps } from "src/components/Steps";
 import { EditorContainer } from './EditorContainer';
 
 export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
   const [videoUrl, setVideoUrl] = React.useState(value);
   const [tempVideoUrl, setTempVideoUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
     mode: 0,
   }); // 0 no preview, 1: preview, 2: error
-  const [currentStep, setCurrentStep] = React.useState(value === '' ? 1 : 0);
+  const [isModalOpen, setIsModalOpen] = React.useState(value === '');
+  const [progress, setProgress] = React.useState(-1);
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
 
@@ -82,6 +86,46 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
     }
   };
 
+  const uploadVideo = async () => {
+    if (file === null) {
+      return;
+    }
+    setProgress(0);
+    const formData = new FormData();
+    formData.append('video', file);
+    formData.append('name', ''); // todo: add name?
+    const response = await axiosLoggedRequest({
+      method: 'POST',
+      url: '/videos',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress(progressEvent) {
+        const totalLength = progressEvent.lengthComputable
+          ? progressEvent.total
+          : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+        if (totalLength !== null) {
+          setProgress(Math.round((progressEvent.loaded * 100) / totalLength));
+        }
+      },
+    });
+    if (response.error) {
+      onChangeVideo('');
+      enqueueSnackbar('Une erreur est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      onChangeVideo(response.data.url);
+      if (!response.data.url) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+      }
+    }
+    setProgress(-1);
+  };
+
   return (
     <EditorContainer
       deleteButtonProps={{
@@ -111,7 +155,8 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
               size="small"
               color="primary"
               onClick={() => {
-                setCurrentStep(1);
+                setIsModalOpen(true);
+                setProgress(-1);
               }}
             >
               {'Changer de vidéo'}
@@ -120,18 +165,23 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         </>
       )}
       <Modal
-        open={currentStep > 0}
+        open={isModalOpen}
         fullWidth
         noCloseOutsideModal
         maxWidth="md"
         title="Choisir une vidéo"
         confirmLabel="Choisir"
-        onConfirm={() => {
-          onChangeVideo(tempVideoUrl);
-          setCurrentStep(0);
+        onConfirm={async () => {
+          if (file !== null) {
+            await uploadVideo();
+          } else {
+            onChangeVideo(tempVideoUrl);
+          }
+          setIsModalOpen(false);
+          resetPreview();
         }}
         onClose={() => {
-          setCurrentStep(0);
+          setIsModalOpen(false);
           if (videoUrl.length === 0) {
             onDelete();
           }
@@ -139,6 +189,9 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         disabled={preview.mode !== 1}
         ariaLabelledBy={`video-edit-${id}`}
         ariaDescribedBy={`video-edit-${id}-desc`}
+        loadingLabel="Upload de votre vidéo en cours..."
+        loading={progress >= 0}
+        progress={progress}
       >
         <div style={{ padding: '0.5rem' }}>
           <Alert icon={<ArrowRightAltIcon />} severity="info">
@@ -151,70 +204,42 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
           <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem', minWidth: 0 }}>
             <div id={`image-edit-${id}-desc`}>
-              {/* <Steps steps={["Choisir la vidéo", "Paramètres"]} activeStep={0} /> */}
-              {currentStep === 1 && (
-                <>
-                  <TextField
-                    label="Entrez l'URL de la vidéo"
-                    variant="outlined"
-                    color="secondary"
-                    fullWidth
-                    value={file === null ? tempVideoUrl : ''}
-                    onBlur={() => {
-                      if (isValidHttpUrl(tempVideoUrl)) {
-                        displayPreview();
-                      } else {
-                        resetPreview();
-                      }
-                    }}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      if (file !== null) {
-                        setFile(null);
-                        resetPreview();
-                        if (inputFile.current) {
-                          inputFile.current.value = '';
-                        }
-                      }
-                      setTempVideoUrl(event.target.value);
-                    }}
-                  />
-                  <Divider style={{ marginTop: '2rem' }} />
-                  <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
-                    <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
-                  </div>
-                  <div className="text-center">
-                    <Tooltip title="Bientôt disponible !" aria-label="available soon">
-                      <span>
-                        <Button
-                          disabled
-                          component="label"
-                          variant="outlined"
-                          color="secondary"
-                          startIcon={<CloudUploadIcon />}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <>
-                            Importer
-                            <input
-                              ref={inputFile}
-                              type="file"
-                              multiple={false}
-                              accept="video/*"
-                              style={{ display: 'none' }}
-                              onChange={onFileSelect}
-                            />
-                          </>
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  </div>
-                  {/* <div style={{ width: "100%", textAlign: "right" }}>
-                    <Button color="primary" variant="contained" disabled={preview.mode !== 1}>
-                      Suivant
-                    </Button>
-                  </div> */}
-                </>
-              )}
+              <TextField
+                label="Entrez l'URL de la vidéo"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                value={file === null ? tempVideoUrl : ''}
+                onBlur={() => {
+                  if (isValidHttpUrl(tempVideoUrl)) {
+                    displayPreview();
+                  } else {
+                    resetPreview();
+                  }
+                }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  if (file !== null) {
+                    setFile(null);
+                    resetPreview();
+                    if (inputFile.current) {
+                      inputFile.current.value = '';
+                    }
+                  }
+                  setTempVideoUrl(event.target.value);
+                }}
+              />
+              <Divider style={{ marginTop: '2rem' }} />
+              <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
+                <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
+              </div>
+              <div className="text-center">
+                <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
+                  <>
+                    Importer
+                    <input ref={inputFile} type="file" multiple={false} accept="video/*" style={{ display: 'none' }} onChange={onFileSelect} />
+                  </>
+                </Button>
+              </div>
             </div>
           </div>
           <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>

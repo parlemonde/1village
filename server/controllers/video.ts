@@ -1,5 +1,5 @@
 import { UserType } from '../entities/user';
-import { getVideoLink } from '../fileUpload';
+import { getVideoLink, uploadVideo } from '../fileUpload';
 import { getQueryString } from '../utils';
 
 import { Controller } from './controller';
@@ -23,5 +23,21 @@ videoController.get({ path: '/download', userType: UserType.TEACHER }, async (re
     next();
   }
 });
+
+// post video
+videoController.upload(
+  {
+    path: '',
+    userType: UserType.TEACHER,
+    multerFieldName: 'video',
+    saveOnDisk: true,
+  },
+  async (req, res) => {
+    const url = await uploadVideo(req.file.path, req.body.name, req.user?.id ?? 0);
+    res.sendJSON({
+      url,
+    });
+  },
+);
 
 export { videoController };

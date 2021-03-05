@@ -1,5 +1,7 @@
+import { getRepository } from 'typeorm';
 import { Vimeo } from 'vimeo';
 
+import { Video } from '../entities/video';
 import { logger } from '../utils/logger';
 
 type VimeoVideoLink = {
@@ -59,5 +61,62 @@ export class VimeoClass {
     });
 
     return url;
+  }
+
+  public async uploadVideo(path: string, name: string, userId: number): Promise<string> {
+    if (!this.initialized) {
+      return '';
+    }
+    // upload video
+    const uri = await new Promise<string>((resolve) => {
+      this.client.upload(
+        path,
+        {
+          content_rating: ['unrated'],
+          name,
+          privacy: {
+            view: 'disable',
+            embed: 'whitelist',
+            download: true,
+            add: true,
+            comments: 'nobody',
+          },
+        },
+        (uri) => {
+          resolve(uri);
+        },
+        () => {},
+        (error) => {
+          logger.error(error);
+          resolve('');
+        },
+      );
+    });
+    if (!uri) {
+      return '';
+    }
+
+    // get video id and create video DB entry.
+    const splits = uri.split('/');
+    const videoID = parseInt(splits[splits.length - 1]);
+    if (!isNaN(videoID)) {
+      const video = new Video();
+      video.id = videoID;
+      video.userId = userId;
+      await getRepository(Video).save(video);
+    }
+
+    // Put video in 1village folder.
+    if (process.env.VIMEO_FOLDER && !isNaN(videoID)) {
+      this.client.request(
+        {
+          method: 'PUT',
+          path: `/me/projects/${process.env.VIMEO_FOLDER}/videos/${videoID}`,
+        },
+        () => {},
+      );
+    }
+
+    return `https://player.vimeo.com/video/${videoID}`;
   }
 }

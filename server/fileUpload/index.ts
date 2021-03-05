@@ -21,3 +21,7 @@ export async function deleteImage(key: string): Promise<void> {
 export function getVideoLink(url: string, quality: 'hd' | 'sd'): Promise<string> {
   return vimeo.getDownloadLink(url, quality);
 }
+
+export function uploadVideo(filePath: string, name: string, userId: number): Promise<string> {
+  return vimeo.uploadVideo(filePath, name, userId);
+}
