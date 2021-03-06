@@ -25,3 +25,7 @@ export function getVideoLink(url: string, quality: 'hd' | 'sd'): Promise<string>
 export function uploadVideo(filePath: string, name: string, userId: number): Promise<string> {
   return vimeo.uploadVideo(filePath, name, userId);
 }
+
+export function deleteVideo(videoId: number): Promise<boolean> {
+  return vimeo.deleteVideo(videoId);
+}

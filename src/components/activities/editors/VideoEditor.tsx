@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import ReactPlayer from 'react-player';
+import { useQueryCache } from 'react-query';
 import React from 'react';
 
 import { Button, Divider, TextField } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { Alert } from '@material-ui/lab';
 
 import { Modal } from 'src/components/Modal';
@@ -21,6 +23,7 @@ import { EditorContainer } from './EditorContainer';
 
 export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
+  const queryCache = useQueryCache();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
   const [videoUrl, setVideoUrl] = React.useState(value);
@@ -128,6 +131,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
           variant: 'error',
         });
       } else {
+        queryCache.invalidateQueries('videos');
         setIsSuccessModalOpen(true);
       }
     }
@@ -288,7 +292,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
               label="Nom de la vidéo"
               value={name}
               onChange={(event) => {
-                setName(event.target.value);
+                setName(event.target.value.slice(0, 64));
               }}
             />
           </div>
@@ -336,8 +340,13 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
             <li style={{ margin: '0.2rem 0' }}>
               Vos vidéos mises en ligne sur 1village sont accessibles sur{' '}
               <Link href="/mes-videos">
-                <a href="/mes-videos" target="_blank" rel="noopener">
-                  <i>mon compte</i> {'->'} <i>mes vidéos</i>
+                <a
+                  href="/mes-videos"
+                  target="_blank"
+                  rel="noopener"
+                  style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'bottom' }}
+                >
+                  <SettingsIcon /> {'->'} <i>mes vidéos</i>
                 </a>
               </Link>
             </li>

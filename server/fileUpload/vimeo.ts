@@ -107,6 +107,7 @@ export class VimeoClass {
       const video = new Video();
       video.id = videoID;
       video.userId = userId;
+      video.name = name.slice(0, 64);
       await getRepository(Video).save(video);
     }
 
@@ -122,5 +123,33 @@ export class VimeoClass {
     }
 
     return `https://player.vimeo.com/video/${videoID}`;
+  }
+
+  public async deleteVideo(videoId: number): Promise<boolean> {
+    if (!this.initialized) {
+      return false;
+    }
+    const success = await new Promise<boolean>((resolve) => {
+      this.client.request(
+        {
+          method: 'DELETE',
+          path: `/videos/${videoId}`,
+        },
+        (error) => {
+          if (error) {
+            logger.error(error);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        },
+      );
+    });
+
+    if (success) {
+      await getRepository(Video).delete({ id: videoId });
+    }
+
+    return success;
   }
 }
