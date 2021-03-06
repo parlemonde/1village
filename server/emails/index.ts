@@ -56,7 +56,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   return undefined;
 }
 
-export async function sendMail<E extends Email>(email: E, receiverEmail: string, options: EmailOptions<E>, language: string = 'fr'): Promise<void> {
+export async function sendMail<E extends Email>(email: E, receiverEmail: string, options: EmailOptions<E>): Promise<void> {
   if (transporter === null) {
     logger.error('Could not send mail, transporter is null!');
     return;

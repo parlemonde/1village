@@ -7,8 +7,7 @@ import { Alert } from '@material-ui/lab';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
-import { primaryColor } from 'src/styles/variables.const';
-import { fontDetailColor, bgPage } from 'src/styles/variables.const';
+import { primaryColor, fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
 import type { EditorProps } from '../editing.types';
