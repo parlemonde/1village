@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import ReactPlayer from 'react-player';
 import React from 'react';
@@ -9,6 +10,7 @@ import { Alert } from '@material-ui/lab';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
+import { useCopy } from 'src/hooks/useCopy';
 import { primaryColor } from 'src/styles/variables.const';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
@@ -20,13 +22,17 @@ import { EditorContainer } from './EditorContainer';
 export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
+  const { copyText } = useCopy();
   const [videoUrl, setVideoUrl] = React.useState(value);
   const [tempVideoUrl, setTempVideoUrl] = React.useState('');
+  const [name, setName] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
     mode: 0,
   }); // 0 no preview, 1: preview, 2: error
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = React.useState(false);
+  const [step, setStep] = React.useState(0);
   const [progress, setProgress] = React.useState(-1);
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
@@ -93,7 +99,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
     setProgress(0);
     const formData = new FormData();
     formData.append('video', file);
-    formData.append('name', ''); // todo: add name?
+    formData.append('name', name);
     const response = await axiosLoggedRequest({
       method: 'POST',
       url: '/videos',
@@ -121,9 +127,12 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
         });
+      } else {
+        setIsSuccessModalOpen(true);
       }
     }
     setProgress(-1);
+    setName('');
   };
 
   return (
@@ -155,8 +164,9 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
               size="small"
               color="primary"
               onClick={() => {
-                setIsModalOpen(true);
                 setProgress(-1);
+                setStep(0);
+                setIsModalOpen(true);
               }}
             >
               {'Changer de vidéo'}
@@ -170,10 +180,15 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         noCloseOutsideModal
         maxWidth="md"
         title="Choisir une vidéo"
-        confirmLabel="Choisir"
+        confirmLabel={step === 1 ? 'Uploader' : 'Choisir'}
         onConfirm={async () => {
           if (file !== null) {
-            await uploadVideo();
+            if (step === 0) {
+              setStep(1);
+              return;
+            } else {
+              await uploadVideo();
+            }
           } else {
             onChangeVideo(tempVideoUrl);
           }
@@ -193,68 +208,147 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         loading={progress >= 0}
         progress={progress}
       >
-        <div style={{ padding: '0.5rem' }}>
-          <Alert icon={<ArrowRightAltIcon />} severity="info">
-            Créer une vidéo sur{' '}
-            <a className="text text--bold" href="https://clap.parlemonde.org" target="_blank" rel="noreferrer">
-              Clap!
-            </a>
-          </Alert>
-        </div>
-        <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
-          <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem', minWidth: 0 }}>
-            <div id={`image-edit-${id}-desc`}>
-              <TextField
-                label="Entrez l'URL de la vidéo"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                value={file === null ? tempVideoUrl : ''}
-                onBlur={() => {
-                  if (isValidHttpUrl(tempVideoUrl)) {
-                    displayPreview();
-                  } else {
-                    resetPreview();
-                  }
-                }}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (file !== null) {
-                    setFile(null);
-                    resetPreview();
-                    if (inputFile.current) {
-                      inputFile.current.value = '';
-                    }
-                  }
-                  setTempVideoUrl(event.target.value);
-                }}
-              />
-              <Divider style={{ marginTop: '2rem' }} />
-              <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
-                <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
-              </div>
-              <div className="text-center">
-                <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
-                  <>
-                    Importer
-                    <input ref={inputFile} type="file" multiple={false} accept="video/*" style={{ display: 'none' }} onChange={onFileSelect} />
-                  </>
-                </Button>
-              </div>
+        {step === 0 && (
+          <>
+            <div style={{ padding: '0.5rem' }}>
+              <Alert icon={<ArrowRightAltIcon />} severity="info">
+                Créer une vidéo sur{' '}
+                <a className="text text--bold" href="https://clap.parlemonde.org" target="_blank" rel="noreferrer">
+                  Clap!
+                </a>
+              </Alert>
             </div>
-          </div>
-          <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
-            <div style={{ width: '100%', height: '100%', backgroundColor: bgPage, padding: '0.5rem' }}>
-              <div className="text-center text text--bold" style={{ height: '10%' }}>
-                Aperçu
-              </div>
-              {preview.mode === 1 && (
-                <div style={{ width: '100%', height: '90%', backgroundColor: 'black' }}>
-                  <ReactPlayer width="100%" height="100%" light url={preview.url} controls />
+            <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
+              <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem', minWidth: 0 }}>
+                <div id={`image-edit-${id}-desc`}>
+                  <TextField
+                    label="Entrez l'URL de la vidéo"
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                    value={file === null ? tempVideoUrl : ''}
+                    onBlur={() => {
+                      if (isValidHttpUrl(tempVideoUrl)) {
+                        displayPreview();
+                      } else {
+                        resetPreview();
+                      }
+                    }}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      if (file !== null) {
+                        setFile(null);
+                        resetPreview();
+                        if (inputFile.current) {
+                          inputFile.current.value = '';
+                        }
+                      }
+                      setTempVideoUrl(event.target.value);
+                    }}
+                  />
+                  <Divider style={{ marginTop: '2rem' }} />
+                  <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
+                    <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
+                  </div>
+                  <div className="text-center">
+                    <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
+                      <>
+                        Importer
+                        <input ref={inputFile} type="file" multiple={false} accept="video/*" style={{ display: 'none' }} onChange={onFileSelect} />
+                      </>
+                    </Button>
+                  </div>
                 </div>
-              )}
-              {preview.mode === 2 && <Alert severity="error">{'Erreur: impossible de lire cette vidéo.'}</Alert>}
+              </div>
+              <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
+                <div style={{ width: '100%', height: '100%', backgroundColor: bgPage, padding: '0.5rem' }}>
+                  <div className="text-center text text--bold" style={{ height: '10%' }}>
+                    Aperçu
+                  </div>
+                  {preview.mode === 1 && (
+                    <div style={{ width: '100%', height: '90%', backgroundColor: 'black' }}>
+                      <ReactPlayer width="100%" height="100%" light url={preview.url} controls />
+                    </div>
+                  )}
+                  {preview.mode === 2 && <Alert severity="error">{'Erreur: impossible de lire cette vidéo.'}</Alert>}
+                </div>
+              </div>
             </div>
+          </>
+        )}
+        {step === 1 && (
+          <div style={{ minHeight: '10rem' }}>
+            <h3 className="text--primary" style={{ margin: '1rem 0' }}>
+              {"Entrez le nom de votre vidéo avant de l'uploader:"}
+            </h3>
+
+            <TextField
+              color="primary"
+              variant="outlined"
+              fullWidth
+              label="Nom de la vidéo"
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
+            />
           </div>
+        )}
+      </Modal>
+      <Modal
+        title="Vidéo mise en ligne avec succès !"
+        fullWidth
+        maxWidth="md"
+        open={isSuccessModalOpen}
+        onClose={() => {
+          setIsSuccessModalOpen(false);
+        }}
+        ariaDescribedBy="success-desc"
+        ariaLabelledBy="success-title"
+        cancelLabel="Continuer"
+        noCloseOutsideModal
+      >
+        <div id="success-desc">
+          <h3 className="text--primary" style={{ marginBottom: '0.5rem' }}>
+            Votre vidéo a bien été mise en ligne, voici le lien :
+          </h3>
+          <Alert
+            icon={false}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  copyText(value);
+                }}
+              >
+                COPIER
+              </Button>
+            }
+            severity="info"
+          >
+            {value}
+          </Alert>
+          <p className="text text--bold">Quelques informations: </p>
+          <ul>
+            <li style={{ margin: '0.2rem 0' }}>
+              <strong>Conservez ce lien,</strong> vous pouvez le réutiliser si vous supprimez par erreur ce bloc {"d'édition vidéo"}.
+            </li>
+            <li style={{ margin: '0.2rem 0' }}>
+              Vos vidéos mises en ligne sur 1village sont accessibles sur{' '}
+              <Link href="/mes-videos">
+                <a href="/mes-videos" target="_blank" rel="noopener">
+                  <i>mon compte</i> {'->'} <i>mes vidéos</i>
+                </a>
+              </Link>
+            </li>
+            <li style={{ margin: '0.2rem 0' }}>
+              La vidéo peut mettre <strong>plusieurs minutes</strong> pour être prête et affichera un écran noir en attendant. Vous pouvez cependant
+              continuer à éditer et publier votre activité. {"Évitez d'uploader plusieurs fois la même vidéo."}
+            </li>
+            <li style={{ margin: '0.2rem 0' }}>
+              Votre vidéo est <strong>privée</strong> et le lien ne fonctionne que sur le site de 1village.
+            </li>
+          </ul>
         </div>
       </Modal>
     </EditorContainer>

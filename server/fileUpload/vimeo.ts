@@ -5,7 +5,7 @@ import { Video } from '../entities/video';
 import { logger } from '../utils/logger';
 
 type VimeoVideoLink = {
-  quality: 'sd' | 'hd';
+  quality: 'sd' | 'hd' | 'source';
   width: number;
   link: string;
 };
@@ -50,7 +50,11 @@ export class VimeoClass {
             resolve('');
           } else {
             try {
-              const url = (body.download || []).filter((link) => link.quality === quality).sort((a, b) => a.width - b.width)[0].link;
+              let urls = (body.download || []).filter((link) => link.quality === quality);
+              if (urls.length === 0) {
+                urls = (body.download || []).filter((link) => link.quality === 'source');
+              }
+              const url = urls.sort((a, b) => a.width - b.width)[0].link;
               resolve(url);
             } catch (_e) {
               resolve('');
