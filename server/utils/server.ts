@@ -57,7 +57,7 @@ export function getDefaultDirectives(): { [directiveName: string]: Iterable<stri
     'script-src': ["'self'", 'https:'],
     'script-src-attr': ["'none'"],
     'style-src': ["'self'", "'unsafe-inline'"],
-    'media-src': ['*', 'data:', 'https:'],
+    'media-src': ['*', 'data:', 'https:', 'blob:'],
     'upgrade-insecure-requests': [],
   };
 }

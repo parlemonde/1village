@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-
+import { UserType } from '../entities/user';
 import { languages } from '../utils/iso-639-languages-french';
 
 import { Controller } from './controller';
@@ -7,7 +6,7 @@ import { Controller } from './controller';
 const languageController = new Controller('/languages');
 
 //--- Get all languages ---
-languageController.get({ path: '' }, async (_req: Request, res: Response) => {
+languageController.get({ path: '', userType: UserType.TEACHER }, async (_req, res) => {
   res.sendJSON(languages);
 });
 

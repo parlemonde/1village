@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import { Button, Divider, TextField } from '@material-ui/core';
@@ -29,6 +30,7 @@ export const ImageModal: React.FC<ImageModalProps> = ({
   onDelete = () => {},
 }: ImageModalProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
   const [tempImageUrl, setTempImageUrl] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
@@ -73,9 +75,18 @@ export const ImageModal: React.FC<ImageModalProps> = ({
     });
     if (response.error) {
       onChangeImage('');
+      enqueueSnackbar('Une erreur est survenue...', {
+        variant: 'error',
+      });
     } else {
       onChangeImage(response.data.url);
+      if (!response.data.url) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+      }
     }
+    setIsModalLoading(false);
   };
 
   const displayPreview = () => {
