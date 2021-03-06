@@ -1,11 +1,13 @@
 import React from 'react';
 
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
+import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, withStyles, WithStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core';
@@ -13,6 +15,19 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
+
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+  return (
+    <Box display="flex" alignItems="center">
+      <Box width="100%" mr={1}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box minWidth={35}>
+        <Typography variant="body2" color="textSecondary">{`${Math.round(props.value)}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 const styles = (theme: MaterialTheme) =>
   createStyles({
@@ -67,7 +82,9 @@ interface ModalProps {
   noTitle?: boolean;
   noCancelButton?: boolean;
   id?: string;
+  loadingLabel?: string;
   loading?: boolean;
+  progress?: number;
 }
 
 export const Modal: React.FunctionComponent<ModalProps> = ({
@@ -90,6 +107,8 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   noCancelButton = false,
   noTitle = false,
   loading = false,
+  loadingLabel,
+  progress,
   actions,
   id,
 }: ModalProps) => {
@@ -152,7 +171,18 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
             justifyContent: 'center',
           }}
         >
-          <CircularProgress color="primary" />
+          {progress ? (
+            <div style={{ width: '80%' }}>
+              {loadingLabel && (
+                <div className="text-center">
+                  <span className="text text--primary">{loadingLabel}</span>
+                </div>
+              )}
+              <LinearProgressWithLabel value={progress} />
+            </div>
+          ) : (
+            <CircularProgress color="primary" />
+          )}
         </div>
       )}
     </Dialog>

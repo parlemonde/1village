@@ -41,6 +41,7 @@ __metadata:
     "@types/sortablejs": ^1
     "@types/string-similarity": ^4
     "@types/uuid": ^8.3.0
+    "@types/vimeo": ^2
     "@types/webpack": ^4.41.25
     "@typescript-eslint/eslint-plugin": ^4.9.1
     "@typescript-eslint/parser": ^4.12.0
@@ -105,6 +106,7 @@ __metadata:
     typeorm: ^0.2.29
     typescript: ^4.1.2
     uuid: ^8.3.2
+    vimeo: ^2.1.1
     webpack: ^5.11.0
     webpack-bundle-analyzer: ^4.3.0
     winston: ^3.3.3
@@ -2324,6 +2326,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/vimeo@npm:^2":
+  version: 2.1.3
+  resolution: "@types/vimeo@npm:2.1.3"
+  checksum: 38ba4c42c9a9dba0b52eacfd1c6d7fead763da4d08a3ffb6de84f37d83cbff8b42b7b68c88a7a4e7b6d76ae36a26c3cff266ea59c29a01bbcc733ee808b6972c
+  languageName: node
+  linkType: hard
+
 "@types/webpack-sources@npm:*":
   version: 2.1.0
   resolution: "@types/webpack-sources@npm:2.1.0"
@@ -3967,6 +3976,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buffer-from@npm:^0.1.1":
+  version: 0.1.2
+  resolution: "buffer-from@npm:0.1.2"
+  checksum: 89e3c7125e8734d8b604cc2ec41876b5e3d3047d4ab76b3c16d435b374e2878095627d70074965f55dbcf27669eb600c2e89f7879de8aeebbaaa54e8ab2329fb
+  languageName: node
+  linkType: hard
+
 "buffer-from@npm:^1.0.0, buffer-from@npm:^1.1.1":
   version: 1.1.1
   resolution: "buffer-from@npm:1.1.1"
@@ -4522,6 +4538,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"combine-errors@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "combine-errors@npm:3.0.3"
+  dependencies:
+    custom-error-instance: 2.1.1
+    lodash.uniqby: 4.5.0
+  checksum: 8d41bd889f3b1ff0abc3fc227e7fd87226e267831e7e72d7a812211845e6a3f443fb17800750158eb2a7a810a5ebce9a050c5ac593d683ab79e74c952fbe7342
+  languageName: node
+  linkType: hard
+
 "combined-stream@npm:^1.0.6, combined-stream@npm:~1.0.6":
   version: 1.0.8
   resolution: "combined-stream@npm:1.0.8"
@@ -5069,6 +5095,13 @@ __metadata:
   version: 3.0.5
   resolution: "csstype@npm:3.0.5"
   checksum: d15967edea15457961ab1e3f1c4080c83792a595055551a087923b2fb67fffaddaa2eedafe10f665d12dc3f493af03c08322c9410fcd58e3dcf48104de15043c
+  languageName: node
+  linkType: hard
+
+"custom-error-instance@npm:2.1.1":
+  version: 2.1.1
+  resolution: "custom-error-instance@npm:2.1.1"
+  checksum: d5c450beeff589a6995ba4b5d3342e3699ba3285ce6439c2a0226e26bf47542484e2337942f2177382d15fe2486a1fa0de1b7e46e06c7fa1e6a9358375d0df2a
   languageName: node
   linkType: hard
 
@@ -6306,7 +6339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"extend@npm:~3.0.2":
+"extend@npm:^3.0.2, extend@npm:~3.0.2":
   version: 3.0.2
   resolution: "extend@npm:3.0.2"
   checksum: 1406da1f0c4b00b839497e4cdd0ec4303ce2ae349144b7c28064a5073c93ce8c08da4e8fb1bc5cb459ffcdff30a35fc0fe54344eb88320e70100c1baea6f195c
@@ -8019,6 +8052,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"js-base64@npm:^2.4.9":
+  version: 2.6.4
+  resolution: "js-base64@npm:2.6.4"
+  checksum: f3fadb18c2feade451a42677d29ddac4e5d40f6561fce38454c0dbf8b5b937d47e65ca54ae109325db90baaab7443780ae071b7d8577273918e8407b01b83f88
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -8549,6 +8589,55 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"lodash._baseiteratee@npm:~4.7.0":
+  version: 4.7.0
+  resolution: "lodash._baseiteratee@npm:4.7.0"
+  dependencies:
+    lodash._stringtopath: ~4.8.0
+  checksum: 5e3a20d4911f9c78b7dbb32b81b86794f7f0ad6f0f80e383e819e34752a8cb15ba16411bf13866177249e3c9d0ae4cfdb20f29504762b2379c1969d6571a8701
+  languageName: node
+  linkType: hard
+
+"lodash._basetostring@npm:~4.12.0":
+  version: 4.12.0
+  resolution: "lodash._basetostring@npm:4.12.0"
+  checksum: be68179ec3cc842f30ce5dbfe2eb5ca35ff334abf5bb19b87bbd3ad8e4975619b30d44f1f5186d14650c92a88737ef581bd06a904765615f1b53182490c612c2
+  languageName: node
+  linkType: hard
+
+"lodash._baseuniq@npm:~4.6.0":
+  version: 4.6.0
+  resolution: "lodash._baseuniq@npm:4.6.0"
+  dependencies:
+    lodash._createset: ~4.0.0
+    lodash._root: ~3.0.0
+  checksum: 913c3698f31f34ea982bdaaa38b9fb182f66826875986538b6c4f826d6918b0203c44e6c42ae798f1489e9741033f26822f1ad4b34eafba9b07c85bb0dc3695f
+  languageName: node
+  linkType: hard
+
+"lodash._createset@npm:~4.0.0":
+  version: 4.0.3
+  resolution: "lodash._createset@npm:4.0.3"
+  checksum: 22c1890453850630792a6f3b05dd734023a48d24b257bd54de949f9a7c965a9c5841a4d3475e50cf64c600039c9dad9a6970b9b7189c783b0b63f4ebee4ed563
+  languageName: node
+  linkType: hard
+
+"lodash._root@npm:~3.0.0":
+  version: 3.0.1
+  resolution: "lodash._root@npm:3.0.1"
+  checksum: 9fc348b1222b2f5fb34d92473ff5a827623b356596a2c65f03f4e4f90189b27f08217684e6c4c7b0c8bc060c674ef9619b0a520c822ae3a7af4b535894c55451
+  languageName: node
+  linkType: hard
+
+"lodash._stringtopath@npm:~4.8.0":
+  version: 4.8.0
+  resolution: "lodash._stringtopath@npm:4.8.0"
+  dependencies:
+    lodash._basetostring: ~4.12.0
+  checksum: 507d56d4605a8fdf6a03fbacd356f6611eaeb08ffeedad669dd628f484944896adbdb63539bf348ccf4192c4a7947035023363505cf609bef3ca6aa27f84b00e
+  languageName: node
+  linkType: hard
+
 "lodash.includes@npm:^4.3.0":
   version: 4.3.0
   resolution: "lodash.includes@npm:4.3.0"
@@ -8602,6 +8691,23 @@ fsevents@~2.1.2:
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
   checksum: 43cde11276c66da7b3eda5e9f00dc6edc276d2bcf0a5969ffc62b612cd1c4baf2eff5e84cee11383005722c460a9ca0f521fad4fa1cd2dc1ef013ee4da2dfe63
+  languageName: node
+  linkType: hard
+
+"lodash.throttle@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "lodash.throttle@npm:4.1.1"
+  checksum: d9107c79033f609f23552f48f5ba93b8a98a07a2b38914745a48d33f18704a4c6a125610ad2bab2a0139974d1da7c5d6a24271243e21571f01e21bf3b2f6b21d
+  languageName: node
+  linkType: hard
+
+"lodash.uniqby@npm:4.5.0":
+  version: 4.5.0
+  resolution: "lodash.uniqby@npm:4.5.0"
+  dependencies:
+    lodash._baseiteratee: ~4.7.0
+    lodash._baseuniq: ~4.6.0
+  checksum: 2366d95cfd0f91b5e35cb84b430a8415644040cc26dd4142bbe9a7ba589a217effde9d90cb26caa1a0fc0fadfcfcd2d3ca8192aa54008bddc3273b054845c4d7
   languageName: node
   linkType: hard
 
@@ -10562,6 +10668,16 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"proper-lockfile@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "proper-lockfile@npm:2.0.1"
+  dependencies:
+    graceful-fs: ^4.1.2
+    retry: ^0.10.0
+  checksum: ab25f9b56476ea100ebc4aaa5efb37a51caa0d8e09ad113dd93694b6c52dd0d47d80edd7b6401449a7f58a81c102bad851311009b4879961b5fb87b87eb315f2
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:~2.0.5":
   version: 2.0.6
   resolution: "proxy-addr@npm:2.0.6"
@@ -10711,6 +10827,13 @@ fsevents@~2.1.2:
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
   checksum: 1e76c51462f0ffb148e0b2fdeb811f61377800298605229d32efcdaaaf0a8fd4314a4b4405e1fbf130a5ca421c0e51f926fab5bb9f8b9b3b8c394f4e2d33d3d1
+  languageName: node
+  linkType: hard
+
+"querystringify@npm:^2.1.1":
+  version: 2.2.0
+  resolution: "querystringify@npm:2.2.0"
+  checksum: 6235036be3aedff7919dfc06b23f759264915c5794c6352d52a917401d40d2b9bb43b1d82e4e5be983e469aa320e06992aefc218192f6fa1d9eba4f54dc4786c
   languageName: node
   linkType: hard
 
@@ -11222,6 +11345,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"requires-port@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "requires-port@npm:1.0.0"
+  checksum: 0db25fb2ac9b4f2345a350846b7ba99d1f25a6686b1728246d14f05450c8f2fc066bdfae4561b4be2627c184a030a27e17268cfefdf46836e271db13734bc49e
+  languageName: node
+  linkType: hard
+
 "resize-observer-polyfill@npm:^1.5.1":
   version: 1.5.1
   resolution: "resize-observer-polyfill@npm:1.5.1"
@@ -11330,6 +11460,13 @@ resolve@^1.1.7:
   version: 0.1.15
   resolution: "ret@npm:0.1.15"
   checksum: 749c2fcae7071f5ecea4f8a18e35a79a8e8a58e522a16d843ecb9dfe9e647a76d92ae85c22690b02f87d3ab78b6b1f73341efc2fabbf59ed54dcfd9b1bdff883
+  languageName: node
+  linkType: hard
+
+"retry@npm:^0.10.0":
+  version: 0.10.1
+  resolution: "retry@npm:0.10.1"
+  checksum: 431b8b2e7551736512e18b9727b28f020ba9c3beab317eb769b84bdffd040bf55cbaa7a70f63984329ed003d9bfdef42fa589fce849fbdcb5f79f1ab8d68ee47
   languageName: node
   linkType: hard
 
@@ -12886,6 +13023,21 @@ resolve@^1.1.7:
   languageName: node
   linkType: hard
 
+"tus-js-client@npm:^1.5.1":
+  version: 1.8.0
+  resolution: "tus-js-client@npm:1.8.0"
+  dependencies:
+    buffer-from: ^0.1.1
+    combine-errors: ^3.0.3
+    extend: ^3.0.2
+    js-base64: ^2.4.9
+    lodash.throttle: ^4.1.1
+    proper-lockfile: ^2.0.1
+    url-parse: ^1.4.3
+  checksum: c6dbc00070752bb01f3e44b028f8edf71411c28c98ad4cdf105526778a694732140ed0c83aa5e95bc8843ada29fb720863f56d578295f288f0745d6ef04db533
+  languageName: node
+  linkType: hard
+
 "tweetnacl@npm:^0.14.3, tweetnacl@npm:~0.14.0":
   version: 0.14.5
   resolution: "tweetnacl@npm:0.14.5"
@@ -13188,6 +13340,16 @@ typescript@^4.1.2:
   languageName: node
   linkType: hard
 
+"url-parse@npm:^1.4.3":
+  version: 1.5.1
+  resolution: "url-parse@npm:1.5.1"
+  dependencies:
+    querystringify: ^2.1.1
+    requires-port: ^1.0.0
+  checksum: d8342b597bf1760c4b9e3c78458524d783fa1c901658f3db8b576fc73451c89e6686d218ddca4845b082a63b23971b4a8b916cccc91f4156cc9f97ffdabe0079
+  languageName: node
+  linkType: hard
+
 "url@npm:0.10.3":
   version: 0.10.3
   resolution: "url@npm:0.10.3"
@@ -13329,6 +13491,15 @@ typescript@^4.1.2:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: 38ea80312cb42e5e8b4ac562d108d675b2354a79f8f125d363671f692657461b9181fd26f4fc9acdca433f8afee099cb78058806e1303e6b15b8fb022affba94
+  languageName: node
+  linkType: hard
+
+"vimeo@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "vimeo@npm:2.1.1"
+  dependencies:
+    tus-js-client: ^1.5.1
+  checksum: adf589ee43b72dc43c327c6c7b75a7ea3c9a7f3cc95c53ae39a11c000021818cfab42ed74c40307da7d8fc3116ebc8691c19bb1b3efcf6a54980e4a47bad252d
   languageName: node
   linkType: hard
 
