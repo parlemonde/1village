@@ -1,3 +1,5 @@
+import { MascotteData } from './presentation.types';
+
 export const PRESENTATION_THEMATIQUE = [
   {
     label: 'Présentation de l’école',
@@ -36,3 +38,25 @@ export const PRESENTATION_THEMATIQUE = [
     cardTitle: 'Présentation libre',
   },
 ];
+
+export const DEFAULT_MASCOTTE_DATA: MascotteData = {
+  presentation: '',
+  totalStudent: 0,
+  girlStudent: 0,
+  boyStudent: 0,
+  meanAge: 0,
+  totalTeacher: 0,
+  womanTeacher: 0,
+  manTeacher: 0,
+  numberClassroom: 0,
+  totalSchoolStudent: 0,
+  mascotteName: '',
+  mascotteImage: '',
+  mascotteDescription: '',
+  personality1: '',
+  personality2: '',
+  personality3: '',
+  countries: [],
+  languages: [],
+  currencies: [],
+};

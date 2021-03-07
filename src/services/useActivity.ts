@@ -2,7 +2,7 @@ import { useSnackbar } from 'notistack';
 import { useQueryCache, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
-import { ExtendedActivity } from 'src/components/activities/editing.types';
+import { ExtendedActivity, ExtendedActivityData } from 'src/components/activities/editing.types';
 import { getExtendedActivity } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -41,7 +41,7 @@ export const useActivityRequests = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const updatedActivityData = React.useCallback(
-    async (activity: ExtendedActivity, data: { [key: string]: string | number | boolean }) => {
+    async (activity: ExtendedActivity, data: ExtendedActivityData) => {
       const response = await axiosLoggedRequest({
         method: 'PUT',
         url: `/activities/${activity.id}/content/${activity.dataId}`,

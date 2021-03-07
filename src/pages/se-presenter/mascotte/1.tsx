@@ -3,13 +3,20 @@ import React from 'react';
 
 import { Button, TextField } from '@material-ui/core';
 
+import { DEFAULT_MASCOTTE_DATA } from 'src/activities/presentation.const';
+import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { ExtendedActivityData } from 'src/components/activities/editing.types';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { ActivityType, ActivitySubType } from 'types/activity.type';
+
+const pluralS = (value: number): string => {
+  return value > 1 ? 's' : '';
+};
 
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
@@ -18,52 +25,26 @@ const MascotteStep1: React.FC = () => {
   const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const labelPresentation =
-    `la classe${user.level ? ' ' + user.level : ''}` +
-    `${user.city ? ' à ' + user.city : ''}` +
-    `${user.school ? " de l'école " + user.school : ''}` +
-    `${user.postalCode ? ' (' + user.postalCode + ')' : ''}` +
-    `${user.countryCode ? ', ' + countries.filter((country) => country.isoCode === user.countryCode)[0]?.name : ''}`;
+    `la classe${user.level ? ' ' + user.level : ''}` + `${user.school ? " de l'école " + user.school : ''}` + `${user.city ? ' à ' + user.city : ''}`;
 
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
-      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
-        presentation: '',
-        totalStudent: 0,
-        girlStudent: 0,
-        boyStudent: 0,
-        meanAge: 0,
-        totalTeacher: 0,
-        womanTeacher: 0,
-        manTeacher: 0,
-        numberClassroom: 0,
-        totalSchoolStudent: 0,
-        mascotteName: '',
-        mascotteImage: '',
-        mascotteDescription: '',
-        personality1: '',
-        personality2: '',
-        personality3: '',
-        countries: [],
-        languages: [],
-        currencies: [],
-      });
+      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, DEFAULT_MASCOTTE_DATA);
     }
   }, [activity, countries, user, createActivityIfNotExist]);
 
-  const ensurePresentationDefined = (key: string, defaultValue: string) => () => {
-    if (activity.data.presentation === '') {
-      const newData = { ...activity.data, [key]: key === 'presentation' ? defaultValue : activity.data.presentation };
+  const data = (activity?.data as MascotteData) || null;
+
+  const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newData = { ...data, [key]: key === 'presentation' ? event.target.value : event.target.value ? Number(event.target.value) : null };
+    updateActivity({ data: newData });
+  };
+  const onFocusInput = (key: keyof MascotteData) => () => {
+    if (data[key] === 0) {
+      const newData: ExtendedActivityData = { ...data, [key]: null };
       updateActivity({ data: newData });
     }
   };
-
-  const dataChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newData = { ...activity.data, [key]: key === 'presentation' ? event.target.value : Number(event.target.value) };
-    updateActivity({ data: newData });
-  };
-
-  if (!user) return <Base>Not authorized</Base>;
-  if (!activity) return <Base>Loading...</Base>;
 
   const isValidSum = (x: number, y: number, z: number) => {
     if (x < 0 || y < 0) return false;
@@ -71,7 +52,7 @@ const MascotteStep1: React.FC = () => {
   };
 
   const errorMessage = (women: number, men: number, total: number) => {
-    if (isError && total === 0) {
+    if (isError && (total === 0 || total === null)) {
       return 'Ce champ est obligatoire';
     }
     if (isError && !isValidSum(women, men, total)) {
@@ -82,10 +63,19 @@ const MascotteStep1: React.FC = () => {
 
   const isValid = () => {
     return (
-      isValidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) &&
-      isValidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) &&
-      activity.data.totalStudent !== 0 &&
-      activity.data.totalTeacher !== 0
+      data.presentation.length > 0 &&
+      isValidSum(data.girlStudent, data.boyStudent, data.totalStudent) &&
+      isValidSum(data.womanTeacher, data.manTeacher, data.totalTeacher) &&
+      data.totalStudent !== 0 &&
+      data.totalTeacher !== 0 &&
+      data.totalStudent !== null &&
+      data.totalTeacher !== null &&
+      data.numberClassroom !== 0 &&
+      data.numberClassroom !== null &&
+      data.totalSchoolStudent !== 0 &&
+      data.totalSchoolStudent !== null &&
+      data.meanAge !== 0 &&
+      data.meanAge !== null
     );
   };
 
@@ -97,132 +87,153 @@ const MascotteStep1: React.FC = () => {
     }
   };
 
+  if (!user || !activity || data === null) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter" />
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
-        <div style={{ margin: '0 10% 0 10%', lineHeight: '70px' }}>
+        <div className="width-900">
           <h1>Qui est dans votre classe ?</h1>
-          <span>Nous sommes </span>
-          <TextField
-            variant="outlined"
-            style={{ width: '100%' }}
-            label={labelPresentation}
-            value={activity.data.presentation}
-            onClick={ensurePresentationDefined('presentation', labelPresentation)}
-            onChange={dataChange('presentation')}
-          />
           <div className="se-presenter-step-one">
-            <span>Nous sommes </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              inputProps={{ min: 0 }}
-              size="small"
-              value={activity.data.totalStudent}
-              onChange={dataChange('totalStudent')}
-              helperText={errorMessage(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number)}
-              error={
-                isError &&
-                (!isValidSum(activity.data.girlStudent as number, activity.data.boyStudent as number, activity.data.totalStudent as number) ||
-                  activity.data.totalStudent === 0)
-              }
-            />{' '}
-            <span> élèves, dont </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.girlStudent}
-              onChange={dataChange('girlStudent')}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> filles et </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.boyStudent}
-              onChange={dataChange('boyStudent')}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> garçons.</span>
-            <br />
-            <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.meanAge}
-              onChange={dataChange('meanAge')}
-              helperText={isError && activity.data.meanAge === 0 ? 'Ce champ est obligatoire' : ''}
-              error={isError && activity.data.meanAge === 0}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> ans.</span>
-            <br />
-            <span>Nous avons </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.totalTeacher}
-              onChange={dataChange('totalTeacher')}
-              helperText={errorMessage(
-                activity.data.womanTeacher as number,
-                activity.data.manTeacher as number,
-                activity.data.totalTeacher as number,
-              )}
-              error={
-                isError &&
-                (!isValidSum(activity.data.womanTeacher as number, activity.data.manTeacher as number, activity.data.totalTeacher as number) ||
-                  activity.data.totalTeacher === 0)
-              }
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> professeurs, dont </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.womanTeacher}
-              onChange={dataChange('womanTeacher')}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> femmes et </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.manTeacher}
-              onChange={dataChange('manTeacher')}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> hommes.</span> <br />
-            <span>Dans notre école, il y a </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.numberClassroom}
-              onChange={dataChange('numberClassroom')}
-              helperText={isError && activity.data.numberClassroom === 0 ? 'Ce champ est obligatoire' : ''}
-              error={isError && activity.data.numberClassroom === 0}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> classes et </span>{' '}
-            <TextField
-              className="se-presenter-step-one__textfield"
-              type="number"
-              size="small"
-              value={activity.data.totalSchoolStudent}
-              onChange={dataChange('totalSchoolStudent')}
-              helperText={isError && activity.data.totalSchoolStudent === 0 ? 'Ce champ est obligatoire' : ''}
-              error={isError && activity.data.totalSchoolStudent === 0}
-              inputProps={{ min: 0 }}
-            />{' '}
-            <span> élèves.</span>
+            <div className="se-presenter-step-one__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0' }}>
+              <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Nous sommes</span>
+              <TextField
+                className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
+                style={{ flex: 1 }}
+                fullWidth
+                placeholder={labelPresentation}
+                value={data.presentation}
+                onChange={dataChange('presentation')}
+                error={isError && !data.presentation}
+                helperText={isError && !data.presentation ? 'Ce champ est obligatoire' : ''}
+              />
+            </div>
+            <div className="se-presenter-step-one__line">
+              <span>Nous sommes </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                inputProps={{ min: 0 }}
+                onFocus={onFocusInput('totalStudent')}
+                size="small"
+                value={data.totalStudent ?? ''}
+                onChange={dataChange('totalStudent')}
+                helperText={errorMessage(data.girlStudent, data.boyStudent, data.totalStudent)}
+                error={
+                  isError &&
+                  (!isValidSum(data.girlStudent, data.boyStudent, data.totalStudent) || data.totalStudent === 0 || data.totalStudent === null)
+                }
+              />{' '}
+              <span> élève{pluralS(data.totalStudent)}, dont </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                onFocus={onFocusInput('girlStudent')}
+                value={data.girlStudent ?? ''}
+                onChange={dataChange('girlStudent')}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> fille{pluralS(data.girlStudent)} et </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.boyStudent ?? ''}
+                onFocus={onFocusInput('boyStudent')}
+                onChange={dataChange('boyStudent')}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> garçon{pluralS(data.boyStudent)}.</span>
+            </div>
+            <div className="se-presenter-step-one__line">
+              <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.meanAge ?? ''}
+                onFocus={onFocusInput('meanAge')}
+                onChange={dataChange('meanAge')}
+                helperText={isError && (data.meanAge === 0 || data.meanAge === null) ? 'Ce champ est obligatoire' : ''}
+                error={isError && (data.meanAge === 0 || data.meanAge === null)}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> an{pluralS(data.meanAge)}.</span>
+            </div>
+            <div className="se-presenter-step-one__line">
+              <span>Nous avons </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.totalTeacher ?? ''}
+                onFocus={onFocusInput('totalTeacher')}
+                onChange={dataChange('totalTeacher')}
+                helperText={errorMessage(data.womanTeacher, data.manTeacher, data.totalTeacher)}
+                error={
+                  isError &&
+                  (!isValidSum(data.womanTeacher, data.manTeacher, data.totalTeacher) || data.totalTeacher === 0 || data.totalTeacher === null)
+                }
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> professeur{pluralS(data.totalTeacher)}, dont </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.womanTeacher ?? ''}
+                onFocus={onFocusInput('womanTeacher')}
+                onChange={dataChange('womanTeacher')}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> femme{pluralS(data.womanTeacher)} et </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.manTeacher ?? ''}
+                onFocus={onFocusInput('manTeacher')}
+                onChange={dataChange('manTeacher')}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> homme{pluralS(data.manTeacher)}.</span>
+            </div>
+            <div className="se-presenter-step-one__line">
+              <span>Dans notre école, il y a </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.numberClassroom ?? ''}
+                onFocus={onFocusInput('numberClassroom')}
+                onChange={dataChange('numberClassroom')}
+                helperText={isError && (data.numberClassroom === 0 || data.numberClassroom === null) ? 'Ce champ est obligatoire' : ''}
+                error={isError && (data.numberClassroom === 0 || data.numberClassroom === null)}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> classe{pluralS(data.numberClassroom)} et </span>{' '}
+              <TextField
+                className="se-presenter-step-one__textfield"
+                type="number"
+                size="small"
+                value={data.totalSchoolStudent ?? ''}
+                onFocus={onFocusInput('totalSchoolStudent')}
+                onChange={dataChange('totalSchoolStudent')}
+                helperText={isError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null) ? 'Ce champ est obligatoire' : ''}
+                error={isError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null)}
+                inputProps={{ min: 0 }}
+              />{' '}
+              <span> élève{pluralS(data.totalSchoolStudent)}.</span>
+            </div>
           </div>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Button component="a" onClick={onNext} variant="outlined" color="primary">
