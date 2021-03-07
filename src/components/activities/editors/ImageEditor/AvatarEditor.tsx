@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ButtonBase } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import { AvatarView } from 'src/components/activities/views/AvatarView';
@@ -15,9 +16,9 @@ export const AvatarEditor: React.FC<EditorProps> = ({ id, value = '', onChange =
 
   return (
     <>
-      <AvatarView value={imageUrl} onClick={() => setIsModalOpen(true)}>
-        {imageUrl || <AddIcon style={{ fontSize: '80px' }} />}
-      </AvatarView>
+      <ButtonBase onClick={() => setIsModalOpen(true)} style={{ borderRadius: '50%' }}>
+        <AvatarView value={imageUrl}>{imageUrl || <AddIcon style={{ fontSize: '80px' }} />}</AvatarView>
+      </ButtonBase>
       <ImageModal
         id={id}
         value={value}

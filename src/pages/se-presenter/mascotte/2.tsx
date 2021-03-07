@@ -53,30 +53,40 @@ const MascotteStep2: React.FC = () => {
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
-                <Box display="flex" justifyContent="center" m={4}>
+                <Box display="flex" justifyContent="center" m={2}>
                   <AvatarEditor id={1} value={activity.data.mascotteImage as string} onChange={imageChange} />
                 </Box>
-                <p>Images de votre mascotte</p>
+                <p className="text-center" style={{ marginTop: '-10px' }}>
+                  Image de votre mascotte
+                </p>
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
                 <TextField
                   error={isError && activity.data.mascotteName === ''}
-                  helperText={isError && activity.data.mascotteName === '' && 'entrez un nom pour votre mascotte'}
+                  helperText={isError && activity.data.mascotteName === '' && 'Entrez un nom pour votre mascotte'}
                   value={activity.data.mascotteName}
                   onChange={dataChange('mascotteName')}
-                  label="nom"
+                  label="Nom"
                   variant="outlined"
+                  placeholder="Pelico"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
                 <p>Quel animal est votre mascotte et pourquoi l’avoir choisi ?</p>
                 <TextField
                   error={isError && activity.data.mascotteDescription === ''}
-                  helperText={isError && activity.data.mascotteDescription === '' && 'entrez une description pour votre mascotte'}
+                  helperText={isError && activity.data.mascotteDescription === '' && 'Entrez une description pour votre mascotte'}
                   value={activity.data.mascotteDescription}
                   onChange={dataChange('mascotteDescription')}
-                  label="description"
+                  label="Description"
                   multiline
                   variant="outlined"
+                  placeholder="C'est un Toucan !"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   style={{ width: '100%' }}
                 />
                 <p>3 traits de personnalités de votre mascotte (et donc des élèves !)</p>
@@ -85,7 +95,7 @@ const MascotteStep2: React.FC = () => {
                     <TextField
                       error={isError && activity.data.personality1 === ''}
                       value={activity.data.personality1}
-                      helperText={isError && activity.data.personality1 === '' && 'entrez une personnalité pour votre mascotte'}
+                      helperText={isError && activity.data.personality1 === '' && 'Entrez une personnalité pour votre mascotte'}
                       onChange={dataChange('personality1')}
                       label="1"
                       variant="outlined"
@@ -95,7 +105,7 @@ const MascotteStep2: React.FC = () => {
                   <Grid item xs={12} md={4}>
                     <TextField
                       error={isError && activity.data.personality2 === ''}
-                      helperText={isError && activity.data.personality2 === '' && 'entrez une personnalité pour votre mascotte'}
+                      helperText={isError && activity.data.personality2 === '' && 'Entrez une personnalité pour votre mascotte'}
                       value={activity.data.personality2}
                       onChange={dataChange('personality2')}
                       label="2"
@@ -106,7 +116,7 @@ const MascotteStep2: React.FC = () => {
                   <Grid item xs={12} md={4}>
                     <TextField
                       error={isError && activity.data.personality3 === ''}
-                      helperText={isError && activity.data.personality3 === '' && 'entrez une personnalité pour votre mascotte'}
+                      helperText={isError && activity.data.personality3 === '' && 'Entrez une personnalité pour votre mascotte'}
                       value={activity.data.personality3}
                       onChange={dataChange('personality3')}
                       label="3"
