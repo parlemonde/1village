@@ -35,8 +35,7 @@ const MascotteStep4: React.FC = () => {
 
   const displayableCurrencies: string[] = React.useMemo(
     () =>
-      activity &&
-      currencies.filter((currency) => (activity.data.currencies as string[]).includes(currency.alphabeticCode)).map((currency) => currency.currency),
+      activity && currencies.filter((currency) => (activity.data.currencies as string[]).includes(currency.code)).map((currency) => currency.name),
     [currencies, activity],
   );
 
@@ -110,7 +109,6 @@ const MascotteStep4: React.FC = () => {
           ? ' utilise comme monnaie : ' + [].concat(displayableCurrencies).map(naturalJoinArray).join('') + '.'
           : " n'utilise aucune monnaie."
       }
-      .
     </p>
     <p>
       ${activity.data.mascotteName} est allé ou rêve d’aller dans

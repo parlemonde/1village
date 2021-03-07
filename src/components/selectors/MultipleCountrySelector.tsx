@@ -73,6 +73,7 @@ export const MultipleCountrySelector: React.FC<MultipleCountrySelectorProps> = (
             ...params.inputProps,
             autoComplete: 'off', // disable autocomplete and autofill
           }}
+          variant="outlined"
           label={label}
           type="search"
         />

@@ -73,6 +73,7 @@ export const MultipleLanguageSelector: React.FC<MultipleLanguageSelectorProps> =
             ...params.inputProps,
             autoComplete: 'off', // disable autocomplete and autofill
           }}
+          variant="outlined"
           label={label}
           type="search"
         />

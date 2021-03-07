@@ -47,23 +47,29 @@ const MascotteStep3: React.FC = () => {
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
-                <p>Quelles langues parle {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?</p>
+                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+                  Quelles langues parle {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                </p>
                 <MultipleLanguageSelector
-                  label={'langues'}
+                  label="Langues"
                   style={{ width: '100%', marginBottom: '1rem' }}
                   value={activity.data.languages as string[]}
                   onChange={dataChange('languages')}
                 />
-                <p>Quelles monnaies utilise {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?</p>
+                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+                  Quelles monnaies utilise {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                </p>
                 <MultipleCurrencySelector
-                  label={'monnaies'}
+                  label="Monnaies"
                   style={{ width: '100%', marginBottom: '1rem' }}
                   value={activity.data.currencies as string[]}
                   onChange={dataChange('currencies')}
                 />
-                <p>Dans quel pays {activity.data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller ?</p>
+                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+                  Dans quel pays {activity.data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
+                </p>
                 <MultipleCountrySelector
-                  label={'pays'}
+                  label="Pays"
                   style={{ width: '100%', marginBottom: '1rem' }}
                   value={activity.data.countries as string[]}
                   onChange={dataChange('countries')}

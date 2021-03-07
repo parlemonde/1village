@@ -7,7 +7,7 @@ const languageController = new Controller('/languages');
 
 //--- Get all languages ---
 languageController.get({ path: '', userType: UserType.TEACHER }, async (_req, res) => {
-  res.sendJSON(languages);
+  res.sendJSON(languages.filter((l) => l.alpha2 !== ''));
 });
 
 export { languageController };

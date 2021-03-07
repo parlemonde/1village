@@ -29,11 +29,11 @@ export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> =
   const options: CurrencyOption[] = React.useMemo(
     () =>
       currencies
-        .filter(filterCurrencies ? (c) => filterCurrencies.find((c2) => c2.toLowerCase() === c.alphabeticCode.toLowerCase()) : () => true)
+        .filter(filterCurrencies ? (c) => filterCurrencies.find((c2) => c2.toLowerCase() === c.code.toLowerCase()) : () => true)
         // Filter duplicates
-        .filter((currencys, index, self) => self.findIndex((t) => t.alphabeticCode == currencys.alphabeticCode) === index)
+        .filter((currencys, index, self) => self.findIndex((t) => t.code == currencys.code) === index)
         .map((option) => {
-          const firstLetter = option.alphabeticCode[0].toUpperCase();
+          const firstLetter = option.name[0].toUpperCase();
           return {
             firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
             ...option,
@@ -44,7 +44,7 @@ export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> =
 
   const [option, setOption] = React.useState<CurrencyOption[] | null>([]);
   React.useEffect(() => {
-    const newOption = options.filter((o) => value.includes(o.alphabeticCode)) || null;
+    const newOption = options.filter((o) => value.includes(o.code)) || null;
     setOption(newOption);
   }, [options, value, currencies, filterCurrencies, onChange]);
 
@@ -54,7 +54,7 @@ export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> =
         setOption(newOption);
       }
       if (onChange) {
-        onChange(newOption ? newOption.map((o) => o.alphabeticCode) : null);
+        onChange(newOption ? newOption.map((o) => o.code) : null);
       }
     },
     [value, onChange],
@@ -66,7 +66,7 @@ export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> =
       groupBy={(option) => option.firstLetter}
       style={style}
       value={option}
-      getOptionLabel={(option) => option.currency}
+      getOptionLabel={(option) => option.name}
       onChange={onChangeOption}
       renderInput={(params) => (
         <TextField
@@ -75,6 +75,7 @@ export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> =
             ...params.inputProps,
             autoComplete: 'off', // disable autocomplete and autofill
           }}
+          variant="outlined"
           label={label}
           type="search"
         />
