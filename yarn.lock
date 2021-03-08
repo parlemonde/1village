@@ -18,6 +18,7 @@ __metadata:
     "@types/cookie-parser": ^1.4.2
     "@types/cors": ^2.8.9
     "@types/cpx": ^1
+    "@types/croppie": ^2
     "@types/draft-js": ^0
     "@types/draftjs-to-html": ^0
     "@types/eslint": ^7.2.6
@@ -57,6 +58,7 @@ __metadata:
     cookie-parser: ^1.4.5
     cors: ^2.8.5
     cpx: ^1.5.0
+    croppie: ^2.6.5
     csrf: ^3.1.0
     dotenv: ^8.2.0
     draft-js: ^0.11.7
@@ -1945,6 +1947,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: a9dfa297433b46c104af2e9e74f7057a04bddbc8e151f82d0be10eda71381a95e9740dd15483ece8d67a992501f3e4ea9034ff1f048ab1d9b955bb4cce773620
+  languageName: node
+  linkType: hard
+
+"@types/croppie@npm:^2":
+  version: 2.5.6
+  resolution: "@types/croppie@npm:2.5.6"
+  checksum: 4238304270caa3ba0e5e36bab09a10f91c39e178ad47426646df1be1d974368ecf20d0f88b74ef7f9ad00a752187cfaf0d64eb20de76167008d25324d8b80b43
   languageName: node
   linkType: hard
 
@@ -4853,6 +4862,13 @@ __metadata:
     safe-buffer: ^5.0.1
     sha.js: ^2.4.8
   checksum: 98957676a93081678a2a915ae14898d65aac9b5651ffa55b8888484dd9d79c06d3cb3f85b137cd833ab536d87adee17394bb2b0efc591ea0e34110266d5bcd75
+  languageName: node
+  linkType: hard
+
+"croppie@npm:^2.6.5":
+  version: 2.6.5
+  resolution: "croppie@npm:2.6.5"
+  checksum: 1a353f3509352f02a9de28f6ecab2ea52adcf1f4cd4286e6ffe785ae49ad56c182abef25f7c5ccc62751b6b47d942d38a3fd7e46adeb774b78771c5ba03943dd
   languageName: node
   linkType: hard
 

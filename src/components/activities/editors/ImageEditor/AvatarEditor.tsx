@@ -28,6 +28,7 @@ export const AvatarEditor: React.FC<EditorProps> = ({ id, value = '', onChange =
         setIsModalOpen={setIsModalOpen}
         imageUrl={imageUrl}
         setImageUrl={setImageUrl}
+        useCrop
       />
     </>
   );
