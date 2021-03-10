@@ -17,10 +17,11 @@ const MascotteStep2: React.FC = () => {
 
   React.useEffect(() => {
     if (!activity && !('activity-id' in router.query)) {
-      router.push('/se-presenter/mascotte/1');
+      router.push('/se-presenter');
     }
   }, [activity, router]);
 
+  const isEdit = activity !== null && activity.id !== 0;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +29,7 @@ const MascotteStep2: React.FC = () => {
     const newData = { ...data, [key]: value };
     updateActivity({ data: newData });
   };
+
   const imageChange = (image: string) => {
     const newData = { ...data, mascotteImage: image };
     updateActivity({ data: newData });
@@ -61,7 +63,7 @@ const MascotteStep2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter/mascotte/1" />
+        <BackButton href="/se-presenter/mascotte/1" label={isEdit ? `Modifier` : 'Retour'} />
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={1} />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Qui êtes-vous ? Choisissez une mascotte pour vous représenter collectivement !</h1>

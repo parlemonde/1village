@@ -7,7 +7,6 @@ import { isMascotte } from 'src/activities/presentation.const';
 import { AvatarView } from 'src/components/activities/views/AvatarView';
 
 import { ActivityViewProps } from './editing.types';
-import { TextView } from './views/TextView';
 
 export const MascotteActivityView: React.FC<ActivityViewProps> = ({ activity }: ActivityViewProps) => {
   if (!isPresentation(activity)) {

@@ -29,6 +29,7 @@ const MascotteStep1: React.FC = () => {
     }
   }, [activity, countries, user, createActivityIfNotExist]);
 
+  const isEdit = activity !== null && activity.id !== 0;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +95,7 @@ const MascotteStep1: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter" />
+        {!isEdit && <BackButton href="/se-presenter" />}
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={0} />
         <div className="width-900">
           <h1>Qui est dans votre classe ?</h1>

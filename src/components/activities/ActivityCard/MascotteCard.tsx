@@ -5,6 +5,7 @@ import { Button, Box } from '@material-ui/core';
 
 import { PresentationMascotteActivity } from 'src/activities/presentation.types';
 import { AvatarView } from 'src/components/activities/views/AvatarView';
+import { bgPage } from 'src/styles/variables.const';
 
 import { RedButton } from '../../buttons/RedButton';
 
@@ -26,11 +27,29 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
         justifyContent: 'flex-start',
       }}
     >
-      <div style={{ margin: '0.25rem', flex: 1 }}>
-        <Box alignItems="center" flexDirection="horizontal" display="flex" justifyContent="left" m={2}>
+      <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
+        <div
+          style={{
+            minHeight: '5rem',
+            height: '100%',
+            padding: '0.1rem 0',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: bgPage,
+          }}
+        >
           <AvatarView size="medium" value={activity.data.mascotteImage} />
-          <h3 style={{ marginLeft: '1rem' }}>Notre Mascotte {activity.data.mascotteName}</h3>
-        </Box>
+        </div>
+      </div>
+      <div style={{ margin: '0.25rem', flex: 1 }}>
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Présentation de notre mascotte</h3>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
+          <div className="text">
+            Notre Mascotte <strong>{activity.data.mascotteName}</strong>
+          </div>
+        </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
             {isSelf && showEditButtons && (
@@ -51,12 +70,16 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
                 </RedButton>
               </>
             )}
-            <CommentIcon count={activity.commentCount} />
-            <Link href={`/activity/${activity.id}`}>
-              <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
-                Regarder la présentation
-              </Button>
-            </Link>
+            {!showEditButtons && (
+              <>
+                <CommentIcon count={activity.commentCount} />
+                <Link href={`/activity/${activity.id}`}>
+                  <Button component="a" color="primary" variant="outlined" href={`/activity/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
+                    Regarder la présentation
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         )}
       </div>

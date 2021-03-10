@@ -3,16 +3,27 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { isPresentation } from 'src/activities/anyActivity';
+import { isMascotte } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const PresentationSuccess: React.FC = () => {
+  const { activity } = React.useContext(ActivityContext);
+
+  if (!isPresentation(activity)) {
+    return <Base>{null}</Base>;
+  }
+
+  const isMascotteActivity = isMascotte(activity);
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">Votre présentation a bien été publiée !</p>
+          <p className="text">{isMascotteActivity ? 'Votre mascotte a bien été publiée !' : 'Votre présentation a bien été publiée !'}</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">

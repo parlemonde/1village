@@ -181,6 +181,29 @@ activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req:
   res.sendJSON(activity);
 });
 
+activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res, next) => {
+  if (req.user && req.user.type >= UserType.MEDIATOR) {
+    // no mascotte for pelico
+    next();
+    return;
+  }
+  const activityId =
+    (
+      await getRepository(Activity).findOne({
+        where: { userId: req.user?.id ?? 0, type: `${ActivityType.PRESENTATION}`, subType: `${ActivitySubType.MASCOTTE}` },
+      })
+    )?.id ?? null;
+  let activity: Activity | undefined;
+  if (activityId !== null) {
+    activity = await getActivity(activityId);
+  }
+  if (activity === undefined) {
+    next();
+    return;
+  }
+  res.sendJSON(activity);
+});
+
 // --- Create an activity ---
 type CreateActivityData = {
   type: ActivityType;

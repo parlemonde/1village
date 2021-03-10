@@ -29,7 +29,7 @@ const MascotteStep4: React.FC = () => {
 
   React.useEffect(() => {
     if (!activity && !('activity-id' in router.query)) {
-      router.push('/se-presenter/mascotte/1');
+      router.push('/se-presenter');
     }
   }, [activity, router, addContent, updateActivity]);
 
@@ -86,7 +86,7 @@ const MascotteStep4: React.FC = () => {
     setIsLoading(true);
     const success = await save();
     if (success) {
-      router.push('/');
+      router.push('/se-presenter/success');
     }
     setIsLoading(false);
   };
@@ -102,7 +102,7 @@ const MascotteStep4: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter/mascotte/3" label={isEdit ? 'Modifier' : 'Retour'} />
+        <BackButton href="/se-presenter/mascotte/3" label={isEdit ? `Modifier` : 'Retour'} />
         <Steps
           steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
           activeStep={3}
@@ -116,7 +116,7 @@ const MascotteStep4: React.FC = () => {
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
+            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
               <Button variant="outlined" color="primary" onClick={onPublish}>
                 Enregistrer les changements
               </Button>
