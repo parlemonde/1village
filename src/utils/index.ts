@@ -122,3 +122,28 @@ export function htmlToText(html: string): string {
   [...tmp.children].forEach(addDotToElement);
   return tmp.textContent || tmp.innerText || '';
 }
+
+export function naturalJoin(array: Array<string>): string {
+  return array
+    .map((element: string, index: number) => {
+      if (array.length < 2) {
+        return element;
+      }
+      if (index === array.length - 2) {
+        return element + ' et ';
+      }
+      if (index === array.length - 1) {
+        return element;
+      }
+      return element + ', ';
+    })
+    .join('');
+}
+
+export function pluralS(value: number): string {
+  return value > 1 ? 's' : '';
+}
+
+export const capitalize = (s: string): string => {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};

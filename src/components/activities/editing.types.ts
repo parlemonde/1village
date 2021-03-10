@@ -1,24 +1,4 @@
-import { Activity } from 'types/activity.type';
-import { Country } from 'types/country.type';
-import { Currency } from 'types/currency.type';
-import { Language } from 'types/language.type';
-
-type SimpleObject = { [key: string]: string | number | boolean } | string | number | boolean | Country | Language | Currency;
-export type ExtendedActivityData = { [key: string]: string | number | boolean | SimpleObject[] };
-
-export type ExtendedActivity = Activity & {
-  data: ExtendedActivityData;
-  processedContent: Array<EditorContent>;
-  dataId: number;
-};
-
-export type EditorTypes = 'text' | 'video' | 'image' | 'h5p';
-
-export type EditorContent = {
-  id: number;
-  type: EditorTypes;
-  value: string;
-};
+import type { AnyActivity } from 'src/activities/anyActivities.types';
 
 export interface EditorProps {
   id: number;
@@ -33,5 +13,5 @@ export interface ViewProps {
 }
 
 export interface ActivityViewProps {
-  activity: ExtendedActivity;
+  activity: AnyActivity;
 }

@@ -44,6 +44,9 @@ const MascotteStep2: React.FC = () => {
   const isValid = (): boolean => {
     if (data.mascotteName === '') return false;
     if (data.mascotteDescription === '') return false;
+    if (data.personality1 === '') return false;
+    if (data.personality2 === '') return false;
+    if (data.personality3 === '') return false;
     return true;
   };
 

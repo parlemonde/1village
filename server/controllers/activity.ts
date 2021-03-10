@@ -63,7 +63,7 @@ const getActivities = async ({
   limit = 200,
   page = 0,
   villageId,
-  type = 0,
+  type = -1,
   subType = null,
   countries = [],
   pelico = true,
@@ -159,7 +159,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined,
     countries: req.query.countries ? getQueryString(req.query.countries).split(',') : undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
-    type: req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : undefined,
+    type: req.query.type ? parseInt(getQueryString(req.query.type), 10) ?? -1 : undefined,
     subType: req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : undefined,
     userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
   });

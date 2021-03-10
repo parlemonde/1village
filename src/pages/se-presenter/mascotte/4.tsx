@@ -4,6 +4,8 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
+import { getMascotteContent } from 'src/activities/presentation.const';
+import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { AvatarView } from 'src/components/activities/views/AvatarView';
@@ -20,28 +22,65 @@ const MascotteStep4: React.FC = () => {
   const { countries } = useCountries();
   const { languages } = useLanguages();
   const { currencies } = useCurrencies();
-
-  const displayableCountries: string[] = React.useMemo(
-    () => activity && countries.filter((country) => (activity.data.countries as string[]).includes(country.isoCode)).map((country) => country.name),
-    [countries, activity],
-  );
-
-  const displayableLanguages: string[] = React.useMemo(
-    () =>
-      activity &&
-      languages.filter((language) => (activity.data.languages as string[]).includes(language.alpha3_b)).map((language) => language.french),
-    [languages, activity],
-  );
-
-  const displayableCurrencies: string[] = React.useMemo(
-    () =>
-      activity && currencies.filter((currency) => (activity.data.currencies as string[]).includes(currency.code)).map((currency) => currency.name),
-    [currencies, activity],
-  );
-
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0;
+  const data = (activity?.data as MascotteData) || null;
+
+  React.useEffect(() => {
+    if (!activity && !('activity-id' in router.query)) {
+      router.push('/se-presenter/mascotte/1');
+    }
+  }, [activity, router, addContent, updateActivity]);
+
+  const content = React.useMemo(() => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)), [
+    data,
+    countries,
+    languages,
+    currencies,
+  ]);
+
+  const prevContent = React.useRef<string[] | null>(null);
+  React.useEffect(() => {
+    if (!activity || prevContent.current === content) {
+      return;
+    }
+    prevContent.current = content;
+    const newContent = [...activity.processedContent];
+    // 1
+    if (newContent.length > 0 && content.length > 0) {
+      newContent[0].value = content[0];
+    } else if (content.length > 0) {
+      newContent.push({
+        type: 'text',
+        value: content[0],
+        id: 1,
+      });
+    }
+
+    // 2
+    if (newContent.length > 1 && content.length > 1) {
+      newContent[1].value = content[1];
+    } else if (content.length > 1) {
+      newContent.push({
+        type: 'text',
+        value: content[1],
+        id: 2,
+      });
+    }
+
+    // 3
+    if (newContent.length > 2 && content.length > 2) {
+      newContent[2].value = content[2];
+    } else if (content.length > 2) {
+      newContent.push({
+        type: 'text',
+        value: content[2],
+        id: 3,
+      });
+    }
+    updateActivity({ processedContent: newContent });
+  }, [activity, content, updateActivity]);
 
   const onPublish = async () => {
     setIsLoading(true);
@@ -52,84 +91,20 @@ const MascotteStep4: React.FC = () => {
     setIsLoading(false);
   };
 
-  React.useEffect(() => {
-    if (!activity && !('activity-id' in router.query)) {
-      router.push('/se-presenter/mascotte/1');
-    }
-  }, [activity, router, addContent, updateActivity]);
-
-  React.useEffect(() => {
-    updateActivity({ processedContent: [] });
-  }, [updateActivity]);
-
-  React.useEffect(() => {
-    if (!activity || !activity.processedContent || activity.processedContent.length !== 0) {
-      return;
-    }
-    addContent(
-      'text',
-      `
-  <p>
-    Nous sommes ${activity.data.presentation}.
-  </p>
-  <p>
-    Nous sommes ${activity.data.totalStudent} élèves, dont ${activity.data.girlStudent} filles et ${activity.data.boyStudent} garçons.
-  </p>
-  <p>En moyenne, l’âge des élèves de notre classe est ${activity.data.meanAge} ans.</p>
-  <p>
-    Nous avons ${activity.data.totalTeacher} professeurs, dont ${activity.data.womanTeacher} femmes et ${activity.data.manTeacher} hommes.
-  </p>
-  <p>
-    Dans notre école, il y a ${activity.data.numberClassroom} classes et ${activity.data.totalSchoolStudent} élèves.
-  </p>`,
+  if (!activity) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
     );
-    addContent(
-      'text',
-      `<p>Notre mascotte s’appelle ${activity.data.mascotteName}, elle nous représente.</p>
-      <p>${activity.data.mascotteDescription}</p>
-      <p>
-        ${activity.data.mascotteName} est ${activity.data.personality1}, ${activity.data.personality2} et ${activity.data.personality3}
-      </p>`,
-    );
-
-    addContent(
-      'text',
-      `<p>
-      ${activity.data.mascotteName}, comme les élèves de notre classe,
-      ${
-        displayableLanguages.length > 0
-          ? ' parle : ' + [].concat(displayableLanguages).map(naturalJoinArray).join('') + '.'
-          : ' ne parle aucune langue.'
-      }
-    </p>
-    <p>
-      ${activity.data.mascotteName}, comme les élèves de notre classe,
-      ${
-        displayableCurrencies.length > 0
-          ? ' utilise comme monnaie : ' + [].concat(displayableCurrencies).map(naturalJoinArray).join('') + '.'
-          : " n'utilise aucune monnaie."
-      }
-    </p>
-    <p>
-      ${activity.data.mascotteName} est allé ou rêve d’aller dans
-      ${displayableCountries.length > 0 ? ' ces pays : ' + [].concat(displayableCountries).map(naturalJoinArray).join('') + '.' : ' aucun pays.'}
-    </p>`,
-    );
-  }, [activity, addContent, displayableCountries, displayableCurrencies, displayableLanguages]);
-
-  if (!activity) return <Base>Redirecting ...</Base>;
+  }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter/mascotte/3" label={isEdit ? 'Modifier' : 'Retour'} />
         <Steps
-          steps={[
-            'Votre classe',
-            'Votre mascotte : ' + activity.data.mascotteName ?? 'mascotteName',
-            'Description de votre mascotte',
-            'Prévisualiser',
-          ]}
+          steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
           activeStep={3}
         />
         <div className="width-900">
@@ -161,7 +136,14 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <div dangerouslySetInnerHTML={{ __html: activity.processedContent[0] && activity.processedContent[0].value }}></div>
+            <div>
+              {content.length > 0 &&
+                content[0].split('\n').map((s, index) => (
+                  <p key={index} style={{ margin: '0.5rem 0' }}>
+                    {s}
+                  </p>
+                ))}
+            </div>
           </div>
           <div className="preview-block">
             <EditButton
@@ -174,11 +156,18 @@ const MascotteStep4: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Box display="flex" justifyContent="center" m={0}>
-                  <AvatarView value={activity.data.mascotteImage as string} />
+                  <AvatarView value={data.mascotteImage} />
                 </Box>
               </Grid>
               <Grid item xs={12} md={9}>
-                <div dangerouslySetInnerHTML={{ __html: activity.processedContent[1] && activity.processedContent[1].value }}></div>
+                <div>
+                  {content.length > 1 &&
+                    content[1].split('\n').map((s, index) => (
+                      <p key={index} style={{ margin: '0.5rem 0' }}>
+                        {s}
+                      </p>
+                    ))}
+                </div>
               </Grid>
             </Grid>
           </div>
@@ -190,7 +179,14 @@ const MascotteStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <div dangerouslySetInnerHTML={{ __html: activity.processedContent[2] && activity.processedContent[2].value }}></div>
+            <div>
+              {content.length > 2 &&
+                content[2].split('\n').map((s, index) => (
+                  <p key={index} style={{ margin: '0.5rem 0' }}>
+                    {s}
+                  </p>
+                ))}
+            </div>
           </div>
         </div>
       </div>
@@ -199,19 +195,6 @@ const MascotteStep4: React.FC = () => {
       </Backdrop>
     </Base>
   );
-};
-
-const naturalJoinArray = (element: string, index: number, array: Array<string>) => {
-  if (array.length < 2) {
-    return element;
-  }
-  if (index === array.length - 2) {
-    return element + ' et ';
-  }
-  if (index === array.length - 1) {
-    return element;
-  }
-  return element + ', ';
 };
 
 export default MascotteStep4;

@@ -2,7 +2,9 @@ import { useRouter } from 'next/router';
 import { useQueryCache } from 'react-query';
 import React from 'react';
 
-import type { ExtendedActivity, ExtendedActivityData, EditorTypes, EditorContent } from 'src/components/activities/editing.types';
+import { AnyActivity, AnyActivityData } from 'src/activities/anyActivities.types';
+import { getAnyActivity } from 'src/activities/anyActivity';
+import type { EditorTypes } from 'src/activities/extendedActivity.types';
 import { serializeToQueryUrl } from 'src/utils';
 import { getQueryString } from 'src/utils';
 import { Activity, ActivityType, ActivitySubType } from 'types/activity.type';
@@ -11,13 +13,13 @@ import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 
 interface ActivityContextValue {
-  activity: ExtendedActivity | null;
-  updateActivity(newActivity: Partial<ExtendedActivity>): void;
-  createNewActivity(type: ActivityType, subType?: ActivitySubType, initialData?: ExtendedActivityData): boolean;
+  activity: AnyActivity | null;
+  updateActivity(newActivity: Partial<AnyActivity>): void;
+  createNewActivity(type: ActivityType, subType?: ActivitySubType, initialData?: AnyActivityData): boolean;
   addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
   save(): Promise<boolean>;
-  createActivityIfNotExist(type: ActivityType, subType: ActivitySubType, initialData?: ExtendedActivityData): void;
+  createActivityIfNotExist(type: ActivityType, subType: ActivitySubType, initialData?: AnyActivityData): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
@@ -26,40 +28,12 @@ interface ActivityContextProviderProps {
   children: React.ReactNode;
 }
 
-export function getExtendedActivity(activity: Activity): ExtendedActivity {
-  let data: ExtendedActivityData = {};
-  let dataId = 0;
-  const processedContent: Array<EditorContent> = [];
-  activity.content.forEach((c) => {
-    if (c.key === 'json') {
-      const decodedValue = JSON.parse(c.value);
-      if (decodedValue.type && decodedValue.type === 'data') {
-        data = decodedValue.data || {};
-        dataId = c.id;
-      }
-      // other json for not data not yet handled
-    } else {
-      processedContent.push({
-        type: c.key,
-        id: c.id,
-        value: c.value,
-      });
-    }
-  });
-  return {
-    ...activity,
-    data,
-    dataId,
-    processedContent,
-  };
-}
-
 export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
   const router = useRouter();
   const queryCache = useQueryCache();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [activity, setActivity] = React.useState<ExtendedActivity | null>(null);
+  const [activity, setActivity] = React.useState<AnyActivity | null>(null);
 
   const currentActivityId = activity === null ? null : activity.id;
 
@@ -72,7 +46,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       if (response.error) {
         router.push('/');
       } else {
-        setActivity(getExtendedActivity(response.data));
+        setActivity(getAnyActivity(response.data));
       }
     },
     [router, axiosLoggedRequest],
@@ -88,16 +62,16 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     }
   }, [getActivity, router, currentActivityId]);
 
-  const updateActivity = React.useCallback((newActivity: Partial<ExtendedActivity>) => {
+  const updateActivity = React.useCallback((newActivity: Partial<AnyActivity>) => {
     setActivity((a) => (a === null ? a : { ...a, ...newActivity }));
   }, []);
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, subType?: ActivitySubType, initialData?: ExtendedActivityData) => {
+    (type: ActivityType, subType?: ActivitySubType, initialData?: AnyActivityData) => {
       if (user === null || village === null) {
         return false;
       }
-      const activity: ExtendedActivity = {
+      const activity: AnyActivity = {
         id: 0,
         type: type,
         subType: subType,
@@ -117,7 +91,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: ActivityType, subType: ActivitySubType, initialData?: ExtendedActivityData) => {
+    async (type: ActivityType, subType: ActivitySubType, initialData?: AnyActivityData) => {
       if (user === null || village === null) {
         return;
       }
@@ -127,7 +101,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         method: 'GET',
         url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
       });
-      if (response.data && response.data.length > 0) setActivity(getExtendedActivity(response.data[0]));
+      if (response.data && response.data.length > 0) setActivity(getAnyActivity(response.data[0]));
       else {
         createNewActivity(type, subType, initialData);
       }
@@ -218,7 +192,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     if (response.error) {
       return false;
     } else {
-      setActivity(getExtendedActivity(response.data));
+      setActivity(getAnyActivity(response.data));
       return true;
     }
   }, [axiosLoggedRequest, getAPIContent, activity]);
@@ -235,7 +209,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     if (response.error) {
       return false;
     }
-    setActivity(getExtendedActivity(response.data));
+    setActivity(getAnyActivity(response.data));
     return true;
   }, [getAPIContent, axiosLoggedRequest, activity]);
 

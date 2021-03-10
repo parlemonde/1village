@@ -1,8 +1,8 @@
 import { useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
-import { ExtendedActivity } from 'src/components/activities/editing.types';
-import { getExtendedActivity } from 'src/contexts/activityContext';
+import { AnyActivity } from 'src/activities/anyActivities.types';
+import { getAnyActivity } from 'src/activities/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
@@ -16,13 +16,13 @@ export type Args = {
   userId?: number;
 };
 
-export const useActivities = ({ pelico, countries, userId, ...args }: Args): { activities: ExtendedActivity[] } => {
+export const useActivities = ({ pelico, countries, userId, ...args }: Args): { activities: AnyActivity[] } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
-  const getActivities: QueryFunction<ExtendedActivity[]> = React.useCallback(async () => {
+  const getActivities: QueryFunction<AnyActivity[]> = React.useCallback(async () => {
     if (!villageId) {
       return [];
     }
@@ -44,14 +44,14 @@ export const useActivities = ({ pelico, countries, userId, ...args }: Args): { a
     if (response.error) {
       return [];
     }
-    return response.data.map(getExtendedActivity);
+    return response.data.map(getAnyActivity);
   }, [args, countries, pelico, userId, villageId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<ExtendedActivity[], unknown>(
+  const { data, isLoading, error } = useQuery<AnyActivity[], unknown>(
     ['activities', { ...args, userId, countries, pelico, villageId }],
     getActivities,
   );
 
-  const prevData = React.useRef<ExtendedActivity[]>([]);
+  const prevData = React.useRef<AnyActivity[]>([]);
   React.useEffect(() => {
     if (data !== undefined) {
       prevData.current = data;

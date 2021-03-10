@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Button, Grid } from '@material-ui/core';
 
+import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -16,16 +17,18 @@ const MascotteStep3: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
 
-  const dataChange = (key: string) => (newValue: string[]) => {
-    const newData = { ...activity.data, [key]: newValue };
-    updateActivity({ data: newData });
-  };
-
   React.useEffect(() => {
     if (!activity && !('activity-id' in router.query)) {
       router.push('/se-presenter/mascotte/1');
     }
   }, [activity, router]);
+
+  const data = (activity?.data as MascotteData) || null;
+
+  const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
+    const newData: MascotteData = { ...data, [key]: newValue };
+    updateActivity({ data: newData });
+  };
 
   if (!activity) return <Base>Redirecting ...</Base>;
 
@@ -34,44 +37,39 @@ const MascotteStep3: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/se-presenter/mascotte/2" />
         <Steps
-          steps={[
-            'Votre classe',
-            'Votre mascotte : ' + activity.data.mascotteName ?? 'mascotteName',
-            'Description de votre mascotte',
-            'Prévisualiser',
-          ]}
+          steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
           activeStep={2}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
-          <h1>Dites-en plus sur vous-mêmes et votre mascotte ! Souvenez-vous {activity.data.mascotteName ?? 'mascotteName'} vous représente.</h1>
+          <h1>Dites-en plus sur vous-mêmes et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles langues parle {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                  Quelles langues parle {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={activity.data.languages as string[]}
+                  value={data.languages}
                   onChange={dataChange('languages')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles monnaies utilise {activity.data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                  Quelles monnaies utilise {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
                 </p>
                 <MultipleCurrencySelector
                   label="Monnaies"
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={activity.data.currencies as string[]}
+                  value={data.currencies}
                   onChange={dataChange('currencies')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Dans quel pays {activity.data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
+                  Dans quel pays {data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
                 </p>
                 <MultipleCountrySelector
                   label="Pays"
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={activity.data.countries as string[]}
+                  value={data.countries}
                   onChange={dataChange('countries')}
                 />
               </Grid>

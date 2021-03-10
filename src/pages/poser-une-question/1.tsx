@@ -3,9 +3,10 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { isQuestion } from 'src/activities/anyActivity';
+import { QuestionActivity } from 'src/activities/question.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { ExtendedActivity } from 'src/components/activities/editing.types';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -59,7 +60,7 @@ const Question1: React.FC = () => {
     }
   };
 
-  const onAskSame = (activity: ExtendedActivity, askSame: number[]) => async () => {
+  const onAskSame = (activity: QuestionActivity, askSame: number[]) => async () => {
     if (!user || !user.id) {
       return;
     }
@@ -97,7 +98,7 @@ const Question1: React.FC = () => {
 
           {questions.map((question, index) => {
             const activity = activities[question.activityIndex];
-            if (!activity) {
+            if (!activity || !isQuestion(activity)) {
               return null;
             }
             const questionUser = users[userMap[activity.userId]];

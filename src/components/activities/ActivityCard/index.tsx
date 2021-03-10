@@ -2,6 +2,9 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
+import { AnyActivity } from 'src/activities/anyActivities.types';
+import { isPresentation, isQuestion } from 'src/activities/anyActivity';
+import { isMascotte, isThematique } from 'src/activities/presentation.const';
 import { Flag } from 'src/components/Flag';
 import { primaryColor } from 'src/styles/variables.const';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
@@ -11,7 +14,7 @@ import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { getGravatarUrl, toDate } from 'src/utils';
-import { ActivitySubType, ActivityType } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 import { MascotteCard } from './MascotteCard';
@@ -34,14 +37,14 @@ const icons = {
   [ActivityType.QUESTION]: QuestionIcon,
 };
 
-export const ActivityCard: React.FC<ActivityCardProps> = ({
+export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
   activity,
   user,
   isSelf = false,
   noButtons = false,
   showEditButtons = false,
   onDelete = () => {},
-}: ActivityCardProps) => {
+}: ActivityCardProps<AnyActivity>) => {
   if (!user) {
     return null;
   }
@@ -73,10 +76,10 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem' }} height="45px" />}
       </div>
       <div className="activity-card__content">
-        {activity.type === ActivityType.PRESENTATION && activity.subType === ActivitySubType.MASCOTTE && (
+        {isPresentation(activity) && isMascotte(activity) && (
           <MascotteCard activity={activity} user={user} isSelf={isSelf} noButtons={noButtons} showEditButtons={showEditButtons} onDelete={onDelete} />
         )}
-        {activity.type === ActivityType.PRESENTATION && activity.subType !== ActivitySubType.MASCOTTE && (
+        {isPresentation(activity) && isThematique(activity) && (
           <PresentationCard
             activity={activity}
             user={user}
@@ -86,7 +89,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             onDelete={onDelete}
           />
         )}
-        {activity.type === ActivityType.QUESTION && (
+        {isQuestion(activity) && (
           <QuestionCard activity={activity} user={user} isSelf={isSelf} noButtons={noButtons} showEditButtons={showEditButtons} onDelete={onDelete} />
         )}
       </div>

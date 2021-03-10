@@ -7,16 +7,12 @@ import { DEFAULT_MASCOTTE_DATA } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { ExtendedActivityData } from 'src/components/activities/editing.types';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
+import { pluralS } from 'src/utils';
 import { ActivityType, ActivitySubType } from 'types/activity.type';
-
-const pluralS = (value: number): string => {
-  return value > 1 ? 's' : '';
-};
 
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
@@ -29,7 +25,7 @@ const MascotteStep1: React.FC = () => {
 
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
-      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, DEFAULT_MASCOTTE_DATA);
+      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, DEFAULT_MASCOTTE_DATA).catch(console.error);
     }
   }, [activity, countries, user, createActivityIfNotExist]);
 
@@ -41,7 +37,7 @@ const MascotteStep1: React.FC = () => {
   };
   const onFocusInput = (key: keyof MascotteData) => () => {
     if (data[key] === 0) {
-      const newData: ExtendedActivityData = { ...data, [key]: null };
+      const newData: MascotteData = { ...data, [key]: null };
       updateActivity({ data: newData });
     }
   };

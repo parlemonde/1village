@@ -1,8 +1,8 @@
-import type { ExtendedActivity } from 'src/components/activities/editing.types';
+import { AnyActivity } from 'src/activities/anyActivities.types';
 import type { User } from 'types/user.type';
 
-export interface ActivityCardProps {
-  activity: ExtendedActivity;
+export interface ActivityCardProps<T extends AnyActivity> {
+  activity: T;
   user?: User;
   isSelf?: boolean;
   showEditButtons?: boolean;

@@ -1,10 +1,10 @@
 import { ReactSortable } from 'react-sortablejs';
 import React from 'react';
 
+import type { EditorContent } from 'src/activities/extendedActivity.types';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 import { AddContentCard } from './AddContentCard';
-import type { EditorContent } from './editing.types';
 import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';

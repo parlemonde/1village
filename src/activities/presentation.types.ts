@@ -1,6 +1,4 @@
-import { Country } from 'types/country.type';
-import { Currency } from 'types/currency.type';
-import { Language } from 'types/language.type';
+import { GenericExtendedActivity } from './extendedActivity.types';
 
 export type MascotteData = {
   presentation: string;
@@ -19,7 +17,17 @@ export type MascotteData = {
   personality1: string;
   personality2: string;
   personality3: string;
-  countries: Country[];
-  languages: Language[];
-  currencies: Currency[];
+  countries: string[];
+  languages: string[];
+  currencies: string[];
 };
+
+export type ThematiqueData = {
+  theme: number;
+};
+
+export type PresentationMascotteActivity = GenericExtendedActivity<MascotteData>;
+
+export type PresentationThematiqueActivity = GenericExtendedActivity<ThematiqueData>;
+
+export type PresentationActivity = PresentationMascotteActivity | PresentationThematiqueActivity;

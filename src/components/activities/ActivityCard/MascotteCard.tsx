@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Button, Box } from '@material-ui/core';
 
+import { PresentationMascotteActivity } from 'src/activities/presentation.types';
 import { AvatarView } from 'src/components/activities/views/AvatarView';
 
 import { RedButton } from '../../buttons/RedButton';
@@ -10,7 +11,13 @@ import { RedButton } from '../../buttons/RedButton';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const MascotteCard: React.FC<ActivityCardProps> = ({ activity, isSelf, noButtons, showEditButtons, onDelete }: ActivityCardProps) => {
+export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivity>> = ({
+  activity,
+  isSelf,
+  noButtons,
+  showEditButtons,
+  onDelete,
+}: ActivityCardProps<PresentationMascotteActivity>) => {
   return (
     <div
       style={{
@@ -21,7 +28,7 @@ export const MascotteCard: React.FC<ActivityCardProps> = ({ activity, isSelf, no
     >
       <div style={{ margin: '0.25rem', flex: 1 }}>
         <Box alignItems="center" flexDirection="horizontal" display="flex" justifyContent="left" m={2}>
-          <AvatarView size="medium" value={activity.data.mascotteImage as string} />
+          <AvatarView size="medium" value={activity.data.mascotteImage} />
           <h3 style={{ marginLeft: '1rem' }}>Notre Mascotte {activity.data.mascotteName}</h3>
         </Box>
         {noButtons || (

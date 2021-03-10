@@ -3,15 +3,12 @@ import React from 'react';
 import { ButtonBase, Card } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 
+import type { EditorTypes } from 'src/activities/extendedActivity.types';
 import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
 import TextIcon from 'src/svg/editor/text_icon.svg';
 import VideoIcon from 'src/svg/editor/video_icon.svg';
 import { UserType } from 'types/user.type';
-
-import type { EditorTypes } from './editing.types';
-
-// import { primaryColor } from "src/styles/variables.const";
 
 interface AddContentCardProps {
   addContent?(type: EditorTypes): void;
