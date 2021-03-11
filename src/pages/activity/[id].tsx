@@ -4,6 +4,7 @@ import React from 'react';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { MascotteActivityView } from 'src/components/activities/MascotteActivityView';
@@ -16,8 +17,8 @@ import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import { getGravatarUrl, toDate } from 'src/utils';
-import { getQueryString } from 'src/utils';
+import { getQueryString, getUserDisplayName } from 'src/utils';
+import { toDate } from 'src/utils';
 import { ActivitySubType, ActivityType } from 'types/activity.type';
 import { User, UserType } from 'types/user.type';
 
@@ -75,21 +76,9 @@ const Activity: React.FC = () => {
       <div className="activity__container">
         {activityUser !== null && (
           <div className="activity__header">
-            <img
-              alt="Image de profil"
-              src={getGravatarUrl(activityUser.email)}
-              width="40px"
-              height="40px"
-              style={{ borderRadius: '20px', margin: '0.25rem' }}
-            />
+            <AvatarImg user={activityUser} size="small" style={{ margin: '0.25rem' }} />
             <div className="activity-card__header_info">
-              <h2>
-                {userIsPelico
-                  ? 'Pelico'
-                  : userIsSelf
-                  ? 'Votre classe'
-                  : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`}
-              </h2>
+              <h2>{getUserDisplayName(activityUser, userIsSelf)}</h2>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
                 {userIsPelico ? (

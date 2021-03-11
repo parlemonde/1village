@@ -4,7 +4,7 @@ import { Grid, Box } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
 import { isMascotte } from 'src/activities/presentation.const';
-import { AvatarView } from 'src/components/activities/views/AvatarView';
+import { AvatarImg } from 'src/components/Avatar';
 
 import { ActivityViewProps } from './editing.types';
 
@@ -31,7 +31,7 @@ export const MascotteActivityView: React.FC<ActivityViewProps> = ({ activity }: 
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>
-                <AvatarView value={activity.data.mascotteImage as string} />
+                <AvatarImg src={activity.data.mascotteImage as string} />
               </Box>
             </Grid>
             <Grid item xs={12} md={8}>

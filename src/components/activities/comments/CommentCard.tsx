@@ -3,12 +3,13 @@ import React from 'react';
 
 import { Button, CircularProgress, Paper } from '@material-ui/core';
 
+import { AvatarImg } from 'src/components/Avatar';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
-import { getGravatarUrl } from 'src/utils';
+import { getUserDisplayName } from 'src/utils';
 import type { Comment } from 'types/comment.type';
 import { User, UserType } from 'types/user.type';
 
@@ -32,7 +33,6 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
     return null;
   }
 
-  const isPelico = user.type >= UserType.MEDIATOR;
   const isSelf = user && selfUser && user.id === selfUser.id;
 
   const onEdit = async () => {
@@ -52,15 +52,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
 
   return (
     <div className="activity__comment-container">
-      <img
-        alt="Image de profil"
-        src={getGravatarUrl(user.email)}
-        width="40px"
-        height="40px"
-        className="activity__comment-image"
-        style={{ borderRadius: '20px', margin: '0.25rem' }}
-      />
-
+      <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
       {displayEditor && isSelf ? (
         <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative' }}>
           <TextEditor
@@ -98,9 +90,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
         </div>
       ) : (
         <Paper elevation={2} className="activity__comment-card">
-          <span className="text text--bold">
-            {isPelico ? 'Pelico' : isSelf ? 'Votre classe' : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`}
-          </span>
+          <span className="text text--bold">{getUserDisplayName(user, isSelf)}</span>
           <div dangerouslySetInnerHTML={{ __html: comment.text }} />
           {isSelf && (
             <div style={{ position: 'absolute', right: '0.25rem', top: '0.25rem' }}>

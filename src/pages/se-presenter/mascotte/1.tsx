@@ -11,7 +11,7 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
-import { pluralS } from 'src/utils';
+import { getUserDisplayName, pluralS } from 'src/utils';
 import { ActivityType, ActivitySubType } from 'types/activity.type';
 
 const MascotteStep1: React.FC = () => {
@@ -20,8 +20,7 @@ const MascotteStep1: React.FC = () => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
-  const labelPresentation =
-    `la classe${user.level ? ' ' + user.level : ''}` + `${user.school ? " de l'école " + user.school : ''}` + `${user.city ? ' à ' + user.city : ''}`;
+  const labelPresentation = getUserDisplayName(user, false);
 
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {

@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, Box } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 import { PresentationMascotteActivity } from 'src/activities/presentation.types';
-import { AvatarView } from 'src/components/activities/views/AvatarView';
+import { AvatarImg } from 'src/components/Avatar';
 import { bgPage } from 'src/styles/variables.const';
 
 import { RedButton } from '../../buttons/RedButton';
@@ -40,7 +40,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
             backgroundColor: bgPage,
           }}
         >
-          <AvatarView size="medium" value={activity.data.mascotteImage} />
+          <AvatarImg size="medium" src={activity.data.mascotteImage} />
         </div>
       </div>
       <div style={{ margin: '0.25rem', flex: 1 }}>

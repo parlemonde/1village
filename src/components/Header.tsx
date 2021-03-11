@@ -14,8 +14,9 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
-import { getGravatarUrl } from 'src/utils';
 import { UserType } from 'types/user.type';
+
+import { AvatarImg } from './Avatar';
 
 export const Header: React.FC = () => {
   const router = useRouter();
@@ -112,7 +113,7 @@ export const Header: React.FC = () => {
                 </MenuItem>
               </Menu>
             </div>
-            <img alt="Image de profil" src={getGravatarUrl(user.email)} width="40px" height="40px" style={{ borderRadius: '20px' }} />
+            <AvatarImg user={user} size="small" />
           </div>
         )}
       </div>

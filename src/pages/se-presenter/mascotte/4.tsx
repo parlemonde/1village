@@ -6,9 +6,9 @@ import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
 import { getMascotteContent } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
+import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { AvatarView } from 'src/components/activities/views/AvatarView';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -156,7 +156,7 @@ const MascotteStep4: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Box display="flex" justifyContent="center" m={0}>
-                  <AvatarView value={data.mascotteImage} />
+                  <AvatarImg src={data.mascotteImage} />
                 </Box>
               </Grid>
               <Grid item xs={12} md={9}>

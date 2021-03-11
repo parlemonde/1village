@@ -1,5 +1,7 @@
 import md5 from 'md5';
 
+import { User, UserType } from 'types/user.type';
+
 /**
  * Returns a query string with the given parameters.
  */
@@ -147,3 +149,14 @@ export function pluralS(value: number): string {
 export const capitalize = (s: string): string => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
+
+export function getUserDisplayName(user: User, isSelf: boolean): string {
+  const userIsPelico = user.type >= UserType.MEDIATOR;
+  if (userIsPelico) {
+    return 'Pelico';
+  }
+  if (isSelf) {
+    return 'Votre classe';
+  }
+  return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`);
+}

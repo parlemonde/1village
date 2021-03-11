@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonBase } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import { AvatarView } from 'src/components/activities/views/AvatarView';
+import { AvatarImg } from 'src/components/Avatar';
 
 import type { EditorProps } from '../../editing.types';
 
@@ -17,7 +17,7 @@ export const AvatarEditor: React.FC<EditorProps> = ({ id, value = '', onChange =
   return (
     <>
       <ButtonBase onClick={() => setIsModalOpen(true)} style={{ borderRadius: '50%' }}>
-        <AvatarView value={imageUrl}>{imageUrl || <AddIcon style={{ fontSize: '80px' }} />}</AvatarView>
+        <AvatarImg src={imageUrl}>{imageUrl || <AddIcon style={{ fontSize: '80px' }} />}</AvatarImg>
       </ButtonBase>
       <ImageModal
         id={id}
