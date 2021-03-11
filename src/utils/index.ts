@@ -94,6 +94,10 @@ export function generateTemporaryToken(length: number = 40): string {
 }
 
 export function isValidHttpUrl(value: string): boolean {
+  if (value.slice(0, 11) === '/api/images') {
+    return true;
+  }
+
   let url;
   try {
     url = new URL(value);

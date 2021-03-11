@@ -104,8 +104,8 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
       displayLanguages.length > 0 ? ' parle ' + naturalJoin(displayLanguages) + '.' : ' ne parle aucune langue.'
     }\n${capitalize(data.mascotteName)}, comme les élèves de notre classe, ${
       displayCurrencies.length > 0 ? ' utilise comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilise aucune monnaie."
-    }\n${capitalize(data.mascotteName)} est allé ou rêve d’aller dans ${
-      displayCountries.length > 0 ? ' ces pays : ' + naturalJoin(displayCountries) + '.' : ' aucun pays.'
+    }\n${capitalize(data.mascotteName)}, comme les élèves de notre classe, est allé ou rêve d’aller dans ${
+      displayCountries.length > 0 ? ` ${displayCountries.length === 1 ? 'ce' : 'ces'} pays : ` + naturalJoin(displayCountries) + '.' : ' aucun pays.'
     }`,
   );
   return content;

@@ -17,7 +17,13 @@ const PresentationStep1: React.FC = () => {
 
   const onClick = (index: number) => () => {
     // Check if we don't need to create an activity
-    if (currentActivityId !== -1 && activity !== null && activity.id === currentActivityId && activity.type === ActivityType.PRESENTATION) {
+    if (
+      currentActivityId !== -1 &&
+      activity !== null &&
+      activity.id === currentActivityId &&
+      activity.type === ActivityType.PRESENTATION &&
+      activity.subType === ActivitySubType.THEMATIQUE
+    ) {
       updateActivity({ data: { theme: index } });
       router.push('/se-presenter/thematique/2');
       return;

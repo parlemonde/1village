@@ -18,7 +18,6 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const Question1: React.FC = () => {
   const router = useRouter();

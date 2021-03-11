@@ -47,7 +47,7 @@ const MascotteStep3: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles langues parle {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                  Quelle(s) langue(s) parle {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"
@@ -56,7 +56,7 @@ const MascotteStep3: React.FC = () => {
                   onChange={dataChange('languages')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles monnaies utilise {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                  Quelle(s) monnaie(s) utilise {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
                 </p>
                 <MultipleCurrencySelector
                   label="Monnaies"
@@ -65,7 +65,7 @@ const MascotteStep3: React.FC = () => {
                   onChange={dataChange('currencies')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Dans quel pays {data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
+                  Dans quel(s) pays {data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
                 </p>
                 <MultipleCountrySelector
                   label="Pays"

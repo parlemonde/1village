@@ -24,9 +24,12 @@ const MascotteStep1: React.FC = () => {
 
   React.useEffect(() => {
     if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
-      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, DEFAULT_MASCOTTE_DATA).catch(console.error);
+      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
+        ...DEFAULT_MASCOTTE_DATA,
+        presentation: labelPresentation,
+      }).catch(console.error);
     }
-  }, [activity, countries, user, createActivityIfNotExist]);
+  }, [activity, countries, user, labelPresentation, createActivityIfNotExist]);
 
   const isEdit = activity !== null && activity.id !== 0;
   const data = (activity?.data as MascotteData) || null;

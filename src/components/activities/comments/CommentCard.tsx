@@ -11,7 +11,7 @@ import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import type { Comment } from 'types/comment.type';
-import { User, UserType } from 'types/user.type';
+import { User } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('../editors/TextEditor'), { ssr: false });
 

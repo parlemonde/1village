@@ -46,6 +46,7 @@ export const ImageModal: React.FC<ImageModalProps> = ({
   const [isModalLoading, setIsModalLoading] = React.useState(false);
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
+  const prevUpload = React.useRef<string | null>(null);
 
   // On value change, update image.
   const prevValue = React.useRef(value);
@@ -55,6 +56,18 @@ export const ImageModal: React.FC<ImageModalProps> = ({
       setImageUrl(typeof value === 'string' ? value : URL.createObjectURL(value));
     }
   }, [value, setImageUrl]);
+
+  const prevIsModalOpen = React.useRef<boolean | null>(null);
+  React.useEffect(() => {
+    if (isModalOpen && isModalOpen !== prevIsModalOpen.current && value) {
+      setTempImageUrl(value);
+      setPreview({
+        mode: 1,
+        url: value,
+      });
+    }
+    prevIsModalOpen.current = isModalOpen;
+  }, [isModalOpen, value]);
 
   const onChangeImage = React.useCallback(
     (newValue: string) => {
@@ -67,6 +80,15 @@ export const ImageModal: React.FC<ImageModalProps> = ({
 
   const uploadImage = async () => {
     setIsModalLoading(true);
+
+    // delete previous uploaded image, not needed anymore.
+    if (prevUpload.current !== null) {
+      await axiosLoggedRequest({
+        method: 'DELETE',
+        url: prevUpload.current.slice(4),
+      });
+    }
+
     const formData = new FormData();
     if (useCrop) {
       if (!croppieRef.current) {
@@ -91,11 +113,13 @@ export const ImageModal: React.FC<ImageModalProps> = ({
     });
     if (response.error) {
       onChangeImage('');
+      prevUpload.current = null;
       enqueueSnackbar('Une erreur est survenue...', {
         variant: 'error',
       });
     } else {
       onChangeImage(response.data.url);
+      prevUpload.current = response.data.url || null;
       if (!response.data.url) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',

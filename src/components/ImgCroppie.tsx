@@ -21,6 +21,7 @@ const ImgCroppieComponent: React.ForwardRefRenderFunction<ImgCroppieRef, ImgCrop
   const croppie = React.useRef<Croppie | null>(null);
   const imgRef = React.useRef<HTMLImageElement>(null);
   const timeoutRef = React.useRef<number>(null);
+  const parentDiv = React.useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
     async getBlob() {
@@ -38,34 +39,46 @@ const ImgCroppieComponent: React.ForwardRefRenderFunction<ImgCroppieRef, ImgCrop
   // init croppie
   useEffect(() => {
     const $image = imgRef.current;
+    const $parent = parentDiv.current;
+
+    if (!$parent || !$image) {
+      return () => {};
+    }
+
     if (croppie.current !== null) {
       croppie.current.destroy();
       croppie.current = null;
+      $parent.innerHTML = '';
+      $parent.appendChild($image);
     }
 
-    if ($image) {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = window.setTimeout(() => {
-        croppie.current = new Croppie($image, {
-          viewport: {
-            width: imgWidth,
-            height: imgHeight,
-            type,
-          },
-        });
-      }, 20);
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
     }
+    timeoutRef.current = window.setTimeout(() => {
+      croppie.current = new Croppie($image, {
+        viewport: {
+          width: imgWidth,
+          height: imgHeight,
+          type,
+        },
+      });
+    }, 20);
     return () => {
       if (croppie.current !== null) {
         croppie.current.destroy();
         croppie.current = null;
+        $parent.innerHTML = '';
+        $parent.appendChild($image);
       }
     };
-  }, [imgHeight, imgWidth, type]);
+  }, [imgHeight, imgWidth, type, src]);
 
-  return <img alt={alt} src={src} ref={imgRef} />;
+  return (
+    <div style={{ width: '100%', height: '100%', position: 'relative' }} ref={parentDiv}>
+      <img alt={alt} src={src} ref={imgRef} />
+    </div>
+  );
 };
 
 export const ImgCroppie = memo(forwardRef(ImgCroppieComponent));

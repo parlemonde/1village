@@ -111,7 +111,7 @@ const MascotteStep2: React.FC = () => {
                     <span className="text text--small">{data.mascotteDescription.length}/400</span>
                   </div>
                 )}
-                <p>3 traits de personnalités de votre mascotte (et donc des élèves !)</p>
+                <p>3 traits de personnalité de votre mascotte (et donc des élèves !)</p>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
                     <TextField

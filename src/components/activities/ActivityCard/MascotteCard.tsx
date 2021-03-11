@@ -19,6 +19,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
   showEditButtons,
   onDelete,
 }: ActivityCardProps<PresentationMascotteActivity>) => {
+  const firstText = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text')?.value || '', [activity.processedContent]);
   return (
     <div
       style={{
@@ -44,10 +45,12 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
         </div>
       </div>
       <div style={{ margin: '0.25rem', flex: 1 }}>
-        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>Présentation de notre mascotte</h3>
-        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
-          <div className="text">
-            Notre Mascotte <strong>{activity.data.mascotteName}</strong>
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>
+          Notre mascotte <strong>{activity.data.mascotteName}</strong>
+        </h3>
+        <div style={{ margin: '0 0.5rem 1rem', height: `2rem`, textAlign: 'justify' }}>
+          <div className="text multine-with-ellipsis" style={{ maxHeight: `2rem` }}>
+            {firstText}
           </div>
         </div>
         {noButtons || (

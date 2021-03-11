@@ -30,6 +30,7 @@ interface SuggestionCarouselProps {
     title: string;
     text: string;
     button: string;
+    disabled?: boolean;
   }>;
   style?: React.CSSProperties;
 }
@@ -150,6 +151,7 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                     color="primary"
                     size="small"
                     style={{ marginLeft: '16px', flexShrink: 0 }}
+                    disabled={selectedSuggestion.disabled}
                   >
                     {"C'est parti !"}
                   </Button>

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useQueryCache } from 'react-query';
 import React from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -12,12 +13,16 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
+import { User } from 'types/user.type';
 
 const MascotteStep4: React.FC = () => {
   const router = useRouter();
+  const queryCache = useQueryCache();
+  const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, addContent, save, updateActivity } = React.useContext(ActivityContext);
   const { countries } = useCountries();
   const { languages } = useLanguages();
@@ -86,6 +91,21 @@ const MascotteStep4: React.FC = () => {
     setIsLoading(true);
     const success = await save();
     if (success) {
+      const newUser: Partial<User> = {};
+      if ((activity.data as MascotteData).mascotteImage) {
+        newUser.avatar = (activity.data as MascotteData).mascotteImage;
+      }
+      newUser.displayName = (activity.data as MascotteData).presentation;
+      const response = await axiosLoggedRequest({
+        method: 'PUT',
+        url: `/users/${user?.id}`,
+        data: newUser,
+      });
+      if (!response.error) {
+        setUser({ ...user, ...newUser });
+        queryCache.invalidateQueries('users');
+        queryCache.invalidateQueries('village-users');
+      }
       router.push('/se-presenter/success');
     }
     setIsLoading(false);
