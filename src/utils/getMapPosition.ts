@@ -5,12 +5,40 @@ import { axiosRequest } from './axiosRequest';
 export async function getMapPosition(user: User): Promise<[number, number] | null> {
   const query = `${user.address}, ${user.city}, ${user.postalCode}, ${user.countryCode}`;
 
-  const response = await axiosRequest({
+  // first try, all address
+  let response = await axiosRequest({
     method: 'GET',
     baseURL: '',
-    url: `https://nominatim.openstreetmap.org/search.php?q=${encodeURIComponent(query)}&polygon_geojson=1&addressdetails=1&format=jsonv2`,
+    url: `https://nominatim.openstreetmap.org/search.php?q=${encodeURIComponent(query)}&addressdetails=1&format=jsonv2`,
   });
+  if (response.error) {
+    return null;
+  }
 
+  // second try, only city + country
+  if (response.data.length === 0) {
+    response = await axiosRequest({
+      method: 'GET',
+      baseURL: '',
+      url: `https://nominatim.openstreetmap.org/search.php?city=${encodeURIComponent(user.city)}&country=${encodeURIComponent(
+        user.countryCode,
+      )}&accept-language=fr&addressdetails=1&format=jsonv2`,
+    });
+  }
+  if (response.error) {
+    return null;
+  }
+
+  // last try, only country
+  if (response.data.length === 0) {
+    response = await axiosRequest({
+      method: 'GET',
+      baseURL: '',
+      url: `https://nominatim.openstreetmap.org/search.php?country=${encodeURIComponent(
+        user.countryCode,
+      )}&accept-language=fr&addressdetails=1&format=jsonv2`,
+    });
+  }
   if (response.error) {
     return null;
   }
