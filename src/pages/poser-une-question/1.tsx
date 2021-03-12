@@ -3,9 +3,11 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { isQuestion } from 'src/activities/anyActivity';
+import { QuestionActivity } from 'src/activities/question.types';
+import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { ExtendedActivity } from 'src/components/activities/editing.types';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -14,9 +16,8 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
-import { getGravatarUrl } from 'src/utils';
+import { getUserDisplayName } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const Question1: React.FC = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const Question1: React.FC = () => {
     page: 0,
     countries: village?.countries,
     pelico: true,
-    type: 4,
+    type: ActivityType.QUESTION,
   });
   const { updatedActivityData } = useActivityRequests();
   const userMap = React.useMemo(
@@ -59,7 +60,7 @@ const Question1: React.FC = () => {
     }
   };
 
-  const onAskSame = (activity: ExtendedActivity, askSame: number[]) => async () => {
+  const onAskSame = (activity: QuestionActivity, askSame: number[]) => async () => {
     if (!user || !user.id) {
       return;
     }
@@ -97,7 +98,7 @@ const Question1: React.FC = () => {
 
           {questions.map((question, index) => {
             const activity = activities[question.activityIndex];
-            if (!activity) {
+            if (!activity || !isQuestion(activity)) {
               return null;
             }
             const questionUser = users[userMap[activity.userId]];
@@ -105,28 +106,13 @@ const Question1: React.FC = () => {
               return null;
             }
             const isSelf = questionUser?.id === user?.id;
-            const isPelico = questionUser?.type ?? UserType.TEACHER >= UserType.MEDIATOR;
             const askSame = !activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0);
             return (
               <div key={index} style={{ display: 'flex', alignItems: 'flex-start', margin: '1rem 0' }}>
-                {questionUser && (
-                  <img
-                    alt="Image de profil"
-                    src={getGravatarUrl(questionUser.email)}
-                    width="40px"
-                    height="40px"
-                    style={{ borderRadius: '20px', margin: '0.25rem' }}
-                  />
-                )}
+                {questionUser && <AvatarImg user={questionUser} size="small" style={{ margin: '0.25rem' }} />}
                 <div style={{ flex: 1, minWidth: 0, backgroundColor: bgPage, padding: '0.5rem 1rem', borderRadius: '10px' }}>
                   <p style={{ margin: '0' }} className="text">
-                    <strong>
-                      {isPelico
-                        ? 'Pelico'
-                        : isSelf
-                        ? 'Votre classe'
-                        : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`}
-                    </strong>
+                    <strong>{getUserDisplayName(questionUser, isSelf)}</strong>
                     <br />
                     <span>{question.q}</span>
                   </p>

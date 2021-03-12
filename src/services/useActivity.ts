@@ -2,19 +2,19 @@ import { useSnackbar } from 'notistack';
 import { useQueryCache, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
-import { ExtendedActivity } from 'src/components/activities/editing.types';
-import { getExtendedActivity } from 'src/contexts/activityContext';
+import { AnyActivity, AnyActivityData } from 'src/activities/anyActivities.types';
+import { getAnyActivity } from 'src/activities/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 
-export const useActivity = (activityId: number): { activity: ExtendedActivity | null } => {
+export const useActivity = (activityId: number): { activity: AnyActivity | null } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
-  const getActivity: QueryFunction<ExtendedActivity | null> = React.useCallback(async () => {
+  const getActivity: QueryFunction<AnyActivity | null> = React.useCallback(async () => {
     if (!villageId) {
       return null;
     }
@@ -25,9 +25,9 @@ export const useActivity = (activityId: number): { activity: ExtendedActivity | 
     if (response.error) {
       return null;
     }
-    return getExtendedActivity(response.data);
+    return getAnyActivity(response.data);
   }, [villageId, activityId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<ExtendedActivity | null, unknown>(['activity', { villageId, activityId }], getActivity);
+  const { data, isLoading, error } = useQuery<AnyActivity | null, unknown>(['activity', { villageId, activityId }], getActivity);
 
   return {
     activity: isLoading || error ? null : data,
@@ -41,7 +41,7 @@ export const useActivityRequests = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const updatedActivityData = React.useCallback(
-    async (activity: ExtendedActivity, data: { [key: string]: string | number | boolean }) => {
+    async (activity: AnyActivity, data: AnyActivityData) => {
       const response = await axiosLoggedRequest({
         method: 'PUT',
         url: `/activities/${activity.id}/content/${activity.dataId}`,

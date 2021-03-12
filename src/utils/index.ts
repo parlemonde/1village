@@ -1,5 +1,7 @@
 import md5 from 'md5';
 
+import { User, UserType } from 'types/user.type';
+
 /**
  * Returns a query string with the given parameters.
  */
@@ -92,6 +94,10 @@ export function generateTemporaryToken(length: number = 40): string {
 }
 
 export function isValidHttpUrl(value: string): boolean {
+  if (value.slice(0, 11) === '/api/images') {
+    return true;
+  }
+
   let url;
   try {
     url = new URL(value);
@@ -121,4 +127,40 @@ export function htmlToText(html: string): string {
   tmp.innerHTML = html;
   [...tmp.children].forEach(addDotToElement);
   return tmp.textContent || tmp.innerText || '';
+}
+
+export function naturalJoin(array: Array<string>): string {
+  return array
+    .map((element: string, index: number) => {
+      if (array.length < 2) {
+        return element;
+      }
+      if (index === array.length - 2) {
+        return element + ' et ';
+      }
+      if (index === array.length - 1) {
+        return element;
+      }
+      return element + ', ';
+    })
+    .join('');
+}
+
+export function pluralS(value: number): string {
+  return value > 1 ? 's' : '';
+}
+
+export const capitalize = (s: string): string => {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export function getUserDisplayName(user: User, isSelf: boolean): string {
+  const userIsPelico = user.type >= UserType.MEDIATOR;
+  if (userIsPelico) {
+    return 'Pelico';
+  }
+  if (isSelf) {
+    return 'Votre classe';
+  }
+  return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`);
 }

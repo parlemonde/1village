@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Button, ButtonBase, CircularProgress, Tooltip } from '@material-ui/core';
 
+import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import TextIcon from 'src/svg/editor/text_icon.svg';
@@ -10,7 +11,6 @@ import GameIcon from 'src/svg/navigation/game-icon.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
-import { getGravatarUrl } from 'src/utils';
 
 const TextEditor = dynamic(() => import('../editors/TextEditor'), { ssr: false });
 
@@ -72,14 +72,7 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId, label }: Add
 
   return (
     <div className="activity__comment-container">
-      <img
-        alt="Image de profil"
-        src={getGravatarUrl(user.email)}
-        width="40px"
-        height="40px"
-        className="activity__comment-image"
-        style={{ borderRadius: '20px', margin: '0.25rem' }}
-      />
+      <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
       {displayEditor ? (
         <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative' }}>
           <TextEditor

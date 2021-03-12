@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { QuestionActivity } from 'src/activities/question.types';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivityRequests } from 'src/services/useActivity';
 
@@ -11,15 +12,19 @@ import { RedButton } from '../../buttons/RedButton';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const QuestionCard: React.FC<ActivityCardProps> = ({ activity, noButtons, showEditButtons, onDelete }: ActivityCardProps) => {
+export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
+  activity,
+  noButtons,
+  showEditButtons,
+  onDelete,
+}: ActivityCardProps<QuestionActivity>) => {
   const { user } = React.useContext(UserContext);
   const { updatedActivityData } = useActivityRequests();
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
 
-  const askSame = React.useMemo(
-    () => (!activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0)),
-    [activity],
-  );
+  const askSame = React.useMemo(() => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)), [
+    activity,
+  ]);
   const onAskSame = async () => {
     if (!user || !user.id) {
       return;

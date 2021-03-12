@@ -34,7 +34,7 @@ const PresentationStep2: React.FC = () => {
         {activity !== null && <BackButton href={`/se-presenter/thematique/1?edit=${activity.id}`} label={isEdit ? 'Modifier' : 'Retour'} />}
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={1} />
         <div className="width-900">
-          <h1>{PRESENTATION_THEMATIQUE[data.theme as number].title}</h1>
+          <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
           <SimpleActivityEditor />
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Link href="/se-presenter/thematique/3">

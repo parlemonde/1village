@@ -5,7 +5,7 @@ import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserType } from '../entities/user';
-import { getImage, uploadImage } from '../fileUpload';
+import { deleteImage, getImage, uploadImage } from '../fileUpload';
 
 import { Controller } from './controller';
 
@@ -58,5 +58,16 @@ imageController.upload(
     });
   },
 );
+
+// delete image
+imageController.delete({ path: '/:id/:filename', userType: UserType.TEACHER }, async (req, res) => {
+  if (req.user?.id !== parseInt(req.params.id, 10)) {
+    res.status(204).send();
+    return;
+  }
+  const key = `images/${req.params.id}/${req.params.filename}`;
+  await deleteImage(key);
+  res.status(204).send();
+});
 
 export { imageController };

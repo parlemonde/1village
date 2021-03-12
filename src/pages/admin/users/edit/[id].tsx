@@ -13,8 +13,8 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-import { CountrySelector } from 'src/components/CountrySelector';
 import { AdminTile } from 'src/components/admin/AdminTile';
+import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';

@@ -4,7 +4,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 
-import { UserContext } from 'src/contexts/userContext';
+// import { UserContext } from 'src/contexts/userContext';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
@@ -13,7 +13,8 @@ import Map from 'src/svg/navigation/map.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
-import { UserType } from 'types/user.type';
+
+// import { UserType } from 'types/user.type';
 
 interface Tab {
   label: string;
@@ -33,7 +34,7 @@ const tabs: Tab[] = [
     label: 'Se présenter',
     path: '/se-presenter',
     icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'Créer une énigme',
@@ -51,7 +52,7 @@ const tabs: Tab[] = [
     label: 'Poser une question',
     path: '/poser-une-question',
     icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'Créer un jeu',
@@ -70,8 +71,8 @@ const tabs: Tab[] = [
 export const Navigation: React.FC = () => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);
-  const { user } = React.useContext(UserContext);
-  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  // const { user } = React.useContext(UserContext);
+  // const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
 
   React.useEffect(() => {
     let index = tabs.findIndex((tab) => tab.path.split('/')[1] === router.pathname.split('/')[1]);
@@ -114,7 +115,7 @@ export const Navigation: React.FC = () => {
                     width: index === selectedTab ? '112%' : '100%',
                   }}
                   disableElevation
-                  disabled={tab.disabled && !isModerateur}
+                  disabled={tab.disabled}
                 >
                   {tab.label}
                 </Button>

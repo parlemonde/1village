@@ -1,18 +1,4 @@
-import { Activity } from 'types/activity.type';
-
-export type ExtendedActivity = Activity & {
-  data: { [key: string]: string | number | boolean };
-  processedContent: Array<EditorContent>;
-  dataId: number;
-};
-
-export type EditorTypes = 'text' | 'video' | 'image' | 'h5p';
-
-export type EditorContent = {
-  id: number;
-  type: EditorTypes;
-  value: string;
-};
+import type { AnyActivity } from 'src/activities/anyActivities.types';
 
 export interface EditorProps {
   id: number;
@@ -26,6 +12,6 @@ export interface ViewProps {
   value?: string;
 }
 
-export interface ActivityViewProps {
-  activity: ExtendedActivity;
+export interface ActivityViewProps<T extends AnyActivity = AnyActivity> {
+  activity: T;
 }

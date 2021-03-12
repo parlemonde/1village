@@ -29,7 +29,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filter
     page: 0,
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
     pelico: filters.pelico,
-    type: filters.type,
+    type: filters.type - 1,
     userId: onlySelf ? user?.id ?? 0 : undefined,
   });
   const { deleteActivity } = useActivityRequests();
@@ -85,7 +85,6 @@ export const Activities: React.FC<ActivitiesProps> = ({ onlySelf = false, filter
             activity={activityToDelete}
             isSelf={user && activityToDelete.userId === user.id}
             user={userMap[activityToDelete.userId] !== undefined ? users[userMap[activityToDelete.userId]] : undefined}
-            noButtons
           />
         )}
       </Modal>
