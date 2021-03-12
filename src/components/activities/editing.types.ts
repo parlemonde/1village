@@ -12,6 +12,6 @@ export interface ViewProps {
   value?: string;
 }
 
-export interface ActivityViewProps {
-  activity: AnyActivity;
+export interface ActivityViewProps<T extends AnyActivity = AnyActivity> {
+  activity: T;
 }

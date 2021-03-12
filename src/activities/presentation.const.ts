@@ -93,7 +93,7 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
   content.push(
     `Notre mascotte s’appelle ${data.mascotteName}, elle nous représente.\n${capitalize(data.mascotteDescription)}\n${capitalize(
       data.mascotteName,
-    )} est ${data.personality1}, ${data.personality2} et ${data.personality3}.`,
+    )} est ${data.personality1.toLowerCase()}, ${data.personality2.toLowerCase()} et ${data.personality3.toLowerCase()}.`,
   );
 
   const displayCountries = countries.filter((country) => data.countries.includes(country.isoCode)).map((country) => country.name);

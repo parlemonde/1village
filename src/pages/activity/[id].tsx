@@ -4,6 +4,8 @@ import React from 'react';
 
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import { isPresentation, isQuestion } from 'src/activities/anyActivity';
+import { isThematique, isMascotte } from 'src/activities/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -17,9 +19,9 @@ import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import { getQueryString, getUserDisplayName } from 'src/utils';
 import { toDate } from 'src/utils';
-import { ActivitySubType, ActivityType } from 'types/activity.type';
+import { getQueryString, getUserDisplayName } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import { User, UserType } from 'types/user.type';
 
 const titles = {
@@ -90,9 +92,9 @@ const Activity: React.FC = () => {
             </div>
           </div>
         )}
-        {activity.type === ActivityType.PRESENTATION && activity.subType !== ActivitySubType.MASCOTTE && <SimpleActivityView activity={activity} />}
-        {activity.type === ActivityType.PRESENTATION && activity.subType === ActivitySubType.MASCOTTE && <MascotteActivityView activity={activity} />}
-        {activity.type === ActivityType.QUESTION && <p>{activity.processedContent[0]?.value}</p>}
+        {isPresentation(activity) && isThematique(activity) && <SimpleActivityView activity={activity} />}
+        {isPresentation(activity) && isMascotte(activity) && <MascotteActivityView activity={activity} activityUser={activityUser} />}
+        {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
 
         <div className="activity__divider">
           <div className="activity__divider--text">
