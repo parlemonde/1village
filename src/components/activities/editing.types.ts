@@ -5,6 +5,7 @@ export interface EditorProps {
   value?: string;
   onChange?(newValue: string): void;
   onDelete?(): void;
+  onBlur?(): void;
 }
 
 export interface ViewProps {

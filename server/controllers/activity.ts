@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { getRepository, getManager } from 'typeorm';
 
 import { ActivityData, ActivityDataType } from '../entities/activityData';
-import { Activity, ActivityType, ActivitySubType } from '../entities/activity';
+import { Activity, ActivityType, ActivitySubType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -24,6 +24,7 @@ type ActivityGetter = {
   countries?: string[];
   pelico?: boolean;
   userId?: number;
+  status?: number;
 };
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
@@ -67,6 +68,7 @@ const getActivities = async ({
   subType = null,
   countries = [],
   pelico = true,
+  status = 0,
   userId,
 }: ActivityGetter) => {
   // get ids
@@ -79,6 +81,9 @@ const getActivities = async ({
   }
   if (subType !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType: `${subType}` });
+  }
+  if (status !== null) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.status = :status', { status: `${status}` });
   }
   if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
@@ -161,6 +166,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
     type: req.query.type ? parseInt(getQueryString(req.query.type), 10) ?? -1 : undefined,
     subType: req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : undefined,
+    status: req.query.status ? parseInt(getQueryString(req.query.status), 10) || 0 : undefined,
     userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
   });
   res.sendJSON(activities);
@@ -181,6 +187,32 @@ activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req:
   res.sendJSON(activity);
 });
 
+// --- Get draft activity for type and subtype  ---
+activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (req.query.villageId === undefined || req.query.type === undefined) {
+    next();
+    return;
+  }
+
+  const search: { userId: number; villageId: number; type: string; status: string; subType?: string } = {
+    userId: req.user?.id ?? 0,
+    villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : 0,
+    type: `${req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : 0}`,
+    status: `${ActivityStatus.DRAFT}`,
+  };
+  if (req.query.subType !== undefined) {
+    search.subType = `${req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : 0}`;
+  }
+  const activityId =
+    (
+      await getRepository(Activity).findOne({
+        where: search,
+      })
+    )?.id ?? -1;
+  const activity = activityId === -1 ? undefined : await getActivity(activityId);
+  res.sendJSON({ draft: activity || null });
+});
+
 activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res) => {
   if (req.user && req.user.type >= UserType.MEDIATOR) {
     // no mascotte for pelico
@@ -188,7 +220,12 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
     return;
   }
   const activity = await getRepository(Activity).findOne({
-    where: { userId: req.user?.id ?? 0, type: `${ActivityType.PRESENTATION}`, subType: `${ActivitySubType.MASCOTTE}` },
+    where: {
+      userId: req.user?.id ?? 0,
+      type: `${ActivityType.PRESENTATION}`,
+      subType: `${ActivitySubType.MASCOTTE}`,
+      status: `${ActivityStatus.PUBLISHED}`,
+    },
   });
   res.sendJSON({ id: activity?.id || -1 });
 });
@@ -197,6 +234,7 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
 type CreateActivityData = {
   type: ActivityType;
   subType?: ActivitySubType;
+  status?: ActivityStatus;
   villageId?: number;
   content?: Array<{
     key: ActivityDataType;
@@ -215,6 +253,11 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     subType: {
       type: 'number',
       enum: [ActivitySubType.THEMATIQUE, ActivitySubType.MASCOTTE],
+      nullable: true,
+    },
+    status: {
+      type: 'number',
+      enum: [ActivityStatus.DRAFT, ActivityStatus.PUBLISHED],
       nullable: true,
     },
     villageId: { type: 'number', nullable: true },
@@ -257,11 +300,23 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
 
+  // Delete old draft if needed.
+  if (data.status === ActivityStatus.DRAFT) {
+    await getRepository(Activity).delete({
+      userId: req.user.id,
+      villageId,
+      type: (`${data.type}` as unknown) as ActivityType,
+      subType: (`${data.subType ?? null}` as unknown) as ActivitySubType,
+      status: (`${ActivityStatus.DRAFT}` as unknown) as ActivityStatus,
+    });
+  }
+
   const activity = new Activity();
   activity.villageId = villageId;
   activity.userId = req.user.id;
   activity.type = data.type;
-  activity.subType = data.subType || data.subType == 0 ? data.subType : null;
+  activity.subType = data.subType ?? null;
+  activity.status = data.status ?? ActivityStatus.PUBLISHED;
   if (data.responseActivityId && data.responseType) {
     activity.responseActivityId = data.responseActivityId;
     activity.responseType = data.responseType;
@@ -284,6 +339,61 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     }
   });
   activity.content = content;
+  res.sendJSON(activity);
+});
+
+// --- Update activity ---
+type UpdateActivity = {
+  status?: ActivityStatus;
+  responseActivityId?: number;
+  responseType?: ActivityType;
+};
+const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
+  type: 'object',
+  properties: {
+    status: {
+      type: 'number',
+      enum: [ActivityStatus.DRAFT, ActivityStatus.PUBLISHED],
+      nullable: true,
+    },
+    responseActivityId: { type: 'number', nullable: true },
+    responseType: {
+      type: 'number',
+      nullable: true,
+      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+    },
+  },
+  required: [],
+  additionalProperties: false,
+};
+const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
+activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!updateActivityValidator(data)) {
+    sendInvalidDataError(updateActivityValidator);
+    return;
+  }
+
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
+  if (activity === undefined || req.user === undefined) {
+    next();
+    return;
+  }
+  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+    next();
+    return;
+  }
+
+  activity.status = data.status ?? activity.status;
+  activity.responseActivityId = data.responseActivityId ?? activity.responseActivityId ?? null;
+  activity.responseType = data.responseType ?? activity.responseType ?? null;
+
+  await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
 
@@ -581,7 +691,12 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
     return;
   }
 
-  await getRepository(Activity).softDelete({ id });
+  if (activity.status === ActivityStatus.DRAFT) {
+    // No soft delete for drafts.
+    await getRepository(Activity).delete({ id });
+  } else {
+    await getRepository(Activity).softDelete({ id });
+  }
   res.status(204).send();
 });
 

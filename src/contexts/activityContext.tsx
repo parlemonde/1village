@@ -2,12 +2,16 @@ import { useRouter } from 'next/router';
 import { useQueryCache } from 'react-query';
 import React from 'react';
 
+import { Card, CircularProgress } from '@material-ui/core';
+
 import { AnyActivity, AnyActivityData } from 'src/activities/anyActivities.types';
 import { getAnyActivity } from 'src/activities/anyActivity';
 import type { EditorTypes } from 'src/activities/extendedActivity.types';
+import { Modal } from 'src/components/Modal';
+import { primaryColor } from 'src/styles/variables.const';
+import { debounce, getQueryString } from 'src/utils';
 import { serializeToQueryUrl } from 'src/utils';
-import { getQueryString } from 'src/utils';
-import { Activity, ActivityType, ActivitySubType } from 'types/activity.type';
+import { Activity, ActivityType, ActivitySubType, ActivityStatus } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -18,7 +22,7 @@ interface ActivityContextValue {
   createNewActivity(type: ActivityType, subType?: ActivitySubType, initialData?: AnyActivityData): boolean;
   addContent(type: EditorTypes, value?: string): void;
   deleteContent(index: number): void;
-  save(): Promise<boolean>;
+  save(publish?: boolean): Promise<boolean>;
   createActivityIfNotExist(type: ActivityType, subType: ActivitySubType, initialData?: AnyActivityData): Promise<void>;
 }
 
@@ -28,14 +32,41 @@ interface ActivityContextProviderProps {
   children: React.ReactNode;
 }
 
+function getInitialActivity(): AnyActivity | null {
+  try {
+    return JSON.parse(sessionStorage.getItem('activity') || null) || null;
+  } catch {
+    return null;
+  }
+}
+function saveActivityInSession(activity: AnyActivity | null): void {
+  try {
+    sessionStorage.setItem('activity', JSON.stringify(activity));
+  } catch {
+    return;
+  }
+}
+const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, false);
+
 export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
   const router = useRouter();
   const queryCache = useQueryCache();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [activity, setActivity] = React.useState<AnyActivity | null>(null);
+  const [draft, setDraft] = React.useState<AnyActivity | null>(null);
+  const [draftStep, setDraftStep] = React.useState(0);
+  const draftStepTimeout = React.useRef<number | undefined>(undefined);
 
   const currentActivityId = activity === null ? null : activity.id;
+
+  // Save & get activity to session storage.
+  React.useEffect(() => {
+    setActivity(getInitialActivity);
+  }, []);
+  React.useEffect(() => {
+    debouncedSaveActivityInSession(activity);
+  }, [activity]);
 
   const getActivity = React.useCallback(
     async (id: number) => {
@@ -66,6 +97,26 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     setActivity((a) => (a === null ? a : { ...a, ...newActivity }));
   }, []);
 
+  const getDraft = React.useCallback(
+    async (type: ActivityType, subType?: ActivitySubType) => {
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities/draft${serializeToQueryUrl({
+          villageId: village.id,
+          type,
+          subType,
+        })}`,
+      });
+      if (response.error) {
+        return;
+      }
+      if (response.data && response.data.draft !== null) {
+        setDraft(getAnyActivity(response.data.draft));
+      }
+    },
+    [village, axiosLoggedRequest],
+  );
+
   const createNewActivity = React.useCallback(
     (type: ActivityType, subType?: ActivitySubType, initialData?: AnyActivityData) => {
       if (user === null || village === null) {
@@ -75,6 +126,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         id: 0,
         type: type,
         subType: subType,
+        status: ActivityStatus.DRAFT,
         userId: user.id,
         villageId: village.id,
         content: [],
@@ -85,9 +137,12 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         processedContent: [{ type: 'text', id: 0, value: '' }],
       };
       setActivity(activity);
+      if (type !== ActivityType.QUESTION) {
+        getDraft(type, subType).catch();
+      }
       return true;
     },
-    [user, village],
+    [user, village, getDraft],
   );
 
   const createActivityIfNotExist = React.useCallback(
@@ -111,43 +166,37 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
 
   const activityContent = activity?.processedContent || null;
 
-  const addContent = React.useCallback(
-    (type: EditorTypes, value: string = '') => {
-      if (activityContent === null) {
-        return;
-      }
-      const newId = Math.max(1, activity.dataId || 0, ...activityContent.map((p) => p.id)) + 1;
-      const newContent = activityContent;
-      newContent.push({
-        id: newId,
-        type,
-        value,
-      });
-      updateActivity({ processedContent: newContent });
-    },
-    [updateActivity, activity, activityContent],
-  );
+  const addContent = (type: EditorTypes, value: string = '') => {
+    if (activityContent === null) {
+      return;
+    }
+    const newId = Math.max(1, activity.dataId || 0, ...activityContent.map((p) => p.id)) + 1;
+    const newContent = activityContent;
+    newContent.push({
+      id: newId,
+      type,
+      value,
+    });
+    updateActivity({ processedContent: newContent });
+  };
 
-  const deleteContent = React.useCallback(
-    (index: number) => {
-      if (activityContent === null) {
-        return;
-      }
-      const newContent = [...activityContent];
-      newContent.splice(index, 1);
-      updateActivity({ processedContent: newContent });
-    },
-    [updateActivity, activityContent],
-  );
+  const deleteContent = (index: number) => {
+    if (activityContent === null) {
+      return;
+    }
+    const newContent = [...activityContent];
+    newContent.splice(index, 1);
+    updateActivity({ processedContent: newContent });
+  };
 
   const getAPIContent = React.useCallback(
-    (isEdit: boolean) => {
+    (isEdit: boolean, publish: boolean) => {
       const mapIndex = isEdit
-        ? {}
-        : activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
+        ? activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
             acc[c.id] = i;
             return acc;
-          }, {});
+          }, {})
+        : {};
       const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
         .map((p) => {
           let data: { key: string; value: string; id?: number } | null = null;
@@ -163,11 +212,17 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
           return data;
         })
         .filter((c) => c !== null);
+      const activityData = { ...activity.data };
+      if (!publish) {
+        activityData.draftUrl = window.location.pathname;
+      } else {
+        delete activityData.draftUrl;
+      }
       content.push({
         key: 'json',
         value: JSON.stringify({
           type: 'data',
-          data: activity.data,
+          data: activityData,
         }),
         id: isEdit ? activity.dataId : undefined,
       });
@@ -176,34 +231,59 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     [activity],
   );
 
-  const createActivity = React.useCallback(async () => {
-    const content = getAPIContent(false);
-    const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
-      type: activity.type,
-      subType: activity.subType,
-      villageId: activity.villageId,
-      content,
-    };
-    const response = await axiosLoggedRequest({
-      method: 'POST',
-      url: '/activities',
-      data,
-    });
-    if (response.error) {
-      return false;
-    } else {
+  const createActivity = React.useCallback(
+    async (publish: boolean) => {
+      const content = getAPIContent(false, publish);
+      const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
+        type: activity.type,
+        subType: activity.subType,
+        villageId: activity.villageId,
+        status: publish ? ActivityStatus.PUBLISHED : ActivityStatus.DRAFT,
+        content,
+      };
+      const response = await axiosLoggedRequest({
+        method: 'POST',
+        url: '/activities',
+        data,
+      });
+      if (response.error) {
+        return false;
+      } else {
+        setActivity(getAnyActivity(response.data));
+        return true;
+      }
+    },
+    [axiosLoggedRequest, getAPIContent, activity],
+  );
+
+  const editActivity = React.useCallback(
+    async (publish: boolean) => {
+      const content = getAPIContent(true, publish);
+      const response = await axiosLoggedRequest({
+        method: 'PUT',
+        url: `/activities/${activity.id}/content`,
+        data: {
+          content,
+        },
+      });
+      if (response.error) {
+        return false;
+      }
       setActivity(getAnyActivity(response.data));
       return true;
-    }
-  }, [axiosLoggedRequest, getAPIContent, activity]);
+    },
+    [getAPIContent, axiosLoggedRequest, activity],
+  );
 
-  const editActivity = React.useCallback(async () => {
-    const content = getAPIContent(true);
+  const publishActivity = React.useCallback(async () => {
+    if ((activity?.id ?? 0) === 0) {
+      return false; // activity is not yet created!
+    }
     const response = await axiosLoggedRequest({
       method: 'PUT',
-      url: `/activities/${activity.id}/content`,
+      url: `/activities/${activity.id}`,
       data: {
-        content,
+        status: ActivityStatus.PUBLISHED,
       },
     });
     if (response.error) {
@@ -211,19 +291,40 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     }
     setActivity(getAnyActivity(response.data));
     return true;
-  }, [getAPIContent, axiosLoggedRequest, activity]);
+  }, [activity, axiosLoggedRequest]);
 
-  const save = React.useCallback(async () => {
-    if (activity === null) {
-      return false;
-    }
-    queryCache.invalidateQueries('activities');
-    if (activity.id === 0) {
-      return await createActivity();
-    } else {
-      return await editActivity();
-    }
-  }, [queryCache, createActivity, editActivity, activity]);
+  const save = React.useCallback(
+    async (publish: boolean = false) => {
+      if (activity === null) {
+        return false;
+      }
+      if (activity.status !== ActivityStatus.DRAFT && !publish) {
+        return false; // don't save draft for already published activities.
+      }
+      if (!publish) {
+        clearTimeout(draftStepTimeout.current);
+        setDraftStep(1);
+      }
+      queryCache.invalidateQueries('activities');
+      let result = false;
+      if (activity.id === 0) {
+        result = await createActivity(publish);
+      } else if (publish) {
+        result = (await editActivity(true)) && (await publishActivity());
+      } else {
+        result = await editActivity(false);
+      }
+
+      if (!publish) {
+        setDraftStep(2);
+        draftStepTimeout.current = window.setTimeout(() => {
+          setDraftStep(0);
+        }, 1500);
+      }
+      return result;
+    },
+    [queryCache, createActivity, editActivity, publishActivity, activity],
+  );
 
   return (
     <ActivityContext.Provider
@@ -238,6 +339,43 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       }}
     >
       {children}
+      {draftStep > 0 && (
+        <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>
+          <Card style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}>
+            {draftStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
+            {draftStep === 2 && <span className="text text--small">Brouillon enregistré</span>}
+          </Card>
+        </div>
+      )}
+      <Modal
+        open={draft !== null}
+        maxWidth="sm"
+        fullWidth
+        title="Brouillon en cours !"
+        cancelLabel="Non"
+        confirmLabel="Oui"
+        onClose={() => {
+          setDraft(null);
+        }}
+        onConfirm={() => {
+          setActivity(draft);
+          if (draft.data.draftUrl) {
+            router.push(draft.data.draftUrl);
+          }
+          setDraft(null);
+        }}
+        noCloseOutsideModal
+        noCloseButton
+        ariaDescribedBy="brouillon-desc"
+        ariaLabelledBy="brouillon-title"
+      >
+        <div id="brouillon-desc" style={{ padding: '0.5rem' }}>
+          <p>Vous avez un brouillon en cours pour cette activité, souhaitez vous le reprendre ?</p>
+          <p>
+            (Continuer sans ce brouillon en créera un nouveau qui va <strong>supprimer</strong> celui déjà existant.)
+          </p>
+        </div>
+      </Modal>
     </ActivityContext.Provider>
   );
 };

@@ -4,6 +4,8 @@ import React from 'react';
 
 import { Button, Grid } from '@material-ui/core';
 
+import { isPresentation } from 'src/activities/anyActivity';
+import { isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -12,24 +14,36 @@ import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountr
 import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const MascotteStep3: React.FC = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
+  const shouldSave = React.useRef(false);
 
   React.useEffect(() => {
-    if (!activity && !('activity-id' in router.query)) {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/se-presenter');
+    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
       router.push('/se-presenter');
     }
   }, [activity, router]);
 
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
     const newData: MascotteData = { ...data, [key]: newValue };
     updateActivity({ data: newData });
+    shouldSave.current = true;
   };
+
+  React.useEffect(() => {
+    if (shouldSave.current) {
+      shouldSave.current = false;
+      save().catch();
+    }
+  }, [data.languages, data.countries, data.currencies, save]);
 
   if (!activity) return <Base>Redirecting ...</Base>;
 

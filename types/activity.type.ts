@@ -13,10 +13,16 @@ export enum ActivitySubType {
   MASCOTTE = 1,
 }
 
+export enum ActivityStatus {
+  PUBLISHED = 0,
+  DRAFT = 1,
+}
+
 export interface Activity {
   id: number;
   type: ActivityType;
   subType?: ActivitySubType | null;
+  status: ActivityStatus;
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;

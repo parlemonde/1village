@@ -14,9 +14,10 @@ export type Args = {
   pelico?: boolean;
   type?: number;
   userId?: number;
+  status?: number;
 };
 
-export const useActivities = ({ pelico, countries, userId, ...args }: Args): { activities: AnyActivity[] } => {
+export const useActivities = ({ pelico, countries = [], userId, ...args }: Args): { activities: AnyActivity[] } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 

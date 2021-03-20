@@ -12,35 +12,30 @@ import { ActivitySubType, ActivityType } from 'types/activity.type';
 
 const PresentationStep1: React.FC = () => {
   const router = useRouter();
-  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const currentActivityId = parseInt(getQueryString(router.query['edit']) ?? '-1', 10) ?? -1;
 
   const onClick = (index: number) => () => {
-    // Check if we don't need to create an activity
-    if (
-      currentActivityId !== -1 &&
-      activity !== null &&
-      activity.id === currentActivityId &&
-      activity.type === ActivityType.PRESENTATION &&
-      activity.subType === ActivitySubType.THEMATIQUE
-    ) {
-      updateActivity({ data: { theme: index } });
-      router.push('/se-presenter/thematique/2');
-      return;
-    }
-
-    const success = createNewActivity(ActivityType.PRESENTATION, ActivitySubType.THEMATIQUE, {
-      theme: index,
-    });
-    if (success) {
-      router.push('/se-presenter/thematique/2');
-    }
+    updateActivity({ data: { theme: index } });
+    router.push('/se-presenter/thematique/2');
   };
+
+  const created = React.useRef(false);
+  React.useEffect(() => {
+    if (!created.current) {
+      created.current = true;
+      if (!('edit' in router.query)) {
+        createNewActivity(ActivityType.PRESENTATION, ActivitySubType.THEMATIQUE, {
+          theme: 0,
+        });
+      }
+    }
+  }, [createNewActivity, router]);
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {currentActivityId === -1 && <BackButton href="/se-presenter" />}
+        {currentActivityId === 0 && <BackButton href="/se-presenter" />}
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={0} />
         <div className="width-900">
           <h1>Choisissez le thème de votre présentation</h1>

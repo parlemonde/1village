@@ -16,6 +16,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
   activity,
   isSelf,
   noButtons,
+  isDraft,
   showEditButtons,
   onDelete,
 }: ActivityCardProps<PresentationMascotteActivity>) => {
@@ -57,10 +58,20 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
           <div style={{ textAlign: 'right' }}>
             {isSelf && showEditButtons && (
               <>
-                <Link href={`se-presenter/mascotte/4?activity-id=${activity.id}`}>
+                <Link
+                  href={
+                    isDraft && activity.data.draftUrl
+                      ? `${activity.data.draftUrl}?activity-id=${activity.id}`
+                      : `/se-presenter/mascotte/4?activity-id=${activity.id}`
+                  }
+                >
                   <Button
                     component="a"
-                    href={`se-presenter/mascotte/4?activity-id=${activity.id}`}
+                    href={
+                      isDraft && activity.data.draftUrl
+                        ? `${activity.data.draftUrl}?activity-id=${activity.id}`
+                        : `/se-presenter/mascotte/4?activity-id=${activity.id}`
+                    }
                     color="secondary"
                     variant="contained"
                     style={{ marginLeft: '0.25rem' }}

@@ -7,5 +7,6 @@ export interface ActivityCardProps<T extends AnyActivity> {
   isSelf?: boolean;
   showEditButtons?: boolean;
   noButtons?: boolean;
+  isDraft?: boolean;
   onDelete?(): void;
 }

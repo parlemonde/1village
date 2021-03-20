@@ -3,25 +3,30 @@ import React from 'react';
 
 import { Button, TextField, Grid, Box } from '@material-ui/core';
 
+import { isPresentation } from 'src/activities/anyActivity';
+import { isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/editors/ImageEditor/AvatarEditor';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const MascotteStep2: React.FC = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
 
   React.useEffect(() => {
-    if (!activity && !('activity-id' in router.query)) {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/se-presenter');
+    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
       router.push('/se-presenter');
     }
   }, [activity, router]);
 
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,12 +35,21 @@ const MascotteStep2: React.FC = () => {
     updateActivity({ data: newData });
   };
 
+  const prevImage = React.useRef<string | null>(data?.mascotteImage || null);
+  React.useEffect(() => {
+    if (data !== null && data.mascotteImage !== prevImage.current) {
+      prevImage.current = data.mascotteImage;
+      save().catch();
+    }
+  }, [data, save]);
+
   const imageChange = (image: string) => {
     const newData = { ...data, mascotteImage: image };
     updateActivity({ data: newData });
   };
 
   const onNext = () => {
+    save().catch(console.error);
     if (!isValid()) {
       setIsError(true);
     } else {
@@ -63,7 +77,7 @@ const MascotteStep2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter/mascotte/1" label={isEdit ? `Modifier` : 'Retour'} />
+        <BackButton href={`/se-presenter/mascotte/1?edit=${activity?.id ?? 0}`} label={isEdit ? `Modifier` : 'Retour'} />
         <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={1} />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Qui êtes-vous ? Choisissez une mascotte pour vous représenter collectivement !</h1>

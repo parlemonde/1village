@@ -6,13 +6,15 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activities/anyActivity';
+import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep3: React.FC = () => {
   const router = useRouter();
@@ -20,17 +22,19 @@ const PresentationStep3: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = activity?.data || null;
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
-    if ((data === null || !('theme' in data) || data.theme === -1) && !('activity-id' in router.query)) {
-      router.push('/se-presenter/thematique/1');
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/se-presenter');
+    } else if (activity && (!isPresentation(activity) || !isThematique(activity))) {
+      router.push('/se-presenter');
     }
-  }, [data, router]);
+  }, [activity, router]);
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save();
+    const success = await save(true);
     if (success) {
       router.push('/se-presenter/success');
     }

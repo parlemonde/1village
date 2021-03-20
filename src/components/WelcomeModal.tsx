@@ -14,7 +14,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useCountries } from 'src/services/useCountries';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
-import { ActivityType } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 import { User, UserType } from 'types/user.type';
 
 import { CGU } from './CGU';
@@ -300,6 +300,7 @@ export const WelcomeModal: React.FC = () => {
                     data: {
                       theme: 0,
                     },
+                    status: ActivityStatus.PUBLISHED,
                     createDate: new Date(),
                     processedContent: [
                       {

@@ -10,14 +10,13 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Activity as ActivityInterface, ActivityType, ActivitySubType } from '../../types/activity.type';
+import { Activity as ActivityInterface, ActivityType, ActivitySubType, ActivityStatus } from '../../types/activity.type';
 
 import { ActivityData } from './activityData';
 import { User } from './user';
 import { Village } from './village';
 
-export { ActivityType };
-export { ActivitySubType };
+export { ActivityType, ActivitySubType, ActivityStatus };
 
 @Entity()
 export class Activity implements ActivityInterface {
@@ -37,6 +36,14 @@ export class Activity implements ActivityInterface {
     nullable: true,
   })
   public subType: ActivitySubType | null;
+
+  @Column({
+    type: 'enum',
+    enum: ActivityStatus,
+    nullable: false,
+    default: ActivityStatus.PUBLISHED,
+  })
+  public status: ActivityStatus;
 
   @CreateDateColumn()
   public createDate: Date;
