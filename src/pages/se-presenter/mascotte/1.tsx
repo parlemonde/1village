@@ -3,7 +3,8 @@ import React from 'react';
 
 import { Button, TextField } from '@material-ui/core';
 
-import { DEFAULT_MASCOTTE_DATA } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activities/anyActivity';
+import { DEFAULT_MASCOTTE_DATA, isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -23,15 +24,21 @@ const MascotteStep1: React.FC = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      created.current = true;
-      if (!('activity-id' in router.query) && !('edit' in router.query)) {
+      if (!activity && !('activity-id' in router.query) && !sessionStorage.getItem('activity') && !('edit' in router.query)) {
+        created.current = true;
+        createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
+          ...DEFAULT_MASCOTTE_DATA,
+          presentation: labelPresentation,
+        }).catch(console.error);
+      } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
+        created.current = true;
         createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       }
     }
-  }, [labelPresentation, createActivityIfNotExist, router]);
+  }, [activity, labelPresentation, createActivityIfNotExist, router]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;

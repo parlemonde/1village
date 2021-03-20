@@ -3,6 +3,8 @@ import React from 'react';
 
 import { Button, TextField, Grid, Box } from '@material-ui/core';
 
+import { isPresentation } from 'src/activities/anyActivity';
+import { isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -17,7 +19,9 @@ const MascotteStep2: React.FC = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
 
   React.useEffect(() => {
-    if (!activity && !('activity-id' in router.query)) {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/se-presenter');
+    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
       router.push('/se-presenter');
     }
   }, [activity, router]);

@@ -5,7 +5,8 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
-import { getMascotteContent } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activities/anyActivity';
+import { getMascotteContent, isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -34,7 +35,9 @@ const MascotteStep4: React.FC = () => {
   const data = (activity?.data as MascotteData) || null;
 
   React.useEffect(() => {
-    if (!activity && !('activity-id' in router.query)) {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/se-presenter');
+    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
       router.push('/se-presenter');
     }
   }, [activity, router, updateActivity]);

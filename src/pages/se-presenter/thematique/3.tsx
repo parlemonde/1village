@@ -6,7 +6,8 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activities/anyActivity';
+import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
@@ -24,10 +25,12 @@ const PresentationStep3: React.FC = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
-    if ((data === null || !('theme' in data) || data.theme === -1) && !('activity-id' in router.query)) {
-      router.push('/se-presenter/thematique/1');
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/se-presenter');
+    } else if (activity && (!isPresentation(activity) || !isThematique(activity))) {
+      router.push('/se-presenter');
     }
-  }, [data, router]);
+  }, [activity, router]);
 
   const onPublish = async () => {
     setIsLoading(true);

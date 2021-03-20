@@ -9,7 +9,7 @@ import { getAnyActivity } from 'src/activities/anyActivity';
 import type { EditorTypes } from 'src/activities/extendedActivity.types';
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
-import { getQueryString } from 'src/utils';
+import { debounce, getQueryString } from 'src/utils';
 import { serializeToQueryUrl } from 'src/utils';
 import { Activity, ActivityType, ActivitySubType, ActivityStatus } from 'types/activity.type';
 
@@ -32,6 +32,22 @@ interface ActivityContextProviderProps {
   children: React.ReactNode;
 }
 
+function getInitialActivity(): AnyActivity | null {
+  try {
+    return JSON.parse(sessionStorage.getItem('activity') || null) || null;
+  } catch {
+    return null;
+  }
+}
+function saveActivityInSession(activity: AnyActivity | null): void {
+  try {
+    sessionStorage.setItem('activity', JSON.stringify(activity));
+  } catch {
+    return;
+  }
+}
+const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, false);
+
 export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
   const router = useRouter();
   const queryCache = useQueryCache();
@@ -43,6 +59,14 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   const draftStepTimeout = React.useRef<number | undefined>(undefined);
 
   const currentActivityId = activity === null ? null : activity.id;
+
+  // Save & get activity to session storage.
+  React.useEffect(() => {
+    setActivity(getInitialActivity);
+  }, []);
+  React.useEffect(() => {
+    debouncedSaveActivityInSession(activity);
+  }, [activity]);
 
   const getActivity = React.useCallback(
     async (id: number) => {
