@@ -17,26 +17,27 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
+import { ActivityStatus } from 'types/activity.type';
 import { User } from 'types/user.type';
 
 const MascotteStep4: React.FC = () => {
   const router = useRouter();
   const queryCache = useQueryCache();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, addContent, save, updateActivity } = React.useContext(ActivityContext);
+  const { activity, save, updateActivity } = React.useContext(ActivityContext);
   const { countries } = useCountries();
   const { languages } = useLanguages();
   const { currencies } = useCurrencies();
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
   React.useEffect(() => {
     if (!activity && !('activity-id' in router.query)) {
       router.push('/se-presenter');
     }
-  }, [activity, router, addContent, updateActivity]);
+  }, [activity, router, updateActivity]);
 
   const content = React.useMemo(() => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)), [
     data,
@@ -89,7 +90,7 @@ const MascotteStep4: React.FC = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save();
+    const success = await save(true);
     if (success) {
       const newUser: Partial<User> = {};
       if ((activity.data as MascotteData).mascotteImage) {

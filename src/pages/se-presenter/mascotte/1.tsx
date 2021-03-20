@@ -10,28 +10,30 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { useCountries } from 'src/services/useCountries';
 import { getUserDisplayName, pluralS } from 'src/utils';
-import { ActivityType, ActivitySubType } from 'types/activity.type';
+import { ActivityType, ActivityStatus, ActivitySubType } from 'types/activity.type';
 
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
-  const { countries } = useCountries();
   const [isError, setIsError] = React.useState<boolean>(false);
-  const { activity, updateActivity, createActivityIfNotExist } = React.useContext(ActivityContext);
+  const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const labelPresentation = getUserDisplayName(user, false);
 
+  const created = React.useRef(false);
   React.useEffect(() => {
-    if (!activity || activity.type !== ActivityType.PRESENTATION || activity.subType !== ActivitySubType.MASCOTTE) {
-      createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
-        ...DEFAULT_MASCOTTE_DATA,
-        presentation: labelPresentation,
-      }).catch(console.error);
+    if (!created.current) {
+      created.current = true;
+      if (!('activity-id' in router.query) && !('edit' in router.query)) {
+        createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
+          ...DEFAULT_MASCOTTE_DATA,
+          presentation: labelPresentation,
+        }).catch(console.error);
+      }
     }
-  }, [activity, countries, user, labelPresentation, createActivityIfNotExist]);
+  }, [labelPresentation, createActivityIfNotExist, router]);
 
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +81,7 @@ const MascotteStep1: React.FC = () => {
   };
 
   const onNext = () => {
+    save().catch(console.error);
     if (isValid()) {
       router.push('/se-presenter/mascotte/2');
     } else {

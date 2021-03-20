@@ -10,16 +10,17 @@ import { Steps } from 'src/components/Steps';
 import { SimpleActivityEditor } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep2: React.FC = () => {
   const router = useRouter();
   const { activity } = React.useContext(ActivityContext);
 
   const data = activity?.data || null;
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
-    if (data === null || !('theme' in data) || data.theme === -1) {
+    if ((data === null || !('theme' in data) || data.theme === -1) && !('activity-id' in router.query)) {
       router.push('/se-presenter/thematique/1');
     }
   }, [data, router]);

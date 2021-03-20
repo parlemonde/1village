@@ -49,6 +49,7 @@ function blockStyleFn(block: ContentBlock): string {
 interface SimpleTextEditorProps {
   value: string;
   onChange?(newValue: string, newLength: number): boolean | void;
+  onBlur?(): void;
   placeholder?: string;
   inlineToolbar?: boolean;
   withBorder?: boolean;
@@ -60,6 +61,7 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
   value = '',
   placeholder = 'Commencez à écrire ici, ou ajoutez une vidéo ou une image.',
   onChange = () => {},
+  onBlur = () => {},
   inlineToolbar = false,
   withBorder = false,
   noBlock = false,
@@ -295,6 +297,9 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
             handleBeforeInput={handleBeforeInput}
             handlePastedText={handlePastedText}
             blockStyleFn={blockStyleFn}
+            onBlur={() => {
+              onBlur();
+            }}
           />
         </div>
       </div>

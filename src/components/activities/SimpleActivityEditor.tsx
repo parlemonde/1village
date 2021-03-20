@@ -11,13 +11,22 @@ import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
 const SimpleActivityEditor: React.FC = () => {
-  const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+  const shouldSave = React.useRef(false);
 
-  const onChangeContent = (index: number) => (newValue: string) => {
+  const onChangeContent = (index: number, willSave: boolean = false) => (newValue: string) => {
     const newContent = [...activity.processedContent];
     newContent[index].value = newValue;
     updateActivity({ processedContent: newContent });
+    shouldSave.current = willSave;
   };
+
+  React.useEffect(() => {
+    if (shouldSave.current) {
+      shouldSave.current = false; // prevent loops.
+      save().catch();
+    }
+  }, [activity.processedContent, save]);
 
   const setContentOrder = (newContent: EditorContent[]) => {
     updateActivity({ processedContent: newContent });
@@ -36,6 +45,10 @@ const SimpleActivityEditor: React.FC = () => {
                 onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
+                  shouldSave.current = true;
+                }}
+                onBlur={() => {
+                  save().catch(console.error);
                 }}
               />
             );
@@ -46,9 +59,10 @@ const SimpleActivityEditor: React.FC = () => {
                 key={p.id}
                 id={p.id}
                 value={p.value}
-                onChange={onChangeContent(index)}
+                onChange={onChangeContent(index, true)}
                 onDelete={() => {
                   deleteContent(index);
+                  shouldSave.current = true;
                 }}
               />
             );
@@ -59,9 +73,10 @@ const SimpleActivityEditor: React.FC = () => {
                 key={p.id}
                 id={p.id}
                 value={p.value}
-                onChange={onChangeContent(index)}
+                onChange={onChangeContent(index, true)}
                 onDelete={() => {
                   deleteContent(index);
+                  shouldSave.current = true;
                 }}
               />
             );
@@ -72,9 +87,10 @@ const SimpleActivityEditor: React.FC = () => {
                 key={p.id}
                 id={p.id}
                 value={p.value}
-                onChange={onChangeContent(index)}
+                onChange={onChangeContent(index, true)}
                 onDelete={() => {
                   deleteContent(index);
+                  shouldSave.current = true;
                 }}
               />
             );

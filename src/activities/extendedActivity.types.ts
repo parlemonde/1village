@@ -9,7 +9,7 @@ export type EditorContent = {
 };
 
 export type GenericExtendedActivity<T> = Activity & {
-  data: T;
+  data: T & { draftUrl?: string };
   processedContent: Array<EditorContent>;
   dataId: number;
 };

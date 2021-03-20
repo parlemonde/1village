@@ -12,10 +12,12 @@ import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountr
 import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const MascotteStep3: React.FC = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
+  const shouldSave = React.useRef(false);
 
   React.useEffect(() => {
     if (!activity && !('activity-id' in router.query)) {
@@ -23,13 +25,21 @@ const MascotteStep3: React.FC = () => {
     }
   }, [activity, router]);
 
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
     const newData: MascotteData = { ...data, [key]: newValue };
     updateActivity({ data: newData });
+    shouldSave.current = true;
   };
+
+  React.useEffect(() => {
+    if (shouldSave.current) {
+      shouldSave.current = false;
+      save().catch();
+    }
+  }, [data.languages, data.countries, data.currencies, save]);
 
   if (!activity) return <Base>Redirecting ...</Base>;
 

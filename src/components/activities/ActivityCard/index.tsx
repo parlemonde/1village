@@ -44,6 +44,7 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
   isSelf = false,
   noButtons = false,
   showEditButtons = false,
+  isDraft = false,
   onDelete = () => {},
 }: ActivityCardProps<AnyActivity>) => {
   if (!user) {
@@ -55,7 +56,7 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
   return (
     <Paper variant="outlined" square style={{ margin: '1rem 0' }}>
       <div className="activity-card__header">
-        <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
+        <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
         <div className="activity-card__header_info">
           <p className="text">
             {`${getUserDisplayName(user, isSelf)} a `}
@@ -74,7 +75,15 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
       </div>
       <div className="activity-card__content">
         {isPresentation(activity) && isMascotte(activity) && (
-          <MascotteCard activity={activity} user={user} isSelf={isSelf} noButtons={noButtons} showEditButtons={showEditButtons} onDelete={onDelete} />
+          <MascotteCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
         )}
         {isPresentation(activity) && isThematique(activity) && (
           <PresentationCard
@@ -83,11 +92,20 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
             isSelf={isSelf}
             noButtons={noButtons}
             showEditButtons={showEditButtons}
+            isDraft={isDraft}
             onDelete={onDelete}
           />
         )}
         {isQuestion(activity) && (
-          <QuestionCard activity={activity} user={user} isSelf={isSelf} noButtons={noButtons} showEditButtons={showEditButtons} onDelete={onDelete} />
+          <QuestionCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
         )}
       </div>
     </Paper>

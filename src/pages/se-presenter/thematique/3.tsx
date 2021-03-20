@@ -13,6 +13,7 @@ import { SimpleActivityView } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep3: React.FC = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const PresentationStep3: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = activity?.data || null;
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if ((data === null || !('theme' in data) || data.theme === -1) && !('activity-id' in router.query)) {
@@ -30,7 +31,7 @@ const PresentationStep3: React.FC = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save();
+    const success = await save(true);
     if (success) {
       router.push('/se-presenter/success');
     }

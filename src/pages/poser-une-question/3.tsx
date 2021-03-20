@@ -74,7 +74,7 @@ const Question3: React.FC = () => {
       await Promise.all(processedContent.map((question) => createQuestionActivity(question.value)));
       queryCache.invalidateQueries('activities');
     } else {
-      await save();
+      await save(true);
     }
     router.push('/poser-une-question/success');
     setIsLoading(false);

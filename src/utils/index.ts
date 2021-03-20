@@ -5,7 +5,7 @@ import { User, UserType } from 'types/user.type';
 /**
  * Returns a query string with the given parameters.
  */
-export function serializeToQueryUrl(obj: { [key: string]: string | number | boolean }): string {
+export function serializeToQueryUrl(obj: { [key: string]: string | number | boolean | null | undefined }): string {
   if (Object.keys(obj).length === 0) {
     return '';
   }
@@ -13,7 +13,9 @@ export function serializeToQueryUrl(obj: { [key: string]: string | number | bool
     '?' +
     Object.keys(obj)
       .reduce(function (a, k) {
-        a.push(k + '=' + encodeURIComponent(obj[k]));
+        if (obj[k] !== undefined) {
+          a.push(k + '=' + encodeURIComponent(obj[k]));
+        }
         return a;
       }, [])
       .join('&');
@@ -33,17 +35,14 @@ export function getQueryString(q: string | string[]): string {
  * N milliseconds. If `immediate` is passed, trigger the function on the
  * leading edge, instead of the trailing.
  */
-export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(
-  func: T,
-  wait: number,
-  immediate: boolean,
-  ...args: unknown[]
-): T {
+export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(func: T, wait: number, immediate: boolean): T {
   let timeout: NodeJS.Timeout;
   return (function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /*@ts-ignore */ //eslint-disable-next-line @typescript-eslint/no-this-alias, @typescript-eslint/no-explicit-any
     const context: any = this;
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
     const later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
