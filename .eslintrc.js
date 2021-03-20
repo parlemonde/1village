@@ -48,6 +48,9 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn",
   },
   settings: {
+    "react": {
+      "version": "detect",
+    },
     "import/resolver": {
       node: {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".svg"],
