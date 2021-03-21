@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, TextField } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
-import { DEFAULT_MASCOTTE_DATA, isMascotte } from 'src/activities/presentation.const';
+import { DEFAULT_MASCOTTE_DATA, isMascotte, PRESENTATION } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -12,7 +12,7 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName, pluralS } from 'src/utils';
-import { ActivityType, ActivityStatus, ActivitySubType } from 'types/activity.type';
+import { ActivityType, ActivityStatus } from 'types/activity.type';
 
 const MascotteStep1: React.FC = () => {
   const router = useRouter();
@@ -26,13 +26,13 @@ const MascotteStep1: React.FC = () => {
     if (!created.current) {
       if (!activity && !('activity-id' in router.query) && !sessionStorage.getItem('activity') && !('edit' in router.query)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
+        createActivityIfNotExist(ActivityType.PRESENTATION, PRESENTATION.MASCOTTE, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.PRESENTATION, ActivitySubType.MASCOTTE, {
+        createActivityIfNotExist(ActivityType.PRESENTATION, PRESENTATION.MASCOTTE, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);

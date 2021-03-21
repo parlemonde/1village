@@ -1,5 +1,4 @@
 import { capitalize, naturalJoin, pluralS } from 'src/utils';
-import { ActivitySubType } from 'types/activity.type';
 import { Country } from 'types/country.type';
 import { Currency } from 'types/currency.type';
 import { Language } from 'types/language.type';
@@ -67,11 +66,16 @@ export const DEFAULT_MASCOTTE_DATA: MascotteData = {
   currencies: [],
 };
 
+export const PRESENTATION = {
+  THEMATIQUE: 0,
+  MASCOTTE: 1,
+};
+
 export const isMascotte = (activity: PresentationActivity): activity is PresentationMascotteActivity => {
-  return activity.subType === ActivitySubType.MASCOTTE;
+  return activity.subType === PRESENTATION.MASCOTTE;
 };
 export const isThematique = (activity: PresentationActivity): activity is PresentationThematiqueActivity => {
-  return activity.subType === null || activity.subType === ActivitySubType.THEMATIQUE;
+  return activity.subType === null || activity.subType === PRESENTATION.THEMATIQUE;
 };
 
 export const getMascotteContent = (data: MascotteData, countries: Country[], currencies: Currency[], languages: Language[]): string[] => {

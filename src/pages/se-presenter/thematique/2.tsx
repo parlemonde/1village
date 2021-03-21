@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
+import { EditorContent } from 'src/activities/extendedActivity.types';
 import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -15,7 +16,7 @@ import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep2: React.FC = () => {
   const router = useRouter();
-  const { activity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const data = activity?.data || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -28,6 +29,10 @@ const PresentationStep2: React.FC = () => {
     }
   }, [activity, router]);
 
+  const updateContent = (content: EditorContent[]): void => {
+    updateActivity({ processedContent: content });
+  };
+
   if (data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
@@ -39,7 +44,13 @@ const PresentationStep2: React.FC = () => {
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={1} />
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
-          <SimpleActivityEditor />
+          <SimpleActivityEditor
+            content={activity.processedContent}
+            updateContent={updateContent}
+            addContent={addContent}
+            deleteContent={deleteContent}
+            save={save}
+          />
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Link href="/se-presenter/thematique/3">
               <Button component="a" href="/se-presenter/thematique/3" variant="outlined" color="primary">
