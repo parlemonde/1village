@@ -5,12 +5,12 @@ import React from 'react';
 import { Card, CircularProgress } from '@material-ui/core';
 
 import { AnyActivity, AnyActivityData } from 'src/activities/anyActivities.types';
-import { getAnyActivity } from 'src/activities/anyActivity';
+import { getAnyActivity, isEnigme } from 'src/activities/anyActivity';
+import { EnigmeData } from 'src/activities/enigme.types';
 import type { EditorTypes } from 'src/activities/extendedActivity.types';
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
-import { debounce, getQueryString } from 'src/utils';
-import { serializeToQueryUrl } from 'src/utils';
+import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import { Activity, ActivityType, ActivityStatus } from 'types/activity.type';
 
 import { UserContext } from './userContext';
@@ -225,6 +225,9 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         activityData.draftUrl = window.location.pathname;
       } else {
         delete activityData.draftUrl;
+        if (isEnigme(activity)) {
+          (activityData as EnigmeData).timer = new Date().getTime();
+        }
       }
       content.push({
         key: 'json',

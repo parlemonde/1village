@@ -1,3 +1,5 @@
+import { EnigmeActivity } from './enigme.types';
+
 export const ENIGME = {
   OBJET: 0,
   EVENEMENT: 1,
@@ -34,9 +36,9 @@ export const ENIGME_TYPES = [
 export const ENIGME_DATA = [
   [
     {
-      label: 'Une fête de l’école',
-      description: 'Faites nous découvrir les jours de fêtes de votre école.',
-      step: 'Une Fête',
+      label: 'Un objet mystère',
+      description: 'Faites nous découvrir un objet mystère.',
+      step: 'Un objet',
     },
     {
       label: 'Autre',
@@ -73,9 +75,19 @@ export const ENIGME_DATA = [
   ],
   [
     {
-      label: 'Une fête de l’école',
-      description: 'Faites nous découvrir les jours de fêtes de votre école.',
-      step: 'Une Fête',
+      label: 'Un personnage historique',
+      description: 'Faites nous découvrir un personnage historique.',
+      step: 'Un personnage historique',
+    },
+    {
+      label: 'Un personnage de fiction',
+      description: 'Faites nous découvrir un personnage de fiction.',
+      step: 'Un personnage de fiction',
+    },
+    {
+      label: 'Un personnage contemporain',
+      description: 'Faites nous découvrir un personnage contemporain.',
+      step: 'Un personnage contemporain',
     },
     {
       label: 'Autre',
@@ -84,3 +96,7 @@ export const ENIGME_DATA = [
     },
   ],
 ];
+
+export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
+  return 7 - Math.floor((new Date().getTime() - (activity.data.timer ?? new Date(activity.updateDate).getTime())) / 3600000 / 24);
+}

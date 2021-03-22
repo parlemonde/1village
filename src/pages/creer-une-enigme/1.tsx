@@ -34,12 +34,14 @@ const EnigmeStep1: React.FC = () => {
         createNewActivity(ActivityType.ENIGME, enigmeTypeIndex, {
           theme: 0,
           indiceContentIndex: 1,
+          timer: 0,
         });
       } else if (activity && (!isEnigme(activity) || activity.subType !== enigmeTypeIndex)) {
         created.current = true;
         createNewActivity(ActivityType.ENIGME, enigmeTypeIndex, {
           theme: 0,
           indiceContentIndex: 1,
+          timer: 0,
         });
       }
     }
