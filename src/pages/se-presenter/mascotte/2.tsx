@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, TextField, Grid, Box } from '@material-ui/core';
+import { TextField, Grid, Box } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
 import { isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/editors/ImageEditor/AvatarEditor';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -164,11 +165,8 @@ const MascotteStep2: React.FC = () => {
               </Grid>
             </Grid>
           </div>
-          <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Button component="a" onClick={onNext} variant="outlined" color="primary">
-              Étape suivante
-            </Button>
-          </div>
+
+          <StepsButton prev={`/se-presenter/mascotte/1?edit=${activity?.id ?? 0}`} next={onNext} />
         </div>
       </div>
     </Base>

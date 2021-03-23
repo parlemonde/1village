@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
 import { DEFAULT_MASCOTTE_DATA, isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -244,11 +245,8 @@ const MascotteStep1: React.FC = () => {
               <span> élève{pluralS(data.totalSchoolStudent)}.</span>
             </div>
           </div>
-          <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Button component="a" onClick={onNext} variant="outlined" color="primary">
-              Étape suivante
-            </Button>
-          </div>
+
+          <StepsButton next={onNext} />
         </div>
       </div>
     </Base>

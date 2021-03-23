@@ -1,12 +1,12 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, ButtonBase, TextField, withStyles, Card } from '@material-ui/core';
+import { ButtonBase, TextField, withStyles, Card } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import { isQuestion } from 'src/activities/anyActivity';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
@@ -107,13 +107,7 @@ const Question2: React.FC = () => {
             </div>
           )}
 
-          <div style={{ width: '100%', textAlign: 'right', margin: '3rem 0' }}>
-            <Link href="/poser-une-question/3">
-              <Button component="a" href="/poser-une-question/3" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
-          </div>
+          <StepsButton prev={activity.id === 0 ? '/poser-une-question/1?edit=true' : undefined} next="/poser-une-question/3" />
         </div>
       </div>
     </Base>

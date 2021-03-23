@@ -1,12 +1,10 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Button } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
 import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityEditor } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -40,13 +38,7 @@ const PresentationStep2: React.FC = () => {
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
           <SimpleActivityEditor />
-          <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Link href="/se-presenter/thematique/3">
-              <Button component="a" href="/se-presenter/thematique/3" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
-          </div>
+          <StepsButton prev={`/se-presenter/thematique/1?edit=${activity.id}`} next="/se-presenter/thematique/3" />
         </div>
       </div>
     </Base>

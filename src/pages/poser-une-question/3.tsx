@@ -9,6 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isQuestion } from 'src/activities/anyActivity';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -150,6 +151,8 @@ const Question3: React.FC = () => {
                 </p>
               ))}
           </div>
+
+          <StepsButton prev="/poser-une-question/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
