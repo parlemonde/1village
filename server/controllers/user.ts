@@ -5,6 +5,7 @@ import { getRepository } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
+import { Activity, ActivitySubType, ActivityType } from '../entities/activity';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -19,6 +20,24 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
   let users: User[] = [];
   if (req.query.villageId) {
     users = await getRepository(User).find({ where: [{ villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 }, { villageId: null }] });
+    const ids = users.map((u) => u.id);
+    const mascottes = (
+      await getRepository(Activity)
+        .createQueryBuilder('activity')
+        .select('userId')
+        .addSelect('id')
+        .where('type = :type', { type: `${ActivityType.PRESENTATION}` })
+        .andWhere('subType = :subType', { subType: `${ActivitySubType.MASCOTTE}` })
+        .andWhere('userId in (:ids)', { ids })
+        .orderBy('createDate', 'ASC')
+        .getRawMany()
+    ).reduce<{ [userId: number]: number }>((acc, row) => {
+      acc[row.userId] = row.id;
+      return acc;
+    }, {});
+    for (const user of users) {
+      user.mascotteId = mascottes[user.id] || undefined;
+    }
   } else {
     users = await getRepository(User).find();
   }

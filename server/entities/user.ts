@@ -70,4 +70,6 @@ export class User implements UserInterface {
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
+
+  public mascotteId?: number;
 }

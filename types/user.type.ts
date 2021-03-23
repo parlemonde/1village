@@ -40,4 +40,6 @@ export interface User {
 
   // country relation
   countryCode: string;
+
+  mascotteId?: number;
 }
