@@ -56,7 +56,7 @@ const MascotteStep3: React.FC = () => {
           activeStep={2}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
-          <h1>Dites-en plus sur vous-mêmes et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
+          <h1>Dites-en plus sur vous-même et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>

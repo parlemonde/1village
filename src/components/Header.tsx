@@ -55,12 +55,12 @@ export const Header: React.FC = () => {
             </h1>
           </a>
         </Link>
-        <div className="header__search">
+        {/* <div className="header__search">
           <IconButton aria-label="search" size="small">
             <SearchIcon />
           </IconButton>
           <InputBase placeholder="Rechercher" inputProps={{ 'aria-label': 'search' }} />
-        </div>
+        </div> */}
         {user && (
           <div className="header__user">
             {user.type > UserType.TEACHER && (
