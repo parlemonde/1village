@@ -8,7 +8,6 @@ import { isQuestion } from 'src/activities/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 
@@ -61,7 +60,6 @@ const Question2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {activity.id === 0 && <BackButton href="/poser-une-question/1" />}
         <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={1} />
         <div className="width-900">
           <h1>Vos questions</h1>

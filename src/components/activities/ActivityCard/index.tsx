@@ -101,17 +101,7 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
           <>
             <Timer style={{ alignSelf: 'center', height: '1.2rem', width: 'auto', marginRight: '0.25rem' }} />
             <div style={{ alignSelf: 'center', marginRight: '0.5rem', lineHeight: '0.875rem' }}>
-              <span className="text text--small text--error">
-                {timeLeft > 0 ? (
-                  `Temps restant: ${timeLeft}j`
-                ) : (
-                  <>
-                    Temps écoulé,
-                    <br />
-                    La réponse est disponible !
-                  </>
-                )}
-              </span>
+              <span className="text text--small text--error">{timeLeft > 0 ? `Temps restant: ${timeLeft}j` : 'La réponse est disponible !'}</span>
             </div>
           </>
         )}

@@ -225,7 +225,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         activityData.draftUrl = window.location.pathname;
       } else {
         delete activityData.draftUrl;
-        if (isEnigme(activity)) {
+        if (isEnigme(activity) && !(activityData as EnigmeData).timer) {
           (activityData as EnigmeData).timer = new Date().getTime();
         }
       }

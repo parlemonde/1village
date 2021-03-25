@@ -1,19 +1,15 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Button } from '@material-ui/core';
 
 import { isEnigme } from 'src/activities/anyActivity';
 import { ENIGME_DATA, ENIGME_TYPES } from 'src/activities/enigme.const';
 import { EnigmeData } from 'src/activities/enigme.types';
 import { EditorContent, EditorTypes } from 'src/activities/extendedActivity.types';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityEditor } from 'src/components/activities';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { ActivityStatus } from 'types/activity.type';
 
 const EnigmeStep3: React.FC = () => {
   const router = useRouter();
@@ -21,7 +17,6 @@ const EnigmeStep3: React.FC = () => {
 
   const data = (activity?.data as EnigmeData) || null;
   const indiceContentIndex = data?.indiceContentIndex ?? 0;
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const contentAdded = React.useRef(false);
   React.useEffect(() => {
@@ -69,7 +64,6 @@ const EnigmeStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href={`/creer-une-enigme/2`} label={isEdit ? 'Modifier' : 'Retour'} />
         <Steps
           steps={[
             enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
@@ -92,13 +86,7 @@ const EnigmeStep3: React.FC = () => {
             deleteContent={deleteIndiceContent}
             save={save}
           />
-          <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Link href="/creer-une-enigme/4">
-              <Button component="a" href="/creer-une-enigme/4" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
-          </div>
+          <StepsButton prev="/creer-une-enigme/2" next="/creer-une-enigme/4" />
         </div>
       </div>
     </Base>

@@ -70,7 +70,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`}>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    {"Résolvez l'énigme"}
+                    {'Résoudre l’énigme'}
                   </Button>
                 </Link>
               </>

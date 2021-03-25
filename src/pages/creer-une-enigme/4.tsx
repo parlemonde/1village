@@ -10,9 +10,9 @@ import { isEnigme } from 'src/activities/anyActivity';
 import { ENIGME_TYPES, ENIGME_DATA } from 'src/activities/enigme.const';
 import { EnigmeData } from 'src/activities/enigme.types';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
@@ -53,7 +53,6 @@ const EnigmeStep4: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href={`/creer-une-enigme/3`} label={isEdit ? 'Modifier' : 'Retour'} />
         <Steps
           steps={[
             enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
@@ -127,6 +126,8 @@ const EnigmeStep4: React.FC = () => {
             />
             <SimpleActivityView activity={activity} content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
           </div>
+
+          <StepsButton prev="/creer-une-enigme/3" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

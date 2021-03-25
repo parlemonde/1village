@@ -12,7 +12,6 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
@@ -49,7 +48,6 @@ const PresentationStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter/thematique/2" label={isEdit ? 'Modifier' : 'Retour'} />
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={2} />
         <div className="width-900">
           <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez la'}</h1>

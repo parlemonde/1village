@@ -25,6 +25,7 @@ const SimpleActivityEditor: React.FC<SimpleActivityEditorProps> = ({
   save,
 }: SimpleActivityEditorProps) => {
   const shouldSave = React.useRef(false);
+  const blurTimeoutSave = React.useRef<number | undefined>(undefined);
 
   const onChangeContent = (index: number, willSave: boolean = false) => (newValue: string) => {
     const newContent = [...content];
@@ -55,8 +56,14 @@ const SimpleActivityEditor: React.FC<SimpleActivityEditorProps> = ({
                   deleteContent(index);
                   shouldSave.current = true;
                 }}
+                onFocus={() => {
+                  clearTimeout(blurTimeoutSave.current);
+                }}
                 onBlur={() => {
-                  save().catch(console.error);
+                  clearTimeout(blurTimeoutSave.current);
+                  blurTimeoutSave.current = window.setTimeout(() => {
+                    save().catch(console.error);
+                  }, 60000);
                 }}
               />
             );

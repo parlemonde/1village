@@ -36,9 +36,29 @@ export const ENIGME_TYPES = [
 export const ENIGME_DATA = [
   [
     {
-      label: 'Un objet mystère',
-      description: 'Faites nous découvrir un objet mystère.',
-      step: 'Un objet',
+      label: 'Un jouet',
+      description: 'Faites nous découvrir un jouet mystère.',
+      step: 'Un jouet',
+    },
+    {
+      label: 'Un ustencile',
+      description: 'Faites nous découvrir un ustencile.',
+      step: 'Un ustencile',
+    },
+    {
+      label: 'Un objet de culte',
+      description: 'Faites nous découvrir un objet de culte.',
+      step: 'Un objet de culte',
+    },
+    {
+      label: 'Un instrument de musique',
+      description: 'Faites nous découvrir un instrument de musique.',
+      step: 'Un instrument de musique',
+    },
+    {
+      label: 'Un costume',
+      description: 'Faites nous découvrir un costume mystère.',
+      step: 'Un costume',
     },
     {
       label: 'Autre',
