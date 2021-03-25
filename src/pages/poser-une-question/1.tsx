@@ -7,6 +7,7 @@ import { isQuestion } from 'src/activities/anyActivity';
 import { QuestionActivity } from 'src/activities/question.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -23,7 +24,7 @@ const Question1: React.FC = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { createNewActivity } = React.useContext(ActivityContext);
+  const { activity, createNewActivity } = React.useContext(ActivityContext);
   const { users } = useVillageUsers();
   const { activities } = useActivities({
     limit: 50,
@@ -54,6 +55,10 @@ const Question1: React.FC = () => {
   }, [activities]);
 
   const onNext = () => {
+    if (activity && isQuestion(activity) && 'edit' in router.query) {
+      router.push('/poser-une-question/2');
+      return;
+    }
     const success = createNewActivity(ActivityType.QUESTION);
     if (success) {
       router.push('/poser-une-question/2');
@@ -140,11 +145,7 @@ const Question1: React.FC = () => {
             );
           })}
 
-          <div style={{ width: '100%', textAlign: 'right', margin: '3rem 0' }}>
-            <Button onClick={onNext} variant="outlined" color="primary">
-              Étape suivante
-            </Button>
-          </div>
+          <StepsButton next={onNext} />
         </div>
       </div>
     </Base>

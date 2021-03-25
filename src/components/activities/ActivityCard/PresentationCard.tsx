@@ -61,7 +61,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
           <div style={{ textAlign: 'right' }}>
             {!showEditButtons && (
               <>
-                <CommentIcon count={activity.commentCount} />
+                <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`}>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     Regarder la présentation

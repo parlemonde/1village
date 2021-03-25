@@ -86,7 +86,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
             )}
             {!showEditButtons && (
               <>
-                <CommentIcon count={activity.commentCount} />
+                <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`}>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
                     Regarder la présentation

@@ -1,13 +1,13 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 import { isPresentation } from 'src/activities/anyActivity';
 import { isMascotte } from 'src/activities/presentation.const';
 import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
@@ -56,7 +56,7 @@ const MascotteStep3: React.FC = () => {
           activeStep={2}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
-          <h1>Dites-en plus sur vous-mêmes et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
+          <h1>Dites-en plus sur vous-même et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
@@ -90,13 +90,8 @@ const MascotteStep3: React.FC = () => {
               </Grid>
             </Grid>
           </div>
-          <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Link href="/se-presenter/mascotte/4">
-              <Button component="a" href="/se-presenter/mascotte/4" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
-          </div>
+
+          <StepsButton prev="/se-presenter/mascotte/2" next="/se-presenter/mascotte/4" />
         </div>
       </div>
     </Base>

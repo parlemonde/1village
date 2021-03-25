@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
@@ -61,11 +62,31 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
   return (
     <Paper variant="outlined" square style={{ margin: '1rem 0' }}>
       <div className="activity-card__header">
-        <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
+        {user.mascotteId ? (
+          <Link href={`/activite/${user.mascotteId}`}>
+            <a href={`/activite/${user.mascotteId}`}>
+              <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
+            </a>
+          </Link>
+        ) : (
+          <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
+        )}
         <div className="activity-card__header_info">
           <p className="text">
-            {`${getUserDisplayName(user, isSelf)} a `}
-            <strong>{titles[activity.type]}</strong>
+            {user.mascotteId ? (
+              <>
+                <Link href={`/activite/${user.mascotteId}`}>
+                  <a href={`/activite/${user.mascotteId}`}>{`${getUserDisplayName(user, isSelf)}`}</a>
+                </Link>
+                {' a '}
+                <strong>{titles[activity.type]}</strong>
+              </>
+            ) : (
+              <>
+                {`${getUserDisplayName(user, isSelf)} a `}
+                <strong>{titles[activity.type]}</strong>
+              </>
+            )}
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>

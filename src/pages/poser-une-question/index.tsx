@@ -1,9 +1,7 @@
-import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
-
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 
 const Question: React.FC = () => {
   return (
@@ -15,13 +13,7 @@ const Question: React.FC = () => {
             Dans cette activité, nous vous proposons de poser une question aux Pélicopains sur leur mode de vie (alimentation, jeux, danses etc.).
             Vous pourrez ensuite répondre aux questions des Pélicopains sous forme d’un texte court ou d’une activités (énigme, vidéo…).
           </p>
-          <div style={{ width: '100%', textAlign: 'right', margin: '3rem 0' }}>
-            <Link href="/poser-une-question/1">
-              <Button component="a" href="/poser-une-question/1" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
-          </div>
+          <StepsButton next="/poser-une-question/1" />
         </div>
       </div>
     </Base>

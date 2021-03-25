@@ -363,8 +363,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         maxWidth="sm"
         fullWidth
         title="Brouillon en cours !"
-        cancelLabel="Non"
-        confirmLabel="Oui"
+        cancelLabel="Créer une nouvelle activité"
+        confirmLabel="Reprendre le brouillon"
         onClose={() => {
           setDraft(null);
         }}

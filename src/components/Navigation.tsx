@@ -61,7 +61,7 @@ const tabs: Tab[] = [
     disabled: true,
   },
   {
-    label: 'Mes activités',
+    label: 'Voir mes activités',
     path: '/mes-activites',
     icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     disabled: false,

@@ -74,7 +74,7 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
             {askSame.length > 0 && <span className="text text--primary">+ {askSame.length}</span>}
           </div>
           <div>
-            <CommentIcon count={activity.commentCount} />
+            <CommentIcon count={activity.commentCount} activityId={activity.id} />
             <Link href={`/activite/${activity.id}`}>
               <Button component="a" href={`/activite/${activity.id}`} variant="outlined" color="primary">
                 Répondre à la question

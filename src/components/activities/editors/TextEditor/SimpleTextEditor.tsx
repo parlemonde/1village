@@ -1,9 +1,23 @@
 import classnames from 'classnames';
-import { Editor, RichUtils, DraftHandleValue, ContentState, convertToRaw, EditorState, Modifier, DraftEditorCommand, ContentBlock } from 'draft-js';
+import {
+  Editor,
+  RichUtils,
+  CompositeDecorator,
+  DraftHandleValue,
+  ContentState,
+  convertToRaw,
+  EditorState,
+  Modifier,
+  DraftEditorCommand,
+  ContentBlock,
+} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import {
   setBlockData,
   getSelectedBlock,
+  getSelectionEntity,
+  getSelectionText,
+  getEntityRange,
   getSelectionInlineStyle,
   extractInlineStyle,
   getCustomStyleMap,
@@ -22,6 +36,7 @@ import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
 import { InlineButtons } from './toolbar/InlineButtons';
+import { LinkPicker, LinkValue, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
 
@@ -67,7 +82,8 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
   noBlock = false,
   maxLen,
 }: SimpleTextEditorProps) => {
-  const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
+  const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty(new CompositeDecorator([LinkDecorator])));
+  const [linkModalOpen, setLinkModalOpen] = React.useState(false);
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<Editor>(null);
   const classes = useStyles();
@@ -78,7 +94,7 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
       previousValue.current = value;
       const { contentBlocks, entityMap } = htmlToDraft(value);
       const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-      const newEditorState = EditorState.createWithContent(contentState);
+      const newEditorState = EditorState.createWithContent(contentState, new CompositeDecorator([LinkDecorator]));
       extractInlineStyle(newEditorState);
       setEditorState(newEditorState);
     }
@@ -147,7 +163,7 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
   };
 
   const onEditorChange = (newEditorState: EditorState) => {
-    const newHTMLValue = draftToHtml(convertToRaw(newEditorState.getCurrentContent()));
+    const newHTMLValue = draftToHtml(convertToRaw(newEditorState.getCurrentContent()), undefined, undefined, linkToHTML);
     previousValue.current = newHTMLValue;
     const content = editorState.getCurrentContent();
     const success = onChange(newHTMLValue, content.getPlainText('').length);
@@ -196,6 +212,26 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
       }
     }
   };
+
+  // --- Links ---
+  const currentLink = React.useMemo(() => {
+    const currentEntity = getSelectionEntity(editorState);
+    const contentState = editorState.getCurrentContent();
+    const currentValues: LinkValue = { link: null, selectionText: null };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (currentEntity && contentState.getEntity(currentEntity).get('type') === 'LINK') {
+      const entityRange = currentEntity && getEntityRange(editorState, currentEntity);
+      currentValues.link = {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        target: currentEntity && contentState.getEntity(currentEntity).get('data').url,
+        title: entityRange && entityRange.text,
+      };
+    }
+    currentValues.selectionText = getSelectionText(editorState);
+    return currentValues;
+  }, [editorState]);
 
   // --- Block style ---
   const toggleBlockType = (blockType: string) => {
@@ -253,6 +289,13 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
       )}
       <Divider flexItem orientation="vertical" className={classes.divider} />
       <ColorPicker value={currentColor} onChange={setInlineColor} />
+      <LinkPicker
+        editorState={editorState}
+        linkModalOpen={linkModalOpen}
+        setLinkModalOpen={setLinkModalOpen}
+        value={currentLink}
+        onChange={onEditorChange}
+      />
       <EmojiPicker onChange={addEmoji} />
     </Paper>
   );
@@ -274,7 +317,7 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
         <div className="text-editor__toolbar-container">
           <div
             className={classnames('text-editor__toolbar', {
-              'text-editor__toolbar--visible': hasFocus,
+              'text-editor__toolbar--visible': hasFocus || linkModalOpen,
             })}
           >
             {toolbar}

@@ -4,7 +4,8 @@ import { Base } from 'src/components/Base';
 import { SuggestionCarousel } from 'src/components/SuggestionCarousel';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { UserContext } from 'src/contexts/userContext';
-import ImageIcon from 'src/svg/image.svg';
+import MascotteIcon from 'src/svg/presentation/mascotte.svg';
+import ThematiqueIcon from 'src/svg/presentation/thematique.svg';
 import { UserType } from 'types/user.type';
 
 const suggestions = [
@@ -14,16 +15,16 @@ const suggestions = [
     href: '/se-presenter/mascotte/1',
     text:
       'Créez votre mascotte pour présenter votre classe à vos Pélicopains. Créez-la à votre image, elle vous représentera dans votre village-monde !',
-    icon: ImageIcon,
+    icon: MascotteIcon,
     disabled: true,
   },
   {
-    title: 'Présentation thématique',
+    title: 'Créer une présentation thématique',
     button: 'Présentation thématique',
     href: '/se-presenter/thematique/1',
     text:
-      'Partagez un aspect de votre quotidien ou de votre culture aux Pelicopains ! Présentez en vidéo, image, texte et son votre école, votre environnement, votre plat favori, vos jeux de récréation et plus encore.',
-    icon: ImageIcon,
+      'Partagez un aspect de votre quotidien ou de votre culture aux Pelicopains ! Présentez en vidéo, image, texte et son, votre école, votre environnement, votre plat favori, vos jeux de récréation et plus encore.',
+    icon: ThematiqueIcon,
     disabled: false,
   },
 ];
@@ -32,14 +33,14 @@ const activities = [
   {
     label: 'Créer sa mascotte',
     href: '/se-presenter/mascotte/1',
-    icon: ImageIcon,
+    icon: MascotteIcon,
     disabled: true,
     disabledText: 'Vous avez déjà créé votre mascotte ! Pour la modifier, rendez-vous dans le menu “mes activités“.',
   },
   {
-    label: 'Présentation thématique',
+    label: 'Créer une présentation thématique',
     href: '/se-presenter/thematique/1',
-    icon: ImageIcon,
+    icon: ThematiqueIcon,
     disabled: false,
     disabledText: '',
   },

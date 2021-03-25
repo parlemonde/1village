@@ -10,6 +10,7 @@ import { getMascotteContent, isMascotte } from 'src/activities/presentation.cons
 import { MascotteData } from 'src/activities/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -212,6 +213,8 @@ const MascotteStep4: React.FC = () => {
                 ))}
             </div>
           </div>
+
+          <StepsButton prev="/se-presenter/mascotte/3" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

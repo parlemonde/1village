@@ -43,7 +43,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, onChange, countries =
     <div style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 0', flexWrap: 'wrap' }}>
       <span className="text text--bold">Filtres :</span>
       <FilterSelect
-        name="Activitées"
+        name="Activités"
         options={[
           { key: 0, label: 'Toutes' },
           { key: 1, label: 'Présentations' },

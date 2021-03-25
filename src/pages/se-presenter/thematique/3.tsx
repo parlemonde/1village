@@ -9,6 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { isPresentation } from 'src/activities/anyActivity';
 import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -99,6 +100,8 @@ const PresentationStep3: React.FC = () => {
             />
             <SimpleActivityView activity={activity} />
           </div>
+
+          <StepsButton prev="/se-presenter/thematique/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
