@@ -115,7 +115,7 @@
     "mysql": "^2.18.1",
     "next": "^10.0.3",
     "nodemailer": "^6.4.18",
-    "notistack": "^1.0.3",
+    "notistack": "^1.0.5",
     "nprogress": "^0.2.0",
     "query-string": "^7.0.0",
     "react": "^17.0.2",
