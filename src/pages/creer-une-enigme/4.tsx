@@ -15,6 +15,7 @@ import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
 const EnigmeStep4: React.FC = () => {
@@ -55,7 +56,7 @@ const EnigmeStep4: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
+            data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
             enigmeType.step2 ?? "Description de l'objet",
             "Création de l'indice",
             'Prévisualisation',
@@ -99,7 +100,8 @@ const EnigmeStep4: React.FC = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p style={{ margin: '0.5rem 0' }}>
-              Notre {enigmeType.titleStep2Short} mystère est <strong>{(enigmeData[data.theme]?.step ?? 'autre').toLowerCase()}</strong>.
+              Notre {enigmeType.titleStep2Short} mystère est{' '}
+              <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
             </p>
           </div>
 

@@ -9,6 +9,8 @@ export const ENIGME = {
 export const ENIGME_TYPES = [
   {
     title: 'Objet mystère',
+    title2: "L'objet mystère",
+    title3: 'un objet mystère',
     titleStep1: 'Choisissez votre objet mystère',
     step2: "Description de l'objet",
     titleStep2: 'Décrivez votre objet mystère',
@@ -17,6 +19,8 @@ export const ENIGME_TYPES = [
   },
   {
     title: 'Événement mystère',
+    title2: "L'événement mystère",
+    title3: 'un événement mystère',
     titleStep1: 'Choisissez votre événement mystère',
     step2: "Description de l'événement",
     titleStep2: 'Décrivez votre événement mystère',
@@ -25,6 +29,8 @@ export const ENIGME_TYPES = [
   },
   {
     title: 'Personalité mystère',
+    title2: 'La personalité mystère',
+    title3: 'une personalité mystère',
     titleStep1: 'Choisissez votre personalité mystère',
     step2: 'Description de la personalité',
     titleStep2: 'Décrivez votre personalité mystère',
@@ -60,11 +66,6 @@ export const ENIGME_DATA = [
       description: 'Faites nous découvrir un costume mystère.',
       step: 'Un costume',
     },
-    {
-      label: 'Autre',
-      description: 'Présentez un objet culturel mystère d’une autre catégorie.',
-      step: 'Autre',
-    },
   ],
   [
     {
@@ -87,11 +88,6 @@ export const ENIGME_DATA = [
       description: 'Faites nous découvrir une fête de votre pays.',
       step: 'Une fête nationale',
     },
-    {
-      label: 'Autre',
-      description: 'Présentez un événement mystère d’une autre catégorie.',
-      step: 'Autre',
-    },
   ],
   [
     {
@@ -108,11 +104,6 @@ export const ENIGME_DATA = [
       label: 'Un personnage contemporain',
       description: 'Faites nous découvrir un personnage contemporain.',
       step: 'Un personnage contemporain',
-    },
-    {
-      label: 'Autre',
-      description: 'Présentez une personalité mystère d’une autre catégorie.',
-      step: 'Autre',
     },
   ],
 ];

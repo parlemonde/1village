@@ -10,6 +10,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityEditor } from 'src/components/activities';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { capitalize } from 'src/utils';
 
 const EnigmeStep3: React.FC = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const EnigmeStep3: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
+            data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
             enigmeType.step2 ?? "Description de l'objet",
             "Création de l'indice",
             'Prévisualisation',

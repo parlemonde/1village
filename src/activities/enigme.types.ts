@@ -2,6 +2,7 @@ import { GenericExtendedActivity } from './extendedActivity.types';
 
 export type EnigmeData = {
   theme: number;
+  themeName?: string;
   indiceContentIndex: number;
   timer: number;
 };
