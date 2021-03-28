@@ -12,7 +12,7 @@ import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 
-const TextEditor = dynamic(() => import('../editors/TextEditor'), { ssr: false });
+const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
 const Reactions = [
   {

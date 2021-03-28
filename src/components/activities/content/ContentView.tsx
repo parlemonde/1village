@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { EditorContent } from 'src/activities/extendedActivity.types';
+import { EditorContent } from 'src/activity-types/extendedActivity.types';
 
-import { ActivityViewProps } from './editing.types';
 import { H5pView } from './views/H5pView';
 import { ImageView } from './views/ImageView';
 import { TextView } from './views/TextView';
 import { VideoView } from './views/VideoView';
 
-type SimpleActivityViewProps = ActivityViewProps & { content?: EditorContent[] };
+type ContentViewProps = { content: EditorContent[] };
 
-export const SimpleActivityView: React.FC<SimpleActivityViewProps> = ({ activity, content }: SimpleActivityViewProps) => {
+export const ContentView: React.FC<ContentViewProps> = ({ content }: ContentViewProps) => {
   return (
     <div>
-      {(content ?? activity.processedContent).map((p) => {
+      {content.map((p) => {
         if (p.type === 'text') {
           return <TextView id={p.id} value={p.value} key={p.id} />;
         }

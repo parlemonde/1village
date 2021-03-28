@@ -3,8 +3,8 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { isQuestion } from 'src/activities/anyActivity';
-import { QuestionActivity } from 'src/activities/question.types';
+import { isQuestion } from 'src/activity-types/anyActivity';
+import { QuestionActivity } from 'src/activity-types/question.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

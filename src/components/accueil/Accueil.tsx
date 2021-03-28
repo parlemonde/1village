@@ -4,9 +4,9 @@ import { Base } from 'src/components/Base';
 import { Filters, FilterArgs } from 'src/components/accueil/Filters';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { SubHeader } from 'src/components/accueil/SubHeader';
+import { Activities } from 'src/components/activities/List';
 import { VillageContext } from 'src/contexts/villageContext';
-
-import { Activities } from '../activities/List';
+import { useActivities } from 'src/services/useActivities';
 
 export const Accueil: React.FC = () => {
   const { village } = React.useContext(VillageContext);
@@ -15,6 +15,13 @@ export const Accueil: React.FC = () => {
     status: 0,
     countries: {},
     pelico: true,
+  });
+  const { activities } = useActivities({
+    limit: 50,
+    page: 0,
+    countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
+    pelico: filters.pelico,
+    type: filters.type - 1,
   });
 
   if (village === null) {
@@ -29,7 +36,7 @@ export const Accueil: React.FC = () => {
     <Base subHeader={<SubHeader />} rightNav={<RightNavigation />}>
       <h1>Dernières activités</h1>
       <Filters countries={village.countries} filters={filters} onChange={setFilters} />
-      <Activities filters={filters} />
+      <Activities activities={activities} />
     </Base>
   );
 };

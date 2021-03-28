@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isEnigme } from 'src/activities/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES } from 'src/activities/enigme.const';
-import { EnigmeData } from 'src/activities/enigme.types';
-import { EditorContent, EditorTypes } from 'src/activities/extendedActivity.types';
+import { isEnigme } from 'src/activity-types/anyActivity';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
+import { EnigmeData } from 'src/activity-types/enigme.types';
+import { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityEditor } from 'src/components/activities';
+import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
 
@@ -80,7 +80,7 @@ const EnigmeStep3: React.FC = () => {
             Créez ici un <strong>indice</strong> pour faire deviner votre {enigmeType.titleStep2Short}. Vous pouvez ajouter du texte, une vidéo ou une
             image à votre indice et vous pourrez le modifier à l’étape 4.
           </p>
-          <SimpleActivityEditor
+          <ContentEditor
             content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)}
             updateContent={updateContent}
             addContent={addIndiceContent}

@@ -3,13 +3,13 @@ import React from 'react';
 
 import { Button, Card } from '@material-ui/core';
 
-import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activities/enigme.const';
-import { EnigmeActivity } from 'src/activities/enigme.types';
+import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
+import { EnigmeActivity } from 'src/activity-types/enigme.types';
+import { ContentView } from 'src/components/activities/content/ContentView';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import Timer from 'src/svg/enigme/timer.svg';
 
-import { SimpleActivityView } from './SimpleActivityView';
-import { ActivityViewProps } from './editing.types';
+import { ActivityViewProps } from './activity-view.types';
 
 type EnigmeActivityViewProps = ActivityViewProps<EnigmeActivity> & {
   isAnswer: boolean;
@@ -40,8 +40,7 @@ export const EnigmeActivityView: React.FC<EnigmeActivityViewProps> = ({ activity
   return (
     <div style={{ margin: '1rem 0' }}>
       <h3 style={{ marginBottom: '1rem' }}>{isAnswer ? "Réponse à l'énigme" : enigmeType.title}</h3>
-      <SimpleActivityView
-        activity={activity}
+      <ContentView
         content={
           isAnswer
             ? activity.processedContent.slice(0, activity.data.indiceContentIndex)

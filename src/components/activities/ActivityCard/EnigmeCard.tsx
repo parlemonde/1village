@@ -3,12 +3,11 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { ENIGME_TYPES } from 'src/activities/enigme.const';
-import { EnigmeActivity } from 'src/activities/enigme.types';
+import { ENIGME_TYPES } from 'src/activity-types/enigme.const';
+import { EnigmeActivity } from 'src/activity-types/enigme.types';
+import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-
-import { RedButton } from '../../buttons/RedButton';
 
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';

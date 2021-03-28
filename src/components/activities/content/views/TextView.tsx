@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { ViewProps } from '../editing.types';
+import type { ViewProps } from '../content.types';
 
 export const TextView: React.FC<ViewProps> = ({ value }: ViewProps) => {
   return (

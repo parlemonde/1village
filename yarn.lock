@@ -18,7 +18,7 @@ __metadata:
     "@types/cookie-parser": ^1.4.2
     "@types/cors": ^2.8.9
     "@types/cpx": ^1
-    "@types/croppie": ^2
+    "@types/croppie": ^2.6.0
     "@types/draft-js": ^0
     "@types/draftjs-to-html": ^0
     "@types/eslint": ^7.2.6
@@ -31,7 +31,7 @@ __metadata:
     "@types/leaflet-fullscreen": ^1
     "@types/mapbox-gl": ^1.5
     "@types/mapbox-gl-leaflet": ^0
-    "@types/md5": ^2
+    "@types/md5": ^2.3.0
     "@types/morgan": ^1.9.2
     "@types/multer": ^1
     "@types/mysql": ^2
@@ -40,7 +40,7 @@ __metadata:
     "@types/nprogress": ^0
     "@types/prettier": ^2.1.5
     "@types/react": ^17
-    "@types/react-dom": ^17
+    "@types/react-dom": ^17.0.3
     "@types/sass": ^1
     "@types/sharp": ^0
     "@types/sortablejs": ^1
@@ -55,7 +55,7 @@ __metadata:
     ajv-formats: ^2.0.0
     argon2: ^0.27.1
     aws-sdk: ^2.840.0
-    axios: ^0.21.0
+    axios: ^0.21.1
     base64url: ^3.0.1
     body-parser: ^1.19.0
     classnames: ^2.2.6
@@ -97,7 +97,7 @@ __metadata:
     next: ^10.0.3
     nodemailer: ^6.4.18
     nodemon: ^2.0.6
-    notistack: ^1.0.3
+    notistack: ^1.0.5
     nprogress: ^0.2.0
     prettier: ^2.2.1
     query-string: ^7.0.0
@@ -2042,10 +2042,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/croppie@npm:^2":
-  version: 2.5.6
-  resolution: "@types/croppie@npm:2.5.6"
-  checksum: 4238304270caa3ba0e5e36bab09a10f91c39e178ad47426646df1be1d974368ecf20d0f88b74ef7f9ad00a752187cfaf0d64eb20de76167008d25324d8b80b43
+"@types/croppie@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "@types/croppie@npm:2.6.0"
+  checksum: 91f1fc66ca82a12101986987865e60a7ec45b81d85bf40cd04c7423ccfcab430425fe48834b875ddfedaaf9d016b3384ae879fc4bb9a3f5dee746a6e7ade359b
   languageName: node
   linkType: hard
 
@@ -2232,12 +2232,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:^2":
-  version: 2.2.1
-  resolution: "@types/md5@npm:2.2.1"
+"@types/md5@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@types/md5@npm:2.3.0"
   dependencies:
     "@types/node": "*"
-  checksum: 2f7968c630887ab34ed6561ed7ab5b7eb237724682cec9fc4c6e6599cc30b2752f3ff534b5eefea929fad5818be4aaadcd943a898621255aa2379e9c9915d9b3
+  checksum: c71340ae0c52b731c45f102745d6862c333d04cbe6a7b3de3bb5049180bb6c5904e1dd9e100e0df4436f6fa5c0fbaff999f96fdd2e85688aa1a73d6725733dcd
   languageName: node
   linkType: hard
 
@@ -2347,12 +2347,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^17":
-  version: 17.0.0
-  resolution: "@types/react-dom@npm:17.0.0"
+"@types/react-dom@npm:^17.0.3":
+  version: 17.0.3
+  resolution: "@types/react-dom@npm:17.0.3"
   dependencies:
     "@types/react": "*"
-  checksum: 7ca9351b6c2523327cd7afe40082a37034898f65e9d86700236682efed910ba7c9cec10e9a3b829aa7b804b18791a28743ce468fcb42e9a788bfc33b84137e45
+  checksum: 9314c91a985f153591e1e74aef3d63d8b22e098069773f32745bf0733740a49802731761a46da8788a7d3dd2c21346036f12c2c24627630e5a6210b120a650e6
   languageName: node
   linkType: hard
 
@@ -3721,12 +3721,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.0":
-  version: 0.21.0
-  resolution: "axios@npm:0.21.0"
+"axios@npm:^0.21.1":
+  version: 0.21.1
+  resolution: "axios@npm:0.21.1"
   dependencies:
     follow-redirects: ^1.10.0
-  checksum: 4b08ecab39040948c03cae5fa726fdcf8bc299679818179c146e779a922ce887fad9261d82ad57ad1a3aa1fcba3612f14b490fdfa2cd28fa23c190fd48517f5f
+  checksum: 864fb7b5d077d236737f10adca53bf451a93f35a15271f56fba8da07265a02d26b7d881b935a6697dc6adb0549ea3e56d2eecb403edaa3bb78f6479901c10f69
   languageName: node
   linkType: hard
 
@@ -9907,9 +9907,9 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"notistack@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "notistack@npm:1.0.3"
+"notistack@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "notistack@npm:1.0.5"
   dependencies:
     clsx: ^1.1.0
     hoist-non-react-statics: ^3.3.0
@@ -9917,7 +9917,7 @@ fsevents@~2.1.2:
     "@material-ui/core": ^4.0.0
     react: ^16.8.0 || ^17.0.0
     react-dom: ^16.8.0 || ^17.0.0
-  checksum: 52a720ed18659b8d8b3bcbaf015a544db89c83ba74648c23d16478414e5a59284d48537fe8d0c0d4b7c0a8e897caacb212ce2310ae8d2002800868c89a0ebd7b
+  checksum: 3d3f3ac8eb3e8d261a8ea50e1c002da919adfc19ccf1498341b1961e8273fd7bf2d61e50fef46bf6e3a38565246253e3b5c0e47ba793fc97da600e39e856d293
   languageName: node
   linkType: hard
 
@@ -13455,11 +13455,11 @@ typescript@^4.1.2:
 
 "typescript@patch:typescript@^4.1.2#builtin<compat/typescript>":
   version: 4.1.3
-  resolution: "typescript@patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"
+  resolution: "typescript@patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=a45b0e"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 017af992148346e671d5b83b041773825888e9c94db8d2b9472cdbb6d6f0ee85927817473121524d319f8be6ffe5a6904d27ff6ef21356d2274fcadd52e17938
+  checksum: 28f0f616bf6284543bb14d4bfe0e1a74963e5df0396ebccfc6a57bfd4ab70b4284e51b3a2045ed2466151a4a58c8a549edb886a2f7a2232cf08fcf73496592e6
   languageName: node
   linkType: hard
 

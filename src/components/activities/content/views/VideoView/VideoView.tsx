@@ -8,7 +8,7 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { UserContext } from 'src/contexts/userContext';
 import { serializeToQueryUrl } from 'src/utils';
 
-import type { ViewProps } from '../../editing.types';
+import type { ViewProps } from '../../content.types';
 
 const VideoView: React.FC<ViewProps> = ({ value }: ViewProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);

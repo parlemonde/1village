@@ -1,32 +1,17 @@
 import React from 'react';
 
-import type { FilterArgs } from 'src/components/accueil/Filters';
+import { AnyActivity } from 'src/activity-types/anyActivities.types';
 import { UserContext } from 'src/contexts/userContext';
-import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 
 import { ActivityCard } from './ActivityCard';
 
 interface ActivitiesProps {
-  filters?: FilterArgs;
+  activities: AnyActivity[];
 }
 
-const DEFAULT_FILTERS: FilterArgs = {
-  type: 0,
-  status: 0,
-  pelico: true,
-  countries: {},
-};
-
-export const Activities: React.FC<ActivitiesProps> = ({ filters = DEFAULT_FILTERS }: ActivitiesProps) => {
+export const Activities: React.FC<ActivitiesProps> = ({ activities }: ActivitiesProps) => {
   const { user } = React.useContext(UserContext);
-  const { activities } = useActivities({
-    limit: 50,
-    page: 0,
-    countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
-    pelico: filters.pelico,
-    type: filters.type - 1,
-  });
   const { users } = useVillageUsers();
   const userMap = React.useMemo(
     () =>

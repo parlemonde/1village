@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { AvatarImg } from 'src/components/Avatar';
 
-import type { EditorProps } from '../../editing.types';
+import type { EditorProps } from '../../content.types';
 
 import { ImageModal } from './ImageModal';
 

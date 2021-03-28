@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { Modal } from '../Modal';
+import { Modal } from 'src/components/Modal';
 
 interface DeleteButtonProps {
   size?: 'small' | 'medium';

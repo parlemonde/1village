@@ -4,7 +4,7 @@ import React from 'react';
 import { ButtonBase, TextField, withStyles, Card } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import { isQuestion } from 'src/activities/anyActivity';
+import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
