@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isPresentation } from 'src/activities/anyActivity';
-import { EditorContent } from 'src/activities/extendedActivity.types';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activity-types/anyActivity';
+import { EditorContent } from 'src/activity-types/extendedActivity.types';
+import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityEditor } from 'src/components/activities';
+import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const PresentationStep2: React.FC = () => {
@@ -38,7 +38,7 @@ const PresentationStep2: React.FC = () => {
         <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={1} />
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
-          <SimpleActivityEditor
+          <ContentEditor
             content={activity.processedContent}
             updateContent={updateContent}
             addContent={addContent}

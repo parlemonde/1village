@@ -2,29 +2,27 @@ import React from 'react';
 
 import { Grid, Box } from '@material-ui/core';
 
-import { PresentationMascotteActivity } from 'src/activities/presentation.types';
+import { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Map } from 'src/components/Map';
 import { getMapPosition } from 'src/utils/getMapPosition';
-import { User } from 'types/user.type';
 
-import { ActivityViewProps } from './editing.types';
+import { ActivityViewProps } from './activity-view.types';
 
-type MascotteActivityViewProps = ActivityViewProps<PresentationMascotteActivity> & {
-  activityUser?: User | null;
-};
-
-export const MascotteActivityView: React.FC<MascotteActivityViewProps> = ({ activity, activityUser = null }: MascotteActivityViewProps) => {
+export const MascotteActivityView: React.FC<ActivityViewProps<PresentationMascotteActivity>> = ({
+  activity,
+  user = null,
+}: ActivityViewProps<PresentationMascotteActivity>) => {
   const [position, setPosition] = React.useState<[number, number] | null>(null);
 
   const getPosition = React.useCallback(async () => {
-    if (activityUser === null) {
+    if (user === null) {
       setPosition(null);
     } else {
-      const pos = await getMapPosition(activityUser);
+      const pos = await getMapPosition(user);
       setPosition(pos);
     }
-  }, [activityUser]);
+  }, [user]);
 
   React.useEffect(() => {
     getPosition().catch();

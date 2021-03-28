@@ -4,10 +4,10 @@ import React from 'react';
 
 import { Card, CircularProgress } from '@material-ui/core';
 
-import { AnyActivity, AnyActivityData } from 'src/activities/anyActivities.types';
-import { getAnyActivity, isEnigme } from 'src/activities/anyActivity';
-import { EnigmeData } from 'src/activities/enigme.types';
-import type { EditorTypes } from 'src/activities/extendedActivity.types';
+import { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivities.types';
+import { getAnyActivity, isEnigme } from 'src/activity-types/anyActivity';
+import { EnigmeData } from 'src/activity-types/enigme.types';
+import type { EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';

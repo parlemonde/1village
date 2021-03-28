@@ -17,7 +17,7 @@ import { primaryColor } from 'src/styles/variables.const';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
-import type { EditorProps } from '../editing.types';
+import type { EditorProps } from '../content.types';
 
 import { EditorContainer } from './EditorContainer';
 

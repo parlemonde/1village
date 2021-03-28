@@ -1,5 +1,3 @@
-import type { AnyActivity } from 'src/activities/anyActivities.types';
-
 export interface EditorProps {
   id: number;
   value?: string;
@@ -12,8 +10,4 @@ export interface EditorProps {
 export interface ViewProps {
   id: number;
   value?: string;
-}
-
-export interface ActivityViewProps<T extends AnyActivity = AnyActivity> {
-  activity: T;
 }

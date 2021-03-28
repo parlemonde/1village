@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonBase, Card } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 
-import type { EditorTypes } from 'src/activities/extendedActivity.types';
+import type { EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
 import TextIcon from 'src/svg/editor/text_icon.svg';

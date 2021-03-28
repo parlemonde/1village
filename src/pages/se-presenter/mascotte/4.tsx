@@ -5,9 +5,9 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
-import { isPresentation } from 'src/activities/anyActivity';
-import { getMascotteContent, isMascotte } from 'src/activities/presentation.const';
-import { MascotteData } from 'src/activities/presentation.types';
+import { isPresentation } from 'src/activity-types/anyActivity';
+import { getMascotteContent, isMascotte } from 'src/activity-types/presentation.const';
+import { MascotteData } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

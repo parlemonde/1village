@@ -1,7 +1,7 @@
 import { ReactSortable } from 'react-sortablejs';
 import React from 'react';
 
-import type { EditorContent, EditorTypes } from 'src/activities/extendedActivity.types';
+import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 
 import { AddContentCard } from './AddContentCard';
 import { H5pEditor } from './editors/H5pEditor';
@@ -9,7 +9,7 @@ import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
-interface SimpleActivityEditorProps {
+interface ContentEditorProps {
   content: EditorContent[];
   updateContent(newContent: EditorContent[]): void;
   addContent(type: EditorTypes, value?: string): void;
@@ -17,13 +17,7 @@ interface SimpleActivityEditorProps {
   save(): Promise<boolean>;
 }
 
-const SimpleActivityEditor: React.FC<SimpleActivityEditorProps> = ({
-  content,
-  updateContent,
-  addContent,
-  deleteContent,
-  save,
-}: SimpleActivityEditorProps) => {
+const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, addContent, deleteContent, save }: ContentEditorProps) => {
   const shouldSave = React.useRef(false);
   const blurTimeoutSave = React.useRef<number | undefined>(undefined);
 
@@ -120,4 +114,4 @@ const SimpleActivityEditor: React.FC<SimpleActivityEditorProps> = ({
   );
 };
 
-export default SimpleActivityEditor;
+export default ContentEditor;

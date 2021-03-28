@@ -3,9 +3,9 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import { isPresentation } from 'src/activities/anyActivity';
-import { isMascotte } from 'src/activities/presentation.const';
-import { MascotteData } from 'src/activities/presentation.types';
+import { isPresentation } from 'src/activity-types/anyActivity';
+import { isMascotte } from 'src/activity-types/presentation.const';
+import { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';

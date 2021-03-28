@@ -14,7 +14,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
-import { VideoView } from 'src/components/activities/views/VideoView';
+import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useVideos } from 'src/services/useVideos';

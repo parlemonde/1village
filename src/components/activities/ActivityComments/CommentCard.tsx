@@ -13,7 +13,7 @@ import { getUserDisplayName } from 'src/utils';
 import type { Comment } from 'types/comment.type';
 import { User } from 'types/user.type';
 
-const TextEditor = dynamic(() => import('../editors/TextEditor'), { ssr: false });
+const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
 interface CommentCardProps {
   activityId: number;

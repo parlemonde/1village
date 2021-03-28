@@ -3,10 +3,9 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { AnyActivity } from 'src/activities/anyActivities.types';
-import { isEnigme, isPresentation, isQuestion } from 'src/activities/anyActivity';
-import { getEnigmeTimeLeft } from 'src/activities/enigme.const';
-import { isMascotte, isThematique } from 'src/activities/presentation.const';
+import { isEnigme, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
+import { getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
+import { isMascotte, isThematique } from 'src/activity-types/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { primaryColor } from 'src/styles/variables.const';
@@ -42,7 +41,7 @@ const icons = {
   [ActivityType.QUESTION]: QuestionIcon,
 };
 
-export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
+export const ActivityCard: React.FC<ActivityCardProps> = ({
   activity,
   user,
   isSelf = false,
@@ -50,7 +49,7 @@ export const ActivityCard: React.FC<ActivityCardProps<AnyActivity>> = ({
   showEditButtons = false,
   isDraft = false,
   onDelete = () => {},
-}: ActivityCardProps<AnyActivity>) => {
+}: ActivityCardProps) => {
   if (!user) {
     return null;
   }

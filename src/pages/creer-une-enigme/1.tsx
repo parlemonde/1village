@@ -3,9 +3,9 @@ import React from 'react';
 
 import { Button, TextField } from '@material-ui/core';
 
-import { isEnigme } from 'src/activities/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES } from 'src/activities/enigme.const';
-import { EnigmeData } from 'src/activities/enigme.types';
+import { isEnigme } from 'src/activity-types/anyActivity';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
+import { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';

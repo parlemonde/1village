@@ -6,13 +6,13 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { isEnigme } from 'src/activities/anyActivity';
-import { ENIGME_TYPES, ENIGME_DATA } from 'src/activities/enigme.const';
-import { EnigmeData } from 'src/activities/enigme.types';
+import { isEnigme } from 'src/activity-types/anyActivity';
+import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.const';
+import { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityView } from 'src/components/activities';
+import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
@@ -114,7 +114,7 @@ const EnigmeStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <SimpleActivityView activity={activity} content={activity.processedContent.slice(0, indiceContentIndex)} />
+            <ContentView content={activity.processedContent.slice(0, indiceContentIndex)} />
           </div>
 
           <span className="text text--small text--success">Indice présenté aux autres classes</span>
@@ -126,7 +126,7 @@ const EnigmeStep4: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <SimpleActivityView activity={activity} content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
+            <ContentView content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
           </div>
 
           <StepsButton prev="/creer-une-enigme/3" />

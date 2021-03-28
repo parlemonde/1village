@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core';
 import { H5p } from 'src/components/H5p';
 import { Modal } from 'src/components/Modal';
 
-import type { EditorProps } from '../editing.types';
+import type { EditorProps } from '../content.types';
 
 import { EditorContainer } from './EditorContainer';
 

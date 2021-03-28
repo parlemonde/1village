@@ -6,12 +6,12 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { isPresentation } from 'src/activities/anyActivity';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activity-types/anyActivity';
+import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { SimpleActivityView } from 'src/components/activities';
+import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
@@ -96,7 +96,7 @@ const PresentationStep3: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <SimpleActivityView activity={activity} />
+            <ContentView content={activity.processedContent} />
           </div>
 
           <StepsButton prev="/se-presenter/thematique/2" />

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { PRESENTATION_THEMATIQUE, PRESENTATION } from 'src/activities/presentation.const';
+import { PRESENTATION_THEMATIQUE, PRESENTATION } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';

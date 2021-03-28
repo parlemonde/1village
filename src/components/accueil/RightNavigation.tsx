@@ -3,13 +3,12 @@ import React from 'react';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Card from '@material-ui/core/Card';
 
+import { KeepRatio } from 'src/components/KeepRatio';
 import Acti1 from 'src/svg/activities/acti1.svg';
 import Acti2 from 'src/svg/activities/acti2.svg';
 import Acti3 from 'src/svg/activities/acti3.svg';
 import Acti4 from 'src/svg/activities/acti4.svg';
 import HourGlass from 'src/svg/hourglass.svg';
-
-import { KeepRatio } from '../KeepRatio';
 
 type ActionItemProps = {
   label: string;

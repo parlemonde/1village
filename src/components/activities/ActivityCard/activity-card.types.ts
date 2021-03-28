@@ -1,7 +1,7 @@
-import { AnyActivity } from 'src/activities/anyActivities.types';
+import { AnyActivity } from 'src/activity-types/anyActivities.types';
 import type { User } from 'types/user.type';
 
-export interface ActivityCardProps<T extends AnyActivity> {
+export interface ActivityCardProps<T extends AnyActivity = AnyActivity> {
   activity: T;
   user?: User;
   isSelf?: boolean;

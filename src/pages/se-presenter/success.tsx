@@ -3,8 +3,8 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { isPresentation } from 'src/activities/anyActivity';
-import { isMascotte } from 'src/activities/presentation.const';
+import { isPresentation } from 'src/activity-types/anyActivity';
+import { isMascotte } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
