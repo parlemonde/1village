@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ReactSortable } from 'react-sortablejs';
 import React from 'react';
 
@@ -24,8 +25,19 @@ const SimpleActivityEditor: React.FC<SimpleActivityEditorProps> = ({
   deleteContent,
   save,
 }: SimpleActivityEditorProps) => {
+  const router = useRouter();
   const shouldSave = React.useRef(false);
   const blurTimeoutSave = React.useRef<number | undefined>(undefined);
+
+  React.useEffect(() => {
+    const cancelSave = () => {
+      clearTimeout(blurTimeoutSave.current);
+    };
+    router.events.on('routeChangeStart', cancelSave);
+    return () => {
+      router.events.off('routeChangeStart', cancelSave);
+    };
+  }, [router.events]);
 
   const onChangeContent = (index: number, willSave: boolean = false) => (newValue: string) => {
     const newContent = [...content];
