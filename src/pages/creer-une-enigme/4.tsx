@@ -6,29 +6,32 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { isPresentation } from 'src/activities/anyActivity';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
+import { isEnigme } from 'src/activities/anyActivity';
+import { ENIGME_TYPES, ENIGME_DATA } from 'src/activities/enigme.const';
+import { EnigmeData } from 'src/activities/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { SimpleActivityView } from 'src/components/activities';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
-const PresentationStep3: React.FC = () => {
+const EnigmeStep4: React.FC = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const data = activity?.data || null;
+  const data = (activity?.data as EnigmeData) || null;
+  const indiceContentIndex = data?.indiceContentIndex ?? 0;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/se-presenter');
-    } else if (activity && (!isPresentation(activity) || !isThematique(activity))) {
-      router.push('/se-presenter');
+      router.push('/creer-une-enigme');
+    } else if (activity && !isEnigme(activity)) {
+      router.push('/creer-une-enigme');
     }
   }, [activity, router]);
 
@@ -36,31 +39,42 @@ const PresentationStep3: React.FC = () => {
     setIsLoading(true);
     const success = await save(true);
     if (success) {
-      router.push('/se-presenter/success');
+      router.push('/creer-une-enigme/success');
     }
     setIsLoading(false);
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (data === null || !isEnigme(activity)) {
     return <div></div>;
   }
+
+  const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
+  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={2} />
+        <Steps
+          steps={[
+            data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
+            enigmeType.step2 ?? "Description de l'objet",
+            "Création de l'indice",
+            'Prévisualisation',
+          ]}
+          activeStep={3}
+        />
         <div className="width-900">
-          <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez la'}</h1>
+          <h1>Pré-visualisez votre énigme{!isEdit && ', et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre présentation.
+            Voici la pré-visualisation de votre énigme.
             {isEdit
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/se-presenter/thematique/2">
-                <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/2">
+              <Link href="/creer-une-enigme/3">
+                <Button component="a" color="secondary" variant="contained" href="/creer-une-enigme/3">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -75,31 +89,47 @@ const PresentationStep3: React.FC = () => {
               </Button>
             </div>
           )}
+
+          <span className="text text--small text--success">{"Catégorie de l'énigme"}</span>
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push(`/se-presenter/thematique/1?edit=${activity.id}`);
+                router.push(`/creer-une-enigme/1?edit=${activity.id}`);
               }}
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p style={{ margin: '0.5rem 0' }}>
-              <strong>Thème : </strong> {PRESENTATION_THEMATIQUE[(data?.theme as number | null) ?? 0]?.cardTitle}
+              Notre {enigmeType.titleStep2Short} mystère est{' '}
+              <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
             </p>
           </div>
 
+          <span className="text text--small text--success">{enigmeType.step2 ?? "Description de l'objet"}</span>
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/se-presenter/thematique/2');
+                router.push('/creer-une-enigme/2');
               }}
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <SimpleActivityView activity={activity} />
+            <SimpleActivityView activity={activity} content={activity.processedContent.slice(0, indiceContentIndex)} />
           </div>
 
-          <StepsButton prev="/se-presenter/thematique/2" />
+          <span className="text text--small text--success">Indice présenté aux autres classes</span>
+          <div className="preview-block">
+            <EditButton
+              onClick={() => {
+                router.push('/creer-une-enigme/3');
+              }}
+              isGreen
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <SimpleActivityView activity={activity} content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
+          </div>
+
+          <StepsButton prev="/creer-une-enigme/3" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -109,4 +139,4 @@ const PresentationStep3: React.FC = () => {
   );
 };
 
-export default PresentationStep3;
+export default EnigmeStep4;

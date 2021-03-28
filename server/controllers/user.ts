@@ -5,7 +5,7 @@ import { getRepository } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
-import { Activity, ActivitySubType, ActivityType } from '../entities/activity';
+import { Activity, ActivityType } from '../entities/activity';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -27,7 +27,7 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
         .select('userId')
         .addSelect('id')
         .where('type = :type', { type: `${ActivityType.PRESENTATION}` })
-        .andWhere('subType = :subType', { subType: `${ActivitySubType.MASCOTTE}` })
+        .andWhere('subType = :subType', { subType: 1 })
         .andWhere('userId in (:ids)', { ids })
         .orderBy('createDate', 'ASC')
         .getRawMany()

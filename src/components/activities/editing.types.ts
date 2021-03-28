@@ -5,6 +5,7 @@ export interface EditorProps {
   value?: string;
   onChange?(newValue: string): void;
   onDelete?(): void;
+  onFocus?(): void;
   onBlur?(): void;
 }
 

@@ -14,9 +14,9 @@ export const CommentIcon: React.FC<CommentIconProps> = ({ count = 0, activityId 
   }
 
   return (
-    <Link href={`/activity/${activityId}`}>
+    <Link href={`/activite/${activityId}`}>
       <a
-        href={`/activity/${activityId}`}
+        href={`/activite/${activityId}`}
         style={{ display: 'inline-block', position: 'relative', height: '2rem', verticalAlign: 'top', margin: '0.2rem 0.25rem' }}
       >
         <CommentBox style={{ width: 'auto', height: '100%' }} />

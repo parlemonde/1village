@@ -9,12 +9,10 @@ import { MascotteData } from 'src/activities/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { ActivityStatus } from 'types/activity.type';
 
 const MascotteStep3: React.FC = () => {
   const router = useRouter();
@@ -29,7 +27,6 @@ const MascotteStep3: React.FC = () => {
     }
   }, [activity, router]);
 
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
   const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
@@ -50,7 +47,6 @@ const MascotteStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/se-presenter/mascotte/2" label={isEdit ? `Modifier` : 'Retour'} />
         <Steps
           steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
           activeStep={2}

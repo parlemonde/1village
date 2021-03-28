@@ -1,0 +1,81 @@
+import { useRouter } from 'next/router';
+import React from 'react';
+
+import { isEnigme } from 'src/activities/anyActivity';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activities/enigme.const';
+import { EnigmeData } from 'src/activities/enigme.types';
+import { EditorContent, EditorTypes } from 'src/activities/extendedActivity.types';
+import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
+import { Steps } from 'src/components/Steps';
+import { SimpleActivityEditor } from 'src/components/activities';
+import { ActivityContext } from 'src/contexts/activityContext';
+import { capitalize } from 'src/utils';
+
+const EnigmeStep2: React.FC = () => {
+  const router = useRouter();
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+
+  const data = (activity?.data as EnigmeData) || null;
+  const indiceContentIndex = Math.max(data?.indiceContentIndex ?? 0, 0);
+
+  React.useEffect(() => {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/creer-une-enigme');
+    } else if (activity && !isEnigme(activity)) {
+      router.push('/creer-une-enigme');
+    }
+  }, [activity, router]);
+
+  const updateContent = (content: EditorContent[]): void => {
+    updateActivity({ processedContent: [...content, ...activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)] });
+  };
+  const addDescriptionContent = (type: EditorTypes, value?: string) => {
+    addContent(type, value, indiceContentIndex);
+    updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex + 1 } });
+  };
+  const deleteDescriptionContent = (index: number) => {
+    deleteContent(index);
+    updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex - 1 } });
+  };
+
+  if (data === null || !isEnigme(activity)) {
+    return <div></div>;
+  }
+
+  const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
+  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
+
+  return (
+    <Base>
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <Steps
+          steps={[
+            data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
+            enigmeType.step2 ?? "Description de l'objet",
+            "Création de l'indice",
+            'Prévisualisation',
+          ]}
+          activeStep={1}
+        />
+        <div className="width-900">
+          <h1>{enigmeType.titleStep2}</h1>
+          <p className="text" style={{ fontSize: '1.1rem' }}>
+            Decrivez ici votre {enigmeType.titleStep2Short}, il s’agira de la <strong>réponse</strong> partagée aux autres classes. Vous pouvez
+            ajouter du texte, une vidéo ou une image à votre description. Vous pourrez le modifier à l’étape 4.
+          </p>
+          <SimpleActivityEditor
+            content={activity.processedContent.slice(0, indiceContentIndex)}
+            updateContent={updateContent}
+            addContent={addDescriptionContent}
+            deleteContent={deleteDescriptionContent}
+            save={save}
+          />
+          <StepsButton prev={`/creer-une-enigme/1?edit=${activity.id}`} next="/creer-une-enigme/3" />
+        </div>
+      </div>
+    </Base>
+  );
+};
+
+export default EnigmeStep2;

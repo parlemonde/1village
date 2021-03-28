@@ -11,7 +11,6 @@ import { isQuestion } from 'src/activities/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -95,7 +94,6 @@ const Question3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/poser-une-question/2" label={isEdit ? `Modifier` : 'Retour'} />
         <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={2} />
         <div className="width-900">
           <h1>Prévisualisez vos questions, et envoyez-les</h1>

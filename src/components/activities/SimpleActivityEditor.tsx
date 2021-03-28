@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router';
 import { ReactSortable } from 'react-sortablejs';
 import React from 'react';
 
-import type { EditorContent } from 'src/activities/extendedActivity.types';
-import { ActivityContext } from 'src/contexts/activityContext';
+import type { EditorContent, EditorTypes } from 'src/activities/extendedActivity.types';
 
 import { AddContentCard } from './AddContentCard';
 import { H5pEditor } from './editors/H5pEditor';
@@ -10,14 +10,39 @@ import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
-const SimpleActivityEditor: React.FC = () => {
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+interface SimpleActivityEditorProps {
+  content: EditorContent[];
+  updateContent(newContent: EditorContent[]): void;
+  addContent(type: EditorTypes, value?: string): void;
+  deleteContent(index: number): void;
+  save(): Promise<boolean>;
+}
+
+const SimpleActivityEditor: React.FC<SimpleActivityEditorProps> = ({
+  content,
+  updateContent,
+  addContent,
+  deleteContent,
+  save,
+}: SimpleActivityEditorProps) => {
+  const router = useRouter();
   const shouldSave = React.useRef(false);
+  const blurTimeoutSave = React.useRef<number | undefined>(undefined);
+
+  React.useEffect(() => {
+    const cancelSave = () => {
+      clearTimeout(blurTimeoutSave.current);
+    };
+    router.events.on('routeChangeStart', cancelSave);
+    return () => {
+      router.events.off('routeChangeStart', cancelSave);
+    };
+  }, [router.events]);
 
   const onChangeContent = (index: number, willSave: boolean = false) => (newValue: string) => {
-    const newContent = [...activity.processedContent];
+    const newContent = [...content];
     newContent[index].value = newValue;
-    updateActivity({ processedContent: newContent });
+    updateContent(newContent);
     shouldSave.current = willSave;
   };
 
@@ -26,16 +51,12 @@ const SimpleActivityEditor: React.FC = () => {
       shouldSave.current = false; // prevent loops.
       save().catch();
     }
-  }, [activity.processedContent, save]);
-
-  const setContentOrder = (newContent: EditorContent[]) => {
-    updateActivity({ processedContent: newContent });
-  };
+  }, [content, save]);
 
   return (
     <div>
-      <ReactSortable list={activity.processedContent} setList={setContentOrder} handle=".drag-handle">
-        {activity.processedContent.map((p, index) => {
+      <ReactSortable list={content} setList={updateContent} handle=".drag-handle">
+        {content.map((p, index) => {
           if (p.type === 'text') {
             return (
               <TextEditor
@@ -47,8 +68,14 @@ const SimpleActivityEditor: React.FC = () => {
                   deleteContent(index);
                   shouldSave.current = true;
                 }}
+                onFocus={() => {
+                  clearTimeout(blurTimeoutSave.current);
+                }}
                 onBlur={() => {
-                  save().catch(console.error);
+                  clearTimeout(blurTimeoutSave.current);
+                  blurTimeoutSave.current = window.setTimeout(() => {
+                    save().catch(console.error);
+                  }, 60000);
                 }}
               />
             );

@@ -65,7 +65,7 @@ export const useActivityRequests = () => {
   );
 
   const deleteActivity = React.useCallback(
-    async (id: number) => {
+    async (id: number, isDraft?: boolean) => {
       const response = await axiosLoggedRequest({
         method: 'DELETE',
         url: `/activities/${id}`,
@@ -76,7 +76,7 @@ export const useActivityRequests = () => {
         });
         return;
       }
-      enqueueSnackbar('Activité supprimée avec succès!', {
+      enqueueSnackbar(isDraft ? 'Brouillon supprimé avec succès!' : 'Activité supprimée avec succès!', {
         variant: 'success',
       });
       queryCache.invalidateQueries('activity');

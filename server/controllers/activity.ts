@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { getRepository, getManager } from 'typeorm';
 
 import { ActivityData, ActivityDataType } from '../entities/activityData';
-import { Activity, ActivityType, ActivitySubType, ActivityStatus } from '../entities/activity';
+import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -80,7 +80,7 @@ const getActivities = async ({
     subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type}` });
   }
   if (subType !== null) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType: `${subType}` });
+    subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
   }
   if (status !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.status = :status', { status: `${status}` });
@@ -194,14 +194,14 @@ activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (re
     return;
   }
 
-  const search: { userId: number; villageId: number; type: string; status: string; subType?: string } = {
+  const search: { userId: number; villageId: number; type: string; status: string; subType?: number } = {
     userId: req.user?.id ?? 0,
     villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : 0,
     type: `${req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : 0}`,
     status: `${ActivityStatus.DRAFT}`,
   };
   if (req.query.subType !== undefined) {
-    search.subType = `${req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : 0}`;
+    search.subType = req.query.subType ? parseInt(getQueryString(req.query.subType), 10) ?? 0 : 0;
   }
   const activityId =
     (
@@ -223,7 +223,7 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
     where: {
       userId: req.user?.id ?? 0,
       type: `${ActivityType.PRESENTATION}`,
-      subType: `${ActivitySubType.MASCOTTE}`,
+      subType: 1,
       status: `${ActivityStatus.PUBLISHED}`,
     },
   });
@@ -233,7 +233,7 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
 // --- Create an activity ---
 type CreateActivityData = {
   type: ActivityType;
-  subType?: ActivitySubType;
+  subType?: number | null;
   status?: ActivityStatus;
   villageId?: number;
   content?: Array<{
@@ -252,7 +252,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     },
     subType: {
       type: 'number',
-      enum: [ActivitySubType.THEMATIQUE, ActivitySubType.MASCOTTE],
       nullable: true,
     },
     status: {
@@ -306,7 +305,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
       userId: req.user.id,
       villageId,
       type: (`${data.type}` as unknown) as ActivityType,
-      subType: (`${data.subType ?? null}` as unknown) as ActivitySubType,
+      subType: data.subType ?? null,
       status: (`${ActivityStatus.DRAFT}` as unknown) as ActivityStatus,
     });
   }

@@ -5,13 +5,13 @@ import React from 'react';
 import { Card, CircularProgress } from '@material-ui/core';
 
 import { AnyActivity, AnyActivityData } from 'src/activities/anyActivities.types';
-import { getAnyActivity } from 'src/activities/anyActivity';
+import { getAnyActivity, isEnigme } from 'src/activities/anyActivity';
+import { EnigmeData } from 'src/activities/enigme.types';
 import type { EditorTypes } from 'src/activities/extendedActivity.types';
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
-import { debounce, getQueryString } from 'src/utils';
-import { serializeToQueryUrl } from 'src/utils';
-import { Activity, ActivityType, ActivitySubType, ActivityStatus } from 'types/activity.type';
+import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
+import { Activity, ActivityType, ActivityStatus } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -19,11 +19,11 @@ import { VillageContext } from './villageContext';
 interface ActivityContextValue {
   activity: AnyActivity | null;
   updateActivity(newActivity: Partial<AnyActivity>): void;
-  createNewActivity(type: ActivityType, subType?: ActivitySubType, initialData?: AnyActivityData): boolean;
-  addContent(type: EditorTypes, value?: string): void;
+  createNewActivity(type: ActivityType, subType?: number, initialData?: AnyActivityData): boolean;
+  addContent(type: EditorTypes, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<boolean>;
-  createActivityIfNotExist(type: ActivityType, subType: ActivitySubType, initialData?: AnyActivityData): Promise<void>;
+  createActivityIfNotExist(type: ActivityType, subType: number, initialData?: AnyActivityData): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
@@ -98,7 +98,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   }, []);
 
   const getDraft = React.useCallback(
-    async (type: ActivityType, subType?: ActivitySubType) => {
+    async (type: ActivityType, subType?: number) => {
       const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
@@ -118,7 +118,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   );
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, subType?: ActivitySubType, initialData?: AnyActivityData) => {
+    (type: ActivityType, subType?: number, initialData?: AnyActivityData) => {
       if (user === null || village === null) {
         return false;
       }
@@ -146,7 +146,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: ActivityType, subType: ActivitySubType, initialData?: AnyActivityData) => {
+    async (type: ActivityType, subType: number, initialData?: AnyActivityData) => {
       if (user === null || village === null) {
         return;
       }
@@ -166,17 +166,25 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
 
   const activityContent = activity?.processedContent || null;
 
-  const addContent = (type: EditorTypes, value: string = '') => {
+  const addContent = (type: EditorTypes, value: string = '', index?: number) => {
     if (activityContent === null) {
       return;
     }
     const newId = Math.max(1, activity.dataId || 0, ...activityContent.map((p) => p.id)) + 1;
     const newContent = activityContent;
-    newContent.push({
-      id: newId,
-      type,
-      value,
-    });
+    if (index !== undefined) {
+      newContent.splice(index, 0, {
+        id: newId,
+        type,
+        value,
+      });
+    } else {
+      newContent.push({
+        id: newId,
+        type,
+        value,
+      });
+    }
     updateActivity({ processedContent: newContent });
   };
 
@@ -217,6 +225,9 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         activityData.draftUrl = window.location.pathname;
       } else {
         delete activityData.draftUrl;
+        if (isEnigme(activity) && !(activityData as EnigmeData).timer) {
+          (activityData as EnigmeData).timer = new Date().getTime();
+        }
       }
       content.push({
         key: 'json',

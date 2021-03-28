@@ -3,8 +3,8 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
-import { PresentationThematiqueActivity } from 'src/activities/presentation.types';
+import { ENIGME_TYPES } from 'src/activities/enigme.const';
+import { EnigmeActivity } from 'src/activities/enigme.types';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 
@@ -13,17 +13,25 @@ import { RedButton } from '../../buttons/RedButton';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const PresentationCard: React.FC<ActivityCardProps<PresentationThematiqueActivity>> = ({
+export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
   activity,
   isSelf,
   noButtons,
   isDraft,
   showEditButtons,
   onDelete,
-}: ActivityCardProps<PresentationThematiqueActivity>) => {
-  const firstImage = React.useMemo(() => activity.processedContent.find((c) => c.type === 'image'), [activity.processedContent]);
-  const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
+}: ActivityCardProps<EnigmeActivity>) => {
+  const firstImage = React.useMemo(
+    () => activity.processedContent.slice(activity.data.indiceContentIndex, activity.processedContent.length).find((c) => c.type === 'image'),
+    [activity.processedContent, activity.data.indiceContentIndex],
+  );
+  const firstTextContent = React.useMemo(
+    () => activity.processedContent.slice(activity.data.indiceContentIndex, activity.processedContent.length).find((c) => c.type === 'text'),
+    [activity.processedContent, activity.data.indiceContentIndex],
+  );
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
+
+  const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
 
   return (
     <div
@@ -49,9 +57,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1 }}>
-        {activity.data.theme !== undefined && (
-          <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{PRESENTATION_THEMATIQUE[activity.data.theme as number].cardTitle}</h3>
-        )}
+        {activity.data.theme !== undefined && <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{enigmeType.title}</h3>}
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}
@@ -64,7 +70,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`}>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    Regarder la présentation
+                    {'Résoudre l’énigme'}
                   </Button>
                 </Link>
               </>
@@ -75,7 +81,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/se-presenter/thematique/3?activity-id=${activity.id}`
+                      : `/creer-une-enigme/4?activity-id=${activity.id}`
                   }
                 >
                   <Button
@@ -83,7 +89,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/se-presenter/thematique/3?activity-id=${activity.id}`
+                        : `/creer-une-enigme/4?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"

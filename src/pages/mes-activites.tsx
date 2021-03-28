@@ -29,7 +29,7 @@ const MesActivites: React.FC = () => {
   const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
   const onDeleteActivity = async () => {
     if (activityToDelete !== null) {
-      await deleteActivity(activityToDelete.id);
+      await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     }
     setDeleteIndex({ index: -1, isDraft: false });
   };

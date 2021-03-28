@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { PRESENTATION_THEMATIQUE } from 'src/activities/presentation.const';
+import { PRESENTATION_THEMATIQUE, PRESENTATION } from 'src/activities/presentation.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
-import { ActivitySubType, ActivityType } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 
 const PresentationStep1: React.FC = () => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const PresentationStep1: React.FC = () => {
     if (!created.current) {
       created.current = true;
       if (!('edit' in router.query)) {
-        createNewActivity(ActivityType.PRESENTATION, ActivitySubType.THEMATIQUE, {
+        createNewActivity(ActivityType.PRESENTATION, PRESENTATION.THEMATIQUE, {
           theme: 0,
         });
       }

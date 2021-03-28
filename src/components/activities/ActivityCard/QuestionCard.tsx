@@ -75,8 +75,8 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
           </div>
           <div>
             <CommentIcon count={activity.commentCount} activityId={activity.id} />
-            <Link href={`/activity/${activity.id}`}>
-              <Button component="a" href={`/activity/${activity.id}`} variant="outlined" color="primary">
+            <Link href={`/activite/${activity.id}`}>
+              <Button component="a" href={`/activite/${activity.id}`} variant="outlined" color="primary">
                 Répondre à la question
               </Button>
             </Link>
