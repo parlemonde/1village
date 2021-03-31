@@ -1,3 +1,5 @@
+@import 'variables';
+
 .activity-card {
   &__header {
     display: flex;
@@ -8,6 +10,9 @@
     p {
       margin: 0;
     }
+  }
+  &--selectable:hover {
+    border: 1px solid $primary-color;
   }
 }
 

@@ -49,6 +49,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   showEditButtons = false,
   isDraft = false,
   onDelete = () => {},
+  onSelect,
 }: ActivityCardProps) => {
   if (!user) {
     return null;
@@ -59,9 +60,19 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
   return (
-    <Paper variant="outlined" square style={{ margin: '1rem 0' }}>
+    <Paper
+      className={onSelect !== undefined ? 'activity-card--selectable' : ''}
+      variant="outlined"
+      square
+      onClick={() => {
+        if (onSelect !== undefined) {
+          onSelect();
+        }
+      }}
+      style={{ margin: '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
+    >
       <div className="activity-card__header">
-        {user.mascotteId ? (
+        {user.mascotteId && !noButtons ? (
           <Link href={`/activite/${user.mascotteId}`}>
             <a href={`/activite/${user.mascotteId}`}>
               <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
@@ -72,7 +83,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         )}
         <div className="activity-card__header_info">
           <p className="text">
-            {user.mascotteId ? (
+            {user.mascotteId && !noButtons ? (
               <>
                 <Link href={`/activite/${user.mascotteId}`}>
                   <a href={`/activite/${user.mascotteId}`}>{`${getUserDisplayName(user, isSelf)}`}</a>

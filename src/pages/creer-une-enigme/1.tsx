@@ -116,7 +116,6 @@ const EnigmeStep1: React.FC = () => {
               }
               label="Autre"
               description={`Présentez ${enigmeType.title3} d’une autre catégorie.`}
-              onClick={() => {}}
             />
           </div>
         </div>

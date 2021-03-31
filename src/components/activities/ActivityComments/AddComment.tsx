@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import React from 'react';
 
 import { Button, ButtonBase, CircularProgress, Tooltip } from '@material-ui/core';
@@ -11,6 +12,8 @@ import GameIcon from 'src/svg/navigation/game-icon.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { serializeToQueryUrl } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -18,31 +21,42 @@ const Reactions = [
   {
     label: 'Texte court',
     icon: TextIcon,
+    disabled: false,
+    link: '',
   },
   {
     label: 'Présentation',
     icon: UserIcon,
+    disabled: false,
+    link: '/se-presenter/thematique/1',
   },
   {
     label: 'Énigme',
     icon: KeyIcon,
+    disabled: false,
+    link: '/creer-une-enigme',
   },
   {
     label: 'Défi',
     icon: TargetIcon,
+    disabled: true,
+    link: '/lancer-un-defi',
   },
   {
     label: 'Jeux',
     icon: GameIcon,
+    disabled: true,
+    link: '/creer-un-jeu',
   },
 ];
 
 interface AddCommentProps {
   activityId: number | null;
+  activityType: ActivityType | null;
   label?: string;
 }
 
-export const AddComment: React.FC<AddCommentProps> = ({ activityId, label }: AddCommentProps) => {
+export const AddComment: React.FC<AddCommentProps> = ({ activityId, activityType, label }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
@@ -127,6 +141,20 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId, label }: Add
                       {R.label}
                     </span>
                   </ButtonBase>
+                ) : !R.disabled && activityId !== null && activityType !== null ? (
+                  <Link href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}>
+                    <ButtonBase
+                      component="a"
+                      href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}
+                      key={index}
+                      className="activity__comment-react-button"
+                    >
+                      <R.icon height="1.5rem" style={{ fill: 'currentcolor' }} />
+                      <span className="text text--small" style={{ marginTop: '0.1rem' }}>
+                        {R.label}
+                      </span>
+                    </ButtonBase>
+                  </Link>
                 ) : (
                   <Tooltip key={index} title="Bientôt disponible" aria-label="available soon">
                     <ButtonBase className="activity__comment-react-button">

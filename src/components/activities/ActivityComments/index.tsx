@@ -34,7 +34,7 @@ export const ActivityComments: React.FC<ActivityCommentsProps> = ({ activityId, 
       {comments.map((comment) => (
         <CommentCard key={comment.id} activityId={activityId} comment={comment} user={usersMap[comment.userId] ?? null} />
       ))}
-      <AddComment activityId={activityId} label={labels[activityType]} />
+      <AddComment activityId={activityId} activityType={activityType} label={labels[activityType]} />
     </div>
   );
 };

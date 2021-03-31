@@ -15,6 +15,9 @@ export const useActivity = (activityId: number): { activity: AnyActivity | null 
   const villageId = village ? village.id : null;
 
   const getActivity: QueryFunction<AnyActivity | null> = React.useCallback(async () => {
+    if (activityId === -1) {
+      return null;
+    }
     if (!villageId) {
       return null;
     }

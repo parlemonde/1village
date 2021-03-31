@@ -74,7 +74,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/se-presenter/thematique/3?activity-id=${activity.id}`
+                      : `/se-presenter/thematique/4?activity-id=${activity.id}`
                   }
                 >
                   <Button
@@ -82,7 +82,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/se-presenter/thematique/3?activity-id=${activity.id}`
+                        : `/se-presenter/thematique/4?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"
