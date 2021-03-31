@@ -35,6 +35,9 @@ export const ActivitySelect: React.FC<ActivitySelectProps> = ({ value, onChange,
   const dataPage = React.useRef(0);
   const selectRef = React.useRef<HTMLDivElement>(null);
   const fetchData = React.useCallback(async () => {
+    if (!village) {
+      return;
+    }
     setLoading(true);
     const response = await axiosLoggedRequest({
       method: 'GET',

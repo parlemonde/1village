@@ -16,7 +16,10 @@ const PresentationStep1: React.FC = () => {
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);
 
-  const onNext = () => {
+  const onNext = (clear: boolean) => () => {
+    if (clear) {
+      updateActivity({ responseActivityId: null, responseType: null });
+    }
     router.push('/se-presenter/thematique/2');
   };
   const onChange = (id: number | null, type: ActivityType | null) => {
@@ -68,11 +71,11 @@ const PresentationStep1: React.FC = () => {
         <div className="width-900">
           <h1>Commencer un nouvel échange avec vos Pélicopains :</h1>
           <div style={{ margin: '1rem 0 3rem 0' }}>
-            <ThemeChoiceButton label="Créer une nouvelle présentation" description="" onClick={onNext} />
+            <ThemeChoiceButton label="Créer une nouvelle présentation" description="" onClick={onNext(true)} />
           </div>
           <h1>Réagir à une activité déjà publiée par vos Pélicopains :</h1>
           <div ref={selectRef}>
-            <ActivitySelect value={activity.responseActivityId} onChange={onChange} onSelect={onNext} style={{ margin: '1rem 0 0 0' }} />
+            <ActivitySelect value={activity.responseActivityId} onChange={onChange} onSelect={onNext(false)} style={{ margin: '1rem 0 0 0' }} />
           </div>
         </div>
       </div>

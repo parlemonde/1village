@@ -47,6 +47,7 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
         qb.select('activity.responseActivityId', 'aid')
           .addSelect('COUNT(activity.id)', 'activityCount')
           .from(Activity, 'activity')
+          .where('activity.status != :status', { status: `${ActivityStatus.DRAFT}` })
           .groupBy('activity.responseActivityId');
         return qb;
       },
@@ -276,7 +277,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
   },
   required: ['type'],
@@ -316,10 +317,8 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.type = data.type;
   activity.subType = data.subType ?? null;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
-  if (data.responseActivityId && data.responseType) {
-    activity.responseActivityId = data.responseActivityId;
-    activity.responseType = data.responseType;
-  }
+  activity.responseActivityId = data.responseActivityId ?? null;
+  activity.responseType = data.responseType ?? null;
 
   const content = (data.content || []).map((d, index) => {
     const activityData = new ActivityData();
@@ -359,7 +358,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
   },
   required: [],
@@ -389,8 +388,8 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   activity.status = data.status ?? activity.status;
-  activity.responseActivityId = data.responseActivityId ?? activity.responseActivityId ?? null;
-  activity.responseType = data.responseType ?? activity.responseType ?? null;
+  activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
+  activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);

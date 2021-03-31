@@ -255,6 +255,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         type: activity.type,
         subType: activity.subType,
         villageId: activity.villageId,
+        responseActivityId: activity.responseActivityId,
+        responseType: activity.responseType,
         status: publish ? ActivityStatus.PUBLISHED : ActivityStatus.DRAFT,
         content,
       };
@@ -301,6 +303,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       url: `/activities/${activity.id}`,
       data: {
         status: ActivityStatus.PUBLISHED,
+        responseActivityId: activity.responseActivityId,
+        responseType: activity.responseType,
       },
     });
     if (response.error) {

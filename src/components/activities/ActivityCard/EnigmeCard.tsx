@@ -80,7 +80,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/creer-une-enigme/4?activity-id=${activity.id}`
+                      : `/creer-une-enigme/5?activity-id=${activity.id}`
                   }
                 >
                   <Button
@@ -88,7 +88,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/creer-une-enigme/4?activity-id=${activity.id}`
+                        : `/creer-une-enigme/5?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"

@@ -9,12 +9,14 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep3: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const data = activity?.data || null;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -35,7 +37,7 @@ const PresentationStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Démarrer', 'Choix du thème', 'Présentation', 'Prévisualisation']} activeStep={2} />
+        <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Choix du thème', 'Présentation', 'Prévisualisation'])} activeStep={isEdit ? 1 : 2} />
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
           <ContentEditor

@@ -46,8 +46,8 @@ export const ThemeChoiceButton: React.FC<ThemeChoiceButtonProps> = ({
           <ArrowRight style={{ transform: showAdd ? 'rotate(90deg)' : 'none', transition: '100ms ease-in-out' }} />
         </div>
       </ButtonBase>
-      {additionalContent && (
-        <div className="bg-grey" style={{ visibility: showAdd ? 'visible' : 'hidden', padding: '0.8rem 1.4rem' }}>
+      {showAdd && additionalContent && (
+        <div className="bg-grey" style={{ padding: '0.8rem 1.4rem' }}>
           {additionalContent}
         </div>
       )}
