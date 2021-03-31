@@ -40,7 +40,7 @@ const tabs: Tab[] = [
     label: 'Créer une énigme',
     path: '/creer-une-enigme',
     icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'Lancer un défi',
