@@ -36,7 +36,7 @@ export const Accueil: React.FC = () => {
     <Base subHeader={<SubHeader />} rightNav={<RightNavigation />}>
       <h1>Dernières activités</h1>
       <Filters countries={village.countries} filters={filters} onChange={setFilters} />
-      <Activities activities={activities} />
+      <Activities activities={activities} withLinks />
     </Base>
   );
 };
