@@ -25,6 +25,7 @@ type ActivityGetter = {
   pelico?: boolean;
   userId?: number;
   status?: number;
+  responseActivityId?: number;
 };
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
@@ -71,6 +72,7 @@ const getActivities = async ({
   pelico = true,
   status = 0,
   userId,
+  responseActivityId,
 }: ActivityGetter) => {
   // get ids
   let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
@@ -86,7 +88,9 @@ const getActivities = async ({
   if (status !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.status = :status', { status: `${status}` });
   }
-  if (userId !== undefined) {
+  if (responseActivityId !== undefined) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
+  } else if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
       userId,
     });
@@ -169,6 +173,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     subType: req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : undefined,
     status: req.query.status ? parseInt(getQueryString(req.query.status), 10) || 0 : undefined,
     userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
+    responseActivityId: req.query.responseActivityId ? parseInt(getQueryString(req.query.responseActivityId), 10) || 0 : undefined,
   });
   res.sendJSON(activities);
 });

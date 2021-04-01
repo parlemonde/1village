@@ -15,6 +15,7 @@ export type Args = {
   type?: number;
   userId?: number;
   status?: number;
+  responseActivityId?: number;
 };
 
 export const useActivities = ({ pelico, countries = [], userId, ...args }: Args): { activities: AnyActivity[] } => {

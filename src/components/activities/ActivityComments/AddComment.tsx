@@ -142,11 +142,10 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId, activityType
                     </span>
                   </ButtonBase>
                 ) : !R.disabled && activityId !== null && activityType !== null ? (
-                  <Link href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}>
+                  <Link key={index} href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}>
                     <ButtonBase
                       component="a"
                       href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}
-                      key={index}
                       className="activity__comment-react-button"
                     >
                       <R.icon height="1.5rem" style={{ fill: 'currentcolor' }} />

@@ -31,7 +31,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ activities, noButtons = 
           activity={activity}
           isSelf={user && activity.userId === user.id}
           user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
-          key={index}
+          key={activity.id}
           noButtons={noButtons}
           onSelect={
             onSelect

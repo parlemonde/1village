@@ -48,6 +48,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   noButtons = false,
   showEditButtons = false,
   isDraft = false,
+  forComment = false,
   onDelete = () => {},
   onSelect,
 }: ActivityCardProps) => {
@@ -62,26 +63,27 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <Paper
       className={onSelect !== undefined ? 'activity-card--selectable' : ''}
-      variant="outlined"
-      square
+      variant={forComment ? 'elevation' : 'outlined'}
+      square={!forComment}
+      elevation={forComment ? 2 : 0}
       onClick={() => {
         if (onSelect !== undefined) {
           onSelect();
         }
       }}
-      style={{ margin: '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
+      style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
     >
       <div className="activity-card__header">
-        {user.mascotteId && !noButtons ? (
+        {!forComment && user.mascotteId && !noButtons ? (
           <Link href={`/activite/${user.mascotteId}`}>
             <a href={`/activite/${user.mascotteId}`}>
               <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
             </a>
           </Link>
         ) : (
-          <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
+          forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
         )}
-        <div className="activity-card__header_info">
+        <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
           <p className="text">
             {user.mascotteId && !noButtons ? (
               <>

@@ -8,6 +8,7 @@ export interface ActivityCardProps<T extends AnyActivity = AnyActivity> {
   showEditButtons?: boolean;
   noButtons?: boolean;
   isDraft?: boolean;
+  forComment?: boolean;
   onDelete?(): void;
   onSelect?: () => void;
 }
