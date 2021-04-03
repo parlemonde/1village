@@ -88,7 +88,7 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId, activityType
     <div className="activity__comment-container">
       <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
       {displayEditor ? (
-        <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative' }}>
+        <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
           <TextEditor
             maxLen={400}
             value={newComment}

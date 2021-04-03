@@ -117,7 +117,7 @@ const MascotteStep1: React.FC = () => {
               <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Nous sommes</span>
               <TextField
                 className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
-                style={{ flex: 1 }}
+                style={{ flex: 1, minWidth: 0 }}
                 fullWidth
                 placeholder={labelPresentation}
                 value={data.presentation}

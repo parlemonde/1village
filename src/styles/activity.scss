@@ -81,6 +81,7 @@
 
   .activity__comment-react {
     flex: 1;
+    min-width: 0;
     border: 1px solid $primary-color;
     padding: 0.5rem;
     margin-left: 0.25rem;
@@ -93,6 +94,7 @@
 
   .activity__comment-card {
     flex: 1;
+    min-width: 0;
     padding: 0.5rem;
     margin-left: 0.25rem;
     &--no-padding {

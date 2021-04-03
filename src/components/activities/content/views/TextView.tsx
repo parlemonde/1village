@@ -5,7 +5,7 @@ import type { ViewProps } from '../content.types';
 export const TextView: React.FC<ViewProps> = ({ value }: ViewProps) => {
   return (
     <div className="activity-data">
-      <div dangerouslySetInnerHTML={{ __html: value }} />
+      <div dangerouslySetInnerHTML={{ __html: value }} className="break-long-words" />
     </div>
   );
 };

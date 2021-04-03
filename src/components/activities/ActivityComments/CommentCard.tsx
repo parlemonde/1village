@@ -54,7 +54,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
     <div className="activity__comment-container">
       <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
       {displayEditor && isSelf ? (
-        <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative' }}>
+        <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
           <TextEditor
             maxLen={400}
             value={newComment}
@@ -91,7 +91,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
       ) : (
         <Paper elevation={2} className="activity__comment-card">
           <span className="text text--bold">{getUserDisplayName(user, isSelf)}</span>
-          <div dangerouslySetInnerHTML={{ __html: comment.text }} />
+          <div dangerouslySetInnerHTML={{ __html: comment.text }} className="break-long-words" />
           {isSelf && (
             <div style={{ position: 'absolute', right: '0.25rem', top: '0.25rem' }}>
               <EditButton
