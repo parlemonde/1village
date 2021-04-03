@@ -288,7 +288,23 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       if (response.error) {
         return false;
       }
-      setActivity(getAnyActivity(response.data));
+      const newActivity = getAnyActivity(response.data);
+      if (!publish) {
+        const response2 = await axiosLoggedRequest({
+          method: 'PUT',
+          url: `/activities/${activity.id}`,
+          data: {
+            responseActivityId: activity.responseActivityId,
+            responseType: activity.responseType,
+          },
+        });
+        if (response2.error) {
+          return false;
+        }
+        newActivity.responseActivityId = (response2.data as Activity).responseActivityId;
+        newActivity.responseType = (response2.data as Activity).responseType;
+      }
+      setActivity(newActivity);
       return true;
     },
     [getAPIContent, axiosLoggedRequest, activity],
