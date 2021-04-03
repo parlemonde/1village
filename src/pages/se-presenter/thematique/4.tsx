@@ -61,7 +61,7 @@ const PresentationStep4: React.FC = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Choix du thème', 'Présentation', 'Prévisualisation'])} activeStep={isEdit ? 2 : 3} />
         <div className="width-900">
-          <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez la'}</h1>
+          <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre présentation.
             {isEdit

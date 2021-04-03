@@ -1,5 +1,8 @@
+import { useQueryCache } from 'react-query';
 import React from 'react';
 
+import { isPresentation } from 'src/activity-types/anyActivity';
+import { isMascotte } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
@@ -9,7 +12,8 @@ import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 
 const MesActivites: React.FC = () => {
-  const { user } = React.useContext(UserContext);
+  const queryCache = useQueryCache();
+  const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { activities } = useActivities({
     limit: 50,
     page: 0,
@@ -30,6 +34,25 @@ const MesActivites: React.FC = () => {
   const onDeleteActivity = async () => {
     if (activityToDelete !== null) {
       await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
+    }
+    if (isPresentation(activityToDelete) && isMascotte(activityToDelete)) {
+      const newUser = {
+        avatar: '',
+        displayName: '',
+      };
+      const response = await axiosLoggedRequest({
+        method: 'PUT',
+        url: `/users/${user?.id}`,
+        data: {
+          avatar: '',
+          displayName: '',
+        },
+      });
+      if (!response.error) {
+        setUser({ ...user, ...newUser });
+        queryCache.invalidateQueries('users');
+        queryCache.invalidateQueries('village-users');
+      }
     }
     setDeleteIndex({ index: -1, isDraft: false });
   };
@@ -86,7 +109,7 @@ const MesActivites: React.FC = () => {
         ariaLabelledBy="delete-action-title"
       >
         <div>Voulez vous vraiment supprimer cette activité ?</div>
-        {activityToDelete && <ActivityCard activity={activityToDelete} isSelf={true} user={user} />}
+        {activityToDelete && <ActivityCard activity={activityToDelete} isSelf={true} user={user} noButtons />}
       </Modal>
     </Base>
   );

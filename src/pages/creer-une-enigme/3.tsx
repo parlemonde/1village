@@ -41,11 +41,6 @@ const EnigmeStep3: React.FC = () => {
     updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex - 1 } });
   };
 
-  const onNext = () => {
-    save().catch(console.error);
-    router.push('/creer-une-enigme/4');
-  };
-
   if (data === null || !isEnigme(activity)) {
     return <div></div>;
   }
@@ -68,8 +63,9 @@ const EnigmeStep3: React.FC = () => {
         <div className="width-900">
           <h1>{enigmeType.titleStep2}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Decrivez ici votre {enigmeType.titleStep2Short}, il s’agira de la <strong>réponse</strong> partagée aux autres classes. Vous pouvez
-            ajouter du texte, une vidéo ou une image à votre description. Vous pourrez le modifier à l’étape 4.
+            Décrivez ici votre {enigmeType.titleStep2Short}, il s’agira de la <strong>réponse</strong> partagée aux autres classes. Votre réponse ne
+            sera visible que 7 jours après la publication de votre énigme, pour laisser le temps à vos Pélicopains de faire des recherches, et de vous
+            poser des questions !
           </p>
           <ContentEditor
             content={activity.processedContent.slice(0, indiceContentIndex)}
@@ -78,7 +74,7 @@ const EnigmeStep3: React.FC = () => {
             deleteContent={deleteDescriptionContent}
             save={save}
           />
-          <StepsButton prev="/creer-une-enigme/2" next={onNext} />
+          <StepsButton prev="/creer-une-enigme/2" next="/creer-une-enigme/4" />
         </div>
       </div>
     </Base>

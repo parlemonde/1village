@@ -95,7 +95,7 @@ export const Activities: React.FC<ActivitiesProps> = ({ activities, noButtons = 
                       style={{ display: 'block', lineHeight: '0.8rem', padding: '0.4rem 0 0 0', margin: '0' }}
                     >
                       <span className="text text--small text--primary" style={{ fontSize: '0.8rem' }}>
-                        En réponse à {REACTIONS[activity.responseType ?? 0]}
+                        En réaction à {REACTIONS[activity.responseType ?? 0]}
                       </span>
                       <br />
                       <img src="/link.png" style={{ width: '4rem', height: 'auto', cursor: 'pointer' }}></img>
@@ -120,7 +120,6 @@ export const Activities: React.FC<ActivitiesProps> = ({ activities, noButtons = 
                         activity={responseActivity}
                         isSelf={user && responseActivity.userId === user.id}
                         user={userMap[responseActivity.userId] !== undefined ? users[userMap[responseActivity.userId]] : undefined}
-                        noButtons={true}
                       />
                     )}
                   </div>

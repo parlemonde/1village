@@ -113,7 +113,7 @@ export const Header: React.FC = () => {
                 </MenuItem>
               </Menu>
             </div>
-            <AvatarImg user={user} size="small" />
+            <AvatarImg user={user} size="small" noLink />
           </div>
         )}
       </div>

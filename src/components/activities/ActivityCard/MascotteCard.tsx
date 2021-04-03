@@ -41,7 +41,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
             backgroundColor: bgPage,
           }}
         >
-          <AvatarImg size="medium" src={activity.data.mascotteImage} />
+          <AvatarImg size="medium" src={activity.data.mascotteImage} noLink />
         </div>
       </div>
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>

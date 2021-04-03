@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,11 +29,20 @@ type AvatarImgProps = {
   src?: string;
   user?: User;
   size?: 'large' | 'medium' | 'small';
+  noLink?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
   style?: React.CSSProperties;
 };
-export const AvatarImg: React.FC<AvatarImgProps> = ({ size = 'large', src = '', user, children, onClick = () => {}, style }: AvatarImgProps) => {
+export const AvatarImg: React.FC<AvatarImgProps> = ({
+  size = 'large',
+  src = '',
+  user,
+  children,
+  onClick = () => {},
+  style,
+  noLink = false,
+}: AvatarImgProps) => {
   const classes = useStyles();
   const isPelico = user && user.type >= UserType.MEDIATOR;
 
@@ -46,6 +56,17 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({ size = 'large', src = '', 
 
   const imgSrc = user ? user.avatar || getGravatarUrl(user.email) || src : src;
 
+  if (!noLink && user && user.mascotteId) {
+    return (
+      <Link href={`/activite/${user.mascotteId}`}>
+        <a href={`/activite/${user.mascotteId}`}>
+          <Avatar alt={'avatar'} className={classes[size]} src={imgSrc} onClick={onClick} style={style}>
+            {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+          </Avatar>
+        </a>
+      </Link>
+    );
+  }
   return (
     <Avatar alt={'avatar'} className={classes[size]} src={imgSrc} onClick={onClick} style={style}>
       {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}

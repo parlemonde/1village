@@ -167,7 +167,7 @@ const Presentation: React.FC = () => {
             Photo de profil :
           </label>
           <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
-            <AvatarImg user={user} size="small" />
+            <AvatarImg user={user} size="small" noLink />
           </div>
         </div>
 

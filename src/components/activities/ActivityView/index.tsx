@@ -5,11 +5,12 @@ import { isPresentation, isQuestion, isEnigme } from 'src/activity-types/anyActi
 import { isThematique, isMascotte } from 'src/activity-types/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
+import { UserDisplayName } from 'src/components/UserDisplayName';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { useActivity } from 'src/services/useActivity';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import { getUserDisplayName, toDate } from 'src/utils';
+import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -25,7 +26,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-export const ActivityView: React.FC<ActivityViewProps> = ({ activity, user, isSelf = false }: ActivityViewProps) => {
+export const ActivityView: React.FC<ActivityViewProps> = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const isAnswer = activity && isEnigme(activity) && 'reponse' in router.query;
@@ -37,7 +38,9 @@ export const ActivityView: React.FC<ActivityViewProps> = ({ activity, user, isSe
         <div className="activity__header">
           <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
           <div className="activity-card__header_info">
-            <h2>{getUserDisplayName(user, isSelf)}</h2>
+            <h2>
+              <UserDisplayName user={user} />
+            </h2>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
               {isPelico ? (

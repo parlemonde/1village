@@ -4,12 +4,12 @@ import React from 'react';
 import { Button, CircularProgress, Paper } from '@material-ui/core';
 
 import { AvatarImg } from 'src/components/Avatar';
+import { UserDisplayName } from 'src/components/UserDisplayName';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
-import { getUserDisplayName } from 'src/utils';
 import type { Comment } from 'types/comment.type';
 import { User } from 'types/user.type';
 
@@ -90,7 +90,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, u
         </div>
       ) : (
         <Paper elevation={2} className="activity__comment-card">
-          <span className="text text--bold">{getUserDisplayName(user, isSelf)}</span>
+          <UserDisplayName className="text text--bold" user={user} />
           <div dangerouslySetInnerHTML={{ __html: comment.text }} className="break-long-words" />
           {isSelf && (
             <div style={{ position: 'absolute', right: '0.25rem', top: '0.25rem' }}>
