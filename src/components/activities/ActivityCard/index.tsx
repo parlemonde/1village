@@ -74,10 +74,10 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
     >
       <div className="activity-card__header">
-        <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={forComment || noButtons} />
+        {forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={noButtons} />}
         <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
           <p className="text">
-            <UserDisplayName className="text" user={user} noLink={forComment || noButtons} />
+            <UserDisplayName className="text" user={user} noLink={noButtons} />
             {' a '}
             <strong>{titles[activity.type]}</strong>
           </p>
