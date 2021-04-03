@@ -306,7 +306,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   }
 
   // Delete old draft if needed.
-  if (data.status === ActivityStatus.DRAFT) {
+  if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
     await getRepository(Activity).delete({
       userId: req.user.id,
       villageId,

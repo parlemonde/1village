@@ -61,6 +61,11 @@ const EnigmeStep4: React.FC = () => {
     return <div></div>;
   }
 
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/creer-une-enigme/5');
+  };
+
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
   const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
 
@@ -89,7 +94,7 @@ const EnigmeStep4: React.FC = () => {
             deleteContent={deleteIndiceContent}
             save={save}
           />
-          <StepsButton prev="/creer-une-enigme/3" next="/creer-une-enigme/5" />
+          <StepsButton prev="/creer-une-enigme/3" next={onNext} />
         </div>
       </div>
     </Base>

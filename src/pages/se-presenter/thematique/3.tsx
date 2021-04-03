@@ -30,6 +30,11 @@ const PresentationStep3: React.FC = () => {
     updateActivity({ processedContent: content });
   };
 
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/se-presenter/thematique/4');
+  };
+
   if (data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
@@ -47,7 +52,7 @@ const PresentationStep3: React.FC = () => {
             deleteContent={deleteContent}
             save={save}
           />
-          <StepsButton prev="/se-presenter/thematique/2" next="/se-presenter/thematique/4" />
+          <StepsButton prev="/se-presenter/thematique/2" next={onNext} />
         </div>
       </div>
     </Base>

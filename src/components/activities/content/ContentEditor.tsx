@@ -69,7 +69,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
                   clearTimeout(blurTimeoutSave.current);
                   blurTimeoutSave.current = window.setTimeout(() => {
                     save().catch(console.error);
-                  }, 60000);
+                  }, 6000);
                 }}
               />
             );
