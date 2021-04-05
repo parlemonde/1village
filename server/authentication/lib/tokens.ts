@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { getRepository, MoreThan } from 'typeorm';
 
 import { Token } from '../../entities/token';
-import { generateTemporaryPassword } from '../../utils';
+import { generateTemporaryToken } from '../../utils';
 
 const secret: string = process.env.APP_SECRET || '';
 
@@ -17,7 +17,7 @@ export async function getAccessToken(
   const accessToken = jwt.sign({ userId }, secret, { expiresIn: '4h' });
   let refreshToken = '';
   if (withRefreshToken) {
-    const rToken = generateTemporaryPassword(30);
+    const rToken = generateTemporaryToken(30);
     const token = new Token();
     token.token = await argon2.hash(rToken);
     token.userId = userId;

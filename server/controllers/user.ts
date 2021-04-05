@@ -10,7 +10,7 @@ import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
-import { generateTemporaryPassword, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
+import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
 
 import { Controller } from './controller';
 
@@ -136,7 +136,7 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   }
   user.accountRegistration = data.password === undefined ? 3 : 0;
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
-  const temporaryPassword = generateTemporaryPassword(20);
+  const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
   // todo: send mail with verification password to validate the email adress.
 
@@ -366,7 +366,7 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   }
 
   // update user
-  const temporaryPassword = generateTemporaryPassword(12);
+  const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
   await getRepository(User).save(user);
 

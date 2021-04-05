@@ -31,7 +31,7 @@ export function isPasswordValid(password: string): boolean {
   );
 }
 
-export function generateTemporaryPassword(length: number): string {
+export function generateTemporaryToken(length: number): string {
   return base64url(crypto.randomBytes(length)).slice(0, length);
 }
 
