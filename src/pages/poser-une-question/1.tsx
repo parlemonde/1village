@@ -9,6 +9,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { UserDisplayName } from 'src/components/UserDisplayName';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -17,7 +18,6 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
-import { getUserDisplayName } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
 const Question1: React.FC = () => {
@@ -117,7 +117,9 @@ const Question1: React.FC = () => {
                 {questionUser && <AvatarImg user={questionUser} size="small" style={{ margin: '0.25rem' }} />}
                 <div style={{ flex: 1, minWidth: 0, backgroundColor: bgPage, padding: '0.5rem 1rem', borderRadius: '10px' }}>
                   <p style={{ margin: '0' }} className="text">
-                    <strong>{getUserDisplayName(questionUser, isSelf)}</strong>
+                    <strong>
+                      <UserDisplayName user={questionUser} />
+                    </strong>
                     <br />
                     <span>{question.q}</span>
                   </p>

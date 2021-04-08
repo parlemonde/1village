@@ -25,6 +25,7 @@ type ActivityGetter = {
   pelico?: boolean;
   userId?: number;
   status?: number;
+  responseActivityId?: number;
 };
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
@@ -47,6 +48,7 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
         qb.select('activity.responseActivityId', 'aid')
           .addSelect('COUNT(activity.id)', 'activityCount')
           .from(Activity, 'activity')
+          .where('activity.status != :status', { status: `${ActivityStatus.DRAFT}` })
           .groupBy('activity.responseActivityId');
         return qb;
       },
@@ -70,6 +72,7 @@ const getActivities = async ({
   pelico = true,
   status = 0,
   userId,
+  responseActivityId,
 }: ActivityGetter) => {
   // get ids
   let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
@@ -85,7 +88,9 @@ const getActivities = async ({
   if (status !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.status = :status', { status: `${status}` });
   }
-  if (userId !== undefined) {
+  if (responseActivityId !== undefined) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
+  } else if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
       userId,
     });
@@ -168,6 +173,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     subType: req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : undefined,
     status: req.query.status ? parseInt(getQueryString(req.query.status), 10) || 0 : undefined,
     userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
+    responseActivityId: req.query.responseActivityId ? parseInt(getQueryString(req.query.responseActivityId), 10) || 0 : undefined,
   });
   res.sendJSON(activities);
 });
@@ -276,7 +282,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
   },
   required: ['type'],
@@ -300,7 +306,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   }
 
   // Delete old draft if needed.
-  if (data.status === ActivityStatus.DRAFT) {
+  if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
     await getRepository(Activity).delete({
       userId: req.user.id,
       villageId,
@@ -316,10 +322,8 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.type = data.type;
   activity.subType = data.subType ?? null;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
-  if (data.responseActivityId && data.responseType) {
-    activity.responseActivityId = data.responseActivityId;
-    activity.responseType = data.responseType;
-  }
+  activity.responseActivityId = data.responseActivityId ?? null;
+  activity.responseType = data.responseType ?? null;
 
   const content = (data.content || []).map((d, index) => {
     const activityData = new ActivityData();
@@ -359,7 +363,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
   },
   required: [],
@@ -389,8 +393,8 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   activity.status = data.status ?? activity.status;
-  activity.responseActivityId = data.responseActivityId ?? activity.responseActivityId ?? null;
-  activity.responseType = data.responseType ?? activity.responseType ?? null;
+  activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
+  activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);

@@ -1,52 +1,70 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.const';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
 import { EnigmeData } from 'src/activity-types/enigme.types';
+import { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ContentView } from 'src/components/activities/content/ContentView';
-import { EditButton } from 'src/components/buttons/EditButton';
+import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
 const EnigmeStep4: React.FC = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const data = (activity?.data as EnigmeData) || null;
-  const indiceContentIndex = data?.indiceContentIndex ?? 0;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
+  const contentAdded = React.useRef(false);
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/creer-une-enigme');
     } else if (activity && !isEnigme(activity)) {
       router.push('/creer-une-enigme');
     }
-  }, [activity, router]);
 
-  const onPublish = async () => {
-    setIsLoading(true);
-    const success = await save(true);
-    if (success) {
-      router.push('/creer-une-enigme/success');
+    if (activity && isEnigme(activity)) {
+      if ((activity.data.indiceContentIndex ?? 0) > activity.processedContent.length) {
+        updateActivity({
+          data: {
+            ...activity.data,
+            indiceContentIndex: activity.processedContent.length,
+          },
+        });
+      }
+      if ((activity.data.indiceContentIndex ?? 0) === activity.processedContent.length && !contentAdded.current) {
+        contentAdded.current = true;
+        addContent('text');
+      }
     }
-    setIsLoading(false);
+  }, [activity, router, updateActivity, addContent]);
+
+  const updateContent = (content: EditorContent[]): void => {
+    updateActivity({ processedContent: [...activity.processedContent.slice(0, indiceContentIndex), ...content] });
+  };
+  const addIndiceContent = (type: EditorTypes, value?: string) => {
+    contentAdded.current = true;
+    addContent(type, value);
+  };
+  const deleteIndiceContent = (index: number) => {
+    contentAdded.current = true; // delete means there were content already
+    deleteContent(indiceContentIndex + index);
   };
 
   if (data === null || !isEnigme(activity)) {
     return <div></div>;
   }
+
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/creer-une-enigme/5');
+  };
 
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
   const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
@@ -55,86 +73,30 @@ const EnigmeStep4: React.FC = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[
+          steps={(isEdit ? [] : ['Démarrer']).concat([
             data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
             enigmeType.step2 ?? "Description de l'objet",
             "Création de l'indice",
             'Prévisualisation',
-          ]}
-          activeStep={3}
+          ])}
+          activeStep={isEdit ? 2 : 3}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre énigme{!isEdit && ', et publiez-la'}</h1>
+          <h1>Créer votre indice</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre énigme.
-            {isEdit
-              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+            Créez ici un <strong>indice</strong> pour faire deviner votre {enigmeType.titleStep2Short}. Vous pouvez ajouter du texte, une vidéo ou une
+            image à votre indice et vous pourrez le modifier à l’étape 4.
           </p>
-          {isEdit ? (
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/creer-une-enigme/3">
-                <Button component="a" color="secondary" variant="contained" href="/creer-une-enigme/3">
-                  {"Modifier à l'étape précédente"}
-                </Button>
-              </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Enregistrer les changements
-              </Button>
-            </div>
-          ) : (
-            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
-            </div>
-          )}
-
-          <span className="text text--small text--success">{"Catégorie de l'énigme"}</span>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push(`/creer-une-enigme/1?edit=${activity.id}`);
-              }}
-              isGreen
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <p style={{ margin: '0.5rem 0' }}>
-              Notre {enigmeType.titleStep2Short} mystère est{' '}
-              <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
-            </p>
-          </div>
-
-          <span className="text text--small text--success">{enigmeType.step2 ?? "Description de l'objet"}</span>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/creer-une-enigme/2');
-              }}
-              isGreen
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <ContentView content={activity.processedContent.slice(0, indiceContentIndex)} />
-          </div>
-
-          <span className="text text--small text--success">Indice présenté aux autres classes</span>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/creer-une-enigme/3');
-              }}
-              isGreen
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <ContentView content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
-          </div>
-
-          <StepsButton prev="/creer-une-enigme/3" />
+          <ContentEditor
+            content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)}
+            updateContent={updateContent}
+            addContent={addIndiceContent}
+            deleteContent={deleteIndiceContent}
+            save={save}
+          />
+          <StepsButton prev="/creer-une-enigme/3" next={onNext} />
         </div>
       </div>
-      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </Base>
   );
 };

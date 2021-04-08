@@ -20,6 +20,7 @@ export const SubHeader: React.FC = () => {
       <div
         style={{
           flex: 1,
+          minWidth: 0,
           backgroundColor: primaryColorLight,
           height: '100%',
           borderTopLeftRadius: '10px',

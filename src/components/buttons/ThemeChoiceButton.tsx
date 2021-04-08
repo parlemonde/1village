@@ -7,27 +7,29 @@ import ArrowRight from 'src/svg/arrow-right.svg';
 interface ThemeChoiceButtonProps {
   label: string;
   description: string;
+  isOpen?: boolean;
   onClick?(): void;
   additionalContent?: React.ReactNode | React.ReactNodeArray;
 }
 
 export const ThemeChoiceButton: React.FC<ThemeChoiceButtonProps> = ({
   label,
+  isOpen,
   description,
   additionalContent,
   onClick = () => {},
 }: ThemeChoiceButtonProps) => {
-  const [showAdd, setShowAdd] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const showAdd = isOpen !== undefined ? isOpen : open;
 
   return (
     <div style={{ width: '100%', borderRadius: '10px', marginBottom: '1rem', overflow: 'hidden' }}>
       <ButtonBase
         style={{ width: '100%', textAlign: 'left' }}
         onClick={() => {
-          if (additionalContent) {
-            setShowAdd(!showAdd);
-          } else {
-            onClick();
+          onClick();
+          if (additionalContent && isOpen === undefined) {
+            setOpen(!open);
           }
         }}
       >
@@ -44,8 +46,8 @@ export const ThemeChoiceButton: React.FC<ThemeChoiceButtonProps> = ({
           <ArrowRight style={{ transform: showAdd ? 'rotate(90deg)' : 'none', transition: '100ms ease-in-out' }} />
         </div>
       </ButtonBase>
-      {additionalContent && (
-        <div className="bg-grey" style={{ visibility: showAdd ? 'visible' : 'hidden', padding: '0.8rem 1.4rem' }}>
+      {showAdd && additionalContent && (
+        <div className="bg-grey" style={{ padding: '0.8rem 1.4rem' }}>
           {additionalContent}
         </div>
       )}

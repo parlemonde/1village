@@ -179,7 +179,7 @@ const MascotteStep4: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={3}>
                 <Box display="flex" justifyContent="center" m={0}>
-                  <AvatarImg src={data.mascotteImage} />
+                  <AvatarImg src={data.mascotteImage} noLink />
                 </Box>
               </Grid>
               <Grid item xs={12} md={9}>

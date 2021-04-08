@@ -52,7 +52,7 @@ export const MascotteActivityView: React.FC<ActivityViewProps<PresentationMascot
             )}
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>
-                <AvatarImg src={activity.data.mascotteImage} />
+                <AvatarImg src={activity.data.mascotteImage} noLink />
               </Box>
             </Grid>
             <Grid item xs={12} md={8}>

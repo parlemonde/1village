@@ -1,13 +1,19 @@
+@import 'variables';
+
 .activity-card {
   &__header {
     display: flex;
   }
   &__header_info {
     flex: 1;
+    min-width: 0;
     margin: 0.25rem;
     p {
       margin: 0;
     }
+  }
+  &--selectable:hover {
+    border: 1px solid $primary-color;
   }
 }
 

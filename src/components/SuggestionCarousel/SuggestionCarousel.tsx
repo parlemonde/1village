@@ -121,7 +121,7 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                   {selectedSuggestion?.text || ''}
                 </div>
               </div>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', marginTop: '0.2rem' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', marginTop: '0.2rem', minHeight: 0 }}>
                 <div style={{ flex: 1, flexShrink: 1, minWidth: 0 }}>
                   <Tabs
                     value={tab}

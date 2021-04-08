@@ -312,6 +312,8 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
           editorRef.current.focus();
         }
       }}
+      onFocus={onFocus}
+      onBlur={onBlur}
     >
       {inlineToolbar ? (
         <div style={{ marginBottom: '0.5rem' }}>{toolbar}</div>
@@ -342,8 +344,6 @@ export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
             handleBeforeInput={handleBeforeInput}
             handlePastedText={handlePastedText}
             blockStyleFn={blockStyleFn}
-            onFocus={onFocus}
-            onBlur={onBlur}
           />
         </div>
       </div>

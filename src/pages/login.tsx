@@ -30,6 +30,20 @@ const errorMessages = {
   6: 'Veuillez utiliser le login par email/mot de passe pour votre compte',
 };
 
+const isRedirectValid = (redirect: string): boolean => {
+  // inner redirection.
+  if (redirect.startsWith('/')) {
+    return true;
+  }
+  // external, allow only same domain.
+  try {
+    const url = new URL(redirect);
+    return url.hostname.slice(-15) === '.parlemonde.org';
+  } catch {
+    return false;
+  }
+};
+
 const Login: React.FC = () => {
   const router = useRouter();
   const { login, loginWithSso } = React.useContext(UserContext);
@@ -51,7 +65,7 @@ const Login: React.FC = () => {
         setIsLoading(true);
         const response = await loginWithSso(code);
         if (response.success) {
-          router.push(redirect.current);
+          router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
         } else {
           setErrorCode(response.errorCode || 0);
         }
@@ -96,7 +110,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
     const response = await login(user.username, user.password, user.remember);
     if (response.success) {
-      router.push(redirect.current);
+      router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
     } else {
       setErrorCode(response.errorCode || 0);
     }

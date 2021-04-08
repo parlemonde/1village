@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
@@ -8,6 +7,7 @@ import { getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
+import { UserDisplayName } from 'src/components/UserDisplayName';
 import { primaryColor } from 'src/styles/variables.const';
 import Timer from 'src/svg/enigme/timer.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
@@ -16,7 +16,7 @@ import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import { getUserDisplayName, toDate } from 'src/utils';
+import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -48,7 +48,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   noButtons = false,
   showEditButtons = false,
   isDraft = false,
+  forComment = false,
   onDelete = () => {},
+  onSelect,
 }: ActivityCardProps) => {
   if (!user) {
     return null;
@@ -59,33 +61,25 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
   return (
-    <Paper variant="outlined" square style={{ margin: '1rem 0' }}>
+    <Paper
+      className={onSelect !== undefined ? 'activity-card--selectable' : ''}
+      variant={forComment ? 'elevation' : 'outlined'}
+      square={!forComment}
+      elevation={forComment ? 2 : 0}
+      onClick={() => {
+        if (onSelect !== undefined) {
+          onSelect();
+        }
+      }}
+      style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
+    >
       <div className="activity-card__header">
-        {user.mascotteId ? (
-          <Link href={`/activite/${user.mascotteId}`}>
-            <a href={`/activite/${user.mascotteId}`}>
-              <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
-            </a>
-          </Link>
-        ) : (
-          <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} />
-        )}
-        <div className="activity-card__header_info">
+        {forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={noButtons} />}
+        <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
           <p className="text">
-            {user.mascotteId ? (
-              <>
-                <Link href={`/activite/${user.mascotteId}`}>
-                  <a href={`/activite/${user.mascotteId}`}>{`${getUserDisplayName(user, isSelf)}`}</a>
-                </Link>
-                {' a '}
-                <strong>{titles[activity.type]}</strong>
-              </>
-            ) : (
-              <>
-                {`${getUserDisplayName(user, isSelf)} a `}
-                <strong>{titles[activity.type]}</strong>
-              </>
-            )}
+            <UserDisplayName className="text" user={user} noLink={noButtons} />
+            {' a '}
+            <strong>{titles[activity.type]}</strong>
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>

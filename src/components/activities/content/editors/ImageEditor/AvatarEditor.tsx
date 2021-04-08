@@ -17,7 +17,9 @@ export const AvatarEditor: React.FC<EditorProps> = ({ id, value = '', onChange =
   return (
     <>
       <ButtonBase onClick={() => setIsModalOpen(true)} style={{ borderRadius: '50%' }}>
-        <AvatarImg src={imageUrl}>{imageUrl || <AddIcon style={{ fontSize: '80px' }} />}</AvatarImg>
+        <AvatarImg src={imageUrl} noLink>
+          {imageUrl || <AddIcon style={{ fontSize: '80px' }} />}
+        </AvatarImg>
       </ButtonBase>
       <ImageModal
         id={id}

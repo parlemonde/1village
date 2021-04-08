@@ -19,7 +19,13 @@ import { VillageContext } from './villageContext';
 interface ActivityContextValue {
   activity: AnyActivity | null;
   updateActivity(newActivity: Partial<AnyActivity>): void;
-  createNewActivity(type: ActivityType, subType?: number, initialData?: AnyActivityData): boolean;
+  createNewActivity(
+    type: ActivityType,
+    subType?: number,
+    initialData?: AnyActivityData,
+    responseActivityId?: number | null,
+    responseType?: ActivityType | null,
+  ): boolean;
   addContent(type: EditorTypes, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<boolean>;
@@ -118,7 +124,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
   );
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, subType?: number, initialData?: AnyActivityData) => {
+    (type: ActivityType, subType?: number, initialData?: AnyActivityData, responseActivityId?: number | null, responseType?: ActivityType | null) => {
       if (user === null || village === null) {
         return false;
       }
@@ -130,8 +136,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         userId: user.id,
         villageId: village.id,
         content: [],
-        responseActivityId: null,
-        responseType: null,
+        responseActivityId: responseActivityId ?? null,
+        responseType: responseType ?? null,
         data: initialData || {},
         dataId: 0,
         processedContent: [{ type: 'text', id: 0, value: '' }],
@@ -249,6 +255,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         type: activity.type,
         subType: activity.subType,
         villageId: activity.villageId,
+        responseActivityId: activity.responseActivityId,
+        responseType: activity.responseType,
         status: publish ? ActivityStatus.PUBLISHED : ActivityStatus.DRAFT,
         content,
       };
@@ -280,7 +288,23 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       if (response.error) {
         return false;
       }
-      setActivity(getAnyActivity(response.data));
+      const newActivity = getAnyActivity(response.data);
+      if (!publish) {
+        const response2 = await axiosLoggedRequest({
+          method: 'PUT',
+          url: `/activities/${activity.id}`,
+          data: {
+            responseActivityId: activity.responseActivityId,
+            responseType: activity.responseType,
+          },
+        });
+        if (response2.error) {
+          return false;
+        }
+        newActivity.responseActivityId = (response2.data as Activity).responseActivityId;
+        newActivity.responseType = (response2.data as Activity).responseType;
+      }
+      setActivity(newActivity);
       return true;
     },
     [getAPIContent, axiosLoggedRequest, activity],
@@ -295,6 +319,8 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       url: `/activities/${activity.id}`,
       data: {
         status: ActivityStatus.PUBLISHED,
+        responseActivityId: activity.responseActivityId,
+        responseType: activity.responseType,
       },
     });
     if (response.error) {

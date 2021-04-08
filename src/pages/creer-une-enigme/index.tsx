@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
@@ -59,16 +60,34 @@ const activities = [
 ];
 
 const Enigme: React.FC = () => {
+  const router = useRouter();
+
+  const [activitiesWithLinks, suggestionsWithLinks] = React.useMemo(() => {
+    if ('responseActivityId' in router.query && 'responseActivityType' in router.query) {
+      return [
+        activities.map((a) => ({
+          ...a,
+          href: `${a.href}&responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
+        })),
+        suggestions.map((s) => ({
+          ...s,
+          href: `${s.href}&responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
+        })),
+      ];
+    }
+    return [activities, suggestions];
+  }, [router.query]);
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
           <h1>{"Suggestions d'activités"}</h1>
           <div style={{ padding: '1rem', textAlign: 'center' }}>
-            <SuggestionCarousel suggestions={suggestions} />
+            <SuggestionCarousel suggestions={suggestionsWithLinks} />
           </div>
           <h1>Choisissez votre énigme</h1>
-          <ActivityChoice activities={activities} />
+          <ActivityChoice activities={activitiesWithLinks} />
         </div>
       </div>
     </Base>

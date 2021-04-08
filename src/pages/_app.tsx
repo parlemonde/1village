@@ -123,7 +123,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       <AdminHeader />
                       <div style={{ display: 'flex', width: '100%' }}>
                         <AdminNavigation />
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <Component {...pageProps} />
                         </div>
                       </div>
