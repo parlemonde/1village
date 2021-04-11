@@ -6,6 +6,7 @@ import AppsIcon from '@material-ui/icons/Apps';
 import type { EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
+import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import TextIcon from 'src/svg/editor/text_icon.svg';
 import VideoIcon from 'src/svg/editor/video_icon.svg';
 import { UserType } from 'types/user.type';
@@ -92,7 +93,7 @@ export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () 
             addContent('sound');
           }}
         >
-          <VideoIcon height="1.25rem" />
+          <SoundIcon height="1.25rem" />
           <span className="text text--small" style={{ marginTop: '0.1rem' }}>
             Son
           </span>
