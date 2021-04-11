@@ -1,6 +1,6 @@
 import { Activity } from 'types/activity.type';
 
-export type EditorTypes = 'text' | 'video' | 'image' | 'h5p';
+export type EditorTypes = 'text' | 'video' | 'image' | 'h5p' | 'sound';
 
 export type EditorContent = {
   id: number;

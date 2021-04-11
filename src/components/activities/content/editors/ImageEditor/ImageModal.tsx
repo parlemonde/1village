@@ -53,7 +53,7 @@ export const ImageModal: React.FC<ImageModalProps> = ({
   React.useEffect(() => {
     if (prevValue.current !== value) {
       prevValue.current = value;
-      setImageUrl(typeof value === 'string' ? value : URL.createObjectURL(value));
+      setImageUrl(value);
     }
   }, [value, setImageUrl]);
 

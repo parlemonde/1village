@@ -4,6 +4,7 @@ import { EditorContent } from 'src/activity-types/extendedActivity.types';
 
 import { H5pView } from './views/H5pView';
 import { ImageView } from './views/ImageView';
+import { SoundView } from './views/SoundView';
 import { TextView } from './views/TextView';
 import { VideoView } from './views/VideoView';
 
@@ -21,6 +22,9 @@ export const ContentView: React.FC<ContentViewProps> = ({ content }: ContentView
         }
         if (p.type === 'video') {
           return <VideoView id={p.id} value={p.value} key={p.id} />;
+        }
+        if (p.type === 'sound') {
+          return <SoundView id={p.id} value={p.value} key={p.id} />;
         }
         if (p.type === 'h5p') {
           return <H5pView id={p.id} value={p.value} key={p.id} />;

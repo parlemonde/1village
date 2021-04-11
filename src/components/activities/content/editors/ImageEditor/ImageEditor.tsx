@@ -10,7 +10,7 @@ import { EditorContainer } from '../EditorContainer';
 import { ImageModal } from './ImageModal';
 
 export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
-  const [imageUrl, setImageUrl] = React.useState(typeof value === 'string' ? value : URL.createObjectURL(value));
+  const [imageUrl, setImageUrl] = React.useState(value);
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
 
   return (

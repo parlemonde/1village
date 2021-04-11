@@ -7,6 +7,7 @@ import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActi
 import { AddContentCard } from './AddContentCard';
 import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor/ImageEditor';
+import { SoundEditor } from './editors/SoundEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
@@ -20,7 +21,6 @@ interface ContentEditorProps {
 
 const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, addContent, deleteContent, save }: ContentEditorProps) => {
   const router = useRouter();
-  const shouldSave = React.useRef(false);
   const blurTimeoutSave = React.useRef<number | undefined>(undefined);
 
   React.useEffect(() => {
@@ -33,19 +33,11 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
     };
   }, [router.events]);
 
-  const onChangeContent = (index: number, willSave: boolean = false) => (newValue: string) => {
+  const onChangeContent = (index: number) => (newValue: string) => {
     const newContent = [...content];
     newContent[index].value = newValue;
     updateContent(newContent);
-    shouldSave.current = willSave;
   };
-
-  React.useEffect(() => {
-    if (shouldSave.current) {
-      shouldSave.current = false; // prevent loops.
-      save().catch();
-    }
-  }, [content, save]);
 
   return (
     <div>
@@ -60,7 +52,6 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
                 onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
-                  shouldSave.current = true;
                 }}
                 onFocus={() => {
                   clearTimeout(blurTimeoutSave.current);
@@ -80,10 +71,9 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
                 key={p.id}
                 id={p.id}
                 value={p.value}
-                onChange={onChangeContent(index, true)}
+                onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
-                  shouldSave.current = true;
                 }}
               />
             );
@@ -94,10 +84,9 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
                 key={p.id}
                 id={p.id}
                 value={p.value}
-                onChange={onChangeContent(index, true)}
+                onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
-                  shouldSave.current = true;
                 }}
               />
             );
@@ -108,15 +97,27 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
                 key={p.id}
                 id={p.id}
                 value={p.value}
-                onChange={onChangeContent(index, true)}
+                onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
-                  shouldSave.current = true;
                 }}
               />
             );
           }
-          return null;
+          if (p.type === 'sound') {
+            return (
+              <SoundEditor
+                key={p.id}
+                id={p.id}
+                value={p.value}
+                onChange={onChangeContent(index)}
+                onDelete={() => {
+                  deleteContent(index);
+                }}
+              />
+            );
+          }
+          return <div key={p.id}></div>;
         })}
       </ReactSortable>
       <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>

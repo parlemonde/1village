@@ -214,7 +214,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
         .map((p) => {
           let data: { key: string; value: string; id?: number } | null = null;
-          if (p.type === 'text' || p.type === 'image' || p.type === 'video' || p.type === 'h5p') {
+          if (p.type === 'text' || p.type === 'image' || p.type === 'sound' || p.type === 'video' || p.type === 'h5p') {
             data = {
               key: p.type,
               value: p.value,

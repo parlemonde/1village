@@ -79,6 +79,24 @@ export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () 
             Vidéo
           </span>
         </ButtonBase>
+        <ButtonBase
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            margin: '0 0.5rem',
+            padding: '0.2rem',
+            borderRadius: '5px',
+          }}
+          onClick={() => {
+            addContent('sound');
+          }}
+        >
+          <VideoIcon height="1.25rem" />
+          <span className="text text--small" style={{ marginTop: '0.1rem' }}>
+            Son
+          </span>
+        </ButtonBase>
         {isPelico && (
           <ButtonBase
             style={{

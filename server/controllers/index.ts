@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { activityController } from './activity';
+import { audioController } from './audio';
 import { countryController } from './countries';
 import { currencyController } from './currencies';
 import { imageController } from './image';
@@ -18,6 +19,7 @@ const controllers = [
   countryController,
   activityController,
   imageController,
+  audioController,
   videoController,
 ];
 
