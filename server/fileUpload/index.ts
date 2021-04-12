@@ -6,16 +6,20 @@ import { VimeoClass } from './vimeo';
 const s3 = new AwsS3();
 const vimeo = new VimeoClass();
 
-export function getImage(filename: string): Readable {
-  return s3.getImage(filename);
+export function getFile(filename: string, range?: string): Readable {
+  return s3.getFile(filename, range);
 }
 
-export function uploadImage(filename: string): Promise<string | null> {
-  return s3.uploadImage(filename);
+export function getFileData(filename: string): Promise<{ AcceptRanges: string; LastModified: Date; ContentLength: number; ContentType: string }> {
+  return s3.getFileData(filename);
 }
 
-export async function deleteImage(key: string): Promise<void> {
-  return s3.deleteImage(key);
+export function uploadFile(filename: string, contentType: string): Promise<string | null> {
+  return s3.uploadFile(filename, contentType);
+}
+
+export async function deleteFile(key: string): Promise<void> {
+  return s3.deleteFile(key);
 }
 
 export function getVideoLink(url: string, quality: 'hd' | 'sd'): Promise<string> {
