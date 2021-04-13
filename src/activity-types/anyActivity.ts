@@ -1,7 +1,7 @@
 import { Activity, ActivityType } from 'types/activity.type';
 
 import type { AnyActivity, AnyActivityData } from './anyActivities.types';
-import { ChallengeActivity } from './challenge.types';
+import { DefiActivity } from './defi.types';
 import { EnigmeActivity } from './enigme.types';
 import { EditorContent } from './extendedActivity.types';
 import { PresentationActivity } from './presentation.types';
@@ -16,7 +16,7 @@ export const isQuestion = (activity: AnyActivity): activity is QuestionActivity 
 export const isEnigme = (activity: AnyActivity): activity is EnigmeActivity => {
   return activity.type === ActivityType.ENIGME;
 };
-export const isChallenge = (activity: AnyActivity): activity is ChallengeActivity => {
+export const isDefi = (activity: AnyActivity): activity is DefiActivity => {
   return activity.type === ActivityType.DEFI;
 };
 

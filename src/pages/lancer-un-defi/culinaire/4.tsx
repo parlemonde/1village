@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isChallenge } from 'src/activity-types/anyActivity';
-import { isCooking, COOKING_CHALLENGES } from 'src/activity-types/challenge.const';
-import { CookingChallengeData } from 'src/activity-types/challenge.types';
+import { TextField, Button } from '@material-ui/core';
+
+import { isDefi } from 'src/activity-types/anyActivity';
+import { isCooking, COOKING_DEFIS } from 'src/activity-types/defi.const';
+import { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -11,35 +13,45 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const ChallengeStep4: React.FC = () => {
+const DefiStep4: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
+  const [otherOpen, setIsOtherOpen] = React.useState(false);
 
-  const data = (activity?.data as CookingChallengeData) || null;
+  const data = (activity?.data as CookingDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+
+  const c = data?.defi || '';
+  const opened = React.useRef(false);
+  React.useEffect(() => {
+    if (c && !opened.current) {
+      setIsOtherOpen(true);
+      opened.current = true;
+    }
+  }, [c]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
-    } else if (activity && (!isChallenge(activity) || (isChallenge(activity) && !isCooking(activity)))) {
+    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isCooking(activity)))) {
       router.push('/lancer-un-defi');
     }
   }, [activity, router]);
 
-  if (data === null || !isChallenge(activity) || (isChallenge(activity) && !isCooking(activity))) {
+  if (data === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
     return <div></div>;
   }
 
   const onClick = (index: number) => () => {
     if (index === -1) {
-      if (!data.challenge) {
+      if (!data.defi) {
         return;
       }
-      updateActivity({ data: { ...data, challengeIndex: index, challenge: data.challenge.toLowerCase() } });
+      updateActivity({ data: { ...data, defiIndex: index, defi: data.defi.toLowerCase() } });
     } else {
       const newData = data;
-      delete newData.challenge;
-      updateActivity({ data: { ...newData, challengeIndex: index } });
+      delete newData.defi;
+      updateActivity({ data: { ...newData, defiIndex: index } });
     }
     router.push('/lancer-un-defi/culinaire/5');
   };
@@ -51,9 +63,38 @@ const ChallengeStep4: React.FC = () => {
         <div className="width-900">
           <h1>Quel défi voulez-vous lancer aux Pelicopains ?</h1>
           <div>
-            {COOKING_CHALLENGES.map((t, index) => (
+            {COOKING_DEFIS.map((t, index) => (
               <ThemeChoiceButton key={index} label={t.title} description={t.description} onClick={onClick(index)} />
             ))}
+            <ThemeChoiceButton
+              isOpen={otherOpen}
+              onClick={() => {
+                setIsOtherOpen(!otherOpen);
+              }}
+              additionalContent={
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 0' }}>
+                    <span style={{ marginRight: '0.3rem' }}>Défi : </span>
+                    {data !== null && (
+                      <TextField
+                        value={data.defi || ''}
+                        onChange={(event) => {
+                          updateActivity({ data: { ...data, defi: event.target.value } });
+                        }}
+                        style={{ minWidth: '0', flex: 1 }}
+                      />
+                    )}
+                  </div>
+                  <div className="text-center" style={{ marginTop: '0.8rem' }}>
+                    <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
+                      Continuer
+                    </Button>
+                  </div>
+                </div>
+              }
+              label="Un autre défi"
+              description={`Réfigez vous même le défi pour vos Pelicopains !`}
+            />
           </div>
           <StepsButton prev="/lancer-un-defi/culinaire/3" />
         </div>
@@ -62,4 +103,4 @@ const ChallengeStep4: React.FC = () => {
   );
 };
 
-export default ChallengeStep4;
+export default DefiStep4;

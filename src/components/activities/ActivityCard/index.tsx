@@ -2,7 +2,7 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { isEnigme, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
+import { isDefi, isEnigme, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
@@ -20,6 +20,7 @@ import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
+import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
 import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
@@ -136,6 +137,17 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         )}
         {isEnigme(activity) && (
           <EnigmeCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
+        )}
+        {isDefi(activity) && (
+          <DefiCard
             activity={activity}
             user={user}
             isSelf={isSelf}

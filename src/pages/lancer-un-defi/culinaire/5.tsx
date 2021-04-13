@@ -5,10 +5,11 @@ import React from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 
-import { isChallenge } from 'src/activity-types/anyActivity';
-import { isCooking } from 'src/activity-types/challenge.const';
-import { CookingChallengeActivity } from 'src/activity-types/challenge.types';
+import { isDefi } from 'src/activity-types/anyActivity';
+import { isCooking, getCookingDefi } from 'src/activity-types/defi.const';
+import { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -27,19 +28,19 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-const ChallengeStep5: React.FC = () => {
+const DefiStep5: React.FC = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const data = (activity?.data as CookingChallengeActivity) || null;
+  const data = (activity?.data as CookingDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
-    } else if (activity && (!isChallenge(activity) || (isChallenge(activity) && !isCooking(activity)))) {
+    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isCooking(activity)))) {
       router.push('/lancer-un-defi');
     }
   }, [activity, router]);
@@ -53,7 +54,7 @@ const ChallengeStep5: React.FC = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !isChallenge(activity) || (isChallenge(activity) && !isCooking(activity))) {
+  if (data === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
     return <div></div>;
   }
 
@@ -125,7 +126,22 @@ const ChallengeStep5: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            todo
+            <div className="text-center">
+              <h3>{data.name}</h3>
+            </div>
+            <Grid container spacing={2}>
+              {data.image && (
+                <Grid item xs={12} md={4}>
+                  <div style={{ width: '100%', marginTop: '1rem' }}>
+                    <img alt="image du plat" src={data.image} style={{ width: '100%', height: 'auto' }} />
+                  </div>
+                </Grid>
+              )}
+              <Grid item xs={12} md={data.image ? 8 : 12}>
+                <p>{data.history}</p>
+                <p>{data.explanation}</p>
+              </Grid>
+            </Grid>
           </div>
 
           <span className="text text--small text--success">La recette</span>
@@ -149,7 +165,7 @@ const ChallengeStep5: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            todo
+            Votre défi : {getCookingDefi(data)}
           </div>
 
           <StepsButton prev="/lancer-un-defi/culinaire/4" />
@@ -162,4 +178,4 @@ const ChallengeStep5: React.FC = () => {
   );
 };
 
-export default ChallengeStep5;
+export default DefiStep5;

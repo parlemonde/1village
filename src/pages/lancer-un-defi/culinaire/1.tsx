@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isChallenge } from 'src/activity-types/anyActivity';
-import { isCooking, CHALLENGE } from 'src/activity-types/challenge.const';
+import { isDefi } from 'src/activity-types/anyActivity';
+import { isCooking, DEFI } from 'src/activity-types/defi.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivitySelect } from 'src/components/activities/ActivitySelect';
@@ -12,7 +12,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
-const ChallengeStep1: React.FC = () => {
+const DefiStep1: React.FC = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);
@@ -39,12 +39,12 @@ const ChallengeStep1: React.FC = () => {
         created.current = true;
         createNewActivity(
           ActivityType.DEFI,
-          CHALLENGE.COOKING,
+          DEFI.COOKING,
           {
             name: '',
             history: '',
             explanation: '',
-            challengeIndex: 0,
+            defiIndex: 0,
           },
           responseActivityId,
           responseActivityType,
@@ -54,16 +54,16 @@ const ChallengeStep1: React.FC = () => {
             selectRef.current.scrollIntoView({ behavior: 'smooth' });
           }
         }
-      } else if (activity && (!isChallenge(activity) || (isChallenge(activity) && !isCooking(activity)))) {
+      } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isCooking(activity)))) {
         created.current = true;
         createNewActivity(
           ActivityType.DEFI,
-          CHALLENGE.COOKING,
+          DEFI.COOKING,
           {
             name: '',
             history: '',
             explanation: '',
-            challengeIndex: 0,
+            defiIndex: 0,
           },
           responseActivityId,
           responseActivityType,
@@ -105,4 +105,4 @@ const ChallengeStep1: React.FC = () => {
   );
 };
 
-export default ChallengeStep1;
+export default DefiStep1;

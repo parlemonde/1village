@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isPresentation, isQuestion, isEnigme } from 'src/activity-types/anyActivity';
+import { isPresentation, isQuestion, isEnigme, isDefi } from 'src/activity-types/anyActivity';
 import { isThematique, isMascotte } from 'src/activity-types/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -14,6 +14,7 @@ import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
+import { DefiActivityView } from './DefiActivityView';
 import { EnigmeActivityView } from './EnigmeActivityView';
 import { MascotteActivityView } from './MascotteActivityView';
 import { ActivityViewProps } from './activity-view.types';
@@ -65,6 +66,7 @@ export const ActivityView: React.FC<ActivityViewProps> = ({ activity, user }: Ac
       {isPresentation(activity) && isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
       {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
       {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
+      {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
     </div>
   );
 };

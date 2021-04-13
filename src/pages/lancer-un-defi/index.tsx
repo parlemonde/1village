@@ -4,9 +4,9 @@ import React from 'react';
 import { Base } from 'src/components/Base';
 import { SuggestionCarousel } from 'src/components/SuggestionCarousel';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
-import CulinaireIcon from 'src/svg/challenge/culinaire.svg';
-import EcologiqueIcon from 'src/svg/challenge/ecologique.svg';
-import LinguistiqueIcon from 'src/svg/challenge/linguistique.svg';
+import CulinaireIcon from 'src/svg/defi/culinaire.svg';
+import EcologiqueIcon from 'src/svg/defi/ecologique.svg';
+import LinguistiqueIcon from 'src/svg/defi/linguistique.svg';
 
 const suggestions = [
   {
@@ -59,7 +59,7 @@ const activities = [
   },
 ];
 
-const Challenge: React.FC = () => {
+const Defi: React.FC = () => {
   const router = useRouter();
 
   const [activitiesWithLinks, suggestionsWithLinks] = React.useMemo(() => {
@@ -99,4 +99,4 @@ const Challenge: React.FC = () => {
   );
 };
 
-export default Challenge;
+export default Defi;
