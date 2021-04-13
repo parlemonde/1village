@@ -9,7 +9,7 @@ import { bgPage } from 'src/styles/variables.const';
 
 import { ActivityViewProps } from './activity-view.types';
 
-export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ activity, user = null }: ActivityViewProps<DefiActivity>) => {
+export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ activity }: ActivityViewProps<DefiActivity>) => {
   return (
     <div>
       <div style={{ margin: '1rem 0' }}>
