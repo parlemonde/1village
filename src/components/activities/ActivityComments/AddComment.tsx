@@ -39,14 +39,8 @@ const Reactions = [
   {
     label: 'Défi',
     icon: TargetIcon,
-    disabled: true,
+    disabled: false,
     link: '/lancer-un-defi',
-  },
-  {
-    label: 'Jeux',
-    icon: GameIcon,
-    disabled: true,
-    link: '/creer-un-jeu',
   },
 ];
 
