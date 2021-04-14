@@ -3,10 +3,11 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { getCookingDefi } from 'src/activity-types/defi.const';
-import { DefiActivity } from 'src/activity-types/defi.types';
+import { ECO_ACTIONS, getCookingDefi, getEcoDefi, isCooking, isEco } from 'src/activity-types/defi.const';
+import { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
+import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
@@ -19,10 +20,18 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
   showEditButtons,
   onDelete,
 }: ActivityCardProps<DefiActivity>) => {
-  const firstImage = React.useMemo(() => activity.data.image || activity.processedContent.find((c) => c.type === 'image')?.value || null, [
-    activity.data.image,
-    activity.processedContent,
-  ]);
+  const isCookingActivity = isCooking(activity);
+  const link = isCookingActivity ? 'culinaire' : isEco(activity) ? 'ecologique' : '';
+
+  const firstImage = React.useMemo(() => {
+    if (isCookingActivity) {
+      return (activity.data as CookingDefiData).image || activity.processedContent.find((c) => c.type === 'image')?.value || null;
+    } else {
+      return activity.processedContent.find((c) => c.type === 'image')?.value || null;
+    }
+  }, [isCookingActivity, activity.data, activity.processedContent]);
+  const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
+  const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
   return (
     <div
@@ -48,15 +57,17 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{activity.data.name}</h3>
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>
+          {isCooking(activity) ? activity.data.name : isEco(activity) ? ECO_ACTIONS[activity.data.type] : null}
+        </h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
-            {activity.data.history}. {activity.data.explanation}
+            {isCooking(activity) ? `${activity.data.history}. ${activity.data.explanation}` : isEco(activity) ? firstText : null}
           </div>
         </div>
         <div style={{ margin: '0 0.5rem 0.5rem' }}>
           <strong>Votre défi : </strong>
-          {getCookingDefi(activity.data)}
+          {isCooking(activity) ? getCookingDefi(activity.data) : isEco(activity) ? getEcoDefi(activity.data) : null}
         </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
@@ -76,7 +87,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/lancer-un-defi/culinaire/5?activity-id=${activity.id}`
+                      : `/lancer-un-defi/${link}/5?activity-id=${activity.id}`
                   }
                 >
                   <Button
@@ -84,7 +95,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/lancer-un-defi/culinaire/5?activity-id=${activity.id}`
+                        : `/lancer-un-defi/${link}/5?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"

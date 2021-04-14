@@ -9,6 +9,13 @@ export type CookingDefiData = {
   defi?: string;
 };
 
-export type CookingDefiActivity = GenericExtendedActivity<CookingDefiData>;
+export type EcoDefiData = {
+  type: number;
+  defiIndex: number;
+  defi?: string;
+};
 
-export type DefiActivity = CookingDefiActivity;
+export type CookingDefiActivity = GenericExtendedActivity<CookingDefiData>;
+export type EcoDefiActivity = GenericExtendedActivity<EcoDefiData>;
+
+export type DefiActivity = CookingDefiActivity | EcoDefiActivity;

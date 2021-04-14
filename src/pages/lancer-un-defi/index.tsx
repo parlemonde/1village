@@ -31,7 +31,7 @@ const suggestions = [
     href: '/lancer-un-defi/ecologique/1',
     text: 'Créez une défi écologique !',
     icon: EcologiqueIcon,
-    disabled: true,
+    disabled: false,
   },
 ];
 
@@ -54,7 +54,7 @@ const activities = [
     label: 'Défi écologique',
     href: '/lancer-un-defi/ecologique/1',
     icon: EcologiqueIcon,
-    disabled: true,
+    disabled: false,
     disabledText: 'Bientôt disponible',
   },
 ];
