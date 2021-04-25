@@ -59,7 +59,10 @@ const DefiEcoStep4: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Votre plat', 'La recette', 'Le défi', 'Prévisualisation'])} activeStep={isEdit ? 2 : 3} />
+        <Steps
+          steps={(isEdit ? [] : ['Démarrer']).concat(['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation'])}
+          activeStep={isEdit ? 2 : 3}
+        />
         <div className="width-900">
           <h1>Quel défi voulez-vous lancer aux Pelicopains ?</h1>
           <div style={{ marginTop: '1rem' }}>
@@ -93,7 +96,7 @@ const DefiEcoStep4: React.FC = () => {
                 </div>
               }
               label="Un autre défi"
-              description={`Réfigez vous même le défi pour vos Pelicopains !`}
+              description={`Rédigez vous même le défi pour vos Pelicopains !`}
             />
           </div>
           <StepsButton prev="/lancer-un-defi/ecologique/3" />

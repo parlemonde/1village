@@ -13,7 +13,7 @@ const suggestions = [
     title: 'Défi linguistique',
     button: 'Linguistique',
     href: '/lancer-un-defi/linguistique/1',
-    text: 'Créez une défi linguistique !',
+    text: 'Créez un défi linguistique !',
     icon: LinguistiqueIcon,
     disabled: false,
   },
@@ -21,7 +21,7 @@ const suggestions = [
     title: 'Défi culinaire',
     button: 'Culinaire',
     href: '/lancer-un-defi/culinaire/1',
-    text: 'Créez une défi culinaire !',
+    text: 'Créez un défi culinaire !',
     icon: CulinaireIcon,
     disabled: false,
   },
@@ -29,7 +29,7 @@ const suggestions = [
     title: 'Défi écologique',
     button: 'Écologique',
     href: '/lancer-un-defi/ecologique/1',
-    text: 'Créez une défi écologique !',
+    text: 'Créez un défi écologique !',
     icon: EcologiqueIcon,
     disabled: false,
   },
@@ -88,7 +88,7 @@ const Defi: React.FC = () => {
           </div>
           <h1>Choisissez le défi que vous souhaitez réaliser</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
-            {"Dans cette activité, nous vous proposons de lancer un défi aux Pélicopains. C'est peut être un défi linguistique, culinaire ou même"}
+            {'Dans cette activité, nous vous proposons de lancer un défi aux Pélicopains. Cela peut être un défi linguistique, culinaire ou même '}
             écologique. Par exemple, vous pouvez partager une action en vous filmant en train de la réaliser et ensuite demander aux autres classes de
             la réaliser à leur tour !
           </p>

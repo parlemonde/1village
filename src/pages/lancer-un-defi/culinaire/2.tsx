@@ -39,7 +39,7 @@ const DefiStep2: React.FC = () => {
   }
 
   const dataChange = (key: 'name' | 'history' | 'explanation') => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.slice(0, 400);
+    const value = event.target.value.slice(0, 600);
     const newData: CookingDefiData = { ...data, [key]: value };
     updateActivity({ data: newData });
   };
@@ -154,7 +154,7 @@ const DefiStep2: React.FC = () => {
                 />
                 {!(isError && data.history === '') && (
                   <div style={{ width: '100%', textAlign: 'right' }}>
-                    <span className="text text--small">{data.history.length}/400</span>
+                    <span className="text text--small">{data.history.length}/600</span>
                   </div>
                 )}
                 <p>Pourquoi avoir choisi ce plat ?</p>
@@ -174,7 +174,7 @@ const DefiStep2: React.FC = () => {
                 />
                 {!(isError && data.explanation === '') && (
                   <div style={{ width: '100%', textAlign: 'right' }}>
-                    <span className="text text--small">{data.explanation.length}/400</span>
+                    <span className="text text--small">{data.explanation.length}/600</span>
                   </div>
                 )}
               </Grid>

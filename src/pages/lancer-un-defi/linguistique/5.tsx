@@ -112,7 +112,7 @@ const DefiStep6: React.FC = () => {
                 </div>
               }
               label="Un autre défi"
-              description={`Réfigez vous même le défi pour vos Pelicopains !`}
+              description={`Rédigez vous même le défi pour vos Pelicopains !`}
             />
           </div>
           <StepsButton prev="/lancer-un-defi/linguistique/4" />
