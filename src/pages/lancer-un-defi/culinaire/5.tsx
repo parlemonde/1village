@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isCooking, getCookingDefi } from 'src/activity-types/defi.const';
+import { isCooking, getDefi, DEFI } from 'src/activity-types/defi.const';
 import { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -165,7 +165,7 @@ const DefiStep5: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {getCookingDefi(data)}
+            Votre défi : {getDefi(DEFI.COOKING, data)}
           </div>
 
           <StepsButton prev="/lancer-un-defi/culinaire/4" />

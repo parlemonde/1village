@@ -1,4 +1,14 @@
-import { DefiActivity, CookingDefiActivity, CookingDefiData, EcoDefiActivity, EcoDefiData } from './defi.types';
+import { replaceTokens } from 'src/utils';
+
+import {
+  DefiActivity,
+  CookingDefiActivity,
+  CookingDefiData,
+  EcoDefiActivity,
+  EcoDefiData,
+  LanguageDefiActivity,
+  LanguageDefiData,
+} from './defi.types';
 
 export const COOKING_DEFIS = [
   {
@@ -27,17 +37,96 @@ export const ECO_DEFIS = [
     description: 'Les Pelicopains devront réaliser une autre action',
   },
 ];
-
-export const getCookingDefi = (data: CookingDefiData): string => {
-  return data.defiIndex === -1 && data.defi ? data.defi : COOKING_DEFIS[(data.defiIndex ?? 0) % COOKING_DEFIS.length].title;
-};
-export const getEcoDefi = (data: EcoDefiData): string => {
-  return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
-};
+export const LANGUAGE_SCHOOL = [
+  'maternelle chez tous les élèves',
+  'maternelle chez certains élèves',
+  'qu’on utilise pour faire cours',
+  'qu’on apprend comme langue étrangère',
+];
+export const LANGUAGE_OBJECTS = [
+  {
+    title: 'Un mot trésor',
+    title2: 'le mot trésor',
+    desc1: 'Écrivez en {{language}} le mot trésor que vous avez choisi.',
+    desc2: 'Expliquez pourquoi vous avez choisi ce mot trésor, ce qu’il signifie et quand vous l’utilisez.',
+  },
+  {
+    title: 'Une expression',
+    title2: "l'expression",
+    desc1: "Écrivez en {{language}} l'expression que vous avez choisie.",
+    desc2: 'Expliquez pourquoi vous avez choisi cette expression, ce qu’elle signifie et quand vous l’utilisez.',
+  },
+  {
+    title: 'Une poésie',
+    title2: 'la poésie',
+    desc1: 'Écrivez en {{language}} la poésie que vous avez choisie.',
+    desc2: 'Expliquez pourquoi vous avez choisi cette poésie, ce qu’elle signifie et quand vous l’utilisez.',
+  },
+  {
+    title: 'Une chanson',
+    title2: 'la chanson',
+    desc1: 'Écrivez en {{language}} la chanson que vous avez choisie.',
+    desc2: 'Expliquez pourquoi vous avez choisi cette chanson, ce qu’elle signifie et quand vous l’utilisez.',
+  },
+  {
+    title: 'Autre',
+    title2: '',
+    desc1: 'Écrivez en {{language}} ce que vous avez choisi.',
+    desc2: 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.',
+  },
+];
+export const LANGUAGE_DEFIS = [
+  {
+    title: 'Trouvez {{object}} qui veut dire la même chose dans une autre langue',
+    description: 'Les Pelicopains devront envoyer un texte, un son ou une vidéo.',
+  },
+  {
+    title: 'Répétez à l’oral {{object}} en {{language}}',
+    description: 'Les Pelicopains devront envoyer un son ou une vidéo.',
+  },
+  {
+    title: 'Écrivez {{object}} en {{language}}',
+    description: 'Les Pelicopains devront envoyer une image ou une vidéo.',
+  },
+];
 
 export const DEFI = {
   COOKING: 0,
   ECO: 1,
+  LANGUAGE: 2,
+};
+
+export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData): string => {
+  if (subtype === DEFI.ECO) {
+    return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
+  }
+  if (subtype === DEFI.LANGUAGE) {
+    return data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
+  }
+  return data.defiIndex === -1 && data.defi ? data.defi : COOKING_DEFIS[(data.defiIndex ?? 0) % COOKING_DEFIS.length].title;
+};
+
+export const getLanguageDefi = (data: LanguageDefiData, language: string): string => {
+  const defi = getDefi(DEFI.LANGUAGE, data);
+  if (data.objectIndex === 4 && data.defiIndex === 0) {
+    return 'Trouvez la même chose dans une autre langue';
+  }
+  return replaceTokens(defi, {
+    object:
+      data.defiIndex === 0
+        ? LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
+        : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title2,
+    language,
+  });
+};
+
+export const getLanguageObject = (data: LanguageDefiData, language: string): string => {
+  const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
+  return replaceTokens(object, {
+    object: data.objectIndex === 4 ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
+    language,
+    school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
+  });
 };
 
 export const isCooking = (activity: DefiActivity): activity is CookingDefiActivity => {
@@ -45,4 +134,7 @@ export const isCooking = (activity: DefiActivity): activity is CookingDefiActivi
 };
 export const isEco = (activity: DefiActivity): activity is EcoDefiActivity => {
   return activity.subType === DEFI.ECO;
+};
+export const isLanguage = (activity: DefiActivity): activity is LanguageDefiActivity => {
+  return activity.subType === DEFI.LANGUAGE;
 };

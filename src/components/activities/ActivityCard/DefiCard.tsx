@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { ECO_ACTIONS, getCookingDefi, getEcoDefi, isCooking, isEco } from 'src/activity-types/defi.const';
+import { ECO_ACTIONS, getDefi, isCooking, isEco } from 'src/activity-types/defi.const';
 import { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -67,7 +67,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
         </div>
         <div style={{ margin: '0 0.5rem 0.5rem' }}>
           <strong>Votre défi : </strong>
-          {isCooking(activity) ? getCookingDefi(activity.data) : isEco(activity) ? getEcoDefi(activity.data) : null}
+          {getDefi(activity.subType || 0, activity.data)}
         </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>

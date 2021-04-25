@@ -166,3 +166,8 @@ export function getUserDisplayName(user: User, isSelf: boolean): string {
   }
   return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`);
 }
+
+const optionsRegex = /{{(.+?)}}/gm;
+export function replaceTokens(s: string, tokens: { [key: string]: string }): string {
+  return s.replace(optionsRegex, (_match: string, group: string) => (tokens[group] !== undefined ? tokens[group] : group));
+}

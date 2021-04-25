@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import { ECO_ACTIONS, getCookingDefi, getEcoDefi, isCooking, isEco } from 'src/activity-types/defi.const';
+import { ECO_ACTIONS, getDefi, isCooking, isEco } from 'src/activity-types/defi.const';
 import { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { bgPage } from 'src/styles/variables.const';
@@ -39,7 +39,7 @@ export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ ac
 
       <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>
         <strong>Votre défi : </strong>
-        {isCooking(activity) ? getCookingDefi(activity.data) : isEco(activity) ? getEcoDefi(activity.data) : null}
+        {getDefi(activity.subType || 0, activity.data)}
       </div>
     </div>
   );

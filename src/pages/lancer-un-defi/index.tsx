@@ -15,7 +15,7 @@ const suggestions = [
     href: '/lancer-un-defi/linguistique/1',
     text: 'Créez une défi linguistique !',
     icon: LinguistiqueIcon,
-    disabled: true,
+    disabled: false,
   },
   {
     title: 'Défi culinaire',
@@ -40,7 +40,7 @@ const activities = [
     label: 'Défi linguistique',
     href: '/lancer-un-defi/linguistique/1',
     icon: LinguistiqueIcon,
-    disabled: true,
+    disabled: false,
     disabledText: 'Bientôt disponible',
   },
   {
