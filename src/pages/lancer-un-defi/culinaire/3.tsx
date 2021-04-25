@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage } from 'src/activity-types/defi.const';
-import { LanguageDefiData } from 'src/activity-types/defi.types';
+import { isCooking } from 'src/activity-types/defi.const';
+import { CookingDefiData } from 'src/activity-types/defi.types';
 import { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -16,18 +16,18 @@ const DefiStep3: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
-  const data = (activity?.data as LanguageDefiData) || null;
+  const data = (activity?.data as CookingDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
-    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
+    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isCooking(activity)))) {
       router.push('/lancer-un-defi');
     }
   }, [activity, router]);
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
+  if (data === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
     return <div></div>;
   }
 
@@ -37,7 +37,7 @@ const DefiStep3: React.FC = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/lancer-un-defi/linguistique/5');
+    router.push('/lancer-un-defi/culinaire/5');
   };
 
   return (
@@ -57,7 +57,7 @@ const DefiStep3: React.FC = () => {
             deleteContent={deleteContent}
             save={save}
           />
-          <StepsButton prev="/lancer-un-defi/linguistique/3" next={onNext} />
+          <StepsButton prev="/lancer-un-defi/culinaire/3" next={onNext} />
         </div>
       </div>
     </Base>
