@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import { ECO_ACTIONS, getDefi, isCooking, isEco } from 'src/activity-types/defi.const';
+import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.const';
 import { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { bgPage } from 'src/styles/variables.const';
@@ -14,7 +14,15 @@ export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ ac
     <div>
       <div style={{ margin: '1rem 0' }}>
         <div className="text-center">
-          <h3>{isCooking(activity) ? activity.data.name : isEco(activity) ? ECO_ACTIONS[activity.data.type] : null}</h3>
+          <h3>
+            {isCooking(activity)
+              ? activity.data.name
+              : isEco(activity)
+              ? ECO_ACTIONS[activity.data.type]
+              : isLanguage(activity)
+              ? getLanguageObject(activity.data)
+              : null}
+          </h3>
         </div>
         {isCooking(activity) && (
           <Grid container spacing={2}>
