@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { FormControlLabel, Grid, Radio, RadioGroup } from '@material-ui/core';
+import { FormControlLabel, FormLabel, Grid, Radio, RadioGroup } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.const';
 import { LanguageDefiData } from 'src/activity-types/defi.types';
+import { MascotteData } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -13,8 +14,10 @@ import { Steps } from 'src/components/Steps';
 import { LanguageSelector } from 'src/components/selectors/LanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { secondaryColor } from 'src/styles/variables.const';
+import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
 const getArticle = (language: string) => {
@@ -29,9 +32,11 @@ const getArticle = (language: string) => {
 
 const DefiStep2: React.FC = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);
   const { languages } = useLanguages();
+  const [mascotteId, setMascotteId] = React.useState(0);
+  const { activity: mascotte } = useActivity(mascotteId);
   const [otherValue, setOtherValue] = React.useState('');
   const data = (activity?.data as LanguageDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -49,6 +54,52 @@ const DefiStep2: React.FC = () => {
       setOtherValue(data.languageCode.slice(0, 2).toLowerCase());
     }
   }, [data]);
+
+  const getMascotteId = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: '/activities/mascotte',
+    });
+    if (!response.error) {
+      setMascotteId(response.data.id === -1 ? 0 : response.data.id);
+    }
+  }, [axiosLoggedRequest]);
+  React.useEffect(() => {
+    getMascotteId().catch(console.error);
+  }, [getMascotteId]);
+
+  const mascotteLanguages = React.useMemo(() => {
+    if (!mascotte || !languages) {
+      return [
+        {
+          label: 'Français',
+          value: 'fr',
+        },
+      ];
+    }
+    const l = (mascotte?.data as MascotteData)?.languages ?? [];
+    return l.reduce<{ label: string; value: string }[]>(
+      (acc, l) => {
+        if (l === 'fre') {
+          return acc;
+        }
+        const language = languages.find((o) => o.alpha3_b === l);
+        if (language) {
+          acc.push({
+            label: capitalize(language.french),
+            value: language.alpha2,
+          });
+        }
+        return acc;
+      },
+      [
+        {
+          label: 'Français',
+          value: 'fr',
+        },
+      ],
+    );
+  }, [mascotte, languages]);
 
   if (data === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
     return <div></div>;
@@ -91,8 +142,9 @@ const DefiStep2: React.FC = () => {
                 <p className="text">Votre mascotte sait parler ces langues, dans laquelle allez-vous créer votre défi ?</p>
                 <div style={{ border: `1px dashed ${secondaryColor}`, padding: '1rem', borderRadius: '5px' }}>
                   <RadioGroup aria-label="gender" name="gender1" value={data.languageCode} onChange={setLanguage}>
-                    <FormControlLabel value="fr" control={<Radio />} label="Français" style={{ cursor: 'pointer' }} />
-                    <FormControlLabel value="en" control={<Radio />} label="Anglais" style={{ cursor: 'pointer' }} />
+                    {mascotteLanguages.map((l) => (
+                      <FormControlLabel key={l.value} value={l.value} control={<Radio />} label={l.label} style={{ cursor: 'pointer' }} />
+                    ))}
                     <div style={{ display: 'flex', width: '100%' }}>
                       <FormControlLabel
                         disabled={otherValue.length === 0}
