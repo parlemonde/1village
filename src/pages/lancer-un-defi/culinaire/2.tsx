@@ -180,7 +180,7 @@ const DefiStep2: React.FC = () => {
               </Grid>
             </Grid>
           </div>
-          {!isEdit && <StepsButton prev={`/lancer-un-defi/culinaire/1?edit=${activity.id}`} next={onNext} />}
+          {<StepsButton prev={isEdit ? undefined : `/lancer-un-defi/culinaire/1?edit=${activity.id}`} next={onNext} />}
         </div>
       </div>
     </Base>

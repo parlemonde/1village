@@ -11,7 +11,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { useLanguages } from 'src/services/useLanguages';
 import { replaceTokens } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
@@ -19,10 +18,8 @@ const DefiStep6: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);
-  const { languages } = useLanguages();
 
   const data = (activity?.data as LanguageDefiData) || null;
-  const selectedLanguage = languages.find((l) => l.alpha2.toLowerCase() === data.languageCode.slice(0, 2))?.french ?? '';
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const c = data?.defi || '';
@@ -81,7 +78,7 @@ const DefiStep6: React.FC = () => {
                           index === 0
                             ? LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
                             : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title2,
-                        language: selectedLanguage,
+                        language: data.language,
                       })
                 }
                 description={t.description}

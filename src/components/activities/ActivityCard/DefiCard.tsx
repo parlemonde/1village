@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { ECO_ACTIONS, getDefi, isCooking, isEco } from 'src/activity-types/defi.const';
+import { ECO_ACTIONS, getDefi, getLanguageObject, isCooking, isEco, isLanguage } from 'src/activity-types/defi.const';
 import { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -21,7 +21,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
   onDelete,
 }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);
-  const link = isCookingActivity ? 'culinaire' : isEco(activity) ? 'ecologique' : '';
+  const link = isCookingActivity ? 'culinaire' : isEco(activity) ? 'ecologique' : 'linguistique';
 
   const firstImage = React.useMemo(() => {
     if (isCookingActivity) {
@@ -58,11 +58,21 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>
-          {isCooking(activity) ? activity.data.name : isEco(activity) ? ECO_ACTIONS[activity.data.type] : null}
+          {isCooking(activity)
+            ? activity.data.name
+            : isEco(activity)
+            ? ECO_ACTIONS[activity.data.type]
+            : isLanguage(activity)
+            ? getLanguageObject(activity.data)
+            : null}
         </h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
-            {isCooking(activity) ? `${activity.data.history}. ${activity.data.explanation}` : isEco(activity) ? firstText : null}
+            {isCooking(activity)
+              ? `${activity.data.history}. ${activity.data.explanation}`
+              : isEco(activity) || isLanguage(activity)
+              ? firstText
+              : null}
           </div>
         </div>
         <div style={{ margin: '0 0.5rem 0.5rem' }}>

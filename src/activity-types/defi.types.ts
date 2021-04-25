@@ -17,6 +17,7 @@ export type EcoDefiData = {
 
 export type LanguageDefiData = {
   languageCode: string;
+  language: string;
   languageIndex: number;
   objectIndex: number;
   defiIndex: number;

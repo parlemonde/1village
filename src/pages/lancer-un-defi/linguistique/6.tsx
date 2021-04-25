@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, getLanguageDefi, getLanguageObject } from 'src/activity-types/defi.const';
+import { isLanguage, getDefi, getLanguageObject, DEFI } from 'src/activity-types/defi.const';
 import { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -17,7 +17,6 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
-import { useLanguages } from 'src/services/useLanguages';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const REACTIONS = {
@@ -32,11 +31,9 @@ const DefiStep6: React.FC = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
-  const { languages } = useLanguages();
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = (activity?.data as LanguageDefiData) || null;
-  const selectedLanguage = languages.find((l) => l.alpha2.toLowerCase() === data.languageCode.slice(0, 2))?.french ?? '';
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
@@ -131,7 +128,7 @@ const DefiStep6: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {getLanguageObject(data, selectedLanguage)}
+            {getLanguageObject(data)}
           </div>
 
           <span className="text text--small text--success">{"L'expression"}</span>
@@ -167,7 +164,7 @@ const DefiStep6: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {getLanguageDefi(data, selectedLanguage)}
+            Votre défi : {getDefi(DEFI.LANGUAGE, data)}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/5" />

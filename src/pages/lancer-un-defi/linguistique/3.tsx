@@ -12,17 +12,14 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { useLanguages } from 'src/services/useLanguages';
 import { replaceTokens } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep3: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
-  const { languages } = useLanguages();
 
   const data = (activity?.data as LanguageDefiData) || null;
-  const selectedLanguage = languages.find((l) => l.alpha2.toLowerCase() === data.languageCode.slice(0, 2))?.french ?? '';
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
@@ -92,7 +89,7 @@ const DefiStep3: React.FC = () => {
             <>
               <p className="text" style={{ fontSize: '1.1rem' }}>
                 {replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
-                  language: selectedLanguage,
+                  language: data.language,
                 })}{' '}
                 Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
               </p>

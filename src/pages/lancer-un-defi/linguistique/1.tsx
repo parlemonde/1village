@@ -42,6 +42,7 @@ const DefiStep1: React.FC = () => {
           DEFI.LANGUAGE,
           {
             languageCode: '',
+            language: '',
             languageIndex: 0,
             objectIndex: -1,
             defiIndex: 0,
@@ -62,6 +63,7 @@ const DefiStep1: React.FC = () => {
           DEFI.LANGUAGE,
           {
             languageCode: '',
+            language: '',
             languageIndex: 0,
             objectIndex: -1,
             defiIndex: 0,

@@ -101,30 +101,26 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
   if (subtype === DEFI.LANGUAGE) {
-    return data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
+    const defi = data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
+    if ((data as LanguageDefiData).objectIndex === 4 && data.defiIndex === 0) {
+      return 'Trouvez la même chose dans une autre langue';
+    }
+    return replaceTokens(defi, {
+      object:
+        data.defiIndex === 0
+          ? LANGUAGE_OBJECTS[(data as LanguageDefiData).objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
+          : LANGUAGE_OBJECTS[(data as LanguageDefiData).objectIndex % LANGUAGE_OBJECTS.length].title2,
+      language: (data as LanguageDefiData).language,
+    });
   }
   return data.defiIndex === -1 && data.defi ? data.defi : COOKING_DEFIS[(data.defiIndex ?? 0) % COOKING_DEFIS.length].title;
 };
 
-export const getLanguageDefi = (data: LanguageDefiData, language: string): string => {
-  const defi = getDefi(DEFI.LANGUAGE, data);
-  if (data.objectIndex === 4 && data.defiIndex === 0) {
-    return 'Trouvez la même chose dans une autre langue';
-  }
-  return replaceTokens(defi, {
-    object:
-      data.defiIndex === 0
-        ? LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
-        : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title2,
-    language,
-  });
-};
-
-export const getLanguageObject = (data: LanguageDefiData, language: string): string => {
+export const getLanguageObject = (data: LanguageDefiData): string => {
   const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
   return replaceTokens(object, {
     object: data.objectIndex === 4 ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
-    language,
+    language: data.language,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });
 };

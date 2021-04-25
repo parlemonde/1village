@@ -63,13 +63,13 @@ const DefiStep2: React.FC = () => {
   };
 
   const setLanguage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateActivity({ data: { ...data, languageCode: (event.target as HTMLInputElement).value } });
+    const languageCode = (event.target as HTMLInputElement).value;
+    const language = languages.find((l) => l.alpha2.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
+    updateActivity({ data: { ...data, languageCode, language } });
   };
   const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateActivity({ data: { ...data, languageIndex: parseInt((event.target as HTMLInputElement).value, 10) } });
   };
-
-  const selectedLanguage = languages.find((l) => l.alpha2.toLowerCase() === data.languageCode.slice(0, 2))?.french ?? '';
 
   return (
     <Base>
@@ -117,8 +117,8 @@ const DefiStep2: React.FC = () => {
             {data.languageCode && (
               <div style={{ margin: '1rem 0' }}>
                 <p className="text">
-                  Dans votre classe, {getArticle(selectedLanguage)}
-                  {selectedLanguage} est une langue :
+                  Dans votre classe, {getArticle(data.language ?? '')}
+                  {data.language} est une langue :
                 </p>
                 <RadioGroup aria-label="gender" name="gender1" value={data.languageIndex} onChange={setLanguageIndex}>
                   {LANGUAGE_SCHOOL.map((l, index) => (
@@ -128,7 +128,7 @@ const DefiStep2: React.FC = () => {
               </div>
             )}
           </div>
-          {!isEdit && <StepsButton prev={`/lancer-un-defi/linguistique/1?edit=${activity.id}`} next={onNext} />}
+          {<StepsButton prev={isEdit ? undefined : `/lancer-un-defi/linguistique/1?edit=${activity.id}`} next={onNext} />}
         </div>
       </div>
     </Base>
