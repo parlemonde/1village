@@ -37,13 +37,13 @@ const DefiStep3: React.FC = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/lancer-un-defi/culinaire/5');
+    router.push('/lancer-un-defi/culinaire/4');
   };
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Votre plat', 'La recette', 'Le défi', 'Prévisualisation'])} activeStep={isEdit ? 2 : 3} />
+        <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Votre plat', 'La recette', 'Le défi', 'Prévisualisation'])} activeStep={isEdit ? 1 : 2} />
         <div className="width-900">
           <h1>Écrivez la recette</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -57,7 +57,7 @@ const DefiStep3: React.FC = () => {
             deleteContent={deleteContent}
             save={save}
           />
-          <StepsButton prev="/lancer-un-defi/culinaire/3" next={onNext} />
+          <StepsButton prev="/lancer-un-defi/culinaire/2" next={onNext} />
         </div>
       </div>
     </Base>

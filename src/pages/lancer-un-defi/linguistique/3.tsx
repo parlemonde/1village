@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import { FormControl, Select, MenuItem } from '@material-ui/core';
@@ -17,6 +18,7 @@ import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep3: React.FC = () => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const data = (activity?.data as LanguageDefiData) || null;
@@ -55,7 +57,12 @@ const DefiStep3: React.FC = () => {
     if (data.objectIndex === -1) {
       return;
     }
-    save().catch(console.error);
+    if (explanationContentIndex === 0) {
+      enqueueSnackbar('Il faut au moins un bloc de texte, image, son ou vidéo avant de continuer.', {
+        variant: 'error',
+      });
+      return;
+    }
     router.push('/lancer-un-defi/linguistique/4');
   };
 

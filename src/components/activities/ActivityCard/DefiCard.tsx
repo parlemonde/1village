@@ -21,7 +21,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
   onDelete,
 }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);
-  const link = isCookingActivity ? 'culinaire' : isEco(activity) ? 'ecologique' : 'linguistique';
+  const link = isCookingActivity ? 'culinaire/5' : isEco(activity) ? 'ecologique/5' : 'linguistique/6';
 
   const firstImage = React.useMemo(() => {
     if (isCookingActivity) {
@@ -97,7 +97,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/lancer-un-defi/${link}/5?activity-id=${activity.id}`
+                      : `/lancer-un-defi/${link}?activity-id=${activity.id}`
                   }
                 >
                   <Button
@@ -105,7 +105,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/lancer-un-defi/${link}/5?activity-id=${activity.id}`
+                        : `/lancer-un-defi/${link}?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"

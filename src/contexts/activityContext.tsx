@@ -18,6 +18,7 @@ import { VillageContext } from './villageContext';
 
 interface ActivityContextValue {
   activity: AnyActivity | null;
+  setActivity(newActivity: AnyActivity | null): void;
   updateActivity(newActivity: Partial<AnyActivity>): void;
   createNewActivity(
     type: ActivityType,
@@ -367,6 +368,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
     <ActivityContext.Provider
       value={{
         activity,
+        setActivity,
         updateActivity,
         createNewActivity,
         addContent,

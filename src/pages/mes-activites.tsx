@@ -6,6 +6,7 @@ import { isMascotte } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
@@ -14,6 +15,7 @@ import { ActivityStatus } from 'types/activity.type';
 const MesActivites: React.FC = () => {
   const queryCache = useQueryCache();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
+  const { setActivity } = React.useContext(ActivityContext);
   const { activities } = useActivities({
     limit: 50,
     page: 0,
@@ -56,6 +58,11 @@ const MesActivites: React.FC = () => {
     }
     setDeleteIndex({ index: -1, isDraft: false });
   };
+
+  // Delete previous activity before going editing other ones.
+  React.useEffect(() => {
+    setActivity(null);
+  }, [setActivity]);
 
   return (
     <Base>

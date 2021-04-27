@@ -60,7 +60,10 @@ const DefiEcoStep5: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Votre plat', 'La recette', 'Le défi', 'Prévisualisation'])} activeStep={isEdit ? 3 : 4} />
+        <Steps
+          steps={(isEdit ? [] : ['Démarrer']).concat(['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation'])}
+          activeStep={isEdit ? 3 : 4}
+        />
         <div className="width-900">
           <h1>Pré-visualisez votre défi{!isEdit && ', et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>

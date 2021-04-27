@@ -158,7 +158,8 @@ const DefiStep2: React.FC = () => {
                         value={otherValue}
                         onChange={(v) => {
                           setOtherValue(v);
-                          updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other` } });
+                          const language = languages.find((l) => l.alpha2.toLowerCase() === v.toLowerCase())?.french ?? '';
+                          updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
                         }}
                       />
                     </div>
