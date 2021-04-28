@@ -19,7 +19,7 @@ interface ContentEditorProps {
   save(): Promise<boolean>;
 }
 
-const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, addContent, deleteContent, save }: ContentEditorProps) => {
+const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, addContent, deleteContent }: ContentEditorProps) => {
   const router = useRouter();
   const blurTimeoutSave = React.useRef<number | undefined>(undefined);
 
@@ -52,15 +52,6 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, a
                 onChange={onChangeContent(index)}
                 onDelete={() => {
                   deleteContent(index);
-                }}
-                onFocus={() => {
-                  clearTimeout(blurTimeoutSave.current);
-                }}
-                onBlur={() => {
-                  clearTimeout(blurTimeoutSave.current);
-                  blurTimeoutSave.current = window.setTimeout(() => {
-                    save().catch(console.error);
-                  }, 6000);
                 }}
               />
             );

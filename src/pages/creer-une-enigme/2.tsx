@@ -16,8 +16,18 @@ import { ActivityStatus } from 'types/activity.type';
 const EnigmeStep2: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
+  const [otherOpen, setIsOtherOpen] = React.useState(false);
   const data = (activity?.data as EnigmeData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+
+  const c = data?.themeName || '';
+  const opened = React.useRef(false);
+  React.useEffect(() => {
+    if (c && !opened.current) {
+      setIsOtherOpen(true);
+      opened.current = true;
+    }
+  }, [c]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -70,6 +80,10 @@ const EnigmeStep2: React.FC = () => {
               <ThemeChoiceButton key={index} label={t.label} description={t.description} onClick={onClick(index)} />
             ))}
             <ThemeChoiceButton
+              isOpen={otherOpen}
+              onClick={() => {
+                setIsOtherOpen(!otherOpen);
+              }}
               additionalContent={
                 <div className="text-center">
                   <h3>Donnez un nom à la catégorie :</h3>

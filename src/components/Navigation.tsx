@@ -46,7 +46,7 @@ const tabs: Tab[] = [
     label: 'Lancer un défi',
     path: '/lancer-un-defi',
     icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'Poser une question',

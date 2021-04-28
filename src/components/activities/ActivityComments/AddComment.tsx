@@ -8,7 +8,6 @@ import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import TextIcon from 'src/svg/editor/text_icon.svg';
-import GameIcon from 'src/svg/navigation/game-icon.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -39,14 +38,8 @@ const Reactions = [
   {
     label: 'Défi',
     icon: TargetIcon,
-    disabled: true,
+    disabled: false,
     link: '/lancer-un-defi',
-  },
-  {
-    label: 'Jeux',
-    icon: GameIcon,
-    disabled: true,
-    link: '/creer-un-jeu',
   },
 ];
 
