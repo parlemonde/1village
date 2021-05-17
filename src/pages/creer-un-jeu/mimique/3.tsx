@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Grid, Box } from '@material-ui/core';
+import { TextField, Grid, Box, Button } from '@material-ui/core';
 
 import { isGame, isPresentation } from 'src/activity-types/anyActivity';
 import { DEFAULT_MIMIQUE_DATA, isMimique, GAME } from 'src/activity-types/game.const';
@@ -14,6 +14,8 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName, pluralS } from 'src/utils';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
+import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
+import UploadIcon from 'src/svg/jeu/add-video.svg';
 
 const MimiqueStep3: React.FC = () => {
   const router = useRouter();
@@ -21,8 +23,10 @@ const MimiqueStep3: React.FC = () => {
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const labelPresentation = getUserDisplayName(user, false);
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+
   const created = React.useRef(false);
-React.useEffect(() => {
+  React.useEffect(() => {
     if (!created.current) {
       if (!activity) {
         created.current = true;
@@ -49,6 +53,17 @@ React.useEffect(() => {
     updateActivity({ data: newData });
   };
 
+  const videoChange = (newValue: string) => {
+    console.log(newValue);
+    const newData = { ...data };
+    newData.mimique1.video = newValue;
+    updateActivity({ data: newData });
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   const errorMessage = () => {
     if (isError) {
       return 'Merci de remplir tout les champs';
@@ -69,12 +84,11 @@ React.useEffect(() => {
   const onNext = () => {
     save().catch(console.error);
     if (isValid()) {
-      router.push('/creer-un-jeu/mimique/2');
+      router.push('/creer-un-jeu/mimique/4');
     } else {
       setIsError(true);
     }
   };
-
 
   if (!user || !activity || data === null) {
     return (
@@ -90,14 +104,24 @@ React.useEffect(() => {
         {!isEdit && <BackButton href="/creer-un-jeu" />}
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={2} />
         <div className="width-900">
-          <h1>Présentez en vidéo une 3ère mimique à vos Pélicopains</h1>
+          <h1>Présentez en vidéo une 3ème mimique à vos Pélicopains</h1>
           <p>
             Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise..
             Gardez le mystère, et ne révélez pas à l’oral sa signification !
           </p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
-              Video
+              <Button name="video" style={{ width: '100%', background: data.mimique3.video ? 'lightgrey' : 'lightgrey' }} onClick={toggleModal}>
+                {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
+              </Button>
+              <p>Mettre en ligne la vidéo de la 3ème mimique</p>
+              <VideoModals
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                videoUrl={data.mimique3.video}
+                setVideoUrl={videoChange}
+                id={0}
+              />
             </Grid>
             <Grid item xs={12} md={8}>
               <h4>Que signifie cette mimique ?</h4>
@@ -118,7 +142,7 @@ React.useEffect(() => {
               />
             </Grid>
           </Grid>
-          <h1>Présentez en vidéo une 3ère mimique à vos Pélicopains</h1>
+          <h1>Présentez en vidéo une 3ème mimique à vos Pélicopains</h1>
           <p>
             Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut
             inventer :
