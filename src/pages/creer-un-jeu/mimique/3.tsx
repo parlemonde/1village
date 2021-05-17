@@ -1,93 +1,143 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Grid } from '@material-ui/core';
+import { TextField, Grid, Box } from '@material-ui/core';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.const';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import { isGame, isPresentation } from 'src/activity-types/anyActivity';
+import { DEFAULT_MIMIQUE_DATA, isMimique, GAME } from 'src/activity-types/game.const';
+import { MimiqueData, MimiquesData } from 'src/activity-types/game.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
-import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
-import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
+import { getUserDisplayName, pluralS } from 'src/utils';
+import { ActivityType, ActivityStatus } from 'types/activity.type';
 
 const MimiqueStep3: React.FC = () => {
   const router = useRouter();
-  const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const shouldSave = React.useRef(false);
-
-  React.useEffect(() => {
-    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/se-presenter');
-    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
-      router.push('/se-presenter');
+  const [isError, setIsError] = React.useState<boolean>(false);
+  const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
+  const { user } = React.useContext(UserContext);
+  const labelPresentation = getUserDisplayName(user, false);
+  const created = React.useRef(false);
+React.useEffect(() => {
+    if (!created.current) {
+      if (!activity) {
+        created.current = true;
+        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
+          ...DEFAULT_MIMIQUE_DATA,
+          presentation: labelPresentation,
+        }).catch(console.error);
+      } else if (activity && (!isGame(activity) || !isMimique(activity))) {
+        created.current = true;
+        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
+          ...DEFAULT_MIMIQUE_DATA,
+          presentation: labelPresentation,
+        }).catch(console.error);
+      }
     }
-  }, [activity, router]);
+  }, [activity, labelPresentation, createActivityIfNotExist, router]);
 
-  const data = (activity?.data as MascotteData) || null;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const data = (activity?.data as MimiquesData) || null;
 
-  const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
-    const newData: MascotteData = { ...data, [key]: newValue };
+  const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newData = { ...data };
+    newData.mimique3[key] = event.target.value;
     updateActivity({ data: newData });
-    shouldSave.current = true;
   };
 
-  React.useEffect(() => {
-    if (shouldSave.current) {
-      shouldSave.current = false;
-      save().catch();
+  const errorMessage = () => {
+    if (isError) {
+      return 'Merci de remplir tout les champs';
     }
-  }, [data.languages, data.countries, data.currencies, save]);
+    return '';
+  };
 
-  if (!activity) return <Base>Redirecting ...</Base>;
+  const isValid = () => {
+    return (
+      data.mimique3.origine.length > 0 &&
+      data.mimique3.signification.length > 0 &&
+      data.mimique3.fakeSignification1.length > 0 &&
+      data.mimique3.fakeSignification2.length > 0 //&&
+      //data.mimique3.video.length > 0
+    );
+  };
+
+  const onNext = () => {
+    save().catch(console.error);
+    if (isValid()) {
+      router.push('/creer-un-jeu/mimique/2');
+    } else {
+      setIsError(true);
+    }
+  };
+
+
+  if (!user || !activity || data === null) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
-          activeStep={2}
-        />
-        <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
-          <h1>Dites-en plus sur vous-même et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
-          <div>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={12}>
-                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelle(s) langue(s) parle {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
-                </p>
-                <MultipleLanguageSelector
-                  label="Langues"
-                  style={{ width: '100%', marginBottom: '1rem' }}
-                  value={data.languages}
-                  onChange={dataChange('languages')}
-                />
-                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelle(s) monnaie(s) utilise {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
-                </p>
-                <MultipleCurrencySelector
-                  label="Monnaies"
-                  style={{ width: '100%', marginBottom: '1rem' }}
-                  value={data.currencies}
-                  onChange={dataChange('currencies')}
-                />
-                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Dans quel(s) pays {data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
-                </p>
-                <MultipleCountrySelector
-                  label="Pays"
-                  style={{ width: '100%', marginBottom: '1rem' }}
-                  value={data.countries}
-                  onChange={dataChange('countries')}
-                />
-              </Grid>
+        {!isEdit && <BackButton href="/creer-un-jeu" />}
+        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={2} />
+        <div className="width-900">
+          <h1>Présentez en vidéo une 3ère mimique à vos Pélicopains</h1>
+          <p>
+            Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise..
+            Gardez le mystère, et ne révélez pas à l’oral sa signification !
+          </p>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              Video
             </Grid>
-          </div>
-
-          <StepsButton prev="/se-presenter/mascotte/2" next="/se-presenter/mascotte/4" />
+            <Grid item xs={12} md={8}>
+              <h4>Que signifie cette mimique ?</h4>
+              <TextField
+                variant="outlined"
+                label="Signification réelle"
+                value={data.mimique3.signification}
+                onChange={dataChange('signification')}
+                style={{ width: '100%' }}
+              />
+              <h4>Quelle est l’origine de cette mimique ?</h4>
+              <TextField
+                variant="outlined"
+                label="Origine"
+                value={data.mimique3.origine}
+                onChange={dataChange('origine')}
+                style={{ width: '100%' }}
+              />
+            </Grid>
+          </Grid>
+          <h1>Présentez en vidéo une 3ère mimique à vos Pélicopains</h1>
+          <p>
+            Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut
+            inventer :
+          </p>
+          <TextField
+            variant="outlined"
+            label="Signification inventée 1"
+            value={data.mimique3.fakeSignification1}
+            onChange={dataChange('fakeSignification1')}
+            style={{ width: '100%' }}
+          />
+          <TextField
+            variant="outlined"
+            label="Signification inventée 2"
+            value={data.mimique3.fakeSignification2}
+            onChange={dataChange('fakeSignification2')}
+            style={{ width: '100%' }}
+          />
+          <StepsButton next={onNext} />
         </div>
       </div>
     </Base>

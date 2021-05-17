@@ -76,8 +76,8 @@ const MimiqueStep1: React.FC = () => {
       data.mimique1.origine.length > 0 &&
       data.mimique1.signification.length > 0 &&
       data.mimique1.fakeSignification1.length > 0 &&
-      data.mimique1.fakeSignification2.length > 0 &&
-      data.mimique1.video.length > 0
+      data.mimique1.fakeSignification2.length > 0 
+      //&&data.mimique1.video.length > 0
     );
   };
 
