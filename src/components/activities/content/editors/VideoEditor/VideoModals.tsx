@@ -5,35 +5,46 @@ import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { Button, Divider, TextField } from '@material-ui/core';
-import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { Alert } from '@material-ui/lab';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { useCopy } from 'src/hooks/useCopy';
-import { primaryColor } from 'src/styles/variables.const';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
-import type { EditorProps } from '../content.types';
+import type { EditorProps } from '../../content.types';
 
-import { EditorContainer } from './EditorContainer';
+interface VideoModalsProps extends EditorProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (val: boolean) => void;
+  videoUrl: string;
+  setVideoUrl: (val: string) => void;
+}
 
-export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const VideoModals: React.FC<VideoModalsProps> = ({
+  isModalOpen,
+  setIsModalOpen,
+  videoUrl,
+  setVideoUrl,
+  id,
+  value = '',
+  onChange = () => {},
+  onDelete = () => {},
+}: VideoModalsProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
-  const [videoUrl, setVideoUrl] = React.useState(value);
   const [tempVideoUrl, setTempVideoUrl] = React.useState('');
   const [name, setName] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
     mode: 0,
   }); // 0 no preview, 1: preview, 2: error
-  const [isModalOpen, setIsModalOpen] = React.useState(value === '');
   const [isSuccessModalOpen, setIsSuccessModalOpen] = React.useState(false);
   const [step, setStep] = React.useState(0);
   const [progress, setProgress] = React.useState(-1);
@@ -49,6 +60,13 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
     }
   }, [value]);
 
+  React.useEffect(() => {
+    if (isModalOpen) {
+      setProgress(-1);
+      setStep(0);
+    }
+  }, [isModalOpen]);
+
   const displayPreview = async () => {
     if (ReactPlayer.canPlay(tempVideoUrl)) {
       setPreview({
@@ -62,6 +80,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
       });
     }
   };
+
   const resetPreview = () => {
     setPreview({
       mode: 0,
@@ -140,44 +159,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
   };
 
   return (
-    <EditorContainer
-      deleteButtonProps={{
-        confirmLabel: 'Voulez-vous vraiment supprimer cette vidéo ?',
-        confirmTitle: 'Supprimer',
-        onDelete,
-      }}
-      className="image-editor"
-    >
-      {videoUrl && (
-        <>
-          <div className="text-center" style={{ height: '9rem', borderRight: `1px dashed ${primaryColor}` }}>
-            <div
-              style={{
-                display: 'inline-block',
-                width: '16rem',
-                height: '9rem',
-                backgroundColor: 'black',
-              }}
-            >
-              <ReactPlayer width="100%" height="100%" light url={videoUrl} controls />
-            </div>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => {
-                setProgress(-1);
-                setStep(0);
-                setIsModalOpen(true);
-              }}
-            >
-              {'Changer de vidéo'}
-            </Button>
-          </div>
-        </>
-      )}
+    <>
       <Modal
         open={isModalOpen}
         fullWidth
@@ -360,6 +342,6 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
           </ul>
         </div>
       </Modal>
-    </EditorContainer>
+    </>
   );
 };
