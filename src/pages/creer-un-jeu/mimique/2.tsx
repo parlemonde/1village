@@ -101,7 +101,7 @@ const MimiqueStep2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!isEdit && <BackButton href="/creer-un-jeu" />}
+        {!isEdit && <BackButton href="/creer-un-jeu/mimique/1" />}
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={1} />
         <div className="width-900">
           <h1>Présentez en vidéo une 2ème mimique à vos Pélicopains</h1>
