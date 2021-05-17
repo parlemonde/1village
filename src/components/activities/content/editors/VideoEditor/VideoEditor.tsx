@@ -51,8 +51,6 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
               size="small"
               color="primary"
               onClick={() => {
-                setProgress(-1);
-                setStep(0);
                 setIsModalOpen(true);
               }}
             >
