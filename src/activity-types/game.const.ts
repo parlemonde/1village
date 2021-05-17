@@ -46,26 +46,26 @@ export const PRESENTATION_THEMATIQUE = [
 
 export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
   mimique1: {
-    origine:"",
-    signification:"",
-    fakeSignification1:"",
-    fakeSignification2:"",
-    video:"",
+    origine: null,
+    signification: null,
+    fakeSignification1: null,
+    fakeSignification2: null,
+    video: null,
   },
   mimique2: {
-    origine:"",
-    signification:"",
-    fakeSignification1:"",
-    fakeSignification2:"",
-    video:"",
+    origine: null,
+    signification: null,
+    fakeSignification1: null,
+    fakeSignification2: null,
+    video: null,
   },
   mimique3: {
-    origine:"",
-    signification:"",
-    fakeSignification1:"",
-    fakeSignification2:"",
-    video:"",
-  }
+    origine: null,
+    signification: null,
+    fakeSignification1: null,
+    fakeSignification2: null,
+    video: null,
+  },
 };
 
 export const GAME = {
