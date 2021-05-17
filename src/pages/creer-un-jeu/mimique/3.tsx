@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Grid, Box, Button } from '@material-ui/core';
+import { TextField, Grid, Button } from '@material-ui/core';
 
-import { isGame, isPresentation } from 'src/activity-types/anyActivity';
+import { isGame } from 'src/activity-types/anyActivity';
 import { DEFAULT_MIMIQUE_DATA, isMimique, GAME } from 'src/activity-types/game.const';
 import { MimiqueData, MimiquesData } from 'src/activity-types/game.types';
 import { Base } from 'src/components/Base';
@@ -12,7 +12,7 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { getUserDisplayName, pluralS } from 'src/utils';
+import { getUserDisplayName } from 'src/utils';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 import UploadIcon from 'src/svg/jeu/add-video.svg';
