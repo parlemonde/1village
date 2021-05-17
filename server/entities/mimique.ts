@@ -51,8 +51,8 @@ export class Mimique implements MimiqueInterface {
   @Column({ nullable: false })
   public activityId: number;
 
-  @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.mimiqueId)
-  public mimiqueResponses: MimiqueResponse[];
+  @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.mimique)
+  public responses: MimiqueResponse[];
 
   @Column({ type: 'text', nullable: false })
   public origine: string;

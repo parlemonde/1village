@@ -34,7 +34,7 @@ export class MimiqueResponse implements MimiqueResponseInterface {
   @Column({ nullable: false })
   public villageId: number;
 
-  @ManyToOne(() => Mimique, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Mimique, (mimique: Mimique) => mimique.responses, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'mimiqueId' })
   public mimique: Mimique | null;
 
