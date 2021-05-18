@@ -22,9 +22,12 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   React.useEffect(() => {
+    const videoUrl = activity?.data?.mimique1?.video;
+    const videoId = videoUrl.split(/\//).pop();
+    if (!videoId) return;
     axiosLoggedRequest({
       method: 'GET',
-      url: '/videos/50606255/picture',
+      url: `/videos/${videoId}/picture`,
     }).then((response) => {
       console.log(response);
       setPictureUrl(response.data);
