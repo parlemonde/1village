@@ -64,20 +64,13 @@ const MimiqueStep1: React.FC = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const errorMessage = () => {
-    if (isError) {
-      return 'Merci de remplir tout les champs';
-    }
-    return '';
-  };
-
   const isValid = () => {
     return (
-      data.mimique1.origine.length > 0 &&
-      data.mimique1.signification.length > 0 &&
-      data.mimique1.fakeSignification1.length > 0 &&
-      data.mimique1.fakeSignification2.length > 0 
-      //&&data.mimique1.video.length > 0
+      data.mimique1.origine != null &&
+      data.mimique1.signification != null &&
+      data.mimique1.fakeSignification1 != null &&
+      data.mimique1.fakeSignification2 != null
+      //&&data.mimique1.video != null
     );
   };
 
@@ -130,7 +123,9 @@ const MimiqueStep1: React.FC = () => {
                 label="Signification réelle"
                 value={data.mimique1.signification}
                 onChange={dataChange('signification')}
-                style={{ width: '100%' }}
+                style={{ width: '100%', margin: '10px' }}
+                error={isError && data.mimique1.signification == null}
+                helperText={isError && data.mimique1.signification == null ? 'Ce champ est obligatoire' : ''}
               />
               <h4>Quelle est l’origine de cette mimique ?</h4>
               <TextField
@@ -138,7 +133,9 @@ const MimiqueStep1: React.FC = () => {
                 label="Origine"
                 value={data.mimique1.origine}
                 onChange={dataChange('origine')}
-                style={{ width: '100%' }}
+                style={{ width: '100%', margin: '10px' }}
+                error={isError && data.mimique1.origine == null}
+                helperText={isError && data.mimique1.origine == null ? 'Ce champ est obligatoire' : ''}
               />
             </Grid>
           </Grid>
@@ -152,14 +149,18 @@ const MimiqueStep1: React.FC = () => {
             label="Signification inventée 1"
             value={data.mimique1.fakeSignification1}
             onChange={dataChange('fakeSignification1')}
-            style={{ width: '100%' }}
+            style={{ width: '100%', margin: '10px' }}
+            error={isError && data.mimique1.fakeSignification1 == null}
+            helperText={isError && data.mimique1.fakeSignification1 == null ? 'Ce champ est obligatoire' : ''}
           />
           <TextField
             variant="outlined"
             label="Signification inventée 2"
             value={data.mimique1.fakeSignification2}
             onChange={dataChange('fakeSignification2')}
-            style={{ width: '100%' }}
+            style={{ width: '100%', margin: '10px' }}
+            error={isError && data.mimique1.fakeSignification2 == null}
+            helperText={isError && data.mimique1.fakeSignification2 == null ? 'Ce champ est obligatoire' : ''}
           />
           <StepsButton next={onNext} />
         </div>

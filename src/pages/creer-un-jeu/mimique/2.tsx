@@ -56,7 +56,7 @@ const MimiqueStep2: React.FC = () => {
   const videoChange = (newValue: string) => {
     console.log(newValue);
     const newData = { ...data };
-    newData.mimique1.video = newValue;
+    newData.mimique2.video = newValue;
     updateActivity({ data: newData });
   };
 
@@ -64,20 +64,13 @@ const MimiqueStep2: React.FC = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const errorMessage = () => {
-    if (isError) {
-      return 'Merci de remplir tout les champs';
-    }
-    return '';
-  };
-
   const isValid = () => {
     return (
-      data.mimique2.origine.length > 0 &&
-      data.mimique2.signification.length > 0 &&
-      data.mimique2.fakeSignification1.length > 0 &&
-      data.mimique2.fakeSignification2.length > 0
-      //&&data.mimique2.video.length > 0
+      data.mimique2.origine != null &&
+      data.mimique2.signification != null &&
+      data.mimique2.fakeSignification1 != null &&
+      data.mimique2.fakeSignification2 != null
+      //&&data.mimique2.video != null
     );
   };
 
@@ -130,7 +123,9 @@ const MimiqueStep2: React.FC = () => {
                 label="Signification réelle"
                 value={data.mimique2.signification}
                 onChange={dataChange('signification')}
-                style={{ width: '100%' }}
+                style={{ width: '100%', margin: '10px' }}
+                error={isError && data.mimique2.signification == null}
+                helperText={isError && data.mimique2.signification == null ? 'Ce champ est obligatoire' : ''}
               />
               <h4>Quelle est l’origine de cette mimique ?</h4>
               <TextField
@@ -138,7 +133,9 @@ const MimiqueStep2: React.FC = () => {
                 label="Origine"
                 value={data.mimique2.origine}
                 onChange={dataChange('origine')}
-                style={{ width: '100%' }}
+                style={{ width: '100%', margin: '10px' }}
+                error={isError && data.mimique2.origine == null}
+                helperText={isError && data.mimique2.origine == null ? 'Ce champ est obligatoire' : ''}
               />
             </Grid>
           </Grid>
@@ -152,14 +149,18 @@ const MimiqueStep2: React.FC = () => {
             label="Signification inventée 1"
             value={data.mimique2.fakeSignification1}
             onChange={dataChange('fakeSignification1')}
-            style={{ width: '100%' }}
+            style={{ width: '100%', margin: '10px' }}
+            error={isError && data.mimique2.fakeSignification1 == null}
+            helperText={isError && data.mimique2.fakeSignification1 == null ? 'Ce champ est obligatoire' : ''}
           />
           <TextField
             variant="outlined"
             label="Signification inventée 2"
             value={data.mimique2.fakeSignification2}
             onChange={dataChange('fakeSignification2')}
-            style={{ width: '100%' }}
+            style={{ width: '100%', margin: '10px' }}
+            error={isError && data.mimique2.fakeSignification2 == null}
+            helperText={isError && data.mimique2.fakeSignification2 == null ? 'Ce champ est obligatoire' : ''}
           />
           <StepsButton next={onNext} />
         </div>
