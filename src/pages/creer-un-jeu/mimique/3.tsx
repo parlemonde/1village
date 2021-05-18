@@ -4,47 +4,30 @@ import React from 'react';
 import { TextField, Grid, Button } from '@material-ui/core';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { DEFAULT_MIMIQUE_DATA, isMimique, GAME } from 'src/activity-types/game.const';
+import { isMimique } from 'src/activity-types/game.const';
 import { MimiqueData, MimiquesData } from 'src/activity-types/game.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
-import { getUserDisplayName } from 'src/utils';
-import { ActivityType, ActivityStatus } from 'types/activity.type';
-import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 import UploadIcon from 'src/svg/jeu/add-video.svg';
+import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 
 const MimiqueStep3: React.FC = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
-  const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
-  const { user } = React.useContext(UserContext);
-  const labelPresentation = getUserDisplayName(user, false);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
 
-  const created = React.useRef(false);
   React.useEffect(() => {
-    if (!created.current) {
-      if (!activity) {
-        created.current = true;
-        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
-          ...DEFAULT_MIMIQUE_DATA,
-          presentation: labelPresentation,
-        }).catch(console.error);
-      } else if (activity && (!isGame(activity) || !isMimique(activity))) {
-        created.current = true;
-        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
-          ...DEFAULT_MIMIQUE_DATA,
-          presentation: labelPresentation,
-        }).catch(console.error);
-      }
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/creer-un-jeu');
+    } else if (activity && (!isGame(activity) || !isMimique(activity))) {
+      router.push('/creer-un-jeu');
     }
-  }, [activity, labelPresentation, createActivityIfNotExist, router]);
+  }, [activity, router]);
 
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MimiquesData) || null;
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +66,7 @@ const MimiqueStep3: React.FC = () => {
     }
   };
 
-  if (!user || !activity || data === null) {
+  if (!activity || data === null) {
     return (
       <Base>
         <div></div>
@@ -94,7 +77,7 @@ const MimiqueStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!isEdit && <BackButton href="/creer-un-jeu/mimique/2" />}
+        {<BackButton href="/creer-un-jeu/mimique/2" />}
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={2} />
         <div className="width-900">
           <h1>Présentez en vidéo une 3ème mimique à vos Pélicopains</h1>
