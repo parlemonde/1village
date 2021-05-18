@@ -31,7 +31,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
   videoUrl,
   setVideoUrl,
   id,
-  value = '',
+  value,
   onChange = () => {},
   onDelete = () => {},
 }: VideoModalsProps) => {
@@ -39,7 +39,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
-  const [tempVideoUrl, setTempVideoUrl] = React.useState('');
+  const [tempVideoUrl, setTempVideoUrl] = React.useState(value);
   const [name, setName] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
@@ -64,6 +64,12 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
     if (isModalOpen) {
       setProgress(-1);
       setStep(0);
+      if (tempVideoUrl) {
+        setPreview({
+          mode: 1,
+          url: tempVideoUrl,
+        });
+      }
     }
   }, [isModalOpen]);
 
@@ -183,7 +189,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
         }}
         onClose={() => {
           setIsModalOpen(false);
-          if (videoUrl.length === 0) {
+          if (videoUrl && videoUrl.length === 0) {
             onDelete();
           }
         }}

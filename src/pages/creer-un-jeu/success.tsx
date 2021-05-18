@@ -1,29 +1,28 @@
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@material-ui/core';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { isMimique } from 'src/activity-types/game.const';
 import { Base } from 'src/components/Base';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const PresentationSuccess: React.FC = () => {
+  const router = useRouter();
   const { activity } = React.useContext(ActivityContext);
 
-  if (!isGame(activity)) {
-    return <Base>{null}</Base>;
+  if (!activity || !isGame(activity)) {
+    router.push('/creer-un-jeu/mimique/2');
   }
-
-  const isMimiqueActivity = isMimique(activity);
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">{isMimiqueActivity ? 'Vos mimiques ont bien été publiées !' : 'Votre jeu a bien été publiée !'}</p>
+          <p className="text">{'Vos mimiques ont bien été publiées !'}</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">

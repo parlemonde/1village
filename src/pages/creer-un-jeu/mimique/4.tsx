@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Grid, Box, Button, Radio, RadioGroup, FormControlLabel, RadioProps, Backdrop, CircularProgress } from '@material-ui/core';
+import { Grid, Button, Radio, RadioGroup, FormControlLabel, RadioProps, Backdrop, CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
@@ -10,9 +10,9 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { EditButton } from 'src/components/buttons/EditButton';
-import UploadIcon from 'src/svg/jeu/mimique.svg';
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimique } from 'src/activity-types/game.const';
+import ReactPlayer from 'react-player';
 
 const GreenRadio = withStyles({
   root: {
@@ -60,23 +60,19 @@ const MimiqueStep4: React.FC = () => {
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={3} />
         <div className="width-900">
           <h1>Pré-visualisez votre mimiques et publiez les !</h1>
-          <h6 style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>
+          <p style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>
             Vous pouvez modifier chaque mimique si vous le souhaitez. Quand vous êtes prêts :
-          </h6>
+          </p>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             <Button variant="outlined" color="primary" onClick={onPublish}>
-              Publier … et jouer à votre tour !
+              Publier
             </Button>
           </div>
           {/* Mimique 1 */}
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <Box display="flex" justifyContent="right" m={1}>
-                  <Button name="video" style={{ width: '100%', height: '80%', background: data.mimique1.video ? 'lightgrey' : 'lightgrey' }}>
-                    {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
-                  </Button>
-                </Box>
+                <ReactPlayer width="100%" height="100%" light url={data.mimique1.video} controls />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
@@ -95,17 +91,13 @@ const MimiqueStep4: React.FC = () => {
                 />
               </Grid>
             </Grid>
-            <h6 style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>{data.mimique1.origine} </h6>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.mimique1.origine} </p>
           </div>
           {/* Mimique 2 */}
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <Box display="flex" justifyContent="center" m={0}>
-                  <Button name="video" style={{ width: '100%', height: '80%', background: data.mimique2.video ? 'lightgrey' : 'lightgrey' }}>
-                    {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
-                  </Button>
-                </Box>
+                <ReactPlayer width="100%" height="100%" light url={data.mimique2.video} controls />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
@@ -124,17 +116,13 @@ const MimiqueStep4: React.FC = () => {
                 />
               </Grid>
             </Grid>
-            <h6 style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>{data.mimique2.origine} </h6>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.mimique2.origine} </p>
           </div>
           {/* Mimique 3 */}
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <Box display="flex" justifyContent="center" m={0}>
-                  <Button name="video" style={{ width: '100%', height: '80%', background: data.mimique3.video ? 'lightgrey' : 'lightgrey' }}>
-                    {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
-                  </Button>
-                </Box>
+                <ReactPlayer width="100%" height="100%" light url={data.mimique3.video} controls />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
@@ -153,7 +141,7 @@ const MimiqueStep4: React.FC = () => {
                 />
               </Grid>
             </Grid>
-            <h6 style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>{data.mimique3.origine} </h6>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.mimique3.origine} </p>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { VideoModals } from 'src/components/activities/content/editors/VideoEdit
 import UploadIcon from 'src/svg/jeu/add-video.svg';
 import { isMimique } from 'src/activity-types/game.const';
 import { isGame } from 'src/activity-types/anyActivity';
+import ReactPlayer from 'react-player';
 
 const MimiqueStep2: React.FC = () => {
   const router = useRouter();
@@ -87,10 +88,32 @@ const MimiqueStep2: React.FC = () => {
           </p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
-              <Button name="video" style={{ width: '100%', background: data.mimique2.video ? 'lightgrey' : 'lightgrey' }} onClick={toggleModal}>
-                {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
-              </Button>
-              <p>Mettre en ligne la vidéo de la 2ème mimique</p>
+              {data.mimique2.video && (
+                <div style={{ width: '100%', height: '100%', marginTop: '0.2rem' }}>
+                  <ReactPlayer width="100%" height="70%" light url={data.mimique2.video} controls />
+                  <Button name="video" style={{ width: '100%', marginTop: '0.4rem' }} onClick={toggleModal} variant="outlined" color="primary">
+                    changer de video
+                  </Button>
+                </div>
+              )}
+              {!data.mimique2.video && (
+                <div>
+                  {!isError && (
+                    <Button name="video" style={{ width: '100%' }} onClick={toggleModal} variant="outlined" color="primary">
+                      {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
+                    </Button>
+                  )}
+                  {isError && (
+                    <div style={{ marginTop: '1.5rem' }}>
+                      <Button name="video" style={{ width: '100%', borderColor: '#d93939' }} onClick={toggleModal} variant="outlined" color="primary">
+                        {<UploadIcon style={{ color: '#d93939', width: '3rem', height: '3rem', margin: '30px' }} />}
+                      </Button>
+                      <span style={{ fontSize: '0.7rem', marginLeft: '1rem', color: '#d93939' }}>Ce champ est obligatoire</span>
+                    </div>
+                  )}
+                  <p>Mettre en ligne la vidéo de la 2ème mimique</p>
+                </div>
+              )}
               <VideoModals
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}

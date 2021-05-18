@@ -2,7 +2,7 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { isDefi, isEnigme, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
+import { isDefi, isEnigme, isGame, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.const';
 import { AvatarImg } from 'src/components/Avatar';
@@ -26,6 +26,9 @@ import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { ActivityCardProps } from './activity-card.types';
+import { GameType } from 'types/game.types';
+import { isMimique } from 'src/activity-types/game.const';
+import { MimiqueCard } from './MimiqueCard';
 
 const titles = {
   [ActivityType.PRESENTATION]: 'créé une présentation',
@@ -33,6 +36,9 @@ const titles = {
   [ActivityType.GAME]: 'lancé un jeu',
   [ActivityType.ENIGME]: 'créé une énigme',
   [ActivityType.QUESTION]: 'posé une question',
+};
+const titlesGame = {
+  [GameType.MIMIQUE]: 'participé au jeu des mimiques',
 };
 const icons = {
   [ActivityType.PRESENTATION]: UserIcon,
@@ -80,7 +86,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           <p className="text">
             <UserDisplayName className="text" user={user} noLink={noButtons} />
             {' a '}
-            <strong>{titles[activity.type]}</strong>
+            <strong>
+              {ActivityType.GAME === activity.type && GameType.MIMIQUE === activity.subType ? titlesGame[activity.subType] : titles[activity.type]}
+            </strong>
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
@@ -148,6 +156,17 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         )}
         {isDefi(activity) && (
           <DefiCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
+        )}
+        {isGame(activity) && isMimique(activity) && (
+          <MimiqueCard
             activity={activity}
             user={user}
             isSelf={isSelf}
