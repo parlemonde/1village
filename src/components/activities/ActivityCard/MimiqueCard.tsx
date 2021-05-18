@@ -4,13 +4,11 @@ import React from 'react';
 import { Button, Grid } from '@material-ui/core';
 
 import { RedButton } from 'src/components/buttons/RedButton';
-import { bgPage } from 'src/styles/variables.const';
-import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 import { GameMimiqueActivity } from 'types/game.types';
-import ReactPlayer from 'react-player';
+import { UserContext } from 'src/contexts/userContext';
 
 export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
   activity,
@@ -20,11 +18,20 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
   showEditButtons,
   onDelete,
 }: ActivityCardProps<GameMimiqueActivity>) => {
-  const firstImage = React.useMemo(() => {
-    return null;
-  }, [activity.data, activity.processedContent]);
-  const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
+  const [pictureUrl, setPictureUrl] = React.useState<string>(null);
+  const { axiosLoggedRequest } = React.useContext(UserContext);
 
+  React.useEffect(() => {
+    axiosLoggedRequest({
+      method: 'GET',
+      url: '/videos/50606255/picture',
+    }).then((response) => {
+      console.log(response);
+      setPictureUrl(response.data);
+    });
+  }, [activity.data, activity.processedContent]);
+
+  console.log(pictureUrl);
   return (
     <div
       style={{
@@ -33,25 +40,21 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
         justifyContent: 'flex-start',
       }}
     >
-      {firstImage && (
-        <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
-          <div
-            style={{
-              height: '100%',
-              width: '100%',
-              backgroundColor: bgPage,
-              backgroundImage: `url(${firstImage})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-            }}
-          />
-        </div>
-      )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} style={{ minHeight: '10rem' }}>
           <Grid item xs={12} md={5}>
-            <ReactPlayer width="100%" height="100%" light url="" controls />
+            {pictureUrl && (
+              <div
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  backgroundImage: `url(${pictureUrl})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                }}
+              />
+            )}
           </Grid>
           <Grid item xs={12} md={7}>
             <span>Nous avons avons ajouté 3 nouvelles mimiques au jeu !</span>
@@ -103,3 +106,6 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
     </div>
   );
 };
+function axiosLoggedRequest(arg0: { method: string; url: string }) {
+  throw new Error('Function not implemented.');
+}
