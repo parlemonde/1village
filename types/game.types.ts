@@ -12,6 +12,7 @@ export type MimiquesData = {
 };
 
 export type MimiqueData = {
+  mimiqueId: number | null;
   origine: string | null;
   signification: string | null;
   fakeSignification1: string | null;

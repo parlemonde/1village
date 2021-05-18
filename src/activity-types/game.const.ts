@@ -2,6 +2,7 @@ import { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity, G
 
 export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
   mimique1: {
+    mimiqueId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
@@ -9,6 +10,7 @@ export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
     video: null,
   },
   mimique2: {
+    mimiqueId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
@@ -16,6 +18,7 @@ export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
     video: null,
   },
   mimique3: {
+    mimiqueId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,

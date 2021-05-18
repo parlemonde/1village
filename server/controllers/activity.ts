@@ -400,10 +400,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       return data.key === 'json';
     });
     if (activityData) {
-      const mimiquesData = JSON.parse(activityData.value).data as MimiquesData;
-      await createMimique(mimiquesData.mimique1, activity);
-      await createMimique(mimiquesData.mimique2, activity);
-      await createMimique(mimiquesData.mimique3, activity);
+      const value = JSON.parse(activityData.value);
+      const mimiquesData = value.data as MimiquesData;
+      mimiquesData.mimique1.mimiqueId = (await createMimique(mimiquesData.mimique1, activity)).id;
+      mimiquesData.mimique2.mimiqueId = (await createMimique(mimiquesData.mimique2, activity)).id;
+      mimiquesData.mimique3.mimiqueId = (await createMimique(mimiquesData.mimique3, activity)).id;
+      activityData.value = JSON.stringify(value);
+      await getRepository(ActivityData).save(activityData);
     }
   }
 
@@ -415,8 +418,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   res.sendJSON(activity);
 });
 
-const createMimique = async (data: MimiqueData, activity: Activity) => {
-  const mimique = new Mimique();
+const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
+  var mimique = new Mimique();
+
+  if (data.mimiqueId) {
+    mimique = await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } });
+  }
+
   mimique.signification = data.signification || '';
   mimique.fakeSignification1 = data.fakeSignification1 || '';
   mimique.fakeSignification2 = data.fakeSignification2 || '';
@@ -426,6 +434,7 @@ const createMimique = async (data: MimiqueData, activity: Activity) => {
   mimique.villageId = activity.villageId;
   mimique.userId = activity.userId;
   await getRepository(Mimique).save(mimique);
+  return mimique;
 };
 // --- Add content to an activity ---
 type AddActivityData = {
