@@ -3,7 +3,7 @@ import React from 'react';
 
 import { TextField, Grid, Button } from '@material-ui/core';
 
-import { MimiqueData, MimiquesData } from 'src/activity-types/game.types';
+import { MimiqueData, MimiquesData } from 'types/game.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';

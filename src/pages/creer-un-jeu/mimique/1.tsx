@@ -4,8 +4,8 @@ import React from 'react';
 import { TextField, Grid, Button, Icon } from '@material-ui/core';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { DEFAULT_MIMIQUE_DATA, isMimique, GAME } from 'src/activity-types/game.const';
-import { MimiqueData, MimiquesData } from 'src/activity-types/game.types';
+import { DEFAULT_MIMIQUE_DATA, isMimique } from 'src/activity-types/game.const';
+import { MimiqueData, MimiquesData, GameType } from 'types/game.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -30,13 +30,13 @@ const MimiqueStep1: React.FC = () => {
     if (!created.current) {
       if (!activity) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
+        createActivityIfNotExist(ActivityType.GAME, GameType.MIMIQUE, {
           ...DEFAULT_MIMIQUE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       } else if (activity && (!isGame(activity) || !isMimique(activity))) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
+        createActivityIfNotExist(ActivityType.GAME, GameType.MIMIQUE, {
           ...DEFAULT_MIMIQUE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);

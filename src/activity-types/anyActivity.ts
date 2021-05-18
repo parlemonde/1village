@@ -4,7 +4,7 @@ import type { AnyActivity, AnyActivityData } from './anyActivities.types';
 import { DefiActivity } from './defi.types';
 import { EnigmeActivity } from './enigme.types';
 import { EditorContent } from './extendedActivity.types';
-import { GameActivity } from './game.types';
+import { GameActivity } from 'types/game.types';
 import { PresentationActivity } from './presentation.types';
 import { QuestionActivity } from './question.types';
 

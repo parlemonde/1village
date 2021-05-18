@@ -1,4 +1,4 @@
-import { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity } from './game.types';
+import { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity, GameType } from '../../types/game.types';
 
 export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
   mimique1: {
@@ -24,14 +24,9 @@ export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
   },
 };
 
-export const GAME = {
-  MIMIQUE: 0,
-  MONNAIE: 1,
-};
-
 export const isMimique = (activity: GameActivity): activity is GameMimiqueActivity => {
-  return activity.subType === GAME.MIMIQUE;
+  return activity.subType === GameType.MIMIQUE;
 };
 export const isMonnaie = (activity: GameActivity): activity is GameMonnaieActivity => {
-  return activity.subType === null || activity.subType === GAME.MONNAIE;
+  return activity.subType === null || activity.subType === GameType.MONNAIE;
 };

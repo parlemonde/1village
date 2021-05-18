@@ -6,10 +6,13 @@ import { ActivityData, ActivityDataType } from '../entities/activityData';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
+import { Mimique } from '../entities/mimique';
+
+import { MimiqueData, MimiquesData, GameType } from '../../types/game.types';
+
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { getQueryString } from '../utils';
-
 import { commentController } from './comment';
 import { Controller } from './controller';
 
@@ -392,6 +395,18 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     return;
   }
 
+  if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE) {
+    const activityData = (activity.content || []).find((data) => {
+      return data.key === 'json';
+    });
+    if (activityData) {
+      const mimiquesData = JSON.parse(activityData.value).data as MimiquesData;
+      await createMimique(mimiquesData.mimique1, activity);
+      await createMimique(mimiquesData.mimique2, activity);
+      await createMimique(mimiquesData.mimique3, activity);
+    }
+  }
+
   activity.status = data.status ?? activity.status;
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
@@ -400,6 +415,18 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   res.sendJSON(activity);
 });
 
+const createMimique = async (data: MimiqueData, activity: Activity) => {
+  const mimique = new Mimique();
+  mimique.signification = data.signification || '';
+  mimique.fakeSignification1 = data.fakeSignification1 || '';
+  mimique.fakeSignification2 = data.fakeSignification2 || '';
+  mimique.origine = data.origine || '';
+  mimique.video = data.video || '';
+  mimique.activityId = activity.id;
+  mimique.villageId = activity.villageId;
+  mimique.userId = activity.userId;
+  await getRepository(Mimique).save(mimique);
+};
 // --- Add content to an activity ---
 type AddActivityData = {
   content?: Array<{

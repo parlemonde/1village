@@ -1,4 +1,9 @@
-import { GenericExtendedActivity } from './extendedActivity.types';
+import { GenericExtendedActivity } from '../src/activity-types/extendedActivity.types';
+
+export enum GameType {
+  MIMIQUE = 0,
+  MONNAIE = 1,
+}
 
 export type MimiquesData = {
   mimique1: MimiqueData;
@@ -7,12 +12,12 @@ export type MimiquesData = {
 };
 
 export type MimiqueData = {
-  origine:string;
-  signification:string;
-  fakeSignification1:string;
-  fakeSignification2:string;
-  video:string;
-}
+  origine: string | null;
+  signification: string | null;
+  fakeSignification1: string | null;
+  fakeSignification2: string | null;
+  video: string | null;
+};
 
 export type MonnaieData = {
   theme: number;
