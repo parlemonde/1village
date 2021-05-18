@@ -10,7 +10,6 @@ import { VideoModals } from 'src/components/activities/content/editors/VideoEdit
 import UploadIcon from 'src/svg/jeu/add-video.svg';
 import ReactPlayer from 'react-player';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { validate } from 'uuid';
 
 interface MimiqueSelectorProps {
   mimiqueData: MimiqueData;

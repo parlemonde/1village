@@ -107,6 +107,3 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
     </div>
   );
 };
-function axiosLoggedRequest(arg0: { method: string; url: string }) {
-  throw new Error('Function not implemented.');
-}
