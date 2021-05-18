@@ -1,21 +1,18 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Grid, Box, Button, Radio, RadioGroup, FormControlLabel, RadioProps } from '@material-ui/core';
+import { Grid, Box, Button, Radio, RadioGroup, FormControlLabel, RadioProps, Backdrop, CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
-import { isGame } from 'src/activity-types/anyActivity';
-import { DEFAULT_MIMIQUE_DATA, isMimique, GAME } from 'src/activity-types/game.const';
 import { MimiquesData } from 'src/activity-types/game.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
-import { getUserDisplayName } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
 import { EditButton } from 'src/components/buttons/EditButton';
 import UploadIcon from 'src/svg/jeu/mimique.svg';
+import { isGame } from 'src/activity-types/anyActivity';
+import { isMimique } from 'src/activity-types/game.const';
 
 const GreenRadio = withStyles({
   root: {
@@ -28,32 +25,25 @@ const GreenRadio = withStyles({
 })((props: RadioProps) => <Radio color="default" {...props} />);
 const MimiqueStep4: React.FC = () => {
   const router = useRouter();
-  const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
-  const { user } = React.useContext(UserContext);
-  const labelPresentation = getUserDisplayName(user, false);
-  const created = React.useRef(false);
+  const { activity, save } = React.useContext(ActivityContext);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const data = (activity?.data as MimiquesData) || null;
 
   React.useEffect(() => {
-    if (!created.current) {
-      if (!activity) {
-        created.current = true;
-        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
-          ...DEFAULT_MIMIQUE_DATA,
-          presentation: labelPresentation,
-        }).catch(console.error);
-      } else if (activity && (!isGame(activity) || !isMimique(activity))) {
-        created.current = true;
-        createActivityIfNotExist(ActivityType.GAME, GAME.MIMIQUE, {
-          ...DEFAULT_MIMIQUE_DATA,
-          presentation: labelPresentation,
-        }).catch(console.error);
-      }
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/creer-un-jeu');
+    } else if (activity && (!isGame(activity) || !isMimique(activity))) {
+      router.push('/creer-un-jeu');
     }
-  }, [activity, labelPresentation, createActivityIfNotExist, router]);
-  const data = (activity?.data as MimiquesData) || null;
-  const [value, setValue] = React.useState(data.mimique1.signification);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
+  }, [activity, router]);
+
+  const onPublish = async () => {
+    setIsLoading(true);
+    const success = await save(true);
+    if (success) {
+      router.push('/creer-un-jeu/success');
+    }
+    setIsLoading(false);
   };
 
   if (!activity) {
@@ -74,7 +64,7 @@ const MimiqueStep4: React.FC = () => {
             Vous pouvez modifier chaque mimique si vous le souhaitez. Quand vous êtes prêts :
           </h6>
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Button variant="outlined" color="primary">
+            <Button variant="outlined" color="primary" onClick={onPublish}>
               Publier … et jouer à votre tour !
             </Button>
           </div>
@@ -89,8 +79,8 @@ const MimiqueStep4: React.FC = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
-                <RadioGroup aria-label="signification" name="signification1" value={value} onChange={handleChange}>
-                  <FormControlLabel value={data.mimique1.signification} control={<GreenRadio />} label={data.mimique1.signification} />
+                <RadioGroup aria-label="signification" name="signification1" value={1}>
+                  <FormControlLabel value={1} control={<GreenRadio />} label={data.mimique1.signification} />
                   <FormControlLabel control={<Radio />} label={data.mimique1.fakeSignification1} />
                   <FormControlLabel control={<Radio />} label={data.mimique1.fakeSignification2} />
                 </RadioGroup>
@@ -118,8 +108,8 @@ const MimiqueStep4: React.FC = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
-                <RadioGroup aria-label="signification" name="signification1" value={value} onChange={handleChange}>
-                  <FormControlLabel value={data.mimique2.signification} control={<GreenRadio />} label={data.mimique2.signification} />
+                <RadioGroup aria-label="signification" name="signification1" value={1}>
+                  <FormControlLabel value={1} control={<GreenRadio />} label={data.mimique2.signification} />
                   <FormControlLabel control={<Radio />} label={data.mimique2.fakeSignification1} />
                   <FormControlLabel control={<Radio />} label={data.mimique2.fakeSignification2} />
                 </RadioGroup>
@@ -147,8 +137,8 @@ const MimiqueStep4: React.FC = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
-                <RadioGroup aria-label="signification" name="signification1" value={value} onChange={handleChange}>
-                  <FormControlLabel value={data.mimique3.signification} control={<GreenRadio />} label={data.mimique3.signification} />
+                <RadioGroup aria-label="signification" name="signification1" value={1}>
+                  <FormControlLabel value={1} control={<GreenRadio />} label={data.mimique3.signification} />
                   <FormControlLabel control={<Radio />} label={data.mimique3.fakeSignification1} />
                   <FormControlLabel control={<Radio />} label={data.mimique3.fakeSignification2} />
                 </RadioGroup>
@@ -167,6 +157,9 @@ const MimiqueStep4: React.FC = () => {
           </div>
         </div>
       </div>
+      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Base>
   );
 };
