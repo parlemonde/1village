@@ -29,12 +29,10 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
       method: 'GET',
       url: `/videos/${videoId}/picture`,
     }).then((response) => {
-      console.log(response);
       setPictureUrl(response.data);
     });
   }, [activity.data, activity.processedContent]);
 
-  console.log(pictureUrl);
   return (
     <div
       style={{
