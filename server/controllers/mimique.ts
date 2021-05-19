@@ -1,9 +1,12 @@
+import { JSONSchemaType } from 'ajv';
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { getRepository } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 import { UserType } from '../entities/user';
 import { Mimique } from '../entities/mimique';
 import { MimiqueResponse } from '../entities/mimiqueResponse';
 import { Controller } from './controller';
+import { MimiqueResponseValue } from '../../types/mimiqueResponse.type';
 
 const mimiqueController = new Controller('/mimiques');
 
@@ -51,6 +54,62 @@ mimiqueController.get({ path: '/play', userType: UserType.TEACHER }, async (req:
     .getOne();
 
   res.sendJSON(mimique || []);
+});
+
+type UpdateActivity = {
+  value: MimiqueResponseValue;
+};
+
+const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
+  type: 'object',
+  properties: {
+    value: {
+      type: 'number',
+      enum: [MimiqueResponseValue.SIGNIFICATION, MimiqueResponseValue.FAKE_SIGNIFICATION_1, MimiqueResponseValue.FAKE_SIGNIFICATION_2],
+      nullable: false,
+    },
+  },
+  required: [],
+  additionalProperties: false,
+};
+
+const answerMimiqueValidator = ajv.compile(ANSWER_M_SCHEMA);
+
+mimiqueController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+  const userId = req.user.id;
+  const data = req.body;
+
+  if (!answerMimiqueValidator(data)) {
+    sendInvalidDataError(answerMimiqueValidator);
+    return;
+  }
+
+  const mimique = await getRepository(Mimique).findOne({ where: { id: id } });
+  if (!mimique) {
+    next();
+    return;
+  }
+  const responses = await getRepository(MimiqueResponse).find({ where: { userId: userId, mimiqueId: id } });
+  if (responses.length > 2) {
+    next();
+    return;
+  }
+
+  const mimiqueResponse = new MimiqueResponse();
+  mimiqueResponse.value = data.value;
+  mimiqueResponse.mimiqueId = mimique.id;
+  mimiqueResponse.villageId = mimique.villageId;
+  mimiqueResponse.userId = userId;
+
+  await getRepository(MimiqueResponse).save(mimiqueResponse);
+
+  res.sendJSON(mimiqueResponse);
 });
 
 export { mimiqueController };

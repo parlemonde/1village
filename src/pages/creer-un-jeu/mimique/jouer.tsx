@@ -26,6 +26,17 @@ const PlayMimique: React.FC = () => {
     [users],
   );
 
+  const choices = React.useMemo(
+    () =>
+      mimique &&
+      shuffleArray([
+        <FormControlLabel value={MimiqueResponseValue.SIGNIFICATION} control={<Radio />} label={mimique.signification} />,
+        <FormControlLabel value={MimiqueResponseValue.FAKE_SIGNIFICATION_1} control={<Radio />} label={mimique.fakeSignification1} />,
+        <FormControlLabel value={MimiqueResponseValue.FAKE_SIGNIFICATION_2} control={<Radio />} label={mimique.fakeSignification2} />,
+      ]),
+    [mimique],
+  );
+
   React.useEffect(() => {
     axiosLoggedRequest({
       method: 'GET',
@@ -45,7 +56,22 @@ const PlayMimique: React.FC = () => {
     }
   }, [mimique, userMap]);
 
-  const validate = () => {};
+  const validate = () => {
+    if (selected === null) {
+      return;
+    }
+    axiosLoggedRequest({
+      method: 'PUT',
+      url: `/mimiques/play/${mimique.id}`,
+      data: { value: selected },
+    }).then((response) => {
+      if (!response.error && response.data) {
+        setMimique(response.data as Mimique);
+      } else {
+        setEnd(true);
+      }
+    });
+  };
   const onChange = (event: { target: HTMLInputElement }) => {
     setSelected(parseInt(event.target.value) as MimiqueResponseValue);
   };
@@ -66,7 +92,7 @@ const PlayMimique: React.FC = () => {
     );
   }
 
-  function shuffleArray(array) {
+  function shuffleArray(array: Array<any>) {
     let i = array.length - 1;
     for (; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -88,11 +114,7 @@ const PlayMimique: React.FC = () => {
 
         <ReactPlayer light url={mimique.video} controls />
         <RadioGroup aria-label="gender" name="gender1" value={selected} onChange={onChange}>
-          {shuffleArray([
-            <FormControlLabel value={MimiqueResponseValue.SIGNIFICATION} control={<Radio />} label={mimique.signification} />,
-            <FormControlLabel value={MimiqueResponseValue.FAKE_SIGNIFICATION_1} control={<Radio />} label={mimique.fakeSignification1} />,
-            <FormControlLabel value={MimiqueResponseValue.FAKE_SIGNIFICATION_2} control={<Radio />} label={mimique.fakeSignification2} />,
-          ])}
+          {choices}
         </RadioGroup>
         <Button
           style={{
