@@ -15,7 +15,15 @@ const suggestions = [
     text: 'Jouez aux mimiques !',
     icon: MimiqueIcon,
     disabled: false,
-  }
+  },
+  {
+    title: 'Jeu de la monaie',
+    button: 'Monnaie',
+    href: '/creer-un-jeu/monnaie',
+    text: 'Jouez au jeu de la monnaie',
+    icon: MonnaieIcon,
+    disabled: true,
+  },
 ];
 
 const activities = [
@@ -32,7 +40,7 @@ const activities = [
     icon: MonnaieIcon,
     disabled: true,
     disabledText: 'Bientôt disponible',
-  }
+  },
 ];
 
 const Jeu: React.FC = () => {

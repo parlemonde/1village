@@ -1,3 +1,5 @@
+import { User } from './user.type';
+
 export enum MimiqueResponseValue {
   SIGNIFICATION = 0,
   FAKE_SIGNIFICATION_1 = 1,
@@ -13,4 +15,5 @@ export interface MimiqueResponse {
   villageId: number;
   mimiqueId: number;
   value: MimiqueResponseValue;
+  user: User | null;
 }

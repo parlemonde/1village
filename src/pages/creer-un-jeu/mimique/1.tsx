@@ -37,8 +37,8 @@ const MimiqueStep1: React.FC = () => {
   const data = (activity?.data as MimiquesData) || null;
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newData = { ...data };
-    newData.mimique1[key] = event.target.value;
+    const newData: MimiquesData = { ...data };
+    (newData.mimique1[key] as string) = event.target.value;
     updateActivity({ data: newData });
   };
 

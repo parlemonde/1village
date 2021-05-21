@@ -56,6 +56,21 @@ mimiqueController.get({ path: '/play', userType: UserType.TEACHER }, async (req:
   res.sendJSON(mimique || []);
 });
 
+mimiqueController.get({ path: '/stats/:mimiqueId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const mimiqueId = parseInt(req.params.mimiqueId, 10) || 0;
+  const mimiqueResponses = await getRepository(MimiqueResponse)
+    .createQueryBuilder('mimiqueResponse')
+    .leftJoinAndSelect('mimiqueResponse.user', 'user')
+    .where('`mimiqueResponse`.`mimiqueId` = :mimiqueId', { mimiqueId: mimiqueId })
+    .getMany();
+
+  res.sendJSON(mimiqueResponses || []);
+});
+
 type UpdateActivity = {
   value: MimiqueResponseValue;
 };
