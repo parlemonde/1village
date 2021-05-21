@@ -191,18 +191,10 @@ const PlayMimique: React.FC = () => {
     setSelected(parseInt(event.target.value) as MimiqueResponseValue);
   };
 
-  if (end) {
-    return (
-      <Base>
-        <div>vous avez découvert toutes les mimiques</div>
-      </Base>
-    );
-  }
-
   if (!mimique || !user) {
     return (
       <Base>
-        <div>loading ...</div>
+        <div></div>
       </Base>
     );
   }
@@ -279,7 +271,7 @@ const PlayMimique: React.FC = () => {
                       return (
                         <LinearProgressWithLabel
                           key="1"
-                          value={Math.round((stats[country]['0'] * 100) / stats[country]['total'])}
+                          value={Math.round((stats[country]['0'] * 100) / stats[country]['total']) || 0}
                           style={{ height: '0.5rem', margin: '1.2rem 0' }}
                         />
                       );
@@ -287,7 +279,7 @@ const PlayMimique: React.FC = () => {
                       return (
                         <LinearProgressWithLabel
                           key="2"
-                          value={Math.round((stats[country]['1'] * 100) / stats[country]['total'])}
+                          value={Math.round((stats[country]['1'] * 100) / stats[country]['total']) || 0}
                           style={{ height: '0.5rem', margin: '1.2rem 0' }}
                         />
                       );
@@ -295,7 +287,7 @@ const PlayMimique: React.FC = () => {
                       return (
                         <LinearProgressWithLabel
                           key="3"
-                          value={Math.round((stats[country]['2'] * 100) / stats[country]['total'])}
+                          value={Math.round((stats[country]['2'] * 100) / stats[country]['total']) || 0}
                           style={{ height: '0.5rem', margin: '1.2rem 0' }}
                         />
                       );
