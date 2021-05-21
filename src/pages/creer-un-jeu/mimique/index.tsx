@@ -4,9 +4,25 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import Button from '@material-ui/core/Button';
+import { UserContext } from 'src/contexts/userContext';
 
 const Mimique: React.FC = () => {
   const router = useRouter();
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const [ableToPlay, setAbleToPlay] = React.useState<boolean>(false);
+
+  React.useMemo(() => {
+    axiosLoggedRequest({
+      method: 'GET',
+      url: `/mimiques/ableToPlay`,
+    }).then((response) => {
+      if (!response.error && response.data) {
+        setAbleToPlay(response.data as boolean);
+      } else {
+        setAbleToPlay(false);
+      }
+    });
+  }, []);
 
   return (
     <Base>
@@ -61,6 +77,7 @@ const Mimique: React.FC = () => {
               float: 'right',
             }}
             disableElevation
+            disabled={!ableToPlay}
           >
             Découvrir des mimiques
           </Button>

@@ -14,7 +14,6 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { Modal } from 'src/components/Modal';
 import { useRouter } from 'next/router';
 import { LinearProgressProps } from '@material-ui/core/LinearProgress';
-import { useCountries } from 'src/services/useCountries';
 import { Flag } from 'src/components/Flag';
 
 const GreenRadio = withStyles({
@@ -56,13 +55,13 @@ interface StatsProps {
 
 const PlayMimique: React.FC = () => {
   const router = useRouter();
-  const [end, setEnd] = React.useState<boolean>(false);
   const [tryCount, setTryCount] = React.useState<number>(0);
   const [found, setFound] = React.useState<boolean>(false);
   const [foundError, setFoundError] = React.useState<boolean>(false);
   const [fake1Selected, setFake1Selected] = React.useState<boolean>(false);
   const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
+  const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
   const [mimique, setMimique] = React.useState<Mimique>(null);
   const [user, setUser] = React.useState<User>(null);
   const { axiosLoggedRequest } = React.useContext(UserContext);
@@ -87,10 +86,10 @@ const PlayMimique: React.FC = () => {
       method: 'GET',
       url: `/mimiques/play`,
     }).then((response) => {
-      if (!response.error && response.data) {
+      if (!response.error && response.data && response.data.length > 0) {
         setMimique(response.data as Mimique);
       } else {
-        setEnd(true);
+        setLastMimiqueModalOpen(true);
       }
     });
   }, [setMimique]);
@@ -194,7 +193,17 @@ const PlayMimique: React.FC = () => {
   if (!mimique || !user) {
     return (
       <Base>
-        <div></div>
+        <Modal
+          open={lastMimiqueModalOpen}
+          title="Oups"
+          cancelLabel="Retourner à l'accueil"
+          maxWidth="lg"
+          ariaDescribedBy="new-user-desc"
+          ariaLabelledBy="new-user-title"
+          onClose={() => router.push('/creer-un-jeu/mimique')}
+        >
+          C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
+        </Modal>
       </Base>
     );
   }
@@ -317,6 +326,17 @@ const PlayMimique: React.FC = () => {
           onClose={() => setErrorModalOpen(false)}
         >
           Dommage ! Ce n’est pas cette réponse. Essayez encore !
+        </Modal>
+        <Modal
+          open={lastMimiqueModalOpen}
+          title="Oups"
+          cancelLabel="Retourner à l'accueil"
+          maxWidth="lg"
+          ariaDescribedBy="new-user-desc"
+          ariaLabelledBy="new-user-title"
+          onClose={() => router.push('/creer-un-jeu/mimique')}
+        >
+          C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
         </Modal>
         {!found && !foundError && (
           <Button

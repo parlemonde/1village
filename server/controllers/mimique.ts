@@ -56,6 +56,17 @@ mimiqueController.get({ path: '/play', userType: UserType.TEACHER }, async (req:
   res.sendJSON(mimique || []);
 });
 
+mimiqueController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const userId = req.user.id;
+  const mimique = await getRepository(Mimique).createQueryBuilder('mimique').where('`mimique`.`userId` = :userId', { userId: userId }).getOne();
+
+  res.sendJSON(mimique ? true : false);
+});
+
 mimiqueController.get({ path: '/stats/:mimiqueId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
