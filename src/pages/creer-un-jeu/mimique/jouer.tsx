@@ -86,7 +86,8 @@ const PlayMimique: React.FC = () => {
       method: 'GET',
       url: `/mimiques/play`,
     }).then((response) => {
-      if (!response.error && response.data && response.data.length > 0) {
+      console.log(response);
+      if (!response.error && response.data) {
         setMimique(response.data as Mimique);
       } else {
         setLastMimiqueModalOpen(true);

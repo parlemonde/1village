@@ -126,6 +126,7 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
               style={{ width: '100%', margin: '10px' }}
               error={isError && !isFieldValid(mimiqueData.signification)}
               helperText={isError && !isFieldValid(mimiqueData.signification) ? 'Ce champ est obligatoire' : ''}
+              multiline
             />
             <h4>Quelle est l’origine de cette mimique ?</h4>
             <TextField
@@ -136,6 +137,7 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
               style={{ width: '100%', margin: '10px' }}
               error={isError && !isFieldValid(mimiqueData.origine)}
               helperText={isError && !isFieldValid(mimiqueData.origine) ? 'Ce champ est obligatoire' : ''}
+              multiline
             />
           </Grid>
         </Grid>
@@ -152,6 +154,7 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
           style={{ width: '100%', margin: '10px' }}
           error={isError && !isFieldValid(mimiqueData.fakeSignification1)}
           helperText={isError && !isFieldValid(mimiqueData.fakeSignification1) ? 'Ce champ est obligatoire' : ''}
+          multiline
         />
         <TextField
           variant="outlined"
@@ -161,6 +164,7 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
           style={{ width: '100%', margin: '10px' }}
           error={isError && !isFieldValid(mimiqueData.fakeSignification2)}
           helperText={isError && !isFieldValid(mimiqueData.fakeSignification2) ? 'Ce champ est obligatoire' : ''}
+          multiline
         />
         <StepsButton next={nextPage} />
       </div>

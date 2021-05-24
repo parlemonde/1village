@@ -19,17 +19,21 @@ const MimiqueStep1: React.FC = () => {
   const { user } = React.useContext(UserContext);
   const labelPresentation = getUserDisplayName(user, false);
 
+  const created = React.useRef(false);
   React.useEffect(() => {
-    if (!activity) {
-      createNewActivity(ActivityType.GAME, GameType.MIMIQUE, {
-        ...DEFAULT_MIMIQUE_DATA,
-        presentation: labelPresentation,
-      });
-    } else if (activity && (!isGame(activity) || !isMimique(activity))) {
-      createNewActivity(ActivityType.GAME, GameType.MIMIQUE, {
-        ...DEFAULT_MIMIQUE_DATA,
-        presentation: labelPresentation,
-      });
+    if (!created.current) {
+      created.current = true;
+      if (!activity || !('edit' in router.query)) {
+        createNewActivity(ActivityType.GAME, GameType.MIMIQUE, {
+          ...DEFAULT_MIMIQUE_DATA,
+          presentation: labelPresentation,
+        });
+      } else if (activity && (!isGame(activity) || !isMimique(activity))) {
+        createNewActivity(ActivityType.GAME, GameType.MIMIQUE, {
+          ...DEFAULT_MIMIQUE_DATA,
+          presentation: labelPresentation,
+        });
+      }
     }
   }, [activity, labelPresentation, createNewActivity, router]);
 
