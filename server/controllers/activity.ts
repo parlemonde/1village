@@ -395,7 +395,11 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     return;
   }
 
-  if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE) {
+  activity.status = data.status ?? activity.status;
+  activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
+  activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
+
+  if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE && activity.status === ActivityStatus.PUBLISHED) {
     const activityData = (activity.content || []).find((data) => {
       return data.key === 'json';
     });
@@ -410,20 +414,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     }
   }
 
-  activity.status = data.status ?? activity.status;
-  activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
-  activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
-
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
 
 const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
-  var mimique = new Mimique();
-
-  if (data.mimiqueId) {
-    mimique = await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } });
-  }
+  const id = data.mimiqueId;
+  var mimique = id ? await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } }) : new Mimique();
 
   mimique.signification = data.signification || '';
   mimique.fakeSignification1 = data.fakeSignification1 || '';

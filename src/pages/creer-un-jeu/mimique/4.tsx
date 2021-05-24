@@ -13,6 +13,7 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimique } from 'src/activity-types/game.const';
 import ReactPlayer from 'react-player';
+import { ActivityStatus } from 'types/activity.type';
 
 const GreenRadio = withStyles({
   root: {
@@ -28,6 +29,8 @@ const MimiqueStep4: React.FC = () => {
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as MimiquesData) || null;
+
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -84,7 +87,7 @@ const MimiqueStep4: React.FC = () => {
               <Grid item xs={12} md={2}>
                 <EditButton
                   onClick={() => {
-                    router.push('/creer-un-jeu/mimique/1');
+                    router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
                   }}
                   isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}

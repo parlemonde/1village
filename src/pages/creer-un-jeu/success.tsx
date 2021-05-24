@@ -15,7 +15,7 @@ const PresentationSuccess: React.FC = () => {
   const { activity } = React.useContext(ActivityContext);
 
   if (!activity || !isGame(activity)) {
-    router.push('/creer-un-jeu/mimique/2');
+    router.push('/creer-un-jeu/mimique');
   }
 
   return (

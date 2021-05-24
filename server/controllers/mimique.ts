@@ -53,7 +53,7 @@ mimiqueController.get({ path: '/play', userType: UserType.TEACHER }, async (req:
     .limit(1)
     .getOne();
 
-  res.sendJSON(mimique || []);
+  res.sendJSON(mimique || null);
 });
 
 mimiqueController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {

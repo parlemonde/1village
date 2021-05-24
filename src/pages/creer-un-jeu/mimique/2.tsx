@@ -51,7 +51,7 @@ const MimiqueStep2: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {<BackButton href="/creer-un-jeu/mimique/1" />}
+        {<BackButton href={`/creer-un-jeu/mimique/1?edit=${activity.id}`} />}
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={1} />
         <MimiqueSelector mimiqueNumber="2ème" mimiqueData={data.mimique2} onDataChange={dataChange} onNext={onNext} onVideoChange={videoChange} />
       </div>
