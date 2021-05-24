@@ -9,7 +9,7 @@ import { languageController } from './languages';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';
-
+import { mimiqueController } from './mimique';
 const controllerRouter = Router();
 const controllers = [
   languageController,
@@ -21,6 +21,7 @@ const controllers = [
   imageController,
   audioController,
   videoController,
+  mimiqueController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {

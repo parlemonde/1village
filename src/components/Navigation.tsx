@@ -58,7 +58,7 @@ const tabs: Tab[] = [
     label: 'Créer un jeu',
     path: '/creer-un-jeu',
     icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
+    disabled: false,
   },
   {
     label: 'Voir mes activités',
