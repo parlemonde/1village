@@ -17,7 +17,7 @@ import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
 import { ReactQueryDevtools } from 'react-query-devtools';
-import { QueryCache, ReactQueryCacheProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import React from 'react';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -42,8 +42,8 @@ interface MyAppOwnProps {
 }
 type MyAppProps = AppProps & MyAppOwnProps;
 
-const queryCache = new QueryCache({
-  defaultConfig: {
+const queryClient = new QueryClient({
+  defaultOptions: {
     queries: {
       staleTime: 3600000, // 1 hour
     },
@@ -117,7 +117,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
             horizontal: 'center',
           }}
         >
-          <ReactQueryCacheProvider queryCache={queryCache}>
+          <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken}>
               <VillageContextProvider>
                 <ActivityContextProvider>
@@ -146,7 +146,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
             </UserContextProvider>
             {/* Dev only, it won't appear after build for prod. */}
             <ReactQueryDevtools />
-          </ReactQueryCacheProvider>
+          </QueryClientProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </>

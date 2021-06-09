@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useQueryCache, useQuery, QueryFunction } from 'react-query';
+import { useQueryClient, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
 import { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivities.types';
@@ -40,7 +40,7 @@ export const useActivity = (activityId: number): { activity: AnyActivity | null 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useActivityRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const updatedActivityData = React.useCallback(
@@ -61,10 +61,10 @@ export const useActivityRequests = () => {
         });
         return;
       }
-      queryCache.invalidateQueries('activity');
-      queryCache.invalidateQueries('activities');
+      queryClient.invalidateQueries('activity');
+      queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, enqueueSnackbar, queryCache],
+    [axiosLoggedRequest, enqueueSnackbar, queryClient],
   );
 
   const deleteActivity = React.useCallback(
@@ -82,10 +82,10 @@ export const useActivityRequests = () => {
       enqueueSnackbar(isDraft ? 'Brouillon supprimé avec succès!' : 'Activité supprimée avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('activity');
-      queryCache.invalidateQueries('activities');
+      queryClient.invalidateQueries('activity');
+      queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   return {

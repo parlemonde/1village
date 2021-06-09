@@ -133,27 +133,29 @@ const Presentation: React.FC = () => {
     setIsLoading(false);
   };
 
-  const updateEditMode = (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) => async () => {
-    if (save === 'user') {
-      await checkEmailAndPseudo();
-      if (errors.email || errors.pseudo) {
-        return;
+  const updateEditMode =
+    (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) =>
+    async () => {
+      if (save === 'user') {
+        await checkEmailAndPseudo();
+        if (errors.email || errors.pseudo) {
+          return;
+        }
+        await updateUser();
+      } else if (save === 'pwd') {
+        checkPassword();
+        if (errors.pwd || errors.pwdConfirm || pwd.new.length === 0 || pwd.confirmNew.length === 0) {
+          return;
+        }
+        await updatePwd();
+      } else if (save === 'delete') {
+        deleteAccount();
+      } else {
+        setNewUser(user);
+        setDeleteConfirm('');
       }
-      await updateUser();
-    } else if (save === 'pwd') {
-      checkPassword();
-      if (errors.pwd || errors.pwdConfirm || pwd.new.length === 0 || pwd.confirmNew.length === 0) {
-        return;
-      }
-      await updatePwd();
-    } else if (save === 'delete') {
-      deleteAccount();
-    } else {
-      setNewUser(user);
-      setDeleteConfirm('');
-    }
-    setEditMode(newEditMode);
-  };
+      setEditMode(newEditMode);
+    };
 
   return (
     <Base rightNav={<HelpButton />}>

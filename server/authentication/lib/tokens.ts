@@ -31,9 +31,7 @@ export async function getAccessToken(
   };
 }
 
-export async function getNewAccessToken(
-  refreshToken: string,
-): Promise<{
+export async function getNewAccessToken(refreshToken: string): Promise<{
   accessToken: string;
   refreshToken: string;
 } | null> {

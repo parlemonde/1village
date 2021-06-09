@@ -37,7 +37,7 @@ export function getQueryString(q: string | string[]): string {
  */
 export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(func: T, wait: number, immediate: boolean): T {
   let timeout: NodeJS.Timeout;
-  return (function () {
+  return function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /*@ts-ignore */ //eslint-disable-next-line @typescript-eslint/no-this-alias, @typescript-eslint/no-explicit-any
     const context: any = this;
@@ -51,7 +51,7 @@ export function debounce<T extends (args: unknown | unknown[]) => unknown | unkn
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
-  } as unknown) as T;
+  } as unknown as T;
 }
 
 // ISO 3166-1 alpha-2

@@ -13,8 +13,7 @@ const suggestions = [
     title: 'Créer sa mascotte',
     button: 'Mascotte',
     href: '/se-presenter/mascotte/1',
-    text:
-      'Créez votre mascotte pour présenter votre classe à vos Pélicopains. Créez-la à votre image, elle vous représentera dans votre village-monde !',
+    text: 'Créez votre mascotte pour présenter votre classe à vos Pélicopains. Créez-la à votre image, elle vous représentera dans votre village-monde !',
     icon: MascotteIcon,
     disabled: true,
   },
@@ -22,8 +21,7 @@ const suggestions = [
     title: 'Créer une présentation thématique',
     button: 'Présentation thématique',
     href: '/se-presenter/thematique/1',
-    text:
-      'Partagez un aspect de votre quotidien ou de votre culture aux Pelicopains ! Présentez en vidéo, image, texte et son, votre école, votre environnement, votre plat favori, vos jeux de récréation et plus encore.',
+    text: 'Partagez un aspect de votre quotidien ou de votre culture aux Pelicopains ! Présentez en vidéo, image, texte et son, votre école, votre environnement, votre plat favori, vos jeux de récréation et plus encore.',
     icon: ThematiqueIcon,
     disabled: false,
   },
