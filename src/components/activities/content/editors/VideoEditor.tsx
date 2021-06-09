@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import ReactPlayer from 'react-player';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { Button, Divider, TextField } from '@material-ui/core';
@@ -23,7 +23,7 @@ import { EditorContainer } from './EditorContainer';
 
 export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
   const [videoUrl, setVideoUrl] = React.useState(value);
@@ -131,7 +131,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
           variant: 'error',
         });
       } else {
-        queryCache.invalidateQueries('videos');
+        queryClient.invalidateQueries('videos');
         setIsSuccessModalOpen(true);
       }
     }

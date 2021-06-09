@@ -46,6 +46,8 @@ const Map: React.FC<MapProps> = ({ position, zoom, markers = [] }: MapProps) => 
             init.current = true;
 
             // 1- Add vector maps
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             L.mapboxGL({
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore

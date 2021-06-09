@@ -102,6 +102,9 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
   }
   if (subtype === DEFI.LANGUAGE) {
     const defi = data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
+    if ((data as LanguageDefiData).objectIndex === -1) {
+      return '';
+    }
     if ((data as LanguageDefiData).objectIndex === 4 && data.defiIndex === 0) {
       return 'Trouvez la même chose dans une autre langue';
     }
@@ -119,7 +122,10 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
 export const getLanguageObject = (data: LanguageDefiData): string => {
   const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
   return replaceTokens(object, {
-    object: data.objectIndex === 4 ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
+    object:
+      data.objectIndex === -1 || data.objectIndex === 4
+        ? 'un défi'
+        : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
     language: data.language,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });

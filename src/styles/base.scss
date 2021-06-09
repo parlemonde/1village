@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import 'variables';
 
 $headerHeight: 50px;
@@ -139,26 +140,26 @@ main {
 
 @include for-small-screen {
   .header__container {
-    margin: $verticalSpacing/2 $horizontalSpacing/2 0 $horizontalSpacing/2;
+    margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
   }
   .header__search {
-    left: $menuWidthSmaller + $horizontalSpacing/2;
+    left: $menuWidthSmaller + math.div($horizontalSpacing, 2);
     width: 10rem;
   }
 
   .navigation {
     top: $headerHeight + $verticalSpacing;
-    height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
+    height: calc(100vh - #{$headerHeight + math.div(3, 2) * $verticalSpacing});
   }
   .navigation__content {
     width: $menuWidthSmaller;
-    margin: 0 $horizontalSpacing / 2;
+    margin: 0 math.div($horizontalSpacing, 2);
   }
   .navigation__button {
     font-size: 0.9rem !important;
   }
   .navigation__cgu-link {
-    right: $horizontalSpacing / 2;
+    right: math.div($horizontalSpacing, 2);
     font-size: 0.8rem !important;
   }
 
@@ -167,7 +168,7 @@ main {
     padding-left: $menuWidthSmaller + $horizontalSpacing;
   }
   .app-content {
-    width: calc(100% - #{$horizontalSpacing / 2});
+    width: calc(100% - #{math.div($horizontalSpacing, 2)});
     min-height: calc(100vh - #{$headerHeight + $verticalSpacing});
   }
   .app-content--narrower {
@@ -181,17 +182,17 @@ main {
     top: $headerHeight + $verticalSpacing;
   }
   .right-navigation > div {
-    right: $horizontalSpacing / 2;
-    height: calc(100vh - #{$headerHeight + 3 / 2 * $verticalSpacing});
+    right: math.div($horizontalSpacing, 2);
+    height: calc(100vh - #{$headerHeight + math.div(3, 2) * $verticalSpacing});
   }
   .right-navigation--smaller > div {
     height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $topNavigationHeight});
   }
 
   .sub-header {
-    margin-right: $horizontalSpacing / 2;
-    margin-bottom: $verticalSpacing / 2;
-    margin-top: $verticalSpacing / 2;
+    margin-right: math.div($horizontalSpacing, 2);
+    margin-bottom: math.div($verticalSpacing, 2);
+    margin-top: math.div($verticalSpacing, 2);
   }
 }
 

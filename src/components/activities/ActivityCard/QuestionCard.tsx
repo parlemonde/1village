@@ -21,9 +21,10 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
   const { updatedActivityData } = useActivityRequests();
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
 
-  const askSame = React.useMemo(() => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)), [
-    activity,
-  ]);
+  const askSame = React.useMemo(
+    () => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)),
+    [activity],
+  );
   const onAskSame = async () => {
     if (!user || !user.id) {
       return;

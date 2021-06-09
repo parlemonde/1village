@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -23,7 +23,7 @@ import { User } from 'types/user.type';
 
 const MascotteStep4: React.FC = () => {
   const router = useRouter();
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);
   const { countries } = useCountries();
@@ -42,12 +42,10 @@ const MascotteStep4: React.FC = () => {
     }
   }, [activity, router, updateActivity]);
 
-  const content = React.useMemo(() => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)), [
-    data,
-    countries,
-    languages,
-    currencies,
-  ]);
+  const content = React.useMemo(
+    () => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)),
+    [data, countries, languages, currencies],
+  );
 
   const prevContent = React.useRef<string[] | null>(null);
   React.useEffect(() => {
@@ -107,8 +105,8 @@ const MascotteStep4: React.FC = () => {
       });
       if (!response.error) {
         setUser({ ...user, ...newUser });
-        queryCache.invalidateQueries('users');
-        queryCache.invalidateQueries('village-users');
+        queryClient.invalidateQueries('users');
+        queryClient.invalidateQueries('village-users');
       }
       router.push('/se-presenter/success');
     }

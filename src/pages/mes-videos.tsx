@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -37,7 +37,7 @@ const StyledTableRow = withStyles(() =>
 
 const MesVideos: React.FC = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { videos } = useVideos();
   const [selectedVideo, setSelectedVideo] = React.useState<Video | null>(null);
@@ -55,7 +55,7 @@ const MesVideos: React.FC = () => {
       enqueueSnackbar('Vidéo supprimée avec succès !', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('videos');
+      queryClient.invalidateQueries('videos');
     }
   };
 
