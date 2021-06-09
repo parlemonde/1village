@@ -122,7 +122,10 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
 export const getLanguageObject = (data: LanguageDefiData): string => {
   const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
   return replaceTokens(object, {
-    object: (data.objectIndex === -1 || data.objectIndex === 4) ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
+    object:
+      data.objectIndex === -1 || data.objectIndex === 4
+        ? 'un défi'
+        : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
     language: data.language,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });
