@@ -19,7 +19,7 @@ const userController = new Controller('/users');
 userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   let users: User[] = [];
   if (req.query.villageId) {
-    users = await getRepository(User).find({ where: [{ villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 }, { villageId: null }] });
+    users = await getRepository(User).find({ where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null }] });
     const ids = users.map((u) => u.id);
     const mascottes = (
       await getRepository(Activity)

@@ -164,16 +164,16 @@ const getActivity = async (id: number) => {
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const activities = await getActivities({
-    limit: req.query.limit ? parseInt(getQueryString(req.query.limit), 10) || 200 : undefined,
-    page: req.query.page ? parseInt(getQueryString(req.query.page), 10) || 0 : undefined,
-    villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : undefined,
-    countries: req.query.countries ? getQueryString(req.query.countries).split(',') : undefined,
+    limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
+    page: req.query.page ? Number(getQueryString(req.query.page)) || 0 : undefined,
+    villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : undefined,
+    countries: req.query.countries ? (getQueryString(req.query.countries) || '').split(',') : undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
-    type: req.query.type ? parseInt(getQueryString(req.query.type), 10) ?? -1 : undefined,
-    subType: req.query.subType ? parseInt(getQueryString(req.query.subType), 10) || 0 : undefined,
-    status: req.query.status ? parseInt(getQueryString(req.query.status), 10) || 0 : undefined,
-    userId: req.query.userId ? parseInt(getQueryString(req.query.userId), 10) || 0 : undefined,
-    responseActivityId: req.query.responseActivityId ? parseInt(getQueryString(req.query.responseActivityId), 10) || 0 : undefined,
+    type: req.query.type ? Number(getQueryString(req.query.type)) ?? -1 : undefined,
+    subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
+    status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
+    userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
+    responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
   });
   res.sendJSON(activities);
 });
@@ -202,12 +202,12 @@ activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (re
 
   const search: { userId: number; villageId: number; type: string; status: string; subType?: number } = {
     userId: req.user?.id ?? 0,
-    villageId: req.query.villageId ? parseInt(getQueryString(req.query.villageId), 10) || 0 : 0,
-    type: `${req.query.type ? parseInt(getQueryString(req.query.type), 10) || 0 : 0}`,
+    villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : 0,
+    type: `${req.query.type ? Number(getQueryString(req.query.type)) || 0 : 0}`,
     status: `${ActivityStatus.DRAFT}`,
   };
   if (req.query.subType !== undefined) {
-    search.subType = req.query.subType ? parseInt(getQueryString(req.query.subType), 10) ?? 0 : 0;
+    search.subType = req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : 0;
   }
   const activityId =
     (

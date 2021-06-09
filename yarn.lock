@@ -24,6 +24,7 @@ __metadata:
     "@types/eslint": ^7.2.6
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/express": ^4.17.9
+    "@types/express-useragent": ^1
     "@types/fs-extra": ^9
     "@types/json-stable-stringify": ^1.0.32
     "@types/jsonwebtoken": ^8.5.0
@@ -80,6 +81,7 @@ __metadata:
     eslint-plugin-react: ^7.22.0
     eslint-plugin-react-hooks: ^4.2.0
     express: ^4.17.1
+    express-useragent: ^1.0.15
     fs-extra: ^9.1.0
     helmet: ^4.4.1
     html-to-draftjs: ^1.5.0
@@ -118,6 +120,7 @@ __metadata:
     typescript: ^4.1.2
     uuid: ^8.3.2
     vimeo: ^2.1.1
+    web-vitals: ^1.1.1
     webpack: ^5.11.0
     webpack-bundle-analyzer: ^4.3.0
     winston: ^3.3.3
@@ -2119,6 +2122,15 @@ __metadata:
     "@types/qs": "*"
     "@types/range-parser": "*"
   checksum: 3238adcdd1587247db567f9c65743563c357fa9996395ae3719d4ee03052056c6f02c42773655b7b0c44c0c160a68f0a1b688fd2168af512071f6d79cd813f36
+  languageName: node
+  linkType: hard
+
+"@types/express-useragent@npm:^1":
+  version: 1.0.0
+  resolution: "@types/express-useragent@npm:1.0.0"
+  dependencies:
+    "@types/express": "*"
+  checksum: ed8ebb42022a981983a9a252bca5df55d575a7d6c67e8bf9d71ad8d87d8a0840207a6d7c5b453946bf74cec8ef345b634154cb702be51c5c6c89d09ab5827444
   languageName: node
   linkType: hard
 
@@ -6417,6 +6429,13 @@ __metadata:
   version: 2.0.3
   resolution: "expand-template@npm:2.0.3"
   checksum: d1c08a374a2335647562d6958bf23a40371fd9eb64362f3a2475b232a8d2e4bfa8f746066ff45c17efde185dab66f5d0824eaaa26e3e491d03bff50be0be7c3d
+  languageName: node
+  linkType: hard
+
+"express-useragent@npm:^1.0.15":
+  version: 1.0.15
+  resolution: "express-useragent@npm:1.0.15"
+  checksum: 62c67f4f0103db402e1b29e5877b85a2b9f46e6853c06c6ab4089aa2059d50f99b6ec4ce8758b6ae58e08b30a67c989ea8b9e1aac223db6fbb97d25957bbbf42
   languageName: node
   linkType: hard
 
@@ -13873,6 +13892,13 @@ typescript@^4.1.2:
     glob-to-regexp: ^0.4.1
     graceful-fs: ^4.1.2
   checksum: a02b3f4023558e8bab20473ca0cfecc0624012272f73f2cac1c0d8fbbd6cfafda2975ff5a3ce3d9b0b1f72770868fe02ff043fceafcc6324acd11fc4cd16b973
+  languageName: node
+  linkType: hard
+
+"web-vitals@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "web-vitals@npm:1.1.1"
+  checksum: e84e449f46d5bdae9bc3d9d03647e654970bbe7fd448ecc8051ae06bcb869aa29cdcd16486786db416ca7a6e43a2f87e0f66662437ec5679761bcdd753a8c055
   languageName: node
   linkType: hard
 
