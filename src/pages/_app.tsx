@@ -11,8 +11,8 @@ import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
 import 'src/styles/se-presenter.scss';
 
-import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import App from 'next/app';
+import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
@@ -31,6 +31,7 @@ import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
+import { useAnalytics } from 'src/hooks/useAnalytics';
 import theme from 'src/styles/theme';
 import { initH5p } from 'src/utils/initH5p';
 import type { User } from 'types/user.type';
@@ -98,6 +99,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
       $body.classList.remove('admin');
     }
   }, [isOnAdmin]);
+
+  useAnalytics();
 
   return (
     <>
