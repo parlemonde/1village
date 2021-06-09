@@ -59,6 +59,7 @@ __metadata:
     axios: ^0.21.1
     base64url: ^3.0.1
     body-parser: ^1.19.0
+    chart.js: ^3.3.2
     classnames: ^2.2.6
     cookie-parser: ^1.4.5
     cors: ^2.8.5
@@ -4376,6 +4377,13 @@ __metadata:
   version: 0.0.2
   resolution: "charenc@npm:0.0.2"
   checksum: ff8199e90334dc7bb60a9fe0aa2bef3e72b1d125e801151459db1cf1c9b77c437ad4a5d9248ee0003720bcb537a90787a53f6e2e1613dbf5fba46f59d5547307
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "chart.js@npm:3.3.2"
+  checksum: f776eb9d92dc5f8f73c7a6685bd86ad2827c7f50a2d4c83ed56b2f3e10bb4aef651347f35c3424104764bd17d9925b69ea5eacd056a9c91fb9c75cc97cdd2456
   languageName: node
   linkType: hard
 

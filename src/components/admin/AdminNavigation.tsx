@@ -12,6 +12,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import GroupIcon from '@material-ui/icons/Group';
 import InsertChartOutlinedOutlinedIcon from '@material-ui/icons/InsertChartOutlinedOutlined';
 import LanguageIcon from '@material-ui/icons/Language';
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 const drawerWidth = 220;
 
@@ -30,7 +31,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-const tabs = ['villages', 'users', 'stats'];
+const tabs = ['villages', 'users', 'stats', 'analytics'];
 
 export const AdminNavigation: React.FC = () => {
   const classes = useStyles();
@@ -77,6 +78,12 @@ export const AdminNavigation: React.FC = () => {
               <InsertChartOutlinedOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="Statistiques" />
+          </ListItem>
+          <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/analytics')}>
+            <ListItemIcon>
+              <TimelineIcon />
+            </ListItemIcon>
+            <ListItemText primary="Web Analytics" />
           </ListItem>
         </List>
       </div>

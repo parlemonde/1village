@@ -1,18 +1,154 @@
 import { JSONSchemaType } from 'ajv';
 import useragent from 'express-useragent';
-import { getRepository } from 'typeorm';
+import { getRepository, Between } from 'typeorm';
 
+import type { AnalyticData } from 'types/analytics.type';
 import type { NavigationPerf, BrowserPerf } from 'types/analytics.type';
 
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
-import { handleErrors } from '../middlewares/handleErrors';
+import { UserType } from '../entities/user';
+import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
-import { generateTemporaryToken } from '../utils';
+import { generateTemporaryToken, getQueryString } from '../utils';
 
 import { Controller } from './controller';
 
 const analyticController = new Controller('/analytics');
+
+const getAggregate = (agg: string = 'hour'): AnalyticData['aggregation'] => {
+  if (agg === 'month') {
+    return 'month';
+  }
+  if (agg === 'day') {
+    return 'day';
+  }
+  return 'hour';
+};
+
+const countAttribute = <T extends string | number>(arr: Array<T | null>): Partial<Record<T, number>> => {
+  const result: Partial<Record<T, number>> = {};
+  for (const o of arr) {
+    if (o === null) {
+      continue;
+    }
+    if (result[o] !== undefined) {
+      (result[o] as number) += 1;
+    } else {
+      result[o] = 1;
+    }
+  }
+  return result;
+};
+
+const MONTH_MS = 2678400000;
+const DAY_MS = 86400000;
+const HOUR_MS = 3600000;
+
+analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) => {
+  const aggregate = getAggregate(getQueryString(req.query.aggregate));
+  const fromTimestamp = Number(getQueryString(req.query.from)) || 0;
+  const toTimestamp = Number(getQueryString(req.query.to)) || 0;
+
+  let from: Date, to: Date;
+  if (fromTimestamp && toTimestamp) {
+    from = new Date(fromTimestamp);
+    to = new Date(toTimestamp);
+  } else {
+    from = new Date();
+    from.setHours(0, 0, 0, 0);
+    to = new Date(from);
+    to.setDate(from.getDate() + 1);
+  }
+
+  // Check timerange
+  const diff = to.getTime() - from.getTime();
+  if (diff < 0) {
+    throw new AppError('Invalid timerange', ErrorCode.UNKNOWN);
+  }
+  if (aggregate === 'month' && diff > 300 * MONTH_MS) {
+    throw new AppError('Timerange too big, please select a narrower timerange', ErrorCode.UNKNOWN);
+  }
+  if (aggregate === 'day' && diff > 300 * DAY_MS) {
+    throw new AppError('Timerange too big, please select a narrower timerange', ErrorCode.UNKNOWN);
+  }
+  if (aggregate === 'hour' && diff > 300 * HOUR_MS) {
+    throw new AppError('Timerange too big, please select a narrower timerange', ErrorCode.UNKNOWN);
+  }
+
+  // [1] get pageview and sessions.
+  const pageViews = await getRepository(AnalyticPageView).find({ where: { date: Between(from, to) } });
+  const allSessions = await getRepository(AnalyticSession).find({ where: { date: Between(from, to) } });
+  const allDurations = allSessions.filter((s) => s.duration !== null).map((s) => s.duration as number);
+
+  // [2] aggregate sessions per timestamps.
+  const aggSessions: Record<number, AnalyticSession[]> = {};
+  let currentDate = new Date(from);
+  let sessionIndex = 0;
+  currentDate.setHours(0, 0, 0, 0);
+  if (aggregate === 'month') {
+    currentDate.setDate(1);
+  }
+  while (currentDate.getTime() < to.getTime()) {
+    const currentTimestamp = currentDate.getTime();
+    const nextDate = new Date(currentDate);
+    if (aggregate === 'hour') {
+      nextDate.setHours(nextDate.getHours() + 1);
+    } else if (aggregate === 'day') {
+      nextDate.setDate(nextDate.getDate() + 1);
+    } else {
+      nextDate.setMonth(nextDate.getMonth() + 1);
+    }
+
+    aggSessions[currentTimestamp] = [];
+    while (allSessions.length > sessionIndex && allSessions[sessionIndex].date.getTime() < nextDate.getTime()) {
+      aggSessions[currentTimestamp] = aggSessions[currentTimestamp].concat(allSessions[sessionIndex]);
+      sessionIndex += 1;
+    }
+    currentDate = nextDate;
+  }
+
+  // [3] compute sessions
+  const sessions: AnalyticData['sessions'] = {
+    labels: [],
+    visitors: { total: 0, data: [] },
+    uniqueVisitors: { total: 0, data: [] },
+    meanDuration: allDurations.reduce<number>((a, b) => a + b, 0) / allDurations.length,
+    pageCount: pageViews.length,
+  };
+  for (const key of Object.keys(aggSessions)) {
+    const uIds = aggSessions[Number(key)].map((s) => s.uniqueId);
+    sessions.labels.push(Number(key));
+    sessions.visitors.data.push(uIds.length);
+    sessions.visitors.total += uIds.length;
+    sessions.uniqueVisitors.data.push(new Set(uIds).size);
+    sessions.uniqueVisitors.total += new Set(uIds).size;
+  }
+
+  // [4] compute pages
+  const pages: AnalyticData['pages'] = {
+    all: countAttribute(pageViews.map((p) => p.page)),
+    referrers: countAttribute(pageViews.map((p) => p.referrer)),
+    initial: countAttribute(allSessions.map((s) => s.initialPage)),
+  };
+
+  // [5] compute browsers
+  const users: AnalyticData['users'] = {
+    browsers: countAttribute(allSessions.map((s) => s.browserName)),
+    versions: countAttribute(allSessions.map((s) => s.browserVersion)),
+    os: countAttribute(allSessions.map((s) => s.os)),
+    width: countAttribute(allSessions.map((s) => s.width)),
+    type: countAttribute(allSessions.map((s) => s.type)),
+  };
+
+  const fullData: AnalyticData = {
+    sessions,
+    pages,
+    users,
+    aggregation: aggregate,
+  };
+  res.sendJSON(fullData);
+});
 
 type AddAnalytic = {
   sessionId: string;
