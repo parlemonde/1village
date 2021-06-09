@@ -310,9 +310,9 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     await getRepository(Activity).delete({
       userId: req.user.id,
       villageId,
-      type: (`${data.type}` as unknown) as ActivityType,
+      type: `${data.type}` as unknown as ActivityType,
       subType: data.subType ?? null,
-      status: (`${ActivityStatus.DRAFT}` as unknown) as ActivityStatus,
+      status: `${ActivityStatus.DRAFT}` as unknown as ActivityStatus,
     });
   }
 

@@ -42,12 +42,10 @@ const MascotteStep4: React.FC = () => {
     }
   }, [activity, router, updateActivity]);
 
-  const content = React.useMemo(() => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)), [
-    data,
-    countries,
-    languages,
-    currencies,
-  ]);
+  const content = React.useMemo(
+    () => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)),
+    [data, countries, languages, currencies],
+  );
 
   const prevContent = React.useRef<string[] | null>(null);
   React.useEffect(() => {

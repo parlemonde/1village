@@ -77,9 +77,7 @@ export class AwsS3 {
     this.initialized = true;
   }
 
-  public async getFileData(
-    filename: string,
-  ): Promise<{
+  public async getFileData(filename: string): Promise<{
     AcceptRanges: string;
     LastModified: Date;
     ContentLength: number;
