@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { Card, CircularProgress } from '@material-ui/core';
@@ -57,7 +57,7 @@ const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, fals
 
 export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
   const router = useRouter();
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [activity, setActivity] = React.useState<AnyActivity | null>(null);
@@ -343,7 +343,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
         clearTimeout(draftStepTimeout.current);
         setDraftStep(1);
       }
-      queryCache.invalidateQueries('activities');
+      queryClient.invalidateQueries('activities');
       let result = false;
       if (activity.id === 0) {
         result = await createActivity(publish);
@@ -361,7 +361,7 @@ export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = (
       }
       return result;
     },
-    [queryCache, createActivity, editActivity, publishActivity, activity],
+    [queryClient, createActivity, editActivity, publishActivity, activity],
   );
 
   return (

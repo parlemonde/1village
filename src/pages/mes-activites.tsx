@@ -1,4 +1,4 @@
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
@@ -13,7 +13,7 @@ import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 
 const MesActivites: React.FC = () => {
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);
   const { activities } = useActivities({
@@ -52,8 +52,8 @@ const MesActivites: React.FC = () => {
       });
       if (!response.error) {
         setUser({ ...user, ...newUser });
-        queryCache.invalidateQueries('users');
-        queryCache.invalidateQueries('village-users');
+        queryClient.invalidateQueries('users');
+        queryClient.invalidateQueries('village-users');
       }
     }
     setDeleteIndex({ index: -1, isDraft: false });

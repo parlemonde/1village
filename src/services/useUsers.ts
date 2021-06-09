@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useQueryCache, useQuery, QueryFunction } from 'react-query';
+import { useQueryClient, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
@@ -7,7 +7,7 @@ import type { User } from 'types/user.type';
 
 export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
 
   const getUsers: QueryFunction<User[]> = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
@@ -23,9 +23,9 @@ export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } 
 
   const setUsers = React.useCallback(
     (newUsers: User[]) => {
-      queryCache.setQueryData(['users'], newUsers);
+      queryClient.setQueryData(['users'], newUsers);
     },
-    [queryCache],
+    [queryClient],
   );
 
   return {
@@ -37,7 +37,7 @@ export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useUserRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const addUser = React.useCallback(
@@ -56,10 +56,10 @@ export const useUserRequests = () => {
       enqueueSnackbar('Utilisateur créé avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('users');
+      queryClient.invalidateQueries('users');
       return response.data as User;
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const editUser = React.useCallback(
@@ -79,10 +79,10 @@ export const useUserRequests = () => {
       enqueueSnackbar('Utilisateur modifié avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('users');
+      queryClient.invalidateQueries('users');
       return response.data as User;
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const deleteUser = React.useCallback(
@@ -100,9 +100,9 @@ export const useUserRequests = () => {
       enqueueSnackbar('Utilisateur supprimé avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('users');
+      queryClient.invalidateQueries('users');
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   return {

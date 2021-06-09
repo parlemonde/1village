@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useQueryCache, useQuery, QueryFunction } from 'react-query';
+import { useQueryClient, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
@@ -7,7 +7,7 @@ import type { Village } from 'types/village.type';
 
 export const useVillages = (): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
 
   const getVillages: QueryFunction<Village[]> = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
@@ -23,9 +23,9 @@ export const useVillages = (): { villages: Village[]; setVillages(newVillages: V
 
   const setVillages = React.useCallback(
     (newVillages: Village[]) => {
-      queryCache.setQueryData(['villages'], newVillages);
+      queryClient.setQueryData(['villages'], newVillages);
     },
-    [queryCache],
+    [queryClient],
   );
 
   return {
@@ -37,7 +37,7 @@ export const useVillages = (): { villages: Village[]; setVillages(newVillages: V
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useVillageRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const addVillage = React.useCallback(
@@ -56,10 +56,10 @@ export const useVillageRequests = () => {
       enqueueSnackbar('Village créé avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('villages');
+      queryClient.invalidateQueries('villages');
       return response.data as Village;
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const editVillage = React.useCallback(
@@ -79,10 +79,10 @@ export const useVillageRequests = () => {
       enqueueSnackbar('Village modifié avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('villages');
+      queryClient.invalidateQueries('villages');
       return response.data as Village;
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const deleteVillage = React.useCallback(
@@ -100,9 +100,9 @@ export const useVillageRequests = () => {
       enqueueSnackbar('Village supprimé avec succès!', {
         variant: 'success',
       });
-      queryCache.invalidateQueries('villages');
+      queryClient.invalidateQueries('villages');
     },
-    [axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const importVillages = React.useCallback(async () => {
@@ -126,8 +126,8 @@ export const useVillageRequests = () => {
         variant: 'success',
       },
     );
-    queryCache.invalidateQueries('villages');
-  }, [axiosLoggedRequest, queryCache, enqueueSnackbar]);
+    queryClient.invalidateQueries('villages');
+  }, [axiosLoggedRequest, queryClient, enqueueSnackbar]);
 
   return {
     addVillage,
