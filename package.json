@@ -109,7 +109,7 @@
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.7.1",
     "leaflet-fullscreen": "^1.0.2",
-    "mapbox-gl": "^1.5.1",
+    "mapbox-gl": "^2.3.0",
     "mapbox-gl-leaflet": "^0.0.14",
     "md5": "^2.3.0",
     "morgan": "^1.10.0",
