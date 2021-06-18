@@ -53,7 +53,6 @@ export interface AnalyticPerformance {
 // ----- Computed analytics -----
 export type AnalyticData = {
   sessions: {
-    labels: number[];
     visitors: {
       total: number;
       data: number[];
@@ -77,5 +76,23 @@ export type AnalyticData = {
     width: Partial<Record<string, number>>;
     type: Partial<Record<string, number>>;
   };
+  perf: {
+    lcp: {
+      total: number;
+      avg: number;
+      data: number[];
+    };
+    fid: {
+      total: number;
+      avg: number;
+      data: number[];
+    };
+    cls: {
+      total: number;
+      avg: number;
+      data: number[];
+    };
+  };
+  labels: number[];
   aggregation: 'day' | 'hour' | 'month';
 };

@@ -41,6 +41,24 @@ const countAttribute = <T extends string | number>(arr: Array<T | null>): Partia
   return result;
 };
 
+const getPerfData = (aggPerfs: Record<number, AnalyticPerformance[]>, perf: keyof BrowserPerf | keyof NavigationPerf) => {
+  let total = 0;
+  let avg = 0;
+  const data: number[] = [];
+  for (const key of Object.keys(aggPerfs)) {
+    const perfs = aggPerfs[Number(key)].filter((d) => perf in d.data);
+    const aggSum = perfs.reduce<number>((sum, d) => sum + (d.data as Record<string, number>)[perf], 0);
+    data.push(perfs.length === 0 ? 0 : aggSum / perfs.length);
+    avg = total + perfs.length === 0 ? 0 : (avg * total + aggSum) / (total + perfs.length);
+    total += perfs.length;
+  }
+  return {
+    total,
+    avg,
+    data,
+  };
+};
+
 const MONTH_MS = 2678400000;
 const DAY_MS = 86400000;
 const HOUR_MS = 3600000;
@@ -77,18 +95,18 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
   }
 
   // [1] get pageview and sessions.
-  const pageViews = await getRepository(AnalyticPageView).find({ where: { date: Between(from, to) } });
-  const allSessions = await getRepository(AnalyticSession).find({ where: { date: Between(from, to) } });
+  const pageViews = await getRepository(AnalyticPageView).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
+  const allSessions = await getRepository(AnalyticSession).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
+  const allPerfs = await getRepository(AnalyticPerformance).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
   const allDurations = allSessions.filter((s) => s.duration !== null).map((s) => s.duration as number);
+  const labels: number[] = [];
 
-  // [2] aggregate sessions per timestamps.
+  // [2] aggregate sessions and performances per timestamps.
   const aggSessions: Record<number, AnalyticSession[]> = {};
+  const aggPerfs: Record<number, AnalyticPerformance[]> = {};
   let currentDate = new Date(from);
   let sessionIndex = 0;
-  currentDate.setHours(0, 0, 0, 0);
-  if (aggregate === 'month') {
-    currentDate.setDate(1);
-  }
+  let perfIndex = 0;
   while (currentDate.getTime() < to.getTime()) {
     const currentTimestamp = currentDate.getTime();
     const nextDate = new Date(currentDate);
@@ -99,30 +117,33 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
     } else {
       nextDate.setMonth(nextDate.getMonth() + 1);
     }
+    labels.push(currentTimestamp);
 
     aggSessions[currentTimestamp] = [];
     while (allSessions.length > sessionIndex && allSessions[sessionIndex].date.getTime() < nextDate.getTime()) {
       aggSessions[currentTimestamp] = aggSessions[currentTimestamp].concat(allSessions[sessionIndex]);
       sessionIndex += 1;
     }
+
+    aggPerfs[currentTimestamp] = [];
+    while (allPerfs.length > perfIndex && allPerfs[perfIndex].date.getTime() < nextDate.getTime()) {
+      aggPerfs[currentTimestamp] = aggPerfs[currentTimestamp].concat(allPerfs[perfIndex]);
+      perfIndex += 1;
+    }
     currentDate = nextDate;
   }
 
   // [3] compute sessions
   const sessions: AnalyticData['sessions'] = {
-    labels: [],
-    visitors: { total: 0, data: [] },
-    uniqueVisitors: { total: 0, data: [] },
+    visitors: { total: allSessions.length, data: [] },
+    uniqueVisitors: { total: new Set(allSessions.map((s) => s.uniqueId)).size, data: [] },
     meanDuration: allDurations.reduce<number>((a, b) => a + b, 0) / allDurations.length,
     pageCount: pageViews.length,
   };
   for (const key of Object.keys(aggSessions)) {
     const uIds = aggSessions[Number(key)].map((s) => s.uniqueId);
-    sessions.labels.push(Number(key));
     sessions.visitors.data.push(uIds.length);
-    sessions.visitors.total += uIds.length;
     sessions.uniqueVisitors.data.push(new Set(uIds).size);
-    sessions.uniqueVisitors.total += new Set(uIds).size;
   }
 
   // [4] compute pages
@@ -141,10 +162,18 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
     type: countAttribute(allSessions.map((s) => s.type)),
   };
 
+  const perf: AnalyticData['perf'] = {
+    lcp: getPerfData(aggPerfs, 'lcp'),
+    fid: getPerfData(aggPerfs, 'fid'),
+    cls: getPerfData(aggPerfs, 'cls'),
+  };
+
   const fullData: AnalyticData = {
     sessions,
     pages,
     users,
+    perf,
+    labels,
     aggregation: aggregate,
   };
   res.sendJSON(fullData);

@@ -31,8 +31,15 @@ const CONFIG: Omit<ChartConfiguration<'line', number[], string>, 'data'> = {
         grid: {
           display: false,
         },
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: 10,
+          maxRotation: 0,
+          minRotation: 0,
+        },
       },
       y: {
+        min: 0,
         grid: {
           drawTicks: false,
         },
@@ -56,7 +63,7 @@ interface TimeserieWidgetProps {
 
 const getLabel = (date: Date, aggregation: AnalyticData['aggregation']): string => {
   if (aggregation === 'hour') {
-    return `${date.getHours()}h`;
+    return `${date.getHours()}:00`;
   }
   if (aggregation === 'day') {
     return `${date.getDate()} ${date.toLocaleString('fr-FR', { month: 'long' })}`;

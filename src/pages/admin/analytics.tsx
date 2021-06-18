@@ -11,11 +11,27 @@ import { UserContext } from 'src/contexts/userContext';
 import { serializeToQueryUrl } from 'src/utils';
 import type { AnalyticData } from 'types/analytics.type';
 
-const NumberStat = ({ label, value }: { label: string; value: string }) => {
+const GREEN_COLOR = '#92e892';
+const ORANGE_COLOR = '#f7b045';
+const RED_COLOR = '#f26650';
+
+const getBackgroundColor = (range: number[], value: number): string => {
+  if (range.length === 0 || value < range[0]) {
+    return GREEN_COLOR;
+  }
+  if (range.length === 1 || value < range[1]) {
+    return ORANGE_COLOR;
+  }
+  return RED_COLOR;
+};
+
+const NumberStat = ({ label, value, color }: { label: string; value: string; color?: string }) => {
   return (
     <Grid item xs={6} md="auto" style={{ position: 'relative' }}>
       <span>{label}</span>
-      <div className="stat-number">{value}</div>
+      <div className="stat-number" style={{ backgroundColor: color }}>
+        {value}
+      </div>
       <div style={{ borderRight: '1px solid #bbbbbb', height: '60%', position: 'absolute', right: '-1px', top: '20%' }} />
     </Grid>
   );
@@ -34,7 +50,7 @@ const Stats: React.FC = () => {
       url: `/analytics${serializeToQueryUrl({
         from: period.startDate.getTime(),
         to: period.endDate.getTime(),
-        aggregate: period.type === 'day' ? 'hours' : period.type === 'month' ? 'day' : 'month',
+        aggregate: period.type === 'day' ? 'hour' : period.type === 'month' ? 'day' : 'month',
       })}`,
     });
     if (!response.error) {
@@ -108,13 +124,13 @@ const Stats: React.FC = () => {
                     <NumberStat label="Visiteurs uniques" value={`${data.sessions.uniqueVisitors.total}`} />
                     <NumberStat label="Visiteurs" value={`${data.sessions.visitors.total}`} />
                     <NumberStat label="Nombre de pages vues" value={`${data.sessions.pageCount}`} />
-                    <NumberStat label="Durées moyennes des sessions" value={`${data.sessions.meanDuration}`} />
+                    <NumberStat label="Durées moyennes des sessions" value={`${Math.round(data.sessions.meanDuration)}`} />
                   </>
                 )}
               </Grid>
               {data !== null && (
                 <TimeserieWidget
-                  labels={data.sessions.labels}
+                  labels={data.labels}
                   datasets={[
                     {
                       name: 'Visiteurs',
@@ -141,52 +157,91 @@ const Stats: React.FC = () => {
               <div style={{ margin: '0.25rem 0' }}>
                 <strong>Signaux Web Essentiels</strong> (Core Web Vitals)
               </div>
-              <Grid container justify="flex-start" spacing={4} style={{ overflow: 'hidden', margin: '0.5rem -16px' }}>
-                <NumberStat label="Moyenne LCP" value="345" />
-                <NumberStat label="Moyenne FID" value="0.3432" />
-                <NumberStat label="Moyenne CLS" value="23" />
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} md={6}>
-                  <TimeserieWidget
-                    title="Temps de chargement: Largest contentful paint (LCP)"
-                    labels={[162222127556, 1622221275456, 1622221275556, 1622221275656, 1622221275756, 1622221275856]}
-                    datasets={[
-                      {
-                        name: 'Visiteurs',
-                        data: [3, 10, 5, 2, 20, 30, 45],
-                      },
-                    ]}
-                    aggregation="hour"
+              {data !== null && (
+                <Grid container justify="flex-start" spacing={4} style={{ overflow: 'hidden', margin: '0.5rem -16px' }}>
+                  <NumberStat
+                    label="Moyenne LCP"
+                    value={`${Math.round(data.perf.lcp.avg) / 1000}s`}
+                    color={getBackgroundColor([2.4, 4], Math.round(data.perf.lcp.avg) / 1000)}
+                  />
+                  <NumberStat
+                    label="Moyenne FID"
+                    value={`${Math.round(data.perf.fid.avg)}ms`}
+                    color={getBackgroundColor([100, 300], Math.round(data.perf.fid.avg))}
+                  />
+                  <NumberStat
+                    label="Moyenne CLS"
+                    value={`${Math.round(data.perf.cls.avg * 10000) / 10000}`}
+                    color={getBackgroundColor([0.1, 0.25], Math.round(data.perf.cls.avg * 10000) / 10000)}
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <TimeserieWidget
-                    title="Interactivité: First input delay (FID)"
-                    labels={[162222127556, 1622221275456, 1622221275556, 1622221275656, 1622221275756, 1622221275856]}
-                    datasets={[
-                      {
-                        name: 'Visiteurs',
-                        data: [3, 10, 5, 2, 20, 30, 45],
-                      },
-                    ]}
-                    aggregation="hour"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TimeserieWidget
-                    title="Stabilité visuelle: Cumulative layout shift (CLS)"
-                    labels={[162222127556, 1622221275456, 1622221275556, 1622221275656, 1622221275756, 1622221275856]}
-                    datasets={[
-                      {
-                        name: 'Visiteurs',
-                        data: [3, 10, 5, 2, 20, 30, 45],
-                      },
-                    ]}
-                    aggregation="hour"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}></Grid>
+              )}
+              <Grid container alignItems="center">
+                {data !== null && (
+                  <>
+                    <Grid item xs={12} md={6}>
+                      <TimeserieWidget
+                        title="Temps de chargement: Largest contentful paint (LCP)"
+                        labels={data.labels}
+                        datasets={[
+                          {
+                            name: 'LCP',
+                            data: data.perf.lcp.data.map((d) => Math.round(d) / 1000),
+                          },
+                        ]}
+                        aggregation={data.aggregation}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TimeserieWidget
+                        title="Interactivité: First input delay (FID)"
+                        labels={data.labels}
+                        datasets={[
+                          {
+                            name: 'FID',
+                            data: data.perf.fid.data.map((d) => Math.round(d)),
+                          },
+                        ]}
+                        aggregation={data.aggregation}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TimeserieWidget
+                        title="Stabilité visuelle: Cumulative layout shift (CLS)"
+                        labels={data.labels}
+                        datasets={[
+                          {
+                            name: 'CLS',
+                            data: data.perf.cls.data.map((d) => Math.round(d * 10000) / 10000),
+                          },
+                        ]}
+                        aggregation={data.aggregation}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                        <div style={{ flex: 1 }}>
+                          <img
+                            style={{ width: '100%', height: 'auto' }}
+                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/ZZU8Z7TMKXmzZT2mCjJU.svg"
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <img
+                            style={{ width: '100%', height: 'auto' }}
+                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg"
+                          />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <img
+                            style={{ width: '100%', height: 'auto' }}
+                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dgpDFckbHwwOKdIGDa3N.svg"
+                          />
+                        </div>
+                      </div>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </Paper>
           </Grid>
