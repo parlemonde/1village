@@ -17,6 +17,7 @@ interface MimiqueSelectorProps {
   onDataChange(key: keyof MimiqueData): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   onVideoChange(newValue: string): void;
   onNext(): void;
+  onPrev(): void;
 }
 
 const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
@@ -25,6 +26,7 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
   onDataChange,
   onVideoChange,
   onNext,
+  onPrev,
 }: MimiqueSelectorProps) => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const { user } = React.useContext(UserContext);
@@ -61,6 +63,11 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
     } else {
       setIsError(true);
     }
+  };
+
+  const prevPage = () => {
+    save().catch(console.error);
+    onPrev();
   };
 
   if (!user || !mimiqueData) {
@@ -126,8 +133,16 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
               style={{ width: '100%', margin: '10px' }}
               error={isError && !isFieldValid(mimiqueData.signification)}
               helperText={isError && !isFieldValid(mimiqueData.signification) ? 'Ce champ est obligatoire' : ''}
+              inputProps={{
+                maxLength: 800,
+              }}
               multiline
             />
+            {!(isError && !isFieldValid(mimiqueData.signification)) && (
+              <div style={{ width: '100%', textAlign: 'right' }}>
+                <span className="text text--small">{mimiqueData.signification?.length}/800</span>
+              </div>
+            )}
             <h4>Quelle est l’origine de cette mimique ?</h4>
             <TextField
               variant="outlined"
@@ -137,11 +152,19 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
               style={{ width: '100%', margin: '10px' }}
               error={isError && !isFieldValid(mimiqueData.origine)}
               helperText={isError && !isFieldValid(mimiqueData.origine) ? 'Ce champ est obligatoire' : ''}
+              inputProps={{
+                maxLength: 800,
+              }}
               multiline
             />
+            {!(isError && !isFieldValid(mimiqueData.origine)) && (
+              <div style={{ width: '100%', textAlign: 'right' }}>
+                <span className="text text--small">{mimiqueData.origine?.length}/800</span>
+              </div>
+            )}
           </Grid>
         </Grid>
-        <h1>Présentez en vidéo une {mimiqueNumber} mimique à vos Pélicopains</h1>
+        <h1>Inventez deux significations fausses à cette mimique</h1>
         <p>
           Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut
           inventer :
@@ -154,8 +177,16 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
           style={{ width: '100%', margin: '10px' }}
           error={isError && !isFieldValid(mimiqueData.fakeSignification1)}
           helperText={isError && !isFieldValid(mimiqueData.fakeSignification1) ? 'Ce champ est obligatoire' : ''}
+          inputProps={{
+            maxLength: 800,
+          }}
           multiline
         />
+        {!(isError && !isFieldValid(mimiqueData.fakeSignification1)) && (
+          <div style={{ width: '100%', textAlign: 'right' }}>
+            <span className="text text--small">{mimiqueData.fakeSignification1?.length}/800</span>
+          </div>
+        )}
         <TextField
           variant="outlined"
           label="Signification inventée 2"
@@ -164,9 +195,17 @@ const MimiqueSelector: React.FC<MimiqueSelectorProps> = ({
           style={{ width: '100%', margin: '10px' }}
           error={isError && !isFieldValid(mimiqueData.fakeSignification2)}
           helperText={isError && !isFieldValid(mimiqueData.fakeSignification2) ? 'Ce champ est obligatoire' : ''}
+          inputProps={{
+            maxLength: 800,
+          }}
           multiline
         />
-        <StepsButton next={nextPage} />
+        {!(isError && !isFieldValid(mimiqueData.fakeSignification2)) && (
+          <div style={{ width: '100%', textAlign: 'right' }}>
+            <span className="text text--small">{mimiqueData.fakeSignification2?.length}/800</span>
+          </div>
+        )}
+        <StepsButton prev={onPrev ? prevPage : undefined} next={nextPage} />
       </div>
     </>
   );

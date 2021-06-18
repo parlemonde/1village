@@ -9,6 +9,7 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import MimiqueSelector from 'src/components/selectors/MimiqueSelector';
+import { ActivityStatus } from 'types/activity.type';
 
 const MimiqueStep3: React.FC = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const MimiqueStep3: React.FC = () => {
   }, [activity, router]);
 
   const data = (activity?.data as MimiquesData) || null;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...data };
@@ -40,6 +42,10 @@ const MimiqueStep3: React.FC = () => {
     router.push('/creer-un-jeu/mimique/4');
   };
 
+  const onPrev = () => {
+    router.push('/creer-un-jeu/mimique/2');
+  };
+
   if (!activity || data === null) {
     return (
       <Base>
@@ -51,9 +57,15 @@ const MimiqueStep3: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {<BackButton href="/creer-un-jeu/mimique/2" />}
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={2} />
-        <MimiqueSelector mimiqueNumber="3ème" mimiqueData={data.mimique3} onDataChange={dataChange} onNext={onNext} onVideoChange={videoChange} />
+        <MimiqueSelector
+          mimiqueNumber="3ème"
+          mimiqueData={data.mimique3}
+          onDataChange={dataChange}
+          onNext={onNext}
+          onPrev={onPrev}
+          onVideoChange={videoChange}
+        />
       </div>
     </Base>
   );

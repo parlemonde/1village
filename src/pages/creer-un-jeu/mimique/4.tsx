@@ -14,6 +14,7 @@ import { isGame } from 'src/activity-types/anyActivity';
 import { isMimique } from 'src/activity-types/game.const';
 import ReactPlayer from 'react-player';
 import { ActivityStatus } from 'types/activity.type';
+import { BackButton } from 'src/components/buttons/BackButton';
 
 const GreenRadio = withStyles({
   root: {

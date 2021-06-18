@@ -6,7 +6,7 @@ import { Base } from 'src/components/Base';
 import { Mimique } from 'types/mimique.type';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { UserDisplayName } from 'src/components/UserDisplayName';
-import { User } from 'types/user.type';
+import { User, UserType } from 'types/user.type';
 import { MimiqueResponse, MimiqueResponseValue } from 'types/mimiqueResponse.type';
 import { green, red } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,6 +15,10 @@ import { Modal } from 'src/components/Modal';
 import { useRouter } from 'next/router';
 import { LinearProgressProps } from '@material-ui/core/LinearProgress';
 import { Flag } from 'src/components/Flag';
+import { VillageContext } from 'src/contexts/villageContext';
+import { serializeToQueryUrl } from 'src/utils';
+import { AvatarImg } from 'src/components/Avatar';
+import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 
 const GreenRadio = withStyles({
   root: {
@@ -68,6 +72,9 @@ const PlayMimique: React.FC = () => {
   const [selected, setSelected] = React.useState<MimiqueResponseValue | null>(null);
   const [mimiqueResponses, setMimiqueResponses] = React.useState<MimiqueResponse[] | null>(null);
   const [stats, setStats] = React.useState<StatsProps | null>(null);
+  const { village } = React.useContext(VillageContext);
+
+  const [userIsPelico, setUserIsPelico] = React.useState<boolean>(true);
 
   const { users } = useVillageUsers();
   const userMap = React.useMemo(
@@ -82,22 +89,28 @@ const PlayMimique: React.FC = () => {
   const choices = React.useMemo(() => mimique && shuffleArray([0, 1, 2]), [mimique]);
 
   React.useEffect(() => {
-    axiosLoggedRequest({
-      method: 'GET',
-      url: `/mimiques/play`,
-    }).then((response) => {
-      console.log(response);
-      if (!response.error && response.data) {
-        setMimique(response.data as Mimique);
-      } else {
-        setLastMimiqueModalOpen(true);
-      }
-    });
+    if (village) {
+      axiosLoggedRequest({
+        method: 'GET',
+        url: `/mimiques/play${serializeToQueryUrl({
+          villageId: village.id,
+        })}`,
+      }).then((response) => {
+        console.log(response);
+        if (!response.error && response.data) {
+          setMimique(response.data as Mimique);
+        } else {
+          setLastMimiqueModalOpen(true);
+        }
+      });
+    }
   }, [setMimique]);
 
   React.useEffect(() => {
     if (mimique) {
-      setUser(userMap[mimique.userId] !== undefined ? users[userMap[mimique.userId]] : undefined);
+      const usr = userMap[mimique.userId] !== undefined ? users[userMap[mimique.userId]] : undefined;
+      setUser(usr);
+      setUserIsPelico(usr.type >= UserType.MEDIATOR);
     }
   }, [mimique, userMap]);
 
@@ -224,10 +237,20 @@ const PlayMimique: React.FC = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
         <h1>Que signifie cette mimique ?</h1>
-        <p>
-          {'Une mimique proposée par '}
-          <UserDisplayName user={user} />
-        </p>
+        <div className="activity-card__header">
+          <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
+          <div className="activity-card__header_info">
+            <p className="text" style={{ marginTop: '0.7rem' }}>
+              {'Une mimique proposée par '}
+              <UserDisplayName className="text" user={user} noLink={false} />
+              {userIsPelico ? (
+                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+              ) : (
+                <Flag country={user.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
+              )}
+            </p>
+          </div>
+        </div>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
             <ReactPlayer light url={mimique.video} controls />

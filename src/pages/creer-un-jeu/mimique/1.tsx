@@ -67,9 +67,15 @@ const MimiqueStep1: React.FC = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!isEdit && <BackButton href="/creer-un-jeu" />}
-        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
-        <MimiqueSelector mimiqueNumber="1ère" mimiqueData={data.mimique1} onDataChange={dataChange} onNext={onNext} onVideoChange={videoChange} />
+        <Steps steps={['1ère mimique', 'toto mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
+        <MimiqueSelector
+          mimiqueNumber="1ère"
+          mimiqueData={data.mimique1}
+          onDataChange={dataChange}
+          onNext={onNext}
+          onPrev={null}
+          onVideoChange={videoChange}
+        />
       </div>
     </Base>
   );

@@ -7,6 +7,7 @@ import { Mimique } from '../entities/mimique';
 import { MimiqueResponse } from '../entities/mimiqueResponse';
 import { Controller } from './controller';
 import { MimiqueResponseValue } from '../../types/mimiqueResponse.type';
+import { logger } from '../utils/logger';
 
 const mimiqueController = new Controller('/mimiques');
 
@@ -30,7 +31,8 @@ mimiqueController.get({ path: '/play', userType: UserType.TEACHER }, async (req:
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.villageId;
+  const villageId = req.user.villageId || Number(req.query.villageId);
+  console.log('villageId : ' + villageId);
   const mimique = await getRepository(Mimique)
     .createQueryBuilder('mimique')
     .leftJoinAndSelect('mimique.responses', 'responses')
@@ -62,9 +64,33 @@ mimiqueController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async
     return;
   }
   const userId = req.user.id;
+  const villageId = req.user.villageId || Number(req.query.villageId);
+  console.log('villageId : ' + villageId);
   const mimique = await getRepository(Mimique).createQueryBuilder('mimique').where('`mimique`.`userId` = :userId', { userId: userId }).getOne();
-
-  res.sendJSON(mimique ? true : false);
+  const count = await getRepository(Mimique)
+    .createQueryBuilder('mimique')
+    .leftJoinAndSelect('mimique.responses', 'responses')
+    .where('`mimique`.`userId` <> :userId', { userId: userId })
+    .andWhere('`mimique`.`villageId` = :villageId', { villageId: villageId })
+    .andWhere(
+      (qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select()
+          .from(MimiqueResponse, 'response')
+          .where(`response.userId = :userId`, { userId: userId })
+          .andWhere(`response.mimiqueId = mimique.id`)
+          .getQuery();
+        return 'NOT EXISTS ' + subQuery;
+      },
+      { userId: req.user.id },
+    )
+    .orderBy('`mimique`.`createDate`', 'DESC')
+    .getCount();
+  res.sendJSON({
+    ableToPlay: mimique ? true : false,
+    count: count,
+  });
 });
 
 mimiqueController.get({ path: '/stats/:mimiqueId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {

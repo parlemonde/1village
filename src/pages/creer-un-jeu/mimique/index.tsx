@@ -5,24 +5,33 @@ import React from 'react';
 import { Base } from 'src/components/Base';
 import Button from '@material-ui/core/Button';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { serializeToQueryUrl } from 'src/utils';
 
 const Mimique: React.FC = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
   const [ableToPlay, setAbleToPlay] = React.useState<boolean>(false);
+  const [count, setCount] = React.useState<number>(0);
 
   React.useMemo(() => {
-    axiosLoggedRequest({
-      method: 'GET',
-      url: `/mimiques/ableToPlay`,
-    }).then((response) => {
-      if (!response.error && response.data) {
-        setAbleToPlay(response.data as boolean);
-      } else {
-        setAbleToPlay(false);
-      }
-    });
-  }, []);
+    if (village) {
+      axiosLoggedRequest({
+        method: 'GET',
+        url: `/mimiques/ableToPlay${serializeToQueryUrl({
+          villageId: village.id,
+        })}`,
+      }).then((response) => {
+        if (!response.error && response.data) {
+          setAbleToPlay(response.data.ableToPlay as boolean);
+          setCount(response.data.count as number);
+        } else {
+          setAbleToPlay(false);
+        }
+      });
+    }
+  }, [village]);
 
   return (
     <Base>
@@ -60,8 +69,8 @@ const Mimique: React.FC = () => {
         </Link>
         <h1 style={{ marginTop: '6rem' }}>Découvrez les mimiques de vos Pélicopains !</h1>
         <p style={{ marginBottom: '3rem' }}>
-          Une fois que vous aurez décrit 3 mimiques, ça sera à vous de deviner ce que veulent dire les mimiques de vos Pélicopains français et
-          lilbanais ! Il y a actuellement X nouvelles mimiques à découvrir :
+          Une fois que vous aurez décrit 3 mimiques, ça sera à vous de deviner ce que veulent dire les mimiques de vos Pélicopains ! Il y a
+          actuellement {count} nouvelles mimiques à découvrir :
         </p>
         <Link href="/creer-un-jeu/mimique/jouer">
           <Button
