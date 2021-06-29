@@ -42,6 +42,9 @@ videoController.upload(
     saveOnDisk: true,
   },
   async (req, res) => {
+    if (!req.file) {
+      throw new AppError('Video file missing!', ErrorCode.UNKNOWN);
+    }
     const url = await uploadVideo(req.file.path, req.body.name, req.user?.id ?? 0);
     res.sendJSON({
       url,

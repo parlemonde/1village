@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserType } from '../entities/user';
 import { streamFile } from '../fileUpload/streamFile';
 import { deleteFile, uploadFile } from '../fileUpload';
+import { AppError, ErrorCode } from '../middlewares/handleErrors';
 
 import { Controller } from './controller';
 
@@ -27,6 +28,10 @@ imageController.upload(
   },
   async (req: Request, res: Response) => {
     const userId = req.user?.id ?? 0;
+
+    if (!req.file) {
+      throw new AppError('Image file missing!', ErrorCode.UNKNOWN);
+    }
 
     // 1- get directory name
     const dir = path.join(__dirname, '../fileUpload');
