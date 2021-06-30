@@ -1,9 +1,11 @@
 import md5 from 'md5';
 
+import { User, UserType } from 'types/user.type';
+
 /**
  * Returns a query string with the given parameters.
  */
-export function serializeToQueryUrl(obj: { [key: string]: string | number | boolean }): string {
+export function serializeToQueryUrl(obj: { [key: string]: string | number | boolean | null | undefined }): string {
   if (Object.keys(obj).length === 0) {
     return '';
   }
@@ -11,7 +13,9 @@ export function serializeToQueryUrl(obj: { [key: string]: string | number | bool
     '?' +
     Object.keys(obj)
       .reduce(function (a, k) {
-        a.push(k + '=' + encodeURIComponent(obj[k]));
+        if (obj[k] !== undefined) {
+          a.push(k + '=' + encodeURIComponent(obj[k]));
+        }
         return a;
       }, [])
       .join('&');
@@ -31,17 +35,14 @@ export function getQueryString(q: string | string[]): string {
  * N milliseconds. If `immediate` is passed, trigger the function on the
  * leading edge, instead of the trailing.
  */
-export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(
-  func: T,
-  wait: number,
-  immediate: boolean,
-  ...args: unknown[]
-): T {
+export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(func: T, wait: number, immediate: boolean): T {
   let timeout: NodeJS.Timeout;
-  return (function () {
+  return function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /*@ts-ignore */ //eslint-disable-next-line @typescript-eslint/no-this-alias, @typescript-eslint/no-explicit-any
     const context: any = this;
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
     const later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
@@ -50,7 +51,7 @@ export function debounce<T extends (args: unknown | unknown[]) => unknown | unkn
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
-  } as unknown) as T;
+  } as unknown as T;
 }
 
 // ISO 3166-1 alpha-2
@@ -92,6 +93,10 @@ export function generateTemporaryToken(length: number = 40): string {
 }
 
 export function isValidHttpUrl(value: string): boolean {
+  if (value.slice(0, 11) === '/api/images' || value.slice(0, 10) === '/api/audio') {
+    return true;
+  }
+
   let url;
   try {
     url = new URL(value);
@@ -121,4 +126,48 @@ export function htmlToText(html: string): string {
   tmp.innerHTML = html;
   [...tmp.children].forEach(addDotToElement);
   return tmp.textContent || tmp.innerText || '';
+}
+
+export function naturalJoin(array: Array<string>): string {
+  return array
+    .map((element: string, index: number) => {
+      if (array.length < 2) {
+        return element;
+      }
+      if (index === array.length - 2) {
+        return element + ' et ';
+      }
+      if (index === array.length - 1) {
+        return element;
+      }
+      return element + ', ';
+    })
+    .join('');
+}
+
+export function pluralS(value: number): string {
+  return value > 1 ? 's' : '';
+}
+
+export const capitalize = (s: string): string => {
+  if (!s) {
+    return s;
+  }
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export function getUserDisplayName(user: User, isSelf: boolean): string {
+  const userIsPelico = user.type >= UserType.MEDIATOR;
+  if (userIsPelico) {
+    return 'Pelico';
+  }
+  if (isSelf) {
+    return 'Votre classe';
+  }
+  return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`);
+}
+
+const optionsRegex = /{{(.+?)}}/gm;
+export function replaceTokens(s: string, tokens: { [key: string]: string }): string {
+  return s.replace(optionsRegex, (_match: string, group: string) => (tokens[group] !== undefined ? tokens[group] : group));
 }

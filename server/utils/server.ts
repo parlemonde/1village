@@ -54,10 +54,10 @@ export function getDefaultDirectives(): { [directiveName: string]: Iterable<stri
     'connect-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
     'img-src': ["'self'", 'http:', 'https:', 'data:', 'blob:'],
     'object-src': ["'none'"],
-    'script-src': ["'self'", 'https:'],
+    'script-src': ["'self'", 'https:', 'blob:'],
     'script-src-attr': ["'none'"],
     'style-src': ["'self'", "'unsafe-inline'"],
-    'media-src': ['*', 'data:', 'https:'],
+    'media-src': ['*', 'data:', 'https:', 'blob:'],
     'upgrade-insecure-requests': [],
   };
 }

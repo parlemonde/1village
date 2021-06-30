@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-
+import { UserType } from '../entities/user';
 import { countries } from '../utils/iso-3166-countries-french';
 
 import { Controller } from './controller';
@@ -7,7 +6,7 @@ import { Controller } from './controller';
 const countryController = new Controller('/countries');
 
 //--- Get all countries ---
-countryController.get({ path: '' }, async (_req: Request, res: Response) => {
+countryController.get({ path: '', userType: UserType.TEACHER }, async (_req, res) => {
   res.sendJSON(countries);
 });
 

@@ -5,6 +5,9 @@
 module.exports = {
   distDir: "./dist/next",
   poweredByHeader: false,
+  future: {
+    webpack5: true,
+  },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,

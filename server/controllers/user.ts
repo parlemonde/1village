@@ -5,11 +5,12 @@ import { getRepository } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
+import { Activity, ActivityType } from '../entities/activity';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
-import { generateTemporaryPassword, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
+import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
 
 import { Controller } from './controller';
 
@@ -18,7 +19,25 @@ const userController = new Controller('/users');
 userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   let users: User[] = [];
   if (req.query.villageId) {
-    users = await getRepository(User).find({ where: [{ villageId: parseInt(getQueryString(req.query.villageId), 10) || 0 }, { villageId: null }] });
+    users = await getRepository(User).find({ where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null }] });
+    const ids = users.map((u) => u.id);
+    const mascottes = (
+      await getRepository(Activity)
+        .createQueryBuilder('activity')
+        .select('userId')
+        .addSelect('id')
+        .where('type = :type', { type: `${ActivityType.PRESENTATION}` })
+        .andWhere('subType = :subType', { subType: 1 })
+        .andWhere('userId in (:ids)', { ids })
+        .orderBy('createDate', 'ASC')
+        .getRawMany()
+    ).reduce<{ [userId: number]: number }>((acc, row) => {
+      acc[row.userId] = row.id;
+      return acc;
+    }, {});
+    for (const user of users) {
+      user.mascotteId = mascottes[user.id] || undefined;
+    }
   } else {
     users = await getRepository(User).find();
   }
@@ -59,6 +78,8 @@ type CreateUserData = {
   city?: string;
   postalCode?: string;
   address?: string;
+  avatar?: string;
+  displayName?: string;
   password?: string;
   type?: UserType;
   villageId?: number;
@@ -75,6 +96,8 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     city: { type: 'string', nullable: true },
     postalCode: { type: 'string', nullable: true },
     address: { type: 'string', nullable: true },
+    avatar: { type: 'string', nullable: true },
+    displayName: { type: 'string', nullable: true },
     password: { type: 'string', nullable: true },
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
@@ -102,6 +125,8 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.address = data.address || '';
   user.city = data.city || '';
   user.postalCode = data.postalCode || '';
+  user.avatar = data.avatar || null;
+  user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
   user.countryCode = data.countryCode;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
@@ -111,7 +136,7 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   }
   user.accountRegistration = data.password === undefined ? 3 : 0;
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
-  const temporaryPassword = generateTemporaryPassword(20);
+  const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
   // todo: send mail with verification password to validate the email adress.
 
@@ -131,6 +156,8 @@ type EditUserData = {
   city?: string;
   postalCode?: string;
   address?: string;
+  avatar?: string;
+  displayName?: string;
   type?: UserType;
   villageId?: number | null;
   accountRegistration?: number;
@@ -147,6 +174,8 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     city: { type: 'string', nullable: true },
     postalCode: { type: 'string', nullable: true },
     address: { type: 'string', nullable: true },
+    avatar: { type: 'string', nullable: true },
+    displayName: { type: 'string', nullable: true },
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
@@ -181,6 +210,8 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
+  user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
+  user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = false;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
@@ -335,7 +366,7 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   }
 
   // update user
-  const temporaryPassword = generateTemporaryPassword(12);
+  const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
   await getRepository(User).save(user);
 

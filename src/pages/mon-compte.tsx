@@ -8,6 +8,7 @@ import NoSsr from '@material-ui/core/NoSsr';
 import { TextField } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
+import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -19,7 +20,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { helpColor } from 'src/styles/variables.const';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { ssoHostName } from 'src/utils';
-import { getGravatarUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 
 const Presentation: React.FC = () => {
@@ -133,27 +133,29 @@ const Presentation: React.FC = () => {
     setIsLoading(false);
   };
 
-  const updateEditMode = (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) => async () => {
-    if (save === 'user') {
-      await checkEmailAndPseudo();
-      if (errors.email || errors.pseudo) {
-        return;
+  const updateEditMode =
+    (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) =>
+    async () => {
+      if (save === 'user') {
+        await checkEmailAndPseudo();
+        if (errors.email || errors.pseudo) {
+          return;
+        }
+        await updateUser();
+      } else if (save === 'pwd') {
+        checkPassword();
+        if (errors.pwd || errors.pwdConfirm || pwd.new.length === 0 || pwd.confirmNew.length === 0) {
+          return;
+        }
+        await updatePwd();
+      } else if (save === 'delete') {
+        deleteAccount();
+      } else {
+        setNewUser(user);
+        setDeleteConfirm('');
       }
-      await updateUser();
-    } else if (save === 'pwd') {
-      checkPassword();
-      if (errors.pwd || errors.pwdConfirm || pwd.new.length === 0 || pwd.confirmNew.length === 0) {
-        return;
-      }
-      await updatePwd();
-    } else if (save === 'delete') {
-      deleteAccount();
-    } else {
-      setNewUser(user);
-      setDeleteConfirm('');
-    }
-    setEditMode(newEditMode);
-  };
+      setEditMode(newEditMode);
+    };
 
   return (
     <Base rightNav={<HelpButton />}>
@@ -167,7 +169,7 @@ const Presentation: React.FC = () => {
             Photo de profil :
           </label>
           <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
-            <img alt="Image de profil" src={getGravatarUrl(user.email)} width="50px" height="50px" style={{ borderRadius: '25px' }} />
+            <AvatarImg user={user} size="small" noLink />
           </div>
         </div>
 

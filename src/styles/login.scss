@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 .login__container {
   background-color: white;
@@ -12,6 +12,7 @@
   width: 50%;
   height: 100%;
   flex: 1;
+  min-width: 0;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;

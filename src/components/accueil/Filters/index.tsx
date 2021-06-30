@@ -43,7 +43,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, onChange, countries =
     <div style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 0', flexWrap: 'wrap' }}>
       <span className="text text--bold">Filtres :</span>
       <FilterSelect
-        name="Activitées"
+        name="Activités"
         options={[
           { key: 0, label: 'Toutes' },
           { key: 1, label: 'Présentations' },
@@ -57,7 +57,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, onChange, countries =
           onChange({ ...filters, type: newType });
         }}
       />
-      <FilterSelect
+      {/* <FilterSelect
         name="Status"
         options={[
           { key: 0, label: 'Tous' },
@@ -68,7 +68,7 @@ export const Filters: React.FC<FiltersProps> = ({ filters, onChange, countries =
         onChange={(newStatus) => {
           onChange({ ...filters, status: newStatus });
         }}
-      />
+      /> */}
       <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
         {countries.map((c) => (
           <label key={c} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>

@@ -3,21 +3,26 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { QuestionActivity } from 'src/activity-types/question.types';
+import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivityRequests } from 'src/services/useActivity';
-
-import { RedButton } from '../../buttons/RedButton';
 
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const QuestionCard: React.FC<ActivityCardProps> = ({ activity, noButtons, showEditButtons, onDelete }: ActivityCardProps) => {
+export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
+  activity,
+  noButtons,
+  showEditButtons,
+  onDelete,
+}: ActivityCardProps<QuestionActivity>) => {
   const { user } = React.useContext(UserContext);
   const { updatedActivityData } = useActivityRequests();
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
 
   const askSame = React.useMemo(
-    () => (!activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0)),
+    () => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)),
     [activity],
   );
   const onAskSame = async () => {
@@ -63,15 +68,15 @@ export const QuestionCard: React.FC<ActivityCardProps> = ({ activity, noButtons,
       ) : noButtons ? null : (
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button onClick={onAskSame}>
-              <span className="text text--bold text--primary">Je me pose la même question</span>
+            <Button style={{ padding: '6px 8px' }} onClick={onAskSame} color="primary" variant={askSame.includes(user?.id) ? 'contained' : 'text'}>
+              <span className="text text--bold">Je me pose la même question</span>
             </Button>
             {askSame.length > 0 && <span className="text text--primary">+ {askSame.length}</span>}
           </div>
           <div>
-            <CommentIcon count={activity.commentCount} />
-            <Link href={`/activity/${activity.id}`}>
-              <Button component="a" href={`/activity/${activity.id}`} variant="outlined" color="primary">
+            <CommentIcon count={activity.commentCount} activityId={activity.id} />
+            <Link href={`/activite/${activity.id}`}>
+              <Button component="a" href={`/activite/${activity.id}`} variant="outlined" color="primary">
                 Répondre à la question
               </Button>
             </Link>

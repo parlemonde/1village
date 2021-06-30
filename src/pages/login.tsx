@@ -30,6 +30,20 @@ const errorMessages = {
   6: 'Veuillez utiliser le login par email/mot de passe pour votre compte',
 };
 
+const isRedirectValid = (redirect: string): boolean => {
+  // inner redirection.
+  if (redirect.startsWith('/')) {
+    return true;
+  }
+  // external, allow only same domain.
+  try {
+    const url = new URL(redirect);
+    return url.hostname.slice(-15) === '.parlemonde.org';
+  } catch {
+    return false;
+  }
+};
+
 const Login: React.FC = () => {
   const router = useRouter();
   const { login, loginWithSso } = React.useContext(UserContext);
@@ -51,7 +65,7 @@ const Login: React.FC = () => {
         setIsLoading(true);
         const response = await loginWithSso(code);
         if (response.success) {
-          router.push(redirect.current);
+          router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
         } else {
           setErrorCode(response.errorCode || 0);
         }
@@ -96,7 +110,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
     const response = await login(user.username, user.password, user.remember);
     if (response.success) {
-      router.push(redirect.current);
+      router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
     } else {
       setErrorCode(response.errorCode || 0);
     }
@@ -133,6 +147,22 @@ const Login: React.FC = () => {
                 {errorMessages[errorCode as 0] || errorMessages[0]}
               </p>
             )}
+            <NoSsr>
+              {ssoHost.length && clientId && (
+                <>
+                  <div className="text-center" style={{ marginBottom: '1rem' }}>
+                    <Button color="primary" variant="contained" size="small" onClick={loginSso}>
+                      Se connecter avec {ssoHostName}
+                    </Button>
+                  </div>
+                  <div className="login__divider">
+                    <div className="login__or">
+                      <span style={{ fontSize: '1.2rem', padding: '0.25rem', backgroundColor: 'white' }}>OU</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </NoSsr>
             <TextField
               label="Adresse email"
               placeholder="Entrez votre adresse email"
@@ -181,23 +211,6 @@ const Login: React.FC = () => {
             <div className="text-center">
               <a className="text text--small text--primary">Mot de passe oublié ?</a>
             </div>
-
-            <NoSsr>
-              {ssoHost.length && clientId && (
-                <>
-                  <div className="login__divider">
-                    <div className="login__or">
-                      <span style={{ fontSize: '1.2rem', padding: '0.25rem', backgroundColor: 'white' }}>OU</span>
-                    </div>
-                  </div>
-                  <div className="text-center" style={{ marginBottom: '1rem' }}>
-                    <Button color="primary" variant="contained" size="small" onClick={loginSso}>
-                      Se connecter avec {ssoHostName}
-                    </Button>
-                  </div>
-                </>
-              )}
-            </NoSsr>
           </form>
         </div>
         <div className="login__panel login__panel--with-blue-background">

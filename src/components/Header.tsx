@@ -3,19 +3,20 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+// import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Button } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+// import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
-import { getGravatarUrl } from 'src/utils';
 import { UserType } from 'types/user.type';
+
+import { AvatarImg } from './Avatar';
 
 export const Header: React.FC = () => {
   const router = useRouter();
@@ -35,6 +36,10 @@ export const Header: React.FC = () => {
     setAnchorEl(null);
     router.push('/mon-compte');
   };
+  const goToVideos = () => {
+    setAnchorEl(null);
+    router.push('/mes-videos');
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -42,16 +47,20 @@ export const Header: React.FC = () => {
   return (
     <header>
       <div className="header__container with-shadow">
-        <Logo style={{ width: '40px', height: 'auto' }} />
-        <h1 className="title" style={{ margin: '0 0 0 0.5rem' }}>
-          1Village
-        </h1>
-        <div className="header__search">
+        <Link href="/">
+          <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <Logo style={{ width: '40px', height: 'auto' }} />
+            <h1 className="title" style={{ margin: '0 0 0 0.5rem' }}>
+              1Village
+            </h1>
+          </a>
+        </Link>
+        {/* <div className="header__search">
           <IconButton aria-label="search" size="small">
             <SearchIcon />
           </IconButton>
           <InputBase placeholder="Rechercher" inputProps={{ 'aria-label': 'search' }} />
-        </div>
+        </div> */}
         {user && (
           <div className="header__user">
             {user.type > UserType.TEACHER && (
@@ -97,13 +106,14 @@ export const Header: React.FC = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={goToAccount}> Mon compte</MenuItem>
+                <MenuItem onClick={goToAccount}>Mon compte</MenuItem>
+                <MenuItem onClick={goToVideos}>Mes vidéos</MenuItem>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>
               </Menu>
             </div>
-            <img alt="Image de profil" src={getGravatarUrl(user.email)} width="40px" height="40px" style={{ borderRadius: '20px' }} />
+            <AvatarImg user={user} size="small" noLink />
           </div>
         )}
       </div>

@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
-import { Map } from 'src/components/Map';
+import { WorldMap } from 'src/components/WorldMap';
 
 const MapPage: React.FC = () => {
   return (
     <Base>
-      <Map />
+      <WorldMap />
     </Base>
   );
 };

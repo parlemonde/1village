@@ -100,13 +100,22 @@ body {
 }
 
 a {
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.leaflet {
+  a {
+    font-size: 11px;
+  }
+}
+a.text {
   font-size: 1rem;
   font-family: 'Roboto', 'Times New Roman', Times, serif;
   font-weight: 400;
   color: $font-color;
-  text-decoration: none;
-}
-a.text {
   cursor: pointer;
 }
 a.text:hover,
@@ -234,4 +243,22 @@ a.text--success:hover {
   margin: 0 auto 1rem auto;
   width: 100%;
   max-width: 900px;
+}
+
+.break-long-words {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }

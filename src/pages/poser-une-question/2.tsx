@@ -1,16 +1,15 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, ButtonBase, TextField, withStyles, Card } from '@material-ui/core';
+import { ButtonBase, TextField, withStyles, Card } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { ActivityType } from 'types/activity.type';
 
 const StyledTextField = withStyles({
   root: {
@@ -25,12 +24,13 @@ const Question2: React.FC = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
 
-  const activityType = activity?.type || null;
   React.useEffect(() => {
-    if (activityType === null || activityType !== ActivityType.QUESTION) {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/poser-une-question/1');
+    } else if (activity && !isQuestion(activity)) {
       router.push('/poser-une-question/1');
     }
-  }, [activityType, router]);
+  }, [activity, router]);
 
   const onQuestionChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const processedContent = [...activity.processedContent];
@@ -49,10 +49,17 @@ const Question2: React.FC = () => {
     addContent('text');
   };
 
+  if (!activity) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {activity.id === 0 && <BackButton href="/poser-une-question/1" />}
         <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={1} />
         <div className="width-900">
           <h1>Vos questions</h1>
@@ -98,13 +105,7 @@ const Question2: React.FC = () => {
             </div>
           )}
 
-          <div style={{ width: '100%', textAlign: 'right', margin: '3rem 0' }}>
-            <Link href="/poser-une-question/3">
-              <Button component="a" href="/poser-une-question/3" variant="outlined" color="primary">
-                Étape suivante
-              </Button>
-            </Link>
-          </div>
+          <StepsButton prev={activity.id === 0 ? '/poser-une-question/1?edit=true' : undefined} next="/poser-une-question/3" />
         </div>
       </div>
     </Base>

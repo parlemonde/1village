@@ -26,6 +26,9 @@ export interface User {
   postalCode: string;
   address: string;
 
+  avatar: string | null;
+  displayName: string | null;
+
   firstLogin: boolean;
 
   type: UserType;
@@ -37,4 +40,6 @@ export interface User {
 
   // country relation
   countryCode: string;
+
+  mascotteId?: number;
 }

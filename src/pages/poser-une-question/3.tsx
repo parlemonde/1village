@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useQueryCache } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -18,7 +19,7 @@ import { ActivityType } from 'types/activity.type';
 
 const Question3: React.FC = () => {
   const router = useRouter();
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
@@ -29,10 +30,12 @@ const Question3: React.FC = () => {
   const isEdit = activity !== null && activity.id !== 0;
 
   React.useEffect(() => {
-    if (processedContent === null && !('activity-id' in router.query)) {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/poser-une-question/1');
+    } else if (activity && !isQuestion(activity)) {
       router.push('/poser-une-question/1');
     }
-  }, [router, processedContent]);
+  }, [activity, router]);
 
   const createQuestionActivity = async (question: string): Promise<boolean> => {
     const data = {
@@ -72,18 +75,25 @@ const Question3: React.FC = () => {
     setIsLoading(true);
     if (activity.id === 0) {
       await Promise.all(processedContent.map((question) => createQuestionActivity(question.value)));
-      queryCache.invalidateQueries('activities');
+      queryClient.invalidateQueries('activities');
     } else {
-      await save();
+      await save(true);
     }
     router.push('/poser-une-question/success');
     setIsLoading(false);
   };
 
+  if (!activity) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/poser-une-question/2" />
         <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={2} />
         <div className="width-900">
           <h1>Prévisualisez vos questions, et envoyez-les</h1>
@@ -139,6 +149,8 @@ const Question3: React.FC = () => {
                 </p>
               ))}
           </div>
+
+          <StepsButton prev="/poser-une-question/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

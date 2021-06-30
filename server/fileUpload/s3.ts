@@ -12,7 +12,7 @@ export class AwsS3 {
   private initialized: boolean = false;
   private s3: S3;
 
-  private uploadS3File(filepath: string, file: Buffer | fs.ReadStream): Promise<string> {
+  private uploadS3File(filepath: string, file: Buffer | fs.ReadStream, contentType: string): Promise<string> {
     if (!this.initialized) {
       throw new AppError("Can't upload to s3", 0);
     }
@@ -23,6 +23,7 @@ export class AwsS3 {
           Body: file,
           Bucket: S3_BUCKET_NAME,
           Key: filepath,
+          ContentType: contentType,
         },
         function (err, data) {
           if (err) {
@@ -76,24 +77,53 @@ export class AwsS3 {
     this.initialized = true;
   }
 
-  public getImage(filename: string): Readable {
+  public async getFileData(filename: string): Promise<{
+    AcceptRanges: string;
+    LastModified: Date;
+    ContentLength: number;
+    ContentType: string;
+  }> {
+    const data: S3.HeadObjectOutput | null = await new Promise((resolve) => {
+      this.s3.headObject(
+        {
+          Bucket: S3_BUCKET_NAME,
+          Key: filename,
+        },
+        (error, data) => {
+          if (error) {
+            resolve(null);
+            return;
+          }
+          resolve(data);
+        },
+      );
+    });
+    return {
+      AcceptRanges: data?.AcceptRanges || 'bytes',
+      LastModified: data?.LastModified || new Date(),
+      ContentLength: data?.ContentLength || 0,
+      ContentType: data?.ContentType || '',
+    };
+  }
+
+  public getFile(filename: string, range?: string): Readable {
     return this.s3
       .getObject({
         Bucket: S3_BUCKET_NAME,
-        Key: `images/${filename}`,
+        Key: filename,
+        Range: range,
       })
       .createReadStream();
   }
 
-  public async uploadImage(filename: string): Promise<string> {
+  public async uploadFile(filename: string, contentType: string): Promise<string> {
     // local dir
-    const dir: string = path.join(__dirname, 'images');
-    const fileStream = fs.createReadStream(path.join(dir, filename));
+    const fileStream = fs.createReadStream(path.join(__dirname, filename));
     let key = '';
 
     // upload image on stockage server
     try {
-      key = await this.uploadS3File(`images/${filename}`, fileStream);
+      key = await this.uploadS3File(filename, fileStream, contentType);
     } catch (e) {
       logger.error(e);
       logger.error(`File ${filename} could not be sent to aws !`);
@@ -102,7 +132,7 @@ export class AwsS3 {
 
     // delete local file
     try {
-      await fs.remove(path.join(dir, filename));
+      await fs.remove(path.join(__dirname, filename));
     } catch (e) {
       logger.error(`File ${filename} not found locally!`);
     }
@@ -110,11 +140,11 @@ export class AwsS3 {
     return `/api/${key}`;
   }
 
-  public async deleteImage(key: string): Promise<void> {
+  public async deleteFile(filename: string): Promise<void> {
     try {
-      await this.deleteS3File(key);
+      await this.deleteS3File(filename);
     } catch (e) {
-      logger.error(`File ${key} not found !`);
+      logger.error(`File ${filename} not found !`);
     }
   }
 }

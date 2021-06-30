@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useQueryCache, useQuery, QueryFunction } from 'react-query';
+import { useQueryClient, useQuery, QueryFunction } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
@@ -7,7 +7,7 @@ import type { Comment } from 'types/comment.type';
 
 export const useComments = (activityId: number | null): { comments: Comment[]; setComments(newComments: Comment[]): void } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
 
   const getComments: QueryFunction<Comment[]> = React.useCallback(async () => {
     if (activityId === null) {
@@ -26,9 +26,9 @@ export const useComments = (activityId: number | null): { comments: Comment[]; s
 
   const setComments = React.useCallback(
     (newComments: Comment[]) => {
-      queryCache.setQueryData(['comments'], newComments);
+      queryClient.setQueryData(['comments'], newComments);
     },
-    [queryCache],
+    [queryClient],
   );
 
   return {
@@ -40,7 +40,7 @@ export const useComments = (activityId: number | null): { comments: Comment[]; s
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useCommentRequests = (activityId: number | null) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const addComment = React.useCallback(
@@ -61,11 +61,11 @@ export const useCommentRequests = (activityId: number | null) => {
         });
         return null;
       }
-      queryCache.invalidateQueries('comments');
-      queryCache.invalidateQueries('activities');
+      queryClient.invalidateQueries('comments');
+      queryClient.invalidateQueries('activities');
       return response.data as Comment;
     },
-    [activityId, axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [activityId, axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const editComment = React.useCallback(
@@ -86,10 +86,10 @@ export const useCommentRequests = (activityId: number | null) => {
         });
         return null;
       }
-      queryCache.invalidateQueries('comments');
+      queryClient.invalidateQueries('comments');
       return response.data as Comment;
     },
-    [activityId, axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [activityId, axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   const deleteComment = React.useCallback(
@@ -107,10 +107,10 @@ export const useCommentRequests = (activityId: number | null) => {
         });
         return;
       }
-      queryCache.invalidateQueries('comments');
-      queryCache.invalidateQueries('activities');
+      queryClient.invalidateQueries('comments');
+      queryClient.invalidateQueries('activities');
     },
-    [activityId, axiosLoggedRequest, queryCache, enqueueSnackbar],
+    [activityId, axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
   return {

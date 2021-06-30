@@ -33,6 +33,12 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 255, default: '' })
   public address: string;
 
+  @Column({ type: 'text', nullable: true, default: null })
+  public avatar: string | null;
+
+  @Column({ type: 'varchar', length: 400, nullable: true, default: null })
+  public displayName: string | null;
+
   @Column({ default: 0 })
   public accountRegistration: number; // 0 to 3 -> Ok, 4 -> Account blocked, 10 -> Account use PLM SSO
 
@@ -64,4 +70,6 @@ export class User implements UserInterface {
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
+
+  public mascotteId?: number;
 }

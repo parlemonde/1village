@@ -9,14 +9,15 @@ import 'src/styles/fonts.scss';
 import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
+import 'src/styles/se-presenter.scss';
 
-import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import App from 'next/app';
+import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
 import { ReactQueryDevtools } from 'react-query-devtools';
-import { QueryCache, ReactQueryCacheProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import React from 'react';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -30,6 +31,7 @@ import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
+import { useAnalytics } from 'src/hooks/useAnalytics';
 import theme from 'src/styles/theme';
 import { initH5p } from 'src/utils/initH5p';
 import type { User } from 'types/user.type';
@@ -40,8 +42,8 @@ interface MyAppOwnProps {
 }
 type MyAppProps = AppProps & MyAppOwnProps;
 
-const queryCache = new QueryCache({
-  defaultConfig: {
+const queryClient = new QueryClient({
+  defaultOptions: {
     queries: {
       staleTime: 3600000, // 1 hour
     },
@@ -98,6 +100,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
     }
   }, [isOnAdmin]);
 
+  useAnalytics();
+
   return (
     <>
       <Head>
@@ -113,7 +117,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
             horizontal: 'center',
           }}
         >
-          <ReactQueryCacheProvider queryCache={queryCache}>
+          <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken}>
               <VillageContextProvider>
                 <ActivityContextProvider>
@@ -122,7 +126,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       <AdminHeader />
                       <div style={{ display: 'flex', width: '100%' }}>
                         <AdminNavigation />
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <Component {...pageProps} />
                         </div>
                       </div>
@@ -142,7 +146,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
             </UserContextProvider>
             {/* Dev only, it won't appear after build for prod. */}
             <ReactQueryDevtools />
-          </ReactQueryCacheProvider>
+          </QueryClientProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </>

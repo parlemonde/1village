@@ -3,9 +3,13 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
+import { isQuestion } from 'src/activity-types/anyActivity';
+import { QuestionActivity } from 'src/activity-types/question.types';
+import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ExtendedActivity } from 'src/components/activities/editing.types';
+import { UserDisplayName } from 'src/components/UserDisplayName';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -14,22 +18,20 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
-import { getGravatarUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const Question1: React.FC = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { createNewActivity } = React.useContext(ActivityContext);
+  const { activity, createNewActivity } = React.useContext(ActivityContext);
   const { users } = useVillageUsers();
   const { activities } = useActivities({
     limit: 50,
     page: 0,
     countries: village?.countries,
     pelico: true,
-    type: 4,
+    type: ActivityType.QUESTION,
   });
   const { updatedActivityData } = useActivityRequests();
   const userMap = React.useMemo(
@@ -53,13 +55,17 @@ const Question1: React.FC = () => {
   }, [activities]);
 
   const onNext = () => {
+    if (activity && isQuestion(activity) && 'edit' in router.query) {
+      router.push('/poser-une-question/2');
+      return;
+    }
     const success = createNewActivity(ActivityType.QUESTION);
     if (success) {
       router.push('/poser-une-question/2');
     }
   };
 
-  const onAskSame = (activity: ExtendedActivity, askSame: number[]) => async () => {
+  const onAskSame = (activity: QuestionActivity, askSame: number[]) => async () => {
     if (!user || !user.id) {
       return;
     }
@@ -97,7 +103,7 @@ const Question1: React.FC = () => {
 
           {questions.map((question, index) => {
             const activity = activities[question.activityIndex];
-            if (!activity) {
+            if (!activity || !isQuestion(activity)) {
               return null;
             }
             const questionUser = users[userMap[activity.userId]];
@@ -105,27 +111,14 @@ const Question1: React.FC = () => {
               return null;
             }
             const isSelf = questionUser?.id === user?.id;
-            const isPelico = questionUser?.type ?? UserType.TEACHER >= UserType.MEDIATOR;
             const askSame = !activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0);
             return (
               <div key={index} style={{ display: 'flex', alignItems: 'flex-start', margin: '1rem 0' }}>
-                {questionUser && (
-                  <img
-                    alt="Image de profil"
-                    src={getGravatarUrl(questionUser.email)}
-                    width="40px"
-                    height="40px"
-                    style={{ borderRadius: '20px', margin: '0.25rem' }}
-                  />
-                )}
+                {questionUser && <AvatarImg user={questionUser} size="small" style={{ margin: '0.25rem' }} />}
                 <div style={{ flex: 1, minWidth: 0, backgroundColor: bgPage, padding: '0.5rem 1rem', borderRadius: '10px' }}>
                   <p style={{ margin: '0' }} className="text">
                     <strong>
-                      {isPelico
-                        ? 'Pelico'
-                        : isSelf
-                        ? 'Votre classe'
-                        : `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`}
+                      <UserDisplayName user={questionUser} />
                     </strong>
                     <br />
                     <span>{question.q}</span>
@@ -133,8 +126,13 @@ const Question1: React.FC = () => {
                   {!isSelf && (
                     <div style={{ width: '100%', textAlign: 'right' }}>
                       <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                        <Button style={{ backgroundColor: 'white' }} onClick={onAskSame(activity, askSame)}>
-                          <span className="text text--bold text--primary">Je me pose la même question</span>
+                        <Button
+                          style={askSame.includes(user?.id) ? {} : { padding: '6px 16px', backgroundColor: 'white' }}
+                          onClick={onAskSame(activity, askSame)}
+                          color="primary"
+                          variant={askSame.includes(user?.id) ? 'contained' : 'text'}
+                        >
+                          <span className="text text--bold">Je me pose la même question</span>
                         </Button>
                         {askSame.length > 0 && (
                           <span className="text text--primary" style={{ marginLeft: '0.25rem' }}>
@@ -149,11 +147,7 @@ const Question1: React.FC = () => {
             );
           })}
 
-          <div style={{ width: '100%', textAlign: 'right', margin: '3rem 0' }}>
-            <Button onClick={onNext} variant="outlined" color="primary">
-              Étape suivante
-            </Button>
-          </div>
+          <StepsButton next={onNext} />
         </div>
       </div>
     </Base>

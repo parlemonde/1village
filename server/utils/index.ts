@@ -31,7 +31,7 @@ export function isPasswordValid(password: string): boolean {
   );
 }
 
-export function generateTemporaryPassword(length: number): string {
+export function generateTemporaryToken(length: number): string {
   return base64url(crypto.randomBytes(length)).slice(0, length);
 }
 
@@ -68,10 +68,12 @@ export function decodeBase64(base64Encoded: string): string {
   return buffer.toString('utf-8');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-export function getQueryString(q: any): string {
-  if (Array.isArray(q)) {
-    return q[0] as string;
+export function getQueryString(q: unknown | unknown[] | undefined): string | undefined {
+  if (Array.isArray(q) && q.length > 0 && typeof q[0] === 'string') {
+    return q[0];
   }
-  return q as string;
+  if (typeof q === 'string') {
+    return q;
+  }
+  return undefined;
 }

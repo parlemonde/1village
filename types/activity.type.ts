@@ -8,9 +8,16 @@ export enum ActivityType {
   GAME = 4,
 }
 
+export enum ActivityStatus {
+  PUBLISHED = 0,
+  DRAFT = 1,
+}
+
 export interface Activity {
   id: number;
   type: ActivityType;
+  subType?: number | null;
+  status: ActivityStatus;
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
