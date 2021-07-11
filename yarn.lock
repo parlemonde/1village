@@ -26,6 +26,7 @@ __metadata:
     "@types/express": ^4.17.12
     "@types/express-useragent": ^1.0.0
     "@types/fs-extra": ^9.0.11
+    "@types/geojson": ^7946.0.7
     "@types/json-stable-stringify": ^1.0.32
     "@types/jsonwebtoken": ^8.5.1
     "@types/leaflet": ^1.7.1
@@ -46,6 +47,7 @@ __metadata:
     "@types/sharp": ^0.28.3
     "@types/sortablejs": ^1.10.6
     "@types/string-similarity": ^4.0.0
+    "@types/three": ^0.129.1
     "@types/uuid": ^8.3.0
     "@types/vimeo": ^2.1.3
     "@types/webpack": ^5.28.0
@@ -86,6 +88,8 @@ __metadata:
     express: ^4.17.1
     express-useragent: ^1.0.15
     fs-extra: ^10.0.0
+    geojson: ^0.5.0
+    globe.gl: ^2.22.3
     helmet: ^4.6.0
     html-to-draftjs: ^1.5.0
     immutable: ^4.0.0-rc.12
@@ -119,7 +123,7 @@ __metadata:
     sharp: ^0.28.3
     sortablejs: ^1.13.0
     string-similarity: ^4.0.4
-    three: ^0.125.2
+    three: ^0.130.0
     three-conic-polygon-geometry: ^1.4.2
     typeorm: ^0.2.34
     typescript: ^4.1.2
@@ -1399,7 +1403,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.4.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.3, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.4.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.3, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
   version: 7.14.6
   resolution: "@babel/runtime@npm:7.14.6"
   dependencies:
@@ -2054,6 +2058,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@turf/boolean-point-in-polygon@npm:^6.3":
+  version: 6.4.0
+  resolution: "@turf/boolean-point-in-polygon@npm:6.4.0"
+  dependencies:
+    "@turf/helpers": ^6.4.0
+    "@turf/invariant": ^6.4.0
+  checksum: 75985281ad479f564061ce8623c3f07398e2f7bd56b67a251958ccb67805f342e3771280b630570a6484d51877b25ccc2c8a941cba65a2151550a17593d32506
+  languageName: node
+  linkType: hard
+
 "@turf/boolean-point-in-polygon@npm:^6.3.0":
   version: 6.3.0
   resolution: "@turf/boolean-point-in-polygon@npm:6.3.0"
@@ -2071,12 +2085,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@turf/helpers@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@turf/helpers@npm:6.4.0"
+  checksum: 3a78b0e665571443245ce08256ef985e779a75460f8df780b39c83b4e6529cd6987413314406ea566a9fe45c67113402a192e1e2bb3a7551632beff85f64566b
+  languageName: node
+  linkType: hard
+
 "@turf/invariant@npm:^6.3.0":
   version: 6.3.0
   resolution: "@turf/invariant@npm:6.3.0"
   dependencies:
     "@turf/helpers": ^6.3.0
   checksum: e140fa10003937360b12e812ee822d3270d63d21df58a938b6e3525d446346f407b4dfa97d2b9aac23d2d47d2495b3ac491142259fb43da57728df3e728b2bbb
+  languageName: node
+  linkType: hard
+
+"@turf/invariant@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@turf/invariant@npm:6.4.0"
+  dependencies:
+    "@turf/helpers": ^6.4.0
+  checksum: 71431b4abae92311b3f5cdc6c16879fe882c454b3d798ef0d593a84552c8956b852b4309af2f36a4f14ae066c2ce77b30e87046b35ec1e5fbd7aba5d23905568
+  languageName: node
+  linkType: hard
+
+"@tweenjs/tween.js@npm:18, @tweenjs/tween.js@npm:^18.6":
+  version: 18.6.4
+  resolution: "@tweenjs/tween.js@npm:18.6.4"
+  checksum: 55929f44d67dfc6d93742f598d19bd1fe46fc0bbef2a06a901a6f1d749230c0b254ea20daf8419afdf631a58c9130e34fe1f8587e63c6a2fd9e33b7e7cf65073
   languageName: node
   linkType: hard
 
@@ -2253,7 +2290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/geojson@npm:*":
+"@types/geojson@npm:*, @types/geojson@npm:^7946.0.7":
   version: 7946.0.7
   resolution: "@types/geojson@npm:7946.0.7"
   checksum: b0a614f58a169069d9978af24c4b816bc7140a722829d8786ad1ff22d8362b429c56170326c836ce661a0307f8e35820a055966c2eedc21b62671a56c472263e
@@ -2555,6 +2592,13 @@ __metadata:
   version: 4.0.0
   resolution: "@types/string-similarity@npm:4.0.0"
   checksum: ab906e5d2e5004c9fd5a23a08fd61746a52156ead32924e4750c6651d586103740edd79f43cc22ca8a2c2a02fb0d3f4740b7cae2123d65c23017638d8846e8dc
+  languageName: node
+  linkType: hard
+
+"@types/three@npm:^0.129.1":
+  version: 0.129.1
+  resolution: "@types/three@npm:0.129.1"
+  checksum: cb916c1206a6516e3d49f389bf8acf0167bcc3d0f5c99acd8e8339935a7d13a5c58f450463a40944fec652726ddd7910f04ebce7fc74c05ed8ec48ff1282742f
   languageName: node
   linkType: hard
 
@@ -3012,6 +3056,13 @@ __metadata:
     mime-types: ~2.1.24
     negotiator: 0.6.2
   checksum: 2686fa30dbc850db1bf458dc8171fba13c54ed6cb25f4298ec7c2f88b8dfc50351f25c40abe3a948e4ec7a0cc8ea83d1c55c2f73ffa612d18840a8778d4a2ee0
+  languageName: node
+  linkType: hard
+
+"accessor-fn@npm:1":
+  version: 1.3.1
+  resolution: "accessor-fn@npm:1.3.1"
+  checksum: 55d03e2609c8ed389b6ca584d3c5191c6e6f5bdabaef879a41799f006dee62355872ea40317d0bbe4a8784167b0902a1b14a194af0b021338c16ced38ce4b761
   languageName: node
   linkType: hard
 
@@ -4948,6 +4999,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-array@npm:1 - 3, d3-array@npm:2 - 3, d3-array@npm:2.10.0 - 3, d3-array@npm:2.5.0 - 3":
+  version: 3.0.1
+  resolution: "d3-array@npm:3.0.1"
+  dependencies:
+    internmap: 1 - 2
+  checksum: b9d9e09be270ff981340f1d82a9494ed6bb4400fe00bacae8a2fd6872f6134f785f4f6d065e9a1075d87a5ae4a7fe108304bc33d381912b368e194e3c54a1dda
+  languageName: node
+  linkType: hard
+
 "d3-array@npm:1, d3-array@npm:^1.2.0":
   version: 1.2.4
   resolution: "d3-array@npm:1.2.4"
@@ -4978,6 +5038,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-color@npm:1 - 3":
+  version: 3.0.1
+  resolution: "d3-color@npm:3.0.1"
+  checksum: aae96d2d4e3e0b1376c9a5395823d330562cf1cae61885c3cebc9f2119bd2a87c5129b05196dd50ae102ef6135a5f910a860a285c53cb6d5c9e2646663b288b8
+  languageName: node
+  linkType: hard
+
 "d3-delaunay@npm:5":
   version: 5.3.0
   resolution: "d3-delaunay@npm:5.3.0"
@@ -4994,7 +5061,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-geo-voronoi@npm:^1.6.0":
+"d3-format@npm:1 - 3":
+  version: 3.0.1
+  resolution: "d3-format@npm:3.0.1"
+  checksum: 151b97173359611dc3dfca595ff2bfae13f5811965ae2e843247d18324ea0228ff99d53957219b00788cfe49025b3d13f064fbbfd6d2d8bd32e383e93bc08b1d
+  languageName: node
+  linkType: hard
+
+"d3-geo-voronoi@npm:^1.6, d3-geo-voronoi@npm:^1.6.0":
   version: 1.6.0
   resolution: "d3-geo-voronoi@npm:1.6.0"
   dependencies:
@@ -5003,6 +5077,15 @@ __metadata:
     d3-geo: ^1.0
     d3-tricontour: 0.1.0
   checksum: b68edec5401ed3d5713661ebc3cc04f1ee2c4aca44dd8d7132c09f528f64c48382f91bbf0a5caf5d0fd796d5ca440027c6299ea8af96b575a109d42326d813a1
+  languageName: node
+  linkType: hard
+
+"d3-geo@npm:1 - 3":
+  version: 3.0.1
+  resolution: "d3-geo@npm:3.0.1"
+  dependencies:
+    d3-array: 2.5.0 - 3
+  checksum: 3e718f5a112d77598fdc7da8b2f61d1302a1959517934176c003dbefa75ed0e0e4237a73baeb69391e3f608022f54c6d6e49ee3413653ea89721d1dbc9795ffe
   languageName: node
   linkType: hard
 
@@ -5033,6 +5116,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-interpolate@npm:1 - 3, d3-interpolate@npm:1.2.0 - 3":
+  version: 3.0.1
+  resolution: "d3-interpolate@npm:3.0.1"
+  dependencies:
+    d3-color: 1 - 3
+  checksum: ec6d6c1733a492c7dfe1b795f3f504b736b5a2be4ac714a14a3dc4f657c907f802fffff46a2775c6a6ac5b5bf7ae761fa07244a19896a7113fc391b4b555db70
+  languageName: node
+  linkType: hard
+
 "d3-scale@npm:1":
   version: 1.0.7
   resolution: "d3-scale@npm:1.0.7"
@@ -5048,6 +5140,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-scale@npm:1 - 4":
+  version: 4.0.0
+  resolution: "d3-scale@npm:4.0.0"
+  dependencies:
+    d3-array: 2.10.0 - 3
+    d3-format: 1 - 3
+    d3-interpolate: 1.2.0 - 3
+    d3-time: 2.1.1 - 3
+    d3-time-format: 2 - 4
+  checksum: 688bd334c5e19b632a3fa382bc311d0b83b2d17acf6cfd9d7393087e8f60e3f2a03d63483ea6ef1c2c6147ac5316a48a397a2c29527627563897df8e4b3b9e18
+  languageName: node
+  linkType: hard
+
 "d3-time-format@npm:2":
   version: 2.3.0
   resolution: "d3-time-format@npm:2.3.0"
@@ -5057,10 +5162,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-time-format@npm:2 - 4":
+  version: 4.0.0
+  resolution: "d3-time-format@npm:4.0.0"
+  dependencies:
+    d3-time: 1 - 3
+  checksum: 578ff1765bb5127fa9919cf1ea0dd3a6838336fb90f40daa0984b29c34053673231a0dbd6317d924a1d4babc859f3ee8ca5204bc5ea1ba8b2f73af80113d0e6e
+  languageName: node
+  linkType: hard
+
 "d3-time@npm:1":
   version: 1.1.0
   resolution: "d3-time@npm:1.1.0"
   checksum: d083c2181bbd1207f5fc8a0bfc2a8c1a44a56b3781dd6ef73a70f1d82aa74f49d1b410d4afc8e1a10db459fd60fdc75191ac89b8cdf4ee2705d7f3a1f0034fac
+  languageName: node
+  linkType: hard
+
+"d3-time@npm:1 - 3, d3-time@npm:2.1.1 - 3":
+  version: 3.0.0
+  resolution: "d3-time@npm:3.0.0"
+  dependencies:
+    d3-array: 2 - 3
+  checksum: 6e9201715ef03eb260c0491f3d9dcdabe9b9f9395b31a1757e6628fe92ce004d226262d1fb76e0ff43ad5cd52971ac442032a0abf1a0f575d6c687fc9c76c8cc
   languageName: node
   linkType: hard
 
@@ -5074,10 +5197,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"data-joint@npm:^1.2":
+  version: 1.2.4
+  resolution: "data-joint@npm:1.2.4"
+  dependencies:
+    index-array-by: ^1.3.1
+  checksum: 78fef73eb6f9983cceb06cb197a3f3ddfcea417726deb5d233c172794865693ac9fb7020adab5e1eed7d1f839b963cb30cea011bbd473c188536a298e222330f
+  languageName: node
+  linkType: hard
+
 "data-uri-to-buffer@npm:3.0.1":
   version: 3.0.1
   resolution: "data-uri-to-buffer@npm:3.0.1"
   checksum: 9f28217ba76eaca400a75f4b1a1d0f55058082c8152a3d88ad5feeec5e54b8c7b6d8a7bb210206bfa552a927c1b942b6102ddbb2feaa557321ea94762c4f14e2
+  languageName: node
+  linkType: hard
+
+"debounce@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "debounce@npm:1.2.1"
+  checksum: 04a00c6c45173ac6fb03ad3a7cf742fa4a86f6bf86b22f5b867085f739d0010ad98cbb92e80d60293faf6efb5452c637941092bd8d783cfeabe55c2000b1b07f
   languageName: node
   linkType: hard
 
@@ -5221,6 +5360,15 @@ __metadata:
   version: 4.0.1
   resolution: "delaunator@npm:4.0.1"
   checksum: 0d7ba5ef6efaadccd0e17a01087f22f27a818279b9050d09032799052f59f0991d332f884a20ec9b839035077c732e6f894143d14207723c9b276c01a579d397
+  languageName: node
+  linkType: hard
+
+"delaunator@npm:5":
+  version: 5.0.0
+  resolution: "delaunator@npm:5.0.0"
+  dependencies:
+    robust-predicates: ^3.0.0
+  checksum: c3c64d31f73afd9b111fe9ac2690f4d6d7dcefc67d56b2ea3c9734cd3e5f74cd0137195c75fe8a46b7f94318fe120599fec9224949840adf3ea75f4637e999a5
   languageName: node
   linkType: hard
 
@@ -5464,7 +5612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"earcut@npm:^2.2.2":
+"earcut@npm:2, earcut@npm:^2.2.2":
   version: 2.2.2
   resolution: "earcut@npm:2.2.2"
   checksum: 030e091437c4fae34c4538e0886a1d7c68f67c3ec3ba793210b280df24b329221ed81179e300742abf7aa2c394332a77395133c5163717b1806cebab6aa6c88c
@@ -6489,6 +6637,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"frame-ticker@npm:1":
+  version: 1.0.3
+  resolution: "frame-ticker@npm:1.0.3"
+  dependencies:
+    simplesignal: ^2.1.6
+  checksum: 5a38f92190facf7d0c5ae05f3afa4ba8b277101c57c05afee7956e04e58d3d134e400b4d31e00043f03a7945a586f0eb483617ed83f29f354b0eefcff4bccb15
+  languageName: node
+  linkType: hard
+
 "fresh@npm:0.5.2":
   version: 0.5.2
   resolution: "fresh@npm:0.5.2"
@@ -6609,6 +6766,13 @@ fsevents@^1.0.0:
   version: 3.2.1
   resolution: "geojson-vt@npm:3.2.1"
   checksum: 5411aa848eebb4bc5ca9583fd696a32655a39b7be5d60ab9460e402b141ccddb544453b73de06c234177f793ab67472e420002ee593c61629ae246656fc6c0a5
+  languageName: node
+  linkType: hard
+
+"geojson@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "geojson@npm:0.5.0"
+  checksum: 5536f75f2660625fbb03ab9b0334d537563f5ec924a7e31b49912ea781ea40e8a1bcde476f662bbb81a00adcd20a75ccfd338a6f1a89e1350de36c12d0db0e3d
   languageName: node
   linkType: hard
 
@@ -6782,6 +6946,20 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
+"globe.gl@npm:^2.22.3":
+  version: 2.22.3
+  resolution: "globe.gl@npm:2.22.3"
+  dependencies:
+    "@tweenjs/tween.js": ^18.6
+    accessor-fn: 1
+    kapsule: ^1.13
+    three: ">=0.118 <1"
+    three-globe: ^2.18
+    three-render-objects: ^1.26
+  checksum: 930a585e6be79232779d9ca3eb6e267b1455c7b58939c28f5db6bbe7bf06fb977a2fb72a983c2c426fe6a361c9b6790c752e737cb791c00df7cc8c34920aa02b
+  languageName: node
+  linkType: hard
+
 "got@npm:^11.7.0":
   version: 11.8.2
   resolution: "got@npm:11.8.2"
@@ -6847,6 +7025,13 @@ fsevents@^1.0.0:
   dependencies:
     duplexer: ^0.1.2
   checksum: 37e0d62ce9db9c8684e056ed65d64485c0921b37a6bda61c119d1de171ec5302d700440c9898679e0715ea61f9907a0117828bf3bbc4e6b7b728ded0957426b6
+  languageName: node
+  linkType: hard
+
+"h3-js@npm:3":
+  version: 3.7.2
+  resolution: "h3-js@npm:3.7.2"
+  checksum: fded1d8911dbe78882256bb6a816ad795038ba322b5bc486ee47b12236a7d8dfe49d487bbd7c803f18a0394c8ff5abc05ef5ed1a441f1ecb6ce17ac4029d2d13
   languageName: node
   linkType: hard
 
@@ -7222,6 +7407,13 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
+"index-array-by@npm:1, index-array-by@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "index-array-by@npm:1.3.1"
+  checksum: 2cfdb32d4731b7551e88b4754118989a6a176b012c41aa389cef6ee37cd2718d047609873ac82a815c07339e74b336c36d5dea5bfa55a39691fecff1922edc96
+  languageName: node
+  linkType: hard
+
 "infer-owner@npm:^1.0.4":
   version: 1.0.4
   resolution: "infer-owner@npm:1.0.4"
@@ -7282,6 +7474,13 @@ fsevents@^1.0.0:
     has: ^1.0.3
     side-channel: ^1.0.4
   checksum: 2465f832aa80c3740f2cfc5c75e74c727b4a45b8d80e295bb66dbb59435de536b9951b7f4d1a8075d5bb90054bd30ff22a37356a247fba3608987c7765569345
+  languageName: node
+  linkType: hard
+
+"internmap@npm:1 - 2":
+  version: 2.0.1
+  resolution: "internmap@npm:2.0.1"
+  checksum: bbe94cac976b48873f54d9bdabd83a4d3df252ef508d8bba7a2415d1251ce43a204490c3e15fc418855874f3a5304ae11845bd4b95ad49757bd1d4cc33a1c627
   languageName: node
   linkType: hard
 
@@ -8134,6 +8333,15 @@ fsevents@^1.0.0:
     jwa: ^1.4.1
     safe-buffer: ^5.0.1
   checksum: 3990b26ebb6f368bf6c53bf580cd327f207052adedeb7900dde665e143fff9ea5d96d0b4282e85a631a6e3af76ada281a1ccc450b1916d579d07e9d36b564a19
+  languageName: node
+  linkType: hard
+
+"kapsule@npm:^1.13":
+  version: 1.13.4
+  resolution: "kapsule@npm:1.13.4"
+  dependencies:
+    debounce: ^1.2.1
+  checksum: 7959e3705ffe6f7ba3daa8ea55466b02b92562587a04e91f957087c5dbb414c6011f3e3e9a6a69c731a39075c8cf7179cc961560bd32dd5aadd6afdd9aaed91d
   languageName: node
   linkType: hard
 
@@ -10065,6 +10273,15 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
+"polished@npm:4":
+  version: 4.1.3
+  resolution: "polished@npm:4.1.3"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+  checksum: 1ba2b0a8d7ca9e229359abf3a743eabe861b2b17ea69b088de5b0905d78401ac2b258371804208af5b412818a6d5ee28359ef6c79cd054245c159fe6c756a85c
+  languageName: node
+  linkType: hard
+
 "popper.js@npm:1.16.1-lts":
   version: 1.16.1-lts
   resolution: "popper.js@npm:1.16.1-lts"
@@ -11054,6 +11271,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"robust-predicates@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "robust-predicates@npm:3.0.1"
+  checksum: c580581823c79956c7fa94e20da3a1fa6c3aef33957eee2e15aa67f9b9a1c8a995d266ebfbeb974fbfa0dae541df6b58535ddbf5950c8c96ebb1082deceb86d1
+  languageName: node
+  linkType: hard
+
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
   resolution: "run-parallel@npm:1.2.0"
@@ -11362,6 +11586,13 @@ resolve@^2.0.0-next.3:
   dependencies:
     is-arrayish: ^0.3.1
   checksum: a5a2c1c86cea94f42ab843508e7c68b5bbfd15acb08056d600ac2e9c7f7c41bc417e71160ea3034a5411d3cce186c801f7a56badfb3a854906ce163120318875
+  languageName: node
+  linkType: hard
+
+"simplesignal@npm:^2.1.6":
+  version: 2.1.7
+  resolution: "simplesignal@npm:2.1.7"
+  checksum: 1e692c868bddae5169c75e5e0cf8c856ef5241f87570c31c4e6db72c1e9af62c72c85a4b4b98faf9c16d948a6cfbf41d1bd4c684c0e933ff678f46d5ed8d98ef
   languageName: node
   linkType: hard
 
@@ -12166,6 +12397,22 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"three-conic-polygon-geometry@npm:^1.4":
+  version: 1.4.4
+  resolution: "three-conic-polygon-geometry@npm:1.4.4"
+  dependencies:
+    "@turf/boolean-point-in-polygon": ^6.3
+    d3-array: 1 - 3
+    d3-geo: 1 - 3
+    d3-geo-voronoi: ^1.6
+    delaunator: 5
+    earcut: 2
+  peerDependencies:
+    three: ">=0.72.0"
+  checksum: 1641fcf635a9f59ce9fedfc0bc235a9f4501cdb4cc123d4b6c98230b056716f337af9d550bc20674325304d7daae25b44cb596dfdd08e91bedb92d1bca1a3ffe
+  languageName: node
+  linkType: hard
+
 "three-conic-polygon-geometry@npm:^1.4.2":
   version: 1.4.2
   resolution: "three-conic-polygon-geometry@npm:1.4.2"
@@ -12182,10 +12429,70 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"three@npm:^0.125.2":
-  version: 0.125.2
-  resolution: "three@npm:0.125.2"
-  checksum: e7b6398d140b9bec8e82301de735c018f5b576c9b565c97017ce6a4be5d6291da2a8c02d0711f44478f949ea51bd7925516207acd036c69ab379ebf0664496d9
+"three-fatline@npm:^0.5":
+  version: 0.5.0
+  resolution: "three-fatline@npm:0.5.0"
+  peerDependencies:
+    three: ">=0.84.0"
+  checksum: 9f43974cf662aee7a192e8e70aecd42c264920fdc233e7a8e3b4fbff32cf01f345a609fbbecb3ca5a8e151dba206f2afd95377e4958750668f4554ec0d435107
+  languageName: node
+  linkType: hard
+
+"three-geojson-geometry@npm:^1.1":
+  version: 1.1.4
+  resolution: "three-geojson-geometry@npm:1.1.4"
+  dependencies:
+    d3-geo: 1 - 3
+    earcut: 2
+  peerDependencies:
+    three: ">=0.72.0"
+  checksum: 4fdec885ad8b2aaa13944086374b7e1dd9d635a7f7ada229e42b577c4135c0dbbbd1193f5f33acb21b0c9133126c19aca48188943dd37b30f62bee3bf328ab7b
+  languageName: node
+  linkType: hard
+
+"three-globe@npm:^2.18":
+  version: 2.18.5
+  resolution: "three-globe@npm:2.18.5"
+  dependencies:
+    "@tweenjs/tween.js": 18
+    accessor-fn: 1
+    d3-geo: 1 - 3
+    d3-interpolate: 1 - 3
+    d3-scale: 1 - 4
+    data-joint: ^1.2
+    earcut: 2
+    frame-ticker: 1
+    h3-js: 3
+    index-array-by: 1
+    kapsule: ^1.13
+    three-conic-polygon-geometry: ^1.4
+    three-fatline: ^0.5
+    three-geojson-geometry: ^1.1
+    tinycolor2: ^1.4
+  peerDependencies:
+    three: ">=0.88.0"
+  checksum: e9f6cf201047539d25d34953642e20dcce2e8276e64e0b8391bc9c42e7a7f5955da67f0392613b78d752bf8ef699171554a921f2d63ab20351ed5f9c64236f3d
+  languageName: node
+  linkType: hard
+
+"three-render-objects@npm:^1.26":
+  version: 1.26.4
+  resolution: "three-render-objects@npm:1.26.4"
+  dependencies:
+    "@tweenjs/tween.js": 18
+    accessor-fn: 1
+    kapsule: ^1.13
+    polished: 4
+  peerDependencies:
+    three: "*"
+  checksum: 3e4ed2192a303d45b82ce70c860a97e409dd8b1fe3460b8a38c9e8a0bb29b828dc8ca1b8f9872109fbecdcbc47a936ed54cf4c62440c2ed7e80d77c143ad8c7f
+  languageName: node
+  linkType: hard
+
+"three@npm:>=0.118 <1, three@npm:^0.130.0":
+  version: 0.130.0
+  resolution: "three@npm:0.130.0"
+  checksum: 81bb291bbc6bcd684b5f06ca4f36cac2172fddf642b8241c7eaccbfca656d5c38321a8326fe8cc7816bd3d7d535aaa2f8151370d7289631f9db595b4214c1ceb
   languageName: node
   linkType: hard
 
@@ -12209,6 +12516,13 @@ resolve@^2.0.0-next.3:
   version: 1.0.3
   resolution: "tiny-warning@npm:1.0.3"
   checksum: 6cf9f66cb765b893976b8cd1c1310338861f30fb04d02ef2c8e0a748cbc2ed5acd8bb1954b78c15f640ad4116def67134d7d705f2a0c9bf27e6e2eb3e92bff29
+  languageName: node
+  linkType: hard
+
+"tinycolor2@npm:^1.4":
+  version: 1.4.2
+  resolution: "tinycolor2@npm:1.4.2"
+  checksum: cf33d084cb378d2988fad1b214e62f38be75ba1a9a6df98d4dadf77c31f82796d40822100e6d3e1973c9233ddf0ddbbbfdcac40e2288c958bca3c6d310e2ccb4
   languageName: node
   linkType: hard
 

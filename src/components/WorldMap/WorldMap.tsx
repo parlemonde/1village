@@ -1,127 +1,76 @@
-import CameraControls from 'camera-controls';
+import Globe, { GlobeInstance } from 'globe.gl';
 import React from 'react';
-// import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
 
-import { getCountries } from '../WorldMap/lib/drawGeoJSON';
+import { Capitals, Countries, Decors, DataClass } from './data';
 
-CameraControls.install({ THREE: THREE });
-const loader = new GLTFLoader();
-
-const loadGLB = async (path: string): Promise<THREE.Group> => {
-  return new Promise((resolve) => {
-    loader.load(
-      path,
-      (gltf) => {
-        resolve(gltf.scene);
-      },
-      (xhr) => {
-        // eslint-disable-next-line no-console
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-      },
-      (error) => {
-        console.error('An error happened loading the map...');
-        console.error(error);
-        resolve(new THREE.Group());
-      },
-    );
-  });
-};
-
-const renderScene = async () => {
-  const scene = new THREE.Scene();
-
-  const camera = new THREE.PerspectiveCamera(45, 2, 0.01, 1000);
-  camera.position.z = 10;
-
-  const [earth, decors] = await Promise.all([loadGLB('/earth/EARTH_HighPoly.glb'), loadGLB('/earth/Decors.glb')]);
-  scene.add(earth);
-  scene.add(decors);
-
-  scene.add(new THREE.AmbientLight(0x888888));
-  scene.add(new THREE.AmbientLight(0x888888));
-  const light1 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
-  light1.position.set(20, 0, 0);
-  scene.add(light1);
-  const light2 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
-  light2.position.set(-20, 0, 0);
-  scene.add(light2);
-
-  const light3 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
-  light3.position.set(0, 20, 0);
-  scene.add(light3);
-  const light4 = new THREE.SpotLight(0x888888, 0.6, 0, 1);
-  light4.position.set(0, -20, 0);
-  scene.add(light4);
-
-  const countries = getCountries(5.06);
-  countries.forEach((c) => {
-    c.rotateY((192 * Math.PI) / 180);
-    scene.add(c);
-  });
-
-  return {
-    scene,
-    camera,
-  };
-};
-
-const clock = new THREE.Clock();
+const GLOBE_IMAGE_URL = '/static-images/earth-blue-marble.jpg';
+const BACKGROUND_IMAGE_URL = '/static-images/night-sky.png';
+const START_ALTITUDE = 2.5;
+const DECORS_BREAKPOINT = 1.5;
 
 const WorldMap: React.FC = () => {
-  const ref = React.useRef<HTMLCanvasElement>(null);
-  const rendererRef = React.useRef<THREE.WebGLRenderer | null>(null);
-  const cameraControlRef = React.useRef<CameraControls | null>(null);
-  const dataRef = React.useRef<{ scene: THREE.Scene; camera: THREE.Camera } | null>(null);
-  const animationFrame = React.useRef<number | null>(null);
+  const canvasRef = React.useRef<HTMLDivElement>(null);
+  const worldRef = React.useRef<GlobeInstance | null>(null);
+  const dataRef = React.useRef<DataClass[]>([]);
+  const showDecorsRef = React.useRef<boolean | null>(null);
 
-  const render = React.useCallback(() => {
-    if (rendererRef.current && cameraControlRef.current && dataRef.current) {
-      const { scene, camera } = dataRef.current;
-      const delta = clock.getDelta();
-      const hasControlsUpdated = cameraControlRef.current.update(delta);
-      if (hasControlsUpdated) {
-        rendererRef.current.render(scene, camera);
-      }
-      animationFrame.current = requestAnimationFrame(render);
+  const onZoom = React.useCallback(({ altitude }: { altitude: number }) => {
+    if (!worldRef.current) {
+      return;
+    }
+    dataRef.current.forEach((d) => d.onZoom(worldRef.current, altitude));
+    const showDecors = altitude >= DECORS_BREAKPOINT;
+    if (showDecorsRef.current !== showDecors) {
+      showDecorsRef.current = showDecors;
+      dataRef.current.forEach((d) => d.updateData(worldRef.current, showDecors));
     }
   }, []);
 
   const init = React.useCallback(async () => {
-    if (ref.current) {
-      const { scene, camera } = await renderScene();
-      dataRef.current = { scene, camera };
+    if (canvasRef.current) {
+      const width = canvasRef.current.clientWidth;
+      const height = canvasRef.current.clientHeight;
 
-      const canvas = ref.current;
-      rendererRef.current = new THREE.WebGLRenderer({ canvas });
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-      const pixelRatio = window.devicePixelRatio;
-      const width = (canvas.clientWidth * pixelRatio) | 0;
-      const height = (canvas.clientHeight * pixelRatio) | 0;
-      rendererRef.current.setSize(width, height, false);
-      rendererRef.current.render(scene, camera);
-      rendererRef.current.outputEncoding = THREE.sRGBEncoding;
+      dataRef.current = [new Countries(), new Capitals(), new Decors()];
+      await Promise.all(dataRef.current.map((d) => d.getData()));
 
-      cameraControlRef.current = new CameraControls(camera, rendererRef.current.domElement);
+      // init world
+      worldRef.current = Globe({
+        rendererConfig: { failIfMajorPerformanceCaveat: true },
+      })(canvasRef.current)
+        .width(width)
+        .height(height)
+        .globeImageUrl(GLOBE_IMAGE_URL)
+        .backgroundImageUrl(BACKGROUND_IMAGE_URL)
+        .atmosphereAltitude(0.25)
+        .onZoom(onZoom);
+
+      worldRef.current.renderer().outputEncoding = THREE.sRGBEncoding;
+      worldRef.current.renderer().shadowMap.enabled = false;
+
+      dataRef.current.forEach((d) => d.showData(worldRef.current, START_ALTITUDE, START_ALTITUDE >= DECORS_BREAKPOINT));
+
+      // clear scene
+      return () => {
+        if (worldRef.current) {
+          worldRef.current.customLayerData([]);
+        }
+        dataRef.current.forEach((d) => d.dispose());
+        if (worldRef.current) {
+          worldRef.current.renderer().renderLists.dispose();
+          worldRef.current.renderer().dispose();
+        }
+      };
     }
-  }, []);
+    return () => {};
+  }, [onZoom]);
 
   React.useEffect(() => {
-    init()
-      .then(() => {
-        animationFrame.current = requestAnimationFrame(render);
-      })
-      .catch();
-    return () => {
-      if (animationFrame.current) {
-        cancelAnimationFrame(animationFrame.current);
-      }
-    };
-  }, [init, render]);
+    init().catch();
+  }, [init]);
 
-  return <canvas ref={ref} style={{ width: '100%', height: '500px' }}></canvas>;
+  return <div ref={canvasRef} style={{ width: '100%', height: '500px' }}></div>;
 };
 
 export default WorldMap;
