@@ -13,6 +13,7 @@ import {
 import { Activity as ActivityInterface, ActivityType, ActivityStatus } from '../../types/activity.type';
 
 import { ActivityData } from './activityData';
+import { Mimique } from './mimique';
 import { User } from './user';
 import { Village } from './village';
 
@@ -86,4 +87,7 @@ export class Activity implements ActivityInterface {
   public responseType: ActivityType | null;
 
   public commentCount?: number;
+
+  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
+  public mimiques: Mimique[];
 }

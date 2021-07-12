@@ -33,3 +33,7 @@ export function uploadVideo(filePath: string, name: string, userId: number): Pro
 export function deleteVideo(videoId: number): Promise<boolean> {
   return vimeo.deleteVideo(videoId);
 }
+
+export function getPictureForVideo(videoId: number): Promise<string> {
+  return vimeo.getPictureForVideo(videoId);
+}
