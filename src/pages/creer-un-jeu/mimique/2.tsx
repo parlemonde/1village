@@ -4,12 +4,10 @@ import React from 'react';
 import { MimiqueData, MimiquesData } from 'types/game.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { isMimique } from 'src/activity-types/game.const';
 import { isGame } from 'src/activity-types/anyActivity';
 import MimiqueSelector from 'src/components/selectors/MimiqueSelector';
-import { ActivityStatus } from 'types/activity.type';
 
 const MimiqueStep2: React.FC = () => {
   const router = useRouter();
@@ -24,7 +22,6 @@ const MimiqueStep2: React.FC = () => {
   }, [activity, router]);
 
   const data = (activity?.data as MimiquesData) || null;
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...data };
