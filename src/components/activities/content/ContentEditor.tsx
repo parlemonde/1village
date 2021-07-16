@@ -9,7 +9,7 @@ import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { SoundEditor } from './editors/SoundEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
-import { VideoEditor } from './editors/VideoEditor';
+import { VideoEditor } from './editors/VideoEditor/VideoEditor';
 
 interface ContentEditorProps {
   content: EditorContent[];

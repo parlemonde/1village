@@ -3,6 +3,8 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMan
 import { User as UserInterface, UserType } from '../../types/user.type';
 
 import { Activity } from './activity';
+import { Mimique } from './mimique';
+import { MimiqueResponse } from './mimiqueResponse';
 import { Village } from './village';
 
 export { UserType };
@@ -70,6 +72,12 @@ export class User implements UserInterface {
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
+
+  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.user)
+  public mimiques: Mimique[];
+
+  @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.user)
+  public mimiqueResponses: MimiqueResponse[];
 
   public mascotteId?: number;
 }
