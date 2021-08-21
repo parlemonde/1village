@@ -138,5 +138,6 @@
     "vimeo": "^2.1.1",
     "web-vitals": "^2.0.1",
     "winston": "^3.3.3"
-  }
+  },
+  "packageManager": "yarn@3.0.1"
 }
