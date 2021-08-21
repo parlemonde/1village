@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
@@ -268,12 +269,11 @@ export const ImageModal: React.FC<ImageModalProps> = ({
                   width: '100%',
                   margin: '0.5rem 0',
                   height: '13rem',
-                  backgroundImage: `url(${preview.url})`,
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
+                  position: 'relative',
                 }}
-              ></div>
+              >
+                <Image layout="fill" objectFit="contain" src={preview.url} unoptimized />
+              </div>
             ) : null}
             {preview.mode === 2 && <Alert severity="error">{"Erreur: impossible de charger l'image."}</Alert>}
           </div>

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -76,24 +77,24 @@ const DefiStep2: React.FC = () => {
               <Grid item xs={12} md={4}>
                 <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
                   <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%' }}>
-                    {data.image ? (
-                      <img alt="image du plat" src={data.image} style={{ width: '100%', height: 'auto' }} />
-                    ) : (
-                      <KeepRatio ratio={1 / 2} width="100%">
-                        <div
-                          style={{
-                            backgroundColor: bgPage,
-                            height: '100%',
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
+                    <KeepRatio ratio={2 / 3} width="100%">
+                      <div
+                        style={{
+                          backgroundColor: bgPage,
+                          height: '100%',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {data.image ? (
+                          <Image layout="fill" objectFit="contain" alt="image du plat" src={data.image} unoptimized />
+                        ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
-                        </div>
-                      </KeepRatio>
-                    )}
+                        )}
+                      </div>
+                    </KeepRatio>
                   </ButtonBase>
                   {data.image && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>

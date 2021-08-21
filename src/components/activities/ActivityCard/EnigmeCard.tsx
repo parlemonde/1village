@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -47,12 +48,11 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
               height: '100%',
               width: '100%',
               backgroundColor: bgPage,
-              backgroundImage: `url(${firstImage.value})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              position: 'relative',
             }}
-          />
+          >
+            <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+          </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>

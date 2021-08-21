@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 import { Button } from '@material-ui/core';
@@ -28,13 +29,12 @@ export const ImageEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
             style={{
               width: '15rem',
               height: '10rem',
-              backgroundImage: `url(${imageUrl})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
               borderRight: `1px dashed ${primaryColor}`,
+              position: 'relative',
             }}
-          ></div>
+          >
+            <Image layout="fill" objectFit="contain" src={imageUrl} unoptimized />
+          </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Button
               variant="outlined"

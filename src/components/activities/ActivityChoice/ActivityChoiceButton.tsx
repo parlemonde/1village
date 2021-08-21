@@ -42,8 +42,8 @@ export const ActivityChoiceButton: React.FC<ActivityChoiceButtonProps> = ({
             </span>
           </div>
         ) : (
-          <Link href={href} passHref>
-            <ButtonBase style={{ width: '100%', height: '100%' }}>
+          <ButtonBase style={{ width: '100%', height: '100%' }}>
+            <Link href={href} passHref>
               <a
                 href={href}
                 className="bg-grey hover-bg-primary"
@@ -63,8 +63,8 @@ export const ActivityChoiceButton: React.FC<ActivityChoiceButtonProps> = ({
                   {label}
                 </span>
               </a>
-            </ButtonBase>
-          </Link>
+            </Link>
+          </ButtonBase>
         )}
       </KeepRatio>
     </KeepRatio>

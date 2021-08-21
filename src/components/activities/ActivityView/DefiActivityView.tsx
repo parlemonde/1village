@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 import { Grid } from '@material-ui/core';
@@ -13,7 +14,7 @@ export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ ac
   return (
     <div>
       <div style={{ margin: '1rem 0' }}>
-        <div className="text-center">
+        <div className="text-center" style={{ marginBottom: '1rem' }}>
           <h3>
             {isCooking(activity)
               ? activity.data.name
@@ -28,8 +29,8 @@ export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ ac
           <Grid container spacing={2}>
             {activity.data.image && (
               <Grid item xs={12} md={4}>
-                <div style={{ width: '100%', marginTop: '1rem' }}>
-                  <img alt="image du plat" src={activity.data.image} style={{ width: '100%', height: 'auto' }} />
+                <div style={{ width: '100%', height: '100%', minHeight: '200px', position: 'relative' }}>
+                  <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.image} />
                 </div>
               </Grid>
             )}

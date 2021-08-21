@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -48,12 +49,11 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
               height: '100%',
               width: '100%',
               backgroundColor: bgPage,
-              backgroundImage: `url(${firstImage})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              position: 'relative',
             }}
-          />
+          >
+            <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+          </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>

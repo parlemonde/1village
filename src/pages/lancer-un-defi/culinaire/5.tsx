@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -126,14 +127,14 @@ const DefiStep5: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <div className="text-center">
+            <div className="text-center" style={{ marginBottom: '1rem' }}>
               <h3>{data.name}</h3>
             </div>
             <Grid container spacing={2}>
               {data.image && (
                 <Grid item xs={12} md={4}>
-                  <div style={{ width: '100%', marginTop: '1rem' }}>
-                    <img alt="image du plat" src={data.image} style={{ width: '100%', height: 'auto' }} />
+                  <div style={{ width: '100%', height: '100%', minHeight: '200px', position: 'relative' }}>
+                    <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={data.image} />
                   </div>
                 </Grid>
               )}
