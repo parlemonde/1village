@@ -161,7 +161,7 @@ export const AdminTable: React.FC<AdminTableProps> = ({ 'aria-label': ariaLabel,
                     count={data.length}
                     rowsPerPage={options.limit || 10}
                     page={(options.page || 1) - 1}
-                    onChangePage={handleChangePage}
+                    onPageChange={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                   />
                 </TableRow>

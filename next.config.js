@@ -20,6 +20,10 @@ module.exports = {
     // config.plugins.push(new DuplicatePackageCheckerPlugin());
     return config;
   },
+  eslint: {
+    // ESLint is already called before building with nextJS. So no need here.
+    ignoreDuringBuilds: true,
+  },
   images: {
     domains: ['web-dev.imgix.net'],
   },
