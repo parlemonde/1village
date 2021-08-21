@@ -67,7 +67,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={`/activite/${activity.id}`}>
+                <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     {'Résoudre l’énigme'}
                   </Button>
@@ -82,6 +82,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/creer-une-enigme/5?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

@@ -172,7 +172,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
           <>
             <p>Aucun village existe !</p>
             {user !== null && user.type >= UserType.ADMIN ? (
-              <Link href="/admin/villages">
+              <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}
                 </Button>
@@ -204,7 +204,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
             {village === null && user !== null && user.type >= UserType.ADMIN && (
               <>
                 <Divider style={{ margin: '1rem 0' }} />
-                <Link href="/admin/villages">
+                <Link href="/admin/villages" passHref>
                   <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                     {"Aller à l'interface admin"}
                   </Button>

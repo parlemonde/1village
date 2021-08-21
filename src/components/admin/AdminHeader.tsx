@@ -41,7 +41,7 @@ export const AdminHeader: React.FC = () => {
             <Typography variant="h6" style={{ flexGrow: 1 }}>
               1Village - Administrateur
             </Typography>
-            <Link href="/">
+            <Link href="/" passHref>
               <Button component="a" href="/" variant="contained" size="small" style={{ margin: '0 1rem' }}>
                 Aller au village
               </Button>

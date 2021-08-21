@@ -5,9 +5,6 @@
 module.exports = {
   distDir: "./dist/next",
   poweredByHeader: false,
-  future: {
-    webpack5: true,
-  },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
@@ -22,5 +19,8 @@ module.exports = {
     // );
     // config.plugins.push(new DuplicatePackageCheckerPlugin());
     return config;
+  },
+  images: {
+    domains: ['web-dev.imgix.net'],
   },
 };

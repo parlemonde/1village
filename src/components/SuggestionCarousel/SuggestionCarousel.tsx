@@ -143,7 +143,7 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                     ))}
                   </Tabs>
                 </div>
-                <Link href={selectedSuggestion.href}>
+                <Link href={selectedSuggestion.href} passHref>
                   <Button
                     component="a"
                     href={selectedSuggestion.href}

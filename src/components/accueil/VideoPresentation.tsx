@@ -26,7 +26,7 @@ export const VideoPresentation: React.FC = () => {
             allowFullScreen
             style={{ height: '65%', width: '100%' }}
           ></iframe>
-          <Link href="/login">
+          <Link href="/login" passHref>
             <Button component="a" href="/login" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
               Se connecter
             </Button>

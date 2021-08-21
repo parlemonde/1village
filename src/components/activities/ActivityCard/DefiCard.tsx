@@ -84,7 +84,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={`/activite/${activity.id}`}>
+                <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     Relever le défi
                   </Button>
@@ -99,6 +99,7 @@ export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/lancer-un-defi/${link}?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

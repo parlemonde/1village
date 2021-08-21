@@ -70,7 +70,7 @@ const PresentationStep4: React.FC = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/se-presenter/thematique/3">
+              <Link href="/se-presenter/thematique/3" passHref>
                 <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/3">
                   {"Modifier à l'étape précédente"}
                 </Button>

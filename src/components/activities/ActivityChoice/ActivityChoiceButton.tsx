@@ -42,7 +42,7 @@ export const ActivityChoiceButton: React.FC<ActivityChoiceButtonProps> = ({
             </span>
           </div>
         ) : (
-          <Link href={href}>
+          <Link href={href} passHref>
             <ButtonBase style={{ width: '100%', height: '100%' }}>
               <a
                 href={href}

@@ -50,7 +50,7 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
       </div>
       {showEditButtons ? (
         <div style={{ width: '100%', textAlign: 'right', padding: '0.25rem' }}>
-          <Link href={`/poser-une-question/3?activity-id=${activity.id}`}>
+          <Link href={`/poser-une-question/3?activity-id=${activity.id}`} passHref>
             <Button
               component="a"
               href={`/poser-une-question/3?activity-id=${activity.id}`}
@@ -75,7 +75,7 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
           </div>
           <div>
             <CommentIcon count={activity.commentCount} activityId={activity.id} />
-            <Link href={`/activite/${activity.id}`}>
+            <Link href={`/activite/${activity.id}`} passHref>
               <Button component="a" href={`/activite/${activity.id}`} variant="outlined" color="primary">
                 Répondre à la question
               </Button>

@@ -49,7 +49,7 @@ const Activity: React.FC = () => {
     <Base>
       <div className="activity__back-container">
         <Link href="/">
-          <a href="/" className="activity__back-button">
+          <a className="activity__back-button">
             <HomeIcon className="activity__back-button-icon" />
             Accueil
           </a>

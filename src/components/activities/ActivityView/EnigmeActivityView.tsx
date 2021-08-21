@@ -68,7 +68,7 @@ export const EnigmeActivityView: React.FC<EnigmeActivityViewProps> = ({ activity
                 }}
               />
             </Button>
-            <Link href={`/activite/${activity.id}?reponse=true`}>
+            <Link href={`/activite/${activity.id}?reponse=true`} passHref>
               <Button
                 style={{ float: 'right' }}
                 disabled={timeLeft > 0}

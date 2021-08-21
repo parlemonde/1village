@@ -72,7 +72,7 @@ const DefiStep5: React.FC = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/lancer-un-defi/culinaire/4">
+              <Link href="/lancer-un-defi/culinaire/4" passHref>
                 <Button component="a" color="secondary" variant="contained" href="/lancer-un-defi/culinaire/4">
                   {"Modifier à l'étape précédente"}
                 </Button>

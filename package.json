@@ -21,6 +21,7 @@
     "react-is": "^17.0.1"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^11.1.0",
     "@svgr/webpack": "^5.5.0",
     "@types/body-parser": "^1.19.0",
     "@types/cookie-parser": "^1.4.2",

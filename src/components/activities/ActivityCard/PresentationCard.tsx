@@ -61,7 +61,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={`/activite/${activity.id}`}>
+                <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     Regarder la présentation
                   </Button>
@@ -76,6 +76,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/se-presenter/thematique/4?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

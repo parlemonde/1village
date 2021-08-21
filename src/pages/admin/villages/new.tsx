@@ -34,7 +34,7 @@ const NewVillage: React.FC = () => {
   return (
     <div className="admin--container">
       <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
-        <Link href="/admin/villages">
+        <Link href="/admin/villages" passHref>
           <MaterialLink href="/admin/villages">
             <h1>Villages</h1>
           </MaterialLink>
@@ -77,7 +77,7 @@ const NewVillage: React.FC = () => {
           </div>
         </form>
       </AdminTile>
-      <Link href="/admin/villages">
+      <Link href="/admin/villages" passHref>
         <Button variant="outlined" style={{ margin: '1rem 0' }} component="a" href="/admin/villages">
           Retour
         </Button>

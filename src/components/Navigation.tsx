@@ -96,7 +96,7 @@ export const Navigation: React.FC = () => {
           </div>
           <div style={{ padding: '0 5%', position: 'relative' }}>
             {tabs.map((tab, index) => (
-              <Link key={tab.path} href={tab.path}>
+              <Link key={tab.path} href={tab.path} passHref>
                 <Button
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -124,9 +124,7 @@ export const Navigation: React.FC = () => {
           </div>
         </div>
         <Link href="/cgu">
-          <a href="/cgu" className="navigation__cgu-link text text--small">
-            {"Conditions générales d'utilisation"}
-          </a>
+          <a className="navigation__cgu-link text text--small">{"Conditions générales d'utilisation"}</a>
         </Link>
       </div>
     </nav>

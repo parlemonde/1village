@@ -69,7 +69,7 @@ const Users: React.FC = () => {
 
   return (
     <div className="admin--container">
-      <Link href="/admin/users">
+      <Link href="/admin/users" passHref>
         <MaterialLink href="/admin/users">
           <h1 style={{ marginBottom: '1rem' }}>Utilisateurs</h1>
         </MaterialLink>
@@ -77,7 +77,7 @@ const Users: React.FC = () => {
       <AdminTile
         title="Liste des utilisateurs"
         toolbarButton={
-          <Link href="/admin/users/new">
+          <Link href="/admin/users/new" passHref>
             <Button component="a" href="/admin/users/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
               Ajouter un utilisateur
             </Button>

@@ -16,7 +16,7 @@ const PresentationSuccess: React.FC = () => {
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a" href="/" variant="outlined" color="primary">
               Retour à l’accueil
             </Button>

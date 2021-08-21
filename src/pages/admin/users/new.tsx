@@ -94,7 +94,7 @@ const NewUser: React.FC = () => {
   return (
     <div className="admin--container">
       <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
-        <Link href="/admin/users">
+        <Link href="/admin/users" passHref>
           <MaterialLink href="/admin/users">
             <h1>Utilisateurs</h1>
           </MaterialLink>
@@ -209,7 +209,7 @@ const NewUser: React.FC = () => {
           </div>
         </form>
       </AdminTile>
-      <Link href="/admin/users">
+      <Link href="/admin/users" passHref>
         <Button variant="outlined" style={{ margin: '1rem 0' }} component="a" href="/admin/users">
           Retour
         </Button>

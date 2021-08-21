@@ -19,7 +19,7 @@ const Custom404: React.FunctionComponent = () => {
           </h1>
           <h2>{"Oups ! Pelico n'a pas trouvé la page."}</h2>
           <p>La page que vous cherchez est introuvable ou temporairement inaccessible.</p>
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a" href="/" color="primary" variant="outlined" style={{ marginTop: '3rem' }}>
               Retour à l&apos;accueil
             </Button>

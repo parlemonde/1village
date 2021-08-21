@@ -340,12 +340,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
             <li style={{ margin: '0.2rem 0' }}>
               Vos vidéos mises en ligne sur 1village sont accessibles sur{' '}
               <Link href="/mes-videos">
-                <a
-                  href="/mes-videos"
-                  target="_blank"
-                  rel="noopener"
-                  style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'bottom' }}
-                >
+                <a target="_blank" rel="noopener" style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'bottom' }}>
                   <SettingsIcon /> {'->'} <i>mes vidéos</i>
                 </a>
               </Link>

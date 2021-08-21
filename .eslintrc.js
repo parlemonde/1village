@@ -21,6 +21,7 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/typescript",
+    "plugin:@next/next/recommended"
   ],
   rules: {
     "@typescript-eslint/no-empty-function": "off",
