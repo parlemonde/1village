@@ -35,7 +35,7 @@ __metadata:
     "@types/morgan": ^1.9.2
     "@types/multer": ^1.4.5
     "@types/mysql": ^2.15.18
-    "@types/node": ^14.17.3
+    "@types/node": ^16.7.1
     "@types/nodemailer": ^6.4.2
     "@types/nprogress": ^0.2.0
     "@types/prettier": ^2.2.3
@@ -2361,10 +2361,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.17.3":
-  version: 14.17.4
-  resolution: "@types/node@npm:14.17.4"
-  checksum: a0bbe143273f9bf39c1d4f9955b6efeabfa5ddb436692ca8fe1a835ceaacfb2536cad122df54a29daaf6139dcc79a480502c39477cf5fe28b9af2709a41312e7
+"@types/node@npm:^16.7.1":
+  version: 16.7.1
+  resolution: "@types/node@npm:16.7.1"
+  checksum: fcf1a2c7b1f19c2201574b2110176b49c6efd824a39b2ed8ac3e6688740e2a35bef95a3334dfa345f4bd4873fd8b79d8ac8cfcc9fcd3d2f4f8f993c2c37ce4ab
   languageName: node
   linkType: hard
 
