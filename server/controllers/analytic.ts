@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv';
+import type { JSONSchemaType } from 'ajv';
 import useragent from 'express-useragent';
 import { getRepository, Between } from 'typeorm';
 

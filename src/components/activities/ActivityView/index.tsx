@@ -17,7 +17,7 @@ import { UserType } from 'types/user.type';
 import { DefiActivityView } from './DefiActivityView';
 import { EnigmeActivityView } from './EnigmeActivityView';
 import { MascotteActivityView } from './MascotteActivityView';
-import { ActivityViewProps } from './activity-view.types';
+import type { ActivityViewProps } from './activity-view.types';
 
 const REACTIONS = {
   [ActivityType.PRESENTATION]: 'cette présentation',

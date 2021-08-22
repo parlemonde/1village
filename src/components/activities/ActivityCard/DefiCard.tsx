@@ -5,13 +5,13 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { ECO_ACTIONS, getDefi, getLanguageObject, isCooking, isEco, isLanguage } from 'src/activity-types/defi.const';
-import { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
+import type { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
 export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);

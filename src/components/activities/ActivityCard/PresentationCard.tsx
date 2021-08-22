@@ -5,13 +5,13 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
-import { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';
+import type { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
 export const PresentationCard = ({
   activity,

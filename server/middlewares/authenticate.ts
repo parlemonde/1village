@@ -1,9 +1,10 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 
 import { getNewAccessToken } from '../authentication/lib/tokens';
-import { UserType, User } from '../entities/user';
+import type { UserType } from '../entities/user';
+import { User } from '../entities/user';
 import { getHeader } from '../utils';
 
 const secret: string = process.env.APP_SECRET || '';

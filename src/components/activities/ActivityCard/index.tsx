@@ -25,7 +25,7 @@ import { EnigmeCard } from './EnigmeCard';
 import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
 const titles = {
   [ActivityType.PRESENTATION]: 'créé une présentation',

@@ -7,9 +7,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
-import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
+import type { LinearProgressProps } from '@material-ui/core/LinearProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, withStyles, WithStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import type { WithStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 

@@ -5,8 +5,8 @@ import { FormControlLabel, Grid, Radio, RadioGroup } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.const';
-import { LanguageDefiData } from 'src/activity-types/defi.types';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import type { LanguageDefiData } from 'src/activity-types/defi.types';
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

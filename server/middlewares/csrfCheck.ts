@@ -1,5 +1,5 @@
 import Tokens from 'csrf';
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
 import { getHeader } from '../utils';
 

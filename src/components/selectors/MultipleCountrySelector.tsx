@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useCountries } from 'src/services/useCountries';
-import { Country } from 'types/country.type';
+import type { Country } from 'types/country.type';
 
 type CountryOption = Country & {
   firstLetter: string;

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import fs from 'fs-extra';
 import path from 'path';
 import sharp from 'sharp';

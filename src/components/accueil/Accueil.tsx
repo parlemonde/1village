@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
-import { Filters, FilterArgs } from 'src/components/accueil/Filters';
+import type { FilterArgs } from 'src/components/accueil/Filters';
+import { Filters } from 'src/components/accueil/Filters';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { SubHeader } from 'src/components/accueil/SubHeader';
 import { Activities } from 'src/components/activities/List';

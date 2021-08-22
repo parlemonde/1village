@@ -39,6 +39,13 @@ module.exports = {
         },
       },
     ],
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+          prefer: 'type-imports',
+          disallowTypeAnnotations: false
+      }
+    ],
     "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "no-console": ["error", { allow: ["warn", "error"] }],
     "arca/import-ordering": ["error", { sections: ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],

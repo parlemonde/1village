@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { AnyActivity } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity } from 'src/activity-types/anyActivities.types';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';

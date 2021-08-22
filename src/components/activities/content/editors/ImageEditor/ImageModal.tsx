@@ -6,7 +6,8 @@ import { Button, Divider, TextField } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Alert } from '@material-ui/lab';
 
-import { ImgCroppie, ImgCroppieRef } from 'src/components/ImgCroppie';
+import type { ImgCroppieRef } from 'src/components/ImgCroppie';
+import { ImgCroppie } from 'src/components/ImgCroppie';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';

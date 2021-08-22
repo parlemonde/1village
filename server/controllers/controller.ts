@@ -1,10 +1,11 @@
-import { Router, RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
+import { Router } from 'express';
 import fs from 'fs-extra';
 import multer from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserType } from '../entities/user';
+import type { UserType } from '../entities/user';
 import { authenticate } from '../middlewares/authenticate';
 import { handleErrors } from '../middlewares/handleErrors';
 

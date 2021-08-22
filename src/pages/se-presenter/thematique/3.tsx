@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { EditorContent } from 'src/activity-types/extendedActivity.types';
+import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

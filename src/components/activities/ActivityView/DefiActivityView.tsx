@@ -4,11 +4,11 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 
 import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.const';
-import { DefiActivity } from 'src/activity-types/defi.types';
+import type { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { bgPage } from 'src/styles/variables.const';
 
-import { ActivityViewProps } from './activity-view.types';
+import type { ActivityViewProps } from './activity-view.types';
 
 export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) => {
   return (

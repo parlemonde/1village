@@ -1,5 +1,5 @@
-import { JSONSchemaType } from 'ajv';
-import { Request, Response } from 'express';
+import type { JSONSchemaType } from 'ajv';
+import type { Request, Response } from 'express';
 
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 

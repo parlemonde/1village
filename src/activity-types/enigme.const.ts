@@ -1,4 +1,4 @@
-import { EnigmeActivity } from './enigme.types';
+import type { EnigmeActivity } from './enigme.types';
 
 export const ENIGME = {
   OBJET: 0,

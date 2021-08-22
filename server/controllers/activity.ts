@@ -1,8 +1,9 @@
-import { JSONSchemaType } from 'ajv';
-import { NextFunction, Request, Response } from 'express';
+import type { JSONSchemaType } from 'ajv';
+import type { NextFunction, Request, Response } from 'express';
 import { getRepository, getManager } from 'typeorm';
 
-import { ActivityData, ActivityDataType } from '../entities/activityData';
+import type { ActivityDataType } from '../entities/activityData';
+import { ActivityData } from '../entities/activityData';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';

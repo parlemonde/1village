@@ -6,7 +6,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { ActivityType } from 'types/activity.type';
-import { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
 

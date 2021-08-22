@@ -7,7 +7,7 @@ import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { getMascotteContent, isMascotte } from 'src/activity-types/presentation.const';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -19,7 +19,7 @@ import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
 import { ActivityStatus } from 'types/activity.type';
-import { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 
 const MascotteStep4 = () => {
   const router = useRouter();

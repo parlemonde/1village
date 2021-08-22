@@ -3,13 +3,13 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
+import type { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
 export const MascotteCard = ({
   activity,

@@ -13,7 +13,7 @@ import Select from '@material-ui/core/Select';
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 import { UserType } from 'types/user.type';
-import { Village } from 'types/village.type';
+import type { Village } from 'types/village.type';
 
 import { UserContext } from './userContext';
 

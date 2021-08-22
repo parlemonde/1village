@@ -3,8 +3,8 @@ import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isCooking } from 'src/activity-types/defi.const';
-import { CookingDefiData } from 'src/activity-types/defi.types';
-import { EditorContent } from 'src/activity-types/extendedActivity.types';
+import type { CookingDefiData } from 'src/activity-types/defi.types';
+import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';

@@ -4,12 +4,12 @@ import React from 'react';
 import { Button, Card } from '@material-ui/core';
 
 import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
-import { EnigmeActivity } from 'src/activity-types/enigme.types';
+import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import Timer from 'src/svg/enigme/timer.svg';
 
-import { ActivityViewProps } from './activity-view.types';
+import type { ActivityViewProps } from './activity-view.types';
 
 type EnigmeActivityViewProps = ActivityViewProps<EnigmeActivity> & {
   isAnswer: boolean;

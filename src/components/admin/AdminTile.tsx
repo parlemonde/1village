@@ -10,7 +10,8 @@ interface AdminTileProps {
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import type { Theme as MaterialTheme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: MaterialTheme) =>
   createStyles({

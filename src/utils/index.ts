@@ -1,6 +1,7 @@
 import md5 from 'md5';
 
-import { User, UserType } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 /**
  * Returns a query string with the given parameters.

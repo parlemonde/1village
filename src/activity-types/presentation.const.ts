@@ -1,9 +1,9 @@
 import { capitalize, naturalJoin, pluralS } from 'src/utils';
-import { Country } from 'types/country.type';
-import { Currency } from 'types/currency.type';
-import { Language } from 'types/language.type';
+import type { Country } from 'types/country.type';
+import type { Currency } from 'types/currency.type';
+import type { Language } from 'types/language.type';
 
-import { MascotteData, PresentationActivity, PresentationMascotteActivity, PresentationThematiqueActivity } from './presentation.types';
+import type { MascotteData, PresentationActivity, PresentationMascotteActivity, PresentationThematiqueActivity } from './presentation.types';
 
 export const PRESENTATION_THEMATIQUE = [
   {

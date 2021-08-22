@@ -3,14 +3,14 @@ import React from 'react';
 import { Button, CircularProgress } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import { AnyActivity } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity } from 'src/activity-types/anyActivities.types';
 import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import type { ActivityType } from 'types/activity.type';
 
 import { Activities } from './List';
 

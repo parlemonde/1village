@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
-import { User as UserInterface, UserType } from '../../types/user.type';
+import type { User as UserInterface } from '../../types/user.type';
+import { UserType } from '../../types/user.type';
 
 import { Activity } from './activity';
 import { Village } from './village';

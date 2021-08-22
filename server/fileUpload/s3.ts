@@ -1,7 +1,8 @@
-import AWS, { S3 } from 'aws-sdk';
+import type { S3 } from 'aws-sdk';
+import AWS from 'aws-sdk';
 import fs from 'fs-extra';
 import path from 'path';
-import { Readable } from 'stream';
+import type { Readable } from 'stream';
 
 import { AppError } from '../middlewares/handleErrors';
 import { logger } from '../utils/logger';

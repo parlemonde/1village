@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Grid, Box } from '@material-ui/core';
 
-import { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
+import type { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Map } from 'src/components/Map';
 import { getMapPosition } from 'src/utils/getMapPosition';
 
-import { ActivityViewProps } from './activity-view.types';
+import type { ActivityViewProps } from './activity-view.types';
 
 export const MascotteActivityView = ({ activity, user = null }: ActivityViewProps<PresentationMascotteActivity>) => {
   const [position, setPosition] = React.useState<[number, number] | null>(null);

@@ -5,7 +5,7 @@ import { TextField } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { DEFAULT_MASCOTTE_DATA, isMascotte, PRESENTATION } from 'src/activity-types/presentation.const';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';

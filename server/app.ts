@@ -2,12 +2,13 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { config } from 'dotenv';
-import express, { Router, Response, RequestHandler } from 'express';
+import type { Response, RequestHandler } from 'express';
+import express, { Router } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import next from 'next';
 import path from 'path';
-import { Connection } from 'typeorm';
+import type { Connection } from 'typeorm';
 
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';

@@ -10,7 +10,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Activity as ActivityInterface, ActivityType, ActivityStatus } from '../../types/activity.type';
+import type { Activity as ActivityInterface } from '../../types/activity.type';
+import { ActivityType, ActivityStatus } from '../../types/activity.type';
 
 import { ActivityData } from './activityData';
 import { User } from './user';

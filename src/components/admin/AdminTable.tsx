@@ -8,7 +8,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Table from '@material-ui/core/Table';
-import { makeStyles, createStyles, withStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import type { Theme as MaterialTheme } from '@material-ui/core/styles';
+import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
 
 const useTableStyles = makeStyles((theme: MaterialTheme) =>
   createStyles({

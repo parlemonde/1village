@@ -15,7 +15,8 @@ import { useCountries } from 'src/services/useCountries';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
-import { User, UserType } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 import { CGU } from './CGU';
 import { Flag } from './Flag';

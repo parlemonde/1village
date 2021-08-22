@@ -8,7 +8,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { getGravatarUrl } from 'src/utils';
-import { User, UserType } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 const useStyles = makeStyles(() => ({
   large: {

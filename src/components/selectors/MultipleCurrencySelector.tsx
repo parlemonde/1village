@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useCurrencies } from 'src/services/useCurrencies';
-import { Currency } from 'types/currency.type';
+import type { Currency } from 'types/currency.type';
 
 type CurrencyOption = Currency & {
   firstLetter: string;

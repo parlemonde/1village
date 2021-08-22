@@ -3,7 +3,7 @@ import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { PRESENTATION_THEMATIQUE, isThematique } from 'src/activity-types/presentation.const';
-import { ThematiqueData } from 'src/activity-types/presentation.types';
+import type { ThematiqueData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';

@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, getDefi, getLanguageObject, DEFI } from 'src/activity-types/defi.const';
-import { LanguageDefiData } from 'src/activity-types/defi.types';
+import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';

@@ -1,6 +1,6 @@
 import base64url from 'base64url';
 import crypto from 'crypto';
-import { Request } from 'express';
+import type { Request } from 'express';
 import fs from 'fs';
 
 /**

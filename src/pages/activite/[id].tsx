@@ -14,7 +14,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 
 const titles = {
   [ActivityType.PRESENTATION]: 'Présentation',

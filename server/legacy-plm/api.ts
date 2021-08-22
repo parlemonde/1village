@@ -4,8 +4,10 @@ import { getRepository } from 'typeorm';
 import { User } from '../entities/user';
 import { logger } from '../utils/logger';
 
-import { PLM_User, createPLMUserToDB } from './user';
-import { PLM_Village, createVillages } from './village';
+import type { PLM_User } from './user';
+import { createPLMUserToDB } from './user';
+import type { PLM_Village } from './village';
+import { createVillages } from './village';
 
 const plmSsoUrl = process.env.PLM_HOST || '';
 const client_id = process.env.CLIENT_ID || '';

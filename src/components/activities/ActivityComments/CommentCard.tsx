@@ -11,7 +11,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
 import type { Comment } from 'types/comment.type';
-import { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 

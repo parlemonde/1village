@@ -5,13 +5,13 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { ENIGME_TYPES } from 'src/activity-types/enigme.const';
-import { EnigmeActivity } from 'src/activity-types/enigme.types';
+import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
 export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<EnigmeActivity>) => {
   const firstImage = React.useMemo(

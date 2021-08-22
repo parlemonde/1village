@@ -1,4 +1,4 @@
-import { Readable } from 'stream';
+import type { Readable } from 'stream';
 
 import { AwsS3 } from './s3';
 import { VimeoClass } from './vimeo';

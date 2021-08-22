@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import stringify from 'json-stable-stringify';
 
 import { logger } from '../utils/logger';

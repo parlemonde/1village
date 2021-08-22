@@ -1,5 +1,5 @@
-import { JSONSchemaType } from 'ajv';
-import { NextFunction, Request, Response } from 'express';
+import type { JSONSchemaType } from 'ajv';
+import type { NextFunction, Request, Response } from 'express';
 
 import { getUserFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';

@@ -18,7 +18,8 @@ import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
-import { User, UserType, userTypeNames } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType, userTypeNames } from 'types/user.type';
 
 const Required = (label: string) => (
   <>

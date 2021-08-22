@@ -2,7 +2,8 @@ import type { AxiosRequestConfig } from 'axios';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { AxiosReturnType, axiosRequest } from 'src/utils/axiosRequest';
+import type { AxiosReturnType } from 'src/utils/axiosRequest';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;

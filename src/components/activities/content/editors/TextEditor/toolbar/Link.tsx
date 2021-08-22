@@ -1,10 +1,12 @@
-import { RichUtils, EditorState, Modifier, ContentBlock, ContentState } from 'draft-js';
+import type { ContentBlock, ContentState } from 'draft-js';
+import { RichUtils, EditorState, Modifier } from 'draft-js';
 import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
 import React from 'react';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, createStyles, withStyles, Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';

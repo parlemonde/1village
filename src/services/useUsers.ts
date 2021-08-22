@@ -1,5 +1,6 @@
 import { useSnackbar } from 'notistack';
-import { useQueryClient, useQuery, QueryFunction } from 'react-query';
+import type { QueryFunction } from 'react-query';
+import { useQueryClient, useQuery } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';

@@ -1,7 +1,8 @@
 import * as argon2 from 'argon2';
 import mysql from 'mysql';
 import path from 'path';
-import { Connection, createConnection, ConnectionOptions, getRepository } from 'typeorm';
+import type { Connection, ConnectionOptions } from 'typeorm';
+import { createConnection, getRepository } from 'typeorm';
 
 import { User, UserType } from '../entities/user';
 

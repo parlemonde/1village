@@ -3,8 +3,8 @@ import React from 'react';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
-import { EnigmeData } from 'src/activity-types/enigme.types';
-import { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
+import type { EnigmeData } from 'src/activity-types/enigme.types';
+import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
