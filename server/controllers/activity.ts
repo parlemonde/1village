@@ -567,7 +567,7 @@ activityController.put({ path: '/:id/content', userType: UserType.TEACHER }, asy
 type EditActivityData = {
   value: string;
 };
-const Edit_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
+const EDIT_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
   type: 'object',
   properties: {
     value: { type: 'string', nullable: false },
@@ -575,7 +575,7 @@ const Edit_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
   required: ['value'],
   additionalProperties: false,
 };
-const editActivityDataValidator = ajv.compile(Edit_DATA_SCHEMA);
+const editActivityDataValidator = ajv.compile(EDIT_DATA_SCHEMA);
 activityController.put({ path: '/:activityId/content/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!editActivityDataValidator(data)) {

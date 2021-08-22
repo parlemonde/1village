@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import type { JSONSchemaType } from 'ajv';
 import type { Request, Response } from 'express';
 

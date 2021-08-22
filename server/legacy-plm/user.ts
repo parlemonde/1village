@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import stringSimilarity from 'string-similarity';
 import { getRepository } from 'typeorm';
 

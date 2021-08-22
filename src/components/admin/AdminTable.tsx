@@ -54,9 +54,9 @@ const StyledTableRow = withStyles(() =>
   }),
 )(TableRow);
 
-function paginate<T>(array: T[], page_size: number, page_number: number): T[] {
+function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
-  return array.slice((page_number - 1) * page_size, page_number * page_size);
+  return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 }
 
 interface TableOptions {

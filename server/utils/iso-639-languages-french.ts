@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import type { Language } from '../../types/language.type';
 
 export const languages: Language[] = [
