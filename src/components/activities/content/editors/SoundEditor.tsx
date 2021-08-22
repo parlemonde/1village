@@ -14,7 +14,7 @@ import type { EditorProps } from '../content.types';
 
 import { EditorContainer } from './EditorContainer';
 
-export const SoundEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 

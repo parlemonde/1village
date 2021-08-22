@@ -45,7 +45,7 @@ const isRedirectValid = (redirect: string): boolean => {
   }
 };
 
-const Login: React.FC = () => {
+const Login = () => {
   const router = useRouter();
   const { login, loginWithSso } = React.useContext(UserContext);
   const redirect = React.useRef<string>('/');

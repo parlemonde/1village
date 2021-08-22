@@ -14,7 +14,7 @@ import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurre
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 
-const MascotteStep3: React.FC = () => {
+const MascotteStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const shouldSave = React.useRef(false);

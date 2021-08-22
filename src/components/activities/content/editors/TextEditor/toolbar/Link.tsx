@@ -45,7 +45,7 @@ type LinkPickerProps = {
   value: LinkValue;
 };
 
-export const LinkPicker: React.FC<LinkPickerProps> = ({ editorState, linkModalOpen, setLinkModalOpen, value, onChange }: LinkPickerProps) => {
+export const LinkPicker = ({ editorState, linkModalOpen, setLinkModalOpen, value, onChange }: LinkPickerProps) => {
   const [link, setLink] = React.useState('');
   const [target, setTarget] = React.useState('');
   const classes = useStyles();
@@ -213,11 +213,10 @@ export const LinkPicker: React.FC<LinkPickerProps> = ({ editorState, linkModalOp
 };
 
 interface EditorLinkProps {
-  children: React.ReactNode | React.ReactNodeArray;
   entityKey: string;
   contentState: ContentState;
 }
-const EditorLink: React.FC<EditorLinkProps> = ({ children, entityKey, contentState }: EditorLinkProps) => {
+const EditorLink: React.FC = ({ children, entityKey, contentState }: React.PropsWithChildren<EditorLinkProps>) => {
   const { url } = contentState.getEntity(entityKey).getData();
   return (
     <a href={url} target="_self" style={{ color: primaryColor, textDecoration: 'underline' }}>

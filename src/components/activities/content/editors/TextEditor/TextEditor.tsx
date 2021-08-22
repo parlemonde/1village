@@ -5,7 +5,7 @@ import { EditorContainer } from '../EditorContainer';
 
 import { SimpleTextEditor } from './SimpleTextEditor';
 
-export const TextEditor: React.FC<EditorProps> = ({ value = '', onChange = () => {}, onBlur, onFocus, onDelete }: EditorProps) => {
+export const TextEditor = ({ value = '', onChange = () => {}, onBlur, onFocus, onDelete }: EditorProps) => {
   const confirm = React.useMemo(() => {
     return !value || value.length === 0 || value === '<p></p>' || value === '<p></p>\n';
   }, [value]);

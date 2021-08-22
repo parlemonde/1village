@@ -42,7 +42,7 @@ const icons = {
   [ActivityType.QUESTION]: QuestionIcon,
 };
 
-export const ActivityCard: React.FC<ActivityCardProps> = ({
+export const ActivityCard = ({
   activity,
   user,
   isSelf = false,

@@ -12,7 +12,7 @@ import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 
-const MascotteStep2: React.FC = () => {
+const MascotteStep2 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);

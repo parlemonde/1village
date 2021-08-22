@@ -30,7 +30,7 @@ const getArticle = (language: string) => {
   return 'le ';
 };
 
-const DefiStep2: React.FC = () => {
+const DefiStep2 = () => {
   const router = useRouter();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);

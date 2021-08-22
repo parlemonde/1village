@@ -23,7 +23,7 @@ interface ActivitySelectProps {
   style?: React.CSSProperties;
 }
 
-export const ActivitySelect: React.FC<ActivitySelectProps> = ({ value, onChange, onSelect, style }: ActivitySelectProps) => {
+export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySelectProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity: selectedActivity } = useActivity(value ?? -1);

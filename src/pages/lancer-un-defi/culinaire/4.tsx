@@ -13,7 +13,7 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep4: React.FC = () => {
+const DefiStep4 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);

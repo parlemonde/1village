@@ -27,7 +27,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-export const ActivityView: React.FC<ActivityViewProps> = ({ activity, user }: ActivityViewProps) => {
+export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const isAnswer = activity && isEnigme(activity) && 'reponse' in router.query;

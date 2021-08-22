@@ -27,7 +27,7 @@ interface ActivityCommentsProps {
   usersMap: { [key: number]: User };
 }
 
-export const ActivityComments: React.FC<ActivityCommentsProps> = ({ activityId, activityType, usersMap }: ActivityCommentsProps) => {
+export const ActivityComments = ({ activityId, activityType, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const userMap = React.useMemo(

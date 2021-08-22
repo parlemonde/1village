@@ -13,14 +13,7 @@ import { htmlToText } from 'src/utils';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const DefiCard: React.FC<ActivityCardProps<DefiActivity>> = ({
-  activity,
-  isSelf,
-  noButtons,
-  isDraft,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<DefiActivity>) => {
+export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);
   const link = isCookingActivity ? 'culinaire/5' : isEco(activity) ? 'ecologique/5' : 'linguistique/6';
 

@@ -16,7 +16,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { replaceTokens } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep3: React.FC = () => {
+const DefiStep3 = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);

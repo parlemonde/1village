@@ -3,7 +3,7 @@ import React from 'react';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 
-const Question: React.FC = () => {
+const Question = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

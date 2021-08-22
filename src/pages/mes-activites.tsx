@@ -12,7 +12,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 
-const MesActivites: React.FC = () => {
+const MesActivites = () => {
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);

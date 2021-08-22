@@ -73,7 +73,7 @@ interface AdminTableProps {
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
 }
 
-export const AdminTable: React.FC<AdminTableProps> = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, columns, actions }: AdminTableProps) => {
+export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, columns, actions }: AdminTableProps) => {
   const classes = useTableStyles();
   const [options, setTableOptions] = React.useState<TableOptions>({
     page: 1,

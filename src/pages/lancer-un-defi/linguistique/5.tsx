@@ -14,7 +14,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { replaceTokens } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep6: React.FC = () => {
+const DefiStep6 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);

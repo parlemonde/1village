@@ -36,7 +36,7 @@ interface SuggestionCarouselProps {
   style?: React.CSSProperties;
 }
 
-const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, style }: SuggestionCarouselProps) => {
+const SuggestionCarousel = ({ suggestions, style }: SuggestionCarouselProps) => {
   const [tab, setTab] = React.useState(0);
   const [textRef, dimensions] = useResizeObserver();
   const lineNumber = Math.max(1, Math.floor(dimensions.height / 16));

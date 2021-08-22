@@ -18,13 +18,7 @@ interface MultipleCountrySelectorProps {
   style?: React.CSSProperties;
 }
 
-export const MultipleCountrySelector: React.FC<MultipleCountrySelectorProps> = ({
-  label,
-  value = [],
-  onChange,
-  filterCountries,
-  style,
-}: MultipleCountrySelectorProps) => {
+export const MultipleCountrySelector = ({ label, value = [], onChange, filterCountries, style }: MultipleCountrySelectorProps) => {
   const { countries } = useCountries();
   const options: CountryOption[] = React.useMemo(
     () =>

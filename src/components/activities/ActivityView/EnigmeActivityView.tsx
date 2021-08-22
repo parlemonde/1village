@@ -15,7 +15,7 @@ type EnigmeActivityViewProps = ActivityViewProps<EnigmeActivity> & {
   isAnswer: boolean;
 };
 
-export const EnigmeActivityView: React.FC<EnigmeActivityViewProps> = ({ activity, isAnswer }: EnigmeActivityViewProps) => {
+export const EnigmeActivityView = ({ activity, isAnswer }: EnigmeActivityViewProps) => {
   const [showClue, setShowClue] = React.useState(false);
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
   const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];

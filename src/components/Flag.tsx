@@ -11,7 +11,7 @@ interface FlagProps {
   style?: React.CSSProperties;
 }
 
-export const Flag: React.FC<FlagProps> = ({ country, size = 'medium', style = {} }: FlagProps) => {
+export const Flag = ({ country, size = 'medium', style = {} }: FlagProps) => {
   return (
     // Small SVG, no need of improvments
     // eslint-disable-next-line @next/next/no-img-element

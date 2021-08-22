@@ -18,7 +18,7 @@ import { UserType } from 'types/user.type';
 
 import { AvatarImg } from './Avatar';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
   const { village, showSelectVillageModal } = React.useContext(VillageContext);

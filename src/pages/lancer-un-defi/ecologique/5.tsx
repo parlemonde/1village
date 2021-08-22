@@ -27,7 +27,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-const DefiEcoStep5: React.FC = () => {
+const DefiEcoStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);

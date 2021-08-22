@@ -3,7 +3,7 @@ import React from 'react';
 
 import MaterialLink from '@material-ui/core/Link';
 
-const Stats: React.FC = () => {
+const Stats = () => {
   return (
     <div className="admin--container">
       <Link href="/admin/stats" passHref>

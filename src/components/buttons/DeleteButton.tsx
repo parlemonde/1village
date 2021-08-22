@@ -33,14 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({
-  size = 'small',
-  color = 'primary',
-  confirmLabel,
-  confirmTitle,
-  onDelete = () => {},
-  style,
-}: DeleteButtonProps) => {
+export const DeleteButton = ({ size = 'small', color = 'primary', confirmLabel, confirmTitle, onDelete = () => {}, style }: DeleteButtonProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const classes = useStyles();
 

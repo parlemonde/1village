@@ -11,7 +11,7 @@ type UserDisplayNameProps = {
   className?: string;
   style?: React.CSSProperties;
 };
-export const UserDisplayName: React.FC<UserDisplayNameProps> = ({ user, className, style, noLink = false }: UserDisplayNameProps) => {
+export const UserDisplayName = ({ user, className, style, noLink = false }: UserDisplayNameProps) => {
   const userId = React.useContext(UserContext)?.user?.id ?? 0;
   const isSelf = userId === user.id;
   const isPelico = user && user.type >= UserType.MEDIATOR;

@@ -28,7 +28,7 @@ interface ActivitiesProps {
   onSelect?: (index: number) => void;
 }
 
-export const Activities: React.FC<ActivitiesProps> = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
+export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState({
     selectedActivityId: null,
     responseActivityId: null,

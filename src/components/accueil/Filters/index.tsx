@@ -28,7 +28,7 @@ interface FiltersProps {
   onChange: React.Dispatch<React.SetStateAction<FilterArgs>>;
 }
 
-export const Filters: React.FC<FiltersProps> = ({ filters, onChange, countries = [] }: FiltersProps) => {
+export const Filters = ({ filters, onChange, countries = [] }: FiltersProps) => {
   React.useEffect(() => {
     onChange((f) => ({
       ...f,

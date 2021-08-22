@@ -29,7 +29,7 @@ const Required = (label: string) => (
   </>
 );
 
-const NewUser: React.FC = () => {
+const NewUser = () => {
   const router = useRouter();
   const { villages } = useVillages();
   const { addUser } = useUserRequests();

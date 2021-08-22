@@ -30,7 +30,7 @@ function ElevationScroll({ children }: ElevationScrollProps) {
   });
 }
 
-export const AdminHeader: React.FC = () => {
+export const AdminHeader = () => {
   const classes = useStyles();
 
   return (

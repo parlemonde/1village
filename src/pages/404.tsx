@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { KeepRatio } from 'src/components/KeepRatio';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
-const Custom404: React.FunctionComponent = () => {
+const Custom404 = () => {
   return (
     <div className="bg-gradiant">
       <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">

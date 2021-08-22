@@ -9,10 +9,7 @@ import { getMapPosition } from 'src/utils/getMapPosition';
 
 import { ActivityViewProps } from './activity-view.types';
 
-export const MascotteActivityView: React.FC<ActivityViewProps<PresentationMascotteActivity>> = ({
-  activity,
-  user = null,
-}: ActivityViewProps<PresentationMascotteActivity>) => {
+export const MascotteActivityView = ({ activity, user = null }: ActivityViewProps<PresentationMascotteActivity>) => {
   const [position, setPosition] = React.useState<[number, number] | null>(null);
 
   const getPosition = React.useCallback(async () => {

@@ -44,6 +44,7 @@ module.exports = {
     "arca/import-ordering": ["error", { sections: ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],
     "arca/newline-after-import-section": ["error", { sections: ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
   },

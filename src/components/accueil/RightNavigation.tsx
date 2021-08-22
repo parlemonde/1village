@@ -14,7 +14,7 @@ type ActionItemProps = {
   label: string;
   icon: React.ReactNode;
 };
-const ActionItem: React.FC<ActionItemProps> = ({ label, icon }: ActionItemProps) => {
+const ActionItem = ({ label, icon }: ActionItemProps) => {
   return (
     <div style={{ display: 'inline-block', width: '43%', margin: '2%' }}>
       <KeepRatio ratio={1}>
@@ -31,7 +31,7 @@ const ActionItem: React.FC<ActionItemProps> = ({ label, icon }: ActionItemProps)
   );
 };
 
-export const RightNavigation: React.FC = () => {
+export const RightNavigation = () => {
   return (
     <div className="bg-secondary" style={{ borderRadius: '10px', overflow: 'hidden' }}>
       <div className="text-center">

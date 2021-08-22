@@ -31,7 +31,7 @@ const Required = (label: string) => (
   </>
 );
 
-const EditUser: React.FC = () => {
+const EditUser = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { villages } = useVillages();

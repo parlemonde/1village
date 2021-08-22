@@ -23,7 +23,7 @@ const PinkButton = withStyles(() => ({
   },
 }))(Button);
 
-export const HelpButton: React.FC<ButtonProps> = (props: ButtonProps) => {
+export const HelpButton = (props: ButtonProps) => {
   return (
     <div style={{ width: '100%', padding: '0 10px' }}>
       <PinkButton {...props}>

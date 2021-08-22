@@ -44,7 +44,7 @@ const activities = [
   },
 ];
 
-const Presentation: React.FC = () => {
+const Presentation = () => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const [currentSuggestions, setCurrentSuggestions] = React.useState(suggestions);
   const [currentActivities, setCurrentActivities] = React.useState(activities);

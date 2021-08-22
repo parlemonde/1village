@@ -23,7 +23,7 @@ import { countryToFlag } from 'src/utils';
 import { userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
-const Users: React.FC = () => {
+const Users = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { users } = useUsers();

@@ -29,7 +29,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-const DefiStep5: React.FC = () => {
+const DefiStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);

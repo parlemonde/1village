@@ -41,7 +41,7 @@ const NumberStat = ({ label, value, color }: { label: string; value: string; col
 const getValues = (data: Partial<Record<string, number>>): Array<{ key: string; value: number }> =>
   Object.keys(data).map((key) => ({ key, value: data[key] }));
 
-const Stats: React.FC = () => {
+const Stats = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [period, setPeriod] = React.useState(getToday());
   const [data, setData] = React.useState<AnalyticData | null>(null);

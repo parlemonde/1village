@@ -17,7 +17,7 @@ interface LanguageSelectorProps {
   style?: React.CSSProperties;
 }
 
-export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ label, value = '', onChange, style }: LanguageSelectorProps) => {
+export const LanguageSelector = ({ label, value = '', onChange, style }: LanguageSelectorProps) => {
   const { languages } = useLanguages();
   const options: LanguageOption[] = React.useMemo(
     () =>

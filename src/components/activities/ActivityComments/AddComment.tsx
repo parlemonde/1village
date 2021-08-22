@@ -49,7 +49,7 @@ interface AddCommentProps {
   label?: string;
 }
 
-export const AddComment: React.FC<AddCommentProps> = ({ activityId, activityType, label }: AddCommentProps) => {
+export const AddComment = ({ activityId, activityType, label }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');

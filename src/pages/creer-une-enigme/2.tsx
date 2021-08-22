@@ -13,7 +13,7 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const EnigmeStep2: React.FC = () => {
+const EnigmeStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);

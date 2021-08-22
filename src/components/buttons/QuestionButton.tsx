@@ -7,7 +7,7 @@ interface QuestionButtonProps {
   helpMessage: string | React.ReactNode | React.ReactNodeArray;
 }
 
-export const QuestionButton: React.FC<QuestionButtonProps> = ({ helpMessage }: QuestionButtonProps) => {
+export const QuestionButton = ({ helpMessage }: QuestionButtonProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);

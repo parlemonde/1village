@@ -8,7 +8,7 @@ import { Activities } from 'src/components/activities/List';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 
-export const Accueil: React.FC = () => {
+export const Accueil = () => {
   const { village } = React.useContext(VillageContext);
   const [filters, setFilters] = React.useState<FilterArgs>({
     type: 0,

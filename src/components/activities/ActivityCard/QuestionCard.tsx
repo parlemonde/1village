@@ -11,12 +11,7 @@ import { useActivityRequests } from 'src/services/useActivity';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
-  activity,
-  noButtons,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<QuestionActivity>) => {
+export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }: ActivityCardProps<QuestionActivity>) => {
   const { user } = React.useContext(UserContext);
   const { updatedActivityData } = useActivityRequests();
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);

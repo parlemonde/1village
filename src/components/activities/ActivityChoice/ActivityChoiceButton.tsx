@@ -12,12 +12,7 @@ interface ActivityChoiceButtonProps {
   disabled?: boolean;
 }
 
-export const ActivityChoiceButton: React.FC<ActivityChoiceButtonProps> = ({
-  label,
-  href,
-  icon: Icon,
-  disabled = false,
-}: ActivityChoiceButtonProps) => {
+export const ActivityChoiceButton = ({ label, href, icon: Icon, disabled = false }: ActivityChoiceButtonProps) => {
   return (
     <KeepRatio ratio={0.5}>
       <KeepRatio ratio={0.5} maxWidth="14rem">

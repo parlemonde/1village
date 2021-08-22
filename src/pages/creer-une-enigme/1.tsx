@@ -12,7 +12,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
-const EnigmeStep1: React.FC = () => {
+const EnigmeStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);

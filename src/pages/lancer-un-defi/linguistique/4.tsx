@@ -13,7 +13,7 @@ import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep4: React.FC = () => {
+const DefiStep4 = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);

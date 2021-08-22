@@ -5,7 +5,7 @@ import { KeepRatio } from 'src/components/KeepRatio';
 
 import type { ViewProps } from '../content.types';
 
-export const ImageView: React.FC<ViewProps> = ({ value }: ViewProps) => {
+export const ImageView = ({ value }: ViewProps) => {
   return (
     <div className="text-center activity-data">
       <KeepRatio ratio={2 / 3} maxWidth="600px">

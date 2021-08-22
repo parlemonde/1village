@@ -11,7 +11,7 @@ import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { useVillageRequests } from 'src/services/useVillages';
 
-const NewVillage: React.FC = () => {
+const NewVillage = () => {
   const router = useRouter();
   const { addVillage } = useVillageRequests();
 

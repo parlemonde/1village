@@ -59,7 +59,7 @@ const activities = [
   },
 ];
 
-const Enigme: React.FC = () => {
+const Enigme = () => {
   const router = useRouter();
 
   const [activitiesWithLinks, suggestionsWithLinks] = React.useMemo(() => {

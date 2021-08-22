@@ -13,7 +13,7 @@ import { htmlToText } from 'src/utils';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const PresentationCard: React.FC<ActivityCardProps<PresentationThematiqueActivity>> = ({
+export const PresentationCard = ({
   activity,
   isSelf,
   noButtons,

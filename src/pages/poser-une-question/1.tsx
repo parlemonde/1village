@@ -20,7 +20,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
 import { ActivityType } from 'types/activity.type';
 
-const Question1: React.FC = () => {
+const Question1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);

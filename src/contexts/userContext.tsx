@@ -27,15 +27,14 @@ interface UserContextProviderProps {
   user: User | null;
   setUser(user: React.SetStateAction<User | null>): void;
   csrfToken: string;
-  children: React.ReactNode;
 }
 
-export const UserContextProvider: React.FunctionComponent<UserContextProviderProps> = ({
+export const UserContextProvider: React.FC<UserContextProviderProps> = ({
   user,
   setUser,
   csrfToken,
   children,
-}: UserContextProviderProps) => {
+}: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
   const headers = React.useMemo(
     () => ({

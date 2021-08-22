@@ -24,7 +24,7 @@ const extractSrcValue = (value: string): string | null => {
   return null;
 };
 
-export const H5pEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
   const [inputValue, setInputValue] = React.useState('');
   const [isValid, setIsValid] = React.useState(false);

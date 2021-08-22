@@ -14,7 +14,7 @@ import { useVillageRequests } from 'src/services/useVillages';
 import { getQueryString } from 'src/utils';
 import type { Village } from 'types/village.type';
 
-const EditVillage: React.FC = () => {
+const EditVillage = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { editVillage } = useVillageRequests();

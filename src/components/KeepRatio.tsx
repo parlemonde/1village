@@ -6,7 +6,6 @@ interface KeepRatioProps {
   maxWidth?: string | number;
   minHeight?: string | number;
   className?: string;
-  children: React.ReactNode | React.ReactNodeArray;
 }
 
 export const KeepRatio: React.FC<KeepRatioProps> = ({
@@ -16,7 +15,7 @@ export const KeepRatio: React.FC<KeepRatioProps> = ({
   ratio,
   className = '',
   children,
-}: KeepRatioProps) => {
+}: React.PropsWithChildren<KeepRatioProps>) => {
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width, maxWidth }}>

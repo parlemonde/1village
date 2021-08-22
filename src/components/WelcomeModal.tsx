@@ -21,7 +21,7 @@ import { CGU } from './CGU';
 import { Flag } from './Flag';
 import { ActivityCard } from './activities/ActivityCard';
 
-export const WelcomeModal: React.FC = () => {
+export const WelcomeModal = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const { village } = React.useContext(VillageContext);

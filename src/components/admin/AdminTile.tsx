@@ -3,7 +3,6 @@ import React from 'react';
 interface AdminTileProps {
   title: string;
   selectLanguage?: React.ReactNode | null;
-  children?: React.ReactNode | React.ReactNodeArray | null;
   toolbarButton?: React.ReactNode | null;
   style?: React.CSSProperties;
 }
@@ -29,13 +28,13 @@ const useStyles = makeStyles((theme: MaterialTheme) =>
   }),
 );
 
-export const AdminTile: React.FunctionComponent<AdminTileProps> = ({
+export const AdminTile: React.FC<AdminTileProps> = ({
   title,
   children = null,
   toolbarButton = null,
   selectLanguage = null,
   style = {},
-}: AdminTileProps) => {
+}: React.PropsWithChildren<AdminTileProps>) => {
   const classes = useStyles();
   return (
     <Paper style={{ ...style, overflow: 'hidden' }}>

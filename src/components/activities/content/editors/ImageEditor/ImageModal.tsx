@@ -23,7 +23,7 @@ interface ImageModalProps extends EditorProps {
   useCrop?: boolean;
 }
 
-export const ImageModal: React.FC<ImageModalProps> = ({
+export const ImageModal = ({
   isModalOpen,
   setIsModalOpen,
   imageUrl,

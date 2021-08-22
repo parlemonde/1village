@@ -31,7 +31,6 @@ type AvatarImgProps = {
   size?: 'large' | 'medium' | 'small';
   noLink?: boolean;
   onClick?: () => void;
-  children?: React.ReactNode;
   style?: React.CSSProperties;
 };
 export const AvatarImg: React.FC<AvatarImgProps> = ({
@@ -42,7 +41,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
   onClick = () => {},
   style,
   noLink = false,
-}: AvatarImgProps) => {
+}: React.PropsWithChildren<AvatarImgProps>) => {
   const classes = useStyles();
   const isPelico = user && user.type >= UserType.MEDIATOR;
 

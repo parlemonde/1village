@@ -11,7 +11,7 @@ import { bgPage } from 'src/styles/variables.const';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivity>> = ({
+export const MascotteCard = ({
   activity,
   isSelf,
   noButtons,

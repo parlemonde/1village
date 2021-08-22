@@ -21,7 +21,7 @@ interface CommentCardProps {
   user: User | null;
 }
 
-export const CommentCard: React.FC<CommentCardProps> = ({ activityId, comment, user }: CommentCardProps) => {
+export const CommentCard = ({ activityId, comment, user }: CommentCardProps) => {
   const { user: selfUser } = React.useContext(UserContext);
   const { editComment, deleteComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');

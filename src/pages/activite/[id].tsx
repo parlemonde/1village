@@ -24,7 +24,7 @@ const titles = {
   [ActivityType.QUESTION]: 'Question',
 };
 
-const Activity: React.FC = () => {
+const Activity = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
   const { user } = React.useContext(UserContext);

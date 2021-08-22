@@ -60,7 +60,7 @@ type ColorPickerProps = {
   onChange(value: string): void;
 };
 
-export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }: ColorPickerProps) => {
+export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const classes = useStyles();
 

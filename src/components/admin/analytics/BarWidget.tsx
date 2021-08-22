@@ -33,7 +33,7 @@ interface BarWidgetProps {
   }>;
 }
 
-export const BarWidget: React.FC<BarWidgetProps> = ({ name, datasets }: BarWidgetProps) => {
+export const BarWidget = ({ name, datasets }: BarWidgetProps) => {
   const [tab, selectedTab] = React.useState(0);
 
   const handleChange = (_e: React.ChangeEvent<unknown>, newValue: number) => {

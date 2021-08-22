@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const CGU: React.FC = () => {
+export const CGU = () => {
   return (
     <div style={{ textAlign: 'justify' }}>
       <div className="text-center" style={{ marginBottom: '1rem' }}>

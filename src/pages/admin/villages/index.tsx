@@ -20,7 +20,7 @@ import { useCountries } from 'src/services/useCountries';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { countryToFlag, ssoHostName } from 'src/utils';
 
-const Villages: React.FC = () => {
+const Villages = () => {
   const router = useRouter();
   const { countries } = useCountries();
   const countryMap = countries.reduce<{ [key: string]: string }>((acc, country) => {

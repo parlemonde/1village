@@ -4,7 +4,7 @@ import { H5p } from 'src/components/H5p';
 
 import type { ViewProps } from '../content.types';
 
-export const H5pView: React.FC<ViewProps> = ({ value }: ViewProps) => {
+export const H5pView = ({ value }: ViewProps) => {
   return (
     <div className="text-center activity-data">
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>

@@ -35,10 +35,6 @@ interface ActivityContextValue {
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
 
-interface ActivityContextProviderProps {
-  children: React.ReactNode;
-}
-
 function getInitialActivity(): AnyActivity | null {
   try {
     return JSON.parse(sessionStorage.getItem('activity') || null) || null;
@@ -55,7 +51,7 @@ function saveActivityInSession(activity: AnyActivity | null): void {
 }
 const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, false);
 
-export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
+export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);

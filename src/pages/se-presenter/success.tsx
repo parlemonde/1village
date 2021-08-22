@@ -10,7 +10,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
-const PresentationSuccess: React.FC = () => {
+const PresentationSuccess = () => {
   const { activity } = React.useContext(ActivityContext);
 
   if (!isPresentation(activity)) {

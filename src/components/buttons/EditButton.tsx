@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const EditButton: React.FC<EditButtonProps> = ({ color = 'default', isGreen = false, ...props }: EditButtonProps) => {
+export const EditButton = ({ color = 'default', isGreen = false, ...props }: EditButtonProps) => {
   const classes = useStyles();
 
   return (

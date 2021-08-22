@@ -71,7 +71,7 @@ const getLabel = (date: Date, aggregation: AnalyticData['aggregation']): string 
   return date.toLocaleString('fr-FR', { month: 'long' });
 };
 
-export const TimeserieWidget: React.FC<TimeserieWidgetProps> = ({ title, labels, datasets, aggregation }: TimeserieWidgetProps) => {
+export const TimeserieWidget = ({ title, labels, datasets, aggregation }: TimeserieWidgetProps) => {
   const canvas = React.useRef<HTMLCanvasElement | null>(null);
   const chart = React.useRef<Chart<'line', number[], string> | null>(null);
 

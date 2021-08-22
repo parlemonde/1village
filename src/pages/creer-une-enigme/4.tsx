@@ -13,7 +13,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
-const EnigmeStep4: React.FC = () => {
+const EnigmeStep4 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 

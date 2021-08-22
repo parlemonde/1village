@@ -13,14 +13,7 @@ import { htmlToText } from 'src/utils';
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
 
-export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
-  activity,
-  isSelf,
-  noButtons,
-  isDraft,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<EnigmeActivity>) => {
+export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<EnigmeActivity>) => {
   const firstImage = React.useMemo(
     () => activity.processedContent.slice(activity.data.indiceContentIndex, activity.processedContent.length).find((c) => c.type === 'image'),
     [activity.processedContent, activity.data.indiceContentIndex],

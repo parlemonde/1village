@@ -21,7 +21,7 @@ import { useLanguages } from 'src/services/useLanguages';
 import { ActivityStatus } from 'types/activity.type';
 import { User } from 'types/user.type';
 
-const MascotteStep4: React.FC = () => {
+const MascotteStep4 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);

@@ -73,7 +73,7 @@ interface SimpleTextEditorProps {
   maxLen?: number;
 }
 
-export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
+export const SimpleTextEditor = ({
   value = '',
   placeholder = 'Commencez à écrire ici, ou ajoutez une vidéo ou une image.',
   onChange = () => {},

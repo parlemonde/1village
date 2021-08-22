@@ -9,7 +9,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
-const QuestionSuccess: React.FC = () => {
+const QuestionSuccess = () => {
   const router = useRouter();
   const { activity } = React.useContext(ActivityContext);
 

@@ -15,7 +15,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName, pluralS } from 'src/utils';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 
-const MascotteStep1: React.FC = () => {
+const MascotteStep1 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);

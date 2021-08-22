@@ -8,7 +8,7 @@ interface H5pProps {
   src: string;
 }
 
-export const H5p: React.FC<H5pProps> = ({ src }: H5pProps) => {
+export const H5p = ({ src }: H5pProps) => {
   const [loading, setIsLoading] = React.useState(true);
 
   // On src change, set new loading

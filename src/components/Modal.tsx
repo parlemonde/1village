@@ -44,10 +44,9 @@ const styles = (theme: MaterialTheme) =>
   });
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
-  children: React.ReactNode;
   onClose: () => void;
 }
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
+const DialogTitle = withStyles(styles)((props: React.PropsWithChildren<DialogTitleProps>) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
@@ -70,7 +69,6 @@ interface ModalProps {
   ariaDescribedBy: string;
   noCloseButton?: boolean;
   title?: React.ReactNode | React.ReactNodeArray;
-  children?: React.ReactNode | React.ReactNodeArray;
   actions?: React.ReactNode | React.ReactNodeArray;
   cancelLabel?: string;
   confirmLabel?: string;
@@ -87,7 +85,7 @@ interface ModalProps {
   progress?: number;
 }
 
-export const Modal: React.FunctionComponent<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = ({
   open = true,
   onClose = () => {},
   onConfirm = null,
@@ -111,7 +109,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   progress,
   actions,
   id,
-}: ModalProps) => {
+}: React.PropsWithChildren<ModalProps>) => {
   return (
     <Dialog
       open={open}

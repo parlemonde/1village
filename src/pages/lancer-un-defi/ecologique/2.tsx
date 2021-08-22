@@ -11,7 +11,7 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiEcoStep2: React.FC = () => {
+const DefiEcoStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const data = (activity?.data as EcoDefiData) || null;

@@ -10,7 +10,7 @@ import { VideoView } from './views/VideoView';
 
 type ContentViewProps = { content: EditorContent[] };
 
-export const ContentView: React.FC<ContentViewProps> = ({ content }: ContentViewProps) => {
+export const ContentView = ({ content }: ContentViewProps) => {
   return (
     <div>
       {content.map((p) => {

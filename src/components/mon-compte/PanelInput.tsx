@@ -16,7 +16,7 @@ interface PanelInputProps {
   onBlur?(): void | Promise<void>;
 }
 
-export const PanelInput: React.FC<PanelInputProps> = ({
+export const PanelInput = ({
   value,
   defaultValue = '',
   label,

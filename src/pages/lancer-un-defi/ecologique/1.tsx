@@ -12,7 +12,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
-const DefiEcoStep1: React.FC = () => {
+const DefiEcoStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);

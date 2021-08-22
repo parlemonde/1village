@@ -165,7 +165,7 @@ type EmojiPickerProps = {
   onChange(emoji: string): void;
 };
 
-export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onChange }: EmojiPickerProps) => {
+export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const classes = useStyles();
 

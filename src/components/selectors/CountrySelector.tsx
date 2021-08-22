@@ -19,7 +19,7 @@ interface CountrySelectorProps {
   style?: React.CSSProperties;
 }
 
-export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value = '', onChange, filterCountries, style }: CountrySelectorProps) => {
+export const CountrySelector = ({ label, value = '', onChange, filterCountries, style }: CountrySelectorProps) => {
   const { countries } = useCountries();
   const options: CountryOption[] = React.useMemo(
     () =>

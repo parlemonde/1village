@@ -5,7 +5,7 @@ import Jumelles from 'src/svg/jumelles.svg';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import Puzzle from 'src/svg/puzzle.svg';
 
-export const SubHeader: React.FC = () => {
+export const SubHeader = () => {
   return (
     <div
       style={{

@@ -26,7 +26,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-const PresentationStep4: React.FC = () => {
+const PresentationStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);

@@ -14,7 +14,7 @@ interface ActivityChoiceProps {
   }>;
 }
 
-export const ActivityChoice: React.FC<ActivityChoiceProps> = ({ activities }: ActivityChoiceProps) => {
+export const ActivityChoice = ({ activities }: ActivityChoiceProps) => {
   return (
     <div style={{ width: '100%', padding: '1rem' }}>
       <div style={{ margin: '0 auto', width: '100%', maxWidth: '750px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem 1rem' }}>

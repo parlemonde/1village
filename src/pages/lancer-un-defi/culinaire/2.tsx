@@ -18,7 +18,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep2: React.FC = () => {
+const DefiStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);

@@ -24,11 +24,7 @@ interface VillageContextValue {
 
 export const VillageContext = React.createContext<VillageContextValue>(null);
 
-interface VillageContextProviderProps {
-  children: React.ReactNode;
-}
-
-export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ children }: VillageContextProviderProps) => {
+export const VillageContextProvider: React.FC = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);

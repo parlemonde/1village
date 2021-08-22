@@ -22,7 +22,7 @@ import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } 
 import { ssoHostName } from 'src/utils';
 import type { User } from 'types/user.type';
 
-const Presentation: React.FC = () => {
+const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User>(user);

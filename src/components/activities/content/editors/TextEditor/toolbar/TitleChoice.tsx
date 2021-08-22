@@ -22,7 +22,7 @@ type TitleChoiceProps = {
   onChange(value: 'header-one' | 'header-two'): void;
 };
 
-export const TitleChoice: React.FC<TitleChoiceProps> = ({ value, onChange }: TitleChoiceProps) => {
+export const TitleChoice = ({ value, onChange }: TitleChoiceProps) => {
   return (
     <StyledToggleButtonGroup size="small" aria-label="text size" value={value}>
       <ToggleButton

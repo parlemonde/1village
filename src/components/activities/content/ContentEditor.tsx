@@ -19,7 +19,7 @@ interface ContentEditorProps {
   save(): Promise<boolean>;
 }
 
-const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, addContent, deleteContent }: ContentEditorProps) => {
+const ContentEditor = ({ content, updateContent, addContent, deleteContent }: ContentEditorProps) => {
   const router = useRouter();
   const blurTimeoutSave = React.useRef<number | undefined>(undefined);
 

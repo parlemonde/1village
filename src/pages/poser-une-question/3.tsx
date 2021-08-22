@@ -17,7 +17,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
 
-const Question3: React.FC = () => {
+const Question3 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { axiosLoggedRequest } = React.useContext(UserContext);

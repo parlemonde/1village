@@ -10,7 +10,7 @@ interface StepsButtonProps {
   next?: string | (() => void);
 }
 
-export const StepsButton: React.FC<StepsButtonProps> = ({ prev, next }: StepsButtonProps) => {
+export const StepsButton = ({ prev, next }: StepsButtonProps) => {
   return (
     <div style={{ width: '100%', margin: '3rem 0', minHeight: '2rem' }}>
       {prev !== undefined &&

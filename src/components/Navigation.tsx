@@ -68,7 +68,7 @@ const tabs: Tab[] = [
   },
 ];
 
-export const Navigation: React.FC = () => {
+export const Navigation = () => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);
   // const { user } = React.useContext(UserContext);

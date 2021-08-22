@@ -18,13 +18,7 @@ interface MultipleCurrencySelectorProps {
   style?: React.CSSProperties;
 }
 
-export const MultipleCurrencySelector: React.FC<MultipleCurrencySelectorProps> = ({
-  label,
-  value = [],
-  onChange,
-  filterCurrencies,
-  style,
-}: MultipleCurrencySelectorProps) => {
+export const MultipleCurrencySelector = ({ label, value = [], onChange, filterCurrencies, style }: MultipleCurrencySelectorProps) => {
   const { currencies } = useCurrencies();
   const options: CurrencyOption[] = React.useMemo(
     () =>

@@ -29,7 +29,7 @@ type InlineProps = {
   onChange(type: 'BOLD' | 'ITALIC' | 'UNDERLINE', value: boolean): void;
 };
 
-export const InlineButtons: React.FC<InlineProps> = ({ value, onChange }: InlineProps) => {
+export const InlineButtons = ({ value, onChange }: InlineProps) => {
   const formats = React.useMemo(
     () =>
       Object.keys(value)
