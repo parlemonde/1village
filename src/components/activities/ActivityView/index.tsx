@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isPresentation, isQuestion, isEnigme, isDefi } from 'src/activity-types/anyActivity';
-import { isThematique, isMascotte } from 'src/activity-types/presentation.const';
+import { isThematique, isMascotte } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';

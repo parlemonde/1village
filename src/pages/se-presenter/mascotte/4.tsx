@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { getMascotteContent, isMascotte } from 'src/activity-types/presentation.const';
+import { getMascotteContent, isMascotte } from 'src/activity-types/presentation.constants';
 import type { MascotteData } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';

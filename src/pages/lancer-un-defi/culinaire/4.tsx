@@ -4,7 +4,7 @@ import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isCooking, COOKING_DEFIS } from 'src/activity-types/defi.const';
+import { isCooking, COOKING_DEFIS } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

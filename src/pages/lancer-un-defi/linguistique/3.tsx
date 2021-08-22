@@ -5,7 +5,7 @@ import React from 'react';
 import { FormControl, Select, MenuItem } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.const';
+import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';

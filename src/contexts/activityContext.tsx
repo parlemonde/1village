@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Card, CircularProgress } from '@material-ui/core';
 
-import type { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity, isEnigme } from 'src/activity-types/anyActivity';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import type { EditorTypes } from 'src/activity-types/extendedActivity.types';

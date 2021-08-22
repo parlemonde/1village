@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, CircularProgress } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import type { AnyActivity } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { UserContext } from 'src/contexts/userContext';

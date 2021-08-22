@@ -2,7 +2,7 @@ import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.const';
+import { isMascotte } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';

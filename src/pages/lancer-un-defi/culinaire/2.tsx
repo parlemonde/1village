@@ -6,7 +6,7 @@ import { ButtonBase, Grid, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isCooking } from 'src/activity-types/defi.const';
+import { isCooking } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';

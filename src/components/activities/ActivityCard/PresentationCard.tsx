@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
+import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import type { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';

@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, TextField } from '@material-ui/core';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

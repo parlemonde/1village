@@ -2,7 +2,7 @@ import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 import React from 'react';
 
-import type { AnyActivity } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { PRESENTATION } from 'src/activity-types/presentation.const';
+import { PRESENTATION } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivitySelect } from 'src/components/activities/ActivitySelect';

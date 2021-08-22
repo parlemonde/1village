@@ -1,7 +1,7 @@
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 
-import type { AnyActivity, AnyActivityData } from './anyActivities.types';
+import type { AnyActivity, AnyActivityData } from './anyActivity.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
 import type { EditorContent } from './extendedActivity.types';

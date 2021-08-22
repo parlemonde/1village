@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';

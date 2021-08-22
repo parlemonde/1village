@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isCooking, getDefi, DEFI } from 'src/activity-types/defi.const';
+import { isCooking, getDefi, DEFI } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';

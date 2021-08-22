@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { ENIGME_TYPES } from 'src/activity-types/enigme.const';
+import { ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';

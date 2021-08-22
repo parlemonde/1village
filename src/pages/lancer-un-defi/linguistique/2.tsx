@@ -4,7 +4,7 @@ import React from 'react';
 import { FormControlLabel, Grid, Radio, RadioGroup } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.const';
+import { isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
