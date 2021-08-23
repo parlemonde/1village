@@ -131,7 +131,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "safe-buffer": "^5.2.1",
     "sass": "^1.34.1",
-    "sharp": "^0.28.3",
+    "sharp": "^0.29.0",
     "sortablejs": "^1.13.0",
     "string-similarity": "^4.0.4",
     "typeorm": "^0.2.34",
