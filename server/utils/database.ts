@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2';
-import mysql from 'mysql';
+import mysql from 'mysql2';
 import path from 'path';
 import type { Connection, ConnectionOptions } from 'typeorm';
 import { createConnection, getRepository } from 'typeorm';

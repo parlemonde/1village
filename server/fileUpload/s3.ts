@@ -84,6 +84,9 @@ export class AwsS3 {
     ContentLength: number;
     ContentType: string;
   }> {
+    if (!this.initialized) {
+      throw new AppError("Can't get from s3", 0);
+    }
     const data: S3.HeadObjectOutput | null = await new Promise((resolve) => {
       this.s3.headObject(
         {
@@ -108,6 +111,9 @@ export class AwsS3 {
   }
 
   public getFile(filename: string, range?: string): Readable {
+    if (!this.initialized) {
+      throw new AppError("Can't get from s3", 0);
+    }
     return this.s3
       .getObject({
         Bucket: S3_BUCKET_NAME,
