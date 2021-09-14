@@ -27,7 +27,7 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
     "@types/cpx": "^1.5.1",
-    "@types/croppie": "^2.6.0",
+    "@types/croppie": "^2.6.1",
     "@types/draft-js": "^0.11.3",
     "@types/draftjs-to-html": "^0.8.0",
     "@types/eslint": "^7.2.13",
