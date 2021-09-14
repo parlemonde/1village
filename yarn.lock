@@ -24,7 +24,7 @@ __metadata:
     "@types/eslint": ^7.2.13
     "@types/eslint-plugin-prettier": ^3.1.0
     "@types/express": ^4.17.12
-    "@types/express-useragent": ^1.0.0
+    "@types/express-useragent": ^1.0.1
     "@types/fs-extra": ^9.0.11
     "@types/json-stable-stringify": ^1.0.32
     "@types/jsonwebtoken": ^8.5.1
@@ -51,7 +51,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^4.26.1
     "@typescript-eslint/parser": ^4.26.1
     "@yarnpkg/pnpify": ^3.0.0-rc.6
-    ajv: ^8.6.0
+    ajv: 8.6.3
     ajv-formats: ^2.1.0
     argon2: ^0.27.1
     aws-sdk: ^2.984.0
@@ -117,7 +117,7 @@ __metadata:
     sortablejs: ^1.13.0
     string-similarity: ^4.0.4
     typeorm: ^0.2.34
-    typescript: 4.3.2
+    typescript: 4.4.3
     uuid: ^8.3.2
     vimeo: ^2.1.1
     web-vitals: ^2.0.1
@@ -2200,12 +2200,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-useragent@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@types/express-useragent@npm:1.0.0"
+"@types/express-useragent@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@types/express-useragent@npm:1.0.1"
   dependencies:
     "@types/express": "*"
-  checksum: 9ff8fa6bbda278b12eb1b50cef854b8a4826f4efb8f1f4edf79861a73f4d5da06e9db728cad1e54919205295fac49fc0095887ac62ea33fb2265c9e828149ac2
+  checksum: e0fad8228d4ce0eaae2da42503e6eeb21c386c6faeacfbe47516be49c97ff548f5d1dd635707c3fdbd41a094c3a1753900e9b54fc799c17cd5f40dc7d0fdf532
   languageName: node
   linkType: hard
 
@@ -3070,6 +3070,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ajv@npm:8.6.3":
+  version: 8.6.3
+  resolution: "ajv@npm:8.6.3"
+  dependencies:
+    fast-deep-equal: ^3.1.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+    uri-js: ^4.2.2
+  checksum: 690ffb9408415fdab43686b3f92037ba0c8362f5d0709a123ba3fb546e6ad81414455f80a2b5cc432ce924afe9864671198f022bc331a19c072d4ede152ec3ca
+  languageName: node
+  linkType: hard
+
 "ajv@npm:^6.10.0, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
@@ -3082,7 +3094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.0, ajv@npm:^8.0.1, ajv@npm:^8.6.0":
+"ajv@npm:^8.0.0, ajv@npm:^8.0.1":
   version: 8.6.0
   resolution: "ajv@npm:8.6.0"
   dependencies:
@@ -12389,23 +12401,23 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-typescript@4.3.2:
-  version: 4.3.2
-  resolution: "typescript@npm:4.3.2"
+typescript@4.4.3:
+  version: 4.4.3
+  resolution: "typescript@npm:4.4.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c2a86fa03ce03b255adc13ccd70a55173ca6539ae12114feca59f34a4e9bb69f14fb7cd5adc6c2416e568cff05c870b89d1366768ec55fce04fbdffb429a1cee
+  checksum: 05823f21796d450531a7e4ab299715d38fd9ded0e4ce7400876053f4b5166ca3dde7a68cecfe72d9086039f03c0b6edba36516fb10ed83c5837d9600532ea4c2
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.3.2#~builtin<compat/typescript>":
-  version: 4.3.2
-  resolution: "typescript@patch:typescript@npm%3A4.3.2#~builtin<compat/typescript>::version=4.3.2&hash=d8b4e7"
+"typescript@patch:typescript@4.4.3#~builtin<compat/typescript>":
+  version: 4.4.3
+  resolution: "typescript@patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=32657b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3d3dec06ba6e5b05caa292355712ed9db813fa1c2377630b1f24b42e5ee8957f0bcdd5efd1500c970a11a6f684897f5728f5542ac822932227159a0611499a5e
+  checksum: 28ab98313afab46788ff41014fdb5932430ada6e03cf9e92ac47f406526a2cac1ae2894834e7da61e46b7429318e9c47f45ba8de323332f0cb9af99b72ebae74
   languageName: node
   linkType: hard
 

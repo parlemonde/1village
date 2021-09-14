@@ -48,7 +48,7 @@ export function handleErrors(fn: RequestHandler): RequestHandler {
     try {
       Promise.resolve((fn as PromiseRequestHandler)(req, res, next)).catch(sendError);
     } catch (err) {
-      sendError(err);
+      sendError(err as Error);
     }
   };
 }

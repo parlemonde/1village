@@ -103,13 +103,6 @@ async function createSuperAdminUser(): Promise<void> {
   logger.info('Super user Admin created!');
 }
 
-// async function createSequences(connection: Connection): Promise<void> {
-//   await connection.transaction(async (manager: EntityManager) => {
-//     await manager.query(`CREATE TABLE sequence (id INT NOT NULL)`);
-//     await manager.query(`INSERT INTO sequence VALUES (0)`);
-//   });
-// }
-
 export async function connectToDatabase(tries: number = 10): Promise<Connection | null> {
   if (tries === 0) {
     return null;
@@ -126,7 +119,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
   } catch (e) {
     logger.error(e);
     logger.info('Could not connect to database. Retry in 10 seconds...');
-    if ((e.message || '').split(':')[0] === 'ER_BAD_DB_ERROR') {
+    if (((e as Error).message || '').split(':')[0] === 'ER_BAD_DB_ERROR') {
       await createMySQLDB();
     }
     await sleep(10000);
