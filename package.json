@@ -111,7 +111,7 @@
     "leaflet": "^1.7.1",
     "leaflet-fullscreen": "^1.0.2",
     "mapbox-gl": "^1.5.1",
-    "mapbox-gl-leaflet": "^0.0.14",
+    "mapbox-gl-leaflet": "^0.0.15",
     "md5": "^2.3.0",
     "mime-types": "^2.1.32",
     "morgan": "^1.10.0",
