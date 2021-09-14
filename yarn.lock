@@ -33,6 +33,7 @@ __metadata:
     "@types/mapbox-gl": ^1.5
     "@types/mapbox-gl-leaflet": ^0.0.1
     "@types/md5": ^2.3.0
+    "@types/mime-types": ^2.1.1
     "@types/morgan": ^1.9.2
     "@types/multer": ^1.4.5
     "@types/node": ^16.7.1
@@ -93,6 +94,7 @@ __metadata:
     mapbox-gl: ^1.5.1
     mapbox-gl-leaflet: ^0.0.14
     md5: ^2.3.0
+    mime-types: ^2.1.32
     morgan: ^1.10.0
     multer: ^1.4.2
     mysql2: ^2.3.0
@@ -2325,6 +2327,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: ccef4ae1b0a3e3b3cbce72b73c2227a83c7e45349d54d7ce28fa562878246023bd7eb820efb3b26e3fc7c0c02ed7827386f6058aa106bfa70021f028b309e65e
+  languageName: node
+  linkType: hard
+
+"@types/mime-types@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@types/mime-types@npm:2.1.1"
+  checksum: 106b5d556add46446a579ad25ff15d6b421851790d887edcad558c90c1e64b1defc72bfbaf4b08f208916e21d9cc45cdb951d77be51268b18221544cfe054a3c
   languageName: node
   linkType: hard
 
@@ -8662,12 +8671,28 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
+"mime-db@npm:1.49.0":
+  version: 1.49.0
+  resolution: "mime-db@npm:1.49.0"
+  checksum: 3744efc45b17896ff8a5934a761c434d5ffe3c7816662002d799ca9934347e00f99ae4d9b4ddf1c48d391cc9e522cc4523a6e77e7701f8e27c426e3e1d6e215a
+  languageName: node
+  linkType: hard
+
 "mime-types@npm:^2.1.27, mime-types@npm:~2.1.24":
   version: 2.1.31
   resolution: "mime-types@npm:2.1.31"
   dependencies:
     mime-db: 1.48.0
   checksum: eb1612aa96403823c7a2ccb1a39d58ce11477e685560186e7d369d8164260fd6fc1eeb56fa23acb6a4050583f417b2a685b69c23eb2bd8ed169fb0c6e323740a
+  languageName: node
+  linkType: hard
+
+"mime-types@npm:^2.1.32":
+  version: 2.1.32
+  resolution: "mime-types@npm:2.1.32"
+  dependencies:
+    mime-db: 1.49.0
+  checksum: 4487dfd2f872126d2c219ec731ad47a6169a438d5a4cce6ecef7594ce08eaefaf0d85429485a76ec005f095016c7ec488a24cf8bfcc0ea06de0355e23395746f
   languageName: node
   linkType: hard
 
