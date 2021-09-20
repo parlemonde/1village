@@ -11,8 +11,8 @@ import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presen
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
+import ActivityLink from 'src/components/activities/Link';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
