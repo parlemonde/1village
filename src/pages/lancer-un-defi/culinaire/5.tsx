@@ -15,6 +15,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { Activities } from 'src/components/activities/List';
+import ActivityLink from 'src/components/activities/Link';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -91,14 +92,7 @@ const DefiStep5 = () => {
           )}
 
           {!isEdit && activity.responseActivityId === null && (
-            <div style={{ margin: '1rem 0' }}>
-              Votre défi initie un nouvel échange avec les Pélicopains,{' '}
-              <Link href={`/lancer-un-defi/culinaire/1?edit=${activity.id}`}>
-                <a className="text text--primary" href={`/lancer-un-defi/culinaire/1?edit=${activity.id}`}>
-                  si vous souhaitez plutôt réagir à une activité déjà publiée, cliquez ici.
-                </a>
-              </Link>
-            </div>
+            <ActivityLink url={`/lancer-un-defi/culinaire/1?edit=${activity.id}`} />
           )}
           {responseActivity !== null && (
             <>
