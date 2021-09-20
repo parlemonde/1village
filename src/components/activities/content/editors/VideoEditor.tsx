@@ -205,7 +205,7 @@ export const VideoEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
             onDelete();
           }
         }}
-        disabled={preview.mode !== 1}
+        disabled={step === 0 ? preview.mode !== 1 : !name}
         ariaLabelledBy={`video-edit-${id}`}
         ariaDescribedBy={`video-edit-${id}-desc`}
         loadingLabel="Upload de votre vidéo en cours..."
