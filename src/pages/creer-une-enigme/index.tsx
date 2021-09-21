@@ -5,6 +5,7 @@ import { Base } from 'src/components/Base';
 import { SuggestionCarousel } from 'src/components/SuggestionCarousel';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import EvenementIcon from 'src/svg/enigme/evenement-mystere.svg';
+import LocationIcon from 'src/svg/enigme/location.svg';
 import ObjetIcon from 'src/svg/enigme/objet-mystere.svg';
 import PersonaliteIcon from 'src/svg/enigme/personalite-mystere.svg';
 
@@ -60,7 +61,7 @@ const activities = [
   {
     label: 'Lieu mystère',
     href: '/creer-une-enigme/1?category=3',
-    icon: PersonaliteIcon,
+    icon: LocationIcon,
     disabled: false,
     disabledText: '',
   },
