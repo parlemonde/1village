@@ -57,6 +57,13 @@ const activities = [
     disabled: false,
     disabledText: '',
   },
+  {
+    label: 'Lieu mystère',
+    href: '/creer-une-enigme/1?category=3',
+    icon: PersonaliteIcon,
+    disabled: false,
+    disabledText: '',
+  },
 ];
 
 const Enigme = () => {
