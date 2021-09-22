@@ -12,8 +12,8 @@ import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
-import ActivityLink from 'src/components/activities/link';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -92,9 +92,7 @@ const DefiEcoStep5 = () => {
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && (
-            <ActivityLink url={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} />
-          )}
+          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} />}
           {responseActivity !== null && (
             <>
               <span className="text text--small text--success">Défi en réaction à {REACTIONS[responseActivity.type]}</span>
