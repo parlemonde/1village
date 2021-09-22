@@ -117,7 +117,28 @@ export const ENIGME_DATA = [
       step: 'Un personnage contemporain',
     },
   ],
-  [],
+  [
+    {
+      label: 'Un monument commémoratif',
+      description: 'Faites nous découvrir un monument commémoratif.',
+      step: 'Un monument commémoratif',
+    },
+    {
+      label: 'Un édifice remarquable',
+      description: 'Faites nous découvrir un édifice remarquable.',
+      step: 'Un édifice remarquable',
+    },
+    {
+      label: 'Une salle de spectacle',
+      description: 'Faites nous découvrir une salle de spectacle.',
+      step: 'Une salle de spectacle',
+    },
+    {
+      label: "Un ouvrage d'art",
+      description: "Faites nous découvrir un ouvrage d'art.",
+      step: "Un ouvrage d'art",
+    },
+  ],
 ];
 
 export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
