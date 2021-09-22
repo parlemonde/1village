@@ -12,8 +12,8 @@ import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { Activities } from 'src/components/activities/List';
 import ActivityLink from 'src/components/activities/Link';
+import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -93,9 +93,7 @@ const DefiStep6 = () => {
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && (
-            <ActivityLink url={`/lancer-un-defi/linguistique/1?edit=${activity.id}`} />
-          )}
+          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/lancer-un-defi/linguistique/1?edit=${activity.id}`} />}
 
           {responseActivity !== null && (
             <>
