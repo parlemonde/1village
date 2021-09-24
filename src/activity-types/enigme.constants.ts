@@ -4,6 +4,7 @@ export const ENIGME = {
   OBJET: 0,
   EVENEMENT: 1,
   PERSONALITE: 2,
+  LIEU: 3,
 };
 
 export const ENIGME_TYPES = [
@@ -36,6 +37,16 @@ export const ENIGME_TYPES = [
     titleStep2: 'Décrivez votre personalité mystère',
     titleStep2Short: 'personalité',
     description: `La classe choisit de présenter une "personalité mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cette personalité peut-être...`,
+  },
+  {
+    title: 'Lieu mystère',
+    title2: 'Le lieu mystère',
+    title3: 'un lieu mystère',
+    titleStep1: 'Choisissez votre lieu mystère',
+    step2: 'Description du lieu',
+    titleStep2: 'Décrivez votre lieu mystère',
+    titleStep2Short: 'lieu',
+    description: `La classe choisit de présenter un "lieu mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Ce lieu peut-être...`,
   },
 ];
 
@@ -104,6 +115,28 @@ export const ENIGME_DATA = [
       label: 'Un personnage contemporain',
       description: 'Faites nous découvrir un personnage contemporain.',
       step: 'Un personnage contemporain',
+    },
+  ],
+  [
+    {
+      label: 'Un monument commémoratif',
+      description: 'Faites nous découvrir un monument commémoratif.',
+      step: 'Un monument commémoratif',
+    },
+    {
+      label: 'Un édifice remarquable',
+      description: 'Faites nous découvrir un édifice remarquable.',
+      step: 'Un édifice remarquable',
+    },
+    {
+      label: 'Une salle de spectacle',
+      description: 'Faites nous découvrir une salle de spectacle.',
+      step: 'Une salle de spectacle',
+    },
+    {
+      label: "Un ouvrage d'art",
+      description: "Faites nous découvrir un ouvrage d'art.",
+      step: "Un ouvrage d'art",
     },
   ],
 ];
