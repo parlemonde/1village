@@ -11,6 +11,7 @@ import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presen
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -87,16 +88,8 @@ const PresentationStep4 = () => {
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && (
-            <div style={{ margin: '1rem 0' }}>
-              Votre présentation initie un nouvel échange avec les Pélicopains,{' '}
-              <Link href={`/se-presenter/thematique/1?edit=${activity.id}`}>
-                <a className="text text--primary" href={`/se-presenter/thematique/1?edit=${activity.id}`}>
-                  si vous souhaitez plutôt réagir à une activité déjà publiée, cliquez ici.
-                </a>
-              </Link>
-            </div>
-          )}
+          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/se-presenter/thematique/1?edit=${activity.id}`} />}
+
           {responseActivity !== null && (
             <>
               <span className="text text--small text--success">Présentation en réaction à {REACTIONS[responseActivity.type]}</span>
