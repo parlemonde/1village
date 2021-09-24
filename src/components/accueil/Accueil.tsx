@@ -18,7 +18,6 @@ export const Accueil = () => {
     pelico: true,
   });
   const { activities } = useActivities({
-    limit: 50,
     page: 0,
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
     pelico: filters.pelico,
