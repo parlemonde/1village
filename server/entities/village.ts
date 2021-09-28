@@ -5,6 +5,12 @@ import type { Village as VillageInterface } from '../../types/village.type';
 import { Activity } from './activity';
 import { User } from './user';
 
+enum VillagePhase {
+  DISCOVER = 1,
+  EXCHANGE = 2,
+  IMAGINE = 3,
+}
+
 @Entity()
 export class Village implements VillageInterface {
   @PrimaryGeneratedColumn()
@@ -18,6 +24,13 @@ export class Village implements VillageInterface {
 
   @Column('simple-array')
   public countries: string[];
+
+  @Column({
+    type: 'enum',
+    enum: VillagePhase,
+    default: VillagePhase.DISCOVER,
+  })
+  public activePhase: VillagePhase;
 
   @OneToMany(() => User, (user: User) => user.village)
   public users: User[];

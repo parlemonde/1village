@@ -19,7 +19,9 @@ import { UserContext } from './userContext';
 
 interface VillageContextValue {
   village: Village | null;
+  selectedPhase: number;
   showSelectVillageModal(): void;
+  setSelectedPhase: (phase: number) => void;
 }
 
 export const VillageContext = React.createContext<VillageContextValue>(null);
@@ -33,6 +35,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(false);
+  const [selectedPhase, setSelectedPhase] = React.useState(1);
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 
@@ -85,6 +88,8 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
       }
     }
     setVillage(userVillage);
+    setSelectedPhase(userVillage?.activePhase);
+
     if (userVillage === null && user.type > UserType.TEACHER) {
       showSelectVillageModal();
     }
@@ -134,7 +139,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
   };
 
   return (
-    <VillageContext.Provider value={{ village, showSelectVillageModal }}>
+    <VillageContext.Provider value={{ village, selectedPhase, showSelectVillageModal, setSelectedPhase }}>
       {children}
       <Modal
         open={isModalOpen}
