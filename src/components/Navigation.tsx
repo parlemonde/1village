@@ -140,7 +140,7 @@ export const Navigation = () => {
         >
           <h2 style={{ marginRight: '1rem' }}>Village-monde </h2>
           <Flag country={user?.countryCode} style={{ marginRight: '0.5rem' }}></Flag> <Flag country={user?.countryCode}></Flag>
-        </div>
+        </div >
         <LeftNavigation tabs={arrayNav[0]} map={false} />
         <div style={{ marginTop: '10%' }}></div>
         <LeftNavigation tabs={arrayNav[selectedPhase || 1]} map={false} />
@@ -168,27 +168,27 @@ export const Navigation = () => {
             </div>
           )}
         </div>
-      </div>
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={async () => {
-          const result = await editVillage({
-            id: village?.id,
-            countries: village?.countries,
-            name: village?.name,
-            activePhase: phase >= selectedPhase ? phase - 1 : selectedPhase,
-          });
-          setIsModalOpen(false);
-          if (result) setPhase(phase >= selectedPhase ? phase - 1 : selectedPhase);
-        }}
-        ariaDescribedBy={'activate-phase-desc'}
-        ariaLabelledBy={'activate-phase'}
-        title={`Êtes vous sûr de vouloir ${phase >= selectedPhase ? 'désactiver' : 'activer'} la phase numéro ${selectedPhase} ?`}
-        cancelLabel="Annuler"
-        confirmLabel="Confirmer"
-        noCloseButton={true}
-      />
-    </nav>
+      </div >
+  <Modal
+    open={isModalOpen}
+    onClose={() => setIsModalOpen(false)}
+    onConfirm={async () => {
+      const result = await editVillage({
+        id: village?.id,
+        countries: village?.countries,
+        name: village?.name,
+        activePhase: phase >= selectedPhase ? phase - 1 : selectedPhase,
+      });
+      setIsModalOpen(false);
+      if (result) setPhase(phase >= selectedPhase ? phase - 1 : selectedPhase);
+    }}
+    ariaDescribedBy={'activate-phase-desc'}
+    ariaLabelledBy={'activate-phase'}
+    title={`Êtes vous sûr de vouloir ${phase >= selectedPhase ? 'désactiver' : 'activer'} la phase numéro ${selectedPhase} ?`}
+    cancelLabel="Annuler"
+    confirmLabel="Confirmer"
+    noCloseButton={true}
+  />
+    </nav >
   );
 };
