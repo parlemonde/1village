@@ -66,12 +66,14 @@ villageController.post({ path: '', userType: UserType.ADMIN }, async (req: Reque
 type UpdateVillageData = {
   name?: string;
   countries?: string[];
+  activePhase?: number;
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdateVillageData> = {
   type: 'object',
   properties: {
     name: { type: 'string', nullable: true },
     countries: { type: 'array', items: { type: 'string' }, minItems: 2, maxItems: 2, uniqueItems: true, nullable: true },
+    activePhase: { type: 'number', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -91,6 +93,7 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
   }
   village.name = valueOrDefault(data.name, village.name);
   village.countries = valueOrDefault(data.countries, village.countries);
+  village.activePhase = valueOrDefault(data.activePhase, village.activePhase);
   await getRepository(Village).save(village);
   res.sendJSON(village);
 });
