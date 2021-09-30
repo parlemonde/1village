@@ -19,6 +19,7 @@ const labels = {
   [ActivityType.GAME]: 'Réagir à cette activité par :',
   [ActivityType.ENIGME]: 'Réagir à cette activité par :',
   [ActivityType.QUESTION]: 'Répondre à cette question par :',
+  [ActivityType.INDICE]: 'Répondre à cet indice culturel par :',
 };
 
 interface ActivityCommentsProps {

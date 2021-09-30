@@ -3,10 +3,7 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
-import EvenementIcon from 'src/svg/enigme/evenement-mystere.svg';
-import LocationIcon from 'src/svg/enigme/location.svg';
 import ObjetIcon from 'src/svg/enigme/objet-mystere.svg';
-import PersonaliteIcon from 'src/svg/enigme/personalite-mystere.svg';
 
 const activities = [
   {
