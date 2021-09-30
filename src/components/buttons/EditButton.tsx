@@ -7,18 +7,22 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import type { ButtonProps } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { successColor } from 'src/styles/variables.const';
+import { successColor, errorColor } from 'src/styles/variables.const';
 
 interface EditButtonProps extends ButtonProps {
   color?: 'primary' | 'secondary' | 'default';
-  isGreen?: boolean;
+  status?: 'success' | 'error' | null;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    green: {
+    success: {
       border: `1px solid ${successColor}`,
       color: successColor,
+    },
+    error: {
+      border: `1px solid ${errorColor}`,
+      color: errorColor,
     },
     primary: {
       border: `1px solid ${theme.palette.primary.main}`,
@@ -32,12 +36,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const EditButton = ({ color = 'default', isGreen = false, ...props }: EditButtonProps) => {
+export const EditButton = ({ color = 'default', status = null, ...props }: EditButtonProps) => {
   const classes = useStyles();
+
 
   return (
     <Tooltip title="Modifier" aria-label="Modifier">
-      <IconButton {...props} size="small" color={color} className={classes[isGreen ? 'green' : color]}>
+      <IconButton {...props} size="small" color={color} className={classes[status ? status : color]}>
         <EditIcon />
       </IconButton>
     </Tooltip>
