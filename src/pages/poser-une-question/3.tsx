@@ -104,8 +104,8 @@ const Question3 = () => {
                 ? " Vous pouvez les modifier à l'étape précédente, et enregistrer vos changements ici."
                 : " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
               : questionsCount > 1
-              ? ' Vous pouvez les modifier, et quand vous êtes prêts : publiez-les dans votre village-monde !'
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+                ? ' Vous pouvez les modifier, et quand vous êtes prêts : publiez-les dans votre village-monde !'
+                : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
@@ -130,7 +130,7 @@ const Question3 = () => {
               onClick={() => {
                 router.push('/poser-une-question/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             {processedContent &&
