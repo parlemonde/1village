@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
+import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import Map from 'src/svg/navigation/map.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
@@ -34,6 +35,12 @@ const tabs: Tab[] = [
     label: 'Se présenter',
     path: '/se-presenter',
     icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    disabled: false,
+  },
+  {
+    label: 'Présenter un indice culturel',
+    path: '/indice-culturel',
+    icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     disabled: false,
   },
   {
