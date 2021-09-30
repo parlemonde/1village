@@ -103,7 +103,7 @@ const DefiEcoStep5 = () => {
                     onClick={() => {
                       router.push(`/lancer-un-defi/ecologique/1?edit=${activity.id}`);
                     }}
-                    isGreen
+                    status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
                   />
                 )}
@@ -118,7 +118,7 @@ const DefiEcoStep5 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/ecologique/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             {ECO_ACTIONS[data.type % ECO_ACTIONS.length]}
@@ -130,7 +130,7 @@ const DefiEcoStep5 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/ecologique/3');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent} />
@@ -142,7 +142,7 @@ const DefiEcoStep5 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/ecologique/4');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             Votre défi : {getDefi(DEFI.ECO, data)}

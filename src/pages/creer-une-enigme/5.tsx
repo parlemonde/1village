@@ -113,7 +113,7 @@ const EnigmeStep5 = () => {
                     onClick={() => {
                       router.push(`/creer-une-enigme/1?edit=${activity.id}`);
                     }}
-                    isGreen
+                    status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
                   />
                 )}
@@ -128,7 +128,7 @@ const EnigmeStep5 = () => {
               onClick={() => {
                 router.push('/creer-une-enigme/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p style={{ margin: '0.5rem 0' }}>
@@ -143,7 +143,7 @@ const EnigmeStep5 = () => {
               onClick={() => {
                 router.push('/creer-une-enigme/3');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent.slice(0, indiceContentIndex)} />
@@ -155,7 +155,7 @@ const EnigmeStep5 = () => {
               onClick={() => {
                 router.push('/creer-une-enigme/4');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
