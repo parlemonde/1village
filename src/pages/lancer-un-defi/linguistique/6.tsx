@@ -26,6 +26,7 @@ const REACTIONS = {
   [ActivityType.GAME]: 'ce jeu',
   [ActivityType.ENIGME]: 'cette énigme',
   [ActivityType.QUESTION]: 'cette question',
+  [ActivityType.INDICE]: 'cet indice culturel',
 };
 
 const DefiStep6 = () => {
