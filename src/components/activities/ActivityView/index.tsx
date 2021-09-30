@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isPresentation, isQuestion, isEnigme, isDefi } from 'src/activity-types/anyActivity';
+import { isPresentation, isQuestion, isEnigme, isDefi, isIndice } from 'src/activity-types/anyActivity';
 import { isThematique, isMascotte } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -25,6 +25,7 @@ const REACTIONS = {
   [ActivityType.GAME]: 'ce jeu',
   [ActivityType.ENIGME]: 'cette énigme',
   [ActivityType.QUESTION]: 'cette question',
+  [ActivityType.INDICE]: 'cet indice culturel',
 };
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
@@ -67,6 +68,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
       {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
       {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
       {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
+      {isIndice(activity) && <ContentView content={activity.processedContent} />}
     </div>
   );
 };
