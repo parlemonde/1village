@@ -147,7 +147,7 @@ const IndiceStep3 = () => {
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Base>
+    </Base >
   );
 };
 
