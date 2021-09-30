@@ -154,7 +154,7 @@ const MascotteStep4 = () => {
               onClick={() => {
                 router.push('/se-presenter/mascotte/1');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <div>
@@ -171,7 +171,7 @@ const MascotteStep4 = () => {
               onClick={() => {
                 router.push('/se-presenter/mascotte/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <Grid container spacing={3}>
@@ -197,7 +197,7 @@ const MascotteStep4 = () => {
               onClick={() => {
                 router.push('/se-presenter/mascotte/3');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <div>

@@ -56,6 +56,7 @@ const DefiStep3 = () => {
   const onNext = () => {
     if (data.objectIndex === -1) {
       return;
+
     }
     if (explanationContentIndex === 0) {
       enqueueSnackbar('Il faut au moins un bloc de texte, image, son ou vidéo avant de continuer.', {
