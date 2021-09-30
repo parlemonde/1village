@@ -110,7 +110,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
   try {
     const config = getDBConfig();
     if (config === null) {
-      logger.error('Could not connect to dabase. Config file for database is not correct!');
+      logger.error('Could not connect to database. Config file for database is not correct!');
       return null;
     }
     const connection = await createConnection(config);
@@ -119,7 +119,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
   } catch (e) {
     logger.error(e);
     logger.info('Could not connect to database. Retry in 10 seconds...');
-    if (((e as Error).message || '').split(':')[0] === 'ER_BAD_DB_ERROR') {
+    if (((e as Error) || '').toString().includes('Unknown database')) {
       await createMySQLDB();
     }
     await sleep(10000);
