@@ -7,7 +7,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import { withStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
-
 import { primaryColor, primaryColorLight2, successColor, errorColor } from 'src/styles/variables.const';
 
 const DotConnector = withStyles({
