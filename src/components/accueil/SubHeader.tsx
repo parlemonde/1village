@@ -1,49 +1,62 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
+import { VillageContext } from 'src/contexts/villageContext';
 import { primaryColorLight } from 'src/styles/variables.const';
 import Jumelles from 'src/svg/jumelles.svg';
-import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
-import Puzzle from 'src/svg/puzzle.svg';
 
-export const SubHeader = () => {
+interface Props {
+  number: number;
+  info: string;
+}
+
+export const SubHeader: React.FC<Props> = ({ number, info }) => {
+  const { selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
+  const router = useRouter();
+
   return (
     <div
       style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'white',
-        borderRadius: '10px',
         display: 'flex',
-        alignItems: 'center',
+        width: '30%',
+        height: '3vw',
+        cursor: 'pointer',
+      }}
+      onClick={() => {
+        setSelectedPhase(number);
+        router.push('/');
       }}
     >
       <div
+        className="with-bot-left-shadow"
         style={{
-          flex: 1,
-          minWidth: 0,
-          backgroundColor: primaryColorLight,
-          height: '100%',
+          alignItems: 'center',
+          backgroundColor: selectedPhase === number ? primaryColorLight : 'white',
           borderTopLeftRadius: '10px',
           borderBottomLeftRadius: '10px',
-          padding: '0 2rem 0 4rem',
+          color: selectedPhase === number ? 'white' : primaryColorLight,
           display: 'flex',
-          alignItems: 'center',
-          position: 'relative',
+          flex: 1,
+          padding: '0.5rem 2rem 0.5rem 1rem',
         }}
       >
-        <PelicoSouriant style={{ top: '-45%', left: '0.8rem', height: '100%', width: 'auto', position: 'absolute' }} />
-        <Jumelles style={{ height: '70%', width: 'auto', marginRight: '0.5rem' }} />
-        <h2>1. Se découvrir</h2>
+        <Jumelles style={{ marginRight: '0.5rem' }} />
+        <h2 style={{ fontSize: '1vw', marginLeft: '2vw' }}>
+          Phase {number} - {info}
+        </h2>
       </div>
-      <div style={{ height: '100%' }}>
-        <svg style={{ width: 'auto', height: '100%' }} viewBox="0 0 32 46" fill="none">
-          <path d="M32 23L0 46L0 0L32 23Z" fill={primaryColorLight} />
-        </svg>
-      </div>
-      <div style={{ margin: '0 2rem', display: 'flex', alignItems: 'center' }}>
-        <Puzzle style={{ height: '2rem', width: 'auto', marginRight: '0.5rem' }} />
-        <h3>2. Construire le village idéal</h3>
-      </div>
+      {/* Arrow shape for subheader */}
+      <svg className="shadow-svg" viewBox="0 0 32 46" fill="none">
+        <path d="M32 23L0 46L0 0L32 23Z" fill={selectedPhase === number ? primaryColorLight : 'white'} />
+      </svg>
     </div>
   );
 };
+
+export const SubHeaders = () => (
+  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+    <SubHeader number={1} info="Découvrir" />
+    <SubHeader number={2} info="Échanger" />
+    <SubHeader number={3} info="Imaginer" />
+  </div>
+);

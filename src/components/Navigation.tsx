@@ -1,20 +1,22 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
 
-// import { UserContext } from 'src/contexts/userContext';
+import { Flag } from 'src/components/Flag';
+import { Modal } from 'src/components/Modal';
+import { LeftNavigation } from 'src/components/accueil/Navigation';
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { useVillageRequests } from 'src/services/useVillages';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
-import Map from 'src/svg/navigation/map.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
-
-// import { UserType } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 interface Tab {
   label: string;
@@ -23,110 +25,151 @@ interface Tab {
   disabled: boolean;
 }
 
-const tabs: Tab[] = [
-  {
-    label: 'Accueil',
-    path: '/',
-    icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  },
-  {
-    label: 'Se présenter',
-    path: '/se-presenter',
-    icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  },
-  {
-    label: 'Créer une énigme',
-    path: '/creer-une-enigme',
-    icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  },
-  {
-    label: 'Lancer un défi',
-    path: '/lancer-un-defi',
-    icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  },
-  {
-    label: 'Poser une question',
-    path: '/poser-une-question',
-    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  },
-  {
-    label: 'Créer un jeu',
-    path: '/creer-un-jeu',
-    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: true,
-  },
-  {
-    label: 'Voir mes activités',
-    path: '/mes-activites',
-    icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  },
-];
-
 export const Navigation = () => {
-  const router = useRouter();
-  const [selectedTab, setSelectedTab] = React.useState(-1);
-  // const { user } = React.useContext(UserContext);
-  // const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  const { village, selectedPhase } = React.useContext(VillageContext);
+  const { user } = React.useContext(UserContext);
+  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  const { editVillage } = useVillageRequests();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [phase, setPhase] = React.useState(0);
 
-  React.useEffect(() => {
-    let index = tabs.findIndex((tab) => tab.path.split('/')[1] === router.pathname.split('/')[1]);
-    if (router.pathname.split('/')[1] === 'activity') {
-      index = 0;
-    }
-    setSelectedTab(index);
-  }, [router.pathname]);
+  useEffect(() => setPhase(village?.activePhase), [village]);
+  const allStep: Tab[] = [
+    {
+      label: 'Accueil',
+      path: '/',
+      icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: false,
+    },
+    {
+      label: 'Créer sa mascotte',
+      path: '/se-presenter/mascotte/1',
+      icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: false,
+    },
+  ];
+
+  const stepOne: Tab[] = [
+    {
+      label: 'Créer une énigme',
+      path: '/creer-une-enigme',
+      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Lancer un défi',
+      path: '/lancer-un-defi',
+      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Poser une question',
+      path: '/poser-une-question',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+  ];
+
+  const stepTwo: Tab[] = [
+    {
+      label: 'Créer un jeu',
+      path: '/creer-un-jeu',
+      icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Voir mes activités',
+      path: '/mes-activites',
+      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+  ];
+
+  const stepThree: Tab[] = [
+    {
+      label: 'Créer un jeu',
+      path: '/creer-un-jeu',
+      icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Voir mes activités',
+      path: '/mes-activites',
+      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+  ];
+
+  const arrayNav = [allStep, stepOne, stepTwo, stepThree];
 
   return (
     <nav className="navigation">
       <div style={{ position: 'relative' }}>
-        <div className="navigation__content with-shadow">
-          <div style={{ padding: '10% 15%', position: 'relative' }}>
-            <Map width="100%" height="100%" />
-            <div className="absolute-center">
-              <Button className="navigation__button" color="primary" variant="contained">
-                Voir sur la carte
-              </Button>
-            </div>
-          </div>
-          <div style={{ padding: '0 5%', position: 'relative' }}>
-            {tabs.map((tab, index) => (
-              <Link key={tab.path} href={tab.path} passHref>
-                <Button
-                  component="a"
-                  onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                    event.preventDefault();
-                    router.push(tab.path);
-                  }}
-                  href={tab.path}
-                  color="primary"
-                  startIcon={tab.icon}
-                  variant={index === selectedTab ? 'contained' : 'outlined'}
-                  className="navigation__button full-width"
-                  style={{
-                    justifyContent: 'flex-start',
-                    paddingRight: '0.1rem',
-                    marginBottom: '0.4rem',
-                    width: index === selectedTab ? '112%' : '100%',
-                  }}
-                  disableElevation
-                  disabled={tab.disabled}
-                >
-                  {tab.label}
-                </Button>
-              </Link>
-            ))}
-          </div>
+        <div
+          className="with-bot-left-shadow"
+          style={{
+            flex: 1,
+            backgroundColor: 'white',
+            height: '100%',
+            borderRadius: '10px 10px 10px 10px',
+            padding: '0.5rem 2rem 0.6rem 1rem',
+            display: 'flex',
+            alignItems: 'center',
+            position: 'relative',
+            margin: '0rem 1rem 1.4rem 1rem',
+          }}
+        >
+          <h2 style={{ marginRight: '1rem' }}>Village-monde </h2>
+          <Flag country={user?.countryCode} style={{ marginRight: '0.5rem' }}></Flag> <Flag country={user?.countryCode}></Flag>
         </div>
-        <Link href="/cgu">
-          <a className="navigation__cgu-link text text--small">{"Conditions générales d'utilisation"}</a>
-        </Link>
+        <LeftNavigation tabs={arrayNav[0]} map={false} />
+        <div style={{ marginTop: '10%' }}></div>
+        <LeftNavigation tabs={arrayNav[selectedPhase || 1]} map={false} />
+        <div style={{ marginTop: '10%' }}></div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Link href="/cgu">
+            <a className="text text--small">{"Conditions générales d'utilisation"}</a>
+          </Link>
+          {isModerateur && (
+            <div style={{ marginTop: '1vw' }}>
+              {phase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase numéro {selectedPhase}
+              <Switch
+                checked={phase >= selectedPhase}
+                onChange={() => setIsModalOpen(true)}
+                value="checkedB"
+                color="primary"
+                disabled={selectedPhase < village?.activePhase || selectedPhase === 1}
+              />
+            </div>
+          )}
+        </div>
       </div>
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={async () => {
+          const result = await editVillage({
+            id: village?.id,
+            countries: village?.countries,
+            name: village?.name,
+            activePhase: phase >= selectedPhase ? phase - 1 : selectedPhase,
+          });
+          setIsModalOpen(false);
+          if (result) setPhase(phase >= selectedPhase ? phase - 1 : selectedPhase);
+        }}
+        ariaDescribedBy={'activate-phase-desc'}
+        ariaLabelledBy={'activate-phase'}
+        title={`Êtes vous sûr de vouloir ${phase >= selectedPhase ? 'désactiver' : 'activer'} la phase numéro ${selectedPhase} ?`}
+        cancelLabel="Annuler"
+        confirmLabel="Confirmer"
+        noCloseButton={true}
+      />
     </nav>
   );
 };
