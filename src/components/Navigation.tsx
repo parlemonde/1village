@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 
-// import { UserContext } from 'src/contexts/userContext';
 import Switch from '@material-ui/core/Switch';
 
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { LeftNavigation } from 'src/components/accueil/Navigation';
 import { UserContext } from 'src/contexts/userContext';
-// import { UserType } from 'types/user.type';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
@@ -31,6 +29,7 @@ interface Tab {
 export const Navigation = () => {
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
+  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [phase, setPhase] = React.useState(0);
@@ -127,21 +126,30 @@ export const Navigation = () => {
         <LeftNavigation tabs={arrayNav[0]} map={false} />
         <div style={{ marginTop: '10%' }}></div>
         <LeftNavigation tabs={arrayNav[selectedPhase || 1]} map={false} />
-        <Link href="/cgu">
-          <a className="navigation__cgu-link text text--small">{"Conditions générales d'utilisation"}</a>
-        </Link>
-        {user && user.type >= UserType.MEDIATOR && (
-          <div style={{ position: 'inherit', paddingLeft: '2rem' }}>
-            {phase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase numéro {selectedPhase}
-            <Switch
-              checked={phase >= selectedPhase}
-              onChange={() => setIsModalOpen(true)}
-              value="checkedB"
-              color="primary"
-              disabled={selectedPhase < village?.activePhase || selectedPhase === 1}
-            />
-          </div>
-        )}
+        <div style={{ marginTop: '10%' }}></div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Link href="/cgu">
+            <a className="text text--small">{"Conditions générales d'utilisation"}</a>
+          </Link>
+          {isModerateur && (
+            <div style={{ marginTop: '1vw' }}>
+              {phase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase numéro {selectedPhase}
+              <Switch
+                checked={phase >= selectedPhase}
+                onChange={() => setIsModalOpen(true)}
+                value="checkedB"
+                color="primary"
+                disabled={selectedPhase < village?.activePhase || selectedPhase === 1}
+              />
+            </div>
+          )}
+        </div>
       </div>
       <Modal
         open={isModalOpen}
