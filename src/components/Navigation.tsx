@@ -168,27 +168,27 @@ export const Navigation = () => {
             </div>
           )}
         </div>
-      </div >
-  <Modal
-    open={isModalOpen}
-    onClose={() => setIsModalOpen(false)}
-    onConfirm={async () => {
-      const result = await editVillage({
-        id: village?.id,
-        countries: village?.countries,
-        name: village?.name,
-        activePhase: phase >= selectedPhase ? phase - 1 : selectedPhase,
-      });
-      setIsModalOpen(false);
-      if (result) setPhase(phase >= selectedPhase ? phase - 1 : selectedPhase);
-    }}
-    ariaDescribedBy={'activate-phase-desc'}
-    ariaLabelledBy={'activate-phase'}
-    title={`Êtes vous sûr de vouloir ${phase >= selectedPhase ? 'désactiver' : 'activer'} la phase numéro ${selectedPhase} ?`}
-    cancelLabel="Annuler"
-    confirmLabel="Confirmer"
-    noCloseButton={true}
-  />
-    </nav >
+      </div>
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={async () => {
+          const result = await editVillage({
+            id: village?.id,
+            countries: village?.countries,
+            name: village?.name,
+            activePhase: phase >= selectedPhase ? phase - 1 : selectedPhase,
+          });
+          setIsModalOpen(false);
+          if (result) setPhase(phase >= selectedPhase ? phase - 1 : selectedPhase);
+        }}
+        ariaDescribedBy={'activate-phase-desc'}
+        ariaLabelledBy={'activate-phase'}
+        title={`Êtes vous sûr de vouloir ${phase >= selectedPhase ? 'désactiver' : 'activer'} la phase numéro ${selectedPhase} ?`}
+        cancelLabel="Annuler"
+        confirmLabel="Confirmer"
+        noCloseButton={true}
+      />
+    </nav>
   );
 };
