@@ -6,57 +6,64 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { isDefi } from 'src/activity-types/anyActivity';
-import { isEco, getDefi, ECO_ACTIONS, DEFI } from 'src/activity-types/defi.constants';
-import type { EcoDefiData } from 'src/activity-types/defi.types';
+import { isSymbol } from 'src/activity-types/anyActivity';
+import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
+import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { errorColor } from 'src/styles/variables.const';
+import { ActivityStatus } from 'types/activity.type';
 
-const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'cette présentation',
-  [ActivityType.DEFI]: 'ce défi',
-  [ActivityType.GAME]: 'ce jeu',
-  [ActivityType.ENIGME]: 'cette énigme',
-  [ActivityType.QUESTION]: 'cette question',
-  [ActivityType.INDICE]: 'cet indice culturel',
-  [ActivityType.SYMBOL]: 'ce symbole',
-};
-
-const DefiEcoStep5 = () => {
+const SymbolStep3 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [style, setStyle] = React.useState({});
 
-  const data = (activity?.data as EcoDefiData) || null;
+  const data = (activity?.data as SymbolData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const isValid = () => {
+    let result = true;
+    activity?.processedContent?.map((content) => {
+      result = content.value === '' || content.value === '<p></p>\n' ? false : true;
+    });
+    return result;
+  };
 
   React.useEffect(() => {
+    if (!isValid()) {
+      setErrorSteps([1]);
+      setStyle({ border: `1px dashed ${errorColor}` });
+    }
+
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/lancer-un-defi');
-    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isEco(activity)))) {
-      router.push('/lancer-un-defi');
+      router.push('/indice-culturel');
+    } else if (activity && !isSymbol(activity)) {
+      router.push('/indice-culturel');
     }
   }, [activity, router]);
 
   const onPublish = async () => {
+    if (!isValid()) {
+      return;
+    }
     setIsLoading(true);
     const success = await save(true);
     if (success) {
-      router.push('/lancer-un-defi/success');
+      router.push('/symbole/success');
     }
     setIsLoading(false);
   };
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isEco(activity))) {
+  if (data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
@@ -64,21 +71,22 @@ const DefiEcoStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={(isEdit ? [] : ['Démarrer']).concat(['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation'])}
-          activeStep={isEdit ? 3 : 4}
+          steps={[SYMBOL_TYPES[activity.subType].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']}
+          activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Pré-visualisez votre défi{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre défi.
+            Voici la pré-visualisation de votre publication.
             {isEdit
-              ? " Vous pouvez le modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez le modifier, et quand vous êtes prêts : publiez-le dans votre village-monde !'}
+              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
+              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/lancer-un-defi/ecologique/4" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/lancer-un-defi/ecologique/4">
+              <Link href="/symbole/2" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/symbole/2">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -94,15 +102,14 @@ const DefiEcoStep5 = () => {
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} />}
           {responseActivity !== null && (
             <>
-              <span className="text text--small text--success">Défi en réaction à {REACTIONS[responseActivity.type]}</span>
+              <span className={'text text--small text--success'}>Présentation en réaction à l&apos;indice culturel</span>
               <div className="preview-block">
                 {!isEdit && (
                   <EditButton
                     onClick={() => {
-                      router.push(`/lancer-un-defi/ecologique/1?edit=${activity.id}`);
+                      router.push(`/symbole/1?edit=${activity.id}`);
                     }}
                     status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
@@ -113,43 +120,31 @@ const DefiEcoStep5 = () => {
             </>
           )}
 
-          <span className="text text--small text--success">Votre action</span>
+          <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/lancer-un-defi/ecologique/2');
+                router.push('/indice-culturel');
               }}
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {ECO_ACTIONS[data.type % ECO_ACTIONS.length]}
+            <p style={{ margin: '0.5rem 0' }}>{SYMBOL_TYPES[activity.subType].title}</p>
           </div>
 
-          <span className="text text--small text--success">Description</span>
-          <div className="preview-block">
+          <span className={`text text--small ${errorSteps.length > 0 ? 'text--alert' : 'text--success'}`}>Symbole</span>
+          <div className="preview-block" style={style}>
             <EditButton
               onClick={() => {
-                router.push('/lancer-un-defi/ecologique/3');
+                router.push('/symbole/2');
               }}
-              status={'success'}
+              status={errorSteps.length > 0 ? 'error' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent} />
           </div>
 
-          <span className="text text--small text--success">Le défi lancé aux Pélicopains</span>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/lancer-un-defi/ecologique/4');
-              }}
-              status={'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            Votre défi : {getDefi(DEFI.ECO, data)}
-          </div>
-
-          <StepsButton prev="/lancer-un-defi/ecologique/4" />
+          <StepsButton prev="/symbole/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -159,4 +154,4 @@ const DefiEcoStep5 = () => {
   );
 };
 
-export default DefiEcoStep5;
+export default SymbolStep3;

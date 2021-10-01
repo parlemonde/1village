@@ -27,6 +27,7 @@ const REACTIONS = {
   [ActivityType.ENIGME]: 'cette énigme',
   [ActivityType.QUESTION]: 'cette question',
   [ActivityType.INDICE]: 'cet indice culturel',
+  [ActivityType.SYMBOL]: 'ce symbole',
 };
 
 const DefiStep6 = () => {

@@ -255,7 +255,15 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   properties: {
     type: {
       type: 'number',
-      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI, ActivityType.INDICE],
+      enum: [
+        ActivityType.PRESENTATION,
+        ActivityType.QUESTION,
+        ActivityType.GAME,
+        ActivityType.ENIGME,
+        ActivityType.DEFI,
+        ActivityType.INDICE,
+        ActivityType.SYMBOL,
+      ],
     },
     subType: {
       type: 'number',

@@ -8,6 +8,7 @@ import type { EditorContent } from './extendedActivity.types';
 import type { IndiceActivity } from './indice.types';
 import type { PresentationActivity } from './presentation.types';
 import type { QuestionActivity } from './question.types';
+import type { SymbolActivity } from './symbol.types';
 
 export const isPresentation = (activity: AnyActivity): activity is PresentationActivity => {
   return activity.type === ActivityType.PRESENTATION;
@@ -23,6 +24,9 @@ export const isDefi = (activity: AnyActivity): activity is DefiActivity => {
 };
 export const isIndice = (activity: AnyActivity): activity is IndiceActivity => {
   return activity.type === ActivityType.INDICE;
+};
+export const isSymbol = (activity: AnyActivity): activity is SymbolActivity => {
+  return activity.type === ActivityType.SYMBOL;
 };
 
 export const getAnyActivity = (activity: Activity): AnyActivity => {

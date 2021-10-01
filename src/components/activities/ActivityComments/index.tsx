@@ -20,6 +20,7 @@ const labels = {
   [ActivityType.ENIGME]: 'Réagir à cette activité par :',
   [ActivityType.QUESTION]: 'Répondre à cette question par :',
   [ActivityType.INDICE]: 'Répondre à cet indice culturel par :',
+  [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
 };
 
 interface ActivityCommentsProps {

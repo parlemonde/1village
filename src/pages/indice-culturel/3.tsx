@@ -83,7 +83,7 @@ const IndiceStep3 = () => {
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
               <Link href="/indice-culturel/2" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/3">
+                <Button component="a" color="secondary" variant="contained" href="/indice-culturel/2">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
