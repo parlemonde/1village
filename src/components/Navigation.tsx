@@ -52,16 +52,10 @@ export const Navigation = () => {
 
   const stepOne: Tab[] = [
     {
-      label: 'Créer une énigme',
-      path: '/creer-une-enigme',
-      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-    {
-      label: 'Lancer un défi',
-      path: '/lancer-un-defi',
-      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
+      label: 'Présenter un indice culturel',
+      path: '/indice-culturel',
+      icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: false,
     },
     {
       label: 'Poser une question',
@@ -69,13 +63,37 @@ export const Navigation = () => {
       icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
+    {
+      label: 'Voir mes activités',
+      path: '/mes-activites',
+      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
   ];
 
   const stepTwo: Tab[] = [
     {
+      label: 'Lancer un défi',
+      path: '/lancer-un-defi',
+      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
       label: 'Créer un jeu',
       path: '/creer-un-jeu',
       icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Créer une énigme',
+      path: '/creer-une-enigme',
+      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Poser une question',
+      path: '/poser-une-question',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
     {
