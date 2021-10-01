@@ -21,8 +21,6 @@ interface Tab {
 export const LeftNavigation: React.FC<NavigationProps> = ({ map, tabs }) => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);
-  // const { user } = React.useContext(UserContext);
-  // const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
 
   React.useEffect(() => {
     let index = tabs.findIndex((tab) => tab.path.split('/')[1] === router.pathname.split('/')[1]);
@@ -30,7 +28,7 @@ export const LeftNavigation: React.FC<NavigationProps> = ({ map, tabs }) => {
       index = 0;
     }
     setSelectedTab(index);
-  }, [router.pathname]);
+  }, [router.pathname, tabs]);
 
   return (
     <div className="navigation__content with-shadow">

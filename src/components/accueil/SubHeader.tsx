@@ -17,12 +17,10 @@ export const SubHeader: React.FC<Props> = ({ number, info }) => {
   return (
     <div
       style={{
-        width: '30%',
-        opacity: 'none',
-        borderRadius: '10px',
         display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer'
+        width: '30%',
+        height: '3vw',
+        cursor: 'pointer',
       }}
       onClick={() => {
         setSelectedPhase(number);
@@ -32,38 +30,33 @@ export const SubHeader: React.FC<Props> = ({ number, info }) => {
       <div
         className="with-bot-left-shadow"
         style={{
-          flex: 1,
-          minWidth: 0,
+          alignItems: 'center',
           backgroundColor: selectedPhase === number ? primaryColorLight : 'white',
-          height: '100%',
           borderTopLeftRadius: '10px',
           borderBottomLeftRadius: '10px',
-          padding: '0.5rem 2rem 0.5rem 1rem',
-          display: 'flex',
           color: selectedPhase === number ? 'white' : primaryColorLight,
-          alignItems: 'center',
+          display: 'flex',
+          flex: 1,
+          padding: '0.5rem 2rem 0.5rem 1rem',
         }}
       >
-        <Jumelles style={{ height: 'auto', width: 'auto', marginRight: '0.5rem' }} />
-        <h2 style={{ fontSize: '1vw' }}>
+        <Jumelles style={{ marginRight: '0.5rem' }} />
+        <h2 style={{ fontSize: '1vw', marginLeft: '2vw' }}>
           Phase {number} - {info}
         </h2>
       </div>
-      <div style={{ height: '100%' }}>
-        <svg className="shadow-svg" style={{ width: 'auto', height: '100%' }} viewBox="0 0 32 46" fill="none">
-          <path d="M32 23L0 46L0 0L32 23Z" fill={selectedPhase === number ? primaryColorLight : 'white'} />
-        </svg>
-      </div>
+      {/* Arrow shape for subheader */}
+      <svg className="shadow-svg" viewBox="0 0 32 46" fill="none">
+        <path d="M32 23L0 46L0 0L32 23Z" fill={selectedPhase === number ? primaryColorLight : 'white'} />
+      </svg>
     </div>
   );
 };
 
 export const SubHeaders = () => (
-  <div style={{
-    display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-    <SubHeader number={
-      1} info="Découvrir" />
+  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+    <SubHeader number={1} info="Découvrir" />
     <SubHeader number={2} info="Échanger" />
     <SubHeader number={3} info="Imaginer" />
-  </div >
+  </div>
 );
