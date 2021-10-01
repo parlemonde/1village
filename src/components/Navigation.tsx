@@ -61,7 +61,7 @@ export const Navigation = () => {
     {
       label: 'Présenter un symbole',
       path: '/symbole',
-      icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      icon: <SymbolIcon style={{ fill: 'white' }} width="1.4rem" />,
       disabled: false,
     },
     {
