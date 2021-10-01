@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export const EditButton = ({ color = 'default', status = null, ...props }: EditButtonProps) => {
   const classes = useStyles();
 
-
   return (
     <Tooltip title="Modifier" aria-label="Modifier">
       <IconButton {...props} size="small" color={color} className={classes[status ? status : color]}>

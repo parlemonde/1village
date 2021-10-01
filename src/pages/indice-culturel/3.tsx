@@ -17,8 +17,8 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
-import { ActivityStatus } from 'types/activity.type';
 import { errorColor } from 'src/styles/variables.const';
+import { ActivityStatus } from 'types/activity.type';
 
 const IndiceStep3 = () => {
   const router = useRouter();
@@ -30,14 +30,15 @@ const IndiceStep3 = () => {
 
   const data = (activity?.data as IndiceData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
- const isValid = () => {
-   let result = true;
-  activity?.processedContent?.map((content) => {
-    result = content.value === "" || content.value === "<p></p>\n" ? false : true
-  })
+  const isValid = () => {
+    let result = true;
+    activity?.processedContent?.map((content) => {
+      result = content.value === '' || content.value === '<p></p>\n' ? false : true;
+    });
 
-  return result;
- }
+    return result;
+  };
+
   React.useEffect(() => {
     if (!isValid()) {
       setErrorSteps([1]);
@@ -101,7 +102,7 @@ const IndiceStep3 = () => {
           {responseActivity !== null && (
             <>
               <span className={'text text--small text--success'}>Présentation en réaction à l&apos;indice culturel</span>
-              <div className="preview-block" >
+              <div className="preview-block">
                 {!isEdit && (
                   <EditButton
                     onClick={() => {
@@ -146,7 +147,7 @@ const IndiceStep3 = () => {
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Base >
+    </Base>
   );
 };
 
