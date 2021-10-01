@@ -19,7 +19,6 @@ export const SubHeader: React.FC<Props> = ({ number, info }) => {
       style={{
         display: 'flex',
         width: '30%',
-        height: '3vw',
         cursor: 'pointer',
       }}
       onClick={() => {
@@ -54,7 +53,7 @@ export const SubHeader: React.FC<Props> = ({ number, info }) => {
 };
 
 export const SubHeaders = () => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '100%' }}>
     <SubHeader number={1} info="Découvrir" />
     <SubHeader number={2} info="Échanger" />
     <SubHeader number={3} info="Imaginer" />
