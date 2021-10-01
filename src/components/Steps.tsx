@@ -8,7 +8,6 @@ import Step from '@material-ui/core/Step';
 import { withStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 
-
 import { primaryColor, primaryColorLight2, successColor, errorColor } from 'src/styles/variables.const';
 
 const DotConnector = withStyles({
@@ -31,14 +30,14 @@ const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
     <div
       style={{
         backgroundColor: active ? primaryColor : error ? errorColor : 'white',
-        color: completed ? error ? 'white' : successColor : active ? 'white' : primaryColor,
+        color: completed ? (error ? 'white' : successColor) : active ? 'white' : primaryColor,
         width: '38px',
         height: '38px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '50%',
-        border: completed ? error ? `1px solid ${errorColor}` : `1px solid ${successColor}` : `1px solid ${primaryColor}`,
+        border: completed ? (error ? `1px solid ${errorColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
       }}
     >
       {completed ? error ? icon : <CheckIcon /> : icon}
@@ -59,16 +58,18 @@ export const Steps = ({ steps, activeStep = 0, errorSteps = [] }: StepsProps) =>
       <Stepper activeStep={activeStep} alternativeLabel connector={<DotConnector />} style={{ zIndex: 1, position: 'relative', background: 'none' }}>
         {steps.map((label, index) => {
           let error: boolean = false;
-          errorSteps.map(step => {
+          errorSteps.map((step) => {
             if (index === step) {
-              error=true;
+              error = true;
             }
-          })
+          });
           return (
             <Step key={label}>
-              <StepLabel StepIconComponent={StepIcon} error={error}>{label}</StepLabel>
+              <StepLabel StepIconComponent={StepIcon} error={error}>
+                {label}
+              </StepLabel>
             </Step>
-          )
+          );
         })}
       </Stepper>
     </div>
