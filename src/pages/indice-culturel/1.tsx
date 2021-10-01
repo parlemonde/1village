@@ -40,10 +40,8 @@ const IndiceStep1 = () => {
       ? activity.subType ?? 0
       : parseInt(getQueryString(router.query['category']) ?? '-1', 10) ?? 0;
 
-  const onNext = (clear: boolean) => () => {
-    if (!clear) {
-      updateActivity({ responseActivityId: null, responseType: null });
-    }
+  const onNext = () => {
+    updateActivity({ responseActivityId: null, responseType: null });
     router.push('/indice-culturel/2');
   };
 
@@ -92,7 +90,7 @@ const IndiceStep1 = () => {
             {INDICE_TYPES[activity.subType].step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice ! Vous
             pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
           </p>
-          <StepsButton prev="/indice-culturel" next={onNext(true)} />
+          <StepsButton prev="/indice-culturel" next={onNext} />
           <div>
             {sameActivities.length > 0 ? (
               <Activities activities={sameActivities} withLinks />
