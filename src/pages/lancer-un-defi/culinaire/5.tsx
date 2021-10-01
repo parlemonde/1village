@@ -102,7 +102,7 @@ const DefiStep5 = () => {
                     onClick={() => {
                       router.push(`/lancer-un-defi/culinaire/1?edit=${activity.id}`);
                     }}
-                    isGreen
+                    status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
                   />
                 )}
@@ -117,7 +117,7 @@ const DefiStep5 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/culinaire/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <div className="text-center" style={{ marginBottom: '1rem' }}>
@@ -144,7 +144,7 @@ const DefiStep5 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/culinaire/3');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent} />
@@ -156,7 +156,7 @@ const DefiStep5 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/culinaire/4');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             Votre défi : {getDefi(DEFI.COOKING, data)}

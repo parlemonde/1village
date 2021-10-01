@@ -130,7 +130,7 @@ const Question3 = () => {
               onClick={() => {
                 router.push('/poser-une-question/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             {processedContent &&

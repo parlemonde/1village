@@ -105,7 +105,7 @@ const DefiStep6 = () => {
                     onClick={() => {
                       router.push(`/lancer-un-defi/linguistique/1?edit=${activity.id}`);
                     }}
-                    isGreen
+                    status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
                   />
                 )}
@@ -119,7 +119,7 @@ const DefiStep6 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/linguistique/2');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             {getLanguageObject(data)}
@@ -131,7 +131,7 @@ const DefiStep6 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/linguistique/3');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent.slice(0, explanationContentIndex)} />
@@ -143,7 +143,7 @@ const DefiStep6 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/linguistique/4');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent.slice(explanationContentIndex, activity.processedContent.length)} />
@@ -155,7 +155,7 @@ const DefiStep6 = () => {
               onClick={() => {
                 router.push('/lancer-un-defi/linguistique/5');
               }}
-              isGreen
+              status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             Votre défi : {getDefi(DEFI.LANGUAGE, data)}

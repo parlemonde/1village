@@ -8,7 +8,7 @@ import Step from '@material-ui/core/Step';
 import { withStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 
-import { primaryColor, primaryColorLight2, successColor } from 'src/styles/variables.const';
+import { primaryColor, primaryColorLight2, successColor, errorColor } from 'src/styles/variables.const';
 
 const DotConnector = withStyles({
   alternativeLabel: {
@@ -25,22 +25,22 @@ const DotConnector = withStyles({
   },
 })(StepConnector);
 
-const StepIcon = ({ icon, active, completed }: StepIconProps) => {
+const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
   return (
     <div
       style={{
-        backgroundColor: active ? primaryColor : 'white',
-        color: completed ? successColor : active ? 'white' : primaryColor,
+        backgroundColor: active ? primaryColor : error ? errorColor : 'white',
+        color: completed ? (error ? 'white' : successColor) : active ? 'white' : primaryColor,
         width: '38px',
         height: '38px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '50%',
-        border: completed ? `1px solid ${successColor}` : `1px solid ${primaryColor}`,
+        border: completed ? (error ? `1px solid ${errorColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
       }}
     >
-      {completed ? <CheckIcon /> : icon}
+      {completed ? error ? icon : <CheckIcon /> : icon}
     </div>
   );
 };
@@ -48,18 +48,29 @@ const StepIcon = ({ icon, active, completed }: StepIconProps) => {
 interface StepsProps {
   steps: string[];
   activeStep?: number;
+  errorSteps?: number[];
 }
 
-export const Steps = ({ steps, activeStep = 0 }: StepsProps) => {
+export const Steps = ({ steps, activeStep = 0, errorSteps = [] }: StepsProps) => {
   return (
     <div className="custom-steps--container" style={{ position: 'relative' }}>
       <div style={{ position: 'absolute', top: '43px', left: '10%', right: '10%', borderTop: `1px solid ${primaryColorLight2}`, zIndex: 0 }}></div>
       <Stepper activeStep={activeStep} alternativeLabel connector={<DotConnector />} style={{ zIndex: 1, position: 'relative', background: 'none' }}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel StepIconComponent={StepIcon}>{label}</StepLabel>
-          </Step>
-        ))}
+        {steps.map((label, index) => {
+          let error: boolean = false;
+          errorSteps.map((step) => {
+            if (index === step) {
+              error = true;
+            }
+          });
+          return (
+            <Step key={label}>
+              <StepLabel StepIconComponent={StepIcon} error={error}>
+                {label}
+              </StepLabel>
+            </Step>
+          );
+        })}
       </Stepper>
     </div>
   );
