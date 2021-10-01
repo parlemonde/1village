@@ -58,11 +58,20 @@ export const Navigation = () => {
       disabled: false,
     },
     {
-      label: 'Créer une énigme',
-      path: '/creer-une-enigme',
-      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      label: 'Poser une question',
+      path: '/poser-une-question',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
+    {
+      label: 'Voir mes activités',
+      path: '/mes-activites',
+      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+  ];
+
+  const stepTwo: Tab[] = [
     {
       label: 'Lancer un défi',
       path: '/lancer-un-defi',
@@ -70,18 +79,21 @@ export const Navigation = () => {
       disabled: !(selectedPhase <= phase),
     },
     {
-      label: 'Poser une question',
-      path: '/poser-une-question',
-      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-  ];
-
-  const stepTwo: Tab[] = [
-    {
       label: 'Créer un jeu',
       path: '/creer-un-jeu',
       icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Créer une énigme',
+      path: '/creer-une-enigme',
+      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Poser une question',
+      path: '/poser-une-question',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
     {
