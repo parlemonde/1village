@@ -6,45 +6,33 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.constants';
-import type { EnigmeData } from 'src/activity-types/enigme.types';
+import { isIndice } from 'src/activity-types/anyActivity';
+import { INDICE_TYPES } from 'src/activity-types/indice.constants';
+import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
-import { capitalize } from 'src/utils';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
 
-const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'cette présentation',
-  [ActivityType.DEFI]: 'ce défi',
-  [ActivityType.GAME]: 'ce jeu',
-  [ActivityType.ENIGME]: 'cette énigme',
-  [ActivityType.QUESTION]: 'cette question',
-  [ActivityType.INDICE]: 'cet indice culturel',
-};
-
-const EnigmeStep5 = () => {
+const IndiceStep3 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const data = (activity?.data as EnigmeData) || null;
+  const data = (activity?.data as IndiceData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/creer-une-enigme');
-    } else if (activity && !isEnigme(activity)) {
-      router.push('/creer-une-enigme');
+      router.push('/indice-culturel');
+    } else if (activity && !isIndice(activity)) {
+      router.push('/indice-culturel');
     }
   }, [activity, router]);
 
@@ -52,42 +40,31 @@ const EnigmeStep5 = () => {
     setIsLoading(true);
     const success = await save(true);
     if (success) {
-      router.push('/creer-une-enigme/success');
+      router.push('/indice-culturel/success');
     }
     setIsLoading(false);
   };
 
-  if (data === null || !isEnigme(activity)) {
+  if (data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
-
-  const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
-  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={(isEdit ? [] : ['Démarrer']).concat([
-            data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
-            enigmeType.step2 ?? "Description de l'objet",
-            "Création de l'indice",
-            'Prévisualisation',
-          ])}
-          activeStep={isEdit ? 3 : 4}
-        />
+        <Steps steps={[INDICE_TYPES[activity.subType].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={2} />
         <div className="width-900">
-          <h1>Pré-visualisez votre énigme{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre énigme.
+            Voici la pré-visualisation de votre publication.
             {isEdit
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/creer-une-enigme/4" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/creer-une-enigme/4">
+              <Link href="/indice-culturel/2" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/3">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -103,15 +80,14 @@ const EnigmeStep5 = () => {
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/creer-une-enigme/1?edit=${activity.id}`} />}
           {responseActivity !== null && (
             <>
-              <span className="text text--small text--success">Énigme en réaction à {REACTIONS[responseActivity.type]}</span>
+              <span className="text text--small text--success">Présentation en réaction à l&apos;indice culturel</span>
               <div className="preview-block">
                 {!isEdit && (
                   <EditButton
                     onClick={() => {
-                      router.push(`/creer-une-enigme/1?edit=${activity.id}`);
+                      router.push(`/indice-culturel/1?edit=${activity.id}`);
                     }}
                     isGreen
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
@@ -122,46 +98,31 @@ const EnigmeStep5 = () => {
             </>
           )}
 
-          <span className="text text--small text--success">{"Catégorie de l'énigme"}</span>
+          <span className="text text--small text--success">Thème</span>
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/creer-une-enigme/2');
+                router.push('/indice-culturel');
               }}
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>
-              Notre {enigmeType.titleStep2Short} mystère est{' '}
-              <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
-            </p>
+            <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType].title}</p>
           </div>
 
-          <span className="text text--small text--success">{enigmeType.step2 ?? "Description de l'objet"}</span>
+          <span className="text text--small text--success">Indice culturel</span>
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/creer-une-enigme/3');
+                router.push('/indice-culturel/2');
               }}
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent.slice(0, indiceContentIndex)} />
+            <ContentView content={activity.processedContent} />
           </div>
 
-          <span className="text text--small text--success">Indice présenté aux autres classes</span>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/creer-une-enigme/4');
-              }}
-              isGreen
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <ContentView content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
-          </div>
-
-          <StepsButton prev="/creer-une-enigme/4" />
+          <StepsButton prev="/indice-culturel/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -171,4 +132,4 @@ const EnigmeStep5 = () => {
   );
 };
 
-export default EnigmeStep5;
+export default IndiceStep3;

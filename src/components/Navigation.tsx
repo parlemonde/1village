@@ -12,6 +12,7 @@ import { useVillageRequests } from 'src/services/useVillages';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
+import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
@@ -51,16 +52,10 @@ export const Navigation = () => {
 
   const stepOne: Tab[] = [
     {
-      label: 'Créer une énigme',
-      path: '/creer-une-enigme',
-      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-    {
-      label: 'Lancer un défi',
-      path: '/lancer-un-defi',
-      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
+      label: 'Présenter un indice culturel',
+      path: '/indice-culturel',
+      icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: false,
     },
     {
       label: 'Poser une question',
@@ -68,13 +63,37 @@ export const Navigation = () => {
       icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
+    {
+      label: 'Voir mes activités',
+      path: '/mes-activites',
+      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
   ];
 
   const stepTwo: Tab[] = [
     {
+      label: 'Lancer un défi',
+      path: '/lancer-un-defi',
+      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
       label: 'Créer un jeu',
       path: '/creer-un-jeu',
       icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Créer une énigme',
+      path: '/creer-une-enigme',
+      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: !(selectedPhase <= phase),
+    },
+    {
+      label: 'Poser une question',
+      path: '/poser-une-question',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
     {
