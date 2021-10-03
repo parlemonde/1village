@@ -12,7 +12,7 @@ __metadata:
     "@material-ui/core": ^4.12.3
     "@material-ui/icons": ^4.11.2
     "@material-ui/lab": ^4.0.0-alpha.60
-    "@next/eslint-plugin-next": 11.1.0
+    "@next/eslint-plugin-next": 11.1.2
     "@svgr/webpack": 5.5.0
     "@types/body-parser": 1.19.0
     "@types/cookie-parser": 1.4.2
@@ -1767,12 +1767,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:11.1.0":
-  version: 11.1.0
-  resolution: "@next/eslint-plugin-next@npm:11.1.0"
+"@next/eslint-plugin-next@npm:11.1.2":
+  version: 11.1.2
+  resolution: "@next/eslint-plugin-next@npm:11.1.2"
   dependencies:
     glob: 7.1.7
-  checksum: 27ac35a84aa8a9887a4bfc993f496d912092b361d75ae1110b326883732a3edf71d8523ea275964daa6fa61f2a63d3259a0d9b9d53425137e925dbc41e12273a
+  checksum: 93e43795588875c083335b76858ece4a02f0a3818f32d7e01e76ad8204fd22758201815753e47d08c86020bd2fddf3425f5a80835cb57a2b31ab26b13a7f0960
   languageName: node
   linkType: hard
 
