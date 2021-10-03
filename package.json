@@ -28,7 +28,7 @@
     "@types/cors": "2.8.12",
     "@types/cpx": "1.5.2",
     "@types/croppie": "2.6.0",
-    "@types/draft-js": "0.11.3",
+    "@types/draft-js": "0.11.5",
     "@types/draftjs-to-html": "0.8.0",
     "@types/eslint": "7.2.13",
     "@types/eslint-plugin-prettier": "3.1.0",

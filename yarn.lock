@@ -19,7 +19,7 @@ __metadata:
     "@types/cors": 2.8.12
     "@types/cpx": 1.5.2
     "@types/croppie": 2.6.0
-    "@types/draft-js": 0.11.3
+    "@types/draft-js": 0.11.5
     "@types/draftjs-to-html": 0.8.0
     "@types/eslint": 7.2.13
     "@types/eslint-plugin-prettier": 3.1.0
@@ -2139,13 +2139,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/draft-js@npm:*, @types/draft-js@npm:0.11.3":
+"@types/draft-js@npm:*":
   version: 0.11.3
   resolution: "@types/draft-js@npm:0.11.3"
   dependencies:
     "@types/react": "*"
     immutable: ~3.7.4
   checksum: 7af5223d242cf573060efa901695579db91cb6e8beba74d625c068a35b60d4e05455529536a3261153db63a49a0e045b941e9501601f36baa3b19ef2eae9bf49
+  languageName: node
+  linkType: hard
+
+"@types/draft-js@npm:0.11.5":
+  version: 0.11.5
+  resolution: "@types/draft-js@npm:0.11.5"
+  dependencies:
+    "@types/react": "*"
+    immutable: ~3.7.4
+  checksum: 5bfb5599fe0fb105b8c546e7bcd778477ea40b4b73ca23978601f2322928e6815fa3dd8fc2c3b21f23830e9f2fbda21e5950a8bd40e9f510206a61ffac39defb
   languageName: node
   linkType: hard
 
