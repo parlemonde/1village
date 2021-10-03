@@ -20,7 +20,7 @@ __metadata:
     "@types/cpx": 1.5.2
     "@types/croppie": 2.6.1
     "@types/draft-js": 0.11.5
-    "@types/draftjs-to-html": 0.8.0
+    "@types/draftjs-to-html": 0.8.1
     "@types/eslint": 7.2.13
     "@types/eslint-plugin-prettier": 3.1.0
     "@types/express": 4.17.12
@@ -2159,12 +2159,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/draftjs-to-html@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@types/draftjs-to-html@npm:0.8.0"
+"@types/draftjs-to-html@npm:0.8.1":
+  version: 0.8.1
+  resolution: "@types/draftjs-to-html@npm:0.8.1"
   dependencies:
     "@types/draft-js": "*"
-  checksum: ab862abe18f95c301a9af042851383952a4e74a43980fa6048a54f4605a5ae3050d9469146d0145c83ba02e7a96c83a1d697d5fc502e8d458d199e48f5b282d4
+  checksum: f1fef0b5dc908b0a28916582bd0ce6373812334a4fd66319c005b67ed260f418273951129153638f5692109cc619e6368d20c4be5192f225bb7e65fd70b8a766
   languageName: node
   linkType: hard
 
