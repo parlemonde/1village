@@ -12,46 +12,46 @@ __metadata:
     "@material-ui/core": ^4.12.3
     "@material-ui/icons": ^4.11.2
     "@material-ui/lab": ^4.0.0-alpha.60
-    "@next/eslint-plugin-next": ^11.1.0
-    "@svgr/webpack": ^5.5.0
-    "@types/body-parser": ^1.19.0
-    "@types/cookie-parser": ^1.4.2
-    "@types/cors": ^2.8.10
-    "@types/cpx": ^1.5.1
-    "@types/croppie": ^2.6.0
-    "@types/draft-js": ^0.11.3
-    "@types/draftjs-to-html": ^0.8.0
-    "@types/eslint": ^7.2.13
-    "@types/eslint-plugin-prettier": ^3.1.0
-    "@types/express": ^4.17.12
-    "@types/express-useragent": ^1.0.1
-    "@types/fs-extra": ^9.0.11
-    "@types/json-stable-stringify": ^1.0.32
-    "@types/jsonwebtoken": ^8.5.1
-    "@types/leaflet": ^1.7.1
-    "@types/leaflet-fullscreen": ^1.0.4
-    "@types/mapbox-gl": ^1.5
-    "@types/mapbox-gl-leaflet": ^0.0.1
-    "@types/md5": ^2.3.0
-    "@types/mime-types": ^2.1.1
-    "@types/morgan": ^1.9.2
-    "@types/multer": ^1.4.5
-    "@types/node": ^16.7.1
-    "@types/nodemailer": ^6.4.2
-    "@types/nprogress": ^0.2.0
-    "@types/prettier": ^2.2.3
-    "@types/react": ^17.0.11
-    "@types/react-dom": ^17.0.7
-    "@types/sass": ^1.16.0
-    "@types/sharp": ^0.28.3
-    "@types/sortablejs": ^1.10.6
-    "@types/string-similarity": ^4.0.0
-    "@types/uuid": ^8.3.0
-    "@types/vimeo": ^2.1.3
-    "@types/webpack": ^5.28.0
-    "@typescript-eslint/eslint-plugin": ^4.26.1
-    "@typescript-eslint/parser": ^4.26.1
-    "@yarnpkg/pnpify": ^3.0.0-rc.6
+    "@next/eslint-plugin-next": 11.1.0
+    "@svgr/webpack": 5.5.0
+    "@types/body-parser": 1.19.0
+    "@types/cookie-parser": 1.4.2
+    "@types/cors": 2.8.10
+    "@types/cpx": 1.5.1
+    "@types/croppie": 2.6.0
+    "@types/draft-js": 0.11.3
+    "@types/draftjs-to-html": 0.8.0
+    "@types/eslint": 7.2.13
+    "@types/eslint-plugin-prettier": 3.1.0
+    "@types/express": 4.17.12
+    "@types/express-useragent": 1.0.1
+    "@types/fs-extra": 9.0.11
+    "@types/json-stable-stringify": 1.0.32
+    "@types/jsonwebtoken": 8.5.2
+    "@types/leaflet": 1.7.3
+    "@types/leaflet-fullscreen": 1.0.4
+    "@types/mapbox-gl": 1.13.1
+    "@types/mapbox-gl-leaflet": 0.0.1
+    "@types/md5": 2.3.0
+    "@types/mime-types": 2.1.1
+    "@types/morgan": 1.9.2
+    "@types/multer": 1.4.6
+    "@types/node": 16.7.1
+    "@types/nodemailer": 6.4.2
+    "@types/nprogress": 0.2.0
+    "@types/prettier": 2.3.0
+    "@types/react": 17.0.11
+    "@types/react-dom": 17.0.8
+    "@types/sass": 1.16.0
+    "@types/sharp": 0.28.3
+    "@types/sortablejs": 1.10.6
+    "@types/string-similarity": 4.0.0
+    "@types/uuid": 8.3.0
+    "@types/vimeo": 2.1.3
+    "@types/webpack": 5.28.0
+    "@typescript-eslint/eslint-plugin": 4.28.1
+    "@typescript-eslint/parser": 4.28.1
+    "@yarnpkg/pnpify": 3.0.0-rc.7
     ajv: 8.6.3
     ajv-formats: ^2.1.0
     argon2: ^0.27.1
@@ -70,17 +70,17 @@ __metadata:
     draft-js: ^0.11.7
     draftjs-to-html: ^0.9.1
     draftjs-utils: ^0.10.2
-    duplicate-package-checker-webpack-plugin: ^3.0.0
-    eslint: ^7.28.0
-    eslint-config-prettier: ^8.3.0
-    eslint-import-resolver-node: ^0.3.4
-    eslint-import-resolver-typescript: ^2.4.0
-    eslint-import-resolver-webpack: ^0.13.1
-    eslint-plugin-arca: ^0.10.1
-    eslint-plugin-import: ^2.23.4
-    eslint-plugin-prettier: ^3.4.0
-    eslint-plugin-react: ^7.24.0
-    eslint-plugin-react-hooks: ^4.2.0
+    duplicate-package-checker-webpack-plugin: 3.0.0
+    eslint: 7.29.0
+    eslint-config-prettier: 8.3.0
+    eslint-import-resolver-node: 0.3.4
+    eslint-import-resolver-typescript: 2.4.0
+    eslint-import-resolver-webpack: 0.13.1
+    eslint-plugin-arca: 0.10.1
+    eslint-plugin-import: 2.23.4
+    eslint-plugin-prettier: 3.4.0
+    eslint-plugin-react: 7.24.0
+    eslint-plugin-react-hooks: 4.2.0
     express: ^4.17.1
     express-useragent: ^1.0.15
     fs-extra: ^10.0.0
@@ -100,10 +100,10 @@ __metadata:
     mysql2: ^2.3.0
     next: ^11.1.0
     nodemailer: ^6.6.1
-    nodemon: ^2.0.7
+    nodemon: 2.0.8
     notistack: ^1.0.9
     nprogress: ^0.2.0
-    prettier: ^2.3.1
+    prettier: 2.3.2
     query-string: ^7.0.0
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -123,8 +123,8 @@ __metadata:
     uuid: ^8.3.2
     vimeo: ^2.1.1
     web-vitals: ^2.0.1
-    webpack: ^5.38.1
-    webpack-bundle-analyzer: ^4.4.2
+    webpack: 5.41.1
+    webpack-bundle-analyzer: 4.4.2
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -1767,7 +1767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:^11.1.0":
+"@next/eslint-plugin-next@npm:11.1.0":
   version: 11.1.0
   resolution: "@next/eslint-plugin-next@npm:11.1.0"
   dependencies:
@@ -2025,7 +2025,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/webpack@npm:^5.5.0":
+"@svgr/webpack@npm:5.5.0":
   version: 5.5.0
   resolution: "@svgr/webpack@npm:5.5.0"
   dependencies:
@@ -2066,7 +2066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/body-parser@npm:*, @types/body-parser@npm:^1.19.0":
+"@types/body-parser@npm:*, @types/body-parser@npm:1.19.0":
   version: 1.19.0
   resolution: "@types/body-parser@npm:1.19.0"
   dependencies:
@@ -2097,7 +2097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cookie-parser@npm:^1.4.2":
+"@types/cookie-parser@npm:1.4.2":
   version: 1.4.2
   resolution: "@types/cookie-parser@npm:1.4.2"
   dependencies:
@@ -2106,14 +2106,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cors@npm:^2.8.10":
+"@types/cors@npm:2.8.10":
   version: 2.8.10
   resolution: "@types/cors@npm:2.8.10"
   checksum: f87e2f7bb6b4e3a143713a8e6def1791c47e8b3d344d30b6a190cae729de2f50df656c51fc92d5bdf7c5536cb32624f73bab244f6396a35aae0119e7c7bbad73
   languageName: node
   linkType: hard
 
-"@types/cpx@npm:^1.5.1":
+"@types/cpx@npm:1.5.1":
   version: 1.5.1
   resolution: "@types/cpx@npm:1.5.1"
   dependencies:
@@ -2122,14 +2122,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/croppie@npm:^2.6.0":
+"@types/croppie@npm:2.6.0":
   version: 2.6.0
   resolution: "@types/croppie@npm:2.6.0"
   checksum: 4f34788c780de543cb0ac2dfca096f9f3de41bf705b16495e560b76c30e197a795a93ac913cb288ff50146625c0c43576384d1cae0b1b38270c19e9600be3094
   languageName: node
   linkType: hard
 
-"@types/draft-js@npm:*, @types/draft-js@npm:^0.11.3":
+"@types/draft-js@npm:*, @types/draft-js@npm:0.11.3":
   version: 0.11.3
   resolution: "@types/draft-js@npm:0.11.3"
   dependencies:
@@ -2139,7 +2139,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/draftjs-to-html@npm:^0.8.0":
+"@types/draftjs-to-html@npm:0.8.0":
   version: 0.8.0
   resolution: "@types/draftjs-to-html@npm:0.8.0"
   dependencies:
@@ -2155,7 +2155,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint-plugin-prettier@npm:^3.1.0":
+"@types/eslint-plugin-prettier@npm:3.1.0":
   version: 3.1.0
   resolution: "@types/eslint-plugin-prettier@npm:3.1.0"
   dependencies:
@@ -2174,7 +2174,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:^7.2.13":
+"@types/eslint@npm:*, @types/eslint@npm:7.2.13":
   version: 7.2.13
   resolution: "@types/eslint@npm:7.2.13"
   dependencies:
@@ -2202,7 +2202,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-useragent@npm:^1.0.1":
+"@types/express-useragent@npm:1.0.1":
   version: 1.0.1
   resolution: "@types/express-useragent@npm:1.0.1"
   dependencies:
@@ -2211,7 +2211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:^4.17.12":
+"@types/express@npm:*, @types/express@npm:4.17.12":
   version: 4.17.12
   resolution: "@types/express@npm:4.17.12"
   dependencies:
@@ -2223,7 +2223,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^9.0.11":
+"@types/fs-extra@npm:9.0.11":
   version: 9.0.11
   resolution: "@types/fs-extra@npm:9.0.11"
   dependencies:
@@ -2253,7 +2253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-stable-stringify@npm:^1.0.32":
+"@types/json-stable-stringify@npm:1.0.32":
   version: 1.0.32
   resolution: "@types/json-stable-stringify@npm:1.0.32"
   checksum: 3091ddc8d15c6cce1a847ba1f8db21e7c2564c7b8bc6923a873801d936228f775096b517d62653fbcebedcb2a7992555dc6ed11517ef050e75525cdf1d1bce8d
@@ -2267,7 +2267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^8.5.1":
+"@types/jsonwebtoken@npm:8.5.2":
   version: 8.5.2
   resolution: "@types/jsonwebtoken@npm:8.5.2"
   dependencies:
@@ -2285,7 +2285,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet-fullscreen@npm:^1.0.4":
+"@types/leaflet-fullscreen@npm:1.0.4":
   version: 1.0.4
   resolution: "@types/leaflet-fullscreen@npm:1.0.4"
   dependencies:
@@ -2294,7 +2294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet@npm:*, @types/leaflet@npm:^1.7.1":
+"@types/leaflet@npm:*, @types/leaflet@npm:1.7.3":
   version: 1.7.3
   resolution: "@types/leaflet@npm:1.7.3"
   dependencies:
@@ -2303,7 +2303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mapbox-gl-leaflet@npm:^0.0.1":
+"@types/mapbox-gl-leaflet@npm:0.0.1":
   version: 0.0.1
   resolution: "@types/mapbox-gl-leaflet@npm:0.0.1"
   dependencies:
@@ -2312,7 +2312,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mapbox-gl@npm:^1.5":
+"@types/mapbox-gl@npm:1.13.1":
   version: 1.13.1
   resolution: "@types/mapbox-gl@npm:1.13.1"
   dependencies:
@@ -2321,7 +2321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:^2.3.0":
+"@types/md5@npm:2.3.0":
   version: 2.3.0
   resolution: "@types/md5@npm:2.3.0"
   dependencies:
@@ -2330,7 +2330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mime-types@npm:^2.1.1":
+"@types/mime-types@npm:2.1.1":
   version: 2.1.1
   resolution: "@types/mime-types@npm:2.1.1"
   checksum: 106b5d556add46446a579ad25ff15d6b421851790d887edcad558c90c1e64b1defc72bfbaf4b08f208916e21d9cc45cdb951d77be51268b18221544cfe054a3c
@@ -2344,7 +2344,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/morgan@npm:^1.9.2":
+"@types/morgan@npm:1.9.2":
   version: 1.9.2
   resolution: "@types/morgan@npm:1.9.2"
   dependencies:
@@ -2353,7 +2353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/multer@npm:^1.4.5":
+"@types/multer@npm:1.4.6":
   version: 1.4.6
   resolution: "@types/multer@npm:1.4.6"
   dependencies:
@@ -2369,6 +2369,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:16.7.1":
+  version: 16.7.1
+  resolution: "@types/node@npm:16.7.1"
+  checksum: fcf1a2c7b1f19c2201574b2110176b49c6efd824a39b2ed8ac3e6688740e2a35bef95a3334dfa345f4bd4873fd8b79d8ac8cfcc9fcd3d2f4f8f993c2c37ce4ab
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^13.7.0":
   version: 13.13.52
   resolution: "@types/node@npm:13.13.52"
@@ -2376,14 +2383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.7.1":
-  version: 16.7.1
-  resolution: "@types/node@npm:16.7.1"
-  checksum: fcf1a2c7b1f19c2201574b2110176b49c6efd824a39b2ed8ac3e6688740e2a35bef95a3334dfa345f4bd4873fd8b79d8ac8cfcc9fcd3d2f4f8f993c2c37ce4ab
-  languageName: node
-  linkType: hard
-
-"@types/nodemailer@npm:^6.4.2":
+"@types/nodemailer@npm:6.4.2":
   version: 6.4.2
   resolution: "@types/nodemailer@npm:6.4.2"
   dependencies:
@@ -2392,7 +2392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nprogress@npm:^0.2.0":
+"@types/nprogress@npm:0.2.0":
   version: 0.2.0
   resolution: "@types/nprogress@npm:0.2.0"
   checksum: 561384775008ae58111f038f8f9468b3de8987cd753feef9bf6d07af0e1343390d492a078bb08a7b53ac7370208e31e06ac069cb852c435d49f5fe218e9769c4
@@ -2406,7 +2406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:^2.2.3":
+"@types/prettier@npm:2.3.0":
   version: 2.3.0
   resolution: "@types/prettier@npm:2.3.0"
   checksum: 8dd9b5263fd91001d72ca4e2ff89fb0d1ba23a450bd723b4478eb651755a2f1151af14ab90c4f7dadba607142757b340c1d7271ae56806563c76719d3321ec20
@@ -2441,7 +2441,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^17.0.7":
+"@types/react-dom@npm:17.0.8":
   version: 17.0.8
   resolution: "@types/react-dom@npm:17.0.8"
   dependencies:
@@ -2459,7 +2459,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^17.0.11":
+"@types/react@npm:*, @types/react@npm:17.0.11":
   version: 17.0.11
   resolution: "@types/react@npm:17.0.11"
   dependencies:
@@ -2479,7 +2479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sass@npm:^1.16.0":
+"@types/sass@npm:1.16.0":
   version: 1.16.0
   resolution: "@types/sass@npm:1.16.0"
   dependencies:
@@ -2512,7 +2512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sharp@npm:^0.28.3":
+"@types/sharp@npm:0.28.3":
   version: 0.28.3
   resolution: "@types/sharp@npm:0.28.3"
   dependencies:
@@ -2521,14 +2521,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sortablejs@npm:^1.10.6":
+"@types/sortablejs@npm:1.10.6":
   version: 1.10.6
   resolution: "@types/sortablejs@npm:1.10.6"
   checksum: 53ca23970f526f12f9a8f8b0b0a50f16e8913c473c6531aaed53e1be8b39754c840057ec98a89189f76a9a48a8d9f07169453af4e046e60cc9211aa75fa0169c
   languageName: node
   linkType: hard
 
-"@types/string-similarity@npm:^4.0.0":
+"@types/string-similarity@npm:4.0.0":
   version: 4.0.0
   resolution: "@types/string-similarity@npm:4.0.0"
   checksum: e530b8c1254ae3318662baaa71e5d42938c900dd6d3486a358f188dfe0d6f14c2342ad48f363db9851230ab51e17460de7a6569038c022815ade6d4bbe78f46f
@@ -2542,21 +2542,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^8.3.0":
+"@types/uuid@npm:8.3.0":
   version: 8.3.0
   resolution: "@types/uuid@npm:8.3.0"
   checksum: 0f46b15020b9c252473fb327a6491fd7d238c7b5bbaebd32195a0de178db040f6abb96902507ba25dd4a673cdd9cc28b8880512dba54561e8bc60d8f326c1e30
   languageName: node
   linkType: hard
 
-"@types/vimeo@npm:^2.1.3":
+"@types/vimeo@npm:2.1.3":
   version: 2.1.3
   resolution: "@types/vimeo@npm:2.1.3"
   checksum: f7d26bad9fd8cd69310d0e33cc52131fca695e5b730be947a5ac932519420a10d3ebb68235b86542493c72d2447a117d1bc05c0dd2e38068354a7b478da13122
   languageName: node
   linkType: hard
 
-"@types/webpack@npm:^5.28.0":
+"@types/webpack@npm:5.28.0":
   version: 5.28.0
   resolution: "@types/webpack@npm:5.28.0"
   dependencies:
@@ -2574,7 +2574,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^4.26.1":
+"@typescript-eslint/eslint-plugin@npm:4.28.1":
   version: 4.28.1
   resolution: "@typescript-eslint/eslint-plugin@npm:4.28.1"
   dependencies:
@@ -2611,7 +2611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^4.26.1":
+"@typescript-eslint/parser@npm:4.28.1":
   version: 4.28.1
   resolution: "@typescript-eslint/parser@npm:4.28.1"
   dependencies:
@@ -2930,7 +2930,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/pnpify@npm:^3.0.0-rc.6":
+"@yarnpkg/pnpify@npm:3.0.0-rc.7":
   version: 3.0.0-rc.7
   resolution: "@yarnpkg/pnpify@npm:3.0.0-rc.7"
   dependencies:
@@ -5295,7 +5295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"duplicate-package-checker-webpack-plugin@npm:^3.0.0":
+"duplicate-package-checker-webpack-plugin@npm:3.0.0":
   version: 3.0.0
   resolution: "duplicate-package-checker-webpack-plugin@npm:3.0.0"
   dependencies:
@@ -5565,7 +5565,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.3.0":
+"eslint-config-prettier@npm:8.3.0":
   version: 8.3.0
   resolution: "eslint-config-prettier@npm:8.3.0"
   peerDependencies:
@@ -5576,7 +5576,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-node@npm:^0.3.4":
+"eslint-import-resolver-node@npm:0.3.4, eslint-import-resolver-node@npm:^0.3.4":
   version: 0.3.4
   resolution: "eslint-import-resolver-node@npm:0.3.4"
   dependencies:
@@ -5586,7 +5586,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:^2.4.0":
+"eslint-import-resolver-typescript@npm:2.4.0":
   version: 2.4.0
   resolution: "eslint-import-resolver-typescript@npm:2.4.0"
   dependencies:
@@ -5602,7 +5602,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-webpack@npm:^0.13.1":
+"eslint-import-resolver-webpack@npm:0.13.1":
   version: 0.13.1
   resolution: "eslint-import-resolver-webpack@npm:0.13.1"
   dependencies:
@@ -5634,7 +5634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-arca@npm:^0.10.1":
+"eslint-plugin-arca@npm:0.10.1":
   version: 0.10.1
   resolution: "eslint-plugin-arca@npm:0.10.1"
   dependencies:
@@ -5643,7 +5643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.23.4":
+"eslint-plugin-import@npm:2.23.4":
   version: 2.23.4
   resolution: "eslint-plugin-import@npm:2.23.4"
   dependencies:
@@ -5668,7 +5668,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^3.4.0":
+"eslint-plugin-prettier@npm:3.4.0":
   version: 3.4.0
   resolution: "eslint-plugin-prettier@npm:3.4.0"
   dependencies:
@@ -5683,7 +5683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:^4.2.0":
+"eslint-plugin-react-hooks@npm:4.2.0":
   version: 4.2.0
   resolution: "eslint-plugin-react-hooks@npm:4.2.0"
   peerDependencies:
@@ -5692,7 +5692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.24.0":
+"eslint-plugin-react@npm:7.24.0":
   version: 7.24.0
   resolution: "eslint-plugin-react@npm:7.24.0"
   dependencies:
@@ -5758,7 +5758,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.28.0":
+"eslint@npm:7.29.0":
   version: 7.29.0
   resolution: "eslint@npm:7.29.0"
   dependencies:
@@ -9237,7 +9237,7 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"nodemon@npm:^2.0.7":
+"nodemon@npm:2.0.8":
   version: 2.0.8
   resolution: "nodemon@npm:2.0.8"
   dependencies:
@@ -10059,7 +10059,7 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.3.1":
+"prettier@npm:2.3.2":
   version: 2.3.2
   resolution: "prettier@npm:2.3.2"
   bin:
@@ -12863,7 +12863,7 @@ typescript@4.4.3:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^4.4.2":
+"webpack-bundle-analyzer@npm:4.4.2":
   version: 4.4.2
   resolution: "webpack-bundle-analyzer@npm:4.4.2"
   dependencies:
@@ -12892,7 +12892,7 @@ typescript@4.4.3:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5, webpack@npm:^5.38.1":
+"webpack@npm:5.41.1, webpack@npm:^5":
   version: 5.41.1
   resolution: "webpack@npm:5.41.1"
   dependencies:
