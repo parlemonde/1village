@@ -69,7 +69,7 @@ jobs:
           docker push $ECR_REGISTRY/1village:latest
 
       - name: Pull and run the docker image on the server
-        run: ssh -i $SSH_KEY_PATH $server "ECR_REGISTRY=$ECR_REGISTRY IMAGE=$ECR_REGISTRY/1village:lastest exec sh" < ./deploy.sh
+        run: ssh -i $SSH_KEY_PATH $server "ECR_REGISTRY=$ECR_REGISTRY IMAGE=$ECR_REGISTRY/1village:latest exec sh" < ./deploy.sh
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           server: ${{secrets.SERVER}}
