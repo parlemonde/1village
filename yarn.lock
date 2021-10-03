@@ -18,7 +18,7 @@ __metadata:
     "@types/cookie-parser": 1.4.2
     "@types/cors": 2.8.12
     "@types/cpx": 1.5.2
-    "@types/croppie": 2.6.0
+    "@types/croppie": 2.6.1
     "@types/draft-js": 0.11.5
     "@types/draftjs-to-html": 0.8.0
     "@types/eslint": 7.2.13
@@ -2132,10 +2132,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/croppie@npm:2.6.0":
-  version: 2.6.0
-  resolution: "@types/croppie@npm:2.6.0"
-  checksum: 4f34788c780de543cb0ac2dfca096f9f3de41bf705b16495e560b76c30e197a795a93ac913cb288ff50146625c0c43576384d1cae0b1b38270c19e9600be3094
+"@types/croppie@npm:2.6.1":
+  version: 2.6.1
+  resolution: "@types/croppie@npm:2.6.1"
+  checksum: 1552d73a1d6c9f97592b4709f78dc70f2d44465c25e9aabbf0cee509602812f4a581cc12d5512eed0539320018036a332d310b91abdeed4867b58f83429050ca
   languageName: node
   linkType: hard
 
