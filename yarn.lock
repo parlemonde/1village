@@ -14,7 +14,7 @@ __metadata:
     "@material-ui/lab": ^4.0.0-alpha.60
     "@next/eslint-plugin-next": 11.1.2
     "@svgr/webpack": 5.5.0
-    "@types/body-parser": 1.19.0
+    "@types/body-parser": 1.19.1
     "@types/cookie-parser": 1.4.2
     "@types/cors": 2.8.10
     "@types/cpx": 1.5.1
@@ -2066,13 +2066,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/body-parser@npm:*, @types/body-parser@npm:1.19.0":
+"@types/body-parser@npm:*":
   version: 1.19.0
   resolution: "@types/body-parser@npm:1.19.0"
   dependencies:
     "@types/connect": "*"
     "@types/node": "*"
   checksum: 15043566f1909e2a08dabb0a5d2642f8988545a1369bc5995fc40ee90c95200da2aa66f9240fcb19fc6af6ff4e27ff453f311b49363c14bb308c308c0751ca9b
+  languageName: node
+  linkType: hard
+
+"@types/body-parser@npm:1.19.1":
+  version: 1.19.1
+  resolution: "@types/body-parser@npm:1.19.1"
+  dependencies:
+    "@types/connect": "*"
+    "@types/node": "*"
+  checksum: 2990656ea2de81f3529a3359a79a13b67feb4c627caf7a367fdc0017a178e567b0cc410546bdd219104ad7197c5ee5a90b70193f5253839ea43d9cdb2d2dacee
   languageName: node
   linkType: hard
 
