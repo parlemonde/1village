@@ -17,7 +17,7 @@ __metadata:
     "@types/body-parser": 1.19.1
     "@types/cookie-parser": 1.4.2
     "@types/cors": 2.8.12
-    "@types/cpx": 1.5.1
+    "@types/cpx": 1.5.2
     "@types/croppie": 2.6.0
     "@types/draft-js": 0.11.3
     "@types/draftjs-to-html": 0.8.0
@@ -2123,12 +2123,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cpx@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@types/cpx@npm:1.5.1"
+"@types/cpx@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@types/cpx@npm:1.5.2"
   dependencies:
     "@types/node": "*"
-  checksum: 0e7ef2f9bb6f3023cfe54adb3b1a1f48824bb6fc1490524ca9e782859dfca481c377c3161a4e987fc196286ea2ff9a88820f135c33e9e793d015ae81b7457bbd
+  checksum: 83369974de2a4636b9f759918186db32d8f076d8d099b1588fd904b9097735717426730a866d22d2c510f9da45ab9440810fc0119a2261390983049f63e9358b
   languageName: node
   linkType: hard
 
