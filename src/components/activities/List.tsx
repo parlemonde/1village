@@ -19,6 +19,7 @@ const REACTIONS = {
   [ActivityType.GAME]: 'un jeu',
   [ActivityType.ENIGME]: 'une énigme',
   [ActivityType.QUESTION]: 'une question',
+  [ActivityType.CONTENU_LIBRE]: 'ce message',
   [ActivityType.INDICE]: 'un indice culturel',
 };
 
