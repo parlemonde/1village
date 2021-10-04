@@ -37,7 +37,7 @@ __metadata:
     "@types/morgan": 1.9.2
     "@types/multer": 1.4.6
     "@types/node": 16.7.1
-    "@types/nodemailer": 6.4.2
+    "@types/nodemailer": 6.4.4
     "@types/nprogress": 0.2.0
     "@types/prettier": 2.3.0
     "@types/react": 17.0.11
@@ -2403,12 +2403,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.2":
-  version: 6.4.2
-  resolution: "@types/nodemailer@npm:6.4.2"
+"@types/nodemailer@npm:6.4.4":
+  version: 6.4.4
+  resolution: "@types/nodemailer@npm:6.4.4"
   dependencies:
     "@types/node": "*"
-  checksum: 5fce38324de0d4aa3a1627e5ad94166cf836f7558febebae79f0f5135f4b4dbd2f77ca2595025a964cbfbc70336800a89428f084db1aebe38ca345531d1f24ca
+  checksum: 16ed1bad2cd8471fd3b026471e234da33ba3b65935dc44b31be3145eff7bdb067eb4d08ec4b41d23339b988075299abc1a0c0fe77b99f04ca235827bca95af81
   languageName: node
   linkType: hard
 
