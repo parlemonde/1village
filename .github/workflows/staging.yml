@@ -70,5 +70,5 @@ jobs:
         run: ssh -i $SSH_KEY_PATH $server "ECR_REGISTRY=$ECR_REGISTRY IMAGE=$ECR_REGISTRY/1village:staging exec sh" < ./deploy.sh
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          server: ${{secrets.SERVER}}
+          server: ${{secrets.STAGING_SERVER}}
           SSH_KEY_PATH: ${{ github.workspace }}/../private.key
