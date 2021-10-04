@@ -30,7 +30,7 @@ __metadata:
     "@types/jsonwebtoken": 8.5.2
     "@types/leaflet": 1.7.3
     "@types/leaflet-fullscreen": 1.0.4
-    "@types/mapbox-gl": 1.13.1
+    "@types/mapbox-gl": 1.13.2
     "@types/mapbox-gl-leaflet": 0.0.1
     "@types/md5": 2.3.0
     "@types/mime-types": 2.1.1
@@ -2332,12 +2332,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mapbox-gl@npm:1.13.1":
-  version: 1.13.1
-  resolution: "@types/mapbox-gl@npm:1.13.1"
+"@types/mapbox-gl@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@types/mapbox-gl@npm:1.13.2"
   dependencies:
     "@types/geojson": "*"
-  checksum: 9acd62e1f23256d50d16b6c041472ee2d28404554d84cc6700de7e3027e0c2fdc57c564b2cd45dd1182a396e4c674cb043b32b182ddc684a368f26b10e9c905e
+  checksum: ec7e3f48403829d61d7a7bf973c07a9e47672ec25c1c2d3db6e6383fc99ecc592e47e8718577970c1e82a708825d591a006901a5aa8f8254484ca0d1a633172a
   languageName: node
   linkType: hard
 
