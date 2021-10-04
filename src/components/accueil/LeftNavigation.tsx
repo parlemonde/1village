@@ -18,7 +18,7 @@ interface Tab {
   disabled: boolean;
 }
 
-export const LeftNavigation: React.FC<NavigationProps> = ({ map, tabs }) => {
+export const LeftNavigation = ({ map, tabs }: NavigationProps) => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);
 

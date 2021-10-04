@@ -7,6 +7,7 @@ import { Checkbox } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
+import { MissingStepModal } from 'src/components/MissingStepModal';
 import { Modal } from 'src/components/Modal';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
@@ -48,7 +49,7 @@ export const WelcomeModal = () => {
     return countries.find((c) => c.isoCode.toLowerCase() === user.countryCode.toLowerCase());
   }, [countries, user]);
 
-  if (user === null || village === null || user.type >= UserType.OBSERVATOR || user.firstLogin === false) {
+  if (user === null || village === null || user.type >= UserType.OBSERVATOR) {
     return null;
   }
 
@@ -120,7 +121,7 @@ export const WelcomeModal = () => {
     }
   };
 
-  return (
+  return user.firstLogin ? (
     <Modal
       open={true}
       title="Bienvenue à 1Village !"
@@ -333,5 +334,7 @@ export const WelcomeModal = () => {
         )}
       </div>
     </Modal>
+  ) : (
+    currentStep === 3 && <MissingStepModal />
   );
 };

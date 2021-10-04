@@ -17,7 +17,7 @@ const GreenCheckbox = withStyles({
 })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
 export type FilterArgs = {
-  type: number;
+  type: number[];
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
@@ -27,9 +27,11 @@ interface FiltersProps {
   countries?: string[];
   filters: FilterArgs;
   onChange: React.Dispatch<React.SetStateAction<FilterArgs>>;
+  phase: number;
+  phaseActivities: { key: string | number; label: string; type: number[] }[][];
 }
 
-export const Filters = ({ filters, onChange, countries = [] }: FiltersProps) => {
+export const Filters = ({ filters, onChange, countries = [], phase, phaseActivities }: FiltersProps) => {
   React.useEffect(() => {
     onChange((f) => ({
       ...f,
@@ -45,18 +47,12 @@ export const Filters = ({ filters, onChange, countries = [] }: FiltersProps) => 
       <span className="text text--bold">Filtres :</span>
       <FilterSelect
         name="Activités"
-        options={[
-          { key: 0, label: 'Toutes' },
-          { key: 1, label: 'Présentations' },
-          { key: 2, label: 'Énigmes' },
-          { key: 3, label: 'Défis' },
-          { key: 4, label: 'Questions' },
-          { key: 5, label: 'Jeux' },
-        ]}
+        options={phaseActivities[phase - 1]}
         value={filters.type}
         onChange={(newType) => {
           onChange({ ...filters, type: newType });
         }}
+        phaseActivities={phaseActivities}
       />
       {/* <FilterSelect
         name="Status"
