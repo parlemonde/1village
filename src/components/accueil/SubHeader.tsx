@@ -3,14 +3,30 @@ import React from 'react';
 
 import { VillageContext } from 'src/contexts/villageContext';
 import { primaryColorLight } from 'src/styles/variables.const';
-import Jumelles from 'src/svg/jumelles.svg';
+import JumellesLight from 'src/svg/jumelles-light.svg';
+import Jumelles from 'src/svg/jumelles-primary.svg';
+import PuzzleLight from 'src/svg/puzzle-light.svg';
+import PuzzlePrimary from 'src/svg/puzzle-primary.svg';
+import Step2Light from 'src/svg/step-2-light.svg';
+import Step2Primary from 'src/svg/step-2-primary.svg';
 
 interface Props {
   number: number;
   info: string;
 }
+const svgsLight = [
+  <JumellesLight key={1} style={{ marginRight: '0.5rem' }} />,
+  <Step2Light key={2} style={{ marginRight: '0.5rem' }} />,
+  <PuzzleLight key={3} style={{ marginRight: '0.5rem' }} />,
+];
 
-export const SubHeader: React.FC<Props> = ({ number, info }) => {
+const svgsPrimary = [
+  <Jumelles key={4} style={{ marginRight: '0.5rem' }} />,
+  <Step2Primary key={5} style={{ marginRight: '0.5rem' }} />,
+  <PuzzlePrimary key={6} style={{ marginRight: '0.5rem' }} />,
+];
+
+export const SubHeader = ({ number, info }: Props): React.ReactElement => {
   const { selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const router = useRouter();
 
@@ -40,7 +56,7 @@ export const SubHeader: React.FC<Props> = ({ number, info }) => {
           padding: '0.5rem 2rem 0.5rem 1rem',
         }}
       >
-        <Jumelles style={{ marginRight: '0.5rem' }} />
+        {selectedPhase === number ? svgsLight[number - 1] : svgsPrimary[number - 1]}
         <h2 style={{ fontSize: '1vw', marginLeft: '2vw' }}>
           Phase {number} - {info}
         </h2>

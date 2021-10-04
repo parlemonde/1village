@@ -53,9 +53,6 @@ const IndiceStep3 = () => {
   }, [activity, router]);
 
   const onPublish = async () => {
-    if (!isValid()) {
-      return;
-    }
     setIsLoading(true);
     const success = await save(true);
     if (success) {
@@ -80,6 +77,11 @@ const IndiceStep3 = () => {
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
+          {errorSteps.length > 0 && (
+            <p>
+              <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+            </p>
+          )}
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
               <Link href="/indice-culturel/2" passHref>
@@ -93,7 +95,7 @@ const IndiceStep3 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid()}>
                 Publier
               </Button>
             </div>
