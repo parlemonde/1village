@@ -5,7 +5,7 @@ import Switch from '@material-ui/core/Switch';
 
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
-import { LeftNavigation } from 'src/components/accueil/Navigation';
+import { LeftNavigation } from 'src/components/accueil/LeftNavigation';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
@@ -26,7 +26,7 @@ interface Tab {
   disabled: boolean;
 }
 
-export const Navigation = () => {
+export const Navigation = (): JSX.Element => {
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
@@ -140,7 +140,7 @@ export const Navigation = () => {
         >
           <h2 style={{ marginRight: '1rem' }}>Village-monde </h2>
           <Flag country={user?.countryCode} style={{ marginRight: '0.5rem' }}></Flag> <Flag country={user?.countryCode}></Flag>
-        </div >
+        </div>
         <LeftNavigation tabs={arrayNav[0]} map={false} />
         <div style={{ marginTop: '10%' }}></div>
         <LeftNavigation tabs={arrayNav[selectedPhase || 1]} map={false} />

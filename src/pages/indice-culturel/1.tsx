@@ -19,7 +19,7 @@ const IndiceStep1 = () => {
   const selectRef = React.useRef<HTMLDivElement>(null);
 
   const [filters] = React.useState<FilterArgs>({
-    type: 0,
+    type: [6],
     status: 0,
     countries: {},
     pelico: true,
