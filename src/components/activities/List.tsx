@@ -20,6 +20,7 @@ const REACTIONS = {
   [ActivityType.ENIGME]: 'une énigme',
   [ActivityType.QUESTION]: 'une question',
   [ActivityType.INDICE]: 'un indice culturel',
+  [ActivityType.SYMBOL]: 'un symbole',
 };
 
 interface ActivitiesProps {
