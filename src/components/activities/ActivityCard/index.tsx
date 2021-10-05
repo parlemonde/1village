@@ -2,7 +2,7 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { isDefi, isEnigme, isIndice, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
+import { isDefi, isEnigme, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
@@ -14,6 +14,7 @@ import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
+import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
@@ -27,6 +28,7 @@ import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
+import { SymbolCard } from './SymbolCard';
 import type { ActivityCardProps } from './activity-card.types';
 
 const titles = {
@@ -36,6 +38,7 @@ const titles = {
   [ActivityType.ENIGME]: 'créé une énigme',
   [ActivityType.QUESTION]: 'posé une question',
   [ActivityType.INDICE]: 'créé un indice culturel',
+  [ActivityType.SYMBOL]: 'créé un symbole',
 };
 const icons = {
   [ActivityType.PRESENTATION]: UserIcon,
@@ -44,6 +47,7 @@ const icons = {
   [ActivityType.ENIGME]: KeyIcon,
   [ActivityType.QUESTION]: QuestionIcon,
   [ActivityType.INDICE]: IndiceIcon,
+  [ActivityType.SYMBOL]: SymbolIcon,
 };
 
 export const ActivityCard = ({
@@ -163,6 +167,17 @@ export const ActivityCard = ({
         )}
         {isIndice(activity) && (
           <IndiceCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
+        )}
+        {isSymbol(activity) && (
+          <SymbolCard
             activity={activity}
             user={user}
             isSelf={isSelf}

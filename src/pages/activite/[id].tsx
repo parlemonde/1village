@@ -23,6 +23,7 @@ const titles = {
   [ActivityType.ENIGME]: 'Énigme',
   [ActivityType.QUESTION]: 'Question',
   [ActivityType.INDICE]: 'Indice culturel',
+  [ActivityType.SYMBOL]: 'Symbole',
 };
 
 const Activity = () => {

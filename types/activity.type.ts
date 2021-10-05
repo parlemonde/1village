@@ -7,6 +7,7 @@ export enum ActivityType {
   QUESTION = 3,
   GAME = 4,
   INDICE = 6,
+  SYMBOL = 7,
 }
 
 export enum ActivityStatus {
