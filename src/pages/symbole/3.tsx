@@ -6,51 +6,59 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
+import { isSymbol } from 'src/activity-types/anyActivity';
+import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
+import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { errorColor } from 'src/styles/variables.const';
+import { ActivityStatus } from 'types/activity.type';
 
-const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'cette présentation',
-  [ActivityType.DEFI]: 'ce défi',
-  [ActivityType.GAME]: 'ce jeu',
-  [ActivityType.ENIGME]: 'cette énigme',
-  [ActivityType.QUESTION]: 'cette question',
-  [ActivityType.INDICE]: 'cet indice culturel',
-  [ActivityType.SYMBOL]: 'ce symbol',
-};
-
-const PresentationStep4 = () => {
+const SymbolStep3 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [style, setStyle] = React.useState({});
 
-  const data = activity?.data || null;
+  const data = (activity?.data as SymbolData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const isValid = () => {
+    let result = true;
+    activity?.processedContent?.map((content) => {
+      result = content.value === '' || content.value === '<p></p>\n' ? false : true;
+    });
+    return result;
+  };
 
   React.useEffect(() => {
+    if (!isValid()) {
+      setErrorSteps([1]);
+      setStyle({ border: `1px dashed ${errorColor}` });
+    }
+
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/se-presenter');
-    } else if (activity && (!isPresentation(activity) || !isThematique(activity))) {
-      router.push('/se-presenter');
+      router.push('/indice-culturel');
+    } else if (activity && !isSymbol(activity)) {
+      router.push('/indice-culturel');
     }
   }, [activity, router]);
 
   const onPublish = async () => {
+    if (!isValid()) {
+      return;
+    }
     setIsLoading(true);
     const success = await save(true);
     if (success) {
-      router.push('/se-presenter/success');
+      router.push('/symbole/success');
     }
     setIsLoading(false);
   };
@@ -62,19 +70,23 @@ const PresentationStep4 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Choix du thème', 'Présentation', 'Prévisualisation'])} activeStep={isEdit ? 2 : 3} />
+        <Steps
+          steps={[SYMBOL_TYPES[activity.subType].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']}
+          activeStep={2}
+          errorSteps={errorSteps}
+        />
         <div className="width-900">
-          <h1>Pré-visualisez votre présentation{!isEdit && ' et publiez-la'}</h1>
+          <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre présentation.
+            Voici la pré-visualisation de votre publication.
             {isEdit
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/se-presenter/thematique/3" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/3">
+              <Link href="/symbole/2" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/symbole/2">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -84,22 +96,20 @@ const PresentationStep4 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={errorSteps.length > 0}>
                 Publier
               </Button>
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/se-presenter/thematique/1?edit=${activity.id}`} />}
-
           {responseActivity !== null && (
             <>
-              <span className="text text--small text--success">Présentation en réaction à {REACTIONS[responseActivity.type]}</span>
+              <span className={'text text--small text--success'}>Présentation en réaction à l&apos;indice culturel</span>
               <div className="preview-block">
                 {!isEdit && (
                   <EditButton
                     onClick={() => {
-                      router.push(`/se-presenter/thematique/1?edit=${activity.id}`);
+                      router.push(`/symbole/1?edit=${activity.id}`);
                     }}
                     status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
@@ -110,31 +120,31 @@ const PresentationStep4 = () => {
             </>
           )}
 
-          <span className="text text--small text--success">Thème</span>
+          <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/se-presenter/thematique/2');
+                router.push('/indice-culturel');
               }}
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>{PRESENTATION_THEMATIQUE[(data?.theme as number | null) ?? 0]?.cardTitle}</p>
+            <p style={{ margin: '0.5rem 0' }}>{SYMBOL_TYPES[activity.subType].title}</p>
           </div>
 
-          <span className="text text--small text--success">Présentation</span>
-          <div className="preview-block">
+          <span className={`text text--small ${errorSteps.length > 0 ? 'text--alert' : 'text--success'}`}>Symbole</span>
+          <div className="preview-block" style={style}>
             <EditButton
               onClick={() => {
-                router.push('/se-presenter/thematique/3');
+                router.push('/symbole/2');
               }}
-              status={'success'}
+              status={errorSteps.length > 0 ? 'error' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.processedContent} />
           </div>
 
-          <StepsButton prev="/se-presenter/thematique/3" />
+          <StepsButton prev="/symbole/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -144,4 +154,4 @@ const PresentationStep4 = () => {
   );
 };
 
-export default PresentationStep4;
+export default SymbolStep3;

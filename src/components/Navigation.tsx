@@ -15,6 +15,7 @@ import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
+import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { UserType } from 'types/user.type';
@@ -57,18 +58,25 @@ export const Navigation = (): JSX.Element => {
       icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: false,
     },
+
+    {
+      label: 'Présenter un symbole',
+      path: '/symbole',
+      icon: <SymbolIcon style={{ fill: 'white' }} width="1.4rem" />,
+      disabled: false,
+    },
     {
       label: 'Poser une question',
       path: '/poser-une-question',
       icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
-    {
-      label: 'Voir mes activités',
-      path: '/mes-activites',
-      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
+    // {
+    //   label: 'Voir mes activités',
+    //   path: '/mes-activites',
+    //   icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    //   disabled: !(selectedPhase <= phase),
+    // },
   ];
 
   const stepTwo: Tab[] = [
