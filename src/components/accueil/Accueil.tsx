@@ -14,20 +14,20 @@ import { getLocalTempHour } from 'src/utils/getLocalTempHour';
 
 const phaseActivities = [
   [
-    { key: 0, label: 'Toutes', type: [6, 7] },
-    { key: 1, label: 'Indice culturel', type: [6] },
-    { key: 2, label: 'Symbole', type: [7] },
+    { key: 0, label: 'Toutes', type: [3, 5, 6, 7] },
+    { key: 1, label: 'Indices culturels', type: [6] },
+    { key: 2, label: 'Symboles', type: [7] },
+    { key: 3, label: 'Questions', type: [3] },
   ],
   [
-    { key: 0, label: 'Toutes', type: [1, 2, 3, 4, 5] },
-    // { key: 9, label: 'Contenu libre', type: [8] },
+    { key: 0, label: 'Toutes', type: [1, 2, 4, 5] },
     { key: 1, label: 'Énigmes', type: [1] },
     { key: 2, label: 'Défis', type: [2] },
     // { key: 10, label: 'Reportage', type: [9] },
     { key: 3, label: 'Jeux', type: [4] },
   ],
   [
-    { key: 0, label: 'Toutes', type: [10] },
+    { key: 0, label: 'Toutes', type: [5, 10] },
     { key: 1, label: 'Hymne', type: [10] },
   ],
 ];

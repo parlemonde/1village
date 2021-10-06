@@ -2,7 +2,7 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { isDefi, isEnigme, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
+import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
@@ -10,6 +10,7 @@ import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { primaryColor } from 'src/styles/variables.const';
 import Timer from 'src/svg/enigme/timer.svg';
+import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
@@ -24,6 +25,7 @@ import { UserType } from 'types/user.type';
 
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
+import { FreeContentCard } from './FreeContentCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
@@ -37,6 +39,7 @@ const titles = {
   [ActivityType.GAME]: 'lancé un jeu',
   [ActivityType.ENIGME]: 'créé une énigme',
   [ActivityType.QUESTION]: 'posé une question',
+  [ActivityType.CONTENU_LIBRE]: 'envoyé un message à ses Pélicopains',
   [ActivityType.INDICE]: 'créé un indice culturel',
   [ActivityType.SYMBOL]: 'créé un symbole',
 };
@@ -46,6 +49,7 @@ const icons = {
   [ActivityType.GAME]: GameIcon,
   [ActivityType.ENIGME]: KeyIcon,
   [ActivityType.QUESTION]: QuestionIcon,
+  [ActivityType.CONTENU_LIBRE]: FreeContentIcon,
   [ActivityType.INDICE]: IndiceIcon,
   [ActivityType.SYMBOL]: SymbolIcon,
 };
@@ -156,6 +160,17 @@ export const ActivityCard = ({
         )}
         {isDefi(activity) && (
           <DefiCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
+        )}
+        {isFreeContent(activity) && (
+          <FreeContentCard
             activity={activity}
             user={user}
             isSelf={isSelf}
