@@ -19,13 +19,13 @@ const MesActivites = () => {
   const { activities } = useActivities({
     limit: 50,
     page: 0,
-    type: -1,
+    type: [],
     userId: user?.id ?? 0,
   });
   const { activities: drafts } = useActivities({
     limit: 50,
     page: 0,
-    type: -1,
+    type: [],
     userId: user?.id ?? 0,
     status: ActivityStatus.DRAFT,
   });

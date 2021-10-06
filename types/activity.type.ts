@@ -6,6 +6,7 @@ export enum ActivityType {
   DEFI = 2,
   QUESTION = 3,
   GAME = 4,
+  CONTENU_LIBRE = 5,
   INDICE = 6,
   SYMBOL = 7,
 }
