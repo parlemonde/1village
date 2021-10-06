@@ -82,6 +82,8 @@ const getActivities = async ({
   }
   if (type.length > 0) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.type IN (:type)', { type });
+  } else if (type.length === 1 && type[0] === -1){
+
   }
   if (subType !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
@@ -262,6 +264,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         ActivityType.ENIGME,
         ActivityType.DEFI,
         ActivityType.INDICE,
+        ActivityType.CONTENU_LIBRE,
         ActivityType.SYMBOL,
       ],
     },
