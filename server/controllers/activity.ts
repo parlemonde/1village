@@ -5,6 +5,7 @@ import { getRepository } from 'typeorm';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
+import { Mimique } from '../entities/mimique';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -14,8 +15,10 @@ import { getQueryString } from '../utils';
 import { commentController } from './comment';
 import { Controller } from './controller';
 
+// what's this for?
 const activityController = new Controller('/activities');
 
+// different activities' definition
 type ActivityGetter = {
   limit?: number;
   page?: number;
@@ -29,6 +32,8 @@ type ActivityGetter = {
   status?: number;
   responseActivityId?: number;
 };
+
+// don't understand this one
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
     return {};
@@ -64,6 +69,8 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
     return acc;
   }, {});
 };
+
+// check if the activities meet the requirements. If they do, then get all activities an then their ids
 const getActivities = async ({
   limit = 200,
   page = 0,
@@ -239,6 +246,7 @@ type CreateActivityData = {
   responseType?: number;
   isPinned?: boolean;
 };
+
 const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   type: 'object',
   properties: {
@@ -286,6 +294,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   required: ['type', 'data', 'content'],
   additionalProperties: false,
 };
+
 const createActivityValidator = ajv.compile(CREATE_SCHEMA);
 activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
@@ -342,6 +351,7 @@ type UpdateActivity = {
   data?: AnyData;
   content?: ActivityContent[];
 };
+
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
   properties: {
@@ -362,6 +372,92 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     data: {
       type: 'object',
       additionalProperties: true,
+  },
+  required: [],
+  additionalProperties: false,
+  };
+
+const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
+activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!updateActivityValidator(data)) {
+    sendInvalidDataError(updateActivityValidator);
+    return;
+  }
+
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
+  if (activity === undefined || req.user === undefined) {
+    next();
+    return;
+  }
+  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+    next();
+    return;
+  }
+
+  activity.status = data.status ?? activity.status;
+  activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
+  activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
+
+  if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE && activity.status === ActivityStatus.PUBLISHED) {
+    const activityData = (activity.content || []).find((data) => {
+      return data.key === 'json';
+    });
+    if (activityData) {
+      const value = JSON.parse(activityData.value);
+      const mimiquesData = value.data as MimiquesData;
+      mimiquesData.mimique1.mimiqueId = (await createMimique(mimiquesData.mimique1, activity)).id;
+      mimiquesData.mimique2.mimiqueId = (await createMimique(mimiquesData.mimique2, activity)).id;
+      mimiquesData.mimique3.mimiqueId = (await createMimique(mimiquesData.mimique3, activity)).id;
+      activityData.value = JSON.stringify(value);
+      await getRepository(ActivityData).save(activityData);
+    }
+  }
+
+  await getRepository(Activity).save(activity);
+  res.sendJSON(activity);
+});
+
+const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
+  const id = data.mimiqueId;
+  const mimique = id ? await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } }) : new Mimique();
+
+  mimique.signification = data.signification || '';
+  mimique.fakeSignification1 = data.fakeSignification1 || '';
+  mimique.fakeSignification2 = data.fakeSignification2 || '';
+  mimique.origine = data.origine || '';
+  mimique.video = data.video || '';
+  mimique.activityId = activity.id;
+  mimique.villageId = activity.villageId;
+  mimique.userId = activity.userId;
+  await getRepository(Mimique).save(mimique);
+  return mimique;
+};
+// --- Add content to an activity ---
+type AddActivityData = {
+  content?: Array<{
+    key: ActivityDataType;
+    value: string;
+  }>;
+};
+const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
+  type: 'object',
+  properties: {
+    content: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          key: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'json', 'h5p', 'sound'] },
+          value: { type: 'string', nullable: false },
+        },
+        required: ['key', 'value'],
+      },
       nullable: true,
     },
     content: {

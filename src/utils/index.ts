@@ -131,7 +131,7 @@ export function generateTemporaryToken(length: number = 40): string {
 }
 
 export function isValidHttpUrl(value: string): boolean {
-  if (value.slice(0, 11) === '/api/images' || value.slice(0, 10) === '/api/audio') {
+  if (value && (value.slice(0, 11) === '/api/images' || value.slice(0, 10) === '/api/audio')) {
     return true;
   }
 

@@ -8,6 +8,7 @@ import { countryController } from './countries';
 import { currencyController } from './currencies';
 import { imageController } from './image';
 import { languageController } from './languages';
+import { mimiqueController } from './mimique';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';
@@ -27,6 +28,7 @@ const controllers = [
   analyticController,
   archiveController,
   weatherController,
+  mimiqueController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {
