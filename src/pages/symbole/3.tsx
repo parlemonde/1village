@@ -12,15 +12,15 @@ import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { errorColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
-import { UserContext } from 'src/contexts/userContext';
 
 const SymbolStep3 = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const SymbolStep3 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const isValid = (): boolean => {
     let result = true;
-    activity?.processedContent?.map((content: { value: string; }) => {
+    activity?.processedContent?.map((content: { value: string }) => {
       result = content.value === '' || content.value === '<p></p>\n' ? false : true;
     });
     return result;
@@ -150,9 +150,7 @@ const SymbolStep3 = () => {
           <StepsButton prev="/symbole/2" />
         </div>
       </div>
-      <ActivityCard
-        activity={activity}
-        user={user} />
+      <ActivityCard activity={activity} user={user} />
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

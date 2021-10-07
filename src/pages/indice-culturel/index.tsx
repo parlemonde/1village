@@ -3,62 +3,69 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
-import ObjetIcon from 'src/svg/enigme/objet-mystere.svg';
+import ArtIcon from 'src/svg/indice-culturel/art.svg';
+import CuisineIcon from 'src/svg/indice-culturel/cuisine.svg';
+import FloreFauneIcon from 'src/svg/indice-culturel/flore-faune.svg';
+import LanguesIcon from 'src/svg/indice-culturel/langues.svg';
+import LieuxIcon from 'src/svg/indice-culturel/lieux-de-vie.svg';
+import LoisirsJeuxIcon from 'src/svg/indice-culturel/loisirs-jeux.svg';
+import PaysagesIcon from 'src/svg/indice-culturel/paysages.svg';
+import TraditionIcon from 'src/svg/indice-culturel/tradition.svg';
 
 const activities = [
   {
-    label: 'Nos paysage',
+    label: 'Nos paysages',
     href: '/indice-culturel/1?category=0',
-    icon: ObjetIcon,
+    icon: PaysagesIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Nos arts',
     href: '/indice-culturel/1?category=1',
-    icon: ObjetIcon,
+    icon: ArtIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Nos lieux de vies',
     href: '/indice-culturel/1?category=2',
-    icon: ObjetIcon,
+    icon: LieuxIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Nos langues',
     href: '/indice-culturel/1?category=3',
-    icon: ObjetIcon,
+    icon: LanguesIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Notre flore et faune',
     href: '/indice-culturel/1?category=4',
-    icon: ObjetIcon,
+    icon: FloreFauneIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Nos loisirs et jeux',
     href: '/indice-culturel/1?category=5',
-    icon: ObjetIcon,
+    icon: LoisirsJeuxIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Nos cuisines',
     href: '/indice-culturel/1?category=6',
-    icon: ObjetIcon,
+    icon: CuisineIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Nos traditions',
     href: '/indice-culturel/1?category=7',
-    icon: ObjetIcon,
+    icon: TraditionIcon,
     disabled: false,
     disabledText: '',
   },

@@ -32,7 +32,7 @@ const IndiceStep3 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const isValid = () => {
     let result = true;
-    activity?.processedContent?.map((content) => {
+    activity?.processedContent?.map((content: { value: string }) => {
       result = content.value === '' || content.value === '<p></p>\n' ? false : true;
     });
 
@@ -118,7 +118,6 @@ const IndiceStep3 = () => {
               </div>
             </>
           )}
-
           <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
             <EditButton

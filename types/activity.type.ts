@@ -38,4 +38,5 @@ export interface Activity {
   // Answer other activity
   responseActivityId: number | null;
   responseType: ActivityType | null;
+  isPinned?: boolean;
 }
