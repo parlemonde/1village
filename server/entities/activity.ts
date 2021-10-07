@@ -83,4 +83,7 @@ export class Activity implements ActivityInterface<AnyData> {
   public isPinned: boolean;
 
   public commentCount?: number;
+
+  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
+  public mimiques: Mimique[];
 }

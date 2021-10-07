@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
+import { isMimique } from 'src/activity-types/game.const';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -22,6 +23,7 @@ import { EnigmeCard } from './EnigmeCard';
 import { FreeContentCard } from './FreeContentCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
+import { MimiqueCard } from './MimiqueCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { SymbolCard } from './SymbolCard';

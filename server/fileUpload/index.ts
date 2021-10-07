@@ -1,4 +1,4 @@
-import type { Readable } from 'stream';
+import { Readable } from 'stream';
 
 import { AwsS3 } from './s3';
 import { VimeoClass } from './vimeo';
@@ -32,4 +32,8 @@ export function uploadVideo(filePath: string, name: string, userId: number): Pro
 
 export function deleteVideo(videoId: number): Promise<boolean> {
   return vimeo.deleteVideo(videoId);
+}
+
+export function getPictureForVideo(videoId: number): Promise<string> {
+  return vimeo.getPictureForVideo(videoId);
 }

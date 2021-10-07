@@ -9,7 +9,7 @@ import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { SoundEditor } from './editors/SoundEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
-import { VideoEditor } from './editors/VideoEditor';
+import { VideoEditor } from './editors/VideoEditor/VideoEditor';
 
 interface ContentEditorProps {
   content: ActivityContent[];
@@ -19,7 +19,7 @@ interface ContentEditorProps {
   save(): Promise<boolean>;
 }
 
-const ContentEditor = ({ content, updateContent, addContent, deleteContent }: ContentEditorProps) => {
+const ContentEditor: React.FC<ContentEditorProps> = ({ content, updateContent, addContent, deleteContent }: ContentEditorProps) => {
   const router = useRouter();
   const blurTimeoutSave = React.useRef<number | undefined>(undefined);
 

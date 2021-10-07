@@ -76,7 +76,6 @@ export class VimeoClass {
       this.client.upload(
         path,
         {
-          // eslint-disable-next-line camelcase
           content_rating: ['unrated'],
           name,
           privacy: {
@@ -152,5 +151,45 @@ export class VimeoClass {
     }
 
     return success;
+  }
+
+  public async getPictureForVideo(videoId: number): Promise<string> {
+    if (!this.initialized) {
+      return '';
+    }
+    const picturesRes = await new Promise<string>((resolve) => {
+      this.client.request(
+        {
+          method: 'GET',
+          path: '/videos/' + videoId,
+        },
+        (error, body) => {
+          if (error) {
+            console.log('error');
+            console.log(error);
+          } else {
+            resolve(body.pictures.uri);
+          }
+        },
+      );
+    });
+
+    const picture = await new Promise<string>((resolve) => {
+      this.client.request(
+        {
+          method: 'GET',
+          path: picturesRes,
+        },
+        (error, body) => {
+          if (error) {
+            console.log('error');
+            console.log(error);
+          } else {
+            resolve(body.sizes[2].link);
+          }
+        },
+      );
+    });
+    return picture;
   }
 }

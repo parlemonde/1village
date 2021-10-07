@@ -3,6 +3,8 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import type { Village as VillageInterface } from '../../types/village.type';
 
 import { Activity } from './activity';
+import { Mimique } from './mimique';
+import { MimiqueResponse } from './mimiqueResponse';
 import { User } from './user';
 
 enum VillagePhase {
@@ -37,4 +39,10 @@ export class Village implements VillageInterface {
 
   @OneToMany(() => Activity, (activity: Activity) => activity.village)
   public activities: Activity[];
+
+  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.village)
+  public mimiques: Mimique[];
+
+  @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.user)
+  public mimiqueResponses: MimiqueResponse[];
 }

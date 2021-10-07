@@ -195,7 +195,9 @@ export const Navigation = (): JSX.Element => {
           </div>
         )}
         <Link href="/cgu">
-          <a className="navigation__cgu-link text text--small">{"Conditions générales d'utilisation"}</a>
+          <a href="/cgu" className="navigation__cgu-link text text--small">
+            {"Conditions générales d'utilisation"}
+          </a>
         </Link>
       </div>
       <Modal

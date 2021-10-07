@@ -169,6 +169,9 @@ a.text--success:hover {
 .bg-alert {
   background-color: $error-color;
 }
+.button-error{
+  border-color: $error-color;
+}
 .bg-success {
   background-color: $success-color;
 }

@@ -1,7 +1,6 @@
 import md5 from 'md5';
 
-import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
+import { User, UserType } from 'types/user.type';
 
 /**
  * Returns a query string with the given parameters.
@@ -117,7 +116,7 @@ export function generateTemporaryToken(length: number = 40): string {
 }
 
 export function isValidHttpUrl(value: string): boolean {
-  if (value.slice(0, 11) === '/api/images' || value.slice(0, 10) === '/api/audio') {
+  if (value && (value.slice(0, 11) === '/api/images' || value.slice(0, 10) === '/api/audio')) {
     return true;
   }
 
