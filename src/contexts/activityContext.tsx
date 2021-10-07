@@ -27,6 +27,7 @@ interface ActivityContextValue {
     initialData?: AnyActivityData,
     responseActivityId?: number | null,
     responseType?: ActivityType | null,
+    isPinned?: boolean,
   ): boolean;
   addContent(type: EditorTypes, value?: string, index?: number): void;
   deleteContent(index: number): void;
@@ -138,6 +139,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         responseType: responseType ?? null,
         data: initialData || {},
         dataId: 0,
+        isPinned: false,
         processedContent: [{ type: 'text', id: 0, value: '' }],
       };
       setActivity(activity);
@@ -294,6 +296,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
           data: {
             responseActivityId: activity.responseActivityId,
             responseType: activity.responseType,
+            isPinned: activity.isPinned,
           },
         });
         if (response2.error) {
@@ -301,6 +304,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         }
         newActivity.responseActivityId = (response2.data as Activity).responseActivityId;
         newActivity.responseType = (response2.data as Activity).responseType;
+        newActivity.isPinned = activity.isPinned;
       }
       setActivity(newActivity);
       return true;
@@ -319,6 +323,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         status: ActivityStatus.PUBLISHED,
         responseActivityId: activity.responseActivityId,
         responseType: activity.responseType,
+        isPinned: activity.isPinned,
       },
     });
     if (response.error) {

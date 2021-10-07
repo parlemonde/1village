@@ -10,7 +10,6 @@ import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { primaryColor } from 'src/styles/variables.const';
 import Timer from 'src/svg/enigme/timer.svg';
-import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
@@ -19,6 +18,7 @@ import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
+import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
@@ -49,7 +49,7 @@ const icons = {
   [ActivityType.GAME]: GameIcon,
   [ActivityType.ENIGME]: KeyIcon,
   [ActivityType.QUESTION]: QuestionIcon,
-  [ActivityType.CONTENU_LIBRE]: FreeContentIcon,
+  [ActivityType.CONTENU_LIBRE]: '',
   [ActivityType.INDICE]: IndiceIcon,
   [ActivityType.SYMBOL]: SymbolIcon,
 };
@@ -95,7 +95,7 @@ export const ActivityCard = ({
             <strong>{titles[activity.type]}</strong>
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+            <p className="text text--small">Publié le {toDate(activity?.createDate as string)} </p>
             {userIsPelico ? (
               <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
             ) : (
@@ -111,6 +111,7 @@ export const ActivityCard = ({
             </div>
           </>
         )}
+        {activity.isPinned && <PinIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
         {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
       </div>
       <div className="activity-card__content">
