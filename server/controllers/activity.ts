@@ -82,8 +82,6 @@ const getActivities = async ({
   }
   if (type.length > 0) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.type IN (:type)', { type });
-  } else if (type.length === 1 && type[0] === -1){
-
   }
   if (subType !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
@@ -138,7 +136,8 @@ const getActivities = async ({
     .createQueryBuilder('activity')
     .leftJoinAndSelect('activity.content', 'activityData', 'activity.id = activityData.activityId')
     .where('activity.id IN (:ids)', { ids })
-    .orderBy('activity.createDate', 'DESC')
+    .orderBy('activity.isPinned', 'DESC')
+    .addOrderBy('activity.createDate', 'DESC')
     .addOrderBy('activityData.order', 'ASC')
     .getMany();
 
@@ -362,6 +361,7 @@ type UpdateActivity = {
   status?: ActivityStatus;
   responseActivityId?: number;
   responseType?: ActivityType;
+  isPinned?: boolean;
 };
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
@@ -377,6 +377,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
       nullable: true,
       enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
+    isPinned: { type: 'boolean', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -407,6 +408,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.status = data.status ?? activity.status;
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
+  activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned ?? null;
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);

@@ -51,12 +51,13 @@ export const Navigation = (): JSX.Element => {
       disabled: false,
     },
   ];
- isModerateur && allStep.push({
-    label: 'Publier un contenu libre',
-    path: '/contenu-libre',
-    icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    disabled: false,
-  });
+  isModerateur &&
+    allStep.push({
+      label: 'Publier un contenu libre',
+      path: '/contenu-libre',
+      icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: false,
+    });
 
   const stepOne: Tab[] = [
     {
@@ -86,12 +87,6 @@ export const Navigation = (): JSX.Element => {
   ];
 
   const stepTwo: Tab[] = [
-    {
-      label: 'Publier un contenu libre',
-      path: '/contenu-libre',
-      icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-    },
     {
       label: 'Lancer un défi',
       path: '/lancer-un-defi',
@@ -125,12 +120,6 @@ export const Navigation = (): JSX.Element => {
   ];
 
   const stepThree: Tab[] = [
-    {
-      label: 'Publier un contenu libre',
-      path: '/contenu-libre',
-      icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-    },
     {
       label: 'Créer un jeu',
       path: '/creer-un-jeu',

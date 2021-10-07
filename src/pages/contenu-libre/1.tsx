@@ -9,14 +9,15 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { ActivityStatus } from 'types/activity.type';
+
+// import { ActivityStatus } from 'types/activity.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const data = (activity?.data as FreeContentData) || null;
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  // const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   React.useEffect(() => {
@@ -37,26 +38,28 @@ const ContenuLibre = () => {
   };
 
   return (
-    <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
-        <div className="width-900">
-          <h1>Ecrivez le contenu de votre publication</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication ; dans l&apos;étape 2 vous pourrez définir l&apos;aspect de
-            la carte résumée de votre publication.
-          </p>
-          <ContentEditor
-            content={activity.processedContent}
-            updateContent={updateContent}
-            addContent={addContent}
-            deleteContent={deleteContent}
-            save={save}
-          />
-          <StepsButton prev="/contenu-libre" next={onNext} />
+    activity && (
+      <Base>
+        <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+          <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
+          <div className="width-900">
+            <h1>Ecrivez le contenu de votre publication</h1>
+            <p className="text" style={{ fontSize: '1.1rem' }}>
+              Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication ; dans l&apos;étape 2 vous pourrez définir l&apos;aspect de
+              la carte résumée de votre publication.
+            </p>
+            <ContentEditor
+              content={activity.processedContent}
+              updateContent={updateContent}
+              addContent={addContent}
+              deleteContent={deleteContent}
+              save={save}
+            />
+            <StepsButton prev="/contenu-libre" next={onNext} />
+          </div>
         </div>
-      </div>
-    </Base>
+      </Base>
+    )
   );
 };
 

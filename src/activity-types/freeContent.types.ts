@@ -5,6 +5,7 @@ export type FreeContentData = {
   resume: string;
   content?: string;
   indiceContentIndex: number;
+  isPinned: boolean;
 };
 
 export type FreeContentActivity = GenericExtendedActivity<FreeContentData>;

@@ -86,5 +86,11 @@ export class Activity implements ActivityInterface {
   })
   public responseType: ActivityType | null;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public isPinned: boolean;
+
   public commentCount?: number;
 }
