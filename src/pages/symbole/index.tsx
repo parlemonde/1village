@@ -3,62 +3,69 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
-import ObjetIcon from 'src/svg/enigme/objet-mystere.svg';
+import AnimalNationalIcon from 'src/svg/symbole/animal-national.svg';
+import DeviseIcon from 'src/svg/symbole/devise.svg';
+import DrapeauIcon from 'src/svg/symbole/drapeau.svg';
+import EmblemeIcon from 'src/svg/symbole/embleme.svg';
+import FigureSymboliqueIcon from 'src/svg/symbole/figure-symbolique.svg';
+import FleurNationaleIcon from 'src/svg/symbole/fleur-nationale.svg';
+import HymneIcon from 'src/svg/symbole/hymne.svg';
+import MonnaieIcon from 'src/svg/symbole/monnaie.svg';
 
 const activities = [
   {
     label: 'Un drapeau',
     href: '/symbole/1?category=0',
-    icon: ObjetIcon,
+    icon: DrapeauIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Un emblème',
     href: '/symbole/1?category=1',
-    icon: ObjetIcon,
+    icon: EmblemeIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Une fleur nationale',
     href: '/symbole/1?category=2',
-    icon: ObjetIcon,
+    icon: FleurNationaleIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Une devise',
     href: '/symbole/1?category=3',
-    icon: ObjetIcon,
+    icon: DeviseIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Un hymne',
     href: '/symbole/1?category=4',
-    icon: ObjetIcon,
+    icon: HymneIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Un animal national',
     href: '/symbole/1?category=5',
-    icon: ObjetIcon,
+    icon: AnimalNationalIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Une figure symbolique',
     href: '/symbole/1?category=6',
-    icon: ObjetIcon,
+    icon: FigureSymboliqueIcon,
     disabled: false,
     disabledText: '',
   },
   {
     label: 'Une monnaie',
     href: '/symbole/1?category=7',
-    icon: ObjetIcon,
+    icon: MonnaieIcon,
     disabled: false,
     disabledText: '',
   },

@@ -25,6 +25,7 @@ const REACTIONS = {
   [ActivityType.GAME]: 'ce jeu',
   [ActivityType.ENIGME]: 'cette énigme',
   [ActivityType.QUESTION]: 'cette question',
+  [ActivityType.CONTENU_LIBRE]: 'cette publication',
   [ActivityType.INDICE]: 'cet indice culturel',
   [ActivityType.SYMBOL]: 'ce symbol',
 };

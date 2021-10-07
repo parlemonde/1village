@@ -2,7 +2,7 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { isDefi, isEnigme, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
+import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { isMascotte, isThematique } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
@@ -18,12 +18,14 @@ import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
+import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
+import { FreeContentCard } from './FreeContentCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
@@ -37,6 +39,7 @@ const titles = {
   [ActivityType.GAME]: 'lancé un jeu',
   [ActivityType.ENIGME]: 'créé une énigme',
   [ActivityType.QUESTION]: 'posé une question',
+  [ActivityType.CONTENU_LIBRE]: 'envoyé un message à ses Pélicopains',
   [ActivityType.INDICE]: 'créé un indice culturel',
   [ActivityType.SYMBOL]: 'créé un symbole',
 };
@@ -46,6 +49,7 @@ const icons = {
   [ActivityType.GAME]: GameIcon,
   [ActivityType.ENIGME]: KeyIcon,
   [ActivityType.QUESTION]: QuestionIcon,
+  [ActivityType.CONTENU_LIBRE]: '',
   [ActivityType.INDICE]: IndiceIcon,
   [ActivityType.SYMBOL]: SymbolIcon,
 };
@@ -91,7 +95,7 @@ export const ActivityCard = ({
             <strong>{titles[activity.type]}</strong>
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+            <p className="text text--small">Publié le {toDate(activity?.createDate as string)} </p>
             {userIsPelico ? (
               <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
             ) : (
@@ -107,6 +111,7 @@ export const ActivityCard = ({
             </div>
           </>
         )}
+        {activity.isPinned && <PinIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
         {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
       </div>
       <div className="activity-card__content">
@@ -156,6 +161,17 @@ export const ActivityCard = ({
         )}
         {isDefi(activity) && (
           <DefiCard
+            activity={activity}
+            user={user}
+            isSelf={isSelf}
+            noButtons={noButtons}
+            showEditButtons={showEditButtons}
+            isDraft={isDraft}
+            onDelete={onDelete}
+          />
+        )}
+        {isFreeContent(activity) && (
+          <FreeContentCard
             activity={activity}
             user={user}
             isSelf={isSelf}

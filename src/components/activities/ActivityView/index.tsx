@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isPresentation, isQuestion, isEnigme, isDefi, isIndice, isSymbol } from 'src/activity-types/anyActivity';
+import { isPresentation, isQuestion, isEnigme, isDefi, isIndice, isSymbol, isFreeContent } from 'src/activity-types/anyActivity';
 import { isThematique, isMascotte } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -16,6 +16,7 @@ import { UserType } from 'types/user.type';
 
 import { DefiActivityView } from './DefiActivityView';
 import { EnigmeActivityView } from './EnigmeActivityView';
+import { FreeContentView } from './FreeContentView';
 import { MascotteActivityView } from './MascotteActivityView';
 import type { ActivityViewProps } from './activity-view.types';
 
@@ -25,6 +26,7 @@ const REACTIONS = {
   [ActivityType.GAME]: 'ce jeu',
   [ActivityType.ENIGME]: 'cette énigme',
   [ActivityType.QUESTION]: 'cette question',
+  [ActivityType.CONTENU_LIBRE]: 'ce message',
   [ActivityType.INDICE]: 'cet indice culturel',
   [ActivityType.SYMBOL]: 'ce symbole',
 };
@@ -45,7 +47,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
               <UserDisplayName user={user} />
             </h2>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+              <p className="text text--small">Publié le {toDate(activity?.createDate as string)} </p>
               {isPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
@@ -69,6 +71,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
       {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
       {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
       {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
+      {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
       {isIndice(activity) && <ContentView content={activity.processedContent} />}
       {isSymbol(activity) && <ContentView content={activity.processedContent} />}
     </div>

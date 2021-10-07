@@ -10,6 +10,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
+import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
@@ -50,6 +51,13 @@ export const Navigation = (): JSX.Element => {
       disabled: false,
     },
   ];
+  isModerateur &&
+    allStep.push({
+      label: 'Publier un contenu libre',
+      path: '/contenu-libre',
+      icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      disabled: false,
+    });
 
   const stepOne: Tab[] = [
     {
@@ -58,7 +66,6 @@ export const Navigation = (): JSX.Element => {
       icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: false,
     },
-
     {
       label: 'Présenter un symbole',
       path: '/symbole',
@@ -69,7 +76,7 @@ export const Navigation = (): JSX.Element => {
       label: 'Poser une question',
       path: '/poser-une-question',
       icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
+      disabled: false,
     },
     // {
     //   label: 'Voir mes activités',
