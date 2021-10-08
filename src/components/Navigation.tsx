@@ -156,8 +156,8 @@ export const Navigation = (): JSX.Element => {
         >
           <h2 style={{ marginRight: '1rem' }}>Village-monde </h2>
           {village &&
-            village.countries.map((country) =>
-              village.activePhase > 1 ? (
+            village.countries.map((country: string) =>
+              selectedPhase !== 1 ? (
                 <Flag country={country}></Flag>
               ) : user.countryCode.toUpperCase() == country ? (
                 <Flag country={country}></Flag>
