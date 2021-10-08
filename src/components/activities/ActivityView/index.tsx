@@ -38,42 +38,44 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const isPelico = user !== null && user.type >= UserType.MEDIATOR;
 
   return (
-    <div>
-      {user !== null && (
-        <div className="activity__header">
-          <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
-          <div className="activity-card__header_info">
-            <h2>
-              <UserDisplayName user={user} />
-            </h2>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <p className="text text--small">Publié le {toDate(activity?.createDate as string)} </p>
-              {isPelico ? (
-                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
-              ) : (
-                <Flag country={user.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
-              )}
+    activity && (
+      <div>
+        {user !== null && (
+          <div className="activity__header">
+            <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
+            <div className="activity-card__header_info">
+              <h2>
+                <UserDisplayName user={user} />
+              </h2>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+                {isPelico ? (
+                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+                ) : (
+                  <Flag country={user.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {responseActivity !== null && (
-        <div style={{ margin: '1rem 0 2rem 0' }}>
-          <h3>
-            Nous avons créé {REACTIONS[activity.type]} en réponse à {REACTIONS[responseActivity.type]} :
-          </h3>
-          <Activities activities={[responseActivity]} />
-        </div>
-      )}
+        )}
+        {responseActivity !== null && (
+          <div style={{ margin: '1rem 0 2rem 0' }}>
+            <h3>
+              Nous avons créé {REACTIONS[activity.type]} en réponse à {REACTIONS[responseActivity.type]} :
+            </h3>
+            <Activities activities={[responseActivity]} />
+          </div>
+        )}
 
-      {isPresentation(activity) && isThematique(activity) && <ContentView content={activity.processedContent} />}
-      {isPresentation(activity) && isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
-      {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
-      {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
-      {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
-      {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
-      {isIndice(activity) && <ContentView content={activity.processedContent} />}
-      {isSymbol(activity) && <ContentView content={activity.processedContent} />}
-    </div>
+        {isPresentation(activity) && isThematique(activity) && <ContentView content={activity.processedContent} />}
+        {isPresentation(activity) && isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
+        {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
+        {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
+        {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
+        {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
+        {isIndice(activity) && <ContentView content={activity.processedContent} />}
+        {isSymbol(activity) && <ContentView content={activity.processedContent} />}
+      </div>
+    )
   );
 };

@@ -127,7 +127,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "mysql2": "^2.3.0",
-    "next": "^11.1.0",
+    "next": "^11.1.2",
     "nodemailer": "^6.6.1",
     "notistack": "^1.0.9",
     "nprogress": "^0.2.0",
