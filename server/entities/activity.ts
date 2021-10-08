@@ -5,7 +5,8 @@ import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
 
 import { ActivityData } from './activityData';
-import { Mimique } from './mimique';
+// import { Mimique } from './mimique';
+import { Game } from './game';
 import { User } from './user';
 import { Village } from './village';
 
@@ -90,6 +91,6 @@ export class Activity implements ActivityInterface<AnyData> {
 
   public commentCount?: number;
 
-  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
-  public mimiques: Mimique[];
+  @OneToMany(() => Game, (game: Game) => game.activity)
+  public games: Game[];
 }

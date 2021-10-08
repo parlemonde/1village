@@ -13,7 +13,7 @@ import {
 import type { Mimique as MimiqueInterface } from '../../types/mimique.type';
 
 import { Activity } from './activity';
-import { MimiqueResponse } from './mimiqueResponse';
+// import { MimiqueResponse } from './mimiqueResponse';
 import { User } from './user';
 import { Village } from './village';
 
@@ -29,6 +29,10 @@ export class Mimique implements MimiqueInterface {
 
   @DeleteDateColumn()
   public deleteDate: Date;
+
+  /* @ManyToOne(() => User, (user: User) => user.mimiques, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  public user: User | null; */
 
   @ManyToOne(() => User, (user: User) => user.mimiques, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })

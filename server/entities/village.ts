@@ -6,15 +6,16 @@ import { VillagePhase } from '../../types/village.type';
 import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
-import { MimiqueResponse } from './mimiqueResponse';
-import { Mimique } from './mimique';
+import { GameResponse } from './gameResponse';
+// import { MimiqueResponse } from './mimiqueResponse';
+// import { Mimique } from './mimique';
+import { Game } from './game';
 import { User } from './user';
 
 export { VillagePhase };
 
 @Entity()
 export class Village implements VillageInterface {
-  [x: string]: any;
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -45,9 +46,15 @@ export class Village implements VillageInterface {
   @OneToMany(() => Activity, (activity: Activity) => activity.village)
   public activities: Activity[];
 
-  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.village)
+  /* @OneToMany(() => Mimique, (mimique: Mimique) => mimique.village)
   public mimiques: Mimique[];
 
   @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.user)
-  public mimiqueResponses: MimiqueResponse[];
+  public mimiqueResponses: MimiqueResponse[];*/
+
+  @OneToMany(() => Game, (game: Game) => game.village)
+  public games: Game[];
+
+  @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
+  public gameResponses: GameResponse[];
 }

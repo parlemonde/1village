@@ -10,15 +10,16 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import type { Challenge as ChallengeInterface } from '../../types/challenge.type';
+import type { GameSelection as GameInterface } from '../../types/game.type';
+import { GameType } from '../../types/game.type';
 
-import { GameResponse } from './GameResponse';
 import { Activity } from './activity';
+import { GameResponse } from './gameResponse';
 import { User } from './user';
 import { Village } from './village';
 
 @Entity()
-export class Challenge implements ChallengeInterface {
+export class Game implements GameInterface {
   @PrimaryGeneratedColumn()
   public id: number;
   @CreateDateColumn()
@@ -30,30 +31,37 @@ export class Challenge implements ChallengeInterface {
   @DeleteDateColumn()
   public deleteDate: Date;
 
-  @ManyToOne(() => User, (user: User) => user.challenges, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user: User) => user.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   public user: User | null;
 
   @Column({ nullable: false })
   public userId: number;
 
-  @ManyToOne(() => Village, (village: Village) => village.challenges, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Village, (village: Village) => village.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
   public village: Village | null;
 
   @Column({ nullable: false })
   public villageId: number;
 
-  @ManyToOne(() => Activity, (activity: Activity) => activity.challenges, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Activity, (activity: Activity) => activity.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })
   public activity: Activity | null;
 
   @Column({ nullable: false })
   public activityId: number;
 
-  @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.challenge)
-  public responses: MimiqueResponse[];
+  @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.game)
+  public responses: GameResponse[];
 
-  @Column({ type: 'int', nullable: false })
-  public type: number;
+  @Column({
+    type: 'enum',
+    enum: GameType,
+    nullable: false,
+  })
+  public type: GameType;
+
+  @Column({ type: 'simple-json', default: () => "_utf8mb4\\'{}\\'" })
+  public content: Record<string, never>;
 }

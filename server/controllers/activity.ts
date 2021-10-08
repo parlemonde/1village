@@ -15,10 +15,8 @@ import { getQueryString } from '../utils';
 import { commentController } from './comment';
 import { Controller } from './controller';
 
-// what's this for?
 const activityController = new Controller('/activities');
 
-// different activities' definition
 type ActivityGetter = {
   limit?: number;
   page?: number;
@@ -32,8 +30,6 @@ type ActivityGetter = {
   status?: number;
   responseActivityId?: number;
 };
-
-// don't understand this one
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
     return {};
@@ -69,8 +65,6 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
     return acc;
   }, {});
 };
-
-// check if the activities meet the requirements. If they do, then get all activities an then their ids
 const getActivities = async ({
   limit = 200,
   page = 0,
@@ -246,7 +240,6 @@ type CreateActivityData = {
   responseType?: number;
   isPinned?: boolean;
 };
-
 const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   type: 'object',
   properties: {
@@ -294,7 +287,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   required: ['type', 'data', 'content'],
   additionalProperties: false,
 };
-
 const createActivityValidator = ajv.compile(CREATE_SCHEMA);
 activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;

@@ -6,10 +6,9 @@ import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
-// Challenge added
-import { Challenge } from './challenge';
-import { MimiqueResponse } from './mimiqueResponse';
-import { Mimique } from './mimique';
+import { GameResponse } from './gameResponse';
+import { Game } from './game';
+//import { Mimique } from './mimique';
 import { Village } from './village';
 
 export { UserType };
@@ -84,15 +83,14 @@ export class User implements UserInterface {
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
 
-  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.user)
-  public mimiques: Mimique[];
+  //@OneToMany(() => Mimique, (mimique: Mimique) => mimique.user)
+  //public mimiques: Mimique[];
 
-  // Challenge relation defined
-  @OneToMany(() => Challenge, (challenge: Challenge) => challenge.user)
-  public challenges: Challenge[];
+  @OneToMany(() => Game, (game: Game) => game.user)
+  public games: Game[];
 
-  @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.user)
-  public mimiqueResponses: MimiqueResponse[];
+  @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
+  public gameResponses: GameResponse[];
 
   public mascotteId?: number;
 }
