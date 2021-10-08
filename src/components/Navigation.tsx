@@ -9,6 +9,7 @@ import { LeftNavigation } from 'src/components/accueil/LeftNavigation';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
+import MysteryFlag from 'src/svg/mystery-flag.svg';
 import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
@@ -154,7 +155,16 @@ export const Navigation = (): JSX.Element => {
           }}
         >
           <h2 style={{ marginRight: '1rem' }}>Village-monde </h2>
-          <Flag country={user?.countryCode} style={{ marginRight: '0.5rem' }}></Flag> <Flag country={user?.countryCode}></Flag>
+          {village &&
+            village.countries.map((country) =>
+              village.activePhase > 1 ? (
+                <Flag country={country}></Flag>
+              ) : user.countryCode.toUpperCase() == country ? (
+                <Flag country={country}></Flag>
+              ) : (
+                <MysteryFlag style={{ width: 'auto', height: '18', borderRadius: '2px' }} />
+              ),
+            )}
         </div>
         <LeftNavigation tabs={arrayNav[0]} map={false} />
         <div style={{ marginTop: '10%' }}></div>
