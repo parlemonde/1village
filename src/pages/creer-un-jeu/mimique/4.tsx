@@ -5,7 +5,7 @@ import { Grid, Button, Radio, RadioGroup, FormControlLabel, RadioProps, Backdrop
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
-import { MimiquesData } from 'types/game.types';
+import { MimiquesData } from 'types/game.type';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';

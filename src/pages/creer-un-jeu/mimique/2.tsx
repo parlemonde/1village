@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { MimiqueData, MimiquesData } from 'types/game.types';
+import { MimiqueData, MimiquesData } from 'types/game.type';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';

@@ -1,4 +1,4 @@
-import { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity, GameType } from '../../types/game.types';
+import { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity, GameType } from '../../types/game.type';
 
 export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
   mimique1: {

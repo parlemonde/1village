@@ -3,7 +3,7 @@ import React from 'react';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimique } from 'src/activity-types/game.const';
-import { MimiqueData, MimiquesData } from 'types/game.types';
+import { MimiqueData, MimiquesData } from 'types/game.type';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';

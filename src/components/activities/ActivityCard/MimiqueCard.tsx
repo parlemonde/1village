@@ -7,7 +7,7 @@ import { RedButton } from 'src/components/buttons/RedButton';
 
 import { CommentIcon } from './CommentIcon';
 import { ActivityCardProps } from './activity-card.types';
-import { GameMimiqueActivity } from 'types/game.types';
+import { GameMimiqueActivity } from 'types/game.type';
 import { UserContext } from 'src/contexts/userContext';
 
 export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({

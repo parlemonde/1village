@@ -1,8 +1,29 @@
+<<<<<<< HEAD
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 
+=======
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
+
+import type { Activity as ActivityInterface } from '../../types/activity.type';
+import { ActivityType, ActivityStatus } from '../../types/activity.type';
+
+import { ActivityData } from './activityData';
+import { Game } from './game';
+// import { Mimique } from './mimique';
+>>>>>>> creation of game and game entity for test
 import { User } from './user';
 import { Village } from './village';
 
@@ -84,6 +105,9 @@ export class Activity implements ActivityInterface<AnyData> {
 
   public commentCount?: number;
 
-  @OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
-  public mimiques: Mimique[];
+  @OneToMany(() => Game, (game: Game) => game.activity)
+  public games: Game[];
+
+  // @OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
+  // public mimiques: Mimique[];
 }

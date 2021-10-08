@@ -5,6 +5,17 @@ export enum GameType {
   MONNAIE = 1,
 }
 
+export interface Game {
+  id: number;
+  type: GameType;
+  createDate?: Date | string;
+  updateDate?: Date | string;
+  deleteDate?: Date | string;
+  userId: number;
+  villageId: number;
+  activityId: number;
+}
+
 export type MimiquesData = {
   mimique1: MimiqueData;
   mimique2: MimiqueData;

@@ -10,8 +10,8 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import type { MimiqueData, MimiquesData } from 'types/game.types';
-import { GameType } from 'types/game.types';
+import type { MimiqueData, MimiquesData } from 'types/game.type';
+import { GameType } from 'types/game.type';
 
 const MimiqueStep1: React.FC = () => {
   const router = useRouter();
