@@ -43,14 +43,17 @@ export const Accueil = () => {
   });
   const [localTemp, setLocalTemp] = React.useState(0);
   const [localTime, setLocalTime] = React.useState();
+  const [countries, setCountries] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    setFilters({
-      type: phaseActivities[selectedPhase - 1][0].type,
-      status: 0,
-      countries: {},
-      pelico: true,
-    });
+    setCountries(village?.activePhase > 1 ? village.countries : [user.countryCode.toUpperCase()]);
+    selectedPhase &&
+      setFilters((currFilters: FilterArgs) => ({
+        type: phaseActivities[selectedPhase - 1][0].type,
+        status: 0,
+        countries: currFilters.countries,
+        pelico: true,
+      }));
     const asyncFunc = async () => {
       if (user && !localTime && !localTemp) {
         const { time, temp } = await getLocalTempHour(user);
@@ -79,7 +82,7 @@ export const Accueil = () => {
       </h1>
       <PelicoReflechit style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
       <Button
-        onClick={() => setSelectedPhase(selectedPhase - 1)}
+        onClick={() => setSelectedPhase(village?.activePhase)}
         color="primary"
         variant="outlined"
         className="navigation__button"
@@ -96,7 +99,7 @@ export const Accueil = () => {
         <>
           {' '}
           <h1>Dernières activités</h1>
-          <Filters countries={village.countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
+          <Filters countries={countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
           <p>Température : {Math.floor(localTemp)}°</p>
           <p>{localTime}</p>
           <Activities activities={activities} withLinks />{' '}
