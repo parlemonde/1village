@@ -74,136 +74,138 @@ export const ActivityCard = ({
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
   return (
-    <Paper
-      className={onSelect !== undefined ? 'activity-card--selectable' : ''}
-      variant={forComment ? 'elevation' : 'outlined'}
-      square={!forComment}
-      elevation={forComment ? 2 : 0}
-      onClick={() => {
-        if (onSelect !== undefined) {
-          onSelect();
-        }
-      }}
-      style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
-    >
-      <div className="activity-card__header">
-        {forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={noButtons} />}
-        <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
-          <p className="text">
-            <UserDisplayName className="text" user={user} noLink={noButtons} />
-            {' a '}
-            <strong>{titles[activity.type]}</strong>
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p className="text text--small">Publié le {toDate(activity?.createDate as string)} </p>
-            {userIsPelico ? (
-              <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
-            ) : (
-              <Flag country={user.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
-            )}
-          </div>
-        </div>
-        {!showEditButtons && isEnigme(activity) && (
-          <>
-            <Timer style={{ alignSelf: 'center', height: '1.2rem', width: 'auto', marginRight: '0.25rem' }} />
-            <div style={{ alignSelf: 'center', marginRight: '0.5rem', lineHeight: '0.875rem' }}>
-              <span className="text text--small text--error">{timeLeft > 0 ? `Temps restant: ${timeLeft}j` : 'La réponse est disponible !'}</span>
+    activity && (
+      <Paper
+        className={onSelect !== undefined ? 'activity-card--selectable' : ''}
+        variant={forComment ? 'elevation' : 'outlined'}
+        square={!forComment}
+        elevation={forComment ? 2 : 0}
+        onClick={() => {
+          if (onSelect !== undefined) {
+            onSelect();
+          }
+        }}
+        style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
+      >
+        <div className="activity-card__header">
+          {forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={noButtons} />}
+          <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
+            <p className="text">
+              <UserDisplayName className="text" user={user} noLink={noButtons} />
+              {' a '}
+              <strong>{titles[activity.type]}</strong>
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+              {userIsPelico ? (
+                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+              ) : (
+                <Flag country={user.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
+              )}
             </div>
-          </>
-        )}
-        {activity.isPinned && <PinIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
-        {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
-      </div>
-      <div className="activity-card__content">
-        {isPresentation(activity) && isMascotte(activity) && (
-          <MascotteCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isPresentation(activity) && isThematique(activity) && (
-          <PresentationCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isQuestion(activity) && (
-          <QuestionCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isEnigme(activity) && (
-          <EnigmeCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isDefi(activity) && (
-          <DefiCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isFreeContent(activity) && (
-          <FreeContentCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isIndice(activity) && (
-          <IndiceCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-        {isSymbol(activity) && (
-          <SymbolCard
-            activity={activity}
-            user={user}
-            isSelf={isSelf}
-            noButtons={noButtons}
-            showEditButtons={showEditButtons}
-            isDraft={isDraft}
-            onDelete={onDelete}
-          />
-        )}
-      </div>
-    </Paper>
+          </div>
+          {!showEditButtons && isEnigme(activity) && (
+            <>
+              <Timer style={{ alignSelf: 'center', height: '1.2rem', width: 'auto', marginRight: '0.25rem' }} />
+              <div style={{ alignSelf: 'center', marginRight: '0.5rem', lineHeight: '0.875rem' }}>
+                <span className="text text--small text--error">{timeLeft > 0 ? `Temps restant: ${timeLeft}j` : 'La réponse est disponible !'}</span>
+              </div>
+            </>
+          )}
+          {activity.isPinned && <PinIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
+          {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
+        </div>
+        <div className="activity-card__content">
+          {isPresentation(activity) && isMascotte(activity) && (
+            <MascotteCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isPresentation(activity) && isThematique(activity) && (
+            <PresentationCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isQuestion(activity) && (
+            <QuestionCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isEnigme(activity) && (
+            <EnigmeCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isDefi(activity) && (
+            <DefiCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isFreeContent(activity) && (
+            <FreeContentCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isIndice(activity) && (
+            <IndiceCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isSymbol(activity) && (
+            <SymbolCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+        </div>
+      </Paper>
+    )
   );
 };
