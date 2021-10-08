@@ -322,6 +322,6 @@ export const WelcomeModal = () => {
       </div>
     </Modal>
   ) : (
-    currentStep === 3 && <MissingStepModal />
+    currentStep === 3 && village?.activePhase > 1 && <MissingStepModal />
   );
 };
