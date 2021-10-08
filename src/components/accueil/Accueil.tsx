@@ -46,7 +46,7 @@ export const Accueil = () => {
   const [countries, setCountries] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    setCountries(village?.activePhase > 1 ? village.countries : [user.countryCode.toUpperCase()]);
+    setCountries(selectedPhase !== 1 ? village.countries : [user.countryCode.toUpperCase()]);
     selectedPhase &&
       setFilters((currFilters: FilterArgs) => ({
         type: phaseActivities[selectedPhase - 1][0].type,
