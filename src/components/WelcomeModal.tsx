@@ -32,6 +32,7 @@ export const WelcomeModal = () => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
   const [newUser, setNewUser] = React.useState<Partial<User>>(user);
+  const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const [updateAsked, setUpdateAsked] = React.useState({
     village: false,
     country: false,
@@ -181,12 +182,15 @@ export const WelcomeModal = () => {
           <div className="text-center">
             <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
             <br />
-            <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
+            <Button variant="contained" color="primary" size="medium" onClick={() => setIsVisible(!isVisible)}>
+              {isVisible ? 'Montrer' : 'Cacher'}
+            </Button>
+            <h2 style={{ fontSize: '1.2rem', margin: '1rem 0', visibility: isVisible ? 'visible' : 'hidden' }} className="text--primary">
               {village.name}
             </h2>
-            <Button size="small" variant="outlined" style={{ marginTop: '2rem' }} onClick={sendError('village')}>
+            <a style={{ marginTop: '2rem', cursor: 'pointer' }} onClick={sendError('village')}>
               {"Ce n'est pas mon village !"}
-            </Button>
+            </a>
           </div>
         )}
         {currentStep === 1 && (
