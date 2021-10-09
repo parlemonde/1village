@@ -62,6 +62,6 @@ export class Game implements GameInterface {
   })
   public type: GameType;
 
-  @Column({ type: 'simple-json', default: () => "_utf8mb4\\'{}\\'" })
+  @Column({ type: 'simple-json', default: null })
   public content: Record<string, never>;
 }

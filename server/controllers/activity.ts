@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
-import { Mimique } from '../entities/mimique';
+// import { Mimique } from '../entities/mimique';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -376,40 +376,40 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
 
-  if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE && activity.status === ActivityStatus.PUBLISHED) {
-    const activityData = (activity.content || []).find((data) => {
-      return data.key === 'json';
-    });
-    if (activityData) {
-      const value = JSON.parse(activityData.value);
-      const mimiquesData = value.data as MimiquesData;
-      mimiquesData.mimique1.mimiqueId = (await createMimique(mimiquesData.mimique1, activity)).id;
-      mimiquesData.mimique2.mimiqueId = (await createMimique(mimiquesData.mimique2, activity)).id;
-      mimiquesData.mimique3.mimiqueId = (await createMimique(mimiquesData.mimique3, activity)).id;
-      activityData.value = JSON.stringify(value);
-      await getRepository(ActivityData).save(activityData);
-    }
-  }
+  // if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE && activity.status === ActivityStatus.PUBLISHED) {
+  //   const activityData = (activity.content || []).find((data) => {
+  //     return data.key === 'json';
+  //   });
+  //   if (activityData) {
+  //     const value = JSON.parse(activityData.value);
+  //     const mimiquesData = value.data as MimiquesData;
+  //     mimiquesData.mimique1.mimiqueId = (await createMimique(mimiquesData.mimique1, activity)).id;
+  //     mimiquesData.mimique2.mimiqueId = (await createMimique(mimiquesData.mimique2, activity)).id;
+  //     mimiquesData.mimique3.mimiqueId = (await createMimique(mimiquesData.mimique3, activity)).id;
+  //     activityData.value = JSON.stringify(value);
+  //     await getRepository(ActivityData).save(activityData);
+  //   }
+  // }
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
 
-const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
-  const id = data.mimiqueId;
-  const mimique = id ? await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } }) : new Mimique();
+// const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
+//   const id = data.mimiqueId;
+//   const mimique = id ? await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } }) : new Mimique();
 
-  mimique.signification = data.signification || '';
-  mimique.fakeSignification1 = data.fakeSignification1 || '';
-  mimique.fakeSignification2 = data.fakeSignification2 || '';
-  mimique.origine = data.origine || '';
-  mimique.video = data.video || '';
-  mimique.activityId = activity.id;
-  mimique.villageId = activity.villageId;
-  mimique.userId = activity.userId;
-  await getRepository(Mimique).save(mimique);
-  return mimique;
-};
+//   mimique.signification = data.signification || '';
+//   mimique.fakeSignification1 = data.fakeSignification1 || '';
+//   mimique.fakeSignification2 = data.fakeSignification2 || '';
+//   mimique.origine = data.origine || '';
+//   mimique.video = data.video || '';
+//   mimique.activityId = activity.id;
+//   mimique.villageId = activity.villageId;
+//   mimique.userId = activity.userId;
+//   await getRepository(Mimique).save(mimique);
+//   return mimique;
+// };
 // --- Add content to an activity ---
 type AddActivityData = {
   content?: Array<{

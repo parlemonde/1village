@@ -7,7 +7,7 @@ import { countryController } from './countries';
 import { currencyController } from './currencies';
 import { imageController } from './image';
 import { languageController } from './languages';
-import { mimiqueController } from './mimique';
+// import { mimiqueController } from './mimique';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';

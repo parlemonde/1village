@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 import { GameResponse as GameResponseInterface } from 'types/gameResponse.type';
 
-import { MimiqueResponseValue } from '../../types/mimiqueResponse.type';
+// import { MimiqueResponseValue } from '../../types/mimiqueResponse.type';
 
 import { Game } from './game';
 import { User } from './user';
