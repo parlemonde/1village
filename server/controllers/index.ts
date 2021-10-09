@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { activityController } from './activity';
 import { analyticController } from './analytic';
+import { archiveController } from './archive';
 import { audioController } from './audio';
 import { countryController } from './countries';
 import { currencyController } from './currencies';
@@ -23,6 +24,7 @@ const controllers = [
   audioController,
   videoController,
   analyticController,
+  archiveController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import type { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Flag } from 'src/components/Flag';
@@ -28,7 +29,7 @@ interface FiltersProps {
   onChange: React.Dispatch<React.SetStateAction<FilterArgs>>;
 }
 
-export const Filters: React.FC<FiltersProps> = ({ filters, onChange, countries = [] }: FiltersProps) => {
+export const Filters = ({ filters, onChange, countries = [] }: FiltersProps) => {
   React.useEffect(() => {
     onChange((f) => ({
       ...f,

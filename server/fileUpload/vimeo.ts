@@ -76,6 +76,7 @@ export class VimeoClass {
       this.client.upload(
         path,
         {
+          // eslint-disable-next-line camelcase
           content_rating: ['unrated'],
           name,
           privacy: {

@@ -6,7 +6,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { ActivityType } from 'types/activity.type';
-import { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
 
@@ -27,7 +27,7 @@ interface ActivityCommentsProps {
   usersMap: { [key: number]: User };
 }
 
-export const ActivityComments: React.FC<ActivityCommentsProps> = ({ activityId, activityType, usersMap }: ActivityCommentsProps) => {
+export const ActivityComments = ({ activityId, activityType, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const userMap = React.useMemo(

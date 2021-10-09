@@ -4,13 +4,13 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.const';
+import { isMascotte } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
-const PresentationSuccess: React.FC = () => {
+const PresentationSuccess = () => {
   const { activity } = React.useContext(ActivityContext);
 
   if (!isPresentation(activity)) {
@@ -27,7 +27,7 @@ const PresentationSuccess: React.FC = () => {
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a" href="/" variant="outlined" color="primary">
               Retour à l’accueil
             </Button>

@@ -29,7 +29,7 @@ type MapProps = {
   markers?: MapMarker[];
 };
 
-const Map: React.FC<MapProps> = ({ position, zoom, markers = [] }: MapProps) => {
+const Map = ({ position, zoom, markers = [] }: MapProps) => {
   const init = React.useRef<boolean>(false);
 
   return (

@@ -3,14 +3,14 @@ import React from 'react';
 import { Button, CircularProgress } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import { AnyActivity } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import type { ActivityType } from 'types/activity.type';
 
 import { Activities } from './List';
 
@@ -23,7 +23,7 @@ interface ActivitySelectProps {
   style?: React.CSSProperties;
 }
 
-export const ActivitySelect: React.FC<ActivitySelectProps> = ({ value, onChange, onSelect, style }: ActivitySelectProps) => {
+export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySelectProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity: selectedActivity } = useActivity(value ?? -1);

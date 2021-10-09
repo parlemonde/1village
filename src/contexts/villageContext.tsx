@@ -13,7 +13,7 @@ import Select from '@material-ui/core/Select';
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 import { UserType } from 'types/user.type';
-import { Village } from 'types/village.type';
+import type { Village } from 'types/village.type';
 
 import { UserContext } from './userContext';
 
@@ -24,11 +24,7 @@ interface VillageContextValue {
 
 export const VillageContext = React.createContext<VillageContextValue>(null);
 
-interface VillageContextProviderProps {
-  children: React.ReactNode;
-}
-
-export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ children }: VillageContextProviderProps) => {
+export const VillageContextProvider: React.FC = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);
@@ -172,7 +168,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
           <>
             <p>Aucun village existe !</p>
             {user !== null && user.type >= UserType.ADMIN ? (
-              <Link href="/admin/villages">
+              <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}
                 </Button>
@@ -204,7 +200,7 @@ export const VillageContextProvider: React.FC<VillageContextProviderProps> = ({ 
             {village === null && user !== null && user.type >= UserType.ADMIN && (
               <>
                 <Divider style={{ margin: '1rem 0' }} />
-                <Link href="/admin/villages">
+                <Link href="/admin/villages" passHref>
                   <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                     {"Aller à l'interface admin"}
                   </Button>

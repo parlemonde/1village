@@ -3,20 +3,15 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { QuestionActivity } from 'src/activity-types/question.types';
+import type { QuestionActivity } from 'src/activity-types/question.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivityRequests } from 'src/services/useActivity';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
-export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
-  activity,
-  noButtons,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<QuestionActivity>) => {
+export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }: ActivityCardProps<QuestionActivity>) => {
   const { user } = React.useContext(UserContext);
   const { updatedActivityData } = useActivityRequests();
   const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
@@ -50,7 +45,7 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
       </div>
       {showEditButtons ? (
         <div style={{ width: '100%', textAlign: 'right', padding: '0.25rem' }}>
-          <Link href={`/poser-une-question/3?activity-id=${activity.id}`}>
+          <Link href={`/poser-une-question/3?activity-id=${activity.id}`} passHref>
             <Button
               component="a"
               href={`/poser-une-question/3?activity-id=${activity.id}`}
@@ -75,7 +70,7 @@ export const QuestionCard: React.FC<ActivityCardProps<QuestionActivity>> = ({
           </div>
           <div>
             <CommentIcon count={activity.commentCount} activityId={activity.id} />
-            <Link href={`/activite/${activity.id}`}>
+            <Link href={`/activite/${activity.id}`} passHref>
               <Button component="a" href={`/activite/${activity.id}`} variant="outlined" color="primary">
                 Répondre à la question
               </Button>

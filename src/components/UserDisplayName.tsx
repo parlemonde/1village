@@ -3,7 +3,8 @@ import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName } from 'src/utils';
-import { User, UserType } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 type UserDisplayNameProps = {
   user: User;
@@ -11,7 +12,7 @@ type UserDisplayNameProps = {
   className?: string;
   style?: React.CSSProperties;
 };
-export const UserDisplayName: React.FC<UserDisplayNameProps> = ({ user, className, style, noLink = false }: UserDisplayNameProps) => {
+export const UserDisplayName = ({ user, className, style, noLink = false }: UserDisplayNameProps) => {
   const userId = React.useContext(UserContext)?.user?.id ?? 0;
   const isSelf = userId === user.id;
   const isPelico = user && user.type >= UserType.MEDIATOR;

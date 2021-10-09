@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { withStyles, Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
@@ -29,7 +30,7 @@ type InlineProps = {
   onChange(type: 'BOLD' | 'ITALIC' | 'UNDERLINE', value: boolean): void;
 };
 
-export const InlineButtons: React.FC<InlineProps> = ({ value, onChange }: InlineProps) => {
+export const InlineButtons = ({ value, onChange }: InlineProps) => {
   const formats = React.useMemo(
     () =>
       Object.keys(value)

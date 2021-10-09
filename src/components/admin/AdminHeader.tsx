@@ -4,7 +4,8 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { Button } from '@material-ui/core';
 
@@ -30,7 +31,7 @@ function ElevationScroll({ children }: ElevationScrollProps) {
   });
 }
 
-export const AdminHeader: React.FC = () => {
+export const AdminHeader = () => {
   const classes = useStyles();
 
   return (
@@ -41,7 +42,7 @@ export const AdminHeader: React.FC = () => {
             <Typography variant="h6" style={{ flexGrow: 1 }}>
               1Village - Administrateur
             </Typography>
-            <Link href="/">
+            <Link href="/" passHref>
               <Button component="a" href="/" variant="contained" size="small" style={{ margin: '0 1rem' }}>
                 Aller au village
               </Button>

@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 
-import { Video as VideoInterface } from '../../types/video.type';
+import type { Video as VideoInterface } from '../../types/video.type';
 
 import { User } from './user';
 

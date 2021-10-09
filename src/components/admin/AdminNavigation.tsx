@@ -33,7 +33,7 @@ const useStyles = makeStyles(() =>
 
 const tabs = ['villages', 'users', 'stats', 'analytics'];
 
-export const AdminNavigation: React.FC = () => {
+export const AdminNavigation = () => {
   const classes = useStyles();
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);

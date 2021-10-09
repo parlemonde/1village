@@ -4,8 +4,8 @@ import React from 'react';
 import { TextField } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { DEFAULT_MASCOTTE_DATA, isMascotte, PRESENTATION } from 'src/activity-types/presentation.const';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import { DEFAULT_MASCOTTE_DATA, isMascotte, PRESENTATION } from 'src/activity-types/presentation.constants';
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -15,7 +15,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName, pluralS } from 'src/utils';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 
-const MascotteStep1: React.FC = () => {
+const MascotteStep1 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);

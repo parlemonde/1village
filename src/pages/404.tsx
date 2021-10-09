@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { KeepRatio } from 'src/components/KeepRatio';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
-const Custom404: React.FunctionComponent = () => {
+const Custom404 = () => {
   return (
     <div className="bg-gradiant">
       <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
@@ -19,7 +19,7 @@ const Custom404: React.FunctionComponent = () => {
           </h1>
           <h2>{"Oups ! Pelico n'a pas trouvé la page."}</h2>
           <p>La page que vous cherchez est introuvable ou temporairement inaccessible.</p>
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a" href="/" color="primary" variant="outlined" style={{ marginTop: '3rem' }}>
               Retour à l&apos;accueil
             </Button>

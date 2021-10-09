@@ -1,7 +1,8 @@
 import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { Modal } from 'src/components/Modal';
@@ -33,14 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({
-  size = 'small',
-  color = 'primary',
-  confirmLabel,
-  confirmTitle,
-  onDelete = () => {},
-  style,
-}: DeleteButtonProps) => {
+export const DeleteButton = ({ size = 'small', color = 'primary', confirmLabel, confirmTitle, onDelete = () => {}, style }: DeleteButtonProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const classes = useStyles();
 

@@ -35,7 +35,7 @@ const StyledTableRow = withStyles(() =>
   }),
 )(TableRow);
 
-const MesVideos: React.FC = () => {
+const MesVideos = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();

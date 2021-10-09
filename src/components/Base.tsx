@@ -2,13 +2,12 @@ import className from 'classnames';
 import React from 'react';
 
 interface BaseProps {
-  children: React.ReactNode | React.ReactNodeArray;
   rightNav?: React.ReactNode | React.ReactNodeArray;
   subHeader?: React.ReactNode | React.ReactNodeArray;
   style?: React.CSSProperties;
 }
 
-export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader, style }: BaseProps) => {
+export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader, style }: React.PropsWithChildren<BaseProps>) => {
   return (
     <main>
       {subHeader && <div className="sub-header">{subHeader}</div>}

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 export function removeTrailingSlash(req: Request, res: Response, next: NextFunction): void {
   if (req.path.indexOf('api-docs') !== -1) {

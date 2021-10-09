@@ -1,6 +1,6 @@
-import { JSONSchemaType } from 'ajv';
+import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';

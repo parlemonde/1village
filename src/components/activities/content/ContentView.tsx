@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EditorContent } from 'src/activity-types/extendedActivity.types';
+import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 
 import { H5pView } from './views/H5pView';
 import { ImageView } from './views/ImageView';
@@ -10,7 +10,7 @@ import { VideoView } from './views/VideoView';
 
 type ContentViewProps = { content: EditorContent[] };
 
-export const ContentView: React.FC<ContentViewProps> = ({ content }: ContentViewProps) => {
+export const ContentView = ({ content }: ContentViewProps) => {
   return (
     <div>
       {content.map((p) => {

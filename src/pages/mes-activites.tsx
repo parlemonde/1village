@@ -2,7 +2,7 @@ import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.const';
+import { isMascotte } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
@@ -12,7 +12,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 
-const MesActivites: React.FC = () => {
+const MesActivites = () => {
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);

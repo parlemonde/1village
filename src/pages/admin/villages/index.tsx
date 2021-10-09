@@ -20,7 +20,7 @@ import { useCountries } from 'src/services/useCountries';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { countryToFlag, ssoHostName } from 'src/utils';
 
-const Villages: React.FC = () => {
+const Villages = () => {
   const router = useRouter();
   const { countries } = useCountries();
   const countryMap = countries.reduce<{ [key: string]: string }>((acc, country) => {
@@ -69,7 +69,7 @@ const Villages: React.FC = () => {
 
   return (
     <div className="admin--container">
-      <Link href="/admin/villages">
+      <Link href="/admin/villages" passHref>
         <MaterialLink href="/admin/villages">
           <h1 style={{ marginBottom: '1rem' }}>Villages</h1>
         </MaterialLink>
@@ -81,7 +81,7 @@ const Villages: React.FC = () => {
             <Button variant="contained" style={{ flexShrink: 0, marginRight: '0.5rem' }} startIcon={<GetAppIcon />} onClick={onImportVillages}>
               Importer depuis {ssoHostName}
             </Button>
-            <Link href="/admin/villages/new">
+            <Link href="/admin/villages/new" passHref>
               <Button component="a" href="/admin/villages/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
                 Ajouter un village
               </Button>
@@ -94,9 +94,7 @@ const Villages: React.FC = () => {
             <>
               {"Vous n'avez pas encore de villages ! "}
               <Link href="/admin/villages/new">
-                <a className="text text--primary text--small" href="/admin/villages/new">
-                  En créer un ?
-                </a>
+                <a className="text text--primary text--small">En créer un ?</a>
               </Link>
             </>
           }

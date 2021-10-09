@@ -7,8 +7,8 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.const';
-import { EnigmeData } from 'src/activity-types/enigme.types';
+import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.constants';
+import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -28,7 +28,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-const EnigmeStep5: React.FC = () => {
+const EnigmeStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
@@ -84,7 +84,7 @@ const EnigmeStep5: React.FC = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/creer-une-enigme/4">
+              <Link href="/creer-une-enigme/4" passHref>
                 <Button component="a" color="secondary" variant="contained" href="/creer-une-enigme/4">
                   {"Modifier à l'étape précédente"}
                 </Button>

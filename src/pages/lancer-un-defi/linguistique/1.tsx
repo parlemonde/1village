@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, DEFI } from 'src/activity-types/defi.const';
+import { isLanguage, DEFI } from 'src/activity-types/defi.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivitySelect } from 'src/components/activities/ActivitySelect';
@@ -12,7 +12,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
-const DefiStep1: React.FC = () => {
+const DefiStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);

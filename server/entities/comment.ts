@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-import { Comment as CommentInterface } from '../../types/comment.type';
+import type { Comment as CommentInterface } from '../../types/comment.type';
 
 import { Activity } from './activity';
 import { User } from './user';

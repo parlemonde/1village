@@ -9,7 +9,7 @@ import type { EditorProps } from '../../content.types';
 
 import { ImageModal } from './ImageModal';
 
-export const AvatarEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const AvatarEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [imageUrl, setImageUrl] = React.useState(value);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);

@@ -2,7 +2,8 @@ import React from 'react';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { makeStyles, withStyles, createStyles } from '@material-ui/core/styles';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -165,7 +166,7 @@ type EmojiPickerProps = {
   onChange(emoji: string): void;
 };
 
-export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onChange }: EmojiPickerProps) => {
+export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const classes = useStyles();
 

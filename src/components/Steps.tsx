@@ -1,7 +1,7 @@
 import React from 'react';
 
 import StepConnector from '@material-ui/core/StepConnector';
-import { StepIconProps } from '@material-ui/core/StepIcon';
+import type { StepIconProps } from '@material-ui/core/StepIcon';
 import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -45,12 +45,12 @@ const StepIcon = ({ icon, active, completed }: StepIconProps) => {
   );
 };
 
-interface Steps {
+interface StepsProps {
   steps: string[];
   activeStep?: number;
 }
 
-export const Steps: React.FC<Steps> = ({ steps, activeStep = 0 }: Steps) => {
+export const Steps = ({ steps, activeStep = 0 }: StepsProps) => {
   return (
     <div className="custom-steps--container" style={{ position: 'relative' }}>
       <div style={{ position: 'absolute', top: '43px', left: '10%', right: '10%', borderTop: `1px solid ${primaryColorLight2}`, zIndex: 0 }}></div>

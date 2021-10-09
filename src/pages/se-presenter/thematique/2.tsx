@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { PRESENTATION_THEMATIQUE, isThematique } from 'src/activity-types/presentation.const';
-import { ThematiqueData } from 'src/activity-types/presentation.types';
+import { PRESENTATION_THEMATIQUE, isThematique } from 'src/activity-types/presentation.constants';
+import type { ThematiqueData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -11,7 +11,7 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const PresentationStep2: React.FC = () => {
+const PresentationStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
 

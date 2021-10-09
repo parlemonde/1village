@@ -1,16 +1,6 @@
 import classnames from 'classnames';
-import {
-  Editor,
-  RichUtils,
-  CompositeDecorator,
-  DraftHandleValue,
-  ContentState,
-  convertToRaw,
-  EditorState,
-  Modifier,
-  DraftEditorCommand,
-  ContentBlock,
-} from 'draft-js';
+import type { DraftHandleValue, DraftEditorCommand, ContentBlock } from 'draft-js';
+import { Editor, RichUtils, CompositeDecorator, ContentState, convertToRaw, EditorState, Modifier } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import {
   setBlockData,
@@ -28,7 +18,8 @@ import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Divider } from '@material-ui/core';
 
 import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
@@ -36,7 +27,8 @@ import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
 import { InlineButtons } from './toolbar/InlineButtons';
-import { LinkPicker, LinkValue, LinkDecorator, linkToHTML } from './toolbar/Link';
+import type { LinkValue } from './toolbar/Link';
+import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
 
@@ -73,7 +65,7 @@ interface SimpleTextEditorProps {
   maxLen?: number;
 }
 
-export const SimpleTextEditor: React.FC<SimpleTextEditorProps> = ({
+export const SimpleTextEditor = ({
   value = '',
   placeholder = 'Commencez à écrire ici, ou ajoutez une vidéo ou une image.',
   onChange = () => {},

@@ -76,7 +76,10 @@ const ImgCroppieComponent: React.ForwardRefRenderFunction<ImgCroppieRef, ImgCrop
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }} ref={parentDiv}>
-      <img alt={alt} src={src} ref={imgRef} />
+      {
+        // eslint-disable-next-line @next/next/no-img-element
+        <img alt={alt} src={src} ref={imgRef} />
+      }
     </div>
   );
 };

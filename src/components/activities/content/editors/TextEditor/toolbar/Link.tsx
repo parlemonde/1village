@@ -1,10 +1,12 @@
-import { RichUtils, EditorState, Modifier, ContentBlock, ContentState } from 'draft-js';
+import type { ContentBlock, ContentState } from 'draft-js';
+import { RichUtils, EditorState, Modifier } from 'draft-js';
 import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
 import React from 'react';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, createStyles, withStyles, Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -45,7 +47,7 @@ type LinkPickerProps = {
   value: LinkValue;
 };
 
-export const LinkPicker: React.FC<LinkPickerProps> = ({ editorState, linkModalOpen, setLinkModalOpen, value, onChange }: LinkPickerProps) => {
+export const LinkPicker = ({ editorState, linkModalOpen, setLinkModalOpen, value, onChange }: LinkPickerProps) => {
   const [link, setLink] = React.useState('');
   const [target, setTarget] = React.useState('');
   const classes = useStyles();
@@ -213,11 +215,10 @@ export const LinkPicker: React.FC<LinkPickerProps> = ({ editorState, linkModalOp
 };
 
 interface EditorLinkProps {
-  children: React.ReactNode | React.ReactNodeArray;
   entityKey: string;
   contentState: ContentState;
 }
-const EditorLink: React.FC<EditorLinkProps> = ({ children, entityKey, contentState }: EditorLinkProps) => {
+const EditorLink: React.FC = ({ children, entityKey, contentState }: React.PropsWithChildren<EditorLinkProps>) => {
   const { url } = contentState.getEntity(entityKey).getData();
   return (
     <a href={url} target="_self" style={{ color: primaryColor, textDecoration: 'underline' }}>

@@ -3,8 +3,8 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 
 import { isDefi, isEnigme, isPresentation, isQuestion } from 'src/activity-types/anyActivity';
-import { getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
-import { isMascotte, isThematique } from 'src/activity-types/presentation.const';
+import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
+import { isMascotte, isThematique } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -25,7 +25,7 @@ import { EnigmeCard } from './EnigmeCard';
 import { MascotteCard } from './MascotteCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
 const titles = {
   [ActivityType.PRESENTATION]: 'créé une présentation',
@@ -42,7 +42,7 @@ const icons = {
   [ActivityType.QUESTION]: QuestionIcon,
 };
 
-export const ActivityCard: React.FC<ActivityCardProps> = ({
+export const ActivityCard = ({
   activity,
   user,
   isSelf = false,

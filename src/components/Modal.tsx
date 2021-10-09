@@ -7,9 +7,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
-import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
+import type { LinearProgressProps } from '@material-ui/core/LinearProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, withStyles, WithStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import type { WithStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 import { CircularProgress } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -44,10 +46,9 @@ const styles = (theme: MaterialTheme) =>
   });
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
-  children: React.ReactNode;
   onClose: () => void;
 }
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
+const DialogTitle = withStyles(styles)((props: React.PropsWithChildren<DialogTitleProps>) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
@@ -70,7 +71,6 @@ interface ModalProps {
   ariaDescribedBy: string;
   noCloseButton?: boolean;
   title?: React.ReactNode | React.ReactNodeArray;
-  children?: React.ReactNode | React.ReactNodeArray;
   actions?: React.ReactNode | React.ReactNodeArray;
   cancelLabel?: string;
   confirmLabel?: string;
@@ -87,7 +87,7 @@ interface ModalProps {
   progress?: number;
 }
 
-export const Modal: React.FunctionComponent<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = ({
   open = true,
   onClose = () => {},
   onConfirm = null,
@@ -111,7 +111,7 @@ export const Modal: React.FunctionComponent<ModalProps> = ({
   progress,
   actions,
   id,
-}: ModalProps) => {
+}: React.PropsWithChildren<ModalProps>) => {
   return (
     <Dialog
       open={open}

@@ -1,4 +1,5 @@
-import Document, { Html, Head, Main, NextScript, DocumentInitialProps, DocumentContext } from 'next/document';
+import type { DocumentInitialProps, DocumentContext } from 'next/document';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 import React from 'react';
 
 import { ServerStyleSheets } from '@material-ui/core/styles';

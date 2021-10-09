@@ -4,8 +4,8 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.const';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import { isMascotte } from 'src/activity-types/presentation.constants';
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -14,7 +14,7 @@ import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurre
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 
-const MascotteStep3: React.FC = () => {
+const MascotteStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const shouldSave = React.useRef(false);

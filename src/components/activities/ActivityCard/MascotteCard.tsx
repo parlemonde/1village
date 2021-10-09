@@ -3,15 +3,15 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
+import type { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
-export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivity>> = ({
+export const MascotteCard = ({
   activity,
   isSelf,
   noButtons,
@@ -63,6 +63,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/se-presenter/mascotte/4?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"
@@ -86,7 +87,7 @@ export const MascotteCard: React.FC<ActivityCardProps<PresentationMascotteActivi
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={`/activite/${activity.id}`}>
+                <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
                     Regarder la présentation
                   </Button>

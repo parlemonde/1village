@@ -1,18 +1,19 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
-import { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';
+import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
+import type { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
-export const PresentationCard: React.FC<ActivityCardProps<PresentationThematiqueActivity>> = ({
+export const PresentationCard = ({
   activity,
   isSelf,
   noButtons,
@@ -39,12 +40,11 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
               height: '100%',
               width: '100%',
               backgroundColor: bgPage,
-              backgroundImage: `url(${firstImage.value})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              position: 'relative',
             }}
-          />
+          >
+            <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+          </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
@@ -61,7 +61,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={`/activite/${activity.id}`}>
+                <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     Regarder la présentation
                   </Button>
@@ -76,6 +76,7 @@ export const PresentationCard: React.FC<ActivityCardProps<PresentationThematique
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/se-presenter/thematique/4?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

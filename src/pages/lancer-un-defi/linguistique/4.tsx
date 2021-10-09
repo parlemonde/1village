@@ -3,9 +3,9 @@ import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.const';
-import { LanguageDefiData } from 'src/activity-types/defi.types';
-import { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
+import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import type { LanguageDefiData } from 'src/activity-types/defi.types';
+import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -13,7 +13,7 @@ import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep4: React.FC = () => {
+const DefiStep4 = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);

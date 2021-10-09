@@ -1,5 +1,5 @@
-import { JSONSchemaType } from 'ajv';
-import { NextFunction, Request, Response } from 'express';
+import type { JSONSchemaType } from 'ajv';
+import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import { Activity } from '../entities/activity';

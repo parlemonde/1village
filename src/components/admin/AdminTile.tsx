@@ -3,7 +3,6 @@ import React from 'react';
 interface AdminTileProps {
   title: string;
   selectLanguage?: React.ReactNode | null;
-  children?: React.ReactNode | React.ReactNodeArray | null;
   toolbarButton?: React.ReactNode | null;
   style?: React.CSSProperties;
 }
@@ -11,7 +10,8 @@ interface AdminTileProps {
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import type { Theme as MaterialTheme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: MaterialTheme) =>
   createStyles({
@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme: MaterialTheme) =>
   }),
 );
 
-export const AdminTile: React.FunctionComponent<AdminTileProps> = ({
+export const AdminTile: React.FC<AdminTileProps> = ({
   title,
   children = null,
   toolbarButton = null,
   selectLanguage = null,
   style = {},
-}: AdminTileProps) => {
+}: React.PropsWithChildren<AdminTileProps>) => {
   const classes = useStyles();
   return (
     <Paper style={{ ...style, overflow: 'hidden' }}>

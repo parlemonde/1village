@@ -20,7 +20,7 @@ const StyledTextField = withStyles({
   },
 })(TextField);
 
-const Question2: React.FC = () => {
+const Question2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
 

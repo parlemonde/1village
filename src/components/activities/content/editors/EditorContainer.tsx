@@ -14,7 +14,6 @@ interface EditorContainerProps {
   className?: string;
   noPadding?: boolean;
   noMinHeight?: boolean;
-  children: React.ReactNode | React.ReactNodeArray;
 }
 
 export const EditorContainer: React.FC<EditorContainerProps> = ({
@@ -23,7 +22,7 @@ export const EditorContainer: React.FC<EditorContainerProps> = ({
   className,
   noPadding = false,
   noMinHeight = false,
-}: EditorContainerProps) => {
+}: React.PropsWithChildren<EditorContainerProps>) => {
   return (
     <div className="editor editor--with-drag-handle">
       <DeleteButton {...deleteButtonProps} color="primary" style={{ position: 'absolute', zIndex: 20, right: '0.5rem', top: '0.5rem' }} />

@@ -21,6 +21,7 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/typescript",
+    "plugin:@next/next/recommended"
   ],
   rules: {
     "@typescript-eslint/no-empty-function": "off",
@@ -38,11 +39,20 @@ module.exports = {
         },
       },
     ],
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+          prefer: 'type-imports',
+          disallowTypeAnnotations: false
+      }
+    ],
     "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "no-console": ["error", { allow: ["warn", "error"] }],
+    "camelcase": ["error", { "properties": "always" }],
     "arca/import-ordering": ["error", { sections: ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],
     "arca/newline-after-import-section": ["error", { sections: ["@material-ui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
   },

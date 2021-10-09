@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.const';
-import { EnigmeData } from 'src/activity-types/enigme.types';
-import { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
+import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';
+import type { EnigmeData } from 'src/activity-types/enigme.types';
+import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -13,7 +13,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
-const EnigmeStep4: React.FC = () => {
+const EnigmeStep4 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 

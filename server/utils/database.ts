@@ -1,7 +1,8 @@
 import * as argon2 from 'argon2';
-import mysql from 'mysql';
+import mysql from 'mysql2';
 import path from 'path';
-import { Connection, createConnection, ConnectionOptions, getRepository } from 'typeorm';
+import type { Connection, ConnectionOptions } from 'typeorm';
+import { createConnection, getRepository } from 'typeorm';
 
 import { User, UserType } from '../entities/user';
 
@@ -102,13 +103,6 @@ async function createSuperAdminUser(): Promise<void> {
   logger.info('Super user Admin created!');
 }
 
-// async function createSequences(connection: Connection): Promise<void> {
-//   await connection.transaction(async (manager: EntityManager) => {
-//     await manager.query(`CREATE TABLE sequence (id INT NOT NULL)`);
-//     await manager.query(`INSERT INTO sequence VALUES (0)`);
-//   });
-// }
-
 export async function connectToDatabase(tries: number = 10): Promise<Connection | null> {
   if (tries === 0) {
     return null;
@@ -116,7 +110,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
   try {
     const config = getDBConfig();
     if (config === null) {
-      logger.error('Could not connect to dabase. Config file for database is not correct!');
+      logger.error('Could not connect to database. Config file for database is not correct!');
       return null;
     }
     const connection = await createConnection(config);
@@ -125,7 +119,7 @@ export async function connectToDatabase(tries: number = 10): Promise<Connection 
   } catch (e) {
     logger.error(e);
     logger.info('Could not connect to database. Retry in 10 seconds...');
-    if ((e.message || '').split(':')[0] === 'ER_BAD_DB_ERROR') {
+    if (((e as Error) || '').toString().includes('Unknown database')) {
       await createMySQLDB();
     }
     await sleep(10000);

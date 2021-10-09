@@ -3,7 +3,12 @@ import React from 'react';
 
 import ArrowRight from 'src/svg/arrow-right.svg';
 
-export const BackButton: React.FC<{ href?: string; label?: string }> = ({ href, label = 'Retour' }: { href?: string; label?: string }) => {
+type BackButtonProps = {
+  href?: string;
+  label?: string;
+};
+
+export const BackButton = ({ href, label = 'Retour' }: BackButtonProps) => {
   const router = useRouter();
 
   const onBack = () => {

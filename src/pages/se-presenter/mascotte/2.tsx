@@ -4,15 +4,15 @@ import React from 'react';
 import { TextField, Grid, Box } from '@material-ui/core';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.const';
-import { MascotteData } from 'src/activity-types/presentation.types';
+import { isMascotte } from 'src/activity-types/presentation.constants';
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 
-const MascotteStep2: React.FC = () => {
+const MascotteStep2 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);

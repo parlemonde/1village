@@ -4,8 +4,8 @@ import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isEco, ECO_DEFIS } from 'src/activity-types/defi.const';
-import { EcoDefiData } from 'src/activity-types/defi.types';
+import { isEco, ECO_DEFIS } from 'src/activity-types/defi.constants';
+import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -13,7 +13,7 @@ import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiEcoStep4: React.FC = () => {
+const DefiEcoStep4 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);

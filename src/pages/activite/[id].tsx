@@ -14,7 +14,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 
 const titles = {
   [ActivityType.PRESENTATION]: 'Présentation',
@@ -24,7 +24,7 @@ const titles = {
   [ActivityType.QUESTION]: 'Question',
 };
 
-const Activity: React.FC = () => {
+const Activity = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
   const { user } = React.useContext(UserContext);
@@ -49,7 +49,7 @@ const Activity: React.FC = () => {
     <Base>
       <div className="activity__back-container">
         <Link href="/">
-          <a href="/" className="activity__back-button">
+          <a className="activity__back-button">
             <HomeIcon className="activity__back-button-icon" />
             Accueil
           </a>

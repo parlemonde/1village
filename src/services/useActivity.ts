@@ -1,8 +1,9 @@
 import { useSnackbar } from 'notistack';
-import { useQueryClient, useQuery, QueryFunction } from 'react-query';
+import type { QueryFunction } from 'react-query';
+import { useQueryClient, useQuery } from 'react-query';
 import React from 'react';
 
-import { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';

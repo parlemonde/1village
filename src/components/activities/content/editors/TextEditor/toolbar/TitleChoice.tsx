@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { withStyles, Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
@@ -22,7 +23,7 @@ type TitleChoiceProps = {
   onChange(value: 'header-one' | 'header-two'): void;
 };
 
-export const TitleChoice: React.FC<TitleChoiceProps> = ({ value, onChange }: TitleChoiceProps) => {
+export const TitleChoice = ({ value, onChange }: TitleChoiceProps) => {
   return (
     <StyledToggleButtonGroup size="small" aria-label="text size" value={value}>
       <ToggleButton

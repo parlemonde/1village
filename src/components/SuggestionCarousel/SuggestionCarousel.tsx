@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -35,7 +36,7 @@ interface SuggestionCarouselProps {
   style?: React.CSSProperties;
 }
 
-const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, style }: SuggestionCarouselProps) => {
+const SuggestionCarousel = ({ suggestions, style }: SuggestionCarouselProps) => {
   const [tab, setTab] = React.useState(0);
   const [textRef, dimensions] = useResizeObserver();
   const lineNumber = Math.max(1, Math.floor(dimensions.height / 16));
@@ -81,15 +82,12 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                   width: '100%',
                   height: '100%',
                   backgroundColor: bgPage,
-                  backgroundImage: selectedSuggestion && selectedSuggestion.imageUrl ? `url(${selectedSuggestion.imageUrl})` : null,
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
                   display: 'flex',
                   alignItems: 'center',
                   flexDirection: 'column',
                   padding: '10px',
                   overflow: 'hidden',
+                  position: 'relative',
                 }}
               >
                 {selectedSuggestion.icon ? (
@@ -99,6 +97,8 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                       {selectedSuggestion.title}
                     </span>
                   </>
+                ) : selectedSuggestion.imageUrl ? (
+                  <Image layout="fill" objectFit="contain" src={selectedSuggestion.imageUrl} />
                 ) : null}
               </div>
             </div>
@@ -143,7 +143,7 @@ const SuggestionCarousel: React.FC<SuggestionCarouselProps> = ({ suggestions, st
                     ))}
                   </Tabs>
                 </div>
-                <Link href={selectedSuggestion.href}>
+                <Link href={selectedSuggestion.href} passHref>
                   <Button
                     component="a"
                     href={selectedSuggestion.href}

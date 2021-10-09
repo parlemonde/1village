@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import { ActivityData as ActivityDataInterface, ActivityDataType } from '../../types/activityData.type';
+import type { ActivityData as ActivityDataInterface, ActivityDataType } from '../../types/activityData.type';
 
 import { Activity } from './activity';
 

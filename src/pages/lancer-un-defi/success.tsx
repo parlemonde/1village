@@ -7,7 +7,7 @@ import { Base } from 'src/components/Base';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
-const DefiSuccess: React.FC = () => {
+const DefiSuccess = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
@@ -19,7 +19,7 @@ const DefiSuccess: React.FC = () => {
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a" href="/" variant="outlined" color="primary">
               Retour à l’accueil
             </Button>

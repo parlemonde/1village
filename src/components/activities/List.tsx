@@ -1,8 +1,9 @@
+import Image from 'next/image';
 import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { AnyActivity } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity } from 'src/activity-types/anyActivity.types';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
@@ -27,7 +28,7 @@ interface ActivitiesProps {
   onSelect?: (index: number) => void;
 }
 
-export const Activities: React.FC<ActivitiesProps> = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
+export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState({
     selectedActivityId: null,
     responseActivityId: null,
@@ -98,7 +99,9 @@ export const Activities: React.FC<ActivitiesProps> = ({ activities, noButtons = 
                         En réaction à {REACTIONS[activity.responseType ?? 0]}
                       </span>
                       <br />
-                      <img src="/link.png" style={{ width: '4rem', height: 'auto', cursor: 'pointer' }}></img>
+                      <div style={{ width: '4rem', height: '4rem', cursor: 'pointer', position: 'relative', display: 'inline-block' }}>
+                        <Image layout="fill" objectFit="contain" src="/link.png" />
+                      </div>
                     </Button>
                   </div>
                 </div>

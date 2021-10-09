@@ -10,7 +10,7 @@ import { serializeToQueryUrl } from 'src/utils';
 
 import type { ViewProps } from '../../content.types';
 
-const VideoView: React.FC<ViewProps> = ({ value }: ViewProps) => {
+const VideoView = ({ value }: ViewProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);

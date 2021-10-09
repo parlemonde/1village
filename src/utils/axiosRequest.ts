@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 export interface AxiosReturnType {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

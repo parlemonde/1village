@@ -8,7 +8,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Table from '@material-ui/core/Table';
-import { makeStyles, createStyles, withStyles, Theme as MaterialTheme } from '@material-ui/core/styles';
+import type { Theme as MaterialTheme } from '@material-ui/core/styles';
+import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
 
 const useTableStyles = makeStyles((theme: MaterialTheme) =>
   createStyles({
@@ -53,9 +54,9 @@ const StyledTableRow = withStyles(() =>
   }),
 )(TableRow);
 
-function paginate<T>(array: T[], page_size: number, page_number: number): T[] {
+function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
-  return array.slice((page_number - 1) * page_size, page_number * page_size);
+  return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 }
 
 interface TableOptions {
@@ -73,7 +74,7 @@ interface AdminTableProps {
   actions?(id: string | number, index: number): React.ReactNode | React.ReactNodeArray;
 }
 
-export const AdminTable: React.FC<AdminTableProps> = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, columns, actions }: AdminTableProps) => {
+export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, columns, actions }: AdminTableProps) => {
   const classes = useTableStyles();
   const [options, setTableOptions] = React.useState<TableOptions>({
     page: 1,
@@ -161,7 +162,7 @@ export const AdminTable: React.FC<AdminTableProps> = ({ 'aria-label': ariaLabel,
                     count={data.length}
                     rowsPerPage={options.limit || 10}
                     page={(options.page || 1) - 1}
-                    onChangePage={handleChangePage}
+                    onPageChange={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                   />
                 </TableRow>

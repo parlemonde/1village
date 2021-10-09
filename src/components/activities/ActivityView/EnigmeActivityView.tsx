@@ -3,19 +3,19 @@ import React from 'react';
 
 import { Button, Card } from '@material-ui/core';
 
-import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.const';
-import { EnigmeActivity } from 'src/activity-types/enigme.types';
+import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
+import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import Timer from 'src/svg/enigme/timer.svg';
 
-import { ActivityViewProps } from './activity-view.types';
+import type { ActivityViewProps } from './activity-view.types';
 
 type EnigmeActivityViewProps = ActivityViewProps<EnigmeActivity> & {
   isAnswer: boolean;
 };
 
-export const EnigmeActivityView: React.FC<EnigmeActivityViewProps> = ({ activity, isAnswer }: EnigmeActivityViewProps) => {
+export const EnigmeActivityView = ({ activity, isAnswer }: EnigmeActivityViewProps) => {
   const [showClue, setShowClue] = React.useState(false);
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
   const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
@@ -68,7 +68,7 @@ export const EnigmeActivityView: React.FC<EnigmeActivityViewProps> = ({ activity
                 }}
               />
             </Button>
-            <Link href={`/activite/${activity.id}?reponse=true`}>
+            <Link href={`/activite/${activity.id}?reponse=true`} passHref>
               <Button
                 style={{ float: 'right' }}
                 disabled={timeLeft > 0}

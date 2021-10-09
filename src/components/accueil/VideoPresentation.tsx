@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { KeepRatio } from 'src/components/KeepRatio';
 import Logo from 'src/svg/logo.svg';
 
-export const VideoPresentation: React.FC = () => {
+export const VideoPresentation = () => {
   return (
     <div className="bg-gradiant">
       <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
@@ -26,7 +26,7 @@ export const VideoPresentation: React.FC = () => {
             allowFullScreen
             style={{ height: '65%', width: '100%' }}
           ></iframe>
-          <Link href="/login">
+          <Link href="/login" passHref>
             <Button component="a" href="/login" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
               Se connecter
             </Button>

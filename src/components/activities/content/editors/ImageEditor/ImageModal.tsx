@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
@@ -5,7 +6,8 @@ import { Button, Divider, TextField } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Alert } from '@material-ui/lab';
 
-import { ImgCroppie, ImgCroppieRef } from 'src/components/ImgCroppie';
+import type { ImgCroppieRef } from 'src/components/ImgCroppie';
+import { ImgCroppie } from 'src/components/ImgCroppie';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
@@ -22,7 +24,7 @@ interface ImageModalProps extends EditorProps {
   useCrop?: boolean;
 }
 
-export const ImageModal: React.FC<ImageModalProps> = ({
+export const ImageModal = ({
   isModalOpen,
   setIsModalOpen,
   imageUrl,
@@ -268,12 +270,11 @@ export const ImageModal: React.FC<ImageModalProps> = ({
                   width: '100%',
                   margin: '0.5rem 0',
                   height: '13rem',
-                  backgroundImage: `url(${preview.url})`,
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
+                  position: 'relative',
                 }}
-              ></div>
+              >
+                <Image layout="fill" objectFit="contain" src={preview.url} unoptimized />
+              </div>
             ) : null}
             {preview.mode === 2 && <Alert severity="error">{"Erreur: impossible de charger l'image."}</Alert>}
           </div>

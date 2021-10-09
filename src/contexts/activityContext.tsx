@@ -4,14 +4,15 @@ import React from 'react';
 
 import { Card, CircularProgress } from '@material-ui/core';
 
-import { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivities.types';
+import type { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity, isEnigme } from 'src/activity-types/anyActivity';
-import { EnigmeData } from 'src/activity-types/enigme.types';
+import type { EnigmeData } from 'src/activity-types/enigme.types';
 import type { EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
-import { Activity, ActivityType, ActivityStatus } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
+import { ActivityType, ActivityStatus } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -35,10 +36,6 @@ interface ActivityContextValue {
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
 
-interface ActivityContextProviderProps {
-  children: React.ReactNode;
-}
-
 function getInitialActivity(): AnyActivity | null {
   try {
     return JSON.parse(sessionStorage.getItem('activity') || null) || null;
@@ -55,7 +52,7 @@ function saveActivityInSession(activity: AnyActivity | null): void {
 }
 const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, false);
 
-export const ActivityContextProvider: React.FC<ActivityContextProviderProps> = ({ children }: ActivityContextProviderProps) => {
+export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);

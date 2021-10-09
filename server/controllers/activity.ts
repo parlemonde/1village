@@ -1,8 +1,9 @@
-import { JSONSchemaType } from 'ajv';
-import { NextFunction, Request, Response } from 'express';
+import type { JSONSchemaType } from 'ajv';
+import type { NextFunction, Request, Response } from 'express';
 import { getRepository, getManager } from 'typeorm';
 
-import { ActivityData, ActivityDataType } from '../entities/activityData';
+import type { ActivityDataType } from '../entities/activityData';
+import { ActivityData } from '../entities/activityData';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -566,7 +567,7 @@ activityController.put({ path: '/:id/content', userType: UserType.TEACHER }, asy
 type EditActivityData = {
   value: string;
 };
-const Edit_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
+const EDIT_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
   type: 'object',
   properties: {
     value: { type: 'string', nullable: false },
@@ -574,7 +575,7 @@ const Edit_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
   required: ['value'],
   additionalProperties: false,
 };
-const editActivityDataValidator = ajv.compile(Edit_DATA_SCHEMA);
+const editActivityDataValidator = ajv.compile(EDIT_DATA_SCHEMA);
 activityController.put({ path: '/:activityId/content/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!editActivityDataValidator(data)) {

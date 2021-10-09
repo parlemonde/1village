@@ -4,8 +4,8 @@ import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_DEFIS, LANGUAGE_OBJECTS } from 'src/activity-types/defi.const';
-import { LanguageDefiData } from 'src/activity-types/defi.types';
+import { isLanguage, LANGUAGE_DEFIS, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -14,7 +14,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { replaceTokens } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep6: React.FC = () => {
+const DefiStep6 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);

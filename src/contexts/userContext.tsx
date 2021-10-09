@@ -2,7 +2,8 @@ import type { AxiosRequestConfig } from 'axios';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { AxiosReturnType, axiosRequest } from 'src/utils/axiosRequest';
+import type { AxiosReturnType } from 'src/utils/axiosRequest';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
@@ -27,15 +28,14 @@ interface UserContextProviderProps {
   user: User | null;
   setUser(user: React.SetStateAction<User | null>): void;
   csrfToken: string;
-  children: React.ReactNode;
 }
 
-export const UserContextProvider: React.FunctionComponent<UserContextProviderProps> = ({
+export const UserContextProvider: React.FC<UserContextProviderProps> = ({
   user,
   setUser,
   csrfToken,
   children,
-}: UserContextProviderProps) => {
+}: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
   const headers = React.useMemo(
     () => ({

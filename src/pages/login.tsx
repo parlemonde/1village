@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import qs from 'query-string';
 import React from 'react';
@@ -44,7 +45,7 @@ const isRedirectValid = (redirect: string): boolean => {
   }
 };
 
-const Login: React.FC = () => {
+const Login = () => {
   const router = useRouter();
   const { login, loginWithSso } = React.useContext(UserContext);
   const redirect = React.useRef<string>('/');
@@ -213,8 +214,10 @@ const Login: React.FC = () => {
             </div>
           </form>
         </div>
-        <div className="login__panel login__panel--with-blue-background">
-          <img src="/family_values_best_friends.png" width="90%" height="auto" style={{ maxWidth: '600px' }} />
+        <div className="login__panel login__panel--with-blue-background" style={{ padding: '1rem' }}>
+          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+            <Image src="/family_values_best_friends.png" layout="fill" objectFit="contain" alt="image de login" />
+          </div>
         </div>
       </KeepRatio>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { withStyles, Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
@@ -25,7 +26,7 @@ type InlineProps = {
   onChange(value: 'left' | 'center' | 'right'): void;
 };
 
-export const TextAlignButtons: React.FC<InlineProps> = ({ value, onChange }: InlineProps) => {
+export const TextAlignButtons = ({ value, onChange }: InlineProps) => {
   const handleAlignment = (newAlignment: 'left' | 'center' | 'right' | undefined) => (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange(newAlignment);

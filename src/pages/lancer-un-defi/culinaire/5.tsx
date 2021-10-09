@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -8,8 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isCooking, getDefi, DEFI } from 'src/activity-types/defi.const';
-import { CookingDefiData } from 'src/activity-types/defi.types';
+import { isCooking, getDefi, DEFI } from 'src/activity-types/defi.constants';
+import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -28,7 +29,7 @@ const REACTIONS = {
   [ActivityType.QUESTION]: 'cette question',
 };
 
-const DefiStep5: React.FC = () => {
+const DefiStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
@@ -72,7 +73,7 @@ const DefiStep5: React.FC = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/lancer-un-defi/culinaire/4">
+              <Link href="/lancer-un-defi/culinaire/4" passHref>
                 <Button component="a" color="secondary" variant="contained" href="/lancer-un-defi/culinaire/4">
                   {"Modifier à l'étape précédente"}
                 </Button>
@@ -126,14 +127,14 @@ const DefiStep5: React.FC = () => {
               isGreen
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <div className="text-center">
+            <div className="text-center" style={{ marginBottom: '1rem' }}>
               <h3>{data.name}</h3>
             </div>
             <Grid container spacing={2}>
               {data.image && (
                 <Grid item xs={12} md={4}>
-                  <div style={{ width: '100%', marginTop: '1rem' }}>
-                    <img alt="image du plat" src={data.image} style={{ width: '100%', height: 'auto' }} />
+                  <div style={{ width: '100%', height: '100%', minHeight: '200px', position: 'relative' }}>
+                    <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={data.image} />
                   </div>
                 </Grid>
               )}

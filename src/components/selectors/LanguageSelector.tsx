@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useLanguages } from 'src/services/useLanguages';
-import { Language } from 'types/language.type';
+import type { Language } from 'types/language.type';
 
 type LanguageOption = Language & {
   firstLetter: string;
@@ -17,7 +17,7 @@ interface LanguageSelectorProps {
   style?: React.CSSProperties;
 }
 
-export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ label, value = '', onChange, style }: LanguageSelectorProps) => {
+export const LanguageSelector = ({ label, value = '', onChange, style }: LanguageSelectorProps) => {
   const { languages } = useLanguages();
   const options: LanguageOption[] = React.useMemo(
     () =>

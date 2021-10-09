@@ -1,9 +1,9 @@
 import { frFR } from '@material-ui/core/locale';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 
 import { primaryColor, secondaryColor, successColor, errorColor, bgPage } from './variables.const';
 
-const theme = createMuiTheme(
+const theme = createTheme(
   {
     palette: {
       primary: {

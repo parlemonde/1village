@@ -17,7 +17,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
 
-const Question3: React.FC = () => {
+const Question3 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { axiosLoggedRequest } = React.useContext(UserContext);
@@ -109,7 +109,7 @@ const Question3: React.FC = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/poser-une-question/2">
+              <Link href="/poser-une-question/2" passHref>
                 <Button component="a" color="secondary" variant="contained" href="/se-presenter/thematique/2">
                   {"Modifier à l'étape précédente"}
                 </Button>

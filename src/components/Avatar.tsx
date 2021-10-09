@@ -8,7 +8,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { getGravatarUrl } from 'src/utils';
-import { User, UserType } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 const useStyles = makeStyles(() => ({
   large: {
@@ -31,7 +32,6 @@ type AvatarImgProps = {
   size?: 'large' | 'medium' | 'small';
   noLink?: boolean;
   onClick?: () => void;
-  children?: React.ReactNode;
   style?: React.CSSProperties;
 };
 export const AvatarImg: React.FC<AvatarImgProps> = ({
@@ -42,7 +42,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
   onClick = () => {},
   style,
   noLink = false,
-}: AvatarImgProps) => {
+}: React.PropsWithChildren<AvatarImgProps>) => {
   const classes = useStyles();
   const isPelico = user && user.type >= UserType.MEDIATOR;
 

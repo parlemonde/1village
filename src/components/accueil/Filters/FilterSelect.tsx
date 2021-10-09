@@ -16,7 +16,7 @@ interface FilterSelectProps {
   onChange(newValue: number): void;
 }
 
-export const FilterSelect: React.FC<FilterSelectProps> = ({ value, onChange, name, options }: FilterSelectProps) => {
+export const FilterSelect = ({ value, onChange, name, options }: FilterSelectProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const selectedOption = options.length <= value ? null : options[value];
 

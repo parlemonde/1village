@@ -12,13 +12,7 @@ interface ThemeChoiceButtonProps {
   additionalContent?: React.ReactNode | React.ReactNodeArray;
 }
 
-export const ThemeChoiceButton: React.FC<ThemeChoiceButtonProps> = ({
-  label,
-  isOpen,
-  description,
-  additionalContent,
-  onClick = () => {},
-}: ThemeChoiceButtonProps) => {
+export const ThemeChoiceButton = ({ label, isOpen, description, additionalContent, onClick = () => {} }: ThemeChoiceButtonProps) => {
   const [open, setOpen] = React.useState(false);
   const showAdd = isOpen !== undefined ? isOpen : open;
 

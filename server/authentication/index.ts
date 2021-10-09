@@ -1,4 +1,5 @@
-import { RequestHandler, Router } from 'express';
+import type { RequestHandler } from 'express';
+import { Router } from 'express';
 import morgan from 'morgan';
 
 import { handleErrors } from '../middlewares/handleErrors';

@@ -18,7 +18,7 @@ import { UserType } from 'types/user.type';
 
 import { AvatarImg } from './Avatar';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
     <header>
       <div className="header__container with-shadow">
         <Link href="/">
-          <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <a style={{ display: 'flex', alignItems: 'center' }}>
             <Logo style={{ width: '40px', height: 'auto' }} />
             <h1 className="title" style={{ margin: '0 0 0 0.5rem' }}>
               1Village
@@ -74,7 +74,7 @@ export const Header: React.FC = () => {
               </div>
             )}
             {user.type >= UserType.ADMIN && (
-              <Link href="/admin/villages">
+              <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
                   {"Aller à l'interface Admin"}
                 </Button>

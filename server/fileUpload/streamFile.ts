@@ -1,18 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import path from 'path';
+import type { Request, Response, NextFunction } from 'express';
+import mime from 'mime-types';
 
 import { getFileData, getFile } from './index';
 
-function getContentTypeFromFileName(filename: string): string | null {
-  const extension = path.extname(filename).substring(1);
-  if (extension === 'svg') {
-    return 'image/svg+xml';
-  }
-  if (['jpeg', 'png', 'gif', 'webp'].includes(extension)) {
-    return `image/${extension}`;
-  }
-  return null;
-}
+const getContentTypeFromFileName = (filename: string): string | null => mime.lookup(filename) || null;
 
 export async function streamFile(file: string, req: Request, res: Response, next: NextFunction): Promise<void> {
   const data = await getFileData(file);

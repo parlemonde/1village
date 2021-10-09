@@ -1,11 +1,12 @@
-import { Activity, ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 
-import type { AnyActivity, AnyActivityData } from './anyActivities.types';
-import { DefiActivity } from './defi.types';
-import { EnigmeActivity } from './enigme.types';
-import { EditorContent } from './extendedActivity.types';
-import { PresentationActivity } from './presentation.types';
-import { QuestionActivity } from './question.types';
+import type { AnyActivity, AnyActivityData } from './anyActivity.types';
+import type { DefiActivity } from './defi.types';
+import type { EnigmeActivity } from './enigme.types';
+import type { EditorContent } from './extendedActivity.types';
+import type { PresentationActivity } from './presentation.types';
+import type { QuestionActivity } from './question.types';
 
 export const isPresentation = (activity: AnyActivity): activity is PresentationActivity => {
   return activity.type === ActivityType.PRESENTATION;

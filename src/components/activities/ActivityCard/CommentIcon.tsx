@@ -8,7 +8,7 @@ interface CommentIconProps {
   activityId: number;
 }
 
-export const CommentIcon: React.FC<CommentIconProps> = ({ count = 0, activityId }: CommentIconProps) => {
+export const CommentIcon = ({ count = 0, activityId }: CommentIconProps) => {
   if (count === 0) {
     return null;
   }

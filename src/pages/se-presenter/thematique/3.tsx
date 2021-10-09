@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { EditorContent } from 'src/activity-types/extendedActivity.types';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.const';
+import type { EditorContent } from 'src/activity-types/extendedActivity.types';
+import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -11,7 +11,7 @@ import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const PresentationStep3: React.FC = () => {
+const PresentationStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 

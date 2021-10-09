@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isEco } from 'src/activity-types/defi.const';
-import { EcoDefiData } from 'src/activity-types/defi.types';
-import { EditorContent } from 'src/activity-types/extendedActivity.types';
+import { isEco } from 'src/activity-types/defi.constants';
+import type { EcoDefiData } from 'src/activity-types/defi.types';
+import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -12,7 +12,7 @@ import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiEcoStep3: React.FC = () => {
+const DefiEcoStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 

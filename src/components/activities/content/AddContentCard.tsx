@@ -15,7 +15,7 @@ interface AddContentCardProps {
   addContent?(type: EditorTypes): void;
 }
 
-export const AddContentCard: React.FC<AddContentCardProps> = ({ addContent = () => {} }: AddContentCardProps) => {
+export const AddContentCard = ({ addContent = () => {} }: AddContentCardProps) => {
   const { user } = React.useContext(UserContext);
   const isPelico = user.type >= UserType.MEDIATOR;
 

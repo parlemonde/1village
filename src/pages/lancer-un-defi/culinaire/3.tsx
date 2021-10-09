@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isCooking } from 'src/activity-types/defi.const';
-import { CookingDefiData } from 'src/activity-types/defi.types';
-import { EditorContent } from 'src/activity-types/extendedActivity.types';
+import { isCooking } from 'src/activity-types/defi.constants';
+import type { CookingDefiData } from 'src/activity-types/defi.types';
+import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -12,7 +12,7 @@ import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
 
-const DefiStep3: React.FC = () => {
+const DefiStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 

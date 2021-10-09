@@ -1,19 +1,20 @@
+import Image from 'next/image';
 import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.const';
-import { DefiActivity } from 'src/activity-types/defi.types';
+import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.constants';
+import type { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { bgPage } from 'src/styles/variables.const';
 
-import { ActivityViewProps } from './activity-view.types';
+import type { ActivityViewProps } from './activity-view.types';
 
-export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ activity }: ActivityViewProps<DefiActivity>) => {
+export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) => {
   return (
     <div>
       <div style={{ margin: '1rem 0' }}>
-        <div className="text-center">
+        <div className="text-center" style={{ marginBottom: '1rem' }}>
           <h3>
             {isCooking(activity)
               ? activity.data.name
@@ -28,8 +29,8 @@ export const DefiActivityView: React.FC<ActivityViewProps<DefiActivity>> = ({ ac
           <Grid container spacing={2}>
             {activity.data.image && (
               <Grid item xs={12} md={4}>
-                <div style={{ width: '100%', marginTop: '1rem' }}>
-                  <img alt="image du plat" src={activity.data.image} style={{ width: '100%', height: 'auto' }} />
+                <div style={{ width: '100%', height: '100%', minHeight: '200px', position: 'relative' }}>
+                  <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.image} />
                 </div>
               </Grid>
             )}

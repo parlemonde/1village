@@ -5,7 +5,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useCountries } from 'src/services/useCountries';
 import { countryToFlag } from 'src/utils';
-import { Country } from 'types/country.type';
+import type { Country } from 'types/country.type';
 
 type CountryOption = Country & {
   firstLetter: string;
@@ -19,7 +19,7 @@ interface CountrySelectorProps {
   style?: React.CSSProperties;
 }
 
-export const CountrySelector: React.FC<CountrySelectorProps> = ({ label, value = '', onChange, filterCountries, style }: CountrySelectorProps) => {
+export const CountrySelector = ({ label, value = '', onChange, filterCountries, style }: CountrySelectorProps) => {
   const { countries } = useCountries();
   const options: CountryOption[] = React.useMemo(
     () =>

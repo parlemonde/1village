@@ -12,7 +12,7 @@ import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import type { ActivityType } from 'types/activity.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -49,7 +49,7 @@ interface AddCommentProps {
   label?: string;
 }
 
-export const AddComment: React.FC<AddCommentProps> = ({ activityId, activityType, label }: AddCommentProps) => {
+export const AddComment = ({ activityId, activityType, label }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
@@ -135,7 +135,11 @@ export const AddComment: React.FC<AddCommentProps> = ({ activityId, activityType
                     </span>
                   </ButtonBase>
                 ) : !R.disabled && activityId !== null && activityType !== null ? (
-                  <Link key={index} href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}>
+                  <Link
+                    key={index}
+                    href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}
+                    passHref
+                  >
                     <ButtonBase
                       component="a"
                       href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}

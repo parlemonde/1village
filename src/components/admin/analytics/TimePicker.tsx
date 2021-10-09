@@ -208,7 +208,7 @@ interface TimePickerProps {
   setPeriod(newPeriod: Period): void;
 }
 
-export const TimePicker: React.FC<TimePickerProps> = ({ period, setPeriod }: TimePickerProps) => {
+export const TimePicker = ({ period, setPeriod }: TimePickerProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const popoverWidth = React.useRef<string | number>('unset');

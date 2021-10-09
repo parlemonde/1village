@@ -1,6 +1,6 @@
 import { replaceTokens } from 'src/utils';
 
-import {
+import type {
   DefiActivity,
   CookingDefiActivity,
   CookingDefiData,

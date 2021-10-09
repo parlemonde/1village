@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv';
+import type { JSONSchemaType } from 'ajv';
 import useragent from 'express-useragent';
 import { getRepository, Between } from 'typeorm';
 
@@ -184,11 +184,11 @@ type AddAnalytic = {
   event: string;
   location: string;
   referrer?: string | null;
-  width?: number;
+  width?: number | null;
   params?: {
     duration?: number;
     isInitial?: boolean;
-    perf?: unknown;
+    perf?: Record<string, unknown>;
   } | null;
 };
 const ADD_ANALYTIC_SCHEMA: JSONSchemaType<AddAnalytic> = {
@@ -220,15 +220,15 @@ const ADD_ANALYTIC_SCHEMA: JSONSchemaType<AddAnalytic> = {
       properties: {
         duration: {
           type: 'number',
-          nullable: false,
+          nullable: true,
         },
         isInitial: {
           type: 'boolean',
-          nullable: false,
+          nullable: true,
         },
         perf: {
           type: 'object',
-          nullable: false,
+          nullable: true,
           properties: {},
           required: [],
           additionalProperties: true,
@@ -300,7 +300,7 @@ analyticController.router.post(
         const pagePerf = new AnalyticPerformance();
         pagePerf.sessionId = data.sessionId;
         pagePerf.date = new Date();
-        pagePerf.data = data.params.perf as NavigationPerf;
+        pagePerf.data = data.params.perf as unknown as NavigationPerf;
         getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
       } else if (data.event === 'perf-stats' && data.params && data.params.perf) {
         const pagePerf = new AnalyticPerformance();

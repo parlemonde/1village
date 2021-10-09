@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
-import { QuestionActivity } from 'src/activity-types/question.types';
+import type { QuestionActivity } from 'src/activity-types/question.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -20,7 +20,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { bgPage } from 'src/styles/variables.const';
 import { ActivityType } from 'types/activity.type';
 
-const Question1: React.FC = () => {
+const Question1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);

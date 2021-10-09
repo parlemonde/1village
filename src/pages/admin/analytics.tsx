@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -40,7 +41,7 @@ const NumberStat = ({ label, value, color }: { label: string; value: string; col
 const getValues = (data: Partial<Record<string, number>>): Array<{ key: string; value: number }> =>
   Object.keys(data).map((key) => ({ key, value: data[key] }));
 
-const Stats: React.FC = () => {
+const Stats = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [period, setPeriod] = React.useState(getToday());
   const [data, setData] = React.useState<AnalyticData | null>(null);
@@ -105,7 +106,7 @@ const Stats: React.FC = () => {
 
   return (
     <div className="admin--container">
-      <Link href="/admin/analytics">
+      <Link href="/admin/analytics" passHref>
         <MaterialLink href="/admin/analytics">
           <h1 style={{ marginBottom: '1rem' }}>Web Analytics</h1>
         </MaterialLink>
@@ -219,24 +220,15 @@ const Stats: React.FC = () => {
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                      <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-                        <div style={{ flex: 1 }}>
-                          <img
-                            style={{ width: '100%', height: 'auto' }}
-                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/ZZU8Z7TMKXmzZT2mCjJU.svg"
-                          />
+                      <div style={{ display: 'flex', width: '100%', height: '160px', alignItems: 'center' }}>
+                        <div style={{ flex: 1, width: '33.3333%', height: '100%', position: 'relative' }}>
+                          <Image layout="fill" src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/ZZU8Z7TMKXmzZT2mCjJU.svg" />
                         </div>
-                        <div style={{ flex: 1 }}>
-                          <img
-                            style={{ width: '100%', height: 'auto' }}
-                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg"
-                          />
+                        <div style={{ flex: 1, width: '33.3333%', height: '100%', position: 'relative' }}>
+                          <Image layout="fill" src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg" />
                         </div>
-                        <div style={{ flex: 1 }}>
-                          <img
-                            style={{ width: '100%', height: 'auto' }}
-                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dgpDFckbHwwOKdIGDa3N.svg"
-                          />
+                        <div style={{ flex: 1, width: '33.3333%', height: '100%', position: 'relative' }}>
+                          <Image layout="fill" src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dgpDFckbHwwOKdIGDa3N.svg" />
                         </div>
                       </div>
                     </Grid>

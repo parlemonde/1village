@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { ButtonProps } from '@material-ui/core';
+import type { ButtonProps } from '@material-ui/core';
 
 import { helpColor, helpColorDarker } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
@@ -23,7 +23,7 @@ const PinkButton = withStyles(() => ({
   },
 }))(Button);
 
-export const HelpButton: React.FC<ButtonProps> = (props: ButtonProps) => {
+export const HelpButton = (props: ButtonProps) => {
   return (
     <div style={{ width: '100%', padding: '0 10px' }}>
       <PinkButton {...props}>

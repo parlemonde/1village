@@ -59,7 +59,7 @@ const activities = [
   },
 ];
 
-const Defi: React.FC = () => {
+const Defi = () => {
   const router = useRouter();
 
   const [activitiesWithLinks, suggestionsWithLinks] = React.useMemo(() => {

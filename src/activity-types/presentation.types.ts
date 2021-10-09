@@ -1,4 +1,4 @@
-import { GenericExtendedActivity } from './extendedActivity.types';
+import type { GenericExtendedActivity } from './extendedActivity.types';
 
 export type MascotteData = {
   presentation: string;

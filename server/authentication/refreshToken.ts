@@ -1,5 +1,6 @@
-import { JSONSchemaType } from 'ajv';
-import { Request, Response } from 'express';
+/* eslint-disable camelcase */
+import type { JSONSchemaType } from 'ajv';
+import type { Request, Response } from 'express';
 
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 

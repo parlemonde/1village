@@ -10,12 +10,12 @@ interface StepsButtonProps {
   next?: string | (() => void);
 }
 
-export const StepsButton: React.FC<StepsButtonProps> = ({ prev, next }: StepsButtonProps) => {
+export const StepsButton = ({ prev, next }: StepsButtonProps) => {
   return (
     <div style={{ width: '100%', margin: '3rem 0', minHeight: '2rem' }}>
       {prev !== undefined &&
         (typeof prev === 'string' ? (
-          <Link href={prev}>
+          <Link href={prev} passHref>
             <Button component="a" href={prev} variant="outlined" color="primary">
               <ChevronLeftIcon />
               Étape précédente
@@ -29,7 +29,7 @@ export const StepsButton: React.FC<StepsButtonProps> = ({ prev, next }: StepsBut
         ))}
       {next !== undefined &&
         (typeof next === 'string' ? (
-          <Link href={next}>
+          <Link href={next} passHref>
             <Button component="a" href={next} variant="outlined" style={{ float: 'right' }} color="primary">
               Étape suivante
               <ChevronRightIcon />

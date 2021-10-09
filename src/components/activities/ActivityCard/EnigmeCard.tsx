@@ -1,25 +1,19 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { ENIGME_TYPES } from 'src/activity-types/enigme.const';
-import { EnigmeActivity } from 'src/activity-types/enigme.types';
+import { ENIGME_TYPES } from 'src/activity-types/enigme.constants';
+import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
+import type { ActivityCardProps } from './activity-card.types';
 
-export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
-  activity,
-  isSelf,
-  noButtons,
-  isDraft,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<EnigmeActivity>) => {
+export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<EnigmeActivity>) => {
   const firstImage = React.useMemo(
     () => activity.processedContent.slice(activity.data.indiceContentIndex, activity.processedContent.length).find((c) => c.type === 'image'),
     [activity.processedContent, activity.data.indiceContentIndex],
@@ -47,12 +41,11 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
               height: '100%',
               width: '100%',
               backgroundColor: bgPage,
-              backgroundImage: `url(${firstImage.value})`,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              position: 'relative',
             }}
-          />
+          >
+            <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+          </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
@@ -67,7 +60,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={`/activite/${activity.id}`}>
+                <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     {'Résoudre l’énigme'}
                   </Button>
@@ -82,6 +75,7 @@ export const EnigmeCard: React.FC<ActivityCardProps<EnigmeActivity>> = ({
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/creer-une-enigme/5?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

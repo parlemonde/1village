@@ -1,4 +1,4 @@
-import { Activity } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
 
 export type EditorTypes = 'text' | 'video' | 'image' | 'h5p' | 'sound';
 

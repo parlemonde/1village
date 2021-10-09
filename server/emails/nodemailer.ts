@@ -1,4 +1,4 @@
-import Mail from 'nodemailer/lib/mailer';
+import type Mail from 'nodemailer/lib/mailer';
 import nodemailer from 'nodemailer';
 
 import { logger } from '../utils/logger';
