@@ -1,57 +1,74 @@
-import type { GlobeInstance } from 'globe.gl';
+import type { FeatureCollection, Point } from 'geojson';
+import { CircleBufferGeometry, Group, Mesh, MeshLambertMaterial, Vector3 } from 'three';
+import { Text } from 'troika-three-text';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import { debounce } from 'src/utils';
 
-import { GeoJSONCityData, GeoLabel, DataClass } from './data.types';
+import { polar2Cartesian } from '../lib/coords-utils';
+import { GLOBE_RADIUS } from '../world-map.constants';
 
-const setLabelSize = ({ globe, zoom }: { globe: GlobeInstance; zoom: number }): void => {
-  globe.labelSize(Math.max(Math.min(zoom / 2.5, 0.4), 0.2)).labelDotRadius(Math.max(Math.min(zoom / 10 + 0.05, 0.2), 0.1));
+export type GeoJSONCityData = FeatureCollection<Point, { cityFR: string; iso3: string }>;
+export type GeoLabel = GeoJSONCityData['features'][0];
+
+const pxPerDeg = (2 * Math.PI * GLOBE_RADIUS) / 360;
+
+export const getCapitals = async (): Promise<Group> => {
+  const capitals = new Group();
+  capitals.name = 'capitals';
+
+  const response = await axiosRequest({
+    method: 'GET',
+    baseURL: '',
+    url: '/earth/capitals.geo.json',
+  });
+  if (response.error) {
+    return null;
+  }
+
+  const features = (response.data as GeoJSONCityData).features;
+  for (let i = 0; i < features.length; i++) {
+    const capitalObj = getCapital(features[i]);
+    if (capitalObj !== null) {
+      capitals.add(capitalObj);
+    }
+  }
+  return capitals;
 };
-const setLabelSizeDebounced = debounce(setLabelSize, 100, false);
 
-export class Capitals extends DataClass {
-  public id = 'capitals';
-  private data: GeoJSONCityData['features'] = [];
+function getCapital(geojson: GeoLabel): Group | null {
+  const capitalObj = new Group();
 
-  public getData = async (): Promise<void> => {
-    const response = await axiosRequest({
-      method: 'GET',
-      baseURL: '',
-      url: '/earth/capitals.geo.json',
-    });
-    if (response.error) {
-      this.data = [];
-    }
-    this.data = (response.data as GeoJSONCityData).features;
-  };
+  const circleGeometry = new CircleBufferGeometry(1, 16);
+  const material = new MeshLambertMaterial({ color: '#000' });
 
-  public showData(globe: GlobeInstance, zoom: number, showDecors: boolean): void {
-    globe
-      .labelLat((c: GeoLabel) => c.geometry.coordinates[1])
-      .labelLng((c: GeoLabel) => c.geometry.coordinates[0])
-      .labelText((c: GeoLabel) => c.properties.cityFR ?? '')
-      .labelAltitude(0.025)
-      .labelColor('#000')
-      .labelResolution(2);
-    this.onZoom(globe, zoom);
-    this.updateData(globe, showDecors);
-  }
+  // dot
+  const dotObj = new Mesh(circleGeometry, material);
+  const dotRadius = 0.1 * pxPerDeg;
+  dotObj.scale.x = dotObj.scale.y = dotRadius;
 
-  public onZoom(globe: GlobeInstance, zoom: number): void {
-    setLabelSizeDebounced({
-      globe,
-      zoom,
-    });
-  }
+  // text
+  const textHeight = 0.4 * pxPerDeg;
+  const labelObj = new Text();
+  labelObj.name = 'Text';
+  labelObj.text = geojson.properties.cityFR;
+  labelObj.fontSize = textHeight;
+  labelObj.color = 0x000000;
+  labelObj.anchorX = 'center';
+  labelObj.position.y = -dotRadius * 1.1;
+  labelObj.sync(); // Update the rendering
 
-  public updateData(globe: GlobeInstance, showDecors: boolean): void {
-    if (showDecors) {
-      globe.labelsData([]);
-    } else {
-      globe.labelsData(this.data);
-    }
-  }
+  capitalObj.add(dotObj);
+  capitalObj.add(labelObj);
 
-  public dispose(): void {}
+  // place
+  const pos = polar2Cartesian(geojson.geometry.coordinates[1], geojson.geometry.coordinates[0], 2);
+  capitalObj.position.x = pos.x;
+  capitalObj.position.y = pos.y;
+  capitalObj.position.z = pos.z;
+
+  // rotate
+  capitalObj.lookAt(new Vector3(0, 0, 0)); // face globe (local) center
+  capitalObj.rotateY(Math.PI); // face outwards
+
+  return capitalObj;
 }

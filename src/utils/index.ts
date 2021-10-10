@@ -36,7 +36,7 @@ export function getQueryString(q: string | string[]): string {
  * N milliseconds. If `immediate` is passed, trigger the function on the
  * leading edge, instead of the trailing.
  */
-export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(func: T, wait: number, immediate: boolean): T {
+export function debounce<T extends (args: unknown | unknown[]) => void>(func: T, wait: number, immediate: boolean): T {
   let timeout: NodeJS.Timeout;
   return function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
