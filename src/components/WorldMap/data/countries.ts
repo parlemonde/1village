@@ -97,6 +97,7 @@ export class HoverableCountry
     this.initMaterials = materials;
     this.userData = {
       isHoverable: true,
+      isClickable: false,
       type: 'country',
       countryName: geojsonProperties.adminFR,
     };
@@ -108,22 +109,16 @@ export class HoverableCountry
   }
 
   public getData(): { countryName: string } {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { isHoverable, ...data } = this.userData;
-    return data;
+    return this.userData;
   }
 
   public onHover(): void {
-    this.scale.x = 1.008;
-    this.scale.y = 1.008;
-    this.scale.z = 1.008;
     this.material = hoverMaterial;
   }
 
   public onReset(): void {
-    this.scale.x = 1;
-    this.scale.y = 1;
-    this.scale.z = 1;
     this.material = this.initMaterials;
   }
+
+  public onClick(): void {}
 }

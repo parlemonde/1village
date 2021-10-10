@@ -47,7 +47,11 @@ export const useObjectHover = () => {
 
     raycaster.setFromCamera(mousePositionRef.current, camera);
     const hoveredObjects = raycaster.intersectObjects(hoverableObjectsRef.current);
-    const hoveredObject = hoveredObjects.length > 0 && hoveredObjects[0].object.name !== 'globe' ? hoveredObjects[0].object : null;
+    let hoveredObject = hoveredObjects.length > 0 && hoveredObjects[0].object.name !== 'globe' ? hoveredObjects[0].object : null;
+    if (hoveredObject && !isHoverable(hoveredObject) && isHoverable(hoveredObject.parent)) {
+      hoveredObject = hoveredObject.parent;
+    }
+
     if (isHoverable(hoveredObject) && (hoveredObjectIdRef.current === null || hoveredObject.id !== hoveredObjectIdRef.current)) {
       onResetHoveredObject(hoveredObjectIdRef.current, scene);
       hoveredObjectIdRef.current = hoveredObject.id;
@@ -84,6 +88,15 @@ export const useObjectHover = () => {
     setPopoverPos(null);
   }, []);
 
+  const onClick = React.useCallback(
+    (camera: THREE.Camera, cameraAltitude: number) => {
+      if (hoveredObject !== null && hoveredObject.userData.isClickable) {
+        hoveredObject.onClick(camera, cameraAltitude);
+      }
+    },
+    [hoveredObject],
+  );
+
   const resetCanvasBoundingRect = React.useCallback(() => {
     canvasBoundingRectRef.current = null;
   }, []);
@@ -107,6 +120,8 @@ export const useObjectHover = () => {
     onMouseMove,
     onMouseLeave,
     resetCanvasBoundingRect,
+    onClick,
+    cursorStyle: hoveredObject !== null && hoveredObject.userData.isClickable ? 'pointer' : 'default',
     popover,
   };
 };

@@ -2,23 +2,22 @@ import React from 'react';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 
+import { useVillageUsers } from 'src/services/useVillageUsers';
 import { debounce } from 'src/utils';
 
 import { getCapitals } from './data/capitals';
 import { getCountries } from './data/countries';
+import type { HoverablePin } from './data/pin';
+import { getPins } from './data/pin';
 import { useObjectHover } from './hooks/use-object-hover';
 import { cartesian2Polar } from './lib/coords-utils';
 import { disposeNode } from './lib/dispose-node';
 import { getAtmosphereGlow } from './lib/get-atmosphere-glow';
 import { GLOBE_IMAGE_URL, BACKGROUND_IMAGE_URL, SKY_RADIUS, MAX_DISTANCE, MIN_DISTANCE, GLOBE_RADIUS } from './world-map.constants';
 
-// adjust controls speed based on altitude
-const updateControls = ({ controls, altitude }: { controls: OrbitControls; altitude: number }) => {
-  controls.rotateSpeed = altitude * 0.2;
-};
-const updateControlsDebounced = debounce(updateControls, 50, false);
-
 const WorldMap: React.FC = () => {
+  const { users } = useVillageUsers();
+
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const threeData = React.useRef<{
     scene: THREE.Scene;
@@ -27,10 +26,21 @@ const WorldMap: React.FC = () => {
     controls: OrbitControls;
     raycaster: THREE.Raycaster;
   } | null>(null);
+  const [isInitialized, setIsInitialized] = React.useState(false);
+  const altitudeRef = React.useRef<number>(MAX_DISTANCE);
   const animationFrameRef = React.useRef<number | null>(null);
   const showDecorsRef = React.useRef(true);
 
-  const { setHoverableObjects, onUpdateHover, onMouseMove, onMouseLeave, resetCanvasBoundingRect, popover } = useObjectHover();
+  const {
+    setHoverableObjects,
+    onClick: onHoverClick,
+    onUpdateHover,
+    onMouseMove,
+    onMouseLeave,
+    resetCanvasBoundingRect,
+    popover,
+    cursorStyle,
+  } = useObjectHover();
 
   const render = React.useCallback(() => {
     if (threeData.current === null) {
@@ -57,6 +67,33 @@ const WorldMap: React.FC = () => {
     };
     return debounce(onResize, 250, false);
   }, [resetCanvasBoundingRect]);
+
+  const onCameraChange = React.useCallback(() => {
+    if (threeData.current === null) {
+      return;
+    }
+    const { scene, camera, controls } = threeData.current;
+    const altitude = cartesian2Polar(camera.position).altitude;
+    altitudeRef.current = altitude;
+    controls.rotateSpeed = altitude * 0.001363 - 0.109;
+
+    const pins = scene.children.find((child) => child.name === 'pins');
+    if (pins) {
+      for (const pin of pins.children) {
+        (pin as HoverablePin).update(camera.position, altitude);
+      }
+    }
+
+    if ((showDecorsRef.current === true && altitude < 240) || (showDecorsRef.current === false && altitude >= 240)) {
+      showDecorsRef.current = altitude >= 240;
+      for (const child of scene.children) {
+        if (child.name === 'countries' || child.name === 'capitals') {
+          child.visible = !showDecorsRef.current;
+        }
+      }
+      setHoverableObjects(scene, showDecorsRef.current);
+    }
+  }, [setHoverableObjects]);
 
   const init = React.useCallback(async () => {
     if (canvasRef.current) {
@@ -101,20 +138,10 @@ const WorldMap: React.FC = () => {
       controls.maxDistance = MAX_DISTANCE;
       controls.enablePan = false;
       controls.enableDamping = true;
-      controls.dampingFactor = 0.1;
+      controls.dampingFactor = 0.05;
       controls.rotateSpeed = 0.4;
       controls.zoomSpeed = 0.25;
-      controls.addEventListener('change', () => {
-        const altitude = cartesian2Polar(camera.position).altitude;
-        updateControlsDebounced({ controls, altitude });
-
-        if ((showDecorsRef.current === true && altitude < 1.6) || (showDecorsRef.current === false && altitude >= 1.6)) {
-          showDecorsRef.current = altitude >= 1.6;
-          countries.visible = !showDecorsRef.current;
-          capitals.visible = !showDecorsRef.current;
-          setHoverableObjects(scene, showDecorsRef.current);
-        }
-      });
+      controls.addEventListener('change', onCameraChange);
       controls.update();
 
       // [5] Start the animation loop.
@@ -127,8 +154,9 @@ const WorldMap: React.FC = () => {
       };
       requestAnimationFrame(render);
       window.addEventListener('resize', onResizeDebounced);
+      setIsInitialized(true);
     }
-  }, [render, setHoverableObjects, onResizeDebounced]);
+  }, [render, onCameraChange, onResizeDebounced]);
 
   const clearScene = React.useCallback(() => {
     if (animationFrameRef.current) {
@@ -149,9 +177,46 @@ const WorldMap: React.FC = () => {
     return clearScene;
   }, [init, clearScene]);
 
+  const onClick = React.useCallback(() => {
+    if (!threeData.current) {
+      return;
+    }
+    onHoverClick(threeData.current.camera, altitudeRef.current);
+    onCameraChange();
+  }, [onHoverClick, onCameraChange]);
+
+  const addPins = React.useCallback(async () => {
+    if (!isInitialized || !threeData.current) {
+      return;
+    }
+    const { scene, camera } = threeData.current;
+
+    // remove previous pins
+    for (const child of scene.children) {
+      if (child.name === 'pins') {
+        scene.remove(child);
+        disposeNode(child);
+      }
+    }
+
+    // add pins
+    const pins = await getPins(users, camera.position);
+    scene.add(pins);
+    setHoverableObjects(scene, showDecorsRef.current);
+  }, [isInitialized, users, setHoverableObjects]);
+  React.useEffect(() => {
+    addPins().catch();
+  }, [addPins]);
+
   return (
     <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-      <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}></canvas>
+      <canvas
+        ref={canvasRef}
+        style={{ width: '100%', height: '100%', cursor: cursorStyle }}
+        onClick={onClick}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
+      ></canvas>
       {popover}
     </div>
   );

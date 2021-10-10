@@ -21,6 +21,6 @@ export function cartesian2Polar({ x, y, z }: Vector3) {
   return {
     lat: 90 - (phi * 180) / Math.PI,
     lng: 90 - (theta * 180) / Math.PI - (theta < -Math.PI / 2 ? 360 : 0), // keep within [-180, 180] boundaries
-    altitude: r / GLOBE_RADIUS - 1,
+    altitude: r,
   };
 }

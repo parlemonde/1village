@@ -61,7 +61,7 @@ function getCapital(geojson: GeoLabel): Group | null {
   capitalObj.add(labelObj);
 
   // place
-  const pos = polar2Cartesian(geojson.geometry.coordinates[1], geojson.geometry.coordinates[0], 2);
+  const pos = polar2Cartesian(geojson.geometry.coordinates[1], geojson.geometry.coordinates[0], 1);
   capitalObj.position.x = pos.x;
   capitalObj.position.y = pos.y;
   capitalObj.position.z = pos.z;
