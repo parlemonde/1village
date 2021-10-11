@@ -43,7 +43,8 @@ export class Activity implements ActivityInterface<AnyData> {
   public type: number;
 
   @Column({ type: 'tinyint', nullable: true })
-  public subType: number | null;
+  // public subType: number | null;
+  public subType: number;
 
   @Column({
     type: 'tinyint',

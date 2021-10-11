@@ -6,10 +6,12 @@ import { getRepository } from 'typeorm';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
+import { Game } from '../entities/game';
 // import { Mimique } from '../entities/mimique';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
+import { logger } from '../utils/logger';
 import { getQueryString } from '../utils';
 
 import { commentController } from './comment';
@@ -305,7 +307,8 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 
   const activity = new Activity();
   activity.type = data.type;
-  activity.subType = data.subType ?? null;
+  // activity.subType = data.subType ?? null;
+  activity.subType = data.subType as number;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
   activity.data = data.data;
   activity.content = data.content;
@@ -390,10 +393,41 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   //     await getRepository(ActivityData).save(activityData);
   //   }
   // }
+  if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED) {
+    const activityData = (activity.content || []).find((data) => {
+      return data.key === 'json';
+    });
+    if (activityData) {
+      const value = JSON.parse(activityData.value);
+      const gamesData = value.data as GamesData;
+      gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
+      gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
+      gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
+      activityData.value = JSON.stringify(value);
+      await getRepository(ActivityData).save(activityData);
+    }
+  }
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
+//On va créer une fonction simailaire mais avec Game entity
+const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
+  logger.debug('je suis dans create game');
+  const id = data.gameId;
+  logger.debug(id);
+  const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
+  logger.debug('est ce que je suis apres la const game ?');
+  logger.debug(game);
+
+  game.type = activity.subType;
+  game.content = data.value;
+  game.userId = activity.userId;
+  game.activityId = activity.id;
+  game.villageId = activity.villageId;
+  await getRepository(Game).save(game);
+  return game;
+};
 
 // const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
 //   const id = data.mimiqueId;

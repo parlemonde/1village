@@ -16,6 +16,17 @@ export interface Game {
   activityId: number;
 }
 
+export type GamesData = {
+  game1: GameData;
+  game2: GameData;
+  game3: GameData;
+};
+
+export type GameData = {
+  gameId: number | null;
+  value: string;
+};
+
 export type MimiquesData = {
   mimique1: MimiqueData;
   mimique2: MimiqueData;
@@ -23,7 +34,8 @@ export type MimiquesData = {
 };
 
 export type MimiqueData = {
-  mimiqueId: number | null;
+  // mimiqueId: number | null;
+  gameId: number | null;
   origine: string | null;
   signification: string | null;
   fakeSignification1: string | null;

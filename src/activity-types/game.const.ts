@@ -1,8 +1,10 @@
-import { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity, GameType } from '../../types/game.type';
+import type { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivity } from '../../types/game.type';
+import { GameType } from '../../types/game.type';
 
 export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
   mimique1: {
-    mimiqueId: null,
+    // mimiqueId: null,
+    gameId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
@@ -10,7 +12,8 @@ export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
     video: null,
   },
   mimique2: {
-    mimiqueId: null,
+    // mimiqueId: null,
+    gameId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
@@ -18,7 +21,8 @@ export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
     video: null,
   },
   mimique3: {
-    mimiqueId: null,
+    // mimiqueId: null,
+    gameId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
