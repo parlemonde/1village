@@ -307,8 +307,8 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 
   const activity = new Activity();
   activity.type = data.type;
-  // activity.subType = data.subType ?? null;
-  activity.subType = data.subType as number;
+  activity.subType = data.subType ?? null;
+  //activity.subType = data.subType as number;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
   activity.data = data.data;
   activity.content = data.content;
@@ -413,15 +413,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 });
 //On va créer une fonction simailaire mais avec Game entity
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
-  logger.debug('je suis dans create game');
   const id = data.gameId;
-  logger.debug(id);
   const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
   logger.debug('est ce que je suis apres la const game ?');
-  logger.debug(game);
+  logger.debug(JSON.stringify(game));
 
   game.type = activity.subType;
-  game.content = data.value;
+  game.content = data.value || '';
   game.userId = activity.userId;
   game.activityId = activity.id;
   game.villageId = activity.villageId;

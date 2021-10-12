@@ -55,12 +55,14 @@ export class Game implements GameInterface {
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.game)
   public responses: GameResponse[];
 
-  @Column({
-    type: 'enum',
-    enum: GameType,
-    nullable: false,
-  })
-  public type: GameType;
+  // @Column({
+  //   type: 'enum',
+  //   enum: GameType,
+  //   nullable: false,
+  // })
+  // public type: GameType;
+  @Column({ type: 'tinyint', nullable: true })
+  public type: number | null;
 
   // @Column({ type: 'simple-json', default: null })
   @Column({ type: 'text' })

@@ -7,13 +7,15 @@ export enum GameType {
 
 export interface Game {
   id: number;
-  type: GameType;
+  //type: GameType;
+  type: number | null;
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
   userId: number;
   villageId: number;
   activityId: number;
+  content: string;
 }
 
 export type GamesData = {
@@ -24,6 +26,7 @@ export type GamesData = {
 
 export type GameData = {
   gameId: number | null;
+  type: GameType;
   value: string;
 };
 
