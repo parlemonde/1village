@@ -4,7 +4,6 @@ import { Grid, Box } from '@material-ui/core';
 
 import type { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
-import { Map } from 'src/components/Map';
 import { getMapPosition } from 'src/utils/getMapPosition';
 
 import type { ActivityViewProps } from './activity-view.types';
@@ -40,13 +39,6 @@ export const MascotteActivityView = ({ activity, user = null }: ActivityViewProp
                   ))}
               </div>
             </Grid>
-            {position !== null && (
-              <Grid item xs={12} md={6}>
-                <div style={{ height: '16rem' }}>
-                  <Map position={position} zoom={5} markers={[{ position: position, label: activity.data.presentation }]} />
-                </div>
-              </Grid>
-            )}
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>
                 <AvatarImg src={activity.data.mascotteImage} noLink />

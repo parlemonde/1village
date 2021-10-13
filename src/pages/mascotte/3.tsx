@@ -9,7 +9,6 @@ import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -21,9 +20,9 @@ const MascotteStep3 = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/se-presenter');
+      router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
-      router.push('/se-presenter');
+      router.push('/ma-classe');
     }
   }, [activity, router]);
 
@@ -40,7 +39,7 @@ const MascotteStep3 = () => {
       shouldSave.current = false;
       save().catch();
     }
-  }, [data.languages, data.countries, data.currencies, save]);
+  }, [data?.fluentLanguages, data?.minorLanguages, data?.wantedForeignLanguages, data?.currencies, save]);
 
   if (!activity) return <Base>Redirecting ...</Base>;
 
@@ -48,46 +47,64 @@ const MascotteStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
+          steps={[
+            'Votre classe',
+            `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
+            'Langues et monnaies',
+            'Le web de Pelico',
+            'Prévisualiser',
+          ]}
           activeStep={2}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
-          <h1>Dites-en plus sur vous-même et votre mascotte ! Souvenez-vous {data.mascotteName ?? 'mascotteName'} vous représente.</h1>
+          <h2>Langues parlées dans votre classe</h2>
           <div>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelle(s) langue(s) parle {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                  Quelles sont les langues parlées couramment par <b>tous les élèves</b> de votre classe ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"
                   style={{ width: '100%', marginBottom: '1rem' }}
-                  value={data.languages}
-                  onChange={dataChange('languages')}
+                  value={data.fluentLanguages}
+                  onChange={dataChange('fluentLanguages')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelle(s) monnaie(s) utilise {data.mascotteName ?? 'mascotteName'} (et donc les élèves de votre classe) ?
+                  Quelles sont les langues parlées couramment par <b>au moins un élève</b> de votre classe ?
                 </p>
+                <MultipleLanguageSelector
+                  label="Langues"
+                  style={{ width: '100%', marginBottom: '1rem' }}
+                  value={data.minorLanguages}
+                  onChange={dataChange('minorLanguages')}
+                />
+                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+                  Quelles sont les langues étrangères que l&apos;ont apprend dans votre classe ?
+                </p>
+                <MultipleLanguageSelector
+                  label="Langues"
+                  style={{ width: '100%', marginBottom: '1rem' }}
+                  value={data.wantedForeignLanguages}
+                  onChange={dataChange('wantedForeignLanguages')}
+                />
+              </Grid>
+            </Grid>
+            <h2>Monnaies utilisées dans votre classe</h2>
+            <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>Quelles sont les monnaies utilisées par les élèves de votre classe ?</p>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
                 <MultipleCurrencySelector
                   label="Monnaies"
                   style={{ width: '100%', marginBottom: '1rem' }}
                   value={data.currencies}
                   onChange={dataChange('currencies')}
                 />
-                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Dans quel(s) pays {data.mascotteName ?? 'mascotteName'} est-il allé ou rêve t-il d’aller (et donc les élèves de la classe) ?
-                </p>
-                <MultipleCountrySelector
-                  label="Pays"
-                  style={{ width: '100%', marginBottom: '1rem' }}
-                  value={data.countries}
-                  onChange={dataChange('countries')}
-                />
               </Grid>
             </Grid>
           </div>
 
-          <StepsButton prev="/se-presenter/mascotte/2" next="/se-presenter/mascotte/4" />
+          <StepsButton prev="/mascotte/2" next="/mascotte/4" />
         </div>
       </div>
     </Base>

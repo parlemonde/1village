@@ -38,7 +38,7 @@ export const MultipleLanguageSelector = ({ label, value = [], onChange, filterLa
   React.useEffect(() => {
     const newOption = options.filter((o) => value.includes(o.alpha3_b)) || null;
     setOption(newOption);
-  }, [options, value, languages, filterLanguages, onChange]);
+  }, [options]);
 
   const onChangeOption = React.useCallback(
     (_event: React.ChangeEvent<unknown>, newOption: LanguageOption[] | null) => {
@@ -47,6 +47,7 @@ export const MultipleLanguageSelector = ({ label, value = [], onChange, filterLa
       }
       if (onChange) {
         onChange(newOption ? newOption.map((o) => o.alpha3_b) : null);
+        setOption(newOption);
       }
     },
     [value, onChange],

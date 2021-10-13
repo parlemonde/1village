@@ -6,6 +6,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { ActivityComments } from 'src/components/activities/ActivityComments';
 import { ActivityView } from 'src/components/activities/ActivityView';
 import { UserContext } from 'src/contexts/userContext';
@@ -49,7 +50,7 @@ const Activity = () => {
   }
 
   return (
-    <Base>
+    <Base rightNav={<RightNavigation activityUser={activityUser} />} leftNav={false}>
       <div className="activity__back-container">
         <Link href="/">
           <a className="activity__back-button">
