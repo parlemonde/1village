@@ -1,6 +1,10 @@
 import React from 'react';
 
 import type { MascotteData } from 'src/activity-types/presentation.types';
+<<<<<<< HEAD
+=======
+import { Checkbox } from '@material-ui/core';
+>>>>>>> changing mascotte flow, change activity details view
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -9,6 +13,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 const MascotteStep4 = () => {
   const { activity } = React.useContext(ActivityContext);
   const data = (activity?.data as MascotteData) || null;
+  const [cguChecked, setCguChecked] = React.useState(false);
 
   return (
     activity && (
@@ -26,14 +31,14 @@ const MascotteStep4 = () => {
           />
           <div className="width-900">
             <h1>Le web de Pelico, et ses règles</h1>
-            <p>Bonjour {data ? data.mascotteName : 'Votre mascotte'}, bienvenue sur 1Village !</p>
+            <p>Bonjour {data?.mascotteName}, bienvenue sur 1Village !</p>
 
             <p>
-              {data ? data.mascotteName : 'Votre mascotte'} est votre mascotte de classe, il s’agit de votre profil, c’est grâce à lui que les autres
+              {data?.mascotteName} est votre mascotte de classe, il s’agit de votre profil, c’est grâce à lui que les autres
               classes vous reconnaîtront sur 1Village, notre espace d’échange sécurisé en ligne.
             </p>
 
-            <p>{data ? data.mascotteName : 'Votre mascotte'}, tout comme moi Pelico, est désormais un citoyen numérique.</p>
+            <p>{data?.mascotteName}, tout comme moi Pelico, est désormais un citoyen numérique.</p>
 
             <p>
               C&apos;est-à-dire ? : Un citoyen numérique est une personne qui interagit avec d’autres personnes en ligne. Sur 1Village, ces personnes
@@ -75,10 +80,20 @@ const MascotteStep4 = () => {
             </p>
 
             <p>
-              Alors, {data ? data.mascotteName : 'Votre mascotte'} avec ta classe, êtes-vous d’accord pour respecter les règles du web de Pelico ?
+              Alors, {data?.mascotteName} avec ta classe, êtes-vous d’accord pour respecter les règles du web de Pelico ?
             </p>
-            <p>En passant à l&apos;étape suivante vous acceptez ces conditions d&apos;utilisation.</p>
-            <StepsButton prev="/mascotte/3" next="/mascotte/5" />
+            <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
+              <label style={{ cursor: 'pointer' }}>
+                <Checkbox
+                  checked={cguChecked}
+                  onChange={(event) => {
+                    setCguChecked(event.target.checked);
+                  }}
+                />
+                <span>{"J'accepte les conditions générales d'utilisation"}</span>
+              </label>
+            </div>
+            <StepsButton prev="/mascotte/3" next={cguChecked ? "/mascotte/5" : undefined} />
           </div>
         </div>
       </Base>
