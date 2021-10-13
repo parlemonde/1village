@@ -60,6 +60,7 @@ export const useActivities = ({ pelico, countries = [], userId, ...args }: Args)
       prevData.current = data;
     }
   }, [data]);
+
   return {
     activities: isLoading || error ? prevData.current : data,
   };

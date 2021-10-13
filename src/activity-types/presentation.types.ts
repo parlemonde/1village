@@ -19,7 +19,14 @@ export type MascotteData = {
   personality3: string;
   countries: string[];
   languages: string[];
+  fluentLanguages: string[];
+  minorLanguages: string[];
+  wantedForeignLanguages: string[];
   currencies: string[];
+  classImg: string;
+  classImgDesc: string;
+  game: string;
+  sport: string;
 };
 
 export type ThematiqueData = {

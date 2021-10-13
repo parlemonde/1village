@@ -4,7 +4,7 @@
 $headerHeight: 50px;
 $menuWidth: 250px;
 $menuWidthSmaller: 200px;
-$rightMenuWidth: 220px;
+$rightMenuWidth: 280px;
 $topNavigationHeight: 45px;
 $verticalSpacing: 20px;
 $horizontalSpacing: 25px;
@@ -95,6 +95,10 @@ header {
 main {
   padding-top: $headerHeight + 2 * $verticalSpacing;
   padding-left: $menuWidth + 2 * $horizontalSpacing;
+}
+.main--narrower {
+  padding-top: $headerHeight + 2 * $verticalSpacing;
+  padding-left: 2 * $horizontalSpacing;
 }
 .app-content {
   background-color: white;

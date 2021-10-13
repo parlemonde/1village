@@ -12,6 +12,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { ImageView } from 'src/components/activities/content/views/ImageView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -36,9 +37,9 @@ const MascotteStep4 = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/se-presenter');
+      router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
-      router.push('/se-presenter');
+      router.push('/ma-classe');
     }
   }, [activity, router, updateActivity]);
 
@@ -113,110 +114,112 @@ const MascotteStep4 = () => {
     setIsLoading(false);
   };
 
-  if (!activity) {
-    return (
-      <Base>
-        <div></div>
-      </Base>
-    );
-  }
-
   return (
-    <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Votre classe', 'Votre mascotte : ' + data.mascotteName ?? 'mascotteName', 'Description de votre mascotte', 'Prévisualiser']}
-          activeStep={3}
-        />
-        <div className="width-900">
-          <h1>Pré-visualisez votre mascotte{!isEdit && ' et publiez la'}</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre présentation.
-            {isEdit
-              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
-          </p>
-          {isEdit ? (
-            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Enregistrer les changements
-              </Button>
+    activity && (
+      <Base>
+        <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+          <Steps
+            steps={[
+              'Votre classe',
+              `${data.presentation ? data.presentation : 'Votre mascotte'}`,
+              'Langues et monnaies',
+              'Le web de Pelico',
+              'Prévisualiser',
+            ]}
+            activeStep={4}
+          />
+          <div className="width-900">
+            <h1>Pré-visualisez votre mascotte{!isEdit && ' et publiez la'}</h1>
+            <p className="text" style={{ fontSize: '1.1rem' }}>
+              Voici la pré-visualisation de votre présentation.
+              {isEdit
+                ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
+                : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+            </p>
+            {isEdit ? (
+              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                <Button variant="outlined" color="primary" onClick={onPublish}>
+                  Enregistrer les changements
+                </Button>
+              </div>
+            ) : (
+              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                <Button variant="outlined" color="primary" onClick={onPublish}>
+                  Publier
+                </Button>
+              </div>
+            )}
+            <div className="preview-block">
+              <EditButton
+                onClick={() => {
+                  router.push('/mascotte/1');
+                }}
+                status={'success'}
+                style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+              />
+              <div>
+                {content.length > 0 &&
+                  content[0].split('\n').map((s, index) => (
+                    <p key={index} style={{ margin: '0.5rem 0' }}>
+                      {s}
+                    </p>
+                  ))}
+                <ImageView id={1} value={data.classImg} key={1} />
+                <p>{data.classImgDesc}</p>
+              </div>
             </div>
-          ) : (
-            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
-            </div>
-          )}
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/se-presenter/mascotte/1');
-              }}
-              status={'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <div>
-              {content.length > 0 &&
-                content[0].split('\n').map((s, index) => (
-                  <p key={index} style={{ margin: '0.5rem 0' }}>
-                    {s}
-                  </p>
-                ))}
-            </div>
-          </div>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/se-presenter/mascotte/2');
-              }}
-              status={'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={3}>
-                <Box display="flex" justifyContent="center" m={0}>
-                  <AvatarImg src={data.mascotteImage} noLink />
-                </Box>
+            <div className="preview-block">
+              <EditButton
+                onClick={() => {
+                  router.push('/mascotte/2');
+                }}
+                status={'success'}
+                style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+              />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={3}>
+                  <Box display="flex" justifyContent="center" m={0}>
+                    <AvatarImg src={data.mascotteImage} noLink />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                  <div>
+                    {content.length > 1 &&
+                      content[1].split('\n').map((s, index) => (
+                        <p key={index} style={{ margin: '0.5rem 0' }}>
+                          {s}
+                        </p>
+                      ))}
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={12} md={9}>
-                <div>
-                  {content.length > 1 &&
-                    content[1].split('\n').map((s, index) => (
-                      <p key={index} style={{ margin: '0.5rem 0' }}>
-                        {s}
-                      </p>
-                    ))}
-                </div>
-              </Grid>
-            </Grid>
-          </div>
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/se-presenter/mascotte/3');
-              }}
-              status={'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <div>
-              {content.length > 2 &&
-                content[2].split('\n').map((s, index) => (
-                  <p key={index} style={{ margin: '0.5rem 0' }}>
-                    {s}
-                  </p>
-                ))}
             </div>
-          </div>
+            <div className="preview-block">
+              <EditButton
+                onClick={() => {
+                  router.push('/mascotte/3');
+                }}
+                status={'success'}
+                style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+              />
+              <div>
+                {content.length > 2 &&
+                  content[2].split('\n').map((s, index) => (
+                    <p key={index} style={{ margin: '0.5rem 0' }}>
+                      {s}
+                    </p>
+                  ))}
+              </div>
+            </div>
 
-          <StepsButton prev="/se-presenter/mascotte/3" />
+            <StepsButton prev="/mascotte/4" />
+          </div>
         </div>
-      </div>
-      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </Base>
+        <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </Base>
+    )
   );
 };
 

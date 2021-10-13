@@ -61,7 +61,7 @@ export const MascotteCard = ({
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/se-presenter/mascotte/4?activity-id=${activity.id}`
+                      : `/mascotte/5?activity-id=${activity.id}`
                   }
                   passHref
                 >
@@ -70,7 +70,7 @@ export const MascotteCard = ({
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/se-presenter/mascotte/4?activity-id=${activity.id}`
+                        : `/mascotte/5?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"
