@@ -10,7 +10,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
 import MysteryFlag from 'src/svg/mystery-flag.svg';
-import AgendaIcon from 'src/svg/navigation/agenda-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
@@ -46,8 +45,8 @@ export const Navigation = (): JSX.Element => {
       disabled: false,
     },
     {
-      label: 'Créer sa mascotte',
-      path: '/se-presenter/mascotte/1',
+      label: 'Notre classe',
+      path: '/ma-classe',
       icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: false,
     },
@@ -79,12 +78,6 @@ export const Navigation = (): JSX.Element => {
       icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: false,
     },
-    // {
-    //   label: 'Voir mes activités',
-    //   path: '/mes-activites',
-    //   icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    //   disabled: !(selectedPhase <= phase),
-    // },
   ];
 
   const stepTwo: Tab[] = [
@@ -112,12 +105,6 @@ export const Navigation = (): JSX.Element => {
       icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
-    {
-      label: 'Voir mes activités',
-      path: '/mes-activites',
-      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
   ];
 
   const stepThree: Tab[] = [
@@ -125,12 +112,6 @@ export const Navigation = (): JSX.Element => {
       label: 'Créer un jeu',
       path: '/creer-un-jeu',
       icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-    {
-      label: 'Voir mes activités',
-      path: '/mes-activites',
-      icon: <AgendaIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: !(selectedPhase <= phase),
     },
   ];

@@ -11,6 +11,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 import { getLocalTempHour } from 'src/utils/getLocalTempHour';
+import { UserType } from 'types/user.type';
 
 const phaseActivities = [
   [
@@ -35,6 +36,7 @@ const phaseActivities = [
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
+  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const [filters, setFilters] = React.useState<FilterArgs>({
     type: [],
     status: 0,
@@ -46,7 +48,7 @@ export const Accueil = () => {
   const [countries, setCountries] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    setCountries(selectedPhase !== 1 ? village.countries : [user.countryCode.toUpperCase()]);
+    setCountries(selectedPhase !== 1 || isModerateur ? village?.countries : [user.countryCode.toUpperCase()]);
     selectedPhase &&
       setFilters((currFilters: FilterArgs) => ({
         type: phaseActivities[selectedPhase - 1][0].type,
@@ -93,14 +95,14 @@ export const Accueil = () => {
     </>
   );
 
-  return village ? (
+  return village && activities ? (
     <Base>
-      {selectedPhase <= village.activePhase ? (
+      {selectedPhase <= village?.activePhase ? (
         <>
           {' '}
           <h1>Dernières activités</h1>
           <Filters countries={countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
-          <p>Température : {Math.floor(localTemp)}°</p>
+          <p>Température : {Math.floor(localTemp)}°C</p>
           <p>{localTime}</p>
           <Activities activities={activities} withLinks />{' '}
         </>
