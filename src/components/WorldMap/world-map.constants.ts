@@ -5,5 +5,6 @@ export const GLOBE_RADIUS = 100;
 export const SKY_RADIUS = GLOBE_RADIUS * 500;
 
 /* camera zoom */
-export const MIN_DISTANCE = 124;
-export const MAX_DISTANCE = 300;
+export const MIN_DISTANCE = 110;
+export const MAX_DISTANCE = 310;
+export const ZOOM_DELTA = 20;

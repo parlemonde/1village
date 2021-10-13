@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, MoreThan } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
@@ -19,7 +19,9 @@ const userController = new Controller('/users');
 userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   let users: User[] = [];
   if (req.query.villageId) {
-    users = await getRepository(User).find({ where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null }] });
+    users = await getRepository(User).find({
+      where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null, type: MoreThan(`${UserType.TEACHER}`) }],
+    });
     const ids = users.map((u) => u.id);
     const mascottes = (
       await getRepository(Activity)

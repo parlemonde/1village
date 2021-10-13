@@ -55,6 +55,33 @@ export function debounce<T extends (args: unknown | unknown[]) => void>(func: T,
   } as unknown as T;
 }
 
+export function throttle<T extends (args: unknown | unknown[]) => void>(func: T, wait: number): T {
+  let lastFunc: number;
+  let lastRan: number;
+
+  return function () {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    /*@ts-ignore */ //eslint-disable-next-line @typescript-eslint/no-this-alias, @typescript-eslint/no-explicit-any
+    const context: any = this;
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      window.clearTimeout(lastFunc);
+      lastFunc = window.setTimeout(function () {
+        if (Date.now() - lastRan >= wait) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, wait - (Date.now() - lastRan));
+    }
+  } as unknown as T;
+}
+
+export const clamp = (n: number, min: number, max: number): number => Math.max(min, Math.min(max, n));
+
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
 export function countryToFlag(isoCode: string): string {

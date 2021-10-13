@@ -1,7 +1,8 @@
 import type { Vector3, Camera } from 'three';
-import { Group } from 'three';
+import { Group, CylinderGeometry, MeshStandardMaterial, Mesh, TextureLoader } from 'three';
 
 import { getMapPosition } from 'src/utils/getMapPosition';
+import { clamp, getGravatarUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 
 import { polar2Cartesian } from '../lib/coords-utils';
@@ -14,9 +15,10 @@ export const getPins = async (users: Array<User>, cameraPos: Vector3): Promise<G
   pins.name = 'pins';
 
   const pinModel = await getPinModel();
+  const textureLoader = new TextureLoader();
 
   for (const user of users) {
-    pins.add(new HoverablePin(pinModel, user, await getMapPosition(user), cameraPos));
+    pins.add(new HoverablePin(pinModel, user, await getMapPosition(user), cameraPos, textureLoader));
   }
 
   return pins;
@@ -36,12 +38,34 @@ export class HoverablePin
     user: User;
   }>['userData'];
 
-  constructor(pinModel: Group, user: User, coords: [number, number], cameraPos: Vector3) {
+  constructor(pinModel: Group, user: User, coords: [number, number], cameraPos: Vector3, textureLoader: TextureLoader) {
     super();
 
     for (const child of pinModel.children) {
       this.add(child.clone(true));
     }
+
+    const cylindar = new Mesh(
+      new CylinderGeometry(3.8, 3.8, 0.8, 30),
+      new MeshStandardMaterial({ color: 13111312, roughness: 0.292, metalness: 0.25 }),
+    );
+    cylindar.position.y = 9.1;
+    cylindar.position.z = 0.2;
+    cylindar.rotation.x = Math.PI / 2;
+    this.add(cylindar);
+
+    const imgSrc = user.avatar || getGravatarUrl(user.email);
+    const cylindar2 = new Mesh(
+      new CylinderGeometry(3.4, 3.4, 0.8, 30),
+      new MeshStandardMaterial({
+        map: textureLoader.load(imgSrc),
+      }),
+    );
+    cylindar2.position.y = 9.1;
+    cylindar2.position.z = 0.25;
+    cylindar2.rotation.x = Math.PI / 2;
+    cylindar2.rotation.y = Math.PI / 2;
+    this.add(cylindar2);
 
     this.userData = {
       isHoverable: true,
@@ -53,7 +77,7 @@ export class HoverablePin
 
     // place
     this.coords = coords;
-    const pos = polar2Cartesian(coords[0], coords[1], 1);
+    const pos = polar2Cartesian(coords[0], coords[1], 2);
     this.position.x = pos.x;
     this.position.y = pos.y;
     this.position.z = pos.z;
@@ -64,7 +88,7 @@ export class HoverablePin
 
   public update(cameraPos: Vector3, altitude: number) {
     // scale with altitude
-    const scale = Math.max(0.2, Math.min(1, altitude / 100 - 1));
+    const scale = clamp(altitude / 100, 0.2, 1);
     this.scale.x = scale;
     this.scale.y = scale;
     this.scale.z = scale;

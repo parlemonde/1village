@@ -2,15 +2,21 @@ import React from 'react';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 
+import { Button, ButtonGroup } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import { debounce } from 'src/utils';
+import { clamp, debounce, throttle } from 'src/utils';
+import { UserType } from 'types/user.type';
 
 import { getCapitals } from './data/capitals';
 import { getCountries } from './data/countries';
 import type { HoverablePin } from './data/pin';
 import { getPins } from './data/pin';
+import { useFullScreen } from './hooks/use-full-screen';
 import { useObjectHover } from './hooks/use-object-hover';
-import { cartesian2Polar } from './lib/coords-utils';
+import { cartesian2Polar, polar2Cartesian } from './lib/coords-utils';
 import { disposeNode } from './lib/dispose-node';
 import { getAtmosphereGlow } from './lib/get-atmosphere-glow';
 import { GLOBE_IMAGE_URL, BACKGROUND_IMAGE_URL, SKY_RADIUS, MAX_DISTANCE, MIN_DISTANCE, GLOBE_RADIUS } from './world-map.constants';
@@ -42,6 +48,8 @@ const WorldMap: React.FC = () => {
     cursorStyle,
   } = useObjectHover();
 
+  const { containerRef, fullScreenButton } = useFullScreen();
+
   const render = React.useCallback(() => {
     if (threeData.current === null) {
       return;
@@ -68,32 +76,48 @@ const WorldMap: React.FC = () => {
     return debounce(onResize, 250, false);
   }, [resetCanvasBoundingRect]);
 
-  const onCameraChange = React.useCallback(() => {
+  const onCameraChangeThrottled = React.useMemo(() => {
+    const onCameraChange = () => {
+      if (threeData.current === null) {
+        return;
+      }
+      const { scene, camera, controls } = threeData.current;
+      const altitude = cartesian2Polar(camera.position).altitude;
+      altitudeRef.current = altitude;
+      controls.rotateSpeed = altitude * 0.001363 - 0.109;
+
+      const pins = scene.children.find((child) => child.name === 'pins');
+      if (pins) {
+        for (const pin of pins.children) {
+          (pin as HoverablePin).update(camera.position, altitude);
+        }
+      }
+
+      if ((showDecorsRef.current === true && altitude < 240) || (showDecorsRef.current === false && altitude >= 240)) {
+        showDecorsRef.current = altitude >= 240;
+        for (const child of scene.children) {
+          if (child.name === 'countries' || child.name === 'capitals') {
+            child.visible = !showDecorsRef.current;
+          }
+        }
+        setHoverableObjects(scene, showDecorsRef.current);
+      }
+    };
+    return throttle(onCameraChange, 50);
+  }, [setHoverableObjects]);
+
+  const onZoom = (delta: number) => {
     if (threeData.current === null) {
       return;
     }
-    const { scene, camera, controls } = threeData.current;
-    const altitude = cartesian2Polar(camera.position).altitude;
-    altitudeRef.current = altitude;
-    controls.rotateSpeed = altitude * 0.001363 - 0.109;
-
-    const pins = scene.children.find((child) => child.name === 'pins');
-    if (pins) {
-      for (const pin of pins.children) {
-        (pin as HoverablePin).update(camera.position, altitude);
-      }
-    }
-
-    if ((showDecorsRef.current === true && altitude < 240) || (showDecorsRef.current === false && altitude >= 240)) {
-      showDecorsRef.current = altitude >= 240;
-      for (const child of scene.children) {
-        if (child.name === 'countries' || child.name === 'capitals') {
-          child.visible = !showDecorsRef.current;
-        }
-      }
-      setHoverableObjects(scene, showDecorsRef.current);
-    }
-  }, [setHoverableObjects]);
+    const cameraPosition = threeData.current.camera.position;
+    const { lat, lng, altitude } = cartesian2Polar(cameraPosition);
+    const { x, y, z } = polar2Cartesian(lat, lng, clamp(altitude + delta, MIN_DISTANCE, MAX_DISTANCE) - GLOBE_RADIUS);
+    cameraPosition.x = x;
+    cameraPosition.y = y;
+    cameraPosition.z = z;
+    onCameraChangeThrottled();
+  };
 
   const init = React.useCallback(async () => {
     if (canvasRef.current) {
@@ -137,11 +161,11 @@ const WorldMap: React.FC = () => {
       controls.minDistance = MIN_DISTANCE;
       controls.maxDistance = MAX_DISTANCE;
       controls.enablePan = false;
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
+      controls.enableDamping = false;
+      // controls.dampingFactor = 0.05;
       controls.rotateSpeed = 0.4;
       controls.zoomSpeed = 0.25;
-      controls.addEventListener('change', onCameraChange);
+      controls.addEventListener('change', onCameraChangeThrottled);
       controls.update();
 
       // [5] Start the animation loop.
@@ -156,7 +180,7 @@ const WorldMap: React.FC = () => {
       window.addEventListener('resize', onResizeDebounced);
       setIsInitialized(true);
     }
-  }, [render, onCameraChange, onResizeDebounced]);
+  }, [render, onCameraChangeThrottled, onResizeDebounced]);
 
   const clearScene = React.useCallback(() => {
     if (animationFrameRef.current) {
@@ -182,8 +206,8 @@ const WorldMap: React.FC = () => {
       return;
     }
     onHoverClick(threeData.current.camera, altitudeRef.current);
-    onCameraChange();
-  }, [onHoverClick, onCameraChange]);
+    onCameraChangeThrottled();
+  }, [onHoverClick, onCameraChangeThrottled]);
 
   const addPins = React.useCallback(async () => {
     if (!isInitialized || !threeData.current) {
@@ -200,7 +224,10 @@ const WorldMap: React.FC = () => {
     }
 
     // add pins
-    const pins = await getPins(users, camera.position);
+    const pins = await getPins(
+      users.filter((u) => u.type === UserType.TEACHER),
+      camera.position,
+    );
     scene.add(pins);
     setHoverableObjects(scene, showDecorsRef.current);
   }, [isInitialized, users, setHoverableObjects]);
@@ -209,7 +236,7 @@ const WorldMap: React.FC = () => {
   }, [addPins]);
 
   return (
-    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', height: '100%', width: '100%' }}>
       <canvas
         ref={canvasRef}
         style={{ width: '100%', height: '100%', cursor: cursorStyle }}
@@ -218,6 +245,17 @@ const WorldMap: React.FC = () => {
         onMouseLeave={onMouseLeave}
       ></canvas>
       {popover}
+      <div style={{ position: 'absolute', left: '0.5rem', top: '0.5rem', display: 'flex', flexDirection: 'column' }}>
+        <ButtonGroup orientation="vertical">
+          <Button style={{ padding: '5px', minWidth: 0, backgroundColor: 'white' }} onClick={() => onZoom(-20)}>
+            <AddIcon />
+          </Button>
+          <Button style={{ padding: '5px', minWidth: 0, backgroundColor: 'white' }} onClick={() => onZoom(20)}>
+            <RemoveIcon />
+          </Button>
+        </ButtonGroup>
+        {fullScreenButton}
+      </div>
     </div>
   );
 };
