@@ -88,7 +88,7 @@ export class HoverablePin
 
   public update(cameraPos: Vector3, altitude: number) {
     // scale with altitude
-    const scale = clamp(altitude / 100, 0.2, 1);
+    const scale = clamp(altitude / 100 - 1, 0.2, 1);
     this.scale.x = scale;
     this.scale.y = scale;
     this.scale.z = scale;

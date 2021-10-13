@@ -3,6 +3,9 @@ import type * as THREE from 'three';
 
 import Card from '@material-ui/core/Card';
 
+import type { User } from 'types/user.type';
+
+import { UserPopover } from '../UserPopover';
 import type { HoverableObject } from '../lib/hoverable-object';
 import { onResetHoveredObject } from '../lib/hoverable-object';
 import { isHoverable } from '../lib/hoverable-object';
@@ -105,11 +108,10 @@ export const useObjectHover = () => {
     popoverPos !== null && hoveredObject !== null ? (
       <div style={{ position: 'absolute', display: 'inline-block', left: popoverPos.x, top: popoverPos.y }}>
         <div style={{ position: 'relative', left: '-50%', pointerEvents: 'none' }}>
-          {hoveredObject.getType() === 'country' && (
-            <Card style={{ padding: '0.25rem 0.5rem' }}>
-              <span className="text text--small">{hoveredObject.userData.countryName}</span>
-            </Card>
-          )}
+          <Card style={{ padding: '0.25rem 0.5rem' }}>
+            {hoveredObject.getType() === 'country' && <span className="text text--small">{hoveredObject.userData.countryName}</span>}
+            {hoveredObject.getType() === 'pin' && <UserPopover user={hoveredObject.userData.user as User} />}
+          </Card>
         </div>
       </div>
     ) : null;

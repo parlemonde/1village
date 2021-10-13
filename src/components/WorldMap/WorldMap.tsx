@@ -197,6 +197,7 @@ const WorldMap: React.FC = () => {
   }, [onResizeDebounced]);
 
   React.useEffect(() => {
+    setIsInitialized(false);
     init().catch();
     return clearScene;
   }, [init, clearScene]);
