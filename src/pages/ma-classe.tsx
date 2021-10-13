@@ -91,7 +91,7 @@ const MaClasse = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
           <h2>Notre mascotte</h2>
-          {hasMascotte ? (
+          {hasMascotte && mascotteActivity ? (
             <ActivityCard activity={mascotteActivity} user={user} showEditButtons isSelf />
           ) : (
             <Button href={'/mascotte/1'}>Créer votre mascotte</Button>
