@@ -33,6 +33,7 @@ type AvatarImgProps = {
   noLink?: boolean;
   onClick?: () => void;
   style?: React.CSSProperties;
+  isRounded?: boolean;
 };
 export const AvatarImg: React.FC<AvatarImgProps> = ({
   size = 'large',
@@ -42,6 +43,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
   onClick = () => {},
   style,
   noLink = false,
+  isRounded = true,
 }: React.PropsWithChildren<AvatarImgProps>) => {
   const classes = useStyles();
   const isPelico = user && user.type >= UserType.MEDIATOR;
@@ -68,7 +70,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
     );
   }
   return (
-    <Avatar alt={'avatar'} className={classes[size]} src={imgSrc} onClick={onClick} style={style}>
+    <Avatar alt={'avatar'} className={classes[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : null}>
       {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
     </Avatar>
   );
