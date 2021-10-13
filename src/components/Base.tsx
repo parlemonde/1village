@@ -1,17 +1,24 @@
 import className from 'classnames';
 import React from 'react';
 
+import { Navigation } from 'src/components/Navigation';
 import { SubHeaders } from 'src/components/accueil/SubHeader';
 
 interface BaseProps {
   rightNav?: React.ReactNode | React.ReactNodeArray;
-  subHeader?: React.ReactNode | React.ReactNodeArray;
+  subHeader?: boolean;
+  leftNav?: React.ReactNode | React.ReactNodeArray;
   style?: React.CSSProperties;
 }
 
-export const Base: React.FC<BaseProps> = ({ children, rightNav, subHeader, style }: React.PropsWithChildren<BaseProps>) => {
+export const Base: React.FC<BaseProps> = ({ children, rightNav, leftNav = true, subHeader, style }: React.PropsWithChildren<BaseProps>) => {
   return (
-    <main>
+    <main
+      className={className({
+        'main--narrower': !leftNav,
+      })}
+    >
+      {leftNav && <Navigation />}
       {!subHeader && (
         <div className="sub-header">
           <SubHeaders />

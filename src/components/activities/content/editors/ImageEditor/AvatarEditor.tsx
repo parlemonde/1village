@@ -9,15 +9,15 @@ import type { EditorProps } from '../../content.types';
 
 import { ImageModal } from './ImageModal';
 
-export const AvatarEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const AvatarEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {}, isRounded = true }: EditorProps) => {
   const [imageUrl, setImageUrl] = React.useState(value);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
     <>
-      <ButtonBase onClick={() => setIsModalOpen(true)} style={{ borderRadius: '50%' }}>
-        <AvatarImg src={imageUrl} noLink>
+      <ButtonBase onClick={() => setIsModalOpen(true)} style={{ borderRadius: isRounded ? '50%' : '0%' }}>
+        <AvatarImg src={imageUrl} noLink isRounded={isRounded}>
           {imageUrl || <AddIcon style={{ fontSize: '80px' }} />}
         </AvatarImg>
       </ButtonBase>
@@ -30,7 +30,7 @@ export const AvatarEditor = ({ id, value = '', onChange = () => {}, onDelete = (
         setIsModalOpen={setIsModalOpen}
         imageUrl={imageUrl}
         setImageUrl={setImageUrl}
-        useCrop
+        useCrop={isRounded}
       />
     </>
   );

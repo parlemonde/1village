@@ -5,6 +5,7 @@ export interface EditorProps {
   onDelete?(): void;
   onFocus?(): void;
   onBlur?(): void;
+  isRounded?: boolean;
 }
 
 export interface ViewProps {

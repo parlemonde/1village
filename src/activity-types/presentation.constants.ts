@@ -3,6 +3,7 @@ import type { Country } from 'types/country.type';
 import type { Currency } from 'types/currency.type';
 import type { Language } from 'types/language.type';
 
+import type { AnyActivity } from './anyActivity.types';
 import type { MascotteData, PresentationActivity, PresentationMascotteActivity, PresentationThematiqueActivity } from './presentation.types';
 
 export const PRESENTATION_THEMATIQUE = [
@@ -62,8 +63,15 @@ export const DEFAULT_MASCOTTE_DATA: MascotteData = {
   personality2: '',
   personality3: '',
   countries: [],
+  wantedForeignLanguages: [],
+  minorLanguages: [],
+  fluentLanguages: [],
   languages: [],
   currencies: [],
+  classImg: '',
+  classImgDesc: '',
+  game: '',
+  sport: '',
 };
 
 export const PRESENTATION = {
@@ -71,7 +79,7 @@ export const PRESENTATION = {
   MASCOTTE: 1,
 };
 
-export const isMascotte = (activity: PresentationActivity): activity is PresentationMascotteActivity => {
+export const isMascotte = (activity: AnyActivity): activity is PresentationMascotteActivity => {
   return activity.subType === PRESENTATION.MASCOTTE;
 };
 export const isThematique = (activity: PresentationActivity): activity is PresentationThematiqueActivity => {
@@ -93,23 +101,31 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
       data.totalSchoolStudent ?? 0
     } élève${pluralS(data.totalSchoolStudent)}.`,
   );
-
+  const displayCountries = countries.filter((country) => data.countries.includes(country.isoCode)).map((country) => country.name);
   content.push(
     `Notre mascotte s’appelle ${data.mascotteName}, elle nous représente.\n${capitalize(data.mascotteDescription)}\n${capitalize(
       data.mascotteName,
-    )} est ${data.personality1.toLowerCase()}, ${data.personality2.toLowerCase()} et ${data.personality3.toLowerCase()}.`,
+    )} est ${data.personality1.toLowerCase()}, ${data.personality2.toLowerCase()} et ${data.personality3.toLowerCase()}.\n
+    Elle rêve d’aller dans ${
+      displayCountries.length > 0 ? ` ${displayCountries.length === 1 ? 'ce' : 'ces'} pays : ` + naturalJoin(displayCountries) + '.' : ' aucun pays.'
+    }\nElle joue ${data.game} et pratique ${data.sport}`,
   );
 
-  const displayCountries = countries.filter((country) => data.countries.includes(country.isoCode)).map((country) => country.name);
-  const displayLanguages = languages.filter((language) => data.languages.includes(language.alpha3_b)).map((language) => language.french);
+  const displayWantedLanguages = languages
+    .filter((language) => data.wantedForeignLanguages.includes(language.alpha3_b))
+    .map((language) => language.french);
+  const displayMinorLanguages = languages.filter((language) => data.minorLanguages.includes(language.alpha3_b)).map((language) => language.french);
+  const displayFluentLanguages = languages.filter((language) => data.fluentLanguages.includes(language.alpha3_b)).map((language) => language.french);
   const displayCurrencies = currencies.filter((currency) => data.currencies.includes(currency.code)).map((currency) => currency.name);
   content.push(
-    `${capitalize(data.mascotteName)}, comme les élèves de notre classe, ${
-      displayLanguages.length > 0 ? ' parle ' + naturalJoin(displayLanguages) + '.' : ' ne parle aucune langue.'
-    }\n${capitalize(data.mascotteName)}, comme les élèves de notre classe, ${
+    `${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
+      displayFluentLanguages.length > 0 ? ' parle ' + naturalJoin(displayFluentLanguages) + '.' : ' ne parle aucune langue.'
+    }\n${capitalize(data.mascotteName)}, comme quelques élèves de notre classe, ${
+      displayMinorLanguages.length > 0 ? ' parle : ' + naturalJoin(displayMinorLanguages) + '.' : ' ne parle aucune langue.'
+    }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
+      displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'utilise aucune monnaie."
+    }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
       displayCurrencies.length > 0 ? ' utilise comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilise aucune monnaie."
-    }\n${capitalize(data.mascotteName)}, comme les élèves de notre classe, est allé ou rêve d’aller dans ${
-      displayCountries.length > 0 ? ` ${displayCountries.length === 1 ? 'ce' : 'ces'} pays : ` + naturalJoin(displayCountries) + '.' : ' aucun pays.'
     }`,
   );
   return content;
