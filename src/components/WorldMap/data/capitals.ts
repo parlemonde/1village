@@ -7,7 +7,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import { polar2Cartesian } from '../lib/coords-utils';
 import { GLOBE_RADIUS } from '../world-map.constants';
 
-export type GeoJSONCityData = FeatureCollection<Point, { cityFR: string; iso3: string }>;
+export type GeoJSONCityData = FeatureCollection<Point, { cityNameFR: string; iso2: string }>;
 export type GeoLabel = GeoJSONCityData['features'][0];
 
 const pxPerDeg = (2 * Math.PI * GLOBE_RADIUS) / 360;
@@ -50,7 +50,7 @@ function getCapital(geojson: GeoLabel): Group | null {
   const textHeight = 0.4 * pxPerDeg;
   const labelObj = new Text();
   labelObj.name = 'Text';
-  labelObj.text = geojson.properties.cityFR;
+  labelObj.text = geojson.properties.cityNameFR;
   labelObj.fontSize = textHeight;
   labelObj.color = 0x000000;
   labelObj.anchorX = 'center';

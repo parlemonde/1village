@@ -1,6 +1,7 @@
-import * as THREE from 'three';
+import type { Material, Texture, Object3D } from 'three';
+import { Mesh } from 'three';
 
-type AnyMaterial = THREE.Material & { [key: string]: THREE.Texture };
+type AnyMaterial = Material & { [key: string]: Texture };
 
 export function disposeMaterial(material: AnyMaterial) {
   if (material.map) material.map.dispose();
@@ -19,11 +20,11 @@ export function disposeMaterial(material: AnyMaterial) {
   material.dispose(); // disposes any programs associated with the material
 }
 
-export function disposeNode(node: THREE.Object3D): void {
+export function disposeNode(node: Object3D): void {
   try {
     // Specific case for Text nodes
     if (node.name === 'Text') {
-      (node as THREE.Object3D & { dispose(): void }).dispose();
+      (node as Object3D & { dispose(): void }).dispose();
       return;
     }
 
@@ -31,7 +32,7 @@ export function disposeNode(node: THREE.Object3D): void {
       disposeNode(child);
     }
 
-    if (node instanceof THREE.Mesh) {
+    if (node instanceof Mesh) {
       if (node.geometry) {
         node.geometry.dispose();
       }

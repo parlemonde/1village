@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type * as THREE from 'three';
+import type { Object3D, Scene, Raycaster, Camera } from 'three';
 
 import Card from '@material-ui/core/Card';
 
@@ -19,14 +19,14 @@ export const useObjectHover = () => {
 
   // Hovered Object.
   const [hoveredObject, setHoveredObject] = React.useState<HoverableObject | null>(null);
-  const hoveredObjectIdRef = React.useRef<THREE.Object3D['id'] | null>(null);
+  const hoveredObjectIdRef = React.useRef<Object3D['id'] | null>(null);
 
   // HoverableObjects
-  const hoverableObjectsRef = React.useRef<THREE.Object3D[]>([]);
+  const hoverableObjectsRef = React.useRef<Object3D[]>([]);
 
-  const setHoverableObjects = React.useCallback((scene: THREE.Scene, showDecors: boolean = true) => {
-    const addObjectFrom = (children: THREE.Object3D[]): THREE.Object3D[] => {
-      const obj: THREE.Object3D[] = [];
+  const setHoverableObjects = React.useCallback((scene: Scene, showDecors: boolean = true) => {
+    const addObjectFrom = (children: Object3D[]): Object3D[] => {
+      const obj: Object3D[] = [];
       for (const child of children) {
         if (child.type === 'Group' && child.children) {
           obj.push(...addObjectFrom(child.children));
@@ -43,7 +43,7 @@ export const useObjectHover = () => {
     setHoveredObject(null);
   }, []);
 
-  const onUpdateHover = React.useCallback((raycaster: THREE.Raycaster, camera: THREE.Camera, scene: THREE.Scene) => {
+  const onUpdateHover = React.useCallback((raycaster: Raycaster, camera: Camera, scene: Scene) => {
     if (mousePositionRef.current === null) {
       return;
     }
@@ -92,7 +92,7 @@ export const useObjectHover = () => {
   }, []);
 
   const onClick = React.useCallback(
-    (camera: THREE.Camera, cameraAltitude: number) => {
+    (camera: Camera, cameraAltitude: number) => {
       if (hoveredObject !== null && hoveredObject.userData.isClickable) {
         hoveredObject.onClick(camera, cameraAltitude);
       }

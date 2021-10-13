@@ -1,8 +1,20 @@
-import React from 'react';
+import * as React from 'react';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import * as THREE from 'three';
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  SphereBufferGeometry,
+  MeshBasicMaterial,
+  AmbientLight,
+  DirectionalLight,
+  TextureLoader,
+  BackSide,
+  Raycaster,
+  Mesh,
+} from 'three';
 
-import { Button, ButtonGroup } from '@material-ui/core';
+import { Button, ButtonGroup, CircularProgress } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
@@ -26,11 +38,11 @@ const WorldMap: React.FC = () => {
 
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const threeData = React.useRef<{
-    scene: THREE.Scene;
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.WebGLRenderer;
+    scene: Scene;
+    camera: PerspectiveCamera;
+    renderer: WebGLRenderer;
     controls: OrbitControls;
-    raycaster: THREE.Raycaster;
+    raycaster: Raycaster;
   } | null>(null);
   const [isInitialized, setIsInitialized] = React.useState(false);
   const altitudeRef = React.useRef<number>(MAX_DISTANCE);
@@ -125,28 +137,29 @@ const WorldMap: React.FC = () => {
       const height = canvasRef.current.clientHeight;
 
       // [1] Init scene, camera and renderer.
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, SKY_RADIUS * 2.5);
-      const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, antialias: true, alpha: true });
+      const scene = new Scene();
+      const camera = new PerspectiveCamera(50, width / height, 0.1, SKY_RADIUS * 2.5);
+      const renderer = new WebGLRenderer({ canvas: canvasRef.current, antialias: true, alpha: true });
+      const textureLoader = new TextureLoader();
       camera.position.z = MAX_DISTANCE;
       renderer.setPixelRatio(window.devicePixelRatio || 1);
       renderer.setSize(width, height, false);
 
       // [2] Add globe to the scene.
-      const globeGeometry = new THREE.SphereBufferGeometry(GLOBE_RADIUS, 75, 75);
-      const defaultGlobeMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(GLOBE_IMAGE_URL), transparent: true });
-      const globeObj = new THREE.Mesh(globeGeometry, defaultGlobeMaterial);
+      const globeGeometry = new SphereBufferGeometry(GLOBE_RADIUS, 75, 75);
+      const defaultGlobeMaterial = new MeshBasicMaterial({ map: textureLoader.load(GLOBE_IMAGE_URL), transparent: true });
+      const globeObj = new Mesh(globeGeometry, defaultGlobeMaterial);
       globeObj.rotation.y = -Math.PI / 2; // face prime meridian along Z axis
       globeObj.name = 'globe';
       const glowObj = getAtmosphereGlow();
-      const skyGeometry = new THREE.SphereBufferGeometry(50000, 75, 75);
-      const defaultSkyMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(BACKGROUND_IMAGE_URL), side: THREE.BackSide });
-      const skyObj = new THREE.Mesh(skyGeometry, defaultSkyMaterial);
+      const skyGeometry = new SphereBufferGeometry(50000, 75, 75);
+      const defaultSkyMaterial = new MeshBasicMaterial({ map: textureLoader.load(BACKGROUND_IMAGE_URL), side: BackSide });
+      const skyObj = new Mesh(skyGeometry, defaultSkyMaterial);
       scene.add(skyObj);
       scene.add(globeObj);
       scene.add(glowObj);
-      scene.add(new THREE.AmbientLight(0xbbbbbb));
-      scene.add(new THREE.DirectionalLight(0xffffff, 0.6));
+      scene.add(new AmbientLight(0xbbbbbb));
+      scene.add(new DirectionalLight(0xffffff, 0.6));
 
       // [3] Add countries
       const countries = await getCountries();
@@ -174,11 +187,13 @@ const WorldMap: React.FC = () => {
         camera,
         renderer,
         controls,
-        raycaster: new THREE.Raycaster(),
+        raycaster: new Raycaster(),
       };
       requestAnimationFrame(render);
       window.addEventListener('resize', onResizeDebounced);
-      setIsInitialized(true);
+      setTimeout(() => {
+        setIsInitialized(true);
+      }, 100);
     }
   }, [render, onCameraChangeThrottled, onResizeDebounced]);
 
@@ -237,7 +252,7 @@ const WorldMap: React.FC = () => {
   }, [addPins]);
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', height: '100%', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', height: '100%', width: '100%', maxHeight: 'calc(100vh - 90px)' }}>
       <canvas
         ref={canvasRef}
         style={{ width: '100%', height: '100%', cursor: cursorStyle }}
@@ -257,6 +272,23 @@ const WorldMap: React.FC = () => {
         </ButtonGroup>
         {fullScreenButton}
       </div>
+      {!isInitialized && (
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'black',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress color="primary" />
+        </div>
+      )}
     </div>
   );
 };
