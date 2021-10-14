@@ -31,7 +31,7 @@ __metadata:
     "@types/geojson": 7946.0.7
     "@types/json-stable-stringify": 1.0.32
     "@types/jsonwebtoken": 8.5.2
-    "@types/leaflet": 1.7.3
+    "@types/leaflet": 1.7.5
     "@types/leaflet-fullscreen": 1.0.4
     "@types/mapbox-gl": 1.13.1
     "@types/mapbox-gl-leaflet": 0.0.1
@@ -2420,21 +2420,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet@npm:*":
+"@types/leaflet@npm:*, @types/leaflet@npm:1.7.5":
   version: 1.7.5
   resolution: "@types/leaflet@npm:1.7.5"
   dependencies:
     "@types/geojson": "*"
   checksum: 922f3d1176017c350be997773df72d0fd8f31c2f0340a20d3a91eb31540c3e6ef09eb020cec85c74b05afd54f4095e406ab3a45c9328c31ea17f95aa6ef69c6e
-  languageName: node
-  linkType: hard
-
-"@types/leaflet@npm:1.7.3":
-  version: 1.7.3
-  resolution: "@types/leaflet@npm:1.7.3"
-  dependencies:
-    "@types/geojson": "*"
-  checksum: 2d3b2149fb17310a8f9726b46aef4a00fb903824982de215dcc7623ad2c676960a13470abea860947729d85aa5f865867298e351b699a737f7843028e710bfe7
   languageName: node
   linkType: hard
 
