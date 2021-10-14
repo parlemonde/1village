@@ -36,7 +36,7 @@ export function getQueryString(q: string | string[]): string {
  * N milliseconds. If `immediate` is passed, trigger the function on the
  * leading edge, instead of the trailing.
  */
-export function debounce<T extends (args: unknown | unknown[]) => unknown | unknown[]>(func: T, wait: number, immediate: boolean): T {
+export function debounce<T extends (args: unknown | unknown[]) => void>(func: T, wait: number, immediate: boolean): T {
   let timeout: NodeJS.Timeout;
   return function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -54,6 +54,33 @@ export function debounce<T extends (args: unknown | unknown[]) => unknown | unkn
     if (callNow) func.apply(context, args);
   } as unknown as T;
 }
+
+export function throttle<T extends (args: unknown | unknown[]) => void>(func: T, wait: number): T {
+  let lastFunc: number;
+  let lastRan: number;
+
+  return function () {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    /*@ts-ignore */ //eslint-disable-next-line @typescript-eslint/no-this-alias, @typescript-eslint/no-explicit-any
+    const context: any = this;
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      window.clearTimeout(lastFunc);
+      lastFunc = window.setTimeout(function () {
+        if (Date.now() - lastRan >= wait) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, wait - (Date.now() - lastRan));
+    }
+  } as unknown as T;
+}
+
+export const clamp = (n: number, min: number, max: number): number => Math.max(min, Math.min(max, n));
 
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11

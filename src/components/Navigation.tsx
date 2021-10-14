@@ -89,9 +89,11 @@ export const Navigation = () => {
           <div style={{ padding: '10% 15%', position: 'relative' }}>
             <Map width="100%" height="100%" />
             <div className="absolute-center">
-              <Button className="navigation__button" color="primary" variant="contained">
-                Voir sur la carte
-              </Button>
+              <Link href="/carte" passHref>
+                <Button component="a" href="/carte" className="navigation__button" color="primary" variant="contained">
+                  Voir sur la carte
+                </Button>
+              </Link>
             </div>
           </div>
           <div style={{ padding: '0 5%', position: 'relative' }}>
