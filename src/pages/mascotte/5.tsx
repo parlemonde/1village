@@ -19,6 +19,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
+import { errorColor, successColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
@@ -27,6 +28,7 @@ const MascotteStep4 = () => {
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);
+  const [errorSteps, setErrorSteps] = React.useState([]);
   const { countries } = useCountries();
   const { languages } = useLanguages();
   const { currencies } = useCurrencies();
@@ -35,7 +37,47 @@ const MascotteStep4 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
+  const isValidSum = (x: number, y: number, z: number) => {
+    if (x < 0 || y < 0) return false;
+    return x + y === z;
+  };
+
+  const isFirstStepValid = () => {
+    return (
+      data?.presentation.length > 0 &&
+      isValidSum(data?.girlStudent, data?.boyStudent, data?.totalStudent) &&
+      isValidSum(data?.womanTeacher, data?.manTeacher, data?.totalTeacher) &&
+      data?.totalStudent !== 0 &&
+      data?.totalTeacher !== 0 &&
+      data?.totalStudent !== null &&
+      data?.totalTeacher !== null &&
+      data?.numberClassroom !== 0 &&
+      data?.numberClassroom !== null &&
+      data?.totalSchoolStudent !== 0 &&
+      data?.totalSchoolStudent !== null &&
+      data?.meanAge !== 0 &&
+      data?.meanAge !== null
+    );
+  };
+
+  const isSecondStepValid = (): boolean => {
+    if (data?.mascotteName === '') return false;
+    if (data?.mascotteDescription === '') return false;
+    if (data?.personality1 === '') return false;
+    if (data?.personality2 === '') return false;
+    if (data?.personality3 === '') return false;
+    if (data?.countries === []) return false;
+    if (data?.game === '') return false;
+    if (data?.sport === '') return false;
+    return true;
+  };
+
   React.useEffect(() => {
+    !isFirstStepValid() && !isSecondStepValid()
+      ? setErrorSteps([0, 1])
+      : !isFirstStepValid()
+      ? setErrorSteps([1])
+      : !isSecondStepValid() && setErrorSteps([0]);
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
@@ -121,12 +163,13 @@ const MascotteStep4 = () => {
           <Steps
             steps={[
               'Votre classe',
-              `${data.presentation ? data.presentation : 'Votre mascotte'}`,
+              `${data?.presentation ? data?.presentation : 'Votre mascotte'}`,
               'Langues et monnaies',
               'Le web de Pelico',
               'Prévisualiser',
             ]}
             activeStep={4}
+            errorSteps={errorSteps}
           />
           <div className="width-900">
             <h1>Pré-visualisez votre mascotte{!isEdit && ' et publiez la'}</h1>
@@ -144,47 +187,53 @@ const MascotteStep4 = () => {
               </div>
             ) : (
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                <Button variant="outlined" color="primary" onClick={onPublish}>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={errorSteps.length > 0}>
                   Publier
                 </Button>
               </div>
             )}
-            <div className="preview-block">
+            <div className="preview-block" style={{ border: `1px dashed ${!isFirstStepValid() ? errorColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/1');
                 }}
-                status={'success'}
+                status={!isFirstStepValid() ? 'error' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>
-                {content.length > 0 &&
+                {isFirstStepValid() &&
+                  content.length > 0 &&
                   content[0].split('\n').map((s, index) => (
                     <p key={index} style={{ margin: '0.5rem 0' }}>
                       {s}
                     </p>
                   ))}
-                <ImageView id={1} value={data.classImg} key={1} />
-                <p>{data.classImgDesc}</p>
+                {data?.classImg && (
+                  <>
+                    <ImageView id={1} value={data?.classImg} key={1} />
+                    <p>{data?.classImgDesc}</p>
+                  </>
+                )}
               </div>
             </div>
-            <div className="preview-block">
+            <div className="preview-block" style={{ border: `1px dashed ${!isSecondStepValid() ? errorColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/2');
                 }}
-                status={'success'}
+                status={!isSecondStepValid() ? 'error' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <Grid container spacing={3}>
                 <Grid item xs={12} md={3}>
                   <Box display="flex" justifyContent="center" m={0}>
-                    <AvatarImg src={data.mascotteImage} noLink />
+                    <AvatarImg src={data?.mascotteImage} noLink />
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={9}>
                   <div>
-                    {content.length > 1 &&
+                    {isSecondStepValid() &&
+                      content.length > 1 &&
                       content[1].split('\n').map((s, index) => (
                         <p key={index} style={{ margin: '0.5rem 0' }}>
                           {s}

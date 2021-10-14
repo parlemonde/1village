@@ -105,6 +105,7 @@ const MascotteStep1 = () => {
     if (isValid()) {
       router.push('/mascotte/2');
     } else {
+      router.push('/mascotte/2');
       setIsError(true);
     }
   };
