@@ -51,6 +51,7 @@ const MascotteStep2 = () => {
   const onNext = () => {
     save().catch(console.error);
     if (!isValid()) {
+      router.push('/mascotte/3');
       setIsError(true);
     } else {
       router.push('/mascotte/3');

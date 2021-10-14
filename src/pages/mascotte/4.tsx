@@ -1,10 +1,7 @@
 import React from 'react';
 
-import type { MascotteData } from 'src/activity-types/presentation.types';
-<<<<<<< HEAD
-=======
 import { Checkbox } from '@material-ui/core';
->>>>>>> changing mascotte flow, change activity details view
+import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -34,8 +31,8 @@ const MascotteStep4 = () => {
             <p>Bonjour {data?.mascotteName}, bienvenue sur 1Village !</p>
 
             <p>
-              {data?.mascotteName} est votre mascotte de classe, il s’agit de votre profil, c’est grâce à lui que les autres
-              classes vous reconnaîtront sur 1Village, notre espace d’échange sécurisé en ligne.
+              {data?.mascotteName} est votre mascotte de classe, il s’agit de votre profil, c’est grâce à lui que les autres classes vous
+              reconnaîtront sur 1Village, notre espace d’échange sécurisé en ligne.
             </p>
 
             <p>{data?.mascotteName}, tout comme moi Pelico, est désormais un citoyen numérique.</p>
@@ -79,9 +76,7 @@ const MascotteStep4 = () => {
               🕶 Ne partagez pas en dehors d’1Village les photos, vidéos et textes publiés par vos Pélicopains… à moins qu’ils ne donnent leur accord !
             </p>
 
-            <p>
-              Alors, {data?.mascotteName} avec ta classe, êtes-vous d’accord pour respecter les règles du web de Pelico ?
-            </p>
+            <p>Alors, {data?.mascotteName} avec ta classe, êtes-vous d’accord pour respecter les règles du web de Pelico ?</p>
             <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
               <label style={{ cursor: 'pointer' }}>
                 <Checkbox
@@ -93,7 +88,7 @@ const MascotteStep4 = () => {
                 <span>{"J'accepte les conditions générales d'utilisation"}</span>
               </label>
             </div>
-            <StepsButton prev="/mascotte/3" next={cguChecked ? "/mascotte/5" : undefined} />
+            <StepsButton prev="/mascotte/3" next={cguChecked ? '/mascotte/5' : undefined} />
           </div>
         </div>
       </Base>
