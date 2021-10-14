@@ -29,7 +29,7 @@ __metadata:
     "@types/express-useragent": 1.0.1
     "@types/fs-extra": 9.0.11
     "@types/geojson": 7946.0.7
-    "@types/json-stable-stringify": 1.0.32
+    "@types/json-stable-stringify": 1.0.33
     "@types/jsonwebtoken": 8.5.2
     "@types/leaflet": 1.7.3
     "@types/leaflet-fullscreen": 1.0.4
@@ -2379,10 +2379,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-stable-stringify@npm:1.0.32":
-  version: 1.0.32
-  resolution: "@types/json-stable-stringify@npm:1.0.32"
-  checksum: 3091ddc8d15c6cce1a847ba1f8db21e7c2564c7b8bc6923a873801d936228f775096b517d62653fbcebedcb2a7992555dc6ed11517ef050e75525cdf1d1bce8d
+"@types/json-stable-stringify@npm:1.0.33":
+  version: 1.0.33
+  resolution: "@types/json-stable-stringify@npm:1.0.33"
+  checksum: 5fb2b6761d7079396372239366afbb4d454bdf2c78fb26a78214b1c3f7a94e131910b1fe0607aae90f8a49dd71972d8a10d74088145b92d3fcb5b38fb1359e30
   languageName: node
   linkType: hard
 
