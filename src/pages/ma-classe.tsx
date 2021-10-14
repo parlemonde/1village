@@ -54,11 +54,12 @@ const MaClasse = () => {
   }, [axiosLoggedRequest]);
 
   const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
-  const onDeleteActivity = async () => {
+  const onDeleteActivity = async (mascotteActivity: AnyActivity = null, isDraft = false) => {
     if (activityToDelete !== null) {
       await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     }
-    if (isPresentation(activityToDelete) && isMascotte(activityToDelete)) {
+    if (mascotteActivity || (isPresentation(activityToDelete) && isMascotte(activityToDelete))) {
+      mascotteActivity && (await deleteActivity(mascotteActivity.id, isDraft));
       const newUser = {
         avatar: '',
         displayName: '',
@@ -92,7 +93,7 @@ const MaClasse = () => {
         <div className="width-900">
           <h2>Notre mascotte</h2>
           {hasMascotte && mascotteActivity ? (
-            <ActivityCard activity={mascotteActivity} user={user} showEditButtons isSelf />
+            <ActivityCard activity={mascotteActivity} user={user} showEditButtons isSelf onDelete={() => onDeleteActivity(mascotteActivity)} />
           ) : (
             <Button href={'/mascotte/1'}>Créer votre mascotte</Button>
           )}
