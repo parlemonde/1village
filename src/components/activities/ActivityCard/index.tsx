@@ -72,7 +72,7 @@ export const ActivityCard = ({
               {userIsPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
-                <Flag country={user.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={user?.countryCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </div>
           </div>
