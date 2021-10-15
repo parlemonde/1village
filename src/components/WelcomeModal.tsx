@@ -182,7 +182,7 @@ export const WelcomeModal = () => {
             <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
             <br />
             <Button variant="contained" color="primary" size="medium" onClick={() => setIsVisible(!isVisible)}>
-              {isVisible ? 'Montrer' : 'Cacher'}
+              {isVisible ? 'Cacher' : 'Montrer'}
             </Button>
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0', visibility: isVisible ? 'visible' : 'hidden' }} className="text--primary">
               {village.name}

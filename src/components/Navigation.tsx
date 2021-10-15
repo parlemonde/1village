@@ -140,7 +140,7 @@ export const Navigation = (): JSX.Element => {
             village.countries.map((country: string) =>
               selectedPhase !== 1 && village?.activePhase > 1 ? (
                 <Flag country={country}></Flag>
-              ) : user.countryCode.toUpperCase() == country ? (
+              ) : user?.countryCode.toUpperCase() == country ? (
                 <Flag country={country}></Flag>
               ) : (
                 <MysteryFlag style={{ width: 'auto', height: '18', borderRadius: '2px' }} />
