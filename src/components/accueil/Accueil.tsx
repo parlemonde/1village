@@ -15,10 +15,11 @@ import { UserType } from 'types/user.type';
 
 const phaseActivities = [
   [
-    { key: 0, label: 'Toutes', type: [3, 5, 6, 7] },
+    { key: 0, label: 'Toutes', type: [0, 3, 5, 6, 7] },
     { key: 1, label: 'Indices culturels', type: [6] },
     { key: 2, label: 'Symboles', type: [7] },
     { key: 3, label: 'Questions', type: [3] },
+    { key: 3, label: 'Mascotte', type: [0] },
   ],
   [
     { key: 0, label: 'Toutes', type: [1, 2, 4, 5] },
@@ -48,7 +49,7 @@ export const Accueil = () => {
   const [countries, setCountries] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    setCountries(selectedPhase !== 1 || isModerateur ? village?.countries : [user.countryCode.toUpperCase()]);
+    setCountries(selectedPhase !== 1 || isModerateur ? village?.countries : [user?.countryCode.toUpperCase()]);
     selectedPhase &&
       setFilters((currFilters: FilterArgs) => ({
         type: phaseActivities[selectedPhase - 1][0].type,
@@ -64,7 +65,7 @@ export const Accueil = () => {
       }
     };
     asyncFunc();
-  }, [user, selectedPhase]);
+  }, [user, selectedPhase, village]);
 
   const { activities } = useActivities({
     page: 0,

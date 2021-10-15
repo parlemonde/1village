@@ -13,7 +13,6 @@ import { UserDisplayName } from 'src/components/UserDisplayName';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
@@ -23,13 +22,12 @@ import { ActivityType } from 'types/activity.type';
 const Question1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
   const { activity, createNewActivity } = React.useContext(ActivityContext);
   const { users } = useVillageUsers();
   const { activities } = useActivities({
     limit: 50,
     page: 0,
-    countries: village?.countries,
+    countries: [user.countryCode.toUpperCase()],
     pelico: true,
     type: ActivityType.QUESTION,
   });
