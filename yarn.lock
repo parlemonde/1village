@@ -99,7 +99,7 @@ __metadata:
     leaflet: ^1.7.1
     leaflet-fullscreen: ^1.0.2
     mapbox-gl: ^1.5.1
-    mapbox-gl-leaflet: ^0.0.14
+    mapbox-gl-leaflet: ^0.0.15
     md5: ^2.3.0
     mime-types: ^2.1.32
     morgan: ^1.10.0
@@ -8963,13 +8963,13 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"mapbox-gl-leaflet@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "mapbox-gl-leaflet@npm:0.0.14"
+"mapbox-gl-leaflet@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "mapbox-gl-leaflet@npm:0.0.15"
   peerDependencies:
     leaflet: ^1.0.0
     mapbox-gl: "*"
-  checksum: 9c9c44e009f2690ab8bae6fb57e4513c92d53d4ddd5931e1a4038eedd3c8e2b75f110eba047ffb89aa21e316ff07ec8d75889bc1f55195bc3a5e534ba0b553af
+  checksum: 48766006c22b047568b14308e39a8a637a2c065bff8c1e0c30e40e333f0d4ea550f14130b83cc230af7d42701a9fdfebdf0cecc00d41b4cc98b2147d4cdbb36b
   languageName: node
   linkType: hard
 
