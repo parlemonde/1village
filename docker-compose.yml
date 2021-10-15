@@ -16,7 +16,6 @@ services:
       - ./src:/app/src
       - ./server:/app/server
       - ./types:/app/types
-
   mysql:
     image: mysql:8
     environment:
