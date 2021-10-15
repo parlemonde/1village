@@ -37,7 +37,7 @@ __metadata:
     "@types/mapbox-gl-leaflet": 0.0.1
     "@types/md5": 2.3.0
     "@types/mime-types": 2.1.1
-    "@types/morgan": 1.9.2
+    "@types/morgan": 1.9.3
     "@types/multer": 1.4.6
     "@types/node": 16.7.1
     "@types/nodemailer": 6.4.2
@@ -2479,12 +2479,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/morgan@npm:1.9.2":
-  version: 1.9.2
-  resolution: "@types/morgan@npm:1.9.2"
+"@types/morgan@npm:1.9.3":
+  version: 1.9.3
+  resolution: "@types/morgan@npm:1.9.3"
   dependencies:
     "@types/node": "*"
-  checksum: 01c6de626d73b7e1335eadcdaaa7a434acf4a6805bc4380eac2f84910d8a8937c0964ac7aac4afd944c5379e8d69804075c6b87b5653893209a013a85a4cab89
+  checksum: 0b9bc8641ce03f7176f617523b8da300e5d47225b1667396749950ac7fdfa1f990447d490648fbaff050c2b0ef5fa60c3f2f00c6b76efec06fe5148de5020813
   languageName: node
   linkType: hard
 
