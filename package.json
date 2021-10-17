@@ -31,7 +31,7 @@
     "@types/d3-geo": "3.0.2",
     "@types/draft-js": "0.11.5",
     "@types/draftjs-to-html": "0.8.1",
-    "@types/earcut": "2",
+    "@types/earcut": "2.1.1",
     "@types/eslint": "7.2.13",
     "@types/eslint-plugin-prettier": "3.1.0",
     "@types/express": "4.17.13",
