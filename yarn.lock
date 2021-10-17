@@ -38,7 +38,7 @@ __metadata:
     "@types/md5": 2.3.0
     "@types/mime-types": 2.1.1
     "@types/morgan": 1.9.3
-    "@types/multer": 1.4.6
+    "@types/multer": 1.4.7
     "@types/node": 16.7.1
     "@types/nodemailer": 6.4.2
     "@types/nprogress": 0.2.0
@@ -2467,12 +2467,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/multer@npm:1.4.6":
-  version: 1.4.6
-  resolution: "@types/multer@npm:1.4.6"
+"@types/multer@npm:1.4.7":
+  version: 1.4.7
+  resolution: "@types/multer@npm:1.4.7"
   dependencies:
     "@types/express": "*"
-  checksum: 625669823a98f7a46a7943671bfd7d0a94ebf5b230c222e7d16cecd85e23f83528a74739ba0cf00220027023741075090edf6ccecf1d098370585a076785bd76
+  checksum: 680cb0710aa25264d20cdcdaf34c212b636b55ea141310f06c25354ab1401193c7aa6839f9d22abf64a223fab1f2b8287f2512b0bef7e1628c4e9ffe54b4aeb2
   languageName: node
   linkType: hard
 
