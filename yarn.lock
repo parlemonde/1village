@@ -35,7 +35,7 @@ __metadata:
     "@types/leaflet-fullscreen": 1.0.4
     "@types/mapbox-gl": 1.13.2
     "@types/mapbox-gl-leaflet": 0.0.1
-    "@types/md5": 2.3.0
+    "@types/md5": 2.3.1
     "@types/mime-types": 2.1.1
     "@types/morgan": 1.9.3
     "@types/multer": 1.4.7
@@ -2435,12 +2435,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:2.3.0":
-  version: 2.3.0
-  resolution: "@types/md5@npm:2.3.0"
+"@types/md5@npm:2.3.1":
+  version: 2.3.1
+  resolution: "@types/md5@npm:2.3.1"
   dependencies:
     "@types/node": "*"
-  checksum: ccef4ae1b0a3e3b3cbce72b73c2227a83c7e45349d54d7ce28fa562878246023bd7eb820efb3b26e3fc7c0c02ed7827386f6058aa106bfa70021f028b309e65e
+  checksum: d508f4dd0663beba1660e5b3796480137690096f5683a0a7dfd2e4afa3a5d906e1f04f5a3bf02355f35ee2e64f4067adf349f4f67ccb15da50e1372b848b8579
   languageName: node
   linkType: hard
 
