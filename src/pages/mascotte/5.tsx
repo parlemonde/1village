@@ -13,6 +13,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageView } from 'src/components/activities/content/views/ImageView';
+import { getErrorSteps, isFirstStepValid, isSecondStepValid } from 'src/components/activities/mascotteChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -37,47 +38,8 @@ const MascotteStep4 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
 
-  const isValidSum = (x: number, y: number, z: number) => {
-    if (x < 0 || y < 0) return false;
-    return x + y === z;
-  };
-
-  const isFirstStepValid = () => {
-    return (
-      data?.presentation.length > 0 &&
-      isValidSum(data?.girlStudent, data?.boyStudent, data?.totalStudent) &&
-      isValidSum(data?.womanTeacher, data?.manTeacher, data?.totalTeacher) &&
-      data?.totalStudent !== 0 &&
-      data?.totalTeacher !== 0 &&
-      data?.totalStudent !== null &&
-      data?.totalTeacher !== null &&
-      data?.numberClassroom !== 0 &&
-      data?.numberClassroom !== null &&
-      data?.totalSchoolStudent !== 0 &&
-      data?.totalSchoolStudent !== null &&
-      data?.meanAge !== 0 &&
-      data?.meanAge !== null
-    );
-  };
-
-  const isSecondStepValid = (): boolean => {
-    if (data?.mascotteName === '') return false;
-    if (data?.mascotteDescription === '') return false;
-    if (data?.personality1 === '') return false;
-    if (data?.personality2 === '') return false;
-    if (data?.personality3 === '') return false;
-    if (data?.countries === []) return false;
-    if (data?.game === '') return false;
-    if (data?.sport === '') return false;
-    return true;
-  };
-
   React.useEffect(() => {
-    !isFirstStepValid() && !isSecondStepValid()
-      ? setErrorSteps([0, 1])
-      : !isFirstStepValid()
-      ? setErrorSteps([1])
-      : !isSecondStepValid() && setErrorSteps([0]);
+    setErrorSteps(getErrorSteps(data));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
@@ -192,16 +154,16 @@ const MascotteStep4 = () => {
                 </Button>
               </div>
             )}
-            <div className="preview-block" style={{ border: `1px dashed ${!isFirstStepValid() ? errorColor : successColor}` }}>
+            <div className="preview-block" style={{ border: `1px dashed ${!isFirstStepValid(data) ? errorColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/1');
                 }}
-                status={!isFirstStepValid() ? 'error' : 'success'}
+                status={!isFirstStepValid(data) ? 'error' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>
-                {isFirstStepValid() &&
+                {isFirstStepValid(data) &&
                   content.length > 0 &&
                   content[0].split('\n').map((s, index) => (
                     <p key={index} style={{ margin: '0.5rem 0' }}>
@@ -216,12 +178,12 @@ const MascotteStep4 = () => {
                 )}
               </div>
             </div>
-            <div className="preview-block" style={{ border: `1px dashed ${!isSecondStepValid() ? errorColor : successColor}` }}>
+            <div className="preview-block" style={{ border: `1px dashed ${!isSecondStepValid(data) ? errorColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/2');
                 }}
-                status={!isSecondStepValid() ? 'error' : 'success'}
+                status={!isSecondStepValid(data) ? 'error' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <Grid container spacing={3}>
@@ -232,7 +194,7 @@ const MascotteStep4 = () => {
                 </Grid>
                 <Grid item xs={12} md={9}>
                   <div>
-                    {isSecondStepValid() &&
+                    {isSecondStepValid(data) &&
                       content.length > 1 &&
                       content[1].split('\n').map((s, index) => (
                         <p key={index} style={{ margin: '0.5rem 0' }}>

@@ -1,16 +1,21 @@
 import React from 'react';
 
 import { Checkbox } from '@material-ui/core';
+
 import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep4 = () => {
   const { activity } = React.useContext(ActivityContext);
   const data = (activity?.data as MascotteData) || null;
   const [cguChecked, setCguChecked] = React.useState(false);
+  const [errorSteps, setErrorSteps] = React.useState([]);
+
+  React.useEffect(() => setErrorSteps(getErrorSteps(data)), [activity]);
 
   return (
     activity && (
@@ -25,6 +30,7 @@ const MascotteStep4 = () => {
               'Prévisualiser',
             ]}
             activeStep={3}
+            errorSteps={errorSteps}
           />
           <div className="width-900">
             <h1>Le web de Pelico, et ses règles</h1>

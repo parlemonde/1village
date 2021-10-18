@@ -10,6 +10,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
+import { isFirstStepValid } from 'src/components/activities/mascotteChecks';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 
@@ -17,8 +18,10 @@ const MascotteStep2 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
+  const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
+    !isFirstStepValid(data) && setErrorSteps([0]);
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
@@ -90,6 +93,7 @@ const MascotteStep2 = () => {
             'Prévisualiser',
           ]}
           activeStep={1}
+          errorSteps={errorSteps}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Qui êtes-vous ? Choisissez une mascotte pour vous représenter collectivement !</h1>
