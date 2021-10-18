@@ -1,8 +1,6 @@
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
-
 import type { AnyActivity } from 'src/activity-types/anyActivity.types';
 import { getAnyActivity, isPresentation } from 'src/activity-types/anyActivity';
 import { isMascotte } from 'src/activity-types/presentation.constants';

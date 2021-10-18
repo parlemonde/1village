@@ -19,7 +19,7 @@ const SymbolStep1 = () => {
   const selectRef = React.useRef<HTMLDivElement>(null);
 
   const [filters] = React.useState<FilterArgs>({
-    type: 0,
+    type: [7],
     status: 0,
     countries: {},
     pelico: true,
@@ -95,7 +95,9 @@ const SymbolStep1 = () => {
             {sameActivities.length > 0 ? (
               <Activities activities={sameActivities} withLinks />
             ) : (
-              <p className="center">Il n&apos;existe encore aucun symbole culturel sur le thème &quot;{SYMBOL_TYPES[activity.subType]?.title}&quot;</p>
+              <p className="center">
+                Il n&apos;existe encore aucun symbole culturel sur le thème &quot;{SYMBOL_TYPES[activity.subType]?.title}&quot;
+              </p>
             )}
           </div>
         </div>
