@@ -3,6 +3,8 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { Base } from 'src/components/Base';
+import { KeepRatio } from 'src/components/KeepRatio';
+import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
@@ -100,7 +102,9 @@ export const Accueil = () => {
     <Base>
       {selectedPhase <= village?.activePhase ? (
         <>
-          {' '}
+          <KeepRatio ratio={1 / 2}>
+            <WorldMap />
+          </KeepRatio>{' '}
           <h1>Dernières activités</h1>
           <Filters countries={countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
           <p>Température : {Math.floor(localTemp)}°C</p>

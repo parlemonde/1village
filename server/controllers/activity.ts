@@ -293,7 +293,16 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI, ActivityType.INDICE, ActivityType.SYMBOL],
+      enum: [
+        null,
+        ActivityType.PRESENTATION,
+        ActivityType.QUESTION,
+        ActivityType.GAME,
+        ActivityType.ENIGME,
+        ActivityType.DEFI,
+        ActivityType.INDICE,
+        ActivityType.SYMBOL,
+      ],
     },
   },
   required: ['type'],
