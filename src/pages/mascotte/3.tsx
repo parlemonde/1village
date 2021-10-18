@@ -9,6 +9,7 @@ import type { MascotteData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { MultipleCurrencySelector } from 'src/components/selectors/MultipleCurrencySelector';
 import { MultipleLanguageSelector } from 'src/components/selectors/MultipleLanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -17,8 +18,10 @@ const MascotteStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const shouldSave = React.useRef(false);
+  const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
+    setErrorSteps(getErrorSteps(data));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
@@ -55,6 +58,7 @@ const MascotteStep3 = () => {
             'Prévisualiser',
           ]}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h2>Langues parlées dans votre classe</h2>

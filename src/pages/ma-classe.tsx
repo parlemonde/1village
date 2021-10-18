@@ -9,12 +9,12 @@ import { isMascotte } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { MascotteTemplate } from 'src/components/activities/content/MascotteTemplate';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
-import { MascotteTemplate } from 'src/components/activities/content/MascotteTemplate';
 
 const MaClasse = () => {
   const queryClient = useQueryClient();
@@ -95,7 +95,9 @@ const MaClasse = () => {
           <h2>Notre mascotte</h2>
           {hasMascotte && mascotteActivity ? (
             <ActivityCard activity={mascotteActivity} user={user} showEditButtons isSelf onDelete={() => onDeleteActivity(mascotteActivity)} />
-          ) : ( <MascotteTemplate user={user} /> )}
+          ) : (
+            <MascotteTemplate user={user} />
+          )}
           <h2>Mes Brouillons</h2>
           {drafts.length === 0 && <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>}
           {drafts.map((activity, index) =>

@@ -24,9 +24,9 @@ const MascotteStep1 = () => {
   const labelPresentation = getUserDisplayName(user, false);
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
-
   const prevImage = React.useRef<string | null>(data?.classImg || null);
   const created = React.useRef(false);
+
   React.useEffect(() => {
     // if (!created.current) {
     if (!activity && !('activity-id' in router.query) && !('edit' in router.query)) {
