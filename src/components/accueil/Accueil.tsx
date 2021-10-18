@@ -21,7 +21,7 @@ const phaseActivities = [
     { key: 1, label: 'Indices culturels', type: [6] },
     { key: 2, label: 'Symboles', type: [7] },
     { key: 3, label: 'Questions', type: [3] },
-    { key: 3, label: 'Mascotte', type: [0] },
+    { key: 4, label: 'Mascotte', type: [0] },
   ],
   [
     { key: 0, label: 'Toutes', type: [1, 2, 4, 5] },
@@ -107,8 +107,8 @@ export const Accueil = () => {
           </KeepRatio>{' '}
           <h1>Dernières activités</h1>
           <Filters countries={countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
-          <p>Température : {Math.floor(localTemp)}°C</p>
-          <p>{localTime}</p>
+          {/* <p>Température : {Math.floor(localTemp)}°C</p>
+          <p>{localTime}</p> */}
           <Activities activities={activities} withLinks />{' '}
         </>
       ) : (

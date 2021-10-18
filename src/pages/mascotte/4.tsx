@@ -15,7 +15,7 @@ const MascotteStep4 = () => {
   const [cguChecked, setCguChecked] = React.useState(false);
   const [errorSteps, setErrorSteps] = React.useState([]);
 
-  React.useEffect(() => setErrorSteps(getErrorSteps(data)), [activity]);
+  React.useEffect(() => setErrorSteps(getErrorSteps(data, 3)), [activity]);
 
   return (
     activity && (
@@ -91,7 +91,7 @@ const MascotteStep4 = () => {
                     setCguChecked(event.target.checked);
                   }}
                 />
-                <span>{"J'accepte les conditions générales d'utilisation"}</span>
+                <span>{"Oui, nous l'acceptons !"}</span>
               </label>
             </div>
             <StepsButton prev="/mascotte/3" next={cguChecked ? '/mascotte/5' : undefined} />

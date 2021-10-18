@@ -10,11 +10,12 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
-import { BackButton } from 'src/components/buttons/BackButton';
+import { stepsHasBeenFilled, isFirstStepValid, isValidSum } from 'src/components/activities/mascotteChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { errorColor } from 'src/styles/variables.const';
 import { getUserDisplayName, pluralS } from 'src/utils';
-import { ActivityType, ActivityStatus } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 
 const MascotteStep1 = () => {
   const router = useRouter();
@@ -22,14 +23,13 @@ const MascotteStep1 = () => {
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const labelPresentation = getUserDisplayName(user, false);
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  // const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
   const prevImage = React.useRef<string | null>(data?.classImg || null);
   const created = React.useRef(false);
-
   React.useEffect(() => {
     // if (!created.current) {
-    if (!activity && !('activity-id' in router.query) && !('edit' in router.query)) {
+    if (!activity && !('activity-id' in router.query) && localStorage.getItem('activity') === null && !('edit' in router.query)) {
       created.current = true;
       createActivityIfNotExist(ActivityType.PRESENTATION, PRESENTATION.MASCOTTE, {
         ...DEFAULT_MASCOTTE_DATA,
@@ -47,6 +47,8 @@ const MascotteStep1 = () => {
       save().catch();
     }
     // }
+
+    setIsError(stepsHasBeenFilled(data, 0));
   }, [activity, labelPresentation, createActivityIfNotExist, router]);
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,11 +65,6 @@ const MascotteStep1 = () => {
     }
   };
 
-  const isValidSum = (x: number, y: number, z: number) => {
-    if (x < 0 || y < 0) return false;
-    return x + y === z;
-  };
-
   const errorMessage = (women: number, men: number, total: number) => {
     if (isError && (total === 0 || total === null)) {
       return 'Ce champ est obligatoire';
@@ -78,31 +75,13 @@ const MascotteStep1 = () => {
     return '';
   };
 
-  const isValid = () => {
-    return (
-      data.presentation.length > 0 &&
-      isValidSum(data.girlStudent, data.boyStudent, data.totalStudent) &&
-      isValidSum(data.womanTeacher, data.manTeacher, data.totalTeacher) &&
-      data.totalStudent !== 0 &&
-      data.totalTeacher !== 0 &&
-      data.totalStudent !== null &&
-      data.totalTeacher !== null &&
-      data.numberClassroom !== 0 &&
-      data.numberClassroom !== null &&
-      data.totalSchoolStudent !== 0 &&
-      data.totalSchoolStudent !== null &&
-      data.meanAge !== 0 &&
-      data.meanAge !== null
-    );
-  };
-
   const imageChange = (image: string) => {
     updateActivity({ data: { ...data, classImg: image } });
   };
 
   const onNext = () => {
     save().catch(console.error);
-    if (isValid()) {
+    if (isFirstStepValid(data)) {
       router.push('/mascotte/2');
     } else {
       router.push('/mascotte/2');
@@ -121,7 +100,6 @@ const MascotteStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!isEdit && <BackButton href="/ma-classe" />}
         <Steps
           steps={[
             'Votre classe',
@@ -282,19 +260,23 @@ const MascotteStep1 = () => {
               <p className="text-center" style={{ marginTop: '-10px' }}>
                 Image de votre affiche ou décoration
               </p>
+              {isError && data.classImgDesc === '' && <p style={{ color: errorColor }}>Ce champs est obligatoire</p>}
             </div>
             <div style={{ width: '100%' }}>
               <p>Que représente cette photo et pourquoi l&apos;avoir choisie ?</p>
               <TextField
                 value={data.classImgDesc}
-                label={"Il s'agit d'une carte du monde !"}
+                label={'Description de l’objet'}
+                placeholder={"Il s'agit d'une carte du monde !"}
                 variant="outlined"
                 style={{ width: '100%' }}
                 onChange={dataChange('classImgDesc')}
+                helperText={isError && data.classImgDesc === '' && 'Ce champs est obligatoire'}
+                error={isError && data.classImgDesc === ''}
               ></TextField>
             </div>
           </div>
-          <StepsButton next={onNext} />
+          <StepsButton prev="/ma-classe" next={onNext} />
         </div>
       </div>
     </Base>

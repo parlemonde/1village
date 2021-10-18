@@ -16,6 +16,7 @@ interface Tab {
   path: string;
   icon: React.ReactNode;
   disabled: boolean;
+  hasMascotte?: boolean;
 }
 
 export const LeftNavigation = ({ map, tabs }: NavigationProps) => {
@@ -52,9 +53,9 @@ export const LeftNavigation = ({ map, tabs }: NavigationProps) => {
                 router.push(tab.path);
               }}
               href={tab.path}
-              color="primary"
+              color={tab?.hasMascotte ? 'secondary' : 'primary'}
               startIcon={tab.icon}
-              variant={index === selectedTab ? 'contained' : 'outlined'}
+              variant={tab?.hasMascotte ? 'contained' : index === selectedTab ? 'contained' : 'outlined'}
               className="navigation__button full-width"
               style={{
                 justifyContent: 'flex-start',

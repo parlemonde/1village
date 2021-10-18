@@ -13,7 +13,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageView } from 'src/components/activities/content/views/ImageView';
-import { getErrorSteps, isFirstStepValid, isSecondStepValid } from 'src/components/activities/mascotteChecks';
+import { getErrorSteps, isFirstStepValid, isSecondStepValid, isThirdStepValid } from 'src/components/activities/mascotteChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -39,7 +39,7 @@ const MascotteStep4 = () => {
   const data = (activity?.data as MascotteData) || null;
 
   React.useEffect(() => {
-    setErrorSteps(getErrorSteps(data));
+    setErrorSteps(getErrorSteps(data, 4));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
@@ -125,7 +125,7 @@ const MascotteStep4 = () => {
           <Steps
             steps={[
               'Votre classe',
-              `${data?.presentation ? data?.presentation : 'Votre mascotte'}`,
+              `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
               'Langues et monnaies',
               'Le web de Pelico',
               'Prévisualiser',
@@ -141,6 +141,11 @@ const MascotteStep4 = () => {
                 ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
                 : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
             </p>
+            {errorSteps.length > 0 && (
+              <p>
+                <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+              </p>
+            )}
             {isEdit ? (
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
                 <Button variant="outlined" color="primary" onClick={onPublish}>
@@ -205,12 +210,12 @@ const MascotteStep4 = () => {
                 </Grid>
               </Grid>
             </div>
-            <div className="preview-block">
+            <div className="preview-block" style={{ border: `1px dashed ${!isThirdStepValid(data) ? errorColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/3');
                 }}
-                status={'success'}
+                status={!isThirdStepValid(data) ? 'error' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>
