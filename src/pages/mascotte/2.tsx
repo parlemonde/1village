@@ -10,9 +10,10 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
-import { isFirstStepValid } from 'src/components/activities/mascotteChecks';
+import { getErrorSteps, stepsHasBeenFilled } from 'src/components/activities/mascotteChecks';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { errorColor } from 'src/styles/variables.const';
 
 const MascotteStep2 = () => {
   const router = useRouter();
@@ -21,12 +22,13 @@ const MascotteStep2 = () => {
   const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
-    !isFirstStepValid(data) && setErrorSteps([0]);
+    setErrorSteps(getErrorSteps(data, 1));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
       router.push('/ma-classe');
     }
+    setIsError(stepsHasBeenFilled(data, 1));
   }, [activity, router]);
 
   const data = (activity?.data as MascotteData) || null;
@@ -106,6 +108,7 @@ const MascotteStep2 = () => {
                 <p className="text-center" style={{ marginTop: '-10px' }}>
                   Image de votre mascotte
                 </p>
+                {isError && data.mascotteImage === '' && <p style={{ color: errorColor, textAlign: 'center' }}>Ce champs est obligatoire</p>}
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
@@ -180,11 +183,11 @@ const MascotteStep2 = () => {
               </Grid>
               <p>Tout commes vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
               <MultipleCountrySelector label="Pays" style={{ width: '100%', marginBottom: '1rem' }} value={data.countries} onChange={countryChange} />
-
+              {isError && data.countries.length === 0 && <p style={{ color: errorColor }}>Ce champs est obligatoire</p>}
               <p>Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?</p>
               <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Notre mascotte joue </span>
               <TextField
-                className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
+                className="se-presenter-step-one__textfield--full-width"
                 style={{ flex: 1, minWidth: 0, width: '100%' }}
                 fullWidth
                 value={data.game}
@@ -197,7 +200,7 @@ const MascotteStep2 = () => {
               </p>
               <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Notre mascotte pratique </span>
               <TextField
-                className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
+                className="se-presenter-step-one__textfield--full-width"
                 style={{ flex: 1, minWidth: 0 }}
                 fullWidth
                 value={data.sport}

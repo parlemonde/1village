@@ -123,7 +123,7 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
     }\n${capitalize(data.mascotteName)}, comme quelques élèves de notre classe, ${
       displayMinorLanguages.length > 0 ? ' parle : ' + naturalJoin(displayMinorLanguages) + '.' : ' ne parle aucune langue.'
     }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
-      displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'utilise aucune monnaie."
+      displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'apprend aucune langue."
     }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
       displayCurrencies.length > 0 ? ' utilise comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilise aucune monnaie."
     }`,

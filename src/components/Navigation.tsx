@@ -21,22 +21,40 @@ import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { UserType } from 'types/user.type';
 
+import { AvatarImg } from './Avatar';
+
 interface Tab {
   label: string;
   path: string;
   icon: React.ReactNode;
   disabled: boolean;
+  hasMascotte?: boolean;
 }
 
 export const Navigation = (): JSX.Element => {
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [phase, setPhase] = React.useState(0);
+  const [hasMascotte, setHasMascotte] = React.useState(false);
 
-  useEffect(() => setPhase(village?.activePhase), [village]);
+  const getMascotte = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities/mascotte`,
+    });
+    if (!response.error && response.data.id !== -1) {
+      setHasMascotte(true);
+    }
+  }, [axiosLoggedRequest]);
+
+  useEffect(() => {
+    getMascotte();
+    setPhase(village?.activePhase);
+  }, [village]);
+
   const allStep: Tab[] = [
     {
       label: 'Accueil',
@@ -47,8 +65,9 @@ export const Navigation = (): JSX.Element => {
     {
       label: 'Notre classe',
       path: '/ma-classe',
-      icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      icon: hasMascotte ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       disabled: false,
+      hasMascotte,
     },
   ];
   isModerateur &&

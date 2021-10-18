@@ -21,7 +21,7 @@ const MascotteStep3 = () => {
   const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
-    setErrorSteps(getErrorSteps(data));
+    setErrorSteps(getErrorSteps(data, 2));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
@@ -84,7 +84,7 @@ const MascotteStep3 = () => {
                   onChange={dataChange('minorLanguages')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles sont les langues étrangères que l&apos;ont apprend dans votre classe ?
+                  Quelles sont les langues étrangères que l&apos;on apprend dans votre classe ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"
