@@ -12,8 +12,9 @@ import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useCountries } from 'src/services/useCountries';
-import { bgPage } from 'src/styles/variables.const';
+import { bgPage, primaryColor } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
+import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -64,6 +65,7 @@ export const WelcomeModal = () => {
       address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
+      displayName: newUser.displayName,
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -285,6 +287,17 @@ export const WelcomeModal = () => {
                   }}
                 />
                 <PanelInput value={userCountry?.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
+                <PanelInput
+                  style={{ marginTop: '2rem' }}
+                  value={newUser.displayName}
+                  defaultValue={'non renseigné'}
+                  label="Nom affiché :"
+                  placeholder={getUserDisplayName({ ...user, ...newUser, type: 0 }, false)}
+                  isEditMode
+                  onChange={(displayName) => {
+                    setNewUser((u) => ({ ...u, displayName }));
+                  }}
+                />
               </div>
               <div style={{ flex: 1, backgroundColor: bgPage, padding: '0.5rem 1rem', minWidth: 0 }}>
                 <span className="text text--bold">Une activité de votre classe apparaîtra comme suit:</span>
@@ -311,7 +324,7 @@ export const WelcomeModal = () => {
                       },
                     ],
                   }}
-                  user={{ ...user, ...newUser, type: 0 }}
+                  user={{ ...user, ...newUser, type: 0, id: -1 }}
                   noButtons
                 />
               </div>

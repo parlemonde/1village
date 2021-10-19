@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import React from 'react';
 
 import TextField from '@material-ui/core/TextField';
@@ -12,6 +13,7 @@ interface PanelInputProps {
   helperText?: string;
   hasError?: boolean;
   type?: string;
+  style?: CSSProperties;
   onChange?(newValue: string): void;
   onBlur?(): void | Promise<void>;
 }
@@ -26,11 +28,12 @@ export const PanelInput = ({
   helperText,
   type = 'text',
   hasError = false,
+  style = {},
   onChange = () => {},
   onBlur = () => {},
 }: PanelInputProps) => {
   return (
-    <div className="flex-center" style={{ margin: '0.5rem' }}>
+    <div className="flex-center" style={{ margin: '0.5rem', ...style }}>
       <label className="text text--bold" style={{ flexShrink: 0 }}>
         {label}
       </label>
