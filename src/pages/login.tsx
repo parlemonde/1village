@@ -14,7 +14,7 @@ import { NoSsr } from '@material-ui/core';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { UserContext } from 'src/contexts/userContext';
 import Logo from 'src/svg/logo.svg';
-import { ssoHost, ssoHostName, clientId, generateTemporaryToken } from 'src/utils';
+import { SSO_HOST, SSO_HOSTNAME, CLIENT_ID, onLoginSSO } from 'src/utils/sso';
 
 type User = {
   username: string;
@@ -27,7 +27,7 @@ const errorMessages = {
   1: 'Adresse e-mail ou pseudo invalide.',
   2: 'Mot de passe invalide.',
   3: 'Compte bloqué, trop de tentatives de connexion. Veuillez réinitialiser votre mot de passe.',
-  5: `Veuillez utiliser le login avec ${ssoHostName} pour votre compte`,
+  5: `Veuillez utiliser le login avec ${SSO_HOSTNAME} pour votre compte`,
   6: 'Veuillez utiliser le login par email/mot de passe pour votre compte',
 };
 
@@ -118,19 +118,6 @@ const Login = () => {
     setIsLoading(false);
   };
 
-  const loginSso = () => {
-    if (!clientId || !ssoHost) {
-      return;
-    }
-    setIsLoading(true);
-    const state = generateTemporaryToken();
-    window.sessionStorage.setItem('oauth-state', state);
-    const url = `${ssoHost}/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${
-      window.location.href.split('?')[0]
-    }&state=${state}`;
-    window.location.replace(url);
-  };
-
   return (
     <div className="bg-gradiant">
       <KeepRatio ratio={0.4} width="95%" maxWidth="1200px" minHeight="550px" className="login__container">
@@ -149,11 +136,11 @@ const Login = () => {
               </p>
             )}
             <NoSsr>
-              {ssoHost.length && clientId && (
+              {SSO_HOST.length && CLIENT_ID && (
                 <>
                   <div className="text-center" style={{ marginBottom: '1rem' }}>
-                    <Button color="primary" variant="contained" size="small" onClick={loginSso}>
-                      Se connecter avec {ssoHostName}
+                    <Button color="primary" variant="contained" size="small" onClick={onLoginSSO}>
+                      Se connecter avec {SSO_HOSTNAME}
                     </Button>
                   </div>
                   <div className="login__divider">

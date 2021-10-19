@@ -2,9 +2,11 @@ import Link from 'next/link';
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
+import { NoSsr } from '@material-ui/core';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import Logo from 'src/svg/logo.svg';
+import { SSO_HOST, CLIENT_ID, onLoginSSO } from 'src/utils/sso';
 
 export const VideoPresentation = () => {
   return (
@@ -26,11 +28,19 @@ export const VideoPresentation = () => {
             allowFullScreen
             style={{ height: '65%', width: '100%' }}
           ></iframe>
-          <Link href="/login" passHref>
-            <Button component="a" href="/login" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
-              Se connecter
-            </Button>
-          </Link>
+          <NoSsr>
+            {SSO_HOST.length && CLIENT_ID ? (
+              <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} onClick={onLoginSSO}>
+                Se connecter
+              </Button>
+            ) : (
+              <Link href="/login" passHref>
+                <Button component="a" href="/login" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
+                  Se connecter
+                </Button>
+              </Link>
+            )}
+          </NoSsr>
         </div>
       </KeepRatio>
     </div>
