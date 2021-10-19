@@ -19,7 +19,7 @@ import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { helpColor } from 'src/styles/variables.const';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
-import { ssoHostName } from 'src/utils';
+import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 
 const Presentation = () => {
@@ -239,7 +239,7 @@ const Presentation = () => {
         <h2>Identifiants de connection</h2>
         <div className="account__panel-edit-button">
           {user.accountRegistration === 10 ? (
-            <QuestionButton helpMessage={`Vos identifiants de connection sont gérés par ${ssoHostName}`} />
+            <QuestionButton helpMessage={`Vos identifiants de connection sont gérés par ${SSO_HOSTNAME}`} />
           ) : (
             editMode !== 1 && <EditButton onClick={updateEditMode(1)} />
           )}

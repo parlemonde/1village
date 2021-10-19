@@ -18,7 +18,8 @@ import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
-import { countryToFlag, ssoHostName } from 'src/utils';
+import { SSO_HOSTNAME } from 'src/utils/sso';
+import { countryToFlag } from 'src/utils';
 
 const Villages = () => {
   const router = useRouter();
@@ -79,7 +80,7 @@ const Villages = () => {
         toolbarButton={
           <>
             <Button variant="contained" style={{ flexShrink: 0, marginRight: '0.5rem' }} startIcon={<GetAppIcon />} onClick={onImportVillages}>
-              Importer depuis {ssoHostName}
+              Importer depuis {SSO_HOSTNAME}
             </Button>
             <Link href="/admin/villages/new" passHref>
               <Button component="a" href="/admin/villages/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
