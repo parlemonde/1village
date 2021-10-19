@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import ReactPlayer from 'react-player';
 import React from 'react';
@@ -19,8 +20,10 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { serializeToQueryUrl } from 'src/utils';
-import type { Mimique } from 'types/mimique.type';
-import type { MimiqueResponse } from 'types/mimiqueResponse.type';
+import { GameType } from 'types/game.type';
+import type { Game } from 'types/game.type';
+import type { GameResponse } from 'types/gameResponse.type';
+import type { MimiqueContent } from 'types/mimique.type';
 import { MimiqueResponseValue } from 'types/mimiqueResponse.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -71,11 +74,12 @@ const PlayMimique: React.FC = () => {
   const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
   const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
-  const [mimique, setMimique] = React.useState<Mimique>(null);
+  const [mimiqueContent, setMimiqueContent] = React.useState<MimiqueContent>(null);
+  const [game, setGame] = React.useState<Game>(null);
   const [user, setUser] = React.useState<User>(null);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [selected, setSelected] = React.useState<MimiqueResponseValue | null>(null);
-  const [mimiqueResponses, setMimiqueResponses] = React.useState<MimiqueResponse[] | null>(null);
+  const [gameResponses, setGameResponses] = React.useState<GameResponse[] | null>(null);
   const [stats, setStats] = React.useState<StatsProps | null>(null);
   const { village } = React.useContext(VillageContext);
 
@@ -91,39 +95,43 @@ const PlayMimique: React.FC = () => {
     [users],
   );
 
-  const choices = React.useMemo(() => mimique && shuffleArray([0, 1, 2]), [mimique]);
-  //TODO : il faudrait enlever ce endpoint et le remplacer par activity
+  const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
   React.useEffect(() => {
     if (village) {
       axiosLoggedRequest({
         method: 'GET',
-        url: `/mimiques/play${serializeToQueryUrl({
+        url: `/games/play${serializeToQueryUrl({
           villageId: village.id,
+          type: GameType.MIMIQUE,
         })}`,
       }).then((response) => {
-        console.log(response);
+        console.log('response =', response);
         if (!response.error && response.data) {
-          setMimique(response.data as Mimique);
+          const game = response.data as Game;
+          setGame(game);
+          const mimiqueContent = JSON.parse(game.content) as unknown;
+          console.log(mimiqueContent);
+          setMimiqueContent(mimiqueContent as MimiqueContent);
         } else {
           setLastMimiqueModalOpen(true);
         }
       });
     }
-  }, [setMimique]);
+  }, [setMimiqueContent]);
 
   React.useEffect(() => {
-    if (mimique) {
-      const usr = userMap[mimique.userId] !== undefined ? users[userMap[mimique.userId]] : undefined;
+    if (game) {
+      const usr = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
       setUser(usr);
       setUserIsPelico(usr.type >= UserType.MEDIATOR);
     }
-  }, [mimique, userMap]);
+  }, [game, userMap]);
 
   React.useEffect(() => {
-    if (mimiqueResponses) {
-      console.log(mimiqueResponses);
+    if (gameResponses) {
+      console.log(gameResponses);
       const resStats: StatsProps = {};
-      mimiqueResponses.forEach((val: MimiqueResponse) => {
+      gameResponses.forEach((val: GameResponse) => {
         if (resStats[val.user.countryCode] && resStats[val.user.countryCode][val.value]) {
           resStats[val.user.countryCode][val.value] = resStats[val.user.countryCode][val.value] + 1;
           resStats[val.user.countryCode].total = resStats[val.user.countryCode].total + 1;
@@ -142,7 +150,7 @@ const PlayMimique: React.FC = () => {
       setStats(resStats);
       console.log(resStats, Object.keys(resStats));
     }
-  }, [mimiqueResponses, userMap]);
+  }, [gameResponses, userMap]);
 
   const validate = () => {
     if (selected === null) {
@@ -150,23 +158,23 @@ const PlayMimique: React.FC = () => {
     }
     axiosLoggedRequest({
       method: 'PUT',
-      url: `/mimiques/play/${mimique.id}`,
+      url: `/games/play/${game.id}`,
       data: { value: selected },
     }).then(() => {
       if (tryCount == 0) {
-        if (selected == 0) {
+        if (selected == MimiqueResponseValue.SIGNIFICATION) {
           console.log('found !');
           setFound(true);
           setSelected(null);
           axiosLoggedRequest({
             method: 'GET',
-            url: `/mimiques/stats/${mimique.id}`,
+            url: `/games/stats/${game.id}`,
           }).then((response) => {
             if (!response.error && response.data) {
-              setMimiqueResponses(response.data as MimiqueResponse[]);
+              setGameResponses(response.data as GameResponse[]);
             }
           });
-        } else if (selected == 1) {
+        } else if (selected == MimiqueResponseValue.FAKE_SIGNIFICATION_1) {
           console.log('fake1 !');
           setFake1Selected(true);
           setSelected(null);
@@ -179,11 +187,11 @@ const PlayMimique: React.FC = () => {
         }
         setTryCount(tryCount + 1);
       } else if (tryCount == 1) {
-        if (selected == 0) {
+        if (selected == MimiqueResponseValue.SIGNIFICATION) {
           console.log('found !');
           setFound(true);
           setSelected(null);
-        } else if (selected == 1) {
+        } else if (selected == MimiqueResponseValue.FAKE_SIGNIFICATION_1) {
           console.log('fake1 !');
           setFake1Selected(true);
           setSelected(null);
@@ -196,20 +204,20 @@ const PlayMimique: React.FC = () => {
         }
         axiosLoggedRequest({
           method: 'GET',
-          url: `/mimiques/stats/${mimique.id}`,
+          url: `/games/stats/${game.id}`,
         }).then((response) => {
           if (!response.error && response.data) {
-            setMimiqueResponses(response.data as MimiqueResponse[]);
+            setGameResponses(response.data as GameResponse[]);
           }
         });
       }
     });
   };
   const onChange = (event: { target: HTMLInputElement }) => {
-    setSelected(parseInt(event.target.value) as MimiqueResponseValue);
+    setSelected(event.target.value as MimiqueResponseValue);
   };
 
-  if (!mimique || !user) {
+  if (!game || !user) {
     return (
       <Base>
         <Modal
@@ -258,7 +266,7 @@ const PlayMimique: React.FC = () => {
         </div>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
-            <ReactPlayer light url={mimique.video} controls />
+            <ReactPlayer light url={mimiqueContent.video} controls />
           </Grid>
           <Grid item xs={12} md={4}>
             <RadioGroup aria-label="gender" name="gender1" value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
@@ -270,7 +278,7 @@ const PlayMimique: React.FC = () => {
                         key="1"
                         value={MimiqueResponseValue.SIGNIFICATION}
                         control={found || foundError ? <GreenRadio icon={<FiberManualRecordIcon style={{ color: green[400] }} />} /> : <Radio />}
-                        label={mimique.signification}
+                        label={mimiqueContent.signification}
                         disabled={found || foundError ? true : false}
                       />
                     );
@@ -280,7 +288,7 @@ const PlayMimique: React.FC = () => {
                         key="2"
                         value={MimiqueResponseValue.FAKE_SIGNIFICATION_1}
                         control={fake1Selected ? <RedRadio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
-                        label={mimique.fakeSignification1}
+                        label={mimiqueContent.fakeSignification1}
                         disabled={fake1Selected || found || foundError ? true : false}
                       />
                     );
@@ -290,7 +298,7 @@ const PlayMimique: React.FC = () => {
                         key="3"
                         value={MimiqueResponseValue.FAKE_SIGNIFICATION_2}
                         control={fake2Selected ? <RedRadio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
-                        label={mimique.fakeSignification2}
+                        label={mimiqueContent.fakeSignification2}
                         disabled={fake2Selected || found || foundError ? true : false}
                       />
                     );
@@ -339,8 +347,8 @@ const PlayMimique: React.FC = () => {
             {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>}
             {(found || foundError) && (
               <>
-                <h2>L'origine de cette mimique :</h2>
-                <p>{mimique.origine}</p>
+                <h2>L&apos;origine de cette mimique :</h2>
+                <p>{mimiqueContent.origine}</p>
               </>
             )}
           </Grid>

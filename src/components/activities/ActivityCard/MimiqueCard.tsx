@@ -4,11 +4,11 @@ import React from 'react';
 import { Button, Grid } from '@material-ui/core';
 
 import { RedButton } from 'src/components/buttons/RedButton';
+import { UserContext } from 'src/contexts/userContext';
+import type { GameMimiqueActivity } from 'types/game.type';
 
 import { CommentIcon } from './CommentIcon';
-import { ActivityCardProps } from './activity-card.types';
-import { GameMimiqueActivity } from 'types/game.type';
-import { UserContext } from 'src/contexts/userContext';
+import type { ActivityCardProps } from './activity-card.types';
 
 export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
   activity,
@@ -22,7 +22,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    const videoUrl = activity?.data?.mimique1?.video;
+    const videoUrl = activity?.data?.game1?.video;
     const videoId = videoUrl.split(/\//).pop();
     if (!videoId) return;
     axiosLoggedRequest({

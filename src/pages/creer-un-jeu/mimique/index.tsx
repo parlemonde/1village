@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Base } from 'src/components/Base';
 import Button from '@material-ui/core/Button';
+
+import { Base } from 'src/components/Base';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { GameType } from 'types/game.type';
 
 const Mimique: React.FC = () => {
   const router = useRouter();
@@ -19,8 +21,9 @@ const Mimique: React.FC = () => {
     if (village) {
       axiosLoggedRequest({
         method: 'GET',
-        url: `/mimiques/ableToPlay${serializeToQueryUrl({
+        url: `/games/ableToPlay${serializeToQueryUrl({
           villageId: village.id,
+          type: GameType.MIMIQUE,
         })}`,
       }).then((response) => {
         if (!response.error && response.data) {

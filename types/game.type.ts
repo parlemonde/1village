@@ -7,7 +7,6 @@ export enum GameType {
 
 export interface Game {
   id: number;
-  //type: GameType;
   type: number | null;
   createDate?: Date | string;
   updateDate?: Date | string;
@@ -25,19 +24,18 @@ export type GamesData = {
 };
 
 export type GameData = {
-  gameId: number | null;
+  gameId?: number | null;
   type: GameType;
   value: string;
 };
 
 export type MimiquesData = {
-  mimique1: MimiqueData;
-  mimique2: MimiqueData;
-  mimique3: MimiqueData;
+  game1: MimiqueData;
+  game2: MimiqueData;
+  game3: MimiqueData;
 };
 
 export type MimiqueData = {
-  // mimiqueId: number | null;
   gameId: number | null;
   origine: string | null;
   signification: string | null;
@@ -45,12 +43,13 @@ export type MimiqueData = {
   fakeSignification2: string | null;
   video: string | null;
 };
-//TODO: a dégager
+
 export type MonnaieData = {
   theme: number;
 };
 
 export type GameMimiqueActivity = GenericExtendedActivity<MimiquesData>;
+//export type GameMimiqueActivity = GenericExtendedActivity<GamesData>;
 
 export type GameMonnaieActivity = GenericExtendedActivity<MonnaieData>;
 

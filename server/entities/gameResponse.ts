@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import { GameResponse as GameResponseInterface } from 'types/gameResponse.type';
+import type { GameResponse as GameResponseInterface } from 'types/gameResponse.type';
 
 // import { MimiqueResponseValue } from '../../types/mimiqueResponse.type';
 
@@ -36,13 +36,6 @@ export class GameResponse implements GameResponseInterface {
 
   @Column({ nullable: false })
   public villageId: number;
-
-  // @ManyToOne(() => Mimique, (mimique: Mimique) => mimique.responses, { onDelete: 'CASCADE' })
-  // @JoinColumn({ name: 'mimiqueId' })
-  // public mimique: Mimique | null;
-
-  // @Column({ nullable: false })
-  // public mimiqueId: number;
 
   @ManyToOne(() => Game, (game: Game) => game.responses, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'gameId' })

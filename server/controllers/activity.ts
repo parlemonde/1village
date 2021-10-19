@@ -379,20 +379,6 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
 
-  // if (activity.type === ActivityType.GAME && activity.subType === GameType.MIMIQUE && activity.status === ActivityStatus.PUBLISHED) {
-  //   const activityData = (activity.content || []).find((data) => {
-  //     return data.key === 'json';
-  //   });
-  //   if (activityData) {
-  //     const value = JSON.parse(activityData.value);
-  //     const mimiquesData = value.data as MimiquesData;
-  //     mimiquesData.mimique1.mimiqueId = (await createMimique(mimiquesData.mimique1, activity)).id;
-  //     mimiquesData.mimique2.mimiqueId = (await createMimique(mimiquesData.mimique2, activity)).id;
-  //     mimiquesData.mimique3.mimiqueId = (await createMimique(mimiquesData.mimique3, activity)).id;
-  //     activityData.value = JSON.stringify(value);
-  //     await getRepository(ActivityData).save(activityData);
-  //   }
-  // }
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED) {
     const activityData = (activity.content || []).find((data) => {
       return data.key === 'json';
@@ -400,6 +386,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     if (activityData) {
       const value = JSON.parse(activityData.value);
       const gamesData = value.data as GamesData;
+
       gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
       gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
       gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
@@ -411,15 +398,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
-//On va créer une fonction simailaire mais avec Game entity
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
   const id = data.gameId;
   const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
-  logger.debug('est ce que je suis apres la const game ?');
-  logger.debug(JSON.stringify(game));
+  delete data['gameId'];
 
   game.type = activity.subType;
-  game.content = data.value || '';
+  game.content = JSON.stringify(data);
   game.userId = activity.userId;
   game.activityId = activity.id;
   game.villageId = activity.villageId;
@@ -427,21 +412,6 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   return game;
 };
 
-// const createMimique = async (data: MimiqueData, activity: Activity): Promise<Mimique> => {
-//   const id = data.mimiqueId;
-//   const mimique = id ? await getRepository(Mimique).findOneOrFail({ where: { id: data.mimiqueId } }) : new Mimique();
-
-//   mimique.signification = data.signification || '';
-//   mimique.fakeSignification1 = data.fakeSignification1 || '';
-//   mimique.fakeSignification2 = data.fakeSignification2 || '';
-//   mimique.origine = data.origine || '';
-//   mimique.video = data.video || '';
-//   mimique.activityId = activity.id;
-//   mimique.villageId = activity.villageId;
-//   mimique.userId = activity.userId;
-//   await getRepository(Mimique).save(mimique);
-//   return mimique;
-// };
 // --- Add content to an activity ---
 type AddActivityData = {
   content?: Array<{

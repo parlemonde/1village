@@ -3,11 +3,11 @@ import React from 'react';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimique } from 'src/activity-types/game.const';
-import { MimiqueData, MimiquesData } from 'types/game.type';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { ActivityContext } from 'src/contexts/activityContext';
 import MimiqueSelector from 'src/components/selectors/MimiqueSelector';
+import { ActivityContext } from 'src/contexts/activityContext';
+import type { MimiqueData, MimiquesData } from 'types/game.type';
 
 const MimiqueStep3: React.FC = () => {
   const router = useRouter();
@@ -25,13 +25,13 @@ const MimiqueStep3: React.FC = () => {
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...data };
-    (newData.mimique3[key] as string) = event.target.value;
+    (newData.game3[key] as string) = event.target.value;
     updateActivity({ data: newData });
   };
 
   const videoChange = (newValue: string) => {
     const newData = { ...data };
-    newData.mimique3.video = newValue;
+    newData.game3.video = newValue;
     updateActivity({ data: newData });
   };
 
@@ -57,7 +57,7 @@ const MimiqueStep3: React.FC = () => {
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={2} />
         <MimiqueSelector
           mimiqueNumber="3ème"
-          mimiqueData={data.mimique3}
+          mimiqueData={data.game3}
           onDataChange={dataChange}
           onNext={onNext}
           onPrev={onPrev}

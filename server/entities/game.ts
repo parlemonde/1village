@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 
 import type { Game as GameInterface } from '../../types/game.type';
-import { GameType } from '../../types/game.type';
 
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
@@ -55,17 +54,9 @@ export class Game implements GameInterface {
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.game)
   public responses: GameResponse[];
 
-  // @Column({
-  //   type: 'enum',
-  //   enum: GameType,
-  //   nullable: false,
-  // })
-  // public type: GameType;
   @Column({ type: 'tinyint', nullable: true })
   public type: number | null;
 
-  // @Column({ type: 'simple-json', default: null })
   @Column({ type: 'text' })
-  //public content: Record<string, never>;
   public content: string;
 }
