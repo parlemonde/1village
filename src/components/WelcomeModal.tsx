@@ -177,7 +177,6 @@ export const WelcomeModal = () => {
         </div>
       }
     >
-      e
       <div id="new-user-desc" style={{ minHeight: '20rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {currentStep === 0 && (
           <div className="text-center">

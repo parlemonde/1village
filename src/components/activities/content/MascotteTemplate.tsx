@@ -8,6 +8,7 @@ import { UserDisplayName } from 'src/components/UserDisplayName';
 import { primaryColor } from 'src/styles/variables.const';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 export const MascotteTemplate = ({ user }: { user: User }) => (
   <Paper variant={'outlined'} square={true} elevation={0} style={{ margin: '0', cursor: 'unset' }}>
@@ -39,9 +40,10 @@ export const MascotteTemplate = ({ user }: { user: User }) => (
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
+            {user.type < UserType.MEDIATOR &&
             <Button href={'/mascotte/1'} color="primary" variant="outlined">
               Créer votre mascotte
-            </Button>
+            </Button>}
           </div>
         </div>
       </div>

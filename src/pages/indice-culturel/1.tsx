@@ -6,33 +6,25 @@ import { INDICE_TYPES } from 'src/activity-types/indice.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
+import { UserContext } from 'src/contexts/userContext';
 
 const IndiceStep1 = () => {
   const router = useRouter();
+  const { user } = React.useContext(UserContext);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);
-
-  const [filters] = React.useState<FilterArgs>({
-    type: [6],
-    status: 0,
-    countries: {},
-    pelico: true,
-  });
   const { activities } = useActivities({
     page: 0,
-    countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
-    pelico: filters.pelico,
+    countries: [user?.countryCode.toUpperCase()],
+    pelico: true,
     type: ActivityType.INDICE,
   });
-  const sameActivities = activities.filter((c) => {
-    return c.subType === activity.subType;
-  });
+  const sameActivities = activities.filter((c) => (c.subType === activity.subType));
 
   // indice sub-type
   const indiceTypeIndex =
