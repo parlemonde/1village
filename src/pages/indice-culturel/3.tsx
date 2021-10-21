@@ -120,13 +120,6 @@ const IndiceStep3 = () => {
           )}
           <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/indice-culturel');
-              }}
-              status={'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
             <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType].title}</p>
           </div>
 

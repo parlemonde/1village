@@ -8,10 +8,10 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { Activities } from 'src/components/activities/List';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import { UserContext } from 'src/contexts/userContext';
 
 const IndiceStep1 = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ const IndiceStep1 = () => {
     pelico: true,
     type: ActivityType.INDICE,
   });
-  const sameActivities = activities.filter((c) => (c.subType === activity.subType));
+  const sameActivities = activities.filter((c) => c.subType === activity.subType);
 
   // indice sub-type
   const indiceTypeIndex =

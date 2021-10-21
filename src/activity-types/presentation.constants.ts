@@ -124,9 +124,7 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
       displayMinorLanguages.length > 0 ? ' parle : ' + naturalJoin(displayMinorLanguages) + '.' : ' ne parle aucune langue.'
     }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
       displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'apprend aucune langue."
-    }\nNous ${
-      displayCurrencies.length > 0 ? ' utilisons comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilisons aucune monnaie."
-    }`,
+    }\nNous ${displayCurrencies.length > 0 ? ' utilisons comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilisons aucune monnaie."}`,
   );
   return content;
 };

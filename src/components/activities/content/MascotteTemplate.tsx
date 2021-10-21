@@ -40,10 +40,11 @@ export const MascotteTemplate = ({ user }: { user: User }) => (
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            {user.type < UserType.MEDIATOR &&
-            <Button href={'/mascotte/1'} color="primary" variant="outlined">
-              Créer votre mascotte
-            </Button>}
+            {user.type < UserType.MEDIATOR && (
+              <Button href={'/mascotte/1'} color="primary" variant="outlined">
+                Créer votre mascotte
+              </Button>
+            )}
           </div>
         </div>
       </div>

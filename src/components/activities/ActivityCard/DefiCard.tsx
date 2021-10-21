@@ -74,9 +74,9 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
         </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
+            <CommentIcon count={activity.commentCount} activityId={activity.id} />
             {!showEditButtons && (
               <>
-                <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     Relever le défi

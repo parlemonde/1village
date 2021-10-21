@@ -71,10 +71,7 @@ export const stepsHasBeenFilled = (data: MascotteData, step: number) => {
       data?.currencies?.length > 0
     );
   }
-    return (
-      data?.fluentLanguages?.length > 0 ||
-      data?.minorLanguages?.length > 0 ||
-      data?.wantedForeignLanguages?.length > 0 ||
-      data?.currencies?.length > 0
-    );
+  return (
+    data?.fluentLanguages?.length > 0 || data?.minorLanguages?.length > 0 || data?.wantedForeignLanguages?.length > 0 || data?.currencies?.length > 0
+  );
 };

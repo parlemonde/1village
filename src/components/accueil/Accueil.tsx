@@ -12,7 +12,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
-import { getLocalTempHour } from 'src/utils/getLocalTempHour';
 import { UserType } from 'types/user.type';
 
 const phaseActivities = [
@@ -46,8 +45,6 @@ export const Accueil = () => {
     countries: {},
     pelico: true,
   });
-  const [localTemp, setLocalTemp] = React.useState(0);
-  const [localTime, setLocalTime] = React.useState();
   const [countries, setCountries] = React.useState<string[]>([]);
 
   React.useEffect(() => {
@@ -59,14 +56,6 @@ export const Accueil = () => {
         countries: currFilters.countries,
         pelico: true,
       }));
-    const asyncFunc = async () => {
-      if (user && !localTime && !localTemp) {
-        const { time, temp } = await getLocalTempHour(user);
-        setLocalTemp(temp);
-        setLocalTime(time);
-      }
-    };
-    asyncFunc();
   }, [user, selectedPhase, village]);
 
   const { activities } = useActivities({
@@ -107,8 +96,6 @@ export const Accueil = () => {
           </KeepRatio>{' '}
           <h1>Dernières activités</h1>
           <Filters countries={countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
-          {/* <p>Température : {Math.floor(localTemp)}°C</p>
-          <p>{localTime}</p> */}
           <Activities activities={activities} withLinks />{' '}
         </>
       ) : (

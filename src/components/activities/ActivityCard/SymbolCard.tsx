@@ -57,9 +57,9 @@ export const SymbolCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
         </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
+            <CommentIcon count={activity.commentCount} activityId={activity.id} />
             {!showEditButtons && (
               <>
-                <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     {'Voir le symbole'}

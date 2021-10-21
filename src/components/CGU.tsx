@@ -41,7 +41,7 @@ export const CGU = () => {
       <p>
         Pour rappel : sont membres de droit les professeurs ou écoles participant à un programme porté par l’association tel que défini dans le
         règlement intérieur, et ayant donné leur accord à devenir membres de droit. Tous les membres de droit ont le pouvoir de voter à l’assemblée
-        générale. Aucune cotisation n’est demandée à ce jour pour les professeurs participant à 1Village pour l’année 2020-2021, le projet étant dans
+        générale. Aucune cotisation n’est demandée à ce jour pour les professeurs participant à 1Village pour l’année 2021-2022, le projet étant dans
         sa phase pilote.
       </p>
     </div>
