@@ -118,14 +118,14 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
   const displayFluentLanguages = languages.filter((language) => data.fluentLanguages.includes(language.alpha3_b)).map((language) => language.french);
   const displayCurrencies = currencies.filter((currency) => data.currencies.includes(currency.code)).map((currency) => currency.name);
   content.push(
-    `${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
+    `Tous les élèves de notre classe, ${
       displayFluentLanguages.length > 0 ? ' parle ' + naturalJoin(displayFluentLanguages) + '.' : ' ne parle aucune langue.'
-    }\n${capitalize(data.mascotteName)}, comme quelques élèves de notre classe, ${
+    }\nAu moins un élève de notre classe, ${
       displayMinorLanguages.length > 0 ? ' parle : ' + naturalJoin(displayMinorLanguages) + '.' : ' ne parle aucune langue.'
     }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
       displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'apprend aucune langue."
-    }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
-      displayCurrencies.length > 0 ? ' utilise comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilise aucune monnaie."
+    }\nNous ${
+      displayCurrencies.length > 0 ? ' utilisons comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilisons aucune monnaie."
     }`,
   );
   return content;

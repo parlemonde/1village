@@ -187,7 +187,7 @@ const MascotteStep2 = () => {
               <p>Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?</p>
               <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Notre mascotte joue </span>
               <TextField
-                className="se-presenter-step-one__textfield--full-width"
+                className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
                 style={{ flex: 1, minWidth: 0, width: '100%' }}
                 fullWidth
                 value={data.game}
@@ -200,7 +200,7 @@ const MascotteStep2 = () => {
               </p>
               <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Notre mascotte pratique </span>
               <TextField
-                className="se-presenter-step-one__textfield--full-width"
+                className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
                 style={{ flex: 1, minWidth: 0 }}
                 fullWidth
                 value={data.sport}

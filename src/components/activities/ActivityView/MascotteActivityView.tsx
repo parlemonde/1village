@@ -7,6 +7,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { getMapPosition } from 'src/utils/getMapPosition';
 
 import type { ActivityViewProps } from './activity-view.types';
+import { ImageView } from '../content/views/ImageView';
 
 export const MascotteActivityView = ({ activity, user = null }: ActivityViewProps<PresentationMascotteActivity>) => {
   const [position, setPosition] = React.useState<[number, number] | null>(null);
@@ -38,6 +39,10 @@ export const MascotteActivityView = ({ activity, user = null }: ActivityViewProp
                     </p>
                   ))}
               </div>
+            </Grid>
+            <Grid item xs={12} md={12} style={{display: 'flex'}}>
+              <ImageView id={1} value={activity.data.classImg} />
+              {activity.data.classImgDesc}
             </Grid>
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>

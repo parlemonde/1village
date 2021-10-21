@@ -89,7 +89,7 @@ export const MascotteCard = ({
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
-                    Voir la présentation
+                    Voir la mascotte
                   </Button>
                 </Link>
               </>
