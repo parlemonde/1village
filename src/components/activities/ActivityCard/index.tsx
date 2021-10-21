@@ -21,6 +21,7 @@ import { EnigmeCard } from './EnigmeCard';
 import { FreeContentCard } from './FreeContentCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
+import { MimiqueCard } from './MimiqueCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { SymbolCard } from './SymbolCard';

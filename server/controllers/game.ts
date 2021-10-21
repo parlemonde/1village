@@ -1,21 +1,12 @@
-// --- transferring game creation (createMimique and etc.) in controllers/game ---
 /* eslint-disable no-console */
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
-import type { GameType } from '../../types/game.type';
-//different types of games type
-import type { ActivityType } from '../entities/activity';
-import { Activity } from '../entities/activity';
-import { ActivityStatus } from '../entities/activity';
 import { GameResponse } from '../entities/gameResponse';
 import { Game } from '../entities/game';
-//import { Mimique } from '../entities/mimique';
 import { UserType } from '../entities/user';
-import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
-import { logger } from '../utils/logger';
 
 import { Controller } from './controller';
 
@@ -43,7 +34,6 @@ gameController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
 });
 
 //--- Play a game ---
-// we have to create a condition in orderf to limit type of game
 gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
