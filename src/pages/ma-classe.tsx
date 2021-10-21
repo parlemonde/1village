@@ -49,8 +49,13 @@ const MaClasse = () => {
         url: `/activities/${response.data.id}`,
       });
       setMascotteActivity(getAnyActivity(res.data));
+
+      activities &&
+        activities.map((activity) => {
+          isMascotte(activity) && setMascotteActivity({ ...mascotteActivity, commentCount: activity.commentCount });
+        });
     }
-  }, [axiosLoggedRequest]);
+  }, [activities, axiosLoggedRequest]);
 
   const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
   const onDeleteActivity = async (mascotteActivity: AnyActivity = null, isDraft = false) => {
@@ -84,7 +89,7 @@ const MaClasse = () => {
   React.useEffect(() => {
     getMascotte();
     setActivity(null);
-  }, [setActivity]);
+  }, [activities, setActivity]);
 
   return (
     <Base>

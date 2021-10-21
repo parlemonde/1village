@@ -185,20 +185,20 @@ const MascotteStep2 = () => {
               <MultipleCountrySelector label="Pays" style={{ width: '100%', marginBottom: '1rem' }} value={data.countries} onChange={countryChange} />
               {isError && data.countries.length === 0 && <p style={{ color: errorColor }}>Ce champs est obligatoire</p>}
               Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
-               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
-              <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
-              <TextField
-                className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
-                style={{ flex: 1, minWidth: 0, width: '100%' }}
-                fullWidth
-                value={data.game}
-                onChange={dataChange('game')}
-                error={isError && !data.game}
-                helperText={isError && !data.game ? 'Ce champ est obligatoire' : ''}
-              />
+              <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
+                <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
+                <TextField
+                  className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
+                  style={{ flex: 1, minWidth: 0, width: '100%' }}
+                  fullWidth
+                  value={data.game}
+                  onChange={dataChange('game')}
+                  error={isError && !data.game}
+                  helperText={isError && !data.game ? 'Ce champ est obligatoire' : ''}
+                />
               </div>
-                Tout commes vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
-               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
+              Tout commes vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
+              <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte pratique </span>
                 <TextField
                   className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
