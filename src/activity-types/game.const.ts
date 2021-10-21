@@ -2,24 +2,24 @@ import type { MimiquesData, GameMimiqueActivity, GameMonnaieActivity, GameActivi
 import { GameType } from '../../types/game.type';
 
 export const DEFAULT_MIMIQUE_DATA: MimiquesData = {
-  mimique1: {
-    mimiqueId: null,
+  game1: {
+    gameId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
     fakeSignification2: null,
     video: null,
   },
-  mimique2: {
-    mimiqueId: null,
+  game2: {
+    gameId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
     fakeSignification2: null,
     video: null,
   },
-  mimique3: {
-    mimiqueId: null,
+  game3: {
+    gameId: null,
     origine: null,
     signification: null,
     fakeSignification1: null,

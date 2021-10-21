@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
+import { GameType } from '../../types/game.type';
 import type { GameResponse as GameResponseInterface } from '../../types/gameResponse.type';
 
 import { Game } from './game';
@@ -41,6 +42,9 @@ export class GameResponse implements GameResponseInterface {
   @Column({ nullable: false })
   public gameId: number;
 
-  @Column({ type: 'text', nullable: false })
+  //  @Column({ type: 'text', nullable: false })
+  //  public value: string;
+
+  @Column({ type: 'text' })
   public value: string;
 }

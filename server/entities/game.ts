@@ -10,8 +10,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import type { GameSelection as GameInterface } from '../../types/game.type';
-import { GameType } from '../../types/game.type';
+import type { Game as GameInterface } from '../../types/game.type';
 
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
@@ -34,34 +33,27 @@ export class Game implements GameInterface {
   @ManyToOne(() => User, (user: User) => user.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   public user: User | null;
-
   @Column({ nullable: false })
   public userId: number;
 
   @ManyToOne(() => Village, (village: Village) => village.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
   public village: Village | null;
-
   @Column({ nullable: false })
   public villageId: number;
 
   @ManyToOne(() => Activity, (activity: Activity) => activity.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })
   public activity: Activity | null;
-
   @Column({ nullable: false })
   public activityId: number;
 
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.game)
   public responses: GameResponse[];
 
-  @Column({
-    type: 'enum',
-    enum: GameType,
-    nullable: false,
-  })
-  public type: GameType;
+  @Column({ type: 'tinyint', nullable: true })
+  public type: number | null;
 
-  @Column({ type: 'simple-json', default: () => "_utf8mb4\\'{}\\'" })
-  public content: Record<string, never>;
+  @Column({ type: 'text' })
+  public content: string;
 }

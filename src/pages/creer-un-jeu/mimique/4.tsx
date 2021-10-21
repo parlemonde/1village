@@ -73,13 +73,13 @@ const MimiqueStep4: React.FC = () => {
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <ReactPlayer width="100%" height="100%" light url={data.mimique1.video} controls />
+                <ReactPlayer width="100%" height="100%" light url={data.game1.video} controls />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<GreenRadio />} label={data.mimique1.signification} />
-                  <FormControlLabel control={<Radio />} label={data.mimique1.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={data.mimique1.fakeSignification2} />
+                  <FormControlLabel value={1} control={<GreenRadio />} label={data.game1.signification} />
+                  <FormControlLabel control={<Radio />} label={data.game1.fakeSignification1} />
+                  <FormControlLabel control={<Radio />} label={data.game1.fakeSignification2} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -92,19 +92,19 @@ const MimiqueStep4: React.FC = () => {
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.mimique1.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game1.origine} </p>
           </div>
           {/* Mimique 2 */}
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <ReactPlayer width="100%" height="100%" light url={data.mimique2.video} controls />
+                <ReactPlayer width="100%" height="100%" light url={data.game2.video} controls />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<GreenRadio />} label={data.mimique2.signification} />
-                  <FormControlLabel control={<Radio />} label={data.mimique2.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={data.mimique2.fakeSignification2} />
+                  <FormControlLabel value={1} control={<GreenRadio />} label={data.game2.signification} />
+                  <FormControlLabel control={<Radio />} label={data.game2.fakeSignification1} />
+                  <FormControlLabel control={<Radio />} label={data.game2.fakeSignification2} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -117,19 +117,19 @@ const MimiqueStep4: React.FC = () => {
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.mimique2.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game2.origine} </p>
           </div>
           {/* Mimique 3 */}
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <ReactPlayer width="100%" height="100%" light url={data.mimique3.video} controls />
+                <ReactPlayer width="100%" height="100%" light url={data.game3.video} controls />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<GreenRadio />} label={data.mimique3.signification} />
-                  <FormControlLabel control={<Radio />} label={data.mimique3.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={data.mimique3.fakeSignification2} />
+                  <FormControlLabel value={1} control={<GreenRadio />} label={data.game3.signification} />
+                  <FormControlLabel control={<Radio />} label={data.game3.fakeSignification1} />
+                  <FormControlLabel control={<Radio />} label={data.game3.fakeSignification2} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -142,7 +142,7 @@ const MimiqueStep4: React.FC = () => {
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.mimique3.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game3.origine} </p>
           </div>
         </div>
       </div>

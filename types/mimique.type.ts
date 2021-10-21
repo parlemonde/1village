@@ -1,11 +1,4 @@
-export interface Mimique {
-  id: number;
-  createDate?: Date | string;
-  updateDate?: Date | string;
-  deleteDate?: Date | string;
-  userId: number;
-  villageId: number;
-  activityId: number;
+export interface MimiqueContent {
   origine: string;
   signification: string;
   fakeSignification1: string;

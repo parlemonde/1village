@@ -5,26 +5,41 @@ export enum GameType {
   MONNAIE = 1,
 }
 
-export interface GameSelection {
+// export interface Game
+export interface Game {
   id: number;
+  type: number | null;
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
   userId: number;
   villageId: number;
   activityId: number;
+  content: string;
 }
 
-// three different mimiques
-export type MimiquesData = {
-  mimique1: MimiqueData;
-  mimique2: MimiqueData;
-  mimique3: MimiqueData;
+export type GamesData = {
+  game1: GameData;
+  game2: GameData;
+  game3: GameData;
 };
 
-// definition of each mimique
+export type GameData = {
+  gameId?: number | null;
+  type: GameType;
+  value: string;
+};
+
+// --- three different mimiques ---
+export type MimiquesData = {
+  game1: MimiqueData;
+  game2: MimiqueData;
+  game3: MimiqueData;
+};
+
+// --- structure of each mimique ---
 export type MimiqueData = {
-  mimiqueId: number | null;
+  gameId: number | null;
   origine: string | null;
   signification: string | null;
   fakeSignification1: string | null;
@@ -32,6 +47,7 @@ export type MimiqueData = {
   video: string | null;
 };
 
+// --- Money game three objects & money game structure => in progress ---
 export type MonnaieData = {
   theme: number;
 };

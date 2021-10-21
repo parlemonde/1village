@@ -7,9 +7,9 @@ import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
-// import { MimiqueResponse } from './mimiqueResponse';
-// import { Mimique } from './mimique';
 import { Game } from './game';
+//import { MimiqueResponse } from './mimiqueResponse';
+//import { Mimique } from './mimique';
 import { User } from './user';
 
 export { VillagePhase };
@@ -46,7 +46,7 @@ export class Village implements VillageInterface {
   @OneToMany(() => Activity, (activity: Activity) => activity.village)
   public activities: Activity[];
 
-  /* @OneToMany(() => Mimique, (mimique: Mimique) => mimique.village)
+  /*@OneToMany(() => Mimique, (mimique: Mimique) => mimique.village)
   public mimiques: Mimique[];
 
   @OneToMany(() => MimiqueResponse, (mimiqueResponse: MimiqueResponse) => mimiqueResponse.user)

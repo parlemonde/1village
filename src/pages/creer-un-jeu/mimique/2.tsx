@@ -25,13 +25,13 @@ const MimiqueStep2: React.FC = () => {
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...data };
-    (newData.mimique2[key] as string) = event.target.value;
+    (newData.game2[key] as string) = event.target.value;
     updateActivity({ data: newData });
   };
 
   const videoChange = (newValue: string) => {
     const newData = { ...data };
-    newData.mimique2.video = newValue;
+    newData.game2.video = newValue;
     updateActivity({ data: newData });
   };
 
@@ -57,7 +57,7 @@ const MimiqueStep2: React.FC = () => {
         <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={1} />
         <MimiqueSelector
           mimiqueNumber="2ème"
-          mimiqueData={data.mimique2}
+          mimiqueData={data.game2}
           onDataChange={dataChange}
           onNext={onNext}
           onPrev={onPrev}

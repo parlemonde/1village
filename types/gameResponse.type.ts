@@ -1,11 +1,5 @@
 import type { User } from './user.type';
 
-/* export enum GameResponseValue {
-  SIGNIFICATION = 0,
-  FAKE_SIGNIFICATION_1 = 1,
-  FAKE_SIGNIFICATION_2 = 2,
-} */
-
 export interface GameResponse {
   id: number;
   createDate?: Date | string;

@@ -22,7 +22,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    const videoUrl = activity?.data?.mimique1?.video;
+    const videoUrl = activity?.data?.game1?.video;
     const videoId = videoUrl.split(/\//).pop();
     if (!videoId) return;
     axiosLoggedRequest({

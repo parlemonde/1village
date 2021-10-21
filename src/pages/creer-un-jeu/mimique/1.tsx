@@ -41,13 +41,13 @@ const MimiqueStep1: React.FC = () => {
 
   const dataChange = (key: keyof MimiqueData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData: MimiquesData = { ...data };
-    (newData.mimique1[key] as string) = event.target.value;
+    (newData.game1[key] as string) = event.target.value;
     updateActivity({ data: newData });
   };
 
   const videoChange = (newValue: string) => {
     const newData = { ...data };
-    newData.mimique1.video = newValue;
+    newData.game1.video = newValue;
     updateActivity({ data: newData });
   };
 
@@ -55,10 +55,10 @@ const MimiqueStep1: React.FC = () => {
     router.push('/creer-un-jeu/mimique/2');
   };
 
-  if (!user || !activity || !activity.data || !data.mimique1) {
+  if (!user || !activity || !activity.data || !data.game1) {
     return (
       <Base>
-        <div></div>
+        <div>Hello</div>
       </Base>
     );
   }
@@ -69,7 +69,7 @@ const MimiqueStep1: React.FC = () => {
         <Steps steps={['1ère mimique', 'toto mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
         <MimiqueSelector
           mimiqueNumber="1ère"
-          mimiqueData={data.mimique1}
+          mimiqueData={data.game1}
           onDataChange={dataChange}
           onNext={onNext}
           onPrev={null}
