@@ -8,7 +8,7 @@ import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { ActivityType } from 'types/activity.type';
 
 export const titles = {
-  [ActivityType.PRESENTATION]: 'créé une présentation',
+  [ActivityType.PRESENTATION]: 'créé une mascotte',
   [ActivityType.DEFI]: 'créé un défi',
   [ActivityType.GAME]: 'lancé un jeu',
   [ActivityType.ENIGME]: 'créé une énigme',
@@ -30,7 +30,7 @@ export const icons = {
 };
 
 export const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'une présentation',
+  [ActivityType.PRESENTATION]: 'une mascotte',
   [ActivityType.DEFI]: 'un défi',
   [ActivityType.GAME]: 'un jeu',
   [ActivityType.ENIGME]: 'une énigme',

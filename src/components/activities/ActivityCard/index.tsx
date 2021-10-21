@@ -57,7 +57,7 @@ export const ActivityCard = ({
             onSelect();
           }
         }}
-        style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset' }}
+        style={{ margin: forComment ? '0' : '1rem 0', cursor: onSelect !== undefined ? 'pointer' : 'unset', border: activity?.isPinned && `2px solid ${primaryColor}` }}
       >
         <div className="activity-card__header">
           {forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={noButtons} />}
