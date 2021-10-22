@@ -42,9 +42,6 @@ export class GameResponse implements GameResponseInterface {
   @Column({ nullable: false })
   public gameId: number;
 
-  //  @Column({ type: 'text', nullable: false })
-  //  public value: string;
-
   @Column({ type: 'text' })
   public value: string;
 }

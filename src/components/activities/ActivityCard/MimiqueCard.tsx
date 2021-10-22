@@ -5,6 +5,7 @@ import { Button, Grid } from '@material-ui/core';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
+import VideoPlaceholder from 'src/svg/jeu/video-placeholder.svg';
 import type { GameMimiqueActivity } from 'types/game.type';
 
 import { CommentIcon } from './CommentIcon';
@@ -44,12 +45,22 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <Grid container spacing={3} style={{ minHeight: '10rem' }}>
           <Grid item xs={12} md={5}>
-            {pictureUrl && (
+            {pictureUrl ? (
               <div
                 style={{
                   height: '100%',
                   width: '100%',
                   backgroundImage: `url(${pictureUrl})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                }}
+              />
+            ) : (
+              <VideoPlaceholder
+                style={{
+                  height: '50%',
+                  width: '50%',
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',

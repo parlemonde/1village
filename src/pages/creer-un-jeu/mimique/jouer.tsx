@@ -100,9 +100,24 @@ const PlayMimique: React.FC = () => {
 
   const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
 
-  const fetchGame = () => {
+  const mimiqueInitialState = {
+    setMimique: setMimiqueContent,
+    setIsLoading: setIsLoading,
+    setFound: setFound,
+    setFoundError: setFoundError,
+    setFake1Selected: setFake1Selected,
+    setFake2Selected: setFake2Selected,
+    setGameResponses: setGameResponses,
+    setStats: setStats,
+    setSelected: setSelected,
+    setTryCount: setTryCount,
+    setErrorModalOpen: setErrorModalOpen,
+  };
+
+  React.useEffect(() => {
     if (isLoading) {
-      setMimiqueContent({} as MimiqueContent);
+      mimiqueInitialState;
+      /*setMimiqueContent({} as MimiqueContent);
       setIsLoading(false);
       setFound(false);
       setFoundError(false);
@@ -112,9 +127,8 @@ const PlayMimique: React.FC = () => {
       setStats(null);
       setSelected(null);
       setTryCount(0);
-      setErrorModalOpen(false);
+      setErrorModalOpen(false);*/
     }
-
     if (isLoading || village) {
       axiosLoggedRequest({
         method: 'GET',
@@ -135,10 +149,6 @@ const PlayMimique: React.FC = () => {
         }
       });
     }
-  };
-
-  React.useEffect(() => {
-    fetchGame();
   }, [setMimiqueContent, isLoading]);
 
   React.useEffect(() => {
@@ -416,7 +426,7 @@ const PlayMimique: React.FC = () => {
             }}
             variant="outlined"
             color="primary"
-            onClick={() => fetchGame()}
+            onClick={() => setIsLoading(true)}
           >
             Rejouer
           </Button>
