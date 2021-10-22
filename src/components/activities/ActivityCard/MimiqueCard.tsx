@@ -2,9 +2,11 @@ import Link from 'next/link';
 import React from 'react';
 
 import { Button, Grid } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
+import VideoPlaceholder from 'src/svg/jeu/video-placeholder.svg';
 import type { GameMimiqueActivity } from 'types/game.type';
 
 import { CommentIcon } from './CommentIcon';
@@ -20,7 +22,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
 }: ActivityCardProps<GameMimiqueActivity>) => {
   const [pictureUrl, setPictureUrl] = React.useState<string>(null);
   const { axiosLoggedRequest } = React.useContext(UserContext);
-
+  console.log(VideoPlaceholder);
   React.useEffect(() => {
     const videoUrl = activity?.data?.game1?.video;
     const videoId = videoUrl.split(/\//).pop();
@@ -44,7 +46,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <Grid container spacing={3} style={{ minHeight: '10rem' }}>
           <Grid item xs={12} md={5}>
-            {pictureUrl && (
+            {pictureUrl ? (
               <div
                 style={{
                   height: '100%',
@@ -53,6 +55,14 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
+                }}
+              />
+            ) : (
+              <VideoPlaceholder
+                style={{
+                  height: '63%',
+                  width: '63%',
+                  margin: 'auto',
                 }}
               />
             )}
@@ -66,7 +76,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href="/creer-un-jeu/mimique">
+                <Link href="/creer-un-jeu/mimique" passHref>
                   <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique">
                     Jouer au jeu
                   </Button>
@@ -81,6 +91,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

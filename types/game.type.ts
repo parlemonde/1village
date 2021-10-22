@@ -49,7 +49,6 @@ export type MonnaieData = {
 };
 
 export type GameMimiqueActivity = GenericExtendedActivity<MimiquesData>;
-//export type GameMimiqueActivity = GenericExtendedActivity<GamesData>;
 
 export type GameMonnaieActivity = GenericExtendedActivity<MonnaieData>;
 

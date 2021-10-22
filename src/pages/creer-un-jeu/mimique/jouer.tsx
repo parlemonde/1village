@@ -74,9 +74,10 @@ const PlayMimique: React.FC = () => {
   const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
   const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
-  const [mimiqueContent, setMimiqueContent] = React.useState<MimiqueContent>(null);
+  const [mimiqueContent, setMimiqueContent] = React.useState<MimiqueContent>({} as MimiqueContent);
   const [game, setGame] = React.useState<Game>(null);
   const [user, setUser] = React.useState<User>(null);
+  const [isReload, setIsReload] = React.useState<boolean>(false);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [selected, setSelected] = React.useState<MimiqueResponseValue | null>(null);
   const [gameResponses, setGameResponses] = React.useState<GameResponse[] | null>(null);
@@ -97,7 +98,21 @@ const PlayMimique: React.FC = () => {
 
   const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
   React.useEffect(() => {
-    if (village) {
+    if (isReload) {
+      setMimiqueContent({} as MimiqueContent);
+      setIsReload(false);
+      setFound(false);
+      setFoundError(false);
+      setFake1Selected(false);
+      setFake2Selected(false);
+      setGameResponses(null);
+      setStats(null);
+      setSelected(null);
+      setTryCount(0);
+      setErrorModalOpen(false);
+    }
+
+    if (isReload || village) {
       axiosLoggedRequest({
         method: 'GET',
         url: `/games/play${serializeToQueryUrl({
@@ -105,19 +120,18 @@ const PlayMimique: React.FC = () => {
           type: GameType.MIMIQUE,
         })}`,
       }).then((response) => {
-        console.log('response =', response);
+        if (isReload) console.log('Reload is true');
         if (!response.error && response.data) {
           const game = response.data as Game;
-          setGame(game);
           const mimiqueContent = JSON.parse(game.content) as unknown;
-          console.log(mimiqueContent);
+          setGame(game);
           setMimiqueContent(mimiqueContent as MimiqueContent);
         } else {
           setLastMimiqueModalOpen(true);
         }
       });
     }
-  }, [setMimiqueContent]);
+  }, [setMimiqueContent, isReload]);
 
   React.useEffect(() => {
     if (game) {
@@ -148,7 +162,6 @@ const PlayMimique: React.FC = () => {
         }
       });
       setStats(resStats);
-      console.log(resStats, Object.keys(resStats));
     }
   }, [gameResponses, userMap]);
 
@@ -163,7 +176,6 @@ const PlayMimique: React.FC = () => {
     }).then(() => {
       if (tryCount == 0) {
         if (selected == MimiqueResponseValue.SIGNIFICATION) {
-          console.log('found !');
           setFound(true);
           setSelected(null);
           axiosLoggedRequest({
@@ -175,12 +187,10 @@ const PlayMimique: React.FC = () => {
             }
           });
         } else if (selected == MimiqueResponseValue.FAKE_SIGNIFICATION_1) {
-          console.log('fake1 !');
           setFake1Selected(true);
           setSelected(null);
           setErrorModalOpen(true);
         } else {
-          console.log('fake2 !');
           setFake2Selected(true);
           setSelected(null);
           setErrorModalOpen(true);
@@ -188,16 +198,13 @@ const PlayMimique: React.FC = () => {
         setTryCount(tryCount + 1);
       } else if (tryCount == 1) {
         if (selected == MimiqueResponseValue.SIGNIFICATION) {
-          console.log('found !');
           setFound(true);
           setSelected(null);
         } else if (selected == MimiqueResponseValue.FAKE_SIGNIFICATION_1) {
-          console.log('fake1 !');
           setFake1Selected(true);
           setSelected(null);
           setFoundError(true);
         } else {
-          console.log('fake2 !');
           setFake2Selected(true);
           setSelected(null);
           setFoundError(true);
@@ -394,7 +401,9 @@ const PlayMimique: React.FC = () => {
             }}
             variant="outlined"
             color="primary"
-            onClick={() => router.reload()}
+            onClick={() => {
+              setIsReload(true);
+            }}
           >
             Rejouer
           </Button>

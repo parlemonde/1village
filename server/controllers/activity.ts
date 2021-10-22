@@ -4,10 +4,12 @@ import { getRepository } from 'typeorm';
 
 
 import type { AnyData, ActivityContent } from '../entities/activity';
+import type { GameData, GamesData } from '../../types/game.type';
+import type { ActivityDataType } from '../entities/activityData';
+import { ActivityData } from '../entities/activityData';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { Game } from '../entities/game';
-// import { Mimique } from '../entities/mimique';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -308,7 +310,6 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   const activity = new Activity();
   activity.type = data.type;
   activity.subType = data.subType ?? null;
-  //activity.subType = data.subType as number;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
   activity.data = data.data;
   activity.content = data.content;

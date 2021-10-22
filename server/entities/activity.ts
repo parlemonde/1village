@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-
-import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
-import { ActivityType, ActivityStatus } from '../../types/activity.type';
-
-=======
 import {
   Column,
   Entity,
@@ -13,17 +6,14 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  OneToMany,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
-import type { Activity as ActivityInterface } from '../../types/activity.type';
+import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 
-import { ActivityData } from './activityData';
 import { Game } from './game';
-// import { Mimique } from './mimique';
->>>>>>> creation of game and game entity for test
 import { User } from './user';
 import { Village } from './village';
 
@@ -44,7 +34,6 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @Column({ type: 'tinyint', nullable: true })
   public subType: number | null;
-  //public subType: number;
 
   @Column({
     type: 'tinyint',
@@ -108,7 +97,4 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @OneToMany(() => Game, (game: Game) => game.activity)
   public games: Game[];
-
-  // @OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
-  // public mimiques: Mimique[];
 }
