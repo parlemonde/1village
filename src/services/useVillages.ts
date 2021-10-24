@@ -69,7 +69,11 @@ export const useVillageRequests = () => {
       const response = await axiosLoggedRequest({
         method: 'PUT',
         url: `/villages/${id}`,
-        data: rest,
+        data: {
+          activePhase: rest.activePhase,
+          countries: rest.countries,
+          name: rest.name,
+        },
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
