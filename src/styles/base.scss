@@ -2,10 +2,10 @@
 @import 'variables';
 
 $headerHeight: 50px;
-$menuWidth: 250px;
-$menuWidthSmaller: 200px;
-$rightMenuWidth: 280px;
-$topNavigationHeight: 45px;
+$menuWidth: 260px;
+$menuWidthSmaller: 220px;
+$rightMenuWidth: 220px;
+$subHeaderHeight: 40px;
 $verticalSpacing: 20px;
 $horizontalSpacing: 25px;
 
@@ -48,26 +48,6 @@ header {
     fill: $font-color;
   }
 }
-.header__search {
-  background-color: $bg-page;
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-right: 0.5rem;
-  padding-left: 0.2rem;
-  height: 2rem;
-  width: 18rem;
-  margin: auto 0;
-  position: absolute;
-  left: $menuWidth + $horizontalSpacing;
-
-  .MuiInputBase-root {
-    margin-left: 0.1rem;
-    flex: 1;
-    min-width: 0;
-  }
-}
 
 // ---- LEFT NAVIGATION ----
 .navigation {
@@ -80,10 +60,12 @@ header {
 }
 .navigation__content {
   background-color: white;
-  min-height: 100%;
   width: $menuWidth;
-  margin: 0 $horizontalSpacing;
+  margin: 0 $horizontalSpacing $verticalSpacing $horizontalSpacing;
   border-radius: 10px;
+}
+.navigation__content--is-header {
+  height: $subHeaderHeight;
 }
 .navigation__cgu-link {
   position: absolute;
@@ -95,11 +77,12 @@ header {
 main {
   padding-top: $headerHeight + 2 * $verticalSpacing;
   padding-left: $menuWidth + 2 * $horizontalSpacing;
+
+  &.without-nav {
+    padding-left: $horizontalSpacing;
+  }
 }
-.main--narrower {
-  padding-top: $headerHeight + 2 * $verticalSpacing;
-  padding-left: 2 * $horizontalSpacing;
-}
+
 .app-content {
   background-color: white;
   width: calc(100% - #{$horizontalSpacing});
@@ -114,13 +97,13 @@ main {
   width: calc(100% - #{2 * $horizontalSpacing + $rightMenuWidth});
 }
 .app-content--smaller {
-  min-height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing + $topNavigationHeight});
+  min-height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing + $subHeaderHeight});
 }
 
 // ---- SUB HEADER ----
 .sub-header {
   margin-right: $horizontalSpacing;
-  height: $topNavigationHeight;
+  height: $subHeaderHeight;
   margin-bottom: $verticalSpacing;
 }
 
@@ -139,16 +122,12 @@ main {
   padding-bottom: 4px;
 }
 .right-navigation--smaller > div {
-  height: calc(100vh - #{$headerHeight + 4 * $verticalSpacing + $topNavigationHeight});
+  height: calc(100vh - #{$headerHeight + 4 * $verticalSpacing + $subHeaderHeight});
 }
 
 @include for-small-screen {
   .header__container {
     margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
-  }
-  .header__search {
-    left: $menuWidthSmaller + math.div($horizontalSpacing, 2);
-    width: 10rem;
   }
 
   .navigation {
@@ -157,7 +136,7 @@ main {
   }
   .navigation__content {
     width: $menuWidthSmaller;
-    margin: 0 math.div($horizontalSpacing, 2);
+    margin: 0 math.div($horizontalSpacing, 2) math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2);
   }
   .navigation__button {
     font-size: 0.9rem !important;
@@ -170,6 +149,10 @@ main {
   main {
     padding-top: $headerHeight + $verticalSpacing;
     padding-left: $menuWidthSmaller + $horizontalSpacing;
+
+    &.without-nav {
+      padding-left: math.div($horizontalSpacing, 2);
+    }
   }
   .app-content {
     width: calc(100% - #{math.div($horizontalSpacing, 2)});
@@ -179,7 +162,7 @@ main {
     width: calc(100% - #{$horizontalSpacing + $rightMenuWidth});
   }
   .app-content--smaller {
-    min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $topNavigationHeight});
+    min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $subHeaderHeight});
   }
 
   .right-navigation {
@@ -190,13 +173,12 @@ main {
     height: calc(100vh - #{$headerHeight + math.div(3, 2) * $verticalSpacing});
   }
   .right-navigation--smaller > div {
-    height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $topNavigationHeight});
+    height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $subHeaderHeight});
   }
 
   .sub-header {
     margin-right: math.div($horizontalSpacing, 2);
     margin-bottom: math.div($verticalSpacing, 2);
-    margin-top: math.div($verticalSpacing, 2);
   }
 }
 

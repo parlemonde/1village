@@ -64,7 +64,7 @@ export const useVillageRequests = () => {
   );
 
   const editVillage = React.useCallback(
-    async (updatedVillage: Village) => {
+    async (updatedVillage: Partial<Village>) => {
       const { id, ...rest } = updatedVillage;
       const response = await axiosLoggedRequest({
         method: 'PUT',

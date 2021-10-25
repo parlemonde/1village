@@ -200,7 +200,7 @@ a.text--success:hover {
   align-items: center;
 }
 .shadow-svg {
-  filter: drop-shadow( 0.5px 2px 0 rgba(187, 187, 187, 0.8));
+  filter: drop-shadow(0.5px 2px 0 rgba(187, 187, 187, 0.8));
 }
 .with-shadow {
   -webkit-box-shadow: 0px 2px 2px 0px rgba(187, 187, 187, 0.8);
@@ -243,10 +243,6 @@ a.text--success:hover {
   }
   .MuiStepLabel-label.MuiStepLabel-completed {
     color: $success-color !important;
-    font-weight: 500;
-  }
-  .MuiStepLabel-label.Mui-error {
-    color: $error-color !important;
     font-weight: 500;
   }
 }

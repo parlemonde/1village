@@ -33,9 +33,9 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
   const [village, setVillage] = React.useState<Village | null>(null);
   const [villages, setVillages] = React.useState<Village[] | null>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
+  const [selectedPhase, setSelectedPhase] = React.useState(-1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(false);
-  const [selectedPhase, setSelectedPhase] = React.useState(1);
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 
@@ -58,9 +58,10 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
       url: '/villages',
     });
     if (response.error) {
-      return setVillages([]);
+      setVillages([]);
+      return;
     }
-    return setVillages(response.data as Village[]);
+    setVillages(response.data as Village[]);
   }, [axiosLoggedRequest]);
 
   const hasFetchVillages = React.useRef(false);
@@ -77,6 +78,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
     let userVillage: Village | null = null;
     if (user === null) {
       setVillage(null);
+      setSelectedPhase(-1);
       return;
     }
     if (user.villageId) {
@@ -88,7 +90,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
       }
     }
     setVillage(userVillage);
-    setSelectedPhase(userVillage?.activePhase);
+    setSelectedPhase(userVillage ? userVillage.activePhase : -1);
 
     if (userVillage === null && user.type > UserType.TEACHER) {
       showSelectVillageModal();
@@ -102,6 +104,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
       setIsModalOpen(false);
       setShowUnassignedModal(false);
       setVillage(null);
+      setSelectedPhase(-1);
     }
     if (isOnAdmin) {
       setIsModalOpen(false);
@@ -164,6 +167,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
         onConfirm={() => {
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
+            setSelectedPhase(villages[selectedVillageIndex].activePhase);
             window.sessionStorage.setItem('villageId', `${villages[selectedVillageIndex].id}`);
           }
           setIsModalOpen(false);

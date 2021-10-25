@@ -13,7 +13,7 @@ $secondary-color: #80cbc4;
 $help-color: #e1c7d1;
 $help-color-darker: #cfbac3;
 $success-color: #008000;
-$error-color: #D68100;
+$error-color: #d93939;
 $bg-page: #f5f5f5;
 
 // screen sizes breakpoints
@@ -52,14 +52,14 @@ $big-screen: 2000px;
   margin-right: -1rem;
   padding-right: 1rem;
   &:before {
-    content: "...";
+    content: '...';
     position: absolute;
     right: 1rem;
     background: $bgColor;
     bottom: 0;
   }
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     right: 1rem;
     width: 1rem;
