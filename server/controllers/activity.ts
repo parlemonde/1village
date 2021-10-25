@@ -302,6 +302,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         ActivityType.DEFI,
         ActivityType.INDICE,
         ActivityType.SYMBOL,
+        ActivityType.CONTENU_LIBRE,
       ],
     },
   },
