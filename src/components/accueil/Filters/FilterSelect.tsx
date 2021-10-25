@@ -21,8 +21,8 @@ export const FilterSelect = ({ value, onChange, name, options, phaseActivities }
   const [isOpen, setIsOpen] = React.useState(false);
   const getIdxFromValue = (actualValue: number[]): number => {
     let result;
-    phaseActivities.map((activities) => {
-      activities.map((activity) => {
+    phaseActivities.forEach((activities) => {
+      activities.forEach((activity) => {
         if (activity.type === actualValue) {
           result = activity.key;
         }

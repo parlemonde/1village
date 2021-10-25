@@ -3,7 +3,6 @@ import type { Country } from 'types/country.type';
 import type { Currency } from 'types/currency.type';
 import type { Language } from 'types/language.type';
 
-import type { AnyActivity } from './anyActivity.types';
 import type { MascotteData, PresentationActivity, PresentationMascotteActivity, PresentationThematiqueActivity } from './presentation.types';
 
 export const PRESENTATION_THEMATIQUE = [
@@ -79,7 +78,7 @@ export const PRESENTATION = {
   MASCOTTE: 1,
 };
 
-export const isMascotte = (activity: AnyActivity): activity is PresentationMascotteActivity => {
+export const isMascotte = (activity: PresentationActivity): activity is PresentationMascotteActivity => {
   return activity.subType === PRESENTATION.MASCOTTE;
 };
 export const isThematique = (activity: PresentationActivity): activity is PresentationThematiqueActivity => {

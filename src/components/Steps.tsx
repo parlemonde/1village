@@ -56,21 +56,13 @@ export const Steps = ({ steps, activeStep = 0, errorSteps = [] }: StepsProps) =>
     <div className="custom-steps--container" style={{ position: 'relative' }}>
       <div style={{ position: 'absolute', top: '43px', left: '10%', right: '10%', borderTop: `1px solid ${primaryColorLight2}`, zIndex: 0 }}></div>
       <Stepper activeStep={activeStep} alternativeLabel connector={<DotConnector />} style={{ zIndex: 1, position: 'relative', background: 'none' }}>
-        {steps.map((label, index) => {
-          let error: boolean = false;
-          errorSteps.map((step) => {
-            if (index === step) {
-              error = true;
-            }
-          });
-          return (
-            <Step key={label}>
-              <StepLabel StepIconComponent={StepIcon} error={error}>
-                {label}
-              </StepLabel>
-            </Step>
-          );
-        })}
+        {steps.map((label, index) => (
+          <Step key={label}>
+            <StepLabel StepIconComponent={StepIcon} error={errorSteps.includes(index)}>
+              {label}
+            </StepLabel>
+          </Step>
+        ))}
       </Stepper>
     </div>
   );

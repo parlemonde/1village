@@ -52,7 +52,7 @@ const MaClasse = () => {
 
       activities &&
         activities.map((activity) => {
-          isMascotte(activity) && setMascotteActivity({ ...mascotteActivity, commentCount: activity.commentCount });
+          isPresentation(activity) && isMascotte(activity) && setMascotteActivity({ ...mascotteActivity, commentCount: activity.commentCount });
         });
     }
   }, [activities, axiosLoggedRequest]);
@@ -104,7 +104,7 @@ const MaClasse = () => {
           <h2>Mes Brouillons</h2>
           {drafts.length === 0 && <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>}
           {drafts.map((activity, index) =>
-            user && activity.userId === user.id && !isPresentation(activity) && !isMascotte(activity) ? (
+            user && activity.userId === user.id ? (
               <ActivityCard
                 activity={activity}
                 user={user}
@@ -121,7 +121,7 @@ const MaClasse = () => {
 
           <h2>Mes activités publiées</h2>
           {activities.map((activity, index) =>
-            user && activity.userId === user.id && !isPresentation(activity) && !isMascotte(activity) ? (
+            user && activity.userId === user.id && !isPresentation(activity) ? (
               <ActivityCard
                 activity={activity}
                 isSelf={true}

@@ -20,7 +20,7 @@ type ActivityGetter = {
   limit?: number;
   page?: number;
   villageId?: number;
-  type?: any;
+  type?: string[];
   subType?: number | null;
   countries?: string[];
   pelico?: boolean;
