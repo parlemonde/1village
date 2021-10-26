@@ -130,7 +130,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         status: ActivityStatus.DRAFT,
         userId: user.id,
         villageId: village.id,
-        content: [],
+        content: [{ type: 'text', id: 0, value: '' }],
         responseActivityId: responseActivityId ?? null,
         responseType: responseType ?? null,
         data: initialData || {},
