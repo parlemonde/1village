@@ -5,14 +5,14 @@ import React from 'react';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
-import type { Activity, ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
 
 export type Args = {
   limit?: number;
   page?: number;
   countries?: string[];
   pelico?: boolean;
-  type?: ActivityType | ActivityType[];
+  type?: number | number[];
   userId?: number;
   status?: number;
   responseActivityId?: number;

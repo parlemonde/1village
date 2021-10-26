@@ -18,17 +18,17 @@ interface ActivityContextValue {
   setActivity(newActivity: Activity | null): void;
   updateActivity(newActivity: Partial<Activity>): void;
   createNewActivity(
-    type: ActivityType,
+    type: number,
     subType?: number,
     initialData?: AnyData,
     responseActivityId?: number | null,
-    responseType?: ActivityType | null,
+    responseType?: number | null,
     isPinned?: boolean,
   ): boolean;
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<boolean>;
-  createActivityIfNotExist(type: ActivityType, subType: number, initialData?: AnyData): Promise<void>;
+  createActivityIfNotExist(type: number, subType: number, initialData?: AnyData): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
@@ -99,7 +99,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   }, []);
 
   const getDraft = React.useCallback(
-    async (type: ActivityType, subType?: number) => {
+    async (type: number, subType?: number) => {
       const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
@@ -119,7 +119,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, subType?: number, initialData?: AnyData, responseActivityId?: number | null, responseType?: ActivityType | null) => {
+    (type: number, subType?: number, initialData?: AnyData, responseActivityId?: number | null, responseType?: number | null) => {
       if (user === null || village === null) {
         return false;
       }
@@ -146,7 +146,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: ActivityType, subType: number, initialData?: AnyData) => {
+    async (type: number, subType: number, initialData?: AnyData) => {
       if (user === null || village === null) {
         return;
       }

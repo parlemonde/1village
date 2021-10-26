@@ -13,7 +13,6 @@ import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
-import type { ActivityType } from 'types/activity.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -46,7 +45,7 @@ const Reactions = [
 
 interface AddCommentProps {
   activityId: number | null;
-  activityType: ActivityType | null;
+  activityType: number | null;
   label?: string;
 }
 

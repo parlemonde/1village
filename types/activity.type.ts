@@ -7,27 +7,27 @@ export interface ActivityContent {
 
 export type AnyData = Record<string, unknown>;
 
-export enum ActivityType {
-  PRESENTATION = 0,
-  ENIGME = 1,
-  DEFI = 2,
-  QUESTION = 3,
-  GAME = 4,
-  CONTENU_LIBRE = 5,
-  INDICE = 6,
-  SYMBOL = 7,
-}
+export const ActivityType = {
+  PRESENTATION: 0,
+  ENIGME: 1,
+  DEFI: 2,
+  QUESTION: 3,
+  GAME: 4,
+  CONTENU_LIBRE: 5,
+  INDICE: 6,
+  SYMBOL: 7,
+};
 
-export enum ActivityStatus {
-  PUBLISHED = 0,
-  DRAFT = 1,
-}
+export const ActivityStatus = {
+  PUBLISHED: 0,
+  DRAFT: 1,
+};
 
 export interface Activity<T extends AnyData = AnyData> {
   id: number;
-  type: ActivityType;
+  type: number;
   subType?: number | null;
-  status: ActivityStatus;
+  status: number;
 
   createDate?: Date | string;
   updateDate?: Date | string;
@@ -49,5 +49,5 @@ export interface Activity<T extends AnyData = AnyData> {
 
   // Answer other activity
   responseActivityId: number | null;
-  responseType: ActivityType | null;
+  responseType: number | null;
 }

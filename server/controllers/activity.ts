@@ -206,9 +206,9 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
   const activity = await getRepository(Activity).findOne({
     where: {
       userId: req.user.id,
-      type: `${ActivityType.PRESENTATION}`,
+      type: ActivityType.PRESENTATION,
       subType: 1,
-      status: `${ActivityStatus.PUBLISHED}`,
+      status: ActivityStatus.PUBLISHED,
     },
   });
   if (activity) {
@@ -220,14 +220,14 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
 
 // --- Create an activity ---
 type CreateActivityData = {
-  type: ActivityType;
+  type: number;
   subType?: number | null;
-  status?: ActivityStatus;
+  status?: number;
   data: AnyData;
   content: ActivityContent[];
   villageId?: number;
   responseActivityId?: number;
-  responseType?: ActivityType;
+  responseType?: number;
   isPinned?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
@@ -235,16 +235,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   properties: {
     type: {
       type: 'number',
-      enum: [
-        ActivityType.PRESENTATION,
-        ActivityType.QUESTION,
-        ActivityType.GAME,
-        ActivityType.ENIGME,
-        ActivityType.DEFI,
-        ActivityType.INDICE,
-        ActivityType.CONTENU_LIBRE,
-        ActivityType.SYMBOL,
-      ],
     },
     subType: {
       type: 'number',
@@ -252,7 +242,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     },
     status: {
       type: 'number',
-      enum: [ActivityStatus.DRAFT, ActivityStatus.PUBLISHED],
       nullable: true,
     },
     data: {
@@ -278,17 +267,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [
-        null,
-        ActivityType.PRESENTATION,
-        ActivityType.QUESTION,
-        ActivityType.GAME,
-        ActivityType.ENIGME,
-        ActivityType.DEFI,
-        ActivityType.INDICE,
-        ActivityType.SYMBOL,
-        ActivityType.CONTENU_LIBRE,
-      ],
     },
     isPinned: { type: 'boolean', nullable: true },
   },
@@ -317,9 +295,9 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     await getRepository(Activity).delete({
       userId: req.user.id,
       villageId,
-      type: `${data.type}` as unknown as ActivityType,
+      type: data.type,
       subType: data.subType ?? null,
-      status: `${ActivityStatus.DRAFT}` as unknown as ActivityStatus,
+      status: ActivityStatus.DRAFT,
     });
   }
 
@@ -342,9 +320,9 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 
 // --- Update activity ---
 type UpdateActivity = {
-  status?: ActivityStatus;
+  status?: number;
   responseActivityId?: number;
-  responseType?: ActivityType;
+  responseType?: number;
   isPinned?: boolean;
   data?: AnyData;
   content?: ActivityContent[];
@@ -354,14 +332,12 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   properties: {
     status: {
       type: 'number',
-      enum: [ActivityStatus.DRAFT, ActivityStatus.PUBLISHED],
       nullable: true,
     },
     responseActivityId: { type: 'number', nullable: true },
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
     isPinned: { type: 'boolean', nullable: true },
     data: {

@@ -15,22 +15,21 @@ export class Activity implements ActivityInterface<AnyData> {
   public id: number;
 
   @Column({
-    type: 'enum',
-    enum: ActivityType,
+    type: 'tinyint',
     default: ActivityType.PRESENTATION,
+    nullable: false,
   })
-  public type: ActivityType;
+  public type: number;
 
   @Column({ type: 'tinyint', nullable: true })
   public subType: number | null;
 
   @Column({
-    type: 'enum',
-    enum: ActivityStatus,
+    type: 'tinyint',
     nullable: false,
     default: ActivityStatus.PUBLISHED,
   })
-  public status: ActivityStatus;
+  public status: number;
 
   @CreateDateColumn()
   public createDate: Date;
@@ -72,11 +71,10 @@ export class Activity implements ActivityInterface<AnyData> {
   public responseActivityId: number | null;
 
   @Column({
-    type: 'enum',
-    enum: ActivityType,
+    type: 'tinyint',
     nullable: true,
   })
-  public responseType: ActivityType | null;
+  public responseType: number | null;
 
   @Column({
     type: 'boolean',

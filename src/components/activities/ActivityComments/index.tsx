@@ -5,7 +5,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import type { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
@@ -16,7 +15,7 @@ import { CommentCard } from './CommentCard';
 
 interface ActivityCommentsProps {
   activityId: number;
-  activityType: ActivityType;
+  activityType: number;
   usersMap: { [key: number]: User };
 }
 

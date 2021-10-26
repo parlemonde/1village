@@ -23,7 +23,7 @@ const DefiEcoStep1 = () => {
     }
     router.push('/lancer-un-defi/ecologique/2');
   };
-  const onChange = (id: number | null, type: ActivityType | null) => {
+  const onChange = (id: number | null, type: number | null) => {
     if (activity !== null) {
       updateActivity({ responseActivityId: id, responseType: type });
     }

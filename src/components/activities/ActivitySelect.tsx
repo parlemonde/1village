@@ -8,7 +8,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
-import type { Activity, ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
 
 import { Activities } from './List';
 
@@ -16,7 +16,7 @@ const ACTIVITIES_PER_PAGE = 10;
 
 interface ActivitySelectProps {
   value: number | null;
-  onChange(newValue: number | null, newType: ActivityType | null): void;
+  onChange(newValue: number | null, newType: number | null): void;
   onSelect(): void;
   style?: React.CSSProperties;
 }
