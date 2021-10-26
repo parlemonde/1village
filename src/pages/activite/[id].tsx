@@ -50,7 +50,7 @@ const Activity = () => {
   }
 
   return (
-    <Base rightNav={<RightNavigation activityUser={activityUser} />} leftNav={false}>
+    <Base rightNav={<RightNavigation activityUser={activityUser} />} hideLeftNav>
       <div className="activity__back-container">
         <Link href="/">
           <a className="activity__back-button">
