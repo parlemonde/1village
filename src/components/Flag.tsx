@@ -8,7 +8,7 @@ const sizes = {
 };
 
 interface FlagProps {
-  isMistery: boolean;
+  isMistery?: boolean;
   country?: string;
   size?: 'small' | 'medium';
   style?: React.CSSProperties;

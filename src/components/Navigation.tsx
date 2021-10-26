@@ -150,7 +150,7 @@ export const Navigation = (): JSX.Element => {
                 style={{ margin: '0.25rem' }}
                 key={country}
                 country={country}
-                isMistery={!village || !user || (village.activePhase === 1 && user.countryCode.toUpperCase() !== country)}
+                isMistery={!village || !user || (village.activePhase === 1 && user.countryCode.toUpperCase() !== country && !isModerateur)}
               ></Flag>
             ))}
         </div>

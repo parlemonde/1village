@@ -9,30 +9,22 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { primaryColor } from 'src/styles/variables.const';
 
-interface FilterSelectProps {
-  options: { key: string | number; label: string; type: number[] }[];
+type Option<T> = {
+  key: number | string;
+  label: string;
+  value: T;
+};
+
+interface FilterSelectProps<T> {
+  options: Option<T>[];
   name: string;
-  value: number[];
-  onChange(newValue: number[]): void;
-  phaseActivities: { key: string | number; label: string; type: number[] }[][];
+  value: number | string;
+  onChange(option: Option<T>): void;
 }
 
-export const FilterSelect = ({ value, onChange, name, options, phaseActivities }: FilterSelectProps) => {
+export const FilterSelect = <T extends unknown>({ value, onChange, name, options }: FilterSelectProps<T>) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const getIdxFromValue = (actualValue: number[]): number => {
-    let result;
-    phaseActivities.forEach((activities) => {
-      activities.forEach((activity) => {
-        if (activity.type === actualValue) {
-          result = activity.key;
-        }
-      });
-    });
-
-    return result;
-  };
-
-  const selectedOption = options[getIdxFromValue(value)];
+  const selectedOption = options.find((o) => o.key === value) || null;
 
   return (
     <div style={{ position: 'relative', marginLeft: '0.5rem' }}>
@@ -115,7 +107,7 @@ export const FilterSelect = ({ value, onChange, name, options, phaseActivities }
                         style={{ padding: '0', marginRight: '0.5rem' }}
                         checked={selectedOption.key === option.key}
                         onChange={() => {
-                          onChange(option.type);
+                          onChange(option);
                           setIsOpen(false);
                         }}
                         name={`${option.key}`}
