@@ -739,7 +739,7 @@ export const countries: Country[] = [
   },
   {
     isoCode: 'PS',
-    name: 'Territoires Palestiniens Occup\u00e9s',
+    name: 'Palestine',
   },
   {
     isoCode: 'PT',
@@ -771,7 +771,7 @@ export const countries: Country[] = [
   },
   {
     isoCode: 'RU',
-    name: 'F\u00e9d\u00e9ration De Russie',
+    name: 'Russie',
   },
   {
     isoCode: 'RW',
