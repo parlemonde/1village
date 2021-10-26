@@ -4,12 +4,12 @@ import React from 'react';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isCooking } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { ActivityContent } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep3 = () => {
@@ -31,8 +31,8 @@ const DefiStep3 = () => {
     return <div></div>;
   }
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: content });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: content });
   };
 
   const onNext = () => {
@@ -50,13 +50,7 @@ const DefiStep3 = () => {
             À vous de montrer aux Pelicopains comment cuisiner ce plat ! Pensez à présenter les ingrédients, les étapes, et donnez vos astuces de
             chef.
           </p>
-          <ContentEditor
-            content={activity.processedContent}
-            updateContent={updateContent}
-            addContent={addContent}
-            deleteContent={deleteContent}
-            save={save}
-          />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
           <StepsButton prev="/lancer-un-defi/culinaire/2" next={onNext} />
         </div>
       </div>

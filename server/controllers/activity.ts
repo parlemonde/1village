@@ -1,9 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository, getManager } from 'typeorm';
+import { getRepository } from 'typeorm';
 
-import type { ActivityDataType } from '../entities/activityData';
-import { ActivityData } from '../entities/activityData';
+import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -76,7 +75,7 @@ const getActivities = async ({
   responseActivityId,
 }: ActivityGetter) => {
   // get ids
-  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').select('activity.id', 'id');
+  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity');
   if (villageId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
   }
@@ -120,26 +119,16 @@ const getActivities = async ({
     }
   }
 
-  const ids = (
-    await subQueryBuilder
-      .orderBy('activity.createDate', 'DESC')
-      .limit(limit)
-      .offset(page * limit)
-      .getRawMany()
-  ).map((row) => row.id);
+  const activities = await subQueryBuilder
+    .orderBy('activity.createDate', 'DESC')
+    .limit(limit)
+    .offset(page * limit)
+    .getMany();
+
+  const ids = activities.map((a) => a.id);
   if (ids.length === 0) {
     return [];
   }
-
-  // select activities and their content
-  const activities = await getRepository(Activity)
-    .createQueryBuilder('activity')
-    .leftJoinAndSelect('activity.content', 'activityData', 'activity.id = activityData.activityId')
-    .where('activity.id IN (:ids)', { ids })
-    .orderBy('activity.isPinned', 'DESC')
-    .addOrderBy('activity.createDate', 'DESC')
-    .addOrderBy('activityData.order', 'ASC')
-    .getMany();
 
   const comments = await getActivitiesCommentCount(ids);
   for (const activity of activities) {
@@ -150,17 +139,6 @@ const getActivities = async ({
     }
   }
   return activities;
-};
-
-const getActivity = async (id: number) => {
-  const activity = await getRepository(Activity)
-    .createQueryBuilder('activity')
-    .leftJoinAndSelect('activity.content', 'activityData')
-    .where('`activity`.`id` = :id', { id })
-    .orderBy('`activity`.`createDate`', 'DESC')
-    .addOrderBy('`activityData`.`order`', 'ASC')
-    .getOne();
-  return activity;
 };
 
 // --- Get all activities. ---
@@ -183,7 +161,9 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
 // --- Get one activity. ---
 activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getActivity(id);
+  const activity = await getRepository(Activity).findOne({
+    where: { id },
+  });
   if (activity === undefined) {
     next();
     return;
@@ -211,31 +191,31 @@ activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (re
   if (req.query.subType !== undefined) {
     search.subType = req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : 0;
   }
-  const activityId =
-    (
-      await getRepository(Activity).findOne({
-        where: search,
-      })
-    )?.id ?? -1;
-  const activity = activityId === -1 ? undefined : await getActivity(activityId);
+  const activity = await getRepository(Activity).findOne({
+    where: search,
+  });
   res.sendJSON({ draft: activity || null });
 });
 
-activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res) => {
-  if (req.user && req.user.type >= UserType.MEDIATOR) {
+activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res, next) => {
+  if (!req.user || req.user.type >= UserType.MEDIATOR) {
     // no mascotte for pelico
-    res.sendJSON({ id: -1 });
+    next();
     return;
   }
   const activity = await getRepository(Activity).findOne({
     where: {
-      userId: req.user?.id ?? 0,
+      userId: req.user.id,
       type: `${ActivityType.PRESENTATION}`,
       subType: 1,
       status: `${ActivityStatus.PUBLISHED}`,
     },
   });
-  res.sendJSON({ id: activity?.id || -1 });
+  if (activity) {
+    res.sendJSON(activity);
+  } else {
+    next();
+  }
 });
 
 // --- Create an activity ---
@@ -243,13 +223,12 @@ type CreateActivityData = {
   type: ActivityType;
   subType?: number | null;
   status?: ActivityStatus;
+  data: AnyData;
+  content: ActivityContent[];
   villageId?: number;
-  content?: Array<{
-    key: ActivityDataType;
-    value: string;
-  }>;
   responseActivityId?: number;
   responseType?: ActivityType;
+  isPinned?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   type: 'object',
@@ -276,19 +255,25 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
       enum: [ActivityStatus.DRAFT, ActivityStatus.PUBLISHED],
       nullable: true,
     },
-    villageId: { type: 'number', nullable: true },
+    data: {
+      type: 'object',
+      additionalProperties: true,
+      nullable: false,
+    },
     content: {
       type: 'array',
       items: {
         type: 'object',
         properties: {
-          key: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'json', 'h5p', 'sound'] },
+          id: { type: 'number', nullable: false },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
           value: { type: 'string', nullable: false },
         },
-        required: ['key', 'value'],
+        required: ['type', 'value'],
       },
-      nullable: true,
+      nullable: false,
     },
+    villageId: { type: 'number', nullable: true },
     responseActivityId: { type: 'number', nullable: true },
     responseType: {
       type: 'number',
@@ -305,8 +290,9 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         ActivityType.CONTENU_LIBRE,
       ],
     },
+    isPinned: { type: 'boolean', nullable: true },
   },
-  required: ['type'],
+  required: ['type', 'data', 'content'],
   additionalProperties: false,
 };
 const createActivityValidator = ajv.compile(CREATE_SCHEMA);
@@ -321,7 +307,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const villageId = data.villageId || req.user.villageId || null;
+  const villageId = req.user.type >= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
   if (villageId === null) {
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
@@ -338,31 +324,19 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   }
 
   const activity = new Activity();
-  activity.villageId = villageId;
-  activity.userId = req.user.id;
   activity.type = data.type;
   activity.subType = data.subType ?? null;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
+  activity.data = data.data;
+  activity.content = data.content;
+  activity.userId = req.user.id;
+  activity.villageId = villageId;
   activity.responseActivityId = data.responseActivityId ?? null;
   activity.responseType = data.responseType ?? null;
+  activity.isPinned = data.isPinned || false;
 
-  const content = (data.content || []).map((d, index) => {
-    const activityData = new ActivityData();
-    activityData.order = index;
-    activityData.key = d.key;
-    activityData.value = d.value;
-    return activityData;
-  });
-  await getManager().transaction(async (transactionalEntityManager) => {
-    await transactionalEntityManager.save(activity);
-    if (content.length > 0) {
-      content.forEach((activityData) => {
-        activityData.activityId = activity.id;
-      });
-      await transactionalEntityManager.save(content);
-    }
-  });
-  activity.content = content;
+  await getRepository(Activity).save(activity);
+
   res.sendJSON(activity);
 });
 
@@ -372,6 +346,8 @@ type UpdateActivity = {
   responseActivityId?: number;
   responseType?: ActivityType;
   isPinned?: boolean;
+  data?: AnyData;
+  content?: ActivityContent[];
 };
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
@@ -388,6 +364,24 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
       enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
     isPinned: { type: 'boolean', nullable: true },
+    data: {
+      type: 'object',
+      additionalProperties: true,
+      nullable: true,
+    },
+    content: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number', nullable: false },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          value: { type: 'string', nullable: false },
+        },
+        required: ['type', 'value'],
+      },
+      nullable: true,
+    },
   },
   required: [],
   additionalProperties: false,
@@ -405,7 +399,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
+  const activity = await getRepository(Activity).findOne({ where: { id } });
   if (activity === undefined || req.user === undefined) {
     next();
     return;
@@ -418,291 +412,12 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.status = data.status ?? activity.status;
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
-  activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned ?? null;
+  activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;
+  activity.data = data.data ?? activity.data;
+  activity.content = data.content ?? activity.content;
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
-});
-
-// --- Add content to an activity ---
-type AddActivityData = {
-  content?: Array<{
-    key: ActivityDataType;
-    value: string;
-  }>;
-};
-const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
-  type: 'object',
-  properties: {
-    content: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          key: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'json', 'h5p', 'sound'] },
-          value: { type: 'string', nullable: false },
-        },
-        required: ['key', 'value'],
-      },
-      nullable: true,
-    },
-  },
-  required: [],
-  additionalProperties: false,
-};
-const addActivityDataValidator = ajv.compile(ADD_DATA_SCHEMA);
-activityController.post({ path: '/:id/content', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
-  if (!addActivityDataValidator(data)) {
-    sendInvalidDataError(addActivityDataValidator);
-    return;
-  }
-
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
-  if (activity === undefined || req.user === undefined) {
-    next();
-    return;
-  }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
-    next();
-    return;
-  }
-  if (!data.content || data.content.length === 0) {
-    res.sendJSON([]);
-    return;
-  }
-
-  const content = (data.content || []).map((c, index) => {
-    const activityData = new ActivityData();
-    activityData.order = index + (activity.content || []).length;
-    activityData.key = c.key;
-    activityData.value = c.value;
-    activityData.activityId = activity.id;
-    return activityData;
-  });
-  await getManager().transaction(async (transactionalEntityManager) => {
-    activity.updateDate = new Date();
-    await transactionalEntityManager.save(activity);
-    await transactionalEntityManager.save(content);
-  });
-  res.sendJSON(content);
-});
-
-// --- update all activity content
-type UpdateActivityData = {
-  content: Array<{
-    key?: ActivityDataType;
-    value: string;
-    id?: number;
-  }>;
-};
-const UPDATE_DATA_SCHEMA: JSONSchemaType<UpdateActivityData> = {
-  type: 'object',
-  properties: {
-    content: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          key: { type: 'string', nullable: true, enum: ['text', 'video', 'image', 'json', 'h5p', 'sound'] },
-          value: { type: 'string', nullable: false },
-          id: { type: 'number', nullable: true },
-        },
-        required: ['value'],
-      },
-      nullable: true,
-    },
-  },
-  required: ['content'],
-  additionalProperties: false,
-};
-const updateActivityDataValidator = ajv.compile(UPDATE_DATA_SCHEMA);
-activityController.put({ path: '/:id/content', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
-  if (!updateActivityDataValidator(data)) {
-    sendInvalidDataError(updateActivityDataValidator);
-    return;
-  }
-
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
-  if (activity === undefined || req.user === undefined) {
-    next();
-    return;
-  }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
-    next();
-    return;
-  }
-
-  const mapIndex = data.content.reduce<{ [key: number]: number }>((acc, c, index) => {
-    if (c.id) {
-      acc[c.id] = index;
-    }
-    return acc;
-  }, {});
-
-  // 1-- new and updated content
-  const newContent: ActivityData[] = [];
-  const updatedContent: ActivityData[] = [];
-  for (let index = 0; index < data.content.length; index++) {
-    const c = data.content[index];
-    if (c.id === undefined && c.key !== undefined) {
-      const activityData = new ActivityData();
-      activityData.order = index;
-      activityData.key = c.key;
-      activityData.value = c.value;
-      activityData.activityId = activity.id;
-      newContent.push(activityData);
-    }
-    if (c.id !== undefined && mapIndex[c.id] !== undefined) {
-      const activityData = new ActivityData();
-      activityData.order = index;
-      activityData.value = c.value;
-      activityData.activityId = activity.id;
-      activityData.id = c.id;
-      updatedContent.push(activityData);
-    }
-  }
-  // 2-- deleted content
-  const deletedContent = (activity.content || []).map((c) => c.id).filter((id) => mapIndex[id] === undefined);
-
-  await getManager().transaction(async (transactionalEntityManager) => {
-    activity.updateDate = new Date();
-    await transactionalEntityManager.save(activity);
-    if (newContent.length) {
-      await transactionalEntityManager.save(newContent);
-    }
-    if (updatedContent.length) {
-      await transactionalEntityManager.save(updatedContent);
-    }
-    if (deletedContent.length) {
-      await transactionalEntityManager.createQueryBuilder().delete().from(ActivityData).where('`id` IN (:...ids)', { ids: deletedContent }).execute();
-    }
-  });
-
-  // send new activity
-  res.sendJSON(await getActivity(id));
-});
-
-// --- Edit an activity content ---
-type EditActivityData = {
-  value: string;
-};
-const EDIT_DATA_SCHEMA: JSONSchemaType<EditActivityData> = {
-  type: 'object',
-  properties: {
-    value: { type: 'string', nullable: false },
-  },
-  required: ['value'],
-  additionalProperties: false,
-};
-const editActivityDataValidator = ajv.compile(EDIT_DATA_SCHEMA);
-activityController.put({ path: '/:activityId/content/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
-  if (!editActivityDataValidator(data)) {
-    sendInvalidDataError(editActivityDataValidator);
-    return;
-  }
-
-  const activityId = parseInt(req.params.activityId, 10) || 0;
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id: activityId } });
-  const activityData = await getRepository(ActivityData).findOne({ where: { id } });
-  if (activity === undefined || activityData === undefined || req.user === undefined) {
-    next();
-    return;
-  }
-  const isQuestionDataChange = activity.type === ActivityType.QUESTION && activityData.key === 'json';
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN && !isQuestionDataChange) {
-    next();
-    return;
-  }
-
-  activityData.value = data.value;
-  await getManager().transaction(async (transactionalEntityManager) => {
-    await transactionalEntityManager.save(activityData);
-    activity.updateDate = new Date();
-    await transactionalEntityManager.save(activity);
-  });
-  res.sendJSON(activityData);
-});
-
-// --- Edit content order ---
-type OrderActivityData = {
-  order: number[];
-};
-const ORDER_DATA_SCHEMA: JSONSchemaType<OrderActivityData> = {
-  type: 'object',
-  properties: {
-    order: {
-      type: 'array',
-      items: {
-        type: 'number',
-      },
-    },
-  },
-  required: ['order'],
-  additionalProperties: false,
-};
-const editOrderActivityDataValidator = ajv.compile(ORDER_DATA_SCHEMA);
-activityController.put({ path: '/:id/content-order', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
-  if (!editOrderActivityDataValidator(data)) {
-    sendInvalidDataError(editOrderActivityDataValidator);
-    return;
-  }
-
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
-  if (activity === undefined || req.user === undefined) {
-    next();
-    return;
-  }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
-    next();
-    return;
-  }
-  if (data.order.length !== (activity.content?.length || 0)) {
-    throw new AppError('Invalid data, length of content is invalid.', ErrorCode.INVALID_DATA);
-  }
-
-  const content = data.order.map((activityDataId, index) => {
-    const activityData = new ActivityData();
-    activityData.order = index;
-    activityData.id = activityDataId;
-    return activityData;
-  });
-  await getManager().transaction(async (transactionalEntityManager) => {
-    await transactionalEntityManager.save(content);
-    activity.updateDate = new Date();
-    await transactionalEntityManager.save(activity);
-  });
-  res.sendJSON(content);
-});
-
-// --- Delete an activity content ---
-activityController.delete({ path: '/:activityId/content/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  const activityId = parseInt(req.params.activityId, 10) || 0;
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id: activityId } });
-  const activityData = await getRepository(ActivityData).findOne({ where: { id } });
-  if (activity === undefined || activityData === undefined || req.user === undefined) {
-    res.status(204).send();
-    return;
-  }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
-    res.status(204).send();
-    return;
-  }
-
-  await getManager().transaction(async (transactionalEntityManager) => {
-    await transactionalEntityManager.delete(ActivityData, { id });
-    activity.updateDate = new Date();
-    await transactionalEntityManager.save(activity);
-  });
-  res.status(204).send();
 });
 
 // --- Delete an activity --- (Soft delete)

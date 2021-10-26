@@ -1,7 +1,7 @@
-import type { GenericExtendedActivity } from './extendedActivity.types';
+import type { Activity } from 'types/activity.type';
 
 export type QuestionData = {
   askSame?: string;
 };
 
-export type QuestionActivity = GenericExtendedActivity<QuestionData>;
+export type QuestionActivity = Activity<QuestionData>;

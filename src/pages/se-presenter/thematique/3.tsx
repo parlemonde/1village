@@ -2,20 +2,21 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
+import type { ThematiqueData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { ActivityContent } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const PresentationStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
-  const data = activity?.data || null;
+  const data = (activity?.data as ThematiqueData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
@@ -26,8 +27,8 @@ const PresentationStep3 = () => {
     }
   }, [activity, router]);
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: content });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: content });
   };
 
   const onNext = () => {
@@ -45,13 +46,7 @@ const PresentationStep3 = () => {
         <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Choix du thème', 'Présentation', 'Prévisualisation'])} activeStep={isEdit ? 1 : 2} />
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
-          <ContentEditor
-            content={activity.processedContent}
-            updateContent={updateContent}
-            addContent={addContent}
-            deleteContent={deleteContent}
-            save={save}
-          />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
           <StepsButton prev="/se-presenter/thematique/2" next={onNext} />
         </div>
       </div>

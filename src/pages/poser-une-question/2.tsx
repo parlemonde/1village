@@ -33,17 +33,17 @@ const Question2 = () => {
   }, [activity, router]);
 
   const onQuestionChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const processedContent = [...activity.processedContent];
-    if (!processedContent[index]) {
+    const content = [...activity.content];
+    if (!content[index]) {
       return;
     }
-    processedContent[index].value = event.target.value.slice(0, 400);
-    updateActivity({ processedContent });
+    content[index].value = event.target.value.slice(0, 400);
+    updateActivity({ content });
   };
 
   const onAddQuestion = () => {
-    const processedContent = [...activity.processedContent];
-    if (processedContent.length >= 3) {
+    const content = [...activity.content];
+    if (content.length >= 3) {
       return;
     }
     addContent('text');
@@ -66,9 +66,9 @@ const Question2 = () => {
           <p className="text">Ici vous pouvez écrire un maximum de trois questions que vous vous posez sur le mode de vie des autres enfants.</p>
 
           {activity !== null &&
-            activity.processedContent.map((c, index) => (
+            activity.content.map((c, index) => (
               <div key={c.id} style={{ marginTop: '1rem', position: 'relative' }}>
-                {activity.processedContent.length >= 2 && (
+                {activity.content.length >= 2 && (
                   <DeleteButton
                     confirmLabel={c.value ? 'Voulez vous vraiment supprimer cette question?' : ''}
                     onDelete={() => {
@@ -90,7 +90,7 @@ const Question2 = () => {
               </div>
             ))}
 
-          {activity && activity.processedContent.length < 3 && activity.id === 0 && (
+          {activity && activity.content.length < 3 && activity.id === 0 && (
             <div className="text-center">
               <Card style={{ display: 'inline-block' }}>
                 <ButtonBase onClick={onAddQuestion}>

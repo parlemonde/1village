@@ -1,26 +1,16 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  ManyToOne,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import type { Activity as ActivityInterface } from '../../types/activity.type';
+import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 
-import { ActivityData } from './activityData';
 import { User } from './user';
 import { Village } from './village';
 
+export type { AnyData, ActivityContent };
 export { ActivityType, ActivityStatus };
 
 @Entity()
-export class Activity implements ActivityInterface {
+export class Activity implements ActivityInterface<AnyData> {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -51,9 +41,11 @@ export class Activity implements ActivityInterface {
   @DeleteDateColumn()
   public deleteDate: Date;
 
-  // data relation
-  @OneToMany(() => ActivityData, (d: ActivityData) => d.activity)
-  public content: ActivityData[] | null;
+  @Column({ type: 'json', nullable: false })
+  public data: AnyData & { draftUrl?: string };
+
+  @Column({ type: 'json', nullable: false })
+  public content: ActivityContent[];
 
   // user relation
   @ManyToOne(() => User, (user: User) => user.activities, { onDelete: 'CASCADE' })

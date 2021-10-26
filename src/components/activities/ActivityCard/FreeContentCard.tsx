@@ -13,8 +13,8 @@ import type { ActivityCardProps } from './activity-card.types';
 
 export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<FreeContentActivity>) => {
   const firstImage = React.useMemo(
-    () => activity.processedContent.slice(activity.data.indiceContentIndex, activity.processedContent.length).find((c) => c.type === 'image'),
-    [activity.processedContent, activity.data.indiceContentIndex],
+    () => activity.content.slice(activity.data.indiceContentIndex, activity.content.length).find((c) => c.type === 'image'),
+    [activity.content, activity.data.indiceContentIndex],
   );
 
   return (

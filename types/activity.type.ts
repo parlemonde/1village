@@ -1,4 +1,11 @@
-import type { ActivityData } from './activityData.type';
+export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound';
+export interface ActivityContent {
+  id: number; // needed to sort content.
+  type: ActivityContentType;
+  value: string;
+}
+
+export type AnyData = Record<string, unknown>;
 
 export enum ActivityType {
   PRESENTATION = 0,
@@ -16,21 +23,26 @@ export enum ActivityStatus {
   DRAFT = 1,
 }
 
-export interface Activity {
+export interface Activity<T extends AnyData = AnyData> {
   id: number;
   type: ActivityType;
   subType?: number | null;
   status: ActivityStatus;
+
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
-  commentCount?: number;
+
+  // activity data
+  data: T & { draftUrl?: string };
 
   // activity content
-  content: ActivityData[] | null;
+  content: ActivityContent[];
 
   // user relation
   userId: number;
+  commentCount?: number;
+  isPinned?: boolean;
 
   // village relation
   villageId: number;
@@ -38,5 +50,4 @@ export interface Activity {
   // Answer other activity
   responseActivityId: number | null;
   responseType: ActivityType | null;
-  isPinned?: boolean;
 }

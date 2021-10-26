@@ -45,7 +45,7 @@ const Question1 = () => {
     const q: Array<{ q: string; activityIndex: number }> = [];
     for (let i = 0, n = activities.length; i < n; i++) {
       q.push({
-        q: activities[i].processedContent[0].value,
+        q: activities[i].content[0].value,
         activityIndex: i,
       });
     }

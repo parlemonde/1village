@@ -4,13 +4,13 @@ import React from 'react';
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
-import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const EnigmeStep4 = () => {
@@ -30,25 +30,25 @@ const EnigmeStep4 = () => {
     }
 
     if (activity && isEnigme(activity)) {
-      if ((activity.data.indiceContentIndex ?? 0) > activity.processedContent.length) {
+      if ((activity.data.indiceContentIndex ?? 0) > activity.content.length) {
         updateActivity({
           data: {
             ...activity.data,
-            indiceContentIndex: activity.processedContent.length,
+            indiceContentIndex: activity.content.length,
           },
         });
       }
-      if ((activity.data.indiceContentIndex ?? 0) === activity.processedContent.length && !contentAdded.current) {
+      if ((activity.data.indiceContentIndex ?? 0) === activity.content.length && !contentAdded.current) {
         contentAdded.current = true;
         addContent('text');
       }
     }
   }, [activity, router, updateActivity, addContent]);
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...activity.processedContent.slice(0, indiceContentIndex), ...content] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
-  const addIndiceContent = (type: EditorTypes, value?: string) => {
+  const addIndiceContent = (type: ActivityContentType, value?: string) => {
     contentAdded.current = true;
     addContent(type, value);
   };
@@ -88,7 +88,7 @@ const EnigmeStep4 = () => {
             image à votre indice et vous pourrez le modifier à l’étape 4.
           </p>
           <ContentEditor
-            content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)}
+            content={activity.content.slice(indiceContentIndex, activity.content.length)}
             updateContent={updateContent}
             addContent={addIndiceContent}
             deleteContent={deleteIndiceContent}

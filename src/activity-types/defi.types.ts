@@ -1,4 +1,4 @@
-import type { GenericExtendedActivity } from './extendedActivity.types';
+import type { Activity } from 'types/activity.type';
 
 export type CookingDefiData = {
   image?: string;
@@ -25,8 +25,8 @@ export type LanguageDefiData = {
   defi?: string;
 };
 
-export type CookingDefiActivity = GenericExtendedActivity<CookingDefiData>;
-export type EcoDefiActivity = GenericExtendedActivity<EcoDefiData>;
-export type LanguageDefiActivity = GenericExtendedActivity<LanguageDefiData>;
+export type CookingDefiActivity = Activity<CookingDefiData>;
+export type EcoDefiActivity = Activity<EcoDefiData>;
+export type LanguageDefiActivity = Activity<LanguageDefiData>;
 
 export type DefiActivity = CookingDefiActivity | EcoDefiActivity | LanguageDefiActivity;

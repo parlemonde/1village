@@ -19,12 +19,12 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
 
   const firstImage = React.useMemo(() => {
     if (isCookingActivity) {
-      return (activity.data as CookingDefiData).image || activity.processedContent.find((c) => c.type === 'image')?.value || null;
+      return (activity.data as CookingDefiData).image || activity.content.find((c) => c.type === 'image')?.value || null;
     } else {
-      return activity.processedContent.find((c) => c.type === 'image')?.value || null;
+      return activity.content.find((c) => c.type === 'image')?.value || null;
     }
-  }, [isCookingActivity, activity.data, activity.processedContent]);
-  const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
+  }, [isCookingActivity, activity]);
+  const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
   return (

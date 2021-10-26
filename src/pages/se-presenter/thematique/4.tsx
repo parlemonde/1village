@@ -122,7 +122,7 @@ const PresentationStep4 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent} />
+            <ContentView content={activity.content} />
           </div>
 
           <StepsButton prev="/se-presenter/thematique/3" />

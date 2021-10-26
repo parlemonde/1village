@@ -58,7 +58,7 @@ const MascotteStep4 = () => {
       return;
     }
     prevContent.current = content;
-    const newContent = [...activity.processedContent];
+    const newContent = [...activity.content];
     // 1
     if (newContent.length > 0 && content.length > 0) {
       newContent[0].value = content[0];
@@ -91,7 +91,7 @@ const MascotteStep4 = () => {
         id: 3,
       });
     }
-    updateActivity({ processedContent: newContent });
+    updateActivity({ content: newContent });
   }, [activity, content, updateActivity]);
 
   const onPublish = async () => {

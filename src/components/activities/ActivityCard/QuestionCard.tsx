@@ -14,7 +14,7 @@ import type { ActivityCardProps } from './activity-card.types';
 export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }: ActivityCardProps<QuestionActivity>) => {
   const { user } = React.useContext(UserContext);
   const { updatedActivityData } = useActivityRequests();
-  const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
+  const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
 
   const askSame = React.useMemo(
     () => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)),
@@ -40,7 +40,7 @@ export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }:
     <div>
       <div style={{ margin: '0.75rem' }}>
         <p style={{ margin: 0 }}>
-          <span>{processedContent[0]?.value}</span>
+          <span>{content[0]?.value}</span>
         </p>
       </div>
       {showEditButtons ? (

@@ -57,14 +57,14 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
           </div>
         )}
 
-        {isPresentation(activity) && isThematique(activity) && <ContentView content={activity.processedContent} />}
+        {isPresentation(activity) && isThematique(activity) && <ContentView content={activity.content} />}
         {isPresentation(activity) && isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
-        {isQuestion(activity) && <p>{activity.processedContent[0]?.value}</p>}
+        {isQuestion(activity) && <p>{activity.content[0]?.value}</p>}
         {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
         {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
         {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
-        {isIndice(activity) && <ContentView content={activity.processedContent} />}
-        {isSymbol(activity) && <ContentView content={activity.processedContent} />}
+        {isIndice(activity) && <ContentView content={activity.content} />}
+        {isSymbol(activity) && <ContentView content={activity.content} />}
       </div>
     )
   );

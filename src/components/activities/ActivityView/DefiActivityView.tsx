@@ -43,7 +43,7 @@ export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) 
       </div>
 
       <div style={{ margin: '1rem 0' }}>
-        <ContentView content={activity.processedContent} />
+        <ContentView content={activity.content} />
       </div>
 
       <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>

@@ -1,4 +1,4 @@
-import type { GenericExtendedActivity } from './extendedActivity.types';
+import type { Activity } from 'types/activity.type';
 
 export type MascotteData = {
   presentation: string;
@@ -33,8 +33,8 @@ export type ThematiqueData = {
   theme: number;
 };
 
-export type PresentationMascotteActivity = GenericExtendedActivity<MascotteData>;
+export type PresentationMascotteActivity = Activity<MascotteData>;
 
-export type PresentationThematiqueActivity = GenericExtendedActivity<ThematiqueData>;
+export type PresentationThematiqueActivity = Activity<ThematiqueData>;
 
 export type PresentationActivity = PresentationMascotteActivity | PresentationThematiqueActivity;

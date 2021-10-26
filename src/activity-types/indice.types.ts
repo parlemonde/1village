@@ -1,8 +1,8 @@
-import type { GenericExtendedActivity } from './extendedActivity.types';
+import type { Activity } from 'types/activity.type';
 
 export type IndiceData = {
   theme: number;
   indiceContentIndex: number;
 };
 
-export type IndiceActivity = GenericExtendedActivity<IndiceData>;
+export type IndiceActivity = Activity<IndiceData>;

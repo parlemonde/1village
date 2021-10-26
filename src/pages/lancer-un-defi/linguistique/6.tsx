@@ -126,7 +126,7 @@ const DefiStep6 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent.slice(0, explanationContentIndex)} />
+            <ContentView content={activity.content.slice(0, explanationContentIndex)} />
           </div>
 
           <span className="text text--small text--success">Explication</span>
@@ -138,7 +138,7 @@ const DefiStep6 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent.slice(explanationContentIndex, activity.processedContent.length)} />
+            <ContentView content={activity.content.slice(explanationContentIndex, activity.content.length)} />
           </div>
 
           <span className="text text--small text--success">Le défi lancé aux Pélicopains</span>

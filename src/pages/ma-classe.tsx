@@ -1,8 +1,7 @@
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import type { AnyActivity } from 'src/activity-types/anyActivity.types';
-import { getAnyActivity, isPresentation } from 'src/activity-types/anyActivity';
+import { isPresentation } from 'src/activity-types/anyActivity';
 import { isMascotte } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
@@ -12,6 +11,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
+import type { Activity } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const MaClasse = () => {
@@ -34,7 +34,7 @@ const MaClasse = () => {
   const { deleteActivity } = useActivityRequests();
   const [deleteIndex, setDeleteIndex] = React.useState<{ index: number; isDraft: boolean }>({ index: -1, isDraft: false });
   const [hasMascotte, setHasMascotte] = React.useState(true);
-  const [mascotteActivity, setMascotteActivity] = React.useState<AnyActivity>();
+  const [mascotteActivity, setMascotteActivity] = React.useState<Activity>();
 
   const getMascotte = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
@@ -48,7 +48,7 @@ const MaClasse = () => {
         method: 'GET',
         url: `/activities/${response.data.id}`,
       });
-      setMascotteActivity(getAnyActivity(res.data));
+      setMascotteActivity(res.data);
 
       activities &&
         activities.map((activity) => {
@@ -58,7 +58,7 @@ const MaClasse = () => {
   }, [activities, axiosLoggedRequest]);
 
   const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
-  const onDeleteActivity = async (mascotteActivity: AnyActivity = null, isDraft = false) => {
+  const onDeleteActivity = async (mascotteActivity: Activity = null, isDraft = false) => {
     if (activityToDelete !== null) {
       await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     }

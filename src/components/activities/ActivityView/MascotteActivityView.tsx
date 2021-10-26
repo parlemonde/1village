@@ -17,8 +17,8 @@ export const MascotteActivityView = ({ activity }: ActivityViewProps<Presentatio
           <Grid container spacing={0} style={{ marginTop: '2rem' }}>
             <Grid item xs={12} md={12}>
               <div style={{ marginRight: '0.25rem' }}>
-                {activity.processedContent.length > 0 &&
-                  activity.processedContent[0].value.split('\n').map((s, index) => (
+                {activity.content.length > 0 &&
+                  activity.content[0].value.split('\n').map((s, index) => (
                     <p key={index} style={{ margin: '0.5rem 0' }}>
                       {s}
                     </p>
@@ -37,8 +37,8 @@ export const MascotteActivityView = ({ activity }: ActivityViewProps<Presentatio
             <Grid item xs={12} md={8}>
               <div style={{ alignItems: 'center', display: 'flex', height: '100%' }}>
                 <div>
-                  {activity.processedContent.length > 1 &&
-                    activity.processedContent[1].value.split('\n').map((s, index) => (
+                  {activity.content.length > 1 &&
+                    activity.content[1].value.split('\n').map((s, index) => (
                       <p key={index} style={{ margin: '0.5rem 0' }}>
                         {s}
                       </p>
@@ -48,8 +48,8 @@ export const MascotteActivityView = ({ activity }: ActivityViewProps<Presentatio
             </Grid>
           </Grid>
           <div>
-            {activity.processedContent.length > 2 &&
-              activity.processedContent[2].value.split('\n').map((s, index) => (
+            {activity.content.length > 2 &&
+              activity.content[2].value.split('\n').map((s, index) => (
                 <p key={index} style={{ margin: '0.5rem 0' }}>
                   {s}
                 </p>
