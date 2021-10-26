@@ -40,7 +40,6 @@ export const DESC = {
   [ActivityType.SYMBOL]: 'un symbole',
 };
 
-
 export const REACTIONS = {
   [ActivityType.PRESENTATION]: 'cette présentation',
   [ActivityType.DEFI]: 'ce défi',
@@ -50,4 +49,15 @@ export const REACTIONS = {
   [ActivityType.CONTENU_LIBRE]: 'ce message',
   [ActivityType.INDICE]: 'cet indice culturel',
   [ActivityType.SYMBOL]: 'ce symbole',
+};
+
+export const labels = {
+  [ActivityType.PRESENTATION]: 'Réagir à cette activité par :',
+  [ActivityType.DEFI]: 'Réagir à cette activité par :',
+  [ActivityType.GAME]: 'Réagir à cette activité par :',
+  [ActivityType.ENIGME]: 'Réagir à cette activité par :',
+  [ActivityType.QUESTION]: 'Répondre à cette question par :',
+  [ActivityType.CONTENU_LIBRE]: 'Répondre à cette publication par :',
+  [ActivityType.INDICE]: 'Répondre à cet indice culturel par :',
+  [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
 };

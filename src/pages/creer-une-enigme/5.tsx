@@ -15,13 +15,12 @@ import { Steps } from 'src/components/Steps';
 import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
+import { REACTIONS } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
 import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
-import { REACTIONS } from 'src/components/activities/utils';
-
 
 const EnigmeStep5 = () => {
   const router = useRouter();

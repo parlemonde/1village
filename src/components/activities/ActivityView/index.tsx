@@ -13,12 +13,13 @@ import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
 import { UserType } from 'types/user.type';
 
+import { REACTIONS } from '../utils';
+
 import { DefiActivityView } from './DefiActivityView';
 import { EnigmeActivityView } from './EnigmeActivityView';
 import { FreeContentView } from './FreeContentView';
 import { MascotteActivityView } from './MascotteActivityView';
 import type { ActivityViewProps } from './activity-view.types';
-import { REACTIONS } from '../utils';
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();
