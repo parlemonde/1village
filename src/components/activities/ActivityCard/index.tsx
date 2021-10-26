@@ -15,7 +15,7 @@ import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { UserType } from 'types/user.type';
 
-import { titles, icons } from '../titles';
+import { titles, icons } from '../utils';
 
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';

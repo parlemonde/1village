@@ -11,7 +11,6 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { useActivity } from 'src/services/useActivity';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 import { DefiActivityView } from './DefiActivityView';
@@ -19,17 +18,7 @@ import { EnigmeActivityView } from './EnigmeActivityView';
 import { FreeContentView } from './FreeContentView';
 import { MascotteActivityView } from './MascotteActivityView';
 import type { ActivityViewProps } from './activity-view.types';
-
-const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'cette présentation',
-  [ActivityType.DEFI]: 'ce défi',
-  [ActivityType.GAME]: 'ce jeu',
-  [ActivityType.ENIGME]: 'cette énigme',
-  [ActivityType.QUESTION]: 'cette question',
-  [ActivityType.CONTENU_LIBRE]: 'ce message',
-  [ActivityType.INDICE]: 'cet indice culturel',
-  [ActivityType.SYMBOL]: 'ce symbole',
-};
+import { REACTIONS } from '../utils';
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();

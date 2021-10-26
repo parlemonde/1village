@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { Map } from 'src/components/Map';
-import { icons, REACTIONS } from 'src/components/activities/titles';
+import { icons, DESC } from 'src/components/activities/utils';
 import { useActivities } from 'src/services/useActivities';
 import { primaryColor } from 'src/styles/variables.const';
 import { getLocalTempHour } from 'src/utils/getLocalTempHour';
@@ -54,7 +54,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
       <div className="bg-secondary" style={{ borderRadius: '10px', overflow: 'hidden', marginBottom: '2rem' }}>
         {position !== null && (
           <div style={{ height: '14rem' }}>
-            <Map position={position} zoom={5} markers={[{ position: position, label: 'salut' }]} />
+            <Map position={position} zoom={5} markers={[{ position: position, label: activityUser?.address }]} />
           </div>
         )}
       </div>
@@ -94,7 +94,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
           return (
             <div key={index}>
               <div style={{ fontSize: 'smaller', paddingBottom: '1rem' }}>
-                <strong>{REACTIONS[activity.type]},&nbsp;</strong>
+                <strong>{DESC[activity.type]},&nbsp;</strong>
                 le {toDate(activity.createDate as string)}
                 {ActivityIcon && (
                   <ActivityIcon

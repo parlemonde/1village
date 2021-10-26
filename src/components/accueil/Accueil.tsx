@@ -26,7 +26,6 @@ const phaseActivities = [
     { key: 0, label: 'Toutes', type: [1, 2, 4, 5] },
     { key: 1, label: 'Énigmes', type: [1] },
     { key: 2, label: 'Défis', type: [2] },
-    // { key: 10, label: 'Reportage', type: [9] },
     { key: 3, label: 'Jeux', type: [4] },
   ],
   [

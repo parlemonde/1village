@@ -19,18 +19,9 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useActivity } from 'src/services/useActivity';
 import { capitalize } from 'src/utils';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
+import { REACTIONS } from 'src/components/activities/utils';
 
-const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'cette présentation',
-  [ActivityType.DEFI]: 'ce défi',
-  [ActivityType.GAME]: 'ce jeu',
-  [ActivityType.ENIGME]: 'cette énigme',
-  [ActivityType.QUESTION]: 'cette question',
-  [ActivityType.CONTENU_LIBRE]: 'cette publication',
-  [ActivityType.INDICE]: 'cet indice culturel',
-  [ActivityType.SYMBOL]: 'ce symbol',
-};
 
 const EnigmeStep5 = () => {
   const router = useRouter();

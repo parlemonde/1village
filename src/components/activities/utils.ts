@@ -29,7 +29,7 @@ export const icons = {
   [ActivityType.SYMBOL]: SymbolIcon,
 };
 
-export const REACTIONS = {
+export const DESC = {
   [ActivityType.PRESENTATION]: 'une mascotte',
   [ActivityType.DEFI]: 'un défi',
   [ActivityType.GAME]: 'un jeu',
@@ -38,4 +38,16 @@ export const REACTIONS = {
   [ActivityType.CONTENU_LIBRE]: 'un message',
   [ActivityType.INDICE]: 'un indice culturel',
   [ActivityType.SYMBOL]: 'un symbole',
+};
+
+
+export const REACTIONS = {
+  [ActivityType.PRESENTATION]: 'cette présentation',
+  [ActivityType.DEFI]: 'ce défi',
+  [ActivityType.GAME]: 'ce jeu',
+  [ActivityType.ENIGME]: 'cette énigme',
+  [ActivityType.QUESTION]: 'cette question',
+  [ActivityType.CONTENU_LIBRE]: 'ce message',
+  [ActivityType.INDICE]: 'cet indice culturel',
+  [ActivityType.SYMBOL]: 'ce symbole',
 };

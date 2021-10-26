@@ -11,7 +11,7 @@ import { primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
 
 import { ActivityCard } from './ActivityCard';
-import { REACTIONS } from './titles';
+import { REACTIONS } from './utils';
 
 interface ActivitiesProps {
   activities: AnyActivity[];

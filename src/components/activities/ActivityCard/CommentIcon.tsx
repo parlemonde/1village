@@ -9,11 +9,8 @@ interface CommentIconProps {
 }
 
 export const CommentIcon = ({ count = 0, activityId }: CommentIconProps) => {
-  if (count === 0) {
-    return null;
-  }
 
-  return (
+  return ( count > 0 &&
     <Link href={`/activite/${activityId}`}>
       <a
         href={`/activite/${activityId}`}
