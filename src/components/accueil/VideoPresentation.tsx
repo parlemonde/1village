@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+import { Button, Link as RegisterLink } from '@material-ui/core';
 import { NoSsr } from '@material-ui/core';
 
 import { KeepRatio } from 'src/components/KeepRatio';
@@ -40,6 +40,12 @@ export const VideoPresentation = () => {
                 </Button>
               </Link>
             )}
+            <div style={{ marginTop: '0.8rem', fontSize: '14px' }}>
+              <RegisterLink href="https://prof.parlemonde.org/1village/" rel="noreferrer" target="_blank" underline="none">
+                {' '}
+                {"S'inscrire"}{' '}
+              </RegisterLink>
+            </div>
           </NoSsr>
         </div>
       </KeepRatio>

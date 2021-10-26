@@ -13,7 +13,7 @@ export type Args = {
   page?: number;
   countries?: string[];
   pelico?: boolean;
-  type?: number;
+  type?: any;
   userId?: number;
   status?: number;
   responseActivityId?: number;
@@ -60,6 +60,7 @@ export const useActivities = ({ pelico, countries = [], userId, ...args }: Args)
       prevData.current = data;
     }
   }, [data]);
+
   return {
     activities: isLoading || error ? prevData.current : data,
   };

@@ -9,17 +9,9 @@ import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
-import { ActivityType } from 'types/activity.type';
 
 import { ActivityCard } from './ActivityCard';
-
-const REACTIONS = {
-  [ActivityType.PRESENTATION]: 'une présentation',
-  [ActivityType.DEFI]: 'un défi',
-  [ActivityType.GAME]: 'un jeu',
-  [ActivityType.ENIGME]: 'une énigme',
-  [ActivityType.QUESTION]: 'une question',
-};
+import { REACTIONS } from './utils';
 
 interface ActivitiesProps {
   activities: AnyActivity[];

@@ -7,6 +7,7 @@ import { Checkbox } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
+import { MissingStepModal } from 'src/components/MissingStepModal';
 import { Modal } from 'src/components/Modal';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
@@ -31,6 +32,7 @@ export const WelcomeModal = () => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
   const [newUser, setNewUser] = React.useState<Partial<User>>(user);
+  const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const [updateAsked, setUpdateAsked] = React.useState({
     village: false,
     country: false,
@@ -48,7 +50,7 @@ export const WelcomeModal = () => {
     return countries.find((c) => c.isoCode.toLowerCase() === user.countryCode.toLowerCase());
   }, [countries, user]);
 
-  if (user === null || village === null || user.type >= UserType.OBSERVATOR || user.firstLogin === false) {
+  if (user === null || village === null || user.type >= UserType.OBSERVATOR) {
     return null;
   }
 
@@ -120,7 +122,7 @@ export const WelcomeModal = () => {
     }
   };
 
-  return (
+  return user.firstLogin ? (
     <Modal
       open={true}
       title="Bienvenue à 1Village !"
@@ -180,12 +182,15 @@ export const WelcomeModal = () => {
           <div className="text-center">
             <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
             <br />
-            <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
+            <Button variant="contained" color="primary" size="medium" onClick={() => setIsVisible(!isVisible)}>
+              {isVisible ? 'Cacher' : 'Montrer'}
+            </Button>
+            <h2 style={{ fontSize: '1.2rem', margin: '1rem 0', visibility: isVisible ? 'visible' : 'hidden' }} className="text--primary">
               {village.name}
             </h2>
-            <Button size="small" variant="outlined" style={{ marginTop: '2rem' }} onClick={sendError('village')}>
+            <a style={{ marginTop: '2rem', cursor: 'pointer' }} onClick={sendError('village')}>
               {"Ce n'est pas mon village !"}
-            </Button>
+            </a>
           </div>
         )}
         {currentStep === 1 && (
@@ -333,5 +338,7 @@ export const WelcomeModal = () => {
         )}
       </div>
     </Modal>
+  ) : (
+    currentStep === 3 && village?.activePhase > 1 && <MissingStepModal />
   );
 };

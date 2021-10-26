@@ -55,13 +55,14 @@ export const MascotteCard = ({
         </div>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
+            <CommentIcon count={activity.commentCount} activityId={activity.id} />
             {isSelf && showEditButtons && (
               <>
                 <Link
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/se-presenter/mascotte/4?activity-id=${activity.id}`
+                      : `/mascotte/5?activity-id=${activity.id}`
                   }
                   passHref
                 >
@@ -70,7 +71,7 @@ export const MascotteCard = ({
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/se-presenter/mascotte/4?activity-id=${activity.id}`
+                        : `/mascotte/5?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"
@@ -86,10 +87,9 @@ export const MascotteCard = ({
             )}
             {!showEditButtons && (
               <>
-                <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`} style={{ marginLeft: '0.25rem' }}>
-                    Regarder la présentation
+                    Voir la mascotte
                   </Button>
                 </Link>
               </>

@@ -1,43 +1,109 @@
 import React from 'react';
 
+import { Button } from '@material-ui/core';
+
 import { Base } from 'src/components/Base';
+import { KeepRatio } from 'src/components/KeepRatio';
+import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
-import { RightNavigation } from 'src/components/accueil/RightNavigation';
-import { SubHeader } from 'src/components/accueil/SubHeader';
 import { Activities } from 'src/components/activities/List';
+import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
+import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
+import { UserType } from 'types/user.type';
+
+const phaseActivities = [
+  [
+    { key: 0, label: 'Toutes', type: [0, 3, 5, 6, 7] },
+    { key: 1, label: 'Indices culturels', type: [6] },
+    { key: 2, label: 'Symboles', type: [7] },
+    { key: 3, label: 'Questions', type: [3] },
+    { key: 4, label: 'Mascotte', type: [0] },
+  ],
+  [
+    { key: 0, label: 'Toutes', type: [1, 2, 4, 5] },
+    { key: 1, label: 'Énigmes', type: [1] },
+    { key: 2, label: 'Défis', type: [2] },
+    { key: 3, label: 'Jeux', type: [4] },
+  ],
+  [
+    { key: 0, label: 'Toutes', type: [5, 10] },
+    { key: 1, label: 'Hymne', type: [10] },
+  ],
+];
 
 export const Accueil = () => {
-  const { village } = React.useContext(VillageContext);
+  const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
+  const { user } = React.useContext(UserContext);
+  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const [filters, setFilters] = React.useState<FilterArgs>({
-    type: 0,
+    type: [],
     status: 0,
     countries: {},
     pelico: true,
   });
+  const [countries, setCountries] = React.useState<string[]>([]);
+
+  React.useEffect(() => {
+    setCountries(selectedPhase !== 1 || isModerateur ? village?.countries : [user?.countryCode.toUpperCase()]);
+    selectedPhase &&
+      setFilters((currFilters: FilterArgs) => ({
+        type: phaseActivities[selectedPhase - 1][0].type,
+        status: 0,
+        countries: currFilters.countries,
+        pelico: true,
+      }));
+  }, [user, selectedPhase, village]);
+
   const { activities } = useActivities({
-    limit: 50,
     page: 0,
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
     pelico: filters.pelico,
-    type: filters.type - 1,
+    type: filters.type,
   });
 
-  if (village === null) {
-    return (
-      <Base subHeader={<SubHeader />} rightNav={<RightNavigation />}>
-        <h1>Dernières activités</h1>
-      </Base>
-    );
-  }
+  const PhaseAccueil = () => (
+    <>
+      <h1 style={{ margin: '1rem' }}>
+        {' '}
+        Un peu de patience, la phase {selectedPhase} n&apos;a pas encore débuté !
+        {selectedPhase === 2
+          ? ' Rendez-vous ici une fois que vous aurez fait découvrir et découvert où habitaient vos Pélicopains. Vous pourrez alors échanger ensemble !'
+          : ' Rendez-vous ici une fois que vous aurez échangé avec vos Pélicopains. Vous pourrez ensuite imaginer ensemble votre village-idéal !'}
+      </h1>
+      <PelicoReflechit style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }} />
+      <Button
+        onClick={() => setSelectedPhase(village?.activePhase)}
+        color="primary"
+        variant="outlined"
+        className="navigation__button"
+        style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', marginTop: '30px' }}
+      >
+        Retourner à l&apos;accueil de la phase {village && village?.activePhase}
+      </Button>
+    </>
+  );
 
-  return (
-    <Base subHeader={<SubHeader />} rightNav={<RightNavigation />}>
+  return village && activities ? (
+    <Base>
+      {selectedPhase <= village?.activePhase ? (
+        <>
+          <KeepRatio ratio={1 / 2}>
+            <WorldMap />
+          </KeepRatio>{' '}
+          <h1>Dernières activités</h1>
+          <Filters countries={countries} filters={filters} onChange={setFilters} phase={selectedPhase} phaseActivities={phaseActivities} />
+          <Activities activities={activities} withLinks />{' '}
+        </>
+      ) : (
+        <PhaseAccueil />
+      )}
+    </Base>
+  ) : (
+    <Base>
       <h1>Dernières activités</h1>
-      <Filters countries={village.countries} filters={filters} onChange={setFilters} />
-      <Activities activities={activities} withLinks />
     </Base>
   );
 };

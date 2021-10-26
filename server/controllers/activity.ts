@@ -20,7 +20,7 @@ type ActivityGetter = {
   limit?: number;
   page?: number;
   villageId?: number;
-  type?: number;
+  type?: string[];
   subType?: number | null;
   countries?: string[];
   pelico?: boolean;
@@ -67,7 +67,7 @@ const getActivities = async ({
   limit = 200,
   page = 0,
   villageId,
-  type = -1,
+  type = [],
   subType = null,
   countries = [],
   pelico = true,
@@ -80,8 +80,8 @@ const getActivities = async ({
   if (villageId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
   }
-  if (type !== -1) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.type = :type', { type: `${type}` });
+  if (type.length > 0) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.type IN (:type)', { type });
   }
   if (subType !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
@@ -136,7 +136,8 @@ const getActivities = async ({
     .createQueryBuilder('activity')
     .leftJoinAndSelect('activity.content', 'activityData', 'activity.id = activityData.activityId')
     .where('activity.id IN (:ids)', { ids })
-    .orderBy('activity.createDate', 'DESC')
+    .orderBy('activity.isPinned', 'DESC')
+    .addOrderBy('activity.createDate', 'DESC')
     .addOrderBy('activityData.order', 'ASC')
     .getMany();
 
@@ -170,7 +171,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : undefined,
     countries: req.query.countries ? (getQueryString(req.query.countries) || '').split(',') : undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
-    type: req.query.type ? Number(getQueryString(req.query.type)) ?? -1 : undefined,
+    type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
@@ -255,7 +256,16 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   properties: {
     type: {
       type: 'number',
-      enum: [ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+      enum: [
+        ActivityType.PRESENTATION,
+        ActivityType.QUESTION,
+        ActivityType.GAME,
+        ActivityType.ENIGME,
+        ActivityType.DEFI,
+        ActivityType.INDICE,
+        ActivityType.CONTENU_LIBRE,
+        ActivityType.SYMBOL,
+      ],
     },
     subType: {
       type: 'number',
@@ -283,7 +293,17 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
     responseType: {
       type: 'number',
       nullable: true,
-      enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
+      enum: [
+        null,
+        ActivityType.PRESENTATION,
+        ActivityType.QUESTION,
+        ActivityType.GAME,
+        ActivityType.ENIGME,
+        ActivityType.DEFI,
+        ActivityType.INDICE,
+        ActivityType.SYMBOL,
+        ActivityType.CONTENU_LIBRE,
+      ],
     },
   },
   required: ['type'],
@@ -351,6 +371,7 @@ type UpdateActivity = {
   status?: ActivityStatus;
   responseActivityId?: number;
   responseType?: ActivityType;
+  isPinned?: boolean;
 };
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
@@ -366,6 +387,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
       nullable: true,
       enum: [null, ActivityType.PRESENTATION, ActivityType.QUESTION, ActivityType.GAME, ActivityType.ENIGME, ActivityType.DEFI],
     },
+    isPinned: { type: 'boolean', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -396,6 +418,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.status = data.status ?? activity.status;
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
+  activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned ?? null;
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);

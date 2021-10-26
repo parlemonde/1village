@@ -136,7 +136,7 @@ export const getGravatarUrl = (email: string): string => {
 };
 
 export const toDate = (date: string): string => {
-  return Intl.DateTimeFormat('fr', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(date));
+  return date ? Intl.DateTimeFormat('fr', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(date)) : '';
 };
 
 function addDotToElement(element: HTMLElement): void {

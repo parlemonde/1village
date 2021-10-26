@@ -8,8 +8,8 @@ import { serializeToQueryUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 
 export const useVillageUsers = (): { users: User[] } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
 
   const villageId = village ? village.id : null;
 
@@ -29,7 +29,13 @@ export const useVillageUsers = (): { users: User[] } => {
 
   const { data, isLoading, error } = useQuery<User[], unknown>(['village-users', { villageId }], getUsers);
 
+  const result =
+    data &&
+    data.filter((dataUser: User) =>
+      selectedPhase !== 1 && village?.activePhase > 1 ? true : dataUser?.countryCode === user?.countryCode ? true : false,
+    );
+
   return {
-    users: isLoading || error ? [] : data,
+    users: isLoading || error ? [] : result,
   };
 };

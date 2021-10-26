@@ -10,15 +10,29 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { primaryColor } from 'src/styles/variables.const';
 
 interface FilterSelectProps {
-  options: { key: string | number; label: string }[];
+  options: { key: string | number; label: string; type: number[] }[];
   name: string;
-  value: number;
-  onChange(newValue: number): void;
+  value: number[];
+  onChange(newValue: number[]): void;
+  phaseActivities: { key: string | number; label: string; type: number[] }[][];
 }
 
-export const FilterSelect = ({ value, onChange, name, options }: FilterSelectProps) => {
+export const FilterSelect = ({ value, onChange, name, options, phaseActivities }: FilterSelectProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const selectedOption = options.length <= value ? null : options[value];
+  const getIdxFromValue = (actualValue: number[]): number => {
+    let result;
+    phaseActivities.forEach((activities) => {
+      activities.forEach((activity) => {
+        if (activity.type === actualValue) {
+          result = activity.key;
+        }
+      });
+    });
+
+    return result;
+  };
+
+  const selectedOption = options[getIdxFromValue(value)];
 
   return (
     <div style={{ position: 'relative', marginLeft: '0.5rem' }}>
@@ -91,7 +105,7 @@ export const FilterSelect = ({ value, onChange, name, options }: FilterSelectPro
 
             <div style={{ padding: '0 0.4rem' }}>
               <FormGroup>
-                {options.map((option, index) => (
+                {options.map((option) => (
                   <FormControlLabel
                     key={option.key}
                     style={{ margin: 0, cursor: 'pointer' }}
@@ -101,7 +115,7 @@ export const FilterSelect = ({ value, onChange, name, options }: FilterSelectPro
                         style={{ padding: '0', marginRight: '0.5rem' }}
                         checked={selectedOption.key === option.key}
                         onChange={() => {
-                          onChange(index);
+                          onChange(option.type);
                           setIsOpen(false);
                         }}
                         name={`${option.key}`}

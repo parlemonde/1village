@@ -27,3 +27,30 @@
     }
   }
 }
+
+.se-presenter-step-two .MuiFormControl-root {
+  display: inline-block;
+}
+.se-presenter-step-two {
+  &__line {
+    margin: 1.4rem 0;
+    padding: 5px 0;
+  }
+  &__textfield {
+    .MuiInputBase-input {
+      margin: -5px 0;
+      width: 4.5rem;
+      text-align: right;
+    }
+    &--full-width {
+      .MuiInputBase-input {
+        width: 100%;
+        text-align: left;
+      }
+    }
+
+    .MuiFormHelperText-root {
+      white-space: nowrap;
+    }
+  }
+}

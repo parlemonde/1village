@@ -45,6 +45,7 @@ export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }:
       </div>
       {showEditButtons ? (
         <div style={{ width: '100%', textAlign: 'right', padding: '0.25rem' }}>
+          <CommentIcon count={activity.commentCount} activityId={activity.id} />
           <Link href={`/poser-une-question/3?activity-id=${activity.id}`} passHref>
             <Button
               component="a"

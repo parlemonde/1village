@@ -10,19 +10,25 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
+import { getErrorSteps, stepsHasBeenFilled } from 'src/components/activities/mascotteChecks';
+import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { errorColor } from 'src/styles/variables.const';
 
 const MascotteStep2 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
+  const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
+    setErrorSteps(getErrorSteps(data, 1));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/se-presenter');
+      router.push('/ma-classe');
     } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
-      router.push('/se-presenter');
+      router.push('/ma-classe');
     }
+    setIsError(stepsHasBeenFilled(data, 1));
   }, [activity, router]);
 
   const data = (activity?.data as MascotteData) || null;
@@ -40,18 +46,20 @@ const MascotteStep2 = () => {
       save().catch();
     }
   }, [data, save]);
-
+  const countryChange = (countryCodes: string[]) => {
+    updateActivity({ data: { ...data, countries: countryCodes } });
+  };
   const imageChange = (image: string) => {
-    const newData = { ...data, mascotteImage: image };
-    updateActivity({ data: newData });
+    updateActivity({ data: { ...data, mascotteImage: image } });
   };
 
   const onNext = () => {
     save().catch(console.error);
     if (!isValid()) {
+      router.push('/mascotte/3');
       setIsError(true);
     } else {
-      router.push('/se-presenter/mascotte/3');
+      router.push('/mascotte/3');
     }
   };
 
@@ -61,6 +69,9 @@ const MascotteStep2 = () => {
     if (data.personality1 === '') return false;
     if (data.personality2 === '') return false;
     if (data.personality3 === '') return false;
+    if (data.countries === []) return false;
+    if (data.game === '') return false;
+    if (data.sport === '') return false;
     return true;
   };
 
@@ -75,7 +86,17 @@ const MascotteStep2 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Votre classe', 'Votre mascotte', 'Description de votre mascotte', 'Prévisualiser']} activeStep={1} />
+        <Steps
+          steps={[
+            'Votre classe',
+            `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
+            'Langues et monnaies',
+            'Le web de Pelico',
+            'Prévisualiser',
+          ]}
+          activeStep={1}
+          errorSteps={errorSteps}
+        />
         <div style={{ margin: '0 auto 1rem auto', width: '100%', maxWidth: '900px' }}>
           <h1>Qui êtes-vous ? Choisissez une mascotte pour vous représenter collectivement !</h1>
           <div>
@@ -87,6 +108,7 @@ const MascotteStep2 = () => {
                 <p className="text-center" style={{ marginTop: '-10px' }}>
                   Image de votre mascotte
                 </p>
+                {isError && data.mascotteImage === '' && <p style={{ color: errorColor, textAlign: 'center' }}>Ce champs est obligatoire</p>}
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
@@ -102,7 +124,7 @@ const MascotteStep2 = () => {
                     shrink: true,
                   }}
                 />
-                <p>Quel animal est votre mascotte et pourquoi l’avoir choisi ?</p>
+                <p>Quel animal est votre mascotte et pourquoi l&apos;avoir choisi ?</p>
                 <TextField
                   error={isError && data.mascotteDescription === ''}
                   helperText={isError && data.mascotteDescription === '' && 'Écrivez la description de votre mascotte !'}
@@ -159,10 +181,39 @@ const MascotteStep2 = () => {
                   </Grid>
                 </Grid>
               </Grid>
+              <p>Tout commes vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
+              <MultipleCountrySelector label="Pays" style={{ width: '100%', marginBottom: '1rem' }} value={data.countries} onChange={countryChange} />
+              {isError && data.countries.length === 0 && <p style={{ color: errorColor }}>Ce champs est obligatoire</p>}
+              Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
+              <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
+                <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
+                <TextField
+                  className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
+                  style={{ flex: 1, minWidth: 0, width: '100%' }}
+                  fullWidth
+                  value={data.game}
+                  onChange={dataChange('game')}
+                  error={isError && !data.game}
+                  helperText={isError && !data.game ? 'Ce champ est obligatoire' : ''}
+                />
+              </div>
+              Tout commes vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
+              <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
+                <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte pratique </span>
+                <TextField
+                  className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
+                  style={{ flex: 1, minWidth: 0, padding: 0 }}
+                  fullWidth
+                  value={data.sport}
+                  onChange={dataChange('sport')}
+                  error={isError && !data.sport}
+                  helperText={isError && !data.sport ? 'Ce champ est obligatoire' : ''}
+                />
+              </div>
             </Grid>
           </div>
 
-          <StepsButton prev={`/se-presenter/mascotte/1?edit=${activity?.id ?? 0}`} next={onNext} />
+          <StepsButton prev={`/mascotte/1?edit=${activity?.id ?? 0}`} next={onNext} />
         </div>
       </div>
     </Base>

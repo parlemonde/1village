@@ -4,33 +4,18 @@ import { Grid, Box } from '@material-ui/core';
 
 import type { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';
-import { Map } from 'src/components/Map';
-import { getMapPosition } from 'src/utils/getMapPosition';
+
+import { ImageView } from '../content/views/ImageView';
 
 import type { ActivityViewProps } from './activity-view.types';
 
-export const MascotteActivityView = ({ activity, user = null }: ActivityViewProps<PresentationMascotteActivity>) => {
-  const [position, setPosition] = React.useState<[number, number] | null>(null);
-
-  const getPosition = React.useCallback(async () => {
-    if (user === null) {
-      setPosition(null);
-    } else {
-      const pos = await getMapPosition(user);
-      setPosition(pos);
-    }
-  }, [user]);
-
-  React.useEffect(() => {
-    getPosition().catch();
-  }, [getPosition]);
-
+export const MascotteActivityView = ({ activity }: ActivityViewProps<PresentationMascotteActivity>) => {
   return (
     <div>
       {activity && (
         <>
           <Grid container spacing={0} style={{ marginTop: '2rem' }}>
-            <Grid item xs={12} md={position === null ? 12 : 6}>
+            <Grid item xs={12} md={12}>
               <div style={{ marginRight: '0.25rem' }}>
                 {activity.processedContent.length > 0 &&
                   activity.processedContent[0].value.split('\n').map((s, index) => (
@@ -40,13 +25,10 @@ export const MascotteActivityView = ({ activity, user = null }: ActivityViewProp
                   ))}
               </div>
             </Grid>
-            {position !== null && (
-              <Grid item xs={12} md={6}>
-                <div style={{ height: '16rem' }}>
-                  <Map position={position} zoom={5} markers={[{ position: position, label: activity.data.presentation }]} />
-                </div>
-              </Grid>
-            )}
+            <Grid item xs={12} md={12} style={{ display: 'flex' }}>
+              <ImageView id={1} value={activity.data.classImg} />
+              {activity.data.classImgDesc}
+            </Grid>
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>
                 <AvatarImg src={activity.data.mascotteImage} noLink />

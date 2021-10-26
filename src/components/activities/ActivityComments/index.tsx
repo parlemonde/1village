@@ -5,21 +5,14 @@ import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import { ActivityType } from 'types/activity.type';
+import type { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
+import { labels } from '../utils';
 
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
-
-const labels = {
-  [ActivityType.PRESENTATION]: 'Réagir à cette activité par :',
-  [ActivityType.DEFI]: 'Réagir à cette activité par :',
-  [ActivityType.GAME]: 'Réagir à cette activité par :',
-  [ActivityType.ENIGME]: 'Réagir à cette activité par :',
-  [ActivityType.QUESTION]: 'Répondre à cette question par :',
-};
 
 interface ActivityCommentsProps {
   activityId: number;
