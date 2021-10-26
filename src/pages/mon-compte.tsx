@@ -12,7 +12,6 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { EditButton } from 'src/components/buttons/EditButton';
-import { HelpButton } from 'src/components/buttons/HelpButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
@@ -158,7 +157,7 @@ const Presentation = () => {
     };
 
   return (
-    <Base rightNav={<HelpButton />}>
+    <Base>
       <h1>Paramètres du compte</h1>
       <div className="account__panel">
         <h2>Paramètres du profil</h2>
