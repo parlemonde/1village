@@ -33,23 +33,20 @@ const MaClasse = () => {
   });
   const { deleteActivity } = useActivityRequests();
   const [deleteIndex, setDeleteIndex] = React.useState<{ index: number; isDraft: boolean }>({ index: -1, isDraft: false });
-  const [hasMascotte, setHasMascotte] = React.useState(true);
-  const [mascotteActivity, setMascotteActivity] = React.useState<Activity>();
+  const [hasMascotte, setHasMascotte] = React.useState(false);
+  const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
 
   const getMascotte = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
       method: 'GET',
       url: `/activities/mascotte`,
     });
-    if (!response.error && response.data.id === -1) {
+    if (response.error) {
       setHasMascotte(false);
+      setMascotteActivity(null);
     } else {
-      const res = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/activities/${response.data.id}`,
-      });
-      setMascotteActivity(res.data);
-
+      setHasMascotte(true);
+      setMascotteActivity(response.data);
       activities &&
         activities.map((activity) => {
           isPresentation(activity) && isMascotte(activity) && setMascotteActivity({ ...mascotteActivity, commentCount: activity.commentCount });
