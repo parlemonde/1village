@@ -58,7 +58,7 @@ __metadata:
     "@yarnpkg/pnpify": 3.0.0-rc.14
     ajv: 8.6.3
     ajv-formats: ^2.1.0
-    argon2: ^0.27.1
+    argon2: ^0.28.0
     aws-sdk: ^2.984.0
     axios: ^0.21.1
     base64url: ^3.0.1
@@ -3504,15 +3504,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"argon2@npm:^0.27.1":
-  version: 0.27.2
-  resolution: "argon2@npm:0.27.2"
+"argon2@npm:^0.28.0":
+  version: 0.28.2
+  resolution: "argon2@npm:0.28.2"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.1
     "@phc/format": ^1.0.0
     node-addon-api: ^3.0.2
     opencollective-postinstall: ^2.0.3
-  checksum: 5120afb531241ef152d181dac585a9e2de348d6ef744fe7cfd2f3297c4fd77b5d0448e82111ac6a2d902559a92cafcb935233a41c27fb2055e9a1a35a5776a64
+  checksum: 982dff6c23163317a01368b6259560b73b558a54416dc3d423ceb6928c84e5bcb0a96809794395c1646e3b6e8c950ac1154f2402c4f61c9efcd13c376166b1ca
   languageName: node
   linkType: hard
 
