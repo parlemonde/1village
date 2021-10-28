@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 import { Button } from '@material-ui/core';
@@ -5,8 +6,8 @@ import { Button } from '@material-ui/core';
 import { Map } from 'src/components/Map';
 import { icons, DESC } from 'src/components/activities/utils';
 import { useActivities } from 'src/services/useActivities';
+import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
-import { getLocalTempHour } from 'src/utils/getLocalTempHour';
 import { getMapPosition } from 'src/utils/getMapPosition';
 import { toDate } from 'src/utils';
 import type { User } from 'types/user.type';
@@ -16,9 +17,8 @@ import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 
 export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
   const [position, setPosition] = React.useState<[number, number] | null>(null);
-  const [localTemp, setLocalTemp] = React.useState(0);
-  const [localTime, setLocalTime] = React.useState('');
-  const [weatherIconUrl, setWeatherIconUrl] = React.useState('');
+  const [localTime, setLocalTime] = React.useState<string | null>(null);
+  const weather = useWeather({ activityUser });
   const { activities } = useActivities({
     limit: 50,
     page: 0,
@@ -37,17 +37,25 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
 
   React.useEffect(() => {
     getPosition().catch();
-    const asyncFunc = async () => {
-      if (activityUser && !localTime && !localTemp) {
-        const { time, temp, iconUrl } = await getLocalTempHour(activityUser, true);
-        const dateTime = new Date(time);
-        setLocalTemp(temp);
-        setLocalTime(`${dateTime.getHours()}h${(dateTime.getMinutes() < 10 ? '0' : '') + dateTime.getMinutes()}`);
-        setWeatherIconUrl(iconUrl);
-      }
-    };
-    asyncFunc();
   }, [activityUser, getPosition]);
+
+  React.useEffect(() => {
+    if (weather !== null) {
+      const timezone = weather.timezone;
+      const updateLocalTime = () => {
+        const time = new Date();
+        time.setHours(time.getHours() + time.getTimezoneOffset() / 60 + timezone / 3600);
+        setLocalTime(`${`0${time.getHours()}`.slice(-2)}h${`0${time.getMinutes()}`.slice(-2)}`);
+      };
+      updateLocalTime();
+      const interval = window.setInterval(updateLocalTime, 10000); // every 10 seconds
+      return () => {
+        window.clearInterval(interval);
+      };
+    } else {
+      return () => {};
+    }
+  }, [weather]);
 
   return (
     <>
@@ -58,30 +66,28 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
           </div>
         )}
       </div>
-      <div
-        className="bg-secondary"
-        style={{
-          fontWeight: 'bold',
-          padding: '1rem',
-          borderRadius: '10px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-          marginBottom: '2rem',
-        }}
-      >
-        {activityUser && (
-          <>
-            <div style={{ marginBottom: '1rem' }}>
-              <Flag country={activityUser?.countryCode}></Flag> {activityUser?.city}
-            </div>
-            {localTime}
-            <img src={weatherIconUrl}></img>
-            {Math.floor(localTemp)}°C
-          </>
-        )}
-      </div>
+      {weather !== null && (
+        <div
+          className="bg-secondary"
+          style={{
+            fontWeight: 'bold',
+            padding: '1rem',
+            borderRadius: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            marginBottom: '2rem',
+          }}
+        >
+          <div style={{ marginBottom: '1rem' }}>
+            <Flag country={activityUser?.countryCode}></Flag> {activityUser?.city}
+          </div>
+          {localTime}
+          <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />
+          {weather.temperature}°C
+        </div>
+      )}
       <div
         className="bg-secondary"
         style={{ padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}

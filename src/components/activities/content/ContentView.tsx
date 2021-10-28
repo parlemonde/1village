@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
+import type { ActivityContent } from 'types/activity.type';
 
 import { H5pView } from './views/H5pView';
 import { ImageView } from './views/ImageView';
@@ -8,7 +8,7 @@ import { SoundView } from './views/SoundView';
 import { TextView } from './views/TextView';
 import { VideoView } from './views/VideoView';
 
-type ContentViewProps = { content: EditorContent[] };
+type ContentViewProps = { content: ActivityContent[] };
 
 export const ContentView = ({ content }: ContentViewProps) => {
   return (

@@ -1,46 +1,35 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  ManyToOne,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import type { Activity as ActivityInterface } from '../../types/activity.type';
+import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 
-import { ActivityData } from './activityData';
 import { User } from './user';
 import { Village } from './village';
 
+export type { AnyData, ActivityContent };
 export { ActivityType, ActivityStatus };
 
 @Entity()
-export class Activity implements ActivityInterface {
+export class Activity implements ActivityInterface<AnyData> {
   @PrimaryGeneratedColumn()
   public id: number;
 
   @Column({
-    type: 'enum',
-    enum: ActivityType,
+    type: 'tinyint',
     default: ActivityType.PRESENTATION,
+    nullable: false,
   })
-  public type: ActivityType;
+  public type: number;
 
   @Column({ type: 'tinyint', nullable: true })
   public subType: number | null;
 
   @Column({
-    type: 'enum',
-    enum: ActivityStatus,
+    type: 'tinyint',
     nullable: false,
     default: ActivityStatus.PUBLISHED,
   })
-  public status: ActivityStatus;
+  public status: number;
 
   @CreateDateColumn()
   public createDate: Date;
@@ -51,9 +40,11 @@ export class Activity implements ActivityInterface {
   @DeleteDateColumn()
   public deleteDate: Date;
 
-  // data relation
-  @OneToMany(() => ActivityData, (d: ActivityData) => d.activity)
-  public content: ActivityData[] | null;
+  @Column({ type: 'json', nullable: false })
+  public data: AnyData & { draftUrl?: string };
+
+  @Column({ type: 'json', nullable: false })
+  public content: ActivityContent[];
 
   // user relation
   @ManyToOne(() => User, (user: User) => user.activities, { onDelete: 'CASCADE' })
@@ -80,11 +71,10 @@ export class Activity implements ActivityInterface {
   public responseActivityId: number | null;
 
   @Column({
-    type: 'enum',
-    enum: ActivityType,
+    type: 'tinyint',
     nullable: true,
   })
-  public responseType: ActivityType | null;
+  public responseType: number | null;
 
   @Column({
     type: 'boolean',

@@ -3,14 +3,12 @@ import React from 'react';
 import { Button, CircularProgress } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import type { AnyActivity } from 'src/activity-types/anyActivity.types';
-import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
-import type { ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
 
 import { Activities } from './List';
 
@@ -18,7 +16,7 @@ const ACTIVITIES_PER_PAGE = 10;
 
 interface ActivitySelectProps {
   value: number | null;
-  onChange(newValue: number | null, newType: ActivityType | null): void;
+  onChange(newValue: number | null, newType: number | null): void;
   onSelect(): void;
   style?: React.CSSProperties;
 }
@@ -28,7 +26,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySel
   const { village } = React.useContext(VillageContext);
   const { activity: selectedActivity } = useActivity(value ?? -1);
 
-  const [activities, setActivities] = React.useState<AnyActivity[]>([]);
+  const [activities, setActivities] = React.useState<Activity[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [canFetchMore, setCanFetchMore] = React.useState(true);
 
@@ -54,7 +52,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySel
       return;
     }
     dataPage.current += 1;
-    const newActivities = response.data.map(getAnyActivity);
+    const newActivities = response.data;
     setActivities((a) => [...a, ...newActivities]);
     if (newActivities.length < ACTIVITIES_PER_PAGE) {
       setCanFetchMore(false);

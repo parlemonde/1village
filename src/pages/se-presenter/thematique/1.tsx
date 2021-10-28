@@ -22,7 +22,7 @@ const PresentationStep1 = () => {
     }
     router.push('/se-presenter/thematique/2');
   };
-  const onChange = (id: number | null, type: ActivityType | null) => {
+  const onChange = (id: number | null, type: number | null) => {
     if (activity !== null) {
       updateActivity({ responseActivityId: id, responseType: type });
     }

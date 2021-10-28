@@ -4,7 +4,6 @@ import React from 'react';
 import { TextField, Switch } from '@material-ui/core';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -13,6 +12,7 @@ import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import type { ActivityContent } from 'types/activity.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
@@ -35,8 +35,8 @@ const ContenuLibre = () => {
     updateActivity({ isPinned: !activity.isPinned });
   };
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...activity.processedContent.slice(0, indiceContentIndex), ...content] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
 
   const dataChange = (key: keyof FreeContentData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +96,7 @@ const ContenuLibre = () => {
               style={{ width: '100%', marginBottom: '1vw' }}
             />
             <ContentEditor
-              content={activity?.processedContent}
+              content={activity?.content}
               updateContent={updateContent}
               addContent={addContent}
               deleteContent={deleteContent}

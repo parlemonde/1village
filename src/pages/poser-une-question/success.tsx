@@ -13,14 +13,14 @@ const QuestionSuccess = () => {
   const router = useRouter();
   const { activity } = React.useContext(ActivityContext);
 
-  const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
-  const questionsCount = processedContent?.length ?? 0;
+  const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
+  const questionsCount = content?.length ?? 0;
 
   React.useEffect(() => {
-    if (processedContent === null) {
+    if (content === null) {
       router.push('/poser-une-question/1');
     }
-  }, [router, processedContent]);
+  }, [router, content]);
 
   return (
     <Base>

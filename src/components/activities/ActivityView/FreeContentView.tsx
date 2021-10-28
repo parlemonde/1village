@@ -22,7 +22,7 @@ export const FreeContentView = ({ activity }: ActivityViewProps<FreeContentActiv
   return (
     <div>
       <h3>{activity.data.title}</h3>
-      <div>{activity.processedContent.map((p) => (resultObj(p)[p.type] ? resultObj(p)[p.type] : null))}</div>
+      <div>{activity.content.map((p) => (resultObj(p)[p.type] ? resultObj(p)[p.type] : null))}</div>
     </div>
   );
 };

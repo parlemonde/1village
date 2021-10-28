@@ -16,8 +16,29 @@ const GreenCheckbox = withStyles({
   },
 })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
+export const ACTIVITIES_PER_PHASE = [
+  [
+    { key: 0, label: 'Toutes', value: [0, 3, 5, 6, 7] },
+    { key: 1, label: 'Indices culturels', value: [6] },
+    { key: 2, label: 'Symboles', value: [7] },
+    { key: 3, label: 'Questions', value: [3] },
+    { key: 4, label: 'Mascotte', value: [0] },
+  ],
+  [
+    { key: 0, label: 'Toutes', value: [1, 2, 4, 5] },
+    { key: 1, label: 'Énigmes', value: [1] },
+    { key: 2, label: 'Défis', value: [2] },
+    { key: 3, label: 'Jeux', value: [4] },
+  ],
+  [
+    { key: 0, label: 'Toutes', value: [5, 10] },
+    { key: 1, label: 'Hymne', value: [10] },
+  ],
+];
+
 export type FilterArgs = {
-  type: number[];
+  selectedType: string | number;
+  types: number[];
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
@@ -28,10 +49,9 @@ interface FiltersProps {
   filters: FilterArgs;
   onChange: React.Dispatch<React.SetStateAction<FilterArgs>>;
   phase: number;
-  phaseActivities: { key: string | number; label: string; type: number[] }[][];
 }
 
-export const Filters = ({ filters, onChange, countries = [], phase, phaseActivities }: FiltersProps) => {
+export const Filters = ({ filters, onChange, countries = [], phase }: FiltersProps) => {
   React.useEffect(() => {
     onChange((f) => ({
       ...f,
@@ -47,12 +67,11 @@ export const Filters = ({ filters, onChange, countries = [], phase, phaseActivit
       <span className="text text--bold">Filtres :</span>
       <FilterSelect
         name="Activités"
-        options={phaseActivities[phase - 1]}
-        value={filters.type}
-        onChange={(newType) => {
-          onChange({ ...filters, type: newType });
+        options={ACTIVITIES_PER_PHASE[phase - 1] || []}
+        value={filters.selectedType}
+        onChange={(option) => {
+          onChange({ ...filters, types: option.value, selectedType: option.key });
         }}
-        phaseActivities={phaseActivities}
       />
       {/* <FilterSelect
         name="Status"
@@ -63,7 +82,7 @@ export const Filters = ({ filters, onChange, countries = [], phase, phaseActivit
         ]}
         value={filters.status}
         onChange={(newStatus) => {
-          onChange({ ...filters, status: newStatus });
+          onChange({ ...filters, status: newStatus.key });
         }}
       /> */}
       <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>

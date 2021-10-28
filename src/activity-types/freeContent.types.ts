@@ -1,4 +1,4 @@
-import type { GenericExtendedActivity } from './extendedActivity.types';
+import type { Activity } from 'types/activity.type';
 
 export type FreeContentData = {
   title: string;
@@ -8,4 +8,4 @@ export type FreeContentData = {
   isPinned: boolean;
 };
 
-export type FreeContentActivity = GenericExtendedActivity<FreeContentData>;
+export type FreeContentActivity = Activity<FreeContentData>;

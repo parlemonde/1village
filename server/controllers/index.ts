@@ -11,6 +11,7 @@ import { languageController } from './languages';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';
+import { weatherController } from './weather';
 
 const controllerRouter = Router();
 const controllers = [
@@ -25,6 +26,7 @@ const controllers = [
   videoController,
   analyticController,
   archiveController,
+  weatherController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {

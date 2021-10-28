@@ -1,15 +1,15 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 import Switch from '@material-ui/core/Switch';
+import { Button } from '@material-ui/core';
 
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
-import { LeftNavigation } from 'src/components/accueil/LeftNavigation';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
-import MysteryFlag from 'src/svg/mystery-flag.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
@@ -27,18 +27,84 @@ interface Tab {
   label: string;
   path: string;
   icon: React.ReactNode;
-  disabled: boolean;
-  hasMascotte?: boolean;
+  phase?: number;
 }
 
+const ACCUEIL: Tab = {
+  label: 'Accueil',
+  path: '/',
+  icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+};
+const FREE_CONTENT: Tab = {
+  label: 'Publier un contenu libre',
+  path: '/contenu-libre',
+  icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+};
+
+// check color of icons
+const TABS_PER_PHASE: Tab[] = [
+  // ---- PHASE 1 ----
+  {
+    label: 'Présenter un indice culturel',
+    path: '/indice-culturel',
+    icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 1,
+  },
+  {
+    label: 'Présenter un symbole',
+    path: '/symbole',
+    icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 1,
+  },
+  {
+    label: 'Poser une question',
+    path: '/poser-une-question',
+    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 1,
+  },
+  // ---- PHASE 2 ----
+  {
+    label: 'Lancer un défi',
+    path: '/lancer-un-defi',
+    icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
+  {
+    label: 'Créer un jeu',
+    path: '/creer-un-jeu',
+    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
+  {
+    label: 'Créer une énigme',
+    path: '/creer-une-enigme',
+    icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
+  {
+    label: 'Poser une question',
+    path: '/poser-une-question',
+    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
+  // ---- PHASE 3 ----
+  {
+    label: 'Créer un jeu',
+    path: '/creer-un-jeu',
+    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 3,
+  },
+];
+
 export const Navigation = (): JSX.Element => {
+  const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [phase, setPhase] = React.useState(0);
   const [hasMascotte, setHasMascotte] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const getMascotte = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
@@ -51,168 +117,113 @@ export const Navigation = (): JSX.Element => {
   }, [axiosLoggedRequest]);
 
   useEffect(() => {
-    getMascotte();
-    setPhase(village?.activePhase);
-  }, [village]);
+    getMascotte().catch();
+  }, [getMascotte]);
 
-  const allStep: Tab[] = [
-    {
-      label: 'Accueil',
-      path: '/',
-      icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-    },
-    {
-      label: 'Notre classe',
-      path: '/ma-classe',
-      icon: hasMascotte ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-      hasMascotte,
-    },
-  ];
-  isModerateur &&
-    allStep.push({
-      label: 'Publier un contenu libre',
-      path: '/contenu-libre',
-      icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-    });
+  const fixedTabs = React.useMemo(
+    () => [
+      ACCUEIL,
+      {
+        label: 'Notre classe',
+        path: '/ma-classe',
+        icon: hasMascotte ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      },
+      ...(isModerateur ? [FREE_CONTENT] : []),
+    ],
+    [hasMascotte, user, isModerateur],
+  );
+  const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase]);
 
-  const stepOne: Tab[] = [
-    {
-      label: 'Présenter un indice culturel',
-      path: '/indice-culturel',
-      icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-    },
-    {
-      label: 'Présenter un symbole',
-      path: '/symbole',
-      icon: <SymbolIcon style={{ fill: 'white' }} width="1.4rem" />,
-      disabled: false,
-    },
-    {
-      label: 'Poser une question',
-      path: '/poser-une-question',
-      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: false,
-    },
-  ];
-
-  const stepTwo: Tab[] = [
-    {
-      label: 'Lancer un défi',
-      path: '/lancer-un-defi',
-      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-    {
-      label: 'Créer un jeu',
-      path: '/creer-un-jeu',
-      icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-    {
-      label: 'Créer une énigme',
-      path: '/creer-une-enigme',
-      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-    {
-      label: 'Poser une question',
-      path: '/poser-une-question',
-      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-  ];
-
-  const stepThree: Tab[] = [
-    {
-      label: 'Créer un jeu',
-      path: '/creer-un-jeu',
-      icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-      disabled: !(selectedPhase <= phase),
-    },
-  ];
-
-  const arrayNav = [allStep, stepOne, stepTwo, stepThree];
+  const currentPathName = `/${router.pathname.split('/')[1] || ''}`;
 
   return (
     <nav className="navigation">
       <div style={{ position: 'relative' }}>
         <div
-          className="with-bot-left-shadow"
-          style={{
-            flex: 1,
-            backgroundColor: 'white',
-            height: '100%',
-            borderRadius: '10px 10px 10px 10px',
-            padding: '0.5rem 2rem 0.6rem 1rem',
-            display: 'flex',
-            alignItems: 'center',
-            position: 'relative',
-            margin: '0rem 1rem 1.4rem 1rem',
-          }}
+          className="navigation__content navigation__content--is-header with-shadow"
+          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
         >
-          <h2 style={{ marginRight: '1rem' }}>Village-monde </h2>
+          <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
           {village &&
-            village.countries.map((country: string) =>
-              selectedPhase !== 1 && village?.activePhase > 1 ? (
-                <Flag country={country}></Flag>
-              ) : user?.countryCode.toUpperCase() == country ? (
-                <Flag country={country}></Flag>
-              ) : (
-                <MysteryFlag style={{ width: 'auto', height: '18', borderRadius: '2px' }} />
-              ),
-            )}
+            village.countries.map((country: string) => (
+              <Flag
+                style={{ margin: '0.25rem' }}
+                key={country}
+                country={country}
+                isMistery={!village || !user || (village.activePhase === 1 && user.countryCode.toUpperCase() !== country && !isModerateur)}
+              ></Flag>
+            ))}
         </div>
-        <LeftNavigation tabs={arrayNav[0]} map={false} />
-        <div style={{ marginTop: '10%' }}></div>
-        <LeftNavigation tabs={arrayNav[selectedPhase || 1]} map={false} />
-        <div style={{ marginTop: '10%' }}></div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Link href="/cgu">
-            <a className="text text--small">{"Conditions générales d'utilisation"}</a>
-          </Link>
-          {isModerateur && (
-            <div style={{ marginTop: '1vw' }}>
-              {phase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase numéro {selectedPhase}
-              <Switch
-                checked={phase >= selectedPhase}
-                onChange={() => setIsModalOpen(true)}
-                value="checkedB"
-                color="primary"
-                disabled={selectedPhase < village?.activePhase || selectedPhase === 1}
-              />
-            </div>
-          )}
-        </div>
+        {[fixedTabs, phaseTabs].map((tabs, index) => (
+          <div key={`tabs_${index}`} className="navigation__content with-shadow" style={{ padding: '1rem 0.5rem 0.2rem 0.5rem' }}>
+            {tabs.map((tab) => (
+              <Link key={tab.path} href={tab.path} passHref>
+                <Button
+                  component="a"
+                  onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                    event.preventDefault();
+                    router.push(tab.path);
+                  }}
+                  href={tab.path}
+                  color="primary"
+                  startIcon={tab.icon}
+                  variant={tab.path === currentPathName ? 'contained' : 'outlined'}
+                  className="navigation__button full-width"
+                  style={{
+                    justifyContent: 'flex-start',
+                    paddingRight: '0.1rem',
+                    marginBottom: '0.8rem',
+                    width: tab.path === currentPathName ? '108%' : '100%',
+                  }}
+                  disableElevation
+                  disabled={!village || (tab.phase && tab.phase > village.activePhase)}
+                >
+                  {tab.label}
+                </Button>
+              </Link>
+            ))}
+          </div>
+        ))}
+        {village && isModerateur && selectedPhase >= 2 && (
+          <div
+            className="navigation__content with-shadow"
+            style={{ padding: '0 0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}
+          >
+            {village.activePhase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase{' '}
+            <strong style={{ marginLeft: '0.25rem' }}>{selectedPhase}</strong>
+            <Switch checked={village.activePhase >= selectedPhase} onChange={() => setIsModalOpen(true)} color="primary" />
+          </div>
+        )}
+        <Link href="/cgu">
+          <a className="navigation__cgu-link text text--small">{"Conditions générales d'utilisation"}</a>
+        </Link>
       </div>
       <Modal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={async () => {
-          const result = await editVillage({
-            id: village?.id,
-            countries: village?.countries,
-            name: village?.name,
-            activePhase: phase >= selectedPhase ? phase - 1 : selectedPhase,
+          if (!village) {
+            return;
+          }
+          setLoading(true);
+          await editVillage({
+            id: village.id,
+            activePhase: village.activePhase >= selectedPhase ? selectedPhase - 1 : selectedPhase,
           });
+          setLoading(false);
           setIsModalOpen(false);
-          if (result) setPhase(phase >= selectedPhase ? phase - 1 : selectedPhase);
+          window.location.reload();
         }}
+        noCloseButton
+        noCloseOutsideModal={loading}
         ariaDescribedBy={'activate-phase-desc'}
         ariaLabelledBy={'activate-phase'}
-        title={`Êtes vous sûr de vouloir ${phase >= selectedPhase ? 'désactiver' : 'activer'} la phase numéro ${selectedPhase} ?`}
+        title={`Êtes vous sûr de vouloir ${
+          (village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
+        } la phase numéro ${selectedPhase} ?`}
         cancelLabel="Annuler"
         confirmLabel="Confirmer"
-        noCloseButton={true}
+        loading={loading}
       />
     </nav>
   );

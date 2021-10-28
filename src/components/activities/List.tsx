@@ -3,18 +3,18 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import type { AnyActivity } from 'src/activity-types/anyActivity.types';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
+import type { Activity } from 'types/activity.type';
 
 import { ActivityCard } from './ActivityCard';
 import { REACTIONS } from './utils';
 
 interface ActivitiesProps {
-  activities: AnyActivity[];
+  activities: Activity[];
   withLinks?: boolean;
   noButtons?: boolean;
   onSelect?: (index: number) => void;

@@ -3,19 +3,18 @@ import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 import React from 'react';
 
-import type { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivity.types';
-import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import type { Activity, AnyData } from 'types/activity.type';
 
-export const useActivity = (activityId: number): { activity: AnyActivity | null } => {
+export const useActivity = (activityId: number): { activity: Activity | null } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
-  const getActivity: QueryFunction<AnyActivity | null> = React.useCallback(async () => {
+  const getActivity: QueryFunction<Activity | null> = React.useCallback(async () => {
     if (activityId === -1) {
       return null;
     }
@@ -29,9 +28,9 @@ export const useActivity = (activityId: number): { activity: AnyActivity | null 
     if (response.error) {
       return null;
     }
-    return getAnyActivity(response.data);
+    return response.data as Activity;
   }, [villageId, activityId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<AnyActivity | null, unknown>(['activity', { villageId, activityId }], getActivity);
+  const { data, isLoading, error } = useQuery<Activity | null, unknown>(['activity', { villageId, activityId }], getActivity);
 
   return {
     activity: isLoading || error ? null : data,
@@ -45,15 +44,12 @@ export const useActivityRequests = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const updatedActivityData = React.useCallback(
-    async (activity: AnyActivity, data: AnyActivityData) => {
+    async (activity: Activity, data: AnyData) => {
       const response = await axiosLoggedRequest({
         method: 'PUT',
-        url: `/activities/${activity.id}/content/${activity.dataId}`,
+        url: `/activities/${activity.id}`,
         data: {
-          value: JSON.stringify({
-            type: 'data',
-            data,
-          }),
+          data,
         },
       });
       if (response.error) {

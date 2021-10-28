@@ -7,13 +7,13 @@ import { FormControl, Select, MenuItem } from '@material-ui/core';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
-import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { replaceTokens } from 'src/utils';
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep3 = () => {
@@ -37,10 +37,10 @@ const DefiStep3 = () => {
     return <div></div>;
   }
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...content, ...activity.processedContent.slice(explanationContentIndex, activity.processedContent.length)] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...content, ...activity.content.slice(explanationContentIndex, activity.content.length)] });
   };
-  const addDescriptionContent = (type: EditorTypes, value?: string) => {
+  const addDescriptionContent = (type: ActivityContentType, value?: string) => {
     addContent(type, value, explanationContentIndex);
     updateActivity({ data: { ...data, explanationContentIndex: explanationContentIndex + 1 } });
   };
@@ -101,7 +101,7 @@ const DefiStep3 = () => {
                 Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
               </p>
               <ContentEditor
-                content={activity.processedContent.slice(0, explanationContentIndex)}
+                content={activity.content.slice(0, explanationContentIndex)}
                 updateContent={updateContent}
                 addContent={addDescriptionContent}
                 deleteContent={deleteDescriptionContent}

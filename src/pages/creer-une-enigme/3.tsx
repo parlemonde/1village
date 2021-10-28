@@ -4,13 +4,13 @@ import React from 'react';
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
-import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { capitalize } from 'src/utils';
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const EnigmeStep3 = () => {
@@ -29,10 +29,10 @@ const EnigmeStep3 = () => {
     }
   }, [activity, router]);
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...content, ...activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...content, ...activity.content.slice(indiceContentIndex, activity.content.length)] });
   };
-  const addDescriptionContent = (type: EditorTypes, value?: string) => {
+  const addDescriptionContent = (type: ActivityContentType, value?: string) => {
     addContent(type, value, indiceContentIndex);
     updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex + 1 } });
   };
@@ -68,7 +68,7 @@ const EnigmeStep3 = () => {
             poser des questions !
           </p>
           <ContentEditor
-            content={activity.processedContent.slice(0, indiceContentIndex)}
+            content={activity.content.slice(0, indiceContentIndex)}
             updateContent={updateContent}
             addContent={addDescriptionContent}
             deleteContent={deleteDescriptionContent}

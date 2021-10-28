@@ -19,7 +19,7 @@ export const MascotteCard = ({
   showEditButtons,
   onDelete,
 }: ActivityCardProps<PresentationMascotteActivity>) => {
-  const firstText = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text')?.value || '', [activity.processedContent]);
+  const firstText = React.useMemo(() => activity.content.find((c) => c.type === 'text')?.value || '', [activity.content]);
   return (
     <div
       style={{

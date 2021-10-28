@@ -24,7 +24,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import { Header } from 'src/components/Header';
-// import { Navigation } from 'src/components/Navigation';
 import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
@@ -134,7 +133,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                   ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
                     <div className="app-container">
                       <Header />
-                      {/* <Navigation /> */}
                       <Component {...pageProps} />
                       <WelcomeModal />
                     </div>

@@ -32,7 +32,7 @@ const IndiceStep3 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const isValid = () => {
     let result = true;
-    activity?.processedContent?.map((content: { value: string }) => {
+    activity?.content?.map((content: { value: string }) => {
       result = content.value === '' || content.value === '<p></p>\n' ? false : true;
     });
 
@@ -132,7 +132,7 @@ const IndiceStep3 = () => {
               status={errorSteps.length > 0 ? 'error' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent} />
+            <ContentView content={activity.content} />
           </div>
 
           <StepsButton prev="/indice-culturel/2" />

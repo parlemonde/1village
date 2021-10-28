@@ -4,47 +4,43 @@ import React from 'react';
 
 import { Card, CircularProgress } from '@material-ui/core';
 
-import type { AnyActivity, AnyActivityData } from 'src/activity-types/anyActivity.types';
-import { getAnyActivity, isEnigme } from 'src/activity-types/anyActivity';
-import type { EnigmeData } from 'src/activity-types/enigme.types';
-import type { EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
-import type { Activity } from 'types/activity.type';
+import type { Activity, AnyData, ActivityContentType } from 'types/activity.type';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 
 interface ActivityContextValue {
-  activity: AnyActivity | null;
-  setActivity(newActivity: AnyActivity | null): void;
-  updateActivity(newActivity: Partial<AnyActivity>): void;
+  activity: Activity | null;
+  setActivity(newActivity: Activity | null): void;
+  updateActivity(newActivity: Partial<Activity>): void;
   createNewActivity(
-    type: ActivityType,
+    type: number,
     subType?: number,
-    initialData?: AnyActivityData,
+    initialData?: AnyData,
     responseActivityId?: number | null,
-    responseType?: ActivityType | null,
+    responseType?: number | null,
     isPinned?: boolean,
   ): boolean;
-  addContent(type: EditorTypes, value?: string, index?: number): void;
+  addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<boolean>;
-  createActivityIfNotExist(type: ActivityType, subType: number, initialData?: AnyActivityData): Promise<void>;
+  createActivityIfNotExist(type: number, subType: number, initialData?: AnyData): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>(null);
 
-function getInitialActivity(): AnyActivity | null {
+function getInitialActivity(): Activity | null {
   try {
     return JSON.parse(sessionStorage.getItem('activity') || null) || null;
   } catch {
     return null;
   }
 }
-function saveActivityInSession(activity: AnyActivity | null): void {
+function saveActivityInSession(activity: Activity | null): void {
   try {
     sessionStorage.setItem('activity', JSON.stringify(activity));
   } catch {
@@ -58,8 +54,8 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   const queryClient = useQueryClient();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [activity, setActivity] = React.useState<AnyActivity | null>(null);
-  const [draft, setDraft] = React.useState<AnyActivity | null>(null);
+  const [activity, setActivity] = React.useState<Activity | null>(null);
+  const [draft, setDraft] = React.useState<Activity | null>(null);
   const [draftStep, setDraftStep] = React.useState(0);
   const draftStepTimeout = React.useRef<number | undefined>(undefined);
 
@@ -82,7 +78,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       if (response.error) {
         router.push('/');
       } else {
-        setActivity(getAnyActivity(response.data));
+        setActivity(response.data);
       }
     },
     [router, axiosLoggedRequest],
@@ -98,12 +94,12 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     }
   }, [getActivity, router, currentActivityId]);
 
-  const updateActivity = React.useCallback((newActivity: Partial<AnyActivity>) => {
+  const updateActivity = React.useCallback((newActivity: Partial<Activity>) => {
     setActivity((a) => (a === null ? a : { ...a, ...newActivity }));
   }, []);
 
   const getDraft = React.useCallback(
-    async (type: ActivityType, subType?: number) => {
+    async (type: number, subType?: number) => {
       const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
@@ -116,31 +112,29 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         return;
       }
       if (response.data && response.data.draft !== null) {
-        setDraft(getAnyActivity(response.data.draft));
+        setDraft(response.data.draft);
       }
     },
     [village, axiosLoggedRequest],
   );
 
   const createNewActivity = React.useCallback(
-    (type: ActivityType, subType?: number, initialData?: AnyActivityData, responseActivityId?: number | null, responseType?: ActivityType | null) => {
+    (type: number, subType?: number, initialData?: AnyData, responseActivityId?: number | null, responseType?: number | null) => {
       if (user === null || village === null) {
         return false;
       }
-      const activity: AnyActivity = {
+      const activity: Activity = {
         id: 0,
         type: type,
         subType: subType,
         status: ActivityStatus.DRAFT,
         userId: user.id,
         villageId: village.id,
-        content: [],
+        content: [{ type: 'text', id: 0, value: '' }],
         responseActivityId: responseActivityId ?? null,
         responseType: responseType ?? null,
         data: initialData || {},
-        dataId: 0,
         isPinned: false,
-        processedContent: [{ type: 'text', id: 0, value: '' }],
       };
       setActivity(activity);
       if (type !== ActivityType.QUESTION) {
@@ -152,7 +146,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: ActivityType, subType: number, initialData?: AnyActivityData) => {
+    async (type: number, subType: number, initialData?: AnyData) => {
       if (user === null || village === null) {
         return;
       }
@@ -162,22 +156,18 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         method: 'GET',
         url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
       });
-      if (response.data && response.data.length > 0) setActivity(getAnyActivity(response.data[0]));
-      else {
+      if (response.data && response.data.length > 0) {
+        setActivity(response.data[0]);
+      } else {
         createNewActivity(type, subType, initialData);
       }
     },
     [user, village, axiosLoggedRequest, createNewActivity],
   );
 
-  const activityContent = activity?.processedContent || null;
-
-  const addContent = (type: EditorTypes, value: string = '', index?: number) => {
-    if (activityContent === null) {
-      return;
-    }
-    const newId = Math.max(1, activity.dataId || 0, ...activityContent.map((p) => p.id)) + 1;
-    const newContent = activityContent;
+  const addContent = (type: ActivityContentType, value: string = '', index?: number) => {
+    const newContent = activity.content ? [...activity.content] : [];
+    const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
     if (index !== undefined) {
       newContent.splice(index, 0, {
         id: newId,
@@ -191,74 +181,29 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         value,
       });
     }
-    updateActivity({ processedContent: newContent });
+    updateActivity({ content: newContent });
   };
 
   const deleteContent = (index: number) => {
-    if (activityContent === null) {
+    const newContent = activity.content ? [...activity.content] : [];
+    if (newContent.length <= index) {
       return;
     }
-    const newContent = [...activityContent];
     newContent.splice(index, 1);
-    updateActivity({ processedContent: newContent });
+    updateActivity({ content: newContent });
   };
-
-  const getAPIContent = React.useCallback(
-    (isEdit: boolean, publish: boolean) => {
-      const mapIndex = isEdit
-        ? activity.content.reduce<{ [key: number]: number }>((acc, c, i) => {
-            acc[c.id] = i;
-            return acc;
-          }, {})
-        : {};
-      const content: Array<{ key: string; value: string; id?: number }> = activity.processedContent
-        .map((p) => {
-          let data: { key: string; value: string; id?: number } | null = null;
-          if (p.type === 'text' || p.type === 'image' || p.type === 'sound' || p.type === 'video' || p.type === 'h5p') {
-            data = {
-              key: p.type,
-              value: p.value,
-            };
-          }
-          if (data !== null && mapIndex[p.id] !== undefined && p.id !== activity.dataId) {
-            data.id = p.id;
-          }
-          return data;
-        })
-        .filter((c) => c !== null);
-      const activityData = { ...activity.data };
-      if (!publish) {
-        activityData.draftUrl = window.location.pathname;
-      } else {
-        delete activityData.draftUrl;
-        if (isEnigme(activity) && !(activityData as EnigmeData).timer) {
-          (activityData as EnigmeData).timer = new Date().getTime();
-        }
-      }
-      content.push({
-        key: 'json',
-        value: JSON.stringify({
-          type: 'data',
-          data: activityData,
-        }),
-        id: isEdit ? activity.dataId : undefined,
-      });
-      return content;
-    },
-    [activity],
-  );
 
   const createActivity = React.useCallback(
     async (publish: boolean) => {
-      const content = getAPIContent(false, publish);
-      const data: Omit<Partial<Activity>, 'content'> & { content: Array<{ key: string; value: string }> } = {
+      const data: Partial<Activity> = {
         type: activity.type,
         subType: activity.subType,
         villageId: activity.villageId,
         responseActivityId: activity.responseActivityId,
         responseType: activity.responseType,
         status: publish ? ActivityStatus.PUBLISHED : ActivityStatus.DRAFT,
-        content,
+        content: activity.content,
+        data: activity.data,
       };
       const response = await axiosLoggedRequest({
         method: 'POST',
@@ -268,48 +213,37 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       if (response.error) {
         return false;
       } else {
-        setActivity(getAnyActivity(response.data));
+        setActivity(response.data);
         return true;
       }
     },
-    [axiosLoggedRequest, getAPIContent, activity],
+    [axiosLoggedRequest, activity],
   );
 
   const editActivity = React.useCallback(
     async (publish: boolean) => {
-      const content = getAPIContent(true, publish);
+      const data: Partial<Activity> = {
+        content: activity.content,
+        data: activity.data,
+      };
+      // if not yet published, the response type and isPinned can be changed.
+      if (!publish) {
+        data.responseActivityId = activity.responseActivityId;
+        data.responseType = activity.responseType;
+        data.isPinned = activity.isPinned;
+      }
       const response = await axiosLoggedRequest({
         method: 'PUT',
-        url: `/activities/${activity.id}/content`,
-        data: {
-          content,
-        },
+        url: `/activities/${activity.id}`,
+        data,
       });
       if (response.error) {
         return false;
       }
-      const newActivity = getAnyActivity(response.data);
-      if (!publish) {
-        const response2 = await axiosLoggedRequest({
-          method: 'PUT',
-          url: `/activities/${activity.id}`,
-          data: {
-            responseActivityId: activity.responseActivityId,
-            responseType: activity.responseType,
-            isPinned: activity.isPinned,
-          },
-        });
-        if (response2.error) {
-          return false;
-        }
-        newActivity.responseActivityId = (response2.data as Activity).responseActivityId;
-        newActivity.responseType = (response2.data as Activity).responseType;
-        newActivity.isPinned = activity.isPinned;
-      }
-      setActivity(newActivity);
+      setActivity(response.data);
       return true;
     },
-    [getAPIContent, axiosLoggedRequest, activity],
+    [axiosLoggedRequest, activity],
   );
 
   const publishActivity = React.useCallback(async () => {
@@ -329,7 +263,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     if (response.error) {
       return false;
     }
-    setActivity(getAnyActivity(response.data));
+    setActivity(response.data);
     return true;
   }, [activity, axiosLoggedRequest]);
 

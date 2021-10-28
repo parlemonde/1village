@@ -25,8 +25,8 @@ const Question3 = () => {
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const processedContent = React.useMemo(() => activity?.processedContent?.filter((q) => q.value) ?? null, [activity]);
-  const questionsCount = processedContent?.length ?? 0;
+  const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
+  const questionsCount = content?.length ?? 0;
   const isEdit = activity !== null && activity.id !== 0;
 
   React.useEffect(() => {
@@ -74,7 +74,7 @@ const Question3 = () => {
 
     setIsLoading(true);
     if (activity.id === 0) {
-      await Promise.all(processedContent.map((question) => createQuestionActivity(question.value)));
+      await Promise.all(content.map((question) => createQuestionActivity(question.value)));
       queryClient.invalidateQueries('activities');
     } else {
       await save(true);
@@ -133,8 +133,8 @@ const Question3 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {processedContent &&
-              processedContent.map((c, index) => (
+            {content &&
+              content.map((c, index) => (
                 <p key={c.id} style={{ margin: questionsCount > 1 ? '0 0 1rem 0' : 0 }}>
                   {questionsCount > 1 && (
                     <>

@@ -2,30 +2,29 @@ import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 import React from 'react';
 
-import type { AnyActivity } from 'src/activity-types/anyActivity.types';
-import { getAnyActivity } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import type { Activity } from 'types/activity.type';
 
 export type Args = {
   limit?: number;
   page?: number;
   countries?: string[];
   pelico?: boolean;
-  type?: any;
+  type?: number | number[];
   userId?: number;
   status?: number;
   responseActivityId?: number;
 };
 
-export const useActivities = ({ pelico, countries = [], userId, ...args }: Args): { activities: AnyActivity[] } => {
+export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args): { activities: Activity[] } => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
-  const getActivities: QueryFunction<AnyActivity[]> = React.useCallback(async () => {
+  const getActivities: QueryFunction<Activity[]> = React.useCallback(async () => {
     if (!villageId) {
       return [];
     }
@@ -33,6 +32,7 @@ export const useActivities = ({ pelico, countries = [], userId, ...args }: Args)
       [key: string]: string | number | boolean;
     } = {
       ...args,
+      type: Array.isArray(type) ? type.join(',') : type,
       villageId,
       countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
@@ -47,14 +47,14 @@ export const useActivities = ({ pelico, countries = [], userId, ...args }: Args)
     if (response.error) {
       return [];
     }
-    return response.data.map(getAnyActivity);
-  }, [args, countries, pelico, userId, villageId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<AnyActivity[], unknown>(
-    ['activities', { ...args, userId, countries, pelico, villageId }],
+    return response.data;
+  }, [args, type, countries, pelico, userId, villageId, axiosLoggedRequest]);
+  const { data, isLoading, error } = useQuery<Activity[], unknown>(
+    ['activities', { ...args, type, userId, countries, pelico, villageId }],
     getActivities,
   );
 
-  const prevData = React.useRef<AnyActivity[]>([]);
+  const prevData = React.useRef<Activity[]>([]);
   React.useEffect(() => {
     if (data !== undefined) {
       prevData.current = data;
@@ -62,6 +62,6 @@ export const useActivities = ({ pelico, countries = [], userId, ...args }: Args)
   }, [data]);
 
   return {
-    activities: isLoading || error ? prevData.current : data,
+    activities: error ? [] : isLoading ? prevData.current : data,
   };
 };

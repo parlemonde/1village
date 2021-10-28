@@ -5,12 +5,12 @@ import React from 'react';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
-import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep4 = () => {
@@ -31,15 +31,15 @@ const DefiStep4 = () => {
     }
 
     if (activity && isDefi(activity) && isLanguage(activity)) {
-      if ((activity.data.explanationContentIndex ?? 0) > activity.processedContent.length) {
+      if ((activity.data.explanationContentIndex ?? 0) > activity.content.length) {
         updateActivity({
           data: {
             ...activity.data,
-            explanationContentIndex: activity.processedContent.length,
+            explanationContentIndex: activity.content.length,
           },
         });
       }
-      if ((activity.data.explanationContentIndex ?? 0) === activity.processedContent.length && !contentAdded.current) {
+      if ((activity.data.explanationContentIndex ?? 0) === activity.content.length && !contentAdded.current) {
         contentAdded.current = true;
         addContent('text');
       }
@@ -50,10 +50,10 @@ const DefiStep4 = () => {
     return <div></div>;
   }
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...activity.processedContent.slice(0, explanationContentIndex), ...content] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...activity.content.slice(0, explanationContentIndex), ...content] });
   };
-  const addIndiceContent = (type: EditorTypes, value?: string) => {
+  const addIndiceContent = (type: ActivityContentType, value?: string) => {
     contentAdded.current = true;
     addContent(type, value);
   };
@@ -63,7 +63,7 @@ const DefiStep4 = () => {
   };
 
   const onNext = () => {
-    if (explanationContentIndex === activity.processedContent.length) {
+    if (explanationContentIndex === activity.content.length) {
       enqueueSnackbar('Il faut au moins un bloc de texte, image, son ou vidéo avant de continuer.', {
         variant: 'error',
       });
@@ -86,7 +86,7 @@ const DefiStep4 = () => {
             {LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc2}
           </p>
           <ContentEditor
-            content={activity.processedContent.slice(explanationContentIndex, activity.processedContent.length)}
+            content={activity.content.slice(explanationContentIndex, activity.content.length)}
             updateContent={updateContent}
             addContent={addIndiceContent}
             deleteContent={deleteIndiceContent}

@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isIndice } from 'src/activity-types/anyActivity';
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { INDICE_TYPES } from 'src/activity-types/indice.constants';
 import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
@@ -10,6 +9,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { ActivityContent } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const IndiceStep2 = () => {
@@ -28,8 +28,8 @@ const IndiceStep2 = () => {
     }
   }, [activity, router]);
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...activity.processedContent.slice(0, indiceContentIndex), ...content] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
 
   const onNext = () => {
@@ -50,13 +50,7 @@ const IndiceStep2 = () => {
           <p className="text">
             Si vous souhaitez réaliser un film, n&apos;hésitez pas à utiliser Clap, un outil d&apos;aide à l&apos;écriture audiovisuel !
           </p>
-          <ContentEditor
-            content={activity.processedContent}
-            updateContent={updateContent}
-            addContent={addContent}
-            deleteContent={deleteContent}
-            save={save}
-          />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
           <StepsButton prev="/indice-culturel" next={onNext} />
         </div>
       </div>

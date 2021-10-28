@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { ReactSortable } from 'react-sortablejs';
 import React from 'react';
 
-import type { EditorContent, EditorTypes } from 'src/activity-types/extendedActivity.types';
+import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 import { AddContentCard } from './AddContentCard';
 import { H5pEditor } from './editors/H5pEditor';
@@ -12,9 +12,9 @@ import { TextEditor } from './editors/TextEditor/TextEditor';
 import { VideoEditor } from './editors/VideoEditor';
 
 interface ContentEditorProps {
-  content: EditorContent[];
-  updateContent(newContent: EditorContent[]): void;
-  addContent(type: EditorTypes, value?: string): void;
+  content: ActivityContent[];
+  updateContent(newContent: ActivityContent[]): void;
+  addContent(type: ActivityContentType, value?: string): void;
   deleteContent(index: number): void;
   save(): Promise<boolean>;
 }

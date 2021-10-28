@@ -138,7 +138,7 @@ const EnigmeStep5 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent.slice(0, indiceContentIndex)} />
+            <ContentView content={activity.content.slice(0, indiceContentIndex)} />
           </div>
 
           <span className="text text--small text--success">Indice présenté aux autres classes</span>
@@ -150,7 +150,7 @@ const EnigmeStep5 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent.slice(indiceContentIndex, activity.processedContent.length)} />
+            <ContentView content={activity.content.slice(indiceContentIndex, activity.content.length)} />
           </div>
 
           <StepsButton prev="/creer-une-enigme/4" />

@@ -1,42 +1,53 @@
-import type { ActivityData } from './activityData.type';
-
-export enum ActivityType {
-  PRESENTATION = 0,
-  ENIGME = 1,
-  DEFI = 2,
-  QUESTION = 3,
-  GAME = 4,
-  CONTENU_LIBRE = 5,
-  INDICE = 6,
-  SYMBOL = 7,
+export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound';
+export interface ActivityContent {
+  id: number; // needed to sort content.
+  type: ActivityContentType;
+  value: string;
 }
 
-export enum ActivityStatus {
-  PUBLISHED = 0,
-  DRAFT = 1,
-}
+export type AnyData = Record<string, unknown>;
 
-export interface Activity {
+export const ActivityType = {
+  PRESENTATION: 0,
+  ENIGME: 1,
+  DEFI: 2,
+  QUESTION: 3,
+  GAME: 4,
+  CONTENU_LIBRE: 5,
+  INDICE: 6,
+  SYMBOL: 7,
+};
+
+export const ActivityStatus = {
+  PUBLISHED: 0,
+  DRAFT: 1,
+};
+
+export interface Activity<T extends AnyData = AnyData> {
   id: number;
-  type: ActivityType;
+  type: number;
   subType?: number | null;
-  status: ActivityStatus;
+  status: number;
+
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
-  commentCount?: number;
+
+  // activity data
+  data: T & { draftUrl?: string };
 
   // activity content
-  content: ActivityData[] | null;
+  content: ActivityContent[];
 
   // user relation
   userId: number;
+  commentCount?: number;
+  isPinned?: boolean;
 
   // village relation
   villageId: number;
 
   // Answer other activity
   responseActivityId: number | null;
-  responseType: ActivityType | null;
-  isPinned?: boolean;
+  responseType: number | null;
 }

@@ -32,7 +32,7 @@ const ContenuLibre = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const isValid = (): boolean => {
     let result = true;
-    activity?.processedContent?.map((content: { value: string }) => {
+    activity?.content?.map((content: { value: string }) => {
       result = content.value === '' || content.value === '<p></p>\n' ? false : true;
     });
 
@@ -120,7 +120,7 @@ const ContenuLibre = () => {
                 status={errorSteps.length > 0 ? 'error' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
-              <ContentView content={activity.processedContent} />
+              <ContentView content={activity.content} />
             </div>
             <ActivityCard activity={activity} user={user} />
 

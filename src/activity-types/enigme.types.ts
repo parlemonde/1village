@@ -1,4 +1,4 @@
-import type { GenericExtendedActivity } from './extendedActivity.types';
+import type { Activity } from 'types/activity.type';
 
 export type EnigmeData = {
   theme: number;
@@ -7,4 +7,4 @@ export type EnigmeData = {
   timer: number;
 };
 
-export type EnigmeActivity = GenericExtendedActivity<EnigmeData>;
+export type EnigmeActivity = Activity<EnigmeData>;

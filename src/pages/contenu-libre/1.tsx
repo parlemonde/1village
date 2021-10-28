@@ -2,13 +2,13 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { ActivityContent } from 'types/activity.type';
 
 // import { ActivityStatus } from 'types/activity.type';
 
@@ -28,8 +28,8 @@ const ContenuLibre = () => {
     }
   }, [activity, router]);
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: [...activity.processedContent.slice(0, indiceContentIndex), ...content] });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
 
   const onNext = () => {
@@ -49,7 +49,7 @@ const ContenuLibre = () => {
               la carte résumée de votre publication.
             </p>
             <ContentEditor
-              content={activity.processedContent}
+              content={activity.content}
               updateContent={updateContent}
               addContent={addContent}
               deleteContent={deleteContent}

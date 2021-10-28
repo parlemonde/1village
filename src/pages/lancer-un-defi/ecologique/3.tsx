@@ -4,12 +4,12 @@ import React from 'react';
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isEco } from 'src/activity-types/defi.constants';
 import type { EcoDefiData } from 'src/activity-types/defi.types';
-import type { EditorContent } from 'src/activity-types/extendedActivity.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { ActivityContent } from 'types/activity.type';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiEcoStep3 = () => {
@@ -31,8 +31,8 @@ const DefiEcoStep3 = () => {
     return <div></div>;
   }
 
-  const updateContent = (content: EditorContent[]): void => {
-    updateActivity({ processedContent: content });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: content });
   };
 
   const onNext = () => {
@@ -52,13 +52,7 @@ const DefiEcoStep3 = () => {
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {"Pour l'illustrer, vous pouvez ajouter des photos ou tout expliquer en vidéo !"}
           </p>
-          <ContentEditor
-            content={activity.processedContent}
-            updateContent={updateContent}
-            addContent={addContent}
-            deleteContent={deleteContent}
-            save={save}
-          />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
           <StepsButton prev="/lancer-un-defi/ecologique/2" next={onNext} />
         </div>
       </div>

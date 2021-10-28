@@ -310,18 +310,16 @@ export const WelcomeModal = () => {
                   activity={{
                     id: 0,
                     type: ActivityType.PRESENTATION,
-                    content: [],
                     userId: user?.id,
                     villageId: 0,
                     responseActivityId: null,
                     responseType: null,
-                    dataId: 0,
                     data: {
                       theme: 0,
                     },
                     status: ActivityStatus.PUBLISHED,
                     createDate: new Date(),
-                    processedContent: [
+                    content: [
                       {
                         type: 'text',
                         value: '........................',

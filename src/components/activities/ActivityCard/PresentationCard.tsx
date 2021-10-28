@@ -21,8 +21,8 @@ export const PresentationCard = ({
   showEditButtons,
   onDelete,
 }: ActivityCardProps<PresentationThematiqueActivity>) => {
-  const firstImage = React.useMemo(() => activity.processedContent.find((c) => c.type === 'image'), [activity.processedContent]);
-  const firstTextContent = React.useMemo(() => activity.processedContent.find((c) => c.type === 'text'), [activity.processedContent]);
+  const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);
+  const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
   return (

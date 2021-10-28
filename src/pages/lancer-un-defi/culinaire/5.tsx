@@ -139,7 +139,7 @@ const DefiStep5 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.processedContent} />
+            <ContentView content={activity.content} />
           </div>
 
           <span className="text text--small text--success">Le défi lancé aux Pélicopains</span>
