@@ -68,14 +68,14 @@ const getActivities = async ({
   villageId,
   type = [],
   subType = null,
-  countries = [],
+  countries,
   pelico = true,
   status = 0,
   userId,
   responseActivityId,
 }: ActivityGetter) => {
   // get ids
-  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity');
+  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').where('activity.status = :status', { status });
   if (villageId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
   }
@@ -85,38 +85,31 @@ const getActivities = async ({
   if (subType !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
   }
-  if (status !== null) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.status = :status', { status: `${status}` });
-  }
   if (responseActivityId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
   } else if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
       userId,
     });
-  } else if (pelico) {
-    if (countries.length > 0) {
-      subQueryBuilder = subQueryBuilder
-        .innerJoin('activity.user', 'user')
-        .andWhere('((user.countryCode IN (:countries) AND user.type <= :userType) OR user.type >= :userType2)', {
-          countries,
-          userType: UserType.OBSERVATOR,
-          userType2: UserType.MEDIATOR,
-        });
-    } else {
-      subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type >= :userType2', {
-        userType2: UserType.MEDIATOR,
-      });
-    }
-  } else {
-    if (countries.length > 0) {
-      subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type <= :userType', {
+  } else if (pelico && countries !== undefined && countries.length > 0) {
+    subQueryBuilder = subQueryBuilder
+      .innerJoin('activity.user', 'user')
+      .andWhere('((user.countryCode IN (:countries) AND user.type <= :userType) OR user.type >= :userType2)', {
         countries,
         userType: UserType.OBSERVATOR,
+        userType2: UserType.MEDIATOR,
       });
-    } else {
-      return [];
-    }
+  } else if (pelico && countries !== undefined && countries.length === 0) {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type >= :userType2', {
+      userType2: UserType.MEDIATOR,
+    });
+  } else if (!pelico && countries !== undefined && countries.length > 0) {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type <= :userType', {
+      countries,
+      userType: UserType.OBSERVATOR,
+    });
+  } else if (!pelico && countries !== undefined) {
+    return [];
   }
 
   const activities = await subQueryBuilder
@@ -147,8 +140,13 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
     page: req.query.page ? Number(getQueryString(req.query.page)) || 0 : undefined,
     villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : undefined,
-    countries: req.query.countries ? (getQueryString(req.query.countries) || '').split(',') : undefined,
-    pelico: req.query.pelico ? req.query.pelico !== 'false' : false,
+    countries:
+      req.query.countries !== undefined
+        ? req.query.countries.length === 0
+          ? []
+          : (getQueryString(req.query.countries) || '').split(',')
+        : undefined,
+    pelico: req.query.pelico ? req.query.pelico !== 'false' : undefined,
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
