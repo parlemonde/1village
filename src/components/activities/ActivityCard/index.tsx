@@ -2,9 +2,8 @@ import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 
-import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
+import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isMascotte, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
-import { isMascotte, isThematique } from 'src/activity-types/presentation.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -92,7 +91,7 @@ export const ActivityCard = ({
           {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
         </div>
         <div className="activity-card__content">
-          {isPresentation(activity) && isMascotte(activity) && (
+          {isMascotte(activity) && (
             <MascotteCard
               activity={activity}
               user={user}
@@ -103,7 +102,7 @@ export const ActivityCard = ({
               onDelete={onDelete}
             />
           )}
-          {isPresentation(activity) && isThematique(activity) && (
+          {isPresentation(activity) && (
             <PresentationCard
               activity={activity}
               user={user}

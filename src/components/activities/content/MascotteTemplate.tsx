@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
@@ -41,9 +42,11 @@ export const MascotteTemplate = ({ user }: { user: User }) => (
           </div>
           <div style={{ textAlign: 'right' }}>
             {user.type < UserType.MEDIATOR && (
-              <Button href={'/mascotte/1'} color="primary" variant="outlined">
-                Créer votre mascotte
-              </Button>
+              <Link href={'/mascotte/1'} passHref>
+                <Button href={'/mascotte/1'} color="primary" variant="outlined">
+                  Créer votre mascotte
+                </Button>
+              </Link>
             )}
           </div>
         </div>

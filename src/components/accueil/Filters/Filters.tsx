@@ -18,11 +18,11 @@ const GreenCheckbox = withStyles({
 
 export const ACTIVITIES_PER_PHASE = [
   [
-    { key: 0, label: 'Toutes', value: [0, 3, 5, 6, 7] },
+    { key: 0, label: 'Toutes', value: [3, 5, 6, 7, 8] },
     { key: 1, label: 'Indices culturels', value: [6] },
     { key: 2, label: 'Symboles', value: [7] },
     { key: 3, label: 'Questions', value: [3] },
-    { key: 4, label: 'Mascotte', value: [0] },
+    { key: 4, label: 'Mascotte', value: [8] },
   ],
   [
     { key: 0, label: 'Toutes', value: [1, 2, 4, 5] },

@@ -5,6 +5,7 @@ import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
 import type { FreeContentActivity } from './freeContent.types';
 import type { IndiceActivity } from './indice.types';
+import type { MascotteActivity } from './mascotte.types';
 import type { PresentationActivity } from './presentation.types';
 import type { QuestionActivity } from './question.types';
 import type { SymbolActivity } from './symbol.types';
@@ -29,4 +30,7 @@ export const isIndice = (activity: Activity): activity is IndiceActivity => {
 };
 export const isSymbol = (activity: Activity): activity is SymbolActivity => {
   return activity.type === ActivityType.SYMBOL;
+};
+export const isMascotte = (activity: Activity): activity is MascotteActivity => {
+  return activity.type === ActivityType.MASCOTTE;
 };

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Checkbox } from '@material-ui/core';
 
-import type { MascotteData } from 'src/activity-types/presentation.types';
+import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -15,7 +15,13 @@ const MascotteStep4 = () => {
   const [cguChecked, setCguChecked] = React.useState(false);
   const [errorSteps, setErrorSteps] = React.useState([]);
 
-  React.useEffect(() => setErrorSteps(getErrorSteps(data, 3)), [activity]);
+  const initErrorSteps = React.useRef(false);
+  React.useEffect(() => {
+    if (data !== null && !initErrorSteps.current) {
+      initErrorSteps.current = true;
+      setErrorSteps(getErrorSteps(data, 3));
+    }
+  }, [data]);
 
   return (
     activity && (

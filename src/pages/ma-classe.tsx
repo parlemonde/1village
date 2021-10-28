@@ -1,8 +1,7 @@
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.constants';
+import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
@@ -19,22 +18,16 @@ const MaClasse = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);
   const { activities } = useActivities({
-    limit: 50,
-    page: 0,
-    type: [],
     userId: user?.id ?? 0,
   });
   const { activities: drafts } = useActivities({
-    limit: 50,
-    page: 0,
-    type: [],
     userId: user?.id ?? 0,
     status: ActivityStatus.DRAFT,
   });
   const { deleteActivity } = useActivityRequests();
   const [deleteIndex, setDeleteIndex] = React.useState<{ index: number; isDraft: boolean }>({ index: -1, isDraft: false });
-  const [hasMascotte, setHasMascotte] = React.useState(false);
   const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
+  const hasMascotte = mascotteActivity !== null;
 
   const getMascotte = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
@@ -42,24 +35,40 @@ const MaClasse = () => {
       url: `/activities/mascotte`,
     });
     if (response.error) {
-      setHasMascotte(false);
       setMascotteActivity(null);
     } else {
-      setHasMascotte(true);
       setMascotteActivity(response.data);
-      activities &&
-        activities.map((activity) => {
-          isPresentation(activity) && isMascotte(activity) && setMascotteActivity({ ...mascotteActivity, commentCount: activity.commentCount });
-        });
     }
-  }, [activities, axiosLoggedRequest]);
+  }, [axiosLoggedRequest]);
+
+  // Get mascotte
+  React.useEffect(() => {
+    getMascotte().catch();
+  }, [getMascotte]);
+
+  // TODO: remove this effect and send the comment count with the mascotte request.
+  React.useEffect(() => {
+    if (!hasMascotte) {
+      return;
+    }
+    for (const activity of activities || []) {
+      if (isMascotte(activity)) {
+        setMascotteActivity((m) => ({ ...m, commentCount: activity.commentCount }));
+      }
+    }
+  }, [hasMascotte, activities]);
+
+  // Delete previous activity before going editing other ones.
+  React.useEffect(() => {
+    setActivity(null);
+  }, [setActivity]);
 
   const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
   const onDeleteActivity = async (mascotteActivity: Activity = null, isDraft = false) => {
     if (activityToDelete !== null) {
       await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     }
-    if (mascotteActivity || (isPresentation(activityToDelete) && isMascotte(activityToDelete))) {
+    if (mascotteActivity || isMascotte(activityToDelete)) {
       mascotteActivity && (await deleteActivity(mascotteActivity.id, isDraft));
       const newUser = {
         avatar: '',
@@ -82,54 +91,56 @@ const MaClasse = () => {
     setDeleteIndex({ index: -1, isDraft: false });
   };
 
-  // Delete previous activity before going editing other ones.
-  React.useEffect(() => {
-    getMascotte();
-    setActivity(null);
-  }, [activities, setActivity]);
+  const hasNoPublishedActivities = activities.filter((a) => a.userId === user?.id && !isMascotte(a)).length === 0;
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
-          <h2>Notre mascotte</h2>
+          <h1 style={{ marginBottom: '1rem' }}>Notre mascotte</h1>
           {hasMascotte && mascotteActivity ? (
             <ActivityCard activity={mascotteActivity} user={user} showEditButtons isSelf onDelete={() => onDeleteActivity(mascotteActivity)} />
           ) : (
             <MascotteTemplate user={user} />
           )}
-          <h2>Mes Brouillons</h2>
-          {drafts.length === 0 && <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>}
-          {drafts.map((activity, index) =>
-            user && activity.userId === user.id ? (
-              <ActivityCard
-                activity={activity}
-                user={user}
-                key={index}
-                onDelete={() => {
-                  setDeleteIndex({ index, isDraft: true });
-                }}
-                isSelf
-                isDraft
-                showEditButtons
-              />
-            ) : null,
+          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes Brouillons</h1>
+          {drafts.length === 0 ? (
+            <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>
+          ) : (
+            drafts.map((activity, index) =>
+              user && activity.userId === user.id ? (
+                <ActivityCard
+                  activity={activity}
+                  user={user}
+                  key={index}
+                  onDelete={() => {
+                    setDeleteIndex({ index, isDraft: true });
+                  }}
+                  isSelf
+                  isDraft
+                  showEditButtons
+                />
+              ) : null,
+            )
           )}
-
-          <h2>Mes activités publiées</h2>
-          {activities.map((activity, index) =>
-            user && activity.userId === user.id && !isPresentation(activity) ? (
-              <ActivityCard
-                activity={activity}
-                isSelf={true}
-                user={user}
-                key={index}
-                showEditButtons={true}
-                onDelete={() => {
-                  setDeleteIndex({ index, isDraft: false });
-                }}
-              />
-            ) : null,
+          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes activités publiées</h1>
+          {hasNoPublishedActivities ? (
+            <p>Vous n&apos;avez pas d&apos;activités publiées.</p>
+          ) : (
+            activities.map((activity, index) =>
+              user && activity.userId === user.id && !isMascotte(activity) ? (
+                <ActivityCard
+                  activity={activity}
+                  isSelf={true}
+                  user={user}
+                  key={index}
+                  showEditButtons={true}
+                  onDelete={() => {
+                    setDeleteIndex({ index, isDraft: false });
+                  }}
+                />
+              ) : null,
+            )
           )}
         </div>
       </div>

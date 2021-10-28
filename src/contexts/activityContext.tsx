@@ -146,7 +146,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: number, subType: number, initialData?: AnyData) => {
+    async (type: number, subType?: number, initialData?: AnyData) => {
       if (user === null || village === null) {
         return;
       }
@@ -205,6 +205,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         content: activity.content,
         data: activity.data,
       };
+      if (!publish) {
+        data.data.draftUrl = window.location.pathname;
+      }
       const response = await axiosLoggedRequest({
         method: 'POST',
         url: '/activities',
@@ -227,10 +230,15 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         data: activity.data,
       };
       // if not yet published, the response type and isPinned can be changed.
-      if (!publish) {
+      if (activity.data.status === ActivityStatus.DRAFT) {
         data.responseActivityId = activity.responseActivityId;
         data.responseType = activity.responseType;
         data.isPinned = activity.isPinned;
+      }
+      if (publish) {
+        data.status = ActivityStatus.PUBLISHED;
+      } else {
+        data.data.draftUrl = window.location.pathname;
       }
       const response = await axiosLoggedRequest({
         method: 'PUT',
@@ -245,27 +253,6 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     },
     [axiosLoggedRequest, activity],
   );
-
-  const publishActivity = React.useCallback(async () => {
-    if ((activity?.id ?? 0) === 0) {
-      return false; // activity is not yet created!
-    }
-    const response = await axiosLoggedRequest({
-      method: 'PUT',
-      url: `/activities/${activity.id}`,
-      data: {
-        status: ActivityStatus.PUBLISHED,
-        responseActivityId: activity.responseActivityId,
-        responseType: activity.responseType,
-        isPinned: activity.isPinned,
-      },
-    });
-    if (response.error) {
-      return false;
-    }
-    setActivity(response.data);
-    return true;
-  }, [activity, axiosLoggedRequest]);
 
   const save = React.useCallback(
     async (publish: boolean = false) => {
@@ -283,10 +270,8 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       let result = false;
       if (activity.id === 0) {
         result = await createActivity(publish);
-      } else if (publish) {
-        result = (await editActivity(true)) && (await publishActivity());
       } else {
-        result = await editActivity(false);
+        result = await editActivity(publish);
       }
 
       if (!publish) {
@@ -297,7 +282,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       }
       return result;
     },
-    [queryClient, createActivity, editActivity, publishActivity, activity],
+    [queryClient, createActivity, editActivity, activity],
   );
 
   return (

@@ -1,8 +1,7 @@
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.constants';
+import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
@@ -37,7 +36,7 @@ const MesActivites = () => {
     if (activityToDelete !== null) {
       await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     }
-    if (isPresentation(activityToDelete) && isMascotte(activityToDelete)) {
+    if (isMascotte(activityToDelete)) {
       const newUser = {
         avatar: '',
         displayName: '',

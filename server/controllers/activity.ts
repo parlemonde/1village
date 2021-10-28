@@ -204,8 +204,7 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
   const activity = await getRepository(Activity).findOne({
     where: {
       userId: req.user.id,
-      type: ActivityType.PRESENTATION,
-      subType: 1,
+      type: ActivityType.MASCOTTE,
       status: ActivityStatus.PUBLISHED,
     },
   });

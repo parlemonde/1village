@@ -18,6 +18,7 @@ import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 const titles = {
+  [ActivityType.MASCOTTE]: 'Mascotte',
   [ActivityType.PRESENTATION]: 'Présentation',
   [ActivityType.DEFI]: 'Défi',
   [ActivityType.GAME]: 'Jeu',

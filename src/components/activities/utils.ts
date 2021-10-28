@@ -8,7 +8,8 @@ import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { ActivityType } from 'types/activity.type';
 
 export const titles = {
-  [ActivityType.PRESENTATION]: 'créé une mascotte',
+  [ActivityType.MASCOTTE]: 'créé une mascotte',
+  [ActivityType.PRESENTATION]: 'créé une présentation',
   [ActivityType.DEFI]: 'créé un défi',
   [ActivityType.GAME]: 'lancé un jeu',
   [ActivityType.ENIGME]: 'créé une énigme',
@@ -19,6 +20,7 @@ export const titles = {
 };
 
 export const icons = {
+  [ActivityType.MASCOTTE]: UserIcon,
   [ActivityType.PRESENTATION]: UserIcon,
   [ActivityType.DEFI]: TargetIcon,
   [ActivityType.GAME]: GameIcon,
@@ -30,7 +32,8 @@ export const icons = {
 };
 
 export const DESC = {
-  [ActivityType.PRESENTATION]: 'une mascotte',
+  [ActivityType.MASCOTTE]: 'une mascotte',
+  [ActivityType.PRESENTATION]: 'une presentation',
   [ActivityType.DEFI]: 'un défi',
   [ActivityType.GAME]: 'un jeu',
   [ActivityType.ENIGME]: 'une énigme',
@@ -41,6 +44,7 @@ export const DESC = {
 };
 
 export const REACTIONS = {
+  [ActivityType.MASCOTTE]: 'cette mascotte',
   [ActivityType.PRESENTATION]: 'cette présentation',
   [ActivityType.DEFI]: 'ce défi',
   [ActivityType.GAME]: 'ce jeu',
@@ -52,6 +56,7 @@ export const REACTIONS = {
 };
 
 export const labels = {
+  [ActivityType.MASCOTTE]: 'Réagir à cette activité par :',
   [ActivityType.PRESENTATION]: 'Réagir à cette activité par :',
   [ActivityType.DEFI]: 'Réagir à cette activité par :',
   [ActivityType.GAME]: 'Réagir à cette activité par :',

@@ -3,9 +3,8 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.constants';
-import type { MascotteData } from 'src/activity-types/presentation.types';
+import { isMascotte } from 'src/activity-types/anyActivity';
+import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -21,15 +20,22 @@ const MascotteStep3 = () => {
   const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
-    setErrorSteps(getErrorSteps(data, 2));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
-    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
+    } else if (activity && !isMascotte(activity)) {
       router.push('/ma-classe');
     }
   }, [activity, router]);
 
   const data = (activity?.data as MascotteData) || null;
+
+  const initErrorSteps = React.useRef(false);
+  React.useEffect(() => {
+    if (data !== null && !initErrorSteps.current) {
+      initErrorSteps.current = true;
+      setErrorSteps(getErrorSteps(data, 2));
+    }
+  }, [data]);
 
   const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
     const newData: MascotteData = { ...data, [key]: newValue };

@@ -3,9 +3,8 @@ import React from 'react';
 
 import { TextField, Grid, Box } from '@material-ui/core';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.constants';
-import type { MascotteData } from 'src/activity-types/presentation.types';
+import { isMascotte } from 'src/activity-types/anyActivity';
+import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -22,16 +21,24 @@ const MascotteStep2 = () => {
   const [errorSteps, setErrorSteps] = React.useState([]);
 
   React.useEffect(() => {
-    setErrorSteps(getErrorSteps(data, 1));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
-    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
+    } else if (activity && !isMascotte(activity)) {
       router.push('/ma-classe');
+    } else if (activity && isMascotte(activity)) {
+      setIsError(stepsHasBeenFilled(activity.data, 1));
     }
-    setIsError(stepsHasBeenFilled(data, 1));
   }, [activity, router]);
 
   const data = (activity?.data as MascotteData) || null;
+
+  const initErrorSteps = React.useRef(false);
+  React.useEffect(() => {
+    if (data !== null && !initErrorSteps.current) {
+      initErrorSteps.current = true;
+      setErrorSteps(getErrorSteps(data, 1));
+    }
+  }, [data]);
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = key === 'mascotteDescription' ? event.target.value.slice(0, 400) : event.target.value;
@@ -55,24 +62,7 @@ const MascotteStep2 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    if (!isValid()) {
-      router.push('/mascotte/3');
-      setIsError(true);
-    } else {
-      router.push('/mascotte/3');
-    }
-  };
-
-  const isValid = (): boolean => {
-    if (data.mascotteName === '') return false;
-    if (data.mascotteDescription === '') return false;
-    if (data.personality1 === '') return false;
-    if (data.personality2 === '') return false;
-    if (data.personality3 === '') return false;
-    if (data.countries === []) return false;
-    if (data.game === '') return false;
-    if (data.sport === '') return false;
-    return true;
+    router.push('/mascotte/3');
   };
 
   if (!activity || data === null) {

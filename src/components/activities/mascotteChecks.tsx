@@ -1,4 +1,4 @@
-import type { MascotteData } from 'src/activity-types/presentation.types';
+import type { MascotteData } from 'src/activity-types/mascotte.types';
 
 export const isValidSum = (x: number, y: number, z: number) => {
   if (x < 0 || y < 0) return false;

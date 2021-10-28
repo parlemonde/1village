@@ -16,6 +16,7 @@ export const ActivityType = {
   CONTENU_LIBRE: 5,
   INDICE: 6,
   SYMBOL: 7,
+  MASCOTTE: 8,
 };
 
 export const ActivityStatus = {

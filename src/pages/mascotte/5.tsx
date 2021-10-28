@@ -5,9 +5,9 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, Grid, Backdrop, Box } from '@material-ui/core';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { getMascotteContent, isMascotte } from 'src/activity-types/presentation.constants';
-import type { MascotteData } from 'src/activity-types/presentation.types';
+import { isMascotte } from 'src/activity-types/anyActivity';
+import { getMascotteContent } from 'src/activity-types/mascotte.constants';
+import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -39,13 +39,20 @@ const MascotteStep4 = () => {
   const data = (activity?.data as MascotteData) || null;
 
   React.useEffect(() => {
-    setErrorSteps(getErrorSteps(data, 4));
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/ma-classe');
-    } else if (activity && (!isPresentation(activity) || !isMascotte(activity))) {
+    } else if (activity && !isMascotte(activity)) {
       router.push('/ma-classe');
     }
   }, [activity, router, updateActivity]);
+
+  const initErrorSteps = React.useRef(false);
+  React.useEffect(() => {
+    if (data !== null && !initErrorSteps.current) {
+      initErrorSteps.current = true;
+      setErrorSteps(getErrorSteps(data, 4));
+    }
+  }, [data]);
 
   const content = React.useMemo(
     () => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)),

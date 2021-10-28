@@ -3,8 +3,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-import { isPresentation } from 'src/activity-types/anyActivity';
-import { isMascotte } from 'src/activity-types/presentation.constants';
+import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
@@ -12,11 +11,6 @@ import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const PresentationSuccess = () => {
   const { activity } = React.useContext(ActivityContext);
-
-  if (!isPresentation(activity)) {
-    return <Base>{null}</Base>;
-  }
-
   const isMascotteActivity = isMascotte(activity);
 
   return (

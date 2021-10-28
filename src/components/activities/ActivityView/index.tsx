@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isPresentation, isQuestion, isEnigme, isDefi, isIndice, isSymbol, isFreeContent } from 'src/activity-types/anyActivity';
-import { isThematique, isMascotte } from 'src/activity-types/presentation.constants';
+import { isPresentation, isQuestion, isEnigme, isDefi, isIndice, isSymbol, isFreeContent, isMascotte } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -57,8 +56,8 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
           </div>
         )}
 
-        {isPresentation(activity) && isThematique(activity) && <ContentView content={activity.content} />}
-        {isPresentation(activity) && isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
+        {isPresentation(activity) && <ContentView content={activity.content} />}
+        {isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
         {isQuestion(activity) && <p>{activity.content[0]?.value}</p>}
         {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
         {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
