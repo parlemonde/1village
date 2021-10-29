@@ -7,11 +7,11 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import type { ButtonProps } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { successColor, errorColor } from 'src/styles/variables.const';
+import { successColor, errorColor, warningColor } from 'src/styles/variables.const';
 
 interface EditButtonProps extends ButtonProps {
   color?: 'primary' | 'secondary' | 'default';
-  status?: 'success' | 'error' | null;
+  status?: 'warning' | 'success' | 'error' | null;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme: Theme) =>
     error: {
       border: `1px solid ${errorColor}`,
       color: errorColor,
+    },
+    warning: {
+      border: `1px solid ${warningColor}`,
+      color: warningColor,
     },
     primary: {
       border: `1px solid ${theme.palette.primary.main}`,

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import * as React from 'react';
 
 import Switch from '@material-ui/core/Switch';
 import { Button } from '@material-ui/core';
@@ -99,26 +99,11 @@ const TABS_PER_PHASE: Tab[] = [
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [hasMascotte, setHasMascotte] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-
-  const getMascotte = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
-      method: 'GET',
-      url: `/activities/mascotte`,
-    });
-    if (!response.error && response.data.id !== -1) {
-      setHasMascotte(true);
-    }
-  }, [axiosLoggedRequest]);
-
-  useEffect(() => {
-    getMascotte().catch();
-  }, [getMascotte]);
 
   const fixedTabs = React.useMemo(
     () => [
@@ -126,11 +111,11 @@ export const Navigation = (): JSX.Element => {
       {
         label: 'Notre classe',
         path: '/ma-classe',
-        icon: hasMascotte ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        icon: user.avatar ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
       ...(isModerateur ? [FREE_CONTENT] : []),
     ],
-    [hasMascotte, user, isModerateur],
+    [user, isModerateur],
   );
   const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase]);
 

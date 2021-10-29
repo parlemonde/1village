@@ -25,7 +25,7 @@ const MaClasse = () => {
     status: ActivityStatus.DRAFT,
   });
   const { deleteActivity } = useActivityRequests();
-  const [deleteIndex, setDeleteIndex] = React.useState<{ index: number; isDraft: boolean }>({ index: -1, isDraft: false });
+  const [deleteIndex, setDeleteIndex] = React.useState<{ index: number | 'mascotte'; isDraft: boolean }>({ index: -1, isDraft: false });
   const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
   const hasMascotte = mascotteActivity !== null;
 
@@ -63,13 +63,20 @@ const MaClasse = () => {
     setActivity(null);
   }, [setActivity]);
 
-  const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
-  const onDeleteActivity = async (mascotteActivity: Activity = null, isDraft = false) => {
+  const activityToDelete =
+    deleteIndex.index === -1
+      ? null
+      : deleteIndex.index === 'mascotte'
+      ? mascotteActivity
+      : deleteIndex.isDraft
+      ? drafts[deleteIndex.index]
+      : activities[deleteIndex.index];
+  const onDeleteActivity = async () => {
     if (activityToDelete !== null) {
       await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     }
-    if (mascotteActivity || isMascotte(activityToDelete)) {
-      mascotteActivity && (await deleteActivity(mascotteActivity.id, isDraft));
+    if (isMascotte(activityToDelete)) {
+      setMascotteActivity(null);
       const newUser = {
         avatar: '',
         displayName: '',
@@ -98,8 +105,16 @@ const MaClasse = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
           <h1 style={{ marginBottom: '1rem' }}>Notre mascotte</h1>
-          {hasMascotte && mascotteActivity ? (
-            <ActivityCard activity={mascotteActivity} user={user} showEditButtons isSelf onDelete={() => onDeleteActivity(mascotteActivity)} />
+          {mascotteActivity ? (
+            <ActivityCard
+              activity={mascotteActivity}
+              user={user}
+              showEditButtons
+              isSelf
+              onDelete={() => {
+                setDeleteIndex({ index: 'mascotte', isDraft: false });
+              }}
+            />
           ) : (
             <MascotteTemplate user={user} />
           )}

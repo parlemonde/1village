@@ -38,7 +38,7 @@ const MascotteStep4 = () => {
             activeStep={3}
             errorSteps={errorSteps}
           />
-          <div className="width-900">
+          <div className="width-900" style={{ textAlign: 'justify' }}>
             <h1>Le web de Pelico, et ses règles</h1>
             <p>Bonjour {data?.mascotteName}, bienvenue sur 1Village !</p>
 
@@ -59,34 +59,36 @@ const MascotteStep4 = () => {
               ensemble sur 1Village durant toute l’année scolaire. Je vous propose de respecter quelques règles, pour éviter toute prise de bec !
             </p>
 
-            <p>
-              📝 Adoptez une attitude responsable vis-à-vis de ce que vous écrivez et de ce que vous dites sur 1Village. Veillez à utiliser un langage
-              poli sans grossièretés, injures ou mots méchants, envers vos Pélicopains.
-            </p>
+            <ul className="mascotte-rules-list">
+              <li data-emoji="📝">
+                Adoptez une attitude responsable vis-à-vis de ce que vous écrivez et de ce que vous dites sur 1Village. Veillez à utiliser un langage
+                poli sans grossièretés, injures ou mots méchants, envers vos Pélicopains.
+              </li>
 
-            <p>
-              🔏 Respectez la loi sur la propriété des œuvres Copiez et utilisez uniquement des textes, des images, des sons que vous avez créé, ou
-              dont vous disposez des droits après les avoir demandés à l’auteur.
-            </p>
+              <li data-emoji="🔏">
+                Respectez la loi sur la propriété des œuvres Copiez et utilisez uniquement des textes, des images, des sons que vous avez créé, ou
+                dont vous disposez des droits après les avoir demandés à l’auteur.
+              </li>
 
-            <p>
-              🗣 Interrogez-vous sur la portée de vos propos avant de publier du contenu sur 1Village. Sur 1Village, la publication de contenu (photo,
-              texte, vidéo etc.) se fait toujours sous le contrôle de votre professeur.
-            </p>
+              <li data-emoji="🗣">
+                Interrogez-vous sur la portée de vos propos avant de publier du contenu sur 1Village. Sur 1Village, la publication de contenu (photo,
+                texte, vidéo etc.) se fait toujours sous le contrôle de votre professeur.
+              </li>
 
-            <p>
-              🤔 Vérifiez toujours les informations transmises sur internet. Tout ce qui est partagé sur le web n’est pas nécessairement vrai.. y
-              compris sur 1Village !
-            </p>
+              <li data-emoji="🤔">
+                Vérifiez toujours les informations transmises sur internet. Tout ce qui est partagé sur le web n’est pas nécessairement vrai.. y
+                compris sur 1Village !
+              </li>
 
-            <p>
-              📸 Ne publiez jamais une photo ou une vidéo sur laquelle apparaît un camarade sans lui avoir préalablement demandé l’autorisation. Le
-              consentement des individus est essentiel pour publier sur le web, y compris sur 1Village.
-            </p>
+              <li data-emoji="📸">
+                Ne publiez jamais une photo ou une vidéo sur laquelle apparaît un camarade sans lui avoir préalablement demandé l’autorisation. Le
+                consentement des individus est essentiel pour publier sur le web, y compris sur 1Village.
+              </li>
 
-            <p>
-              🕶 Ne partagez pas en dehors d’1Village les photos, vidéos et textes publiés par vos Pélicopains… à moins qu’ils ne donnent leur accord !
-            </p>
+              <li data-emoji="🕶">
+                Ne partagez pas en dehors d’1Village les photos, vidéos et textes publiés par vos Pélicopains… à moins qu’ils ne donnent leur accord !
+              </li>
+            </ul>
 
             <p>Alors, {data?.mascotteName} avec ta classe, êtes-vous d’accord pour respecter les règles du web de Pelico ?</p>
             <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>

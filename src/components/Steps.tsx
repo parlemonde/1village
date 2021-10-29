@@ -8,7 +8,7 @@ import Step from '@material-ui/core/Step';
 import { withStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 
-import { primaryColor, primaryColorLight2, successColor, errorColor } from 'src/styles/variables.const';
+import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
 
 const DotConnector = withStyles({
   alternativeLabel: {
@@ -29,7 +29,7 @@ const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
   return (
     <div
       style={{
-        backgroundColor: active ? primaryColor : error ? errorColor : 'white',
+        backgroundColor: active ? primaryColor : error ? warningColor : 'white',
         color: completed ? (error ? 'white' : successColor) : active ? 'white' : primaryColor,
         width: '38px',
         height: '38px',
@@ -37,7 +37,7 @@ const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '50%',
-        border: completed ? (error ? `1px solid ${errorColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
+        border: completed ? (error ? `1px solid ${warningColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
       }}
     >
       {completed ? error ? icon : <CheckIcon /> : icon}

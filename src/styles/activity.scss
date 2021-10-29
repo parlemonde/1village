@@ -113,3 +113,18 @@
     min-width: 3rem;
   }
 }
+
+.mascotte-rules-list {
+  margin: 0 0 0 1.5rem;
+  padding: 0;
+  list-style-type: none;
+
+  li {
+    margin: 1rem 0;
+  }
+
+  li:before {
+    content: attr(data-emoji);
+    margin-left: -1.5rem;
+  }
+}

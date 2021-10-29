@@ -13,4 +13,5 @@ export const helpColorDarker = '#cfbac3';
 export const successColor = '#008000';
 export const errorColor = '#d93939';
 export const errorColorDarker = '#ad2d2d';
+export const warningColor = '#CA8621';
 export const bgPage = '#f5f5f5';

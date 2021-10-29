@@ -54,9 +54,9 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
     `Notre mascotte s’appelle ${data.mascotteName}, elle nous représente.\n${capitalize(data.mascotteDescription)}\n${capitalize(
       data.mascotteName,
     )} est ${data.personality1.toLowerCase()}, ${data.personality2.toLowerCase()} et ${data.personality3.toLowerCase()}.\n
-    Elle rêve d’aller dans ${
+    Notre mascotte rêve d’aller dans ${
       displayCountries.length > 0 ? ` ${displayCountries.length === 1 ? 'ce' : 'ces'} pays : ` + naturalJoin(displayCountries) + '.' : ' aucun pays.'
-    }\nElle joue ${data.game} et pratique ${data.sport}`,
+    }\nNotre mascotte joue ${data.game} et pratique ${data.sport}`,
   );
 
   const displayWantedLanguages = languages
@@ -66,10 +66,14 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
   const displayFluentLanguages = languages.filter((language) => data.fluentLanguages.includes(language.alpha3_b)).map((language) => language.french);
   const displayCurrencies = currencies.filter((currency) => data.currencies.includes(currency.code)).map((currency) => currency.name);
   content.push(
-    `Tous les élèves de notre classe, ${
-      displayFluentLanguages.length > 0 ? ' parle ' + naturalJoin(displayFluentLanguages) + '.' : ' ne parle aucune langue.'
-    }\nAu moins un élève de notre classe, ${
-      displayMinorLanguages.length > 0 ? ' parle : ' + naturalJoin(displayMinorLanguages) + '.' : ' ne parle aucune langue.'
+    `${
+      displayFluentLanguages.length > 0
+        ? 'Tous les élèves de notre classe parlent : ' + naturalJoin(displayFluentLanguages) + '.'
+        : 'Les élèves de notre classe ne parlent aucune langue !'
+    }\n${
+      displayMinorLanguages.length > 0
+        ? 'Au moins un élève de notre classe parle: ' + naturalJoin(displayMinorLanguages) + '.'
+        : 'Aucun élève de notre classe ne parle de langue supplémentaire.'
     }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
       displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'apprend aucune langue."
     }\nNous ${displayCurrencies.length > 0 ? ' utilisons comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilisons aucune monnaie."}`,

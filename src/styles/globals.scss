@@ -240,6 +240,10 @@ a.text--success:hover {
     color: $success-color !important;
     font-weight: 500;
   }
+  .MuiStepLabel-label.MuiStepLabel-completed.Mui-error {
+    color: $warning-color !important;
+    font-weight: 500;
+  }
 }
 
 .width-900 {

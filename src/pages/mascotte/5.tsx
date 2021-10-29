@@ -20,7 +20,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
-import { errorColor, successColor } from 'src/styles/variables.const';
+import { successColor, warningColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
@@ -166,12 +166,12 @@ const MascotteStep4 = () => {
                 </Button>
               </div>
             )}
-            <div className="preview-block" style={{ border: `1px dashed ${!isFirstStepValid(data) ? errorColor : successColor}` }}>
+            <div className="preview-block" style={{ border: `1px dashed ${!isFirstStepValid(data) ? warningColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/1');
                 }}
-                status={!isFirstStepValid(data) ? 'error' : 'success'}
+                status={!isFirstStepValid(data) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>
@@ -190,12 +190,12 @@ const MascotteStep4 = () => {
                 )}
               </div>
             </div>
-            <div className="preview-block" style={{ border: `1px dashed ${!isSecondStepValid(data) ? errorColor : successColor}` }}>
+            <div className="preview-block" style={{ border: `1px dashed ${!isSecondStepValid(data) ? warningColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/2');
                 }}
-                status={!isSecondStepValid(data) ? 'error' : 'success'}
+                status={!isSecondStepValid(data) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <Grid container spacing={3}>
@@ -217,12 +217,12 @@ const MascotteStep4 = () => {
                 </Grid>
               </Grid>
             </div>
-            <div className="preview-block" style={{ border: `1px dashed ${!isThirdStepValid(data) ? errorColor : successColor}` }}>
+            <div className="preview-block" style={{ border: `1px dashed ${!isThirdStepValid(data) ? warningColor : successColor}` }}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/3');
                 }}
-                status={!isThirdStepValid(data) ? 'error' : 'success'}
+                status={!isThirdStepValid(data) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>

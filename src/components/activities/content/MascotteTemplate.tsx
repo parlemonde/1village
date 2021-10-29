@@ -19,7 +19,8 @@ export const MascotteTemplate = ({ user }: { user: User }) => (
         <p className="text">
           {'Vous, '}
           <UserDisplayName className="text" user={user} />
-          {` à ${user.city}, n'avez pas encore crée votre mascotte`}
+          {` à ${user.city}, n'avez pas encore créé `}
+          <strong>votre mascotte</strong>
         </p>
       </div>
       <UserIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />
