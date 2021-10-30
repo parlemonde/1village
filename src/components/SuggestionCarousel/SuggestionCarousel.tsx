@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import Card from '@material-ui/core/Card';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import Card from '@mui/material/Card';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { Button } from '@mui/material';
+import { withStyles } from '@mui/styles';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { useResizeObserver } from 'src/hooks/useResizeObserver';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 
 import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isMascotte, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';

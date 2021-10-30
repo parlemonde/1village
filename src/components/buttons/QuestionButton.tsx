@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Popover from '@material-ui/core/Popover';
-import HelpIcon from '@material-ui/icons/Help';
+import HelpIcon from '@mui/icons-material/Help';
+import Popover from '@mui/material/Popover';
 
 interface QuestionButtonProps {
   helpMessage: string | React.ReactNode | React.ReactNodeArray;

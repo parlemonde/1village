@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import { Button, Divider, TextField } from '@material-ui/core';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { Alert } from '@material-ui/lab';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Alert from '@mui/material/Alert';
+import { Button, Divider, TextField } from '@mui/material';
 
 import type { ImgCroppieRef } from 'src/components/ImgCroppie';
 import { ImgCroppie } from 'src/components/ImgCroppie';

@@ -1,15 +1,15 @@
 import React from 'react';
 
-import NoSsr from '@material-ui/core/NoSsr';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Table from '@material-ui/core/Table';
-import type { Theme as MaterialTheme } from '@material-ui/core/styles';
-import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
+import NoSsr from '@mui/material/NoSsr';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Table from '@mui/material/Table';
+import type { Theme as MaterialTheme } from '@mui/styles';
+import { makeStyles, createStyles, withStyles } from '@mui/styles';
 
 const useTableStyles = makeStyles((theme: MaterialTheme) =>
   createStyles({

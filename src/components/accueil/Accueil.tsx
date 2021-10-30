@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';

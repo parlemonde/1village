@@ -2,16 +2,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import IconButton from '@material-ui/core/IconButton';
-import MaterialLink from '@material-ui/core/Link';
-import Tooltip from '@material-ui/core/Tooltip';
-import { Button, NoSsr } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import MaterialLink from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
+import { Button, NoSsr } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';

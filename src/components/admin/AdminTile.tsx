@@ -7,11 +7,11 @@ interface AdminTileProps {
   style?: React.CSSProperties;
 }
 
-import Paper from '@material-ui/core/Paper';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import type { Theme as MaterialTheme } from '@material-ui/core/styles';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import Paper from '@mui/material/Paper';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import type { Theme as MaterialTheme } from '@mui/styles';
+import { makeStyles, createStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: MaterialTheme) =>
   createStyles({

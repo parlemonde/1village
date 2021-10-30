@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Switch } from '@material-ui/core';
+import { TextField, Switch } from '@mui/material';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';

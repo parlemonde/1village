@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.constants';
 import type { DefiActivity } from 'src/activity-types/defi.types';

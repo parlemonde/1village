@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';

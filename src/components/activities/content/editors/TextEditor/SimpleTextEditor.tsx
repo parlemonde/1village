@@ -17,10 +17,10 @@ import {
 import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
-import Paper from '@material-ui/core/Paper';
-import type { Theme } from '@material-ui/core/styles';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Divider } from '@material-ui/core';
+import Paper from '@mui/material/Paper';
+import type { Theme } from '@mui/material/styles';
+import { Divider } from '@mui/material';
+import { makeStyles, createStyles } from '@mui/styles';
 
 import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
 

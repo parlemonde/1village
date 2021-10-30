@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import { Card, CircularProgress } from '@material-ui/core';
+import { Card, CircularProgress } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
 import { primaryColor } from 'src/styles/variables.const';

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import IconButton from '@material-ui/core/IconButton';
-import type { Theme } from '@material-ui/core/styles';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import type { Theme } from '@mui/material/styles';
+import { makeStyles, createStyles } from '@mui/styles';
 
 import { Modal } from 'src/components/Modal';
 

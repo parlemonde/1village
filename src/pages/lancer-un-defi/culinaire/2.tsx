@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ButtonBase, Grid, TextField } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonBase, Grid, TextField } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isCooking } from 'src/activity-types/defi.constants';

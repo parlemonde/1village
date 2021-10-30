@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import MaterialLink from '@material-ui/core/Link';
-import { Button, TextField } from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import MaterialLink from '@mui/material/Link';
+import { Button, TextField } from '@mui/material';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';

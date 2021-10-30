@@ -4,11 +4,11 @@ import ReactPlayer from 'react-player';
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import { Button, Divider, TextField } from '@material-ui/core';
-import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import SettingsIcon from '@material-ui/icons/Settings';
-import { Alert } from '@material-ui/lab';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Alert from '@mui/material/Alert';
+import { Button, Divider, TextField } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';

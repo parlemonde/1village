@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { ButtonBase, Card } from '@material-ui/core';
-import AppsIcon from '@material-ui/icons/Apps';
+import AppsIcon from '@mui/icons-material/Apps';
+import { ButtonBase, Card } from '@mui/material';
 
 import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';

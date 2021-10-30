@@ -1,12 +1,12 @@
 import React from 'react';
 
-import type { Theme } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/core/styles';
-import FormatBoldIcon from '@material-ui/icons/FormatBold';
-import FormatItalicIcon from '@material-ui/icons/FormatItalic';
-import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ToggleButton from '@material-ui/lab/ToggleButton';
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import type { Theme } from '@mui/material/styles';
+import { withStyles } from '@mui/styles';
 
 const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
   grouped: {

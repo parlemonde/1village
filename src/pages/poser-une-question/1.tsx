@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import type { QuestionActivity } from 'src/activity-types/question.types';

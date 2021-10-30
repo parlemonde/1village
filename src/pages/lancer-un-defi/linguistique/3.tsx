@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import { FormControl, Select, MenuItem } from '@material-ui/core';
+import { FormControl, Select, MenuItem } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';

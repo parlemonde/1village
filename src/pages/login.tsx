@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import qs from 'query-string';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import TextField from '@material-ui/core/TextField';
-import { NoSsr } from '@material-ui/core';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import TextField from '@mui/material/TextField';
+import { NoSsr } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { UserContext } from 'src/contexts/userContext';

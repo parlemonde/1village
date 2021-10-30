@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { Map } from 'src/components/Map';
 import { icons, DESC } from 'src/components/activities/utils';

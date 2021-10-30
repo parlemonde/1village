@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, Card } from '@material-ui/core';
+import { Button, Card } from '@mui/material';
 
 import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import type { EnigmeActivity } from 'src/activity-types/enigme.types';

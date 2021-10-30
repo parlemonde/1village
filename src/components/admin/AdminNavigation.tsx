@@ -1,18 +1,18 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Toolbar from '@material-ui/core/Toolbar';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import GroupIcon from '@material-ui/icons/Group';
-import InsertChartOutlinedOutlinedIcon from '@material-ui/icons/InsertChartOutlinedOutlined';
-import LanguageIcon from '@material-ui/icons/Language';
-import TimelineIcon from '@material-ui/icons/Timeline';
+import GroupIcon from '@mui/icons-material/Group';
+import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutlinedOutlined';
+import LanguageIcon from '@mui/icons-material/Language';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import Toolbar from '@mui/material/Toolbar';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const drawerWidth = 220;
 

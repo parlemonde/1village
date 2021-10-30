@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Button, CircularProgress } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Button, CircularProgress } from '@mui/material';
 
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { UserContext } from 'src/contexts/userContext';

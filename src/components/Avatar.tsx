@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Avatar } from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
+import PersonIcon from '@mui/icons-material/Person';
+import { Avatar } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';

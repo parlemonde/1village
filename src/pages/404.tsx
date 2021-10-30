@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';

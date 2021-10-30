@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Box } from '@material-ui/core';
+import { Grid, Box } from '@mui/material';
 
 import type { PresentationMascotteActivity } from 'src/activity-types/presentation.types';
 import { AvatarImg } from 'src/components/Avatar';

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isEco, ECO_DEFIS } from 'src/activity-types/defi.constants';

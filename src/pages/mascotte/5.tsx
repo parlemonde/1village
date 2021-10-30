@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, Grid, Backdrop, Box } from '@material-ui/core';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Button, Grid, Backdrop, Box } from '@mui/material';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { getMascotteContent } from 'src/activity-types/mascotte.constants';

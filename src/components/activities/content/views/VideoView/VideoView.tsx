@@ -2,7 +2,7 @@ import { useSnackbar } from 'notistack';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button, CircularProgress } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { UserContext } from 'src/contexts/userContext';

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { ButtonGroup, Button, Menu, MenuItem, Divider } from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { ButtonGroup, Button, Menu, MenuItem, Divider } from '@mui/material';
 
 import { capitalize } from 'src/utils';
 

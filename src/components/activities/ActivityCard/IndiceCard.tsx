@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { INDICE_TYPES } from 'src/activity-types/indice.constants';
 import type { IndiceActivity } from 'src/activity-types/indice.types';

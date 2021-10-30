@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
 import { RedButton } from 'src/components/buttons/RedButton';

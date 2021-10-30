@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 

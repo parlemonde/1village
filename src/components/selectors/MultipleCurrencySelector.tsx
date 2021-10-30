@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 import { useCurrencies } from 'src/services/useCurrencies';
 import type { Currency } from 'types/currency.type';

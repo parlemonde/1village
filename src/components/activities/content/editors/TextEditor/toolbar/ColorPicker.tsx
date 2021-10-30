@@ -1,12 +1,12 @@
 import React from 'react';
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Paper from '@material-ui/core/Paper';
-import type { Theme } from '@material-ui/core/styles';
-import { makeStyles, createStyles, withStyles } from '@material-ui/core/styles';
-import FormatColorTextIcon from '@material-ui/icons/FormatColorText';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ToggleButton from '@material-ui/lab/ToggleButton';
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Paper from '@mui/material/Paper';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import type { Theme } from '@mui/material/styles';
+import { makeStyles, createStyles, withStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

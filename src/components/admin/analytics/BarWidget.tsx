@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { withStyles } from '@material-ui/core/styles';
-import { Tab, Tabs, Paper } from '@material-ui/core';
+import { Tab, Tabs, Paper } from '@mui/material';
+import { withStyles } from '@mui/styles';
 
 import { primaryColorLight } from 'src/styles/variables.const';
 

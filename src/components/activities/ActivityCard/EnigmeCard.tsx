@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeActivity } from 'src/activity-types/enigme.types';

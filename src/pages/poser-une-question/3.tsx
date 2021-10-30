@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';

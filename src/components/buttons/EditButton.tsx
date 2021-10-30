@@ -1,11 +1,11 @@
 import React from 'react';
 
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import type { Theme } from '@material-ui/core/styles';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import type { ButtonProps } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import type { Theme } from '@mui/material/styles';
+import type { ButtonProps } from '@mui/material';
+import { makeStyles, createStyles } from '@mui/styles';
 
 import { successColor, errorColor, warningColor } from 'src/styles/variables.const';
 

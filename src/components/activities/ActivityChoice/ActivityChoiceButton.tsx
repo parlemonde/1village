@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import ButtonBase from '@material-ui/core/ButtonBase';
+import ButtonBase from '@mui/material/ButtonBase';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 

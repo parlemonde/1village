@@ -14,9 +14,9 @@ import {
   Mesh,
 } from 'three';
 
-import { Button, ButtonGroup, CircularProgress } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Button, ButtonGroup, CircularProgress } from '@mui/material';
 
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { clamp, debounce, throttle } from 'src/utils';

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CardActionArea from '@material-ui/core/CardActionArea';
-import Card from '@material-ui/core/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import Card from '@mui/material/Card';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import Acti1 from 'src/svg/activities/acti1.svg';

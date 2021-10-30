@@ -1,9 +1,9 @@
 import React from 'react';
 
-import type { Theme } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/core/styles';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import type { Theme } from '@mui/material/styles';
+import { withStyles } from '@mui/styles';
 
 const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
   grouped: {

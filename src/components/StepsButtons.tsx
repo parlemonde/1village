@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Button } from '@mui/material';
 
 interface StepsButtonProps {
   prev?: string | (() => void);

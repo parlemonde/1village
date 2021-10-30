@@ -1,9 +1,9 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import { Button, Divider, TextField } from '@material-ui/core';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { Alert } from '@material-ui/lab';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Alert from '@mui/material/Alert';
+import { Button, Divider, TextField } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';

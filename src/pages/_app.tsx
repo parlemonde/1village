@@ -11,6 +11,8 @@ import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
 import 'src/styles/se-presenter.scss';
 
+import type { EmotionCache } from '@emotion/react';
+import { CacheProvider } from '@emotion/react';
 import App from 'next/app';
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
@@ -20,8 +22,8 @@ import { ReactQueryDevtools } from 'react-query-devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import React from 'react';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
@@ -31,6 +33,7 @@ import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
+import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
 import { initH5p } from 'src/utils/initH5p';
 import type { User } from 'types/user.type';
@@ -39,7 +42,10 @@ interface MyAppOwnProps {
   csrfToken: string | null;
   user: User | null;
 }
-type MyAppProps = AppProps & MyAppOwnProps;
+type MyAppProps = AppProps &
+  MyAppOwnProps & {
+    emotionCache: EmotionCache;
+  };
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,11 +55,14 @@ const queryClient = new QueryClient({
   },
 });
 
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
+
 NProgress.configure({ showSpinner: false });
 
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
-} = ({ Component, pageProps, router, user: initialUser, csrfToken }: MyAppProps) => {
+} = ({ Component, pageProps, router, user: initialUser, csrfToken, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = React.useState<User | null>(initialUser);
 
   const onRouterChangeStart = (): void => {
@@ -102,11 +111,12 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   useAnalytics();
 
   return (
-    <>
+    <CacheProvider value={emotionCache}>
       <Head>
         <title key="app-title">1Village{isOnAdmin ? ' - Admin' : ''}</title>
         <meta key="app-viewport" name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
+
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SnackbarProvider
@@ -147,7 +157,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           </QueryClientProvider>
         </SnackbarProvider>
       </ThemeProvider>
-    </>
+    </CacheProvider>
   );
 };
 

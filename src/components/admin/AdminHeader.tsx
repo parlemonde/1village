@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import React from 'react';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import type { Theme } from '@material-ui/core/styles';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import { Button } from '@material-ui/core';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import type { Theme } from '@mui/material/styles';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { Button } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 
 interface ElevationScrollProps {
   children: React.ReactElement;

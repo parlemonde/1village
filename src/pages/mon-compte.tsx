@@ -1,12 +1,12 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import NoSsr from '@material-ui/core/NoSsr';
-import { TextField } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import NoSsr from '@mui/material/NoSsr';
+import { Alert, AlertTitle } from '@mui/material';
+import { TextField } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';

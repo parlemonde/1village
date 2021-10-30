@@ -2,15 +2,15 @@ import { useSnackbar } from 'notistack';
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
-import IconButton from '@material-ui/core/IconButton';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Table from '@material-ui/core/Table';
-import Tooltip from '@material-ui/core/Tooltip';
-import { createStyles, withStyles } from '@material-ui/core/styles';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import IconButton from '@mui/material/IconButton';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Table from '@mui/material/Table';
+import Tooltip from '@mui/material/Tooltip';
+import { createStyles, withStyles } from '@mui/styles';
 
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';

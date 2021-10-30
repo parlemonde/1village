@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-import { Button, CircularProgress, Paper } from '@material-ui/core';
+import { Button, CircularProgress, Paper } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserDisplayName } from 'src/components/UserDisplayName';

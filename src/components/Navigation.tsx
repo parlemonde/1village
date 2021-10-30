@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
-import Switch from '@material-ui/core/Switch';
-import { Button } from '@material-ui/core';
+import Switch from '@mui/material/Switch';
+import { Button } from '@mui/material';
 
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';

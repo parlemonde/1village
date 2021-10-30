@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import type { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';

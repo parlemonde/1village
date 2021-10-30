@@ -1,5 +1,5 @@
-import { frFR } from '@material-ui/core/locale';
-import { createTheme } from '@material-ui/core/styles';
+import { frFR } from '@mui/material/locale';
+import { createTheme } from '@mui/material/styles';
 
 import { primaryColor, secondaryColor, successColor, errorColor, bgPage } from './variables.const';
 
@@ -44,16 +44,20 @@ const theme = createTheme(
         fontSize: '0.95rem',
       },
     },
-    overrides: {
+    components: {
       MuiButton: {
-        root: {
-          textTransform: 'none',
-          borderRadius: '12px',
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            borderRadius: '12px',
+          },
         },
       },
       MuiInputLabel: {
-        shrink: {
-          transform: 'translate(0, 1.5px) scale(0.9)',
+        styleOverrides: {
+          shrink: {
+            transform: 'translate(0, 1.5px) scale(0.9)',
+          },
         },
       },
     },

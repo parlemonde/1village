@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import { bgPage } from 'src/styles/variables.const';

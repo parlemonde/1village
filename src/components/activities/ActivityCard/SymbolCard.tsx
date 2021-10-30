@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
 import type { SymbolActivity } from 'src/activity-types/symbol.types';

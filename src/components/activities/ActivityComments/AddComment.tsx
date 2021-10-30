@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, ButtonBase, CircularProgress, Tooltip } from '@material-ui/core';
+import { Button, ButtonBase, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';

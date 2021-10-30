@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
 
 import { H5p } from 'src/components/H5p';
 import { Modal } from 'src/components/Modal';

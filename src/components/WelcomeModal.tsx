@@ -1,11 +1,11 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import MobileStepper from '@material-ui/core/MobileStepper';
-import { Checkbox } from '@material-ui/core';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import Button from '@mui/material/Button';
+import MobileStepper from '@mui/material/MobileStepper';
+import { Checkbox } from '@mui/material';
 
 import { MissingStepModal } from 'src/components/MissingStepModal';
 import { Modal } from 'src/components/Modal';

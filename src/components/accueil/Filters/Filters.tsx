@@ -1,8 +1,8 @@
 import React from 'react';
 
-import type { CheckboxProps } from '@material-ui/core/Checkbox';
-import Checkbox from '@material-ui/core/Checkbox';
-import { withStyles } from '@material-ui/core/styles';
+import type { CheckboxProps } from '@mui/material/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
+import { withStyles } from '@mui/styles';
 
 import { Flag } from 'src/components/Flag';
 import { successColor } from 'src/styles/variables.const';

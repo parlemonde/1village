@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Object3D, Scene, Raycaster, Camera } from 'three';
 
-import Card from '@material-ui/core/Card';
+import Card from '@mui/material/Card';
 
 import type { User } from 'types/user.type';
 
