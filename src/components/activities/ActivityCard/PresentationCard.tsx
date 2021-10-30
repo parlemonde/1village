@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
-import type { PresentationThematiqueActivity } from 'src/activity-types/presentation.types';
+import type { PresentationActivity } from 'src/activity-types/presentation.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
@@ -13,14 +13,7 @@ import { htmlToText } from 'src/utils';
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 
-export const PresentationCard = ({
-  activity,
-  isSelf,
-  noButtons,
-  isDraft,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<PresentationThematiqueActivity>) => {
+export const PresentationCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<PresentationActivity>) => {
   const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);
   const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';

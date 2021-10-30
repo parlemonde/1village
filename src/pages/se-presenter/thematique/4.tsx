@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
+import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -32,7 +32,7 @@ const PresentationStep4 = () => {
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/se-presenter');
-    } else if (activity && (!isPresentation(activity) || !isThematique(activity))) {
+    } else if (activity && !isPresentation(activity)) {
       router.push('/se-presenter');
     }
   }, [activity, router]);
