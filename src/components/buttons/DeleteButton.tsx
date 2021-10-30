@@ -3,7 +3,6 @@ import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import type { Theme } from '@mui/material/styles';
-import { makeStyles, createStyles } from '@mui/styles';
 
 import { Modal } from 'src/components/Modal';
 
@@ -16,27 +15,24 @@ interface DeleteButtonProps {
   onDelete?(): void;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    red: {
-      backgroundColor: theme.palette.error.main,
-      color: 'white',
-      '&:hover': {
-        backgroundColor: theme.palette.error.light,
-      },
+const styles = {
+  red: {
+    backgroundColor: (theme: Theme) => theme.palette.error.main,
+    color: 'white',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => theme.palette.error.light,
     },
-    primary: {
-      border: `1px solid ${theme.palette.primary.main}`,
-    },
-    secondary: {
-      border: `1px solid ${theme.palette.secondary.main}`,
-    },
-  }),
-);
+  },
+  primary: {
+    border: (theme: Theme) => `1px solid ${theme.palette.primary.main}`,
+  },
+  secondary: {
+    border: (theme: Theme) => `1px solid ${theme.palette.secondary.main}`,
+  },
+};
 
 export const DeleteButton = ({ size = 'small', color = 'primary', confirmLabel, confirmTitle, onDelete = () => {}, style }: DeleteButtonProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const classes = useStyles();
 
   return (
     <>
@@ -50,8 +46,8 @@ export const DeleteButton = ({ size = 'small', color = 'primary', confirmLabel, 
         }}
         size={size}
         color={color === 'red' ? undefined : color}
-        className={classes[color]}
         style={style}
+        sx={styles[color]}
         aria-label="delete"
       >
         <DeleteIcon />

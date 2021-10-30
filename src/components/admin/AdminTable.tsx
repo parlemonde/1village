@@ -8,51 +8,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Table from '@mui/material/Table';
-import type { Theme as MaterialTheme } from '@mui/styles';
-import { makeStyles, createStyles, withStyles } from '@mui/styles';
-
-const useTableStyles = makeStyles((theme: MaterialTheme) =>
-  createStyles({
-    toolbar: {
-      backgroundColor: theme.palette.secondary.main,
-      color: 'white',
-      fontWeight: 'bold',
-      minHeight: 'unset',
-      padding: '8px 8px 8px 16px',
-    },
-    title: {
-      flex: '1 1 100%',
-    },
-    button: {
-      color: 'white',
-    },
-    visuallyHidden: {
-      border: 0,
-      clip: 'rect(0 0 0 0)',
-      height: 1,
-      margin: -1,
-      overflow: 'hidden',
-      padding: 0,
-      position: 'absolute',
-      top: 20,
-      width: 1,
-    },
-  }),
-);
-
-const StyledTableRow = withStyles(() =>
-  createStyles({
-    root: {
-      backgroundColor: 'white',
-      '&:nth-of-type(even)': {
-        backgroundColor: 'rgb(224 239 232)',
-      },
-      '&.sortable-ghost': {
-        opacity: 0,
-      },
-    },
-  }),
-)(TableRow);
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
@@ -75,7 +30,6 @@ interface AdminTableProps {
 }
 
 export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, columns, actions }: AdminTableProps) => {
-  const classes = useTableStyles();
   const [options, setTableOptions] = React.useState<TableOptions>({
     page: 1,
     limit: 10,
@@ -119,7 +73,16 @@ export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, co
           </TableBody>
         ) : (
           <>
-            <TableHead style={{ borderBottom: '1px solid white' }} className={classes.toolbar}>
+            <TableHead
+              style={{ borderBottom: '1px solid white' }}
+              sx={{
+                backgroundColor: (theme) => theme.palette.secondary.main,
+                color: 'white',
+                fontWeight: 'bold',
+                minHeight: 'unset',
+                padding: '8px 8px 8px 16px',
+              }}
+            >
               <TableRow>
                 {columns.map((c) => (
                   <TableCell key={c.key} style={{ color: 'white', fontWeight: 'bold' }}>
@@ -127,7 +90,21 @@ export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, co
                       <TableSortLabel active={options.order === c.key} direction={options.sort} onClick={onSortBy(c.key)}>
                         {c.label}
                         {options.order === c.label ? (
-                          <span className={classes.visuallyHidden}>{options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}</span>
+                          <span
+                            style={{
+                              border: 0,
+                              clip: 'rect(0 0 0 0)',
+                              height: 1,
+                              margin: -1,
+                              overflow: 'hidden',
+                              padding: 0,
+                              position: 'absolute',
+                              top: 20,
+                              width: 1,
+                            }}
+                          >
+                            {options.sort === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          </span>
                         ) : null}
                       </TableSortLabel>
                     ) : (
@@ -144,7 +121,18 @@ export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, co
             </TableHead>
             <TableBody>
               {displayedData.map((d, index) => (
-                <StyledTableRow key={d.id}>
+                <TableRow
+                  key={d.id}
+                  sx={{
+                    backgroundColor: 'white',
+                    '&:nth-of-type(even)': {
+                      backgroundColor: 'rgb(224 239 232)',
+                    },
+                    '&.sortable-ghost': {
+                      opacity: 0,
+                    },
+                  }}
+                >
                   {columns.map((c) => (
                     <TableCell key={`${d.id}_${c.key}`}>{d[c.key] !== undefined ? d[c.key] : ''}</TableCell>
                   ))}
@@ -153,7 +141,7 @@ export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, co
                       {actions(d.id, index)}
                     </TableCell>
                   )}
-                </StyledTableRow>
+                </TableRow>
               ))}
               {usePagination && (
                 <TableRow>
@@ -163,7 +151,7 @@ export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, co
                     rowsPerPage={options.limit || 10}
                     page={(options.page || 1) - 1}
                     onPageChange={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                   />
                 </TableRow>
               )}

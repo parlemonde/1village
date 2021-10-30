@@ -5,16 +5,6 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import type { Theme } from '@mui/material/styles';
-import { makeStyles, createStyles, withStyles } from '@mui/styles';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      border: `1px solid ${theme.palette.divider}`,
-    },
-  }),
-);
 
 const colors = [
   'rgb(46, 52, 59)',
@@ -43,19 +33,6 @@ const colors = [
   'rgb(124,112,107)',
 ];
 
-const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
-  grouped: {
-    margin: theme.spacing(0.5),
-    border: 'none',
-    '&:not(:first-child)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-child': {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}))(ToggleButtonGroup);
-
 type ColorPickerProps = {
   value: string;
   onChange(value: string): void;
@@ -63,7 +40,6 @@ type ColorPickerProps = {
 
 export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const classes = useStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -83,15 +59,24 @@ export const ColorPicker = ({ value, onChange }: ColorPickerProps) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <div>
-        <StyledToggleButtonGroup size="small" aria-label="text color">
+        <ToggleButtonGroup
+          size="small"
+          aria-label="text color"
+          sx={{
+            '& .MuiToggleButtonGroup-grouped': {
+              m: 0.5,
+              border: 'none',
+            },
+          }}
+        >
           <ToggleButton value="bold" aria-label="bold" onMouseDown={handleClick}>
             <FormatColorTextIcon style={{ color: value || 'rgb(46, 52, 59)' }} />
           </ToggleButton>
-        </StyledToggleButtonGroup>
+        </ToggleButtonGroup>
         <div style={{ position: 'relative' }}>
           {isOpen && (
             <div style={{ position: 'absolute', left: '-3.5rem', bottom: '-6.5rem', zIndex: 1 }}>
-              <Paper elevation={1} className={classes.paper}>
+              <Paper elevation={1} sx={{ border: (theme) => `1px solid ${theme.palette.divider}` }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', width: '10rem', padding: '0.2rem' }}>
                   {colors.map((c, index) => (
                     <div

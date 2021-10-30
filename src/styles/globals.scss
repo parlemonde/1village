@@ -232,15 +232,15 @@ a.text--success:hover {
     margin-top: 0.25rem !important;
     color: $primary-color;
   }
-  .MuiStepLabel-label.MuiStepLabel-active {
+  .MuiStepLabel-label.Mui-active {
     color: $primary-color !important;
     font-weight: 500;
   }
-  .MuiStepLabel-label.MuiStepLabel-completed {
+  .MuiStepLabel-label.Mui-completed {
     color: $success-color !important;
     font-weight: 500;
   }
-  .MuiStepLabel-label.MuiStepLabel-completed.Mui-error {
+  .MuiStepLabel-label.Mui-completed.Mui-error {
     color: $warning-color !important;
     font-weight: 500;
   }

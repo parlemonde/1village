@@ -5,21 +5,6 @@ import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import type { Theme } from '@mui/material/styles';
-import { withStyles } from '@mui/styles';
-
-const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
-  grouped: {
-    margin: theme.spacing(0.5),
-    border: 'none',
-    '&:not(:first-child)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-child': {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}))(ToggleButtonGroup);
 
 type InlineProps = {
   value: {
@@ -40,7 +25,23 @@ export const InlineButtons = ({ value, onChange }: InlineProps) => {
   );
 
   return (
-    <StyledToggleButtonGroup size="small" value={formats} aria-label="text formatting">
+    <ToggleButtonGroup
+      size="small"
+      value={formats}
+      aria-label="text formatting"
+      sx={{
+        '& .MuiToggleButtonGroup-grouped': {
+          m: 0.5,
+          border: 'none',
+          '&:not(:first-of-type)': {
+            borderRadius: '4px',
+          },
+          '&:not(:last-of-type)': {
+            borderRadius: '4px',
+          },
+        },
+      }}
+    >
       <ToggleButton
         value="BOLD"
         aria-label="bold"
@@ -71,6 +72,6 @@ export const InlineButtons = ({ value, onChange }: InlineProps) => {
       >
         <FormatUnderlinedIcon />
       </ToggleButton>
-    </StyledToggleButtonGroup>
+    </ToggleButtonGroup>
   );
 };

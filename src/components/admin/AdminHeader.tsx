@@ -4,22 +4,12 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import type { Theme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { Button } from '@mui/material';
-import { createStyles, makeStyles } from '@mui/styles';
 
 interface ElevationScrollProps {
   children: React.ReactElement;
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-    },
-  }),
-);
 
 function ElevationScroll({ children }: ElevationScrollProps) {
   const trigger = useScrollTrigger({
@@ -32,12 +22,10 @@ function ElevationScroll({ children }: ElevationScrollProps) {
 }
 
 export const AdminHeader = () => {
-  const classes = useStyles();
-
   return (
     <>
       <ElevationScroll>
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
           <Toolbar variant="dense">
             <Typography variant="h6" style={{ flexGrow: 1 }}>
               1Village - Administrateur

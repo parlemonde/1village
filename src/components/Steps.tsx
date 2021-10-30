@@ -6,24 +6,8 @@ import type { StepIconProps } from '@mui/material/StepIcon';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import { withStyles } from '@mui/styles';
 
 import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
-
-const DotConnector = withStyles({
-  alternativeLabel: {
-    top: '16.5px',
-    left: '-2.5px',
-    right: 'unset',
-  },
-  line: {
-    border: 'none',
-    width: '5px',
-    height: '5px',
-    borderRadius: '2.5px',
-    backgroundColor: primaryColorLight2,
-  },
-})(StepConnector);
 
 const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
   return (
@@ -40,7 +24,7 @@ const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
         border: completed ? (error ? `1px solid ${warningColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
       }}
     >
-      {completed ? error ? icon : <CheckIcon /> : icon}
+      {completed && !error ? <CheckIcon /> : icon}
     </div>
   );
 };
@@ -55,7 +39,21 @@ export const Steps = ({ steps, activeStep = 0, errorSteps = [] }: StepsProps) =>
   return (
     <div className="custom-steps--container" style={{ position: 'relative' }}>
       <div style={{ position: 'absolute', top: '43px', left: '10%', right: '10%', borderTop: `1px solid ${primaryColorLight2}`, zIndex: 0 }}></div>
-      <Stepper activeStep={activeStep} alternativeLabel connector={<DotConnector />} style={{ zIndex: 1, position: 'relative', background: 'none' }}>
+      <Stepper
+        activeStep={activeStep}
+        alternativeLabel
+        connector={
+          <StepConnector
+            sx={{
+              top: '16.5px',
+              left: '-2.5px',
+              right: 'unset',
+              '& .MuiStepConnector-line': { border: 'none', width: '5px', height: '5px', borderRadius: '2.5px', backgroundColor: primaryColorLight2 },
+            }}
+          />
+        }
+        sx={{ zIndex: 1, position: 'relative', background: 'none', p: 3 }}
+      >
         {steps.map((label, index) => (
           <Step key={label}>
             <StepLabel StepIconComponent={StepIcon} error={errorSteps.includes(index)}>

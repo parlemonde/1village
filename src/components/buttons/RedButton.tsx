@@ -1,14 +1,19 @@
+import * as React from 'react';
+
+import type { ButtonProps } from '@mui/material/Button';
 import Button from '@mui/material/Button';
-import { withStyles } from '@mui/styles';
 
 import { errorColor, errorColorDarker } from 'src/styles/variables.const';
 
-export const RedButton = withStyles(() => ({
-  root: {
-    color: 'white',
-    backgroundColor: errorColor,
-    '&:hover': {
-      backgroundColor: errorColorDarker,
-    },
-  },
-}))(Button);
+export const RedButton = (props: ButtonProps) => (
+  <Button
+    {...props}
+    sx={{
+      color: 'white',
+      backgroundColor: errorColor,
+      '&:hover': {
+        backgroundColor: errorColorDarker,
+      },
+    }}
+  />
+);

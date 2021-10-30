@@ -1,20 +1,11 @@
 import React from 'react';
 
-import type { CheckboxProps } from '@mui/material/Checkbox';
 import Checkbox from '@mui/material/Checkbox';
-import { withStyles } from '@mui/styles';
 
 import { Flag } from 'src/components/Flag';
-import { successColor } from 'src/styles/variables.const';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 
 import { FilterSelect } from './FilterSelect';
-
-const GreenCheckbox = withStyles({
-  checked: {
-    color: successColor,
-  },
-})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
 export const ACTIVITIES_PER_PHASE = [
   [
@@ -88,7 +79,8 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
       <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
         {countries.map((c) => (
           <label key={c} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
-            <GreenCheckbox
+            <Checkbox
+              color="success"
               style={{ padding: '0' }}
               checked={filters.countries[c] || false}
               onChange={(event) => {
@@ -105,7 +97,8 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
           </label>
         ))}
         <label style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
-          <GreenCheckbox
+          <Checkbox
+            color="success"
             style={{ padding: '0' }}
             checked={filters.pelico}
             onChange={(event) => {

@@ -2,21 +2,6 @@ import React from 'react';
 
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import type { Theme } from '@mui/material/styles';
-import { withStyles } from '@mui/styles';
-
-const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
-  grouped: {
-    margin: theme.spacing(0.5),
-    border: 'none',
-    '&:not(:first-child)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-child': {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}))(ToggleButtonGroup);
 
 type TitleChoiceProps = {
   value: 'unstyle' | 'header-one' | 'header-two';
@@ -25,7 +10,23 @@ type TitleChoiceProps = {
 
 export const TitleChoice = ({ value, onChange }: TitleChoiceProps) => {
   return (
-    <StyledToggleButtonGroup size="small" aria-label="text size" value={value}>
+    <ToggleButtonGroup
+      size="small"
+      aria-label="text size"
+      value={value}
+      sx={{
+        '& .MuiToggleButtonGroup-grouped': {
+          m: 0.5,
+          border: 'none',
+          '&:not(:first-of-type)': {
+            borderRadius: '4px',
+          },
+          '&:not(:last-of-type)': {
+            borderRadius: '4px',
+          },
+        },
+      }}
+    >
       <ToggleButton
         aria-label="left aligned"
         value="header-one"
@@ -46,6 +47,6 @@ export const TitleChoice = ({ value, onChange }: TitleChoiceProps) => {
       >
         Titre 2
       </ToggleButton>
-    </StyledToggleButtonGroup>
+    </ToggleButtonGroup>
   );
 };

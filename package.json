@@ -91,7 +91,6 @@
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.5",
     "@mui/material": "^5.0.6",
-    "@mui/styles": "^5.0.2",
     "ajv": "8.6.3",
     "ajv-formats": "^2.1.0",
     "argon2": "^0.27.1",

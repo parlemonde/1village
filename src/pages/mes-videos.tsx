@@ -10,7 +10,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Table from '@mui/material/Table';
 import Tooltip from '@mui/material/Tooltip';
-import { createStyles, withStyles } from '@mui/styles';
 
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
@@ -20,20 +19,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { useVideos } from 'src/services/useVideos';
 import { bgPage } from 'src/styles/variables.const';
 import type { Video } from 'types/video.type';
-
-const StyledTableRow = withStyles(() =>
-  createStyles({
-    root: {
-      backgroundColor: 'white',
-      '&:nth-of-type(even)': {
-        backgroundColor: bgPage,
-      },
-      '&.sortable-ghost': {
-        opacity: 0,
-      },
-    },
-  }),
-)(TableRow);
 
 const MesVideos = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
@@ -78,7 +63,18 @@ const MesVideos = () => {
               </TableHead>
               <TableBody>
                 {videos.map((video, index) => (
-                  <StyledTableRow key={video.id}>
+                  <TableRow
+                    key={video.id}
+                    sx={{
+                      backgroundColor: 'white',
+                      '&:nth-of-type(even)': {
+                        backgroundColor: bgPage,
+                      },
+                      '&.sortable-ghost': {
+                        opacity: 0,
+                      },
+                    }}
+                  >
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{video.name}</TableCell>
                     <TableCell>https://player.vimeo.com/video/{video.id}</TableCell>
@@ -103,7 +99,7 @@ const MesVideos = () => {
                         />
                       </Tooltip>
                     </TableCell>
-                  </StyledTableRow>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>

@@ -3,7 +3,6 @@ import React from 'react';
 
 import PersonIcon from '@mui/icons-material/Person';
 import { Avatar } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
@@ -11,7 +10,7 @@ import { getGravatarUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   large: {
     width: '140px',
     height: '140px',
@@ -24,7 +23,7 @@ const useStyles = makeStyles(() => ({
     width: '40px',
     height: '40px',
   },
-}));
+};
 
 type AvatarImgProps = {
   src?: string;
@@ -45,12 +44,11 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
   noLink = false,
   isRounded = true,
 }: React.PropsWithChildren<AvatarImgProps>) => {
-  const classes = useStyles();
   const isPelico = user && user.type >= UserType.MEDIATOR;
 
   if (isPelico) {
     return (
-      <Avatar alt={'avatar'} className={classes[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
+      <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
         <PelicoSouriant style={{ width: '80%', height: 'auto' }} />
       </Avatar>
     );
@@ -62,7 +60,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
     return (
       <Link href={`/activite/${user.mascotteId}`}>
         <a href={`/activite/${user.mascotteId}`}>
-          <Avatar alt={'avatar'} className={classes[size]} src={imgSrc} onClick={onClick} style={style}>
+          <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style}>
             {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
           </Avatar>
         </a>
@@ -70,7 +68,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
     );
   }
   return (
-    <Avatar alt={'avatar'} className={classes[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : null}>
+    <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : null}>
       {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
     </Avatar>
   );

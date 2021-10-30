@@ -1,25 +1,8 @@
 import React from 'react';
 
 import { Tab, Tabs, Paper } from '@mui/material';
-import { withStyles } from '@mui/styles';
 
 import { primaryColorLight } from 'src/styles/variables.const';
-
-const SmallTabs = withStyles({
-  root: {
-    minHeight: 'unset',
-  },
-})(Tabs);
-
-const SmallTab = withStyles({
-  root: {
-    minWidth: 'unset',
-    minHeight: 'unset',
-    padding: '0.25rem',
-    fontSize: '0.88rem',
-    textTransform: 'none',
-  },
-})(Tab);
 
 interface BarWidgetProps {
   name: string;
@@ -64,11 +47,15 @@ export const BarWidget = ({ name, datasets }: BarWidgetProps) => {
           <strong>{name}</strong>
         </div>
         {datasets.length > 1 && (
-          <SmallTabs value={tab} onChange={handleChange} indicatorColor="primary" textColor="primary">
+          <Tabs value={tab} onChange={handleChange} indicatorColor="primary" textColor="primary" sx={{ minHeight: 'unset' }}>
             {datasets.map((d) => (
-              <SmallTab key={d.name} label={d.name} />
+              <Tab
+                key={d.name}
+                label={d.name}
+                sx={{ minWidth: 'unset', minHeight: 'unset', padding: '0.25rem', fontSize: '0.88rem', textTransform: 'none' }}
+              />
             ))}
-          </SmallTabs>
+          </Tabs>
         )}
       </div>
 

@@ -6,22 +6,10 @@ import Card from '@mui/material/Card';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Button } from '@mui/material';
-import { withStyles } from '@mui/styles';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { useResizeObserver } from 'src/hooks/useResizeObserver';
 import { bgPage } from 'src/styles/variables.const';
-
-const StyledTab = withStyles({
-  root: {
-    minWidth: 0,
-    flex: 1,
-    fontSize: '0.95rem',
-    textTransform: 'unset',
-    padding: '0 12px 3px 12px',
-    minHeight: 'unset',
-  },
-})(Tab);
 
 interface SuggestionCarouselProps {
   suggestions: Array<{
@@ -132,13 +120,21 @@ const SuggestionCarousel = ({ suggestions, style }: SuggestionCarouselProps) => 
                     style={{ minHeight: 0 }}
                   >
                     {suggestions.map((s) => (
-                      <StyledTab
+                      <Tab
                         key={s.button}
                         label={
                           <span style={{ margin: 'auto', maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                             {s.button}
                           </span>
                         }
+                        sx={{
+                          minWidth: 0,
+                          flex: 1,
+                          fontSize: '0.95rem',
+                          textTransform: 'unset',
+                          padding: '0 12px 3px 12px',
+                          minHeight: 'unset',
+                        }}
                       />
                     ))}
                   </Tabs>

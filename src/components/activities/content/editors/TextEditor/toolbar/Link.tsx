@@ -7,32 +7,9 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import type { Theme } from '@mui/material/styles';
 import { TextField, Button } from '@mui/material';
-import { makeStyles, createStyles, withStyles } from '@mui/styles';
 
 import { primaryColor } from 'src/styles/variables.const';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      border: `1px solid ${theme.palette.divider}`,
-    },
-  }),
-);
-
-const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
-  grouped: {
-    margin: theme.spacing(0.5),
-    border: 'none',
-    '&:not(:first-child)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-child': {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}))(ToggleButtonGroup);
 
 export type LinkValue = {
   link: { target: string; title: string } | null;
@@ -50,7 +27,6 @@ type LinkPickerProps = {
 export const LinkPicker = ({ editorState, linkModalOpen, setLinkModalOpen, value, onChange }: LinkPickerProps) => {
   const [link, setLink] = React.useState('');
   const [target, setTarget] = React.useState('');
-  const classes = useStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -157,15 +133,24 @@ export const LinkPicker = ({ editorState, linkModalOpen, setLinkModalOpen, value
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <div>
-        <StyledToggleButtonGroup size="small" aria-label="text color">
+        <ToggleButtonGroup
+          size="small"
+          aria-label="text color"
+          sx={{
+            '& .MuiToggleButtonGroup-grouped': {
+              m: 0.5,
+              border: 'none',
+            },
+          }}
+        >
           <ToggleButton value="bold" aria-label="bold" onMouseDown={handleClick}>
             Lien
           </ToggleButton>
-        </StyledToggleButtonGroup>
+        </ToggleButtonGroup>
         <div style={{ position: 'relative' }}>
           {linkModalOpen && (
             <div style={{ position: 'absolute', left: '-3.5rem', bottom: '-8.5rem', zIndex: 1 }}>
-              <Paper elevation={1} className={classes.paper}>
+              <Paper elevation={1} sx={{ border: (theme) => `1px solid ${theme.palette.divider}` }}>
                 <div
                   style={{ display: 'flex', flexWrap: 'wrap', width: '14rem', padding: '0.2rem' }}
                   onMouseDown={(event) => {

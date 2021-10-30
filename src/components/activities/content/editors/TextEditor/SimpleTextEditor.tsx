@@ -18,9 +18,7 @@ import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
 import Paper from '@mui/material/Paper';
-import type { Theme } from '@mui/material/styles';
 import { Divider } from '@mui/material';
-import { makeStyles, createStyles } from '@mui/styles';
 
 import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
@@ -31,19 +29,6 @@ import type { LinkValue } from './toolbar/Link';
 import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      display: 'flex',
-      border: `1px solid ${theme.palette.divider}`,
-      flexWrap: 'wrap',
-    },
-    divider: {
-      margin: theme.spacing(1, 0.5),
-    },
-  }),
-);
 
 function blockStyleFn(block: ContentBlock): string {
   const blockAlignment = block.getData() && block.getData().get('text-align');
@@ -80,7 +65,6 @@ export const SimpleTextEditor = ({
   const [linkModalOpen, setLinkModalOpen] = React.useState(false);
   const editorContainerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<Editor>(null);
-  const classes = useStyles();
 
   const previousValue = React.useRef<string | null>(null);
   React.useEffect(() => {
@@ -260,7 +244,11 @@ export const SimpleTextEditor = ({
   const toolbar = (
     <Paper
       elevation={0}
-      className={classes.paper}
+      sx={{
+        display: 'flex',
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        flexWrap: 'wrap',
+      }}
       style={
         withBorder
           ? {
@@ -275,13 +263,13 @@ export const SimpleTextEditor = ({
       <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
       {noBlock || (
         <>
-          <Divider flexItem orientation="vertical" className={classes.divider} />
+          <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
           <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
-          <Divider flexItem orientation="vertical" className={classes.divider} />
+          <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
           <TitleChoice value={currentHeader as 'unstyle' | 'header-one' | 'header-two'} onChange={toggleBlockType} />
         </>
       )}
-      <Divider flexItem orientation="vertical" className={classes.divider} />
+      <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
       <ColorPicker value={currentColor} onChange={setInlineColor} />
       <LinkPicker
         editorState={editorState}

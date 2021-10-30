@@ -12,34 +12,16 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
-import { createStyles, makeStyles } from '@mui/styles';
 
-const drawerWidth = 220;
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: drawerWidth,
-    },
-    drawerContainer: {
-      overflow: 'auto',
-    },
-  }),
-);
-
-const tabs = ['villages', 'users', 'stats', 'analytics'];
+const DRAWER_WIDTH = 220;
+const TABS = ['villages', 'users', 'stats', 'analytics'];
 
 export const AdminNavigation = () => {
-  const classes = useStyles();
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);
 
   React.useEffect(() => {
-    const index = tabs.findIndex((tab) => tab === router.pathname.split('/')[2]);
+    const index = TABS.findIndex((tab) => tab === router.pathname.split('/')[2]);
     setSelectedTab(index);
   }, [router.pathname]);
 
@@ -49,14 +31,17 @@ export const AdminNavigation = () => {
 
   return (
     <Drawer
-      className={classes.drawer}
       variant="permanent"
-      classes={{
-        paper: classes.drawerPaper,
+      sx={{
+        width: DRAWER_WIDTH,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: DRAWER_WIDTH,
+        },
       }}
     >
       <Toolbar />
-      <div className={classes.drawerContainer}>
+      <div style={{ overflow: 'auto' }}>
         <List>
           <ListItem button selected={selectedTab === 0} onClick={goToPath('/admin/villages')}>
             <ListItemIcon>

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import { ButtonBase, TextField, withStyles, Card } from '@mui/material';
+import { ButtonBase, TextField, Card } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
@@ -10,15 +10,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-
-const StyledTextField = withStyles({
-  root: {
-    '& fieldset': {
-      borderStyle: 'dashed',
-      borderWidth: '1px!important',
-    },
-  },
-})(TextField);
 
 const Question2 = () => {
   const router = useRouter();
@@ -77,7 +68,7 @@ const Question2 = () => {
                     style={{ position: 'absolute', right: '0.25rem', top: '0.25rem', zIndex: 100 }}
                   />
                 )}
-                <StyledTextField
+                <TextField
                   fullWidth
                   multiline
                   variant="outlined"
@@ -86,6 +77,12 @@ const Question2 = () => {
                   value={c.value || ''}
                   onChange={onQuestionChange(index)}
                   FormHelperTextProps={{ style: { textAlign: 'right' } }}
+                  sx={{
+                    '& fieldset': {
+                      borderStyle: 'dashed',
+                      borderWidth: '1px!important',
+                    },
+                  }}
                 />
               </div>
             ))}

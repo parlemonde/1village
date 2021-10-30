@@ -5,8 +5,6 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import type { Theme } from '@mui/material/styles';
-import { makeStyles, withStyles, createStyles } from '@mui/styles';
 
 const emojis = [
   '😀',
@@ -141,34 +139,12 @@ const emojis = [
   '💯',
 ];
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      border: `1px solid ${theme.palette.divider}`,
-    },
-  }),
-);
-
-const StyledToggleButtonGroup = withStyles((theme: Theme) => ({
-  grouped: {
-    margin: theme.spacing(0.5),
-    border: 'none',
-    '&:not(:first-child)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-child': {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}))(ToggleButtonGroup);
-
 type EmojiPickerProps = {
   onChange(emoji: string): void;
 };
 
 export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const classes = useStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -188,15 +164,24 @@ export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <div>
-        <StyledToggleButtonGroup size="small" aria-label="text color">
+        <ToggleButtonGroup
+          size="small"
+          aria-label="text color"
+          sx={{
+            '& .MuiToggleButtonGroup-grouped': {
+              m: 0.5,
+              border: 'none',
+            },
+          }}
+        >
           <ToggleButton value="bold" aria-label="bold" onMouseDown={handleClick}>
             <InsertEmoticonIcon />
           </ToggleButton>
-        </StyledToggleButtonGroup>
+        </ToggleButtonGroup>
         <div style={{ position: 'relative' }}>
           {isOpen && (
             <div style={{ position: 'absolute', left: '-3.5rem', bottom: '-7.75rem', zIndex: 1 }}>
-              <Paper elevation={1} className={classes.paper}>
+              <Paper elevation={1} sx={{ border: (theme) => `1px solid ${theme.palette.divider}` }}>
                 <div style={{ maxHeight: '8rem', overflow: 'scroll' }}>
                   <div style={{ display: 'flex', flexWrap: 'wrap', width: '10rem', padding: '0.2rem' }}>
                     {emojis.map((c, index) => (

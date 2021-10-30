@@ -11,10 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import type { LinearProgressProps } from '@mui/material/LinearProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import type { Theme as MaterialTheme } from '@mui/material/styles';
 import { CircularProgress } from '@mui/material';
-import type { WithStyles } from '@mui/styles';
-import { createStyles, withStyles } from '@mui/styles';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -32,36 +29,32 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
   );
 }
 
-const styles = (theme: MaterialTheme) =>
-  createStyles({
-    root: {
-      margin: 0,
-      padding: theme.spacing(2),
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
-    },
-  });
-export interface DialogTitleProps extends WithStyles<typeof styles> {
+export type DialogTitleProps = React.PropsWithChildren<{
   id: string;
   onClose: () => void;
-}
-const DialogTitle = withStyles(styles)((props: React.PropsWithChildren<DialogTitleProps>) => {
-  const { children, classes, onClose, ...other } = props;
+}>;
+const DialogTitle = ({ children, id, onClose }: DialogTitleProps) => {
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    <MuiDialogTitle id={id} sx={{ margin: 0, p: 2 }}>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          aria-label="close"
+          sx={{
+            p: 1.5,
+            position: 'absolute',
+            right: (theme) => theme.spacing(1),
+            top: (theme) => theme.spacing(1),
+            color: 'grey.500',
+          }}
+          onClick={onClose}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
     </MuiDialogTitle>
   );
-});
+};
 
 interface ModalProps {
   open?: boolean;
