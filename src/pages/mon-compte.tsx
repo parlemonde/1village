@@ -16,7 +16,7 @@ import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
-import { helpColor } from 'src/styles/variables.const';
+import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
@@ -224,7 +224,14 @@ const Presentation = () => {
         />
         {editMode === 0 && (
           <div className="text-center">
-            <Button size="small" variant="contained" style={{ margin: '0.5rem' }} onClick={updateEditMode(-1)}>
+            <Button
+              color="inherit"
+              size="small"
+              sx={defaultContainedButtonStyle}
+              variant="contained"
+              style={{ margin: '0.5rem' }}
+              onClick={updateEditMode(-1)}
+            >
               Annuler
             </Button>
             <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
@@ -284,7 +291,7 @@ const Presentation = () => {
             </div>
             {editMode === 1 && (
               <div className="text-center">
-                <Button size="small" variant="contained" style={{ margin: '0.5rem' }} onClick={updateEditMode(-1)}>
+                <Button color="inherit" size="small" variant="contained" style={{ margin: '0.5rem' }} onClick={updateEditMode(-1)}>
                   Annuler
                 </Button>
                 <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>

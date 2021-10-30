@@ -26,7 +26,22 @@ export const useFullScreen = () => {
 
   const fullScreenButton = (
     <Tooltip title="Plein écran" enterDelay={500}>
-      <Button variant="outlined" style={{ marginTop: '0.5rem', padding: '5px', minWidth: 0, backgroundColor: 'white' }} onClick={toggleFullScreen}>
+      <Button
+        color="inherit"
+        variant="outlined"
+        sx={{
+          color: (theme) => theme.palette.text.primary,
+          border: '1px solid #c5c5c5',
+          marginTop: '0.5rem',
+          padding: '5px',
+          minWidth: 0,
+          backgroundColor: 'white',
+          '&:hover': {
+            backgroundColor: '#f5f5f5',
+          },
+        }}
+        onClick={toggleFullScreen}
+      >
         {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
       </Button>
     </Tooltip>

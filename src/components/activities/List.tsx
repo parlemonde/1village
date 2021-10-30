@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import { primaryColor } from 'src/styles/variables.const';
+import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import type { Activity } from 'types/activity.type';
 
@@ -82,6 +82,8 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
                     }}
                   >
                     <Button
+                      color="inherit"
+                      sx={defaultTextButtonStyle}
                       onClick={() => {
                         setResponseActivityId({ selectedActivityId: activity.id, responseActivityId: activity.responseActivityId });
                       }}
@@ -100,6 +102,8 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
                 <div style={{ display: 'inline-flex', width: '50%', flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', flexDirection: 'column', width: '6rem', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
+                      color="inherit"
+                      sx={defaultTextButtonStyle}
                       onClick={() => {
                         setResponseActivityId({ selectedActivityId: null, responseActivityId: null });
                       }}

@@ -18,6 +18,7 @@ import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
+import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import { countryToFlag } from 'src/utils';
 
@@ -79,11 +80,26 @@ const Villages = () => {
         title="Liste des villages"
         toolbarButton={
           <>
-            <Button variant="contained" style={{ flexShrink: 0, marginRight: '0.5rem' }} startIcon={<GetAppIcon />} onClick={onImportVillages}>
+            <Button
+              color="inherit"
+              sx={defaultContainedButtonStyle}
+              variant="contained"
+              style={{ flexShrink: 0, marginRight: '0.5rem' }}
+              startIcon={<GetAppIcon />}
+              onClick={onImportVillages}
+            >
               Importer depuis {SSO_HOSTNAME}
             </Button>
             <Link href="/admin/villages/new" passHref>
-              <Button component="a" href="/admin/villages/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
+              <Button
+                color="inherit"
+                sx={defaultContainedButtonStyle}
+                component="a"
+                href="/admin/villages/new"
+                variant="contained"
+                style={{ flexShrink: 0 }}
+                startIcon={<AddCircleIcon />}
+              >
                 Ajouter un village
               </Button>
             </Link>

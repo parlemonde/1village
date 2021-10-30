@@ -19,6 +19,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useUsers, useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
+import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
@@ -78,7 +79,15 @@ const Users = () => {
         title="Liste des utilisateurs"
         toolbarButton={
           <Link href="/admin/users/new" passHref>
-            <Button component="a" href="/admin/users/new" variant="contained" style={{ flexShrink: 0 }} startIcon={<AddCircleIcon />}>
+            <Button
+              color="inherit"
+              sx={defaultContainedButtonStyle}
+              component="a"
+              href="/admin/users/new"
+              variant="contained"
+              style={{ flexShrink: 0 }}
+              startIcon={<AddCircleIcon />}
+            >
               Ajouter un utilisateur
             </Button>
           </Link>

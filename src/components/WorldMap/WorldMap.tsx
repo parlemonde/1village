@@ -262,11 +262,44 @@ const WorldMap: React.FC = () => {
       ></canvas>
       {popover}
       <div style={{ position: 'absolute', left: '0.5rem', top: '0.5rem', display: 'flex', flexDirection: 'column' }}>
-        <ButtonGroup orientation="vertical">
-          <Button style={{ padding: '5px', minWidth: 0, backgroundColor: 'white' }} onClick={() => onZoom(-20)}>
+        <ButtonGroup
+          orientation="vertical"
+          sx={{
+            '& .MuiButtonGroup-grouped:hover': {
+              borderColor: '#c5c5c5',
+            },
+          }}
+        >
+          <Button
+            color="inherit"
+            sx={{
+              color: (theme) => theme.palette.text.primary,
+              border: '1px solid #c5c5c5',
+              padding: '5px',
+              minWidth: 0,
+              backgroundColor: 'white',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+              },
+            }}
+            onClick={() => onZoom(-20)}
+          >
             <AddIcon />
           </Button>
-          <Button style={{ padding: '5px', minWidth: 0, backgroundColor: 'white' }} onClick={() => onZoom(20)}>
+          <Button
+            color="inherit"
+            sx={{
+              color: (theme) => theme.palette.text.primary,
+              border: '1px solid #c5c5c5',
+              padding: '5px',
+              minWidth: 0,
+              backgroundColor: 'white',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+              },
+            }}
+            onClick={() => onZoom(20)}
+          >
             <RemoveIcon />
           </Button>
         </ButtonGroup>

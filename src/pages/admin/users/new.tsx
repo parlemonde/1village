@@ -17,6 +17,7 @@ import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
+import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
 import type { User } from 'types/user.type';
 import { UserType, userTypeNames } from 'types/user.type';
@@ -211,7 +212,7 @@ const NewUser = () => {
         </form>
       </AdminTile>
       <Link href="/admin/users" passHref>
-        <Button variant="outlined" style={{ margin: '1rem 0' }} component="a" href="/admin/users">
+        <Button color="inherit" variant="outlined" sx={defaultOutlinedButtonStyle} style={{ margin: '1rem 0' }} component="a" href="/admin/users">
           Retour
         </Button>
       </Link>

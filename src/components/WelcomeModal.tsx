@@ -13,7 +13,7 @@ import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useCountries } from 'src/services/useCountries';
-import { bgPage } from 'src/styles/variables.const';
+import { bgPage, defaultOutlinedButtonStyle, defaultTextButtonStyle } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
@@ -145,8 +145,9 @@ export const WelcomeModal = () => {
             nextButton={
               <Button
                 size="small"
-                color={currentStep >= 2 ? 'primary' : 'default'}
+                color={currentStep >= 2 ? 'primary' : 'inherit'}
                 variant={currentStep >= 2 ? 'contained' : 'text'}
+                sx={currentStep < 2 ? defaultTextButtonStyle : undefined}
                 disabled={(currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)) || (currentStep === 2 && !cguChecked)}
                 onClick={() => {
                   if (currentStep !== 3) {
@@ -163,6 +164,8 @@ export const WelcomeModal = () => {
             backButton={
               <Button
                 size="small"
+                color="inherit"
+                sx={defaultTextButtonStyle}
                 onClick={() => {
                   setCurrentStep(currentStep - 1);
                 }}
@@ -201,7 +204,14 @@ export const WelcomeModal = () => {
               <span style={{ marginRight: '0.5rem' }}>{userCountry?.name}</span>
               {userCountry?.isoCode && <Flag country={userCountry?.isoCode}></Flag>}
             </h2>
-            <Button size="small" variant="outlined" style={{ marginTop: '2rem' }} onClick={sendError('country')}>
+            <Button
+              color="inherit"
+              sx={defaultOutlinedButtonStyle}
+              size="small"
+              variant="outlined"
+              style={{ marginTop: '2rem' }}
+              onClick={sendError('country')}
+            >
               {"Ce n'est pas mon pays !"}
             </Button>
           </div>

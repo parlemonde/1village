@@ -34,6 +34,10 @@ const styles = {
   },
   inherit: {
     border: (theme: Theme) => `1px solid ${theme.palette.grey[400]}`,
+    color: (theme: Theme) => theme.palette.text.primary,
+    '&:hover': {
+      backgroundColor: '#f5f5f5',
+    },
   },
 };
 

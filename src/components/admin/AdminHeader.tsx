@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { Button } from '@mui/material';
 
+import { defaultContainedButtonStyle } from 'src/styles/variables.const';
+
 interface ElevationScrollProps {
   children: React.ReactElement;
 }
@@ -31,7 +33,15 @@ export const AdminHeader = () => {
               1Village - Administrateur
             </Typography>
             <Link href="/" passHref>
-              <Button component="a" href="/" variant="contained" size="small" style={{ margin: '0 1rem' }}>
+              <Button
+                color="inherit"
+                sx={defaultContainedButtonStyle}
+                component="a"
+                href="/"
+                variant="contained"
+                size="small"
+                style={{ margin: '0 1rem' }}
+              >
                 Aller au village
               </Button>
             </Link>

@@ -5,6 +5,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { ButtonGroup, Button, Menu, MenuItem, Divider } from '@mui/material';
 
+import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { capitalize } from 'src/utils';
 
 type Period = {
@@ -262,16 +263,52 @@ export const TimePicker = ({ period, setPeriod }: TimePickerProps) => {
   return (
     <>
       <div style={{ display: 'flex' }}>
-        <ButtonGroup size="large" style={{ marginRight: '1rem' }}>
-          <Button style={{ backgroundColor: 'white', borderTopLeftRadius: '4px', borderBottomLeftRadius: '4px' }} onClick={onPreviousTimeFrame}>
+        <ButtonGroup
+          size="large"
+          style={{ marginRight: '1rem' }}
+          sx={{
+            '& .MuiButtonGroup-grouped:hover': {
+              borderColor: '#c5c5c5',
+            },
+          }}
+        >
+          <Button
+            color="inherit"
+            sx={{
+              color: (theme) => theme.palette.text.primary,
+              backgroundColor: 'white',
+              border: '1px solid #c5c5c5',
+              borderTopLeftRadius: '4px',
+              borderBottomLeftRadius: '4px',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+              },
+            }}
+            onClick={onPreviousTimeFrame}
+          >
             <ChevronLeftIcon />
           </Button>
-          <Button style={{ backgroundColor: 'white', borderTopRightRadius: '4px', borderBottomRightRadius: '4px' }} onClick={onNextTimeFrame}>
+          <Button
+            color="inherit"
+            sx={{
+              color: (theme) => theme.palette.text.primary,
+              backgroundColor: 'white',
+              border: '1px solid #c5c5c5',
+              borderTopRightRadius: '4px',
+              borderBottomRightRadius: '4px',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+              },
+            }}
+            onClick={onNextTimeFrame}
+          >
             <ChevronRightIcon />
           </Button>
         </ButtonGroup>
         <Button
+          color="inherit"
           variant="outlined"
+          sx={defaultOutlinedButtonStyle}
           aria-controls="simple-menu"
           endIcon={<KeyboardArrowDownIcon />}
           size="large"
@@ -284,7 +321,6 @@ export const TimePicker = ({ period, setPeriod }: TimePickerProps) => {
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
-          getContentAnchorEl={null}
           PaperProps={{ variant: 'outlined', style: { width: popoverWidth.current, marginTop: '0.5rem', borderColor: 'rgba(0, 0, 0, 0.23)' } }}
           anchorOrigin={{
             vertical: 'bottom',

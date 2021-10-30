@@ -11,6 +11,7 @@ import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { UserContext } from 'src/contexts/userContext';
 import { useVillageRequests } from 'src/services/useVillages';
+import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { getQueryString } from 'src/utils';
 import type { Village } from 'types/village.type';
 
@@ -99,7 +100,7 @@ const EditVillage = () => {
         </form>
       </AdminTile>
       <Link href="/admin/villages" passHref>
-        <Button variant="outlined" style={{ margin: '1rem 0' }} component="a" href="/admin/villages">
+        <Button color="inherit" variant="outlined" sx={defaultOutlinedButtonStyle} style={{ margin: '1rem 0' }} component="a" href="/admin/villages">
           Retour
         </Button>
       </Link>

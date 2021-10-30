@@ -13,7 +13,7 @@ import { Button, Divider, TextField } from '@mui/material';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { useCopy } from 'src/hooks/useCopy';
-import { primaryColor } from 'src/styles/variables.const';
+import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
@@ -320,6 +320,7 @@ export const VideoEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
             action={
               <Button
                 color="inherit"
+                sx={defaultTextButtonStyle}
                 size="small"
                 onClick={() => {
                   copyText(value);
