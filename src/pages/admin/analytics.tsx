@@ -28,7 +28,7 @@ const getBackgroundColor = (range: number[], value: number): string => {
 
 const NumberStat = ({ label, value, color }: { label: string; value: string; color?: string }) => {
   return (
-    <Grid item xs={6} md="auto" style={{ position: 'relative' }}>
+    <Grid item xs={6} md="auto" sx={{ position: 'relative', p: 2, m: 0 }}>
       <span>{label}</span>
       <div className="stat-number" style={{ backgroundColor: color }}>
         {value}
@@ -119,7 +119,7 @@ const Stats = () => {
           </Grid>
           <Grid item xs={12} md={12}>
             <Paper style={{ padding: '1rem' }}>
-              <Grid container spacing={4} sx={{ overflow: 'hidden', justifyContent: 'flex-start' }}>
+              <Grid container spacing={4} sx={{ overflow: 'hidden', justifyContent: 'flex-start', m: -2 }}>
                 {data !== null && (
                   <>
                     <NumberStat label="Visiteurs uniques" value={`${data.sessions.uniqueVisitors.total}`} />

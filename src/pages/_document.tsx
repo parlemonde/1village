@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import createEmotionServer from '@emotion/server/create-instance';
 import type { DocumentInitialProps, DocumentContext } from 'next/document';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
@@ -19,7 +20,8 @@ class MyDocument extends Document {
 
     ctx.renderPage = () =>
       originalRenderPage({
-        // eslint-disable-next-line react/display-name
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         enhanceApp: (App) => (props) => <App emotionCache={cache} {...props} />,
       });
 

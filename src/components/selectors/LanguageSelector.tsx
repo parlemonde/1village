@@ -2,6 +2,7 @@ import React from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { Box } from '@mui/material';
 
 import { useLanguages } from 'src/services/useLanguages';
 import type { Language } from 'types/language.type';
@@ -62,7 +63,11 @@ export const LanguageSelector = ({ label, value = '', onChange, style }: Languag
       isOptionEqualToValue={(option, value) => option.alpha2 === value.alpha2}
       getOptionLabel={(option) => option.french}
       style={style}
-      renderOption={(_p, option) => <>{option.french}</>}
+      renderOption={(props, option) => (
+        <Box component="li" {...props}>
+          {option.french}
+        </Box>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}

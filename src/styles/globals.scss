@@ -269,3 +269,8 @@ a.text--success:hover {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+
+.MuiIconButton-root.MuiIconButton-sizeSmall {
+  padding: 3px;
+  font-size: 1.125rem;
+}

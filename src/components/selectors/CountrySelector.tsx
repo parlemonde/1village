@@ -2,6 +2,7 @@ import React from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { Box } from '@mui/material';
 
 import { useCountries } from 'src/services/useCountries';
 import { countryToFlag } from 'src/utils';
@@ -78,11 +79,11 @@ export const CountrySelector = ({ label, value = '', onChange, filterCountries, 
       isOptionEqualToValue={(option, value) => option.isoCode === value.isoCode}
       getOptionLabel={(option) => option.name}
       style={style}
-      renderOption={(_p, option) => (
-        <>
+      renderOption={(props, option) => (
+        <Box component="li" {...props}>
           <span style={{ marginRight: '0.6rem' }}>{countryToFlag(option.isoCode)}</span>
           {option.name}
-        </>
+        </Box>
       )}
       renderInput={(params) => (
         <TextField

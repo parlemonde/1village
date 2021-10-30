@@ -185,9 +185,10 @@ const EditUser = () => {
             onChange={updateUserField('level')}
             style={{ marginBottom: '1rem' }}
           />
-          <FormControl style={{ width: '100%', marginBottom: '1rem' }}>
+          <FormControl variant="standard" style={{ width: '100%', marginBottom: '1rem' }}>
             <InputLabel id="type-select">Rôle</InputLabel>
             <Select
+              variant="standard"
               labelId="type-select"
               id="type-simple-select"
               value={user.type}
@@ -202,9 +203,10 @@ const EditUser = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl style={{ width: '100%', marginBottom: '1rem' }}>
+          <FormControl variant="standard" style={{ width: '100%', marginBottom: '1rem' }}>
             <InputLabel id="village-select">{user.type === UserType.TEACHER ? Required('Village') : 'Village'}</InputLabel>
             <Select
+              variant="standard"
               labelId="village-select"
               id="village-simple-select"
               value={user.villageId}

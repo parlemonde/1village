@@ -167,9 +167,10 @@ const NewUser = () => {
             onChange={updateUserField('level')}
             style={{ marginBottom: '1rem' }}
           />
-          <FormControl style={{ width: '100%', marginBottom: '1rem' }}>
+          <FormControl variant="standard" style={{ width: '100%', marginBottom: '1rem' }}>
             <InputLabel id="type-select">Rôle</InputLabel>
             <Select
+              variant="standard"
               labelId="type-select"
               id="type-simple-select"
               value={newUser.type}
@@ -184,9 +185,10 @@ const NewUser = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl style={{ width: '100%', marginBottom: '1rem' }}>
+          <FormControl variant="standard" style={{ width: '100%', marginBottom: '1rem' }}>
             <InputLabel id="village-select">{newUser.type === UserType.TEACHER ? Required('Village') : 'Village'}</InputLabel>
             <Select
+              variant="standard"
               labelId="village-select"
               id="village-simple-select"
               value={newUser.villageId}
