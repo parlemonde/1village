@@ -91,6 +91,7 @@ const EnigmeStep2 = () => {
                     <span style={{ marginRight: '0.3rem' }}>{`${enigmeType.title2} est`}</span>
                     {data !== null && (
                       <TextField
+                        variant="standard"
                         value={data.themeName || ''}
                         onChange={(event) => {
                           updateActivity({ data: { ...data, themeName: event.target.value } });

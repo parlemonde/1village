@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
+import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, Select, MenuItem } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
@@ -49,8 +50,8 @@ const DefiStep3 = () => {
     updateActivity({ data: { ...data, explanationContentIndex: explanationContentIndex - 1 } });
   };
 
-  const onObjectChange = (event: React.ChangeEvent<{ value: number }>) => {
-    updateActivity({ data: { ...data, objectIndex: event.target.value } });
+  const onObjectChange = (event: SelectChangeEvent<string | number>) => {
+    updateActivity({ data: { ...data, objectIndex: `${event.target.value}` } });
   };
 
   const onNext = () => {

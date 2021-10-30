@@ -112,6 +112,7 @@ const MascotteStep1 = () => {
               <span style={{ flexShrink: 0, marginRight: '0.5rem' }}>Nous sommes</span>
               <TextField
                 className="se-presenter-step-one__textfield se-presenter-step-one__textfield--full-width"
+                variant="standard"
                 style={{ flex: 1, minWidth: 0 }}
                 fullWidth
                 placeholder={labelPresentation}
@@ -125,6 +126,7 @@ const MascotteStep1 = () => {
               <span>Nous sommes </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 inputProps={{ min: 0 }}
                 onFocus={onFocusInput('totalStudent')}
@@ -140,6 +142,7 @@ const MascotteStep1 = () => {
               <span> élève{pluralS(data.totalStudent)}, dont </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 onFocus={onFocusInput('girlStudent')}
@@ -150,6 +153,7 @@ const MascotteStep1 = () => {
               <span> fille{pluralS(data.girlStudent)} et </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.boyStudent ?? ''}
@@ -163,6 +167,7 @@ const MascotteStep1 = () => {
               <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.meanAge ?? ''}
@@ -178,6 +183,7 @@ const MascotteStep1 = () => {
               <span>Nous avons </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.totalTeacher ?? ''}
@@ -193,6 +199,7 @@ const MascotteStep1 = () => {
               <span> professeur{pluralS(data.totalTeacher)}, dont </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.womanTeacher ?? ''}
@@ -203,6 +210,7 @@ const MascotteStep1 = () => {
               <span> femme{pluralS(data.womanTeacher)} et </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.manTeacher ?? ''}
@@ -216,6 +224,7 @@ const MascotteStep1 = () => {
               <span>Dans notre école, il y a </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.numberClassroom ?? ''}
@@ -228,6 +237,7 @@ const MascotteStep1 = () => {
               <span> classe{pluralS(data.numberClassroom)} et </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
+                variant="standard"
                 type="number"
                 size="small"
                 value={data.totalSchoolStudent ?? ''}

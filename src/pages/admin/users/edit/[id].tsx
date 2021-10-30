@@ -125,6 +125,7 @@ const EditUser = () => {
         <form autoComplete="off" style={{ width: '100%', padding: '1rem' }} onSubmit={onSubmit}>
           <TextField
             className="full-width"
+            variant="standard"
             label={Required('Email')}
             value={user.email}
             onChange={updateUserField('email')}
@@ -135,6 +136,7 @@ const EditUser = () => {
           />
           <TextField
             className="full-width"
+            variant="standard"
             label={Required('Pseudo')}
             value={user.pseudo}
             onChange={updateUserField('pseudo')}
@@ -145,6 +147,7 @@ const EditUser = () => {
           />
           <TextField
             className="full-width"
+            variant="standard"
             label="Adresse de l'école"
             value={user.address}
             onChange={updateUserField('address')}
@@ -152,6 +155,7 @@ const EditUser = () => {
           />
           <TextField
             className="full-width"
+            variant="standard"
             label="Ville de l'école"
             value={user.city}
             onChange={updateUserField('city')}
@@ -159,14 +163,23 @@ const EditUser = () => {
           />
           <TextField
             className="full-width"
+            variant="standard"
             label="Code postal"
             value={user.postalCode}
             onChange={updateUserField('postalCode')}
             style={{ marginBottom: '1rem' }}
           />
-          <TextField className="full-width" label="École" value={user.school} onChange={updateUserField('school')} style={{ marginBottom: '1rem' }} />
           <TextField
             className="full-width"
+            variant="standard"
+            label="École"
+            value={user.school}
+            onChange={updateUserField('school')}
+            style={{ marginBottom: '1rem' }}
+          />
+          <TextField
+            className="full-width"
+            variant="standard"
             label="Niveau de la classe"
             value={user.level}
             onChange={updateUserField('level')}

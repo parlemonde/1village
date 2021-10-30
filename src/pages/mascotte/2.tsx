@@ -179,6 +179,7 @@ const MascotteStep2 = () => {
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
                 <TextField
                   className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
+                  variant="standard"
                   style={{ flex: 1, minWidth: 0, width: '100%' }}
                   fullWidth
                   value={data.game}
@@ -192,6 +193,7 @@ const MascotteStep2 = () => {
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte pratique </span>
                 <TextField
                   className="se-presenter-step-two__textfield se-presenter-step-two__textfield--full-width"
+                  variant="standard"
                   style={{ flex: 1, minWidth: 0, padding: 0 }}
                   fullWidth
                   value={data.sport}

@@ -45,6 +45,7 @@ const NewVillage = () => {
         <form autoComplete="off" style={{ width: '100%', padding: '1rem' }} onSubmit={onSubmit}>
           <TextField
             className="full-width"
+            variant="standard"
             name="vl-n"
             label="Nom du village"
             autoComplete="new-password"

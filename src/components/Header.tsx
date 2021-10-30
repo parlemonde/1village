@@ -102,7 +102,6 @@ export const Header = () => {
                   vertical: 'top',
                   horizontal: 'right',
                 }}
-                getContentAnchorEl={null}
                 open={open}
                 onClose={handleClose}
               >

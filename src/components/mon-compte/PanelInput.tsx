@@ -40,6 +40,7 @@ export const PanelInput = ({
       {isEditMode ? (
         <TextField
           value={value}
+          variant="standard"
           autoComplete="false"
           className="account__input"
           color="primary"

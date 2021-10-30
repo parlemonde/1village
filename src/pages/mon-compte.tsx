@@ -337,10 +337,12 @@ const Presentation = () => {
               onChange={(event) => {
                 setPwd((p) => ({ ...p, current: event.target.value }));
               }}
+              variant="standard"
               className="full-width"
             />
             <TextField
               value={pwd.new}
+              variant="standard"
               type="password"
               label="Nouveau mot de passe"
               onChange={(event) => {
@@ -358,6 +360,7 @@ const Presentation = () => {
             />
             <TextField
               value={pwd.confirmNew}
+              variant="standard"
               type="password"
               label="Confirmer le mot de passe"
               onChange={(event) => {

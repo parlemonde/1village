@@ -77,6 +77,7 @@ const DefiStep4 = () => {
                     <span style={{ marginRight: '0.3rem' }}>Défi : </span>
                     {data !== null && (
                       <TextField
+                        variant="standard"
                         value={data.defi || ''}
                         onChange={(event) => {
                           updateActivity({ data: { ...data, defi: event.target.value } });

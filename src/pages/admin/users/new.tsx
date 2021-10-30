@@ -106,6 +106,7 @@ const NewUser = () => {
       <AdminTile title="Ajouter un utilisateur">
         <form autoComplete="off" style={{ width: '100%', padding: '1rem' }} onSubmit={onSubmit}>
           <TextField
+            variant="standard"
             className="full-width"
             label={Required('Email')}
             value={newUser.email}
@@ -116,6 +117,7 @@ const NewUser = () => {
             onBlur={checkEmailAndPseudo}
           />
           <TextField
+            variant="standard"
             className="full-width"
             label={Required('Pseudo')}
             value={newUser.pseudo}
@@ -126,6 +128,7 @@ const NewUser = () => {
             onBlur={checkEmailAndPseudo}
           />
           <TextField
+            variant="standard"
             className="full-width"
             label="Adresse de l'école"
             value={newUser.address}
@@ -133,6 +136,7 @@ const NewUser = () => {
             style={{ marginBottom: '1rem' }}
           />
           <TextField
+            variant="standard"
             className="full-width"
             label="Ville de l'école"
             value={newUser.city}
@@ -140,6 +144,7 @@ const NewUser = () => {
             style={{ marginBottom: '1rem' }}
           />
           <TextField
+            variant="standard"
             className="full-width"
             label="Code postal"
             value={newUser.postalCode}
@@ -147,6 +152,7 @@ const NewUser = () => {
             style={{ marginBottom: '1rem' }}
           />
           <TextField
+            variant="standard"
             className="full-width"
             label="École"
             value={newUser.school}
@@ -154,6 +160,7 @@ const NewUser = () => {
             style={{ marginBottom: '1rem' }}
           />
           <TextField
+            variant="standard"
             className="full-width"
             label="Niveau de la classe"
             value={newUser.level}

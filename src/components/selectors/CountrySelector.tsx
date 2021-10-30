@@ -75,10 +75,10 @@ export const CountrySelector = ({ label, value = '', onChange, filterCountries, 
       groupBy={(option) => option.firstLetter}
       value={option}
       onChange={onChangeOption}
-      getOptionSelected={(option, value) => option.isoCode === value.isoCode}
+      isOptionEqualToValue={(option, value) => option.isoCode === value.isoCode}
       getOptionLabel={(option) => option.name}
       style={style}
-      renderOption={(option) => (
+      renderOption={(_p, option) => (
         <>
           <span style={{ marginRight: '0.6rem' }}>{countryToFlag(option.isoCode)}</span>
           {option.name}
@@ -91,6 +91,7 @@ export const CountrySelector = ({ label, value = '', onChange, filterCountries, 
             ...params.inputProps,
             autoComplete: 'off', // disable autocomplete and autofill
           }}
+          variant="standard"
           label={label}
           type="search"
         />

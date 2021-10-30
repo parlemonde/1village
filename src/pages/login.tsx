@@ -152,6 +152,7 @@ const Login = () => {
               )}
             </NoSsr>
             <TextField
+              variant="standard"
               label="Adresse email"
               placeholder="Entrez votre adresse email"
               name="username"
@@ -164,6 +165,7 @@ const Login = () => {
               InputLabelProps={{ shrink: true }}
             />
             <TextField
+              variant="standard"
               label="Mot de passe"
               placeholder="Entrez votre mot de passe"
               name="password"

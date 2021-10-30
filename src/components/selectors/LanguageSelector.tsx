@@ -59,10 +59,10 @@ export const LanguageSelector = ({ label, value = '', onChange, style }: Languag
       groupBy={(option) => option.firstLetter}
       value={option}
       onChange={onChangeOption}
-      getOptionSelected={(option, value) => option.alpha2 === value.alpha2}
+      isOptionEqualToValue={(option, value) => option.alpha2 === value.alpha2}
       getOptionLabel={(option) => option.french}
       style={style}
-      renderOption={(option) => <>{option.french}</>}
+      renderOption={(_p, option) => <>{option.french}</>}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -70,6 +70,7 @@ export const LanguageSelector = ({ label, value = '', onChange, style }: Languag
             ...params.inputProps,
             autoComplete: 'off', // disable autocomplete and autofill
           }}
+          variant="standard"
           label={label}
           type="search"
         />

@@ -112,14 +112,14 @@ const Stats = () => {
         </MaterialLink>
       </Link>
       <div style={{ maxWidth: '1000px', margin: 'auto' }}>
-        <Grid container justify="flex-start" spacing={3}>
+        <Grid container spacing={3} sx={{ justifyContent: 'flex-start' }}>
           <Grid item xs={12} md={6} />
           <Grid item xs={12} md={6}>
             <TimePicker period={period} setPeriod={setPeriod} />
           </Grid>
           <Grid item xs={12} md={12}>
             <Paper style={{ padding: '1rem' }}>
-              <Grid container justify="flex-start" spacing={4} style={{ overflow: 'hidden' }}>
+              <Grid container spacing={4} sx={{ overflow: 'hidden', justifyContent: 'flex-start' }}>
                 {data !== null && (
                   <>
                     <NumberStat label="Visiteurs uniques" value={`${data.sessions.uniqueVisitors.total}`} />
@@ -159,7 +159,7 @@ const Stats = () => {
                 <strong>Signaux Web Essentiels</strong> (Core Web Vitals)
               </div>
               {data !== null && (
-                <Grid container justify="flex-start" spacing={4} style={{ overflow: 'hidden', margin: '0.5rem -16px' }}>
+                <Grid container spacing={4} style={{ overflow: 'hidden', margin: '0.5rem -16px', justifyContent: 'flex-start' }}>
                   <NumberStat
                     label="Moyenne LCP"
                     value={`${Math.round(data.perf.lcp.avg) / 1000}s`}
