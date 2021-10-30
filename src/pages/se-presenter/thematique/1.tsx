@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { PRESENTATION } from 'src/activity-types/presentation.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { ActivitySelect } from 'src/components/activities/ActivitySelect';
@@ -39,7 +38,7 @@ const PresentationStep1 = () => {
           'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
         createNewActivity(
           ActivityType.PRESENTATION,
-          PRESENTATION.THEMATIQUE,
+          undefined,
           {
             theme: 0,
           },

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
-import { isThematique, PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
+import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
 import type { ThematiqueData } from 'src/activity-types/presentation.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -22,7 +22,7 @@ const PresentationStep3 = () => {
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/se-presenter');
-    } else if (activity && (!isPresentation(activity) || !isThematique(activity))) {
+    } else if (activity && !isPresentation(activity)) {
       router.push('/se-presenter');
     }
   }, [activity, router]);
