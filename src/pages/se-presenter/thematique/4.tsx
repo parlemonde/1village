@@ -46,7 +46,7 @@ const PresentationStep4 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null || data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 

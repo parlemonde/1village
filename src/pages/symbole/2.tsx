@@ -29,6 +29,9 @@ const SymbolStep2 = () => {
   }, [activity, router]);
 
   const updateContent = (content: ActivityContent[]): void => {
+    if (!activity) {
+      return;
+    }
     updateActivity({ content: [...activity.content.slice(0, symbolContentIndex), ...content] });
   };
 
@@ -37,14 +40,14 @@ const SymbolStep2 = () => {
     router.push('/symbole/3');
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null || data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[SYMBOL_TYPES[activity.subType].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
+        <Steps steps={[SYMBOL_TYPES[activity.subType || 0].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
         <div className="width-900">
           <h1>Faites une présentation libre de votre symbole</h1>
           <p className="text">

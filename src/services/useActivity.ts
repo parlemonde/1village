@@ -33,7 +33,7 @@ export const useActivity = (activityId: number): { activity: Activity | null } =
   const { data, isLoading, error } = useQuery<Activity | null, unknown>(['activity', { villageId, activityId }], getActivity);
 
   return {
-    activity: isLoading || error ? null : data,
+    activity: isLoading || error ? null : data || null,
   };
 };
 

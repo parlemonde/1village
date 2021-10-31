@@ -24,7 +24,7 @@ const MascotteStep1 = () => {
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const labelPresentation = getUserDisplayName(user, false);
+  const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
   const created = React.useRef(false);
@@ -45,7 +45,7 @@ const MascotteStep1 = () => {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
-      } else if (isMascotte(activity)) {
+      } else if (activity && isMascotte(activity)) {
         setIsError(!isFirstStepValid(activity.data));
       }
     }
@@ -133,13 +133,15 @@ const MascotteStep1 = () => {
                 size="small"
                 value={data.totalStudent ?? ''}
                 onChange={dataChange('totalStudent')}
-                helperText={errorMessage(data.girlStudent, data.boyStudent, data.totalStudent)}
+                helperText={errorMessage(data.girlStudent || 0, data.boyStudent || 0, data.totalStudent || 0)}
                 error={
                   isError &&
-                  (!isValidSum(data.girlStudent, data.boyStudent, data.totalStudent) || data.totalStudent === 0 || data.totalStudent === null)
+                  (!isValidSum(data.girlStudent || 0, data.boyStudent || 0, data.totalStudent || 0) ||
+                    data.totalStudent === 0 ||
+                    data.totalStudent === null)
                 }
               />{' '}
-              <span> élève{pluralS(data.totalStudent)}, dont </span>{' '}
+              <span> élève{pluralS(data.totalStudent || 0)}, dont </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
                 variant="standard"
@@ -150,7 +152,7 @@ const MascotteStep1 = () => {
                 onChange={dataChange('girlStudent')}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> fille{pluralS(data.girlStudent)} et </span>{' '}
+              <span> fille{pluralS(data.girlStudent || 0)} et </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
                 variant="standard"
@@ -161,7 +163,7 @@ const MascotteStep1 = () => {
                 onChange={dataChange('boyStudent')}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> garçon{pluralS(data.boyStudent)}.</span>
+              <span> garçon{pluralS(data.boyStudent || 0)}.</span>
             </div>
             <div className="se-presenter-step-one__line">
               <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
@@ -177,7 +179,7 @@ const MascotteStep1 = () => {
                 error={isError && (data.meanAge === 0 || data.meanAge === null)}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> an{pluralS(data.meanAge)}.</span>
+              <span> an{pluralS(data.meanAge || 0)}.</span>
             </div>
             <div className="se-presenter-step-one__line">
               <span>Nous avons </span>{' '}
@@ -189,14 +191,16 @@ const MascotteStep1 = () => {
                 value={data.totalTeacher ?? ''}
                 onFocus={onFocusInput('totalTeacher')}
                 onChange={dataChange('totalTeacher')}
-                helperText={errorMessage(data.womanTeacher, data.manTeacher, data.totalTeacher)}
+                helperText={errorMessage(data.womanTeacher || 0, data.manTeacher || 0, data.totalTeacher || 0)}
                 error={
                   isError &&
-                  (!isValidSum(data.womanTeacher, data.manTeacher, data.totalTeacher) || data.totalTeacher === 0 || data.totalTeacher === null)
+                  (!isValidSum(data.womanTeacher || 0, data.manTeacher || 0, data.totalTeacher || 0) ||
+                    data.totalTeacher === 0 ||
+                    data.totalTeacher === null)
                 }
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> professeur{pluralS(data.totalTeacher)}, dont </span>{' '}
+              <span> professeur{pluralS(data.totalTeacher || 0)}, dont </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
                 variant="standard"
@@ -207,7 +211,7 @@ const MascotteStep1 = () => {
                 onChange={dataChange('womanTeacher')}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> femme{pluralS(data.womanTeacher)} et </span>{' '}
+              <span> femme{pluralS(data.womanTeacher || 0)} et </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
                 variant="standard"
@@ -218,7 +222,7 @@ const MascotteStep1 = () => {
                 onChange={dataChange('manTeacher')}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> homme{pluralS(data.manTeacher)}.</span>
+              <span> homme{pluralS(data.manTeacher || 0)}.</span>
             </div>
             <div className="se-presenter-step-one__line">
               <span>Dans notre école, il y a </span>{' '}
@@ -234,7 +238,7 @@ const MascotteStep1 = () => {
                 error={isError && (data.numberClassroom === 0 || data.numberClassroom === null)}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> classe{pluralS(data.numberClassroom)} et </span>{' '}
+              <span> classe{pluralS(data.numberClassroom || 0)} et </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
                 variant="standard"
@@ -247,7 +251,7 @@ const MascotteStep1 = () => {
                 error={isError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null)}
                 inputProps={{ min: 0 }}
               />{' '}
-              <span> élève{pluralS(data.totalSchoolStudent)}.</span>
+              <span> élève{pluralS(data.totalSchoolStudent || 0)}.</span>
             </div>
           </div>
           <h1 style={{ marginTop: '5rem' }}>À quoi ressemble votre classe ?</h1>

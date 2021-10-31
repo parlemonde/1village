@@ -88,14 +88,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
     };
   }, [router.events]);
 
-  React.useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-
   // Let all h5p iframe to automatically resize.
   React.useEffect(initH5p, []);
 
@@ -130,7 +122,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           }}
         >
           <QueryClientProvider client={queryClient}>
-            <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken}>
+            <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken || ''}>
               <VillageContextProvider initialVillage={initialVillage}>
                 <ActivityContextProvider>
                   {isOnAdmin ? (
@@ -174,7 +166,7 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
   };
   if (ctxRequest === null) {
     // client code
-    const data = JSON.parse(window.document.getElementById('__NEXT_DATA__')?.innerText);
+    const data = JSON.parse(window.document.getElementById('__NEXT_DATA__')?.innerText || 'null');
     initialData.csrfToken = data?.props?.csrfToken || null;
     initialData.user = data?.props?.user || null;
     initialData.village = data?.props?.village || null;

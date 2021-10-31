@@ -33,7 +33,7 @@ export const useComments = (activityId: number | null): { comments: Comment[]; s
   );
 
   return {
-    comments: isLoading || error ? [] : data,
+    comments: isLoading || error ? [] : data || [],
     setComments,
   };
 };

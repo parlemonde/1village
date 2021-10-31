@@ -29,7 +29,7 @@ export const WelcomeModal = () => {
   const { village } = React.useContext(VillageContext);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
-  const [newUser, setNewUser] = React.useState<Partial<User>>(user);
+  const [newUser, setNewUser] = React.useState<Partial<User> | null>(user);
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const [updateAsked, setUpdateAsked] = React.useState({
     village: false,
@@ -41,24 +41,24 @@ export const WelcomeModal = () => {
     setNewUser(user);
   }, [user]);
 
-  if (user === null || village === null || user.type >= UserType.OBSERVATOR) {
+  if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
     return null;
   }
 
   const updateUser = async () => {
-    if (!newUser.city || !newUser.address || !newUser.postalCode) {
+    if (!newUser.city || !newUser.address || !newUser.pseudo || !newUser.school || !newUser.email || !newUser.postalCode) {
       return;
     }
     setIsLoading(true);
     const updatedValues = {
       school: newUser.school,
-      level: newUser.level,
+      level: newUser.level || '',
       city: newUser.city,
       postalCode: newUser.postalCode,
       address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
-      displayName: newUser.displayName,
+      displayName: newUser.displayName || '',
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -70,7 +70,7 @@ export const WelcomeModal = () => {
         variant: 'error',
       });
     } else {
-      setUser({ ...user, ...updatedValues, firstLogin: false });
+      setUser({ ...(user || {}), ...updatedValues, firstLogin: false });
     }
     setIsLoading(false);
   };
@@ -113,7 +113,11 @@ export const WelcomeModal = () => {
     }
   };
 
-  return user.firstLogin ? (
+  if (!user.firstLogin && currentStep === 3 && village && village.activePhase > 1) {
+    return <MissingStepModal />;
+  }
+
+  return (
     <Modal
       open={true}
       title="Bienvenue à 1Village !"
@@ -237,7 +241,7 @@ export const WelcomeModal = () => {
             <div style={{ display: 'flex', alignItems: 'stretch' }}>
               <div style={{ flex: 1, marginRight: '1rem', minWidth: 0 }}>
                 <PanelInput
-                  value={newUser.school}
+                  value={newUser.school || ''}
                   defaultValue={'non renseignée'}
                   label="École :"
                   placeholder="Nom de votre école"
@@ -247,7 +251,7 @@ export const WelcomeModal = () => {
                   }}
                 />
                 <PanelInput
-                  value={newUser.level}
+                  value={newUser.level || ''}
                   defaultValue={'non renseigné'}
                   label="Niveau de la classe :"
                   placeholder="Niveau de votre classe"
@@ -257,7 +261,7 @@ export const WelcomeModal = () => {
                   }}
                 />
                 <PanelInput
-                  value={newUser.address}
+                  value={newUser.address || ''}
                   defaultValue={'non renseigné'}
                   label="Adresse de l'école :"
                   placeholder="Adresse"
@@ -269,7 +273,7 @@ export const WelcomeModal = () => {
                   }}
                 />
                 <PanelInput
-                  value={newUser.city}
+                  value={newUser.city || ''}
                   defaultValue={'non renseigné'}
                   label="Ville :"
                   placeholder="Ville"
@@ -281,7 +285,7 @@ export const WelcomeModal = () => {
                   }}
                 />
                 <PanelInput
-                  value={newUser.postalCode}
+                  value={newUser.postalCode || ''}
                   defaultValue={'non renseigné'}
                   label="Code postal :"
                   placeholder="Code postal"
@@ -295,7 +299,7 @@ export const WelcomeModal = () => {
                 <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
                 <PanelInput
                   style={{ marginTop: '2rem' }}
-                  value={newUser.displayName}
+                  value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
                   label="Nom affiché :"
                   placeholder={getUserDisplayName({ ...user, ...newUser, type: 0 }, false)}
@@ -337,7 +341,5 @@ export const WelcomeModal = () => {
         )}
       </div>
     </Modal>
-  ) : (
-    currentStep === 3 && village?.activePhase > 1 && <MissingStepModal />
   );
 };

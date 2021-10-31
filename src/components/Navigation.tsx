@@ -164,7 +164,7 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={!village || (tab.phase && tab.phase > village.activePhase)}
+                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}
                 >
                   {tab.label}
                 </Button>

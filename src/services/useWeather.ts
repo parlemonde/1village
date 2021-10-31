@@ -38,5 +38,5 @@ export const useWeather = ({ activityUser }: { activityUser: User }): Weather | 
   if (isLoading || error) {
     return null;
   }
-  return data;
+  return data || null;
 };

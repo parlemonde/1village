@@ -10,7 +10,7 @@ export const ImageView = ({ value }: ViewProps) => {
     <div className="text-center activity-data">
       <KeepRatio ratio={2 / 3} maxWidth="600px">
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-          <Image layout="fill" objectFit="contain" src={value} unoptimized />
+          {value && <Image layout="fill" objectFit="contain" src={value} unoptimized />}
         </div>
       </KeepRatio>
     </div>

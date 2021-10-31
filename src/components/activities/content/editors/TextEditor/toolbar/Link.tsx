@@ -203,7 +203,7 @@ interface EditorLinkProps {
   entityKey: string;
   contentState: ContentState;
 }
-const EditorLink: React.FC = ({ children, entityKey, contentState }: React.PropsWithChildren<EditorLinkProps>) => {
+const EditorLink = ({ children, entityKey, contentState }: React.PropsWithChildren<EditorLinkProps>) => {
   const { url } = contentState.getEntity(entityKey).getData();
   return (
     <a href={url} target="_self" style={{ color: primaryColor, textDecoration: 'underline' }}>

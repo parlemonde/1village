@@ -18,7 +18,10 @@ export const getPins = async (users: Array<User>, cameraPos: Vector3): Promise<G
   const textureLoader = new TextureLoader();
 
   for (const user of users) {
-    pins.add(new HoverablePin(pinModel, user, await getMapPosition(user), cameraPos, textureLoader));
+    const pos = await getMapPosition(user);
+    if (pos !== null) {
+      pins.add(new HoverablePin(pinModel, user, pos, cameraPos, textureLoader));
+    }
   }
 
   return pins;

@@ -46,6 +46,9 @@ const EnigmeStep4 = () => {
   }, [activity, router, updateActivity, addContent]);
 
   const updateContent = (content: ActivityContent[]): void => {
+    if (!activity) {
+      return;
+    }
     updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
   const addIndiceContent = (type: ActivityContentType, value?: string) => {
@@ -57,7 +60,7 @@ const EnigmeStep4 = () => {
     deleteContent(indiceContentIndex + index);
   };
 
-  if (data === null || !isEnigme(activity)) {
+  if (data === null || activity === null || !isEnigme(activity)) {
     return <div></div>;
   }
 

@@ -51,7 +51,7 @@ const EnigmeStep2 = () => {
     router.push('/creer-une-enigme/3');
   };
 
-  if (data === null || !isEnigme(activity)) {
+  if (data === null || activity === null || !isEnigme(activity)) {
     return <div></div>;
   }
 

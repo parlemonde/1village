@@ -20,11 +20,11 @@ const IndiceStep1 = () => {
   const selectRef = React.useRef<HTMLDivElement>(null);
   const { activities } = useActivities({
     page: 0,
-    countries: [user?.country.isoCode.toUpperCase()],
+    countries: user ? [user.country.isoCode.toUpperCase()] : [],
     pelico: true,
     type: ActivityType.INDICE,
   });
-  const sameActivities = activities.filter((c) => c.subType === activity.subType);
+  const sameActivities = activity ? activities.filter((c) => c.subType === activity.subType) : [];
 
   // indice sub-type
   const indiceTypeIndex =
@@ -75,19 +75,21 @@ const IndiceStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[INDICE_TYPES[activity.subType]?.step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={0} />
+        <Steps steps={[INDICE_TYPES[activity.subType || 0]?.step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={0} />
         <div className="width-900">
           <p className="text">
             Vous trouvez ici les indices culturels qui ont déjà été présentés par les Pélicopains sur l&apos;aspect &quot;
-            {INDICE_TYPES[activity.subType]?.step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice ! Vous
-            pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
+            {INDICE_TYPES[activity.subType || 0]?.step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice !
+            Vous pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
           </p>
           <StepsButton prev="/indice-culturel" next={onNext} />
           <div>
             {sameActivities.length > 0 ? (
               <Activities activities={sameActivities} withLinks />
             ) : (
-              <p className="center">Il n&apos;existe encore aucun indice culturel sur le thème &quot;{INDICE_TYPES[activity.subType]?.title}&quot;</p>
+              <p className="center">
+                Il n&apos;existe encore aucun indice culturel sur le thème &quot;{INDICE_TYPES[activity.subType || 0]?.title}&quot;
+              </p>
             )}
           </div>
         </div>

@@ -12,7 +12,7 @@ type InlineProps = {
 };
 
 export const TextAlignButtons = ({ value, onChange }: InlineProps) => {
-  const handleAlignment = (newAlignment: 'left' | 'center' | 'right' | undefined) => (event: React.MouseEvent<HTMLElement>) => {
+  const handleAlignment = (newAlignment: 'left' | 'center' | 'right') => (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange(newAlignment);
   };

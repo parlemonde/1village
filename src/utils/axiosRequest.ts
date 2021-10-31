@@ -21,18 +21,25 @@ const axiosRequest = async (req: AxiosRequestConfig): Promise<AxiosReturnType> =
       status: res.status,
     };
   } catch (error) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.error(error.response.data);
-      console.error(error.response.status);
-    } else {
-      console.error(error);
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error(error.response.data);
+        console.error(error.response.status);
+      } else {
+        console.error(error);
+      }
+      return {
+        data: error.response ? error.response.data || null : null,
+        error: true,
+        status: (error.response || {}).status || 500,
+      };
     }
     return {
-      data: error.response ? error.response.data || null : null,
+      data: null,
       error: true,
-      status: (error.response || {}).status || 404,
+      status: 500,
     };
   }
 };

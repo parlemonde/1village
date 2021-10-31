@@ -13,9 +13,10 @@ export function serializeToQueryUrl(obj: { [key: string]: string | number | bool
   const str =
     '?' +
     Object.keys(obj)
-      .reduce(function (a, k) {
-        if (obj[k] !== undefined) {
-          a.push(k + '=' + encodeURIComponent(obj[k]));
+      .reduce<string[]>(function (a, k) {
+        const value = obj[k];
+        if (value !== undefined && value !== null) {
+          a.push(k + '=' + encodeURIComponent(value));
         }
         return a;
       }, [])
@@ -23,7 +24,10 @@ export function serializeToQueryUrl(obj: { [key: string]: string | number | bool
   return str;
 }
 
-export function getQueryString(q: string | string[]): string {
+export function getQueryString(q: string | string[] | undefined): string {
+  if (!q) {
+    return '';
+  }
   if (Array.isArray(q)) {
     return q[0];
   }
@@ -36,8 +40,9 @@ export function getQueryString(q: string | string[]): string {
  * N milliseconds. If `immediate` is passed, trigger the function on the
  * leading edge, instead of the trailing.
  */
-export function debounce<T extends (args: unknown | unknown[]) => void>(func: T, wait: number, immediate: boolean): T {
-  let timeout: NodeJS.Timeout;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (args: any) => void>(func: T, wait: number, immediate: boolean): T {
+  let timeout: number | undefined;
   return function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /*@ts-ignore */ //eslint-disable-next-line @typescript-eslint/no-this-alias, @typescript-eslint/no-explicit-any
@@ -45,17 +50,22 @@ export function debounce<T extends (args: unknown | unknown[]) => void>(func: T,
     // eslint-disable-next-line prefer-rest-params
     const args = arguments;
     const later = function () {
-      timeout = null;
+      timeout = undefined;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       if (!immediate) func.apply(context, args);
     };
     const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+    window.clearTimeout(timeout);
+    timeout = window.setTimeout(later, wait);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (callNow) func.apply(context, args);
   } as unknown as T;
 }
 
-export function throttle<T extends (args: unknown | unknown[]) => void>(func: T, wait: number): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throttle<T extends (args: any) => void>(func: T, wait: number): T {
   let lastFunc: number;
   let lastRan: number;
 
@@ -66,12 +76,16 @@ export function throttle<T extends (args: unknown | unknown[]) => void>(func: T,
     // eslint-disable-next-line prefer-rest-params
     const args = arguments;
     if (!lastRan) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       func.apply(context, args);
       lastRan = Date.now();
     } else {
       window.clearTimeout(lastFunc);
       lastFunc = window.setTimeout(function () {
         if (Date.now() - lastRan >= wait) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           func.apply(context, args);
           lastRan = Date.now();
         }
@@ -112,7 +126,7 @@ export function generateTemporaryToken(length: number = 40): string {
   let array = new Uint8Array(length);
   cryptoObj.getRandomValues(array);
   array = array.map((x) => validChars.charCodeAt(x % validChars.length));
-  const randomState = String.fromCharCode.apply(null, array);
+  const randomState = String.fromCharCode.apply(null, [...array]);
   return randomState;
 }
 
@@ -139,6 +153,7 @@ export const toDate = (date: string): string => {
   return date ? Intl.DateTimeFormat('fr', { year: 'numeric', month: 'numeric', day: 'numeric' }).format(new Date(date)) : '';
 };
 
+const isHTMLElement = (el: Element): el is HTMLElement => 'innerText' in el;
 function addDotToElement(element: HTMLElement): void {
   const innerText = element.innerText || '';
   if (innerText.length > 0 && !/\W/im.test(innerText.slice(-1))) {
@@ -148,7 +163,7 @@ function addDotToElement(element: HTMLElement): void {
 export function htmlToText(html: string): string {
   const tmp = document.createElement('DIV');
   tmp.innerHTML = html;
-  [...tmp.children].forEach(addDotToElement);
+  [...tmp.children].filter(isHTMLElement).forEach(addDotToElement);
   return tmp.textContent || tmp.innerText || '';
 }
 

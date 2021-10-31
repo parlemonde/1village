@@ -18,7 +18,7 @@ const MascotteStep2 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {

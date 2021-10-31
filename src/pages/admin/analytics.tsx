@@ -39,7 +39,7 @@ const NumberStat = ({ label, value, color }: { label: string; value: string; col
 };
 
 const getValues = (data: Partial<Record<string, number>>): Array<{ key: string; value: number }> =>
-  Object.keys(data).map((key) => ({ key, value: data[key] }));
+  Object.keys(data).map((key) => ({ key, value: data[key] || 0 }));
 
 const Stats = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);

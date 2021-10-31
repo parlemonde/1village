@@ -105,7 +105,7 @@ export const FilterSelect = <T extends unknown>({ value, onChange, name, options
                       <Checkbox
                         size="small"
                         style={{ padding: '0', marginRight: '0.5rem' }}
-                        checked={selectedOption.key === option.key}
+                        checked={selectedOption !== null && selectedOption.key === option.key}
                         onChange={() => {
                           onChange(option);
                           setIsOpen(false);

@@ -46,7 +46,7 @@ const DefiStep4 = () => {
     }
   }, [activity, router, updateActivity, addContent]);
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
     return <div></div>;
   }
 

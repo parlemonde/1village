@@ -24,7 +24,7 @@ import type { User } from 'types/user.type';
 const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
-  const [newUser, setNewUser] = React.useState<User>(user);
+  const [newUser, setNewUser] = React.useState<User | null>(user);
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
@@ -40,7 +40,7 @@ const Presentation = () => {
     pwdConfirm: false,
   });
 
-  if (!user) {
+  if (!user || !newUser) {
     return <div></div>;
   }
 
@@ -179,7 +179,7 @@ const Presentation = () => {
           placeholder="Nom de votre école"
           isEditMode={editMode === 0}
           onChange={(school) => {
-            setNewUser((u) => ({ ...u, school }));
+            setNewUser((u) => (!u ? u : { ...u, school }));
           }}
         />
         <PanelInput
@@ -189,7 +189,7 @@ const Presentation = () => {
           placeholder="Niveau de votre classe"
           isEditMode={editMode === 0}
           onChange={(level) => {
-            setNewUser((u) => ({ ...u, level }));
+            setNewUser((u) => (!u ? u : { ...u, level }));
           }}
         />
         <PanelInput
@@ -199,7 +199,7 @@ const Presentation = () => {
           placeholder="Adresse"
           isEditMode={editMode === 0}
           onChange={(address) => {
-            setNewUser((u) => ({ ...u, address }));
+            setNewUser((u) => (!u ? u : { ...u, address }));
           }}
         />
         <PanelInput
@@ -209,7 +209,7 @@ const Presentation = () => {
           placeholder="Ville"
           isEditMode={editMode === 0}
           onChange={(city) => {
-            setNewUser((u) => ({ ...u, city }));
+            setNewUser((u) => (!u ? u : { ...u, city }));
           }}
         />
         <PanelInput
@@ -219,7 +219,7 @@ const Presentation = () => {
           placeholder="Code postal"
           isEditMode={editMode === 0}
           onChange={(postalCode) => {
-            setNewUser((u) => ({ ...u, postalCode }));
+            setNewUser((u) => (!u ? u : { ...u, postalCode }));
           }}
         />
         {editMode === 0 && (
@@ -263,7 +263,7 @@ const Presentation = () => {
           placeholder="Pseudo de la classe"
           isEditMode={editMode === 1}
           onChange={(pseudo) => {
-            setNewUser((u) => ({ ...u, pseudo }));
+            setNewUser((u) => (!u ? u : { ...u, pseudo }));
           }}
           errorMsg="Pseudo indisponible"
           hasError={errors.pseudo}
@@ -276,7 +276,7 @@ const Presentation = () => {
           placeholder="Email du professeur"
           isEditMode={editMode === 1}
           onChange={(email) => {
-            setNewUser((u) => ({ ...u, email }));
+            setNewUser((u) => (!u ? u : { ...u, email }));
           }}
           errorMsg="Email invalide"
           hasError={errors.email}

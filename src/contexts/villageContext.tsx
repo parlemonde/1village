@@ -25,7 +25,12 @@ interface VillageContextValue {
   setSelectedPhase: (phase: number) => void;
 }
 
-export const VillageContext = React.createContext<VillageContextValue>(null);
+export const VillageContext = React.createContext<VillageContextValue>({
+  village: null,
+  selectedPhase: -1,
+  showSelectVillageModal: () => {},
+  setSelectedPhase: () => {},
+});
 
 type VillageContextProviderProps = React.PropsWithChildren<{
   initialVillage: Village | null;
@@ -35,7 +40,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const { enqueueSnackbar } = useSnackbar();
   const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const [village, setVillage] = React.useState<Village | null>(initialVillage);
-  const [villages, setVillages] = React.useState<Village[] | null>([]);
+  const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
   const [selectedPhase, setSelectedPhase] = React.useState(initialVillage ? initialVillage.activePhase : -1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);

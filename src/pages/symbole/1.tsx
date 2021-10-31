@@ -20,17 +20,17 @@ const SymbolStep1 = () => {
   const selectRef = React.useRef<HTMLDivElement>(null);
   const { activities } = useActivities({
     page: 0,
-    countries: [user?.country.isoCode.toUpperCase()],
+    countries: user ? [user.country.isoCode.toUpperCase()] : [],
     pelico: true,
     type: ActivityType.SYMBOL,
   });
-  const sameActivities = activities.filter((c) => c.subType === activity.subType);
+  const sameActivities = activity ? activities.filter((c) => c.subType === activity.subType) : [];
 
   // symbol sub-type
   const symbolTypeIndex =
     activity !== null && 'edit' in router.query && isSymbol(activity)
       ? activity.subType ?? 0
-      : parseInt(getQueryString(router.query['category']) ?? '-1', 10) ?? 0;
+      : parseInt(getQueryString(router.query['category']) || '-1', 10) ?? 0;
 
   const onNext = () => {
     updateActivity({ responseActivityId: null, responseType: null });
@@ -75,12 +75,12 @@ const SymbolStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[SYMBOL_TYPES[activity.subType]?.step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']} activeStep={0} />
+        <Steps steps={[SYMBOL_TYPES[activity.subType || 0]?.step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']} activeStep={0} />
         <div className="width-900">
           <p className="text">
             Vous trouvez ici les symboles qui ont déjà été présentés par les Pélicopains de type &quot;
-            {SYMBOL_TYPES[activity.subType]?.step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre symbole ! Vous
-            pouvez également choisir de présenter un autre symbole, en revenant à l&apos;étape précédente.
+            {SYMBOL_TYPES[activity.subType || 0]?.step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre symbole !
+            Vous pouvez également choisir de présenter un autre symbole, en revenant à l&apos;étape précédente.
           </p>
           <StepsButton prev="/symbole" next={onNext} />
           <div>
@@ -88,7 +88,7 @@ const SymbolStep1 = () => {
               <Activities activities={sameActivities} withLinks />
             ) : (
               <p className="center">
-                Il n&apos;existe encore aucun symbole culturel sur le thème &quot;{SYMBOL_TYPES[activity.subType]?.title}&quot;
+                Il n&apos;existe encore aucun symbole culturel sur le thème &quot;{SYMBOL_TYPES[activity.subType || 0]?.title}&quot;
               </p>
             )}
           </div>

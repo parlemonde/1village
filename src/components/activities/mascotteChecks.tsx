@@ -7,8 +7,8 @@ export const isValidSum = (x: number, y: number, z: number) => {
 
 export const isFirstStepValid = (data: MascotteData) =>
   data?.presentation.length > 0 &&
-  isValidSum(data?.girlStudent, data?.boyStudent, data?.totalStudent) &&
-  isValidSum(data?.womanTeacher, data?.manTeacher, data?.totalTeacher) &&
+  isValidSum(data?.girlStudent || 0, data?.boyStudent || 0, data?.totalStudent || 0) &&
+  isValidSum(data?.womanTeacher || 0, data?.manTeacher || 0, data?.totalTeacher || 0) &&
   data?.totalStudent !== 0 &&
   data?.totalTeacher !== 0 &&
   data?.totalStudent !== null &&

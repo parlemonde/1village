@@ -29,6 +29,9 @@ const ContenuLibre = () => {
   }, [activity, router]);
 
   const updateContent = (content: ActivityContent[]): void => {
+    if (!activity) {
+      return;
+    }
     updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
 
@@ -37,29 +40,25 @@ const ContenuLibre = () => {
     router.push('/contenu-libre/2');
   };
 
+  if (!activity) {
+    return <Base />;
+  }
+
   return (
-    activity && (
-      <Base>
-        <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-          <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
-          <div className="width-900">
-            <h1>Ecrivez le contenu de votre publication</h1>
-            <p className="text" style={{ fontSize: '1.1rem' }}>
-              Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication ; dans l&apos;étape 2 vous pourrez définir l&apos;aspect de
-              la carte résumée de votre publication.
-            </p>
-            <ContentEditor
-              content={activity.content}
-              updateContent={updateContent}
-              addContent={addContent}
-              deleteContent={deleteContent}
-              save={save}
-            />
-            <StepsButton prev="/contenu-libre" next={onNext} />
-          </div>
+    <Base>
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
+        <div className="width-900">
+          <h1>Ecrivez le contenu de votre publication</h1>
+          <p className="text" style={{ fontSize: '1.1rem' }}>
+            Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication ; dans l&apos;étape 2 vous pourrez définir l&apos;aspect de
+            la carte résumée de votre publication.
+          </p>
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <StepsButton prev="/contenu-libre" next={onNext} />
         </div>
-      </Base>
-    )
+      </div>
+    </Base>
   );
 };
 

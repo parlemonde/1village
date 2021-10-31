@@ -36,7 +36,7 @@ const PresentationStep3 = () => {
     router.push('/se-presenter/thematique/4');
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null || data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 

@@ -49,7 +49,7 @@ const EnigmeStep5 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !isEnigme(activity)) {
+  if (data === null || activity === null || !isEnigme(activity)) {
     return <div></div>;
   }
 

@@ -28,7 +28,7 @@ const SymbolStep3 = () => {
   const { user } = React.useContext(UserContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
   const [style, setStyle] = React.useState({});
 
   const data = (activity?.data as SymbolData) || null;
@@ -66,7 +66,7 @@ const SymbolStep3 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null || user === null || data === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
@@ -74,7 +74,7 @@ const SymbolStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[SYMBOL_TYPES[activity.subType].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']}
+          steps={[SYMBOL_TYPES[activity.subType || 0].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']}
           activeStep={2}
           errorSteps={errorSteps}
         />
@@ -132,7 +132,7 @@ const SymbolStep3 = () => {
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>{SYMBOL_TYPES[activity.subType].title}</p>
+            <p style={{ margin: '0.5rem 0' }}>{SYMBOL_TYPES[activity.subType || 0].title}</p>
           </div>
 
           <span className={`text text--small ${errorSteps.length > 0 ? 'text--alert' : 'text--success'}`}>Symbole</span>

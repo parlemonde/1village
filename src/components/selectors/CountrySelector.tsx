@@ -37,7 +37,7 @@ export const CountrySelector = ({ label, value = '', onChange, filterCountries, 
   );
   const [option, setOption] = React.useState<CountryOption | null>(null);
 
-  const prevFilter = React.useRef<string[]>(filterCountries);
+  const prevFilter = React.useRef<string[] | undefined>(filterCountries);
   React.useEffect(() => {
     const shouldUpdateValue = (prevFilter.current || []).join(',') !== (filterCountries || []).join(',');
     if (shouldUpdateValue) {
@@ -48,7 +48,7 @@ export const CountrySelector = ({ label, value = '', onChange, filterCountries, 
       const newOption = options.find((o) => o.isoCode.toLowerCase() === value.toLowerCase()) || null;
       setOption(newOption);
       if (shouldUpdateValue && onChange) {
-        onChange(newOption.isoCode || '');
+        onChange(newOption?.isoCode || '');
       }
     } else {
       setOption(null);

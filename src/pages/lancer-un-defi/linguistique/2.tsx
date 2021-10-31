@@ -101,7 +101,7 @@ const DefiStep2 = () => {
     );
   }, [mascotte, languages]);
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
     return <div></div>;
   }
 
@@ -135,7 +135,7 @@ const DefiStep2 = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} md={4} style={{ padding: '1rem' }}>
                 <div style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                  <AvatarImg user={user} size="large" />
+                  {user && <AvatarImg user={user} size="large" />}
                 </div>
               </Grid>
               <Grid item xs={12} md={8}>

@@ -34,14 +34,14 @@ export const MultipleCountrySelector = ({ label, value = [], onChange, filterCou
     [countries, filterCountries],
   );
 
-  const [option, setOption] = React.useState<CountryOption[] | null>([]);
+  const [option, setOption] = React.useState<CountryOption[]>([]);
   React.useEffect(() => {
     const newOption = options.filter((o) => value.includes(o.isoCode)) || null;
     setOption(newOption);
-  }, [options, value, countries, filterCountries, onChange]);
+  }, [options, value]);
 
   const onChangeOption = React.useCallback(
-    (_event: React.ChangeEvent<unknown>, newOption: CountryOption[] | null) => {
+    (_event: React.ChangeEvent<unknown>, newOption: CountryOption[]) => {
       if (!value) {
         setOption(newOption);
       }

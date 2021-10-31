@@ -46,7 +46,7 @@ const Activity = () => {
   const activityUser = activity === null ? null : usersMap[activity.userId] ?? null;
   const userIsSelf = activityUser !== null && user !== null && activityUser.id === user.id;
 
-  if (activity === null || user === null) {
+  if (activity === null || activityUser === null) {
     return null;
   }
 

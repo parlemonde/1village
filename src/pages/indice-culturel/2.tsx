@@ -29,6 +29,9 @@ const IndiceStep2 = () => {
   }, [activity, router]);
 
   const updateContent = (content: ActivityContent[]): void => {
+    if (!activity) {
+      return;
+    }
     updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
   };
 
@@ -37,14 +40,14 @@ const IndiceStep2 = () => {
     router.push('/indice-culturel/3');
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (data === null || activity === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[INDICE_TYPES[activity.subType].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
+        <Steps steps={[INDICE_TYPES[activity.subType || 0].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
         <div className="width-900">
           <h1>Faites une présentation libre de votre indice</h1>
           <p className="text">

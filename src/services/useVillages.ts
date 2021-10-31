@@ -30,7 +30,7 @@ export const useVillages = (): { villages: Village[]; setVillages(newVillages: V
   );
 
   return {
-    villages: isLoading || error ? [] : data,
+    villages: isLoading || error ? [] : data || [],
     setVillages,
   };
 };

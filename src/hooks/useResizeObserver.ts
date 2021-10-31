@@ -12,14 +12,14 @@ type Dimensions = {
  * Hook to return the dimensions of a component. Use with noSSR!
  * @param ref
  */
-export const useResizeObserver = (): [(node: HTMLElement) => void, Dimensions] => {
+export const useResizeObserver = (): [(node: HTMLElement | null) => void, Dimensions] => {
   const [dimensions, setDimensions] = React.useState({
     width: 0,
     height: 0,
     scrollHeight: 0,
     scrollWidth: 0,
   });
-  const observedNode = React.useRef<HTMLElement>();
+  const observedNode = React.useRef<HTMLElement | null>();
   const resizeObserver = React.useRef<ResizeObserver>();
   const animationFrame = React.useRef<number | null>(null);
 
@@ -56,9 +56,10 @@ export const useResizeObserver = (): [(node: HTMLElement) => void, Dimensions] =
   React.useEffect(() => removeObserver, [removeObserver]);
 
   const observeNode = React.useCallback(
-    (node?: HTMLElement) => {
-      if (!node) {
+    (node?: HTMLElement | null) => {
+      if (node === undefined || node === null) {
         removeObserver();
+        return;
       }
       const currentNode = observedNode.current;
       if (currentNode === node) {

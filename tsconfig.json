@@ -14,7 +14,7 @@
     "outDir": "dist/next",
     "removeComments": true,
     "sourceMap": true,
-    "strict": false, // true
+    "strict": true,
     "noImplicitAny": true,
     "strictPropertyInitialization": false,
     "noImplicitThis": true,

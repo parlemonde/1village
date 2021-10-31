@@ -21,6 +21,9 @@ export class GeoJsonGeometry extends BufferGeometry {
 
     let groupCnt = 0;
     groups.forEach((newG) => {
+      if (newG === undefined) {
+        return;
+      }
       const prevIndCnt = group.indices.length;
       group = concatGroup(group, newG);
       this.addGroup(prevIndCnt, group.indices.length - prevIndCnt, groupCnt++);

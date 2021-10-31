@@ -64,7 +64,12 @@ export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }:
       ) : noButtons ? null : (
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button style={{ padding: '6px 8px' }} onClick={onAskSame} color="primary" variant={askSame.includes(user?.id) ? 'contained' : 'text'}>
+            <Button
+              style={{ padding: '6px 8px' }}
+              onClick={onAskSame}
+              color="primary"
+              variant={user !== null && askSame.includes(user.id) ? 'contained' : 'text'}
+            >
               <span className="text text--bold">Je me pose la même question</span>
             </Button>
             {askSame.length > 0 && <span className="text text--primary">+ {askSame.length}</span>}

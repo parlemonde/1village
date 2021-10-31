@@ -37,17 +37,17 @@ export const DEFAULT_MASCOTTE_DATA: MascotteData = {
 export const getMascotteContent = (data: MascotteData, countries: Country[], currencies: Currency[], languages: Language[]): string[] => {
   const content: string[] = [];
   content.push(
-    `Nous sommes ${data.presentation ?? 0}.\nNous sommes ${data.totalStudent ?? 0} élève${pluralS(data.totalStudent)}, dont ${
+    `Nous sommes ${data.presentation ?? 0}.\nNous sommes ${data.totalStudent ?? 0} élève${pluralS(data.totalStudent || 0)}, dont ${
       data.girlStudent ?? 0
-    } fille${pluralS(data.girlStudent)} et ${data.boyStudent ?? 0} garçon${pluralS(
-      data.boyStudent,
-    )}.\nEn moyenne, l’âge des élèves de notre classe est ${data.meanAge ?? 0} an${pluralS(data.meanAge)}.\nNous avons ${
+    } fille${pluralS(data.girlStudent || 0)} et ${data.boyStudent ?? 0} garçon${pluralS(
+      data.boyStudent || 0,
+    )}.\nEn moyenne, l’âge des élèves de notre classe est ${data.meanAge ?? 0} an${pluralS(data.meanAge || 0)}.\nNous avons ${
       data.totalTeacher ?? 0
-    } professeur${pluralS(data.totalTeacher)}, dont ${data.womanTeacher ?? 0} femme${pluralS(data.womanTeacher)} et ${
+    } professeur${pluralS(data.totalTeacher || 0)}, dont ${data.womanTeacher ?? 0} femme${pluralS(data.womanTeacher || 0)} et ${
       data.manTeacher ?? 0
-    } homme${pluralS(data.manTeacher)}.\nDans notre école, il y a ${data.numberClassroom ?? 0} classe${pluralS(data.numberClassroom)} et ${
+    } homme${pluralS(data.manTeacher || 0)}.\nDans notre école, il y a ${data.numberClassroom ?? 0} classe${pluralS(data.numberClassroom || 0)} et ${
       data.totalSchoolStudent ?? 0
-    } élève${pluralS(data.totalSchoolStudent)}.`,
+    } élève${pluralS(data.totalSchoolStudent || 0)}.`,
   );
   const displayCountries = countries.filter((country) => data.countries.includes(country.isoCode)).map((country) => country.name);
   content.push(

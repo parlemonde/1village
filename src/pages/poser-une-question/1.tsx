@@ -27,7 +27,7 @@ const Question1 = () => {
   const { activities } = useActivities({
     limit: 50,
     page: 0,
-    countries: [user.country.isoCode.toUpperCase()],
+    countries: user ? [user.country.isoCode.toUpperCase()] : [],
     pelico: true,
     type: ActivityType.QUESTION,
   });
@@ -125,10 +125,10 @@ const Question1 = () => {
                     <div style={{ width: '100%', textAlign: 'right' }}>
                       <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Button
-                          style={askSame.includes(user?.id) ? {} : { padding: '6px 16px', backgroundColor: 'white' }}
+                          style={user && askSame.includes(user.id) ? {} : { padding: '6px 16px', backgroundColor: 'white' }}
                           onClick={onAskSame(activity, askSame)}
                           color="primary"
-                          variant={askSame.includes(user?.id) ? 'contained' : 'text'}
+                          variant={user && askSame.includes(user.id) ? 'contained' : 'text'}
                         >
                           <span className="text text--bold">Je me pose la même question</span>
                         </Button>

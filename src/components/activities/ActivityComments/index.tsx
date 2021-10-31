@@ -39,7 +39,7 @@ export const ActivityComments = ({ activityId, activityType, usersMap }: Activit
 
   const data = React.useMemo(() => {
     return [...comments.map((c) => ({ data: c, type: 'comment' as const })), ...activities.map((a) => ({ data: a, type: 'activity' as const }))].sort(
-      (a, b) => new Date(a.data.createDate).getTime() - new Date(b.data.createDate).getTime(),
+      (a, b) => new Date(a.data.createDate || '').getTime() - new Date(b.data.createDate || '').getTime(),
     );
   }, [comments, activities]);
 
@@ -61,7 +61,7 @@ export const ActivityComments = ({ activityId, activityType, usersMap }: Activit
             <div key={activity.id} className="activity__comment-container">
               <AvatarImg user={activityUser} size="small" style={{ margin: '0.25rem' }} />
               <div className="activity__comment-card activity__comment-card--no-padding">
-                <ActivityCard activity={activity} isSelf={user && activity.userId === user.id} user={activityUser} forComment />
+                <ActivityCard activity={activity} isSelf={user !== null && activity.userId === user.id} user={activityUser} forComment />
               </div>
             </div>
           );

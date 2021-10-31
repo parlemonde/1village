@@ -57,11 +57,11 @@ const NewUser = () => {
   });
 
   const checkEmailAndPseudo = async () => {
-    const pseudoValid = await isPseudoValid(newUser.pseudo, '');
+    const pseudoValid = newUser.pseudo !== undefined && (await isPseudoValid(newUser.pseudo, ''));
     setErrors((e) => ({
       ...e,
-      email: newUser.email && !isEmailValid(newUser.email),
-      pseudo: newUser.pseudo && !pseudoValid,
+      email: newUser.email !== undefined && !isEmailValid(newUser.email),
+      pseudo: newUser.pseudo !== undefined && !pseudoValid,
     }));
   };
 
@@ -209,7 +209,7 @@ const NewUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={newUser.country.isoCode}
+            value={newUser.country?.isoCode || ''}
             onChange={(countryCode) => {
               setNewUser((u) => ({ ...u, country: { isoCode: countryCode, name: '' } }));
             }}

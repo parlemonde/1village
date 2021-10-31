@@ -11,7 +11,7 @@ import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const PresentationSuccess = () => {
   const { activity } = React.useContext(ActivityContext);
-  const isMascotteActivity = isMascotte(activity);
+  const isMascotteActivity = activity && isMascotte(activity);
 
   return (
     <Base>

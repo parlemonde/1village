@@ -39,10 +39,12 @@ const SuggestionCarousel = ({ suggestions, style }: SuggestionCarouselProps) => 
     }
     intervalRef.current = window.setInterval(updateTab, 8000);
     return () => {
-      window.clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        window.clearInterval(intervalRef.current);
+      }
     };
   }, [updateTab]);
-  const onChangeTab = (_event: React.ChangeEvent<HTMLElement>, value: number) => {
+  const onChangeTab = (_event: React.SyntheticEvent<Element, Event>, value: number) => {
     if (intervalRef.current) {
       window.clearInterval(intervalRef.current);
     }

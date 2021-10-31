@@ -109,7 +109,7 @@ export const useObjectHover = () => {
       <div style={{ position: 'absolute', display: 'inline-block', left: popoverPos.x, top: popoverPos.y }}>
         <div style={{ position: 'relative', left: '-50%', pointerEvents: 'none' }}>
           <Card style={{ padding: '0.25rem 0.5rem' }}>
-            {hoveredObject.getType() === 'country' && <span className="text text--small">{hoveredObject.userData.countryName}</span>}
+            {hoveredObject.getType() === 'country' && <span className="text text--small">{hoveredObject.userData.countryName as string}</span>}
             {hoveredObject.getType() === 'pin' && <UserPopover user={hoveredObject.userData.user as User} />}
           </Card>
         </div>

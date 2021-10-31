@@ -29,7 +29,7 @@ const MascotteStep4 = () => {
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);
-  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
   const { countries } = useCountries();
   const { languages } = useLanguages();
   const { currencies } = useCurrencies();
@@ -102,6 +102,9 @@ const MascotteStep4 = () => {
   }, [activity, content, updateActivity]);
 
   const onPublish = async () => {
+    if (!activity || !user) {
+      return;
+    }
     setIsLoading(true);
     const success = await save(true);
     if (success) {

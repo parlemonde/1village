@@ -21,6 +21,6 @@ export const useCurrencies = (): { currencies: Currency[] } => {
   const { data, isLoading, error } = useQuery<Currency[], unknown>(['currencies'], getCurrencies);
 
   return {
-    currencies: isLoading || error ? [] : data,
+    currencies: isLoading || error ? [] : data || [],
   };
 };

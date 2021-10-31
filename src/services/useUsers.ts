@@ -30,7 +30,7 @@ export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } 
   );
 
   return {
-    users: isLoading || error ? [] : data,
+    users: isLoading || error ? [] : data || [],
     setUsers,
   };
 };
@@ -49,7 +49,7 @@ export const useUserRequests = () => {
         url: '/users',
         data: {
           ...u,
-          countryCode: country.isoCode,
+          countryCode: country?.isoCode,
         },
       });
       if (response.error) {

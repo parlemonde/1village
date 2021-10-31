@@ -24,6 +24,9 @@ const Question2 = () => {
   }, [activity, router]);
 
   const onQuestionChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!activity) {
+      return;
+    }
     const content = [...activity.content];
     if (!content[index]) {
       return;
@@ -33,6 +36,9 @@ const Question2 = () => {
   };
 
   const onAddQuestion = () => {
+    if (!activity) {
+      return;
+    }
     const content = [...activity.content];
     if (content.length >= 3) {
       return;

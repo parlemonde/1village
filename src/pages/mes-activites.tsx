@@ -33,9 +33,10 @@ const MesActivites = () => {
 
   const activityToDelete = deleteIndex.index === -1 ? null : deleteIndex.isDraft ? drafts[deleteIndex.index] : activities[deleteIndex.index];
   const onDeleteActivity = async () => {
-    if (activityToDelete !== null) {
-      await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
+    if (activityToDelete === null) {
+      return;
     }
+    await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     if (isMascotte(activityToDelete)) {
       const newUser = {
         avatar: '',
@@ -49,7 +50,7 @@ const MesActivites = () => {
           displayName: '',
         },
       });
-      if (!response.error) {
+      if (!response.error && user !== null) {
         setUser({ ...user, ...newUser });
         queryClient.invalidateQueries('users');
         queryClient.invalidateQueries('village-users');
@@ -115,7 +116,7 @@ const MesActivites = () => {
         ariaLabelledBy="delete-action-title"
       >
         <div>Voulez vous vraiment supprimer cette activité ?</div>
-        {activityToDelete && <ActivityCard activity={activityToDelete} isSelf={true} user={user} noButtons />}
+        {activityToDelete && user && <ActivityCard activity={activityToDelete} isSelf={true} user={user} noButtons />}
       </Modal>
     </Base>
   );

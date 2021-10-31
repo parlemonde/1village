@@ -68,7 +68,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
     );
   }
   return (
-    <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : null}>
+    <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
       {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
     </Avatar>
   );

@@ -68,7 +68,7 @@ const Question3 = () => {
   };
 
   const onPublish = async () => {
-    if (!activity) {
+    if (!activity || !content) {
       return;
     }
 

@@ -27,7 +27,7 @@ const DefiStep3 = () => {
     }
   }, [activity, router]);
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
     return <div></div>;
   }
 

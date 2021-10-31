@@ -15,7 +15,7 @@ const VideoView = ({ value }: ViewProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
 
-  const showDownloadButton = React.useMemo(() => value.indexOf('vimeo') !== -1, [value]);
+  const showDownloadButton = React.useMemo(() => value !== undefined && value.indexOf('vimeo') !== -1, [value]);
 
   const onDownload = async () => {
     setLoading(true);

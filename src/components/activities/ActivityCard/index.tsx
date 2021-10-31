@@ -59,7 +59,7 @@ export const ActivityCard = ({
         style={{
           margin: forComment ? '0' : '1rem 0',
           cursor: onSelect !== undefined ? 'pointer' : 'unset',
-          border: activity?.isPinned && `2px solid ${primaryColor}`,
+          border: activity?.isPinned ? `2px solid ${primaryColor}` : undefined,
         }}
       >
         <div className="activity-card__header">

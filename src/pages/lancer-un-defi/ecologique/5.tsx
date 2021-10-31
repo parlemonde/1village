@@ -47,7 +47,7 @@ const DefiEcoStep5 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isEco(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isEco(activity))) {
     return <div></div>;
   }
 

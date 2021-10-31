@@ -30,6 +30,6 @@ export const useVillageUsers = (): { users: User[] } => {
   const { data, isLoading, error } = useQuery<User[], unknown>(['village-users', { villageId }], getUsers);
 
   return {
-    users: isLoading || error ? [] : data,
+    users: isLoading || error ? [] : data || [],
   };
 };

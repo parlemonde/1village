@@ -71,10 +71,14 @@ const EditUser = () => {
     const pseudoValid = await isPseudoValid(user.pseudo, initialPseudo.current);
     setErrors((e) => ({
       ...e,
-      email: user.email && !isEmailValid(user.email),
-      pseudo: user.pseudo && !pseudoValid,
+      email: user.email !== undefined && !isEmailValid(user.email),
+      pseudo: user.pseudo !== undefined && !pseudoValid,
     }));
   };
+
+  if (user === null) {
+    return <div></div>;
+  }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -103,12 +107,8 @@ const EditUser = () => {
     }
   };
 
-  if (user === null) {
-    return <div></div>;
-  }
-
   const updateUserField = (field: Extract<keyof User, string>) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUser((u) => ({ ...u, [field]: event.target.value }));
+    setUser((u) => (!u ? null : { ...u, [field]: event.target.value }));
   };
 
   return (
@@ -193,7 +193,7 @@ const EditUser = () => {
               id="type-simple-select"
               value={user.type}
               onChange={(event) => {
-                setUser((u) => ({ ...u, type: event.target.value as number }));
+                setUser((u) => (!u ? null : { ...u, type: event.target.value as number }));
               }}
             >
               {[UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN].map((type) => (
@@ -211,7 +211,7 @@ const EditUser = () => {
               id="village-simple-select"
               value={user.villageId}
               onChange={(event) => {
-                setUser((u) => ({ ...u, villageId: event.target.value as number }));
+                setUser((u) => (!u ? null : { ...u, villageId: event.target.value as number }));
               }}
             >
               <MenuItem value={0}>Aucun</MenuItem>
@@ -226,7 +226,7 @@ const EditUser = () => {
             label={Required('Pays')}
             value={user.country.isoCode}
             onChange={(countryCode) => {
-              setUser((u) => ({ ...u, country: { isoCode: countryCode, name: '' } }));
+              setUser((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
             }}
             filterCountries={
               user.villageId ? villages.find((v) => v.id === user.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined

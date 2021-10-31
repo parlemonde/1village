@@ -30,6 +30,9 @@ const EnigmeStep3 = () => {
   }, [activity, router]);
 
   const updateContent = (content: ActivityContent[]): void => {
+    if (!activity) {
+      return;
+    }
     updateActivity({ content: [...content, ...activity.content.slice(indiceContentIndex, activity.content.length)] });
   };
   const addDescriptionContent = (type: ActivityContentType, value?: string) => {
@@ -41,7 +44,7 @@ const EnigmeStep3 = () => {
     updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex - 1 } });
   };
 
-  if (data === null || !isEnigme(activity)) {
+  if (data === null || activity === null || !isEnigme(activity)) {
     return <div></div>;
   }
 

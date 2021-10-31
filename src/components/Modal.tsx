@@ -31,7 +31,7 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 
 export type DialogTitleProps = React.PropsWithChildren<{
   id: string;
-  onClose: () => void;
+  onClose?: () => void;
 }>;
 const DialogTitle = ({ children, id, onClose }: DialogTitleProps) => {
   return (
@@ -84,7 +84,7 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({
   open = true,
   onClose = () => {},
-  onConfirm = null,
+  onConfirm,
   ariaLabelledBy,
   ariaDescribedBy,
   color = 'secondary',
@@ -139,12 +139,12 @@ export const Modal: React.FC<ModalProps> = ({
                 {cancelLabel || 'Annuler'}
               </Button>
             )}
-            {onConfirm !== null && error && (
+            {onConfirm !== undefined && error && (
               <RedButton onClick={onConfirm} disabled={disabled} variant="contained">
                 {confirmLabel || 'Oui'}
               </RedButton>
             )}
-            {onConfirm !== null && !error && (
+            {onConfirm !== undefined && !error && (
               <Button onClick={onConfirm} disabled={disabled} color={color} variant="contained">
                 {confirmLabel || 'Non'}
               </Button>

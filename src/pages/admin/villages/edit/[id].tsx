@@ -38,6 +38,10 @@ const EditVillage = () => {
     getVillage().catch((e) => console.error(e));
   }, [getVillage]);
 
+  if (village === null) {
+    return <div></div>;
+  }
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!village.name || !village.countries[0] || !village.countries[1]) {
@@ -48,10 +52,6 @@ const EditVillage = () => {
       router.push('/admin/villages');
     }
   };
-
-  if (village === null) {
-    return <div></div>;
-  }
 
   return (
     <div className="admin--container">
@@ -73,14 +73,14 @@ const EditVillage = () => {
             autoComplete="new-password"
             value={village.name}
             onChange={(event) => {
-              setVillage((v) => ({ ...v, name: event.target.value }));
+              setVillage((v) => (!v ? null : { ...v, name: event.target.value }));
             }}
             style={{ marginBottom: '1rem' }}
           />
           <CountrySelector
             value={village.countries[0].isoCode}
             onChange={(newValue: string) => {
-              setVillage((v) => ({ ...v, countries: [{ isoCode: newValue, name: '' }, village.countries[1]] }));
+              setVillage((v) => (!v ? null : { ...v, countries: [{ isoCode: newValue, name: '' }, village.countries[1]] }));
             }}
             label="Pays 1"
             style={{ width: '100%', marginBottom: '1rem' }}
@@ -88,7 +88,7 @@ const EditVillage = () => {
           <CountrySelector
             value={village.countries[1].isoCode}
             onChange={(newValue: string) => {
-              setVillage((v) => ({ ...v, countries: [village.countries[0], { isoCode: newValue, name: '' }] }));
+              setVillage((v) => (!v ? null : { ...v, countries: [village.countries[0], { isoCode: newValue, name: '' }] }));
             }}
             label="Pays 2"
             style={{ width: '100%', marginBottom: '1rem' }}

@@ -21,7 +21,10 @@ interface ActivitiesProps {
 }
 
 export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
-  const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState({
+  const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState<{
+    selectedActivityId: number | null;
+    responseActivityId: number | null;
+  }>({
     selectedActivityId: null,
     responseActivityId: null,
   });
@@ -43,7 +46,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
         const card = (
           <ActivityCard
             activity={activity}
-            isSelf={user && activity.userId === user.id}
+            isSelf={user !== null && activity.userId === user.id}
             user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
             key={activity.id}
             noButtons={noButtons}
@@ -117,7 +120,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
                     {responseActivity !== null && (
                       <ActivityCard
                         activity={responseActivity}
-                        isSelf={user && responseActivity.userId === user.id}
+                        isSelf={user !== null && responseActivity.userId === user.id}
                         user={userMap[responseActivity.userId] !== undefined ? users[userMap[responseActivity.userId]] : undefined}
                       />
                     )}

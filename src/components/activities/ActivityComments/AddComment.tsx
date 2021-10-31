@@ -57,7 +57,7 @@ export const AddComment = ({ activityId, activityType, label }: AddCommentProps)
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
-  const isDisplayed = activityType === 5 ? selectedPhase === 1 : [0, 3, 6, 7].includes(activityType);
+  const isDisplayed = activityType === 5 ? selectedPhase === 1 : activityType !== null && [0, 3, 6, 7].includes(activityType);
 
   if (!user) {
     return null;

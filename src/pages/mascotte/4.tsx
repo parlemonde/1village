@@ -13,7 +13,7 @@ const MascotteStep4 = () => {
   const { activity } = React.useContext(ActivityContext);
   const data = (activity?.data as MascotteData) || null;
   const [cguChecked, setCguChecked] = React.useState(false);
-  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
 
   const initErrorSteps = React.useRef(false);
   React.useEffect(() => {

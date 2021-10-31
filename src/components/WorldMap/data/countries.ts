@@ -22,7 +22,7 @@ const COLORS: { [key: string]: string[] } = {
   'South America': ['#BBF7D0', '#99F6E4', '#047857', '#059669', '#34D399', '#6EE7B7'],
 };
 
-export const getCountries = async (): Promise<Group | null> => {
+export const getCountries = async (): Promise<Group> => {
   const countries = new Group();
   countries.name = 'countries';
 
@@ -32,7 +32,7 @@ export const getCountries = async (): Promise<Group | null> => {
     url: '/earth/countries.geo.json',
   });
   if (response.error) {
-    return null;
+    return countries;
   }
 
   const features = (response.data as GeoJSONCountriesData).features;

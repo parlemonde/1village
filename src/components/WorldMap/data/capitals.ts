@@ -22,7 +22,7 @@ export const getCapitals = async (): Promise<Group> => {
     url: '/earth/capitals.geo.json',
   });
   if (response.error) {
-    return null;
+    return capitals;
   }
 
   const features = (response.data as GeoJSONCityData).features;

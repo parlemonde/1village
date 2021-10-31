@@ -21,6 +21,6 @@ export const useCountries = (): { countries: Country[] } => {
   const { data, isLoading, error } = useQuery<Country[], unknown>(['countries'], getCountries);
 
   return {
-    countries: isLoading || error ? [] : data,
+    countries: isLoading || error ? [] : data || [],
   };
 };

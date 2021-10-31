@@ -25,7 +25,7 @@ const IndiceStep3 = () => {
   const { activity, save } = React.useContext(ActivityContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errorSteps, setErrorSteps] = React.useState([]);
+  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
   const [style, setStyle] = React.useState({});
 
   const data = (activity?.data as IndiceData) || null;
@@ -61,14 +61,18 @@ const IndiceStep3 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !('theme' in data) || data.theme === -1) {
+  if (data === null || activity === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[INDICE_TYPES[activity.subType].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={2} errorSteps={errorSteps} />
+        <Steps
+          steps={[INDICE_TYPES[activity.subType || 0].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']}
+          activeStep={2}
+          errorSteps={errorSteps}
+        />
         <div className="width-900">
           <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -120,7 +124,7 @@ const IndiceStep3 = () => {
           )}
           <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
-            <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType].title}</p>
+            <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType || 0].title}</p>
           </div>
 
           <span className={`text text--small ${errorSteps.length > 0 ? 'text--alert' : 'text--success'}`}>Indice culturel</span>

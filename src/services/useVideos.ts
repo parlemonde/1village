@@ -21,6 +21,6 @@ export const useVideos = (): { videos: Video[] } => {
   const { data, isLoading, error } = useQuery<Video[], unknown>(['videos'], getVideos);
 
   return {
-    videos: isLoading || error ? [] : data,
+    videos: isLoading || error ? [] : data || [],
   };
 };

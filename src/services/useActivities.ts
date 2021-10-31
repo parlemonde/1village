@@ -29,7 +29,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       return [];
     }
     const query: {
-      [key: string]: string | number | boolean;
+      [key: string]: string | number | boolean | undefined;
     } = {
       ...args,
       type: Array.isArray(type) ? type.join(',') : type,
@@ -62,6 +62,6 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
   }, [data]);
 
   return {
-    activities: error ? [] : isLoading ? prevData.current : data,
+    activities: error ? [] : isLoading ? prevData.current : data || [],
   };
 };

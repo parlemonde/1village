@@ -53,7 +53,7 @@ const MaClasse = () => {
     }
     for (const activity of activities || []) {
       if (isMascotte(activity)) {
-        setMascotteActivity((m) => ({ ...m, commentCount: activity.commentCount }));
+        setMascotteActivity((m) => (m === null ? null : { ...m, commentCount: activity.commentCount }));
       }
     }
   }, [hasMascotte, activities]);
@@ -72,9 +72,10 @@ const MaClasse = () => {
       ? drafts[deleteIndex.index]
       : activities[deleteIndex.index];
   const onDeleteActivity = async () => {
-    if (activityToDelete !== null) {
-      await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
+    if (activityToDelete === null) {
+      return;
     }
+    await deleteActivity(activityToDelete.id, deleteIndex.isDraft);
     if (isMascotte(activityToDelete)) {
       setMascotteActivity(null);
       const newUser = {
@@ -89,7 +90,7 @@ const MaClasse = () => {
           displayName: '',
         },
       });
-      if (!response.error) {
+      if (!response.error && user) {
         setUser({ ...user, ...newUser });
         queryClient.invalidateQueries('users');
         queryClient.invalidateQueries('village-users');
@@ -105,7 +106,7 @@ const MaClasse = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
           <h1 style={{ marginBottom: '1rem' }}>Notre mascotte</h1>
-          {mascotteActivity ? (
+          {mascotteActivity && user ? (
             <ActivityCard
               activity={mascotteActivity}
               user={user}
@@ -115,9 +116,9 @@ const MaClasse = () => {
                 setDeleteIndex({ index: 'mascotte', isDraft: false });
               }}
             />
-          ) : (
+          ) : user ? (
             <MascotteTemplate user={user} />
-          )}
+          ) : null}
           <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes Brouillons</h1>
           {drafts.length === 0 ? (
             <p>Vous n&apos;avez pas de brouillons d&apos;activités en cours.</p>
@@ -173,7 +174,7 @@ const MaClasse = () => {
         ariaLabelledBy="delete-action-title"
       >
         <div>Voulez vous vraiment supprimer cette activité ?</div>
-        {activityToDelete && <ActivityCard activity={activityToDelete} isSelf={true} user={user} noButtons />}
+        {activityToDelete && user && <ActivityCard activity={activityToDelete} isSelf={true} user={user} noButtons />}
       </Modal>
     </Base>
   );

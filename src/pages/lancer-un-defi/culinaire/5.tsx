@@ -49,7 +49,7 @@ const DefiStep5 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isCooking(activity))) {
     return <div></div>;
   }
 

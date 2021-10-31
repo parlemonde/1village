@@ -11,7 +11,7 @@ interface ImgCroppieProps {
 }
 
 export interface ImgCroppieRef {
-  getBlob(): Promise<Blob>;
+  getBlob(): Promise<Blob | null>;
 }
 
 const ImgCroppieComponent: React.ForwardRefRenderFunction<ImgCroppieRef, ImgCroppieProps> = (
@@ -20,7 +20,7 @@ const ImgCroppieComponent: React.ForwardRefRenderFunction<ImgCroppieRef, ImgCrop
 ) => {
   const croppie = React.useRef<Croppie | null>(null);
   const imgRef = React.useRef<HTMLImageElement>(null);
-  const timeoutRef = React.useRef<number>(null);
+  const timeoutRef = React.useRef<number | null>(null);
   const parentDiv = React.useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({

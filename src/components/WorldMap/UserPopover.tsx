@@ -8,7 +8,7 @@ import type { User } from 'types/user.type';
 
 export const UserPopover = ({ user }: { user: User }) => {
   const { user: selfUser } = React.useContext(UserContext);
-  const isSelf = user.id === selfUser.id;
+  const isSelf = selfUser !== null && user.id === selfUser.id;
 
   return (
     <div style={{ margin: 0, padding: 0, display: 'flex', alignItems: 'center' }}>

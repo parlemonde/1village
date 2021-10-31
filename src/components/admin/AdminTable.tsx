@@ -54,7 +54,7 @@ export const AdminTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, data, co
     const useSort = options.sort !== undefined && options.order !== undefined;
     const sortedData = useSort
       ? data.sort((a, b) => {
-          return a[options.order] >= b[options.order] ? (options.sort === 'asc' ? 1 : -1) : options.sort === 'asc' ? -1 : 1;
+          return (a[options.order || 0] || 0) >= (b[options.order || 0] || 0) ? (options.sort === 'asc' ? 1 : -1) : options.sort === 'asc' ? -1 : 1;
         })
       : data;
     return usePagination ? paginate(sortedData, options.limit || 10, options.page || 1) : sortedData;

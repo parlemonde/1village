@@ -97,7 +97,7 @@ export const ImageModal = ({
         setIsModalLoading(false);
         return;
       }
-      formData.append('image', await croppieRef.current.getBlob());
+      formData.append('image', (await croppieRef.current.getBlob()) || '');
     } else {
       if (file === null) {
         setIsModalLoading(false);

@@ -47,7 +47,7 @@ const Users = () => {
           <EditIcon />
         </IconButton>
       </Tooltip>
-      {user.id !== id && (
+      {user && user.id !== id && (
         <Tooltip title="Supprimer">
           <IconButton
             aria-label="delete"

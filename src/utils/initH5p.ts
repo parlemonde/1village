@@ -18,12 +18,12 @@ function hello(iframe: HTMLIFrameElement, _data: EventData, respond: (value: str
 }
 function prepareResize(iframe: HTMLIFrameElement, data: EventData, respond: (value: string) => void): void {
   if (iframe.clientHeight !== data.scrollHeight || data.scrollHeight !== data.clientHeight) {
-    iframe.style.height = data.clientHeight - 25 + 'px';
+    iframe.style.height = (data.clientHeight || 0) - 25 + 'px';
     respond('resizePrepared');
   }
 }
 function resize(iframe: HTMLIFrameElement, data: EventData): void {
-  iframe.style.height = data.scrollHeight - 25 + 'px';
+  iframe.style.height = (data.scrollHeight || 0) - 25 + 'px';
 }
 
 const actionHandlers = {
@@ -66,7 +66,7 @@ export function initH5p(): () => void {
   const ready = { context: 'h5p', action: 'ready' };
   for (let i = 0; i < iframes.length; i++) {
     if (iframes[i].src.indexOf('h5p') !== -1) {
-      iframes[i].contentWindow.postMessage(ready, '*');
+      iframes[i].contentWindow?.postMessage(ready, '*');
     }
   }
 

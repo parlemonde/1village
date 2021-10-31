@@ -36,14 +36,14 @@ export const MultipleCurrencySelector = ({ label, value = [], onChange, filterCu
     [currencies, filterCurrencies],
   );
 
-  const [option, setOption] = React.useState<CurrencyOption[] | null>([]);
+  const [option, setOption] = React.useState<CurrencyOption[]>([]);
   React.useEffect(() => {
     const newOption = options.filter((o) => value.includes(o.code)) || null;
     setOption(newOption);
-  }, [options, value, currencies, filterCurrencies, onChange]);
+  }, [options, value]);
 
   const onChangeOption = React.useCallback(
-    (_event: React.ChangeEvent<unknown>, newOption: CurrencyOption[] | null) => {
+    (_event: React.ChangeEvent<unknown>, newOption: CurrencyOption[]) => {
       if (!value) {
         setOption(newOption);
       }

@@ -48,7 +48,7 @@ const DefiStep6 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
     return <div></div>;
   }
 

@@ -28,14 +28,23 @@ interface ActivityContextValue {
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<boolean>;
-  createActivityIfNotExist(type: number, subType: number, initialData?: AnyData): Promise<void>;
+  createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData): Promise<void>;
 }
 
-export const ActivityContext = React.createContext<ActivityContextValue>(null);
+export const ActivityContext = React.createContext<ActivityContextValue>({
+  activity: null,
+  setActivity: () => {},
+  updateActivity: () => {},
+  createNewActivity: () => false,
+  addContent: () => {},
+  deleteContent: () => {},
+  save: async () => false,
+  createActivityIfNotExist: async () => {},
+});
 
 function getInitialActivity(): Activity | null {
   try {
-    return JSON.parse(sessionStorage.getItem('activity') || null) || null;
+    return JSON.parse(sessionStorage.getItem('activity') || 'null') || null;
   } catch {
     return null;
   }
@@ -100,6 +109,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
 
   const getDraft = React.useCallback(
     async (type: number, subType?: number) => {
+      if (!village) {
+        return;
+      }
       const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
@@ -166,6 +178,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const addContent = (type: ActivityContentType, value: string = '', index?: number) => {
+    if (!activity) {
+      return;
+    }
     const newContent = activity.content ? [...activity.content] : [];
     const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
     if (index !== undefined) {
@@ -185,6 +200,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   };
 
   const deleteContent = (index: number) => {
+    if (!activity) {
+      return;
+    }
     const newContent = activity.content ? [...activity.content] : [];
     if (newContent.length <= index) {
       return;
@@ -195,6 +213,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
 
   const createActivity = React.useCallback(
     async (publish: boolean) => {
+      if (!activity) {
+        return false;
+      }
       const data: Partial<Activity> = {
         type: activity.type,
         subType: activity.subType,
@@ -206,7 +227,13 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         data: activity.data,
       };
       if (!publish) {
-        data.data.draftUrl = window.location.pathname;
+        if (data.data) {
+          data.data.draftUrl = window.location.pathname;
+        } else {
+          data.data = {
+            draftUrl: window.location.pathname,
+          };
+        }
       }
       const response = await axiosLoggedRequest({
         method: 'POST',
@@ -225,6 +252,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
 
   const editActivity = React.useCallback(
     async (publish: boolean) => {
+      if (!activity) {
+        return false;
+      }
       const data: Partial<Activity> = {
         content: activity.content,
         data: activity.data,
@@ -238,7 +268,13 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       if (publish) {
         data.status = ActivityStatus.PUBLISHED;
       } else {
-        data.data.draftUrl = window.location.pathname;
+        if (data.data) {
+          data.data.draftUrl = window.location.pathname;
+        } else {
+          data.data = {
+            draftUrl: window.location.pathname,
+          };
+        }
       }
       const response = await axiosLoggedRequest({
         method: 'PUT',
@@ -318,6 +354,9 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
           setDraft(null);
         }}
         onConfirm={() => {
+          if (draft === null) {
+            return;
+          }
           setActivity(draft);
           if (draft.data.draftUrl) {
             router.push(draft.data.draftUrl);

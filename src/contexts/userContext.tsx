@@ -22,7 +22,19 @@ interface UserContextValue {
   setUser: (value: React.SetStateAction<User | null>) => void;
 }
 
-export const UserContext = React.createContext<UserContextValue>(undefined);
+export const UserContext = React.createContext<UserContextValue>({
+  user: null,
+  isLoggedIn: false,
+  login: async () => ({ success: false, errorCode: 0 }),
+  loginWithSso: async () => ({ success: false, errorCode: 0 }),
+  axiosLoggedRequest: async () => ({ data: null, error: true, status: 500 }),
+  signup: async () => ({ success: false, errorCode: 0 }),
+  updatePassword: async () => ({ success: false, errorCode: 0 }),
+  verifyEmail: async () => ({ success: false, errorCode: 0 }),
+  logout: async () => {},
+  deleteAccount: async () => false,
+  setUser: () => {},
+});
 
 interface UserContextProviderProps {
   user: User | null;
@@ -120,6 +132,9 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
   };
 
   const deleteAccount = async (): Promise<boolean> => {
+    if (!user) {
+      return false;
+    }
     const response = await axiosRequest({
       method: 'DELETE',
       headers,
