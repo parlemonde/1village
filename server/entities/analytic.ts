@@ -6,7 +6,7 @@ import type {
   AnalyticPerformance as AnalyticPerformanceInterface,
   NavigationPerf,
   BrowserPerf,
-} from 'types/analytics.type';
+} from '../../types/analytics.type';
 
 @Entity()
 export class AnalyticSession implements AnalyticSessionInterface {

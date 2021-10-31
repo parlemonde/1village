@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "..",
     "module": "commonjs",
     "target": "es6",
     "outDir": "../dist",
-    "isolatedModules": false,
     "noEmit": false,
     "strict": true,
     "strictPropertyInitialization": false,
@@ -15,6 +13,5 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": ["**/*.ts", "../types/**/*.ts"],
-  "files": ["../types/express.d.ts"]
+  "include": ["**/*.ts", "../types/**/*.ts"]
 }

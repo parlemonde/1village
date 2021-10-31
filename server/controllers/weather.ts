@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 
-import type { Weather } from 'types/weather.type';
-
+import type { Weather } from '../../types/weather.type';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { logger } from '../utils/logger';

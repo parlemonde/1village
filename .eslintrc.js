@@ -11,7 +11,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["import", "arca"],
+  plugins: ["@typescript-eslint", "prettier", "arca"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -19,8 +19,6 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
-    "plugin:import/errors",
-    "plugin:import/typescript",
     "plugin:@next/next/recommended"
   ],
   rules: {
@@ -59,12 +57,6 @@ module.exports = {
   settings: {
     "react": {
       "version": "detect",
-    },
-    "import/resolver": {
-      node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx", ".svg"],
-      },
-      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
     },
   },
 };
