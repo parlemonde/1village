@@ -25,7 +25,7 @@ const NewVillage = () => {
     if (!village.name || !village.countries[0] || !village.countries[1]) {
       return;
     }
-    const result = await addVillage(village);
+    const result = await addVillage({ name: village.name, countries: village.countries.map((c) => ({ isoCode: c, name: c })) });
     if (result !== null) {
       router.push('/admin/villages');
     }

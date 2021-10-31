@@ -1,7 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
+import type { Country } from '../../types/country.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { UserType } from '../../types/user.type';
+import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
 import { Village } from './village';
@@ -67,7 +69,13 @@ export class User implements UserInterface {
   public villageId: number | null;
 
   @Column({ type: 'varchar', length: 2, nullable: false })
-  public countryCode: string;
+  set countryCode(newCountryCode: string) {
+    this.country = countriesMap[newCountryCode] || countriesMap['FR'];
+  }
+  get countryCode() {
+    return this.country.isoCode;
+  }
+  public country: Country;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];

@@ -19,6 +19,7 @@ import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
 import { AvatarImg } from './Avatar';
@@ -111,7 +112,7 @@ export const Navigation = (): JSX.Element => {
       {
         label: 'Notre classe',
         path: '/ma-classe',
-        icon: user.avatar ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        icon: user && user.avatar ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
       ...(isModerateur ? [FREE_CONTENT] : []),
     ],
@@ -130,12 +131,14 @@ export const Navigation = (): JSX.Element => {
         >
           <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
           {village &&
-            village.countries.map((country: string) => (
+            village.countries.map((country: Country) => (
               <Flag
                 style={{ margin: '0.25rem' }}
-                key={country}
-                country={country}
-                isMistery={!village || !user || (village.activePhase === 1 && user.countryCode.toUpperCase() !== country && !isModerateur)}
+                key={country.isoCode}
+                country={country.isoCode}
+                isMistery={
+                  !village || !user || (village.activePhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur)
+                }
               ></Flag>
             ))}
         </div>

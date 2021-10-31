@@ -16,26 +16,21 @@ import { Button, NoSsr } from '@mui/material';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
-import { useCountries } from 'src/services/useCountries';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import { countryToFlag } from 'src/utils';
+import type { Country } from 'types/country.type';
 
 const Villages = () => {
   const router = useRouter();
-  const { countries } = useCountries();
-  const countryMap = countries.reduce<{ [key: string]: string }>((acc, country) => {
-    acc[country.isoCode] = country.name;
-    return acc;
-  }, {});
   const { villages } = useVillages();
   const { deleteVillage, importVillages } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
 
-  const countriesToText = (countries: string[]) => {
-    return countries.map((isoCode) => `${countryToFlag(isoCode)} ${countryMap[isoCode.toUpperCase()] || ''}`).join(' - ');
+  const countriesToText = (countries: Country[]) => {
+    return countries.map((c) => `${countryToFlag(c.isoCode)} ${c.name}`).join(' - ');
   };
 
   const onImportVillages = async () => {

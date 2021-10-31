@@ -12,6 +12,7 @@ import Select from '@mui/material/Select';
 
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
+import { getCookie, setCookie } from 'src/utils/cookies';
 import { UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
@@ -26,16 +27,20 @@ interface VillageContextValue {
 
 export const VillageContext = React.createContext<VillageContextValue>(null);
 
-export const VillageContextProvider: React.FC = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
+type VillageContextProviderProps = React.PropsWithChildren<{
+  initialVillage: Village | null;
+}>;
+export const VillageContextProvider = ({ initialVillage, children }: VillageContextProviderProps) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);
-  const [village, setVillage] = React.useState<Village | null>(null);
+  const [village, setVillage] = React.useState<Village | null>(initialVillage);
   const [villages, setVillages] = React.useState<Village[] | null>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
-  const [selectedPhase, setSelectedPhase] = React.useState(-1);
+  const [selectedPhase, setSelectedPhase] = React.useState(initialVillage ? initialVillage.activePhase : -1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [showUnassignedModal, setShowUnassignedModal] = React.useState(false);
+  const [showUnassignedModal, setShowUnassignedModal] = React.useState(initialVillage === null && user && user.type === UserType.TEACHER);
+  const currentVillageId = village ? village.id : -1;
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 
@@ -75,38 +80,32 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
   }, [getVillages]);
 
   const setUserVillage = React.useCallback(async () => {
-    let userVillage: Village | null = null;
     if (user === null) {
-      setVillage(null);
-      setSelectedPhase(-1);
+      // should not happen
       return;
     }
-    if (user.villageId) {
-      userVillage = await getVillage(user.villageId);
-    } else {
-      const previousSelectedVillageId = parseInt(window.sessionStorage.getItem('villageId'), 10) || null;
-      if (previousSelectedVillageId !== null) {
-        userVillage = await getVillage(previousSelectedVillageId);
+
+    const userVillageId = user.villageId || parseInt(getCookie('village-id'), 10) || -1;
+    if (userVillageId !== currentVillageId) {
+      const newVillage = userVillageId === -1 ? null : await getVillage(userVillageId);
+      setVillage(newVillage);
+      setSelectedPhase(newVillage ? newVillage.activePhase : -1);
+
+      if (newVillage === null && user.type > UserType.TEACHER) {
+        showSelectVillageModal();
+      }
+      if (newVillage === null && user.type === UserType.TEACHER) {
+        setShowUnassignedModal(true);
       }
     }
-    setVillage(userVillage);
-    setSelectedPhase(userVillage ? userVillage.activePhase : -1);
-
-    if (userVillage === null && user.type > UserType.TEACHER) {
-      showSelectVillageModal();
-    }
-    if (userVillage === null && user.type === UserType.TEACHER) {
-      setShowUnassignedModal(true);
-    }
-  }, [getVillage, showSelectVillageModal, user]);
+  }, [currentVillageId, getVillage, showSelectVillageModal, user]);
   React.useEffect(() => {
     if (user === null) {
       setIsModalOpen(false);
       setShowUnassignedModal(false);
       setVillage(null);
       setSelectedPhase(-1);
-    }
-    if (isOnAdmin) {
+    } else if (isOnAdmin) {
       setIsModalOpen(false);
       setShowUnassignedModal(false);
     } else {
@@ -168,7 +167,7 @@ export const VillageContextProvider: React.FC = ({ children }: React.PropsWithCh
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
             setSelectedPhase(villages[selectedVillageIndex].activePhase);
-            window.sessionStorage.setItem('villageId', `${villages[selectedVillageIndex].id}`);
+            setCookie('village-id', `${villages[selectedVillageIndex].id}`);
           }
           setIsModalOpen(false);
         }}

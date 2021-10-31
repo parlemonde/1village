@@ -1,6 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
+import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
+import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
 import { User } from './user';
@@ -23,7 +25,13 @@ export class Village implements VillageInterface {
   public name: string;
 
   @Column('simple-array')
-  public countries: string[];
+  set countryCodes(newCountryCodes: string[]) {
+    this.countries = newCountryCodes.map((isoCode) => countriesMap[isoCode]).filter((c) => c !== undefined);
+  }
+  get countryCodes() {
+    return this.countries.map((c) => c.isoCode);
+  }
+  public countries: Country[];
 
   @Column({
     type: 'enum',

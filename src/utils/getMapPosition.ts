@@ -3,7 +3,7 @@ import type { User } from 'types/user.type';
 import { axiosRequest } from './axiosRequest';
 
 export async function getMapPosition(user: User): Promise<[number, number] | null> {
-  const query = `${user.address}, ${user.city}, ${user.postalCode}, ${user.countryCode}`;
+  const query = `${user.address}, ${user.city}, ${user.postalCode}, ${user.country.isoCode}`;
 
   // first try, all address
   let response = await axiosRequest({
@@ -21,7 +21,7 @@ export async function getMapPosition(user: User): Promise<[number, number] | nul
       method: 'GET',
       baseURL: '',
       url: `https://nominatim.openstreetmap.org/search.php?city=${encodeURIComponent(user.city)}&country=${encodeURIComponent(
-        user.countryCode,
+        user.country.isoCode,
       )}&accept-language=fr&addressdetails=1&format=jsonv2`,
     });
   }
@@ -35,7 +35,7 @@ export async function getMapPosition(user: User): Promise<[number, number] | nul
       method: 'GET',
       baseURL: '',
       url: `https://nominatim.openstreetmap.org/search.php?country=${encodeURIComponent(
-        user.countryCode,
+        user.country.isoCode,
       )}&accept-language=fr&addressdetails=1&format=jsonv2`,
     });
   }

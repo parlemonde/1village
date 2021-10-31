@@ -43,7 +43,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySel
         limit: ACTIVITIES_PER_PAGE,
         page: dataPage.current,
         villageId: village.id,
-        countries: village.countries.join(','),
+        countries: village.countries.map((c) => c.isoCode).join(','),
         pelico: true,
       })}`,
     });

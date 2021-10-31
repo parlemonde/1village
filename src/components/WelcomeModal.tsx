@@ -12,7 +12,6 @@ import { Modal } from 'src/components/Modal';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useCountries } from 'src/services/useCountries';
 import { bgPage, defaultOutlinedButtonStyle, defaultTextButtonStyle } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { getUserDisplayName } from 'src/utils';
@@ -28,7 +27,6 @@ export const WelcomeModal = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const { village } = React.useContext(VillageContext);
-  const { countries } = useCountries();
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
   const [newUser, setNewUser] = React.useState<Partial<User>>(user);
@@ -42,13 +40,6 @@ export const WelcomeModal = () => {
   React.useEffect(() => {
     setNewUser(user);
   }, [user]);
-
-  const userCountry = React.useMemo(() => {
-    if (user === null) {
-      return null;
-    }
-    return countries.find((c) => c.isoCode.toLowerCase() === user.countryCode.toLowerCase());
-  }, [countries, user]);
 
   if (user === null || village === null || user.type >= UserType.OBSERVATOR) {
     return null;
@@ -201,8 +192,8 @@ export const WelcomeModal = () => {
             <span style={{ fontSize: '1.1rem' }}>Votre pays</span>
             <br />
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
-              <span style={{ marginRight: '0.5rem' }}>{userCountry?.name}</span>
-              {userCountry?.isoCode && <Flag country={userCountry?.isoCode}></Flag>}
+              <span style={{ marginRight: '0.5rem' }}>{user ? user.country.name : ''}</span>
+              {user && <Flag country={user.country.isoCode}></Flag>}
             </h2>
             <Button
               color="inherit"
@@ -301,7 +292,7 @@ export const WelcomeModal = () => {
                     setNewUser((u) => ({ ...u, postalCode }));
                   }}
                 />
-                <PanelInput value={userCountry?.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
+                <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
                 <PanelInput
                   style={{ marginTop: '2rem' }}
                   value={newUser.displayName}

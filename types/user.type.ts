@@ -1,3 +1,4 @@
+import type { Country } from './country.type';
 import type { Village } from './village.type';
 
 export enum UserType {
@@ -39,7 +40,7 @@ export interface User {
   village: Village | null;
 
   // country relation
-  countryCode: string;
+  country: Country;
 
   mascotteId?: number;
 }

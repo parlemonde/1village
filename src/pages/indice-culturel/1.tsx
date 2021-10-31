@@ -20,7 +20,7 @@ const IndiceStep1 = () => {
   const selectRef = React.useRef<HTMLDivElement>(null);
   const { activities } = useActivities({
     page: 0,
-    countries: [user?.countryCode.toUpperCase()],
+    countries: [user?.country.isoCode.toUpperCase()],
     pelico: true,
     type: ActivityType.INDICE,
   });

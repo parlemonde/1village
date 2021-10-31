@@ -51,7 +51,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
     logger.info(`c2: ${JSON.stringify(c2.bestMatch)}`);
     if (c1.bestMatch.rating > 0.88 && c2.bestMatch.rating > 0.88) {
       const newVillage = new Village();
-      newVillage.countries = [countries[c1.bestMatchIndex].isoCode, countries[c2.bestMatchIndex].isoCode];
+      newVillage.countryCodes = [countries[c1.bestMatchIndex].isoCode, countries[c2.bestMatchIndex].isoCode];
       newVillage.name = name;
       newVillage.plmId = plmId;
       await getRepository(Village).save(newVillage);
@@ -60,7 +60,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   }
 
   const newVillage = new Village();
-  newVillage.countries = ['FR', 'FR'];
+  newVillage.countryCodes = ['FR', 'FR'];
   newVillage.name = name;
   newVillage.plmId = plmId;
   await getRepository(Village).save(newVillage);

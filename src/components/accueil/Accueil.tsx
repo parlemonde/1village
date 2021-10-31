@@ -20,13 +20,21 @@ export const Accueil = () => {
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
-    types: [],
+    types: ACTIVITIES_PER_PHASE[selectedPhase - 1]?.[0]?.value || [],
     status: 0,
-    countries: {},
+    countries: village.countries.reduce<{ [key: string]: boolean }>((acc, c) => {
+      acc[c.isoCode] = true;
+      return acc;
+    }, {}),
     pelico: true,
   });
   const filterCountries = React.useMemo(
-    () => (!village || (selectedPhase === 1 && !isModerateur) ? (user ? [user.countryCode.toUpperCase()] : []) : village.countries),
+    () =>
+      !village || (selectedPhase === 1 && !isModerateur)
+        ? user
+          ? [user.country.isoCode.toUpperCase()]
+          : []
+        : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isModerateur],
   );
   const { activities } = useActivities({

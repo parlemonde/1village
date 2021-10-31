@@ -43,10 +43,14 @@ export const useUserRequests = () => {
 
   const addUser = React.useCallback(
     async (newUser: Partial<Omit<User, 'id'>>) => {
+      const { country, ...u } = newUser;
       const response = await axiosLoggedRequest({
         method: 'POST',
         url: '/users',
-        data: newUser,
+        data: {
+          ...u,
+          countryCode: country.isoCode,
+        },
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
@@ -65,11 +69,11 @@ export const useUserRequests = () => {
 
   const editUser = React.useCallback(
     async (updatedUser: Partial<User>) => {
-      const { id, ...rest } = updatedUser;
+      const { id, country, ...rest } = updatedUser;
       const response = await axiosLoggedRequest({
         method: 'PUT',
         url: `/users/${id}`,
-        data: rest,
+        data: { ...rest, countryCode: country?.isoCode ?? undefined },
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {

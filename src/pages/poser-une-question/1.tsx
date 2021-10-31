@@ -27,7 +27,7 @@ const Question1 = () => {
   const { activities } = useActivities({
     limit: 50,
     page: 0,
-    countries: [user.countryCode.toUpperCase()],
+    countries: [user.country.isoCode.toUpperCase()],
     pelico: true,
     type: ActivityType.QUESTION,
   });

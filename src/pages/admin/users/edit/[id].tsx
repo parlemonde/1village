@@ -78,7 +78,7 @@ const EditUser = () => {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const requiredFields: Extract<keyof User, string>[] = ['email', 'pseudo', 'countryCode'];
+    const requiredFields: Extract<keyof User, string>[] = ['email', 'pseudo', 'country'];
     if (user.type === UserType.TEACHER) {
       requiredFields.push('villageId');
     }
@@ -224,11 +224,13 @@ const EditUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={user.countryCode}
+            value={user.country.isoCode}
             onChange={(countryCode) => {
-              setUser((u) => ({ ...u, countryCode }));
+              setUser((u) => ({ ...u, country: { isoCode: countryCode, name: '' } }));
             }}
-            filterCountries={user.villageId ? villages.find((v) => v.id === user.villageId)?.countries || undefined : undefined}
+            filterCountries={
+              user.villageId ? villages.find((v) => v.id === user.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined
+            }
             style={{ width: '100%', marginBottom: '1rem' }}
           />
           <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>

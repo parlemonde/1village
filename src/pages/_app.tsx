@@ -13,6 +13,7 @@ import 'src/styles/se-presenter.scss';
 
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
+import type { Request } from 'express';
 import App from 'next/app';
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
@@ -37,10 +38,12 @@ import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
 import { initH5p } from 'src/utils/initH5p';
 import type { User } from 'types/user.type';
+import type { Village } from 'types/village.type';
 
 interface MyAppOwnProps {
   csrfToken: string | null;
   user: User | null;
+  village: Village | null;
 }
 type MyAppProps = AppProps &
   MyAppOwnProps & {
@@ -62,8 +65,8 @@ NProgress.configure({ showSpinner: false });
 
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
-} = ({ Component, pageProps, router, user: initialUser, csrfToken, emotionCache = clientSideEmotionCache }: MyAppProps) => {
-  const [user, setUser] = React.useState<User | null>(initialUser);
+} = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
+  const [user, setUser] = React.useState<User | null>(initialUser || null);
 
   const onRouterChangeStart = (): void => {
     NProgress.start();
@@ -128,7 +131,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
         >
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken}>
-              <VillageContextProvider>
+              <VillageContextProvider initialVillage={initialVillage}>
                 <ActivityContextProvider>
                   {isOnAdmin ? (
                     <div>
@@ -161,23 +164,25 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   );
 };
 
-MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps & MyAppOwnProps> => {
+MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps> => {
   const appProps = await App.getInitialProps(appContext);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ctxRequest: any = appContext.ctx.req || null;
+  const ctxRequest = (appContext.ctx.req || null) as Request | null;
   const initialData: MyAppOwnProps = {
     user: null,
     csrfToken: '',
+    village: null,
   };
   if (ctxRequest === null) {
     // client code
     const data = JSON.parse(window.document.getElementById('__NEXT_DATA__')?.innerText);
     initialData.csrfToken = data?.props?.csrfToken || null;
     initialData.user = data?.props?.user || null;
+    initialData.village = data?.props?.village || null;
   } else {
     // server code
-    initialData.csrfToken = ctxRequest?.csrfToken || null;
-    initialData.user = ctxRequest?.user || null;
+    initialData.csrfToken = ctxRequest.csrfToken || null;
+    initialData.user = ctxRequest.user || null;
+    initialData.village = ctxRequest.village || null;
   }
   return { ...appProps, ...initialData };
 };

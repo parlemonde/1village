@@ -91,8 +91,8 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   if (country === null) {
     country = 'FR';
   }
-  if (village !== null && !village.countries.includes(country)) {
-    country = village.countries[0];
+  if (village !== null && !village.countryCodes.includes(country)) {
+    country = village.countryCodes[0];
   }
 
   // 3- Add user

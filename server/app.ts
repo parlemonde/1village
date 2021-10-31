@@ -17,6 +17,7 @@ import { authenticate } from './middlewares/authenticate';
 import { crsfProtection } from './middlewares/csrfCheck';
 import { handleErrors } from './middlewares/handleErrors';
 import { jsonify } from './middlewares/jsonify';
+import { setVillage } from './middlewares/setVillage';
 import { removeTrailingSlash } from './middlewares/trailingSlash';
 import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
@@ -92,7 +93,8 @@ async function start() {
     '*',
     morgan('dev'),
     handleErrors(authenticate()),
-    handleErrors((req, res) => {
+    handleErrors(setVillage),
+    handleErrors(async (req, res) => {
       if (req.user === undefined && req.path !== '/login' && req.path !== '/') {
         res.redirect('/login');
         return;
@@ -102,7 +104,7 @@ async function start() {
         return;
       }
       req.csrfToken = req.getCsrfToken();
-      handle(req, res).catch((e) => console.error(e));
+      await handle(req, res);
     }),
   );
 

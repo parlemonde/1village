@@ -46,7 +46,10 @@ const NewUser = () => {
     level: '',
     type: UserType.TEACHER,
     villageId: 0,
-    countryCode: '',
+    country: {
+      isoCode: '',
+      name: '',
+    },
   });
   const [errors, setErrors] = React.useState({
     email: false,
@@ -64,7 +67,7 @@ const NewUser = () => {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const requiredFields: Extract<keyof User, string>[] = ['email', 'pseudo', 'countryCode'];
+    const requiredFields: Extract<keyof User, string>[] = ['email', 'pseudo', 'country'];
     if (newUser.type === UserType.TEACHER) {
       requiredFields.push('villageId');
     }
@@ -206,11 +209,13 @@ const NewUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={newUser.countryCode}
+            value={newUser.country.isoCode}
             onChange={(countryCode) => {
-              setNewUser((u) => ({ ...u, countryCode }));
+              setNewUser((u) => ({ ...u, country: { isoCode: countryCode, name: '' } }));
             }}
-            filterCountries={newUser.villageId ? villages.find((v) => v.id === newUser.villageId)?.countries || undefined : undefined}
+            filterCountries={
+              newUser.villageId ? villages.find((v) => v.id === newUser.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined
+            }
             style={{ width: '100%', marginBottom: '1rem' }}
           />
           <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>

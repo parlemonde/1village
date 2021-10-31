@@ -188,7 +188,7 @@ export function getUserDisplayName(user: User, isSelf: boolean): string {
   if (isSelf) {
     return 'Votre classe';
   }
-  return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city ?? user.countryCode}`);
+  return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city}`);
 }
 
 const optionsRegex = /{{(.+?)}}/gm;

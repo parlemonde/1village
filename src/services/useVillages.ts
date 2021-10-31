@@ -46,7 +46,10 @@ export const useVillageRequests = () => {
       const response = await axiosLoggedRequest({
         method: 'POST',
         url: '/villages',
-        data: newVillage,
+        data: {
+          name: newVillage.name,
+          countries: newVillage.countries.map((c) => c.isoCode),
+        },
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
@@ -71,7 +74,7 @@ export const useVillageRequests = () => {
         url: `/villages/${id}`,
         data: {
           activePhase: rest.activePhase,
-          countries: rest.countries,
+          countries: rest.countries?.map((c) => c.isoCode) || undefined,
           name: rest.name,
         },
       });

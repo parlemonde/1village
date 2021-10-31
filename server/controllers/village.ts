@@ -57,7 +57,7 @@ villageController.post({ path: '', userType: UserType.ADMIN }, async (req: Reque
   }
   const village = new Village();
   village.name = data.name;
-  village.countries = data.countries;
+  village.countryCodes = data.countries;
   await getRepository(Village).save(village);
   res.sendJSON(village);
 });
@@ -92,7 +92,7 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
     return;
   }
   village.name = valueOrDefault(data.name, village.name);
-  village.countries = valueOrDefault(data.countries, village.countries);
+  village.countryCodes = valueOrDefault(data.countries, village.countryCodes);
   village.activePhase = valueOrDefault(data.activePhase, village.activePhase);
   await getRepository(Village).save(village);
   res.sendJSON(village);

@@ -78,17 +78,17 @@ const EditVillage = () => {
             style={{ marginBottom: '1rem' }}
           />
           <CountrySelector
-            value={village.countries[0]}
+            value={village.countries[0].isoCode}
             onChange={(newValue: string) => {
-              setVillage((v) => ({ ...v, countries: [newValue, village.countries[1]] }));
+              setVillage((v) => ({ ...v, countries: [{ isoCode: newValue, name: '' }, village.countries[1]] }));
             }}
             label="Pays 1"
             style={{ width: '100%', marginBottom: '1rem' }}
           />
           <CountrySelector
-            value={village.countries[1]}
+            value={village.countries[1].isoCode}
             onChange={(newValue: string) => {
-              setVillage((v) => ({ ...v, countries: [village.countries[0], newValue] }));
+              setVillage((v) => ({ ...v, countries: [village.countries[0], { isoCode: newValue, name: '' }] }));
             }}
             label="Pays 2"
             style={{ width: '100%', marginBottom: '1rem' }}

@@ -16,7 +16,6 @@ import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { UserContext } from 'src/contexts/userContext';
-import { useCountries } from 'src/services/useCountries';
 import { useUsers, useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
@@ -28,11 +27,6 @@ const Users = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { users } = useUsers();
-  const { countries } = useCountries();
-  const countryMap = countries.reduce<{ [key: string]: string }>((acc, country) => {
-    acc[country.isoCode] = country.name;
-    return acc;
-  }, {});
   const { villages } = useVillages();
   const villageMap = villages.reduce<{ [key: number]: Village }>((acc, village) => {
     acc[village.id] = village;
@@ -100,11 +94,7 @@ const Users = () => {
             pseudo: u.pseudo,
             email: u.email,
             school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
-            country: u.countryCode ? (
-              `${countryToFlag(u.countryCode)} ${countryMap[u.countryCode.toUpperCase()] || ''}`
-            ) : (
-              <span style={{ color: 'grey' }}>Non renseigné</span>
-            ),
+            country: `${countryToFlag(u.country.isoCode)} ${u.country.name}`,
             village: u.villageId ? (
               villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
             ) : (

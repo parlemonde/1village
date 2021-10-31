@@ -81,7 +81,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
           }}
         >
           <div style={{ marginBottom: '1rem' }}>
-            <Flag country={activityUser?.countryCode}></Flag> {activityUser?.city}
+            <Flag country={activityUser?.country.isoCode}></Flag> {activityUser?.city}
           </div>
           {localTime}
           <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />
