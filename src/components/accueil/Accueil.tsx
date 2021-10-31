@@ -18,16 +18,6 @@ export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
-  const [filters, setFilters] = React.useState<FilterArgs>({
-    selectedType: 0,
-    types: ACTIVITIES_PER_PHASE[selectedPhase - 1]?.[0]?.value || [],
-    status: 0,
-    countries: village.countries.reduce<{ [key: string]: boolean }>((acc, c) => {
-      acc[c.isoCode] = true;
-      return acc;
-    }, {}),
-    pelico: true,
-  });
   const filterCountries = React.useMemo(
     () =>
       !village || (selectedPhase === 1 && !isModerateur)
@@ -37,6 +27,16 @@ export const Accueil = () => {
         : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isModerateur],
   );
+  const [filters, setFilters] = React.useState<FilterArgs>({
+    selectedType: 0,
+    types: ACTIVITIES_PER_PHASE[selectedPhase - 1]?.[0]?.value || [],
+    status: 0,
+    countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
+      acc[c] = true;
+      return acc;
+    }, {}),
+    pelico: true,
+  });
   const { activities } = useActivities({
     limit: 50,
     page: 0,
