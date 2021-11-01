@@ -10,6 +10,7 @@ import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { ActivityComments } from 'src/components/activities/ActivityComments';
 import { ActivityView } from 'src/components/activities/ActivityView';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
@@ -33,6 +34,7 @@ const Activity = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
   const { user } = React.useContext(UserContext);
+  const { setSelectedPhase } = React.useContext(VillageContext);
   const { activity } = useActivity(activityId);
   const { users } = useVillageUsers();
   const isAnswer = activity && isEnigme(activity) && 'reponse' in router.query;
@@ -46,12 +48,19 @@ const Activity = () => {
   const activityUser = activity === null ? null : usersMap[activity.userId] ?? null;
   const userIsSelf = activityUser !== null && user !== null && activityUser.id === user.id;
 
+  const activityPhase = activity ? activity.phase : -1;
+  React.useEffect(() => {
+    if (activityPhase !== -1) {
+      setSelectedPhase(activityPhase);
+    }
+  }, [setSelectedPhase, activityPhase]);
+
   if (activity === null || activityUser === null) {
     return null;
   }
 
   return (
-    <Base rightNav={<RightNavigation activityUser={activityUser} />} hideLeftNav>
+    <Base rightNav={<RightNavigation activityUser={activityUser} />} hideLeftNav showSubHeader>
       <div className="activity__back-container">
         <Link href="/">
           <a className="activity__back-button">
