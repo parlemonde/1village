@@ -119,7 +119,6 @@ __metadata:
     react-player: ^2.9.0
     react-query: ^3.16.1
     react-query-devtools: ^2.6.3
-    react-sortablejs: ^6.0.0
     resize-observer-polyfill: ^1.5.1
     safe-buffer: ^5.2.1
     sass: ^1.34.1
@@ -4821,7 +4820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.6, classnames@npm:^2.3.1":
+"classnames@npm:^2.3.1":
   version: 2.3.1
   resolution: "classnames@npm:2.3.1"
   checksum: 14db8889d56c267a591f08b0834989fe542d47fac659af5a539e110cc4266694e8de86e4e3bbd271157dbd831361310a8293e0167141e80b0f03a0f175c80960
@@ -11209,21 +11208,6 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"react-sortablejs@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "react-sortablejs@npm:6.0.0"
-  dependencies:
-    classnames: ^2.2.6
-    tiny-invariant: ^1.1.0
-  peerDependencies:
-    "@types/sortablejs": ^1.10.0
-    react: ^16.9.0
-    react-dom: ^16.9.0
-    sortablejs: ^1.10.0
-  checksum: 28c496b2e1618996ecf11e5cc3d5560e2f398b53e5a5f86f4e34f02dcca77f1c4cf52c1a2aca41ccd7b4392e82558481929759a11844bcd44727a58ba7b3bd49
-  languageName: node
-  linkType: hard
-
 "react-transition-group@npm:^4.4.2":
   version: 4.4.2
   resolution: "react-transition-group@npm:4.4.2"
@@ -12887,13 +12871,6 @@ resolve@^2.0.0-next.3:
   dependencies:
     setimmediate: ^1.0.4
   checksum: ec37ae299066bef6c464dcac29c7adafba1999e7227a9bdc4e105a459bee0f0b27234a46bfd7ab4041da79619e06a58433472867a913d01c26f8a203f87cee70
-  languageName: node
-  linkType: hard
-
-"tiny-invariant@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "tiny-invariant@npm:1.1.0"
-  checksum: 27d29bbb9e1d1d86e25766711c28ad91af6d67c87d561167077ac7fbce5212b97bbfe875e70bc369808e075748c825864c9b61f0e9f8652275ec86bcf4dcc924
   languageName: node
   linkType: hard
 

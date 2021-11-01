@@ -137,7 +137,6 @@
     "react-player": "^2.9.0",
     "react-query": "^3.16.1",
     "react-query-devtools": "^2.6.3",
-    "react-sortablejs": "^6.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "safe-buffer": "^5.2.1",
     "sass": "^1.34.1",

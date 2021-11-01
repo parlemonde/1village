@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import { ReactSortable } from 'react-sortablejs';
 import React from 'react';
 
+import { Sortable } from 'src/components/Sortable';
 import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 import { AddContentCard } from './AddContentCard';
@@ -41,7 +41,7 @@ const ContentEditor = ({ content, updateContent, addContent, deleteContent }: Co
 
   return (
     <div>
-      <ReactSortable list={content} setList={updateContent} handle=".drag-handle">
+      <Sortable component="div" list={content} setList={updateContent} handle=".drag-handle">
         {content.map((p, index) => {
           if (p.type === 'text') {
             return (
@@ -110,7 +110,7 @@ const ContentEditor = ({ content, updateContent, addContent, deleteContent }: Co
           }
           return <div key={p.id}></div>;
         })}
-      </ReactSortable>
+      </Sortable>
       <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>
         <AddContentCard addContent={addContent} />
       </div>
