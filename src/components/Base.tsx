@@ -26,29 +26,15 @@ export const Base: React.FC<BaseProps> = ({
           'without-nav': hideLeftNav,
         })}
       >
-        {showSubHeader && (
-          <div className="sub-header">
-            <SubHeaders />
-          </div>
-        )}
-        {rightNav && (
-          <aside
-            className={className('right-navigation', {
-              'right-navigation--smaller': showSubHeader,
-            })}
-          >
-            <div>{rightNav}</div>
-          </aside>
-        )}
-        <div
-          className={className('app-content with-shadow', {
-            'app-content--narrower': !!rightNav,
-            'app-content--smaller': showSubHeader,
-          })}
-          style={style}
-        >
-          {children}
+        <div className={className('app-content', { 'app-content--with-subheader': showSubHeader })} style={style}>
+          {showSubHeader && (
+            <div className="app-content__sub-header">
+              <SubHeaders />
+            </div>
+          )}
+          <div className="app-content__card with-shadow">{children}</div>
         </div>
+        {rightNav && <aside className="right-navigation">{rightNav}</aside>}
       </main>
     </>
   );

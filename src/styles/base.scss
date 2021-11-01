@@ -75,8 +75,15 @@ header {
 
 // ---- APP CONTENT ----
 main {
+  width: 100%;
+  min-height: 100vh;
   padding-top: $headerHeight + 2 * $verticalSpacing;
   padding-left: $menuWidth + 2 * $horizontalSpacing;
+  padding-right: $horizontalSpacing;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
 
   &.without-nav {
     padding-left: $horizontalSpacing;
@@ -84,45 +91,41 @@ main {
 }
 
 .app-content {
-  background-color: white;
-  width: calc(100% - #{$horizontalSpacing});
-  min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing});
-  margin: 0;
-  padding: 0.5rem 1.2rem;
-  overflow: visible;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-.app-content--narrower {
-  width: calc(100% - #{2 * $horizontalSpacing + $rightMenuWidth});
-}
-.app-content--smaller {
-  min-height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing + $subHeaderHeight});
-}
+  width: 100%;
+  min-height: 100%;
+  flex: 1;
+  min-width: 0;
+  position: relative;
 
-// ---- SUB HEADER ----
-.sub-header {
-  margin-right: $horizontalSpacing;
-  height: $subHeaderHeight;
-  margin-bottom: $verticalSpacing;
+  &--with-subheader {
+    padding-top: $subHeaderHeight + $verticalSpacing;
+  }
+
+  &__card {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0.5rem 1.2rem;
+    overflow: visible;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  &__sub-header {
+    position: absolute;
+    top: 0;
+    height: $subHeaderHeight;
+    width: 100%;
+  }
 }
 
 // ---- RIGHT NAVIGATION ----
 .right-navigation {
-  position: sticky;
-  top: $headerHeight + 2 * $verticalSpacing;
-}
-.right-navigation > div {
-  position: absolute;
-  top: 0;
-  right: $horizontalSpacing;
   width: $rightMenuWidth;
-  height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
-  overflow: auto;
-  padding-bottom: 4px;
-}
-.right-navigation--smaller > div {
-  height: calc(100vh - #{$headerHeight + 4 * $verticalSpacing + $subHeaderHeight});
+  min-height: 100%;
+  margin-left: $horizontalSpacing;
+  padding-bottom: $verticalSpacing;
 }
 
 @include for-small-screen {
@@ -149,36 +152,20 @@ main {
   main {
     padding-top: $headerHeight + $verticalSpacing;
     padding-left: $menuWidthSmaller + $horizontalSpacing;
+    padding-right: math.div($horizontalSpacing, 2);
 
     &.without-nav {
       padding-left: math.div($horizontalSpacing, 2);
     }
   }
-  .app-content {
-    width: calc(100% - #{math.div($horizontalSpacing, 2)});
-    min-height: calc(100vh - #{$headerHeight + $verticalSpacing});
-  }
-  .app-content--narrower {
-    width: calc(100% - #{$horizontalSpacing + $rightMenuWidth});
-  }
-  .app-content--smaller {
-    min-height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $subHeaderHeight});
+
+  .app-content--with-subheader {
+    padding-top: $subHeaderHeight + math.div($verticalSpacing, 2);
   }
 
   .right-navigation {
-    top: $headerHeight + $verticalSpacing;
-  }
-  .right-navigation > div {
-    right: math.div($horizontalSpacing, 2);
-    height: calc(100vh - #{$headerHeight + math.div(3, 2) * $verticalSpacing});
-  }
-  .right-navigation--smaller > div {
-    height: calc(100vh - #{$headerHeight + 2 * $verticalSpacing + $subHeaderHeight});
-  }
-
-  .sub-header {
-    margin-right: math.div($horizontalSpacing, 2);
-    margin-bottom: math.div($verticalSpacing, 2);
+    margin-left: math.div($horizontalSpacing, 2);
+    padding-bottom: math.div($verticalSpacing, 2);
   }
 }
 

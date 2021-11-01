@@ -17,7 +17,7 @@ export const KeepRatio: React.FC<KeepRatioProps> = ({
   children,
 }: React.PropsWithChildren<KeepRatioProps>) => {
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width, maxWidth }}>
         <div style={{ width: '100%', paddingBottom: `${ratio * 100}%`, minHeight, position: 'relative' }}>
           <div className={className} style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
