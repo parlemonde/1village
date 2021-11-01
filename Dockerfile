@@ -4,24 +4,29 @@ FROM node:16.7-slim as build-dependencies
 # Create app directory
 WORKDIR /app
 
-# Install app dependencies
-COPY package.json ./
-RUN yarn install
+# Install app dependencies with yarn 2
+COPY .yarn/releases .yarn/releases
+COPY .yarn/sdks .yarn/sdks
+COPY .yarn/cache .yarn/cache
+COPY .yarnrc.yml .
+COPY package.json .
+COPY yarn.lock .
+RUN yarn
 
 # Bundle app source
-COPY public ./public
-COPY src ./src
-COPY server ./server
-COPY types ./types
-COPY .env ./
-COPY .eslintignore ./
-COPY .eslintrc.js ./
-COPY .prettierrc.js ./
-COPY .svgrrc.js ./
-COPY nodemon.json ./
-COPY next-env.d.ts ./
-COPY next.config.js ./
-COPY tsconfig.json ./
+COPY public public
+COPY src src
+COPY server server
+COPY types types
+COPY .env .
+COPY .eslintignore .
+COPY .eslintrc.js .
+COPY .prettierrc.js .
+COPY .svgrrc.js .
+COPY nodemon.json .
+COPY next-env.d.ts .
+COPY next.config.js .
+COPY tsconfig.json .
 RUN mkdir dist
 
 # Build sources
@@ -35,12 +40,17 @@ FROM node:16.7-slim as prod
 # Create app directory
 WORKDIR /app
 
-# Install app dependencies
-COPY package.json ./
-RUN yarn install --production
+# Install app dependencies with yarn 2
+COPY .yarn/releases .yarn/releases
+COPY .yarn/sdks .yarn/sdks
+COPY .yarn/cache .yarn/cache
+COPY .yarnrc.yml .
+COPY package.json .
+COPY yarn.lock .
+RUN yarn
 
 # Copy app files
-COPY next.config.js ./
+COPY next.config.js .
 COPY --from=build-dependencies app/dist dist
 COPY --from=build-dependencies app/public public
 
@@ -49,4 +59,4 @@ ENV NODE_ENV production
 
 EXPOSE 5000
 
-CMD [ "node", "./dist/server/app.js" ]
+CMD [ "yarn", "node", "./dist/server/app.js" ]

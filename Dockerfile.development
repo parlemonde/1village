@@ -8,9 +8,14 @@ RUN apt-get install -yq lsof procps
 # Create app directory
 WORKDIR /app
 
-# Install app dependencies
+# Install app dependencies with yarn 2
+COPY .yarn/releases ./.yarn/releases
+COPY .yarn/sdks ./.yarn/sdks
+COPY .yarn/cache ./.yarn/cache
+COPY .yarnrc.yml ./
 COPY package.json ./
-RUN yarn install
+COPY yarn.lock ./
+RUN yarn
 
 # Bundle app source
 COPY public ./public
