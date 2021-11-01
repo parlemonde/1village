@@ -117,8 +117,7 @@ __metadata:
     react-dom: ^17.0.2
     react-leaflet: ^3.2.0
     react-player: ^2.9.0
-    react-query: ^3.16.1
-    react-query-devtools: ^2.6.3
+    react-query: ^3.31.0
     resize-observer-polyfill: ^1.5.1
     safe-buffer: ^5.2.1
     sass: ^1.34.1
@@ -1429,7 +1428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
   version: 7.16.0
   resolution: "@babel/runtime@npm:7.16.0"
   dependencies:
@@ -9143,16 +9142,6 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"match-sorter@npm:^4.1.0":
-  version: 4.2.1
-  resolution: "match-sorter@npm:4.2.1"
-  dependencies:
-    "@babel/runtime": ^7.10.5
-    remove-accents: 0.4.2
-  checksum: 7f3cd8f84cdb4567b7a81f66a095e418044f318f41b6c8a1640730c99e370af9e5054f5a1ed2dfa1287a23101d75a105da63e4d95e8ac2f7061a8f8b32367c7d
-  languageName: node
-  linkType: hard
-
 "match-sorter@npm:^6.0.2":
   version: 6.3.1
   resolution: "match-sorter@npm:6.3.1"
@@ -11171,21 +11160,9 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"react-query-devtools@npm:^2.6.3":
-  version: 2.6.3
-  resolution: "react-query-devtools@npm:2.6.3"
-  dependencies:
-    match-sorter: ^4.1.0
-  peerDependencies:
-    react: ^16.6.3 || ^17.0.0
-    react-query: ^2.0.0
-  checksum: 55cd257c32af83ac33ddff32a7234922fc53dd212c8a92dbee2a5c494c08763a94f60c8f455416ee4dde8ee7d908c7762b90f11d25d86e87efff9b729a8c2cfc
-  languageName: node
-  linkType: hard
-
-"react-query@npm:^3.16.1":
-  version: 3.30.0
-  resolution: "react-query@npm:3.30.0"
+"react-query@npm:^3.31.0":
+  version: 3.31.0
+  resolution: "react-query@npm:3.31.0"
   dependencies:
     "@babel/runtime": ^7.5.5
     broadcast-channel: ^3.4.1
@@ -11197,7 +11174,7 @@ fsevents@^1.0.0:
       optional: true
     react-native:
       optional: true
-  checksum: d6b59c81287a6343a33cfe3890e051a74619ecbfb8c55b9715738b46ad0fa64462970dcd0dcea34d663d7f59fe535fac34c7abf6f6c5a10074bd1bcbb1c9ee89
+  checksum: a00e05ea485f61a63686b98e7bd591112f321c732dc313e43ba4787ae9d767666e2cfff3da0dc2a3626fe229b87b3e5433d32c5d45f3647a031f24366678f586
   languageName: node
   linkType: hard
 

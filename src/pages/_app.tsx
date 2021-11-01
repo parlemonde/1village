@@ -19,7 +19,6 @@ import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
-import { ReactQueryDevtools } from 'react-query-devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import React from 'react';
 
@@ -147,8 +146,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 </ActivityContextProvider>
               </VillageContextProvider>
             </UserContextProvider>
-            {/* Dev only, it won't appear after build for prod. */}
-            <ReactQueryDevtools />
           </QueryClientProvider>
         </SnackbarProvider>
       </ThemeProvider>
