@@ -3,7 +3,6 @@ import React from 'react';
 
 import { isSymbol } from 'src/activity-types/anyActivity';
 import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
-import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -16,9 +15,7 @@ const SymbolStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
-  const data = (activity?.data as SymbolData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const symbolContentIndex = data?.indiceContentIndex ?? 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -32,7 +29,7 @@ const SymbolStep2 = () => {
     if (!activity) {
       return;
     }
-    updateActivity({ content: [...activity.content.slice(0, symbolContentIndex), ...content] });
+    updateActivity({ content });
   };
 
   const onNext = () => {
@@ -40,7 +37,7 @@ const SymbolStep2 = () => {
     router.push('/symbole/3');
   };
 
-  if (activity === null || data === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null) {
     return <div></div>;
   }
 

@@ -1,8 +1,5 @@
 import type { Activity } from 'types/activity.type';
 
-export type IndiceData = {
-  theme: number;
-  indiceContentIndex: number;
-};
+export type IndiceData = Record<string, never>; // empty object {}
 
 export type IndiceActivity = Activity<IndiceData>;

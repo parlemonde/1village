@@ -2,23 +2,20 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
-import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';
-
-// import { ActivityStatus } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
-  const data = (activity?.data as FreeContentData) || null;
-  // const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const indiceContentIndex = data?.indiceContentIndex ?? 0;
+  const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -32,7 +29,7 @@ const ContenuLibre = () => {
     if (!activity) {
       return;
     }
-    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
+    updateActivity({ content });
   };
 
   const onNext = () => {
@@ -47,15 +44,16 @@ const ContenuLibre = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        {!isEdit && <BackButton href="/contenu-libre" />}
         <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
         <div className="width-900">
           <h1>Ecrivez le contenu de votre publication</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication ; dans l&apos;étape 2 vous pourrez définir l&apos;aspect de
-            la carte résumée de votre publication.
+          <p className="text">
+            Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication. Dans l&apos;étape 2 vous pourrez définir l&apos;aspect de la
+            carte résumée de votre publication.
           </p>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
-          <StepsButton prev="/contenu-libre" next={onNext} />
+          <StepsButton next={onNext} />
         </div>
       </div>
     </Base>

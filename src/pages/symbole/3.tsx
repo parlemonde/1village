@@ -9,7 +9,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { isSymbol } from 'src/activity-types/anyActivity';
 import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
-import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -26,7 +25,6 @@ const SymbolStep3 = () => {
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const data = (activity?.data as SymbolData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
@@ -56,7 +54,7 @@ const SymbolStep3 = () => {
     setIsLoading(false);
   };
 
-  if (activity === null || user === null || data === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null || user === null) {
     return <div></div>;
   }
 

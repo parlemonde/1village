@@ -14,14 +14,8 @@ import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 
 export const SymbolCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<SymbolActivity>) => {
-  const firstImage = React.useMemo(
-    () => activity.content.slice(activity.data.indiceContentIndex, activity.content.length).find((c) => c.type === 'image'),
-    [activity.content, activity.data.indiceContentIndex],
-  );
-  const firstTextContent = React.useMemo(
-    () => activity.content.slice(activity.data.indiceContentIndex, activity.content.length).find((c) => c.type === 'text'),
-    [activity.content, activity.data.indiceContentIndex],
-  );
+  const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);
+  const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
   const symbolType = SYMBOL_TYPES[activity.subType ?? 0] ?? SYMBOL_TYPES[0];
@@ -49,7 +43,7 @@ export const SymbolCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        {activity.data.theme !== undefined && <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{symbolType.title}</h3>}
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{symbolType.title}</h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}

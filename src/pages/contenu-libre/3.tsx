@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -7,44 +8,38 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
+import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
-import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { useActivity } from 'src/services/useActivity';
-import { errorColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
-  const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
-  const [style, setStyle] = React.useState({});
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isValid = (): boolean => {
-    let result = true;
-    activity?.content?.map((content: { value: string }) => {
-      result = content.value === '' || content.value === '<p></p>\n' ? false : true;
-    });
-
-    return result;
-  };
+  const errorSteps = React.useMemo(() => {
+    const errors: number[] = [];
+    const data = (activity?.data as FreeContentData) || null;
+    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
+      errors.push(0);
+    }
+    if (data !== null && (!data.title || !data.resume)) {
+      errors.push(1);
+    }
+    return errors;
+  }, [activity]);
+  const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
-    if (!isValid()) {
-      setErrorSteps([1]);
-      setStyle({ border: `1px dashed ${errorColor}` });
-    }
-
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/contenu-libre');
     } else if (activity && !isFreeContent(activity)) {
@@ -53,6 +48,9 @@ const ContenuLibre = () => {
   }, [activity, router]);
 
   const onPublish = async () => {
+    if (!isValid) {
+      return;
+    }
     setIsLoading(true);
     const success = await save(true);
     if (success) {
@@ -61,7 +59,7 @@ const ContenuLibre = () => {
     setIsLoading(false);
   };
 
-  if (!activity) {
+  if (!activity || !user) {
     return <Base />;
   }
 
@@ -96,36 +94,29 @@ const ContenuLibre = () => {
             </div>
           )}
 
-          {responseActivity !== null && (
-            <>
-              <span className={'text text--small text--success'}>Présentation en réaction au contenu libre</span>
-              <div className="preview-block">
-                {!isEdit && (
-                  <EditButton
-                    onClick={() => {
-                      router.push(`/contenu-libre/1?edit=${activity.id}`);
-                    }}
-                    status={'success'}
-                    style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-                  />
-                )}
-                <Activities activities={[responseActivity]} noButtons />
-              </div>
-            </>
-          )}
-
-          <span className={`text text--small ${errorSteps.length > 0 ? 'text--alert' : 'text--success'}`}>Contenu</span>
-          <div className="preview-block" style={style}>
+          <span className={`text text--small ${errorSteps.includes(0) ? 'text--warning' : 'text--success'}`}>Contenu</span>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push('/contenu-libre/2');
+                router.push('/contenu-libre/1');
               }}
-              status={errorSteps.length > 0 ? 'error' : 'success'}
+              status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.content} />
           </div>
-          {user && <ActivityCard activity={activity} user={user} />}
+
+          <span className={`text text--small ${errorSteps.includes(1) ? 'text--warning' : 'text--success'}`}>Forme</span>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(1) })}>
+            <EditButton
+              onClick={() => {
+                router.push('/contenu-libre/2');
+              }}
+              status={errorSteps.includes(1) ? 'warning' : 'success'}
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <ActivityCard activity={activity} user={user} noMargin noButtons />
+          </div>
 
           <StepsButton prev="/contenu-libre/2" />
         </div>

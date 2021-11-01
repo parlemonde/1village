@@ -3,7 +3,6 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
-import { Steps } from 'src/components/Steps';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { ActivityType } from 'types/activity.type';
@@ -22,10 +21,13 @@ const ContenuLibre = () => {
     }
   };
 
-  return isModerator ? (
+  if (!isModerator) {
+    return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>;
+  }
+
+  return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
         <div className="width-900">
           <h1>Publication de contenu libre</h1>
           <p className="text">
@@ -36,8 +38,6 @@ const ContenuLibre = () => {
         </div>
       </div>
     </Base>
-  ) : (
-    <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>
   );
 };
 

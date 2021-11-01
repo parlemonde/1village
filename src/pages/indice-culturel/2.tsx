@@ -3,7 +3,6 @@ import React from 'react';
 
 import { isIndice } from 'src/activity-types/anyActivity';
 import { INDICE_TYPES } from 'src/activity-types/indice.constants';
-import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -16,9 +15,7 @@ const IndiceStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
-  const data = (activity?.data as IndiceData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -32,7 +29,7 @@ const IndiceStep2 = () => {
     if (!activity) {
       return;
     }
-    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
+    updateActivity({ content });
   };
 
   const onNext = () => {
@@ -40,7 +37,7 @@ const IndiceStep2 = () => {
     router.push('/indice-culturel/3');
   };
 
-  if (data === null || activity === null || !('theme' in data) || data.theme === -1) {
+  if (activity === null) {
     return <div></div>;
   }
 

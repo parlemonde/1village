@@ -9,7 +9,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { isIndice } from 'src/activity-types/anyActivity';
 import { INDICE_TYPES } from 'src/activity-types/indice.constants';
-import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -26,7 +25,6 @@ const IndiceStep3 = () => {
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const data = (activity?.data as IndiceData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const isValid = React.useMemo(() => {
@@ -56,7 +54,7 @@ const IndiceStep3 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || user === null || activity === null || !('theme' in data) || data.theme === -1) {
+  if (user === null || activity === null) {
     return <div></div>;
   }
 

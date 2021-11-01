@@ -12,10 +12,7 @@ import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 
 export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<FreeContentActivity>) => {
-  const firstImage = React.useMemo(
-    () => activity.content.slice(activity.data.indiceContentIndex, activity.content.length).find((c) => c.type === 'image'),
-    [activity.content, activity.data.indiceContentIndex],
-  );
+  const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);
 
   return (
     <div
