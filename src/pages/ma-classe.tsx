@@ -105,7 +105,7 @@ const MaClasse = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
-          <h1 style={{ marginBottom: '1rem' }}>Notre mascotte</h1>
+          <h1 style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>Notre mascotte</h1>
           {mascotteActivity && user ? (
             <ActivityCard
               activity={mascotteActivity}

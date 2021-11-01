@@ -75,7 +75,7 @@ const Indice = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
-          <h1>Quel aspect de culture allez-vous présenter ?</h1>
+          <h1 style={{ marginTop: '0.5rem' }}>Quel aspect de culture allez-vous présenter ?</h1>
           <p className="text">
             Dans cette activité, nous vous proposons de présenter à vos Pélicopains un paysage, une danse, un vêtement, une musique... un indice
             culturel, qui représnte le pays ou la région dans lequel vous habitez.
