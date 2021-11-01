@@ -6,7 +6,7 @@ import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
-import { Filters, ACTIVITIES_PER_PHASE } from 'src/components/accueil/Filters';
+import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -29,7 +29,7 @@ export const Accueil = () => {
   );
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
-    types: ACTIVITIES_PER_PHASE[selectedPhase - 1]?.[0]?.value || [],
+    types: 'all',
     status: 0,
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
       acc[c] = true;
@@ -42,14 +42,16 @@ export const Accueil = () => {
     page: 0,
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
     pelico: filters.pelico,
-    type: filters.types,
+    type: filters.types === 'all' ? undefined : filters.types,
+    phase: selectedPhase,
   });
 
+  // on selected phase change, select all activities.
   React.useEffect(() => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       selectedType: 0,
-      types: ACTIVITIES_PER_PHASE[selectedPhase - 1]?.[0]?.value || [],
+      types: 'all',
     }));
   }, [selectedPhase]);
 

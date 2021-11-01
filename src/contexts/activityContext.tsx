@@ -5,6 +5,7 @@ import React from 'react';
 import { Card, CircularProgress } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
+import { getActivityPhase } from 'src/components/activities/utils';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import type { Activity, AnyData, ActivityContentType } from 'types/activity.type';
@@ -137,6 +138,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       }
       const activity: Activity = {
         id: 0,
+        phase: getActivityPhase(type, village.activePhase),
         type: type,
         subType: subType,
         status: ActivityStatus.DRAFT,
@@ -213,10 +215,11 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
 
   const createActivity = React.useCallback(
     async (publish: boolean) => {
-      if (!activity) {
+      if (!activity || !village) {
         return false;
       }
       const data: Partial<Activity> = {
+        phase: getActivityPhase(activity.type, village.activePhase),
         type: activity.type,
         subType: activity.subType,
         villageId: activity.villageId,
@@ -247,12 +250,12 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         return true;
       }
     },
-    [axiosLoggedRequest, activity],
+    [axiosLoggedRequest, activity, village],
   );
 
   const editActivity = React.useCallback(
     async (publish: boolean) => {
-      if (!activity) {
+      if (!activity || !village) {
         return false;
       }
       const data: Partial<Activity> = {
@@ -266,6 +269,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         data.isPinned = activity.isPinned;
       }
       if (publish) {
+        data.phase = getActivityPhase(activity.type, village.activePhase);
         data.status = ActivityStatus.PUBLISHED;
       } else {
         if (data.data) {
@@ -287,7 +291,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       setActivity(response.data);
       return true;
     },
-    [axiosLoggedRequest, activity],
+    [axiosLoggedRequest, activity, village],
   );
 
   const save = React.useCallback(

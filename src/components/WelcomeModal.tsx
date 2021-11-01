@@ -318,6 +318,7 @@ export const WelcomeModal = () => {
                   activity={{
                     id: 0,
                     type: ActivityType.PRESENTATION,
+                    phase: 1,
                     userId: user?.id,
                     villageId: 0,
                     responseActivityId: null,

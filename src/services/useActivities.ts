@@ -15,6 +15,7 @@ export type Args = {
   type?: number | number[];
   userId?: number;
   status?: number;
+  phase?: number;
   responseActivityId?: number;
 };
 

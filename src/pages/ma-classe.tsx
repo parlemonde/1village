@@ -27,7 +27,6 @@ const MaClasse = () => {
   const { deleteActivity } = useActivityRequests();
   const [deleteIndex, setDeleteIndex] = React.useState<{ index: number | 'mascotte'; isDraft: boolean }>({ index: -1, isDraft: false });
   const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
-  const hasMascotte = mascotteActivity !== null;
 
   const getMascotte = React.useCallback(async () => {
     const response = await axiosLoggedRequest({
@@ -45,18 +44,6 @@ const MaClasse = () => {
   React.useEffect(() => {
     getMascotte().catch();
   }, [getMascotte]);
-
-  // TODO: remove this effect and send the comment count with the mascotte request.
-  React.useEffect(() => {
-    if (!hasMascotte) {
-      return;
-    }
-    for (const activity of activities || []) {
-      if (isMascotte(activity)) {
-        setMascotteActivity((m) => (m === null ? null : { ...m, commentCount: activity.commentCount }));
-      }
-    }
-  }, [hasMascotte, activities]);
 
   // Delete previous activity before going editing other ones.
   React.useEffect(() => {

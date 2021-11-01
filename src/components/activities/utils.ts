@@ -66,3 +66,29 @@ export const labels = {
   [ActivityType.INDICE]: 'Répondre à cet indice culturel par :',
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
 };
+
+const specificActivityPhase = {
+  [ActivityType.MASCOTTE]: [1],
+  [ActivityType.PRESENTATION]: [1, 2, 3],
+  [ActivityType.DEFI]: [2],
+  [ActivityType.GAME]: [2],
+  [ActivityType.ENIGME]: [2],
+  [ActivityType.QUESTION]: [1, 2, 3],
+  [ActivityType.CONTENU_LIBRE]: [1, 2, 3],
+  [ActivityType.INDICE]: [1],
+  [ActivityType.SYMBOL]: [1],
+};
+export const getActivityPhase = (activityType: number, activePhase: number) => {
+  const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];
+  if (availablePhases.length === 0) {
+    return activePhase; // should not happen
+  } else if (availablePhases.length === 1) {
+    return availablePhases[0];
+  } else if (specificActivityPhase[activityType].includes(activePhase)) {
+    return activePhase;
+  }
+  return availablePhases
+    .filter((p) => p <= activePhase)
+    .concat([1])
+    .sort((a, b) => b - a)[0];
+};

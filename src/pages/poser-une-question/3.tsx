@@ -12,6 +12,7 @@ import type { QuestionActivity } from 'src/activity-types/question.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { getActivityPhase } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -45,6 +46,7 @@ const Question3 = () => {
     const data: Partial<QuestionActivity> = {
       type: ActivityType.QUESTION,
       villageId: village.id,
+      phase: getActivityPhase(ActivityType.QUESTION, village.activePhase),
       data: {},
       content: [
         {

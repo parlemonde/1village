@@ -6,6 +6,7 @@ import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
+import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { getQueryString } from '../utils';
@@ -18,6 +19,7 @@ const activityController = new Controller('/activities');
 type ActivityGetter = {
   limit?: number;
   page?: number;
+  phase?: number | null;
   villageId?: number;
   type?: string[];
   subType?: number | null;
@@ -69,6 +71,7 @@ const getActivities = async ({
   type = [],
   subType = null,
   countries,
+  phase = null,
   pelico = true,
   status = 0,
   userId,
@@ -84,6 +87,9 @@ const getActivities = async ({
   }
   if (subType !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
+  }
+  if (phase !== null) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.phase = :phase', { phase });
   }
   if (responseActivityId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
@@ -149,6 +155,7 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     pelico: req.query.pelico ? req.query.pelico !== 'false' : undefined,
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
+    phase: req.query.phase ? Number(getQueryString(req.query.phase)) || 0 : undefined,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
     responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
@@ -170,6 +177,8 @@ activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req:
     next();
     return;
   }
+  const commentCount = await getActivitiesCommentCount([activity.id]);
+  activity.commentCount = commentCount[activity.id] || 0;
   res.sendJSON(activity);
 });
 
@@ -209,6 +218,8 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
     },
   });
   if (activity) {
+    const commentCount = await getActivitiesCommentCount([activity.id]);
+    activity.commentCount = commentCount[activity.id] || 0;
     res.sendJSON(activity);
   } else {
     next();
@@ -221,6 +232,7 @@ type CreateActivityData = {
   subType?: number | null;
   status?: number;
   data: AnyData;
+  phase?: number;
   content: ActivityContent[];
   villageId?: number;
   responseActivityId?: number;
@@ -238,6 +250,10 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
       nullable: true,
     },
     status: {
+      type: 'number',
+      nullable: true,
+    },
+    phase: {
       type: 'number',
       nullable: true,
     },
@@ -303,6 +319,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.subType = data.subType ?? null;
   activity.status = data.status ?? ActivityStatus.PUBLISHED;
   activity.data = data.data;
+  activity.phase = data.phase || VillagePhase.DISCOVER;
   activity.content = data.content;
   activity.userId = req.user.id;
   activity.villageId = villageId;
@@ -318,6 +335,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 // --- Update activity ---
 type UpdateActivity = {
   status?: number;
+  phase?: number;
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
@@ -328,6 +346,10 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
   properties: {
     status: {
+      type: 'number',
+      nullable: true,
+    },
+    phase: {
       type: 'number',
       nullable: true,
     },
@@ -382,6 +404,9 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     return;
   }
 
+  if (activity.status !== ActivityStatus.PUBLISHED) {
+    activity.phase = data.phase || activity.phase;
+  }
   activity.status = data.status ?? activity.status;
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;

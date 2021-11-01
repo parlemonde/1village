@@ -29,6 +29,7 @@ export interface Activity<T extends AnyData = AnyData> {
   type: number;
   subType?: number | null;
   status: number;
+  phase: number;
 
   createDate?: Date | string;
   updateDate?: Date | string;

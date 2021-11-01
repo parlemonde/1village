@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
+import { VillagePhase } from '../../types/village.type';
 
 import { User } from './user';
 import { Village } from './village';
@@ -23,6 +24,9 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @Column({ type: 'tinyint', nullable: true })
   public subType: number | null;
+
+  @Column({ type: 'tinyint', nullable: false, default: VillagePhase.DISCOVER })
+  public phase: number;
 
   @Column({
     type: 'tinyint',

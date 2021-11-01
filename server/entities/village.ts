@@ -2,16 +2,13 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
+import { VillagePhase } from '../../types/village.type';
 import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
 import { User } from './user';
 
-enum VillagePhase {
-  DISCOVER = 1,
-  EXCHANGE = 2,
-  IMAGINE = 3,
-}
+export { VillagePhase };
 
 @Entity()
 export class Village implements VillageInterface {
@@ -34,11 +31,10 @@ export class Village implements VillageInterface {
   public countries: Country[];
 
   @Column({
-    type: 'enum',
-    enum: VillagePhase,
+    type: 'tinyint',
     default: VillagePhase.DISCOVER,
   })
-  public activePhase: VillagePhase;
+  public activePhase: number;
 
   @OneToMany(() => User, (user: User) => user.village)
   public users: User[];

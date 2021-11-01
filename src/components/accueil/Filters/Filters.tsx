@@ -7,29 +7,30 @@ import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 
 import { FilterSelect } from './FilterSelect';
 
-export const ACTIVITIES_PER_PHASE = [
+export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | number[] }[][] = [
   [
-    { key: 0, label: 'Toutes', value: [3, 5, 6, 7, 8] },
+    { key: 0, label: 'Toutes', value: 'all' },
     { key: 1, label: 'Indices culturels', value: [6] },
     { key: 2, label: 'Symboles', value: [7] },
     { key: 3, label: 'Questions', value: [3] },
     { key: 4, label: 'Mascotte', value: [8] },
   ],
   [
-    { key: 0, label: 'Toutes', value: [1, 2, 4, 5] },
-    { key: 1, label: 'Énigmes', value: [1] },
-    { key: 2, label: 'Défis', value: [2] },
-    { key: 3, label: 'Jeux', value: [4] },
+    { key: 0, label: 'Toutes', value: 'all' },
+    { key: 1, label: 'Défis', value: [2] },
+    { key: 2, label: 'Jeux', value: [4] },
+    { key: 3, label: 'Énigmes', value: [1] },
+    { key: 4, label: 'Questions', value: [3] },
   ],
   [
-    { key: 0, label: 'Toutes', value: [5, 10] },
+    { key: 0, label: 'Toutes', value: 'all' },
     { key: 1, label: 'Hymne', value: [10] },
   ],
 ];
 
 export type FilterArgs = {
   selectedType: string | number;
-  types: number[];
+  types: number[] | 'all';
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
