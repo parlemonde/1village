@@ -1,27 +1,26 @@
-# Workflow that lint and build with typescript the code.
+# Workflow that lint and test with typescript the code.
 name: ESLint & Typescript
 
-# Triggered on very branch at every push
+# Triggered on every branch at every push
 on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # [1] checkout repo.
       - uses: actions/checkout@v2
+
+      # [2] get node.
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.yarn/cache
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
+          node-version: '12.x'
+
+      # [3] install dependencies.
       - name: Install dependencies
         run: yarn
+
+      # [4] Test project.
       - name: Run tests
         run: yarn test

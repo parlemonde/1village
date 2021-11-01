@@ -8,20 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # [1] checkout repo.
       - uses: actions/checkout@v2
+
+      # [2] get node.
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.yarn/cache
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
+          node-version: '12.x'
+
+      # [3] install dependencies.
       - name: Install dependencies
         run: yarn
+
+      # [4] build project.
       - name: Run build
         run: yarn build
