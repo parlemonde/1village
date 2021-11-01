@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
@@ -12,7 +11,7 @@ import FleurNationaleIcon from 'src/svg/symbole/fleur-nationale.svg';
 import HymneIcon from 'src/svg/symbole/hymne.svg';
 import MonnaieIcon from 'src/svg/symbole/monnaie.svg';
 
-const activities = [
+const symbols = [
   {
     label: 'Un drapeau',
     href: '/symbole/1?category=0',
@@ -72,20 +71,6 @@ const activities = [
 ];
 
 const Symbol = () => {
-  const router = useRouter();
-
-  const [activitiesWithLinks] = React.useMemo(() => {
-    if ('responseActivityId' in router.query && 'responseActivityType' in router.query) {
-      return [
-        activities.map((a) => ({
-          ...a,
-          href: `${a.href}&responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
-        })),
-      ];
-    }
-    return [activities];
-  }, [router.query]);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -98,7 +83,7 @@ const Symbol = () => {
           <p className="text">
             Commencez par choisir quel type de symbole vous souhaitez présenter, ou choisissez de présenter un autre type de symbole.
           </p>
-          <ActivityChoice activities={activitiesWithLinks} />
+          <ActivityChoice activities={symbols} />
         </div>
       </div>
     </Base>

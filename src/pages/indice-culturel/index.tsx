@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
@@ -12,7 +11,7 @@ import LoisirsJeuxIcon from 'src/svg/indice-culturel/loisirs-jeux.svg';
 import PaysagesIcon from 'src/svg/indice-culturel/paysages.svg';
 import TraditionIcon from 'src/svg/indice-culturel/tradition.svg';
 
-const activities = [
+const indices = [
   {
     label: 'Nos paysages',
     href: '/indice-culturel/1?category=0',
@@ -72,20 +71,6 @@ const activities = [
 ];
 
 const Indice = () => {
-  const router = useRouter();
-
-  const [activitiesWithLinks] = React.useMemo(() => {
-    if ('responseActivityId' in router.query && 'responseActivityType' in router.query) {
-      return [
-        activities.map((a) => ({
-          ...a,
-          href: `${a.href}&responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
-        })),
-      ];
-    }
-    return [activities];
-  }, [router.query]);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -99,7 +84,7 @@ const Indice = () => {
             Commencez par choisir quel type d&apos;indice culturel vous souhaitez présenter, ou choisissez de présenter un autre type d&apos;indice
             culturel.
           </p>
-          <ActivityChoice activities={activitiesWithLinks} />
+          <ActivityChoice activities={indices} />
         </div>
       </div>
     </Base>

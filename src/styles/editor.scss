@@ -112,6 +112,10 @@
   min-height: calc(34px + 1rem);
   margin-bottom: 1rem;
   padding-right: 2.5rem;
+
+  &--warning {
+    border-color: $warning-color;
+  }
 }
 
 .text-editor__toolbar-container {

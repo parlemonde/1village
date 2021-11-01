@@ -16,9 +16,11 @@ interface MultipleCountrySelectorProps {
   onChange?(newValue: string[] | null): void;
   filterCountries?: string[];
   style?: React.CSSProperties;
+  helperText?: React.ReactNode;
+  error?: boolean;
 }
 
-export const MultipleCountrySelector = ({ label, value = [], onChange, filterCountries, style }: MultipleCountrySelectorProps) => {
+export const MultipleCountrySelector = ({ label, value = [], onChange, filterCountries, style, helperText, error }: MultipleCountrySelectorProps) => {
   const { countries } = useCountries();
   const options: CountryOption[] = React.useMemo(
     () =>
@@ -70,6 +72,8 @@ export const MultipleCountrySelector = ({ label, value = [], onChange, filterCou
           variant="outlined"
           label={label}
           type="search"
+          helperText={helperText}
+          error={error}
         />
       )}
       autoHighlight

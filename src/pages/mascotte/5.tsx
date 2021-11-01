@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import React from 'react';
@@ -13,14 +14,13 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageView } from 'src/components/activities/content/views/ImageView';
-import { getErrorSteps, isFirstStepValid, isSecondStepValid, isThirdStepValid } from 'src/components/activities/mascotteChecks';
+import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
-import { successColor, warningColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
@@ -29,7 +29,6 @@ const MascotteStep4 = () => {
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);
-  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
   const { countries } = useCountries();
   const { languages } = useLanguages();
   const { currencies } = useCurrencies();
@@ -37,6 +36,13 @@ const MascotteStep4 = () => {
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 4);
+    }
+    return [];
+  }, [data]);
+  const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -45,14 +51,6 @@ const MascotteStep4 = () => {
       router.push('/ma-classe');
     }
   }, [activity, router, updateActivity]);
-
-  const initErrorSteps = React.useRef(false);
-  React.useEffect(() => {
-    if (data !== null && !initErrorSteps.current) {
-      initErrorSteps.current = true;
-      setErrorSteps(getErrorSteps(data, 4));
-    }
-  }, [data]);
 
   const content = React.useMemo(
     () => (data === null ? ['', '', ''] : getMascotteContent(data, countries, currencies, languages)),
@@ -102,7 +100,7 @@ const MascotteStep4 = () => {
   }, [activity, content, updateActivity]);
 
   const onPublish = async () => {
-    if (!activity || !user) {
+    if (!activity || !user || !isValid) {
       return;
     }
     setIsLoading(true);
@@ -151,7 +149,7 @@ const MascotteStep4 = () => {
                 ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
                 : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
             </p>
-            {errorSteps.length > 0 && (
+            {!isValid && (
               <p>
                 <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
               </p>
@@ -164,21 +162,21 @@ const MascotteStep4 = () => {
               </div>
             ) : (
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                <Button variant="outlined" color="primary" onClick={onPublish} disabled={errorSteps.length > 0}>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
                   Publier
                 </Button>
               </div>
             )}
-            <div className="preview-block" style={{ border: `1px dashed ${!isFirstStepValid(data) ? warningColor : successColor}` }}>
+            <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/1');
                 }}
-                status={!isFirstStepValid(data) ? 'warning' : 'success'}
+                status={errorSteps.indexOf(0) !== -1 ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>
-                {isFirstStepValid(data) &&
+                {errorSteps.indexOf(0) === -1 &&
                   content.length > 0 &&
                   content[0].split('\n').map((s, index) => (
                     <p key={index} style={{ margin: '0.5rem 0' }}>
@@ -193,12 +191,12 @@ const MascotteStep4 = () => {
                 )}
               </div>
             </div>
-            <div className="preview-block" style={{ border: `1px dashed ${!isSecondStepValid(data) ? warningColor : successColor}` }}>
+            <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/2');
                 }}
-                status={!isSecondStepValid(data) ? 'warning' : 'success'}
+                status={errorSteps.indexOf(1) !== -1 ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <Grid container spacing={3}>
@@ -209,7 +207,7 @@ const MascotteStep4 = () => {
                 </Grid>
                 <Grid item xs={12} md={9}>
                   <div>
-                    {isSecondStepValid(data) &&
+                    {errorSteps.indexOf(1) === -1 &&
                       content.length > 1 &&
                       content[1].split('\n').map((s, index) => (
                         <p key={index} style={{ margin: '0.5rem 0' }}>
@@ -220,12 +218,12 @@ const MascotteStep4 = () => {
                 </Grid>
               </Grid>
             </div>
-            <div className="preview-block" style={{ border: `1px dashed ${!isThirdStepValid(data) ? warningColor : successColor}` }}>
+            <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}>
               <EditButton
                 onClick={() => {
                   router.push('/mascotte/3');
                 }}
-                status={!isThirdStepValid(data) ? 'warning' : 'success'}
+                status={errorSteps.indexOf(2) !== -1 ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
               />
               <div>

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -12,39 +13,30 @@ import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { Activities } from 'src/components/activities/List';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { useActivity } from 'src/services/useActivity';
-import { errorColor } from 'src/styles/variables.const';
+import { UserContext } from 'src/contexts/userContext';
 import { ActivityStatus } from 'types/activity.type';
 
 const IndiceStep3 = () => {
   const router = useRouter();
+  const { user } = React.useContext(UserContext);
   const { activity, save } = React.useContext(ActivityContext);
-  const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
-  const [style, setStyle] = React.useState({});
 
   const data = (activity?.data as IndiceData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isValid = () => {
-    let result = true;
-    activity?.content?.map((content: { value: string }) => {
-      result = content.value === '' || content.value === '<p></p>\n' ? false : true;
-    });
 
-    return result;
-  };
+  const isValid = React.useMemo(() => {
+    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
+      return false;
+    }
+    return true;
+  }, [activity]);
 
   React.useEffect(() => {
-    if (!isValid()) {
-      setErrorSteps([1]);
-      setStyle({ border: `1px dashed ${errorColor}` });
-    }
-
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/indice-culturel');
     } else if (activity && !isIndice(activity)) {
@@ -53,6 +45,9 @@ const IndiceStep3 = () => {
   }, [activity, router]);
 
   const onPublish = async () => {
+    if (!isValid) {
+      return;
+    }
     setIsLoading(true);
     const success = await save(true);
     if (success) {
@@ -61,7 +56,7 @@ const IndiceStep3 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || activity === null || !('theme' in data) || data.theme === -1) {
+  if (data === null || user === null || activity === null || !('theme' in data) || data.theme === -1) {
     return <div></div>;
   }
 
@@ -71,7 +66,7 @@ const IndiceStep3 = () => {
         <Steps
           steps={[INDICE_TYPES[activity.subType || 0].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']}
           activeStep={2}
-          errorSteps={errorSteps}
+          errorSteps={isValid ? [] : [1]}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
@@ -81,7 +76,7 @@ const IndiceStep3 = () => {
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
-          {errorSteps.length > 0 && (
+          {!isValid && (
             <p>
               <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
             </p>
@@ -99,45 +94,31 @@ const IndiceStep3 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid()}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
                 Publier
               </Button>
             </div>
           )}
 
-          {responseActivity !== null && (
-            <>
-              <span className={'text text--small text--success'}>Présentation en réaction à l&apos;indice culturel</span>
-              <div className="preview-block">
-                {!isEdit && (
-                  <EditButton
-                    onClick={() => {
-                      router.push(`/indice-culturel/1?edit=${activity.id}`);
-                    }}
-                    status={'success'}
-                    style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-                  />
-                )}
-                <Activities activities={[responseActivity]} noButtons />
-              </div>
-            </>
-          )}
           <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
             <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType || 0].title}</p>
           </div>
 
-          <span className={`text text--small ${errorSteps.length > 0 ? 'text--alert' : 'text--success'}`}>Indice culturel</span>
-          <div className="preview-block" style={style}>
+          <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Indice culturel</span>
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <EditButton
               onClick={() => {
                 router.push('/indice-culturel/2');
               }}
-              status={errorSteps.length > 0 ? 'error' : 'success'}
+              status={isValid ? 'success' : 'warning'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity.content} />
           </div>
+
+          <span className="text text--small">Aperçu de la publication</span>
+          <ActivityCard activity={activity} user={user} noMargin noButtons />
 
           <StepsButton prev="/indice-culturel/2" />
         </div>

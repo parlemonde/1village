@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isIndice } from 'src/activity-types/anyActivity';
 import { INDICE_TYPES } from 'src/activity-types/indice.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { Activities } from 'src/components/activities/List';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const IndiceStep1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
-  const selectRef = React.useRef<HTMLDivElement>(null);
+  const { activity, createNewActivity } = React.useContext(ActivityContext);
+  const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
   const { activities } = useActivities({
     page: 0,
     countries: user ? [user.country.isoCode.toUpperCase()] : [],
@@ -26,55 +26,31 @@ const IndiceStep1 = () => {
   });
   const sameActivities = activity ? activities.filter((c) => c.subType === activity.subType) : [];
 
-  // indice sub-type
-  const indiceTypeIndex =
-    activity !== null && 'edit' in router.query && isIndice(activity)
-      ? activity.subType ?? 0
-      : parseInt(getQueryString(router.query['category']) ?? '-1', 10) ?? 0;
-
-  const onNext = () => {
-    updateActivity({ responseActivityId: null, responseType: null });
-    router.push('/indice-culturel/2');
-  };
-
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
       created.current = true;
       if (!('edit' in router.query)) {
-        const responseActivityId =
-          'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
-        const responseActivityType =
-          'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
-        createNewActivity(
-          ActivityType.INDICE,
-          indiceTypeIndex,
-          {
-            theme: 0,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
-        if (responseActivityId !== null) {
-          if (selectRef.current) {
-            selectRef.current.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
+        const indiceType = parseInt(getQueryString(router.query['category']) || '0', 10) || 0;
+        createNewActivity(ActivityType.INDICE, indiceType, {
+          theme: 0,
+        });
       }
     }
-  }, [activity, createNewActivity, indiceTypeIndex, router]);
+  }, [activity, createNewActivity, router]);
+
+  const onNext = () => {
+    router.push('/indice-culturel/2');
+  };
 
   if (!activity) {
-    return (
-      <Base>
-        <div></div>
-      </Base>
-    );
+    return <Base></Base>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        {!isEdit && <BackButton href="/indice-culturel" />}
         <Steps steps={[INDICE_TYPES[activity.subType || 0]?.step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={0} />
         <div className="width-900">
           <p className="text">
@@ -82,7 +58,7 @@ const IndiceStep1 = () => {
             {INDICE_TYPES[activity.subType || 0]?.step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice !
             Vous pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
           </p>
-          <StepsButton prev="/indice-culturel" next={onNext} />
+          <StepsButton next={onNext} />
           <div>
             {sameActivities.length > 0 ? (
               <Activities activities={sameActivities} withLinks />

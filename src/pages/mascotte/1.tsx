@@ -11,6 +11,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { isFirstStepValid, isValidSum } from 'src/components/activities/mascotteChecks';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -24,9 +25,11 @@ const MascotteStep1 = () => {
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
+
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
+
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!user || !village) {
@@ -95,6 +98,7 @@ const MascotteStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        {!isEdit && <BackButton href="/ma-classe" />}
         <Steps
           steps={[
             'Votre classe',
@@ -289,7 +293,7 @@ const MascotteStep1 = () => {
               ></TextField>
             </div>
           </div>
-          <StepsButton prev={!isEdit ? '/ma-classe' : undefined} next={onNext} />
+          <StepsButton next={onNext} />
         </div>
       </div>
     </Base>

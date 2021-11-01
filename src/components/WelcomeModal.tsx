@@ -44,6 +44,9 @@ export const WelcomeModal = () => {
   if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
     return null;
   }
+  if (!user.firstLogin) {
+    return null;
+  }
 
   const updateUser = async () => {
     if (!newUser.city || !newUser.address || !newUser.pseudo || !newUser.school || !newUser.email || !newUser.postalCode) {
@@ -113,7 +116,7 @@ export const WelcomeModal = () => {
     }
   };
 
-  if (!user.firstLogin && currentStep === 3 && village && village.activePhase > 1) {
+  if (village && village.activePhase > 1) {
     return <MissingStepModal />;
   }
 

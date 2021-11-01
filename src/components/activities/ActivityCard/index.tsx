@@ -34,6 +34,7 @@ export const ActivityCard = ({
   showEditButtons = false,
   isDraft = false,
   forComment = false,
+  noMargin = false,
   onDelete = () => {},
   onSelect,
 }: ActivityCardProps) => {
@@ -57,7 +58,7 @@ export const ActivityCard = ({
           }
         }}
         style={{
-          margin: forComment ? '0' : '1rem 0',
+          margin: noMargin || forComment ? '0' : '1rem 0',
           cursor: onSelect !== undefined ? 'pointer' : 'unset',
           border: activity?.isPinned ? `2px solid ${primaryColor}` : undefined,
         }}
@@ -88,7 +89,11 @@ export const ActivityCard = ({
             </>
           )}
           {activity.isPinned && <PinIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
-          {ActivityIcon && <ActivityIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
+          {ActivityIcon && (
+            <ActivityIcon
+              style={{ fill: primaryColor, color: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
+            />
+          )}
         </div>
         <div className="activity-card__content">
           {isMascotte(activity) && (

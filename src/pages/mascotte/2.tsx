@@ -9,7 +9,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
-import { getErrorSteps, stepsHasBeenFilled } from 'src/components/activities/mascotteChecks';
+import { getErrorSteps, isSecondStepValid } from 'src/components/activities/mascotteChecks';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { errorColor } from 'src/styles/variables.const';
@@ -18,7 +18,6 @@ const MascotteStep2 = () => {
   const router = useRouter();
   const [isError, setIsError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -26,18 +25,16 @@ const MascotteStep2 = () => {
     } else if (activity && !isMascotte(activity)) {
       router.push('/ma-classe');
     } else if (activity && isMascotte(activity)) {
-      setIsError(stepsHasBeenFilled(activity.data, 1));
+      setIsError(!isSecondStepValid(activity.data));
     }
   }, [activity, router]);
 
   const data = (activity?.data as MascotteData) || null;
-
-  const initErrorSteps = React.useRef(false);
-  React.useEffect(() => {
-    if (data !== null && !initErrorSteps.current) {
-      initErrorSteps.current = true;
-      setErrorSteps(getErrorSteps(data, 1));
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 1);
     }
+    return [];
   }, [data]);
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +95,11 @@ const MascotteStep2 = () => {
                 <p className="text-center" style={{ marginTop: '-10px' }}>
                   Image de votre mascotte
                 </p>
-                {isError && data.mascotteImage === '' && <p style={{ color: errorColor, textAlign: 'center' }}>Ce champs est obligatoire</p>}
+                {isError && data.mascotteImage === '' && (
+                  <p className="text text--small text-center" style={{ color: errorColor }}>
+                    Ce champs est obligatoire
+                  </p>
+                )}
               </Grid>
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
@@ -172,8 +173,14 @@ const MascotteStep2 = () => {
                 </Grid>
               </Grid>
               <p>Tout commes vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
-              <MultipleCountrySelector label="Pays" style={{ width: '100%', marginBottom: '1rem' }} value={data.countries} onChange={countryChange} />
-              {isError && data.countries.length === 0 && <p style={{ color: errorColor }}>Ce champs est obligatoire</p>}
+              <MultipleCountrySelector
+                label="Pays"
+                style={{ width: '100%', marginBottom: '1rem' }}
+                value={data.countries}
+                onChange={countryChange}
+                helperText={isError && data.countries.length === 0 ? 'Ce champs est obligatoire' : ''}
+                error={isError && data.countries.length === 0}
+              />
               Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>

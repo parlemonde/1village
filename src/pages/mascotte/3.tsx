@@ -17,7 +17,6 @@ const MascotteStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const shouldSave = React.useRef(false);
-  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -28,13 +27,11 @@ const MascotteStep3 = () => {
   }, [activity, router]);
 
   const data = (activity?.data as MascotteData) || null;
-
-  const initErrorSteps = React.useRef(false);
-  React.useEffect(() => {
-    if (data !== null && !initErrorSteps.current) {
-      initErrorSteps.current = true;
-      setErrorSteps(getErrorSteps(data, 2));
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 2);
     }
+    return [];
   }, [data]);
 
   const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {

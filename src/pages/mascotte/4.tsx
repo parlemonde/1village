@@ -8,20 +8,25 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 
 const MascotteStep4 = () => {
   const { activity } = React.useContext(ActivityContext);
-  const data = (activity?.data as MascotteData) || null;
   const [cguChecked, setCguChecked] = React.useState(false);
-  const [errorSteps, setErrorSteps] = React.useState<number[]>([]);
 
-  const initErrorSteps = React.useRef(false);
-  React.useEffect(() => {
-    if (data !== null && !initErrorSteps.current) {
-      initErrorSteps.current = true;
-      setErrorSteps(getErrorSteps(data, 3));
+  const data = (activity?.data as MascotteData) || null;
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 3);
     }
+    return [];
   }, [data]);
+
+  React.useEffect(() => {
+    if (activity && activity.status === ActivityStatus.PUBLISHED) {
+      setCguChecked(true);
+    }
+  }, [activity]);
 
   return (
     activity && (

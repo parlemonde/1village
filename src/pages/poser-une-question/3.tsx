@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
+import type { QuestionActivity } from 'src/activity-types/question.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -38,20 +39,18 @@ const Question3 = () => {
   }, [activity, router]);
 
   const createQuestionActivity = async (question: string): Promise<boolean> => {
-    const data = {
+    if (!village) {
+      return false;
+    }
+    const data: Partial<QuestionActivity> = {
       type: ActivityType.QUESTION,
-      villageId: village?.id,
+      villageId: village.id,
+      data: {},
       content: [
         {
-          key: 'text',
+          id: 0,
+          type: 'text',
           value: question,
-        },
-        {
-          key: 'json',
-          value: JSON.stringify({
-            type: 'data',
-            data: {},
-          }),
         },
       ],
     };
