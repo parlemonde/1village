@@ -97,13 +97,12 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
       const newVillage = userVillageId === -1 ? null : await getVillage(userVillageId);
       setVillage(newVillage);
       setSelectedPhase(newVillage ? newVillage.activePhase : -1);
-
-      if (newVillage === null && user.type > UserType.TEACHER) {
-        showSelectVillageModal();
-      }
-      if (newVillage === null && user.type === UserType.TEACHER) {
-        setShowUnassignedModal(true);
-      }
+    }
+    if (userVillageId === -1 && user.type > UserType.TEACHER) {
+      showSelectVillageModal();
+    }
+    if (userVillageId === -1 && user.type === UserType.TEACHER) {
+      setShowUnassignedModal(true);
     }
   }, [currentVillageId, getVillage, showSelectVillageModal, user]);
   React.useEffect(() => {
