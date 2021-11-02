@@ -6,7 +6,6 @@ import { VillagePhase } from '../../types/village.type';
 
 import { ActivityData } from './activityData';
 import { Game } from './game';
-//import { Mimique } from './mimique';
 import { User } from './user';
 import { Village } from './village';
 
@@ -93,7 +92,4 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @OneToMany(() => Game, (game: Game) => game.activity)
   public games: Game[];
-
-  /*@OneToMany(() => Mimique, (mimique: Mimique) => mimique.activity)
-  public mimiques: Mimique[];*/
 }

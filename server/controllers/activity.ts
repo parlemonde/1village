@@ -6,7 +6,6 @@ import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { Game } from '../entities/game';
-//import { Mimique } from '../entities/mimique';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';

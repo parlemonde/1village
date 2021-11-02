@@ -1,8 +1,8 @@
 import type { GenericExtendedActivity } from '../src/activity-types/extendedActivity.types';
 
 export enum GameType {
-  MIMIQUE = 0,
-  MONNAIE = 1,
+  MIMIC = 0,
+  MONEY = 1,
 }
 
 // export interface Game
@@ -31,14 +31,21 @@ export type GameData = {
 };
 
 // --- three different mimiques ---
-export type MimiquesData = {
-  game1: MimiqueData;
-  game2: MimiqueData;
-  game3: MimiqueData;
+export type MimicsData = {
+  game1: MimicData;
+  game2: MimicData;
+  game3: MimicData;
+};
+
+// --- three different objects ---
+export type MoneysData = {
+  game1: MoneyData;
+  game2: MoneyData;
+  game3: MoneyData;
 };
 
 // --- structure of each mimique ---
-export type MimiqueData = {
+export type MimicData = {
   gameId: number | null;
   origine: string | null;
   signification: string | null;
@@ -47,13 +54,17 @@ export type MimiqueData = {
   video: string | null;
 };
 
-// --- Money game three objects & money game structure => in progress ---
-export type MonnaieData = {
-  theme: number;
+// --- Money game three objects & money game structure ---
+export type MoneyData = {
+  gameId: number | null;
+  name: string | null;
+  price: string | null;
+  description: string | null;
+  image: string | null;
 };
 
-export type GameMimiqueActivity = GenericExtendedActivity<MimiquesData>;
+export type GameMimicActivity = GenericExtendedActivity<MimicsData>;
 
-export type GameMonnaieActivity = GenericExtendedActivity<MonnaieData>;
+export type GameMoneyActivity = GenericExtendedActivity<MoneyData>;
 
-export type GameActivity = GameMimiqueActivity | GameMonnaieActivity;
+export type GameActivity = GameMimicActivity | GameMoneyActivity;

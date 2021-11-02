@@ -28,8 +28,6 @@ import { MimiqueResponseValue } from 'types/mimiqueResponse.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
-//import type { MimiqueResponse } from 'types/mimiqueResponse.type';
-
 const GreenRadio = withStyles({
   root: {
     color: green[400],
@@ -101,7 +99,7 @@ const PlayMimique: React.FC = () => {
   const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
 
   const mimiqueInitialState = {
-    setMimique: setMimiqueContent,
+    setMimiqueContent: setMimiqueContent,
     setIsLoading: setIsLoading,
     setFound: setFound,
     setFoundError: setFoundError,
@@ -134,7 +132,7 @@ const PlayMimique: React.FC = () => {
         method: 'GET',
         url: `/games/play${serializeToQueryUrl({
           villageId: village.id,
-          type: GameType.MIMIQUE,
+          type: GameType.MIMIC,
         })}`,
       }).then((response) => {
         console.log('response =', response);
@@ -300,7 +298,7 @@ const PlayMimique: React.FC = () => {
           <Grid item xs={12} md={12}>
             <ReactPlayer light url={mimiqueContent.video} controls />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={6} md={6}>
             <RadioGroup aria-label="gender" name="gender1" value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
               {choices &&
                 choices.map((val) => {
@@ -341,7 +339,7 @@ const PlayMimique: React.FC = () => {
           {stats &&
             Object.keys(stats).map((country: string) => {
               return (
-                <Grid item xs={12} md={4} key={country}>
+                <Grid item xs={6} md={6} key={country}>
                   <span>Réponses des pélicopains </span>
                   <Flag country={country} />
                   {choices.map((val) => {
