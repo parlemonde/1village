@@ -2,6 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
+import type { GameData, GamesData } from '../../types/game.type';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
@@ -229,7 +230,7 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
   }
 });
 
-// --- Create an activity: challenge, question, riddle or game ---
+// --- Create an activity ---
 type CreateActivityData = {
   type: number;
   subType?: number | null;
@@ -371,14 +372,29 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     data: {
       type: 'object',
       additionalProperties: true,
+      nullable: true,
+    },
+    content: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number', nullable: false },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          value: { type: 'string', nullable: false },
+        },
+        required: ['type', 'value'],
+      },
+      nullable: true,
+    },
   },
   required: [],
   additionalProperties: false,
-  };
+};
 
 const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
 
-activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+/**activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateActivityValidator(data)) {
     sendInvalidDataError(updateActivityValidator);
@@ -404,10 +420,9 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
 
-  // --- define type of activity: it can be a challenge, a riddle or a game
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED) {
     const activityData = (activity.content || []).find((data) => {
-      return data.key === 'json';
+      return data.value === 'json';
     });
     if (activityData) {
       const value = JSON.parse(activityData.value);
@@ -416,16 +431,17 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
       gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
       activityData.value = JSON.stringify(value);
-      await getRepository(ActivityData).save(activityData);
+      await getRepository(Activity).save(activityData);
     }
   }
+  
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
-});
+});*/
 
 // --- create a game ---
-const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
+/**const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
   const id = data.gameId;
   const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
   delete data['gameId'];
@@ -436,48 +452,10 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   game.content = JSON.stringify(data);
   await getRepository(Game).save(game);
   return game;
-};
+};*/
 
-// --- Add content to an activity ---
-type AddActivityData = {
-  content?: Array<{
-    key: ActivityDataType;
-    value: string;
-  }>;
-};
-const ADD_DATA_SCHEMA: JSONSchemaType<AddActivityData> = {
-  type: 'object',
-  properties: {
-    content: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          key: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'json', 'h5p', 'sound'] },
-          value: { type: 'string', nullable: false },
-        },
-        required: ['key', 'value'],
-      },
-      nullable: true,
-    },
-    content: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
-          value: { type: 'string', nullable: false },
-        },
-        required: ['type', 'value'],
-      },
-      nullable: true,
-    },
-  },
-  required: [],
-  additionalProperties: false,
-};
-const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateActivityValidator(data)) {
