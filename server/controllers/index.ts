@@ -29,7 +29,6 @@ const controllers = [
   analyticController,
   archiveController,
   weatherController,
-  mimiqueController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {

@@ -1,4 +1,4 @@
-import type { GenericExtendedActivity } from '../src/activity-types/extendedActivity.types';
+import type { Activity } from './activity.type';
 
 export enum GameType {
   MIMIC = 0,
@@ -63,8 +63,8 @@ export type MoneyData = {
   image: string | null;
 };
 
-export type GameMimicActivity = GenericExtendedActivity<MimicsData>;
+export type GameMimicActivity = Activity<MimicsData>;
 
-export type GameMoneyActivity = GenericExtendedActivity<MoneyData>;
+export type GameMoneyActivity = Activity<MoneyData>;
 
 export type GameActivity = GameMimicActivity | GameMoneyActivity;
