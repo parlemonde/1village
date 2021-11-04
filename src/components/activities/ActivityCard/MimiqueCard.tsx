@@ -6,19 +6,19 @@ import { Button, Grid } from '@material-ui/core';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
 import VideoPlaceholder from 'src/svg/jeu/video-placeholder.svg';
-import type { GameMimiqueActivity } from 'types/game.type';
+import type { GameMimicActivity } from 'types/game.type';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 
-export const MimiqueCard: React.FC<ActivityCardProps<GameMimiqueActivity>> = ({
+export const MimiqueCard: React.FC<ActivityCardProps<GameMimicActivity>> = ({
   activity,
   isSelf,
   noButtons,
   isDraft,
   showEditButtons,
   onDelete,
-}: ActivityCardProps<GameMimiqueActivity>) => {
+}: ActivityCardProps<GameMimicActivity>) => {
   const [pictureUrl, setPictureUrl] = React.useState<string>(null);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 

@@ -22,7 +22,7 @@ import type { EditorProps } from '../../content.types';
 interface VideoModalsProps extends EditorProps {
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
-  videoUrl: string;
+  videoUrl: string | null;
   setVideoUrl: (val: string) => void;
 }
 
@@ -40,7 +40,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
-  const [tempVideoUrl, setTempVideoUrl] = React.useState(value);
+  const [tempVideoUrl, setTempVideoUrl] = React.useState(value || '');
   const [name, setName] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
@@ -57,7 +57,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
   React.useEffect(() => {
     if (prevValue.current !== value) {
       prevValue.current = value;
-      setVideoUrl(value);
+      setVideoUrl(value || '');
     }
   }, [value]);
 
@@ -312,7 +312,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
                 sx={defaultTextButtonStyle}
                 size="small"
                 onClick={() => {
-                  copyText(value);
+                  copyText(value || '');
                 }}
               >
                 COPIER

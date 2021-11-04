@@ -8,12 +8,12 @@ import type { RadioProps } from '@material-ui/core';
 import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@material-ui/core';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { isMimique } from 'src/activity-types/game.const';
+import { isMimic } from 'src/activity-types/game.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import type { MimiquesData } from 'types/game.type';
+import type { MimicsData } from 'types/game.type';
 
 const GreenRadio = withStyles({
   root: {
@@ -24,16 +24,17 @@ const GreenRadio = withStyles({
   },
   checked: {},
 })((props: RadioProps) => <Radio color="default" {...props} />);
-const MimiqueStep4: React.FC = () => {
+
+const MimiqueStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as MimiquesData) || null;
+  const data = (activity?.data as MimicsData) || null;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/creer-un-jeu');
-    } else if (activity && (!isGame(activity) || !isMimique(activity))) {
+    } else if (activity && (!isGame(activity) || !isMimic(activity))) {
       router.push('/creer-un-jeu');
     }
   }, [activity, router]);
