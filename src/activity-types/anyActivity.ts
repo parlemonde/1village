@@ -1,5 +1,6 @@
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
+import type { GameActivity } from 'types/game.type';
 
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
@@ -33,4 +34,7 @@ export const isSymbol = (activity: Activity): activity is SymbolActivity => {
 };
 export const isMascotte = (activity: Activity): activity is MascotteActivity => {
   return activity.type === ActivityType.MASCOTTE;
+};
+export const isGame = (activity: Activity): activity is GameActivity => {
+  return activity.type === ActivityType.GAME;
 };

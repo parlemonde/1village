@@ -6,6 +6,8 @@ import { VillagePhase } from '../../types/village.type';
 import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
+import { GameResponse } from './gameResponse';
+import { Game } from './game';
 import { User } from './user';
 
 export { VillagePhase };
@@ -41,4 +43,10 @@ export class Village implements VillageInterface {
 
   @OneToMany(() => Activity, (activity: Activity) => activity.village)
   public activities: Activity[];
+
+  @OneToMany(() => Game, (game: Game) => game.village)
+  public games: Game[];
+
+  @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
+  public gameResponses: GameResponse[];
 }

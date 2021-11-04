@@ -6,6 +6,8 @@ import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
+import { GameResponse } from './gameResponse';
+import { Game } from './game';
 import { Village } from './village';
 
 export { UserType };
@@ -79,6 +81,12 @@ export class User implements UserInterface {
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
+
+  @OneToMany(() => Game, (game: Game) => game.user)
+  public games: Game[];
+
+  @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
+  public gameResponses: GameResponse[];
 
   public mascotteId?: number;
 }
