@@ -40,7 +40,7 @@ const MimiqueStep2 = () => {
   };
 
   const onPrev = () => {
-    router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
+    router.push(`/creer-un-jeu/mimique/1?edit=${activity?.id}`);
   };
 
   if (!activity || data === null) {

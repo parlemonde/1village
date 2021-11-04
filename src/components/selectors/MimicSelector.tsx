@@ -17,8 +17,8 @@ interface MimicSelectorProps {
   mimicNumber: string;
   onDataChange(key: keyof MimicData): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   onVideoChange(newValue: string): void;
-  onNext(): void;
-  onPrev(): void;
+  onNext: (() => void) | null;
+  onPrev: (() => void) | null;
 }
 
 const MimicSelector: React.FC<MimicSelectorProps> = ({ MimicData, mimicNumber, onDataChange, onVideoChange, onNext, onPrev }: MimicSelectorProps) => {
@@ -53,7 +53,7 @@ const MimicSelector: React.FC<MimicSelectorProps> = ({ MimicData, mimicNumber, o
   const nextPage = () => {
     save().catch(console.error);
     if (isValid()) {
-      onNext();
+      onNext?.();
     } else {
       setIsError(true);
     }
@@ -61,7 +61,7 @@ const MimicSelector: React.FC<MimicSelectorProps> = ({ MimicData, mimicNumber, o
 
   const prevPage = () => {
     save().catch(console.error);
-    onPrev();
+    onPrev?.();
   };
 
   if (!user || !MimicData) {
