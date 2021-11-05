@@ -1,5 +1,6 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
+import type { DeepPartial } from 'typeorm';
 import { getRepository } from 'typeorm';
 
 import type { GameData, GamesData } from '../../types/game.type';
@@ -488,9 +489,33 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
 
+  if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
+    const gamesData = JSON.parse(activity.data as unknown as string) as GamesData;
+    gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
+    gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
+    gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
+    const value = JSON.stringify(gamesData);
+    console.table(value);
+    await getRepository(Activity).save(value as DeepPartial<Activity>);
+  }
+
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
+
+// --- create a game ---
+const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
+  const id = data.gameId;
+  const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
+  delete data['gameId'];
+  game.activityId = activity.id;
+  game.villageId = activity.villageId;
+  game.userId = activity.userId;
+  game.type = activity.subType;
+  game.content = JSON.stringify(data);
+  await getRepository(Game).save(game);
+  return game;
+};
 
 // --- Delete an activity --- (Soft delete)
 activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
