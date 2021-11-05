@@ -490,16 +490,10 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.content = data.content ?? activity.content;
 
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
-    // const gamesData = JSON.parse(activity.data as unknown as string) as GamesData;
     const gamesData = activity.data as GamesData;
-    console.log('GamesData : -------------->', gamesData);
     gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
     gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
     gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
-    const value = JSON.stringify(gamesData);
-    console.table(value);
-    //TODO : voir comment enregistrer ici
-    await getRepository(Activity).save(value as DeepPartial<Activity>);
   }
 
   await getRepository(Activity).save(activity);

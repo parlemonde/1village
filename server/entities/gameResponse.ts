@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import { GameType } from '../../types/game.type';
 import type { GameResponse as GameResponseInterface } from '../../types/gameResponse.type';
 
 import { Game } from './game';
@@ -23,7 +22,7 @@ export class GameResponse implements GameResponseInterface {
   // user relation
   @ManyToOne(() => User, (user: User) => user.gameResponses, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  public user: User | null;
+  public user: User;
 
   @Column({ nullable: false })
   public userId: number;

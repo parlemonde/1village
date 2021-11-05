@@ -153,18 +153,18 @@ const PlayMimique = () => {
       console.log(gameResponses);
       const resStats: StatsProps = {};
       gameResponses.forEach((val: GameResponse) => {
-        if (resStats[val.user.country] && resStats[val.user.country][val.user]) {
-          resStats[val.user.country][val.value] = resStats[val.user.country][val.value] + 1;
-          resStats[val.user.country].total = resStats[val.user.country].total + 1;
+        if (resStats[val.user.country.isoCode] && resStats[val.user.country.isoCode][val.user.id]) {
+          resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
+          resStats[val.user.country.isoCode][val.value] = resStats[val.user.country.isoCode][val.value] + 1;
         } else {
-          if (!resStats[val.user.country]) {
-            resStats[val.user.country] = {
+          if (!resStats[val.user.country.isoCode]) {
+            resStats[val.user.country.isoCode] = {
               total: 0,
             };
           }
-          if (!resStats[val.user.country][val.value]) {
-            resStats[val.user.country][val.value] = 1;
-            resStats[val.user.country].total = resStats[val.user.country].total + 1;
+          if (!resStats[val.user.country.isoCode][val.value]) {
+            resStats[val.user.country.isoCode][val.value] = 1;
+            resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
           }
         }
       });
@@ -333,7 +333,7 @@ const PlayMimique = () => {
                 <Grid item xs={6} md={6} key={country}>
                   <span>Réponses des pélicopains </span>
                   <Flag country={country} />
-                  {choices.map((val) => {
+                  {choices?.map((val) => {
                     if (val === 0) {
                       return (
                         <LinearProgressWithLabel

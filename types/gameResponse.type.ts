@@ -9,5 +9,5 @@ export interface GameResponse {
   villageId: number;
   gameId: number;
   value: string;
-  user: User | null;
+  user: User;
 }

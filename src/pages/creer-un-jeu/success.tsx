@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import Button from '@mui/material/Button';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
