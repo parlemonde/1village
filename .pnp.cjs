@@ -109,7 +109,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["earcut", "npm:2.2.3"],
             ["eslint", "npm:7.29.0"],
             ["eslint-config-prettier", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.3.0"],
-            ["eslint-plugin-arca", "npm:0.10.1"],
+            ["eslint-plugin-arca", "npm:0.13.3"],
             ["eslint-plugin-import", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.23.4"],
             ["eslint-plugin-prettier", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.4.1"],
             ["eslint-plugin-react", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.24.0"],
@@ -244,7 +244,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["earcut", "npm:2.2.3"],
             ["eslint", "npm:7.29.0"],
             ["eslint-config-prettier", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.3.0"],
-            ["eslint-plugin-arca", "npm:0.10.1"],
+            ["eslint-plugin-arca", "npm:0.13.3"],
             ["eslint-plugin-import", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.23.4"],
             ["eslint-plugin-prettier", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.4.1"],
             ["eslint-plugin-react", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.24.0"],
@@ -8427,11 +8427,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["eslint-plugin-arca", [
-        ["npm:0.10.1", {
-          "packageLocation": "./.yarn/cache/eslint-plugin-arca-npm-0.10.1-60a99e0e1d-ac19f1976e.zip/node_modules/eslint-plugin-arca/",
+        ["npm:0.13.3", {
+          "packageLocation": "./.yarn/cache/eslint-plugin-arca-npm-0.13.3-2a7c51dd75-5b8b7a8d08.zip/node_modules/eslint-plugin-arca/",
           "packageDependencies": [
-            ["eslint-plugin-arca", "npm:0.10.1"],
-            ["requireindex", "npm:1.1.0"]
+            ["eslint-plugin-arca", "npm:0.13.3"]
           ],
           "linkType": "HARD",
         }]
@@ -14304,15 +14303,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/require-from-string-npm-2.0.2-8557e0db12-a03ef68954.zip/node_modules/require-from-string/",
           "packageDependencies": [
             ["require-from-string", "npm:2.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["requireindex", [
-        ["npm:1.1.0", {
-          "packageLocation": "./.yarn/cache/requireindex-npm-1.1.0-445c011741-397057d97d.zip/node_modules/requireindex/",
-          "packageDependencies": [
-            ["requireindex", "npm:1.1.0"]
           ],
           "linkType": "HARD",
         }]

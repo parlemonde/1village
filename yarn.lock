@@ -83,7 +83,7 @@ __metadata:
     earcut: ^2.2.2
     eslint: 7.29.0
     eslint-config-prettier: 8.3.0
-    eslint-plugin-arca: 0.10.1
+    eslint-plugin-arca: 0.13.3
     eslint-plugin-import: 2.23.4
     eslint-plugin-prettier: 3.4.1
     eslint-plugin-react: 7.24.0
@@ -6301,12 +6301,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-arca@npm:0.10.1":
-  version: 0.10.1
-  resolution: "eslint-plugin-arca@npm:0.10.1"
-  dependencies:
-    requireindex: ~1.1.0
-  checksum: ac19f1976ec8a7a5e4e4e8ba24a427b670e7ad0b2e244157a55f60aa8f569edd51c687162f1bfebbfd5fc8abee8282b763215b18bd56245e000f9cb94d4d72c0
+"eslint-plugin-arca@npm:0.13.3":
+  version: 0.13.3
+  resolution: "eslint-plugin-arca@npm:0.13.3"
+  checksum: 5b8b7a8d0875dda1701153b31d5e0d91f157e5a4a56df3a56d24d5b3bb73833ce9995765102fb1abd3e7c18adceb05d0aee69fdb78d93ba5a8576162c4216530
   languageName: node
   linkType: hard
 
@@ -11488,13 +11486,6 @@ fsevents@^1.0.0:
   version: 2.0.2
   resolution: "require-from-string@npm:2.0.2"
   checksum: a03ef6895445f33a4015300c426699bc66b2b044ba7b670aa238610381b56d3f07c686251740d575e22f4c87531ba662d06937508f0f3c0f1ddc04db3130560b
-  languageName: node
-  linkType: hard
-
-"requireindex@npm:~1.1.0":
-  version: 1.1.0
-  resolution: "requireindex@npm:1.1.0"
-  checksum: 397057d97d7f753a3851abf0d6db94c295bd8254536f71f622b896ba08ea8c0d3e3771c8b009a557e6ce602f4245c0588836cdf59c4ce588fff721a7b855d323
   languageName: node
   linkType: hard
 
