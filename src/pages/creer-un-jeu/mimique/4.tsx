@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
+import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import { green } from '@material-ui/core/colors';
-import { withStyles } from '@material-ui/core/styles';
-import type { RadioProps } from '@material-ui/core';
-import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@material-ui/core';
+import { green } from '@mui/material/colors';
+import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@mui/material';
+import type { RadioProps } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic } from 'src/activity-types/game.const';
@@ -15,7 +16,7 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { MimicsData } from 'types/game.type';
 
-const GreenRadio = withStyles({
+const GreenRadio = makeStyles({
   root: {
     color: green[400],
     '&$checked': {
@@ -74,7 +75,13 @@ const MimiqueStep4 = () => {
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <ReactPlayer width="100%" height="100%" light url={data.game1.video} controls />
+                <ReactPlayer
+                  width="100%"
+                  height="100%"
+                  light
+                  url={data.game1.video as string | string[] | SourceProps[] | MediaStream | undefined}
+                  controls
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
@@ -88,7 +95,7 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
                   }}
-                  isGreen
+                  //isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
@@ -99,7 +106,13 @@ const MimiqueStep4 = () => {
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <ReactPlayer width="100%" height="100%" light url={data.game2.video} controls />
+                <ReactPlayer
+                  width="100%"
+                  height="100%"
+                  light
+                  url={data.game2.video as string | string[] | SourceProps[] | MediaStream | undefined}
+                  controls
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
@@ -113,7 +126,7 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/2');
                   }}
-                  isGreen
+                  //isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
@@ -124,7 +137,13 @@ const MimiqueStep4 = () => {
           <div className="preview-block">
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
-                <ReactPlayer width="100%" height="100%" light url={data.game3.video} controls />
+                <ReactPlayer
+                  width="100%"
+                  height="100%"
+                  light
+                  url={data.game3.video as string | string[] | SourceProps[] | MediaStream | undefined}
+                  controls
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
@@ -138,7 +157,7 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/3');
                   }}
-                  isGreen
+                  //isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
