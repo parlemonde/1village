@@ -6,7 +6,7 @@ import React from 'react';
 import { green } from '@mui/material/colors';
 import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@mui/material';
 import type { RadioProps } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { withStyles } from '@mui/styles';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic } from 'src/activity-types/game.const';
@@ -16,7 +16,7 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { MimicsData } from 'types/game.type';
 
-const GreenRadio = makeStyles({
+const GreenRadio = withStyles({
   root: {
     color: green[400],
     '&$checked': {
@@ -95,7 +95,6 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
                   }}
-                  //isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
@@ -126,7 +125,6 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/2');
                   }}
-                  //isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
@@ -157,7 +155,6 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/3');
                   }}
-                  //isGreen
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>

@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { useRouter } from 'next/router';
+import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
@@ -66,7 +67,7 @@ interface StatsProps {
   [key: string]: { [key: string]: number };
 }
 
-const PlayMimique: React.FC = () => {
+const PlayMimique = () => {
   const router = useRouter();
   const [tryCount, setTryCount] = React.useState<number>(0);
   const [found, setFound] = React.useState<boolean>(false);
@@ -78,7 +79,7 @@ const PlayMimique: React.FC = () => {
   const [game, setGame] = React.useState<Game>();
   const [mimicContent, setMimicContent] = React.useState<MimicData>({} as MimicData);
   const [gameResponses, setGameResponses] = React.useState<GameResponse[] | null>(null);
-  const [user, setUser] = React.useState<User | null>(null);
+  const [user, setUser] = React.useState<User>();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
   const [stats, setStats] = React.useState<StatsProps | null>(null);
@@ -115,18 +116,8 @@ const PlayMimique: React.FC = () => {
   React.useEffect(() => {
     if (isLoading) {
       mimiqueInitialState;
-      /*setMimiqueContent({} as MimiqueContent);
-      setIsLoading(false);
-      setFound(false);
-      setFoundError(false);
-      setFake1Selected(false);
-      setFake2Selected(false);
-      setGameResponses(null);
-      setStats(null);
-      setSelected(null);
-      setTryCount(0);
-      setErrorModalOpen(false);*/
     }
+
     if (isLoading || village) {
       axiosLoggedRequest({
         method: 'GET',
@@ -152,7 +143,7 @@ const PlayMimique: React.FC = () => {
   React.useEffect(() => {
     if (game) {
       const user = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
-      setUser(user!);
+      setUser(user);
       setUserIsPelico(user!.type >= UserType.MEDIATOR);
     }
   }, [game, userMap]);
@@ -162,8 +153,7 @@ const PlayMimique: React.FC = () => {
       console.log(gameResponses);
       const resStats: StatsProps = {};
       gameResponses.forEach((val: GameResponse) => {
-        const valUser = val.user;
-        if (resStats[valUser.country] && resStats[valUser.country][valUser]) {
+        if (resStats[val.user.country] && resStats[val.user.country][val.user]) {
           resStats[val.user.country][val.value] = resStats[val.user.country][val.value] + 1;
           resStats[val.user.country].total = resStats[val.user.country].total + 1;
         } else {
@@ -297,7 +287,7 @@ const PlayMimique: React.FC = () => {
         </div>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
-            <ReactPlayer light url={mimicContent.video} controls />
+            <ReactPlayer light url={mimicContent.video as string | string[] | MediaStream | SourceProps[] | undefined} controls />
           </Grid>
           <Grid item xs={6} md={6}>
             <RadioGroup aria-label="gender" name="gender1" value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
