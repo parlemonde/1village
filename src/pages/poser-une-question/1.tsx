@@ -29,7 +29,7 @@ const Question1 = () => {
   const { users } = useVillageUsers();
   const isMediator = user !== null && user.type > UserType.TEACHER;
   const { activities } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     countries:
       village && (isMediator || village.activePhase >= 2)

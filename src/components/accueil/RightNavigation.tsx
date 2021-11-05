@@ -20,7 +20,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
   const [localTime, setLocalTime] = React.useState<string | null>(null);
   const weather = useWeather({ activityUser });
   const { activities } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     type: [],
     userId: activityUser?.id ?? 0,

@@ -33,7 +33,7 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
   );
   const { comments } = useComments(activityId);
   const { activities } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     responseActivityId: activityId,
   });
