@@ -12,16 +12,13 @@ import { INDICE_TYPES } from 'src/activity-types/indice.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { ActivityStatus } from 'types/activity.type';
 
 const IndiceStep3 = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -54,7 +51,7 @@ const IndiceStep3 = () => {
     setIsLoading(false);
   };
 
-  if (user === null || activity === null) {
+  if (activity === null) {
     return <div></div>;
   }
 
@@ -114,9 +111,6 @@ const IndiceStep3 = () => {
             />
             <ContentView content={activity.content} />
           </div>
-
-          <span className="text text--small">Aperçu de la publication</span>
-          <ActivityCard activity={activity} user={user} noMargin noButtons />
 
           <StepsButton prev="/indice-culturel/2" />
         </div>

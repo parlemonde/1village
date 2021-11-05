@@ -25,7 +25,7 @@ const titles = {
   [ActivityType.GAME]: 'Jeu',
   [ActivityType.ENIGME]: 'Énigme',
   [ActivityType.QUESTION]: 'Question',
-  [ActivityType.CONTENU_LIBRE]: 'Contenu Libre',
+  [ActivityType.CONTENU_LIBRE]: 'Message de Pelico',
   [ActivityType.INDICE]: 'Indice culturel',
   [ActivityType.SYMBOL]: 'Symbole',
 };

@@ -93,7 +93,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
         style={{ padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
       >
         <h3>
-          <b>Nos dernières activités</b>
+          <b>Dernières activités</b>
         </h3>
         {activities.slice(0, 3).map((activity, index) => {
           const ActivityIcon = icons[activity.type] || null;

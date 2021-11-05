@@ -12,17 +12,14 @@ import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { ActivityStatus } from 'types/activity.type';
 
 const SymbolStep3 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
-  const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -54,7 +51,7 @@ const SymbolStep3 = () => {
     setIsLoading(false);
   };
 
-  if (activity === null || user === null) {
+  if (activity === null) {
     return <div></div>;
   }
 
@@ -116,9 +113,6 @@ const SymbolStep3 = () => {
             />
             <ContentView content={activity.content} />
           </div>
-
-          <span className="text text--small">Aperçu de la publication</span>
-          <ActivityCard activity={activity} user={user} noMargin noButtons />
 
           <StepsButton prev="/symbole/2" />
         </div>
