@@ -16,10 +16,11 @@ import { CommentCard } from './CommentCard';
 interface ActivityCommentsProps {
   activityId: number;
   activityType: number;
+  activityPhase: number;
   usersMap: { [key: number]: User };
 }
 
-export const ActivityComments = ({ activityId, activityType, usersMap }: ActivityCommentsProps) => {
+export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const userMap = React.useMemo(
@@ -67,7 +68,7 @@ export const ActivityComments = ({ activityId, activityType, usersMap }: Activit
           );
         }
       })}
-      <AddComment activityId={activityId} activityType={activityType} label={labels[activityType]} />
+      <AddComment activityId={activityId} activityType={activityType} activityPhase={activityPhase} label={labels[activityType]} />
     </div>
   );
 };
