@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
@@ -9,7 +10,7 @@ import Step from '@mui/material/Step';
 
 import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
 
-const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
+const StepIcon = ({ icon, active, completed, error, onClick }: StepIconProps) => {
   return (
     <div
       style={{
@@ -23,6 +24,8 @@ const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
         borderRadius: '50%',
         border: completed ? (error ? `1px solid ${warningColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
       }}
+      className={onClick !== undefined ? 'background-hover' : ''}
+      onClick={onClick}
     >
       {completed && !error ? <CheckIcon /> : icon}
     </div>
@@ -31,11 +34,14 @@ const StepIcon = ({ icon, active, completed, error }: StepIconProps) => {
 
 interface StepsProps {
   steps: string[];
+  urls?: string[];
   activeStep?: number;
   errorSteps?: number[];
 }
 
-export const Steps = ({ steps, activeStep = 0, errorSteps = [] }: StepsProps) => {
+export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsProps) => {
+  const router = useRouter();
+
   return (
     <div className="custom-steps--container" style={{ position: 'relative' }}>
       <div style={{ position: 'absolute', top: '43px', left: '10%', right: '10%', borderTop: `1px solid ${primaryColorLight2}`, zIndex: 0 }}></div>
@@ -56,7 +62,18 @@ export const Steps = ({ steps, activeStep = 0, errorSteps = [] }: StepsProps) =>
       >
         {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel StepIconComponent={StepIcon} error={errorSteps.includes(index)}>
+            <StepLabel
+              StepIconComponent={StepIcon}
+              StepIconProps={{
+                onClick:
+                  urls !== undefined && urls.length > index
+                    ? () => {
+                        router.push(urls[index]);
+                      }
+                    : undefined,
+              }}
+              error={errorSteps.includes(index)}
+            >
               {label}
             </StepLabel>
           </Step>

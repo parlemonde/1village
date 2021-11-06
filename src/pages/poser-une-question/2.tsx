@@ -57,7 +57,11 @@ const Question2 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={1} />
+        <Steps
+          steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
+          urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
+          activeStep={1}
+        />
         <div className="width-900">
           <h1>Vos questions</h1>
           <p className="text">Ici vous pouvez écrire un maximum de trois questions que vous vous posez sur le mode de vie des autres enfants.</p>

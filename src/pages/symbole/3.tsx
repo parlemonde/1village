@@ -62,6 +62,7 @@ const SymbolStep3 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']}
+          urls={['/symbole/1?edit', '/symbole/2', '/symbole/3']}
           activeStep={2}
           errorSteps={isValid ? [] : [1]}
         />

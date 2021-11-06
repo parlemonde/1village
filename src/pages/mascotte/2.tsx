@@ -87,6 +87,7 @@ const MascotteStep2 = () => {
             'Le web de Pelico',
             'Prévisualiser',
           ]}
+          urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
           activeStep={1}
           errorSteps={errorSteps}
         />

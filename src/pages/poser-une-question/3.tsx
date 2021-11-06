@@ -95,7 +95,11 @@ const Question3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={2} />
+        <Steps
+          steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
+          urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
+          activeStep={2}
+        />
         <div className="width-900">
           <h1>Prévisualisez vos questions, et envoyez-les</h1>
           <p className="text">

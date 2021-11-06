@@ -46,7 +46,11 @@ const SymbolStep2 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
+        <Steps
+          steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']}
+          urls={['/symbole/1?edit', '/symbole/2', '/symbole/3']}
+          activeStep={isEdit ? 0 : 1}
+        />
         <div className="width-900">
           <h1>Faites une présentation libre de votre symbole</h1>
           <p className="text">

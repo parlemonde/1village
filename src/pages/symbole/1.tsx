@@ -60,7 +60,11 @@ const SymbolStep1 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/symbole" />}
-        <Steps steps={[getSymbol(activity.subType, data).step1 || 'Symbole', 'Créer le symbole', 'Prévisualiser']} activeStep={0} />
+        <Steps
+          steps={[getSymbol(activity.subType, data).step1 || 'Symbole', 'Créer le symbole', 'Prévisualiser']}
+          urls={['/symbole/1?edit', '/symbole/2', '/symbole/3']}
+          activeStep={0}
+        />
         <div className="width-900">
           {activity.subType === -1 ? (
             <>

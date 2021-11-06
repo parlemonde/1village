@@ -45,7 +45,11 @@ const ContenuLibre = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/contenu-libre" />}
-        <Steps steps={['Contenu', 'Forme', 'Pré-visualiser']} activeStep={0} />
+        <Steps
+          steps={['Contenu', 'Forme', 'Pré-visualiser']}
+          urls={['/contenu-libre/1?edit', '/contenu-libre/2', '/contenu-libre/3']}
+          activeStep={0}
+        />
         <div className="width-900">
           <h1>Ecrivez le contenu de votre publication</h1>
           <p className="text">

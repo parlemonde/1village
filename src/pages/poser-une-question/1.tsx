@@ -92,7 +92,11 @@ const Question1 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/poser-une-question" />
-        <Steps steps={['Les questions', 'Poser ses questions', 'Prévisualiser']} activeStep={0} />
+        <Steps
+          steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
+          urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
+          activeStep={0}
+        />
         <div className="width-900">
           <h1>Les questions déjà posées</h1>
           <p className="text">

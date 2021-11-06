@@ -280,3 +280,10 @@ a.text--success:hover {
   padding: 3px;
   font-size: 1.125rem;
 }
+
+.background-hover {
+  cursor: pointer;
+  &:hover {
+    background-color: black;
+  }
+}

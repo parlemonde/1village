@@ -60,7 +60,11 @@ const IndiceStep1 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/indice-culturel" />}
-        <Steps steps={[getIndice(activity.subType, data).step1 || 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={0} />
+        <Steps
+          steps={[getIndice(activity.subType, data).step1 || 'Indice', "Créer l'indice", 'Prévisualiser']}
+          urls={['/indice-culturel/1?edit', '/indice-culturel/2', '/indice-culturel/3']}
+          activeStep={0}
+        />
         <div className="width-900">
           {activity.subType === -1 ? (
             <>
