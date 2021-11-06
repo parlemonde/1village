@@ -35,10 +35,7 @@ __metadata:
     "@types/geojson": 7946.0.7
     "@types/json-stable-stringify": 1.0.33
     "@types/jsonwebtoken": 8.5.5
-    "@types/leaflet": 1.7.5
-    "@types/leaflet-fullscreen": 1.0.5
-    "@types/mapbox-gl": 1.13.2
-    "@types/mapbox-gl-leaflet": 0.0.1
+    "@types/maplibre-gl": 1.13.1
     "@types/md5": 2.3.1
     "@types/mime-types": 2.1.1
     "@types/morgan": 1.9.3
@@ -97,10 +94,7 @@ __metadata:
     immutable: ^4.0.0-rc.12
     json-stable-stringify: ^1.0.1
     jsonwebtoken: ^8.5.1
-    leaflet: ^1.7.1
-    leaflet-fullscreen: ^1.0.2
-    mapbox-gl: ^1.5.1
-    mapbox-gl-leaflet: ^0.0.14
+    maplibre-gl: 1.14.0
     md5: ^2.3.0
     mime-types: ^2.1.32
     morgan: ^1.10.0
@@ -115,7 +109,6 @@ __metadata:
     query-string: ^7.0.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-leaflet: ^3.2.0
     react-player: ^2.9.0
     react-query: ^3.31.0
     resize-observer-polyfill: ^1.5.1
@@ -2145,17 +2138,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-leaflet/core@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@react-leaflet/core@npm:1.1.1"
-  peerDependencies:
-    leaflet: ^1.7.1
-    react: ^17.0.1
-    react-dom: ^17.0.1
-  checksum: 2fc4a80e5524f9437ac6cef0f95e63388f2df6ecc5107fef85fd097eb2455436e796d41a4c43cdcbb983a4132403646823ba1dc0d953e866eb80808cbfaf0232
-  languageName: node
-  linkType: hard
-
 "@sindresorhus/is@npm:^0.14.0":
   version: 0.14.0
   resolution: "@sindresorhus/is@npm:0.14.0"
@@ -2628,39 +2610,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet-fullscreen@npm:1.0.5":
-  version: 1.0.5
-  resolution: "@types/leaflet-fullscreen@npm:1.0.5"
-  dependencies:
-    "@types/leaflet": "*"
-  checksum: c26068b021d798e70abaa79b0b7db5619a10c7525b57841617d9a5e1232cbc01410cb98d9811c32298e9e82892319a01811b61184f8606032ffdb84f3b97d3bf
-  languageName: node
-  linkType: hard
-
-"@types/leaflet@npm:*, @types/leaflet@npm:1.7.5":
-  version: 1.7.5
-  resolution: "@types/leaflet@npm:1.7.5"
+"@types/maplibre-gl@npm:1.13.1":
+  version: 1.13.1
+  resolution: "@types/maplibre-gl@npm:1.13.1"
   dependencies:
     "@types/geojson": "*"
-  checksum: 922f3d1176017c350be997773df72d0fd8f31c2f0340a20d3a91eb31540c3e6ef09eb020cec85c74b05afd54f4095e406ab3a45c9328c31ea17f95aa6ef69c6e
-  languageName: node
-  linkType: hard
-
-"@types/mapbox-gl-leaflet@npm:0.0.1":
-  version: 0.0.1
-  resolution: "@types/mapbox-gl-leaflet@npm:0.0.1"
-  dependencies:
-    "@types/leaflet": "*"
-  checksum: c9e36e4619a804a4fd01e68984340c4e26eb038d27bbd7a7dc3974086c9b822272b9d86492732a8f1b7778bf31d685c3da0b5a089788eeb6c2b16acb36382064
-  languageName: node
-  linkType: hard
-
-"@types/mapbox-gl@npm:1.13.2":
-  version: 1.13.2
-  resolution: "@types/mapbox-gl@npm:1.13.2"
-  dependencies:
-    "@types/geojson": "*"
-  checksum: ec7e3f48403829d61d7a7bf973c07a9e47672ec25c1c2d3db6e6383fc99ecc592e47e8718577970c1e82a708825d591a006901a5aa8f8254484ca0d1a633172a
+  checksum: 73f8cc71f30ec2093a20c8a9f2bb3c8654078b3f86a2f235c42d4ab17656cfa2ad47212e0ffa46e490a349cbb5744fe9b5041f4f6b9749d9a8c47018f92a8626
   languageName: node
   linkType: hard
 
@@ -8733,20 +8688,6 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"leaflet-fullscreen@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "leaflet-fullscreen@npm:1.0.2"
-  checksum: 3db3c2ff690781b765e4e76f277ba807b5a4d9246e224efed68ba16230061a5ba3362f251d996857b451059bbd5113fc48bda9875454fd64020085365f3b4ccb
-  languageName: node
-  linkType: hard
-
-"leaflet@npm:^1.7.1":
-  version: 1.7.1
-  resolution: "leaflet@npm:1.7.1"
-  checksum: f69149ab482eeb6cdabd837939c4782c97a7a18bc0b2a9330d4a828ca0dc6e035981f2ecdb71c6646aa173bc369cd3b4fd6bbe5d81df4c59c45254f9e9361d03
-  languageName: node
-  linkType: hard
-
 "levn@npm:^0.4.1":
   version: 0.4.1
   resolution: "levn@npm:0.4.1"
@@ -9101,19 +9042,9 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"mapbox-gl-leaflet@npm:^0.0.14":
-  version: 0.0.14
-  resolution: "mapbox-gl-leaflet@npm:0.0.14"
-  peerDependencies:
-    leaflet: ^1.0.0
-    mapbox-gl: "*"
-  checksum: 9c9c44e009f2690ab8bae6fb57e4513c92d53d4ddd5931e1a4038eedd3c8e2b75f110eba047ffb89aa21e316ff07ec8d75889bc1f55195bc3a5e534ba0b553af
-  languageName: node
-  linkType: hard
-
-"mapbox-gl@npm:1.13.2, mapbox-gl@npm:^1.5.1":
-  version: 1.13.2
-  resolution: "mapbox-gl@npm:1.13.2"
+"maplibre-gl@npm:1.14.0":
+  version: 1.14.0
+  resolution: "maplibre-gl@npm:1.14.0"
   dependencies:
     "@mapbox/geojson-rewind": ^0.5.0
     "@mapbox/geojson-types": ^1.0.2
@@ -9138,7 +9069,7 @@ fsevents@^1.0.0:
     supercluster: ^7.1.0
     tinyqueue: ^2.0.3
     vt-pbf: ^3.1.1
-  checksum: ea87bbab1b5d2a4597a3170769295dd80b73c06782051d82f9fd9f2839cfc60f56b9043dd707bdac0f9b4a60c087440cc9d215d693cb545b2e446d7c08175458
+  checksum: fecfe44337cc19d80100f5124568d07fedda1e780fe37e7ab9597762ef156097838d2e96df17b011feb26173ef3b096f8661264676cdaf8ba5126d8df9caa931
   languageName: node
   linkType: hard
 
@@ -11129,19 +11060,6 @@ fsevents@^1.0.0:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
-  languageName: node
-  linkType: hard
-
-"react-leaflet@npm:^3.2.0":
-  version: 3.2.2
-  resolution: "react-leaflet@npm:3.2.2"
-  dependencies:
-    "@react-leaflet/core": ^1.1.1
-  peerDependencies:
-    leaflet: ^1.7.1
-    react: ^17.0.1
-    react-dom: ^17.0.1
-  checksum: d5e5f34dea05e4d48d1d8c5c455b62ac1d2d417620b025f1098ca4014d83e81c97db3d5adef6abaa0c0c429aa6230564f50091aab4e7ebd9402d1fc541573967
   languageName: node
   linkType: hard
 

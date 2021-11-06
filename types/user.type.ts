@@ -26,11 +26,15 @@ export interface User {
   city: string;
   postalCode: string;
   address: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
 
   avatar: string | null;
   displayName: string | null;
 
-  firstLogin: boolean;
+  firstLogin: number;
 
   type: UserType;
   accountRegistration: number;

@@ -249,7 +249,7 @@ const WorldMap: React.FC = () => {
   }, [isInitialized, users, setHoverableObjects]);
   React.useEffect(() => {
     addPins().catch();
-  }, []);
+  }, [addPins]);
 
   return (
     <div ref={containerRef} style={{ position: 'relative', height: '100%', width: '100%', maxHeight: 'calc(100vh - 90px)' }}>

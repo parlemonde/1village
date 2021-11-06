@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 
 import { User, UserType } from '../entities/user';
 import { Village } from '../entities/village';
+import { setUserPosition } from '../utils/get-pos';
 import { countries } from '../utils/iso-3166-countries-french';
 import { logger } from '../utils/logger';
 
@@ -110,6 +111,7 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.passwordHash = '';
   user.verificationHash = '';
   user.accountRegistration = 10;
+  await setUserPosition(user);
   await getRepository(User).save(user);
 
   delete user.passwordHash;

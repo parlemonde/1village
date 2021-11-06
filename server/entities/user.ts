@@ -51,8 +51,8 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 95, default: '', select: false })
   public verificationHash?: string;
 
-  @Column({ type: 'bool', default: true })
-  public firstLogin: boolean;
+  @Column({ type: 'tinyint', default: 0 })
+  public firstLogin: number;
 
   @Column({
     type: 'enum',
@@ -76,6 +76,30 @@ export class User implements UserInterface {
     return this.country.isoCode;
   }
   public country: Country;
+
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
+  set positionLat(newLat: string) {
+    if (!this.position) {
+      this.position = { lat: 0, lng: 0 };
+    }
+    this.position.lat = parseFloat(newLat) || 0;
+  }
+  get positionLat() {
+    return `${this.position.lat}`;
+  }
+
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
+  set positionLon(newLon: string) {
+    if (!this.position) {
+      this.position = { lat: 0, lng: 0 };
+    }
+    this.position.lng = parseFloat(newLon) || 0;
+  }
+  get positionLon() {
+    return `${this.position.lng}`;
+  }
+
+  public position: { lat: number; lng: number };
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];

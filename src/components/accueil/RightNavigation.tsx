@@ -12,7 +12,6 @@ import { useActivity } from 'src/services/useActivity';
 import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
-import { getMapPosition } from 'src/utils/getMapPosition';
 import { getUserDisplayName, toDate } from 'src/utils';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -22,7 +21,6 @@ import { Flag } from '../Flag';
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 
 export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
-  const [position, setPosition] = React.useState<[number, number] | null>(null);
   const [localTime, setLocalTime] = React.useState<string | null>(null);
   const { user } = React.useContext(UserContext);
   const weather = useWeather({ activityUser });
@@ -34,19 +32,6 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
     userId: activityUser?.id ?? 0,
   });
   const isPelico = activityUser.type > UserType.TEACHER;
-
-  // ---- Get user position ----
-  const getPosition = React.useCallback(async () => {
-    if (activityUser === null) {
-      setPosition(null);
-    } else {
-      const pos = await getMapPosition(activityUser);
-      setPosition(pos);
-    }
-  }, [activityUser]);
-  React.useEffect(() => {
-    getPosition().catch();
-  }, [activityUser, getPosition]);
 
   // ---- Get user weather and time ----
   React.useEffect(() => {
@@ -115,11 +100,9 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
         )}
       </div>
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
-        {position !== null && (
-          <div style={{ height: '14rem' }}>
-            <Map position={position} zoom={5} markers={[{ position: position, label: activityUser?.address }]} />
-          </div>
-        )}
+        <div style={{ height: '14rem' }}>
+          <Map position={activityUser.position} zoom={3} markers={[{ position: activityUser.position, label: activityUser.address }]} />
+        </div>
       </div>
       {weather !== null && (
         <div
@@ -135,7 +118,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
           }}
         >
           <div style={{ marginBottom: '1rem' }}>
-            <Flag country={activityUser?.country.isoCode}></Flag> {activityUser?.city}
+            <Flag country={activityUser.country.isoCode}></Flag> {activityUser.city}
           </div>
           {localTime}
           <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />

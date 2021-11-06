@@ -7,14 +7,15 @@ import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 import { Checkbox } from '@mui/material';
 
-import { MissingStepModal } from 'src/components/MissingStepModal';
+import { Map } from 'src/components/Map';
+// import { MissingStepModal } from 'src/components/MissingStepModal';
 import { Modal } from 'src/components/Modal';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { bgPage, defaultOutlinedButtonStyle, defaultTextButtonStyle } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
-import { getUserDisplayName } from 'src/utils';
+import { getUserDisplayName, serializeToQueryUrl } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -28,6 +29,7 @@ export const WelcomeModal = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { village } = React.useContext(VillageContext);
   const [currentStep, setCurrentStep] = React.useState(0);
+  const [position, setPosition] = React.useState<{ lat: number; lng: number } | null>(null);
   const [loading, setIsLoading] = React.useState(false);
   const [newUser, setNewUser] = React.useState<Partial<User> | null>(user);
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -44,16 +46,33 @@ export const WelcomeModal = () => {
   if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
     return null;
   }
-  if (!user.firstLogin) {
+
+  if (user.firstLogin === 1) {
     return null;
   }
+
+  const getNewUserPosition = async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/users/position${serializeToQueryUrl({
+        query: `${newUser.address}, ${newUser.city}, ${newUser.postalCode}, ${newUser.country?.name || ''}`,
+        city: newUser.city,
+        country: newUser.country?.name || '',
+      })}`,
+    });
+    if (response.error) {
+      setPosition({ lat: 0, lng: 0 });
+    } else {
+      setPosition(response.data);
+    }
+  };
 
   const updateUser = async () => {
     if (!newUser.city || !newUser.address || !newUser.pseudo || !newUser.school || !newUser.email || !newUser.postalCode) {
       return;
     }
     setIsLoading(true);
-    const updatedValues = {
+    const updatedValues: Partial<User> = {
       school: newUser.school,
       level: newUser.level || '',
       city: newUser.city,
@@ -61,8 +80,12 @@ export const WelcomeModal = () => {
       address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
+      firstLogin: 1,
       displayName: newUser.displayName || '',
     };
+    if (position !== null) {
+      updatedValues.position = position;
+    }
     const response = await axiosLoggedRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
@@ -73,7 +96,7 @@ export const WelcomeModal = () => {
         variant: 'error',
       });
     } else {
-      setUser({ ...(user || {}), ...updatedValues, firstLogin: false });
+      setUser({ ...(user || {}), ...updatedValues, firstLogin: 1 });
     }
     setIsLoading(false);
   };
@@ -116,9 +139,9 @@ export const WelcomeModal = () => {
     }
   };
 
-  if (village && village.activePhase > 1) {
-    return <MissingStepModal />;
-  }
+  // if (village && village.activePhase > 1) {
+  //   return <MissingStepModal />;
+  // }
 
   return (
     <Modal
@@ -138,25 +161,28 @@ export const WelcomeModal = () => {
           <MobileStepper
             style={{ backgroundColor: 'unset' }}
             variant="dots"
-            steps={4}
+            steps={5}
             activeStep={currentStep}
             nextButton={
               <Button
                 size="small"
-                color={currentStep >= 2 ? 'primary' : 'inherit'}
-                variant={currentStep >= 2 ? 'contained' : 'text'}
-                sx={currentStep < 2 ? defaultTextButtonStyle : undefined}
+                color={currentStep === 2 || currentStep === 4 ? 'primary' : 'inherit'}
+                variant={currentStep === 2 || currentStep === 4 ? 'contained' : 'text'}
+                sx={currentStep === 2 || currentStep === 4 ? undefined : defaultTextButtonStyle}
                 disabled={(currentStep === 3 && (!newUser.city || !newUser.address || !newUser.postalCode)) || (currentStep === 2 && !cguChecked)}
                 onClick={() => {
-                  if (currentStep !== 3) {
+                  if (currentStep === 3) {
+                    getNewUserPosition().catch();
+                  }
+                  if (currentStep !== 4) {
                     setCurrentStep(currentStep + 1);
                   } else {
                     updateUser();
                   }
                 }}
               >
-                {currentStep === 2 ? 'Accepter' : currentStep === 3 ? 'Terminer' : 'Suivant'}
-                {currentStep < 2 && <KeyboardArrowRight />}
+                {currentStep === 2 ? 'Accepter' : currentStep === 4 ? 'Terminer' : 'Suivant'}
+                {currentStep !== 2 && currentStep !== 4 && <KeyboardArrowRight />}
               </Button>
             }
             backButton={
@@ -165,6 +191,9 @@ export const WelcomeModal = () => {
                 color="inherit"
                 sx={defaultTextButtonStyle}
                 onClick={() => {
+                  if (currentStep === 4) {
+                    setPosition(null);
+                  }
                   setCurrentStep(currentStep - 1);
                 }}
                 disabled={currentStep === 0}
@@ -178,7 +207,7 @@ export const WelcomeModal = () => {
         </div>
       }
     >
-      <div id="new-user-desc" style={{ minHeight: '20rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div id="new-user-desc" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {currentStep === 0 && (
           <div className="text-center">
             <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
@@ -189,9 +218,16 @@ export const WelcomeModal = () => {
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0', visibility: isVisible ? 'visible' : 'hidden' }} className="text--primary">
               {village.name}
             </h2>
-            <a style={{ marginTop: '2rem', cursor: 'pointer' }} onClick={sendError('village')}>
+            <Button
+              color="inherit"
+              sx={defaultOutlinedButtonStyle}
+              size="small"
+              variant="outlined"
+              style={{ marginTop: '2rem' }}
+              onClick={sendError('village')}
+            >
               {"Ce n'est pas mon village !"}
-            </a>
+            </Button>
           </div>
         )}
         {currentStep === 1 && (
@@ -269,7 +305,6 @@ export const WelcomeModal = () => {
                   label="Adresse de l'école :"
                   placeholder="Adresse"
                   hasError={!newUser.address}
-                  errorMsg="Requis"
                   isEditMode
                   onChange={(address) => {
                     setNewUser((u) => ({ ...u, address }));
@@ -281,7 +316,6 @@ export const WelcomeModal = () => {
                   label="Ville :"
                   placeholder="Ville"
                   hasError={!newUser.city}
-                  errorMsg="Requis"
                   isEditMode
                   onChange={(city) => {
                     setNewUser((u) => ({ ...u, city }));
@@ -293,7 +327,6 @@ export const WelcomeModal = () => {
                   label="Code postal :"
                   placeholder="Code postal"
                   hasError={!newUser.postalCode}
-                  errorMsg="Requis"
                   isEditMode
                   onChange={(postalCode) => {
                     setNewUser((u) => ({ ...u, postalCode }));
@@ -340,6 +373,33 @@ export const WelcomeModal = () => {
                   noButtons
                 />
               </div>
+            </div>
+          </>
+        )}
+        {currentStep === 4 && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+              <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />
+              <span className="text text--bold">
+                Votre position sur la carte est-elle correcte ? Si non, vous pouvez déplacer le curseur pour la modifier.
+              </span>
+            </div>
+            <div style={{ flex: 1, minHeight: 0, width: '100%', height: 0 }}>
+              {position !== null && (
+                <Map
+                  position={position}
+                  zoom={3}
+                  markers={[
+                    {
+                      position,
+                      label: 'Votre classe',
+                      onDragEnd: (newPos: { lat: number; lng: number }) => {
+                        setPosition(newPos);
+                      },
+                    },
+                  ]}
+                />
+              )}
             </div>
           </>
         )}

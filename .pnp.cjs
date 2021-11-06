@@ -61,10 +61,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/geojson", "npm:7946.0.7"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
-            ["@types/leaflet", "npm:1.7.5"],
-            ["@types/leaflet-fullscreen", "npm:1.0.5"],
-            ["@types/mapbox-gl", "npm:1.13.2"],
-            ["@types/mapbox-gl-leaflet", "npm:0.0.1"],
+            ["@types/maplibre-gl", "npm:1.13.1"],
             ["@types/md5", "npm:2.3.1"],
             ["@types/mime-types", "npm:2.1.1"],
             ["@types/morgan", "npm:1.9.3"],
@@ -123,10 +120,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["immutable", "npm:4.0.0"],
             ["json-stable-stringify", "npm:1.0.1"],
             ["jsonwebtoken", "npm:8.5.1"],
-            ["leaflet", "npm:1.7.1"],
-            ["leaflet-fullscreen", "npm:1.0.2"],
-            ["mapbox-gl", "npm:1.13.2"],
-            ["mapbox-gl-leaflet", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.0.14"],
+            ["maplibre-gl", "npm:1.14.0"],
             ["md5", "npm:2.3.0"],
             ["mime-types", "npm:2.1.33"],
             ["morgan", "npm:1.10.0"],
@@ -141,7 +135,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["query-string", "npm:7.0.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],
-            ["react-leaflet", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.2.2"],
             ["react-player", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.9.0"],
             ["react-query", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.31.0"],
             ["resize-observer-polyfill", "npm:1.5.1"],
@@ -196,10 +189,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/geojson", "npm:7946.0.7"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
-            ["@types/leaflet", "npm:1.7.5"],
-            ["@types/leaflet-fullscreen", "npm:1.0.5"],
-            ["@types/mapbox-gl", "npm:1.13.2"],
-            ["@types/mapbox-gl-leaflet", "npm:0.0.1"],
+            ["@types/maplibre-gl", "npm:1.13.1"],
             ["@types/md5", "npm:2.3.1"],
             ["@types/mime-types", "npm:2.1.1"],
             ["@types/morgan", "npm:1.9.3"],
@@ -258,10 +248,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["immutable", "npm:4.0.0"],
             ["json-stable-stringify", "npm:1.0.1"],
             ["jsonwebtoken", "npm:8.5.1"],
-            ["leaflet", "npm:1.7.1"],
-            ["leaflet-fullscreen", "npm:1.0.2"],
-            ["mapbox-gl", "npm:1.13.2"],
-            ["mapbox-gl-leaflet", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.0.14"],
+            ["maplibre-gl", "npm:1.14.0"],
             ["md5", "npm:2.3.0"],
             ["mime-types", "npm:2.1.33"],
             ["morgan", "npm:1.10.0"],
@@ -276,7 +263,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["query-string", "npm:7.0.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],
-            ["react-leaflet", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.2.2"],
             ["react-player", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.9.0"],
             ["react-query", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.31.0"],
             ["resize-observer-polyfill", "npm:1.5.1"],
@@ -2959,12 +2945,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:6473d0ca5b63d45bbb0166babe5efbd642e04479057ea84b583e981a4074eeec3e1f240b08fad3c9ced12d2f3521d2c46773956ec63e72ec6328c9c2aeae7e95#npm:1.5.0", {
-          "packageLocation": "./.yarn/__virtual__/@mapbox-mapbox-gl-supported-virtual-ed70170497/0/cache/@mapbox-mapbox-gl-supported-npm-1.5.0-1a6e7562c1-0861f89e2a.zip/node_modules/@mapbox/mapbox-gl-supported/",
+        ["virtual:360645b5f946c199156acf73fea6d12c574bfc45397c4a027985d472e3dd2b7e0617b55b913b4cb761bee642f18a93237c42571f842bf5888aea25e59a4089a6#npm:1.5.0", {
+          "packageLocation": "./.yarn/__virtual__/@mapbox-mapbox-gl-supported-virtual-d8b0b7ed2b/0/cache/@mapbox-mapbox-gl-supported-npm-1.5.0-1a6e7562c1-0861f89e2a.zip/node_modules/@mapbox/mapbox-gl-supported/",
           "packageDependencies": [
-            ["@mapbox/mapbox-gl-supported", "virtual:6473d0ca5b63d45bbb0166babe5efbd642e04479057ea84b583e981a4074eeec3e1f240b08fad3c9ced12d2f3521d2c46773956ec63e72ec6328c9c2aeae7e95#npm:1.5.0"],
+            ["@mapbox/mapbox-gl-supported", "virtual:360645b5f946c199156acf73fea6d12c574bfc45397c4a027985d472e3dd2b7e0617b55b913b4cb761bee642f18a93237c42571f842bf5888aea25e59a4089a6#npm:1.5.0"],
             ["@types/mapbox-gl", null],
-            ["mapbox-gl", "npm:1.13.2"]
+            ["mapbox-gl", null]
           ],
           "packagePeers": [
             "@types/mapbox-gl",
@@ -3512,36 +3498,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@react-leaflet/core", [
-        ["npm:1.1.1", {
-          "packageLocation": "./.yarn/cache/@react-leaflet-core-npm-1.1.1-859cffbcb8-2fc4a80e55.zip/node_modules/@react-leaflet/core/",
-          "packageDependencies": [
-            ["@react-leaflet/core", "npm:1.1.1"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:49bc19e64e8bd5a8a98b21ce003e81fc8dbb82e217f7092ebbeec4e9a43739ad60450d79a27a87217971d9ca7747fcc334a63166d8786ea2ffdea7b3c1502373#npm:1.1.1", {
-          "packageLocation": "./.yarn/__virtual__/@react-leaflet-core-virtual-25da965125/0/cache/@react-leaflet-core-npm-1.1.1-859cffbcb8-2fc4a80e55.zip/node_modules/@react-leaflet/core/",
-          "packageDependencies": [
-            ["@react-leaflet/core", "virtual:49bc19e64e8bd5a8a98b21ce003e81fc8dbb82e217f7092ebbeec4e9a43739ad60450d79a27a87217971d9ca7747fcc334a63166d8786ea2ffdea7b3c1502373#npm:1.1.1"],
-            ["@types/leaflet", "npm:1.7.5"],
-            ["@types/react", "npm:17.0.27"],
-            ["@types/react-dom", "npm:17.0.8"],
-            ["leaflet", "npm:1.7.1"],
-            ["react", "npm:17.0.2"],
-            ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"]
-          ],
-          "packagePeers": [
-            "@types/leaflet",
-            "@types/react-dom",
-            "@types/react",
-            "leaflet",
-            "react-dom",
-            "react"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@sindresorhus/is", [
         ["npm:0.14.0", {
           "packageLocation": "./.yarn/cache/@sindresorhus-is-npm-0.14.0-9f906ea34b-971e0441dd.zip/node_modules/@sindresorhus/is/",
@@ -4081,42 +4037,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@types/leaflet", [
-        ["npm:1.7.5", {
-          "packageLocation": "./.yarn/cache/@types-leaflet-npm-1.7.5-a9a09f775c-922f3d1176.zip/node_modules/@types/leaflet/",
+      ["@types/maplibre-gl", [
+        ["npm:1.13.1", {
+          "packageLocation": "./.yarn/cache/@types-maplibre-gl-npm-1.13.1-9a8f293c45-73f8cc71f3.zip/node_modules/@types/maplibre-gl/",
           "packageDependencies": [
-            ["@types/leaflet", "npm:1.7.5"],
+            ["@types/maplibre-gl", "npm:1.13.1"],
             ["@types/geojson", "npm:7946.0.8"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/leaflet-fullscreen", [
-        ["npm:1.0.5", {
-          "packageLocation": "./.yarn/cache/@types-leaflet-fullscreen-npm-1.0.5-5d499acefd-c26068b021.zip/node_modules/@types/leaflet-fullscreen/",
-          "packageDependencies": [
-            ["@types/leaflet-fullscreen", "npm:1.0.5"],
-            ["@types/leaflet", "npm:1.7.5"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/mapbox-gl", [
-        ["npm:1.13.2", {
-          "packageLocation": "./.yarn/cache/@types-mapbox-gl-npm-1.13.2-4196d09f8e-ec7e3f4840.zip/node_modules/@types/mapbox-gl/",
-          "packageDependencies": [
-            ["@types/mapbox-gl", "npm:1.13.2"],
-            ["@types/geojson", "npm:7946.0.8"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/mapbox-gl-leaflet", [
-        ["npm:0.0.1", {
-          "packageLocation": "./.yarn/cache/@types-mapbox-gl-leaflet-npm-0.0.1-e9693909d4-c9e36e4619.zip/node_modules/@types/mapbox-gl-leaflet/",
-          "packageDependencies": [
-            ["@types/mapbox-gl-leaflet", "npm:0.0.1"],
-            ["@types/leaflet", "npm:1.7.5"]
           ],
           "linkType": "HARD",
         }]
@@ -11129,24 +11055,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["leaflet", [
-        ["npm:1.7.1", {
-          "packageLocation": "./.yarn/cache/leaflet-npm-1.7.1-dc40ced5a1-f69149ab48.zip/node_modules/leaflet/",
-          "packageDependencies": [
-            ["leaflet", "npm:1.7.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["leaflet-fullscreen", [
-        ["npm:1.0.2", {
-          "packageLocation": "./.yarn/cache/leaflet-fullscreen-npm-1.0.2-6e7e6b6788-3db3c2ff69.zip/node_modules/leaflet-fullscreen/",
-          "packageDependencies": [
-            ["leaflet-fullscreen", "npm:1.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["levn", [
         ["npm:0.4.1", {
           "packageLocation": "./.yarn/cache/levn-npm-0.4.1-d183b2d7bb-12c5021c85.zip/node_modules/levn/",
@@ -11556,15 +11464,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["mapbox-gl", [
-        ["npm:1.13.2", {
-          "packageLocation": "./.yarn/cache/mapbox-gl-npm-1.13.2-6473d0ca5b-ea87bbab1b.zip/node_modules/mapbox-gl/",
+      ["maplibre-gl", [
+        ["npm:1.14.0", {
+          "packageLocation": "./.yarn/cache/maplibre-gl-npm-1.14.0-360645b5f9-fecfe44337.zip/node_modules/maplibre-gl/",
           "packageDependencies": [
-            ["mapbox-gl", "npm:1.13.2"],
+            ["maplibre-gl", "npm:1.14.0"],
             ["@mapbox/geojson-rewind", "npm:0.5.1"],
             ["@mapbox/geojson-types", "npm:1.0.2"],
             ["@mapbox/jsonlint-lines-primitives", "npm:2.0.2"],
-            ["@mapbox/mapbox-gl-supported", "virtual:6473d0ca5b63d45bbb0166babe5efbd642e04479057ea84b583e981a4074eeec3e1f240b08fad3c9ced12d2f3521d2c46773956ec63e72ec6328c9c2aeae7e95#npm:1.5.0"],
+            ["@mapbox/mapbox-gl-supported", "virtual:360645b5f946c199156acf73fea6d12c574bfc45397c4a027985d472e3dd2b7e0617b55b913b4cb761bee642f18a93237c42571f842bf5888aea25e59a4089a6#npm:1.5.0"],
             ["@mapbox/point-geometry", "npm:0.1.0"],
             ["@mapbox/tiny-sdf", "npm:1.2.5"],
             ["@mapbox/unitbezier", "npm:0.0.0"],
@@ -11584,32 +11492,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["supercluster", "npm:7.1.4"],
             ["tinyqueue", "npm:2.0.3"],
             ["vt-pbf", "npm:3.1.3"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["mapbox-gl-leaflet", [
-        ["npm:0.0.14", {
-          "packageLocation": "./.yarn/cache/mapbox-gl-leaflet-npm-0.0.14-7348c5d001-9c9c44e009.zip/node_modules/mapbox-gl-leaflet/",
-          "packageDependencies": [
-            ["mapbox-gl-leaflet", "npm:0.0.14"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.0.14", {
-          "packageLocation": "./.yarn/__virtual__/mapbox-gl-leaflet-virtual-c8c4975fae/0/cache/mapbox-gl-leaflet-npm-0.0.14-7348c5d001-9c9c44e009.zip/node_modules/mapbox-gl-leaflet/",
-          "packageDependencies": [
-            ["mapbox-gl-leaflet", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.0.14"],
-            ["@types/leaflet", "npm:1.7.5"],
-            ["@types/mapbox-gl", "npm:1.13.2"],
-            ["leaflet", "npm:1.7.1"],
-            ["mapbox-gl", "npm:1.13.2"]
-          ],
-          "packagePeers": [
-            "@types/leaflet",
-            "@types/mapbox-gl",
-            "leaflet",
-            "mapbox-gl"
           ],
           "linkType": "HARD",
         }]
@@ -13867,37 +13749,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-is-npm-17.0.2-091bbb8db6-9d6d111d89.zip/node_modules/react-is/",
           "packageDependencies": [
             ["react-is", "npm:17.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["react-leaflet", [
-        ["npm:3.2.2", {
-          "packageLocation": "./.yarn/cache/react-leaflet-npm-3.2.2-02604d439e-d5e5f34dea.zip/node_modules/react-leaflet/",
-          "packageDependencies": [
-            ["react-leaflet", "npm:3.2.2"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.2.2", {
-          "packageLocation": "./.yarn/__virtual__/react-leaflet-virtual-49bc19e64e/0/cache/react-leaflet-npm-3.2.2-02604d439e-d5e5f34dea.zip/node_modules/react-leaflet/",
-          "packageDependencies": [
-            ["react-leaflet", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.2.2"],
-            ["@react-leaflet/core", "virtual:49bc19e64e8bd5a8a98b21ce003e81fc8dbb82e217f7092ebbeec4e9a43739ad60450d79a27a87217971d9ca7747fcc334a63166d8786ea2ffdea7b3c1502373#npm:1.1.1"],
-            ["@types/leaflet", "npm:1.7.5"],
-            ["@types/react", "npm:17.0.27"],
-            ["@types/react-dom", "npm:17.0.8"],
-            ["leaflet", "npm:1.7.1"],
-            ["react", "npm:17.0.2"],
-            ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"]
-          ],
-          "packagePeers": [
-            "@types/leaflet",
-            "@types/react-dom",
-            "@types/react",
-            "leaflet",
-            "react-dom",
-            "react"
           ],
           "linkType": "HARD",
         }]

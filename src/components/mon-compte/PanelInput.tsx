@@ -33,7 +33,7 @@ export const PanelInput = ({
   onBlur = () => {},
 }: PanelInputProps) => {
   return (
-    <div className="flex-center" style={{ margin: '0.5rem', ...style }}>
+    <div style={{ margin: '0.5rem', display: 'inline-flex', alignItems: 'flex-start', ...style }}>
       <label className="text text--bold" style={{ flexShrink: 0 }}>
         {label}
       </label>
