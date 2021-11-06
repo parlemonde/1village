@@ -4,7 +4,7 @@
 $headerHeight: 50px;
 $menuWidth: 260px;
 $menuWidthSmaller: 220px;
-$rightMenuWidth: 250px;
+$rightMenuWidth: 275px;
 $subHeaderHeight: 40px;
 $verticalSpacing: 20px;
 $horizontalSpacing: 25px;
@@ -120,6 +120,13 @@ main {
   }
 }
 
+.with-sub-header-height {
+  height: $subHeaderHeight;
+}
+.vertical-bottom-margin {
+  margin-bottom: $verticalSpacing;
+}
+
 // ---- RIGHT NAVIGATION ----
 .right-navigation {
   width: $rightMenuWidth;
@@ -166,6 +173,10 @@ main {
   .right-navigation {
     margin-left: math.div($horizontalSpacing, 2);
     padding-bottom: math.div($verticalSpacing, 2);
+  }
+
+  .vertical-bottom-margin {
+    margin-bottom: math.div($verticalSpacing, 2);
   }
 }
 
