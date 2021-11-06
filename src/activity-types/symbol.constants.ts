@@ -1,3 +1,5 @@
+import type { SymbolData } from './symbol.types';
+
 export const SYMBOL = {
   DRAPEAU: 0,
   EMBLEME: 1,
@@ -9,7 +11,7 @@ export const SYMBOL = {
   MONNAIE: 7,
 };
 
-export const SYMBOL_TYPES = [
+const SYMBOL_TYPES = [
   {
     title: 'Drapeau',
     step1: 'Un drapeau',
@@ -43,3 +45,9 @@ export const SYMBOL_TYPES = [
     step1: 'Une monnaie',
   },
 ];
+
+export const getSymbol = (activitySubType: number | null | undefined, activityData: SymbolData) =>
+  (activitySubType === -1 ? { title: activityData.symbol || '', step1: activityData.symbol || '' } : SYMBOL_TYPES[activitySubType || 0]) || {
+    title: 'Symbole',
+    step1: 'Symbole',
+  };

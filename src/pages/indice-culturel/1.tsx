@@ -1,7 +1,10 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { INDICE_TYPES } from 'src/activity-types/indice.constants';
+import { TextField } from '@mui/material';
+
+import { getIndice } from 'src/activity-types/indice.constants';
+import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -16,7 +19,8 @@ import { ActivityStatus, ActivityType } from 'types/activity.type';
 const IndiceStep1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { activity, createNewActivity } = React.useContext(ActivityContext);
+  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const [showErrors, setShowErrors] = React.useState(false);
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
   const { activities } = useActivities({
     page: 0,
@@ -25,6 +29,7 @@ const IndiceStep1 = () => {
     type: ActivityType.INDICE,
   });
   const sameActivities = activity ? activities.filter((c) => c.subType === activity.subType) : [];
+  const data = (activity?.data as IndiceData) || null;
 
   const created = React.useRef(false);
   React.useEffect(() => {
@@ -40,10 +45,14 @@ const IndiceStep1 = () => {
   }, [activity, createNewActivity, router]);
 
   const onNext = () => {
+    if (activity === null || data === null || (activity.subType === -1 && !data.indice)) {
+      setShowErrors(true);
+      return;
+    }
     router.push('/indice-culturel/2');
   };
 
-  if (!activity) {
+  if (!activity || data === null) {
     return <Base></Base>;
   }
 
@@ -51,23 +60,48 @@ const IndiceStep1 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/indice-culturel" />}
-        <Steps steps={[INDICE_TYPES[activity.subType || 0]?.step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={0} />
+        <Steps steps={[getIndice(activity.subType, data).step1 || 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={0} />
         <div className="width-900">
-          <p className="text">
-            Vous trouvez ici les indices culturels qui ont déjà été présentés par les Pélicopains sur l&apos;aspect &quot;
-            {INDICE_TYPES[activity.subType || 0]?.step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice !
-            Vous pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
-          </p>
+          {activity.subType === -1 ? (
+            <>
+              <h1>Présenter un autre type d&apos;indice culturel</h1>
+              <p className="text">Indiquez quel autre type d&apos;indice culturel vous souhaitez présenter :</p>
+              <TextField
+                value={data.indice}
+                onChange={(event) => {
+                  updateActivity({ data: { indice: event.target.value.slice(0, 80) } });
+                }}
+                label="Indice à présenter"
+                variant="outlined"
+                placeholder="Nos monuments"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                error={showErrors && !data.indice}
+                FormHelperTextProps={{ style: { textAlign: showErrors && !data.indice ? 'left' : 'right' } }}
+                helperText={showErrors && !data.indice ? 'Requis' : `${data.indice?.length || 0}/80`}
+                sx={{ width: '100%', margin: '1rem 0 1rem 0' }}
+              />
+            </>
+          ) : (
+            <p className="text">
+              Vous trouvez ici les indices culturels qui ont déjà été présentés par les Pélicopains sur l&apos;aspect &quot;
+              {getIndice(activity.subType, data).step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice !
+              Vous pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
+            </p>
+          )}
           <StepsButton next={onNext} />
-          <div>
-            {sameActivities.length > 0 ? (
-              <Activities activities={sameActivities} withLinks />
-            ) : (
-              <p className="center">
-                Il n&apos;existe encore aucun indice culturel sur le thème &quot;{INDICE_TYPES[activity.subType || 0]?.title}&quot;
-              </p>
-            )}
-          </div>
+          {activity.subType !== -1 && (
+            <div>
+              {sameActivities.length > 0 ? (
+                <Activities activities={sameActivities} withLinks />
+              ) : (
+                <p className="center">
+                  Il n&apos;existe encore aucun indice culturel sur le thème &quot;{getIndice(activity.subType, data).title}&quot;
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </Base>

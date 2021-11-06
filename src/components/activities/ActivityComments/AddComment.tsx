@@ -6,7 +6,6 @@ import { Button, ButtonBase, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
 import { useCommentRequests } from 'src/services/useComments';
 import TextIcon from 'src/svg/editor/text_icon.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';

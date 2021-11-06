@@ -8,7 +8,8 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isIndice } from 'src/activity-types/anyActivity';
-import { INDICE_TYPES } from 'src/activity-types/indice.constants';
+import { getIndice } from 'src/activity-types/indice.constants';
+import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -23,6 +24,7 @@ const IndiceStep3 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const data = (activity?.data as IndiceData) || null;
 
   const isValid = React.useMemo(() => {
     if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
@@ -51,18 +53,14 @@ const IndiceStep3 = () => {
     setIsLoading(false);
   };
 
-  if (activity === null) {
+  if (activity === null || data === null) {
     return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={[INDICE_TYPES[activity.subType || 0].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']}
-          activeStep={2}
-          errorSteps={isValid ? [] : [1]}
-        />
+        <Steps steps={[getIndice(activity.subType, data).step1, "Créer l'indice", 'Prévisualiser']} activeStep={2} errorSteps={isValid ? [] : [1]} />
         <div className="width-900">
           <h1>Pré-visualisez votre publication{!isEdit && ' et publiez-la.'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -97,7 +95,14 @@ const IndiceStep3 = () => {
 
           <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
-            <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType || 0].title}</p>
+            <EditButton
+              onClick={() => {
+                router.push('/indice-culturel/1?edit');
+              }}
+              status="success"
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p style={{ margin: '0.5rem 0' }}>{getIndice(activity.subType, data).title}</p>
           </div>
 
           <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Indice culturel</span>

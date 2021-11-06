@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
+import { getSymbol } from 'src/activity-types/symbol.constants';
 import type { SymbolActivity } from 'src/activity-types/symbol.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -18,7 +18,7 @@ export const SymbolCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
   const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
-  const symbolType = SYMBOL_TYPES[activity.subType ?? 0] ?? SYMBOL_TYPES[0];
+  const symbolType = getSymbol(activity.subType, activity.data);
 
   return (
     <div

@@ -8,7 +8,8 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isSymbol } from 'src/activity-types/anyActivity';
-import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
+import { getSymbol } from 'src/activity-types/symbol.constants';
+import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -23,6 +24,7 @@ const SymbolStep3 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const data = (activity?.data as SymbolData) || null;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -51,7 +53,7 @@ const SymbolStep3 = () => {
     setIsLoading(false);
   };
 
-  if (activity === null) {
+  if (activity === null || data === null) {
     return <div></div>;
   }
 
@@ -59,7 +61,7 @@ const SymbolStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[SYMBOL_TYPES[activity.subType || 0].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']}
+          steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']}
           activeStep={2}
           errorSteps={isValid ? [] : [1]}
         />
@@ -94,12 +96,12 @@ const SymbolStep3 = () => {
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/indice-culturel');
+                router.push('/symbole/1?edit');
               }}
-              status={'success'}
+              status="success"
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>{SYMBOL_TYPES[activity.subType || 0].title}</p>
+            <p style={{ margin: '0.5rem 0' }}>{getSymbol(activity.subType, data).title}</p>
           </div>
 
           <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Symbole</span>

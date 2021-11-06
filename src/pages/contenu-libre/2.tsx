@@ -70,7 +70,7 @@ const ContenuLibre = () => {
             InputLabelProps={{
               shrink: true,
             }}
-            style={{ width: '100%', marginBottom: '1vw' }}
+            style={{ width: '100%', marginBottom: '1rem' }}
           />
           <TextField
             value={data.resume}
@@ -80,7 +80,7 @@ const ContenuLibre = () => {
             InputLabelProps={{
               shrink: true,
             }}
-            style={{ width: '100%', marginBottom: '1vw' }}
+            style={{ width: '100%', marginBottom: '1rem' }}
           />
           Épingler la publication ?
           <Switch checked={activity?.isPinned} onChange={handleChange} value={activity?.isPinned} color="primary" />

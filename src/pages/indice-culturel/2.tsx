@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isIndice } from 'src/activity-types/anyActivity';
-import { INDICE_TYPES } from 'src/activity-types/indice.constants';
+import { getIndice } from 'src/activity-types/indice.constants';
+import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -16,6 +17,7 @@ const IndiceStep2 = () => {
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const data = (activity?.data as IndiceData) || null;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -37,14 +39,14 @@ const IndiceStep2 = () => {
     router.push('/indice-culturel/3');
   };
 
-  if (activity === null) {
+  if (activity === null || data === null) {
     return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[INDICE_TYPES[activity.subType || 0].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
+        <Steps steps={[getIndice(activity.subType, data).step1, "Créer l'indice", 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
         <div className="width-900">
           <h1>Faites une présentation libre de votre indice</h1>
           <p className="text">
