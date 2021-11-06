@@ -4,6 +4,8 @@ export type FreeContentData = {
   title: string;
   resume: string;
   isPinned: boolean;
+  noImage?: boolean;
+  imageUrl?: string;
 };
 
 export type FreeContentActivity = Activity<FreeContentData>;
