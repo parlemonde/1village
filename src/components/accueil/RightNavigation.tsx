@@ -52,6 +52,31 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
     }
   }, [weather]);
 
+  if (isPelico) {
+    return (
+      <div
+        className="bg-secondary vertical-bottom-margin with-sub-header-height"
+        style={{
+          borderRadius: '10px',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 0.5rem',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
+          <span style={{ marginRight: '0.3rem', display: 'flex' }}>
+            <AvatarImg user={activityUser} size="extra-small" noLink />
+          </span>
+          <span className="text">
+            <strong>Pelico</strong>
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div
@@ -67,17 +92,13 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
       >
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
           <span style={{ marginRight: '0.3rem', display: 'flex' }}>
-            {isPelico || activityUser.avatar ? (
+            {activityUser.avatar ? (
               <AvatarImg user={activityUser} size="extra-small" noLink />
             ) : (
               <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
             )}
           </span>
-          {isPelico ? (
-            <span className="text">
-              <strong>Pelico</strong>
-            </span>
-          ) : userMascotte && isMascotte(userMascotte) ? (
+          {userMascotte && isMascotte(userMascotte) ? (
             <span
               className="text"
               style={{ fontSize: '0.9rem', margin: '0 0.25rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
@@ -93,11 +114,9 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
             </span>
           )}
         </div>
-        {!isPelico && (
-          <span style={{ marginLeft: '0.25rem', display: 'flex' }}>
-            <Flag country={activityUser.country.isoCode}></Flag>
-          </span>
-        )}
+        <span style={{ marginLeft: '0.25rem', display: 'flex' }}>
+          <Flag country={activityUser.country.isoCode}></Flag>
+        </span>
       </div>
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
         <div style={{ height: '14rem' }}>

@@ -30,7 +30,7 @@ export const useVillageUsers = (): { users: User[] } => {
       return [];
     }
     if (activePhase === 1 && !isPelico) {
-      return (response.data as User[]).filter((user) => user.country.isoCode === userCountryIsoCode);
+      return (response.data as User[]).filter((user) => user.country.isoCode === userCountryIsoCode || user.type > UserType.TEACHER);
     }
     return response.data as User[];
   }, [villageId, activePhase, userCountryIsoCode, isPelico, axiosLoggedRequest]);
