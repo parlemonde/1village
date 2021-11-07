@@ -77,7 +77,7 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
       plmUser.country.trim().toLowerCase(),
       matchs.map((c) => c.name.toLowerCase()),
     );
-    if (c.bestMatch.rating > 0.88) {
+    if (c.bestMatch.rating > 0.55) {
       country = matchs[c.bestMatchIndex].isoCode;
     }
   }
@@ -92,12 +92,12 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   // 3- Add user
   const user = new User();
   user.email = plmUser.user_email;
-  user.pseudo = plmUser.user_login;
+  user.pseudo = plmUser.user_login.slice(0, 50);
   user.level = '';
-  user.school = getMetaValue(plmUser, "Nom de l'école");
-  user.city = getMetaValue(plmUser, 'Ville') || getMetaValue(plmUser, 'Académie');
-  user.postalCode = getMetaValue(plmUser, "Code postal de l'école");
-  user.address = getMetaValue(plmUser, 'Rue');
+  user.school = getMetaValue(plmUser, "Nom de l'école").slice(0, 255);
+  user.city = (getMetaValue(plmUser, 'Ville') || getMetaValue(plmUser, 'Académie')).slice(0, 128);
+  user.postalCode = getMetaValue(plmUser, "Code postal de l'école").slice(0, 20);
+  user.address = getMetaValue(plmUser, 'Rue').slice(0, 255);
   user.villageId = village?.id || null;
   user.countryCode = country;
   user.type = userType;
@@ -105,6 +105,7 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.verificationHash = '';
   user.accountRegistration = 10;
   user.position = { lat: 0, lng: 0 };
+
   await setUserPosition(user);
   await getRepository(User).save(user);
 

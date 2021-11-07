@@ -30,7 +30,7 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 128, default: '' })
   public city: string;
 
-  @Column({ type: 'varchar', length: 10, default: '' })
+  @Column({ type: 'varchar', length: 20, default: '' })
   public postalCode: string;
 
   @Column({ type: 'varchar', length: 255, default: '' })
