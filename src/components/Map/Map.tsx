@@ -1,4 +1,8 @@
+import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import L from 'leaflet';
+// eslint-disable-next-line arca/import-ordering -- Should be imported after leaflet.
+import {} from 'leaflet.fullscreen';
 import maplibregl from 'maplibre-gl';
 import React from 'react';
 
@@ -29,32 +33,75 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
     if (!mapRef.current) {
       return;
     }
-    const map = new maplibregl.Map({
-      container: mapRef.current,
-      style: 'https://api.maptiler.com/maps/0ad2ffc3-1725-4a16-ae2f-8b77e5839593/style.json?key=ecMNwc4xNgcrvp2RH6cr',
-      center: initialPosition.current,
-      zoom,
-    });
 
-    map.addControl(
-      new maplibregl.NavigationControl({
-        showCompass: false,
-      }),
-    );
-    map.addControl(new maplibregl.ScaleControl());
-    map.addControl(new maplibregl.FullscreenControl());
+    // ---- WebGL MAP ----
+    if (maplibregl.supported()) {
+      const map = new maplibregl.Map({
+        container: mapRef.current,
+        style: 'https://api.maptiler.com/maps/0ad2ffc3-1725-4a16-ae2f-8b77e5839593/style.json?key=ecMNwc4xNgcrvp2RH6cr',
+        center: initialPosition.current,
+        zoom,
+      });
+
+      map.addControl(
+        new maplibregl.NavigationControl({
+          showCompass: false,
+        }),
+      );
+      map.addControl(new maplibregl.ScaleControl());
+      map.addControl(new maplibregl.FullscreenControl());
+
+      initialMarkers.current.forEach((m) => {
+        const marker = new maplibregl.Marker({
+          color: primaryColor,
+          draggable: m.onDragEnd !== undefined,
+        })
+          .setLngLat(m.position)
+          .addTo(map);
+        if (m.onDragEnd !== undefined) {
+          const func = m.onDragEnd;
+          const onMarkerDragEnd = () => {
+            const newPos = marker.getLngLat();
+            func(newPos);
+          };
+          marker.on('dragend', onMarkerDragEnd);
+        }
+      });
+
+      return () => {
+        map.remove();
+      };
+    }
+
+    // ---- Leaflet MAP (fallback if webgl is not supported) ----
+    const map = L.map(mapRef.current, {
+      fullscreenControl: true,
+      fullscreenControlOptions: {
+        position: 'topleft',
+      },
+    }).setView(initialPosition.current, zoom + 2);
+    L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=ecMNwc4xNgcrvp2RH6cr', {
+      tileSize: 512,
+      zoomOffset: -1,
+      minZoom: 1,
+      attribution:
+        '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+      crossOrigin: true,
+    }).addTo(map);
 
     initialMarkers.current.forEach((m) => {
-      const marker = new maplibregl.Marker({
-        color: primaryColor,
+      const marker = L.marker(m.position, {
+        icon: new L.Icon({
+          iconUrl: '/marker.svg',
+          iconSize: [25, 41],
+          iconAnchor: [13.5, 41],
+        }),
         draggable: m.onDragEnd !== undefined,
-      })
-        .setLngLat(m.position)
-        .addTo(map);
+      }).addTo(map);
       if (m.onDragEnd !== undefined) {
         const func = m.onDragEnd;
         const onMarkerDragEnd = () => {
-          const newPos = marker.getLngLat();
+          const newPos = marker.getLatLng();
           func(newPos);
         };
         marker.on('dragend', onMarkerDragEnd);

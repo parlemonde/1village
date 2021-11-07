@@ -61,6 +61,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/geojson", "npm:7946.0.7"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/leaflet", "npm:1.7.5"],
+            ["@types/leaflet.fullscreen", "npm:1.6.1"],
             ["@types/maplibre-gl", "npm:1.13.1"],
             ["@types/md5", "npm:2.3.1"],
             ["@types/mime-types", "npm:2.1.1"],
@@ -120,6 +122,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["immutable", "npm:4.0.0"],
             ["json-stable-stringify", "npm:1.0.1"],
             ["jsonwebtoken", "npm:8.5.1"],
+            ["leaflet", "npm:1.7.1"],
+            ["leaflet.fullscreen", "npm:2.1.0"],
             ["maplibre-gl", "npm:1.14.0"],
             ["md5", "npm:2.3.0"],
             ["mime-types", "npm:2.1.33"],
@@ -189,6 +193,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/geojson", "npm:7946.0.7"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/leaflet", "npm:1.7.5"],
+            ["@types/leaflet.fullscreen", "npm:1.6.1"],
             ["@types/maplibre-gl", "npm:1.13.1"],
             ["@types/md5", "npm:2.3.1"],
             ["@types/mime-types", "npm:2.1.1"],
@@ -248,6 +254,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["immutable", "npm:4.0.0"],
             ["json-stable-stringify", "npm:1.0.1"],
             ["jsonwebtoken", "npm:8.5.1"],
+            ["leaflet", "npm:1.7.1"],
+            ["leaflet.fullscreen", "npm:2.1.0"],
             ["maplibre-gl", "npm:1.14.0"],
             ["md5", "npm:2.3.0"],
             ["mime-types", "npm:2.1.33"],
@@ -4033,6 +4041,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/keyv", "npm:3.1.3"],
             ["@types/node", "npm:16.11.6"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/leaflet", [
+        ["npm:1.7.5", {
+          "packageLocation": "./.yarn/cache/@types-leaflet-npm-1.7.5-a9a09f775c-922f3d1176.zip/node_modules/@types/leaflet/",
+          "packageDependencies": [
+            ["@types/leaflet", "npm:1.7.5"],
+            ["@types/geojson", "npm:7946.0.8"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/leaflet.fullscreen", [
+        ["npm:1.6.1", {
+          "packageLocation": "./.yarn/cache/@types-leaflet.fullscreen-npm-1.6.1-b6b2d08702-e3a914f4dd.zip/node_modules/@types/leaflet.fullscreen/",
+          "packageDependencies": [
+            ["@types/leaflet.fullscreen", "npm:1.6.1"],
+            ["@types/leaflet", "npm:1.7.5"]
           ],
           "linkType": "HARD",
         }]
@@ -11051,6 +11079,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["latest-version", "npm:5.1.0"],
             ["package-json", "npm:6.5.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["leaflet", [
+        ["npm:1.7.1", {
+          "packageLocation": "./.yarn/cache/leaflet-npm-1.7.1-dc40ced5a1-f69149ab48.zip/node_modules/leaflet/",
+          "packageDependencies": [
+            ["leaflet", "npm:1.7.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["leaflet.fullscreen", [
+        ["npm:2.1.0", {
+          "packageLocation": "./.yarn/cache/leaflet.fullscreen-npm-2.1.0-78e7b614bc-0e516e4952.zip/node_modules/leaflet.fullscreen/",
+          "packageDependencies": [
+            ["leaflet.fullscreen", "npm:2.1.0"]
           ],
           "linkType": "HARD",
         }]

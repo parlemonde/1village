@@ -288,6 +288,17 @@ a.text--success:hover {
   }
 }
 
+// ----- MAP ----
 .mapboxgl-map {
   height: 100%;
+}
+.leaflet-container {
+  height: 100%;
+}
+.fullscreen-icon {
+  background-image: url('/icon-fullscreen.png');
+}
+.leaflet-retina .fullscreen-icon {
+  background-image: url('/icon-fullscreen-2x.png');
+  background-size: 26px 26px;
 }

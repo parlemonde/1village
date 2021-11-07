@@ -207,7 +207,7 @@ export const WelcomeModal = () => {
         </div>
       }
     >
-      <div id="new-user-desc" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div id="new-user-desc" style={{ height: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {currentStep === 0 && (
           <div className="text-center">
             <span style={{ fontSize: '1.1rem' }}>Votre classe appartient au village</span>
@@ -384,7 +384,7 @@ export const WelcomeModal = () => {
                 Votre position sur la carte est-elle correcte ? Si non, vous pouvez déplacer le curseur pour la modifier.
               </span>
             </div>
-            <div style={{ flex: 1, minHeight: 0, width: '100%', height: 0 }}>
+            <div style={{ flex: 1, minHeight: 0, width: '100%' }}>
               {position !== null && (
                 <Map
                   position={position}
