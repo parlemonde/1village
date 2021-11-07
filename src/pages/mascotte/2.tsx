@@ -179,7 +179,7 @@ const MascotteStep2 = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <p>Tout commes vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
+              <p>Tout comme vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
               <MultipleCountrySelector
                 label="Pays"
                 style={{ width: '100%', marginBottom: '1rem' }}
@@ -188,7 +188,7 @@ const MascotteStep2 = () => {
                 helperText={showError && data.countries.length === 0 ? 'Ce champs est obligatoire' : ''}
                 error={showError && data.countries.length === 0}
               />
-              Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
+              Tout comme vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
                 <TextField
@@ -202,7 +202,7 @@ const MascotteStep2 = () => {
                   helperText={showError && !data.game ? 'Ce champ est obligatoire' : ''}
                 />
               </div>
-              Tout commes vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
+              Tout comme vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte pratique </span>
                 <TextField

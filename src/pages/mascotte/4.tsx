@@ -63,6 +63,7 @@ const MascotteStep4 = () => {
             <p>
               Comme à la maison, à l’école ou dans la rue, certaines règles permettent de mieux vivre-ensemble. Alors, comme nous allons échanger
               ensemble sur 1Village durant toute l’année scolaire. Je me suis demandé quelles règles pourrions nous adopter cette année sur 1Village.
+              Voilà les questions que je me suis posées :
             </p>
 
             <ul className="mascotte-rules-list">

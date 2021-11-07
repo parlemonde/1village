@@ -85,7 +85,7 @@ export class User implements UserInterface {
     this.position.lat = parseFloat(newLat) || 0;
   }
   get positionLat() {
-    return `${this.position.lat}`;
+    return `${this.position?.lat || 0}`;
   }
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
@@ -96,7 +96,7 @@ export class User implements UserInterface {
     this.position.lng = parseFloat(newLon) || 0;
   }
   get positionLon() {
-    return `${this.position.lng}`;
+    return `${this.position?.lng || 0}`;
   }
 
   public position: { lat: number; lng: number };
