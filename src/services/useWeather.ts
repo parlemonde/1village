@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
-import { getMapPosition } from 'src/utils/getMapPosition';
 import { serializeToQueryUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 import type { Weather } from 'types/weather.type';
@@ -16,16 +15,11 @@ export const useWeather = ({ activityUser }: { activityUser: User }): Weather | 
       return null;
     }
 
-    const pos = await getMapPosition(activityUser);
-    if (!pos) {
-      return null;
-    }
-
     const response = await axiosLoggedRequest({
       method: 'GET',
       url: `/weather${serializeToQueryUrl({
-        latitude: pos[0],
-        longitude: pos[1],
+        latitude: activityUser.position.lat,
+        longitude: activityUser.position.lng,
       })}`,
     });
     return response.error ? null : (response.data as Weather);

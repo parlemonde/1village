@@ -1,3 +1,5 @@
+import type { IndiceData } from './indice.types';
+
 export const INDICE = {
   PAYSAGE: 0,
   ARTS: 1,
@@ -43,3 +45,9 @@ export const INDICE_TYPES = [
     step1: 'Nos traditions',
   },
 ];
+
+export const getIndice = (activitySubType: number | null | undefined, activityData: IndiceData) =>
+  (activitySubType === -1 ? { title: activityData.indice || '', step1: activityData.indice || '' } : INDICE_TYPES[activitySubType || 0]) || {
+    title: 'Indice',
+    step1: 'Indice',
+  };

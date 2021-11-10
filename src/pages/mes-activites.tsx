@@ -16,13 +16,13 @@ const MesActivites = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);
   const { activities } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     type: [],
     userId: user?.id ?? 0,
   });
   const { activities: drafts } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     type: [],
     userId: user?.id ?? 0,

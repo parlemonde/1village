@@ -3,42 +3,37 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { isMascotte } from 'src/activity-types/anyActivity';
 import { Map } from 'src/components/Map';
 import { icons, DESC } from 'src/components/activities/utils';
+import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
+import { useActivity } from 'src/services/useActivity';
 import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
-import { getMapPosition } from 'src/utils/getMapPosition';
-import { toDate } from 'src/utils';
+import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { getUserDisplayName, toDate } from 'src/utils';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
+import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 
 export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
-  const [position, setPosition] = React.useState<[number, number] | null>(null);
   const [localTime, setLocalTime] = React.useState<string | null>(null);
+  const { user } = React.useContext(UserContext);
   const weather = useWeather({ activityUser });
+  const { activity: userMascotte } = useActivity(activityUser.mascotteId || -1);
   const { activities } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     type: [],
     userId: activityUser?.id ?? 0,
   });
+  const isPelico = activityUser.type > UserType.TEACHER;
 
-  const getPosition = React.useCallback(async () => {
-    if (activityUser === null) {
-      setPosition(null);
-    } else {
-      const pos = await getMapPosition(activityUser);
-      setPosition(pos);
-    }
-  }, [activityUser]);
-
-  React.useEffect(() => {
-    getPosition().catch();
-  }, [activityUser, getPosition]);
-
+  // ---- Get user weather and time ----
   React.useEffect(() => {
     if (weather !== null) {
       const timezone = weather.timezone;
@@ -57,18 +52,80 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
     }
   }, [weather]);
 
+  if (isPelico) {
+    return (
+      <div
+        className="bg-secondary vertical-bottom-margin with-sub-header-height"
+        style={{
+          borderRadius: '10px',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 0.5rem',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
+          <span style={{ marginRight: '0.3rem', display: 'flex' }}>
+            <AvatarImg user={activityUser} size="extra-small" noLink />
+          </span>
+          <span className="text">
+            <strong>Pelico</strong>
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="bg-secondary" style={{ borderRadius: '10px', overflow: 'hidden', marginBottom: '2rem' }}>
-        {position !== null && (
-          <div style={{ height: '14rem' }}>
-            <Map position={position} zoom={5} markers={[{ position: position, label: activityUser?.address }]} />
-          </div>
-        )}
+      <div
+        className="bg-secondary vertical-bottom-margin with-sub-header-height"
+        style={{
+          borderRadius: '10px',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 0.5rem',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
+          <span style={{ marginRight: '0.3rem', display: 'flex' }}>
+            {activityUser.avatar ? (
+              <AvatarImg user={activityUser} size="extra-small" noLink />
+            ) : (
+              <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
+            )}
+          </span>
+          {userMascotte && isMascotte(userMascotte) ? (
+            <span
+              className="text"
+              style={{ fontSize: '0.9rem', margin: '0 0.25rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+            >
+              <strong>{userMascotte.data.mascotteName}</strong>, notre mascotte
+            </span>
+          ) : (
+            <span
+              className="text"
+              style={{ fontSize: '0.9rem', margin: '0 0.25rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+            >
+              {getUserDisplayName(activityUser, user !== null && user.id === activityUser.id)}
+            </span>
+          )}
+        </div>
+        <span style={{ marginLeft: '0.25rem', display: 'flex' }}>
+          <Flag country={activityUser.country.isoCode}></Flag>
+        </span>
+      </div>
+      <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
+        <div style={{ height: '14rem' }}>
+          <Map position={activityUser.position} zoom={3} markers={[{ position: activityUser.position, label: activityUser.address }]} />
+        </div>
       </div>
       {weather !== null && (
         <div
-          className="bg-secondary"
+          className="bg-secondary vertical-bottom-margin"
           style={{
             fontWeight: 'bold',
             padding: '1rem',
@@ -77,11 +134,10 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column',
-            marginBottom: '2rem',
           }}
         >
           <div style={{ marginBottom: '1rem' }}>
-            <Flag country={activityUser?.country.isoCode}></Flag> {activityUser?.city}
+            <Flag country={activityUser.country.isoCode}></Flag> {activityUser.city}
           </div>
           {localTime}
           <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />
@@ -89,11 +145,11 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
         </div>
       )}
       <div
-        className="bg-secondary"
+        className="bg-secondary vertical-bottom-margin"
         style={{ padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
       >
         <h3>
-          <b>Nos dernières activités</b>
+          <b>Dernières activités</b>
         </h3>
         {activities.slice(0, 3).map((activity, index) => {
           const ActivityIcon = icons[activity.type] || null;

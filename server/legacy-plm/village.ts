@@ -12,7 +12,7 @@ export type PLM_Village = {
   name: string;
   slug: string;
   description: string;
-  status: string;
+  status: 'private' | 'hidden' | 'public';
   parent_id: string; // number in string
   enable_forum: string; // number in string
   date_created: string; // date "YYYY-MM-DD HH:MM:SS",
@@ -23,7 +23,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   const name = plmVillage.name;
 
   // not used villages
-  if (plmId === 2 || plmId === 10) {
+  if (plmVillage.status !== 'private' || plmId === 8) {
     return false;
   }
 

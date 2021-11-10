@@ -16,8 +16,6 @@ import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import { UserType } from 'types/user.type';
 
-import { AvatarImg } from './Avatar';
-
 export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
@@ -112,7 +110,6 @@ export const Header = () => {
                 </MenuItem>
               </Menu>
             </div>
-            <AvatarImg user={user} size="small" noLink />
           </div>
         )}
       </div>

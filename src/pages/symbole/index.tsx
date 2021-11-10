@@ -68,6 +68,13 @@ const symbols = [
     disabled: false,
     disabledText: '',
   },
+  {
+    label: 'Présenter un autre symbole',
+    href: '/symbole/1?category=-1',
+    icon: null,
+    disabled: false,
+    disabledText: '',
+  },
 ];
 
 const Symbol = () => {

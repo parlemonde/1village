@@ -1,7 +1,6 @@
 import type { Vector3, Camera } from 'three';
 import { Group, CylinderGeometry, MeshStandardMaterial, Mesh, TextureLoader } from 'three';
 
-import { getMapPosition } from 'src/utils/getMapPosition';
 import { clamp, getGravatarUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 
@@ -18,10 +17,7 @@ export const getPins = async (users: Array<User>, cameraPos: Vector3): Promise<G
   const textureLoader = new TextureLoader();
 
   for (const user of users) {
-    const pos = await getMapPosition(user);
-    if (pos !== null) {
-      pins.add(new HoverablePin(pinModel, user, pos, cameraPos, textureLoader));
-    }
+    pins.add(new HoverablePin(pinModel, user, cameraPos, textureLoader));
   }
 
   return pins;
@@ -36,12 +32,15 @@ export class HoverablePin
       user: User;
     }>
 {
-  private coords: [number, number];
+  private coords: {
+    lat: number;
+    lng: number;
+  };
   public userData: HoverableObject<{
     user: User;
   }>['userData'];
 
-  constructor(pinModel: Group, user: User, coords: [number, number], cameraPos: Vector3, textureLoader: TextureLoader) {
+  constructor(pinModel: Group, user: User, cameraPos: Vector3, textureLoader: TextureLoader) {
     super();
 
     for (const child of pinModel.children) {
@@ -79,8 +78,8 @@ export class HoverablePin
     this.name = 'pinGroup';
 
     // place
-    this.coords = coords;
-    const pos = polar2Cartesian(coords[0], coords[1], 2);
+    this.coords = user.position;
+    const pos = polar2Cartesian(this.coords.lat, this.coords.lng, 2);
     this.position.x = pos.x;
     this.position.y = pos.y;
     this.position.z = pos.z;
@@ -110,7 +109,7 @@ export class HoverablePin
   public onReset(): void {}
 
   public onClick(camera: Camera, cameraAltitude: number): void {
-    const newPos = polar2Cartesian(this.coords[0], this.coords[1], Math.min(cameraAltitude, 200) - GLOBE_RADIUS);
+    const newPos = polar2Cartesian(this.coords.lat, this.coords.lng, Math.min(cameraAltitude, 200) - GLOBE_RADIUS);
     camera.position.x = newPos.x;
     camera.position.y = newPos.y;
     camera.position.z = newPos.z;

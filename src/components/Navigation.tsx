@@ -112,7 +112,8 @@ export const Navigation = (): JSX.Element => {
       {
         label: 'Notre classe',
         path: '/ma-classe',
-        icon: user && user.avatar ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        icon:
+          user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
       ...(isModerateur ? [FREE_CONTENT] : []),
     ],

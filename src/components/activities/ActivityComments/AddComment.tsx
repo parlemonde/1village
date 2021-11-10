@@ -6,7 +6,6 @@ import { Button, ButtonBase, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
 import { useCommentRequests } from 'src/services/useComments';
 import TextIcon from 'src/svg/editor/text_icon.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
@@ -44,20 +43,20 @@ const Reactions = [
 ];
 
 interface AddCommentProps {
-  activityId: number | null;
-  activityType: number | null;
+  activityId: number;
+  activityType: number;
+  activityPhase: number;
   label?: string;
 }
 
-export const AddComment = ({ activityId, activityType, label }: AddCommentProps) => {
+export const AddComment = ({ activityId, activityType, activityPhase, label }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
-  const { selectedPhase } = React.useContext(VillageContext);
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
-  const isDisplayed = activityType === 5 ? selectedPhase === 1 : activityType !== null && [0, 3, 6, 7].includes(activityType);
+  const allowOnlyComments = activityPhase === 1 || (activityType !== 5 && activityType !== 0);
 
   if (!user) {
     return null;
@@ -82,7 +81,7 @@ export const AddComment = ({ activityId, activityType, label }: AddCommentProps)
   return (
     <div className="activity__comment-container">
       <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} noLink />
-      {displayEditor || isDisplayed ? (
+      {displayEditor || allowOnlyComments ? (
         <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
           <TextEditor
             maxLen={400}
@@ -97,7 +96,7 @@ export const AddComment = ({ activityId, activityType, label }: AddCommentProps)
             <span className="text text--primary">{newCommentLength}/400</span>
           </div>
           <div style={{ width: '100%', textAlign: 'right', marginTop: '0.5rem' }}>
-            {!isDisplayed && (
+            {!allowOnlyComments && (
               <Button
                 size="small"
                 variant="outlined"

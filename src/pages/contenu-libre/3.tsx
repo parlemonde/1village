@@ -66,7 +66,12 @@ const ContenuLibre = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Contenu', 'Forme', 'Prévisualiser']} activeStep={2} errorSteps={errorSteps} />
+        <Steps
+          steps={['Contenu', 'Forme', 'Prévisualiser']}
+          urls={['/contenu-libre/1?edit', '/contenu-libre/2', '/contenu-libre/3']}
+          activeStep={2}
+          errorSteps={errorSteps}
+        />
         <div className="width-900">
           <h1>Pré-visualisez votre publication</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>

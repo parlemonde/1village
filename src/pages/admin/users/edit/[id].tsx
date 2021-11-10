@@ -101,7 +101,9 @@ const EditUser = () => {
       });
       return;
     }
-    const result = await editUser({ ...user, villageId: user.villageId || null });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { position: _ignore, ...updatedValues } = user;
+    const result = await editUser({ ...updatedValues, villageId: user.villageId || null });
     if (result !== null) {
       router.push('/admin/users');
     }

@@ -25,7 +25,7 @@ const titles = {
   [ActivityType.GAME]: 'Jeu',
   [ActivityType.ENIGME]: 'Énigme',
   [ActivityType.QUESTION]: 'Question',
-  [ActivityType.CONTENU_LIBRE]: 'Contenu Libre',
+  [ActivityType.CONTENU_LIBRE]: 'Message de Pelico',
   [ActivityType.INDICE]: 'Indice culturel',
   [ActivityType.SYMBOL]: 'Symbole',
 };
@@ -90,7 +90,7 @@ const Activity = () => {
       <div className="activity__container">
         <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
 
-        {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} usersMap={usersMap} />}
+        {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />}
       </div>
     </Base>
   );

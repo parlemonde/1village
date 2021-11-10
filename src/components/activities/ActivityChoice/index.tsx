@@ -8,7 +8,7 @@ interface ActivityChoiceProps {
   activities: Array<{
     label: string;
     href: string;
-    icon: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+    icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>> | null;
     disabled: boolean;
     disabledText: string;
   }>;
