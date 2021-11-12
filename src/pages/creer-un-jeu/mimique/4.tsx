@@ -3,28 +3,16 @@ import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import { green } from '@mui/material/colors';
 import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@mui/material';
-import type { RadioProps } from '@mui/material';
-import { withStyles } from '@mui/styles';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic } from 'src/activity-types/game.const';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { CustomRadio } from 'src/components/buttons/CustomRadio';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { MimicsData } from 'types/game.type';
-
-const GreenRadio = withStyles({
-  root: {
-    color: green[400],
-    '&$checked': {
-      color: green[600],
-    },
-  },
-  checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
 
 const MimiqueStep4 = () => {
   const router = useRouter();
@@ -85,7 +73,7 @@ const MimiqueStep4 = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<GreenRadio />} label={data.game1.signification} />
+                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={data.game1.signification} />
                   <FormControlLabel control={<Radio />} label={data.game1.fakeSignification1} />
                   <FormControlLabel control={<Radio />} label={data.game1.fakeSignification2} />
                 </RadioGroup>
@@ -115,7 +103,7 @@ const MimiqueStep4 = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<GreenRadio />} label={data.game2.signification} />
+                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={data.game2.signification} />
                   <FormControlLabel control={<Radio />} label={data.game2.fakeSignification1} />
                   <FormControlLabel control={<Radio />} label={data.game2.fakeSignification2} />
                 </RadioGroup>
@@ -145,7 +133,7 @@ const MimiqueStep4 = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<GreenRadio />} label={data.game3.signification} />
+                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={data.game3.signification} />
                   <FormControlLabel control={<Radio />} label={data.game3.fakeSignification1} />
                   <FormControlLabel control={<Radio />} label={data.game3.fakeSignification2} />
                 </RadioGroup>
