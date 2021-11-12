@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
@@ -7,9 +6,7 @@ import React from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import type { LinearProgressProps } from '@mui/material/LinearProgress';
 import { green, red } from '@mui/material/colors';
-import type { RadioProps } from '@mui/material';
 import { Button, FormControlLabel, Grid, Radio, RadioGroup, LinearProgress, Typography, Box } from '@mui/material';
-import { withStyles } from '@mui/styles';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -21,7 +18,6 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { serializeToQueryUrl } from 'src/utils';
-import type { Country } from 'types/country.type';
 import type { Game } from 'types/game.type';
 import { GameType } from 'types/game.type';
 import type { MimicData } from 'types/game.type';
@@ -29,26 +25,6 @@ import type { GameResponse } from 'types/gameResponse.type';
 import { MimicResponseValue } from 'types/mimicResponse.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
-
-const GreenRadio = withStyles({
-  root: {
-    color: green[400],
-  },
-  disabled: {
-    color: green[400],
-  },
-})((props: RadioProps) => <Radio color="default" {...props} />);
-const RedRadio = withStyles({
-  root: {
-    color: red[400],
-  },
-  disabled: {
-    color: red[400],
-    '&$disabled': {
-      color: red[400],
-    },
-  },
-})((props: RadioProps) => <Radio color="default" {...props} />);
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -67,6 +43,15 @@ interface StatsProps {
   [key: string]: { [key: string]: number };
 }
 
+const mimicContentPropsDefault = {
+  gameId: 0,
+  origine: '',
+  signification: '',
+  fakeSignification1: '',
+  fakeSignification2: '',
+  video: '',
+};
+
 const PlayMimique = () => {
   const router = useRouter();
   const [tryCount, setTryCount] = React.useState<number>(0);
@@ -77,14 +62,15 @@ const PlayMimique = () => {
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
   const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
   const [game, setGame] = React.useState<Game>();
-  const [mimicContent, setMimicContent] = React.useState<MimicData>({} as MimicData);
-  const [gameResponses, setGameResponses] = React.useState<GameResponse[] | null>(null);
+  const [mimicContent, setMimicContent] = React.useState<MimicData>(mimicContentPropsDefault);
+  const [gameResponses, setGameResponses] = React.useState<GameResponse[]>();
   const [user, setUser] = React.useState<User>();
   const { axiosLoggedRequest } = React.useContext(UserContext);
+  // const [selected, setSelected] = React.useState<MimicResponseValue | null>('-1' as MimicResponseValue);
   const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
-  const [stats, setStats] = React.useState<StatsProps | null>(null);
+  const [stats, setStats] = React.useState<StatsProps>();
   const { village } = React.useContext(VillageContext);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isReloading, setIsReloading] = React.useState<boolean>(false);
 
   const [userIsPelico, setUserIsPelico] = React.useState<boolean>(true);
 
@@ -100,25 +86,22 @@ const PlayMimique = () => {
 
   const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
 
-  const mimiqueInitialState = {
-    setMimicContent: setMimicContent,
-    setIsLoading: setIsLoading,
-    setFound: setFound,
-    setFoundError: setFoundError,
-    setFake1Selected: setFake1Selected,
-    setFake2Selected: setFake2Selected,
-    setGameResponses: setGameResponses,
-    setStats: setStats,
-    setTryCount: setTryCount,
-    setErrorModalOpen: setErrorModalOpen,
-  };
-
   React.useEffect(() => {
-    if (isLoading) {
-      mimiqueInitialState;
+    if (isReloading) {
+      setMimicContent(mimicContentPropsDefault);
+      setIsReloading(false);
+      setFound(false);
+      setFoundError(false);
+      setFake1Selected(false);
+      setFake2Selected(false);
+      setGameResponses([] as GameResponse[]);
+      setStats({} as StatsProps);
+      setSelected(null);
+      setTryCount(0);
+      setErrorModalOpen(false);
     }
-
-    if (isLoading || village) {
+    console.log('selected', selected);
+    if (isReloading || village) {
       axiosLoggedRequest({
         method: 'GET',
         url: `/games/play${serializeToQueryUrl({
@@ -126,31 +109,28 @@ const PlayMimique = () => {
           type: GameType.MIMIC,
         })}`,
       }).then((response) => {
-        console.log('response =', response);
-        if (isLoading) console.log(isLoading);
         if (!response.error && response.data) {
           const game = response.data as Game;
           setGame(game);
-          const mimicContent = JSON.parse(game.content) as unknown;
-          setMimicContent(mimicContent as MimicData);
+          const mimicContent = JSON.parse(game.content) as unknown as MimicData;
+          setMimicContent(mimicContent);
         } else {
           setLastMimiqueModalOpen(true);
         }
       });
     }
-  }, [setMimicContent, isLoading]);
+  }, [mimicContent.gameId, isReloading]);
 
   React.useEffect(() => {
     if (game) {
       const user = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
-      setUser(user);
-      setUserIsPelico(user!.type >= UserType.MEDIATOR);
+      if (user && user.type !== UserType.OBSERVATOR) setUser(user as unknown as User);
+      if (user && user.type === UserType.OBSERVATOR) setUserIsPelico(false);
     }
-  }, [game, userMap]);
+  }, [game, userMap, users]);
 
   React.useEffect(() => {
     if (gameResponses) {
-      console.log(gameResponses);
       const resStats: StatsProps = {};
       gameResponses.forEach((val: GameResponse) => {
         if (resStats[val.user.country.isoCode] && resStats[val.user.country.isoCode][val.user.id]) {
@@ -169,14 +149,11 @@ const PlayMimique = () => {
         }
       });
       setStats(resStats);
-      console.log(resStats, Object.keys(resStats));
     }
   }, [gameResponses, userMap]);
 
   const validate = () => {
-    if (selected === null) {
-      return;
-    }
+    if (selected === null) return;
     axiosLoggedRequest({
       method: 'PUT',
       url: `/games/play/${game?.id}`,
@@ -256,7 +233,7 @@ const PlayMimique = () => {
     );
   }
 
-  function shuffleArray(array: Array<any>) {
+  function shuffleArray(array: Array<number>) {
     let i = array.length - 1;
     for (; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -280,7 +257,7 @@ const PlayMimique = () => {
               {userIsPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
-                <Flag country={user.country as unknown as string} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={user.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </p>
           </div>
@@ -290,7 +267,7 @@ const PlayMimique = () => {
             <ReactPlayer light url={mimicContent.video as string | string[] | MediaStream | SourceProps[] | undefined} controls />
           </Grid>
           <Grid item xs={6} md={6}>
-            <RadioGroup aria-label="gender" name="gender1" value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
+            <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
               {choices &&
                 choices.map((val) => {
                   if (val === 0) {
@@ -298,7 +275,7 @@ const PlayMimique = () => {
                       <FormControlLabel
                         key="1"
                         value={MimicResponseValue.SIGNIFICATION}
-                        control={found || foundError ? <GreenRadio icon={<FiberManualRecordIcon style={{ color: green[400] }} />} /> : <Radio />}
+                        control={found || foundError ? <Radio icon={<FiberManualRecordIcon style={{ color: green[400] }} />} /> : <Radio />}
                         label={mimicContent.signification}
                         disabled={found || foundError ? true : false}
                       />
@@ -308,7 +285,7 @@ const PlayMimique = () => {
                       <FormControlLabel
                         key="2"
                         value={MimicResponseValue.FAKE_SIGNIFICATION_1}
-                        control={fake1Selected ? <RedRadio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
+                        control={fake1Selected ? <Radio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
                         label={mimicContent.fakeSignification1}
                         disabled={fake1Selected || found || foundError ? true : false}
                       />
@@ -318,7 +295,7 @@ const PlayMimique = () => {
                       <FormControlLabel
                         key="3"
                         value={MimicResponseValue.FAKE_SIGNIFICATION_2}
-                        control={fake2Selected ? <RedRadio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
+                        control={fake2Selected ? <Radio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
                         label={mimicContent.fakeSignification2}
                         disabled={fake2Selected || found || foundError ? true : false}
                       />
@@ -415,8 +392,10 @@ const PlayMimique = () => {
             }}
             variant="outlined"
             color="primary"
-            onClick={() => setIsLoading(true)}
+            onClick={() => setIsReloading(true)}
           >
+            {console.log(found)}
+            {console.log(foundError)}
             Rejouer
           </Button>
         )}

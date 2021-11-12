@@ -66,7 +66,7 @@ const MimiqueStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['1ère mimique', 'toto mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
+        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
         <MimicSelector
           mimicNumber="1ère"
           MimicData={data.game1}
