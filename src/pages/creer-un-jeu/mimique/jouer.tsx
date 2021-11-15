@@ -3,9 +3,7 @@ import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import type { LinearProgressProps } from '@mui/material/LinearProgress';
-import { green, red } from '@mui/material/colors';
 import { Button, FormControlLabel, Grid, Radio, RadioGroup, LinearProgress, Typography, Box } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
@@ -13,6 +11,8 @@ import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
+import { CustomRadio as GreenRadio } from 'src/components/buttons/CustomRadio';
+import { CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageUsers } from 'src/services/useVillageUsers';
@@ -66,7 +66,6 @@ const PlayMimique = () => {
   const [gameResponses, setGameResponses] = React.useState<GameResponse[]>();
   const [user, setUser] = React.useState<User>();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  // const [selected, setSelected] = React.useState<MimicResponseValue | null>('-1' as MimicResponseValue);
   const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
   const [stats, setStats] = React.useState<StatsProps>();
   const { village } = React.useContext(VillageContext);
@@ -100,7 +99,6 @@ const PlayMimique = () => {
       setTryCount(0);
       setErrorModalOpen(false);
     }
-    console.log('selected', selected);
     if (isReloading || village) {
       axiosLoggedRequest({
         method: 'GET',
@@ -161,7 +159,6 @@ const PlayMimique = () => {
     }).then(() => {
       if (tryCount == 0) {
         if (selected == MimicResponseValue.SIGNIFICATION) {
-          console.log('found !');
           setFound(true);
           setSelected(null);
           axiosLoggedRequest({
@@ -173,12 +170,10 @@ const PlayMimique = () => {
             }
           });
         } else if (selected == MimicResponseValue.FAKE_SIGNIFICATION_1) {
-          console.log('fake1 !');
           setFake1Selected(true);
           setSelected(null);
           setErrorModalOpen(true);
         } else {
-          console.log('fake2 !');
           setFake2Selected(true);
           setSelected(null);
           setErrorModalOpen(true);
@@ -186,16 +181,13 @@ const PlayMimique = () => {
         setTryCount(tryCount + 1);
       } else if (tryCount == 1) {
         if (selected == MimicResponseValue.SIGNIFICATION) {
-          console.log('found !');
           setFound(true);
           setSelected(null);
         } else if (selected == MimicResponseValue.FAKE_SIGNIFICATION_1) {
-          console.log('fake1 !');
           setFake1Selected(true);
           setSelected(null);
           setFoundError(true);
         } else {
-          console.log('fake2 !');
           setFake2Selected(true);
           setSelected(null);
           setFoundError(true);
@@ -275,7 +267,7 @@ const PlayMimique = () => {
                       <FormControlLabel
                         key="1"
                         value={MimicResponseValue.SIGNIFICATION}
-                        control={found || foundError ? <Radio icon={<FiberManualRecordIcon style={{ color: green[400] }} />} /> : <Radio />}
+                        control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
                         label={mimicContent.signification}
                         disabled={found || foundError ? true : false}
                       />
@@ -285,7 +277,7 @@ const PlayMimique = () => {
                       <FormControlLabel
                         key="2"
                         value={MimicResponseValue.FAKE_SIGNIFICATION_1}
-                        control={fake1Selected ? <Radio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
+                        control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
                         label={mimicContent.fakeSignification1}
                         disabled={fake1Selected || found || foundError ? true : false}
                       />
@@ -295,7 +287,7 @@ const PlayMimique = () => {
                       <FormControlLabel
                         key="3"
                         value={MimicResponseValue.FAKE_SIGNIFICATION_2}
-                        control={fake2Selected ? <Radio icon={<FiberManualRecordIcon style={{ color: red[400] }} />} /> : <Radio />}
+                        control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
                         label={mimicContent.fakeSignification2}
                         disabled={fake2Selected || found || foundError ? true : false}
                       />
@@ -394,8 +386,6 @@ const PlayMimique = () => {
             color="primary"
             onClick={() => setIsReloading(true)}
           >
-            {console.log(found)}
-            {console.log(foundError)}
             Rejouer
           </Button>
         )}
