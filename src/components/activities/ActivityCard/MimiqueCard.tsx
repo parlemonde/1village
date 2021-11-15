@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid } from '@mui/material';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
@@ -19,12 +19,12 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimicActivity>> = ({
   showEditButtons,
   onDelete,
 }: ActivityCardProps<GameMimicActivity>) => {
-  const [pictureUrl, setPictureUrl] = React.useState<string>(null);
+  const [pictureUrl, setPictureUrl] = React.useState<string>();
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
   React.useEffect(() => {
     const videoUrl = activity?.data?.game1?.video;
-    const videoId = videoUrl.split(/\//).pop();
+    const videoId = videoUrl?.split(/\//).pop();
     if (!videoId) return;
     axiosLoggedRequest({
       method: 'GET',
@@ -32,7 +32,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimicActivity>> = ({
     }).then((response) => {
       setPictureUrl(response.data);
     });
-  }, [activity.data, activity.processedContent]);
+  }, [activity.data, activity.content]);
 
   return (
     <div
