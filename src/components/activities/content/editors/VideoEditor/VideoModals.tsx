@@ -13,7 +13,7 @@ import { Button, Divider, TextField } from '@mui/material';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { useCopy } from 'src/hooks/useCopy';
-import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
+import { defaultTextButtonStyle } from 'src/styles/variables.const';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
