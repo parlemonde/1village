@@ -14,21 +14,6 @@ import type { ActivityCardProps } from './activity-card.types';
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
   const firstVideo = React.useMemo(() => activity.content.find((c) => c.type === 'video'), [activity.content]);
 
-  // const [pictureUrl, setPictureUrl] = React.useState<string>();
-  // const { axiosLoggedRequest } = React.useContext(UserContext);
-
-  // React.useEffect(() => {
-  //   const videoUrl = activity?.data?.game1?.video;
-  //   const videoId = firstVideo?.split(/\//).pop();
-  //   if (!videoId) return;
-  //   axiosLoggedRequest({
-  //     method: 'GET',
-  //     url: `/videos/${videoId}/picture`,
-  //   }).then((response) => {
-  //     setPictureUrl(response.data);
-  //   });
-  // }, [activity.data, activity.content]);
-
   return (
     <div
       style={{

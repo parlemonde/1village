@@ -4,7 +4,6 @@ import Paper from '@mui/material/Paper';
 
 import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isMascotte, isQuestion, isSymbol, isGame } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
-import { isMimic, isMoney } from 'src/activity-types/game.const';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -13,7 +12,6 @@ import Timer from 'src/svg/enigme/timer.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
-import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
 import { titles, icons } from '../utils';
@@ -203,15 +201,3 @@ export const ActivityCard = ({
     )
   );
 };
-
-// (activity.subType === GameType.MIMIC ? (
-//   <MimicCard
-//     activity={activity}
-//     user={user}
-//     isSelf={isSelf}
-//     noButtons={noButtons}
-//     showEditButtons={showEditButtons}
-//     isDraft={isDraft}
-//     onDelete={onDelete}
-//   />
-// ) : null)
