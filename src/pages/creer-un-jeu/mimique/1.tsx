@@ -58,7 +58,7 @@ const MimiqueStep1 = () => {
   if (!user || !activity || !activity.data || !data.game1) {
     return (
       <Base>
-        <div>Hello</div>
+        <div></div>
       </Base>
     );
   }

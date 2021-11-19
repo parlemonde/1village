@@ -65,6 +65,6 @@ export type MoneyData = {
 
 export type GameMimicActivity = Activity<MimicsData>;
 
-export type GameMoneyActivity = Activity<MoneyData>;
+export type GameMoneyActivity = Activity<MoneysData>;
 
 export type GameActivity = GameMimicActivity | GameMoneyActivity;

@@ -4,35 +4,30 @@ import React from 'react';
 import { Button, Grid } from '@mui/material';
 
 import { RedButton } from 'src/components/buttons/RedButton';
-import { UserContext } from 'src/contexts/userContext';
+//import { UserContext } from 'src/contexts/userContext';
 import VideoPlaceholder from 'src/svg/jeu/video-placeholder.svg';
-import type { GameMimicActivity } from 'types/game.type';
+import type { GameActivity } from 'types/game.type';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 
-export const MimiqueCard: React.FC<ActivityCardProps<GameMimicActivity>> = ({
-  activity,
-  isSelf,
-  noButtons,
-  isDraft,
-  showEditButtons,
-  onDelete,
-}: ActivityCardProps<GameMimicActivity>) => {
-  const [pictureUrl, setPictureUrl] = React.useState<string>();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
+  const firstVideo = React.useMemo(() => activity.content.find((c) => c.type === 'video'), [activity.content]);
 
-  React.useEffect(() => {
-    const videoUrl = activity?.data?.game1?.video;
-    const videoId = videoUrl?.split(/\//).pop();
-    if (!videoId) return;
-    axiosLoggedRequest({
-      method: 'GET',
-      url: `/videos/${videoId}/picture`,
-    }).then((response) => {
-      setPictureUrl(response.data);
-    });
-  }, [activity.data, activity.content]);
+  // const [pictureUrl, setPictureUrl] = React.useState<string>();
+  // const { axiosLoggedRequest } = React.useContext(UserContext);
+
+  // React.useEffect(() => {
+  //   const videoUrl = activity?.data?.game1?.video;
+  //   const videoId = firstVideo?.split(/\//).pop();
+  //   if (!videoId) return;
+  //   axiosLoggedRequest({
+  //     method: 'GET',
+  //     url: `/videos/${videoId}/picture`,
+  //   }).then((response) => {
+  //     setPictureUrl(response.data);
+  //   });
+  // }, [activity.data, activity.content]);
 
   return (
     <div
@@ -44,13 +39,13 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimicActivity>> = ({
     >
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <Grid container spacing={3} style={{ minHeight: '10rem' }}>
-          <Grid item xs={12} md={5}>
-            {pictureUrl ? (
+          <Grid item xs={12} md={5} style={{ marginTop: '2rem' }}>
+            {firstVideo ? (
               <div
                 style={{
                   height: '100%',
                   width: '100%',
-                  backgroundImage: `url(${pictureUrl})`,
+                  backgroundImage: `url(${firstVideo})`,
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
@@ -68,7 +63,7 @@ export const MimiqueCard: React.FC<ActivityCardProps<GameMimicActivity>> = ({
               />
             )}
           </Grid>
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={6} style={{ marginTop: '2rem' }}>
             <span>Nous avons avons ajouté 3 nouvelles mimiques au jeu !</span>
           </Grid>
         </Grid>
