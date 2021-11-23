@@ -1,6 +1,8 @@
 # STAGE 1 - Typescript to Javascript
 FROM node:16.7-slim as build-dependencies
 
+ARG BUILD_VERSION
+
 # Create app directory
 WORKDIR /app
 
@@ -22,16 +24,21 @@ COPY .env .
 COPY .eslintignore .
 COPY .eslintrc.js .
 COPY .prettierrc.js .
+COPY .sentryclirc .
 COPY .svgrrc.js .
 COPY nodemon.json .
 COPY next-env.d.ts .
 COPY next.config.js .
+COPY sentry.client.config.js .
+COPY sentry.properties .
+COPY sentry.server.config.js .
 COPY tsconfig.json .
 RUN mkdir dist
 
 # Build sources
-ENV NODE_ENV production
 ENV DOCKER 1
+ENV USE_SENTRY 1
+ENV NODE_ENV production
 RUN yarn build
 
 # STAGE 2 - Docker server
@@ -51,10 +58,13 @@ RUN yarn
 
 # Copy app files
 COPY next.config.js .
+COPY sentry.client.config.js .
+COPY sentry.server.config.js .
 COPY --from=build-dependencies app/dist dist
 COPY --from=build-dependencies app/public public
 
 ENV DOCKER 1
+ENV USE_SENTRY 1
 ENV NODE_ENV production
 
 EXPOSE 5000
