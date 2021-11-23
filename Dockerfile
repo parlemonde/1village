@@ -3,6 +3,8 @@ FROM node:16.7-slim as build-dependencies
 
 ARG BUILD_VERSION
 
+RUN apt-get update && apt-get install -y ca-certificates
+
 # Create app directory
 WORKDIR /app
 
