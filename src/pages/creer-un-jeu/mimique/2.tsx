@@ -7,6 +7,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import MimicSelector from 'src/components/selectors/MimicSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { ActivityStatus } from 'types/activity.type';
 import type { MimicData, MimicsData } from 'types/game.type';
 
 const MimiqueStep2 = () => {
