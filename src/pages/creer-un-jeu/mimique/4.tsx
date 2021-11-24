@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
@@ -19,6 +20,13 @@ const MimiqueStep4 = () => {
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as MimicsData) || null;
+
+  const isValid = React.useMemo(() => {
+    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
+      return false;
+    }
+    return true;
+  }, [activity]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -48,34 +56,45 @@ const MimiqueStep4 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={3} />
+        <Steps
+          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
+          urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
+          activeStep={3}
+          errorSteps={isValid ? [] : [0, 1, 2]}
+        />
+
         <div className="width-900">
           <h1>Pré-visualisez votre mimiques et publiez les !</h1>
           <p style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>
             Vous pouvez modifier chaque mimique si vous le souhaitez. Quand vous êtes prêts :
           </p>
+          {!isValid && (
+            <p>
+              <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+            </p>
+          )}
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Button variant="outlined" color="primary" onClick={onPublish}>
+            <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
               Publier
             </Button>
           </div>
           {/* Mimique 1 */}
-          <div className="preview-block">
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
                   height="100%"
                   light
-                  url={data.game1.video as string | string[] | SourceProps[] | MediaStream | undefined}
+                  url={isValid ? (data.game1.video as string | string[] | SourceProps[] | MediaStream | undefined) : ' '}
                   controls
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={data.game1.signification} />
-                  <FormControlLabel control={<Radio />} label={data.game1.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={data.game1.fakeSignification2} />
+                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={isValid ? data.game1.signification : ''} />
+                  <FormControlLabel control={<Radio />} label={isValid ? data.game1.fakeSignification1 : ''} />
+                  <FormControlLabel control={<Radio />} label={isValid ? data.game1.fakeSignification2 : ''} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -83,29 +102,30 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
                   }}
+                  status={isValid ? 'success' : 'warning'}
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game1.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{isValid ? data.game1.origine : ''} </p>
           </div>
           {/* Mimique 2 */}
-          <div className="preview-block">
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
                   height="100%"
                   light
-                  url={data.game2.video as string | string[] | SourceProps[] | MediaStream | undefined}
+                  url={isValid ? (data.game2.video as string | string[] | SourceProps[] | MediaStream | undefined) : ' '}
                   controls
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={data.game2.signification} />
-                  <FormControlLabel control={<Radio />} label={data.game2.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={data.game2.fakeSignification2} />
+                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={isValid ? data.game2.signification : ''} />
+                  <FormControlLabel control={<Radio />} label={isValid ? data.game2.fakeSignification1 : ''} />
+                  <FormControlLabel control={<Radio />} label={isValid ? data.game2.fakeSignification2 : ''} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -113,29 +133,30 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/2');
                   }}
+                  status={isValid ? 'success' : 'warning'}
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game2.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{isValid ? data.game2.origine : ''} </p>
           </div>
           {/* Mimique 3 */}
-          <div className="preview-block">
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
                   height="100%"
                   light
-                  url={data.game3.video as string | string[] | SourceProps[] | MediaStream | undefined}
+                  url={isValid ? (data.game3.video as string | string[] | SourceProps[] | MediaStream | undefined) : ' '}
                   controls
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={data.game3.signification} />
-                  <FormControlLabel control={<Radio />} label={data.game3.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={data.game3.fakeSignification2} />
+                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={isValid ? data.game3.signification : ''} />
+                  <FormControlLabel control={<Radio />} label={isValid ? data.game3.fakeSignification1 : ''} />
+                  <FormControlLabel control={<Radio />} label={isValid ? data.game3.fakeSignification2 : ''} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -143,11 +164,12 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/3');
                   }}
+                  status={isValid ? 'success' : 'warning'}
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game3.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{isValid ? data.game3.origine : ''} </p>
           </div>
         </div>
       </div>

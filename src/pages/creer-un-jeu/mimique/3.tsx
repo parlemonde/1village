@@ -13,6 +13,15 @@ const MimiqueStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity } = React.useContext(ActivityContext);
 
+  const data = (activity?.data as MimicsData) || null;
+
+  const isValid = React.useMemo(() => {
+    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
+      return false;
+    }
+    return true;
+  }, [activity]);
+
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/creer-un-jeu');
@@ -20,8 +29,6 @@ const MimiqueStep3 = () => {
       router.push('/creer-un-jeu');
     }
   }, [activity, router]);
-
-  const data = (activity?.data as MimicsData) || null;
 
   const dataChange = (key: keyof MimicData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = { ...data };
@@ -54,7 +61,13 @@ const MimiqueStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={2} />
+        <Steps
+          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
+          urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
+          activeStep={2}
+          errorSteps={isValid ? [] : [0, 1]}
+        />
+
         <MimicSelector
           mimicNumber="3ème"
           MimicData={data.game3}

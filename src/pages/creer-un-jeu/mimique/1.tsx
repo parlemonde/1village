@@ -66,7 +66,12 @@ const MimiqueStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
+        <Steps
+          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
+          urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
+          activeStep={0}
+        />
+
         <MimicSelector
           mimicNumber="1ère"
           MimicData={data.game1}
