@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { DEFAULT_MIMIC_DATA, isMimic } from 'src/activity-types/game.const';
+import { DEFAULT_MIMIC_DATA, isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import MimicSelector from 'src/components/selectors/MimicSelector';

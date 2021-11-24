@@ -32,5 +32,5 @@ export const isMimic = (activity: GameActivity): activity is GameMimicActivity =
   return activity.subType === GameType.MIMIC;
 };
 export const isMoney = (activity: GameActivity): activity is GameMoneyActivity => {
-  return activity.subType === null || activity.subType === GameType.MONEY;
+  return activity.subType === GameType.MONEY;
 };

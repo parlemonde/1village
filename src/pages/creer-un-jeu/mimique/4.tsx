@@ -6,7 +6,7 @@ import React from 'react';
 import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@mui/material';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic } from 'src/activity-types/game.const';
+import { isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { CustomRadio } from 'src/components/buttons/CustomRadio';
