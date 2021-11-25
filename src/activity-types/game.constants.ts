@@ -1,4 +1,4 @@
-import type { MimicsData, GameMimicActivity, GameMoneyActivity, GameActivity } from '../../types/game.type';
+import type { MimicsData, GameMimicActivity, GameMoneyActivity, GameActivity, MimicData } from '../../types/game.type';
 import { GameType } from '../../types/game.type';
 
 export const DEFAULT_MIMIC_DATA: MimicsData = {
@@ -26,6 +26,21 @@ export const DEFAULT_MIMIC_DATA: MimicsData = {
     fakeSignification2: null,
     video: null,
   },
+};
+
+export const isMimicValid = (data: MimicData): boolean => {
+  return (
+    data.origine != null &&
+    data.origine.length > 0 &&
+    data.signification != null &&
+    data.signification.length > 0 &&
+    data.fakeSignification1 != null &&
+    data.fakeSignification1.length > 0 &&
+    data.fakeSignification2 != null &&
+    data.fakeSignification2.length > 0 &&
+    data.video != null &&
+    data.video.length > 0
+  );
 };
 
 export const isMimic = (activity: GameActivity): activity is GameMimicActivity => {

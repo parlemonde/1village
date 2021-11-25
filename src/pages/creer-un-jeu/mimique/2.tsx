@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic } from 'src/activity-types/game.constants';
+import { isMimic, isMimicValid } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import MimicSelector from 'src/components/selectors/MimicSelector';
@@ -15,12 +15,12 @@ const MimiqueStep2 = () => {
 
   const data = (activity?.data as MimicsData) || null;
 
-  const isValid = React.useMemo(() => {
-    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
-      return false;
+  const isStep1Valid = React.useMemo(() => {
+    if (data !== null) {
+      return isMimicValid(data.game1);
     }
-    return true;
-  }, [activity]);
+    return false;
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -65,7 +65,7 @@ const MimiqueStep2 = () => {
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
           urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
           activeStep={1}
-          errorSteps={isValid ? [] : [0]}
+          errorSteps={isStep1Valid ? [] : [0]}
         />
 
         <MimicSelector

@@ -7,7 +7,7 @@ import React from 'react';
 import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@mui/material';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic } from 'src/activity-types/game.constants';
+import { isMimic, isMimicValid } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { CustomRadio } from 'src/components/buttons/CustomRadio';
@@ -21,13 +21,15 @@ const MimiqueStep4 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as MimicsData) || null;
 
-  const isValid = React.useMemo(() => {
-    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
-      return false;
-    }
-    return true;
-  }, [activity]);
+  const errorSteps = React.useMemo(() => {
+    const errors: number[] = [];
+    if (!isMimicValid(data.game1)) errors.push(0); // step of mimic 1
+    if (!isMimicValid(data.game2)) errors.push(1); // step of mimic 2
+    if (!isMimicValid(data.game3)) errors.push(2); // step of mimic 3
+    return errors;
+  }, [data]);
 
+  const isValid = errorSteps.length === 0;
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/creer-un-jeu');
@@ -60,7 +62,7 @@ const MimiqueStep4 = () => {
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
           urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
           activeStep={3}
-          errorSteps={isValid ? [] : [0, 1, 2]}
+          errorSteps={errorSteps}
         />
 
         <div className="width-900">
@@ -79,22 +81,26 @@ const MimiqueStep4 = () => {
             </Button>
           </div>
           {/* Mimique 1 */}
-          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(0) })}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
                   height="100%"
                   light
-                  url={isValid ? (data.game1.video as string | string[] | SourceProps[] | MediaStream | undefined) : ' '}
+                  url={errorSteps.includes(0) ? ' ' : (data.game1.video as string | string[] | SourceProps[] | MediaStream | undefined)}
                   controls
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={isValid ? data.game1.signification : ''} />
-                  <FormControlLabel control={<Radio />} label={isValid ? data.game1.fakeSignification1 : ''} />
-                  <FormControlLabel control={<Radio />} label={isValid ? data.game1.fakeSignification2 : ''} />
+                  <FormControlLabel
+                    value={1}
+                    control={<CustomRadio isChecked isSuccess />}
+                    label={errorSteps.includes(0) ? '' : data.game1.signification}
+                  />
+                  <FormControlLabel control={<Radio />} label={errorSteps.includes(0) ? '' : data.game1.fakeSignification1} />
+                  <FormControlLabel control={<Radio />} label={errorSteps.includes(0) ? '' : data.game1.fakeSignification2} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -102,30 +108,34 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
                   }}
-                  status={isValid ? 'success' : 'warning'}
+                  status={errorSteps.includes(0) ? 'warning' : 'success'}
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{isValid ? data.game1.origine : ''} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{errorSteps.includes(0) ? '' : data.game1.origine} </p>
           </div>
           {/* Mimique 2 */}
-          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(1) })}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
                   height="100%"
                   light
-                  url={isValid ? (data.game2.video as string | string[] | SourceProps[] | MediaStream | undefined) : ' '}
+                  url={errorSteps.includes(1) ? ' ' : (data.game2.video as string | string[] | SourceProps[] | MediaStream | undefined)}
                   controls
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={isValid ? data.game2.signification : ''} />
-                  <FormControlLabel control={<Radio />} label={isValid ? data.game2.fakeSignification1 : ''} />
-                  <FormControlLabel control={<Radio />} label={isValid ? data.game2.fakeSignification2 : ''} />
+                  <FormControlLabel
+                    value={1}
+                    control={<CustomRadio isChecked isSuccess />}
+                    label={errorSteps.includes(1) ? '' : data.game2.signification}
+                  />
+                  <FormControlLabel control={<Radio />} label={errorSteps.includes(1) ? '' : data.game2.fakeSignification1} />
+                  <FormControlLabel control={<Radio />} label={errorSteps.includes(1) ? '' : data.game2.fakeSignification2} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -133,30 +143,34 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/2');
                   }}
-                  status={isValid ? 'success' : 'warning'}
+                  status={errorSteps.includes(1) ? 'warning' : 'success'}
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{isValid ? data.game2.origine : ''} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{errorSteps.includes(1) ? '' : data.game2.origine} </p>
           </div>
           {/* Mimique 3 */}
-          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(2) })}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
                   height="100%"
                   light
-                  url={isValid ? (data.game3.video as string | string[] | SourceProps[] | MediaStream | undefined) : ' '}
+                  url={errorSteps.includes(2) ? ' ' : (data.game3.video as string | string[] | SourceProps[] | MediaStream | undefined)}
                   controls
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel value={1} control={<CustomRadio isChecked isSuccess />} label={isValid ? data.game3.signification : ''} />
-                  <FormControlLabel control={<Radio />} label={isValid ? data.game3.fakeSignification1 : ''} />
-                  <FormControlLabel control={<Radio />} label={isValid ? data.game3.fakeSignification2 : ''} />
+                  <FormControlLabel
+                    value={1}
+                    control={<CustomRadio isChecked isSuccess />}
+                    label={errorSteps.includes(2) ? '' : data.game3.signification}
+                  />
+                  <FormControlLabel control={<Radio />} label={errorSteps.includes(2) ? '' : data.game3.fakeSignification1} />
+                  <FormControlLabel control={<Radio />} label={errorSteps.includes(2) ? '' : data.game3.fakeSignification2} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -164,12 +178,12 @@ const MimiqueStep4 = () => {
                   onClick={() => {
                     router.push('/creer-un-jeu/mimique/3');
                   }}
-                  status={isValid ? 'success' : 'warning'}
+                  status={errorSteps.includes(2) ? 'warning' : 'success'}
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{isValid ? data.game3.origine : ''} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{errorSteps.includes(2) ? '' : data.game3.origine} </p>
           </div>
         </div>
       </div>
