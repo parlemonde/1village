@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
@@ -24,20 +23,6 @@ const activities = [
 ];
 
 const Jeu = () => {
-  const router = useRouter();
-
-  const [activitiesWithLinks] = React.useMemo(() => {
-    if ('responseActivityId' in router.query && 'responseActivityType' in router.query) {
-      return [
-        activities.map((a) => ({
-          ...a,
-          href: `${a.href}?responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
-        })),
-      ];
-    }
-    return [activities];
-  }, [router.query]);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -46,7 +31,7 @@ const Jeu = () => {
           <p className="text" style={{ fontSize: '1rem' }}>
             Jouez avec vos Pélicopains, pour découvrir et faire découvrir certains aspects de votre vie !
           </p>
-          <ActivityChoice activities={activitiesWithLinks} />
+          <ActivityChoice activities={activities} />
         </div>
       </div>
     </Base>
