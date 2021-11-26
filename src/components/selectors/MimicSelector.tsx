@@ -22,7 +22,7 @@ interface MimicSelectorProps {
 }
 
 const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, onNext, onPrev }: MimicSelectorProps) => {
-  const [isError, setIsError] = React.useState<boolean>(false);
+  const [showError, setShowError] = React.useState<boolean>(false);
   const { user } = React.useContext(UserContext);
   const { save } = React.useContext(ActivityContext);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
@@ -31,37 +31,22 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
     setIsModalOpen(!isModalOpen);
   };
 
-  const isValid = () => {
-    return (
-      MimicData.origine != null &&
-      MimicData.origine.length > 0 &&
-      MimicData.signification != null &&
-      MimicData.signification.length > 0 &&
-      MimicData.fakeSignification1 != null &&
-      MimicData.fakeSignification1.length > 0 &&
-      MimicData.fakeSignification2 != null &&
-      MimicData.fakeSignification2.length > 0 &&
-      MimicData.video != null &&
-      MimicData.video.length > 0
-    );
-  };
-
   const isFieldValid = (value: string | null) => {
     return value != null && value.length > 0;
   };
 
   React.useEffect(() => {
-    let numEmptyField = Object.keys(MimicData).length - 1; // minus gameId in MimicData
-    for (const [key, value] of Object.entries(MimicData)) {
-      if (key === 'gameId') continue;
-      if (isFieldValid(value as string)) numEmptyField -= 1;
+    // if user navigated to the next step already, let's show the errors if there are any.
+    if (window.sessionStorage.getItem(`mimic-step-${mimicNumber}-next`) === 'true') {
+      setShowError(true);
+      window.sessionStorage.setItem(`mimic-step-${mimicNumber}-next`, 'false');
     }
-    if (numEmptyField < Object.keys(MimicData).length - 1) setIsError(true);
-  }, []);
+  }, [mimicNumber]);
 
   const nextPage = () => {
     save().catch(console.error);
-    if (!isValid()) setIsError(true);
+    // save in local storage that the user is going to the next step.
+    window.sessionStorage.setItem(`mimic-step-${mimicNumber}-next`, 'true');
     onNext?.();
   };
 
@@ -98,12 +83,12 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
             )}
             {!isFieldValid(MimicData.video as string | null) && (
               <div>
-                {!isError && (
+                {!showError && (
                   <Button name="video" style={{ width: '100%' }} onClick={toggleModal} variant="outlined" color="primary">
                     {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
                   </Button>
                 )}
-                {isError && (
+                {showError && (
                   <div style={{ marginTop: '1.5rem' }}>
                     <Button name="video" style={{ width: '100%', borderColor: '#d93939' }} onClick={toggleModal} variant="outlined" color="primary">
                       {<UploadIcon style={{ color: '#d93939', width: '3rem', height: '3rem', margin: '30px' }} />}
@@ -131,14 +116,14 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               label="Signification réelle"
               onChange={onDataChange('signification')}
               style={{ width: '100%', margin: '10px' }}
-              error={isError && !isFieldValid(MimicData.signification)}
-              helperText={isError && !isFieldValid(MimicData.signification) ? 'Ce champ est obligatoire' : ''}
+              error={showError && !isFieldValid(MimicData.signification)}
+              helperText={showError && !isFieldValid(MimicData.signification) ? 'Ce champ est obligatoire' : ''}
               inputProps={{
                 maxLength: 800,
               }}
               multiline
             />
-            {!(isError && !isFieldValid(MimicData.signification)) && (
+            {!(showError && !isFieldValid(MimicData.signification)) && (
               <div style={{ width: '100%', textAlign: 'right' }}>
                 <span className="text text--small">{MimicData.signification?.length}/800</span>
               </div>
@@ -150,14 +135,14 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               value={MimicData.origine || ''}
               onChange={onDataChange('origine')}
               style={{ width: '100%', margin: '10px' }}
-              error={isError && !isFieldValid(MimicData.origine)}
-              helperText={isError && !isFieldValid(MimicData.origine) ? 'Ce champ est obligatoire' : ''}
+              error={showError && !isFieldValid(MimicData.origine)}
+              helperText={showError && !isFieldValid(MimicData.origine) ? 'Ce champ est obligatoire' : ''}
               inputProps={{
                 maxLength: 800,
               }}
               multiline
             />
-            {!(isError && !isFieldValid(MimicData.origine)) && (
+            {!(showError && !isFieldValid(MimicData.origine)) && (
               <div style={{ width: '100%', textAlign: 'right' }}>
                 <span className="text text--small">{MimicData.origine?.length}/800</span>
               </div>
@@ -175,14 +160,14 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
           value={MimicData.fakeSignification1 || ''}
           onChange={onDataChange('fakeSignification1')}
           style={{ width: '100%', margin: '10px' }}
-          error={isError && !isFieldValid(MimicData.fakeSignification1)}
-          helperText={isError && !isFieldValid(MimicData.fakeSignification1) ? 'Ce champ est obligatoire' : ''}
+          error={showError && !isFieldValid(MimicData.fakeSignification1)}
+          helperText={showError && !isFieldValid(MimicData.fakeSignification1) ? 'Ce champ est obligatoire' : ''}
           inputProps={{
             maxLength: 800,
           }}
           multiline
         />
-        {!(isError && !isFieldValid(MimicData.fakeSignification1)) && (
+        {!(showError && !isFieldValid(MimicData.fakeSignification1)) && (
           <div style={{ width: '100%', textAlign: 'right' }}>
             <span className="text text--small">{MimicData.fakeSignification1?.length}/800</span>
           </div>
@@ -193,14 +178,14 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
           value={MimicData.fakeSignification2 || ''}
           onChange={onDataChange('fakeSignification2')}
           style={{ width: '100%', margin: '10px' }}
-          error={isError && !isFieldValid(MimicData.fakeSignification2)}
-          helperText={isError && !isFieldValid(MimicData.fakeSignification2) ? 'Ce champ est obligatoire' : ''}
+          error={showError && !isFieldValid(MimicData.fakeSignification2)}
+          helperText={showError && !isFieldValid(MimicData.fakeSignification2) ? 'Ce champ est obligatoire' : ''}
           inputProps={{
             maxLength: 800,
           }}
           multiline
         />
-        {!(isError && !isFieldValid(MimicData.fakeSignification2)) && (
+        {!(showError && !isFieldValid(MimicData.fakeSignification2)) && (
           <div style={{ width: '100%', textAlign: 'right' }}>
             <span className="text text--small">{MimicData.fakeSignification2?.length}/800</span>
           </div>
