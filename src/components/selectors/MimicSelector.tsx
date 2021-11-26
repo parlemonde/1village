@@ -21,7 +21,7 @@ interface MimicSelectorProps {
   onPrev: (() => void) | null;
 }
 
-const MimicSelector: React.FC<MimicSelectorProps> = ({ MimicData, mimicNumber, onDataChange, onVideoChange, onNext, onPrev }: MimicSelectorProps) => {
+const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, onNext, onPrev }: MimicSelectorProps) => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const { user } = React.useContext(UserContext);
   const { save } = React.useContext(ActivityContext);
@@ -50,13 +50,19 @@ const MimicSelector: React.FC<MimicSelectorProps> = ({ MimicData, mimicNumber, o
     return value != null && value.length > 0;
   };
 
+  React.useEffect(() => {
+    let numEmptyField = Object.keys(MimicData).length - 1; // minus gameId in MimicData
+    for (const [key, value] of Object.entries(MimicData)) {
+      if (key === 'gameId') continue;
+      if (isFieldValid(value as string)) numEmptyField -= 1;
+    }
+    if (numEmptyField < Object.keys(MimicData).length - 1) setIsError(true);
+  }, []);
+
   const nextPage = () => {
     save().catch(console.error);
-    if (isValid()) {
-      onNext?.();
-    } else {
-      setIsError(true);
-    }
+    if (!isValid()) setIsError(true);
+    onNext?.();
   };
 
   const prevPage = () => {
