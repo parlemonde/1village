@@ -2,14 +2,15 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isGame } from 'src/activity-types/anyActivity';
-import { DEFAULT_MIMIC_DATA, isMimic } from 'src/activity-types/game.const';
+import { DEFAULT_MIMIC_DATA, isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
+import { BackButton } from 'src/components/buttons/BackButton';
 import MimicSelector from 'src/components/selectors/MimicSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { MimicData, MimicsData } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
@@ -36,6 +37,8 @@ const MimiqueStep1 = () => {
       }
     }
   }, [activity, labelPresentation, createNewActivity, router]);
+
+  const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   const data = (activity?.data as MimicsData) || null;
 
@@ -66,7 +69,13 @@ const MimiqueStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']} activeStep={0} />
+        {!isEdit && <BackButton href="/creer-un-jeu/mimique" />}
+        <Steps
+          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
+          urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
+          activeStep={0}
+        />
+
         <MimicSelector
           mimicNumber="1ère"
           MimicData={data.game1}
