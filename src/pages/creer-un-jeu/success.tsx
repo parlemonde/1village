@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -35,15 +34,14 @@ const PresentationSuccess = () => {
           type: GameType.MIMIC,
         })}`,
       }).then((response) => {
-        //if user is the first one to create the mimics, then "return to homepage" is rendered
-        if (!response.error && response.data === null) {
+        if (!response.error && response.data !== null) {
           setFirstCreation(response.data as boolean);
         } else {
           setFirstCreation(true);
         }
       });
     }
-  }, [firstCreation, axiosLoggedRequest, village]);
+  }, [axiosLoggedRequest, village]);
 
   return (
     <Base>
@@ -51,7 +49,7 @@ const PresentationSuccess = () => {
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text">{'Vos mimiques ont bien été publiées !'}</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
-          {firstCreation !== true ? (
+          {firstCreation === true ? (
             <p className="text">{''}</p>
           ) : (
             <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}>
@@ -62,7 +60,7 @@ const PresentationSuccess = () => {
           )}
         </div>
         <div className="text-center">
-          {firstCreation !== true ? (
+          {firstCreation === true ? (
             <Link href="/" passHref>
               <Button component="a" href="/" variant="outlined" color="primary">
                 Revenir à l&apos;accueil
