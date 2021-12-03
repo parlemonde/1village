@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
@@ -70,6 +71,7 @@ const PlayMimique = () => {
   const [stats, setStats] = React.useState<StatsProps>();
   const { village } = React.useContext(VillageContext);
   const [isReloading, setIsReloading] = React.useState<boolean>(false);
+  const [ableToValidate, setAbleToValidate] = React.useState<boolean>(false);
 
   const [userIsPelico, setUserIsPelico] = React.useState<boolean>(true);
 
@@ -98,6 +100,7 @@ const PlayMimique = () => {
       setSelected(null);
       setTryCount(0);
       setErrorModalOpen(false);
+      setAbleToValidate(false);
     }
     if (isReloading || village) {
       axiosLoggedRequest({
@@ -117,7 +120,7 @@ const PlayMimique = () => {
         }
       });
     }
-  }, [mimicContent.gameId, isReloading]);
+  }, [mimicContent.gameId, isReloading, village, axiosLoggedRequest]);
 
   React.useEffect(() => {
     if (game) {
@@ -205,6 +208,7 @@ const PlayMimique = () => {
   };
   const onChange = (event: { target: HTMLInputElement }) => {
     setSelected(event.target.value as MimicResponseValue);
+    setAbleToValidate(true);
   };
 
   if (!game || !user) {
@@ -246,7 +250,7 @@ const PlayMimique = () => {
             <p className="text" style={{ marginTop: '0.7rem' }}>
               {'Une mimique proposée par '}
               <UserDisplayName className="text" user={user} noLink={false} />
-              {userIsPelico ? (
+              {!userIsPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
                 <Flag country={user.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
@@ -373,22 +377,38 @@ const PlayMimique = () => {
             variant="outlined"
             color="primary"
             onClick={validate}
+            disabled={!ableToValidate}
           >
             Valider
           </Button>
         )}
-        {(found || foundError) && (
-          <Button
-            style={{
-              float: 'right',
-            }}
-            variant="outlined"
-            color="primary"
-            onClick={() => setIsReloading(true)}
-          >
-            Rejouer
-          </Button>
-        )}
+        <div>
+          {(found || foundError) && (
+            <div>
+              <p
+                style={{
+                  float: 'right',
+                  margin: '0.5rem 1rem',
+                  textDecorationLine: 'underline',
+                }}
+              >
+                <Link href="/" passHref>
+                  {"Ou revenir à l'accueil"}
+                </Link>
+              </p>
+              <Button
+                style={{
+                  float: 'right',
+                }}
+                variant="outlined"
+                color="primary"
+                onClick={() => setIsReloading(true)}
+              >
+                Rejouer
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </Base>
   );

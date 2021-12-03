@@ -34,7 +34,7 @@ const Mimique: React.FC = () => {
         }
       });
     }
-  }, [village]);
+  }, [axiosLoggedRequest, village]);
 
   return (
     <Base>
@@ -52,7 +52,7 @@ const Mimique: React.FC = () => {
           illustrant la mimique, une explication de sa signification et de son origine. Pour pimenter le jeu, à chaque étape vous devrez également
           inventer deux significations fausses … à vos Pélicopains de deviner ce qui signifie réellement vos mimiques !
         </p>
-        <Link href="/creer-un-jeu/mimique/1">
+        <Link href="/creer-un-jeu/mimique/1" passHref>
           <Button
             component="a"
             onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -71,11 +71,13 @@ const Mimique: React.FC = () => {
           </Button>
         </Link>
         <h1 style={{ marginTop: '6rem' }}>Découvrez les mimiques de vos Pélicopains !</h1>
+
         <p style={{ marginBottom: '3rem' }}>
           Une fois que vous aurez décrit 3 mimiques, ça sera à vous de deviner ce que veulent dire les mimiques de vos Pélicopains ! Il y a
-          actuellement {count} nouvelles mimiques à découvrir :
+          actuellement {count === 0 ? `${count} nouvelle mimique` : `${count} nouvelles mimiques`} à découvrir :
         </p>
-        <Link href="/creer-un-jeu/mimique/jouer">
+
+        <Link href="/creer-un-jeu/mimique/jouer" passHref>
           <Button
             component="a"
             onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
