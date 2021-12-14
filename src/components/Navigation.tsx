@@ -16,6 +16,7 @@ import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
+import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -64,6 +65,12 @@ const TABS_PER_PHASE: Tab[] = [
     phase: 1,
   },
   // ---- PHASE 2 ----
+  {
+    label: 'Réaliser un reportage',
+    path: '/realiser-un-reportage',
+    icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
   {
     label: 'Lancer un défi',
     path: '/lancer-un-defi',

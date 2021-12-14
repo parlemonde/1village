@@ -9,6 +9,7 @@ import type { IndiceActivity } from './indice.types';
 import type { MascotteActivity } from './mascotte.types';
 import type { PresentationActivity } from './presentation.types';
 import type { QuestionActivity } from './question.types';
+import type { ReportageActivity } from './reportage.types';
 import type { SymbolActivity } from './symbol.types';
 
 export const isPresentation = (activity: Activity): activity is PresentationActivity => {
@@ -37,4 +38,7 @@ export const isMascotte = (activity: Activity): activity is MascotteActivity => 
 };
 export const isGame = (activity: Activity): activity is GameActivity => {
   return activity.type === ActivityType.GAME;
+};
+export const isReportage = (activity: Activity): activity is ReportageActivity => {
+  return activity.type === ActivityType.REPORTAGE;
 };
