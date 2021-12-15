@@ -34,7 +34,7 @@ const reportages = [
     disabledText: '',
   },
   {
-    label: 'Nos langues',
+    label: 'Notre école',
     href: '/realiser-un-reportage/1?category=3',
     icon: LanguesIcon,
     disabled: false,

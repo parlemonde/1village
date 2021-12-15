@@ -25,8 +25,8 @@ export const REPORTAGE_TYPES = [
     step1: 'Nos lieux de vies',
   },
   {
-    title: 'Langues',
-    step1: 'Nos langues',
+    title: 'École',
+    step1: 'Notre école',
   },
   {
     title: 'Faune et flore',
@@ -51,6 +51,3 @@ export const getReportage = (activitySubType: number | null | undefined, activit
     title: 'Reportage',
     step1: 'Reportage',
   };
-
-// eslint-disable-next-line no-console
-console.log('getReportage', getReportage);

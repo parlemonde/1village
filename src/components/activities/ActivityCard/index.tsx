@@ -2,7 +2,18 @@ import React from 'react';
 
 import Paper from '@mui/material/Paper';
 
-import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isMascotte, isQuestion, isSymbol, isGame } from 'src/activity-types/anyActivity';
+import {
+  isDefi,
+  isEnigme,
+  isFreeContent,
+  isIndice,
+  isPresentation,
+  isMascotte,
+  isQuestion,
+  isSymbol,
+  isGame,
+  isReportage,
+} from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -24,6 +35,7 @@ import { MascotteCard } from './MascotteCard';
 import { MimicCard } from './MimicCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
+import { ReportageCard } from './ReportageCard';
 import { SymbolCard } from './SymbolCard';
 import type { ActivityCardProps } from './activity-card.types';
 
@@ -187,6 +199,17 @@ export const ActivityCard = ({
           )}
           {isGame(activity) && (
             <MimicCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isReportage(activity) && (
+            <ReportageCard
               activity={activity}
               user={user}
               isSelf={isSelf}

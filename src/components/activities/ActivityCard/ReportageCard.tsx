@@ -1,11 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { SourceProps } from 'react-player/base';
+import ReactPlayer from 'react-player';
 import React from 'react';
 
 import { Button } from '@mui/material';
 
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageActivity } from 'src/activity-types/reportage.types';
+import { KeepRatio } from 'src/components/KeepRatio';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
@@ -15,7 +18,7 @@ import type { ActivityCardProps } from './activity-card.types';
 
 export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ReportageActivity>) => {
   const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);
-  //const firstVideo = React.useMemo(() => activity.content.find((c) => c.type === 'video'), [activity.content]);
+  const firstVideo = React.useMemo(() => activity.content.find((c) => c.type === 'video'), [activity.content]);
   const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
@@ -43,6 +46,29 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
           </div>
         </div>
       )}
+      {firstVideo && (
+        <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
+          <div
+            style={{
+              height: '100%',
+              width: '100%',
+              backgroundColor: bgPage,
+              position: 'relative',
+            }}
+          >
+            <KeepRatio ratio={9 / 16} maxWidth="600px">
+              <ReactPlayer
+                width="100%"
+                height="100%"
+                light
+                url={firstVideo.value as string | string[] | SourceProps[] | MediaStream | undefined}
+                controls
+                style={{ backgroundColor: 'black' }}
+              />
+            </KeepRatio>
+          </div>
+        </div>
+      )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{reportageType.title}</h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
@@ -57,7 +83,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    {"Voir l'indice culturel"}
+                    {'Voir le reportage'}
                   </Button>
                 </Link>
               </>

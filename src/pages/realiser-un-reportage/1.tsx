@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -12,21 +13,27 @@ import { Activities } from 'src/components/activities/List';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 const ReportageStep1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const [showErrors, setShowErrors] = React.useState(false);
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+  const isPelico = user !== null && user.type > UserType.TEACHER;
   const { activities } = useActivities({
     page: 0,
-    countries: user ? [user.country.isoCode.toUpperCase()] : [],
+    countries:
+      village && isPelico ? village.countries.map((country) => country.isoCode.toUpperCase()) : user ? [user.country.isoCode.toUpperCase()] : [],
     pelico: true,
     type: ActivityType.REPORTAGE,
+    userId: user?.id ?? 0,
   });
 
   const sameActivities = activity ? activities.filter((c) => c.subType === activity.subType) : [];
@@ -90,7 +97,7 @@ const ReportageStep1 = () => {
             </>
           ) : (
             <p className="text">
-              Vous trouvez ici les reportages qui ont déjà été crées par les Pélicopains sur le thème &quot;
+              Vous trouvez ici les reportages qui ont déjà été déjà présentés par les Pélicopains sur le thème &quot;
               {getReportage(activity.subType, data).step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de réaliser votre
               reportage ! Vous pouvez également choisir de réaliser un autre reportage, en revenant à l&apos;étape précédente.
             </p>
