@@ -2,20 +2,28 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { ECO_ACTIONS, isEco } from 'src/activity-types/defi.constants';
+import { isEco } from 'src/activity-types/defi.constants';
 import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
+import { ContentEditor } from 'src/components/activities/content';
+import { getErrorSteps } from 'src/components/activities/defiEcologieChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { ActivityStatus } from 'types/activity.type';
+import type { ActivityContent } from 'types/activity.type';
 
 const DefiEcoStep2 = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+
   const data = (activity?.data as EcoDefiData) || null;
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 1);
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -29,8 +37,12 @@ const DefiEcoStep2 = () => {
     return <div></div>;
   }
 
-  const onNext = (index: number) => () => {
-    updateActivity({ data: { ...data, type: index } });
+  const updateContent = (content: ActivityContent[]): void => {
+    updateActivity({ content: content });
+  };
+
+  const onNext = () => {
+    save().catch(console.error);
     router.push('/lancer-un-defi/ecologique/3');
   };
 
@@ -38,17 +50,18 @@ const DefiEcoStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={(isEdit ? [] : ['Démarrer']).concat(['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation'])}
-          activeStep={isEdit ? 0 : 1}
+          steps={['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation']}
+          urls={['/lancer-un-defi/ecologique/1?edit', '/lancer-un-defi/ecologique/2', '/lancer-un-defi/ecologique/3', '/lancer-un-defi/ecologique/4']}
+          activeStep={1}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Quel geste pour la planète souhaitez-vous presenter ?</h1>
-          <div style={{ marginTop: '1rem' }}>
-            {ECO_ACTIONS.map((t, index) => (
-              <ThemeChoiceButton key={index} label={t} description="" onClick={onNext(index)} />
-            ))}
-          </div>
-          {!isEdit && <StepsButton prev={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} />}
+          <h1>Expliquez aux Pélicopains votre action et pourquoi vous l’avez choisie.</h1>
+          <p className="text" style={{ fontSize: '1.1rem' }}>
+            {"Pour l'illustrer, vous pouvez ajouter des photos ou tout expliquer en vidéo !"}
+          </p>
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <StepsButton prev={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} next={onNext} />
         </div>
       </div>
     </Base>
