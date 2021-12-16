@@ -34,14 +34,15 @@ const DefiStep5 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const errorSteps = React.useMemo(() => {
-    if (activity?.data.explanationContentIndex === activity?.content.length && data !== null) {
+    const fieldStep3 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 3
+    if (data !== null && fieldStep3?.length === 0) {
       const errors = getErrorSteps(data, 3);
       errors.push(2); //corresponding to step 3
       return errors;
     }
     if (data !== null) return getErrorSteps(data, 3);
     return [];
-  }, [activity?.content.length, activity?.data.explanationContentIndex, data]);
+  }, [activity?.content, data]);
   const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
@@ -130,12 +131,12 @@ const DefiStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push('/lancer-un-defi/linguistique/1');
+                router.push(`/lancer-un-defi/linguistique/1?edit=${activity.id}`);
               }}
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {getLanguageObject(data)}
+            {data.languageIndex !== 0 ? getLanguageObject(data) : ''}
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
