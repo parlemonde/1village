@@ -2,11 +2,13 @@ import Link from 'next/link';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 
+import { KeepRatio } from 'src/components/KeepRatio';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { bgPage } from 'src/styles/variables.const';
 import { serializeToQueryUrl } from 'src/utils';
 import type { GameActivity, MimicsData } from 'types/game.type';
 import { GameType } from 'types/game.type';
@@ -53,16 +55,25 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         justifyContent: 'flex-start',
       }}
     >
+      {randomVideoLink && (
+        <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
+          <div
+            style={{
+              height: '100%',
+              width: '100%',
+              backgroundColor: bgPage,
+              position: 'relative',
+            }}
+          >
+            <KeepRatio ratio={9 / 16} maxWidth="600px">
+              <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+            </KeepRatio>
+          </div>
+        </div>
+      )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <Grid container spacing={3} style={{ minHeight: '10rem' }}>
-          <Grid item xs={12} md={3} style={{ marginTop: '2rem' }}>
-            {randomVideoLink && <ReactPlayer width="100%" height="100%" light url={randomVideoLink} />}
-          </Grid>
-          <Grid item xs={6} md={6} style={{ marginTop: '2rem' }}>
-            <p>Il y a actuellement {count} nouvelles mimiques à découvrir !</p>
-            <p>{activity.data.presentation} a relancé le jeu des mimiques</p>
-          </Grid>
-        </Grid>
+        <p>Il y a actuellement {count} nouvelles mimiques à découvrir !</p>
+        <p>{activity.data.presentation} a relancé le jeu des mimiques</p>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
             {!showEditButtons && (
