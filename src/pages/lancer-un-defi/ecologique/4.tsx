@@ -95,9 +95,16 @@ const DefiEcoStep4 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
+              {!isValid && (
+                <p>
+                  <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                </p>
+              )}
+              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                  Publier
+                </Button>
+              </div>
             </div>
           )}
 
