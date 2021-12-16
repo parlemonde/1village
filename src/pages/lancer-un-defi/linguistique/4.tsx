@@ -22,14 +22,15 @@ const DefiStep4 = () => {
   const data = (activity?.data as LanguageDefiData) || null;
 
   const errorSteps = React.useMemo(() => {
-    if (activity?.data.explanationContentIndex === activity?.content.length && data !== null) {
+    const fieldStep3 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 3
+    if (data !== null && fieldStep3?.length === 0) {
       const errors = getErrorSteps(data, 2);
       errors.push(2); //corresponding to step 3
       return errors;
     }
     if (data !== null) return getErrorSteps(data, 2);
     return [];
-  }, [activity?.content.length, activity?.data.explanationContentIndex, data]);
+  }, [activity?.content, data]);
 
   const c = data?.defi || '';
   const opened = React.useRef(false);
