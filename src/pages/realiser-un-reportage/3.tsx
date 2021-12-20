@@ -14,6 +14,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentView } from 'src/components/activities/content/ContentView';
+import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
@@ -25,6 +26,17 @@ const ReportageStep3 = () => {
 
   const isEdit = activity != null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as ReportageData) || null;
+
+  const errorSteps = React.useMemo(() => {
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (data !== null && fieldStep2?.length === 0) {
+      const errors = getErrorSteps(data, 1);
+      errors.push(1); //corresponding to step 2
+      return errors;
+    }
+    if (data !== null) return getErrorSteps(data, 1);
+    return [];
+  }, [activity?.content, data]);
 
   const isValid = React.useMemo(() => {
     if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
@@ -64,7 +76,7 @@ const ReportageStep3 = () => {
           steps={[getReportage(activity.subType, data).step1, 'Le reportage', 'Prévisualiser']}
           urls={['/realiser-un-reportage/1?edit', '/realiser-un-reportage/2', '/realiser-un-reportage/3']}
           activeStep={2}
-          errorSteps={isValid ? [] : [1]}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre reportage{!isEdit && ' et publiez-la.'}</h1>
@@ -98,13 +110,13 @@ const ReportageStep3 = () => {
             </div>
           )}
 
-          <span className={'text text--small text--success'}>Thème</span>
-          <div className="preview-block">
+          <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Thème</span>
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <EditButton
               onClick={() => {
                 router.push('/realiser-un-reportage/1?edit');
               }}
-              status="success"
+              status={isValid ? 'success' : 'warning'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p style={{ margin: '0.5rem 0' }}>{getReportage(activity.subType, data).title}</p>
