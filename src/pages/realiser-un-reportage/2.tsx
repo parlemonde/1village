@@ -8,16 +8,22 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
+import { getErrorSteps } from 'src/components/activities/reportageCheck';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';
-import { ActivityStatus } from 'types/activity.type';
 
 const ReportageStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as ReportageData) || null;
+
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 1);
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -49,7 +55,8 @@ const ReportageStep2 = () => {
         <Steps
           steps={[getReportage(activity.subType, data).step1, 'Le reportage', 'Prévisualiser']}
           urls={['/realiser-un-reportage/1?edit', '/realiser-un-reportage/2', '/realiser-un-reportage/3']}
-          activeStep={isEdit ? 0 : 1}
+          activeStep={1}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Créez maintenant votre reportage multimédia.</h1>
