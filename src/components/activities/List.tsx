@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -8,10 +7,10 @@ import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
+import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import type { Activity } from 'types/activity.type';
 
 import { ActivityCard } from './ActivityCard';
-import { REACTIONS } from './utils';
 
 interface ActivitiesProps {
   activities: Activity[];
@@ -93,12 +92,9 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
                       style={{ display: 'block', lineHeight: '0.8rem', padding: '0.4rem 0 0 0', margin: '0' }}
                     >
                       <span className="text text--small text--primary" style={{ fontSize: '0.8rem' }}>
-                        En réaction à {REACTIONS[activity.responseType ?? 0]}
+                        En réaction à
                       </span>
-                      <br />
-                      <div style={{ width: '4rem', height: '4rem', cursor: 'pointer', position: 'relative', display: 'inline-block' }}>
-                        <Image layout="fill" objectFit="contain" src="/link.png" />
-                      </div>
+                      <ReactionIcon style={{ width: '4rem', height: '4rem', cursor: 'pointer', position: 'relative', display: 'inline-block' }} />
                     </Button>
                   </div>
                 </div>
