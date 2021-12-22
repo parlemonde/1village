@@ -29,21 +29,17 @@ const ReportageStep3 = () => {
 
   const errorSteps = React.useMemo(() => {
     const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
-    if (data !== null && fieldStep2?.length === 0) {
+    if (data !== null && fieldStep2?.length === 0 && activity?.subType === -1) {
       const errors = getErrorSteps(data, 1);
       errors.push(1); //corresponding to step 2
       return errors;
     }
-    if (data !== null) return getErrorSteps(data, 1);
-    return [];
-  }, [activity?.content, data]);
-
-  const isValid = React.useMemo(() => {
-    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
-      return false;
+    if (data !== null && fieldStep2?.length === 0) {
+      return [1]; //corresponding to step 2
     }
-    return true;
-  }, [activity]);
+    return [];
+  }, [activity?.content, activity?.subType, data]);
+  const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -110,13 +106,15 @@ const ReportageStep3 = () => {
             </div>
           )}
 
-          <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Thème</span>
-          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
+          <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(0) })}>
+            Thème
+          </span>
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
                 router.push('/realiser-un-reportage/1?edit');
               }}
-              status={isValid ? 'success' : 'warning'}
+              status={!isValid && errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p style={{ margin: '0.5rem 0' }}>{getReportage(activity.subType, data).title}</p>

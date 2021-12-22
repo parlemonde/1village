@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -14,30 +13,19 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
 import { serializeToQueryUrl } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
-import { UserType } from 'types/user.type';
 
 const ReportageStep1 = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const [reportageActivity, setReportageActivity] = React.useState<Activity[]>([]);
   const [showErrors, setShowErrors] = React.useState(false);
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-  const isPelico = user !== null && user.type > UserType.TEACHER;
-  const { activities } = useActivities({
-    page: 0,
-    countries:
-      village && isPelico ? village.countries.map((country) => country.isoCode.toUpperCase()) : user ? [user.country.isoCode.toUpperCase()] : [],
-    pelico: true,
-    type: ActivityType.REPORTAGE,
-  });
 
   const sameActivities = activity ? reportageActivity.filter((c) => c.subType === activity.subType) : [];
   const data = (activity?.data as ReportageData) || null;
@@ -74,7 +62,6 @@ const ReportageStep1 = () => {
   const onNext = () => {
     if (activity === null || data === null || (activity.subType === -1 && !data.reportage)) {
       setShowErrors(true);
-      return;
     }
     router.push('/realiser-un-reportage/2');
   };
