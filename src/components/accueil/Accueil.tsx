@@ -83,7 +83,7 @@ export const Accueil = () => {
 
   return (
     <Base showSubHeader>
-      {selectedPhase <= village.activePhase && activitiesFiltered && activitiesFiltered.length > 0 ? (
+      {selectedPhase <= village.activePhase && activitiesFiltered && activitiesFiltered.length > 0 && (
         <>
           <KeepRatio ratio={1 / 3}>
             <WorldMap />
@@ -92,7 +92,8 @@ export const Accueil = () => {
           <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} />
           <Activities activities={activitiesFiltered} withLinks />
         </>
-      ) : (
+      )}
+      {!(selectedPhase <= village.activePhase) && (
         <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem', alignItems: 'center' }}>
           <h1 style={{ margin: '1rem' }}>
             Un peu de patience, la phase {selectedPhase} n&apos;a pas encore débuté !
