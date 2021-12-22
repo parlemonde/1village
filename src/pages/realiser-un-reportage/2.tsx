@@ -15,15 +15,14 @@ import type { ActivityContent } from 'types/activity.type';
 const ReportageStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
-
   const data = (activity?.data as ReportageData) || null;
 
   const errorSteps = React.useMemo(() => {
-    if (data !== null) {
+    if (data !== null && activity?.subType === -1) {
       return getErrorSteps(data, 1);
     }
     return [];
-  }, [data]);
+  }, [activity?.subType, data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
