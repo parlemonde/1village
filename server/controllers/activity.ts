@@ -1,6 +1,5 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import type { DeepPartial } from 'typeorm';
 import { getRepository } from 'typeorm';
 
 import type { GameData, GamesData } from '../../types/game.type';
@@ -436,7 +435,7 @@ const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
       await getRepository(Activity).save(activityData);
     }
   }
-  
+
 
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);

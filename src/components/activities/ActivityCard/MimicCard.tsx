@@ -4,7 +4,6 @@ import React from 'react';
 import { Button, Grid } from '@mui/material';
 
 import { RedButton } from 'src/components/buttons/RedButton';
-//import { UserContext } from 'src/contexts/userContext';
 import VideoPlaceholder from 'src/svg/jeu/video-placeholder.svg';
 import type { GameActivity } from 'types/game.type';
 
@@ -57,7 +56,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href="/creer-un-jeu/mimique">
+                <Link href="/creer-un-jeu/mimique" passHref>
                   <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique">
                     Jouer au jeu
                   </Button>
@@ -72,6 +71,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
                       : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
                   }
+                  passHref
                 >
                   <Button
                     component="a"

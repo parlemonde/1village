@@ -1,6 +1,7 @@
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
-import type { GameActivity } from 'types/game.type';
+
+import type { GameActivity } from '../../types/game.type';
 
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
@@ -9,6 +10,7 @@ import type { IndiceActivity } from './indice.types';
 import type { MascotteActivity } from './mascotte.types';
 import type { PresentationActivity } from './presentation.types';
 import type { QuestionActivity } from './question.types';
+import type { ReactionActivity } from './reaction.types';
 import type { SymbolActivity } from './symbol.types';
 
 export const isPresentation = (activity: Activity): activity is PresentationActivity => {
@@ -37,4 +39,7 @@ export const isMascotte = (activity: Activity): activity is MascotteActivity => 
 };
 export const isGame = (activity: Activity): activity is GameActivity => {
   return activity.type === ActivityType.GAME;
+};
+export const isReaction = (activity: Activity): activity is ReactionActivity => {
+  return activity.type === ActivityType.REACTION;
 };
