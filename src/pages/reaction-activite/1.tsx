@@ -32,7 +32,7 @@ const ReactionStep1 = () => {
   const onChange = (id: number | null, type: number | null) => {
     if (activity !== null) {
       updateActivity({ responseActivityId: id, responseType: type });
-      id !== null && setSelectedActivity({ id, type });
+      setSelectedActivity({ id, type });
     }
   };
 
@@ -42,6 +42,7 @@ const ReactionStep1 = () => {
       const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
       const responseActivityType =
         'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
+      setSelectedActivity({ id: responseActivityId, type: responseActivityType });
       if (!('edit' in router.query)) {
         created.current = true;
         createNewActivity(ActivityType.REACTION, undefined, {}, responseActivityId, responseActivityType);

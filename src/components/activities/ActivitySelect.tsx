@@ -73,6 +73,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sél
       <ThemeChoiceButton
         label={label}
         description=""
+        isOpen={value ? true : undefined}
         onClick={() => {
           if (selectRef.current) {
             selectRef.current.scrollIntoView({ behavior: 'smooth' });
