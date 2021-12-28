@@ -32,6 +32,7 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
     userId: activityUser?.id ?? 0,
   });
   const isPelico = activityUser.type > UserType.TEACHER;
+  const isMediator = user !== null && user.type > UserType.TEACHER;
 
   // ---- Get user weather and time ----
   React.useEffect(() => {
@@ -118,6 +119,18 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
           <Flag country={activityUser.country.isoCode}></Flag>
         </span>
       </div>
+      {isMediator && (
+        <Button
+          component="a"
+          href={`https://prof.parlemonde.org/les-professeurs-partenaires/${activityUser.pseudo}/profile`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ overflow: 'hidden', margin: '2rem 2rem 2.5rem 2rem', textAlign: 'center' }}
+          variant="outlined"
+        >
+          Voir la fiche du professeur
+        </Button>
+      )}
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
         <div style={{ height: '14rem' }}>
           <Map position={activityUser.position} zoom={3} markers={[{ position: activityUser.position, label: activityUser.address }]} />
