@@ -23,11 +23,11 @@ const ReportageStep1 = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
-  const [reportageActivity, setReportageActivity] = React.useState<Activity[]>([]);
+  const [reportageActivities, setReportageActivities] = React.useState<Activity[]>([]);
   const [showErrors, setShowErrors] = React.useState(false);
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
-  const sameActivities = activity ? reportageActivity.filter((c) => c.subType === activity.subType) : [];
+  const sameActivities = activity ? reportageActivities.filter((c) => c.subType === activity.subType) : [];
   const data = (activity?.data as ReportageData) || null;
   const created = React.useRef(false);
   React.useEffect(() => {
@@ -52,8 +52,8 @@ const ReportageStep1 = () => {
         })}`,
       }).then((response) => {
         if (!response.error && response.data) {
-          const reportageActivity = response.data;
-          setReportageActivity(reportageActivity as Activity[]);
+          const reportageActivities = response.data;
+          setReportageActivities(reportageActivities as Activity[]);
         }
       });
     }
