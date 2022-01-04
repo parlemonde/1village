@@ -8,7 +8,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
-import { getErrorSteps } from 'src/components/activities/reportageCheck';
+import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';
 

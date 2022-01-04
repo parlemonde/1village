@@ -14,7 +14,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ContentView } from 'src/components/activities/content/ContentView';
-import { getErrorSteps } from 'src/components/activities/reportageCheck';
+import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
@@ -28,7 +28,7 @@ const ReportageStep3 = () => {
   const data = (activity?.data as ReportageData) || null;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    const fieldStep2 = activity?.content.filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
     if (data !== null && fieldStep2?.length === 0 && activity?.subType === -1) {
       const errors = getErrorSteps(data, 1);
       errors.push(1); //corresponding to step 2
