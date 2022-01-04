@@ -1,62 +1,27 @@
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import React from 'react';
 
-import { Button, ButtonBase, CircularProgress, Tooltip } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
-import TextIcon from 'src/svg/editor/text_icon.svg';
-import KeyIcon from 'src/svg/navigation/key-icon.svg';
-import TargetIcon from 'src/svg/navigation/target-icon.svg';
-import UserIcon from 'src/svg/navigation/user-icon.svg';
-import { serializeToQueryUrl } from 'src/utils';
+import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
-
-const Reactions = [
-  {
-    label: 'Texte court',
-    icon: TextIcon,
-    disabled: false,
-    link: '',
-  },
-  {
-    label: 'Présentation',
-    icon: UserIcon,
-    disabled: false,
-    link: '/se-presenter/thematique/1',
-  },
-  {
-    label: 'Énigme',
-    icon: KeyIcon,
-    disabled: false,
-    link: '/creer-une-enigme',
-  },
-  {
-    label: 'Défi',
-    icon: TargetIcon,
-    disabled: false,
-    link: '/lancer-un-defi',
-  },
-];
 
 interface AddCommentProps {
   activityId: number;
   activityType: number;
   activityPhase: number;
-  label?: string;
 }
 
-export const AddComment = ({ activityId, activityType, activityPhase, label }: AddCommentProps) => {
+export const AddComment = ({ activityId, activityType, activityPhase }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
   const [newCommentLength, setNewCommentLength] = React.useState(0);
-  const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
-  const allowOnlyComments = activityPhase === 1 || (activityType !== 5 && activityType !== 0);
 
   if (!user) {
     return null;
@@ -69,7 +34,6 @@ export const AddComment = ({ activityId, activityType, activityPhase, label }: A
     setIsLoading(true);
     await addComment(newComment);
     setIsLoading(false);
-    setDisplayEditor(false);
     setNewComment('');
   };
 
@@ -79,96 +43,54 @@ export const AddComment = ({ activityId, activityType, activityPhase, label }: A
   };
 
   return (
-    <div className="activity__comment-container">
-      <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} noLink />
-      {displayEditor || allowOnlyComments ? (
-        <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
-          <TextEditor
-            maxLen={400}
-            value={newComment}
-            onChange={onCommentChange}
-            placeholder="Écrivez votre réaction ici"
-            inlineToolbar
-            withBorder
-            noBlock
-          />
-          <div style={{ width: '100%', textAlign: 'right' }}>
-            <span className="text text--primary">{newCommentLength}/400</span>
-          </div>
-          <div style={{ width: '100%', textAlign: 'right', marginTop: '0.5rem' }}>
-            {!allowOnlyComments && (
-              <Button
-                size="small"
-                variant="outlined"
-                style={{ marginRight: '0.5rem' }}
-                onClick={() => {
-                  setDisplayEditor(false);
-                }}
-              >
-                Annuler
-              </Button>
+    <div>
+      <div className="activity__comment-container">
+        <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+          <span style={{ marginLeft: '2.5rem', fontWeight: 600 }}>Publiez directement un commentaire</span>
+          <div style={{ display: 'flex' }}>
+            <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} noLink />
+            <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
+              <TextEditor
+                maxLen={400}
+                value={newComment}
+                onChange={onCommentChange}
+                placeholder="Écrivez votre réaction ici"
+                inlineToolbar
+                withBorder
+                noBlock
+              />
+              <div style={{ width: '100%', textAlign: 'left' }}>
+                <span className="text text--primary">{newCommentLength}/400</span>
+              </div>
+              <div style={{ width: '100%', textAlign: 'left', marginTop: '0.5rem' }}>
+                <Button variant="outlined" color="primary" onClick={comment}>
+                  Commenter
+                </Button>
+              </div>
+            </div>
+            {loading && (
+              <div className="activity__loader">
+                <CircularProgress color="primary" />
+              </div>
             )}
-            <Button size="small" variant="contained" color="primary" onClick={comment}>
+          </div>
+        </div>
+        {activityPhase >= 2 && (
+          <div style={{ marginLeft: '1rem' }}>
+            <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
+            <Button
+              component="a"
+              href={`/reaction-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+              variant="outlined"
+              color="primary"
+              style={{ width: '100%' }}
+            >
+              <ReactionIcon />
               Réagir
             </Button>
           </div>
-          {loading && (
-            <div className="activity__loader">
-              <CircularProgress color="primary" />
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="activity__comment-react">
-          <span className="text text--bold">{label || 'Réagir à cette activité par :'}</span>
-          <div className="text-center">
-            <div className="activity__comment-react-actions">
-              {Reactions.map((R, index) =>
-                index === 0 ? (
-                  <ButtonBase
-                    key={index}
-                    className="activity__comment-react-button"
-                    onClick={() => {
-                      setDisplayEditor(true);
-                    }}
-                  >
-                    <R.icon height="1.5rem" style={{ fill: 'currentcolor' }} />
-                    <span className="text text--small" style={{ marginTop: '0.1rem' }}>
-                      {R.label}
-                    </span>
-                  </ButtonBase>
-                ) : !R.disabled && activityId !== null && activityType !== null ? (
-                  <Link
-                    key={index}
-                    href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}
-                    passHref
-                  >
-                    <ButtonBase
-                      component="a"
-                      href={`${R.link}${serializeToQueryUrl({ responseActivityId: activityId, responseActivityType: activityType })}`}
-                      className="activity__comment-react-button"
-                    >
-                      <R.icon height="1.5rem" style={{ fill: 'currentcolor' }} />
-                      <span className="text text--small" style={{ marginTop: '0.1rem' }}>
-                        {R.label}
-                      </span>
-                    </ButtonBase>
-                  </Link>
-                ) : (
-                  <Tooltip key={index} title="Bientôt disponible" aria-label="available soon">
-                    <ButtonBase className="activity__comment-react-button">
-                      <R.icon height="1.5rem" style={{ fill: 'currentcolor' }} />
-                      <span className="text text--small" style={{ marginTop: '0.1rem' }}>
-                        {R.label}
-                      </span>
-                    </ButtonBase>
-                  </Tooltip>
-                ),
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

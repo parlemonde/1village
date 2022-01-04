@@ -16,6 +16,7 @@ import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
+import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -71,7 +72,7 @@ const TABS_PER_PHASE: Tab[] = [
     phase: 2,
   },
   {
-    label: 'Créer un jeu',
+    label: 'Jouer ensemble',
     path: '/creer-un-jeu',
     icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 2,
@@ -88,9 +89,15 @@ const TABS_PER_PHASE: Tab[] = [
     icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 2,
   },
+  {
+    label: 'Réagir à une activité',
+    path: '/reaction-activite/1',
+    icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
   // ---- PHASE 3 ----
   {
-    label: 'Créer un jeu',
+    label: 'Jouer ensemble',
     path: '/creer-un-jeu',
     icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 3,
