@@ -1,30 +1,29 @@
 /* eslint-disable */
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin')
+const { withSentryConfig } = require('@sentry/nextjs');
+const BUILD_VERSION = process.env.BUILD_VERSION;
 
-module.exports = {
-  distDir: "./dist/next",
+const nextConfig = {
+  distDir: './dist/next',
   poweredByHeader: false,
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"],
+      use: ['@svgr/webpack'],
     });
-    // config.plugins.push(
-    //   new BundleAnalyzerPlugin({
-    //     analyzerMode: 'server',
-    //     analyzerPort: isServer ? 8888 : 8889,
-    //     openAnalyzer: true,
-    //   })
-    // );
-    // config.plugins.push(new DuplicatePackageCheckerPlugin());
     return config;
   },
   eslint: {
     // ESLint is already called before building with nextJS. So no need here.
     ignoreDuringBuilds: true,
   },
-  images: {
-    domains: ['web-dev.imgix.net'],
+  generateBuildId: BUILD_VERSION ? async () => BUILD_VERSION : undefined,
+};
+
+// https://github.com/getsentry/sentry-webpack-plugin#options.
+const sentryWebpackPluginOptions = {
+  errorHandler: (err, _invokeErr, compilation) => {
+    compilation.warnings.push('Sentry CLI Plugin: ' + err.message);
   },
 };
+
+module.exports = process.env.USE_SENTRY ? withSentryConfig(nextConfig, sentryWebpackPluginOptions) : nextConfig;

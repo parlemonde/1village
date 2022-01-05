@@ -1,7 +1,12 @@
+// --- Load environment variables ---
+// eslint-disable-next-line arca/newline-after-import-section
+import { config } from 'dotenv';
+config();
+
+// eslint-disable-next-line arca/import-ordering
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { config } from 'dotenv';
 import type { Response, RequestHandler } from 'express';
 import express, { Router } from 'express';
 import helmet from 'helmet';
@@ -23,8 +28,6 @@ import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
 import { onError, normalizePort, getDefaultDirectives } from './utils/server';
 
-// --- Load environment variables ---
-config();
 const isDevENV = process.env.NODE_ENV !== 'production';
 const frontendHandler = next({ dev: isDevENV });
 const handle = frontendHandler.getRequestHandler();
