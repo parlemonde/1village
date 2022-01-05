@@ -37,8 +37,8 @@ import { MascotteCard } from './MascotteCard';
 import { MimicCard } from './MimicCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
-import { ReportageCard } from './ReportageCard';
 import { ReactionCard } from './ReactionCard';
+import { ReportageCard } from './ReportageCard';
 import { SymbolCard } from './SymbolCard';
 import type { ActivityCardProps } from './activity-card.types';
 
