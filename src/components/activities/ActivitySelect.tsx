@@ -19,9 +19,11 @@ interface ActivitySelectProps {
   onChange(newValue: number | null, newType: number | null): void;
   onSelect(): void;
   style?: React.CSSProperties;
+  label?: string;
+  type?: number;
 }
 
-export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySelectProps) => {
+export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sélectionner une activité', type }: ActivitySelectProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity: selectedActivity } = useActivity(value ?? -1);
@@ -45,6 +47,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySel
         villageId: village.id,
         countries: village.countries.map((c) => c.isoCode).join(','),
         pelico: true,
+        type: type,
       })}`,
     });
     if (response.error) {
@@ -58,7 +61,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySel
       setCanFetchMore(false);
     }
     setLoading(false);
-  }, [axiosLoggedRequest, village]);
+  }, [axiosLoggedRequest, village, type]);
   React.useEffect(() => {
     if (dataPage.current === 0) {
       fetchData().catch();
@@ -68,9 +71,9 @@ export const ActivitySelect = ({ value, onChange, onSelect, style }: ActivitySel
   return (
     <div style={style} ref={selectRef}>
       <ThemeChoiceButton
-        label="Sélectionner une activité"
+        label={label}
         description=""
-        isOpen={true}
+        isOpen={value ? true : undefined}
         onClick={() => {
           if (selectRef.current) {
             selectRef.current.scrollIntoView({ behavior: 'smooth' });

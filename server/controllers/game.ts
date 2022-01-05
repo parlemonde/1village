@@ -62,8 +62,7 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
       { userId: req.user.id },
     )
     .orderBy('game.createDate', 'DESC')
-    .limit(1)
-    .getOne();
+    .getMany();
 
   res.sendJSON(game || null);
 });
@@ -106,7 +105,17 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
   });
 });
 
-//--- retrieve all answers from all users response to game ---
+//--- retrieve answers to all mimics ---
+gameController.get({ path: '/stats', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const gameResponses = await getRepository(GameResponse).createQueryBuilder('gameResponse').leftJoinAndSelect('gameResponse.user', 'user').getMany();
+  res.sendJSON(gameResponses || []);
+});
+
+//--- retrieve answers to the mimic with this id ---
 gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();

@@ -3,6 +3,7 @@ import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
+import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -19,6 +20,7 @@ export const titles = {
   [ActivityType.INDICE]: 'créé un indice culturel',
   [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réaliser un reportage',
+  [ActivityType.REACTION]: 'réagi à',
 };
 
 export const icons = {
@@ -32,6 +34,7 @@ export const icons = {
   [ActivityType.INDICE]: IndiceIcon,
   [ActivityType.SYMBOL]: SymbolIcon,
   [ActivityType.REPORTAGE]: ReportageIcon,
+  [ActivityType.REACTION]: ReactionIcon,
 };
 
 export const DESC = {
@@ -45,6 +48,7 @@ export const DESC = {
   [ActivityType.INDICE]: 'un indice culturel',
   [ActivityType.SYMBOL]: 'un symbole',
   [ActivityType.REPORTAGE]: 'un reportage',
+  [ActivityType.REACTION]: 'une réaction',
 };
 
 export const REACTIONS = {
@@ -58,6 +62,7 @@ export const REACTIONS = {
   [ActivityType.INDICE]: 'cet indice culturel',
   [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
+  [ActivityType.REACTION]: 'cette réaction',
 };
 
 export const labels = {
@@ -71,6 +76,7 @@ export const labels = {
   [ActivityType.INDICE]: 'Répondre à cet indice culturel par :',
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
+  [ActivityType.REACTION]: 'Répondre à cette réaction par :',
 };
 
 const specificActivityPhase = {
@@ -84,6 +90,7 @@ const specificActivityPhase = {
   [ActivityType.INDICE]: [1],
   [ActivityType.SYMBOL]: [1],
   [ActivityType.REPORTAGE]: [2],
+  [ActivityType.REACTION]: [2],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];

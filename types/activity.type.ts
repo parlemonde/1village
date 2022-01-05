@@ -18,6 +18,7 @@ export const ActivityType = {
   SYMBOL: 7,
   MASCOTTE: 8,
   REPORTAGE: 9,
+  REACTION: 10,
 };
 
 export const ActivityStatus = {
@@ -37,7 +38,7 @@ export interface Activity<T extends AnyData = AnyData> {
   deleteDate?: Date | string;
 
   // activity data
-  data: T & { draftUrl?: string };
+  data: T & { draftUrl?: string; presentation?: string };
 
   // activity content
   content: ActivityContent[];
