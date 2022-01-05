@@ -17,6 +17,7 @@ const MimiqueStep3 = () => {
 
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
+    if (data === undefined || data === null) return; //when you came from ma-classe.tsx
     if (!isMimicValid(data.game1)) errors.push(0); // step of mimic 1
     if (!isMimicValid(data.game2)) errors.push(1); // step of mimic 2
     return errors;

@@ -37,7 +37,7 @@ export interface Activity<T extends AnyData = AnyData> {
   deleteDate?: Date | string;
 
   // activity data
-  data: T & { draftUrl?: string };
+  data: T & { draftUrl?: string; presentation?: string };
 
   // activity content
   content: ActivityContent[];
