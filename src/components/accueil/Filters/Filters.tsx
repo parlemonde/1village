@@ -17,10 +17,12 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
   ],
   [
     { key: 0, label: 'Toutes', value: 'all' },
-    { key: 1, label: 'Défis', value: [2] },
-    { key: 2, label: 'Jeux', value: [4] },
-    { key: 3, label: 'Énigmes', value: [1] },
-    { key: 4, label: 'Questions', value: [3] },
+    { key: 1, label: 'Reportages', value: [9] },
+    { key: 2, label: 'Défis', value: [2] },
+    { key: 3, label: 'Jeux', value: [4] },
+    { key: 4, label: 'Énigmes', value: [1] },
+    { key: 5, label: 'Questions', value: [3] },
+    { key: 6, label: 'Réactions', value: [10] },
   ],
   [
     { key: 0, label: 'Toutes', value: 'all' },

@@ -27,11 +27,19 @@ const suggestions = [
     disabled: false,
   },
   {
-    title: 'Personalité mystère',
-    button: 'Personalité',
+    title: 'Personnalité mystère',
+    button: 'Personnalité',
     href: '/creer-une-enigme/1?category=2',
-    text: 'Créez une énigme sur une personalité mystère !',
+    text: 'Créez une énigme sur une personnalité mystère !',
     icon: PersonaliteIcon,
+    disabled: false,
+  },
+  {
+    title: 'Lieu mystère',
+    button: 'Lieu',
+    href: '/creer-une-enigme/1?category=3',
+    text: 'Créez une énigme sur un lieu mystère !',
+    icon: LocationIcon,
     disabled: false,
   },
 ];
@@ -52,7 +60,7 @@ const activities = [
     disabledText: '',
   },
   {
-    label: 'Personalité mystère',
+    label: 'Personnalité mystère',
     href: '/creer-une-enigme/1?category=2',
     icon: PersonaliteIcon,
     disabled: false,
