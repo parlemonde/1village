@@ -70,7 +70,7 @@ export const Accueil = () => {
   }, [selectedPhase]);
 
   //Preload of the activities filtered only one mimic
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (activities && activities.length > 0) {
       const filteredActivities = filterActivitiesWithLastMimicGame(activities);
       setActivitiesFiltered(filteredActivities);
