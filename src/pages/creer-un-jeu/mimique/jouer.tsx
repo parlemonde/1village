@@ -72,6 +72,9 @@ const PlayMimique = () => {
   const { village } = React.useContext(VillageContext);
   const [isReloading, setIsReloading] = React.useState<boolean>(false);
   const [ableToValidate, setAbleToValidate] = React.useState<boolean>(false);
+  const [firstCountryToAnswer, setFirstCountryToAnswer] = React.useState<boolean>(false);
+  const [connectedUserId, setconnectedUserId] = React.useState<number>(0);
+  const [connectedUserIsoCode, setconnectedUserIsoCode] = React.useState('');
 
   const [userIsPelico, setUserIsPelico] = React.useState<boolean>(true);
 
@@ -112,8 +115,11 @@ const PlayMimique = () => {
       }).then((response) => {
         if (!response.error && response.data) {
           const game = response.data as Game;
-          setGame(game);
-          const mimicContent = JSON.parse(game.content) as unknown as MimicData;
+          const gameValues = Object.values(game);
+          // Pick a random mimic game
+          const randomGamePick = gameValues[Math.floor(Math.random() * gameValues.length)] as Game;
+          setGame(randomGamePick);
+          const mimicContent = JSON.parse(randomGamePick.content) as unknown as MimicData;
           setMimicContent(mimicContent);
         } else {
           setLastMimiqueModalOpen(true);
@@ -134,6 +140,12 @@ const PlayMimique = () => {
     if (gameResponses) {
       const resStats: StatsProps = {};
       gameResponses.forEach((val: GameResponse) => {
+        // connected user's id
+        const classUserId = val.userId;
+        setconnectedUserId(classUserId);
+        // connected user's country
+        const classUserIsoCode = val.user.country.isoCode;
+        setconnectedUserIsoCode(classUserIsoCode);
         if (resStats[val.user.country.isoCode] && resStats[val.user.country.isoCode][val.user.id]) {
           resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
           resStats[val.user.country.isoCode][val.value] = resStats[val.user.country.isoCode][val.value] + 1;
@@ -150,8 +162,15 @@ const PlayMimique = () => {
         }
       });
       setStats(resStats);
+      const resStatsCountries = Object.keys(resStats);
+      // if the array contains only one country, the other country has not played the same game yet
+      if (resStatsCountries.length === 1) {
+        setFirstCountryToAnswer(true);
+      } else {
+        setFirstCountryToAnswer(false);
+      }
     }
-  }, [gameResponses, userMap]);
+  }, [firstCountryToAnswer, gameResponses, userMap]);
 
   const validate = () => {
     if (selected === null) return;
@@ -206,6 +225,7 @@ const PlayMimique = () => {
       }
     });
   };
+
   const onChange = (event: { target: HTMLInputElement }) => {
     setSelected(event.target.value as MimicResponseValue);
     setAbleToValidate(true);
@@ -262,7 +282,7 @@ const PlayMimique = () => {
           <Grid item xs={12} md={12}>
             <ReactPlayer light url={mimicContent.video as string | string[] | MediaStream | SourceProps[] | undefined} controls />
           </Grid>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={2} md={2}>
             <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
               {choices &&
                 choices.map((val) => {
@@ -303,8 +323,8 @@ const PlayMimique = () => {
           {stats &&
             Object.keys(stats).map((country: string) => {
               return (
-                <Grid item xs={6} md={6} key={country}>
-                  <span>Réponses des pélicopains </span>
+                <Grid item xs={5} md={5} key={country}>
+                  <span style={{ paddingRight: '0.5rem' }}>Réponses de vos Pélicopains</span>
                   <Flag country={country} />
                   {choices?.map((val) => {
                     if (val === 0) {
@@ -336,6 +356,23 @@ const PlayMimique = () => {
                 </Grid>
               );
             })}
+          {/* Here, we check if the player is the first country of the "village-monde" who plays the mimic game.*/}
+          {stats && firstCountryToAnswer === true ? (
+            Object.keys(stats).map((country: string) => {
+              return (
+                <Grid item xs={5} md={5} key={country}>
+                  <span style={{ paddingRight: '0.5rem' }}>Pas de réponses des Pélicopains</span>
+                  {/* First, we make sure the connected user is different from the user who has already played. 
+                  Then check if they are from the same country. Based on the user's id, we display the correct flag. */}
+                  {user.id !== connectedUserId && user.country.isoCode === connectedUserIsoCode && <Flag country={connectedUserIsoCode} />}
+                  {user.id !== connectedUserId && user.country.isoCode !== connectedUserIsoCode && <Flag country={user.country.isoCode} />}
+                </Grid>
+              );
+            })
+          ) : (
+            <div></div>
+          )}
+
           <Grid item xs={12} md={12}>
             {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
             {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>}
