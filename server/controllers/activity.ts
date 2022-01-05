@@ -1,6 +1,5 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import type { DeepPartial } from 'typeorm';
 import { getRepository } from 'typeorm';
 
 import type { GameData, GamesData } from '../../types/game.type';
@@ -395,68 +394,6 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
 };
 
 const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
-
-/**activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
-  if (!updateActivityValidator(data)) {
-    sendInvalidDataError(updateActivityValidator);
-    return;
-  }
-
-  if (!req.user) {
-    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-  }
-
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id }, relations: ['content'] });
-  if (activity === undefined || req.user === undefined) {
-    next();
-    return;
-  }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
-    next();
-    return;
-  }
-
-  activity.status = data.status ?? activity.status;
-  activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
-  activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
-
-  if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED) {
-    const activityData = (activity.content || []).find((data) => {
-      return data.value === 'json';
-    });
-    if (activityData) {
-      const value = JSON.parse(activityData.value);
-      const gamesData = value.data as GamesData;
-      gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
-      gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
-      gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
-      activityData.value = JSON.stringify(value);
-      await getRepository(Activity).save(activityData);
-    }
-  }
-  
-
-  await getRepository(Activity).save(activity);
-  res.sendJSON(activity);
-});*/
-
-// --- create a game ---
-/**const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
-  const id = data.gameId;
-  const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
-  delete data['gameId'];
-  game.activityId = activity.id;
-  game.villageId = activity.villageId;
-  game.userId = activity.userId;
-  game.type = activity.subType;
-  game.content = JSON.stringify(data);
-  await getRepository(Game).save(game);
-  return game;
-};*/
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
