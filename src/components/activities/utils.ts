@@ -3,6 +3,7 @@ import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
+import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -18,6 +19,7 @@ export const titles = {
   [ActivityType.CONTENU_LIBRE]: 'envoyé un message à ses Pélicopains',
   [ActivityType.INDICE]: 'créé un indice culturel',
   [ActivityType.SYMBOL]: 'créé un symbole',
+  [ActivityType.REPORTAGE]: 'réaliser un reportage',
   [ActivityType.REACTION]: 'réagi à',
 };
 
@@ -31,6 +33,7 @@ export const icons = {
   [ActivityType.CONTENU_LIBRE]: '',
   [ActivityType.INDICE]: IndiceIcon,
   [ActivityType.SYMBOL]: SymbolIcon,
+  [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
 };
 
@@ -44,6 +47,7 @@ export const DESC = {
   [ActivityType.CONTENU_LIBRE]: 'un message',
   [ActivityType.INDICE]: 'un indice culturel',
   [ActivityType.SYMBOL]: 'un symbole',
+  [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
 };
 
@@ -57,6 +61,7 @@ export const REACTIONS = {
   [ActivityType.CONTENU_LIBRE]: 'ce message',
   [ActivityType.INDICE]: 'cet indice culturel',
   [ActivityType.SYMBOL]: 'ce symbole',
+  [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
 };
 
@@ -70,6 +75,7 @@ export const labels = {
   [ActivityType.CONTENU_LIBRE]: 'Répondre à cette publication par :',
   [ActivityType.INDICE]: 'Répondre à cet indice culturel par :',
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
+  [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
 };
 
@@ -83,6 +89,7 @@ const specificActivityPhase = {
   [ActivityType.CONTENU_LIBRE]: [1, 2, 3],
   [ActivityType.INDICE]: [1],
   [ActivityType.SYMBOL]: [1],
+  [ActivityType.REPORTAGE]: [2],
   [ActivityType.REACTION]: [2],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
