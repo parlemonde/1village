@@ -13,20 +13,15 @@ import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
-import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
-import { REACTIONS } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { useActivity } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
-  const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = (activity?.data as LanguageDefiData) || null;
@@ -113,26 +108,6 @@ const DefiStep5 = () => {
                 </Button>
               </div>
             </div>
-          )}
-
-          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/lancer-un-defi/linguistique/1?edit=${activity.id}`} />}
-
-          {responseActivity !== null && (
-            <>
-              <span className="text text--small text--success">Défi en réaction à {REACTIONS[responseActivity.type]}</span>
-              <div className="preview-block">
-                {!isEdit && (
-                  <EditButton
-                    onClick={() => {
-                      router.push(`/lancer-un-defi/linguistique/1?edit=${activity.id}`);
-                    }}
-                    status={'success'}
-                    style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-                  />
-                )}
-                <Activities activities={[responseActivity]} noButtons />
-              </div>
-            </>
           )}
 
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
