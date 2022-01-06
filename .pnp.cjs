@@ -80,7 +80,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/sortablejs", "npm:1.10.7"],
             ["@types/string-similarity", "npm:4.0.0"],
             ["@types/three", "npm:0.133.1"],
-            ["@types/uuid", "npm:8.3.0"],
+            ["@types/uuid", "npm:8.3.4"],
             ["@types/vimeo", "npm:2.1.4"],
             ["@types/webpack", "npm:5.28.0"],
             ["@typescript-eslint/eslint-plugin", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:4.28.1"],
@@ -213,7 +213,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/sortablejs", "npm:1.10.7"],
             ["@types/string-similarity", "npm:4.0.0"],
             ["@types/three", "npm:0.133.1"],
-            ["@types/uuid", "npm:8.3.0"],
+            ["@types/uuid", "npm:8.3.4"],
             ["@types/vimeo", "npm:2.1.4"],
             ["@types/webpack", "npm:5.28.0"],
             ["@typescript-eslint/eslint-plugin", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:4.28.1"],
@@ -4577,10 +4577,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/uuid", [
-        ["npm:8.3.0", {
-          "packageLocation": "./.yarn/cache/@types-uuid-npm-8.3.0-60b441a3d7-0f46b15020.zip/node_modules/@types/uuid/",
+        ["npm:8.3.4", {
+          "packageLocation": "./.yarn/cache/@types-uuid-npm-8.3.4-7547f4402c-6f11f3ff70.zip/node_modules/@types/uuid/",
           "packageDependencies": [
-            ["@types/uuid", "npm:8.3.0"]
+            ["@types/uuid", "npm:8.3.4"]
           ],
           "linkType": "HARD",
         }]
