@@ -63,6 +63,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              pointerEvents: 'none', //Disable click on video
             }}
           >
             <KeepRatio ratio={9 / 16} maxWidth="600px">

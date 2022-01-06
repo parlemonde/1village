@@ -54,17 +54,11 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              pointerEvents: 'none', //Disable click on video
             }}
           >
             <KeepRatio ratio={9 / 16} maxWidth="600px">
-              <ReactPlayer
-                width="100%"
-                height="100%"
-                light
-                url={firstVideo.value as string | string[] | SourceProps[] | MediaStream | undefined}
-                controls
-                style={{ backgroundColor: 'black' }}
-              />
+              <ReactPlayer width="100%" height="100%" url={firstVideo.value} light style={{ backgroundColor: 'black' }} />
             </KeepRatio>
           </div>
         </div>
