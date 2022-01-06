@@ -20,11 +20,11 @@ const ReactionStep1 = () => {
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);
   const [selectedActivity, setSelectedActivity] = React.useState<SelectedActivityInfos>({ id: null, type: null });
-  const activitiesTypes = [1, 2, 3, 4];
+  const activitiesTypes = [1, 2, 3, 4, 9];
 
-  const onNext = (clear: boolean) => () => {
-    if (clear) {
-      updateActivity({ responseActivityId: null, responseType: null });
+  const onNext = () => {
+    if (!activity || !isReaction(activity)) {
+      createNewActivity(ActivityType.REACTION, undefined, {}, selectedActivity.id, selectedActivity.type);
     }
     router.push('/reaction-activite/2');
   };
@@ -39,9 +39,11 @@ const ReactionStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
+      created.current = true;
       const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
       const responseActivityType =
         'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
+      createNewActivity(ActivityType.REACTION, undefined, {}, responseActivityId, responseActivityType);
       setSelectedActivity({ id: responseActivityId, type: responseActivityType });
       if (!('edit' in router.query)) {
         created.current = true;
@@ -76,7 +78,7 @@ const ReactionStep1 = () => {
                 key={idx}
                 value={selectedActivity.type === type ? selectedActivity.id : null}
                 onChange={onChange}
-                onSelect={onNext(false)}
+                onSelect={onNext}
                 style={{ margin: '1rem 0 0 0' }}
                 label={`Réagir à ${DESC[type]}`}
                 type={type}

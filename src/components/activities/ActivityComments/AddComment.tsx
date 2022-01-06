@@ -75,7 +75,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
             )}
           </div>
         </div>
-        {activityPhase >= 2 && (
+        {activityPhase >= 2 && activityType !== 9 && (
           <div style={{ marginLeft: '1rem' }}>
             <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
             <Button
