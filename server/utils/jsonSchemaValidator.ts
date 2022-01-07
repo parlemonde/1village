@@ -5,8 +5,6 @@ import Ajv from 'ajv';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 
 const ajv = new Ajv();
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 addFormats(ajv);
 
 export function sendInvalidDataError(validateFunction: ValidateFunction<unknown>): void {

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
@@ -76,7 +75,6 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
   const userId = req.user.id;
   const villageId = req.user.villageId || Number(req.query.villageId);
   const type = req.query.type;
-  console.log('villageId : ' + villageId);
   const game = await getRepository(Game).createQueryBuilder('game').where('`game`.`userId` = :userId', { userId: userId }).getOne();
   const count = await getRepository(Game)
     .createQueryBuilder('game')
@@ -135,7 +133,6 @@ type UpdateActivity = {
   value: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
   properties: {

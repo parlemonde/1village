@@ -40,6 +40,17 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
   );
 }
 
+function shuffleArray(array: Array<number>) {
+  let i = array.length - 1;
+  for (; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
 interface StatsProps {
   [key: string]: { [key: string]: number };
 }
@@ -65,7 +76,7 @@ const PlayMimique = () => {
   const [game, setGame] = React.useState<Game>();
   const [mimicContent, setMimicContent] = React.useState<MimicData>(mimicContentPropsDefault);
   const [gameResponses, setGameResponses] = React.useState<GameResponse[]>();
-  const [user, setUser] = React.useState<User>();
+  const [user, setUser] = React.useState<User | undefined>(undefined);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
   const [stats, setStats] = React.useState<StatsProps>();
@@ -119,7 +130,7 @@ const PlayMimique = () => {
           // Pick a random mimic game
           const randomGamePick = gameValues[Math.floor(Math.random() * gameValues.length)] as Game;
           setGame(randomGamePick);
-          const mimicContent = JSON.parse(randomGamePick.content) as unknown as MimicData;
+          const mimicContent = JSON.parse(randomGamePick.content) as MimicData;
           setMimicContent(mimicContent);
         } else {
           setLastMimiqueModalOpen(true);
@@ -131,7 +142,7 @@ const PlayMimique = () => {
   React.useEffect(() => {
     if (game) {
       const user = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
-      if (user && user.type !== UserType.OBSERVATOR) setUser(user as unknown as User);
+      if (user && user.type !== UserType.OBSERVATOR) setUser(user);
       if (user && user.type === UserType.OBSERVATOR) setUserIsPelico(false);
     }
   }, [game, userMap, users]);
@@ -247,17 +258,6 @@ const PlayMimique = () => {
         </Modal>
       </Base>
     );
-  }
-
-  function shuffleArray(array: Array<number>) {
-    let i = array.length - 1;
-    for (; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-    return array;
   }
 
   return (

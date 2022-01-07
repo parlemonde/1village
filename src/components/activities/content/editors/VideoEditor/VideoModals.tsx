@@ -59,10 +59,11 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
       prevValue.current = value;
       setVideoUrl(value || '');
     }
-  }, [value]);
+  }, [value, setVideoUrl]);
 
+  const prevIsModalOpen = React.useRef<boolean | null>(null);
   React.useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen && isModalOpen !== prevIsModalOpen.current) {
       setProgress(-1);
       setStep(0);
       if (tempVideoUrl) {
@@ -72,7 +73,8 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
         });
       }
     }
-  }, [isModalOpen]);
+    prevIsModalOpen.current = isModalOpen;
+  }, [isModalOpen, tempVideoUrl]);
 
   const displayPreview = async () => {
     if (ReactPlayer.canPlay(tempVideoUrl)) {
@@ -101,7 +103,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
       onChange(newValue);
       setVideoUrl(newValue);
     },
-    [onChange],
+    [onChange, setVideoUrl],
   );
 
   const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -330,12 +332,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
             <li style={{ margin: '0.2rem 0' }}>
               Vos vidéos mises en ligne sur 1village sont accessibles sur{' '}
               <Link href="/mes-videos">
-                <a
-                  href="/mes-videos"
-                  target="_blank"
-                  rel="noopener"
-                  style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'bottom' }}
-                >
+                <a target="_blank" rel="noopener" style={{ display: 'inline-flex', alignItems: 'center', verticalAlign: 'bottom' }}>
                   <SettingsIcon /> {'->'} <i>mes vidéos</i>
                 </a>
               </Link>
