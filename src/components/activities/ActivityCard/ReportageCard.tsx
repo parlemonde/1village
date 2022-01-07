@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
