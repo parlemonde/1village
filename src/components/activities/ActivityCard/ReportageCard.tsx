@@ -31,7 +31,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
         justifyContent: 'flex-start',
       }}
     >
-      {firstImage && (
+      {firstImage ? (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -44,8 +44,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
             <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
           </div>
         </div>
-      )}
-      {firstVideo && (
+      ) : firstVideo ? (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -61,6 +60,8 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
             </KeepRatio>
           </div>
         </div>
+      ) : (
+        <div></div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{reportageType.title}</h3>
