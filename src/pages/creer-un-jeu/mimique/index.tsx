@@ -91,7 +91,7 @@ const Mimique: React.FC = () => {
               float: 'right',
             }}
             disableElevation
-            disabled={!ableToPlay}
+            disabled={!ableToPlay || count === 0}
           >
             Découvrir des mimiques
           </Button>
