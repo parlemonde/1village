@@ -10,6 +10,7 @@ import {
   isPresentation,
   isQuestion,
   isReaction,
+  isReportage,
   isSymbol,
 } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
@@ -74,6 +75,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
         {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
         {isIndice(activity) && <ContentView content={activity.content} />}
         {isSymbol(activity) && <ContentView content={activity.content} />}
+        {isReportage(activity) && <ContentView content={activity.content} />}
         {isReaction(activity) && <ContentView content={activity.content} />}
       </div>
     )
