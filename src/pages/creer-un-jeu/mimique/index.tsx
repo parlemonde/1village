@@ -17,7 +17,7 @@ const Mimique: React.FC = () => {
   const [ableToPlay, setAbleToPlay] = React.useState<boolean>(false);
   const [count, setCount] = React.useState<number>(0);
 
-  React.useMemo(() => {
+  React.useEffect(() => {
     if (village) {
       axiosLoggedRequest({
         method: 'GET',

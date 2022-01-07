@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { getRepository } from 'typeorm';
 import { Vimeo } from 'vimeo';
 
@@ -167,10 +166,8 @@ export class VimeoClass {
         },
         (error, body) => {
           if (error) {
-            // eslint-disable-next-line no-console
-            console.log('error');
-            // eslint-disable-next-line no-console
-            console.log(error);
+            logger.error(`Error getting picture for video: ${videoId}`);
+            logger.error(error);
           } else {
             resolve(body.pictures.uri);
           }
@@ -186,8 +183,8 @@ export class VimeoClass {
         },
         (error, body) => {
           if (error) {
-            console.log('error');
-            console.log(error);
+            logger.error(`Error getting picture for video: ${videoId}`);
+            logger.error(error);
           } else {
             resolve(body.sizes[2].link);
           }
