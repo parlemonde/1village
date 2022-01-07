@@ -31,7 +31,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
     return rdmMimicPick.video;
   }, [activityMimic]);
 
-  React.useMemo(() => {
+  React.useEffect(() => {
     if (village) {
       axiosLoggedRequest({
         method: 'GET',
