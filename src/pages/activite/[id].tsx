@@ -28,7 +28,7 @@ const titles = {
   [ActivityType.CONTENU_LIBRE]: 'Message de Pelico',
   [ActivityType.INDICE]: 'Indice culturel',
   [ActivityType.SYMBOL]: 'Symbole',
-  [ActivityType.REACTION]: 'Reportage',
+  [ActivityType.REPORTAGE]: 'Reportage',
   [ActivityType.REACTION]: 'Réaction',
 };
 
