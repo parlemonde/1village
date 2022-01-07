@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { isGame } from 'src/activity-types/anyActivity';
+import { isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
@@ -39,8 +41,6 @@ export const Accueil = () => {
     pelico: true,
   });
 
-  const [activitiesFiltered, setActivitiesFiltered] = React.useState<Activity<AnyData>[]>([]);
-
   const { activities } = useActivities({
     limit: 200,
     page: 0,
@@ -51,11 +51,14 @@ export const Accueil = () => {
   });
 
   function filterActivitiesWithLastMimicGame(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-    const mostRecentMimic = activitiesData.find((activity) => activity.subType === 0); // Get the last mimic created
-    const indexOfLastMimic = activitiesData.findIndex((activity) => activity.subType === 0); // Get the index of this last mimic
-    const activitiesWithoutMimic = activitiesData.filter((activity) => activity.subType !== 0); // Remove all mimics in activities
+    const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && isMimic(activity)); // Get the index of this last mimic
+    if (indexOfLastMimic === -1) {
+      return activitiesData;
+    }
+    const mostRecentMimic = activitiesData[indexOfLastMimic]; // Get the last mimic created
+    const activitiesWithoutMimic = activitiesData.filter((activity) => !isGame(activity) || !isMimic(activity)); // Remove all mimics in activities
     const activitiesWithLastMimic = [...activitiesWithoutMimic];
-    activitiesWithLastMimic.splice(indexOfLastMimic, 0, mostRecentMimic as unknown as Activity<AnyData>); // Put the last mimic created at the same spot in the array
+    activitiesWithLastMimic.splice(indexOfLastMimic, 0, mostRecentMimic); // Put the last mimic created at the same spot in the array
 
     return activitiesWithLastMimic;
   }
@@ -70,10 +73,11 @@ export const Accueil = () => {
   }, [selectedPhase]);
 
   //Preload of the activities filtered only one mimic
-  React.useMemo(() => {
+  const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      const filteredActivities = filterActivitiesWithLastMimicGame(activities);
-      setActivitiesFiltered(filteredActivities);
+      return filterActivitiesWithLastMimicGame(activities);
+    } else {
+      return [];
     }
   }, [activities]);
 
@@ -83,7 +87,7 @@ export const Accueil = () => {
 
   return (
     <Base showSubHeader>
-      {selectedPhase <= village.activePhase && activitiesFiltered && activitiesFiltered.length > 0 && (
+      {selectedPhase <= village.activePhase ? (
         <>
           <KeepRatio ratio={1 / 3}>
             <WorldMap />
@@ -92,8 +96,7 @@ export const Accueil = () => {
           <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} />
           <Activities activities={activitiesFiltered} withLinks />
         </>
-      )}
-      {!(selectedPhase <= village.activePhase) && (
+      ) : (
         <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem', alignItems: 'center' }}>
           <h1 style={{ margin: '1rem' }}>
             Un peu de patience, la phase {selectedPhase} n&apos;a pas encore débuté !

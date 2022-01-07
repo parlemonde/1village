@@ -61,7 +61,7 @@ const TABS_PER_PHASE: Tab[] = [
   },
   {
     label: 'Poser une question',
-    path: '/poser-une-question',
+    path: '/poser-une-question/1',
     icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 1,
   },
