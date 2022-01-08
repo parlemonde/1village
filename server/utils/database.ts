@@ -46,7 +46,6 @@ const getDBConfig = (): ConnectionOptions | null => {
     entities: [path.join(__dirname, '../entities/*.js')],
     subscribers: [],
     synchronize: true,
-    timezone: 'utc',
     ...connectionOptions,
   };
 };
@@ -69,7 +68,6 @@ async function createMySQLDB(): Promise<void> {
       charset: 'utf8mb4_unicode_ci',
       host: process.env.DB_HOST,
       password: process.env.DB_PASS,
-      timezone: 'utc',
       user: process.env.DB_USER,
     });
     const dbName: string = process.env.DB_NAME || DEFAULT_NAME;
