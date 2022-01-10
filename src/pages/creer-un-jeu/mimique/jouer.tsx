@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import type { SourceProps } from 'react-player/base';
-import ReactPlayer from 'react-player';
 import React from 'react';
 
 import type { LinearProgressProps } from '@mui/material/LinearProgress';
@@ -12,6 +10,7 @@ import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
+import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { CustomRadio as GreenRadio } from 'src/components/buttons/CustomRadio';
 import { CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
 import { UserContext } from 'src/contexts/userContext';
@@ -280,7 +279,7 @@ const PlayMimique = () => {
         </div>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
-            <ReactPlayer light url={mimicContent.video as string | string[] | MediaStream | SourceProps[] | undefined} controls />
+            {mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
           </Grid>
           <Grid item xs={2} md={2}>
             <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
