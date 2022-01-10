@@ -51,7 +51,11 @@ const ReactionStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Activité', 'Réaction', 'Prévisualisation']} activeStep={2} />
+        <Steps
+          steps={['Activité', 'Réaction', 'Prévisualisation']}
+          urls={['/reaction-activite/1?edit', '/reaction-activite/2?edit', '/reaction-activite']}
+          activeStep={2}
+        />
         <div className="width-900">
           <h1>Pré-visualisez votre réaction{!isEdit && ', et publiez-la'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -79,7 +83,7 @@ const ReactionStep3 = () => {
             </div>
           )}
 
-          {!isEdit && activity?.responseActivityId === null && <ActivityLink url={`/reaction-activite/1?edit=${activity?.id}`} />}
+          {!isEdit && activity?.responseActivityId === null && <ActivityLink url={`/reaction-activite/1?edit`} />}
           {responseActivity !== null && (
             <>
               <span className="text text--small text--success">En réaction à {REACTIONS[responseActivity.type]}</span>
@@ -87,7 +91,7 @@ const ReactionStep3 = () => {
                 {!isEdit && (
                   <EditButton
                     onClick={() => {
-                      router.push(`/reaction-activite/1?edit=${activity?.id}`);
+                      router.push(`/reaction-activite/1?edit`);
                     }}
                     status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
@@ -102,7 +106,7 @@ const ReactionStep3 = () => {
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/reaction-activite/2');
+                router.push('/reaction-activite/2?edit');
               }}
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}

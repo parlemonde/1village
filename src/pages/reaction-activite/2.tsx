@@ -12,7 +12,7 @@ import type { ActivityContent } from 'types/activity.type';
 const ReactionStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
-
+  const url = 'edit' in router.query ? '/reaction-activite/1?edit' : '/reaction-activite/1';
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/reaction-activite/1');
@@ -44,7 +44,7 @@ const ReactionStep2 = () => {
         <div className="width-900">
           <h1>Réagissez à l&apos;activité sélectionnée</h1>
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
-          <StepsButton prev="/reaction-activite/1" next={onNext} />
+          <StepsButton prev={url} next={onNext} />
         </div>
       </div>
     </Base>
