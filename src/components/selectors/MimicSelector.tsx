@@ -77,7 +77,7 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               <div style={{ width: '100%', height: '100%', marginTop: '0.2rem' }}>
                 <ReactPlayer width="100%" height="70%" light url={MimicData.video || ''} controls />
                 <Button name="video" style={{ width: '100%', marginTop: '0.4rem' }} onClick={toggleModal} variant="outlined" color="primary">
-                  changer de video
+                  Changer de vidéo
                 </Button>
               </div>
             )}
@@ -100,12 +100,11 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               </div>
             )}
             <VideoModals
+              id={0}
               isModalOpen={isModalOpen}
               setIsModalOpen={setIsModalOpen}
-              videoUrl={MimicData.video as string | null}
-              value={MimicData.video as string | undefined}
+              videoUrl={MimicData.video || ''}
               setVideoUrl={onVideoChange}
-              id={0}
             />
           </Grid>
           <Grid item xs={12} md={8}>

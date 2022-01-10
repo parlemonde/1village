@@ -17,30 +17,28 @@ import { defaultTextButtonStyle } from 'src/styles/variables.const';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
-import type { EditorProps } from '../../content.types';
-
-interface VideoModalsProps extends EditorProps {
+interface VideoModalsProps {
+  id: number;
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
-  videoUrl: string | null;
+  videoUrl: string;
   setVideoUrl: (val: string) => void;
+  onDeleteEditor?: () => void;
 }
 
 export const VideoModals: React.FC<VideoModalsProps> = ({
+  id,
   isModalOpen,
   setIsModalOpen,
   videoUrl,
   setVideoUrl,
-  id,
-  value,
-  onChange = () => {},
-  onDelete = () => {},
+  onDeleteEditor = () => {},
 }: VideoModalsProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
-  const [tempVideoUrl, setTempVideoUrl] = React.useState(value || '');
+  const [tempVideoUrl, setTempVideoUrl] = React.useState(videoUrl);
   const [name, setName] = React.useState('');
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
     url: '',
@@ -52,26 +50,26 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
 
-  // On value change, update image.
-  const prevValue = React.useRef(value);
+  // On url change, update temp video.
+  const prevValue = React.useRef(videoUrl);
   React.useEffect(() => {
-    if (prevValue.current !== value) {
-      prevValue.current = value;
-      setVideoUrl(value || '');
+    if (prevValue.current !== videoUrl) {
+      prevValue.current = videoUrl;
+      setTempVideoUrl(videoUrl);
     }
-  }, [value, setVideoUrl]);
+  }, [videoUrl]);
 
   const prevIsModalOpen = React.useRef<boolean | null>(null);
   React.useEffect(() => {
     if (isModalOpen && isModalOpen !== prevIsModalOpen.current) {
       setProgress(-1);
       setStep(0);
-      if (tempVideoUrl) {
-        setPreview({
-          mode: 1,
-          url: tempVideoUrl,
-        });
-      }
+      setFile(null);
+      setTempVideoUrl(prevValue.current);
+      setPreview({
+        mode: prevValue.current ? 1 : 0,
+        url: prevValue.current,
+      });
     }
     prevIsModalOpen.current = isModalOpen;
   }, [isModalOpen, tempVideoUrl]);
@@ -96,15 +94,6 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
       url: '',
     });
   };
-
-  const onChangeVideo = React.useCallback(
-    (newValue: string) => {
-      prevValue.current = newValue;
-      onChange(newValue);
-      setVideoUrl(newValue);
-    },
-    [onChange, setVideoUrl],
-  );
 
   const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -148,12 +137,14 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
       },
     });
     if (response.error) {
-      onChangeVideo('');
+      setTempVideoUrl('');
+      setFile(null);
       enqueueSnackbar('Une erreur est survenue...', {
         variant: 'error',
       });
     } else {
-      onChangeVideo(response.data.url);
+      prevValue.current = response.data.url;
+      setVideoUrl(response.data.url);
       if (!response.data.url) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
@@ -185,15 +176,15 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
               await uploadVideo();
             }
           } else {
-            onChangeVideo(tempVideoUrl);
+            setVideoUrl(tempVideoUrl);
           }
           setIsModalOpen(false);
           resetPreview();
         }}
         onClose={() => {
           setIsModalOpen(false);
-          if (videoUrl && videoUrl.length === 0) {
-            onDelete();
+          if (videoUrl.length === 0) {
+            onDeleteEditor();
           }
         }}
         disabled={step === 0 ? preview.mode !== 1 : !name}
@@ -215,7 +206,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
             </div>
             <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
               <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem', minWidth: 0 }}>
-                <div id={`image-edit-${id}-desc`}>
+                <div id={`video-edit-${id}-desc`}>
                   <TextField
                     label="Entrez l'URL de la vidéo"
                     variant="outlined"
@@ -314,7 +305,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
                 sx={defaultTextButtonStyle}
                 size="small"
                 onClick={() => {
-                  copyText(value || '');
+                  copyText(videoUrl || '');
                 }}
               >
                 COPIER
@@ -322,7 +313,7 @@ export const VideoModals: React.FC<VideoModalsProps> = ({
             }
             severity="info"
           >
-            {value}
+            {videoUrl}
           </Alert>
           <p className="text text--bold">Quelques informations: </p>
           <ul>

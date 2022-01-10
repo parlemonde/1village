@@ -24,7 +24,6 @@ const DefiStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);
-  const [imageUrl, setIsImageUrl] = React.useState('');
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as CookingDefiData) || null;
@@ -146,13 +145,10 @@ const DefiStep1 = () => {
                   )}
                   <ImageModal
                     id={0}
-                    value={data.image}
-                    onChange={setImage}
-                    onDelete={() => {}}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={imageUrl}
-                    setImageUrl={setIsImageUrl}
+                    imageUrl={data.image || ''}
+                    setImageUrl={setImage}
                   />
                 </div>
                 <p className="text-center" style={{ marginTop: '10px' }}>

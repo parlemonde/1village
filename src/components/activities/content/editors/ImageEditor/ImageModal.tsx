@@ -14,30 +14,28 @@ import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
-import type { EditorProps } from '../../content.types';
-
-interface ImageModalProps extends EditorProps {
+interface ImageModalProps {
+  id: number;
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
   imageUrl: string;
   setImageUrl: (val: string) => void;
   useCrop?: boolean;
+  onDeleteEditor?: () => void;
 }
 
 export const ImageModal = ({
+  id,
   isModalOpen,
   setIsModalOpen,
   imageUrl,
   setImageUrl,
-  id,
-  value = '',
-  onChange = () => {},
-  onDelete = () => {},
   useCrop = false,
+  onDeleteEditor = () => {},
 }: ImageModalProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
-  const [tempImageUrl, setTempImageUrl] = React.useState('');
+  const [tempImageUrl, setTempImageUrl] = React.useState(imageUrl);
   const previewRef = React.useRef<HTMLDivElement>(null);
   const croppieRef = React.useRef<ImgCroppieRef>(null);
   const [preview, setPreview] = React.useState<{ url: string; mode: number }>({
@@ -50,35 +48,27 @@ export const ImageModal = ({
   const inputFile = React.useRef<HTMLInputElement>(null);
   const prevUpload = React.useRef<string | null>(null);
 
-  // On value change, update image.
-  const prevValue = React.useRef(value);
+  // On url change, update image.
+  const prevValue = React.useRef(imageUrl);
   React.useEffect(() => {
-    if (prevValue.current !== value) {
-      prevValue.current = value;
-      setImageUrl(value);
+    if (prevValue.current !== imageUrl) {
+      prevValue.current = imageUrl;
+      setTempImageUrl(imageUrl);
     }
-  }, [value, setImageUrl]);
+  }, [imageUrl]);
 
   const prevIsModalOpen = React.useRef<boolean | null>(null);
   React.useEffect(() => {
-    if (isModalOpen && isModalOpen !== prevIsModalOpen.current && value) {
-      setTempImageUrl(value);
+    if (isModalOpen && isModalOpen !== prevIsModalOpen.current) {
+      setTempImageUrl(prevValue.current);
+      setFile(null);
       setPreview({
-        mode: 1,
-        url: value,
+        mode: prevValue.current ? 1 : 0,
+        url: prevValue.current,
       });
     }
     prevIsModalOpen.current = isModalOpen;
-  }, [isModalOpen, value]);
-
-  const onChangeImage = React.useCallback(
-    (newValue: string) => {
-      prevValue.current = newValue;
-      onChange(newValue);
-      setImageUrl(typeof newValue === 'string' ? newValue : URL.createObjectURL(newValue));
-    },
-    [onChange, setImageUrl],
-  );
+  }, [isModalOpen]);
 
   const uploadImage = async () => {
     setIsModalLoading(true);
@@ -114,14 +104,15 @@ export const ImageModal = ({
       },
     });
     if (response.error) {
-      onChangeImage('');
+      setTempImageUrl('');
+      setFile(null);
       prevUpload.current = null;
       enqueueSnackbar('Une erreur est survenue...', {
         variant: 'error',
       });
     } else {
-      onChangeImage(response.data.url);
-      prevUpload.current = response.data.url || null;
+      prevValue.current = response.data.url;
+      setImageUrl(response.data.url);
       if (!response.data.url) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
@@ -179,7 +170,7 @@ export const ImageModal = ({
         if (file !== null || useCrop) {
           await uploadImage();
         } else {
-          onChangeImage(tempImageUrl);
+          setImageUrl(tempImageUrl);
         }
         setIsModalOpen(false);
         resetPreview();
@@ -188,7 +179,7 @@ export const ImageModal = ({
         setIsModalOpen(false);
         resetPreview();
         if (imageUrl.length === 0) {
-          onDelete();
+          onDeleteEditor();
         }
       }}
       loading={isModalLoading}

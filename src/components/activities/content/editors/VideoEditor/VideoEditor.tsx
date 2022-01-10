@@ -11,17 +11,7 @@ import { EditorContainer } from '../EditorContainer';
 import { VideoModals } from './VideoModals';
 
 export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
-  const [videoUrl, setVideoUrl] = React.useState(value);
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
-
-  // On value change, update image.
-  const prevValue = React.useRef(value);
-  React.useEffect(() => {
-    if (prevValue.current !== value) {
-      prevValue.current = value;
-      setVideoUrl(value);
-    }
-  }, [value]);
 
   return (
     <EditorContainer
@@ -32,7 +22,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
       }}
       className="image-editor"
     >
-      {videoUrl && (
+      {value && (
         <>
           <div className="text-center" style={{ height: '9rem', borderRight: `1px dashed ${primaryColor}` }}>
             <div
@@ -43,7 +33,7 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
                 backgroundColor: 'black',
               }}
             >
-              <ReactPlayer width="100%" height="100%" light url={videoUrl} controls />
+              <ReactPlayer width="100%" height="100%" light url={value} controls />
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -64,10 +54,9 @@ export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = 
         id={id}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        videoUrl={videoUrl}
-        setVideoUrl={setVideoUrl}
-        onChange={onChange}
-        onDelete={onDelete}
+        videoUrl={value}
+        setVideoUrl={onChange}
+        onDeleteEditor={onDelete}
       />
     </EditorContainer>
   );
