@@ -124,7 +124,7 @@ const PlayMimique = () => {
           type: GameType.MIMIC,
         })}`,
       }).then((response) => {
-        if (!response.error && response.data) {
+        if (!response.error && response.data && response.data.length > 0) {
           const game = response.data as Game;
           const gameValues = Object.values(game);
           // Pick a random mimic game
@@ -294,6 +294,7 @@ const PlayMimique = () => {
                         control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
                         label={mimicContent.signification}
                         disabled={found || foundError ? true : false}
+                        style={{ cursor: 'pointer' }}
                       />
                     );
                   } else if (val === 1) {
@@ -304,6 +305,7 @@ const PlayMimique = () => {
                         control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
                         label={mimicContent.fakeSignification1}
                         disabled={fake1Selected || found || foundError ? true : false}
+                        style={{ cursor: 'pointer' }}
                       />
                     );
                   } else {
@@ -314,6 +316,7 @@ const PlayMimique = () => {
                         control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
                         label={mimicContent.fakeSignification2}
                         disabled={fake2Selected || found || foundError ? true : false}
+                        style={{ cursor: 'pointer' }}
                       />
                     );
                   }

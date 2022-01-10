@@ -67,8 +67,8 @@ const PresentationSuccess = () => {
               </Button>
             </Link>
           ) : (
-            <Link href="/creer-un-jeu/mimique" passHref>
-              <Button component="a" href="/creer-un-jeu/mimique" variant="outlined" color="primary">
+            <Link href="/creer-un-jeu/mimique/jouer" passHref>
+              <Button component="a" href="/creer-un-jeu/mimique/jouer" variant="outlined" color="primary">
                 Découvrir les mimiques de vos Pélicopains !
               </Button>
             </Link>
