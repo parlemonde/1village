@@ -72,7 +72,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.7.1"],
             ["@types/nodemailer", "npm:6.4.4"],
             ["@types/nprogress", "npm:0.2.0"],
-            ["@types/prettier", "npm:2.3.0"],
+            ["@types/prettier", "npm:2.4.3"],
             ["@types/react", "npm:17.0.27"],
             ["@types/react-dom", "npm:17.0.8"],
             ["@types/sass", "npm:1.16.1"],
@@ -136,7 +136,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["nodemon", "npm:2.0.8"],
             ["notistack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.0.2"],
             ["nprogress", "npm:0.2.0"],
-            ["prettier", "npm:2.3.2"],
+            ["prettier", "npm:2.5.1"],
             ["query-string", "npm:7.0.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],
@@ -205,7 +205,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.7.1"],
             ["@types/nodemailer", "npm:6.4.4"],
             ["@types/nprogress", "npm:0.2.0"],
-            ["@types/prettier", "npm:2.3.0"],
+            ["@types/prettier", "npm:2.4.3"],
             ["@types/react", "npm:17.0.27"],
             ["@types/react-dom", "npm:17.0.8"],
             ["@types/sass", "npm:1.16.1"],
@@ -269,7 +269,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["nodemon", "npm:2.0.8"],
             ["notistack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.0.2"],
             ["nprogress", "npm:0.2.0"],
-            ["prettier", "npm:2.3.2"],
+            ["prettier", "npm:2.5.1"],
             ["query-string", "npm:7.0.1"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],
@@ -4385,10 +4385,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/prettier", [
-        ["npm:2.3.0", {
-          "packageLocation": "./.yarn/cache/@types-prettier-npm-2.3.0-b1be4bd841-8dd9b5263f.zip/node_modules/@types/prettier/",
+        ["npm:2.4.3", {
+          "packageLocation": "./.yarn/cache/@types-prettier-npm-2.4.3-59302580e6-b240434daa.zip/node_modules/@types/prettier/",
           "packageDependencies": [
-            ["@types/prettier", "npm:2.3.0"]
+            ["@types/prettier", "npm:2.4.3"]
           ],
           "linkType": "HARD",
         }]
@@ -8657,10 +8657,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["eslint-plugin-prettier", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.4.1"],
             ["@types/eslint", "npm:7.2.13"],
-            ["@types/prettier", "npm:2.3.0"],
+            ["@types/prettier", "npm:2.4.3"],
             ["eslint", "npm:7.29.0"],
             ["eslint-config-prettier", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.3.0"],
-            ["prettier", "npm:2.3.2"],
+            ["prettier", "npm:2.5.1"],
             ["prettier-linter-helpers", "npm:1.0.0"]
           ],
           "packagePeers": [
@@ -13582,10 +13582,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prettier", [
-        ["npm:2.3.2", {
-          "packageLocation": "./.yarn/cache/prettier-npm-2.3.2-4467ec48dc-17ce5784ac.zip/node_modules/prettier/",
+        ["npm:2.5.1", {
+          "packageLocation": "./.yarn/cache/prettier-npm-2.5.1-58b195b509-21b9408476.zip/node_modules/prettier/",
           "packageDependencies": [
-            ["prettier", "npm:2.3.2"]
+            ["prettier", "npm:2.5.1"]
           ],
           "linkType": "HARD",
         }]

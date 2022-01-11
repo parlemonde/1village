@@ -46,7 +46,7 @@ __metadata:
     "@types/node": 16.7.1
     "@types/nodemailer": 6.4.4
     "@types/nprogress": 0.2.0
-    "@types/prettier": 2.3.0
+    "@types/prettier": 2.4.3
     "@types/react": 17.0.27
     "@types/react-dom": 17.0.8
     "@types/sass": 1.16.1
@@ -110,7 +110,7 @@ __metadata:
     nodemon: 2.0.8
     notistack: ^2.0.2
     nprogress: ^0.2.0
-    prettier: 2.3.2
+    prettier: 2.5.1
     query-string: ^7.0.0
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -2895,10 +2895,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:2.3.0":
-  version: 2.3.0
-  resolution: "@types/prettier@npm:2.3.0"
-  checksum: 8dd9b5263fd91001d72ca4e2ff89fb0d1ba23a450bd723b4478eb651755a2f1151af14ab90c4f7dadba607142757b340c1d7271ae56806563c76719d3321ec20
+"@types/prettier@npm:2.4.3":
+  version: 2.4.3
+  resolution: "@types/prettier@npm:2.4.3"
+  checksum: b240434daabac54700c862b0bb52a83fec396e0e9c847447119ba41fd8404d79aadfa174e6306fb094b29efadac586344b7606c3a71c286b71755ab2579d54df
   languageName: node
   linkType: hard
 
@@ -10935,12 +10935,12 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.3.2":
-  version: 2.3.2
-  resolution: "prettier@npm:2.3.2"
+"prettier@npm:2.5.1":
+  version: 2.5.1
+  resolution: "prettier@npm:2.5.1"
   bin:
     prettier: bin-prettier.js
-  checksum: 17ce5784ac67621c292df58e2da60b2ee150c2d6aebea22a6ad9e52fcd6a5e66c349d0a8436ea3bd8ff9d778920a5f68000d7625b74f43558718a49755aa5259
+  checksum: 21b9408476ea1c544b0e45d51ceb94a84789ff92095abb710942d780c862d0daebdb29972d47f6b4d0f7ebbfb0ffbf56cc2cfa3e3e9d1cca54864af185b15b66
   languageName: node
   linkType: hard
 
