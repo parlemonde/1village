@@ -2,17 +2,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { LinearProgressProps } from '@mui/material/LinearProgress';
-import { Button, FormControlLabel, Grid, Radio, RadioGroup, LinearProgress, Typography, Box } from '@mui/material';
+import { Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
+import { MimicStats } from 'src/components/activities/MimicStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { CustomRadio as GreenRadio } from 'src/components/buttons/CustomRadio';
 import { CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
@@ -22,19 +24,6 @@ import type { MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { MimicResponseValue } from 'types/mimicResponse.type';
 import { UserType } from 'types/user.type';
-
-function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
-  return (
-    <Box display="flex" alignItems="center">
-      <Box width="100%" mr={1}>
-        <LinearProgress variant="determinate" {...props} />
-      </Box>
-      <Box minWidth={35}>
-        <Typography variant="body2" color="textSecondary">{`${Math.round(props.value)}%`}</Typography>
-      </Box>
-    </Box>
-  );
-}
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -47,12 +36,10 @@ function shuffleArray(array: Array<number>) {
   return array;
 }
 
-interface StatsProps {
-  [key: string]: { [key: string]: number };
-}
-
 const PlayMimique = () => {
   const router = useRouter();
+  const { user } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
   const { users } = useVillageUsers();
   const { getRandomGame, sendNewGameResponse, getGameStats } = useGameRequests();
 
@@ -119,53 +106,9 @@ const PlayMimique = () => {
     return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
   }, [game, userMap, users]);
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
+  const userIsPelico = user !== null && user.type >= UserType.OBSERVATOR;
   const ableToValidate = selected !== null;
-  const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
-
-  const stats = React.useMemo(() => {
-    // todo: get stats from responses.
-  }, [gameResponses]);
-
-  // React.useEffect(() => {
-  //   if (gameResponses) {
-  //     // console.log('2. gameResponses', gameResponses);
-  //     const resStats: StatsProps = {};
-  //     gameResponses.forEach((val: GameResponse) => {
-  //       // connected user's id
-  //       const classUserId = val.userId;
-  //       setconnectedUserId(classUserId);
-  //       console.log('1. classUserId', classUserId);
-  //       // connected user's country
-  //       const classUserIsoCode = val.user.country.isoCode;
-  //       setconnectedUserIsoCode(classUserIsoCode);
-  //       console.log('1. classUserIsoCode', classUserIsoCode);
-  //       if (resStats[val.user.country.isoCode] && resStats[val.user.country.isoCode][val.user.id]) {
-  //         resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
-  //         resStats[val.user.country.isoCode][val.value] = resStats[val.user.country.isoCode][val.value] + 1;
-  //       } else {
-  //         if (!resStats[val.user.country.isoCode]) {
-  //           resStats[val.user.country.isoCode] = {
-  //             total: 0,
-  //           };
-  //         }
-  //         if (!resStats[val.user.country.isoCode][val.value]) {
-  //           resStats[val.user.country.isoCode][val.value] = 1;
-  //           resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
-  //         }
-  //       }
-  //     });
-  //     setStats(resStats);
-  //     // console.log('1. resStats', resStats);
-  //     const resStatsCountries = Object.keys(resStats);
-  //     console.log('1. resStatsCountries', resStatsCountries);
-  //     // if the array contains only one country, the other country has not played the same game yet
-  //     if (resStatsCountries.length === 1) {
-  //       setFirstCountryToAnswer(true);
-  //     } else {
-  //       setFirstCountryToAnswer(false);
-  //     }
-  //   }
-  // }, [firstCountryToAnswer, gameResponses, userMap]);
+  const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
   const onValidate = async () => {
     if (selected === null || game === undefined) {
@@ -181,6 +124,7 @@ const PlayMimique = () => {
     setFake1Selected(fake1Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_1);
     setFake2Selected(fake2Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_2);
     setSelected(null);
+    setErrorModalOpen(selected !== MimicResponseValue.SIGNIFICATION);
     setTryCount(tryCount + 1);
     if (selected === MimicResponseValue.SIGNIFICATION || tryCount === 1) {
       setFoundError(selected !== MimicResponseValue.SIGNIFICATION);
@@ -192,8 +136,8 @@ const PlayMimique = () => {
     setSelected(event.target.value as MimicResponseValue);
   };
 
-  if (loadingGame) {
-    <Base></Base>;
+  if (user === null || village === null || loadingGame) {
+    return <Base></Base>;
   }
 
   if (!game || !gameCreator) {
@@ -277,58 +221,28 @@ const PlayMimique = () => {
                 })}
             </RadioGroup>
           </Grid>
-          {/* {stats &&
-            Object.keys(stats).map((country: string) => {
-              return (
-                <Grid item xs={5} md={5} key={country}>
-                  <span style={{ paddingRight: '0.5rem' }}>Réponses de vos Pélicopains</span>
-                  <Flag country={country} />
-                  {choices?.map((val) => {
-                    if (val === 0) {
-                      return (
-                        <LinearProgressWithLabel
-                          key="1"
-                          value={Math.round((stats[country]['0'] * 100) / stats[country]['total']) || 0}
-                          style={{ height: '0.5rem', margin: '1.2rem 0' }}
-                        />
-                      );
-                    } else if (val === 1) {
-                      return (
-                        <LinearProgressWithLabel
-                          key="2"
-                          value={Math.round((stats[country]['1'] * 100) / stats[country]['total']) || 0}
-                          style={{ height: '0.5rem', margin: '1.2rem 0' }}
-                        />
-                      );
-                    } else {
-                      return (
-                        <LinearProgressWithLabel
-                          key="3"
-                          value={Math.round((stats[country]['2'] * 100) / stats[country]['total']) || 0}
-                          style={{ height: '0.5rem', margin: '1.2rem 0' }}
-                        />
-                      );
-                    }
-                  })}
-                </Grid>
-              );
-            })}
-          {/* Here, we check if the player is the first country of the "village-monde" who plays the mimic game.*/}
-          {/* {stats && firstCountryToAnswer === true ? (
-            Object.keys(stats).map((country: string) => {
-              return (
-                <Grid item xs={5} md={5} key={country}>
-                  <span style={{ paddingRight: '0.5rem' }}>Pas de réponses des Pélicopains</span>
-                  {/* First, we make sure the connected user is different from the user who has already played. 
-                  Then check if they are from the same country. Based on the user's id, we display the correct flag. */}
-          {/* {user.id === connectedUserId && user.country.isoCode === connectedUserIsoCode && <Flag country={connectedUserIsoCode} />} */}
-          {/* {user.id !== connectedUserId && user.country.isoCode !== connectedUserIsoCode && <Flag country={user.country.isoCode} />}
-                </Grid>
-              );
-            })
-          ) : (
-            <div></div>
-          )} */}
+
+          {(found || foundError) && (
+            <>
+              <MimicStats
+                gameResponses={gameResponses}
+                choices={choices}
+                country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
+                userMap={userMap}
+                users={users}
+              />
+
+              <MimicStats
+                gameResponses={gameResponses}
+                choices={choices}
+                country={
+                  userIsPelico ? village.countries[1].isoCode : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
+                }
+                userMap={userMap}
+                users={users}
+              />
+            </>
+          )}
           <Grid item xs={12} md={12}>
             {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
             {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>}
