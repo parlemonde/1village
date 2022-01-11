@@ -23,7 +23,6 @@ import { GameType } from 'types/game.type';
 import type { MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { MimicResponseValue } from 'types/mimicResponse.type';
-import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
@@ -54,17 +53,12 @@ interface StatsProps {
   [key: string]: { [key: string]: number };
 }
 
-const mimicContentPropsDefault = {
-  gameId: 0,
-  origine: '',
-  signification: '',
-  fakeSignification1: '',
-  fakeSignification2: '',
-  video: '',
-};
-
 const PlayMimique = () => {
   const router = useRouter();
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
+  const { users } = useVillageUsers();
+
   const [tryCount, setTryCount] = React.useState<number>(0);
   const [found, setFound] = React.useState<boolean>(false);
   const [foundError, setFoundError] = React.useState<boolean>(false);
@@ -72,23 +66,14 @@ const PlayMimique = () => {
   const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
   const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
-  const [game, setGame] = React.useState<Game>();
-  const [mimicContent, setMimicContent] = React.useState<MimicData>(mimicContentPropsDefault);
+  const [game, setGame] = React.useState<Game | undefined>(undefined);
   const [gameResponses, setGameResponses] = React.useState<GameResponse[]>();
-  const [user, setUser] = React.useState<User | undefined>(undefined);
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
+  // TODO: useMemo
   const [stats, setStats] = React.useState<StatsProps>();
-  const { village } = React.useContext(VillageContext);
   const [isReloading, setIsReloading] = React.useState<boolean>(false);
-  const [ableToValidate, setAbleToValidate] = React.useState<boolean>(false);
-  const [firstCountryToAnswer, setFirstCountryToAnswer] = React.useState<boolean>(false);
-  const [connectedUserId, setconnectedUserId] = React.useState<number>(0);
-  const [connectedUserIsoCode, setconnectedUserIsoCode] = React.useState('');
 
-  const [userIsPelico, setUserIsPelico] = React.useState<boolean>(true);
-
-  const { users } = useVillageUsers();
+  console.log('all users from the same village (admin included)', users);
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -98,11 +83,37 @@ const PlayMimique = () => {
     [users],
   );
 
+  const mimicContent = React.useMemo(() => {
+    if (game === undefined) {
+      return undefined;
+    }
+    try {
+      return JSON.parse(game.content) as MimicData;
+    } catch (e) {
+      // TODO : display 'next game'
+      return undefined;
+    }
+  }, [game]);
+
+  const gameCreator = React.useMemo(() => {
+    if (game === undefined) {
+      return undefined;
+    }
+    const creator = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
+    if (creator === undefined) {
+      // TODO go to next game
+    }
+    return creator;
+  }, [game, userMap, users]);
+
+  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
+
+  const ableToValidate = selected !== null;
+
   const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
 
   React.useEffect(() => {
     if (isReloading) {
-      setMimicContent(mimicContentPropsDefault);
       setIsReloading(false);
       setFound(false);
       setFoundError(false);
@@ -113,7 +124,6 @@ const PlayMimique = () => {
       setSelected(null);
       setTryCount(0);
       setErrorModalOpen(false);
-      setAbleToValidate(false);
     }
     if (isReloading || village) {
       axiosLoggedRequest({
@@ -129,58 +139,53 @@ const PlayMimique = () => {
           // Pick a random mimic game
           const randomGamePick = gameValues[Math.floor(Math.random() * gameValues.length)] as Game;
           setGame(randomGamePick);
-          const mimicContent = JSON.parse(randomGamePick.content) as MimicData;
-          setMimicContent(mimicContent);
         } else {
           setLastMimiqueModalOpen(true);
         }
       });
     }
-  }, [mimicContent.gameId, isReloading, village, axiosLoggedRequest]);
+  }, [isReloading, village, axiosLoggedRequest]);
 
-  React.useEffect(() => {
-    if (game) {
-      const user = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
-      if (user && user.type !== UserType.OBSERVATOR) setUser(user);
-      if (user && user.type === UserType.OBSERVATOR) setUserIsPelico(false);
-    }
-  }, [game, userMap, users]);
-
-  React.useEffect(() => {
-    if (gameResponses) {
-      const resStats: StatsProps = {};
-      gameResponses.forEach((val: GameResponse) => {
-        // connected user's id
-        const classUserId = val.userId;
-        setconnectedUserId(classUserId);
-        // connected user's country
-        const classUserIsoCode = val.user.country.isoCode;
-        setconnectedUserIsoCode(classUserIsoCode);
-        if (resStats[val.user.country.isoCode] && resStats[val.user.country.isoCode][val.user.id]) {
-          resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
-          resStats[val.user.country.isoCode][val.value] = resStats[val.user.country.isoCode][val.value] + 1;
-        } else {
-          if (!resStats[val.user.country.isoCode]) {
-            resStats[val.user.country.isoCode] = {
-              total: 0,
-            };
-          }
-          if (!resStats[val.user.country.isoCode][val.value]) {
-            resStats[val.user.country.isoCode][val.value] = 1;
-            resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
-          }
-        }
-      });
-      setStats(resStats);
-      const resStatsCountries = Object.keys(resStats);
-      // if the array contains only one country, the other country has not played the same game yet
-      if (resStatsCountries.length === 1) {
-        setFirstCountryToAnswer(true);
-      } else {
-        setFirstCountryToAnswer(false);
-      }
-    }
-  }, [firstCountryToAnswer, gameResponses, userMap]);
+  // React.useEffect(() => {
+  //   if (gameResponses) {
+  //     // console.log('2. gameResponses', gameResponses);
+  //     const resStats: StatsProps = {};
+  //     gameResponses.forEach((val: GameResponse) => {
+  //       // connected user's id
+  //       const classUserId = val.userId;
+  //       setconnectedUserId(classUserId);
+  //       console.log('1. classUserId', classUserId);
+  //       // connected user's country
+  //       const classUserIsoCode = val.user.country.isoCode;
+  //       setconnectedUserIsoCode(classUserIsoCode);
+  //       console.log('1. classUserIsoCode', classUserIsoCode);
+  //       if (resStats[val.user.country.isoCode] && resStats[val.user.country.isoCode][val.user.id]) {
+  //         resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
+  //         resStats[val.user.country.isoCode][val.value] = resStats[val.user.country.isoCode][val.value] + 1;
+  //       } else {
+  //         if (!resStats[val.user.country.isoCode]) {
+  //           resStats[val.user.country.isoCode] = {
+  //             total: 0,
+  //           };
+  //         }
+  //         if (!resStats[val.user.country.isoCode][val.value]) {
+  //           resStats[val.user.country.isoCode][val.value] = 1;
+  //           resStats[val.user.country.isoCode].total = resStats[val.user.country.isoCode].total + 1;
+  //         }
+  //       }
+  //     });
+  //     setStats(resStats);
+  //     // console.log('1. resStats', resStats);
+  //     const resStatsCountries = Object.keys(resStats);
+  //     console.log('1. resStatsCountries', resStatsCountries);
+  //     // if the array contains only one country, the other country has not played the same game yet
+  //     if (resStatsCountries.length === 1) {
+  //       setFirstCountryToAnswer(true);
+  //     } else {
+  //       setFirstCountryToAnswer(false);
+  //     }
+  //   }
+  // }, [firstCountryToAnswer, gameResponses, userMap]);
 
   const validate = () => {
     if (selected === null) return;
@@ -238,10 +243,9 @@ const PlayMimique = () => {
 
   const onChange = (event: { target: HTMLInputElement }) => {
     setSelected(event.target.value as MimicResponseValue);
-    setAbleToValidate(true);
   };
 
-  if (!game || !user) {
+  if (!game) {
     return (
       <Base>
         <Modal
@@ -259,27 +263,32 @@ const PlayMimique = () => {
     );
   }
 
+  if (!gameCreator) {
+    // Should not happen
+    return null;
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
         <h1>Que signifie cette mimique ?</h1>
         <div className="activity-card__header">
-          <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
+          <AvatarImg user={gameCreator} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
           <div className="activity-card__header_info">
             <p className="text" style={{ marginTop: '0.7rem' }}>
               {'Une mimique proposée par '}
-              <UserDisplayName className="text" user={user} noLink={false} />
-              {!userIsPelico ? (
+              <UserDisplayName className="text" user={gameCreator} noLink={false} />
+              {gameCreatorIsPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
-                <Flag country={user.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </p>
           </div>
         </div>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
-            {mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
+            {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
           </Grid>
           <Grid item xs={2} md={2}>
             <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
@@ -291,7 +300,7 @@ const PlayMimique = () => {
                         key="1"
                         value={MimicResponseValue.SIGNIFICATION}
                         control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
-                        label={mimicContent.signification}
+                        label={mimicContent?.signification || ''}
                         disabled={found || foundError ? true : false}
                         style={{ cursor: 'pointer' }}
                       />
@@ -302,7 +311,7 @@ const PlayMimique = () => {
                         key="2"
                         value={MimicResponseValue.FAKE_SIGNIFICATION_1}
                         control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
-                        label={mimicContent.fakeSignification1}
+                        label={mimicContent?.fakeSignification1 || ''}
                         disabled={fake1Selected || found || foundError ? true : false}
                         style={{ cursor: 'pointer' }}
                       />
@@ -313,7 +322,7 @@ const PlayMimique = () => {
                         key="3"
                         value={MimicResponseValue.FAKE_SIGNIFICATION_2}
                         control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
-                        label={mimicContent.fakeSignification2}
+                        label={mimicContent?.fakeSignification2 || ''}
                         disabled={fake2Selected || found || foundError ? true : false}
                         style={{ cursor: 'pointer' }}
                       />
@@ -322,7 +331,7 @@ const PlayMimique = () => {
                 })}
             </RadioGroup>
           </Grid>
-          {stats &&
+          {/* {stats &&
             Object.keys(stats).map((country: string) => {
               return (
                 <Grid item xs={5} md={5} key={country}>
@@ -359,29 +368,28 @@ const PlayMimique = () => {
               );
             })}
           {/* Here, we check if the player is the first country of the "village-monde" who plays the mimic game.*/}
-          {stats && firstCountryToAnswer === true ? (
+          {/* {stats && firstCountryToAnswer === true ? (
             Object.keys(stats).map((country: string) => {
               return (
                 <Grid item xs={5} md={5} key={country}>
                   <span style={{ paddingRight: '0.5rem' }}>Pas de réponses des Pélicopains</span>
                   {/* First, we make sure the connected user is different from the user who has already played. 
                   Then check if they are from the same country. Based on the user's id, we display the correct flag. */}
-                  {user.id !== connectedUserId && user.country.isoCode === connectedUserIsoCode && <Flag country={connectedUserIsoCode} />}
-                  {user.id !== connectedUserId && user.country.isoCode !== connectedUserIsoCode && <Flag country={user.country.isoCode} />}
+          {/* {user.id === connectedUserId && user.country.isoCode === connectedUserIsoCode && <Flag country={connectedUserIsoCode} />} */}
+          {/* {user.id !== connectedUserId && user.country.isoCode !== connectedUserIsoCode && <Flag country={user.country.isoCode} />}
                 </Grid>
               );
             })
           ) : (
             <div></div>
-          )}
-
+          )} */}
           <Grid item xs={12} md={12}>
             {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
             {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>}
             {(found || foundError) && (
               <>
                 <h2>Origine de cette mimique :</h2>
-                <p>{mimicContent.origine}</p>
+                <p>{mimicContent?.origine || ''}</p>
               </>
             )}
           </Grid>
