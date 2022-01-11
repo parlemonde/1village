@@ -6,6 +6,7 @@ import { GameResponse } from '../entities/gameResponse';
 import { Game } from '../entities/game';
 import { UserType } from '../entities/user';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
+import { getQueryString } from '../utils';
 
 import { Controller } from './controller';
 
@@ -32,15 +33,19 @@ gameController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   res.sendJSON(game);
 });
 
-//--- Play a game ---
+//--- Get one random game to play ---
 gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
+  const type = parseInt(getQueryString(req.query.type) || '0', 10);
+  if (!req.user || !req.query.type) {
     next();
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.villageId || Number(req.query.villageId);
-  const type = req.query.type;
+  const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
+  if (!villageId) {
+    next();
+    return;
+  }
   const game = await getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
@@ -60,22 +65,29 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
       },
       { userId: req.user.id },
     )
-    .orderBy('game.createDate', 'DESC')
-    .getMany();
-
-  res.sendJSON(game || null);
+    .orderBy('RAND()')
+    .getOne();
+  if (!game) {
+    next();
+    return;
+  }
+  res.sendJSON(game);
 });
 
-//--- Activate play mode ---
+//--- Get number of games available ---
 gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const type = parseInt(getQueryString(req.query.type) || '0', 10);
   if (!req.user) {
     next();
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.villageId || Number(req.query.villageId);
-  const type = req.query.type;
-  const game = await getRepository(Game).createQueryBuilder('game').where('`game`.`userId` = :userId', { userId: userId }).getOne();
+  const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
+  if (!villageId) {
+    next();
+    return;
+  }
+  // const game = await getRepository(Game).createQueryBuilder('game').where('`game`.`userId` = :userId', { userId: userId }).getOne();
   const count = await getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
@@ -95,28 +107,16 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
       },
       { userId: req.user.id },
     )
-    .orderBy('`game`.`createDate`', 'DESC')
     .getCount();
   res.sendJSON({
-    ableToPlay: game ? true : false,
     count: count,
   });
-});
-
-//--- retrieve answers to all mimics ---
-gameController.get({ path: '/stats', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    next();
-    return;
-  }
-  const gameResponses = await getRepository(GameResponse).createQueryBuilder('gameResponse').leftJoinAndSelect('gameResponse.user', 'user').getMany();
-  res.sendJSON(gameResponses || []);
 });
 
 //--- retrieve answers to the mimic with this id ---
 gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
-    next();
+    res.sendJSON([]);
     return;
   }
   const gameId = parseInt(req.params.gameId, 10) || 0;

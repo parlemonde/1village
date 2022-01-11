@@ -5,36 +5,19 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 import { Base } from 'src/components/Base';
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { serializeToQueryUrl } from 'src/utils';
+import { useGameRequests } from 'src/services/useGames';
 import { GameType } from 'types/game.type';
 
 const Mimique: React.FC = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
-  const [ableToPlay, setAbleToPlay] = React.useState<boolean>(false);
-  const [count, setCount] = React.useState<number>(0);
+  const { getAvailableGamesCount } = useGameRequests();
+  const [mimicsCount, setMimicsCount] = React.useState<number>(0);
 
   React.useEffect(() => {
-    if (village) {
-      axiosLoggedRequest({
-        method: 'GET',
-        url: `/games/ableToPlay${serializeToQueryUrl({
-          villageId: village.id,
-          type: GameType.MIMIC,
-        })}`,
-      }).then((response) => {
-        if (!response.error && response.data) {
-          setAbleToPlay(response.data.ableToPlay as boolean);
-          setCount(response.data.count as number);
-        } else {
-          setAbleToPlay(false);
-        }
-      });
-    }
-  }, [axiosLoggedRequest, village]);
+    getAvailableGamesCount(GameType.MIMIC).then((count) => {
+      setMimicsCount(count);
+    });
+  }, [getAvailableGamesCount]);
 
   return (
     <Base>
@@ -74,7 +57,7 @@ const Mimique: React.FC = () => {
 
         <p style={{ marginBottom: '3rem' }}>
           Une fois que vous aurez décrit 3 mimiques, ça sera à vous de deviner ce que veulent dire les mimiques de vos Pélicopains ! Il y a
-          actuellement {count === 0 ? `${count} nouvelle mimique` : `${count} nouvelles mimiques`} à découvrir :
+          actuellement {mimicsCount === 0 ? `${mimicsCount} nouvelle mimique` : `${mimicsCount} nouvelles mimiques`} à découvrir :
         </p>
 
         <Link href="/creer-un-jeu/mimique/jouer" passHref>
@@ -91,7 +74,7 @@ const Mimique: React.FC = () => {
               float: 'right',
             }}
             disableElevation
-            disabled={!ableToPlay || count === 0}
+            disabled={mimicsCount === 0}
           >
             Découvrir des mimiques
           </Button>

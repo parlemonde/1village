@@ -13,11 +13,9 @@ import { UserDisplayName } from 'src/components/UserDisplayName';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { CustomRadio as GreenRadio } from 'src/components/buttons/CustomRadio';
 import { CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
+import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
-import { serializeToQueryUrl } from 'src/utils';
 import type { Game } from 'types/game.type';
 import { GameType } from 'types/game.type';
 import type { MimicData } from 'types/game.type';
@@ -55,25 +53,47 @@ interface StatsProps {
 
 const PlayMimique = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
   const { users } = useVillageUsers();
+  const { getRandomGame, sendNewGameResponse, getGameStats } = useGameRequests();
 
+  const [game, setGame] = React.useState<Game | undefined>(undefined);
   const [tryCount, setTryCount] = React.useState<number>(0);
   const [found, setFound] = React.useState<boolean>(false);
   const [foundError, setFoundError] = React.useState<boolean>(false);
   const [fake1Selected, setFake1Selected] = React.useState<boolean>(false);
   const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
+  const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
   const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
-  const [game, setGame] = React.useState<Game | undefined>(undefined);
-  const [gameResponses, setGameResponses] = React.useState<GameResponse[]>();
-  const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
-  // TODO: useMemo
-  const [stats, setStats] = React.useState<StatsProps>();
-  const [isReloading, setIsReloading] = React.useState<boolean>(false);
+  const [loadingGame, setLoadingGame] = React.useState<boolean>(true);
+  const [gameResponses, setGameResponses] = React.useState<GameResponse[]>([]);
 
-  console.log('all users from the same village (admin included)', users);
+  const getNextGame = React.useCallback(async () => {
+    setLoadingGame(true);
+
+    // [1] Reset game.
+    setFound(false);
+    setFoundError(false);
+    setFake1Selected(false);
+    setFake2Selected(false);
+    setGameResponses([]);
+    setSelected(null);
+    setTryCount(0);
+    setErrorModalOpen(false);
+
+    // [2] Get next game data.
+    const newGame = await getRandomGame(GameType.MIMIC);
+    setGame(newGame);
+    setLastMimiqueModalOpen(newGame === undefined);
+
+    setLoadingGame(false);
+  }, [getRandomGame]);
+
+  // Get next game on start and on village change.
+  React.useEffect(() => {
+    getNextGame().catch();
+  }, [getNextGame]);
+
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -82,7 +102,6 @@ const PlayMimique = () => {
       }, {}),
     [users],
   );
-
   const mimicContent = React.useMemo(() => {
     if (game === undefined) {
       return undefined;
@@ -90,61 +109,22 @@ const PlayMimique = () => {
     try {
       return JSON.parse(game.content) as MimicData;
     } catch (e) {
-      // TODO : display 'next game'
       return undefined;
     }
   }, [game]);
-
   const gameCreator = React.useMemo(() => {
     if (game === undefined) {
       return undefined;
     }
-    const creator = userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
-    if (creator === undefined) {
-      // TODO go to next game
-    }
-    return creator;
+    return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
   }, [game, userMap, users]);
-
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
-
   const ableToValidate = selected !== null;
-
   const choices = React.useMemo(() => game && shuffleArray([0, 1, 2]), [game]);
 
-  React.useEffect(() => {
-    if (isReloading) {
-      setIsReloading(false);
-      setFound(false);
-      setFoundError(false);
-      setFake1Selected(false);
-      setFake2Selected(false);
-      setGameResponses([] as GameResponse[]);
-      setStats({} as StatsProps);
-      setSelected(null);
-      setTryCount(0);
-      setErrorModalOpen(false);
-    }
-    if (isReloading || village) {
-      axiosLoggedRequest({
-        method: 'GET',
-        url: `/games/play${serializeToQueryUrl({
-          villageId: village?.id,
-          type: GameType.MIMIC,
-        })}`,
-      }).then((response) => {
-        if (!response.error && response.data && response.data.length > 0) {
-          const game = response.data as Game;
-          const gameValues = Object.values(game);
-          // Pick a random mimic game
-          const randomGamePick = gameValues[Math.floor(Math.random() * gameValues.length)] as Game;
-          setGame(randomGamePick);
-        } else {
-          setLastMimiqueModalOpen(true);
-        }
-      });
-    }
-  }, [isReloading, village, axiosLoggedRequest]);
+  const stats = React.useMemo(() => {
+    // todo: get stats from responses.
+  }, [gameResponses]);
 
   // React.useEffect(() => {
   //   if (gameResponses) {
@@ -187,65 +167,36 @@ const PlayMimique = () => {
   //   }
   // }, [firstCountryToAnswer, gameResponses, userMap]);
 
-  const validate = () => {
-    if (selected === null) return;
-    axiosLoggedRequest({
-      method: 'PUT',
-      url: `/games/play/${game?.id}`,
-      data: { value: selected },
-    }).then(() => {
-      if (tryCount == 0) {
-        if (selected == MimicResponseValue.SIGNIFICATION) {
-          setFound(true);
-          setSelected(null);
-          axiosLoggedRequest({
-            method: 'GET',
-            url: `/games/stats/${game?.id}`,
-          }).then((response) => {
-            if (!response.error && response.data) {
-              setGameResponses(response.data as GameResponse[]);
-            }
-          });
-        } else if (selected == MimicResponseValue.FAKE_SIGNIFICATION_1) {
-          setFake1Selected(true);
-          setSelected(null);
-          setErrorModalOpen(true);
-        } else {
-          setFake2Selected(true);
-          setSelected(null);
-          setErrorModalOpen(true);
-        }
-        setTryCount(tryCount + 1);
-      } else if (tryCount == 1) {
-        if (selected == MimicResponseValue.SIGNIFICATION) {
-          setFound(true);
-          setSelected(null);
-        } else if (selected == MimicResponseValue.FAKE_SIGNIFICATION_1) {
-          setFake1Selected(true);
-          setSelected(null);
-          setFoundError(true);
-        } else {
-          setFake2Selected(true);
-          setSelected(null);
-          setFoundError(true);
-        }
-        axiosLoggedRequest({
-          method: 'GET',
-          url: `/games/stats/${game?.id}`,
-        }).then((response) => {
-          if (!response.error && response.data) {
-            setGameResponses(response.data as GameResponse[]);
-          }
-        });
-      }
-    });
+  const onValidate = async () => {
+    if (selected === null || game === undefined) {
+      return;
+    }
+    const success = await sendNewGameResponse(game.id, selected);
+    if (!success) {
+      // TODO: send notistack that an unknown error happened..
+      return;
+    }
+
+    setFound(selected === MimicResponseValue.SIGNIFICATION);
+    setFake1Selected(fake1Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_1);
+    setFake2Selected(fake2Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_2);
+    setSelected(null);
+    setTryCount(tryCount + 1);
+    if (selected === MimicResponseValue.SIGNIFICATION || tryCount === 1) {
+      setFoundError(selected !== MimicResponseValue.SIGNIFICATION);
+      setGameResponses(await getGameStats(game.id));
+    }
   };
 
   const onChange = (event: { target: HTMLInputElement }) => {
     setSelected(event.target.value as MimicResponseValue);
   };
 
-  if (!game) {
+  if (loadingGame) {
+    <Base></Base>;
+  }
+
+  if (!game || !gameCreator) {
     return (
       <Base>
         <Modal
@@ -261,11 +212,6 @@ const PlayMimique = () => {
         </Modal>
       </Base>
     );
-  }
-
-  if (!gameCreator) {
-    // Should not happen
-    return null;
   }
 
   return (
@@ -423,7 +369,7 @@ const PlayMimique = () => {
             }}
             variant="outlined"
             color="primary"
-            onClick={validate}
+            onClick={onValidate}
             disabled={!ableToValidate}
           >
             Valider
@@ -449,7 +395,9 @@ const PlayMimique = () => {
                 }}
                 variant="outlined"
                 color="primary"
-                onClick={() => setIsReloading(true)}
+                onClick={() => {
+                  getNextGame();
+                }}
               >
                 Rejouer
               </Button>

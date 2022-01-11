@@ -6,10 +6,9 @@ import { Button } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import { RedButton } from 'src/components/buttons/RedButton';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
-import { serializeToQueryUrl } from 'src/utils';
 import type { GameActivity, MimicsData } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
@@ -18,9 +17,9 @@ import type { ActivityCardProps } from './activity-card.types';
 
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
   const { village } = React.useContext(VillageContext);
-  const [count, setCount] = React.useState<number>(0);
+  const { getAvailableGamesCount } = useGameRequests();
+  const [availableMimicsCount, setAvailableMimicsCount] = React.useState<number>(0);
 
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const activityMimic = activity.data as MimicsData;
 
   const randomVideoLink = React.useMemo(() => {
@@ -33,19 +32,11 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
 
   React.useEffect(() => {
     if (village) {
-      axiosLoggedRequest({
-        method: 'GET',
-        url: `/games/ableToPlay${serializeToQueryUrl({
-          villageId: village.id,
-          type: GameType.MIMIC,
-        })}`,
-      }).then((response) => {
-        if (!response.error && response.data) {
-          setCount(response.data.count as number);
-        }
+      getAvailableGamesCount(GameType.MIMIC).then((count) => {
+        setAvailableMimicsCount(count);
       });
     }
-  }, [axiosLoggedRequest, village]);
+  }, [getAvailableGamesCount, village]);
 
   return (
     <div
@@ -73,7 +64,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <p>Il y a actuellement {count} nouvelles mimiques à découvrir !</p>
+        <p>Il y a actuellement {availableMimicsCount} nouvelles mimiques à découvrir !</p>
         <p>{activity.data.presentation} a relancé le jeu des mimiques</p>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
