@@ -54,15 +54,9 @@ export const MimicStats = ({ gameResponses, choices, country, userMap, users }: 
       <Flag country={country} />
       {responseCount > 0 && responseChoices && (
         <>
-          {responseChoices.map((responseChoice) => {
-            if (responseChoice === 0) {
-              return <LinearProgressWithLabel value={stats[0]} style={{ height: '0.5rem', margin: '1.2rem 0' }} />;
-            } else if (responseChoice === 1) {
-              return <LinearProgressWithLabel value={stats[1]} style={{ height: '0.5rem', margin: '1.2rem 0' }} />;
-            } else {
-              return <LinearProgressWithLabel value={stats[2]} style={{ height: '0.5rem', margin: '1.2rem 0' }} />;
-            }
-          })}
+          {responseChoices.map((responseChoice, index) => (
+            <LinearProgressWithLabel key={index} value={stats[responseChoice]} style={{ height: '0.5rem', margin: '1.2rem 0' }} />
+          ))}
         </>
       )}
     </Grid>
