@@ -23,9 +23,13 @@ const ReactionStep1 = () => {
   const activitiesTypes = [1, 2, 3, 4, 9];
 
   const onNext = () => {
-    if (!activity || !isReaction(activity)) {
-      createNewActivity(ActivityType.REACTION, undefined, {}, selectedActivity.id, selectedActivity.type);
+    if (!activity || !isReaction(activity) || activity.responseActivityId !== selectedActivity.id) {
+      createNewActivity(ActivityType.REACTION, undefined, { content: activity?.content }, selectedActivity.id, selectedActivity.type);
     }
+    if ('edit' in router.query && activity) {
+      updateActivity({ content: activity?.content, responseActivityId: selectedActivity.id, responseType: selectedActivity.type });
+    }
+
     router.push('/reaction-activite/2');
   };
 
@@ -39,15 +43,13 @@ const ReactionStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      created.current = true;
       const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
       const responseActivityType =
         'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
-      createNewActivity(ActivityType.REACTION, undefined, {}, responseActivityId, responseActivityType);
-      setSelectedActivity({ id: responseActivityId, type: responseActivityType });
       if (!('edit' in router.query)) {
         created.current = true;
         createNewActivity(ActivityType.REACTION, undefined, {}, responseActivityId, responseActivityType);
+        setSelectedActivity({ id: responseActivityId, type: responseActivityType });
         if (responseActivityId !== null) {
           if (selectRef.current) {
             selectRef.current.scrollIntoView({ behavior: 'smooth' });
