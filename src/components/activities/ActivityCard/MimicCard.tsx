@@ -70,7 +70,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href="/creer-un-jeu/mimique" passHref>
-                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique" style={{ marginTop: '3rem' }}>
+                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique" style={{ marginTop: '4rem' }}>
                     Jouer au jeu
                   </Button>
                 </Link>
