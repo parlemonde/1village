@@ -55,9 +55,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               pointerEvents: 'none', //Disable click on video
             }}
           >
-            <KeepRatio ratio={9 / 16} maxWidth="600px">
-              <ReactPlayer width="100%" height="100%" url={firstVideo.value} light style={{ backgroundColor: 'black' }} />
-            </KeepRatio>
+            <ReactPlayer width="100%" height="100%" url={firstVideo.value} light />
           </div>
         </div>
       ) : (
@@ -76,7 +74,13 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
             {!showEditButtons && (
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
-                  <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
+                  <Button
+                    component="a"
+                    color="primary"
+                    variant="outlined"
+                    href={`/activite/${activity.id}`}
+                    style={{ marginTop: `${firstVideo ? 4 : 2}rem` }}
+                  >
                     {'Voir le reportage'}
                   </Button>
                 </Link>

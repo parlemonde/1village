@@ -57,9 +57,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               pointerEvents: 'none', //Disable click on video
             }}
           >
-            <KeepRatio ratio={9 / 16} maxWidth="600px">
-              <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
-            </KeepRatio>
+            <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
           </div>
         </div>
       )}
@@ -72,7 +70,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href="/creer-un-jeu/mimique" passHref>
-                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique">
+                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique" style={{ marginTop: '3rem' }}>
                     Jouer au jeu
                   </Button>
                 </Link>
