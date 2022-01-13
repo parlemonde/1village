@@ -30,8 +30,6 @@ export const DEFAULT_MIMIC_DATA: MimicsData = {
 
 export const isMimicValid = (data: MimicData): boolean => {
   return (
-    data.origine != null &&
-    data.origine.length > 0 &&
     data.signification != null &&
     data.signification.length > 0 &&
     data.fakeSignification1 != null &&

@@ -115,7 +115,7 @@ const MimiqueStep4 = () => {
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{errorSteps?.includes(0) ? '' : data.game1.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game1.origine} </p>
           </div>
           {/* Mimique 2 */}
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(1) })}>
@@ -150,7 +150,7 @@ const MimiqueStep4 = () => {
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{errorSteps?.includes(1) ? '' : data.game2.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game2.origine} </p>
           </div>
           {/* Mimique 3 */}
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(2) })}>
@@ -185,7 +185,7 @@ const MimiqueStep4 = () => {
                 />
               </Grid>
             </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{errorSteps?.includes(2) ? '' : data.game3.origine} </p>
+            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game3.origine} </p>
           </div>
         </div>
       </div>

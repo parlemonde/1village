@@ -7,7 +7,6 @@ import { Button } from '@mui/material';
 
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageActivity } from 'src/activity-types/reportage.types';
-import { KeepRatio } from 'src/components/KeepRatio';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
