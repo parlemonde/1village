@@ -65,7 +65,7 @@ export const SecondPhase = () => {
                     width: 'auto',
                   }}
                 >
-                  Retournez sur la phase 1
+                  Retourner sur la phase 1
                 </Button>
               </div>
               <div>
@@ -86,7 +86,7 @@ export const SecondPhase = () => {
                     width: 'auto',
                   }}
                 >
-                  Poursuivez sur la phase 2
+                  Poursuivre sur la phase 2
                 </Button>
               </div>
             </div>

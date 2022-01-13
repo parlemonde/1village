@@ -19,6 +19,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
   const firstVideo = React.useMemo(() => activity.content.find((c) => c.type === 'video'), [activity.content]);
   const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
+  const hasPreview = firstImage !== undefined || firstVideo !== undefined;
 
   const reportageType = getReportage(activity.subType, activity.data);
 
@@ -62,8 +63,8 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{reportageType.title}</h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
-          <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
+        <div style={{ margin: '0 0.5rem 1rem', height: `${hasPreview ? 4 : 2}rem`, textAlign: 'justify' }}>
+          <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${hasPreview ? 4 : 2}rem` }}>
             {firstText}
           </div>
         </div>
@@ -73,13 +74,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
             {!showEditButtons && (
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
-                  <Button
-                    component="a"
-                    color="primary"
-                    variant="outlined"
-                    href={`/activite/${activity.id}`}
-                    style={{ marginTop: `${firstVideo ? 4 : 2}rem` }}
-                  >
+                  <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     {'Voir le reportage'}
                   </Button>
                 </Link>

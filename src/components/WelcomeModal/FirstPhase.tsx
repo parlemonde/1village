@@ -7,8 +7,11 @@ import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
 import { Checkbox } from '@mui/material';
 
+import { CGU } from 'src/components/CGU';
+import { Flag } from 'src/components/Flag';
 import { Map } from 'src/components/Map';
 import { Modal } from 'src/components/Modal';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -18,10 +21,6 @@ import { getUserDisplayName, serializeToQueryUrl } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
-
-import { CGU } from '../CGU';
-import { Flag } from '../Flag';
-import { ActivityCard } from '../activities/ActivityCard';
 
 export const FirstPhase = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
@@ -43,10 +42,6 @@ export const FirstPhase = () => {
   }, [user]);
 
   if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
-    return null;
-  }
-
-  if (user.firstLogin === 1) {
     return null;
   }
 

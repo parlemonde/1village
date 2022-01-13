@@ -10,11 +10,10 @@ import { UserType } from 'types/user.type';
 
 export const useVillageUsers = (): { users: User[] } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
-  const activePhase = village ? village.activePhase : 1;
   const isPelico = user !== null && user.type > UserType.TEACHER;
   const userCountryIsoCode = user ? user.country.isoCode : null;
 
@@ -29,13 +28,16 @@ export const useVillageUsers = (): { users: User[] } => {
     if (response.error) {
       return [];
     }
-    if (activePhase === 1 && !isPelico) {
+    if (selectedPhase === 1 && !isPelico) {
       return (response.data as User[]).filter((user) => user.country.isoCode === userCountryIsoCode || user.type > UserType.TEACHER);
     }
     return response.data as User[];
-  }, [villageId, activePhase, userCountryIsoCode, isPelico, axiosLoggedRequest]);
+  }, [villageId, selectedPhase, userCountryIsoCode, isPelico, axiosLoggedRequest]);
 
-  const { data, isLoading, error } = useQuery<User[], unknown>(['village-users', { villageId, activePhase, userCountryIsoCode, isPelico }], getUsers);
+  const { data, isLoading, error } = useQuery<User[], unknown>(
+    ['village-users', { villageId, selectedPhase, userCountryIsoCode, isPelico }],
+    getUsers,
+  );
 
   return {
     users: isLoading || error ? [] : data || [],

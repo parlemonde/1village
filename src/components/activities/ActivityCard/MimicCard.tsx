@@ -62,14 +62,14 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p>Il y a actuellement {availableMimicsCount} nouvelles mimiques à découvrir !</p>
-        <p>{activity.data.presentation} a relancé le jeu des mimiques</p>
+        <p style={{ marginBottom: '4rem' }}>{activity.data.presentation} a relancé le jeu des mimiques</p>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
                 <Link href="/creer-un-jeu/mimique" passHref>
-                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique" style={{ marginTop: '4rem' }}>
+                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique">
                     Jouer au jeu
                   </Button>
                 </Link>
