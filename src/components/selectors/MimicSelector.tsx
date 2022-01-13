@@ -133,19 +133,16 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               label="Origine"
               value={MimicData.origine || ''}
               onChange={onDataChange('origine')}
-              style={{ width: '100%', margin: '10px' }}
-              error={showError && !isFieldValid(MimicData.origine)}
-              helperText={showError && !isFieldValid(MimicData.origine) ? 'Ce champ est obligatoire' : ''}
+              style={{ width: '100%', margin: '10px', fontStyle: 'italic' }}
+              helperText={'Ce champ est optionnel'}
               inputProps={{
                 maxLength: 800,
               }}
               multiline
             />
-            {!(showError && !isFieldValid(MimicData.origine)) && (
-              <div style={{ width: '100%', textAlign: 'right' }}>
-                <span className="text text--small">{MimicData.origine?.length}/800</span>
-              </div>
-            )}
+            <div style={{ width: '100%', textAlign: 'right' }}>
+              <span className="text text--small">{MimicData.origine?.length}/800</span>
+            </div>
           </Grid>
         </Grid>
         <h1>Inventez deux significations fausses à cette mimique</h1>

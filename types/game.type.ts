@@ -47,7 +47,7 @@ export type MoneysData = {
 // --- structure of each mimique ---
 export type MimicData = {
   gameId: number | null;
-  origine: string | null;
+  origine?: string | null;
   signification: string | null;
   fakeSignification1: string | null;
   fakeSignification2: string | null;

@@ -4,7 +4,6 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import { KeepRatio } from 'src/components/KeepRatio';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
