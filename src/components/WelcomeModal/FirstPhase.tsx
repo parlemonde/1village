@@ -8,7 +8,6 @@ import MobileStepper from '@mui/material/MobileStepper';
 import { Checkbox } from '@mui/material';
 
 import { Map } from 'src/components/Map';
-// import { MissingStepModal } from 'src/components/MissingStepModal';
 import { Modal } from 'src/components/Modal';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
@@ -20,11 +19,11 @@ import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
-import { CGU } from './CGU';
-import { Flag } from './Flag';
-import { ActivityCard } from './activities/ActivityCard';
+import { CGU } from '../CGU';
+import { Flag } from '../Flag';
+import { ActivityCard } from '../activities/ActivityCard';
 
-export const WelcomeModal = () => {
+export const FirstPhase = () => {
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const { village } = React.useContext(VillageContext);
@@ -96,7 +95,7 @@ export const WelcomeModal = () => {
         variant: 'error',
       });
     } else {
-      setUser({ ...(user || {}), ...updatedValues, firstLogin: 1 });
+      setUser({ ...(user || {}), ...updatedValues });
     }
     setIsLoading(false);
   };
@@ -138,11 +137,6 @@ export const WelcomeModal = () => {
       setUpdateAsked({ ...updateAsked, [error]: true });
     }
   };
-
-  // if (village && village.activePhase > 1) {
-  //   return <MissingStepModal />;
-  // }
-
   return (
     <Modal
       open={true}
