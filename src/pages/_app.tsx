@@ -26,7 +26,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 
 import { Header } from 'src/components/Header';
-import { WelcomeModal } from 'src/components/WelcomeModal';
+import { WelcomeModal } from 'src/components/WelcomeModal/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';

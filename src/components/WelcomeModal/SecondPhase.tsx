@@ -1,20 +1,43 @@
+import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import Button from '@mui/material/Button';
 
 import { Modal } from 'src/components/Modal';
+import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 
-export const MissingStepModal = () => {
+export const SecondPhase = () => {
   const { setSelectedPhase } = React.useContext(VillageContext);
+  const { axiosLoggedRequest, user, setUser } = React.useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
   const [isModalOpen, setIsModalOpen] = React.useState(true);
+
+  if (!user) {
+    return null;
+  }
+
+  const updateUser = async () => {
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: { firstLogin: 2 },
+    });
+    if (response.error) {
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...(user || {}), firstLogin: 2 });
+    }
+  };
 
   return (
     <div style={{ width: '100%' }}>
       <Modal
         open={isModalOpen}
         title="La phase 2 est active, et l'identité de vos Pélicopains est dévoilée !"
-        maxWidth="lg"
+        maxWidth="md"
         fullWidth
         onClose={() => {}}
         noCloseOutsideModal
@@ -29,6 +52,7 @@ export const MissingStepModal = () => {
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                     event.preventDefault();
+                    updateUser();
                     setSelectedPhase(1);
                     setIsModalOpen(false);
                   }}
@@ -50,6 +74,7 @@ export const MissingStepModal = () => {
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                     event.preventDefault();
+                    updateUser();
                     setIsModalOpen(false);
                   }}
                   href={'/'}
