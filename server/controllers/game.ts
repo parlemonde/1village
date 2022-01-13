@@ -114,7 +114,7 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
 });
 
 //--- retrieve answers to the mimic with this id ---
-gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     res.sendJSON([]);
     return;
