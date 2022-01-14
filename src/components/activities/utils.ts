@@ -19,7 +19,7 @@ export const titles = {
   [ActivityType.CONTENU_LIBRE]: 'envoyé un message à ses Pélicopains',
   [ActivityType.INDICE]: 'créé un indice culturel',
   [ActivityType.SYMBOL]: 'créé un symbole',
-  [ActivityType.REPORTAGE]: 'réaliser un reportage',
+  [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
 };
 

@@ -73,13 +73,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
             {!showEditButtons && (
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
-                  <Button
-                    component="a"
-                    color="primary"
-                    variant="outlined"
-                    href={`/activite/${activity.id}`}
-                    style={{ marginTop: `${firstVideo ? 4 : 2}rem` }}
-                  >
+                  <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                     {'Voir le reportage'}
                   </Button>
                 </Link>

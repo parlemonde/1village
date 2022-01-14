@@ -5,13 +5,50 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 import { Base } from 'src/components/Base';
+import { ActivityComments } from 'src/components/activities/ActivityComments';
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
+import { useVillageUsers } from 'src/services/useVillageUsers';
+import { serializeToQueryUrl } from 'src/utils';
+import type { Activity } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 import { GameType } from 'types/game.type';
+import type { User } from 'types/user.type';
 
-const Mimique: React.FC = () => {
+const Mimique = () => {
   const router = useRouter();
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
   const { getAvailableGamesCount } = useGameRequests();
+  const { users } = useVillageUsers();
   const [mimicsCount, setMimicsCount] = React.useState<number>(0);
+  const [activity, setActivity] = React.useState<Activity[]>([]);
+
+  const usersMap = React.useMemo(() => {
+    return users.reduce<{ [key: number]: User }>((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {});
+  }, [users]);
+
+  //I thought fetching activity by using this useEffect.
+  React.useEffect(() => {
+    if (village) {
+      axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities${serializeToQueryUrl({
+          villageId: village?.id,
+          type: ActivityType.GAME,
+        })}`,
+      }).then((response) => {
+        if (!response.error && response.data) {
+          const activity = response.data;
+          setActivity(activity as Activity[]);
+        }
+      });
+    }
+  }, [axiosLoggedRequest, village]);
 
   React.useEffect(() => {
     getAvailableGamesCount(GameType.MIMIC).then((count) => {
@@ -79,6 +116,9 @@ const Mimique: React.FC = () => {
             Découvrir des mimiques
           </Button>
         </Link>
+      </div>
+      <div>
+        <ActivityComments activityId={activity[0]?.id} activityType={GameType.MIMIC} activityPhase={2} usersMap={usersMap} />
       </div>
     </Base>
   );
