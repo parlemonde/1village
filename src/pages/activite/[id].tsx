@@ -22,7 +22,6 @@ const titles = {
   [ActivityType.MASCOTTE]: 'Mascotte',
   [ActivityType.PRESENTATION]: 'Présentation',
   [ActivityType.DEFI]: 'Défi',
-  [ActivityType.GAME]: 'Jeu',
   [ActivityType.ENIGME]: 'Énigme',
   [ActivityType.QUESTION]: 'Question',
   [ActivityType.CONTENU_LIBRE]: 'Message de Pelico',

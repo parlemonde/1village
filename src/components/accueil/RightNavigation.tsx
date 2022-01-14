@@ -13,6 +13,7 @@ import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { getUserDisplayName, toDate } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -168,21 +169,25 @@ export const RightNavigation = ({ activityUser }: { activityUser: User }) => {
           const ActivityIcon = icons[activity.type] || null;
           return (
             <div key={index}>
-              <div style={{ fontSize: 'smaller', paddingBottom: '1rem' }}>
-                <strong>{DESC[activity.type]},&nbsp;</strong>
-                le {toDate(activity.createDate as string)}
-                {ActivityIcon && (
-                  <ActivityIcon
-                    style={{ float: 'right', fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
-                  />
-                )}
-              </div>
-              <div style={{ float: 'right', paddingBottom: '1rem' }}>
-                <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                  {"Voir l'activité"}
-                </Button>
-              </div>
+              {activity.type !== ActivityType.GAME && (
+                <>
+                  <div style={{ fontSize: 'smaller', paddingBottom: '1rem' }}>
+                    <strong>{DESC[activity.type]},&nbsp;</strong>
+                    le {toDate(activity.createDate as string)}
+                    {ActivityIcon && (
+                      <ActivityIcon
+                        style={{ float: 'right', fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
+                      />
+                    )}
+                  </div>
+                  <div style={{ float: 'right', paddingBottom: '1rem' }}>
+                    <CommentIcon count={activity.commentCount} activityId={activity.id} />
+                    <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
+                      {"Voir l'activité"}
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           );
         })}
