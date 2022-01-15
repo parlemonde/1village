@@ -46,7 +46,7 @@ __metadata:
     "@types/nprogress": 0.2.0
     "@types/prettier": 2.3.0
     "@types/react": 17.0.27
-    "@types/react-dom": 17.0.8
+    "@types/react-dom": 17.0.11
     "@types/sass": 1.16.1
     "@types/sharp": 0.28.3
     "@types/sortablejs": 1.10.7
@@ -2725,12 +2725,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:17.0.8":
-  version: 17.0.8
-  resolution: "@types/react-dom@npm:17.0.8"
+"@types/react-dom@npm:17.0.11":
+  version: 17.0.11
+  resolution: "@types/react-dom@npm:17.0.11"
   dependencies:
     "@types/react": "*"
-  checksum: 9ad1220297bede365e0d2aae4bc4a2deee3247da9da62d45bcd770812d246d46c219b3f58755b08423a4339c3c654fddd6c2b16b27151d09213b527a7cde8910
+  checksum: 4d5730dffbef86c887cecad7e3cecda424ce6a64d0b5441c63b5b015d48219868660a2bb1aa15e897e565ad8867fa6b885d4358b04e1c4e589ba4c07c3fda55c
   languageName: node
   linkType: hard
 
