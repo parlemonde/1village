@@ -57,7 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],
             ["@types/express-useragent", "npm:1.0.1"],
             ["@types/fs-extra", "npm:9.0.13"],
-            ["@types/geojson", "npm:7946.0.7"],
+            ["@types/geojson", "npm:7946.0.8"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
             ["@types/leaflet", "npm:1.7.5"],
@@ -187,7 +187,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],
             ["@types/express-useragent", "npm:1.0.1"],
             ["@types/fs-extra", "npm:9.0.13"],
-            ["@types/geojson", "npm:7946.0.7"],
+            ["@types/geojson", "npm:7946.0.8"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
             ["@types/leaflet", "npm:1.7.5"],
@@ -3956,6 +3956,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.7-22fd23fc31-18e705c224.zip/node_modules/@types/geojson/",
           "packageDependencies": [
             ["@types/geojson", "npm:7946.0.7"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:7946.0.8", {
+          "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.8-df9187edab-6049a39b02.zip/node_modules/@types/geojson/",
+          "packageDependencies": [
+            ["@types/geojson", "npm:7946.0.8"]
           ],
           "linkType": "HARD",
         }]
