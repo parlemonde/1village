@@ -24,7 +24,6 @@ export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
       <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
         <div
           style={{
-            minHeight: '5rem',
             height: '100%',
             padding: '0.1rem 0',
             width: '100%',
@@ -41,8 +40,8 @@ export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>
           Notre mascotte <strong>{activity.data.mascotteName}</strong>
         </h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `2rem`, textAlign: 'justify' }}>
-          <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `2rem` }}>
+        <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
+          <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `4rem` }}>
             {firstText}
           </div>
         </div>

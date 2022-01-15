@@ -2,31 +2,25 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isEco, DEFI } from 'src/activity-types/defi.constants';
+import { isEco, DEFI, ECO_ACTIONS } from 'src/activity-types/defi.constants';
+import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { ActivitySelect } from 'src/components/activities/ActivitySelect';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getQueryString } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiEcoStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
-  const selectRef = React.useRef<HTMLDivElement>(null);
+  const data = (activity?.data as EcoDefiData) || null;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
-  const onNext = (clear: boolean) => () => {
-    if (clear) {
-      updateActivity({ responseActivityId: null, responseType: null });
-    }
+  const onNext = (index: number) => () => {
+    updateActivity({ data: { ...data, type: index } });
     router.push('/lancer-un-defi/ecologique/2');
-  };
-  const onChange = (id: number | null, type: number | null) => {
-    if (activity !== null) {
-      updateActivity({ responseActivityId: id, responseType: type });
-    }
   };
 
   const created = React.useRef(false);
@@ -41,59 +35,47 @@ const DefiEcoStep1 = () => {
           ActivityType.DEFI,
           DEFI.ECO,
           {
-            type: 0,
-            defiIndex: 0,
+            type: null,
+            defiIndex: null,
           },
           responseActivityId,
           responseActivityType,
         );
-        if (responseActivityId !== null) {
-          if (selectRef.current) {
-            selectRef.current.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isEco(activity)))) {
         created.current = true;
         createNewActivity(
           ActivityType.DEFI,
           DEFI.ECO,
           {
-            type: 0,
-            defiIndex: 0,
+            type: null,
+            defiIndex: null,
           },
           responseActivityId,
           responseActivityType,
         );
-        if (responseActivityId !== null) {
-          if (selectRef.current) {
-            selectRef.current.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
       }
     }
   }, [activity, createNewActivity, router]);
 
-  if (!activity) {
-    return (
-      <Base>
-        <div></div>
-      </Base>
-    );
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isEco(activity))) {
+    return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!('edit' in router.query) && <BackButton href="/lancer-un-defi" />}
-        <Steps steps={['Démarrer', 'Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation']} activeStep={0} />
+        {!isEdit && <BackButton href="/lancer-un-defi" />}
+        <Steps
+          steps={['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation']}
+          urls={['/lancer-un-defi/ecologique/1?edit', '/lancer-un-defi/ecologique/2', '/lancer-un-defi/ecologique/3', '/lancer-un-defi/ecologique/4']}
+          activeStep={0}
+        />
         <div className="width-900">
-          <h1>Commencer un nouvel échange avec vos Pélicopains :</h1>
-          <div style={{ margin: '1rem 0 3rem 0' }}>
-            <ThemeChoiceButton label="Créer un nouveau défi écologique" description="" onClick={onNext(true)} />
-          </div>
-          <h1>Réagir à une activité déjà publiée par vos Pélicopains :</h1>
-          <div ref={selectRef}>
-            <ActivitySelect value={activity.responseActivityId} onChange={onChange} onSelect={onNext(false)} style={{ margin: '1rem 0 0 0' }} />
+          <h1>Quel geste pour la planète souhaitez-vous presenter ?</h1>
+          <div style={{ marginTop: '1rem' }}>
+            {ECO_ACTIONS.map((t, index) => (
+              <ThemeChoiceButton key={index} label={t} description="" onClick={onNext(index)} />
+            ))}
           </div>
         </div>
       </div>

@@ -214,16 +214,13 @@ const ContenuLibre = () => {
       {/* Other image uploader */}
       <ImageModal
         id={0}
-        value={imageUrl}
-        onChange={(newUrl) => {
+        isModalOpen={isImageModalOpen}
+        setIsModalOpen={setIsImageModalOpen}
+        imageUrl={imageUrl || ''}
+        setImageUrl={(newUrl) => {
           updateActivity({ data: { ...data, imageUrl: newUrl, noImage: false } });
           setSelectedImageUrl(undefined);
         }}
-        onDelete={() => {}}
-        isModalOpen={isImageModalOpen}
-        setIsModalOpen={setIsImageModalOpen}
-        imageUrl={selectedImageUrl || ''}
-        setImageUrl={setSelectedImageUrl}
       />
     </Base>
   );

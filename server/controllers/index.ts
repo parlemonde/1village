@@ -6,6 +6,7 @@ import { archiveController } from './archive';
 import { audioController } from './audio';
 import { countryController } from './countries';
 import { currencyController } from './currencies';
+import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
 import { userController } from './user';
@@ -21,6 +22,7 @@ const controllers = [
   villageController,
   countryController,
   activityController,
+  gameController,
   imageController,
   audioController,
   videoController,

@@ -8,7 +8,6 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
-import { labels } from '../utils';
 
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
@@ -68,7 +67,7 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
           );
         }
       })}
-      <AddComment activityId={activityId} activityType={activityType} activityPhase={activityPhase} label={labels[activityType]} />
+      <AddComment activityId={activityId} activityType={activityType} activityPhase={activityPhase} />
     </div>
   );
 };

@@ -22,12 +22,13 @@ const titles = {
   [ActivityType.MASCOTTE]: 'Mascotte',
   [ActivityType.PRESENTATION]: 'Présentation',
   [ActivityType.DEFI]: 'Défi',
-  [ActivityType.GAME]: 'Jeu',
   [ActivityType.ENIGME]: 'Énigme',
   [ActivityType.QUESTION]: 'Question',
   [ActivityType.CONTENU_LIBRE]: 'Message de Pelico',
   [ActivityType.INDICE]: 'Indice culturel',
   [ActivityType.SYMBOL]: 'Symbole',
+  [ActivityType.REPORTAGE]: 'Reportage',
+  [ActivityType.REACTION]: 'Réaction',
 };
 
 const Activity = () => {

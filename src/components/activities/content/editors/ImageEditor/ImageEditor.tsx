@@ -11,7 +11,6 @@ import { EditorContainer } from '../EditorContainer';
 import { ImageModal } from './ImageModal';
 
 export const ImageEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
-  const [imageUrl, setImageUrl] = React.useState(value);
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
 
   return (
@@ -23,7 +22,7 @@ export const ImageEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
       }}
       className="image-editor"
     >
-      {imageUrl && (
+      {value && (
         <>
           <div
             style={{
@@ -33,7 +32,7 @@ export const ImageEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
               position: 'relative',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={imageUrl} unoptimized />
+            <Image layout="fill" objectFit="contain" src={value} unoptimized />
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Button
@@ -51,13 +50,11 @@ export const ImageEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
       )}
       <ImageModal
         id={id}
-        value={value}
-        onChange={onChange}
-        onDelete={onDelete}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        imageUrl={imageUrl}
-        setImageUrl={setImageUrl}
+        imageUrl={value}
+        setImageUrl={onChange}
+        onDeleteEditor={onDelete}
       />
     </EditorContainer>
   );
