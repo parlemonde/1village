@@ -45,7 +45,7 @@ __metadata:
     "@types/nodemailer": 6.4.4
     "@types/nprogress": 0.2.0
     "@types/prettier": 2.3.0
-    "@types/react": 17.0.27
+    "@types/react": 17.0.38
     "@types/react-dom": 17.0.8
     "@types/sass": 1.16.1
     "@types/sharp": 0.28.3
@@ -2752,7 +2752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:17.0.27":
+"@types/react@npm:*":
   version: 17.0.27
   resolution: "@types/react@npm:17.0.27"
   dependencies:
@@ -2760,6 +2760,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 3a1147d963c16dc9bbea5afb20c4be94f2389cf4eca4c5fbe9b02f3406bd9957602c0459ea017c95f8c3d523221f572e8bd842f94654835776d4c2923357f9dc
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:17.0.38":
+  version: 17.0.38
+  resolution: "@types/react@npm:17.0.38"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 4079f4f959cd4a4bfaeda8b89fe8a1b1f8bdc9d87acfdc5f74a0b39cec9ec6a470724357c62778c0f063180b360c250e920c5a142f1dbcda67d9cc25a6d43a85
   languageName: node
   linkType: hard
 
