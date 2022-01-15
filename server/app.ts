@@ -4,7 +4,6 @@ import { config } from 'dotenv';
 config();
 
 // eslint-disable-next-line arca/import-ordering
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import type { Response, RequestHandler } from 'express';
@@ -65,8 +64,8 @@ async function start() {
   );
   app.use(cors() as RequestHandler);
   app.use(removeTrailingSlash);
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(crsfProtection());
 
@@ -75,7 +74,11 @@ async function start() {
 
   // [4] --- Add backend API ---
   const backRouter = Router();
-  backRouter.use(morgan('dev') as RequestHandler);
+  backRouter.use(
+    morgan(isDevENV ? 'dev' : 'combined', {
+      skip: (req) => req.baseUrl.slice(0, 14) === '/api/analytics',
+    }),
+  );
   backRouter.use(jsonify);
   backRouter.get('/', (_, res: Response) => {
     res.status(200).send('Hello World 1Village!');
@@ -94,7 +97,7 @@ async function start() {
   });
   app.get(
     '*',
-    morgan('dev'),
+    morgan(isDevENV ? 'dev' : 'combined'),
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
@@ -112,7 +115,7 @@ async function start() {
   );
 
   // [6] --- Last fallback ---
-  app.use(morgan('dev') as RequestHandler, (_, res: Response) => {
+  app.use(morgan(isDevENV ? 'dev' : 'combined'), (_, res: Response) => {
     res.status(404).send('Error 404 - Not found.');
   });
 
