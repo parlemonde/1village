@@ -12,12 +12,12 @@ import type { ActivityContent } from 'types/activity.type';
 const ReactionStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
-  const url = 'edit' in router.query ? '/reaction-activite/1?edit' : '/reaction-activite/1';
+  const url = 'edit' in router.query ? '/reagir-a-une-activite/1?edit' : '/reagir-a-une-activite/1';
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/reaction-activite/1');
+      router.push('/reagir-a-une-activite/1');
     } else if (activity && !isReaction(activity)) {
-      router.push('/reaction-activite/1');
+      router.push('/reagir-a-une-activite/1');
     }
   }, [activity, router]);
 
@@ -30,7 +30,7 @@ const ReactionStep2 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/reaction-activite/3');
+    router.push('/reagir-a-une-activite/3');
   };
 
   if (!activity) {

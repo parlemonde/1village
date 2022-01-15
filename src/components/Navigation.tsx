@@ -98,7 +98,7 @@ const TABS_PER_PHASE: Tab[] = [
   },
   {
     label: 'Réagir à une activité',
-    path: '/reaction-activite/1',
+    path: '/reagir-a-une-activite/1',
     icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 2,
   },

@@ -29,9 +29,9 @@ const ReactionStep3 = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/reaction-activite/1');
+      router.push('/reagir-a-une-activite/1');
     } else if (activity && !isReaction(activity)) {
-      router.push('/reaction-activite/1');
+      router.push('/reagir-a-une-activite/1');
     }
   }, [activity, router]);
 
@@ -39,7 +39,7 @@ const ReactionStep3 = () => {
     setIsLoading(true);
     const success = await save(true);
     if (success) {
-      router.push('/reaction-activite/success');
+      router.push('/reagir-a-une-activite/success');
     }
     setIsLoading(false);
   };
@@ -53,7 +53,7 @@ const ReactionStep3 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['Activité', 'Réaction', 'Prévisualisation']}
-          urls={['/reaction-activite/1?edit', '/reaction-activite/2?edit', '/reaction-activite']}
+          urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite']}
           activeStep={2}
         />
         <div className="width-900">
@@ -66,8 +66,8 @@ const ReactionStep3 = () => {
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/reaction-activite/2" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/reaction-activite/2">
+              <Link href="/reagir-a-une-activite/2" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/reagir-a-une-activite/2">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -83,7 +83,7 @@ const ReactionStep3 = () => {
             </div>
           )}
 
-          {!isEdit && activity?.responseActivityId === null && <ActivityLink url={`/reaction-activite/1?edit`} />}
+          {!isEdit && activity?.responseActivityId === null && <ActivityLink url={`/reagir-a-une-activite/1?edit`} />}
           {responseActivity !== null && (
             <>
               <span className="text text--small text--success">En réaction à {REACTIONS[responseActivity.type]}</span>
@@ -91,7 +91,7 @@ const ReactionStep3 = () => {
                 {!isEdit && (
                   <EditButton
                     onClick={() => {
-                      router.push(`/reaction-activite/1?edit`);
+                      router.push(`/reagir-a-une-activite/1?edit`);
                     }}
                     status={'success'}
                     style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
@@ -106,7 +106,7 @@ const ReactionStep3 = () => {
           <div className="preview-block">
             <EditButton
               onClick={() => {
-                router.push('/reaction-activite/2?edit');
+                router.push('/reagir-a-une-activite/2?edit');
               }}
               status={'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
@@ -114,7 +114,7 @@ const ReactionStep3 = () => {
             <ContentView content={activity?.content} />
           </div>
 
-          <StepsButton prev="/reaction-activite/2" />
+          <StepsButton prev="/reagir-a-une-activite/2" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

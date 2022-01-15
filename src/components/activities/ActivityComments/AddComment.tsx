@@ -80,7 +80,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
             <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
             <Button
               component="a"
-              href={`/reaction-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+              href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
               variant="outlined"
               color="primary"
               style={{ width: '100%' }}

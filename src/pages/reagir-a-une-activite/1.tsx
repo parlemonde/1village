@@ -30,7 +30,7 @@ const ReactionStep1 = () => {
       updateActivity({ content: activity?.content, responseActivityId: selectedActivity.id, responseType: selectedActivity.type });
     }
 
-    router.push('/reaction-activite/2');
+    router.push('/reagir-a-une-activite/2');
   };
 
   const onChange = (id: number | null, type: number | null) => {

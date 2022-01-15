@@ -63,7 +63,7 @@ export const ReactionCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/reaction-activite/3?activity-id=${activity.id}`
+                      : `/reagir-a-une-activite/3?activity-id=${activity.id}`
                   }
                   passHref
                 >
@@ -72,7 +72,7 @@ export const ReactionCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/reaction-activite/3?activity-id=${activity.id}`
+                        : `/reagir-a-une-activite/3?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"
