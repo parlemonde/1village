@@ -75,6 +75,7 @@ export const SecondPhase = () => {
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                     event.preventDefault();
                     updateUser();
+                    setSelectedPhase(2);
                     setIsModalOpen(false);
                   }}
                   href={'/'}

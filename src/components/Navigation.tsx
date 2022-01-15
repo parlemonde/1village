@@ -152,7 +152,10 @@ export const Navigation = (): JSX.Element => {
                 key={country.isoCode}
                 country={country.isoCode}
                 isMistery={
-                  !village || !user || (village.activePhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur)
+                  !village ||
+                  !user ||
+                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur) ||
+                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur)
                 }
               ></Flag>
             ))}
