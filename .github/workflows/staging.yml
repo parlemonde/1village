@@ -31,23 +31,12 @@ jobs:
         env:
           HOST_URL: ${{ secrets.STAGING_HOST }}
           PLM_CLIENT_ID: ${{ secrets.STAGING_CLIENT_ID }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
           cat << EOF > .env
           NEXT_PUBLIC_BASE_APP=/api
           NEXT_PUBLIC_HOST_URL=$HOST_URL
           NEXT_PUBLIC_PLM_HOST=https://prof.parlemonde.org
           NEXT_PUBLIC_CLIENT_ID=$PLM_CLIENT_ID
-          NEXT_PUBLIC_SENTRY_DSN=$SENTRY_DSN
-          EOF
-
-      - name: Create .sentryclirc file
-        env:
-          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN }}
-        run: |
-          cat << EOF > .sentryclirc
-          [auth]
-          token=$SENTRY_TOKEN
           EOF
 
       - name: Create build version

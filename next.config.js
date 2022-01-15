@@ -1,8 +1,7 @@
 /* eslint-disable */
-const { withSentryConfig } = require('@sentry/nextjs');
 const BUILD_VERSION = process.env.BUILD_VERSION;
 
-const nextConfig = {
+module.exports = {
   distDir: './dist/next',
   poweredByHeader: false,
   webpack: (config) => {
@@ -18,12 +17,3 @@ const nextConfig = {
   },
   generateBuildId: BUILD_VERSION ? async () => BUILD_VERSION : undefined,
 };
-
-// https://github.com/getsentry/sentry-webpack-plugin#options.
-const sentryWebpackPluginOptions = {
-  errorHandler: (err, _invokeErr, compilation) => {
-    compilation.warnings.push('Sentry CLI Plugin: ' + err.message);
-  },
-};
-
-module.exports = process.env.USE_SENTRY ? withSentryConfig(nextConfig, sentryWebpackPluginOptions) : nextConfig;
