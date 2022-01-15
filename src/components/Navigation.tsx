@@ -135,7 +135,7 @@ export const Navigation = (): JSX.Element => {
   );
   const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase]);
 
-  const currentPathName = `/${router.pathname.split('/')[1] || ''}`;
+  const currentPathName = router.pathname.split('/')[1] || '';
 
   return (
     <nav className="navigation">
@@ -173,13 +173,13 @@ export const Navigation = (): JSX.Element => {
                   href={tab.path}
                   color="primary"
                   startIcon={tab.icon}
-                  variant={tab.path === currentPathName ? 'contained' : 'outlined'}
+                  variant={tab.path.split('/')[1] === currentPathName ? 'contained' : 'outlined'}
                   className="navigation__button full-width"
                   style={{
                     justifyContent: 'flex-start',
                     paddingRight: '0.1rem',
                     marginBottom: '0.8rem',
-                    width: tab.path === currentPathName ? '108%' : '100%',
+                    width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
                   disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}

@@ -43,7 +43,9 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
   const [selectedPhase, setSelectedPhase] = React.useState(
-    initialVillage && initialVillage.activePhase <= (user?.firstLogin || 1) ? initialVillage.activePhase : 1,
+    initialVillage && ((user?.type || UserType.TEACHER) >= UserType.OBSERVATOR || initialVillage.activePhase <= (user?.firstLogin || 1))
+      ? initialVillage.activePhase
+      : 1,
   );
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(
