@@ -23,7 +23,7 @@ __metadata:
     "@types/cpx": 1.5.2
     "@types/croppie": 2.6.1
     "@types/d3-geo": 3.0.2
-    "@types/draft-js": 0.11.5
+    "@types/draft-js": 0.11.8
     "@types/draftjs-to-html": 0.8.1
     "@types/earcut": 2.1.1
     "@types/eslint": 7.2.13
@@ -2415,13 +2415,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/draft-js@npm:*, @types/draft-js@npm:0.11.5":
+"@types/draft-js@npm:*":
   version: 0.11.5
   resolution: "@types/draft-js@npm:0.11.5"
   dependencies:
     "@types/react": "*"
     immutable: ~3.7.4
   checksum: 5bfb5599fe0fb105b8c546e7bcd778477ea40b4b73ca23978601f2322928e6815fa3dd8fc2c3b21f23830e9f2fbda21e5950a8bd40e9f510206a61ffac39defb
+  languageName: node
+  linkType: hard
+
+"@types/draft-js@npm:0.11.8":
+  version: 0.11.8
+  resolution: "@types/draft-js@npm:0.11.8"
+  dependencies:
+    "@types/react": "*"
+    immutable: ~3.7.4
+  checksum: d2a825c414de71a04372a4fb96ebb221da87ad7901d673e4d340cd39a09aa318a0d01ea2bbe9aa707c6480c6cbd28486054aa1fdfe36e4362e6d4c94106e77a7
   languageName: node
   linkType: hard
 

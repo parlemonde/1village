@@ -49,7 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/cpx", "npm:1.5.2"],
             ["@types/croppie", "npm:2.6.1"],
             ["@types/d3-geo", "npm:3.0.2"],
-            ["@types/draft-js", "npm:0.11.5"],
+            ["@types/draft-js", "npm:0.11.8"],
             ["@types/draftjs-to-html", "npm:0.8.1"],
             ["@types/earcut", "npm:2.1.1"],
             ["@types/eslint", "npm:7.2.13"],
@@ -179,7 +179,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/cpx", "npm:1.5.2"],
             ["@types/croppie", "npm:2.6.1"],
             ["@types/d3-geo", "npm:3.0.2"],
-            ["@types/draft-js", "npm:0.11.5"],
+            ["@types/draft-js", "npm:0.11.8"],
             ["@types/draftjs-to-html", "npm:0.8.1"],
             ["@types/earcut", "npm:2.1.1"],
             ["@types/eslint", "npm:7.2.13"],
@@ -3824,6 +3824,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-draft-js-npm-0.11.5-9da82cd60d-5bfb5599fe.zip/node_modules/@types/draft-js/",
           "packageDependencies": [
             ["@types/draft-js", "npm:0.11.5"],
+            ["@types/react", "npm:17.0.27"],
+            ["immutable", "npm:3.7.6"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:0.11.8", {
+          "packageLocation": "./.yarn/cache/@types-draft-js-npm-0.11.8-e7dc5cdec1-d2a825c414.zip/node_modules/@types/draft-js/",
+          "packageDependencies": [
+            ["@types/draft-js", "npm:0.11.8"],
             ["@types/react", "npm:17.0.27"],
             ["immutable", "npm:3.7.6"]
           ],
@@ -7741,7 +7750,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/draftjs-utils-virtual-e443d59ecf/0/cache/draftjs-utils-npm-0.10.2-b7f318899b-8cbb1bdbff.zip/node_modules/draftjs-utils/",
           "packageDependencies": [
             ["draftjs-utils", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.10.2"],
-            ["@types/draft-js", "npm:0.11.5"],
+            ["@types/draft-js", "npm:0.11.8"],
             ["@types/immutable", null],
             ["draft-js", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.11.7"],
             ["immutable", "npm:4.0.0"]
@@ -9614,7 +9623,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/html-to-draftjs-virtual-fad015c0b8/0/cache/html-to-draftjs-npm-1.5.0-6e3e802864-b1bab72ed0.zip/node_modules/html-to-draftjs/",
           "packageDependencies": [
             ["html-to-draftjs", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.0"],
-            ["@types/draft-js", "npm:0.11.5"],
+            ["@types/draft-js", "npm:0.11.8"],
             ["@types/immutable", null],
             ["draft-js", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.11.7"],
             ["immutable", "npm:4.0.0"]
