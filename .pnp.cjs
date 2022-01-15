@@ -73,7 +73,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", "npm:2.3.0"],
             ["@types/react", "npm:17.0.27"],
             ["@types/react-dom", "npm:17.0.8"],
-            ["@types/sass", "npm:1.16.1"],
+            ["@types/sass", "npm:1.43.1"],
             ["@types/sharp", "npm:0.28.3"],
             ["@types/sortablejs", "npm:1.10.7"],
             ["@types/string-similarity", "npm:4.0.0"],
@@ -203,7 +203,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", "npm:2.3.0"],
             ["@types/react", "npm:17.0.27"],
             ["@types/react-dom", "npm:17.0.8"],
-            ["@types/sass", "npm:1.16.1"],
+            ["@types/sass", "npm:1.43.1"],
             ["@types/sharp", "npm:0.28.3"],
             ["@types/sortablejs", "npm:1.10.7"],
             ["@types/string-similarity", "npm:4.0.0"],
@@ -4236,10 +4236,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/sass", [
-        ["npm:1.16.1", {
-          "packageLocation": "./.yarn/cache/@types-sass-npm-1.16.1-d45fe03696-3f86d2eaf4.zip/node_modules/@types/sass/",
+        ["npm:1.43.1", {
+          "packageLocation": "./.yarn/cache/@types-sass-npm-1.43.1-6770eea7c0-19eb71acc4.zip/node_modules/@types/sass/",
           "packageDependencies": [
-            ["@types/sass", "npm:1.16.1"],
+            ["@types/sass", "npm:1.43.1"],
             ["@types/node", "npm:16.7.1"]
           ],
           "linkType": "HARD",
@@ -11959,7 +11959,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node-sass", null],
             ["@types/react", "npm:17.0.27"],
             ["@types/react-dom", "npm:17.0.8"],
-            ["@types/sass", "npm:1.16.1"],
+            ["@types/sass", "npm:1.43.1"],
             ["assert", "npm:2.0.0"],
             ["ast-types", "npm:0.13.2"],
             ["browserify-zlib", "npm:0.2.0"],

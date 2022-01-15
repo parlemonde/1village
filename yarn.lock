@@ -47,7 +47,7 @@ __metadata:
     "@types/prettier": 2.3.0
     "@types/react": 17.0.27
     "@types/react-dom": 17.0.8
-    "@types/sass": 1.16.1
+    "@types/sass": 1.43.1
     "@types/sharp": 0.28.3
     "@types/sortablejs": 1.10.7
     "@types/string-similarity": 4.0.0
@@ -2772,12 +2772,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sass@npm:1.16.1":
-  version: 1.16.1
-  resolution: "@types/sass@npm:1.16.1"
+"@types/sass@npm:1.43.1":
+  version: 1.43.1
+  resolution: "@types/sass@npm:1.43.1"
   dependencies:
     "@types/node": "*"
-  checksum: 3f86d2eaf4988a2775fc0fc164d35e73ce82d71228191da7b11d97ad5e8ac129f1c5f798307e31482f8cfebab758bd3b24e731860bed81afe5a1bbe13fa2b2df
+  checksum: 19eb71acc4b0d7db2170732a51ad18a34007021f42069652a5be8a3e3a448a470d2f970b9e85f734d1896bf3a25e48fb5132b4a989c101eb5df21cc171d426c5
   languageName: node
   linkType: hard
 
