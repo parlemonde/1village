@@ -66,7 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mime-types", "npm:2.1.1"],
             ["@types/morgan", "npm:1.9.3"],
             ["@types/multer", "npm:1.4.7"],
-            ["@types/node", "npm:16.7.1"],
+            ["@types/node", "npm:16.11.19"],
             ["@types/nodemailer", "npm:6.4.4"],
             ["@types/nprogress", "npm:0.2.0"],
             ["@types/prettier", "npm:2.4.3"],
@@ -195,7 +195,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mime-types", "npm:2.1.1"],
             ["@types/morgan", "npm:1.9.3"],
             ["@types/multer", "npm:1.4.7"],
-            ["@types/node", "npm:16.7.1"],
+            ["@types/node", "npm:16.11.19"],
             ["@types/nodemailer", "npm:6.4.4"],
             ["@types/nprogress", "npm:0.2.0"],
             ["@types/prettier", "npm:2.4.3"],
@@ -4388,6 +4388,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-13.13.52-95159539bb-8f1afff497.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:13.13.52"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:16.11.19", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.19-b289452f75-a9ba0cd1e6.zip/node_modules/@types/node/",
+          "packageDependencies": [
+            ["@types/node", "npm:16.11.19"]
           ],
           "linkType": "HARD",
         }],
