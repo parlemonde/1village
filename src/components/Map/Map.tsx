@@ -48,8 +48,8 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
           showCompass: false,
         }),
       );
-      map.addControl(new maplibregl.ScaleControl());
-      map.addControl(new maplibregl.FullscreenControl());
+      map.addControl(new maplibregl.ScaleControl({}));
+      map.addControl(new maplibregl.FullscreenControl({}));
 
       initialMarkers.current.forEach((m) => {
         const marker = new maplibregl.Marker({
@@ -75,6 +75,8 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
 
     // ---- Leaflet MAP (fallback if webgl is not supported) ----
     const map = L.map(mapRef.current, {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       fullscreenControl: true,
       fullscreenControlOptions: {
         position: 'topleft',

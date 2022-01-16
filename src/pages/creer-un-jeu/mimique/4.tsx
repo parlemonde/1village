@@ -99,10 +99,10 @@ const MimiqueStep4 = () => {
                   <FormControlLabel
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
-                    label={errorSteps?.includes(0) ? '' : data.game1.signification}
+                    label={errorSteps?.includes(0) ? '' : data.game1.signification || ''}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2} />
+                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1 || ''} />
+                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2 || ''} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -134,10 +134,10 @@ const MimiqueStep4 = () => {
                   <FormControlLabel
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
-                    label={errorSteps?.includes(1) ? '' : data.game2.signification}
+                    label={errorSteps?.includes(1) ? '' : data.game2.signification || ''}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2} />
+                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1 || ''} />
+                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2 || ''} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -169,10 +169,10 @@ const MimiqueStep4 = () => {
                   <FormControlLabel
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
-                    label={errorSteps?.includes(2) ? '' : data.game3.signification}
+                    label={errorSteps?.includes(2) ? '' : data.game3.signification || ''}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2} />
+                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1 || ''} />
+                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2 || ''} />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>

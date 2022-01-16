@@ -253,6 +253,8 @@ const WorldMap: React.FC = () => {
     if (useLeafletFallback) {
       if (leafletRef.current) {
         const map = L.map(leafletRef.current, {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           fullscreenControl: true,
           fullscreenControlOptions: {
             position: 'topleft',

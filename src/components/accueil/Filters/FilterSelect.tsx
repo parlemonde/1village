@@ -22,7 +22,7 @@ interface FilterSelectProps<T> {
   onChange(option: Option<T>): void;
 }
 
-export const FilterSelect = <T extends unknown>({ value, onChange, name, options }: FilterSelectProps<T>) => {
+export const FilterSelect = <T,>({ value, onChange, name, options }: FilterSelectProps<T>) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const selectedOption = options.find((o) => o.key === value) || null;
 
