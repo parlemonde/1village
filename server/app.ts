@@ -60,6 +60,9 @@ async function start() {
       referrerPolicy: {
         policy: 'strict-origin-when-cross-origin',
       },
+      crossOriginEmbedderPolicy: false,
+      crossOriginOpenerPolicy: false,
+      crossOriginResourcePolicy: false,
     }),
   );
   app.use(cors() as RequestHandler);
