@@ -71,7 +71,7 @@ __metadata:
     croppie: ^2.6.5
     csrf: ^3.1.0
     d3-geo: ^3.0.1
-    dotenv: ^12.0.4
+    dotenv: ^13.0.0
     draft-js: ^0.11.7
     draftjs-to-html: ^0.9.1
     draftjs-utils: ^0.10.2
@@ -6215,10 +6215,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^12.0.4":
-  version: 12.0.4
-  resolution: "dotenv@npm:12.0.4"
-  checksum: d79a69fae72b5c5785906600ce42388b48bf7ab20bbac8346bac327cc87a68617a09b1b3cd39965210f011ab07ea4641d5952d46f67f4e40a66b9ad76cf456c0
+"dotenv@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "dotenv@npm:13.0.0"
+  checksum: f95138a18994a3910bf37fcbe069479b468c470093e2e1041dab23438bf136d6097ccbf272acba0286e3695b9082a33f2f6d3f6ed5341840d873384dcc9feab3
   languageName: node
   linkType: hard
 

@@ -97,7 +97,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["croppie", "npm:2.6.5"],
             ["csrf", "npm:3.1.0"],
             ["d3-geo", "npm:3.0.1"],
-            ["dotenv", "npm:12.0.4"],
+            ["dotenv", "npm:13.0.0"],
             ["draft-js", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.11.7"],
             ["draftjs-to-html", "npm:0.9.1"],
             ["draftjs-utils", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.10.2"],
@@ -226,7 +226,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["croppie", "npm:2.6.5"],
             ["csrf", "npm:3.1.0"],
             ["d3-geo", "npm:3.0.1"],
-            ["dotenv", "npm:12.0.4"],
+            ["dotenv", "npm:13.0.0"],
             ["draft-js", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.11.7"],
             ["draftjs-to-html", "npm:0.9.1"],
             ["draftjs-utils", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.10.2"],
@@ -8202,10 +8202,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["dotenv", [
-        ["npm:12.0.4", {
-          "packageLocation": "./.yarn/cache/dotenv-npm-12.0.4-a60bd10bc2-d79a69fae7.zip/node_modules/dotenv/",
+        ["npm:13.0.0", {
+          "packageLocation": "./.yarn/cache/dotenv-npm-13.0.0-26ed6fab9a-f95138a189.zip/node_modules/dotenv/",
           "packageDependencies": [
-            ["dotenv", "npm:12.0.4"]
+            ["dotenv", "npm:13.0.0"]
           ],
           "linkType": "HARD",
         }],
