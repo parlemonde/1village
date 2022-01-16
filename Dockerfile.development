@@ -12,6 +12,7 @@ WORKDIR /app
 COPY .yarn/releases ./.yarn/releases
 COPY .yarn/sdks ./.yarn/sdks
 COPY .yarn/cache ./.yarn/cache
+COPY .yarn/plugins ./.yarn/plugins
 COPY .yarnrc.yml ./
 COPY package.json ./
 COPY yarn.lock ./
