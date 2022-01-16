@@ -39,14 +39,9 @@ jobs:
           NEXT_PUBLIC_CLIENT_ID=$PLM_CLIENT_ID
           EOF
 
-      - name: Create build version
-        id: tag
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            return `staging-${context.ref.split('/').slice(-1)[0]}-${new Date().getTime().toString().slice(0, 10)}`
-          result-encoding: string
+      - name: Remove robots.txt
+        run: |
+          rm public/robots.txt
 
       - name: Add IP to AWS security group
         uses: sohelamin/aws-security-group-add-ip-action@master
@@ -72,9 +67,8 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          BUILD_VERSION: ${{ steps.tag.outputs.result }}
         run: |
-          docker build --build-arg BUILD_VERSION=$BUILD_VERSION -t $ECR_REGISTRY/1village:staging .
+          docker build -t $ECR_REGISTRY/1village:staging .
           docker push $ECR_REGISTRY/1village:staging
 
       - name: Pull and run the docker image on the server
