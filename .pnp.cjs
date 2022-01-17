@@ -59,7 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fs-extra", "npm:9.0.13"],
             ["@types/geojson", "npm:7946.0.8"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
-            ["@types/jsonwebtoken", "npm:8.5.7"],
+            ["@types/jsonwebtoken", "npm:8.5.8"],
             ["@types/leaflet", "npm:1.7.8"],
             ["@types/leaflet.fullscreen", "npm:1.6.1"],
             ["@types/md5", "npm:2.3.1"],
@@ -188,7 +188,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fs-extra", "npm:9.0.13"],
             ["@types/geojson", "npm:7946.0.8"],
             ["@types/json-stable-stringify", "npm:1.0.33"],
-            ["@types/jsonwebtoken", "npm:8.5.7"],
+            ["@types/jsonwebtoken", "npm:8.5.8"],
             ["@types/leaflet", "npm:1.7.8"],
             ["@types/leaflet.fullscreen", "npm:1.6.1"],
             ["@types/md5", "npm:2.3.1"],
@@ -4288,10 +4288,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/jsonwebtoken", [
-        ["npm:8.5.7", {
-          "packageLocation": "./.yarn/cache/@types-jsonwebtoken-npm-8.5.7-2fb608fcdb-3be419834a.zip/node_modules/@types/jsonwebtoken/",
+        ["npm:8.5.8", {
+          "packageLocation": "./.yarn/cache/@types-jsonwebtoken-npm-8.5.8-798e14708c-56738a918c.zip/node_modules/@types/jsonwebtoken/",
           "packageDependencies": [
-            ["@types/jsonwebtoken", "npm:8.5.7"],
+            ["@types/jsonwebtoken", "npm:8.5.8"],
             ["@types/node", "npm:16.7.1"]
           ],
           "linkType": "HARD",

@@ -39,7 +39,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/geojson": "7946.0.8",
     "@types/json-stable-stringify": "1.0.33",
-    "@types/jsonwebtoken": "8.5.7",
+    "@types/jsonwebtoken": "8.5.8",
     "@types/leaflet": "1.7.8",
     "@types/leaflet.fullscreen": "1.6.1",
     "@types/md5": "2.3.1",
