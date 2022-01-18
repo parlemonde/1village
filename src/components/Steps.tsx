@@ -8,6 +8,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 
+import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
 
 const StepIcon = ({ icon, active, completed, error, onClick }: StepIconProps) => {
@@ -41,6 +42,7 @@ interface StepsProps {
 
 export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsProps) => {
   const router = useRouter();
+  const { save } = React.useContext(ActivityContext);
 
   return (
     <div className="custom-steps--container" style={{ position: 'relative' }}>
@@ -68,6 +70,7 @@ export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsPro
                 onClick:
                   urls !== undefined && urls.length > index
                     ? () => {
+                        save().catch(console.error);
                         router.push(urls[index]);
                       }
                     : undefined,
