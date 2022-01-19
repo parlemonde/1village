@@ -20,7 +20,7 @@ const ReactionStep1 = () => {
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const selectRef = React.useRef<HTMLDivElement>(null);
   const [selectedActivity, setSelectedActivity] = React.useState<SelectedActivityInfos>({ id: null, type: null });
-  const activitiesTypes = [1, 2, 3, 9];
+  const activitiesTypes = [1, 2, 3, 5, 9];
 
   const onNext = () => {
     if (!activity || !isReaction(activity) || activity.responseActivityId !== selectedActivity.id) {
