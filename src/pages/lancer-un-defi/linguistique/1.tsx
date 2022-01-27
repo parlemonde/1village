@@ -112,7 +112,7 @@ const DefiStep1 = () => {
         },
       ];
     }
-    const l = (mascotte?.data as MascotteData)?.languages ?? [];
+    const l = (mascotte?.data as MascotteData)?.fluentLanguages ?? [];
     return l.reduce<{ label: string; value: string }[]>(
       (acc, l) => {
         if (l === 'fre') {

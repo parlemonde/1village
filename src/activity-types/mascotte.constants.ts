@@ -26,7 +26,6 @@ export const DEFAULT_MASCOTTE_DATA: MascotteData = {
   wantedForeignLanguages: [],
   minorLanguages: [],
   fluentLanguages: [],
-  languages: [],
   currencies: [],
   classImg: '',
   classImgDesc: '',
