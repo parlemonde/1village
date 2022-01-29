@@ -11,6 +11,7 @@ module.exports = {
     });
     return config;
   },
+  experimental: { esmExternals: false },
   eslint: {
     // ESLint is already called before building with nextJS. So no need here.
     ignoreDuringBuilds: true,
