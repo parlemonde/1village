@@ -365,7 +365,13 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
-  res.cookie('access-token', accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, {
+    maxAge: 4 * 60 * 60000,
+    expires: new Date(Date.now() + 4 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
   delete user.verificationHash;
   res.sendJSON({ user: user, accessToken });
 });
@@ -469,7 +475,13 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
-  res.cookie('access-token', accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, {
+    maxAge: 4 * 60 * 60000,
+    expires: new Date(Date.now() + 4 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
   delete user.passwordHash;
   delete user.verificationHash;
   res.sendJSON({ user, accessToken });

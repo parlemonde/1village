@@ -111,6 +111,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.28.0"],
             ["eslint-plugin-react-hooks", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:4.3.0"],
             ["express", "npm:4.17.2"],
+            ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.2.0"],
             ["express-useragent", "npm:1.0.15"],
             ["fs-extra", "npm:10.0.0"],
             ["geojson", "npm:0.5.0"],
@@ -240,6 +241,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.28.0"],
             ["eslint-plugin-react-hooks", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:4.3.0"],
             ["express", "npm:4.17.2"],
+            ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.2.0"],
             ["express-useragent", "npm:1.0.15"],
             ["fs-extra", "npm:10.0.0"],
             ["geojson", "npm:0.5.0"],
@@ -8716,6 +8718,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["type-is", "npm:1.6.18"],
             ["utils-merge", "npm:1.0.1"],
             ["vary", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["express-rate-limit", [
+        ["npm:6.2.0", {
+          "packageLocation": "./.yarn/cache/express-rate-limit-npm-6.2.0-ed256d1e34-642f148e6b.zip/node_modules/express-rate-limit/",
+          "packageDependencies": [
+            ["express-rate-limit", "npm:6.2.0"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.2.0", {
+          "packageLocation": "./.yarn/__virtual__/express-rate-limit-virtual-b3b0b6c69f/0/cache/express-rate-limit-npm-6.2.0-ed256d1e34-642f148e6b.zip/node_modules/express-rate-limit/",
+          "packageDependencies": [
+            ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.2.0"],
+            ["@types/express", "npm:4.17.13"],
+            ["express", "npm:4.17.2"]
+          ],
+          "packagePeers": [
+            "@types/express",
+            "express"
           ],
           "linkType": "HARD",
         }]
