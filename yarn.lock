@@ -33,14 +33,14 @@ __metadata:
     "@types/fs-extra": 9.0.13
     "@types/geojson": 7946.0.8
     "@types/json-stable-stringify": 1.0.33
-    "@types/jsonwebtoken": 8.5.7
+    "@types/jsonwebtoken": 8.5.8
     "@types/leaflet": 1.7.9
     "@types/leaflet.fullscreen": 1.6.1
     "@types/md5": 2.3.1
     "@types/mime-types": 2.1.1
     "@types/morgan": 1.9.3
     "@types/multer": 1.4.7
-    "@types/node": 16.11.19
+    "@types/node": 16.11.21
     "@types/nodemailer": 6.4.4
     "@types/nprogress": 0.2.0
     "@types/prettier": 2.4.3
@@ -60,7 +60,7 @@ __metadata:
     ajv: 8.9.0
     ajv-formats: ^2.1.1
     argon2: ^0.28.3
-    aws-sdk: ^2.1058.0
+    aws-sdk: ^2.1066.0
     axios: ^0.25.0
     base64url: ^3.0.1
     chart.js: ^3.7.0
@@ -71,7 +71,7 @@ __metadata:
     croppie: ^2.6.5
     csrf: ^3.1.0
     d3-geo: ^3.0.1
-    dotenv: ^12.0.4
+    dotenv: ^14.3.2
     draft-js: ^0.11.7
     draftjs-to-html: ^0.9.1
     draftjs-utils: ^0.10.2
@@ -88,7 +88,7 @@ __metadata:
     express-useragent: ^1.0.15
     fs-extra: ^10.0.0
     geojson: 0.5.0
-    helmet: ^5.0.1
+    helmet: ^5.0.2
     html-to-draftjs: ^1.5.0
     immutable: ^4.0.0
     json-stable-stringify: ^1.0.1
@@ -128,7 +128,7 @@ __metadata:
     web-vitals: ^2.1.4
     webpack: 5.67.0
     webpack-bundle-analyzer: 4.5.0
-    winston: ^3.4.0
+    winston: ^3.5.0
   languageName: unknown
   linkType: soft
 
@@ -2848,12 +2848,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.7":
-  version: 8.5.7
-  resolution: "@types/jsonwebtoken@npm:8.5.7"
+"@types/jsonwebtoken@npm:8.5.8":
+  version: 8.5.8
+  resolution: "@types/jsonwebtoken@npm:8.5.8"
   dependencies:
     "@types/node": "*"
-  checksum: 3be419834af4d4f90cd34535a0ccf4a075239641ff9f49af220e67222f963a343427de82f7e78fa8891ec48d5fde5171cebc4071bbc970ce06f04ec9c7f0771a
+  checksum: 56738a918c543dba30786066959f801212e7fb5cd4ec53cf7b8d227711ed358834feb9e5141f7f88ec7c642bb39757330a5a8917e3b22e0ff9084940d35f0d70
   languageName: node
   linkType: hard
 
@@ -2941,10 +2941,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.19":
-  version: 16.11.19
-  resolution: "@types/node@npm:16.11.19"
-  checksum: a9ba0cd1e61c8ad50f3fc9c2b37b795bf0286dacb39dcc985da90328abf0c5151dffe9932d20bc9a6a52c3ce7bfc1e5a7c2dc1416480fb84f1c2d70e25caeba0
+"@types/node@npm:16.11.21":
+  version: 16.11.21
+  resolution: "@types/node@npm:16.11.21"
+  checksum: 75b679dc6375cf09bc14a2d1b344be6f3fd8ea50f212b0d60970dc9e175cef45e44c284c716eb9e766ffa52d0c83b689adb3d1911b6dd8649c560b8f77442a22
   languageName: node
   linkType: hard
 
@@ -4246,20 +4246,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:^2.1058.0":
-  version: 2.1058.0
-  resolution: "aws-sdk@npm:2.1058.0"
+"aws-sdk@npm:^2.1066.0":
+  version: 2.1066.0
+  resolution: "aws-sdk@npm:2.1066.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
     ieee754: 1.1.13
-    jmespath: 0.15.0
+    jmespath: 0.16.0
     querystring: 0.2.0
     sax: 1.2.1
     url: 0.10.3
     uuid: 3.3.2
     xml2js: 0.4.19
-  checksum: 089910be6f5aa7120315916c3441b4d20736aefb530b1d173454ef6c7ecf65047bfc32689f1007f9716113d168ba5a531317ae1328f621bca0741f7e277ea7e8
+  checksum: 5ed48ddd14fa01478222d989be06d75a9a3d7521a5bb9324547f745fbde8ee760836c80c6ee9678449b591c67e1d447671ed16ab36583a3a6266c4fc6ba6eb7c
   languageName: node
   linkType: hard
 
@@ -6214,10 +6214,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^12.0.4":
-  version: 12.0.4
-  resolution: "dotenv@npm:12.0.4"
-  checksum: d79a69fae72b5c5785906600ce42388b48bf7ab20bbac8346bac327cc87a68617a09b1b3cd39965210f011ab07ea4641d5952d46f67f4e40a66b9ad76cf456c0
+"dotenv@npm:^14.3.2":
+  version: 14.3.2
+  resolution: "dotenv@npm:14.3.2"
+  checksum: 86c06758915d6facc35275f4a7fafc16705b6f3b44befaa8abca91367991efc8ff8db5437d3cc14778231d19fb97610fe82d60f8a53ba723cdb69fe4171439aa
   languageName: node
   linkType: hard
 
@@ -7831,10 +7831,10 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"helmet@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "helmet@npm:5.0.1"
-  checksum: 6e693ce32a413e967a3f7dc4f12ebcb494b8819b7d9397b2b3c72ac82f75a2ce415b5c6159f7d9717dc646bbf2f3447f63770fc8398efb555b12da1ac8ef53e7
+"helmet@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "helmet@npm:5.0.2"
+  checksum: 3fe107f3f73fb6a79173e5599f87a016c69f1c7cc46bcde1c60043ea36e64f893434592890d3c0be68f1d35731f2f2f22094a1cfd70438f9d35740861071dcf3
   languageName: node
   linkType: hard
 
@@ -8714,10 +8714,10 @@ fsevents@^1.0.0:
   languageName: node
   linkType: hard
 
-"jmespath@npm:0.15.0":
-  version: 0.15.0
-  resolution: "jmespath@npm:0.15.0"
-  checksum: 353bb9e69cc4c1560be0a4df43cb4020abc246e1c60cb5b55dcc76d8c858383f1633faf22ccaf6a5e09568a2077d0f4f1e989e6fcfd496b5cef87964cc8cb9e7
+"jmespath@npm:0.16.0":
+  version: 0.16.0
+  resolution: "jmespath@npm:0.16.0"
+  checksum: 2d602493a1e4addfd1350ac8c9d54b1b03ed09e305fd863bab84a4ee1f52868cf939dd1a08c5cdea29ce9ba8f86875ebb458b6ed45dab3e1c3f2694503fb2fd9
   languageName: node
   linkType: hard
 
@@ -11808,6 +11808,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"safe-stable-stringify@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "safe-stable-stringify@npm:2.3.1"
+  checksum: a0a0bad0294c3e2a9d1bf3cf2b1096dfb83c162d09a5e4891e488cce082120bd69161d2a92aae7fc48255290f17700decae9c89a07fe139794e61b5c8b411377
+  languageName: node
+  linkType: hard
+
 "safer-buffer@npm:>= 2.1.2 < 3, safer-buffer@npm:>= 2.1.2 < 3.0.0, safer-buffer@npm:^2.0.2, safer-buffer@npm:^2.1.0":
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
@@ -13915,9 +13922,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "winston@npm:3.4.0"
+"winston@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "winston@npm:3.5.0"
   dependencies:
     "@dabh/diagnostics": ^2.0.2
     async: ^3.2.3
@@ -13925,10 +13932,11 @@ resolve@^2.0.0-next.3:
     logform: ^2.3.2
     one-time: ^1.0.0
     readable-stream: ^3.4.0
+    safe-stable-stringify: ^2.3.1
     stack-trace: 0.0.x
     triple-beam: ^1.3.0
     winston-transport: ^4.4.2
-  checksum: 9d06652788b611e1fa7891b0c0bad8a7fb4c08f12856a186058008292034f08ad638765f2b4345a1963116be0e3533dcbd0c7e626524aa4e4cb2018b82a6f6ec
+  checksum: 06cbc12e99805ad65220b47d1926a18a146060fd78cd248b7928534f543c399bdcc87752ba423a98cbb79539d859639404066300b2bcdbb06e7e526d1a3c18ea
   languageName: node
   linkType: hard
 
