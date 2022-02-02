@@ -16,20 +16,28 @@ import { replaceTokens } from 'src/utils';
 
 const DefiStep4 = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);
 
   const data = (activity?.data as LanguageDefiData) || null;
 
   const errorSteps = React.useMemo(() => {
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
     const fieldStep3 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 3
-    if (data !== null && fieldStep3?.length === 0) {
-      const errors = getErrorSteps(data, 2);
-      errors.push(2); //corresponding to step 3
+    if (data !== null) {
+      const errors = getErrorSteps(data, 1);
+      if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
+      if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
       return errors;
     }
-    if (data !== null) return getErrorSteps(data, 2);
     return [];
+    // if (data !== null && fieldStep3?.length === 0) {
+    //   const errors = getErrorSteps(data, 2);
+    //   errors.push(2); //corresponding to step 3
+    //   return errors;
+    // }
+    // if (data !== null) return getErrorSteps(data, 2);
+    // return [];
   }, [activity?.content, data]);
 
   const c = data?.defi || '';
@@ -67,6 +75,11 @@ const DefiStep4 = () => {
     router.push('/lancer-un-defi/linguistique/5');
   };
 
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/lancer-un-defi/linguistique/5');
+  };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -94,9 +107,9 @@ const DefiStep4 = () => {
                     : replaceTokens(t.title, {
                         object:
                           index === 0
-                            ? LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title.toLowerCase() ?? "{ objet choisi à l'étape 2 }"
-                            : LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title2 ?? "{ objet choisi à l'étape 2 }",
-                        language: data?.language && data?.language.length > 0 ? data?.language : "{ langue choisie à l'étape 1 }",
+                            ? LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
+                            : LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title2 ?? " < objet choisi à l'étape 2 > ",
+                        language: data?.language && data?.language.length > 0 ? data?.language : " < langue choisie à l'étape 1 > ",
                       })
                 }
                 description={t.description}
@@ -134,7 +147,7 @@ const DefiStep4 = () => {
               description={`Rédigez vous même le défi pour vos Pelicopains !`}
             />
           </div>
-          <StepsButton prev="/lancer-un-defi/linguistique/3" />
+          <StepsButton prev="/lancer-un-defi/linguistique/3" next={onNext} />
         </div>
       </div>
     </Base>

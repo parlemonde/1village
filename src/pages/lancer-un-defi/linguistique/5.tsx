@@ -17,6 +17,7 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { fontDetailColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep5 = () => {
@@ -160,7 +161,11 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {getDefi(DEFI.LANGUAGE, data)}
+            {data.language === '' ? (
+              <span style={{ color: fontDetailColor }}>Veuillez choisir une langue à l&apos;étape 1</span>
+            ) : (
+              <span>Votre défi : {getDefi(DEFI.LANGUAGE, data)}</span>
+            )}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />

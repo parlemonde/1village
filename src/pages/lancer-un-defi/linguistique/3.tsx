@@ -20,11 +20,15 @@ const DefiStep3 = () => {
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
 
   const errorSteps = React.useMemo(() => {
-    if (data !== null) {
-      return getErrorSteps(data, 2);
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (data !== null && fieldStep2?.length === 0) {
+      const errors = getErrorSteps(data, 1);
+      errors.push(1); //corresponding to step 2
+      return errors;
+      // return getErrorSteps(data, 2);
     }
     return [];
-  }, [data]);
+  }, [activity?.content, data]);
 
   const contentAdded = React.useRef(false);
   React.useEffect(() => {

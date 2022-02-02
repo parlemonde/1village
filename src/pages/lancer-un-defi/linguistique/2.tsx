@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import Typography from '@mui/material/Typography';
 import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, Select, MenuItem } from '@mui/material';
 
@@ -13,6 +14,7 @@ import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { errorColorDarker, warningColor } from 'src/styles/variables.const';
 import { replaceTokens } from 'src/utils';
 import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
@@ -24,11 +26,13 @@ const DefiStep2 = () => {
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
 
   const errorSteps = React.useMemo(() => {
+    console.log('data', data);
     if (data !== null) {
       return getErrorSteps(data, 1);
     }
     return [];
   }, [data]);
+  console.log('error', errorSteps);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -55,7 +59,8 @@ const DefiStep2 = () => {
   };
 
   const onObjectChange = (event: SelectChangeEvent<string | number>) => {
-    updateActivity({ data: { ...data, objectIndex: `${event.target.value}` } });
+    updateActivity({ data: { ...data, objectIndex: Number(event.target.value) } });
+    //TO DO: add a function to convert string to number
   };
 
   const onNext = () => {
@@ -99,11 +104,20 @@ const DefiStep2 = () => {
           {data.objectIndex !== -1 && (
             <>
               <p className="text" style={{ fontSize: '1.1rem' }}>
-                {replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
-                  language: data.language,
-                })}{' '}
+                {data.language === '' ? (
+                  <span style={{ color: warningColor, fontWeight: 'bold' }}>Veuillez choisir une langue à l&apos;étape 1.</span>
+                ) : (
+                  replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
+                    language: data.language,
+                  })
+                )}
                 Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
               </p>
+              {data.objectIndex == 4 && activity.content[1].value === '' ? (
+                <p style={{ height: '0', fontSize: '1rem', fontStyle: 'italic', color: errorColorDarker }}>Ce champ est obligatoire</p>
+              ) : (
+                ''
+              )}
               <ContentEditor
                 content={activity.content.slice(0, explanationContentIndex)}
                 updateContent={updateContent}
