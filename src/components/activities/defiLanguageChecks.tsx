@@ -2,13 +2,13 @@ import type { LanguageDefiData } from 'src/activity-types/defi.types';
 
 export const isFirstStepValid = (data: LanguageDefiData): boolean => {
   if (data?.languageCode.length === 0) return false;
-  if (data?.languageIndex === -1) return false;
+  if (data?.languageIndex === 0) return false;
   return true;
 };
 
 export const isSecondStepValid = (data: LanguageDefiData): boolean => {
   if (data?.objectIndex === -1) return false;
-  if (data?.explanationContentIndex === 0) return false;
+  if (data?.explanationContentIndex === 1) return false;
   return true;
 };
 
