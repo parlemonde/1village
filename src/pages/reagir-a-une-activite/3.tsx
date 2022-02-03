@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -25,7 +26,18 @@ const ReactionStep3 = () => {
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const data = activity?.data || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+
+  const errorSteps = React.useMemo(() => {
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (data !== null && fieldStep2?.length === 0) {
+      return [1]; //corresponding to step 2
+    }
+    return [];
+  }, [activity?.content, data]);
+
+  const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -55,6 +67,7 @@ const ReactionStep3 = () => {
           steps={['Activité', 'Réaction', 'Prévisualisation']}
           urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite']}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre réaction{!isEdit && ', et publiez-la'}</h1>
@@ -77,9 +90,16 @@ const ReactionStep3 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
+              {!isValid && (
+                <p>
+                  <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                </p>
+              )}
+              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                  Publier
+                </Button>
+              </div>
             </div>
           )}
 
@@ -102,13 +122,15 @@ const ReactionStep3 = () => {
             </>
           )}
 
-          <span className="text text--small text--success">Contenu de votre réaction</span>
-          <div className="preview-block">
+          <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
+            Contenu de votre réaction
+          </span>
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
               onClick={() => {
                 router.push('/reagir-a-une-activite/2?edit');
               }}
-              status={'success'}
+              status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity?.content} />
