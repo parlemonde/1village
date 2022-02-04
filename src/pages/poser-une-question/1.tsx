@@ -40,7 +40,18 @@ const Question1 = () => {
     pelico: true,
     type: ActivityType.QUESTION,
   });
-  const { updatedActivityData } = useActivityRequests();
+  const { askSameQuestion } = useActivityRequests();
+
+  const created = React.useRef(false);
+  React.useEffect(() => {
+    if (!created.current) {
+      created.current = true;
+      if (!('edit' in router.query)) {
+        createNewActivity(ActivityType.QUESTION);
+      }
+    }
+  }, [activity, createNewActivity, router]);
+
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -62,12 +73,7 @@ const Question1 = () => {
   }, [activities]);
 
   const onNext = () => {
-    if (activity && isQuestion(activity) && 'edit' in router.query) {
-      router.push('/poser-une-question/2');
-      return;
-    }
-    const success = createNewActivity(ActivityType.QUESTION);
-    if (success) {
+    if (activity && isQuestion(activity)) {
       router.push('/poser-une-question/2');
     }
   };
@@ -83,7 +89,7 @@ const Question1 = () => {
     } else {
       askSame.push(user.id);
     }
-    await updatedActivityData(activity, {
+    await askSameQuestion(activity, {
       askSame: askSame.join(','),
     });
   };

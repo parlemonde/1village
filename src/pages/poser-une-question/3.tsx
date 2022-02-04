@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
@@ -18,6 +19,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
 
 const Question3 = () => {
   const router = useRouter();
@@ -29,7 +31,7 @@ const Question3 = () => {
 
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
   const questionsCount = content?.length ?? 0;
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -38,6 +40,16 @@ const Question3 = () => {
       router.push('/poser-une-question/1');
     }
   }, [activity, router]);
+
+  const errorSteps = React.useMemo(() => {
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (fieldStep2?.length === 0) {
+      return [1]; //corresponding to step 2
+    }
+    return [];
+  }, [activity?.content]);
+
+  const isValid = errorSteps.length === 0;
 
   const createQuestionActivity = async (question: string): Promise<boolean> => {
     if (!village) {
@@ -69,10 +81,9 @@ const Question3 = () => {
   };
 
   const onPublish = async () => {
-    if (!activity || !content) {
+    if (!isValid || !activity || !content) {
       return;
     }
-
     setIsLoading(true);
     if (activity.id === 0) {
       await Promise.all(content.map((question) => createQuestionActivity(question.value)));
@@ -99,6 +110,7 @@ const Question3 = () => {
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
           urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Prévisualisez vos questions, et envoyez-les</h1>
@@ -112,6 +124,11 @@ const Question3 = () => {
               ? ' Vous pouvez les modifier, et quand vous êtes prêts : publiez-les dans votre village-monde !'
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
+          {!isValid && (
+            <p>
+              <b>Avant de publier votre question, il faut corriger les étapes incomplètes, marquées en orange.</b>
+            </p>
+          )}
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
               <Link href="/poser-une-question/2" passHref>
@@ -125,17 +142,17 @@ const Question3 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
                 Publier
               </Button>
             </div>
           )}
-          <div className="preview-block">
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <EditButton
               onClick={() => {
                 router.push('/poser-une-question/2');
               }}
-              status={'success'}
+              status={!isValid ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             {content &&
