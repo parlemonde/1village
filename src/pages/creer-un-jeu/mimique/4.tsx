@@ -100,9 +100,18 @@ const MimiqueStep4 = () => {
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
                     label={errorSteps?.includes(0) ? '' : data.game1.signification || ''}
+                    style={{ maxWidth: '100%' }}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1 || ''} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2 || ''} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -135,9 +144,18 @@ const MimiqueStep4 = () => {
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
                     label={errorSteps?.includes(1) ? '' : data.game2.signification || ''}
+                    style={{ maxWidth: '100%' }}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1 || ''} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2 || ''} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -154,7 +172,7 @@ const MimiqueStep4 = () => {
           </div>
           {/* Mimique 3 */}
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(2) })}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} style={{ boxSizing: 'border-box' }}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
@@ -170,9 +188,18 @@ const MimiqueStep4 = () => {
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
                     label={errorSteps?.includes(2) ? '' : data.game3.signification || ''}
+                    style={{ maxWidth: '100%' }}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1 || ''} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2 || ''} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
