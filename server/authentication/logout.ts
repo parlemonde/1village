@@ -8,7 +8,7 @@ export async function logout(req: Request, res: Response): Promise<void> {
   }
 
   // send empty expired cookies to delete them
-  res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
-  res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+  res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
+  res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
   res.status(204).send();
 }

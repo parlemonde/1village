@@ -75,9 +75,21 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   }
 
   const { accessToken, refreshToken } = await getAccessToken(user.id, !!data.getRefreshToken);
-  res.cookie('access-token', accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, {
+    maxAge: 4 * 60 * 60000,
+    expires: new Date(Date.now() + 4 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
   if (data.getRefreshToken) {
-    res.cookie('refresh-token', refreshToken, { maxAge: 7 * 24 * 60 * 60000, expires: new Date(Date.now() + 7 * 24 * 60 * 60000), httpOnly: true });
+    res.cookie('refresh-token', refreshToken, {
+      maxAge: 7 * 24 * 60 * 60000,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60000),
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
   }
   delete user.passwordHash;
   res.sendJSON({ user: user, accessToken, refreshToken: refreshToken });

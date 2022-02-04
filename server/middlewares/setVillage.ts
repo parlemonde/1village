@@ -17,7 +17,7 @@ export async function setVillage(req: Request, res: Response, next: NextFunction
       ? undefined
       : await getRepository(Village).findOne(villageId !== -1 ? { where: { id: villageId } } : { order: { id: 'ASC' } });
   if (villageId === -1 && req.village !== undefined) {
-    res.cookie('village-id', req.village.id);
+    res.cookie('village-id', req.village.id, { httpOnly: false, secure: true, sameSite: 'strict' });
   }
   next();
 }

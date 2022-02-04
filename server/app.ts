@@ -6,6 +6,7 @@ config();
 // eslint-disable-next-line arca/import-ordering
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import type { Response, RequestHandler } from 'express';
 import express, { Router } from 'express';
 import helmet from 'helmet';
@@ -30,6 +31,13 @@ import { onError, normalizePort, getDefaultDirectives } from './utils/server';
 const isDevENV = process.env.NODE_ENV !== 'production';
 const frontendHandler = next({ dev: isDevENV });
 const handle = frontendHandler.getRequestHandler();
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 600, // Limit each IP to 600 requests per `window` (here, per minute)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 async function start() {
   // Connect to DB
@@ -65,6 +73,7 @@ async function start() {
       crossOriginResourcePolicy: false,
     }),
   );
+  app.use(limiter);
   app.use(cors() as RequestHandler);
   app.use(removeTrailingSlash);
   app.use(express.json());

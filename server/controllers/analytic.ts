@@ -260,6 +260,8 @@ analyticController.router.post(
           maxAge: 10 * 365 * 24 * 60 * 60000,
           expires: new Date(Date.now() + 10 * 365 * 24 * 60 * 60000),
           httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
         });
       }
 

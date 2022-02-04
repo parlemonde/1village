@@ -6,7 +6,7 @@ export function setCookie(cname: string, cvalue: string, exdays?: number): void 
   const d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
   const expires = 'expires=' + d.toUTCString();
-  document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+  document.cookie = cname + '=' + cvalue + ';' + expires + '; secure; SameSite=Strict;path=/';
 }
 
 export function getCookie(cname: string): string {

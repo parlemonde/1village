@@ -36,7 +36,7 @@ export type DialogTitleProps = React.PropsWithChildren<{
 const DialogTitle = ({ children, id, onClose }: DialogTitleProps) => {
   return (
     <MuiDialogTitle id={id} sx={{ margin: 0, p: 2 }}>
-      <Typography variant="h6">{children}</Typography>
+      {children}
       {onClose ? (
         <IconButton
           aria-label="close"
