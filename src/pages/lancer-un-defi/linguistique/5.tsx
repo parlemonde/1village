@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, getDefi, getLanguageObject, DEFI } from 'src/activity-types/defi.constants';
+import { isLanguage, getDefi, getLanguageObject, DEFI, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -17,7 +17,6 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { fontDetailColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 
 const DefiStep5 = () => {
@@ -30,15 +29,24 @@ const DefiStep5 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep3 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 3
-    if (data !== null && fieldStep3?.length === 0) {
+    const fieldStep2 = activity?.content.slice(0, activity?.content.length - 1).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
+    const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
+
+    if (data !== null && fieldStep2?.length === 0) {
       const errors = getErrorSteps(data, 3);
       errors.push(2); //corresponding to step 3
       return errors;
     }
-    if (data !== null) return getErrorSteps(data, 3);
+
+    if (data !== null) {
+      const errors = getErrorSteps(data, 1);
+      if (fieldStep3?.length === 0) errors.push(2);
+      return errors;
+    }
+
     return [];
   }, [activity?.content, data]);
+
   const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
@@ -97,7 +105,7 @@ const DefiStep5 = () => {
               </Button>
             </div>
           ) : (
-            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+            <div style={{ width: '100%', margin: '1rem 0' }}>
               {!isValid && (
                 <p>
                   <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
@@ -123,7 +131,7 @@ const DefiStep5 = () => {
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
-            {"L'expression"}
+            L&apos;expression
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
@@ -133,7 +141,12 @@ const DefiStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.content.slice(0, explanationContentIndex)} />
+            <span>
+              {LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title} :
+              <span>
+                <ContentView content={activity.content.slice(0, explanationContentIndex)} />
+              </span>
+            </span>
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
@@ -161,11 +174,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {data.language === '' ? (
-              <span style={{ color: fontDetailColor }}>Veuillez choisir une langue à l&apos;étape 1</span>
-            ) : (
-              <span>Votre défi : {getDefi(DEFI.LANGUAGE, data)}</span>
-            )}
+            Votre défi : {getDefi(DEFI.LANGUAGE, data)}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />

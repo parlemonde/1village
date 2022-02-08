@@ -68,12 +68,12 @@ export const LANGUAGE_OBJECTS = [
     desc1: 'Écrivez en {{language}} la chanson que vous avez choisie.',
     desc2: 'Expliquez pourquoi vous avez choisi cette chanson, ce qu’elle signifie et quand vous l’utilisez.',
   },
-  {
-    title: 'Autre',
-    title2: '',
-    desc1: 'Écrivez en {{language}} ce que vous avez choisi.',
-    desc2: 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.',
-  },
+  // {
+  //   title: 'Autre',
+  //   title2: '',
+  //   desc1: 'Écrivez en {{language}} ce que vous avez choisi.',
+  //   desc2: 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.',
+  // },
 ];
 export const LANGUAGE_DEFIS = [
   {
@@ -105,7 +105,7 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     if ((data as LanguageDefiData).objectIndex === -1) {
       return '';
     }
-    if ((data as LanguageDefiData).objectIndex === 4 && data.defiIndex === 0) {
+    if (data.defiIndex === 0) {
       return 'Trouvez la même chose dans une autre langue';
     }
     return replaceTokens(defi, {
@@ -122,10 +122,7 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
 export const getLanguageObject = (data: LanguageDefiData): string => {
   const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
   return replaceTokens(object, {
-    object:
-      data.objectIndex === -1 || data.objectIndex === 4
-        ? 'un défi'
-        : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
+    object: data.objectIndex === -1 ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
     language: data.language,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });

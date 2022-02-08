@@ -19,9 +19,9 @@ const ContenuLibre = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/indice-culturel');
+      router.push('/contenu-libre');
     } else if (activity && !isFreeContent(activity)) {
-      router.push('/indice-culturel');
+      router.push('/contenu-libre');
     }
   }, [activity, router]);
 

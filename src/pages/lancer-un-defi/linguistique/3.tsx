@@ -20,15 +20,16 @@ const DefiStep3 = () => {
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    const fieldStep2 = activity?.content.filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
     if (data !== null && fieldStep2?.length === 0) {
-      const errors = getErrorSteps(data, 1);
-      errors.push(1); //corresponding to step 2
+      return getErrorSteps(data, 2);
+    }
+    if (data !== null && data.language.length === 0) {
+      const errors = getErrorSteps(data, 1); //corresponding to step 1
       return errors;
-      // return getErrorSteps(data, 2);
     }
     return [];
-  }, [activity?.content, data]);
+  }, [activity, data]);
 
   const contentAdded = React.useRef(false);
   React.useEffect(() => {
@@ -95,6 +96,7 @@ const DefiStep3 = () => {
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.desc2}
           </p>
+
           <ContentEditor
             content={activity.content.slice(explanationContentIndex, activity.content.length)}
             updateContent={updateContent}
@@ -102,6 +104,7 @@ const DefiStep3 = () => {
             deleteContent={deleteIndiceContent}
             save={save}
           />
+
           <StepsButton prev="/lancer-un-defi/linguistique/2" next={onNext} />
         </div>
       </div>

@@ -23,6 +23,5 @@ export const getErrorSteps = (data: LanguageDefiData, step: number) => {
   if (step > 0 && !isFirstStepValid(data)) errorSteps.push(0);
   if (step > 1 && !isSecondStepValid(data)) errorSteps.push(1);
   if (step > 2 && !isFouthStepValid(data)) errorSteps.push(3);
-
   return errorSteps;
 };
