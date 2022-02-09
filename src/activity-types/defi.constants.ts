@@ -68,7 +68,7 @@ export const LANGUAGE_OBJECTS = [
     desc1: 'Écrivez en {{language}} la chanson que vous avez choisie.',
     desc2: 'Expliquez pourquoi vous avez choisi cette chanson, ce qu’elle signifie et quand vous l’utilisez.',
   },
-      // We are going to implement this later when we add "other" category in language challenge.
+  // We are going to implement this later when we add "other" category in language challenge.
   // {
   //   title: 'Autre',
   //   title2: '',
