@@ -68,6 +68,7 @@ export const LANGUAGE_OBJECTS = [
     desc1: 'Écrivez en {{language}} la chanson que vous avez choisie.',
     desc2: 'Expliquez pourquoi vous avez choisi cette chanson, ce qu’elle signifie et quand vous l’utilisez.',
   },
+      // We are going to implement this later when we add "other" category in language challenge.
   // {
   //   title: 'Autre',
   //   title2: '',
@@ -105,9 +106,10 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     if ((data as LanguageDefiData).objectIndex === -1) {
       return '';
     }
-    if (data.defiIndex === 0) {
-      return 'Trouvez la même chose dans une autre langue';
-    }
+    // We are going to implement this later when we add "other" category in language challenge.
+    // if ((data as LanguageDefiData).objectIndex === 4 && data.defiIndex === 0) {
+    //   return 'Trouvez la même chose dans une autre langue';
+    // }
     return replaceTokens(defi, {
       object:
         data.defiIndex === 0

@@ -26,13 +26,9 @@ const DefiStep4 = () => {
     const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
 
     if (data !== null) {
-      const errors = getErrorSteps(data, 1);
+      const errors = getErrorSteps(data, 1); // corresponde to step 1
       if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
       if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
-      return errors;
-    }
-    if (data !== null && fieldStep3?.length === 0) {
-      const errors = getErrorSteps(data, 2); //corresponding to step 3
       return errors;
     }
     return [];
