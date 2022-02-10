@@ -65,14 +65,11 @@ export const useActivityRequests = () => {
   );
 
   const askSameQuestion = React.useCallback(
-    async (activity: Activity, data: AnyData) => {
+    async (activityId: number) => {
       const response = await axiosLoggedRequest({
         method: 'PUT',
-        url: `/activities/${activity.id}/askSame`,
-        data: {
-          data,
-        },
-      });
+        url: `/activities/${activityId}/askSame`,
+       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',

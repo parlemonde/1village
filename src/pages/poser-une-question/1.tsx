@@ -4,7 +4,6 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
-import type { QuestionActivity } from 'src/activity-types/question.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -32,7 +31,7 @@ const Question1 = () => {
     limit: 200,
     page: 0,
     countries:
-      village && (isMediator || village.activePhase >= 2)
+      village && (isMediator || village.activePhase >= 1)
         ? village.countries.map((c) => c.isoCode.toUpperCase())
         : user
         ? [user.country.isoCode.toUpperCase()]
@@ -78,26 +77,17 @@ const Question1 = () => {
     }
   };
 
-  const onAskSame = (activity: QuestionActivity, askSame: number[]) => async () => {
+  const onAskSame = (activityId: number) => async () => {
     if (!user || !user.id) {
       return;
     }
-
-    const index = askSame.findIndex((i) => i === user.id);
-    if (index !== -1) {
-      askSame.splice(index, 1);
-    } else {
-      askSame.push(user.id);
-    }
-    await askSameQuestion(activity, {
-      askSame: askSame.join(','),
-    });
+    await askSameQuestion(activityId);
   };
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/poser-une-question" />
+        <BackButton href="/" />
         <Steps
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
           urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
@@ -145,7 +135,7 @@ const Question1 = () => {
                       <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Button
                           style={user && askSame.includes(user.id) ? {} : { padding: '6px 16px', backgroundColor: 'white' }}
-                          onClick={onAskSame(activity, askSame)}
+                          onClick={onAskSame(activity.id)}
                           color="primary"
                           variant={user && askSame.includes(user.id) ? 'contained' : 'text'}
                         >

@@ -20,20 +20,12 @@ export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }:
     () => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)),
     [activity],
   );
+
   const onAskSame = async () => {
     if (!user || isSelf) {
       return;
     }
-
-    const index = askSame.findIndex((i) => i === user.id);
-    if (index !== -1) {
-      askSame.splice(index, 1);
-    } else {
-      askSame.push(user.id);
-    }
-    await askSameQuestion(activity, {
-      askSame: askSame.join(','),
-    });
+    await askSameQuestion(activity.id);
   };
 
   return (
