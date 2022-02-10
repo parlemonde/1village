@@ -31,7 +31,7 @@ const Question1 = () => {
     limit: 200,
     page: 0,
     countries:
-      village && (isMediator || village.activePhase >= 1)
+      village && (isMediator || village.activePhase >= 2)
         ? village.countries.map((c) => c.isoCode.toUpperCase())
         : user
         ? [user.country.isoCode.toUpperCase()]
