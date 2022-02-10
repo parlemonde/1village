@@ -6,6 +6,7 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Tooltip } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.constants';
@@ -17,16 +18,20 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { getErrorSteps } from 'src/components/activities/enigmeChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 const EnigmeStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
+  const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = (activity?.data as EnigmeData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const isUserObservator = user?.type === UserType.OBSERVATOR;
   const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   const errorSteps = React.useMemo(() => {
@@ -100,18 +105,28 @@ const EnigmeStep4 = () => {
               </Button>
             </div>
           ) : (
-            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+            <>
               {!isValid && (
                 <p>
                   <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
-                  Publier
-                </Button>
+                {isUserObservator ? (
+                  <Tooltip title="Action non autorisée" arrow>
+                    <span>
+                      <Button variant="outlined" color="primary" onClick={onPublish} disabled>
+                        Publier
+                      </Button>
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                    Publier
+                  </Button>
+                )}
               </div>
-            </div>
+            </>
           )}
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(0) })}>

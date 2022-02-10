@@ -4,7 +4,7 @@ import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { Button, Grid, Backdrop, Box } from '@mui/material';
+import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { getMascotteContent } from 'src/activity-types/mascotte.constants';
@@ -23,6 +23,7 @@ import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
 import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 const MascotteStep4 = () => {
   const router = useRouter();
@@ -35,6 +36,7 @@ const MascotteStep4 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const isUserObservator = user?.type === UserType.OBSERVATOR;
   const data = (activity?.data as MascotteData) || null;
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
@@ -157,16 +159,33 @@ const MascotteStep4 = () => {
             )}
             {isEdit ? (
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                <Button variant="outlined" color="primary" onClick={onPublish}>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
                   Enregistrer les changements
                 </Button>
               </div>
             ) : (
-              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
-                  Publier
-                </Button>
-              </div>
+              <>
+                {!isValid && (
+                  <p>
+                    <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                  </p>
+                )}
+                <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                  {isUserObservator ? (
+                    <Tooltip title="Action non autorisée" arrow>
+                      <span>
+                        <Button variant="outlined" color="primary" onClick={onPublish} disabled>
+                          Publier
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                      Publier
+                    </Button>
+                  )}
+                </div>
+              </>
             )}
             <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
               <EditButton
