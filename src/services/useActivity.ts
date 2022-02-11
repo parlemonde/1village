@@ -69,7 +69,7 @@ export const useActivityRequests = () => {
       const response = await axiosLoggedRequest({
         method: 'PUT',
         url: `/activities/${activityId}/askSame`,
-       });
+      });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
