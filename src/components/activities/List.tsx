@@ -94,7 +94,16 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
                       <span className="text text--small text--primary" style={{ fontSize: '0.8rem' }}>
                         En réaction à
                       </span>
-                      <ReactionIcon style={{ width: '4rem', height: '4rem', cursor: 'pointer', position: 'relative', display: 'inline-block' }} />
+                      <ReactionIcon
+                        style={{
+                          fill: primaryColor,
+                          width: '4rem',
+                          height: '4rem',
+                          cursor: 'pointer',
+                          position: 'relative',
+                          display: 'inline-block',
+                        }}
+                      />
                     </Button>
                   </div>
                 </div>
