@@ -4,7 +4,7 @@ import type { SourceProps } from 'react-player/base';
 import ReactPlayer from 'react-player';
 import React from 'react';
 
-import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress } from '@mui/material';
+import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress, Tooltip } from '@mui/material';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic, isMimicValid } from 'src/activity-types/game.constants';
@@ -13,13 +13,17 @@ import { Steps } from 'src/components/Steps';
 import { CustomRadio } from 'src/components/buttons/CustomRadio';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import type { MimicsData } from 'types/game.type';
+import { UserType } from 'types/user.type';
 
 const MimiqueStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
+  const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as MimicsData) || null;
+  const isUserObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
@@ -78,9 +82,19 @@ const MimiqueStep4 = () => {
             </p>
           )}
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
-              Publier
-            </Button>
+            {isUserObservator ? (
+              <Tooltip title="Action non autorisée" arrow>
+                <span>
+                  <Button variant="outlined" color="primary" disabled>
+                    Publier
+                  </Button>
+                </span>
+              </Tooltip>
+            ) : (
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                Publier
+              </Button>
+            )}
           </div>
           {/* Mimique 1 */}
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(0) })}>
@@ -100,9 +114,18 @@ const MimiqueStep4 = () => {
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
                     label={errorSteps?.includes(0) ? '' : data.game1.signification || ''}
+                    style={{ maxWidth: '100%' }}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1 || ''} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2 || ''} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -135,9 +158,18 @@ const MimiqueStep4 = () => {
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
                     label={errorSteps?.includes(1) ? '' : data.game2.signification || ''}
+                    style={{ maxWidth: '100%' }}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1 || ''} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2 || ''} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>
@@ -154,7 +186,7 @@ const MimiqueStep4 = () => {
           </div>
           {/* Mimique 3 */}
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(2) })}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} style={{ boxSizing: 'border-box' }}>
               <Grid item xs={12} md={4}>
                 <ReactPlayer
                   width="100%"
@@ -170,9 +202,18 @@ const MimiqueStep4 = () => {
                     value={1}
                     control={<CustomRadio isChecked isSuccess />}
                     label={errorSteps?.includes(2) ? '' : data.game3.signification || ''}
+                    style={{ maxWidth: '100%' }}
                   />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1 || ''} />
-                  <FormControlLabel control={<Radio />} label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2 || ''} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2 || ''}
+                    style={{ maxWidth: '100%' }}
+                  />
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} md={2}>

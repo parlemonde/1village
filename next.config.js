@@ -7,10 +7,12 @@ module.exports = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
     });
     return config;
   },
+  experimental: { esmExternals: false },
   eslint: {
     // ESLint is already called before building with nextJS. So no need here.
     ignoreDuringBuilds: true,

@@ -49,7 +49,7 @@ export const MimicStats = ({ gameResponses, choices, country, userMap, users }: 
   }, [choices]);
 
   return (
-    <Grid item xs={5} md={5}>
+    <Grid item xs={3} md={3}>
       <span style={{ paddingRight: '0.5rem' }}>{responseCount !== 0 ? 'Réponses de vos Pélicopains' : 'Pas de réponses de vos Pélicopains'}</span>
       <Flag country={country} />
       {responseCount > 0 && responseChoices && (

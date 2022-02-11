@@ -41,7 +41,19 @@ export async function loginWithPlmSSO(req: Request, res: Response, next: NextFun
     throw new AppError('Please use normal login', ErrorCode.DONT_USO_SSO);
   }
   const { accessToken, refreshToken } = await getAccessToken(user.id, true);
-  res.cookie('access-token', accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
-  res.cookie('refresh-token', refreshToken, { maxAge: 7 * 24 * 60 * 60000, expires: new Date(Date.now() + 7 * 24 * 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, {
+    maxAge: 4 * 60 * 60000,
+    expires: new Date(Date.now() + 4 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
+  res.cookie('refresh-token', refreshToken, {
+    maxAge: 7 * 24 * 60 * 60000,
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
   res.sendJSON({ user, accessToken, refreshToken: refreshToken });
 }
