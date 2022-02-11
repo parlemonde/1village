@@ -1,4 +1,4 @@
-import type { EnigmeActivity } from './enigme.types';
+import type { EnigmeActivity, EnigmeData } from './enigme.types';
 
 export const ENIGME = {
   OBJET: 0,
@@ -144,3 +144,9 @@ export const ENIGME_DATA = [
 export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
   return 7 - Math.floor((new Date().getTime() - (activity.data.timer ?? new Date(activity.updateDate || '').getTime())) / 3600000 / 24);
 }
+
+export const getEnigme = (activitySubType: number | null | undefined, activityData: EnigmeData) =>
+  (activitySubType === -1 ? { title: activityData.themeName || '', step1: activityData.themeName || '' } : ENIGME_TYPES[activitySubType || 0]) || {
+    title: 'Enigme',
+    step1: 'Enigme',
+  };
