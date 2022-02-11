@@ -5,6 +5,7 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Tooltip } from '@mui/material';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';
@@ -17,14 +18,18 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { REACTIONS } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 const PresentationStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
+  const { user } = React.useContext(UserContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
+  const isUserObservator = user?.type === UserType.OBSERVATOR;
 
   const data = activity?.data || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -69,15 +74,25 @@ const PresentationStep4 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
                 Enregistrer les changements
               </Button>
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
+              {isUserObservator ? (
+                <Tooltip title="Action non autorisée" arrow>
+                  <span>
+                    <Button variant="outlined" color="primary" disabled>
+                      Publier
+                    </Button>
+                  </span>
+                </Tooltip>
+              ) : (
+                <Button variant="outlined" color="primary" onClick={onPublish}>
+                  Publier
+                </Button>
+              )}
             </div>
           )}
 
