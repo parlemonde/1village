@@ -85,7 +85,7 @@ const ReactionStep3 = () => {
               {isUserObservator ? (
                 <Tooltip title="Action non autorisée" arrow>
                   <span>
-                    <Button variant="outlined" color="primary" onClick={onPublish} disabled>
+                    <Button variant="outlined" color="primary" disabled>
                       Publier
                     </Button>
                   </span>
