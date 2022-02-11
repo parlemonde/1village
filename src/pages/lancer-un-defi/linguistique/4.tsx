@@ -22,13 +22,15 @@ const DefiStep4 = () => {
   const data = (activity?.data as LanguageDefiData) || null;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep3 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 3
-    if (data !== null && fieldStep3?.length === 0) {
-      const errors = getErrorSteps(data, 2);
-      errors.push(2); //corresponding to step 3
+    const fieldStep2 = activity?.content.slice(0, activity?.content.length - 1).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
+    const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
+
+    if (data !== null) {
+      const errors = getErrorSteps(data, 1); // corresponde to step 1
+      if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
+      if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
       return errors;
     }
-    if (data !== null) return getErrorSteps(data, 2);
     return [];
   }, [activity?.content, data]);
 
@@ -88,17 +90,13 @@ const DefiStep4 = () => {
             {LANGUAGE_DEFIS.map((t, index) => (
               <ThemeChoiceButton
                 key={index}
-                label={
-                  data.objectIndex === 4 && index === 0
-                    ? 'Trouvez la même chose dans une autre langue'
-                    : replaceTokens(t.title, {
-                        object:
-                          index === 0
-                            ? LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title.toLowerCase() ?? "{ objet choisi à l'étape 2 }"
-                            : LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title2 ?? "{ objet choisi à l'étape 2 }",
-                        language: data?.language && data?.language.length > 0 ? data?.language : "{ langue choisie à l'étape 1 }",
-                      })
-                }
+                label={replaceTokens(t.title, {
+                  object:
+                    index === 0
+                      ? LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
+                      : LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title2 ?? " < objet choisi à l'étape 2 > ",
+                  language: data?.language && data?.language.length > 0 ? data?.language : "< langue choisie à l'étape 1 > ",
+                })}
                 description={t.description}
                 onClick={onClick(index)}
               />

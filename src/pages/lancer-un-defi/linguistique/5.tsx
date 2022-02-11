@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Tooltip } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, getDefi, getLanguageObject, DEFI } from 'src/activity-types/defi.constants';
+import { isLanguage, getDefi, getLanguageObject, DEFI, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -34,15 +34,19 @@ const DefiStep5 = () => {
   const isUserObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep3 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 3
-    if (data !== null && fieldStep3?.length === 0) {
-      const errors = getErrorSteps(data, 3);
-      errors.push(2); //corresponding to step 3
+    const fieldStep2 = activity?.content.slice(0, activity?.content.length - 1).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
+    const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
+
+    if (data !== null) {
+      const errors = getErrorSteps(data, 1); // corresponde to step 1
+      if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
+      if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
+      if (data.defiIndex === null) errors.push(3); //corresponding to step 4
       return errors;
     }
-    if (data !== null) return getErrorSteps(data, 3);
     return [];
   }, [activity?.content, data]);
+
   const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
@@ -137,7 +141,7 @@ const DefiStep5 = () => {
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
-            {"L'expression"}
+            L&apos;expression
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
@@ -147,7 +151,12 @@ const DefiStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.content.slice(0, explanationContentIndex)} />
+            <span>
+              {LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title} :
+              <span>
+                <ContentView content={activity.content.slice(0, explanationContentIndex)} />
+              </span>
+            </span>
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
@@ -175,7 +184,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {getDefi(DEFI.LANGUAGE, data)}
+            Votre défi : {data.defiIndex === null ? '' : getDefi(DEFI.LANGUAGE, data)}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />
