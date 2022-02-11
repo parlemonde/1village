@@ -68,6 +68,13 @@ const indices = [
     disabled: false,
     disabledText: '',
   },
+  {
+    label: 'Présenter un autre indice',
+    href: '/indice-culturel/1?category=-1',
+    icon: null,
+    disabled: false,
+    disabledText: '',
+  },
 ];
 
 const Indice = () => {

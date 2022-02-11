@@ -8,7 +8,6 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
-import { labels } from '../utils';
 
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
@@ -16,10 +15,11 @@ import { CommentCard } from './CommentCard';
 interface ActivityCommentsProps {
   activityId: number;
   activityType: number;
+  activityPhase: number;
   usersMap: { [key: number]: User };
 }
 
-export const ActivityComments = ({ activityId, activityType, usersMap }: ActivityCommentsProps) => {
+export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const userMap = React.useMemo(
@@ -32,7 +32,7 @@ export const ActivityComments = ({ activityId, activityType, usersMap }: Activit
   );
   const { comments } = useComments(activityId);
   const { activities } = useActivities({
-    limit: 50,
+    limit: 200,
     page: 0,
     responseActivityId: activityId,
   });
@@ -67,7 +67,7 @@ export const ActivityComments = ({ activityId, activityType, usersMap }: Activit
           );
         }
       })}
-      <AddComment activityId={activityId} activityType={activityType} label={labels[activityType]} />
+      <AddComment activityId={activityId} activityType={activityType} activityPhase={activityPhase} />
     </div>
   );
 };

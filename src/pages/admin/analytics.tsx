@@ -222,13 +222,25 @@ const Stats = () => {
                     <Grid item xs={12} md={6}>
                       <div style={{ display: 'flex', width: '100%', height: '160px', alignItems: 'center' }}>
                         <div style={{ flex: 1, width: '33.3333%', height: '100%', position: 'relative' }}>
-                          <Image layout="fill" src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/ZZU8Z7TMKXmzZT2mCjJU.svg" />
+                          <Image
+                            layout="fill"
+                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/ZZU8Z7TMKXmzZT2mCjJU.svg"
+                            unoptimized
+                          />
                         </div>
                         <div style={{ flex: 1, width: '33.3333%', height: '100%', position: 'relative' }}>
-                          <Image layout="fill" src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg" />
+                          <Image
+                            layout="fill"
+                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/iHYrrXKe4QRcb2uu8eV8.svg"
+                            unoptimized
+                          />
                         </div>
                         <div style={{ flex: 1, width: '33.3333%', height: '100%', position: 'relative' }}>
-                          <Image layout="fill" src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dgpDFckbHwwOKdIGDa3N.svg" />
+                          <Image
+                            layout="fill"
+                            src="https://web-dev.imgix.net/image/tcFciHGuF3MxnTr1y5ue01OGLBn2/dgpDFckbHwwOKdIGDa3N.svg"
+                            unoptimized
+                          />
                         </div>
                       </div>
                     </Grid>

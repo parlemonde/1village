@@ -1,7 +1,18 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isPresentation, isQuestion, isEnigme, isDefi, isIndice, isSymbol, isFreeContent, isMascotte } from 'src/activity-types/anyActivity';
+import {
+  isDefi,
+  isEnigme,
+  isFreeContent,
+  isIndice,
+  isMascotte,
+  isPresentation,
+  isQuestion,
+  isReaction,
+  isReportage,
+  isSymbol,
+} from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -64,6 +75,8 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
         {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
         {isIndice(activity) && <ContentView content={activity.content} />}
         {isSymbol(activity) && <ContentView content={activity.content} />}
+        {isReportage(activity) && <ContentView content={activity.content} />}
+        {isReaction(activity) && <ContentView content={activity.content} />}
       </div>
     )
   );

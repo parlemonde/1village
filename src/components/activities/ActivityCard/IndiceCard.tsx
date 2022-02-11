@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import { INDICE_TYPES } from 'src/activity-types/indice.constants';
+import { getIndice } from 'src/activity-types/indice.constants';
 import type { IndiceActivity } from 'src/activity-types/indice.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -18,7 +18,7 @@ export const IndiceCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
   const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
-  const indiceType = INDICE_TYPES[activity.subType ?? 0] ?? INDICE_TYPES[0];
+  const indiceType = getIndice(activity.subType, activity.data);
 
   return (
     <div

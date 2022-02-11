@@ -23,12 +23,16 @@ const styles = {
     width: '40px',
     height: '40px',
   },
+  'extra-small': {
+    width: '30px',
+    height: '30px',
+  },
 };
 
 type AvatarImgProps = {
   src?: string;
   user?: User;
-  size?: 'large' | 'medium' | 'small';
+  size?: 'large' | 'medium' | 'small' | 'extra-small';
   noLink?: boolean;
   onClick?: () => void;
   style?: React.CSSProperties;

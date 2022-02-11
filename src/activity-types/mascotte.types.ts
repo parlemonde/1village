@@ -18,7 +18,6 @@ export type MascotteData = {
   personality2: string;
   personality3: string;
   countries: string[];
-  languages: string[];
   fluentLanguages: string[];
   minorLanguages: string[];
   wantedForeignLanguages: string[];

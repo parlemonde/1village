@@ -55,6 +55,7 @@ export const SubHeader = ({ number, info }: Props): React.ReactElement => {
           color: selectedPhase === number ? 'white' : primaryColor,
           display: 'flex',
           flex: 1,
+          minWidth: 0,
           padding: '0.25rem 0.5rem 0.25rem 1rem',
         }}
       >
@@ -64,7 +65,7 @@ export const SubHeader = ({ number, info }: Props): React.ReactElement => {
         </h2>
       </div>
       {/* Arrow shape for subheader */}
-      <svg className="shadow-svg" viewBox="0 0 32 46" fill="none">
+      <svg className="shadow-svg" viewBox="0 0 32 46" fill="none" style={{ height: '100%', width: 'auto' }}>
         <path d="M32 23L0 46L0 0L32 23Z" fill={selectedPhase === number ? primaryColor : 'white'} />
       </svg>
     </div>

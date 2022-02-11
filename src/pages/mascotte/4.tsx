@@ -40,6 +40,7 @@ const MascotteStep4 = () => {
               'Le web de Pelico',
               'Prévisualiser',
             ]}
+            urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
             activeStep={3}
             errorSteps={errorSteps}
           />
@@ -48,54 +49,47 @@ const MascotteStep4 = () => {
             <p>Bonjour {data?.mascotteName}, bienvenue sur 1Village !</p>
 
             <p>
-              {data?.mascotteName} est votre mascotte de classe, il s’agit de votre profil, c’est grâce à lui que les autres classes vous
-              reconnaîtront sur 1Village, notre espace d’échange sécurisé en ligne.
+              {data?.mascotteName ?? 'Votre mascotte'} est votre mascotte de classe, il s’agit de votre profil, c’est grâce à lui que les autres
+              classes vous reconnaîtront sur 1Village, notre espace d’échange sécurisé en ligne.
             </p>
 
-            <p>{data?.mascotteName}, tout comme moi Pelico, est désormais un citoyen numérique.</p>
+            <p>{data?.mascotteName ?? 'Votre mascotte'}, tout comme moi Pelico, est désormais un citoyen numérique.</p>
 
             <p>
-              C&apos;est-à-dire ? : Un citoyen numérique est une personne qui interagit avec d’autres personnes en ligne. Sur 1Village, ces personnes
+              C&apos;est-à-dire ? Un citoyen numérique est une personne qui interagit avec d’autres personnes en ligne. Sur 1Village, ces personnes
               sont tes Pélicopains, des enfants comme toi qui ont soif de découvertes !
             </p>
 
             <p>
               Comme à la maison, à l’école ou dans la rue, certaines règles permettent de mieux vivre-ensemble. Alors, comme nous allons échanger
-              ensemble sur 1Village durant toute l’année scolaire. Je vous propose de respecter quelques règles, pour éviter toute prise de bec !
+              ensemble sur 1Village durant toute l’année scolaire. Je me suis demandé quelles règles pourrions nous adopter cette année sur 1Village.
+              Voilà les questions que je me suis posées :
             </p>
 
             <ul className="mascotte-rules-list">
               <li data-emoji="📝">
-                Adoptez une attitude responsable vis-à-vis de ce que vous écrivez et de ce que vous dites sur 1Village. Veillez à utiliser un langage
-                poli sans grossièretés, injures ou mots méchants, envers vos Pélicopains.
+                Avons-nous le droit d’écrire et de publier ce que l’on veut sur internet ? Y compris des insultes, grossièretés ou méchancetés ?
               </li>
 
-              <li data-emoji="🔏">
-                Respectez la loi sur la propriété des œuvres Copiez et utilisez uniquement des textes, des images, des sons que vous avez créé, ou
-                dont vous disposez des droits après les avoir demandés à l’auteur.
-              </li>
+              <li data-emoji="🔏">Pouvons-nous utiliser librement des œuvres (image, texte, son…) dont nous ne sommes pas les auteurs ?</li>
 
               <li data-emoji="🗣">
-                Interrogez-vous sur la portée de vos propos avant de publier du contenu sur 1Village. Sur 1Village, la publication de contenu (photo,
-                texte, vidéo etc.) se fait toujours sous le contrôle de votre professeur.
+                Devons-nous nous questionner sur la portée de nos propos sur internet ? ? Et peut-on décider seul de ce que l’on publie ?
               </li>
 
-              <li data-emoji="🤔">
-                Vérifiez toujours les informations transmises sur internet. Tout ce qui est partagé sur le web n’est pas nécessairement vrai.. y
-                compris sur 1Village !
-              </li>
+              <li data-emoji="🤔">Lors d’une recherche sur internet, les informations que l’on trouve sont-elles toutes vraies ?</li>
 
-              <li data-emoji="📸">
-                Ne publiez jamais une photo ou une vidéo sur laquelle apparaît un camarade sans lui avoir préalablement demandé l’autorisation. Le
-                consentement des individus est essentiel pour publier sur le web, y compris sur 1Village.
-              </li>
+              <li data-emoji="📸">Peut-on filmer et publier du contenu sur lequel apparaissent nos camarades sans leur permission ?</li>
 
-              <li data-emoji="🕶">
-                Ne partagez pas en dehors d’1Village les photos, vidéos et textes publiés par vos Pélicopains… à moins qu’ils ne donnent leur accord !
-              </li>
+              <li data-emoji="🕶">Avons-nous le droit de partager les photos, vidéos et textes publiés par nos Pélicopains en dehors d’1Village ?</li>
             </ul>
 
-            <p>Alors, {data?.mascotteName} avec ta classe, êtes-vous d’accord pour respecter les règles du web de Pelico ?</p>
+            <p>
+              D’ailleurs, savez-vous s’il existe des règles dans votre pays qui décrivent nos droits et devoirs sur le web ? Existe-t-il un droit
+              mondial, commun à tous les pays ?
+            </p>
+
+            <p>Êtes-vous d’accord pour réfléchir à ces questions avec votre classe et tous vos nouveaux Pélicopains ?</p>
             <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
               <label style={{ cursor: 'pointer' }}>
                 <Checkbox

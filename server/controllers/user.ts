@@ -8,6 +8,7 @@ import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
@@ -70,6 +71,22 @@ userController.get({ path: '/pseudo/:pseudo' }, async (req: Request, res: Respon
   });
 });
 
+// --- Get pos ---
+userController.get({ path: '/position' }, async (req: Request, res: Response, next: NextFunction) => {
+  const query = req.query.query ? getQueryString(req.query.query) : '';
+  const country = req.query.country ? getQueryString(req.query.country) : '';
+  const city = req.query.city ? getQueryString(req.query.city) : '';
+
+  let pos = query ? await getPosition({ q: query }) : null;
+  pos ||= city && country ? await getPosition({ city, country }) : null;
+  pos ||= country ? await getPosition({ country }) : null;
+  if (pos === null) {
+    next();
+    return;
+  }
+  res.sendJSON(pos);
+});
+
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
@@ -85,7 +102,7 @@ type CreateUserData = {
   password?: string;
   type?: UserType;
   villageId?: number;
-  firstLogin?: boolean;
+  firstLogin?: number;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -103,7 +120,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     password: { type: 'string', nullable: true },
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
-    firstLogin: { type: 'boolean', nullable: true },
+    firstLogin: { type: 'number', nullable: true },
   },
   required: ['email', 'pseudo'],
   additionalProperties: false,
@@ -142,6 +159,7 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.verificationHash = await argon2.hash(temporaryPassword);
   // todo: send mail with verification password to validate the email adress.
 
+  await setUserPosition(user);
   await getRepository(User).save(user);
   delete user.passwordHash;
   delete user.verificationHash;
@@ -163,7 +181,8 @@ type EditUserData = {
   type?: UserType;
   villageId?: number | null;
   accountRegistration?: number;
-  firstLogin?: boolean;
+  firstLogin?: number;
+  position?: { lat: number; lng: number };
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
@@ -181,7 +200,17 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
-    firstLogin: { type: 'boolean', nullable: true },
+    firstLogin: { type: 'number', nullable: true },
+    position: {
+      type: 'object',
+      nullable: true,
+      properties: {
+        lat: { type: 'number', nullable: false },
+        lng: { type: 'number', nullable: false },
+      },
+      required: ['lat', 'lng'],
+      additionalProperties: false,
+    },
   },
   required: [],
   additionalProperties: false,
@@ -214,10 +243,13 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
-  user.firstLogin = false;
+  user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
+  }
+  if (data.position) {
+    user.position = data.position;
   }
   await getRepository(User).save(user);
   res.sendJSON(user);
@@ -333,7 +365,13 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
-  res.cookie('access-token', accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, {
+    maxAge: 4 * 60 * 60000,
+    expires: new Date(Date.now() + 4 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
   delete user.verificationHash;
   res.sendJSON({ user: user, accessToken });
 });
@@ -437,7 +475,13 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
-  res.cookie('access-token', accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+  res.cookie('access-token', accessToken, {
+    maxAge: 4 * 60 * 60000,
+    expires: new Date(Date.now() + 4 * 60 * 60000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
   delete user.passwordHash;
   delete user.verificationHash;
   res.sendJSON({ user, accessToken });

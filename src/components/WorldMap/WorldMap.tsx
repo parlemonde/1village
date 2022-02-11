@@ -1,3 +1,9 @@
+// eslint-disable-next-line arca/import-ordering -- Should be imported after leaflet.
+import {} from 'leaflet.fullscreen';
+import 'leaflet/dist/leaflet.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import L from 'leaflet';
+import ReactDOM from 'react-dom';
 import * as React from 'react';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import {
@@ -22,6 +28,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { clamp, debounce, throttle } from 'src/utils';
 import { UserType } from 'types/user.type';
 
+import { UserPopover } from './UserPopover';
 import { getCapitals } from './data/capitals';
 import { getCountries } from './data/countries';
 import type { HoverablePin } from './data/pin';
@@ -33,9 +40,20 @@ import { disposeNode } from './lib/dispose-node';
 import { getAtmosphereGlow } from './lib/get-atmosphere-glow';
 import { GLOBE_IMAGE_URL, BACKGROUND_IMAGE_URL, SKY_RADIUS, MAX_DISTANCE, MIN_DISTANCE, GLOBE_RADIUS } from './world-map.constants';
 
+const isWebGLAvailable = () => {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+};
+
 const WorldMap: React.FC = () => {
   const { users } = useVillageUsers();
 
+  const leafletRef = React.useRef<HTMLDivElement | null>(null);
+  const leafletMapRef = React.useRef<L.Map | null>(null);
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const threeData = React.useRef<{
     scene: Scene;
@@ -45,6 +63,7 @@ const WorldMap: React.FC = () => {
     raycaster: Raycaster;
   } | null>(null);
   const [isInitialized, setIsInitialized] = React.useState(false);
+  const [useLeafletFallback, setUseLeafletFallback] = React.useState(false);
   const altitudeRef = React.useRef<number>(MAX_DISTANCE);
   const animationFrameRef = React.useRef<number | null>(null);
   const showDecorsRef = React.useRef(true);
@@ -132,6 +151,11 @@ const WorldMap: React.FC = () => {
   };
 
   const init = React.useCallback(async () => {
+    if (!isWebGLAvailable()) {
+      setUseLeafletFallback(true);
+      return;
+    }
+
     if (canvasRef.current) {
       const width = canvasRef.current.clientWidth;
       const height = canvasRef.current.clientHeight;
@@ -225,8 +249,62 @@ const WorldMap: React.FC = () => {
     onCameraChangeThrottled();
   }, [onHoverClick, onCameraChangeThrottled]);
 
+  React.useEffect(() => {
+    if (useLeafletFallback) {
+      if (leafletRef.current) {
+        const map = L.map(leafletRef.current, {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          fullscreenControl: true,
+          fullscreenControlOptions: {
+            position: 'topleft',
+          },
+        }).setView([51.505, -0.09], 2);
+        L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=ecMNwc4xNgcrvp2RH6cr', {
+          tileSize: 512,
+          zoomOffset: -1,
+          minZoom: 1,
+          attribution:
+            '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+          crossOrigin: true,
+        }).addTo(map);
+        leafletMapRef.current = map;
+        setIsInitialized(true);
+
+        return () => {
+          map.remove();
+        };
+      }
+    }
+    return;
+  }, [useLeafletFallback]);
+
   const addPins = React.useCallback(async () => {
-    if (!isInitialized || !threeData.current) {
+    if (!isInitialized) {
+      return;
+    }
+
+    if (useLeafletFallback && leafletMapRef.current !== null) {
+      const map = leafletMapRef.current;
+      users
+        .filter((u) => u.type === UserType.TEACHER)
+        .forEach((u) => {
+          const marker = L.marker(u.position, {
+            icon: new L.Icon({
+              iconUrl: '/marker.svg',
+              iconSize: [25, 41],
+              iconAnchor: [13.5, 41],
+            }),
+          }).addTo(map);
+
+          const $div = document.createElement('div');
+          ReactDOM.render(<UserPopover user={u} />, $div, () => {
+            marker.bindPopup($div.innerHTML);
+          });
+        });
+    }
+
+    if (!threeData.current) {
       return;
     }
     const { scene, camera } = threeData.current;
@@ -246,10 +324,14 @@ const WorldMap: React.FC = () => {
     );
     scene.add(pins);
     setHoverableObjects(scene, showDecorsRef.current);
-  }, [isInitialized, users, setHoverableObjects]);
+  }, [isInitialized, users, useLeafletFallback, setHoverableObjects]);
   React.useEffect(() => {
     addPins().catch();
-  }, []);
+  }, [addPins]);
+
+  if (useLeafletFallback) {
+    return <div ref={leafletRef} style={{ position: 'relative', height: '100%', width: '100%', maxHeight: 'calc(100vh - 90px)' }}></div>;
+  }
 
   return (
     <div ref={containerRef} style={{ position: 'relative', height: '100%', width: '100%', maxHeight: 'calc(100vh - 90px)' }}>

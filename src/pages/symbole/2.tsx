@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isSymbol } from 'src/activity-types/anyActivity';
-import { SYMBOL_TYPES } from 'src/activity-types/symbol.constants';
+import { getSymbol } from 'src/activity-types/symbol.constants';
+import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -16,6 +17,7 @@ const SymbolStep2 = () => {
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const data = (activity?.data as SymbolData) || null;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -37,14 +39,18 @@ const SymbolStep2 = () => {
     router.push('/symbole/3');
   };
 
-  if (activity === null) {
+  if (activity === null || data === null) {
     return <div></div>;
   }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={[SYMBOL_TYPES[activity.subType || 0].step1 ?? 'Symbole', 'Créer le symbole', 'Prévisualiser']} activeStep={isEdit ? 0 : 1} />
+        <Steps
+          steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']}
+          urls={['/symbole/1?edit', '/symbole/2', '/symbole/3']}
+          activeStep={isEdit ? 0 : 1}
+        />
         <div className="width-900">
           <h1>Faites une présentation libre de votre symbole</h1>
           <p className="text">

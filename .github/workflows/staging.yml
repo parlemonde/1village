@@ -27,17 +27,22 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
           SSH_KEY_PATH: ${{ github.workspace }}/../private.key
 
-      # Add env file
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_NEXT_PUBLIC_BASE_APP: /api
-          envkey_NEXT_PUBLIC_HOST_URL: ${{ secrets.STAGING_HOST }}
-          envkey_NEXT_PUBLIC_PLM_HOST: https://prof.parlemonde.org
-          envkey_NEXT_PUBLIC_CLIENT_ID: ${{ secrets.STAGING_CLIENT_ID }}
-          file_name: .env
+      - name: Create .env file
+        env:
+          HOST_URL: ${{ secrets.STAGING_HOST }}
+          PLM_CLIENT_ID: ${{ secrets.STAGING_CLIENT_ID }}
+        run: |
+          cat << EOF > .env
+          NEXT_PUBLIC_BASE_APP=/api
+          NEXT_PUBLIC_HOST_URL=$HOST_URL
+          NEXT_PUBLIC_PLM_HOST=https://prof.parlemonde.org
+          NEXT_PUBLIC_CLIENT_ID=$PLM_CLIENT_ID
+          EOF
 
-      # Add ip to aws security group
+      - name: Remove robots.txt
+        run: |
+          rm public/robots.txt
+
       - name: Add IP to AWS security group
         uses: sohelamin/aws-security-group-add-ip-action@master
         with:

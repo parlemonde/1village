@@ -2,11 +2,24 @@ import React from 'react';
 
 import Paper from '@mui/material/Paper';
 
-import { isDefi, isEnigme, isFreeContent, isIndice, isPresentation, isMascotte, isQuestion, isSymbol } from 'src/activity-types/anyActivity';
+import {
+  isDefi,
+  isEnigme,
+  isFreeContent,
+  isGame,
+  isIndice,
+  isMascotte,
+  isPresentation,
+  isQuestion,
+  isReaction,
+  isReportage,
+  isSymbol,
+} from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
+import { useActivity } from 'src/services/useActivity';
 import { primaryColor } from 'src/styles/variables.const';
 import Timer from 'src/svg/enigme/timer.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
@@ -14,15 +27,18 @@ import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { UserType } from 'types/user.type';
 
-import { titles, icons } from '../utils';
+import { titles, icons, REACTIONS } from '../utils';
 
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
 import { FreeContentCard } from './FreeContentCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
+import { MimicCard } from './MimicCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
+import { ReactionCard } from './ReactionCard';
+import { ReportageCard } from './ReportageCard';
 import { SymbolCard } from './SymbolCard';
 import type { ActivityCardProps } from './activity-card.types';
 
@@ -38,6 +54,7 @@ export const ActivityCard = ({
   onDelete = () => {},
   onSelect,
 }: ActivityCardProps) => {
+  const { activity: responseActivity } = useActivity(activity.responseActivityId ?? -1);
   if (!user) {
     return null;
   }
@@ -69,7 +86,11 @@ export const ActivityCard = ({
             <p className="text">
               <UserDisplayName className="text" user={user} noLink={noButtons} />
               {' a '}
-              <strong>{titles[activity.type]}</strong>
+              {responseActivity && isReaction(activity) ? (
+                `${titles[activity.type]} ${REACTIONS[responseActivity?.type]}`
+              ) : (
+                <strong>{titles[activity.type]}</strong>
+              )}
             </p>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
@@ -89,7 +110,7 @@ export const ActivityCard = ({
             </>
           )}
           {activity.isPinned && <PinIcon style={{ fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }} />}
-          {ActivityIcon && (
+          {ActivityIcon && !isReaction(activity) && (
             <ActivityIcon
               style={{ fill: primaryColor, color: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
             />
@@ -175,6 +196,39 @@ export const ActivityCard = ({
           )}
           {isSymbol(activity) && (
             <SymbolCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isGame(activity) && (
+            <MimicCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isReportage(activity) && (
+            <ReportageCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isReaction(activity) && (
+            <ReactionCard
               activity={activity}
               user={user}
               isSelf={isSelf}

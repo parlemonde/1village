@@ -32,7 +32,13 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       // send new token
       token = newTokens.accessToken;
-      res.cookie('access-token', newTokens.accessToken, { maxAge: 4 * 60 * 60000, expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+      res.cookie('access-token', newTokens.accessToken, {
+        maxAge: 4 * 60 * 60000,
+        expires: new Date(Date.now() + 4 * 60 * 60000),
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+      });
     } else {
       token = getHeader(req, 'x-access-token') || getHeader(req, 'authorization') || '';
     }
@@ -64,8 +70,8 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
         } catch (e) {
           if (req.method === 'GET' && userType === undefined) {
             req.user = undefined;
-            res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
-            res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+            res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
+            res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
             next();
           } else {
             res.status(401).send('invalid access token');
@@ -88,8 +94,8 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
     } catch (_e) {
       if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
-        res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
-        res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true });
+        res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
+        res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
         next();
       } else {
         res.status(401).send('invalid access token');

@@ -16,6 +16,8 @@ import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
+import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
+import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -59,11 +61,17 @@ const TABS_PER_PHASE: Tab[] = [
   },
   {
     label: 'Poser une question',
-    path: '/poser-une-question',
+    path: '/poser-une-question/1',
     icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 1,
   },
   // ---- PHASE 2 ----
+  {
+    label: 'Réaliser un reportage',
+    path: '/realiser-un-reportage',
+    icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
   {
     label: 'Lancer un défi',
     path: '/lancer-un-defi',
@@ -71,7 +79,7 @@ const TABS_PER_PHASE: Tab[] = [
     phase: 2,
   },
   {
-    label: 'Créer un jeu',
+    label: 'Jouer ensemble',
     path: '/creer-un-jeu',
     icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 2,
@@ -84,13 +92,19 @@ const TABS_PER_PHASE: Tab[] = [
   },
   {
     label: 'Poser une question',
-    path: '/poser-une-question',
+    path: '/poser-une-question/1',
     icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 2,
+  },
+  {
+    label: 'Réagir à une activité',
+    path: '/reagir-a-une-activite/1',
+    icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 2,
   },
   // ---- PHASE 3 ----
   {
-    label: 'Créer un jeu',
+    label: 'Jouer ensemble',
     path: '/creer-un-jeu',
     icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 3,
@@ -112,7 +126,8 @@ export const Navigation = (): JSX.Element => {
       {
         label: 'Notre classe',
         path: '/ma-classe',
-        icon: user && user.avatar ? <AvatarImg user={user} size="small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        icon:
+          user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
       ...(isModerateur ? [FREE_CONTENT] : []),
     ],
@@ -120,7 +135,7 @@ export const Navigation = (): JSX.Element => {
   );
   const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase]);
 
-  const currentPathName = `/${router.pathname.split('/')[1] || ''}`;
+  const currentPathName = router.pathname.split('/')[1] || '';
 
   return (
     <nav className="navigation">
@@ -137,7 +152,10 @@ export const Navigation = (): JSX.Element => {
                 key={country.isoCode}
                 country={country.isoCode}
                 isMistery={
-                  !village || !user || (village.activePhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur)
+                  !village ||
+                  !user ||
+                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur) ||
+                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur)
                 }
               ></Flag>
             ))}
@@ -155,13 +173,13 @@ export const Navigation = (): JSX.Element => {
                   href={tab.path}
                   color="primary"
                   startIcon={tab.icon}
-                  variant={tab.path === currentPathName ? 'contained' : 'outlined'}
+                  variant={tab.path.split('/')[1] === currentPathName ? 'contained' : 'outlined'}
                   className="navigation__button full-width"
                   style={{
                     justifyContent: 'flex-start',
                     paddingRight: '0.1rem',
                     marginBottom: '0.8rem',
-                    width: tab.path === currentPathName ? '108%' : '100%',
+                    width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
                   disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}

@@ -8,24 +8,23 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { isIndice } from 'src/activity-types/anyActivity';
-import { INDICE_TYPES } from 'src/activity-types/indice.constants';
+import { getIndice } from 'src/activity-types/indice.constants';
+import type { IndiceData } from 'src/activity-types/indice.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { ActivityStatus } from 'types/activity.type';
 
 const IndiceStep3 = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const data = (activity?.data as IndiceData) || null;
 
   const isValid = React.useMemo(() => {
     if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
@@ -54,7 +53,7 @@ const IndiceStep3 = () => {
     setIsLoading(false);
   };
 
-  if (user === null || activity === null) {
+  if (activity === null || data === null) {
     return <div></div>;
   }
 
@@ -62,7 +61,8 @@ const IndiceStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[INDICE_TYPES[activity.subType || 0].step1 ?? 'Indice', "Créer l'indice", 'Prévisualiser']}
+          steps={[getIndice(activity.subType, data).step1, "Créer l'indice", 'Prévisualiser']}
+          urls={['/indice-culturel/1?edit', '/indice-culturel/2', '/indice-culturel/3']}
           activeStep={2}
           errorSteps={isValid ? [] : [1]}
         />
@@ -100,7 +100,14 @@ const IndiceStep3 = () => {
 
           <span className={'text text--small text--success'}>Thème</span>
           <div className="preview-block">
-            <p style={{ margin: '0.5rem 0' }}>{INDICE_TYPES[activity.subType || 0].title}</p>
+            <EditButton
+              onClick={() => {
+                router.push('/indice-culturel/1?edit');
+              }}
+              status="success"
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p style={{ margin: '0.5rem 0' }}>{getIndice(activity.subType, data).title}</p>
           </div>
 
           <span className={`text text--small ${isValid ? 'text--success' : 'text--warning'}`}>Indice culturel</span>
@@ -114,9 +121,6 @@ const IndiceStep3 = () => {
             />
             <ContentView content={activity.content} />
           </div>
-
-          <span className="text text--small">Aperçu de la publication</span>
-          <ActivityCard activity={activity} user={user} noMargin noButtons />
 
           <StepsButton prev="/indice-culturel/2" />
         </div>

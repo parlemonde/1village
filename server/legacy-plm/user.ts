@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
 import stringSimilarity from 'string-similarity';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
 import { User, UserType } from '../entities/user';
 import { Village } from '../entities/village';
+import { setUserPosition } from '../utils/get-pos';
 import { countries } from '../utils/iso-3166-countries-french';
 import { logger } from '../utils/logger';
 
@@ -17,7 +18,7 @@ export type PLM_User = {
   display_name: string;
   spam: string; // boolean in string ("0" or "1")
   deleted: string; // boolean in string ("0" or "1")
-  first_name: string;
+  country: string;
   groups: Array<{
     name: string; // village name
     id: string; // number in string, village id
@@ -29,26 +30,23 @@ export type PLM_User = {
     key: string;
     value: string; // can be a number
   }>;
-  role: {
-    id: string; // number in string. (country id?)
-    title: string; // country
-    key: string; // country as well
-  };
   db_error: string;
 };
 
-async function getVillage(plmId: number): Promise<Village | null> {
+const MEDIATEUR_GROUP_ID = 10;
+
+async function getVillage(plmIds: number[]): Promise<Village | null> {
   try {
     // Find the village
     const dbVillage = await getRepository(Village).findOne({
-      where: { plmId },
+      where: { plmId: In(plmIds) },
     });
     if (dbVillage) {
       return dbVillage;
     }
   } catch (error) {
     logger.error(error);
-    logger.error(`Error with village (${plmId})`);
+    logger.error(`Error no villages (${plmIds})`);
   }
   return null;
 }
@@ -61,30 +59,26 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   // 1- Find village
   let village: Village | null = null;
   let userType = UserType.TEACHER;
-  const userGroups = (plmUser.groups || []).filter((g) => parseInt(g.id, 10) !== 2 && parseInt(g.id, 10) !== 10);
+  const userGroups = plmUser.groups || [];
+  const groupIds = userGroups.map((g) => parseInt(g.id, 10)).filter((n) => !Number.isNaN(n));
 
-  if (userGroups.length === 1) {
-    village = await getVillage(parseInt(userGroups[0].id, 10) || -1);
+  if (groupIds.length > 0) {
+    village = await getVillage(groupIds);
   }
-  if (userGroups.length > 1) {
+  if (groupIds.includes(MEDIATEUR_GROUP_ID)) {
     userType = UserType.OBSERVATOR;
-    if (plmUser.groups.some((g) => parseInt(g.is_mod, 10) === 1)) {
-      userType = UserType.MEDIATOR;
-    }
-    if (plmUser.groups.some((g) => parseInt(g.is_admin, 10) === 1)) {
-      userType = UserType.ADMIN;
-    }
   }
 
   // 2- Find country
   let country: string | null = null;
-  if (plmUser.role && plmUser.role.title) {
+  if (plmUser.country) {
+    const matchs = village !== null ? village.countries : countries;
     const c = stringSimilarity.findBestMatch(
-      plmUser.role.title.trim().toLowerCase(),
-      countries.map((c) => c.name.toLowerCase()),
+      plmUser.country.trim().toLowerCase(),
+      matchs.map((c) => c.name.toLowerCase()),
     );
-    if (c.bestMatch.rating > 0.88) {
-      country = countries[c.bestMatchIndex].isoCode;
+    if (c.bestMatch.rating > 0.55) {
+      country = matchs[c.bestMatchIndex].isoCode;
     }
   }
   // last fallback
@@ -98,18 +92,21 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   // 3- Add user
   const user = new User();
   user.email = plmUser.user_email;
-  user.pseudo = plmUser.user_login;
+  user.pseudo = plmUser.user_login.slice(0, 50);
   user.level = '';
-  user.school = getMetaValue(plmUser, 'Nom de votre école');
-  user.city = getMetaValue(plmUser, 'Ville de votre école') || getMetaValue(plmUser, 'Académie');
-  user.postalCode = getMetaValue(plmUser, 'Code postal de votre école');
-  user.address = getMetaValue(plmUser, "Adresse de l'école");
+  user.school = getMetaValue(plmUser, "Nom de l'école").slice(0, 255);
+  user.city = (getMetaValue(plmUser, 'Ville') || getMetaValue(plmUser, 'Académie')).slice(0, 128);
+  user.postalCode = getMetaValue(plmUser, "Code postal de l'école").slice(0, 20);
+  user.address = getMetaValue(plmUser, 'Rue').slice(0, 255);
   user.villageId = village?.id || null;
   user.countryCode = country;
   user.type = userType;
   user.passwordHash = '';
   user.verificationHash = '';
   user.accountRegistration = 10;
+  user.position = { lat: 0, lng: 0 };
+
+  await setUserPosition(user);
   await getRepository(User).save(user);
 
   delete user.passwordHash;

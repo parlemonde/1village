@@ -13,7 +13,7 @@ export function crsfProtection(): RequestHandler {
     if (secret === null) {
       secret = tokens.secretSync();
       // save new secret in cookie for 4 hours.
-      res.cookie('csrf-secret', secret, { expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true });
+      res.cookie('csrf-secret', secret, { expires: new Date(Date.now() + 4 * 60 * 60000), httpOnly: true, secure: true, sameSite: 'strict' });
     }
 
     // get token from header ['csrf-token'] or set it to null;

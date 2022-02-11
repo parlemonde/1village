@@ -1,30 +1,21 @@
 /* eslint-disable */
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin')
+const BUILD_VERSION = process.env.BUILD_VERSION;
 
 module.exports = {
-  distDir: "./dist/next",
+  distDir: './dist/next',
   poweredByHeader: false,
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"],
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
     });
-    // config.plugins.push(
-    //   new BundleAnalyzerPlugin({
-    //     analyzerMode: 'server',
-    //     analyzerPort: isServer ? 8888 : 8889,
-    //     openAnalyzer: true,
-    //   })
-    // );
-    // config.plugins.push(new DuplicatePackageCheckerPlugin());
     return config;
   },
+  experimental: { esmExternals: false },
   eslint: {
     // ESLint is already called before building with nextJS. So no need here.
     ignoreDuringBuilds: true,
   },
-  images: {
-    domains: ['web-dev.imgix.net'],
-  },
+  generateBuildId: BUILD_VERSION ? async () => BUILD_VERSION : undefined,
 };

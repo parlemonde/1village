@@ -228,6 +228,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         status: publish ? ActivityStatus.PUBLISHED : ActivityStatus.DRAFT,
         content: activity.content,
         data: activity.data,
+        isPinned: activity.isPinned,
       };
       if (!publish) {
         if (data.data) {
@@ -261,12 +262,12 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       const data: Partial<Activity> = {
         content: activity.content,
         data: activity.data,
+        isPinned: activity.isPinned,
       };
       // if not yet published, the response type and isPinned can be changed.
-      if (activity.data.status === ActivityStatus.DRAFT) {
+      if (activity.status === ActivityStatus.DRAFT) {
         data.responseActivityId = activity.responseActivityId;
         data.responseType = activity.responseType;
-        data.isPinned = activity.isPinned;
       }
       if (publish) {
         data.phase = getActivityPhase(activity.type, village.activePhase);

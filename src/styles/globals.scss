@@ -175,6 +175,9 @@ a.text--success:hover {
 .bg-alert {
   background-color: $error-color;
 }
+.button-error {
+  border-color: $error-color;
+}
 .bg-success {
   background-color: $success-color;
 }
@@ -279,4 +282,26 @@ a.text--success:hover {
 .MuiIconButton-root.MuiIconButton-sizeSmall {
   padding: 3px;
   font-size: 1.125rem;
+}
+
+.background-hover {
+  cursor: pointer;
+  &:hover {
+    background-color: black;
+  }
+}
+
+// ----- MAP ----
+.mapboxgl-map {
+  height: 100%;
+}
+.leaflet-container {
+  height: 100%;
+}
+.fullscreen-icon {
+  background-image: url('/icon-fullscreen.png');
+}
+.leaflet-retina .fullscreen-icon {
+  background-image: url('/icon-fullscreen-2x.png');
+  background-size: 26px 26px;
 }

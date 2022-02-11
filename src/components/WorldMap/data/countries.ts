@@ -93,7 +93,7 @@ export class HoverableCountry
   }>['userData'];
 
   constructor(coords: Position[][], geojsonProperties: GeoJSONCountryData['properties'], materials: MeshBasicMaterial[]) {
-    super(new ConicPolygonBufferGeometry(coords as unknown as number[][], GLOBE_RADIUS + 0.5, GLOBE_RADIUS + 1, false, true, true, 5), materials);
+    super(new ConicPolygonBufferGeometry(coords, GLOBE_RADIUS + 0.5, GLOBE_RADIUS + 1, false, true, true, 5), materials);
 
     this.initMaterials = materials;
     this.userData = {

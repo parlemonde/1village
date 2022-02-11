@@ -32,6 +32,9 @@ const actionHandlers = {
   resize,
 };
 
+const isKeyOfAction = (actionName: unknown): actionName is keyof typeof actionHandlers =>
+  typeof actionName === 'string' && Object.prototype.hasOwnProperty.call(actionHandlers, actionName);
+
 function receiveMessage(event: MessageEvent): void {
   if (event.data.context !== 'h5p') {
     return;
@@ -47,8 +50,9 @@ function receiveMessage(event: MessageEvent): void {
   if (!iframe) {
     return;
   }
-  if (actionHandlers[event.data.action as 'hello' | 'prepareResize' | 'resize']) {
-    actionHandlers[event.data.action as 'hello' | 'prepareResize' | 'resize'](iframe, event.data, (action: string) => {
+  const actionName = event.data.action;
+  if (isKeyOfAction(actionName)) {
+    actionHandlers[actionName](iframe, event.data, (action: string) => {
       const data = {
         action,
         context: 'h5p',

@@ -6,6 +6,8 @@ import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 
 import { Activity } from './activity';
+import { GameResponse } from './gameResponse';
+import { Game } from './game';
 import { Village } from './village';
 
 export { UserType };
@@ -30,7 +32,7 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 128, default: '' })
   public city: string;
 
-  @Column({ type: 'varchar', length: 10, default: '' })
+  @Column({ type: 'varchar', length: 20, default: '' })
   public postalCode: string;
 
   @Column({ type: 'varchar', length: 255, default: '' })
@@ -51,8 +53,8 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 95, default: '', select: false })
   public verificationHash?: string;
 
-  @Column({ type: 'bool', default: true })
-  public firstLogin: boolean;
+  @Column({ type: 'tinyint', default: 0 })
+  public firstLogin: number;
 
   @Column({
     type: 'enum',
@@ -77,8 +79,38 @@ export class User implements UserInterface {
   }
   public country: Country;
 
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
+  set positionLat(newLat: string) {
+    if (!this.position) {
+      this.position = { lat: 0, lng: 0 };
+    }
+    this.position.lat = parseFloat(newLat) || 0;
+  }
+  get positionLat() {
+    return `${this.position?.lat || 0}`;
+  }
+
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
+  set positionLon(newLon: string) {
+    if (!this.position) {
+      this.position = { lat: 0, lng: 0 };
+    }
+    this.position.lng = parseFloat(newLon) || 0;
+  }
+  get positionLon() {
+    return `${this.position?.lng || 0}`;
+  }
+
+  public position: { lat: number; lng: number };
+
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
+
+  @OneToMany(() => Game, (game: Game) => game.user)
+  public games: Game[];
+
+  @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
+  public gameResponses: GameResponse[];
 
   public mascotteId?: number;
 }

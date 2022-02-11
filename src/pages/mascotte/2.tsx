@@ -9,14 +9,14 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
-import { getErrorSteps, isSecondStepValid } from 'src/components/activities/mascotteChecks';
+import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { MultipleCountrySelector } from 'src/components/selectors/MultipleCountrySelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { errorColor } from 'src/styles/variables.const';
 
 const MascotteStep2 = () => {
   const router = useRouter();
-  const [isError, setIsError] = React.useState<boolean>(false);
+  const [showError, setShowError] = React.useState<boolean>(false);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
 
   React.useEffect(() => {
@@ -24,10 +24,15 @@ const MascotteStep2 = () => {
       router.push('/ma-classe');
     } else if (activity && !isMascotte(activity)) {
       router.push('/ma-classe');
-    } else if (activity && isMascotte(activity)) {
-      setIsError(!isSecondStepValid(activity.data));
     }
   }, [activity, router]);
+
+  React.useEffect(() => {
+    if (window.sessionStorage.getItem('mascotte-step-2-next') === 'true') {
+      setShowError(true);
+      window.sessionStorage.setItem('mascotte-step-2-next', 'false');
+    }
+  }, []);
 
   const data = (activity?.data as MascotteData) || null;
   const errorSteps = React.useMemo(() => {
@@ -59,6 +64,7 @@ const MascotteStep2 = () => {
 
   const onNext = () => {
     save().catch(console.error);
+    window.sessionStorage.setItem('mascotte-step-2-next', 'true');
     router.push('/mascotte/3');
   };
 
@@ -81,6 +87,7 @@ const MascotteStep2 = () => {
             'Le web de Pelico',
             'Prévisualiser',
           ]}
+          urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
           activeStep={1}
           errorSteps={errorSteps}
         />
@@ -95,7 +102,7 @@ const MascotteStep2 = () => {
                 <p className="text-center" style={{ marginTop: '-10px' }}>
                   Image de votre mascotte
                 </p>
-                {isError && data.mascotteImage === '' && (
+                {showError && data.mascotteImage === '' && (
                   <p className="text text--small text-center" style={{ color: errorColor }}>
                     Ce champs est obligatoire
                   </p>
@@ -104,8 +111,8 @@ const MascotteStep2 = () => {
               <Grid item xs={12} md={9}>
                 <p>Quel est le nom de votre mascotte ?</p>
                 <TextField
-                  error={isError && data.mascotteName === ''}
-                  helperText={isError && data.mascotteName === '' && 'Écrivez le nom de votre mascotte !'}
+                  error={showError && data.mascotteName === ''}
+                  helperText={showError && data.mascotteName === '' && 'Écrivez le nom de votre mascotte !'}
                   value={data.mascotteName}
                   onChange={dataChange('mascotteName')}
                   label="Nom"
@@ -117,8 +124,8 @@ const MascotteStep2 = () => {
                 />
                 <p>Quel animal est votre mascotte et pourquoi l&apos;avoir choisi ?</p>
                 <TextField
-                  error={isError && data.mascotteDescription === ''}
-                  helperText={isError && data.mascotteDescription === '' && 'Écrivez la description de votre mascotte !'}
+                  error={showError && data.mascotteDescription === ''}
+                  helperText={showError && data.mascotteDescription === '' && 'Écrivez la description de votre mascotte !'}
                   value={data.mascotteDescription}
                   onChange={dataChange('mascotteDescription')}
                   label="Description"
@@ -130,7 +137,7 @@ const MascotteStep2 = () => {
                   }}
                   style={{ width: '100%' }}
                 />
-                {!(isError && data.mascotteDescription === '') && (
+                {!(showError && data.mascotteDescription === '') && (
                   <div style={{ width: '100%', textAlign: 'right' }}>
                     <span className="text text--small">{data.mascotteDescription.length}/400</span>
                   </div>
@@ -139,9 +146,9 @@ const MascotteStep2 = () => {
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      error={isError && data.personality1 === ''}
+                      error={showError && data.personality1 === ''}
                       value={data.personality1}
-                      helperText={isError && data.personality1 === '' && 'Écrivez un trait de personnalité !'}
+                      helperText={showError && data.personality1 === '' && 'Écrivez un trait de personnalité !'}
                       onChange={dataChange('personality1')}
                       label="1"
                       variant="outlined"
@@ -150,8 +157,8 @@ const MascotteStep2 = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      error={isError && data.personality2 === ''}
-                      helperText={isError && data.personality2 === '' && 'Écrivez un trait de personnalité !'}
+                      error={showError && data.personality2 === ''}
+                      helperText={showError && data.personality2 === '' && 'Écrivez un trait de personnalité !'}
                       value={data.personality2}
                       onChange={dataChange('personality2')}
                       label="2"
@@ -161,8 +168,8 @@ const MascotteStep2 = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <TextField
-                      error={isError && data.personality3 === ''}
-                      helperText={isError && data.personality3 === '' && 'Écrivez un trait de personnalité !'}
+                      error={showError && data.personality3 === ''}
+                      helperText={showError && data.personality3 === '' && 'Écrivez un trait de personnalité !'}
                       value={data.personality3}
                       onChange={dataChange('personality3')}
                       label="3"
@@ -172,16 +179,16 @@ const MascotteStep2 = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <p>Tout commes vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
+              <p>Tout comme vous, votre mascotte rêve. Dans quels pays rêve-t-elle de voyager ?</p>
               <MultipleCountrySelector
                 label="Pays"
                 style={{ width: '100%', marginBottom: '1rem' }}
                 value={data.countries}
                 onChange={countryChange}
-                helperText={isError && data.countries.length === 0 ? 'Ce champs est obligatoire' : ''}
-                error={isError && data.countries.length === 0}
+                helperText={showError && data.countries.length === 0 ? 'Ce champs est obligatoire' : ''}
+                error={showError && data.countries.length === 0}
               />
-              Tout commes vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
+              Tout comme vous, votre mascotte joue à l&apos;école. À quel jeu de récréation votre mascotte joue-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte joue </span>
                 <TextField
@@ -191,11 +198,11 @@ const MascotteStep2 = () => {
                   fullWidth
                   value={data.game}
                   onChange={dataChange('game')}
-                  error={isError && !data.game}
-                  helperText={isError && !data.game ? 'Ce champ est obligatoire' : ''}
+                  error={showError && !data.game}
+                  helperText={showError && !data.game ? 'Ce champ est obligatoire' : ''}
                 />
               </div>
-              Tout commes vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
+              Tout comme vous, votre mascotte fait du sport à l&apos;école. Quels sports pratique-t-elle le plus souvent ?
               <div className="se-presenter-step-two__line" style={{ display: 'flex', alignItems: 'flex-start', margin: '1.4rem 0', width: '100%' }}>
                 <span style={{ flexShrink: 0, marginRight: '0.5rem', display: 'inline-flex', alignItems: 'center' }}>Notre mascotte pratique </span>
                 <TextField
@@ -205,8 +212,8 @@ const MascotteStep2 = () => {
                   fullWidth
                   value={data.sport}
                   onChange={dataChange('sport')}
-                  error={isError && !data.sport}
-                  helperText={isError && !data.sport ? 'Ce champ est obligatoire' : ''}
+                  error={showError && !data.sport}
+                  helperText={showError && !data.sport ? 'Ce champ est obligatoire' : ''}
                 />
               </div>
             </Grid>

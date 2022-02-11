@@ -30,7 +30,7 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
     const { access_token } = ssoResponse.data as { access_token: string };
     const userResponse = await axios({
       method: 'GET',
-      url: `${plmSsoUrl}/oauth/me?access_token=${access_token}`,
+      url: `${plmSsoUrl}/oauth/me/?access_token=${access_token}`,
     });
     const plmUser = userResponse.data as PLM_User;
     let user = await getRepository(User).findOne({

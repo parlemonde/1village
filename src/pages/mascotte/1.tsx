@@ -10,7 +10,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
-import { isFirstStepValid, isValidSum } from 'src/components/activities/mascotteChecks';
+import { isValidSum } from 'src/components/activities/mascotteChecks';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -21,7 +21,7 @@ import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const MascotteStep1 = () => {
   const router = useRouter();
-  const [isError, setIsError] = React.useState<boolean>(false);
+  const [showError, setShowError] = React.useState(false);
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
@@ -29,6 +29,13 @@ const MascotteStep1 = () => {
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const data = (activity?.data as MascotteData) || null;
+
+  React.useEffect(() => {
+    if (window.sessionStorage.getItem('mascotte-step-1-next') === 'true') {
+      setShowError(true);
+      window.sessionStorage.setItem('mascotte-step-1-next', 'false');
+    }
+  }, []);
 
   const created = React.useRef(false);
   React.useEffect(() => {
@@ -48,8 +55,6 @@ const MascotteStep1 = () => {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
-      } else if (activity && isMascotte(activity)) {
-        setIsError(!isFirstStepValid(activity.data));
       }
     }
   }, [user, village, activity, labelPresentation, createActivityIfNotExist, router]);
@@ -69,10 +74,10 @@ const MascotteStep1 = () => {
   };
 
   const errorMessage = (women: number, men: number, total: number) => {
-    if (isError && (total === 0 || total === null)) {
+    if (showError && (total === 0 || total === null)) {
       return 'Ce champ est obligatoire';
     }
-    if (isError && !isValidSum(women, men, total)) {
+    if (showError && !isValidSum(women, men, total)) {
       return "Le compte n'est pas bon";
     }
     return '';
@@ -84,6 +89,7 @@ const MascotteStep1 = () => {
 
   const onNext = () => {
     save().catch(console.error);
+    window.sessionStorage.setItem('mascotte-step-1-next', 'true');
     router.push('/mascotte/2');
   };
 
@@ -107,6 +113,7 @@ const MascotteStep1 = () => {
             'Le web de Pelico',
             'Prévisualiser',
           ]}
+          urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
           activeStep={0}
         />
         <div className="width-900">
@@ -122,8 +129,8 @@ const MascotteStep1 = () => {
                 placeholder={labelPresentation}
                 value={data.presentation}
                 onChange={dataChange('presentation')}
-                error={isError && !data.presentation}
-                helperText={isError && !data.presentation ? 'Ce champ est obligatoire' : ''}
+                error={showError && !data.presentation}
+                helperText={showError && !data.presentation ? 'Ce champ est obligatoire' : ''}
               />
             </div>
             <div className="se-presenter-step-one__line">
@@ -139,7 +146,7 @@ const MascotteStep1 = () => {
                 onChange={dataChange('totalStudent')}
                 helperText={errorMessage(data.girlStudent || 0, data.boyStudent || 0, data.totalStudent || 0)}
                 error={
-                  isError &&
+                  showError &&
                   (!isValidSum(data.girlStudent || 0, data.boyStudent || 0, data.totalStudent || 0) ||
                     data.totalStudent === 0 ||
                     data.totalStudent === null)
@@ -179,8 +186,8 @@ const MascotteStep1 = () => {
                 value={data.meanAge ?? ''}
                 onFocus={onFocusInput('meanAge')}
                 onChange={dataChange('meanAge')}
-                helperText={isError && (data.meanAge === 0 || data.meanAge === null) ? 'Ce champ est obligatoire' : ''}
-                error={isError && (data.meanAge === 0 || data.meanAge === null)}
+                helperText={showError && (data.meanAge === 0 || data.meanAge === null) ? 'Ce champ est obligatoire' : ''}
+                error={showError && (data.meanAge === 0 || data.meanAge === null)}
                 inputProps={{ min: 0 }}
               />{' '}
               <span> an{pluralS(data.meanAge || 0)}.</span>
@@ -197,7 +204,7 @@ const MascotteStep1 = () => {
                 onChange={dataChange('totalTeacher')}
                 helperText={errorMessage(data.womanTeacher || 0, data.manTeacher || 0, data.totalTeacher || 0)}
                 error={
-                  isError &&
+                  showError &&
                   (!isValidSum(data.womanTeacher || 0, data.manTeacher || 0, data.totalTeacher || 0) ||
                     data.totalTeacher === 0 ||
                     data.totalTeacher === null)
@@ -238,8 +245,8 @@ const MascotteStep1 = () => {
                 value={data.numberClassroom ?? ''}
                 onFocus={onFocusInput('numberClassroom')}
                 onChange={dataChange('numberClassroom')}
-                helperText={isError && (data.numberClassroom === 0 || data.numberClassroom === null) ? 'Ce champ est obligatoire' : ''}
-                error={isError && (data.numberClassroom === 0 || data.numberClassroom === null)}
+                helperText={showError && (data.numberClassroom === 0 || data.numberClassroom === null) ? 'Ce champ est obligatoire' : ''}
+                error={showError && (data.numberClassroom === 0 || data.numberClassroom === null)}
                 inputProps={{ min: 0 }}
               />{' '}
               <span> classe{pluralS(data.numberClassroom || 0)} et </span>{' '}
@@ -251,8 +258,8 @@ const MascotteStep1 = () => {
                 value={data.totalSchoolStudent ?? ''}
                 onFocus={onFocusInput('totalSchoolStudent')}
                 onChange={dataChange('totalSchoolStudent')}
-                helperText={isError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null) ? 'Ce champ est obligatoire' : ''}
-                error={isError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null)}
+                helperText={showError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null) ? 'Ce champ est obligatoire' : ''}
+                error={showError && (data.totalSchoolStudent === 0 || data.totalSchoolStudent === null)}
                 inputProps={{ min: 0 }}
               />{' '}
               <span> élève{pluralS(data.totalSchoolStudent || 0)}.</span>
@@ -273,7 +280,7 @@ const MascotteStep1 = () => {
               <p className="text-center" style={{ marginTop: '-10px' }}>
                 Image de votre affiche ou décoration
               </p>
-              {isError && data.classImg === '' && (
+              {showError && data.classImg === '' && (
                 <p className="text text--small text-center" style={{ color: errorColor }}>
                   Ce champs est obligatoire
                 </p>
@@ -288,8 +295,8 @@ const MascotteStep1 = () => {
                 variant="outlined"
                 style={{ width: '100%' }}
                 onChange={dataChange('classImgDesc')}
-                helperText={isError && data.classImgDesc === '' && 'Ce champs est obligatoire'}
-                error={isError && data.classImgDesc === ''}
+                helperText={showError && data.classImgDesc === '' && 'Ce champs est obligatoire'}
+                error={showError && data.classImgDesc === ''}
               ></TextField>
             </div>
           </div>

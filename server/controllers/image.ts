@@ -47,7 +47,8 @@ imageController.upload(
     const filename = `images/${userId}/${uuid}.${extension}`;
 
     // 3- resize image if needed to max width: 1000px.
-    const imageProcess = sharp(req.file.buffer).resize(1000, null, {
+    // Use `.rotate()` to keep original image orientation metadata.
+    const imageProcess = sharp(req.file.buffer).rotate().resize(1000, null, {
       withoutEnlargement: true,
     });
     if (needReFormat) {

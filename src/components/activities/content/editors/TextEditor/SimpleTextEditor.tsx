@@ -260,25 +260,27 @@ export const SimpleTextEditor = ({
           : {}
       }
     >
-      <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
-      {noBlock || (
-        <>
-          <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
-          <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
-          <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
-          <TitleChoice value={currentHeader as 'unstyle' | 'header-one' | 'header-two'} onChange={toggleBlockType} />
-        </>
-      )}
-      <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
-      <ColorPicker value={currentColor} onChange={setInlineColor} />
-      <LinkPicker
-        editorState={editorState}
-        linkModalOpen={linkModalOpen}
-        setLinkModalOpen={setLinkModalOpen}
-        value={currentLink}
-        onChange={onEditorChange}
-      />
-      <EmojiPicker onChange={addEmoji} />
+      <>
+        <InlineButtons value={currentInlineStyle} onChange={setInlineStyle} />
+        {noBlock || (
+          <>
+            <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
+            <TextAlignButtons value={currentAlignment} onChange={setBlockAlignmentData} />
+            <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
+            <TitleChoice value={currentHeader as 'unstyle' | 'header-one' | 'header-two'} onChange={toggleBlockType} />
+          </>
+        )}
+        <Divider flexItem orientation="vertical" sx={{ my: 1, mx: 0.5 }} />
+        <ColorPicker value={currentColor} onChange={setInlineColor} />
+        <LinkPicker
+          editorState={editorState}
+          linkModalOpen={linkModalOpen}
+          setLinkModalOpen={setLinkModalOpen}
+          value={currentLink}
+          onChange={onEditorChange}
+        />
+        <EmojiPicker onChange={addEmoji} />
+      </>
     </Paper>
   );
 

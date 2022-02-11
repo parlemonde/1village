@@ -2,9 +2,11 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
+import type { GameData, GamesData } from '../../types/game.type';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
+import { Game } from '../entities/game';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -29,6 +31,7 @@ type ActivityGetter = {
   status?: number;
   responseActivityId?: number;
 };
+
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
     return {};
@@ -64,6 +67,7 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
     return acc;
   }, {});
 };
+
 const getActivities = async ({
   limit = 200,
   page = 0,
@@ -119,7 +123,8 @@ const getActivities = async ({
   }
 
   const activities = await subQueryBuilder
-    .orderBy('activity.createDate', 'DESC')
+    .orderBy('activity.isPinned', 'DESC')
+    .addOrderBy('activity.createDate', 'DESC')
     .limit(limit)
     .offset(page * limit)
     .getMany();
@@ -239,6 +244,8 @@ type CreateActivityData = {
   responseType?: number;
   isPinned?: boolean;
 };
+
+// --- create activity's schema ---
 const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   type: 'object',
   properties: {
@@ -286,7 +293,10 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
   required: ['type', 'data', 'content'],
   additionalProperties: false,
 };
+
+// --- validate activity's schema ---
 const createActivityValidator = ajv.compile(CREATE_SCHEMA);
+
 activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createActivityValidator(data)) {
@@ -342,6 +352,7 @@ type UpdateActivity = {
   data?: AnyData;
   content?: ActivityContent[];
 };
+
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   type: 'object',
   properties: {
@@ -381,7 +392,9 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
   required: [],
   additionalProperties: false,
 };
+
 const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
+
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateActivityValidator(data)) {
@@ -414,9 +427,30 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
 
+  if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
+    const gamesData = activity.data as GamesData;
+    gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
+    gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
+    gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
+  }
+
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
+
+// --- create a game ---
+const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
+  const id = data.gameId;
+  const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
+  delete data['gameId'];
+  game.activityId = activity.id;
+  game.villageId = activity.villageId;
+  game.userId = activity.userId;
+  game.type = activity.subType;
+  game.content = JSON.stringify(data);
+  await getRepository(Game).save(game);
+  return game;
+};
 
 // --- Delete an activity --- (Soft delete)
 activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {

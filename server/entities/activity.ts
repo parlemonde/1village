@@ -1,9 +1,20 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
 
+import { Game } from './game';
 import { User } from './user';
 import { Village } from './village';
 
@@ -87,4 +98,7 @@ export class Activity implements ActivityInterface<AnyData> {
   public isPinned: boolean;
 
   public commentCount?: number;
+
+  @OneToMany(() => Game, (game: Game) => game.activity)
+  public games: Game[];
 }
