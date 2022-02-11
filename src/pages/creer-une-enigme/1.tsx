@@ -27,7 +27,6 @@ const EnigmeStep1 = () => {
     activity !== null && 'edit' in router.query && isEnigme(activity)
       ? activity.subType ?? 0
       : parseInt(getQueryString(router.query['category']) ?? '-1', 10) ?? 0;
-  //const enigmeType = ENIGME_TYPES[enigmeTypeIndex] ?? ENIGME_TYPES[0];
 
   const c = data?.themeName || '';
   const opened = React.useRef(false);
@@ -52,7 +51,6 @@ const EnigmeStep1 = () => {
           {
             theme: null,
             indiceContentIndex: 1,
-            timer: 0,
           },
           responseActivityId,
           responseActivityType,
@@ -70,7 +68,6 @@ const EnigmeStep1 = () => {
           {
             theme: null,
             indiceContentIndex: 1,
-            timer: 0,
           },
           responseActivityId,
           responseActivityType,
