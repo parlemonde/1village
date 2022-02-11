@@ -13,6 +13,7 @@ import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { warningColor } from 'src/styles/variables.const';
 import { replaceTokens } from 'src/utils';
 import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
@@ -55,7 +56,7 @@ const DefiStep2 = () => {
   };
 
   const onObjectChange = (event: SelectChangeEvent<string | number>) => {
-    updateActivity({ data: { ...data, objectIndex: `${event.target.value}` } });
+    updateActivity({ data: { ...data, objectIndex: Number(event.target.value) } });
   };
 
   const onNext = () => {
@@ -99,9 +100,14 @@ const DefiStep2 = () => {
           {data.objectIndex !== -1 && (
             <>
               <p className="text" style={{ fontSize: '1.1rem' }}>
-                {replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
-                  language: data.language,
-                })}{' '}
+                {/* if there is no language selected in the previous step: */}
+                {data.language === '' ? (
+                  <span style={{ color: warningColor, fontWeight: 'bold' }}>Veuillez choisir une langue à l&apos;étape 1.</span>
+                ) : (
+                  replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
+                    language: data.language,
+                  })
+                )}
                 Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
               </p>
               <ContentEditor

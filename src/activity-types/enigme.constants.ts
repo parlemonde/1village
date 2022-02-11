@@ -142,5 +142,5 @@ export const ENIGME_DATA = [
 ];
 
 export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
-  return 7 - Math.floor((new Date().getTime() - (activity.data.timer ?? new Date(activity.updateDate || '').getTime())) / 3600000 / 24);
+  return 7 - Math.floor((new Date().getTime() - new Date(activity.updateDate || '').getTime()) / 3600000 / 24);
 }

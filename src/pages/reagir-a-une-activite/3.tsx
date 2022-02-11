@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -5,6 +6,7 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Tooltip } from '@mui/material';
 
 import { isReaction } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
@@ -16,16 +18,31 @@ import { ContentView } from 'src/components/activities/content/ContentView';
 import { REACTIONS } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 const ReactionStep3 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
+  const { user } = React.useContext(UserContext);
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const data = activity?.data || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const isUserObservator = user?.type === UserType.OBSERVATOR;
+
+  const errorSteps = React.useMemo(() => {
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (data !== null && fieldStep2?.length === 0) {
+      return [1]; //corresponding to step 2
+    }
+    return [];
+  }, [activity?.content, data]);
+
+  const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -55,6 +72,7 @@ const ReactionStep3 = () => {
           steps={['Activité', 'Réaction', 'Prévisualisation']}
           urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite']}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre réaction{!isEdit && ', et publiez-la'}</h1>
@@ -71,15 +89,30 @@ const ReactionStep3 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
                 Enregistrer les changements
               </Button>
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
+              {!isValid && (
+                <p>
+                  <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                </p>
+              )}
+              {isUserObservator ? (
+                <Tooltip title="Action non autorisée" arrow>
+                  <span>
+                    <Button variant="outlined" color="primary" disabled>
+                      Publier
+                    </Button>
+                  </span>
+                </Tooltip>
+              ) : (
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                  Publier
+                </Button>
+              )}
             </div>
           )}
 
@@ -102,13 +135,15 @@ const ReactionStep3 = () => {
             </>
           )}
 
-          <span className="text text--small text--success">Contenu de votre réaction</span>
-          <div className="preview-block">
+          <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
+            Contenu de votre réaction
+          </span>
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
               onClick={() => {
                 router.push('/reagir-a-une-activite/2?edit');
               }}
-              status={'success'}
+              status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <ContentView content={activity?.content} />
