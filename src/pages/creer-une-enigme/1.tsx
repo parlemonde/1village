@@ -1,4 +1,3 @@
-import { DataDrivenProperty } from 'maplibre-gl';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -29,7 +28,6 @@ const EnigmeStep1 = () => {
     activity !== null && 'edit' in router.query && isEnigme(activity)
       ? activity.subType ?? 0
       : parseInt(getQueryString(router.query['category']) ?? '-1', 10) ?? 0;
-  //const enigmeType = ENIGME_TYPES[enigmeTypeIndex] ?? ENIGME_TYPES[0];
 
   const c = data?.themeName || '';
   const opened = React.useRef(false);
@@ -54,7 +52,6 @@ const EnigmeStep1 = () => {
           {
             theme: null,
             indiceContentIndex: 1,
-            timer: 0,
           },
           responseActivityId,
           responseActivityType,
@@ -72,7 +69,6 @@ const EnigmeStep1 = () => {
           {
             theme: null,
             indiceContentIndex: 1,
-            timer: 0,
           },
           responseActivityId,
           responseActivityType,
@@ -125,7 +121,7 @@ const EnigmeStep1 = () => {
             <>
               <h1>Créer une énigme sur un autre thème</h1>
               <p className="text">
-                Indiquez le thème de l&apos;énigme que vous souhaitez créer. N&apos;Indiquez pas la réponse à votre énigme ici, car ce thème srta
+                Indiquez le thème de l&apos;énigme que vous souhaitez créer. N&apos;indiquez pas la réponse à votre énigme ici, car ce thème sera
                 utilisé comme indice supplémentaire par les Pélicopains.
               </p>
               <TextField
@@ -135,7 +131,7 @@ const EnigmeStep1 = () => {
                 }}
                 label="Énigme à créer"
                 variant="outlined"
-                placeholder="Un animal"
+                placeholder="ex: Un animal"
                 InputLabelProps={{
                   shrink: true,
                 }}
