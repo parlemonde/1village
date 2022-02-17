@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Tooltip } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_TYPES, ENIGME_DATA } from 'src/activity-types/enigme.constants';
+import { ENIGME_TYPES, ENIGME_DATA, getEnigme } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -35,14 +35,17 @@ const EnigmeStep4 = () => {
   const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.slice(indiceContentIndex - 1, activity.content.length).filter((d) => d.value !== ''); // if value is empty in step 2
-    const fieldStep3 = activity?.content.slice(indiceContentIndex, activity.content.length).filter((d) => d.value !== ''); // if value is empty in step 3
+    const fieldStep2 = activity?.content
+      .slice(indiceContentIndex - 1, activity.content.length)
+      .filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
+    const fieldStep3 = activity?.content.slice(indiceContentIndex, activity.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
     if (data !== null) {
       const errors = getErrorSteps(data, 1);
       if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
       if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
       return errors;
     }
+
     return [];
   }, [activity?.content, data, indiceContentIndex]);
   const isValid = errorSteps.length === 0;
@@ -76,9 +79,13 @@ const EnigmeStep4 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.theme === -1 ? capitalize(data.themeName ?? '') : enigmeData[data.theme]?.step ?? 'Choix de la catégorie',
-            enigmeType.step1 ?? "Description de l'objet",
-            "Création de l'indice",
+            data.theme === -1
+              ? capitalize(data.themeName ?? '')
+              : activity.subType === -1
+              ? getEnigme(activity.subType, data).step1
+              : enigmeData[data.theme]?.step ?? 'Thème',
+            'Énigme',
+            'Réponse',
             'Prévisualisation',
           ]}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
@@ -140,14 +147,20 @@ const EnigmeStep4 = () => {
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>
-              Notre {enigmeType.titleStep2Short} mystère est{' '}
-              <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
-            </p>
+            {activity.subType === -1 ? (
+              <p style={{ margin: '0.5rem 0' }}>
+                Notre thème mystère est <strong>{getEnigme(activity.subType, data).step1}</strong>.
+              </p>
+            ) : (
+              <p style={{ margin: '0.5rem 0' }}>
+                Notre {enigmeType.titleStep2Short} mystère est{' '}
+                <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
+              </p>
+            )}
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
-            {enigmeType.step1 ?? "Description de l'objet"}
+            Indice présenté aux autres classes
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
@@ -161,7 +174,7 @@ const EnigmeStep4 = () => {
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
-            Indice présenté aux autres classes
+            Réponse
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}>
             <EditButton
