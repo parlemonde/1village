@@ -22,8 +22,7 @@
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/src/",
-      "<rootDir>/server/",
-      "<rootDir>/tests/"
+      "<rootDir>/server/"
     ],
     "transform": {
       "^.+\\.(t|j)sx?$": "@swc/jest"
