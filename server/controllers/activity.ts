@@ -408,7 +408,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await getRepository(Activity).findOne({ where: { id } });
-  if (activity === undefined || req.user === undefined) {
+  if (activity === undefined) {
     next();
     return;
   }
@@ -434,6 +434,33 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
   }
 
+  await getRepository(Activity).save(activity);
+  res.sendJSON(activity);
+});
+
+activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+  if (!user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+  const activity = await getRepository(Activity).findOne({ where: { id } });
+  if (activity === undefined || activity.type !== ActivityType.QUESTION || activity.userId === user.id) {
+    next();
+    return;
+  }
+  // TODO: When we change the type of askSame from stringt to array of number, we have to change the type here as well
+  const askSame = !activity.data.askSame ? [] : ((activity.data.askSame as string) || '').split(',').map((n) => parseInt(n, 10) || 0);
+  // activity.data = data.data ?? activity.data;
+  const index = askSame.findIndex((i) => i === user.id);
+  if (index !== -1) {
+    askSame.splice(index, 1);
+  } else {
+    askSame.push(user.id);
+  }
+
+  activity.data.askSame = askSame.join(',');
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });

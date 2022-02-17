@@ -20,15 +20,11 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  const isMediator = user !== null && user.type >= UserType.MEDIATOR;
   const filterCountries = React.useMemo(
     () =>
-      !village || (selectedPhase === 1 && !isModerateur)
-        ? user
-          ? [user.country.isoCode.toUpperCase()]
-          : []
-        : village.countries.map((c) => c.isoCode),
-    [selectedPhase, village, user, isModerateur],
+      !village || (selectedPhase === 1 && !isMediator) ? (user ? [user.country.isoCode.toUpperCase()] : []) : village.countries.map((c) => c.isoCode),
+    [selectedPhase, village, user, isMediator],
   );
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
@@ -91,7 +87,7 @@ export const Accueil = () => {
         <>
           <KeepRatio ratio={1 / 3}>
             <WorldMap />
-          </KeepRatio>{' '}
+          </KeepRatio>
           <h1 style={{ marginTop: '1rem' }}>Dernières activités</h1>
           <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} />
           <Activities activities={activitiesFiltered} withLinks />

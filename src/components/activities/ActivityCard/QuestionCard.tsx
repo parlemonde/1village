@@ -13,27 +13,19 @@ import type { ActivityCardProps } from './activity-card.types';
 
 export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }: ActivityCardProps<QuestionActivity>) => {
   const { user } = React.useContext(UserContext);
-  const { updatedActivityData } = useActivityRequests();
+  const { askSameQuestion } = useActivityRequests();
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
-
+  const isSelf = user !== null && user.id === activity.userId;
   const askSame = React.useMemo(
     () => (!activity.data.askSame ? [] : (activity.data.askSame || '').split(',').map((n) => parseInt(n, 10) || 0)),
     [activity],
   );
+
   const onAskSame = async () => {
-    if (!user || !user.id) {
+    if (!user || isSelf) {
       return;
     }
-
-    const index = askSame.findIndex((i) => i === user.id);
-    if (index !== -1) {
-      askSame.splice(index, 1);
-    } else {
-      askSame.push(user.id);
-    }
-    await updatedActivityData(activity, {
-      askSame: askSame.join(','),
-    });
+    await askSameQuestion(activity.id);
   };
 
   return (
@@ -67,6 +59,7 @@ export const QuestionCard = ({ activity, noButtons, showEditButtons, onDelete }:
             <Button
               style={{ padding: '6px 8px' }}
               onClick={onAskSame}
+              disabled={isSelf}
               color="primary"
               variant={user !== null && askSame.includes(user.id) ? 'contained' : 'text'}
             >
