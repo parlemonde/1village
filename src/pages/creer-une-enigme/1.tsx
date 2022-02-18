@@ -55,6 +55,10 @@ const EnigmeStep1 = () => {
           },
           responseActivityId,
           responseActivityType,
+          [
+            { type: 'text', id: 0, value: '' }, //empty content for step2
+            { type: 'text', id: 1, value: '' }, //empty content for step3
+          ],
         );
         if (responseActivityId !== null) {
           if (selectRef.current) {
@@ -72,6 +76,10 @@ const EnigmeStep1 = () => {
           },
           responseActivityId,
           responseActivityType,
+          [
+            { type: 'text', id: 0, value: '' }, //empty content for step2
+            { type: 'text', id: 1, value: '' }, //empty content for step3
+          ],
         );
         if (responseActivityId !== null) {
           if (selectRef.current) {
