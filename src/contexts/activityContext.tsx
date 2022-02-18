@@ -8,7 +8,7 @@ import { Modal } from 'src/components/Modal';
 import { getActivityPhase } from 'src/components/activities/utils';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
-import type { Activity, AnyData, ActivityContentType } from 'types/activity.type';
+import type { Activity, AnyData, ActivityContentType, ActivityContent } from 'types/activity.type';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 
 import { UserContext } from './userContext';
@@ -24,7 +24,7 @@ interface ActivityContextValue {
     initialData?: AnyData,
     responseActivityId?: number | null,
     responseType?: number | null,
-    isPinned?: boolean,
+    initiaContent?: ActivityContent[],
   ): boolean;
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
@@ -132,7 +132,14 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const createNewActivity = React.useCallback(
-    (type: number, subType?: number, initialData?: AnyData, responseActivityId?: number | null, responseType?: number | null) => {
+    (
+      type: number,
+      subType?: number,
+      initialData?: AnyData,
+      responseActivityId?: number | null,
+      responseType?: number | null,
+      initiaContent?: ActivityContent[],
+    ) => {
       if (user === null || village === null) {
         return false;
       }
@@ -144,7 +151,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         status: ActivityStatus.DRAFT,
         userId: user.id,
         villageId: village.id,
-        content: [{ type: 'text', id: 0, value: '' }],
+        content: initiaContent || [{ type: 'text', id: 0, value: '' }],
         responseActivityId: responseActivityId ?? null,
         responseType: responseType ?? null,
         data: initialData || {},

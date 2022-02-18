@@ -39,21 +39,6 @@ const EnigmeStep3 = () => {
     } else if (activity && !isEnigme(activity)) {
       router.push('/creer-une-enigme');
     }
-
-    if (activity && isEnigme(activity)) {
-      if ((activity.data.indiceContentIndex ?? 0) > activity.content.length) {
-        updateActivity({
-          data: {
-            ...activity.data,
-            indiceContentIndex: activity.content.length,
-          },
-        });
-      }
-      if ((activity.data.indiceContentIndex ?? 0) === activity.content.length && !contentAdded.current) {
-        contentAdded.current = true;
-        addContent('text');
-      }
-    }
   }, [activity, router, updateActivity, addContent]);
 
   const updateContent = (content: ActivityContent[]): void => {
