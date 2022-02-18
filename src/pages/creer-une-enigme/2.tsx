@@ -18,7 +18,7 @@ const EnigmeStep2 = () => {
   const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   const data = (activity?.data as EnigmeData) || null;
-  const indiceContentIndex = data?.indiceContentIndex ?? 0;
+  const indiceContentIndex = Math.max(data?.indiceContentIndex ?? 0, 0);
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
@@ -27,43 +27,27 @@ const EnigmeStep2 = () => {
     return [];
   }, [data]);
 
-  const contentAdded = React.useRef(false);
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/creer-une-enigme');
     } else if (activity && !isEnigme(activity)) {
       router.push('/creer-une-enigme');
     }
-
-    if (activity && isEnigme(activity)) {
-      if ((activity.data.indiceContentIndex ?? 0) > activity.content.length) {
-        updateActivity({
-          data: {
-            ...activity.data,
-            indiceContentIndex: activity.content.length,
-          },
-        });
-      }
-      if ((activity.data.indiceContentIndex ?? 0) === activity.content.length && !contentAdded.current) {
-        contentAdded.current = true;
-        addContent('text');
-      }
-    }
-  }, [activity, router, updateActivity, addContent]);
+  }, [activity, router]);
 
   const updateContent = (content: ActivityContent[]): void => {
     if (!activity) {
       return;
     }
-    updateActivity({ content: [...activity.content.slice(0, indiceContentIndex), ...content] });
+    updateActivity({ content: [...content, ...activity.content.slice(indiceContentIndex, activity.content.length)] });
   };
-  const addIndiceContent = (type: ActivityContentType, value?: string) => {
-    contentAdded.current = true;
-    addContent(type, value);
+  const addDescriptionContent = (type: ActivityContentType, value?: string) => {
+    addContent(type, value, indiceContentIndex);
+    updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex + 1 } });
   };
-  const deleteIndiceContent = (index: number) => {
-    contentAdded.current = true; // delete means there were content already
-    deleteContent(indiceContentIndex + index);
+  const deleteDescriptionContent = (index: number) => {
+    deleteContent(index);
+    updateActivity({ data: { ...data, indiceContentIndex: indiceContentIndex - 1 } });
   };
 
   if (data === null || activity === null || !isEnigme(activity)) {
@@ -103,10 +87,10 @@ const EnigmeStep2 = () => {
             l’étape suivante, vous écrirez la réponse à l’énigme.
           </p>
           <ContentEditor
-            content={activity.content.slice(indiceContentIndex, activity.content.length)}
+            content={activity.content.slice(0, indiceContentIndex)}
             updateContent={updateContent}
-            addContent={addIndiceContent}
-            deleteContent={deleteIndiceContent}
+            addContent={addDescriptionContent}
+            deleteContent={deleteDescriptionContent}
             save={save}
           />
           <StepsButton prev={`/creer-une-enigme/1?edit=${activity.id}`} next={onNext} />
