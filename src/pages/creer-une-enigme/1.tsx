@@ -49,6 +49,8 @@ const EnigmeStep1 = () => {
             theme: null,
             indiceContentIndex: 1,
           },
+          null,
+          null,
           [
             { type: 'text', id: 0, value: '' }, //empty content for step2
             { type: 'text', id: 1, value: '' }, //empty content for step3
@@ -63,6 +65,8 @@ const EnigmeStep1 = () => {
             theme: null,
             indiceContentIndex: 1,
           },
+          null,
+          null,
           [
             { type: 'text', id: 0, value: '' }, //empty content for step2
             { type: 'text', id: 1, value: '' }, //empty content for step3
