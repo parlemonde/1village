@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
@@ -60,31 +59,13 @@ const activities = [
 ];
 
 const Defi = () => {
-  const router = useRouter();
-
-  const [activitiesWithLinks, suggestionsWithLinks] = React.useMemo(() => {
-    if ('responseActivityId' in router.query && 'responseActivityType' in router.query) {
-      return [
-        activities.map((a) => ({
-          ...a,
-          href: `${a.href}?responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
-        })),
-        suggestions.map((s) => ({
-          ...s,
-          href: `${s.href}?responseActivityId=${router.query.responseActivityId}&responseActivityType=${router.query.responseActivityType}`,
-        })),
-      ];
-    }
-    return [activities, suggestions];
-  }, [router.query]);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
           <h1>{"Suggestions d'activités"}</h1>
           <div style={{ padding: '1rem', textAlign: 'center' }}>
-            <SuggestionCarousel suggestions={suggestionsWithLinks} />
+            <SuggestionCarousel suggestions={suggestions} />
           </div>
           <h1>Choisissez le défi que vous souhaitez réaliser</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
@@ -92,7 +73,7 @@ const Defi = () => {
             écologique. Par exemple, vous pouvez partager une action en vous filmant en train de la réaliser et ensuite demander aux autres classes de
             la réaliser à leur tour !
           </p>
-          <ActivityChoice activities={activitiesWithLinks} />
+          <ActivityChoice activities={activities} />
         </div>
       </div>
     </Base>

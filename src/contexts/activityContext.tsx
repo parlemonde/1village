@@ -22,8 +22,8 @@ interface ActivityContextValue {
     type: number,
     subType?: number,
     initialData?: AnyData,
-    responseActivityId?: number | null,
-    responseType?: number | null,
+    // responseActivityId?: number | null,
+    // responseType?: number | null,
     initiaContent?: ActivityContent[],
   ): boolean;
   addContent(type: ActivityContentType, value?: string, index?: number): void;
@@ -136,8 +136,8 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       type: number,
       subType?: number,
       initialData?: AnyData,
-      responseActivityId?: number | null,
-      responseType?: number | null,
+      // responseActivityId?: number | null,
+      // responseType?: number | null,
       initiaContent?: ActivityContent[],
     ) => {
       if (user === null || village === null) {
@@ -152,8 +152,8 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         userId: user.id,
         villageId: village.id,
         content: initiaContent || [{ type: 'text', id: 0, value: '' }],
-        responseActivityId: responseActivityId ?? null,
-        responseType: responseType ?? null,
+        // responseActivityId: responseActivityId ?? null,
+        // responseType: responseType ?? null,
         data: initialData || {},
         isPinned: false,
       };
