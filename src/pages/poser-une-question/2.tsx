@@ -13,7 +13,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 
 const Question2 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -22,6 +22,11 @@ const Question2 = () => {
       router.push('/poser-une-question/1');
     }
   }, [activity, router]);
+
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/poser-une-question/3');
+  };
 
   const onQuestionChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!activity) {
@@ -97,7 +102,7 @@ const Question2 = () => {
               </div>
             ))}
 
-          {activity && activity.content.length < 3 && activity.id === 0 && (
+          {activity && (
             <div className="text-center">
               <Card style={{ display: 'inline-block' }}>
                 <ButtonBase onClick={onAddQuestion}>
@@ -112,7 +117,7 @@ const Question2 = () => {
             </div>
           )}
 
-          <StepsButton prev={activity.id === 0 ? '/poser-une-question/1?edit=true' : undefined} next="/poser-une-question/3" />
+          <StepsButton prev={activity.id === 0 ? '/poser-une-question/1?edit=true' : undefined} next={onNext} />
         </div>
       </div>
     </Base>

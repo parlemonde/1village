@@ -4,7 +4,6 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
-import type { QuestionActivity } from 'src/activity-types/question.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -40,7 +39,18 @@ const Question1 = () => {
     pelico: true,
     type: ActivityType.QUESTION,
   });
-  const { updatedActivityData } = useActivityRequests();
+  const { askSameQuestion } = useActivityRequests();
+
+  const created = React.useRef(false);
+  React.useEffect(() => {
+    if (!created.current) {
+      created.current = true;
+      if (!('edit' in router.query)) {
+        createNewActivity(ActivityType.QUESTION);
+      }
+    }
+  }, [activity, createNewActivity, router]);
+
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -62,36 +72,22 @@ const Question1 = () => {
   }, [activities]);
 
   const onNext = () => {
-    if (activity && isQuestion(activity) && 'edit' in router.query) {
-      router.push('/poser-une-question/2');
-      return;
-    }
-    const success = createNewActivity(ActivityType.QUESTION);
-    if (success) {
+    if (activity && isQuestion(activity)) {
       router.push('/poser-une-question/2');
     }
   };
 
-  const onAskSame = (activity: QuestionActivity, askSame: number[]) => async () => {
+  const onAskSame = (activityId: number) => async () => {
     if (!user || !user.id) {
       return;
     }
-
-    const index = askSame.findIndex((i) => i === user.id);
-    if (index !== -1) {
-      askSame.splice(index, 1);
-    } else {
-      askSame.push(user.id);
-    }
-    await updatedActivityData(activity, {
-      askSame: askSame.join(','),
-    });
+    await askSameQuestion(activityId);
   };
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/poser-une-question" />
+        <BackButton href="/" />
         <Steps
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
           urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
@@ -139,7 +135,7 @@ const Question1 = () => {
                       <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Button
                           style={user && askSame.includes(user.id) ? {} : { padding: '6px 16px', backgroundColor: 'white' }}
-                          onClick={onAskSame(activity, askSame)}
+                          onClick={onAskSame(activity.id)}
                           color="primary"
                           variant={user && askSame.includes(user.id) ? 'contained' : 'text'}
                         >

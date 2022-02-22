@@ -4,9 +4,10 @@ import React from 'react';
 import { Button, TextField } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES } from 'src/activity-types/enigme.constants';
+import { ENIGME_DATA, ENIGME_TYPES, getEnigme } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
@@ -54,6 +55,10 @@ const EnigmeStep1 = () => {
           },
           responseActivityId,
           responseActivityType,
+          [
+            { type: 'text', id: 0, value: '' }, //empty content for step2
+            { type: 'text', id: 1, value: '' }, //empty content for step3
+          ],
         );
         if (responseActivityId !== null) {
           if (selectRef.current) {
@@ -71,6 +76,10 @@ const EnigmeStep1 = () => {
           },
           responseActivityId,
           responseActivityType,
+          [
+            { type: 'text', id: 0, value: '' }, //empty content for step2
+            { type: 'text', id: 1, value: '' }, //empty content for step3
+          ],
         );
         if (responseActivityId !== null) {
           if (selectRef.current) {
@@ -95,6 +104,10 @@ const EnigmeStep1 = () => {
     router.push('/creer-une-enigme/2');
   };
 
+  const onNext = () => {
+    router.push('/creer-une-enigme/2');
+  };
+
   if (data === null || activity === null || !isEnigme(activity)) {
     return <div></div>;
   }
@@ -107,64 +120,90 @@ const EnigmeStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/creer-une-enigme" />}
         <Steps
-          steps={['Choix de la catégorie', enigmeType.step1 ?? "Description de l'objet", "Création de l'indice", 'Prévisualisation']}
+          steps={[getEnigme(activity.subType, data).step1 || 'Thème', 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
           activeStep={0}
         />
         <div className="width-900">
-          <h1>{enigmeType.titleStep1}</h1>
-          <p className="text" style={{ fontSize: '1.1rem' }}>
-            {enigmeType.description}
-          </p>
-          <div>
-            {enigmeData.map((t, index) => (
-              <ThemeChoiceButton key={index} label={t.label} description={t.description} onClick={onClick(index)} />
-            ))}
-            <ThemeChoiceButton
-              isOpen={otherOpen}
-              onClick={() => {
-                setIsOtherOpen(!otherOpen);
-              }}
-              additionalContent={
-                <div className="text-center">
-                  <h3>Donnez un nom à la catégorie :</h3>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', margin: '0.5rem 0' }}>
-                    <span style={{ marginRight: '0.3rem' }}>{`${enigmeType.title2} est`}</span>
-                    {data !== null && (
-                      <TextField
-                        variant="standard"
-                        value={data.themeName || ''}
-                        onChange={(event) => {
-                          updateActivity({ data: { ...data, themeName: event.target.value } });
+          {activity.subType === -1 ? (
+            <>
+              <h1>Créer une énigme sur un autre thème</h1>
+              <p className="text">
+                Indiquez le thème de l&apos;énigme que vous souhaitez créer. N&apos;indiquez pas la réponse à votre énigme ici, car ce thème sera
+                utilisé comme indice supplémentaire par les Pélicopains.
+              </p>
+              <TextField
+                value={data.themeName}
+                onChange={(event) => {
+                  updateActivity({ data: { themeName: event.target.value.slice(0, 400) } });
+                }}
+                label="Énigme à créer"
+                variant="outlined"
+                placeholder="ex: Un animal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ width: '100%', margin: '1rem 0 1rem 0' }}
+              />
+              <StepsButton next={onNext} />
+            </>
+          ) : (
+            <>
+              <h1>{enigmeType.titleStep1}</h1>
+              <p className="text" style={{ fontSize: '1.1rem' }}>
+                {enigmeType.description}
+              </p>
+              <div>
+                {enigmeData.map((t, index) => (
+                  <ThemeChoiceButton key={index} label={t.label} description={t.description} onClick={onClick(index)} />
+                ))}
+                <ThemeChoiceButton
+                  isOpen={otherOpen}
+                  onClick={() => {
+                    setIsOtherOpen(!otherOpen);
+                  }}
+                  additionalContent={
+                    <div className="text-center">
+                      <h3>Donnez un nom à la catégorie :</h3>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', margin: '0.5rem 0' }}>
+                        <span style={{ marginRight: '0.3rem' }}>{`${enigmeType.title2} est`}</span>
+                        {data !== null && (
+                          <TextField
+                            variant="standard"
+                            value={data.themeName || ''}
+                            onChange={(event) => {
+                              updateActivity({ data: { ...data, themeName: event.target.value } });
+                            }}
+                          />
+                        )}
+                      </div>
+                      <br />
+                      <p
+                        className="text text--small"
+                        style={{
+                          display: 'inline-block',
+                          textAlign: 'justify',
+                          padding: '4px',
+                          border: '1px dashed',
+                          borderRadius: '4px',
+                          maxWidth: '480px',
                         }}
-                      />
-                    )}
-                  </div>
-                  <br />
-                  <p
-                    className="text text--small"
-                    style={{
-                      display: 'inline-block',
-                      textAlign: 'justify',
-                      padding: '4px',
-                      border: '1px dashed',
-                      borderRadius: '4px',
-                      maxWidth: '480px',
-                    }}
-                  >
-                    Ne donnez pas le nom de votre {enigmeType.title.toLowerCase()}. La catégorie de {"l'énigme"} est un{' '}
-                    <strong>indice supplémentaire</strong> pour les autres classes.
-                  </p>
-                  <br />
-                  <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
-                    Continuer
-                  </Button>
-                </div>
-              }
-              label="Autre"
-              description={`Présentez ${enigmeType.title3} d’une autre catégorie.`}
-            />
-          </div>
+                      >
+                        Ne donnez pas le nom de votre {enigmeType.title.toLowerCase()}. La catégorie de {"l'énigme"} est un{' '}
+                        <strong>indice supplémentaire</strong> pour les autres classes.
+                      </p>
+                      <br />
+                      <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
+                        Continuer
+                      </Button>
+                    </div>
+                  }
+                  label="Autre"
+                  description={`Présentez ${enigmeType.title3} d’une autre catégorie.`}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Base>

@@ -5,7 +5,7 @@ name: ESLint & Typescript
 on: [push]
 
 jobs:
-  test:
+  typescript:
     runs-on: ubuntu-latest
     steps:
       # [1] checkout repo.
@@ -21,6 +21,46 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      # [4] Test project.
-      - name: Run tests
+      # [4] test typescript.
+      - name: Run typescript
+        run: yarn typscript
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      # [1] checkout repo.
+      - uses: actions/checkout@v2
+
+      # [2] get node.
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.7.0'
+
+      # [3] install dependencies.
+      - name: Install dependencies
+        run: yarn
+
+      # [4] test.
+      - name: Run eslint
+        run: yarn lint
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      # [1] checkout repo.
+      - uses: actions/checkout@v2
+
+      # [2] get node.
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.7.0'
+
+      # [3] install dependencies.
+      - name: Install dependencies
+        run: yarn
+
+      # [4] test.
+      - name: Run jest
         run: yarn test

@@ -64,6 +64,24 @@ export const useActivityRequests = () => {
     [axiosLoggedRequest, enqueueSnackbar, queryClient],
   );
 
+  const askSameQuestion = React.useCallback(
+    async (activityId: number) => {
+      const response = await axiosLoggedRequest({
+        method: 'PUT',
+        url: `/activities/${activityId}/askSame`,
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+        return;
+      }
+      queryClient.invalidateQueries('activity');
+      queryClient.invalidateQueries('activities');
+    },
+    [axiosLoggedRequest, enqueueSnackbar, queryClient],
+  );
+
   const deleteActivity = React.useCallback(
     async (id: number, isDraft?: boolean) => {
       const response = await axiosLoggedRequest({
@@ -87,6 +105,7 @@ export const useActivityRequests = () => {
 
   return {
     updatedActivityData,
+    askSameQuestion,
     deleteActivity,
   };
 };

@@ -1,4 +1,4 @@
-import type { EnigmeActivity } from './enigme.types';
+import type { EnigmeActivity, EnigmeData } from './enigme.types';
 
 export const ENIGME = {
   OBJET: 0,
@@ -13,7 +13,7 @@ export const ENIGME_TYPES = [
     title2: "L'objet mystère",
     title3: 'un objet mystère',
     titleStep1: 'Choisissez votre objet mystère',
-    step1: "Description de l'objet",
+    step1: 'Thème',
     titleStep2: 'Décrivez votre objet mystère',
     titleStep2Short: 'objet',
     description: `La classe choisit de présenter un "objet mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet objet peut-être...`,
@@ -23,7 +23,7 @@ export const ENIGME_TYPES = [
     title2: "L'événement mystère",
     title3: 'un événement mystère',
     titleStep1: 'Choisissez votre événement mystère',
-    step1: "Description de l'événement",
+    step1: 'Thème',
     titleStep2: 'Décrivez votre événement mystère',
     titleStep2Short: 'événement',
     description: `La classe choisit de présenter un "événement mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet événement peut-être une fête de l’école, un festival, un fait historique s'étant déroulé localement, une fête nationale...`,
@@ -33,7 +33,7 @@ export const ENIGME_TYPES = [
     title2: 'La personnalité mystère',
     title3: 'une personnalité mystère',
     titleStep1: 'Choisissez votre personnalité mystère',
-    step2: 'Description de la personnalité',
+    step1: 'Thème',
     titleStep2: 'Décrivez votre personnalité mystère',
     titleStep2Short: 'personnalité',
     description: `La classe choisit de présenter une "personnalité mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cette personnalité peut-être...`,
@@ -43,7 +43,7 @@ export const ENIGME_TYPES = [
     title2: 'Le lieu mystère',
     title3: 'un lieu mystère',
     titleStep1: 'Choisissez votre lieu mystère',
-    step1: 'Description du lieu',
+    step1: 'Thème',
     titleStep2: 'Décrivez votre lieu mystère',
     titleStep2Short: 'lieu',
     description: `La classe choisit de présenter un "lieu mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Ce lieu peut-être...`,
@@ -144,3 +144,9 @@ export const ENIGME_DATA = [
 export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
   return 7 - Math.floor((new Date().getTime() - new Date(activity.updateDate || '').getTime()) / 3600000 / 24);
 }
+
+export const getEnigme = (activitySubType: number | null | undefined, activityData: EnigmeData) =>
+  (activitySubType === -1 ? { title: activityData.themeName || '', step1: activityData.themeName || '' } : ENIGME_TYPES[activitySubType || 0]) || {
+    title: 'Enigme',
+    step1: 'Enigme',
+  };

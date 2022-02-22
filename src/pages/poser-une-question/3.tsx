@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
@@ -6,6 +7,7 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Tooltip } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import type { QuestionActivity } from 'src/activity-types/question.types';
@@ -18,18 +20,21 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 const Question3 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
   const questionsCount = content?.length ?? 0;
-  const isEdit = activity !== null && activity.id !== 0;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
+  const isUserObservator = user?.type === UserType.OBSERVATOR;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -39,6 +44,16 @@ const Question3 = () => {
     }
   }, [activity, router]);
 
+  const errorSteps = React.useMemo(() => {
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (fieldStep2?.length === 0) {
+      return [1]; //corresponding to step 2
+    }
+    return [];
+  }, [activity?.content]);
+
+  const isValid = errorSteps.length === 0;
+
   const createQuestionActivity = async (question: string): Promise<boolean> => {
     if (!village) {
       return false;
@@ -46,7 +61,7 @@ const Question3 = () => {
     const data: Partial<QuestionActivity> = {
       type: ActivityType.QUESTION,
       villageId: village.id,
-      phase: getActivityPhase(ActivityType.QUESTION, village.activePhase),
+      phase: getActivityPhase(ActivityType.QUESTION, selectedPhase),
       data: {},
       content: [
         {
@@ -69,10 +84,9 @@ const Question3 = () => {
   };
 
   const onPublish = async () => {
-    if (!activity || !content) {
+    if (!isValid || !activity || !content) {
       return;
     }
-
     setIsLoading(true);
     if (activity.id === 0) {
       await Promise.all(content.map((question) => createQuestionActivity(question.value)));
@@ -99,6 +113,7 @@ const Question3 = () => {
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
           urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Prévisualisez vos questions, et envoyez-les</h1>
@@ -112,6 +127,7 @@ const Question3 = () => {
               ? ' Vous pouvez les modifier, et quand vous êtes prêts : publiez-les dans votre village-monde !'
               : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
+
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
               <Link href="/poser-une-question/2" passHref>
@@ -119,23 +135,41 @@ const Question3 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
                 Enregistrer les changements
               </Button>
             </div>
           ) : (
-            <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
-              </Button>
-            </div>
+            <>
+              {!isValid && (
+                <p>
+                  <b>Avant de publier votre question, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                </p>
+              )}
+              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                {isUserObservator ? (
+                  <Tooltip title="Action non autorisée" arrow>
+                    <span>
+                      <Button variant="outlined" color="primary" disabled>
+                        Publier
+                      </Button>
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                    Publier
+                  </Button>
+                )}
+              </div>
+            </>
           )}
-          <div className="preview-block">
+
+          <div className={classNames('preview-block', { 'preview-block--warning': !isValid })}>
             <EditButton
               onClick={() => {
                 router.push('/poser-une-question/2');
               }}
-              status={'success'}
+              status={!isValid ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             {content &&
