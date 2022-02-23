@@ -2,7 +2,7 @@
   "name": "1village",
   "version": "1.0.0",
   "description": "1Village, application de Par Le Monde",
-  "main": "dist/app.js",
+  "main": "dist/start.js",
   "author": "Par Le Monde",
   "license": "GPL-3.0-only",
   "scripts": {
@@ -14,8 +14,8 @@
     "lint:fix": "yarn eslint src --fix && yarn eslint server --fix",
     "typscript": "yarn tsc -p . && yarn tsc --project server/tsconfig.json --noEmit",
     "test": "yarn jest",
-    "start-dev": "yarn build:server && node dist/server/app.js",
-    "start": "NODE_ENV=production node dist/server/app.js",
+    "start-dev": "yarn build:server && node dist/server/start.js",
+    "start": "NODE_ENV=production node dist/server/start.js",
     "dev": "nodemon"
   },
   "jest": {

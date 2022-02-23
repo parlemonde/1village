@@ -26,7 +26,7 @@ import { setVillage } from './middlewares/setVillage';
 import { removeTrailingSlash } from './middlewares/trailingSlash';
 import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
-import { onError, normalizePort, getDefaultDirectives } from './utils/server';
+import { getDefaultDirectives } from './utils/server';
 
 const isDevENV = process.env.NODE_ENV !== 'production';
 const frontendHandler = next({ dev: isDevENV });
@@ -39,7 +39,7 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-async function start() {
+export async function getApp() {
   // Connect to DB
   const connection: Connection | null = await connectToDatabase();
   if (connection === null) {
@@ -131,16 +131,5 @@ async function start() {
     res.status(404).send('Error 404 - Not found.');
   });
 
-  // [7] --- Start server ---
-  const port = normalizePort(process.env.PORT || '5000');
-  const server = app.listen(port);
-  server.on('error', onError);
-  server.on('listening', () => {
-    logger.info(`App listening on port ${port}!`);
-  });
+  return app;
 }
-
-start().catch((e: Error) => {
-  console.error(e);
-  process.exit(0);
-});
