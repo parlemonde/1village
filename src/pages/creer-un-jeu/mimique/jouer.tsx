@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -180,42 +180,48 @@ const PlayMimique = () => {
           <Grid item xs={12} md={12}>
             {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
           </Grid>
-          <Grid item xs={2} md={4}>
+          <Grid xs={2} md={4}>
             <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
               {choices &&
                 choices.map((val) => {
                   if (val === 0) {
                     return (
-                      <FormControlLabel
-                        key="1"
-                        value={MimicResponseValue.SIGNIFICATION}
-                        control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
-                        label={mimicContent?.signification || ''}
-                        disabled={found || foundError ? true : false}
-                        style={{ cursor: 'pointer', width: '100%' }}
-                      />
+                      <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '4px' }}>
+                        <FormControlLabel
+                          key="1"
+                          value={MimicResponseValue.SIGNIFICATION}
+                          control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
+                          label={mimicContent?.signification || ''}
+                          disabled={found || foundError ? true : false}
+                          style={{ cursor: 'pointer', width: '100%' }}
+                        />
+                      </Box>
                     );
                   } else if (val === 1) {
                     return (
-                      <FormControlLabel
-                        key="2"
-                        value={MimicResponseValue.FAKE_SIGNIFICATION_1}
-                        control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
-                        label={mimicContent?.fakeSignification1 || ''}
-                        disabled={fake1Selected || found || foundError ? true : false}
-                        style={{ cursor: 'pointer', width: '100%' }}
-                      />
+                      <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '4px' }}>
+                        <FormControlLabel
+                          key="2"
+                          value={MimicResponseValue.FAKE_SIGNIFICATION_1}
+                          control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
+                          label={mimicContent?.fakeSignification1 || ''}
+                          disabled={fake1Selected || found || foundError ? true : false}
+                          style={{ cursor: 'pointer', width: '100%' }}
+                        />
+                      </Box>
                     );
                   } else {
                     return (
-                      <FormControlLabel
-                        key="3"
-                        value={MimicResponseValue.FAKE_SIGNIFICATION_2}
-                        control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
-                        label={mimicContent?.fakeSignification2 || ''}
-                        disabled={fake2Selected || found || foundError ? true : false}
-                        style={{ cursor: 'pointer', width: '100%' }}
-                      />
+                      <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '4px' }}>
+                        <FormControlLabel
+                          key="3"
+                          value={MimicResponseValue.FAKE_SIGNIFICATION_2}
+                          control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
+                          label={mimicContent?.fakeSignification2 || ''}
+                          disabled={fake2Selected || found || foundError ? true : false}
+                          style={{ cursor: 'pointer', width: '100%' }}
+                        />
+                      </Box>
                     );
                   }
                 })}
