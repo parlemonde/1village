@@ -10,6 +10,26 @@ export const useGameRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
+  const getIsGameCreateBeforePlaying = React.useCallback(
+    async (type: GameType) => {
+      if (!village) {
+        return 0;
+      }
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/games/isGameCreateBeforePlaying${serializeToQueryUrl({
+          villageId: village.id,
+          type,
+        })}`,
+      });
+      if (response.error) {
+        return 0;
+      }
+      return response.data.game as number;
+    },
+    [axiosLoggedRequest, village],
+  );
+
   const getAvailableGamesCount = React.useCallback(
     async (type: GameType) => {
       if (!village) {
@@ -79,5 +99,5 @@ export const useGameRequests = () => {
     [axiosLoggedRequest],
   );
 
-  return { getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
+  return { getIsGameCreateBeforePlaying, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
 };
