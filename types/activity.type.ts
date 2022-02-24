@@ -52,6 +52,6 @@ export interface Activity<T extends AnyData = AnyData> {
   villageId: number;
 
   // Answer other activity
-  responseActivityId: number | null;
-  responseType: number | null;
+  responseActivityId?: number | null;
+  responseType?: number | null;
 }
