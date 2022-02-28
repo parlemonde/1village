@@ -87,7 +87,9 @@ export const ActivityCard = ({
               <UserDisplayName className="text" user={user} noLink={noButtons} />
               {' a '}
               {responseActivity && isReaction(activity) ? (
-                `${titles[activity.type]} ${REACTIONS[responseActivity?.type]}`
+                <strong>
+                  {titles[activity.type]} {REACTIONS[responseActivity?.type]}
+                </strong>
               ) : (
                 <strong>{titles[activity.type]}</strong>
               )}
