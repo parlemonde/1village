@@ -6,6 +6,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
+import { primaryColor } from 'src/styles/variables.const';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
@@ -85,7 +86,11 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
               color="primary"
               style={{ width: '100%' }}
             >
-              <ReactionIcon />
+              <ReactionIcon
+                style={{
+                  fill: primaryColor,
+                }}
+              />
               Réagir
             </Button>
           </div>
