@@ -70,7 +70,11 @@ const ReactionStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Activité', 'Réaction', 'Prévisualisation']} activeStep={0} />
+        <Steps
+          steps={['Activité', 'Réaction', 'Prévisualisation']}
+          urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite/3']}
+          activeStep={0}
+        />
         <div className="width-900">
           <h1>Réagir à une activité</h1>
           <p>Quand un simple texte ne suffit plus, vous pouvez réagir à une activité déjà publiée par vos Pélicopains.</p>
