@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_DATA, getEnigme } from 'src/activity-types/enigme.constants';
+import { getCategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -60,18 +60,18 @@ const EnigmeStep3 = () => {
     return <div></div>;
   }
 
-  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
+  // const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.theme === -1
-              ? capitalize(data.themeName ?? '')
-              : activity.subType === -1
-              ? getEnigme(activity.subType, data).step1
-              : enigmeData[data.theme]?.step ?? 'Thème',
+            // data.theme === -1
+            //   ? capitalize(data.themeName ?? '')
+            //   : activity.subType === -1
+            //   ? getEnigme(activity.subType, data).step1
+            //   : enigmeData[data.theme]?.step ?? 'Thème',
             'Énigme',
             'Réponse',
             'Prévisualisation',

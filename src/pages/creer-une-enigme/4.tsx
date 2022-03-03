@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Tooltip } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_TYPES, ENIGME_DATA, getEnigme } from 'src/activity-types/enigme.constants';
+import { ENIGME_TYPES, getCategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -70,20 +70,19 @@ const EnigmeStep4 = () => {
   if (data === null || activity === null || !isEnigme(activity)) {
     return <div></div>;
   }
-
-  const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
-  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
+  // const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
+  // const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.theme === -1
-              ? capitalize(data.themeName ?? '')
-              : activity.subType === -1
-              ? getEnigme(activity.subType, data).step1
-              : enigmeData[data.theme]?.step ?? 'Thème',
+            // data.theme === -1
+            //   ? capitalize(data.themeName ?? '')
+            //   : activity.subType === -1
+            //   ? getEnigme(activity.subType, data).step1
+            //   : enigmeData[data.theme]?.step ?? 'Thème',
             'Énigme',
             'Réponse',
             'Prévisualisation',
@@ -147,16 +146,6 @@ const EnigmeStep4 = () => {
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {activity.subType === -1 ? (
-              <p style={{ margin: '0.5rem 0' }}>
-                Notre thème mystère est <strong>{getEnigme(activity.subType, data).step1}</strong>.
-              </p>
-            ) : (
-              <p style={{ margin: '0.5rem 0' }}>
-                Notre {enigmeType.titleStep2Short} mystère est{' '}
-                <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
-              </p>
-            )}
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
@@ -186,7 +175,6 @@ const EnigmeStep4 = () => {
             />
             <ContentView content={activity.content.slice(indiceContentIndex, activity.content.length)} />
           </div>
-
           <StepsButton prev="/creer-une-enigme/3" />
         </div>
       </div>

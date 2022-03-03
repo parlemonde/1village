@@ -24,7 +24,7 @@ interface ActivityContextValue {
     initialData?: AnyData,
     responseActivityId?: number | null,
     responseType?: number | null,
-    initiaContent?: ActivityContent[],
+    initialContent?: ActivityContent[],
   ): boolean;
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
@@ -138,7 +138,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       initialData?: AnyData,
       responseActivityId?: number | null,
       responseType?: number | null,
-      initiaContent?: ActivityContent[],
+      initialContent?: ActivityContent[],
     ) => {
       if (user === null || village === null) {
         return false;
@@ -151,7 +151,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         status: ActivityStatus.DRAFT,
         userId: user.id,
         villageId: village.id,
-        content: initiaContent || [{ type: 'text', id: 0, value: '' }],
+        content: initialContent || [{ type: 'text', id: 0, value: '' }],
         responseActivityId: responseActivityId ?? null,
         responseType: responseType ?? null,
         data: initialData || {},
