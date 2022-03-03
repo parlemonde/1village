@@ -35,12 +35,16 @@ const ReactionStep3 = () => {
   const isUserObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
-    if (data !== null && fieldStep2?.length === 0) {
-      return [1]; //corresponding to step 2
+    const fieldStep2 = activity?.content.filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
+    const errors = [];
+    if (data !== null && activity?.responseActivityId === null) {
+      errors.push(0); //corresponding to step 1
     }
-    return [];
-  }, [activity?.content, data]);
+    if (data !== null && fieldStep2?.length === 0) {
+      errors.push(1); //corresponding to step 2
+    }
+    return errors;
+  }, [activity?.content, activity?.responseActivityId, data]);
 
   const isValid = errorSteps.length === 0;
 
@@ -70,7 +74,7 @@ const ReactionStep3 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['Activité', 'Réaction', 'Prévisualisation']}
-          urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite']}
+          urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite/3']}
           activeStep={2}
           errorSteps={errorSteps}
         />

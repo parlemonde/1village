@@ -18,7 +18,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { secondaryColor } from 'src/styles/variables.const';
-import { capitalize, getQueryString } from 'src/utils';
+import { capitalize } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const getArticle = (language: string) => {
@@ -45,41 +45,26 @@ const DefiStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
-      const responseActivityType =
-        'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.LANGUAGE,
-          {
-            languageCode: '',
-            language: '',
-            languageIndex: 0,
-            objectIndex: -1,
-            defiIndex: null,
-            explanationContentIndex: 1,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.LANGUAGE, {
+          languageCode: '',
+          language: '',
+          languageIndex: 0,
+          objectIndex: -1,
+          defiIndex: null,
+          explanationContentIndex: 1,
+        });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.LANGUAGE,
-          {
-            languageCode: '',
-            language: '',
-            languageIndex: 0,
-            objectIndex: -1,
-            defiIndex: null,
-            explanationContentIndex: 1,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.LANGUAGE, {
+          languageCode: '',
+          language: '',
+          languageIndex: 0,
+          objectIndex: -1,
+          defiIndex: null,
+          explanationContentIndex: 1,
+        });
       }
     }
   }, [activity, createNewActivity, router]);

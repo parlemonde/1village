@@ -22,7 +22,7 @@ interface ActivitiesProps {
 export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState<{
     selectedActivityId: number | null;
-    responseActivityId: number | null;
+    responseActivityId?: number | null;
   }>({
     selectedActivityId: null,
     responseActivityId: null,

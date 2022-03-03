@@ -9,7 +9,6 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { getQueryString } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiEcoStep1 = () => {
@@ -26,33 +25,18 @@ const DefiEcoStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
-      const responseActivityType =
-        'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.ECO,
-          {
-            type: null,
-            defiIndex: null,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.ECO, {
+          type: null,
+          defiIndex: null,
+        });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isEco(activity)))) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.ECO,
-          {
-            type: null,
-            defiIndex: null,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.ECO, {
+          type: null,
+          defiIndex: null,
+        });
       }
     }
   }, [activity, createNewActivity, router]);

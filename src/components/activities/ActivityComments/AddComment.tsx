@@ -49,7 +49,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
           <span style={{ marginLeft: '2.5rem', fontWeight: 600 }}>Publiez directement un commentaire</span>
           <div style={{ display: 'flex' }}>
             <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} noLink />
-            <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
+            <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0, maxWidth: 539 }}>
               <TextEditor
                 maxLen={400}
                 value={newComment}

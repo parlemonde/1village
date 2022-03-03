@@ -43,8 +43,8 @@ export const EnigmeActivityView = ({ activity, isAnswer }: EnigmeActivityViewPro
       <ContentView
         content={
           isAnswer
-            ? activity.content.slice(0, activity.data.indiceContentIndex)
-            : activity.content.slice(activity.data.indiceContentIndex, activity.content.length)
+            ? activity.content.slice(activity.data.indiceContentIndex, activity.content.length)
+            : activity.content.slice(0, activity.data.indiceContentIndex)
         }
       />
       {!isAnswer && (
