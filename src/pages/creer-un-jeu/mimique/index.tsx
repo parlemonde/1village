@@ -10,23 +10,21 @@ import { GameType } from 'types/game.type';
 
 const Mimique = () => {
   const router = useRouter();
-  const { getIsGameCreateBeforePlaying, getAvailableGamesCount } = useGameRequests();
+  const { getUserCreatedGamesCount, getAvailableGamesCount } = useGameRequests();
   const [mimicsCount, setMimicsCount] = React.useState<number>(0);
-  const [isGameCreateBeforePlaying, setIsGameCreateBeforePlaying] = React.useState<boolean>(false);
+  const [hasUserCreatedMimics, setHasUserCreatedMimics] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    Promise.all([
-      getIsGameCreateBeforePlaying(GameType.MIMIC).then((game) => {
-        if (game > 0) {
-          setIsGameCreateBeforePlaying(true);
-        }
-      }),
-      getAvailableGamesCount(GameType.MIMIC).then((count) => {
-        setMimicsCount(count);
-      }),
-    ]);
-  }, [getAvailableGamesCount, getIsGameCreateBeforePlaying, isGameCreateBeforePlaying]);
+    getAvailableGamesCount(GameType.MIMIC).then((count) => {
+      setMimicsCount(count);
+    });
+  }, [getAvailableGamesCount]);
 
+  React.useEffect(() => {
+    getUserCreatedGamesCount(GameType.MIMIC, 'self').then((game) => {
+      setHasUserCreatedMimics(game > 0);
+    });
+  }, [getUserCreatedGamesCount]);
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginTop: '2rem' }}>
@@ -82,7 +80,7 @@ const Mimique = () => {
               float: 'right',
             }}
             disableElevation
-            disabled={isGameCreateBeforePlaying === false || mimicsCount === 0}
+            disabled={hasUserCreatedMimics === true || mimicsCount === 0}
           >
             Découvrir des mimiques
           </Button>
