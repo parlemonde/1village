@@ -139,18 +139,22 @@ export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
   return 7 - Math.floor((new Date().getTime() - new Date(activity.updateDate || '').getTime()) / 3600000 / 24);
 }
 
+// This function is used only in step 1
 export function getCategoryName(activitySubType: number | null | undefined, activityData: EnigmeData) {
   return activitySubType === -1 // this is when we choose a category 'autre' in index page
     ? { title: activityData.themeName || 'Thème' }
     : { title: ENIGME_TYPES[activitySubType || 0].title };
 }
 
+// This function is used starting from step 2
 export function getSubcategoryName(theme: number | null | undefined, activityData: EnigmeData, activitySubType: number | null | undefined) {
   if (activitySubType === -1) {
     return getCategoryName(activitySubType, activityData);
   } else if (activitySubType === null || activitySubType === undefined) {
     return { title: 'Thème' };
   } else if (theme === null || theme === undefined) {
+    return { title: ENIGME_TYPES[activitySubType || 0].title };
+  } else if (theme === -1 && activityData.themeName === '') {
     return { title: ENIGME_TYPES[activitySubType || 0].title };
   }
   const { subCategories } = ENIGME_TYPES[activitySubType];
