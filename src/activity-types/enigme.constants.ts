@@ -14,7 +14,6 @@ export const ENIGME_TYPES = [
     title2: "L'objet mystère",
     title3: 'un objet mystère',
     titleStep1: 'Choisissez votre objet mystère',
-    // step1: 'Thème',
     titleStep2: 'Décrivez votre objet mystère',
     titleStep2Short: 'objet',
     description: `La classe choisit de présenter un "objet mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet objet peut-être...`,
@@ -51,7 +50,6 @@ export const ENIGME_TYPES = [
     title2: "L'événement mystère",
     title3: 'un événement mystère',
     titleStep1: 'Choisissez votre événement mystère',
-    // step1: 'Thème',
     titleStep2: 'Décrivez votre événement mystère',
     titleStep2Short: 'événement',
     description: `La classe choisit de présenter un "événement mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cet événement peut-être une fête de l’école, un festival, un fait historique s'étant déroulé localement, une fête nationale...`,
@@ -83,7 +81,6 @@ export const ENIGME_TYPES = [
     title2: 'La personnalité mystère',
     title3: 'une personnalité mystère',
     titleStep1: 'Choisissez votre personnalité mystère',
-    // step1: 'Thème',
     titleStep2: 'Décrivez votre personnalité mystère',
     titleStep2Short: 'personnalité',
     description: `La classe choisit de présenter une "personnalité mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Cette personnalité peut-être...`,
@@ -110,7 +107,6 @@ export const ENIGME_TYPES = [
     title2: 'Le lieu mystère',
     title3: 'un lieu mystère',
     titleStep1: 'Choisissez votre lieu mystère',
-    // step1: 'Thème',
     titleStep2: 'Décrivez votre lieu mystère',
     titleStep2Short: 'lieu',
     description: `La classe choisit de présenter un "lieu mystère", à travers une énigme sous forme de texte, de son, d'image ou de vidéo. Ce lieu peut-être...`,
@@ -145,7 +141,7 @@ export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
 
 export function getCategoryName(activitySubType: number | null | undefined, activityData: EnigmeData) {
   return activitySubType === -1 // this is when we choose a category 'autre' in index page
-    ? { title: activityData.themeName || '' }
+    ? { title: activityData.themeName || 'Thème' }
     : { title: ENIGME_TYPES[activitySubType || 0].title };
 }
 
@@ -153,7 +149,9 @@ export function getSubcategoryName(theme: number | null | undefined, activityDat
   if (activitySubType === -1) {
     return getCategoryName(activitySubType, activityData);
   } else if (activitySubType === null || activitySubType === undefined) {
-    return { title: 'Theme' };
+    return { title: 'Thème' };
+  } else if (theme === null || theme === undefined) {
+    return { title: ENIGME_TYPES[activitySubType || 0].title };
   }
   const { subCategories } = ENIGME_TYPES[activitySubType];
   return theme === -1 ? { title: activityData.themeName || '' } : { title: subCategories[theme].label };

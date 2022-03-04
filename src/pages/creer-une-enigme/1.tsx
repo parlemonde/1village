@@ -47,6 +47,7 @@ const EnigmeStep1 = () => {
           enigmeTypeIndex,
           {
             theme: null,
+            themeName: '',
             indiceContentIndex: 1,
           },
           null,
@@ -63,6 +64,7 @@ const EnigmeStep1 = () => {
           enigmeTypeIndex,
           {
             theme: null,
+            themeName: '',
             indiceContentIndex: 1,
           },
           null,

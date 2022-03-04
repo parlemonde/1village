@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { getCategoryName } from 'src/activity-types/enigme.constants';
+import { getSubcategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -10,7 +10,6 @@ import { Steps } from 'src/components/Steps';
 import { ContentEditor } from 'src/components/activities/content';
 import { getErrorSteps } from 'src/components/activities/enigmeChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { capitalize } from 'src/utils';
 import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const EnigmeStep3 = () => {
@@ -60,22 +59,11 @@ const EnigmeStep3 = () => {
     return <div></div>;
   }
 
-  // const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[
-            // data.theme === -1
-            //   ? capitalize(data.themeName ?? '')
-            //   : activity.subType === -1
-            //   ? getEnigme(activity.subType, data).step1
-            //   : enigmeData[data.theme]?.step ?? 'Thème',
-            'Énigme',
-            'Réponse',
-            'Prévisualisation',
-          ]}
+          steps={[getSubcategoryName(activity.data.theme, data, activity.subType).title, 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
           activeStep={2}
           errorSteps={errorSteps}
