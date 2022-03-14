@@ -29,11 +29,11 @@ export type StoriesData = {
   isOriginal: boolean;
 };
 
-// generic type for stories element and tale element
+// Generic type for story elements and tale element
 export type GenericStoryElement = {
   imageId: number;
   imageUrl: string;
-  activityId: number; //foreign key to connect originals stories and inspired
+  activityId: number; //foreign key to connect original and inspired stories
   imageType: number;
 };
 export type StoryElement = GenericStoryElement & {
