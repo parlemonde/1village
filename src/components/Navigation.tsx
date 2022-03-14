@@ -18,6 +18,8 @@ import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
+import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
+import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -31,6 +33,7 @@ interface Tab {
   path: string;
   icon: React.ReactNode;
   phase?: number;
+  disabled?: boolean;
 }
 
 const ACCUEIL: Tab = {
@@ -104,9 +107,15 @@ const TABS_PER_PHASE: Tab[] = [
   },
   // ---- PHASE 3 ----
   {
-    label: 'Jouer ensemble',
-    path: '/creer-un-jeu',
-    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    label: 'Inventer une histoire',
+    path: '/creer-une-histoire/',
+    icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+    phase: 3,
+  },
+  {
+    label: 'Ré-inventer une histoire',
+    path: '/re-inventer-une-histoire/',
+    icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
     phase: 3,
   },
 ];
@@ -171,7 +180,7 @@ export const Navigation = (): JSX.Element => {
                     router.push(tab.path);
                   }}
                   href={tab.path}
-                  color="primary"
+                  color={'primary'}
                   startIcon={tab.icon}
                   variant={tab.path.split('/')[1] === currentPathName ? 'contained' : 'outlined'}
                   className="navigation__button full-width"
@@ -182,7 +191,9 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}
+                  disabled={
+                    village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.label === 'Ré-inventer une histoire'
+                  }
                 >
                   {tab.label}
                 </Button>
