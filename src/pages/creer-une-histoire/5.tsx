@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 
-const StortStep5 = () => {
+const StoryStep5 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -12,4 +12,4 @@ const StortStep5 = () => {
   );
 };
 
-export default StortStep5;
+export default StoryStep5;
