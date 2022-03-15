@@ -1,9 +1,12 @@
 import React from 'react';
 
+import { TextField, Grid, Button } from '@mui/material';
+
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
-import StorySelector from 'src/components/selectors/StorySelector';
+import UploadIcon from 'src/svg/jeu/add-video.svg';
 
 const StoryStep1 = () => {
   return (
@@ -21,8 +24,31 @@ const StoryStep1 = () => {
             Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à leurs pouvoirs, le village idéal a atteint
             l’objectif du développement durable que vous choisirez en étape 3.{' '}
           </p>
-          <StorySelector />
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <div style={{ marginTop: '1.5rem' }}>
+                <Button name="video" style={{ width: '100%' }} variant="outlined" color="primary">
+                  {<UploadIcon style={{ width: '2rem', height: '6.23rem', margin: '30px' }} />}
+                </Button>
+                <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
+              </div>
+              <TextField
+                id="standard-multiline-static"
+                label="Décrivez l’objet magique"
+                multiline
+                variant="outlined"
+                style={{ width: '100%', marginTop: '25px', color: 'primary' }}
+                inputProps={{
+                  maxLength: 400,
+                }}
+              />
+              <div style={{ width: '100%', textAlign: 'right' }}>
+                <span className="text text--small">/400</span>
+              </div>
+            </Grid>
+          </Grid>
         </div>
+        <StepsButton next="/creer-une-histoire/2" />
       </div>
     </Base>
   );
