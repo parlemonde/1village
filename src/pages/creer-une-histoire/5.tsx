@@ -1,19 +1,15 @@
 import classNames from 'classnames';
-import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Grid, Button, TextField, RadioGroup, FormControlLabel, Backdrop, CircularProgress, Tooltip } from '@mui/material';
+import { Grid, Button, TextField } from '@mui/material';
 
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import UploadIcon from 'src/svg/jeu/add-video.svg';
 
 const StoryStep5 = () => {
-  const router = useRouter();
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

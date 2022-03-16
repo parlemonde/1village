@@ -15,7 +15,7 @@ const ODDSelector = ({ label }: ODDSelectorProps) => {
   return (
     <Autocomplete
       options={[]}
-      renderOption={(props, option) => <Box component="li" {...props}></Box>}
+      renderOption={(props) => <Box component="li" {...props}></Box>}
       renderInput={(params) => (
         <TextField
           {...params}
