@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Box } from '@mui/material';
+import { Box, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+
+import { ODD_CHOICE } from 'src/activity-types/story.constants';
+import villages from 'src/pages/admin/villages';
 
 interface ODDSelectorProps {
   label: string | React.ReactNode;
@@ -12,25 +15,28 @@ interface ODDSelectorProps {
 }
 
 const ODDSelector = ({ label }: ODDSelectorProps) => {
+  const [oDDChoice, setODDChoice] = useState('');
+
   return (
-    <Autocomplete
-      options={[]}
-      renderOption={(props) => <Box component="li" {...props}></Box>}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: 'off',
-          }}
-          label={label}
-          variant="standard"
-          type="search"
-        />
-      )}
-      autoHighlight
-      blurOnSelect
-    />
+    <FormControl variant="outlined" className="full-width" style={{ marginTop: '1rem' }}>
+      <InputLabel id="select-ODD">ODD</InputLabel>
+      <Select
+        labelId="select-ODD"
+        id="select-ODD-outlined"
+        value={oDDChoice}
+        onChange={(event) => {
+          setODDChoice(event.target.value as string);
+        }}
+        label="Village"
+      >
+        {(ODD_CHOICE || []).map((v, index) => (
+          <MenuItem value={index} key={index + 1}>
+            {v.choice}
+          </MenuItem>
+        ))}
+      </Select>
+      <FormHelperText>{label}</FormHelperText>
+    </FormControl>
   );
 };
 
