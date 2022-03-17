@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { Box, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { ODD_CHOICE } from 'src/activity-types/story.constants';
-import villages from 'src/pages/admin/villages';
 
 interface ODDSelectorProps {
   label: string | React.ReactNode;
