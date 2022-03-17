@@ -91,6 +91,7 @@ const specificActivityPhase = {
   [ActivityType.SYMBOL]: [1],
   [ActivityType.REPORTAGE]: [2],
   [ActivityType.REACTION]: [2],
+  [ActivityType.STORY]: [3],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];
