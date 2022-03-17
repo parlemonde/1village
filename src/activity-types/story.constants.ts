@@ -1,3 +1,24 @@
+import type { StoriesData } from '../../types/story.type';
+
+export const DEFAULT_STORY_DATA: StoriesData = {
+  object: {
+    imageId: null,
+    imageUrl: null,
+    description: null,
+  },
+  place: {
+    imageId: null,
+    imageUrl: null,
+    description: null,
+  },
+  odd: {
+    imageId: null,
+    imageUrl: null,
+    description: null,
+  },
+  isOriginal: false,
+};
+
 export const ODD_CHOICE = [
   {
     choice: 'ODD 1 : Éradication de la pauvreté',

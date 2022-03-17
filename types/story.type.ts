@@ -27,17 +27,19 @@ export type StoriesData = {
 
 // Generic type for story elements and tale element
 export type GenericStoryElement = {
-  imageId: number;
-  imageUrl: string;
+  imageId: number | null;
+  imageUrl: string | null;
   // activityId: number | null; //foreign key to connect original and inspired stories
 };
 
+// --- structure of each story ---
 export type StoryElement = GenericStoryElement & {
-  description: string;
+  description: string | null;
 };
 
+// --- structure of each tale ---
 export type TaleElement = GenericStoryElement & {
-  tale: string;
+  tale: string | null;
 };
 
 export type StoryActivity = Activity<StoriesData>;
