@@ -2,19 +2,19 @@ import type { StoriesData } from '../../types/story.type';
 
 export const DEFAULT_STORY_DATA: StoriesData = {
   object: {
-    imageId: null,
-    imageUrl: null,
-    description: null,
+    imageId: 0,
+    imageUrl: '',
+    description: '',
   },
   place: {
-    imageId: null,
-    imageUrl: null,
-    description: null,
+    imageId: 0,
+    imageUrl: '',
+    description: '',
   },
   odd: {
-    imageId: null,
-    imageUrl: null,
-    description: null,
+    imageId: 0,
+    imageUrl: '',
+    description: '',
   },
   isOriginal: false,
 };
