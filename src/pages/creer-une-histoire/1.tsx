@@ -71,6 +71,11 @@ const StoryStep1 = () => {
     updateActivity({ data: newData });
   };
 
+  const setImage = (imageUrl: string) => {
+    const { object } = data;
+    updateActivity({ data: { ...data, object: { ...object, imageUrl } } });
+  };
+
   const onNext = () => {
     router.push('/creer-une-histoire/2');
   };
@@ -94,26 +99,34 @@ const StoryStep1 = () => {
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
                 {
-                  <Button name="video" style={{ width: '100%' }} variant="outlined" color="primary">
-                    {<UploadIcon style={{ width: '2rem', height: '6.23rem', margin: '30px' }} />}
+                  <>
+                    <Button
+                      name="video"
+                      style={{ width: '100%' }}
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        setIsImageModalOpen(!isImageModalOpen);
+                      }}
+                    >
+                      {<UploadIcon style={{ width: '2rem', height: '6.23rem', margin: '30px' }} />}
+                    </Button>
                     <ImageModal
                       id={0}
                       isModalOpen={isImageModalOpen}
                       setIsModalOpen={setIsImageModalOpen}
-                      imageUrl={data.object.imageUrl || ''}
-                      setImageUrl={(newUrl) => {
-                        updateActivity({ data: { ...data, imageUrl: newUrl } });
-                      }}
+                      imageUrl={data?.object?.imageUrl || ''}
+                      setImageUrl={setImage}
                     />
-                  </Button>
+                  </>
                 }
                 <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
               </div>
               <TextField
                 id="standard-multiline-static"
                 label="Décrivez l’objet magique"
-                // value={data?.object.description}
-                // onChange={dataChange('description')}
+                value={data?.object.description}
+                onChange={dataChange('description')}
                 multiline
                 variant="outlined"
                 style={{ width: '100%', marginTop: '25px', color: 'primary' }}
