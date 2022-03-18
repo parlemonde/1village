@@ -67,10 +67,10 @@ const StoryStep1 = () => {
     }
   }, [activity, createNewActivity, router.query, user, village]);
 
-  // Update the "object step" image description, when add the text.
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
-    const newData = { ...data, [key]: value };
+    const { object } = data;
+    const newData = { ...data, object: { ...object, [key]: value } };
     updateActivity({ data: newData });
   };
 
@@ -148,7 +148,7 @@ const StoryStep1 = () => {
               <TextField
                 id="standard-multiline-static"
                 label="Décrivez l’objet magique"
-                value={data?.object.description}
+                value={data?.object?.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
                 style={{ width: '100%', marginTop: '25px', color: 'primary' }}
