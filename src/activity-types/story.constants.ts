@@ -16,6 +16,11 @@ export const DEFAULT_STORY_DATA: StoriesData = {
     imageUrl: '',
     description: '',
   },
+  tale: {
+    imageId: 0,
+    imageStory: '',
+    tale: '',
+  },
   isOriginal: false,
 };
 

@@ -42,8 +42,6 @@ const StoryStep1 = () => {
           undefined,
           {
             ...DEFAULT_STORY_DATA,
-            imageStory: '',
-            tale: '',
           },
           null,
           null,
@@ -56,8 +54,6 @@ const StoryStep1 = () => {
           undefined,
           {
             ...DEFAULT_STORY_DATA,
-            imageStory: '',
-            tale: '',
           },
           null,
           null,

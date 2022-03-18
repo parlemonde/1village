@@ -21,6 +21,7 @@ export type StoriesData = {
   object: StoryElement;
   place: StoryElement;
   odd: StoryElement;
+  tale: TaleElement;
   isOriginal: boolean;
   // maybe we can create a function. TBD
 };
@@ -38,7 +39,9 @@ export type StoryElement = GenericStoryElement & {
 };
 
 // --- structure of each tale ---
-export type TaleElement = GenericStoryElement & {
+export type TaleElement = {
+  imageId: number | null;
+  imageStory: string | null;
   tale: string | null;
 };
 
