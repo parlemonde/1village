@@ -23,7 +23,8 @@ import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep1 = () => {
   const router = useRouter();
-  const { activity, updateActivity, createNewActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
+  const [isError, setIsError] = React.useState<boolean>(false);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
@@ -79,7 +80,18 @@ const StoryStep1 = () => {
     updateActivity({ data: { ...data, object: { ...object, imageUrl } } });
   };
 
+  React.useEffect(() => {
+    // if user navigated to the next step already, let's show the errors if there are any.
+    if (window.sessionStorage.getItem(`story-step-1-next`) === 'true') {
+      setIsError(true);
+      window.sessionStorage.setItem(`story-step-1-next`, 'false');
+    }
+  }, []);
+
   const onNext = () => {
+    save().catch(console.error);
+    // save in local storage that the user is going to the next step.
+    window.sessionStorage.setItem(`story-step-1-next`, 'true');
     router.push('/creer-une-histoire/2');
   };
 
