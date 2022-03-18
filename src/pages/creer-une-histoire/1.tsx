@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import { TextField, Grid, Button, ButtonBase } from '@mui/material';
+import { TextField, Grid, ButtonBase } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';
@@ -17,7 +17,7 @@ import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { bgPage } from 'src/styles/variables.const';
+import { bgPage, primaryColor } from 'src/styles/variables.const';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
@@ -29,7 +29,6 @@ const StoryStep1 = () => {
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-  console.log('data', data);
 
   // Create the story activity.
   const created = React.useRef(false);
@@ -103,15 +102,16 @@ const StoryStep1 = () => {
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
                 <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
-                  <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%' }}>
+                  <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${primaryColor}` }}>
                     <KeepRatio ratio={2 / 3} width="100%">
                       <div
                         style={{
-                          backgroundColor: bgPage,
                           height: '100%',
                           width: '100%',
                           display: 'flex',
                           alignItems: 'center',
+                          border: `1px solid ${primaryColor}`,
+                          borderRadius: '10px',
                           justifyContent: 'center',
                         }}
                       >
