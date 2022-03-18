@@ -15,7 +15,7 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-import { ActivityStatus } from 'types/activity.type';
+// import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep2 = () => {
@@ -23,7 +23,7 @@ const StoryStep2 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+  // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {

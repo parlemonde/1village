@@ -18,7 +18,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { bgPage, primaryColor } from 'src/styles/variables.const';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep1 = () => {
@@ -29,7 +29,7 @@ const StoryStep1 = () => {
   const { village } = React.useContext(VillageContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+  // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   // Create the story activity.
   const created = React.useRef(false);
