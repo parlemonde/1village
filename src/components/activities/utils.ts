@@ -4,6 +4,7 @@ import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
+import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
@@ -21,6 +22,7 @@ export const titles = {
   [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
+  [ActivityType.STORY]: 'inventé une histoire',
 };
 
 export const icons = {
@@ -35,6 +37,7 @@ export const icons = {
   [ActivityType.SYMBOL]: SymbolIcon,
   [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
+  [ActivityType.STORY]: StoryIcon,
 };
 
 export const DESC = {
@@ -49,6 +52,7 @@ export const DESC = {
   [ActivityType.SYMBOL]: 'un symbole',
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
+  [ActivityType.STORY]: 'une histoire',
 };
 
 export const REACTIONS = {

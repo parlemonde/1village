@@ -29,6 +29,7 @@ const titles = {
   [ActivityType.SYMBOL]: 'Symbole',
   [ActivityType.REPORTAGE]: 'Reportage',
   [ActivityType.REACTION]: 'Réaction',
+  [ActivityType.STORY]: 'Histoire',
 };
 
 const Activity = () => {
