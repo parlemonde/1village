@@ -12,7 +12,7 @@ export interface Image {
   id: number;
   activityId: number;
   imageType: number;
-  imageUrl: string;
+  imageUrl: string | null;
   inspiredStoryId: number | null;
 }
 

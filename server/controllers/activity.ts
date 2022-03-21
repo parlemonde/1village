@@ -3,10 +3,13 @@ import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import type { GameData, GamesData } from '../../types/game.type';
+import type { StoriesData, StoryElement } from '../../types/story.type';
+import { ImageType } from '../../types/story.type';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { Game } from '../entities/game';
+import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -427,11 +430,26 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
 
+  // logic to create a activity game
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
     const gamesData = activity.data as GamesData;
     gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
     gamesData.game2.gameId = (await createGame(gamesData.game2, activity)).id;
     gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
+  }
+
+  // logic to create activity image
+  if (activity.type === ActivityType.STORY && activity.status === ActivityStatus.PUBLISHED && activity.data) {
+    const imagesData = activity.data as Omit<StoriesData, 'tale'>;
+    if (!imagesData.isOriginal) {
+      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, activity.id)).id;
+      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, activity.id)).id;
+      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, activity.id)).id;
+    } else {
+      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT)).id;
+      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE)).id;
+      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD)).id;
+    }
   }
 
   await getRepository(Activity).save(activity);
@@ -477,6 +495,21 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   game.content = JSON.stringify(data);
   await getRepository(Game).save(game);
   return game;
+};
+
+// --- create a image ---
+const createStory = async (data: StoryElement, activity: Activity, type: ImageType, inspiredStoryId: number = 0): Promise<Image> => {
+  const id = data.imageId;
+  const storyImage = id ? await getRepository(Image).findOneOrFail({ where: { id: data.imageId } }) : new Image();
+  // delete data['imageId'];
+  storyImage.activityId = activity.id;
+  storyImage.villageId = activity.villageId;
+  storyImage.userId = activity.userId;
+  storyImage.imageType = type;
+  storyImage.imageUrl = data.imageUrl;
+  storyImage.inspiredStoryId = inspiredStoryId;
+  await getRepository(Image).save(storyImage);
+  return storyImage;
 };
 
 // --- Delete an activity --- (Soft delete)

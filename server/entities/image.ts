@@ -44,7 +44,7 @@ export class Image implements ImageInterface {
   public imageType: number;
 
   @Column({ type: 'text' })
-  public imageUrl: string;
+  public imageUrl: string | null;
 
   @Column({ type: 'tinyint' })
   public inspiredStoryId: number;
