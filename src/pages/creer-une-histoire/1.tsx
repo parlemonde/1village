@@ -29,6 +29,8 @@ const StoryStep1 = () => {
   const { village } = React.useContext(VillageContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
+  const currentPathName = router.pathname.split('/')[1] || '';
+
   // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   // Create the story activity.
@@ -60,8 +62,11 @@ const StoryStep1 = () => {
           undefined,
         );
       }
+      if (currentPathName === 'creer-une-histoire') {
+        updateActivity({ data: { ...data, isOriginal: true } });
+      }
     }
-  }, [activity, createNewActivity, router.query, user, village]);
+  }, [activity, createNewActivity, currentPathName, data, router.query, updateActivity, user, village]);
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
