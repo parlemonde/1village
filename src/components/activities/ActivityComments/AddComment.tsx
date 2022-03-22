@@ -6,7 +6,10 @@ import { Button, CircularProgress } from '@mui/material';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
+import { primaryColor } from 'src/styles/variables.const';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
+import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
+import { ActivityType } from 'types/activity.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -43,7 +46,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
   };
 
   return (
-    <div>
+    <>
       <div className="activity__comment-container">
         <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <span style={{ marginLeft: '2.5rem', fontWeight: 600 }}>Publiez directement un commentaire</span>
@@ -75,22 +78,46 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
             )}
           </div>
         </div>
-        {activityPhase >= 2 && activityType !== 10 && (
+        {activityPhase >= 2 && activityType !== ActivityType.REACTION && (
           <div style={{ marginLeft: '1rem' }}>
-            <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
-            <Button
-              component="a"
-              href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-              variant="outlined"
-              color="primary"
-              style={{ width: '100%' }}
-            >
-              <ReactionIcon />
-              Réagir
-            </Button>
-          </div>
+            {ActivityType.STORY ? (
+              <p style={{ fontWeight: 600 }}>Ou bien ré-écrivez l&apos;histoire !</p>
+            ) : (
+              <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
+            )}
+            {ActivityType.STORY ? (
+              <Button
+                component="a"
+                href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+                variant="outlined"
+                color="primary"
+                style={{ width: '100%' }}
+              >
+                <RouletteIcon
+                  style={{
+                    fill: primaryColor,
+                    position: 'relative',
+                    display: 'inline-block',
+                    marginRight: '0.6rem',
+                  }}
+                />
+                Ré-inventer une histoire
+              </Button>
+            ) : (
+              <Button
+                component="a"
+                href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+                variant="outlined"
+                color="primary"
+                style={{ width: '100%' }}
+              >
+                <ReactionIcon />
+                Réagir
+              </Button>
+            )}
+          </div> //end of <div style={{ marginLeft: '1rem' }}>
         )}
       </div>
-    </div>
-  );
+    </> //end of fragment
+  ); //end of return
 };

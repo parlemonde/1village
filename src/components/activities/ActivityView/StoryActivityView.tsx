@@ -1,24 +1,17 @@
 import Image from 'next/image';
 import React from 'react';
 
+import CardMedia from '@mui/material/CardMedia';
+import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import { Box } from '@mui/system';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { bgPage } from 'src/styles/variables.const';
 import type { StoryActivity } from 'types/story.type';
 
 import type { ActivityViewProps } from './activity-view.types';
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
 
 export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
   return (
@@ -39,37 +32,54 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                 </div>
               </Grid>
             )}
-            <Grid item xs={12} md={12}>
-              <p style={{ backgroundColor: bgPage }}>
+            <>
+              <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>
                 Voilà le l’objet, le lieu et l’objectif du développement durable choisis par vos Pélicopains pour écrire leur histoire :{' '}
-              </p>
-            </Grid>
+              </div>
+            </>
 
-            <Grid container columns={{ xs: 4, md: 12 }}>
+            <Grid container columns={{ xs: 4, sm: 8, md: 6 }} spacing={1} style={{ border: 'solid', borderRadius: '1rem', color: 'grey' }}>
               {activity.data.object.imageUrl && activity.data.place.imageUrl && activity.data.odd.imageUrl && (
                 <>
-                  <Grid item xs={2} sm={4} md={4}>
-                    <p>Image 1</p>
-                    <Image height="150rem" width="150rem" objectFit="contain" alt="image du plat" unoptimized src={activity.data.object.imageUrl} />
+                  <Grid item xs={2} sm={4} md={2}>
+                    <Card sx={{ maxWidth: 210 }}>
+                      <Typography
+                        sx={{ mb: 1.5, mt: 1.5, height: 50, textAlign: 'center', backgroundColor: '#999999', color: 'white' }}
+                        variant={'h3'}
+                        color="text.secondary"
+                      >
+                        {activity.data.object.description}
+                      </Typography>
+                      <CardMedia
+                        sx={{ borderRadius: '0.5rem' }}
+                        component="img"
+                        height="150"
+                        image={activity.data.object.imageUrl}
+                        alt="Paella dish"
+                      />
+                    </Card>
                   </Grid>
-                  <Grid item xs={2} sm={4} md={4}>
-                    <p>Image 2</p>
-                    <Image height="150rem" width="150rem" objectFit="contain" alt="image du plat" unoptimized src={activity.data.place.imageUrl} />
+                  <Grid item xs={2} sm={4} md={2}>
+                    <Card sx={{ maxWidth: 210 }}>
+                      <Typography sx={{ mb: 1.5, height: 50, textAlign: 'center' }} variant={'h3'} color="text.secondary">
+                        {activity.data.place.description}
+                      </Typography>{' '}
+                      <CardMedia component="img" height="150" image={activity.data.place.imageUrl} alt="Paella dish" />
+                    </Card>
                   </Grid>
-                  <Grid item xs={2} sm={4} md={4}>
-                    <p>Image 3</p>
-                    <Image height="150rem" width="150rem" objectFit="contain" alt="image du plat" unoptimized src={activity.data.odd.imageUrl} />
+                  <Grid item xs={2} sm={4} md={2}>
+                    <Card sx={{ maxWidth: 210, fontSize: '1rem' }}>
+                      <Typography sx={{ mb: 1.5, height: 50, textAlign: 'center' }} variant={'h3'} color="text.secondary">
+                        {activity.data.odd.description}
+                      </Typography>
+                      <CardMedia component="img" height="150" image={activity.data.odd.imageUrl} alt="Paella dish" />
+                    </Card>
                   </Grid>
                 </>
               )}
             </Grid>
           </Grid>
         )}
-      </div>
-
-      <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>
-        <strong>Votre défi : </strong>
-        {/* {getDefi(activity.subType || 0, activity.data)} */}
       </div>
     </div>
   );
