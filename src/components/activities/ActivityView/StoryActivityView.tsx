@@ -25,7 +25,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
               <p>{activity.data.tale.tale}</p>
             </Grid>
             {activity.data.tale.imageStory && (
-              <Grid item xs={3}>
+              <Grid item xs={6}>
                 <div
                   style={{
                     width: '100%',
