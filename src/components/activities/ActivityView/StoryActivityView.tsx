@@ -54,7 +54,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                   <Grid item>
                     <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
                       <Typography
-                        sx={{ mx: 1.5, pt: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: bgPage }}
+                        sx={{ mx: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
                         variant={'h3'}
                       >
                         {activity.data.object.description}
@@ -71,7 +71,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                   <Grid item>
                     <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
                       <Typography
-                        sx={{ mx: 1.5, pt: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: bgPage }}
+                        sx={{ mx: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
                         variant={'h3'}
                       >
                         {activity.data.place.description}
@@ -88,7 +88,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                   <Grid item>
                     <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
                       <Typography
-                        sx={{ mx: 1.5, pt: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: bgPage }}
+                        sx={{ mx: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
                         variant={'h3'}
                       >
                         {activity.data.odd.description}
