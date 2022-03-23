@@ -43,7 +43,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                 Voilà le l’objet, le lieu et l’objectif du développement durable choisis par vos Pélicopains pour écrire leur histoire :{' '}
               </div>
             </>
-
             <Grid
               container
               spacing={1}
