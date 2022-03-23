@@ -12,11 +12,11 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-// import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 
 const StoryStep3 = () => {
@@ -25,7 +25,32 @@ const StoryStep3 = () => {
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
-  // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+  console.log('step 3 data', data);
+
+  // const errorSteps = React.useMemo(() => {
+  //   const errors = [];
+  //   if (data !== null) {
+  //     console.log(data.object);
+  //     if (getErrorSteps(data.object, 1)) {
+  //       errors.push(0);
+  //     }
+  //     console.log(data.place);
+  //     if (getErrorSteps(data.place, 2)) {
+  //       errors.push(1);
+  //     }
+  //     console.log('step 3 errors', errors);
+  //     return errors;
+  //   }
+  //   return [];
+  // }, [data]);
+
+  const errorSteps = React.useMemo(() => {
+    const fieldStep2 = data.place.description;
+    if (data !== null && fieldStep2 === '') {
+      return getErrorSteps(data.object, 1);
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -58,6 +83,7 @@ const StoryStep3 = () => {
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>

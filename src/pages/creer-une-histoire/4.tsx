@@ -11,11 +11,11 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-// import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData, TaleElement } from 'types/story.type';
 
 const StoryStep4 = () => {
@@ -23,7 +23,24 @@ const StoryStep4 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+  console.log('step 4 data', data);
+
+  const errorSteps = React.useMemo(() => {
+    const errors = [];
+    if (data !== null) {
+      if (getErrorSteps(data.object, 1)) {
+        errors.push(0);
+      }
+      if (getErrorSteps(data.place, 2)) {
+        errors.push(1);
+      }
+      if (getErrorSteps(data.odd, 3)) {
+        errors.push(2);
+      }
+      return errors;
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -63,6 +80,7 @@ const StoryStep4 = () => {
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={3}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Illustrez et écrivez l’histoire de votre visite dans le village idéal</h1>

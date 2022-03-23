@@ -65,7 +65,7 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/creer-une-histoire/3?activity-id=${activity.id}`
+                      : `/creer-une-histoire/5?activity-id=${activity.id}`
                   }
                   passHref
                 >
@@ -74,7 +74,7 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/creer-une-histoire/3?activity-id=${activity.id}`
+                        : `/creer-une-histoire/5?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"

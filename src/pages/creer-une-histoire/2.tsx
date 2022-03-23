@@ -11,11 +11,11 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-// import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep2 = () => {
@@ -23,7 +23,14 @@ const StoryStep2 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+  console.log('step 2 data', data);
+
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data.object, 1);
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -63,6 +70,7 @@ const StoryStep2 = () => {
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={1}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Inventez et dessinez un lieu extraordinaire</h1>
@@ -128,13 +136,19 @@ const StoryStep2 = () => {
                   maxLength: 400,
                 }}
               />
-              <div style={{ width: '100%', textAlign: 'right' }}>
-                <span className="text text--small">/400</span>
-              </div>
+              {data?.place.description ? (
+                <div style={{ width: '100%', textAlign: 'right' }}>
+                  <span className="text text--small">{data.place.description.length}/400</span>
+                </div>
+              ) : (
+                <div style={{ width: '100%', textAlign: 'right' }}>
+                  <span className="text text--small">0/400</span>
+                </div>
+              )}
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev="/creer-une-histoire/1" next={onNext} />
+        <StepsButton prev={`/creer-une-histoire/1?edit=${activity.id}`} next={onNext} />
       </div>
     </Base>
   );
