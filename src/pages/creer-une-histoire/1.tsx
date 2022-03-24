@@ -28,7 +28,6 @@ const StoryStep1 = () => {
   const data = (activity?.data as StoriesData) || null;
   const currentPathName = router.pathname.split('/')[1] || '';
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-  // console.table([data.object]);
 
   // Create the story activity.
   const created = React.useRef(false);
@@ -162,11 +161,11 @@ const StoryStep1 = () => {
                 <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
               </div>
               <TextField
-                error={isError && data.object.description === ''}
-                helperText={isError && data.object.description === '' && 'Écrivez la description de votre image !'}
+                error={isError && data?.object?.description === ''}
+                helperText={isError && data?.object?.description === '' && 'Écrivez la description de votre image !'}
                 id="standard-multiline-static"
                 label="Décrivez l’objet magique"
-                value={data.object.description || ''}
+                value={data?.object?.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
                 style={{ width: '100%', marginTop: '25px', color: 'primary' }}
@@ -174,7 +173,7 @@ const StoryStep1 = () => {
                   maxLength: 400,
                 }}
               />
-              {data?.object.description ? (
+              {data?.object?.description ? (
                 <div style={{ width: '100%', textAlign: 'right' }}>
                   <span className="text text--small">{data.object.description.length}/400</span>
                 </div>

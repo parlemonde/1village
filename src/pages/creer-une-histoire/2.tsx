@@ -23,7 +23,6 @@ const StoryStep2 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  // console.table([data.object, data.place]);
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
@@ -128,7 +127,7 @@ const StoryStep2 = () => {
               <TextField
                 id="standard-multiline-static"
                 label="Décrivez l’objet magique"
-                value={data.place.description || ''}
+                value={data?.place?.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
                 style={{ width: '100%', marginTop: '25px', color: 'primary' }}
@@ -136,7 +135,7 @@ const StoryStep2 = () => {
                   maxLength: 400,
                 }}
               />
-              {data.place.description ? (
+              {data?.place?.description ? (
                 <div style={{ width: '100%', textAlign: 'right' }}>
                   <span className="text text--small">{data.place.description.length}/400</span>
                 </div>

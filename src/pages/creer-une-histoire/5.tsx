@@ -134,7 +134,7 @@ const StoryStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
               <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', color: `${!isValid && data.object.imageUrl === '' ? errorColor : primaryColor}` }}>
+                <ButtonBase style={{ width: '100%', color: `${!isValid && data?.object?.imageUrl === '' ? errorColor : primaryColor}` }}>
                   <KeepRatio ratio={2 / 3} width="100%">
                     <div
                       style={{
@@ -142,7 +142,7 @@ const StoryStep5 = () => {
                         width: '100%',
                         display: 'flex',
                         alignItems: 'center',
-                        border: `1px solid ${!isValid && data.object.imageUrl === '' ? errorColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data?.object?.imageUrl === '' ? errorColor : primaryColor}`,
                         borderRadius: '10px',
                         justifyContent: 'center',
                       }}
@@ -165,9 +165,9 @@ const StoryStep5 = () => {
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
                 <TextField
-                  error={!isValid && data.object.description === ''}
+                  error={!isValid && data?.object?.description === ''}
                   id="standard-multiline-static"
-                  value={data.object.description || ''}
+                  value={data?.object?.description || ''}
                   multiline
                   variant="outlined"
                   style={{ width: '100%', marginTop: '50px', color: 'primary' }}
@@ -183,7 +183,7 @@ const StoryStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
               <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', color: `${!isValid && data.place.imageUrl === '' ? errorColor : primaryColor}` }}>
+                <ButtonBase style={{ width: '100%', color: `${!isValid && data?.place?.imageUrl === '' ? errorColor : primaryColor}` }}>
                   <KeepRatio ratio={2 / 3} width="100%">
                     <div
                       style={{
@@ -191,7 +191,7 @@ const StoryStep5 = () => {
                         width: '100%',
                         display: 'flex',
                         alignItems: 'center',
-                        border: `1px solid ${!isValid && data.place.imageUrl === '' ? errorColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data?.place?.imageUrl === '' ? errorColor : primaryColor}`,
                         borderRadius: '10px',
                         justifyContent: 'center',
                       }}
@@ -214,9 +214,9 @@ const StoryStep5 = () => {
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
                 <TextField
-                  error={!isValid && data.place.description === ''}
+                  error={!isValid && data?.place?.description === ''}
                   id="standard-multiline-static"
-                  value={data.place.description || ''}
+                  value={data?.place?.description || ''}
                   multiline
                   variant="outlined"
                   style={{ width: '100%', marginTop: '50px', color: 'primary' }}
@@ -232,7 +232,7 @@ const StoryStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
               <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', color: `${!isValid && data.odd.imageUrl === '' ? errorColor : primaryColor}` }}>
+                <ButtonBase style={{ width: '100%', color: `${!isValid && data?.odd?.imageUrl === '' ? errorColor : primaryColor}` }}>
                   <KeepRatio ratio={2 / 3} width="100%">
                     <div
                       style={{
@@ -240,7 +240,7 @@ const StoryStep5 = () => {
                         width: '100%',
                         display: 'flex',
                         alignItems: 'center',
-                        border: `1px solid ${!isValid && data.odd.imageUrl === '' ? errorColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data?.odd?.imageUrl === '' ? errorColor : primaryColor}`,
                         borderRadius: '10px',
                         justifyContent: 'center',
                       }}
@@ -263,9 +263,9 @@ const StoryStep5 = () => {
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
                 <TextField
-                  error={!isValid && data.odd.description === ''}
+                  error={!isValid && data?.odd?.description === ''}
                   id="standard-multiline-static"
-                  value={data.odd.description || ''}
+                  value={data?.odd?.description || ''}
                   multiline
                   variant="outlined"
                   style={{ width: '100%', marginTop: '50px', color: 'primary' }}
@@ -281,7 +281,7 @@ const StoryStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(3) })}>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
               <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', color: `${!isValid && data.tale.imageStory === '' ? errorColor : primaryColor}` }}>
+                <ButtonBase style={{ width: '100%', color: `${!isValid && data?.tale?.imageStory === '' ? errorColor : primaryColor}` }}>
                   <KeepRatio ratio={2 / 3} width="100%">
                     <div
                       style={{
@@ -289,7 +289,7 @@ const StoryStep5 = () => {
                         width: '100%',
                         display: 'flex',
                         alignItems: 'center',
-                        border: `1px solid ${!isValid && data.tale.imageStory === '' ? errorColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data?.tale?.imageStory === '' ? errorColor : primaryColor}`,
                         borderRadius: '10px',
                         justifyContent: 'center',
                       }}
@@ -312,9 +312,9 @@ const StoryStep5 = () => {
                   style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
                 />
                 <TextField
-                  error={!isValid && data.tale.tale === ''}
+                  error={!isValid && data?.tale?.tale === ''}
                   id="standard-multiline-static"
-                  value={data.tale.tale || ''}
+                  value={data?.tale?.tale || ''}
                   rows={5}
                   multiline
                   variant="outlined"

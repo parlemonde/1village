@@ -23,7 +23,6 @@ const StoryStep4 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  // console.table([data.object, data.place, data.odd, data.tale]);
 
   const errorSteps = React.useMemo(() => {
     const errors = [];
@@ -112,7 +111,7 @@ const StoryStep4 = () => {
                     </div>
                   </KeepRatio>
                 </ButtonBase>
-                {data.tale.imageStory && (
+                {data?.tale?.imageStory && (
                   <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                     <DeleteButton
                       onDelete={() => {
@@ -139,7 +138,7 @@ const StoryStep4 = () => {
               label="Écrivez votre histoire du Village idéal"
               rows={8}
               multiline
-              value={data.tale.tale || ''}
+              value={data?.tale?.tale || ''}
               onChange={dataChange('tale')}
               variant="outlined"
               style={{ width: '100%', marginTop: '25px', color: 'primary' }}

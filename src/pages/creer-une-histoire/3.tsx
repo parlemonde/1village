@@ -26,8 +26,6 @@ const StoryStep3 = () => {
   const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
 
-  // console.table([data.object, data.place, data.odd]);
-
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
@@ -132,7 +130,7 @@ const StoryStep3 = () => {
                   <Select
                     labelId="select-ODD"
                     id="select-ODD-outlined"
-                    value={oDDChoice || data.odd.description}
+                    value={oDDChoice || data?.odd?.description}
                     onChange={(event) => {
                       setODDChoice(event.target.value as string);
                       const { odd } = data;
