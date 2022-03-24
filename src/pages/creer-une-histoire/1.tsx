@@ -28,7 +28,7 @@ const StoryStep1 = () => {
   const data = (activity?.data as StoriesData) || null;
   const currentPathName = router.pathname.split('/')[1] || '';
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-  console.log('step 1 data', data);
+  // console.table([data.object]);
 
   // Create the story activity.
   const created = React.useRef(false);

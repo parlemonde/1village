@@ -23,7 +23,7 @@ const StoryStep2 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  console.log('step 2 data', data);
+  // console.table([data.object, data.place]);
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
