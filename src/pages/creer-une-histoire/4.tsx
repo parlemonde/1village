@@ -90,7 +90,7 @@ const StoryStep4 = () => {
           </p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <div style={{ marginTop: '1.5rem' }}>
+              <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
                 <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${primaryColor}` }}>
                   <KeepRatio ratio={2 / 3} width="100%">
                     <div
@@ -112,7 +112,7 @@ const StoryStep4 = () => {
                     </div>
                   </KeepRatio>
                 </ButtonBase>
-                {data?.tale?.imageStory && (
+                {data.tale.imageStory && (
                   <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                     <DeleteButton
                       onDelete={() => {
@@ -131,7 +131,6 @@ const StoryStep4 = () => {
                   imageUrl={data?.tale?.imageStory || ''}
                   setImageUrl={setImage}
                 />
-
                 <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
               </div>
             </Grid>
