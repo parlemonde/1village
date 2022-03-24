@@ -191,10 +191,9 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={
-                    village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.label === 'Ré-inventer une histoire'
-                  }
+                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}
                 >
+                  {/* We have to add a condition so once we create and publish the fisrt story, "re-invent a story" button is activated. */}
                   {tab.label}
                 </Button>
               </Link>
