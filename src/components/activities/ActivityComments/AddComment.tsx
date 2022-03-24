@@ -86,13 +86,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
               <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
             )}
             {ActivityType.STORY ? (
-              <Button
-                component="a"
-                href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                variant="outlined"
-                color="primary"
-                style={{ width: '100%' }}
-              >
+              <Button component="a" href={`/creer-une-histoire`} variant="outlined" color="primary" style={{ width: '100%' }}>
                 <RouletteIcon
                   style={{
                     fill: primaryColor,
@@ -104,20 +98,14 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 Ré-inventer une histoire
               </Button>
             ) : (
-              <Button
-                component="a"
-                href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                variant="outlined"
-                color="primary"
-                style={{ width: '100%' }}
-              >
+              <Button component="a" href={`/creer-une-histoire`} variant="outlined" color="primary" style={{ width: '100%' }}>
                 <ReactionIcon />
                 Réagir
               </Button>
             )}
-          </div> //end of <div style={{ marginLeft: '1rem' }}>
+          </div>
         )}
       </div>
-    </> //end of fragment
-  ); //end of return
+    </>
+  );
 };

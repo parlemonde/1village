@@ -23,7 +23,7 @@ const StoryStep4 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  console.table([data.object, data.place, data.odd, data.tale]);
+  // console.table([data.object, data.place, data.odd, data.tale]);
 
   const errorSteps = React.useMemo(() => {
     const errors = [];
