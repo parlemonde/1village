@@ -191,7 +191,6 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  //We have to add a condition here. when the first story is published, this button is activated.
                   disabled={
                     village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.label === 'Ré-inventer une histoire'
                   }

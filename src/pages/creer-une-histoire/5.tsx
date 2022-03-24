@@ -167,7 +167,7 @@ const StoryStep5 = () => {
                 <TextField
                   error={!isValid && data.object.description === ''}
                   id="standard-multiline-static"
-                  value={data?.object?.description || ''}
+                  value={data.object.description || ''}
                   multiline
                   variant="outlined"
                   style={{ width: '100%', marginTop: '50px', color: 'primary' }}
@@ -216,7 +216,7 @@ const StoryStep5 = () => {
                 <TextField
                   error={!isValid && data.place.description === ''}
                   id="standard-multiline-static"
-                  value={data?.place?.description || ''}
+                  value={data.place.description || ''}
                   multiline
                   variant="outlined"
                   style={{ width: '100%', marginTop: '50px', color: 'primary' }}
@@ -265,7 +265,7 @@ const StoryStep5 = () => {
                 <TextField
                   error={!isValid && data.odd.description === ''}
                   id="standard-multiline-static"
-                  value={data?.odd?.description || ''}
+                  value={data.odd.description || ''}
                   multiline
                   variant="outlined"
                   style={{ width: '100%', marginTop: '50px', color: 'primary' }}
@@ -314,7 +314,7 @@ const StoryStep5 = () => {
                 <TextField
                   error={!isValid && data.tale.tale === ''}
                   id="standard-multiline-static"
-                  value={data?.tale?.tale || ''}
+                  value={data.tale.tale || ''}
                   rows={5}
                   multiline
                   variant="outlined"

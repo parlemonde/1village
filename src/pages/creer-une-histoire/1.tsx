@@ -166,7 +166,7 @@ const StoryStep1 = () => {
                 helperText={isError && data.object.description === '' && 'Écrivez la description de votre image !'}
                 id="standard-multiline-static"
                 label="Décrivez l’objet magique"
-                value={data?.object?.description || ''}
+                value={data.object.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
                 style={{ width: '100%', marginTop: '25px', color: 'primary' }}

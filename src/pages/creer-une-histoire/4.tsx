@@ -139,7 +139,7 @@ const StoryStep4 = () => {
               label="Écrivez votre histoire du Village idéal"
               rows={8}
               multiline
-              value={data?.tale?.tale || ''}
+              value={data.tale.tale || ''}
               onChange={dataChange('tale')}
               variant="outlined"
               style={{ width: '100%', marginTop: '25px', color: 'primary' }}
