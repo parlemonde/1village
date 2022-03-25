@@ -88,7 +88,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
             {ActivityType.STORY ? (
               <Button
                 component="a"
-                href={`/re-inventer-une-histoire/?activityId=${activityId}`}
+                href={`/re-inventer-une-histoire?activityId=${activityId}`}
                 variant="outlined"
                 color="primary"
                 style={{ width: '100%' }}

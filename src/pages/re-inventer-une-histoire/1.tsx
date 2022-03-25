@@ -24,48 +24,12 @@ const ReInventStoryStep1 = () => {
   const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  const [isOriginal, setIsOriginal] = React.useState(false);
-  const data = (activity?.data as StoriesData) || null;
+  // const [isOriginal, setIsOriginal] = React.useState(false);
+  const data = activity?.data as StoriesData;
   const currentPathName = router.pathname.split('/')[1] || '';
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-
-  // Create the story activity.
-  const created = React.useRef(false);
-  React.useEffect(() => {
-    if (!created.current) {
-      if (!('edit' in router.query)) {
-        created.current = true;
-        createNewActivity(
-          ActivityType.STORY,
-          undefined,
-          {
-            ...DEFAULT_STORY_DATA,
-          },
-          null,
-          null,
-          undefined,
-        );
-      } else if (activity && !isStory(activity)) {
-        created.current = true;
-        createNewActivity(
-          ActivityType.STORY,
-          undefined,
-          {
-            ...DEFAULT_STORY_DATA,
-          },
-          null,
-          null,
-          undefined,
-        );
-      }
-    }
-  }, [activity, createNewActivity, router.query]);
-
-  React.useEffect(() => {
-    if (currentPathName === 'creer-une-histoire') {
-      setIsOriginal(true);
-    }
-  }, [currentPathName]);
+  console.log({ data });
+  console.log({ activity });
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
@@ -89,9 +53,9 @@ const ReInventStoryStep1 = () => {
   }, []);
 
   const onNext = () => {
-    if (isOriginal) {
-      data.isOriginal = true;
-    }
+    // if (isOriginal) {
+    //   data.isOriginal = true;
+    // }
     save().catch(console.error);
     // save in local storage that the user is going to the next step.
     window.sessionStorage.setItem(`story-step-1-next`, 'true');

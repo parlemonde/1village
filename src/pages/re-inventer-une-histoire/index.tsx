@@ -21,7 +21,7 @@ import type { Activity } from 'types/activity.type';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
-// a) data vient de histoire inspirante => getActivites id
+// a) data vient de histoire inspirante => getActivites id ---->  done
 // b) UseEffect created si data est vide (en ce cas la on recupere que les images) => data {object, ...} StoriesData
 // Useffect roulette =>
 // 1) images roulette du data qui vient de getActivities Id
@@ -30,46 +30,60 @@ import type { StoriesData, StoryElement } from 'types/story.type';
 const InspiredStory = () => {
   const router = useRouter();
   const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
-  const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
+  const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<Activity[]>([]);
+  const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
 
   console.log({ activityId });
-  React.useEffect(() => {
-    if (village) {
-      axiosLoggedRequest({
+
+  /**
+   * 1 - creer une activité => NE MARCHE PAS DE CETTE FACON
+   * 2- si url avec id mettre a jour le data sinon creer une nouvelle activité => NE MARCHE PAS DE CETTE FACON\
+   *
+   * 1BIS - si id je recupère info
+   * 2bis - ensuite je crée activité
+   */
+  //Get data from Inspiring story
+  const getInspiringStory = React.useCallback(async () => {
+    if (village && activityId) {
+      const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
           villageId: village?.id,
           type: ActivityType.STORY,
+          id: activityId,
         })}`,
-      }).then((response) => {
-        if (!response.error && response.data) {
-          const inspiredStoryActivity = response.data;
-          setInspiredStoryActivity(inspiredStoryActivity as Activity[]);
-        }
       });
+      if (!response.error && response.data) {
+        setInspiredStoryActivity(response.data[0].data as StoriesData);
+      }
     }
-  }, [axiosLoggedRequest, village]);
+  }, [activityId, axiosLoggedRequest, village]);
 
-  // Create the story activity.
+  React.useEffect(() => {
+    if (activityId) {
+      getInspiringStory();
+    }
+  }, [activity, activityId, getInspiringStory]);
+  console.log({ inspiredStoryActivity });
+
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      if (!('edit' in router.query)) {
+      if (!('edit' in router.query) && inspiredStoryActivity && Object.keys(inspiredStoryActivity).length > 0) {
         created.current = true;
         createNewActivity(
           ActivityType.STORY,
           undefined,
           {
-            ...DEFAULT_STORY_DATA,
+            ...inspiredStoryActivity,
           },
           null,
           null,
           undefined,
         );
-      } else if (activity && !isStory(activity)) {
+      } else {
         created.current = true;
         createNewActivity(
           ActivityType.STORY,
@@ -83,7 +97,8 @@ const InspiredStory = () => {
         );
       }
     }
-  }, [activity, createNewActivity, router.query]);
+    // }
+  }, [activity, activityId, createNewActivity, inspiredStoryActivity, router.query]);
 
   return (
     <>
