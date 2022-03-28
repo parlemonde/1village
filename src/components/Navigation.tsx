@@ -43,6 +43,11 @@ const FREE_CONTENT: Tab = {
   path: '/contenu-libre',
   icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
 };
+const ANTHEM_PARAM: Tab = {
+  label: 'Paramétrer l\'hymne',
+  path: '/parametrer-hymne/1',
+  icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+};
 
 // check color of icons
 const TABS_PER_PHASE: Tab[] = [
@@ -129,7 +134,7 @@ export const Navigation = (): JSX.Element => {
         icon:
           user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
-      ...(isModerateur ? [FREE_CONTENT] : []),
+      ...(isModerateur ? [FREE_CONTENT, ANTHEM_PARAM] : []),
     ],
     [user, isModerateur],
   );
@@ -224,9 +229,8 @@ export const Navigation = (): JSX.Element => {
         noCloseOutsideModal={loading}
         ariaDescribedBy={'activate-phase-desc'}
         ariaLabelledBy={'activate-phase'}
-        title={`Êtes vous sûr de vouloir ${
-          (village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
-        } la phase numéro ${selectedPhase} ?`}
+        title={`Êtes vous sûr de vouloir ${(village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
+          } la phase numéro ${selectedPhase} ?`}
         cancelLabel="Annuler"
         confirmLabel="Confirmer"
         loading={loading}

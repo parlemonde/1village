@@ -21,6 +21,8 @@ export const titles = {
   [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
+  [ActivityType.ANTHEM]: 'crééune hymne',
+
 };
 
 export const icons = {
@@ -35,6 +37,7 @@ export const icons = {
   [ActivityType.SYMBOL]: SymbolIcon,
   [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
+  [ActivityType.ANTHEM]: SymbolIcon,
 };
 
 export const DESC = {
@@ -49,6 +52,7 @@ export const DESC = {
   [ActivityType.SYMBOL]: 'un symbole',
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
+  [ActivityType.ANTHEM]: 'une hymne',
 };
 
 export const REACTIONS = {
@@ -63,6 +67,7 @@ export const REACTIONS = {
   [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
+  [ActivityType.ANTHEM]: 'cette hymne',
 };
 
 export const labels = {
@@ -77,6 +82,7 @@ export const labels = {
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
+  [ActivityType.ANTHEM]: 'Répondre à cette hymne par :',
 };
 
 const specificActivityPhase = {
@@ -91,6 +97,7 @@ const specificActivityPhase = {
   [ActivityType.SYMBOL]: [1],
   [ActivityType.REPORTAGE]: [2],
   [ActivityType.REACTION]: [2],
+  [ActivityType.ANTHEM]: [3],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];

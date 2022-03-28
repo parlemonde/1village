@@ -14,7 +14,7 @@ import type { EditorProps } from '../content.types';
 
 import { EditorContainer } from './EditorContainer';
 
-export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -133,30 +133,14 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
   };
 
   return (
-    <EditorContainer
-      deleteButtonProps={{
-        confirmLabel: 'Voulez-vous vraiment supprimer ce son ?',
-        confirmTitle: 'Supprimer',
-        onDelete,
-      }}
-      className="image-editor"
-    >
     <>
       {soundUrl && (
         <>
-          <div
-            className="text-center"
-            style={{
-              padding: '1rem',
-              borderRight: `1px dashed ${primaryColor}`,
-            }}
-          >
-            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata}>
+          <div>
+            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata} style={{width: '250px', height: '30px'}}>
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Button
+            {/* <Button
               variant="outlined"
               size="small"
               color="primary"
@@ -165,7 +149,7 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
               }}
             >
               {'Changer de son'}
-            </Button>
+            </Button> */}
           </div>
         </>
       )}
@@ -256,6 +240,5 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
         </div>
       </Modal>
       </>
-    </EditorContainer>
   );
 };

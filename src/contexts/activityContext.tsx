@@ -52,8 +52,10 @@ function getInitialActivity(): Activity | null {
 }
 function saveActivityInSession(activity: Activity | null): void {
   try {
+    console.log(activity)
     sessionStorage.setItem('activity', JSON.stringify(activity));
-  } catch {
+  } catch(e) {
+    console.error(e)
     return;
   }
 }
@@ -71,16 +73,24 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
 
   const currentActivityId = activity === null ? null : activity.id;
 
+
   // Save & get activity to session storage.
   React.useEffect(() => {
+    console.log(activity)
+
     setActivity(getInitialActivity);
+
   }, []);
   React.useEffect(() => {
+    console.log(activity)
+
     debouncedSaveActivityInSession(activity);
+
   }, [activity]);
 
   const getActivity = React.useCallback(
     async (id: number) => {
+      console.log(activity)
       const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities/${id}`,
@@ -95,6 +105,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   React.useEffect(() => {
+    console.log(activity)
     if ('activity-id' in router.query) {
       const newActivityId = parseInt(getQueryString(router.query['activity-id']), 10);
       if (currentActivityId === null || currentActivityId !== newActivityId) {
@@ -105,11 +116,13 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   }, [getActivity, router, currentActivityId]);
 
   const updateActivity = React.useCallback((newActivity: Partial<Activity>) => {
-    setActivity((a) => (a === null ? a : { ...a, ...newActivity }));
+    console.log(activity)
+    setActivity((a) => (a === null ? newActivity : { ...a, ...newActivity }));
   }, []);
 
   const getDraft = React.useCallback(
     async (type: number, subType?: number) => {
+      console.log(activity)
       if (!village) {
         return;
       }
@@ -143,7 +156,8 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       if (user === null || village === null) {
         return false;
       }
-      const activity: Activity = {
+      console.log(activity)
+      const newActivity: Activity = {
         id: 0,
         phase: getActivityPhase(type, village.activePhase),
         type: type,
@@ -157,7 +171,8 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         data: initialData || {},
         isPinned: false,
       };
-      setActivity(activity);
+      setActivity(newActivity);
+
       if (type !== ActivityType.QUESTION) {
         getDraft(type, subType).catch();
       }
@@ -171,6 +186,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       if (user === null || village === null) {
         return;
       }
+      console.log(activity)
       const userId = user.id;
       const villageId = village.id;
       const response = await axiosLoggedRequest({
@@ -190,6 +206,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     if (!activity) {
       return;
     }
+    console.log(activity)
     const newContent = activity.content ? [...activity.content] : [];
     const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
     if (index !== undefined) {
@@ -212,6 +229,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     if (!activity) {
       return;
     }
+    console.log(activity)
     const newContent = activity.content ? [...activity.content] : [];
     if (newContent.length <= index) {
       return;
@@ -335,6 +353,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   return (
+    console.log(activity),
     <ActivityContext.Provider
       value={{
         activity,

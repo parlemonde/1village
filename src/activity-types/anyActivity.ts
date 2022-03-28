@@ -2,7 +2,7 @@ import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 
 import type { GameActivity } from '../../types/game.type';
-
+import type { AnthemActivity } from './anthem.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
 import type { FreeContentActivity } from './freeContent.types';
@@ -46,4 +46,7 @@ export const isReportage = (activity: Activity): activity is ReportageActivity =
 };
 export const isReaction = (activity: Activity): activity is ReactionActivity => {
   return activity.type === ActivityType.REACTION;
+};
+export const isAnthem = (activity: Activity): activity is AnthemActivity => {
+  return activity.type === ActivityType.ANTHEM;
 };
