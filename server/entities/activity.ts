@@ -97,6 +97,12 @@ export class Activity implements ActivityInterface<AnyData> {
   })
   public isPinned: boolean;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public displayAsUser?: boolean;
+
   public commentCount?: number;
 
   @OneToMany(() => Game, (game: Game) => game.activity)

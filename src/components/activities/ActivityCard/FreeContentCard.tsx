@@ -53,7 +53,7 @@ export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEdit
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    {'Voir le message de Pelico'}
+                    {activity.displayAsUser ? 'Voir le message' : 'Voir le message de Pelico'}
                   </Button>
                 </Link>
               </>
