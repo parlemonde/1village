@@ -16,6 +16,20 @@ export interface Image {
   inspiredStoryId: number | null;
 }
 
+export type ImageRandom = Image & {
+  createDate: string;
+  updateDate: string;
+  deleteDate: string | null;
+  userId: number;
+  villageId: number;
+};
+
+export type ImagesRandomData = {
+  object: ImageRandom;
+  place: ImageRandom;
+  odd: ImageRandom;
+};
+
 // Starting from here, the types are for Front.
 export type StoriesData = {
   object: StoryElement;

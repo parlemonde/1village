@@ -54,14 +54,15 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
             <Grid
               container
               spacing={1}
-              style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', margin: 0, maxWidth: 700 }}
+              xs={8}
+              style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
             >
               {activity.data.object.imageUrl && activity.data.place.imageUrl && activity.data.odd.imageUrl && (
                 <>
-                  <Grid item>
-                    <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
+                  <Grid item xs>
+                    <Card sx={{ mb: 1 }}>
                       <Typography
-                        sx={{ mb: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
+                        sx={{ mb: 1.5, p: 2, height: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
                         variant={'h3'}
                       >
                         {activity.data.object.description && truncateString(activity.data.object.description, 50)}
@@ -75,10 +76,10 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       />
                     </Card>
                   </Grid>
-                  <Grid item>
-                    <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
+                  <Grid item xs>
+                    <Card sx={{ mb: 1 }}>
                       <Typography
-                        sx={{ mb: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
+                        sx={{ mb: 1.5, p: 2, height: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
                         variant={'h3'}
                       >
                         {activity.data.place.description && truncateString(activity.data.place.description, 50)}
@@ -92,13 +93,13 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       />
                     </Card>
                   </Grid>
-                  <Grid item>
-                    <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
+                  <Grid item xs>
+                    <Card sx={{ mb: 1 }}>
                       <Typography
-                        sx={{ mb: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
+                        sx={{ mb: 1.5, p: 2, height: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
                         variant={'h3'}
                       >
-                        {activity.data.odd.description && truncateString(activity.data.odd.description, 50)}
+                        {activity.data.odd.description && truncateString(activity.data.odd.description, 45)}
                       </Typography>
                       <CardMedia
                         sx={{ borderRadius: '0.5rem', mt: 1 }}
