@@ -270,6 +270,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         content: activity.content,
         data: activity.data,
         isPinned: activity.isPinned,
+        displayAsUser: activity.displayAsUser,
       };
       // if not yet published, the response type and isPinned can be changed.
       if (activity.status === ActivityStatus.DRAFT) {

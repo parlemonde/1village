@@ -243,6 +243,7 @@ type CreateActivityData = {
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
+  displayAsUser?: boolean;
 };
 
 // --- create activity's schema ---
@@ -289,6 +290,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
       nullable: true,
     },
     isPinned: { type: 'boolean', nullable: true },
+    displayAsUser: { type: 'boolean', nullable: true },
   },
   required: ['type', 'data', 'content'],
   additionalProperties: false,
@@ -336,6 +338,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.responseActivityId = data.responseActivityId ?? null;
   activity.responseType = data.responseType ?? null;
   activity.isPinned = data.isPinned || false;
+  activity.displayAsUser = data.displayAsUser || false;
 
   await getRepository(Activity).save(activity);
 
@@ -349,6 +352,7 @@ type UpdateActivity = {
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
+  displayAsUser?: boolean;
   data?: AnyData;
   content?: ActivityContent[];
 };
@@ -370,6 +374,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
       nullable: true,
     },
     isPinned: { type: 'boolean', nullable: true },
+    displayAsUser: { type: 'boolean', nullable: true },
     data: {
       type: 'object',
       additionalProperties: true,
@@ -424,6 +429,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;
+  activity.displayAsUser = data.displayAsUser !== undefined ? data.displayAsUser : activity.displayAsUser;
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
 
