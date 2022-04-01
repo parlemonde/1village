@@ -64,7 +64,7 @@ const InspiredStory = () => {
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
           villageId: village?.id,
-          type: ActivityType.STORY,
+          type: ActivityType.RE_INVENT_STORY,
           id: activityId,
         })}`,
       });
