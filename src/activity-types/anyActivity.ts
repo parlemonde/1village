@@ -50,5 +50,5 @@ export const isReaction = (activity: Activity): activity is ReactionActivity => 
 };
 
 export const isStory = (activity: Activity): activity is StoryActivity => {
-  return activity.type === ActivityType.STORY;
+  return activity.type === ActivityType.STORY || activity.type === ActivityType.RE_INVENT_STORY;
 };

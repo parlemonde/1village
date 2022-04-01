@@ -1,11 +1,10 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Grid, Button, Card, CardMedia, Typography } from '@mui/material';
-
+import { isStory } from 'src/activity-types/anyActivity';
 import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
+import { StepsButton } from 'src/components/StepsButtons';
 import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWheel';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -24,7 +23,7 @@ import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
-  const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
@@ -43,7 +42,7 @@ const InspiredStory = () => {
       if (!('edit' in router.query)) {
         created.current = true;
         createNewActivity(
-          ActivityType.STORY,
+          ActivityType.RE_INVENT_STORY,
           undefined,
           {
             ...DEFAULT_STORY_DATA,
@@ -131,6 +130,15 @@ const InspiredStory = () => {
     getRandomImages().catch();
   };
 
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/re-inventer-une-histoire/1');
+  };
+
+  if (activity === null || !isStory(activity)) {
+    return <div></div>;
+  }
+
   return (
     <>
       <Base>
@@ -171,25 +179,13 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
+        {/* TODO: implementer le cas où la roulette doit être inactiver si qu'une seule histoire en DB*/}
         {inspiredStoryActivity ? (
           <StoryPictureWheel images={inspiredStoryActivity} onClick={onClick} />
         ) : (
           imagesRandom && <StoryPictureWheel images={imagesRandom} onClick={onClick} />
         )}
-        <Link href="/re-inventer-une-histoire/1" passHref>
-          <Button
-            component="a"
-            href="/re-inventer-une-histoire/1"
-            variant="outlined"
-            color="primary"
-            style={{
-              float: 'right',
-              marginBottom: '3rem',
-            }}
-          >
-            Étape suivante
-          </Button>
-        </Link>
+        <StepsButton next={onNext} />
       </Base>
     </>
   );

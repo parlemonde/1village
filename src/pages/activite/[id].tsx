@@ -30,6 +30,7 @@ const titles = {
   [ActivityType.REPORTAGE]: 'Reportage',
   [ActivityType.REACTION]: 'Réaction',
   [ActivityType.STORY]: 'Histoire',
+  [ActivityType.RE_INVENT_STORY]: 'Histoire',
 };
 
 const Activity = () => {

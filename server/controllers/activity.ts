@@ -439,7 +439,11 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   // logic to create activity image
-  if (activity.type === ActivityType.STORY && activity.status === ActivityStatus.PUBLISHED && activity.data) {
+  if (
+    (activity.type === ActivityType.STORY || activity.type === ActivityType.RE_INVENT_STORY) &&
+    activity.status === ActivityStatus.PUBLISHED &&
+    activity.data
+  ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
     if (!imagesData.isOriginal) {
       imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, activity.id)).id;

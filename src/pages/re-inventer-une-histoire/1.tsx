@@ -6,7 +6,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { TextField, Grid, ButtonBase } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
-import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -16,20 +15,17 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const ReInventStoryStep1 = () => {
   const router = useRouter();
-  const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   // const [isOriginal, setIsOriginal] = React.useState(false);
   const data = activity?.data as StoriesData;
-  const currentPathName = router.pathname.split('/')[1] || '';
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-  console.log({ data });
-  console.log({ activity });
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
@@ -46,29 +42,40 @@ const ReInventStoryStep1 = () => {
 
   React.useEffect(() => {
     // if user navigated to the next step already, let's show the errors if there are any.
-    if (window.sessionStorage.getItem(`story-step-1-next`) === 'true') {
+    if (window.sessionStorage.getItem(`re-invent-a-story-step-1-next`) === 'true') {
       setIsError(true);
-      window.sessionStorage.setItem(`story-step-1-next`, 'false');
+      window.sessionStorage.setItem(`re-invent-a-story-step-1-next`, 'false');
     }
   }, []);
 
   const onNext = () => {
+    //TODO: implementer le cas où je change l'image et si ça devient une histoire original.
     // if (isOriginal) {
     //   data.isOriginal = true;
     // }
     save().catch(console.error);
     // save in local storage that the user is going to the next step.
-    window.sessionStorage.setItem(`story-step-1-next`, 'true');
-    router.push('/creer-une-histoire/2');
+    window.sessionStorage.setItem(`re-invent-a-story-step-1-next`, 'true');
+    router.push('/re-inventer-une-histoire/2');
   };
+
+  if (data === null || activity === null || !isStory(activity)) {
+    return <div></div>;
+  }
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!isEdit && <BackButton href="/creer-une-histoire" />}
+        {!isEdit && <BackButton href="/re-inventer-une-histoire" />}
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
-          urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
+          urls={[
+            '/re-inventer-une-histoire/1?edit',
+            '/re-inventer-une-histoire/2',
+            '/re-inventer-une-histoire/3',
+            '/re-inventer-une-histoire/4',
+            '/re-inventer-une-histoire/5',
+          ]}
           activeStep={0}
         />
         <div className="width-900">

@@ -29,10 +29,10 @@ export const ODD_CHOICE = [
     choice: 'ODD 1 : Éradication de la pauvreté',
   },
   {
-    choice: 'ODD 2 : Accès à la santé',
+    choice: 'ODD 2 : Lutte contre la faim',
   },
   {
-    choice: 'ODD 3 : Éradication de la pauvreté',
+    choice: 'ODD 3 : Accès à la santé',
   },
   {
     choice: 'ODD 4 : Accès à une éducation de qualité',
