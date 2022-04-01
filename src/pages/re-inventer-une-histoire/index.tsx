@@ -62,14 +62,10 @@ const InspiredStory = () => {
     if (village && activityId) {
       const response = await axiosLoggedRequest({
         method: 'GET',
-        url: `/activities${serializeToQueryUrl({
-          villageId: village?.id,
-          type: ActivityType.RE_INVENT_STORY,
-          id: activityId,
-        })}`,
+        url: `/activities/${activityId}`,
       });
       if (!response.error && response.data) {
-        setInspiredStoryActivity(response.data[0].data as StoriesData);
+        setInspiredStoryActivity(response.data.data as StoriesData);
       }
     }
   }, [activityId, axiosLoggedRequest, village]);
