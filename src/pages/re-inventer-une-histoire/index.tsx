@@ -1,32 +1,26 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import { TextField, Grid, ButtonBase, Button, Card, CardMedia, Typography } from '@mui/material';
+import { Grid, Button, Card, CardMedia, Typography } from '@mui/material';
 
-import { isStory } from 'src/activity-types/anyActivity';
 import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
-import { KeepRatio } from 'src/components/KeepRatio';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWheel';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
-import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
 import { getQueryString } from 'src/utils';
 import { serializeToQueryUrl } from 'src/utils';
-import type { Activity } from 'types/activity.type';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { ImagesRandomData, StoriesData, StoryElement } from 'types/story.type';
+import { ActivityType } from 'types/activity.type';
+import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
 // a) data vient de histoire inspirante => getActivites id ---->  DONE
 // b) UseEffect created si data est vide (en ce cas la on recupere que les images) => data {object, ...} StoriesData ---->  DONE
 // Useffect roulette =>
-// 1) images roulette du data qui vient de getActivities Id
-// 2) images pris alétoirement dans le cas où data vide et remplir le data avec les objects ==> s'inspirer de game pour recevoir un truc random
+// 1) images roulette du data qui vient de getActivities Id ---->  DONE
+// 2) images pris alétoirement dans le cas où data vide et remplir le data avec les objects ==> s'inspirer de game pour recevoir un truc random ---->  DONE
 
 const InspiredStory = () => {
   const router = useRouter();
@@ -39,7 +33,30 @@ const InspiredStory = () => {
   const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
 
   console.log({ activityId });
-  console.log({ activity });
+  console.log({ 'activity avant creation': activity });
+
+  //Creation of new empty story activity no matter what
+  const created = React.useRef(false);
+  React.useEffect(() => {
+    console.log('je suis dans creation');
+    if (!created.current) {
+      if (!('edit' in router.query)) {
+        created.current = true;
+        createNewActivity(
+          ActivityType.STORY,
+          undefined,
+          {
+            ...DEFAULT_STORY_DATA,
+          },
+          null,
+          null,
+          undefined,
+        );
+      }
+    }
+  }, [activity, activityId, createNewActivity, inspiredStoryActivity, router.query]);
+
+  console.log({ 'activity après creation': activity });
 
   //Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
@@ -58,21 +75,36 @@ const InspiredStory = () => {
     }
   }, [activityId, axiosLoggedRequest, village]);
 
-  //Get Random Images fom DB
+  //Get Random Images from DB
   const getRandomImages = React.useCallback(async () => {
-    if (village && activity) {
+    if (village && activity && activity.data) {
       const images = await getRandomImagesStory();
-      console.log({ images });
       setImagesRandom(images);
     }
   }, [activity, getRandomImagesStory, village]);
   console.log({ imagesRandom });
 
+  //Get ramdom images when index page is launch only if no activityId in url
+  //or when wheel is operated
   React.useEffect(() => {
-    getRandomImages().catch();
-  }, [getRandomImages]);
+    if (!activityId) {
+      getRandomImages().catch();
+    }
+  }, [activityId, getRandomImages]);
 
-  //Retrieve data from Inspiring story
+  //Set imageUrl from imagesRandom in activity
+  React.useEffect(() => {
+    if (imagesRandom && activity && activity.data) {
+      console.log('je suis dans le if imagesRandom');
+      const { object, place, odd } = activity.data as StoriesData;
+      object.imageUrl = imagesRandom.object.imageUrl;
+      place.imageUrl = imagesRandom.place.imageUrl;
+      odd.imageUrl = imagesRandom.odd.imageUrl;
+    }
+    console.log({ 'activity après getRamdomImages': activity?.data });
+  }, [activity, getRandomImages, imagesRandom]);
+
+  //Retrieve data from Inspiring story if activityId in url
   React.useEffect(() => {
     if (activityId) {
       getInspiringStory();
@@ -80,37 +112,24 @@ const InspiredStory = () => {
   }, [activity, activityId, getInspiringStory]);
   console.log({ inspiredStoryActivity });
 
-  const created = React.useRef(false);
+  //Set imageUrl from inspiredStoryActivity in activity
   React.useEffect(() => {
-    if (!created.current) {
-      if (!('edit' in router.query) && inspiredStoryActivity && Object.keys(inspiredStoryActivity).length > 0) {
-        created.current = true;
-        createNewActivity(
-          ActivityType.STORY,
-          undefined,
-          {
-            ...inspiredStoryActivity,
-          },
-          null,
-          null,
-          undefined,
-        );
-      } else {
-        created.current = true;
-        createNewActivity(
-          ActivityType.STORY,
-          undefined,
-          {
-            ...DEFAULT_STORY_DATA,
-          },
-          null,
-          null,
-          undefined,
-        );
-      }
+    if (inspiredStoryActivity && activity && activity.data) {
+      console.log('je suis dans le if inspiredStoryActivity');
+      const { object, place, odd } = activity.data as StoriesData;
+      object.imageUrl = inspiredStoryActivity.object.imageUrl;
+      place.imageUrl = inspiredStoryActivity.place.imageUrl;
+      odd.imageUrl = inspiredStoryActivity.odd.imageUrl;
     }
-    // }
-  }, [activity, activityId, createNewActivity, inspiredStoryActivity, router.query]);
+    console.log({ 'activity après getInspiringStory': activity?.data });
+  }, [activity, inspiredStoryActivity]);
+
+  const onClick = () => {
+    console.log('je passe dans le onClick');
+    //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
+    setInspiredStoryActivity(undefined);
+    getRandomImages().catch();
+  };
 
   return (
     <>
@@ -152,62 +171,10 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
-        {imagesRandom && (
-          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
-            <Grid
-              container
-              spacing={1}
-              xs={5}
-              style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
-            >
-              {imagesRandom.object.imageUrl && imagesRandom.place.imageUrl && imagesRandom.odd.imageUrl && (
-                <>
-                  <Grid item xs>
-                    <Card sx={{ mb: 1 }}>
-                      <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                        Objet
-                      </Typography>
-                      <CardMedia
-                        sx={{ borderRadius: '0.5rem', mt: 1 }}
-                        component="img"
-                        height="150"
-                        image={imagesRandom.object.imageUrl}
-                        alt="objet de l'histoire"
-                      />
-                    </Card>
-                  </Grid>
-                  <Grid item xs>
-                    <Card sx={{ mb: 1 }}>
-                      <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                        Lieu
-                      </Typography>{' '}
-                      <CardMedia
-                        sx={{ borderRadius: '0.5rem', mt: 1 }}
-                        component="img"
-                        height="150"
-                        image={imagesRandom.place.imageUrl}
-                        alt="lieu de l'histoire"
-                      />
-                    </Card>
-                  </Grid>
-                  <Grid item xs>
-                    <Card sx={{ mb: 1 }}>
-                      <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                        ODD
-                      </Typography>
-                      <CardMedia
-                        sx={{ borderRadius: '0.5rem', mt: 1 }}
-                        component="img"
-                        height="150"
-                        image={imagesRandom.odd.imageUrl}
-                        alt="Objectifs de développement durable de l'histoire"
-                      />
-                    </Card>
-                  </Grid>
-                </>
-              )}
-            </Grid>
-          </Grid>
+        {inspiredStoryActivity ? (
+          <StoryPictureWheel images={inspiredStoryActivity} onClick={onClick} />
+        ) : (
+          imagesRandom && <StoryPictureWheel images={imagesRandom} onClick={onClick} />
         )}
         <Link href="/re-inventer-une-histoire/1" passHref>
           <Button
