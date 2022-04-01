@@ -12,7 +12,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
@@ -74,7 +73,6 @@ const StoryStep4 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/creer-une-histoire" />
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
