@@ -1,23 +1,27 @@
 import type { Activity } from 'types/activity.type';
 
 export type AnthemData = {
-  verseMix: Sample[];
+  verseAudios: Sample[];
   introOutro: Sample[];
   verse: Syllable[];
   chorus: Syllable[];
+  finalVerse: string;
+  finalMix: string;
+  verseTime: number;
 };
 
 export type Syllable = {
-  content: string;
-  isBack: boolean;
-}
+  value: string;
+  back: boolean;
+};
 
 export type Sample = {
   value: string;
   display: boolean;
   label: string;
   type: SampleType;
-}
+  time?: number;
+};
 
 export enum SampleType {
   VOCALS = 0,
@@ -28,7 +32,7 @@ export enum SampleType {
   RYTHMIC1 = 5,
   RYTHMIC2 = 6,
   INTRO_CHORUS = 7,
-  OUTRO = 8
+  OUTRO = 8,
 }
 
 export type AnthemActivity = Activity<AnthemData>;

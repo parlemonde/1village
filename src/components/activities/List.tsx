@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { isAnthem } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
@@ -42,7 +43,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
   return (
     <div>
       {activities.map((activity, index) => {
-        const card = (
+        const card = isAnthem(activity) ? null : (
           <ActivityCard
             activity={activity}
             isSelf={user !== null && activity.userId === user.id}

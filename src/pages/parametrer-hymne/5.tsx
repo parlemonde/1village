@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -6,29 +7,41 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import type { AnthemData } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
-import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
-import { Activities } from 'src/components/activities/List';
-import { ContentView } from 'src/components/activities/content/ContentView';
-import { REACTIONS } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { useActivity } from 'src/services/useActivity';
+import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityStatus } from 'types/activity.type';
 
 const AnthemStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
-  const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
+  const { village } = React.useContext(VillageContext);
   const [isLoading, setIsLoading] = React.useState(false);
+  const data = (activity?.data as AnthemData) || null;
 
-  const data = (activity?.data as EnigmeData) || null;
+  const errorSteps = React.useMemo(() => {
+    const errors: number[] = [];
+    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+      errors.push(0);
+    }
+    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+      errors.push(1);
+    }
+    if (activity !== null && data.verse.filter((c) => !!c.value).length === 0) {
+      errors.push(2);
+    }
+    if (activity !== null && data.chorus.filter((c) => !!c.value).length === 0) {
+      errors.push(3);
+    }
+    return errors;
+  }, [activity]);
+
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -36,7 +49,7 @@ const AnthemStep5 = () => {
     } else if (activity && !isAnthem(activity)) {
       router.push('/parametrer-hymne');
     }
-  }, [activity, router]);
+  }, [activity, router, village]);
 
   const onPublish = async () => {
     setIsLoading(true);
@@ -54,22 +67,19 @@ const AnthemStep5 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Mix Couplet', 'Intro Outro', "Couplet", "Refrain", 'Prévisualiser']}
-          activeStep={isEdit ? 3 : 4}
-        />
+        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={4} />
         <div className="width-900">
-          <h1>Pré-visualisez votre énigme{!isEdit && ', et publiez-la'}</h1>
+          <h1>Pré-visualisez votre paramétrage et activez l&apos;hymne</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre énigme.
+            Voici la pré-visualisation de votre paramétrage.
             {isEdit
-              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+              ? " Vous pouvez ld modifier à l'étape précédente, et enregistrer vos changements ici."
+              : ' Vous pouvez la modifier, et quand vous êtes prêts : activez ce paramétrage dans ce village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/creer-une-enigme/4" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/creer-une-enigme/4">
+              <Link href="/parametrer-hymne/4" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/parametrer-hymne/4">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -79,68 +89,81 @@ const AnthemStep5 = () => {
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
-                Publier
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={errorSteps.length !== 0}>
+                Paramétrer
               </Button>
             </div>
           )}
 
-          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/creer-une-enigme/1?edit=${activity.id}`} />}
-          {responseActivity !== null && (
-            <>
-              <span className="text text--small text--success">Énigme en réaction à {REACTIONS[responseActivity.type]}</span>
-              <div className="preview-block">
-                {!isEdit && (
-                  <EditButton
-                    onClick={() => {
-                      router.push(`/creer-une-enigme/1?edit=${activity.id}`);
-                    }}
-                    status={'success'}
-                    style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-                  />
-                )}
-                <Activities activities={[responseActivity]} noButtons />
-              </div>
-            </>
-          )}
-
-          <span className="text text--small text--success">{"Catégorie de l'énigme"}</span>
-          <div className="preview-block">
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push('/creer-une-enigme/2');
+                router.push('/parametrer-hymne/1');
               }}
-              status={'success'}
+              status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p style={{ margin: '0.5rem 0' }}>
-              Notre {enigmeType.titleStep2Short} mystère est{' '}
-              <strong>{(data.theme === -1 ? data.themeName ?? '' : enigmeData[data.theme]?.step ?? '').toLowerCase()}</strong>.
+
+            {data.finalVerse && <audio src={data.finalVerse} controls style={{ width: '350px', height: '60px' }} />}
+            <p style={{ margin: '0.5rem 0' }}>Écoutez le mix par défaut du couplet (les 7 pistes mélangées)</p>
+          </div>
+
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(1) })}>
+            <EditButton
+              onClick={() => {
+                router.push('/parametrer-hymne/2');
+              }}
+              status={errorSteps.includes(1) ? 'warning' : 'success'}
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            {data.finalMix && <audio src={data.finalMix} controls style={{ width: '350px', height: '60px' }} />}
+            <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de l&apos;hymne (intro + refrain + couplet mixé + outro)</p>
+          </div>
+
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(2) })}>
+            <EditButton
+              onClick={() => {
+                router.push('/parametrer-hymne/3');
+              }}
+              status={errorSteps.includes(2) ? 'warning' : 'success'}
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+            <p>Voilà la structure du couplet, découpé en syllabes :</p>
+            <p>
+              {data.verse.map((syllable) =>
+                syllable.back ? (
+                  <>
+                    {syllable.value}
+                    <br />
+                  </>
+                ) : (
+                  <>{syllable.value} </>
+                ),
+              )}
             </p>
           </div>
 
-
-          <div className="preview-block">
-            <EditButton
-              onClick={() => {
-                router.push('/creer-une-enigme/3');
-              }}
-              status={'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            <ContentView content={activity.content.slice(0, indiceContentIndex)} />
-          </div>
-
-          <span className="text text--small text--success">Indice présenté aux autres classes</span>
-          <div className="preview-block">
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(3) })}>
             <EditButton
               onClick={() => {
                 router.push('/parametrer-hymne/4');
               }}
-              status={'success'}
+              status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.content.slice(indiceContentIndex, activity.content.length)} />
+            <p>Voilà le refrain découpé en syllabes :</p>
+            <p>
+              {data.chorus.map((syllable) =>
+                syllable.back ? (
+                  <>
+                    {syllable.value}
+                    <br />
+                  </>
+                ) : (
+                  <>{syllable.value} </>
+                ),
+              )}
+            </p>
           </div>
 
           <StepsButton prev="/parametrer-hymne/4" />

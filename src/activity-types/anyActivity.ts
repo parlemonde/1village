@@ -2,6 +2,7 @@ import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 
 import type { GameActivity } from '../../types/game.type';
+
 import type { AnthemActivity } from './anthem.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';

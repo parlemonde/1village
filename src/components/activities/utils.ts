@@ -1,3 +1,4 @@
+import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
@@ -21,8 +22,7 @@ export const titles = {
   [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
-  [ActivityType.ANTHEM]: 'crééune hymne',
-
+  [ActivityType.ANTHEM]: 'créé une hymne',
 };
 
 export const icons = {
@@ -37,7 +37,7 @@ export const icons = {
   [ActivityType.SYMBOL]: SymbolIcon,
   [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
-  [ActivityType.ANTHEM]: SymbolIcon,
+  [ActivityType.ANTHEM]: AnthemIcon,
 };
 
 export const DESC = {
@@ -97,7 +97,7 @@ const specificActivityPhase = {
   [ActivityType.SYMBOL]: [1],
   [ActivityType.REPORTAGE]: [2],
   [ActivityType.REACTION]: [2],
-  [ActivityType.ANTHEM]: [3],
+  [ActivityType.ANTHEM]: [],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];

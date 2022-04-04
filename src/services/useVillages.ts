@@ -76,6 +76,7 @@ export const useVillageRequests = () => {
           activePhase: rest.activePhase,
           countries: rest.countries?.map((c) => c.isoCode) || undefined,
           name: rest.name,
+          anthemId: rest.anthemId,
         },
       });
       if (response.error) {

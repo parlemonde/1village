@@ -4,11 +4,13 @@
   position: relative;
   white-space: pre-wrap;
 }
+
 /* @noflip */
 .public-DraftStyleDefault-ltr {
   direction: ltr;
   // text-align: left;
 }
+
 /* @noflip */
 .public-DraftStyleDefault-rtl {
   direction: rtl;
@@ -18,9 +20,11 @@
 .center-aligned-block {
   text-align: center;
 }
+
 .right-aligned-block {
   text-align: right;
 }
+
 /**
  * These rules provide appropriate text direction for counter pseudo-elements.
  */
@@ -28,10 +32,12 @@
 .public-DraftStyleDefault-listLTR {
   direction: ltr;
 }
+
 /* @noflip */
 .public-DraftStyleDefault-listRTL {
   direction: rtl;
 }
+
 /**
  * Default spacing for list container elements. Override with CSS as needed.
  */
@@ -41,7 +47,7 @@
   padding: 0;
 }
 
-.editor {
+.syllable-editor {
   background-color: white;
   position: relative;
   display: flex;
@@ -50,126 +56,146 @@
   margin: 1.5rem 0rem 1rem 0;
   padding: 0;
   border: 1px dashed $primary-color;
-  border-radius: 5px;
-  &--with-drag-handle {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: none;
-  }
+}
 
-  .drag-handle {
-    margin: -1px 0;
-    background-color: $primary-color;
-    color: white;
+  .editor {
+    background-color: white;
+    position: relative;
     display: flex;
-    align-items: center;
-    cursor: grab;
+    width: 100%;
+    align-items: stretch;
+    margin: 1.5rem 0rem 1rem 0;
+    padding: 0;
+    border: 1px dashed $primary-color;
+    border-radius: 5px;
+
+    &--with-drag-handle {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left: none;
+    }
+
+    .drag-handle {
+      margin: -1px 0;
+      background-color: $primary-color;
+      color: white;
+      display: flex;
+      align-items: center;
+      cursor: grab;
+    }
+
+    .editor__container {
+      flex: 1;
+      min-width: 0;
+      padding: 0.5rem 2.2rem 0.5rem 0.5rem;
+      min-height: 4rem;
+
+      &--without-padding {
+        padding: 0 2.2rem 0 0;
+      }
+
+      &--without-min-height {
+        min-height: unset;
+      }
+    }
+
+    &.sortable-ghost {
+      background-color: $primary-color;
+      opacity: 0.2;
+
+      div {
+        opacity: 0;
+      }
+    }
   }
 
-  .editor__container {
-    flex: 1;
-    min-width: 0;
-    padding: 0.5rem 2.2rem 0.5rem 0.5rem;
+  .text-editor {
+    padding: 0.5rem 0.5rem;
     min-height: 4rem;
-    &--without-padding {
-      padding: 0 2.2rem 0 0;
-    }
-    &--without-min-height {
-      min-height: unset;
+    cursor: text;
+
+    &--with-border {
+      padding: 0;
+      border: 1px solid $primary-color;
+      border-radius: 5px;
     }
   }
 
-  &.sortable-ghost {
-    background-color: $primary-color;
-    opacity: 0.2;
+  .activity-data {
+    margin: 1rem 0rem;
+    padding: 0;
+  }
 
-    div {
+  .preview-block {
+    border: 1px dashed $success-color;
+    padding: 0.5rem;
+    border-radius: 5px;
+    position: relative;
+    min-height: calc(34px + 1rem);
+    margin-bottom: 1rem;
+    padding-right: 2.5rem;
+
+    &--warning {
+      border-color: $warning-color;
+    }
+  }
+
+  .text-editor__toolbar-container {
+    top: calc(143px + 0.5rem);
+    position: unset; // for ie
+    position: sticky;
+    transform: translate(-0.5rem, -0.5rem);
+    z-index: 20;
+  }
+
+  @include for-small-screen {
+    .text-editor__toolbar-container {
+      top: calc(123px + 0.5rem);
+    }
+  }
+
+  .text-editor__toolbar {
+    display: none;
+    position: absolute;
+    top: 0;
+    z-index: 20;
+    min-width: 511px;
+    transform: translateY(calc(-100% - 5px));
+    left: -1px;
+  }
+
+  .text-editor__toolbar--visible {
+    display: block;
+    animation: fadeInFromNone 0.15s ease-out;
+  }
+
+  @keyframes fadeInFromNone {
+    0% {
+      display: none;
       opacity: 0;
     }
-  }
-}
 
-.text-editor {
-  padding: 0.5rem 0.5rem;
-  min-height: 4rem;
-  cursor: text;
+    1% {
+      display: block;
+      opacity: 0;
+    }
 
-  &--with-border {
-    padding: 0;
-    border: 1px solid $primary-color;
-    border-radius: 5px;
-  }
-}
-.activity-data {
-  margin: 1rem 0rem;
-  padding: 0;
-}
-.preview-block {
-  border: 1px dashed $success-color;
-  padding: 0.5rem;
-  border-radius: 5px;
-  position: relative;
-  min-height: calc(34px + 1rem);
-  margin-bottom: 1rem;
-  padding-right: 2.5rem;
-
-  &--warning {
-    border-color: $warning-color;
-  }
-}
-
-.text-editor__toolbar-container {
-  top: calc(143px + 0.5rem);
-  position: unset; // for ie
-  position: sticky;
-  transform: translate(-0.5rem, -0.5rem);
-  z-index: 20;
-}
-@include for-small-screen {
-  .text-editor__toolbar-container {
-    top: calc(123px + 0.5rem);
-  }
-}
-.text-editor__toolbar {
-  display: none;
-  position: absolute;
-  top: 0;
-  z-index: 20;
-  min-width: 511px;
-  transform: translateY(calc(-100% - 5px));
-  left: -1px;
-}
-.text-editor__toolbar--visible {
-  display: block;
-  animation: fadeInFromNone 0.15s ease-out;
-}
-@keyframes fadeInFromNone {
-  0% {
-    display: none;
-    opacity: 0;
+    100% {
+      display: block;
+      opacity: 1;
+    }
   }
 
-  1% {
-    display: block;
-    opacity: 0;
-  }
-
-  100% {
-    display: block;
-    opacity: 1;
-  }
-}
-
-.image-editor {
-  flex: 1;
-  min-width: 0;
-  padding: 0.5rem 1.2rem;
-  min-height: 4rem;
-  position: relative;
-  display: flex;
-
-  div {
+  .image-editor {
     flex: 1;
     min-width: 0;
+    padding: 0.5rem 1.2rem;
+    min-height: 4rem;
+    position: relative;
+    display: flex;
+
+    div {
+      flex: 1;
+      min-width: 0;
+    }
   }
-}

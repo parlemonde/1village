@@ -1,23 +1,32 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { ButtonBase, Card } from '@mui/material';
+
+import type { AnthemData } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
-import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { ButtonBase, Card } from '@mui/material';
-
-import ImageIcon from 'src/svg/editor/image_icon.svg';
-import TextIcon from 'src/svg/editor/text_icon.svg';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
+import { ActivityContext } from 'src/contexts/activityContext';
+import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
+import Syllable from 'src/svg/anthem/syllable.svg';
 
-const EnigmeStep3 = () => {
+const AnthemStep3 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
-  const { data: { verse }} = activity;
-  const data = (activity?.data as EnigmeData) || null;
+  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const data = (activity?.data as AnthemData) || null;
+  const errorSteps = React.useMemo(() => {
+    const errors: number[] = [];
+    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+      errors.push(0);
+    }
+    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+      errors.push(1);
+    }
+    return errors;
+  }, [activity]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -34,13 +43,14 @@ const EnigmeStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Mix Couplet', 'Intro Outro', "Couplet", "Refrain", 'Prévisualiser']}
-          activeStep={2}
-        />
+        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={2} />
+        <h1>Paramétrer le couplet</h1>
+        <p>Rajouter des syllabes au couplet, soit sur la même ligne, soit en passant à la ligne.</p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {verse.map((el, index) => (<SyllableEditor backline={el.back} index={index} update={updateActivity} content={verse} />))}
+            {data?.verse.map((el, index) => (
+              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} update={updateActivity} data={data} />
+            ))}
           </div>
           <Card style={{ display: 'inline-block' }}>
             <div style={{ display: 'inline-flex', padding: '0.2rem 1rem', alignItems: 'center' }}>
@@ -57,11 +67,11 @@ const EnigmeStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  updateActivity(verse.push({ back: false }));
-
+                  data?.verse.push({ value: 'LA', back: false });
+                  updateActivity({ data: { ...data } });
                 }}
               >
-                <TextIcon height="1.25rem" />
+                <Syllable height="1.25rem" />
                 <span className="text text--small" style={{ marginTop: '0.1rem' }}>
                   Syllabe
                 </span>
@@ -76,10 +86,11 @@ const EnigmeStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  updateActivity(verse.push({ back: true }));
+                  data?.verse.push({ value: 'LA', back: true });
+                  updateActivity({ data: { ...data } });
                 }}
               >
-                <ImageIcon height="1.25rem" />
+                <SyllableBackline height="1.55rem" />
                 <span className="text text--small" style={{ marginTop: '0.1rem' }}>
                   Syllabe à la ligne
                 </span>
@@ -93,4 +104,4 @@ const EnigmeStep3 = () => {
   );
 };
 
-export default EnigmeStep3;
+export default AnthemStep3;

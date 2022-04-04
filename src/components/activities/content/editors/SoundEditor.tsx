@@ -124,13 +124,6 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
       resetPreview();
     }
   };
-  const audioRef = React.useRef();
-
-  const onLoadedMetadata = () => {
-      if (audioRef.current) {
-          console.log(audioRef.current.duration);
-      }
-  };
 
   return (
     <EditorContainer
@@ -141,7 +134,6 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
       }}
       className="image-editor"
     >
-    <>
       {soundUrl && (
         <>
           <div
@@ -151,7 +143,7 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
               borderRight: `1px dashed ${primaryColor}`,
             }}
           >
-            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata}>
+            <audio controls src={soundUrl}>
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
           </div>
@@ -255,7 +247,6 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
           </div>
         </div>
       </Modal>
-      </>
     </EditorContainer>
   );
 };

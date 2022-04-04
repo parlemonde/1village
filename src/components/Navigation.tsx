@@ -10,11 +10,13 @@ import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
+import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
+import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
@@ -31,90 +33,8 @@ interface Tab {
   path: string;
   icon: React.ReactNode;
   phase?: number;
+  disabled?: boolean;
 }
-
-const ACCUEIL: Tab = {
-  label: 'Accueil',
-  path: '/',
-  icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-};
-const FREE_CONTENT: Tab = {
-  label: 'Publier un contenu libre',
-  path: '/contenu-libre',
-  icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-};
-const ANTHEM_PARAM: Tab = {
-  label: 'Paramétrer l\'hymne',
-  path: '/parametrer-hymne/1',
-  icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-};
-
-// check color of icons
-const TABS_PER_PHASE: Tab[] = [
-  // ---- PHASE 1 ----
-  {
-    label: 'Présenter un indice culturel',
-    path: '/indice-culturel',
-    icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 1,
-  },
-  {
-    label: 'Présenter un symbole',
-    path: '/symbole',
-    icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 1,
-  },
-  {
-    label: 'Poser une question',
-    path: '/poser-une-question/1',
-    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 1,
-  },
-  // ---- PHASE 2 ----
-  {
-    label: 'Réaliser un reportage',
-    path: '/realiser-un-reportage',
-    icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Lancer un défi',
-    path: '/lancer-un-defi',
-    icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Jouer ensemble',
-    path: '/creer-un-jeu',
-    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Créer une énigme',
-    path: '/creer-une-enigme',
-    icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Poser une question',
-    path: '/poser-une-question/1',
-    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Réagir à une activité',
-    path: '/reagir-a-une-activite/1',
-    icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  // ---- PHASE 3 ----
-  {
-    label: 'Jouer ensemble',
-    path: '/creer-un-jeu',
-    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 3,
-  },
-];
 
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
@@ -124,6 +44,96 @@ export const Navigation = (): JSX.Element => {
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+
+  const ACCUEIL: Tab = {
+    label: 'Accueil',
+    path: '/',
+    icon: <HomeIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+  };
+  const FREE_CONTENT: Tab = {
+    label: 'Publier un contenu libre',
+    path: '/contenu-libre',
+    icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+  };
+  const ANTHEM_PARAM: Tab = {
+    label: "Paramétrer l'hymne",
+    path: '/parametrer-hymne',
+    icon: <AnthemIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+  };
+
+  // check color of icons
+  const TABS_PER_PHASE: Tab[] = [
+    // ---- PHASE 1 ----
+    {
+      label: 'Présenter un indice culturel',
+      path: '/indice-culturel',
+      icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 1,
+    },
+    {
+      label: 'Présenter un symbole',
+      path: '/symbole',
+      icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 1,
+    },
+    {
+      label: 'Poser une question',
+      path: '/poser-une-question/1',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 1,
+    },
+    // ---- PHASE 2 ----
+    {
+      label: 'Réaliser un reportage',
+      path: '/realiser-un-reportage',
+      icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 2,
+    },
+    {
+      label: 'Lancer un défi',
+      path: '/lancer-un-defi',
+      icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 2,
+    },
+    {
+      label: 'Jouer ensemble',
+      path: '/creer-un-jeu',
+      icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 2,
+    },
+    {
+      label: 'Créer une énigme',
+      path: '/creer-une-enigme',
+      icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 2,
+    },
+    {
+      label: 'Poser une question',
+      path: '/poser-une-question/1',
+      icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 2,
+    },
+    {
+      label: 'Réagir à une activité',
+      path: '/reagir-a-une-activite/1',
+      icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 2,
+    },
+    // ---- PHASE 3 ----
+    {
+      label: 'Jouer ensemble',
+      path: '/creer-un-jeu',
+      icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 3,
+    },
+    {
+      label: 'Chanter un couplet',
+      path: '/chanter-un-couplet',
+      icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      phase: 3,
+      disabled: !village?.anthemId,
+    },
+  ];
 
   const fixedTabs = React.useMemo(
     () => [
@@ -187,7 +197,7 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}
+                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.disabled}
                 >
                   {tab.label}
                 </Button>
@@ -229,8 +239,9 @@ export const Navigation = (): JSX.Element => {
         noCloseOutsideModal={loading}
         ariaDescribedBy={'activate-phase-desc'}
         ariaLabelledBy={'activate-phase'}
-        title={`Êtes vous sûr de vouloir ${(village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
-          } la phase numéro ${selectedPhase} ?`}
+        title={`Êtes vous sûr de vouloir ${
+          (village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
+        } la phase numéro ${selectedPhase} ?`}
         cancelLabel="Annuler"
         confirmLabel="Confirmer"
         loading={loading}

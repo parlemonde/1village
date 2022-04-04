@@ -7,14 +7,26 @@ import { Button, Divider, TextField } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
-import { fontDetailColor, bgPage, primaryColor } from 'src/styles/variables.const';
+import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
-import type { EditorProps } from '../content.types';
+export interface AnthemEditorProps {
+  value?: string;
+  onChange?(newValue: string): void;
+  onDelete?(): void;
+  setTime?(args: number): void;
+  onClose?(idx: number): void;
+  idx?: number;
+}
 
-import { EditorContainer } from './EditorContainer';
-
-export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const AnthemEditor = ({
+  value = '',
+  onChange = () => {},
+  onDelete = () => {},
+  setTime = () => {},
+  onClose = () => {},
+  idx = 0,
+}: AnthemEditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -124,12 +136,12 @@ export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = (
       resetPreview();
     }
   };
-  const audioRef = React.useRef();
+  const audioRef = React.useRef<HTMLAudioElement>(null);
 
   const onLoadedMetadata = () => {
-      if (audioRef.current) {
-          console.log(audioRef.current.duration);
-      }
+    if (audioRef.current) {
+      setTime(audioRef.current.duration);
+    }
   };
 
   return (
@@ -137,7 +149,7 @@ export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = (
       {soundUrl && (
         <>
           <div>
-            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata} style={{width: '250px', height: '30px'}}>
+            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata} style={{ width: '250px', height: '30px' }}>
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
             {/* <Button
@@ -170,6 +182,7 @@ export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = (
           resetPreview();
         }}
         onClose={() => {
+          onClose(idx);
           setIsModalOpen(false);
           resetPreview();
           if (soundUrl.length === 0) {
@@ -178,12 +191,12 @@ export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = (
         }}
         loading={isModalLoading}
         disabled={preview.mode !== 1}
-        ariaLabelledBy={`sound-edit-${id}`}
-        ariaDescribedBy={`sound-edit-${id}-desc`}
+        ariaLabelledBy={`sound-edit-${idx}`}
+        ariaDescribedBy={`sound-edit-${idx}-desc`}
       >
         <div style={{ display: 'flex', width: '100%' }}>
           <div style={{ flex: 1, height: '100%', padding: '2rem 0', minWidth: 0 }}>
-            <div id={`sound-edit-${id}-desc`} style={{ marginTop: '2rem' }}>
+            <div id={`sound-edit-${idx}-desc`} style={{ marginTop: '2rem' }}>
               <TextField
                 label="Entrez l'URL du son"
                 variant="outlined"
@@ -239,6 +252,6 @@ export const AnthemEditor = ({ id, value = '', onChange = () => {}, onDelete = (
           </div>
         </div>
       </Modal>
-      </>
+    </>
   );
 };

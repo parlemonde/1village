@@ -1,23 +1,36 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { ButtonBase, Card } from '@mui/material';
+
+import type { AnthemData } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
-import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { ButtonBase, Card } from '@mui/material';
-
-import ImageIcon from 'src/svg/editor/image_icon.svg';
-import TextIcon from 'src/svg/editor/text_icon.svg';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
+import { ActivityContext } from 'src/contexts/activityContext';
+import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
+import Syllable from 'src/svg/anthem/syllable.svg';
 
-const EnigmeStep3 = () => {
+const AnthemStep4 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
-  const { data: { chorus }} = activity;
-  const data = (activity?.data as EnigmeData) || null;
+  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const data = (activity?.data as AnthemData) || null;
+  const errorSteps = React.useMemo(() => {
+    const errors: number[] = [];
+    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+      errors.push(0);
+    }
+    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+      errors.push(1);
+    }
+    if (activity !== null && data.verse.filter((c) => !!c.value).length === 0) {
+      errors.push(2);
+    }
+
+    return errors;
+  }, [activity]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -34,13 +47,24 @@ const EnigmeStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Mix Couplet', 'Intro Outro', "Couplet", "Refrain", 'Prévisualiser']}
-          activeStep={3}
-        />
+        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={3} />
+        <h1>Paramétrer le refrain</h1>
+        <p>
+          Rajouter des syllabes au refrain, soit sur la même ligne, soit en passant à la ligne. Puis remplacez les &quot;La&quot; par les syllabes du
+          refrain.
+        </p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {chorus.map((el, index) => (<SyllableEditor backline={el.back} index={index} update={updateActivity} content={chorus} editable value={el.value}/>))}
+            {data?.chorus.map((el, index) => (
+              <SyllableEditor
+                key={`syllableEditor--chorus--${index}`}
+                backline={el.back}
+                index={index}
+                update={updateActivity}
+                data={data}
+                editable
+              />
+            ))}
           </div>
           <Card style={{ display: 'inline-block' }}>
             <div style={{ display: 'inline-flex', padding: '0.2rem 1rem', alignItems: 'center' }}>
@@ -57,11 +81,11 @@ const EnigmeStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  updateActivity(chorus.push({ value: 'LA', back: false }));
-
+                  data?.chorus.push({ value: 'LA', back: false });
+                  updateActivity({ data: { ...data } });
                 }}
               >
-                <TextIcon height="1.25rem" />
+                <Syllable height="1.25rem" />
                 <span className="text text--small" style={{ marginTop: '0.1rem' }}>
                   Syllabe
                 </span>
@@ -76,10 +100,11 @@ const EnigmeStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  updateActivity(chorus.push({ value: 'LA', back: true }));
+                  data?.chorus.push({ value: 'LA', back: true });
+                  updateActivity({ data: { ...data } });
                 }}
               >
-                <ImageIcon height="1.25rem" />
+                <SyllableBackline height="1.55rem" />
                 <span className="text text--small" style={{ marginTop: '0.1rem' }}>
                   Syllabe à la ligne
                 </span>
@@ -93,4 +118,4 @@ const EnigmeStep3 = () => {
   );
 };
 
-export default EnigmeStep3;
+export default AnthemStep4;
