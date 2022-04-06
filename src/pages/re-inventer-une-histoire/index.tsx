@@ -11,15 +11,8 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { getQueryString } from 'src/utils';
-import { serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { ImagesRandomData, StoriesData } from 'types/story.type';
-
-// a) data vient de histoire inspirante => getActivites id ---->  DONE
-// b) UseEffect created si data est vide (en ce cas la on recupere que les images) => data {object, ...} StoriesData ---->  DONE
-// Useffect roulette =>
-// 1) images roulette du data qui vient de getActivities Id ---->  DONE
-// 2) images pris alétoirement dans le cas où data vide et remplir le data avec les objects ==> s'inspirer de game pour recevoir un truc random ---->  DONE
 
 const InspiredStory = () => {
   const router = useRouter();
@@ -31,13 +24,9 @@ const InspiredStory = () => {
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
   const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
 
-  console.log({ activityId });
-  console.log({ 'activity avant creation': activity });
-
   //Creation of new empty story activity no matter what
   const created = React.useRef(false);
   React.useEffect(() => {
-    console.log('je suis dans creation');
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
@@ -54,8 +43,6 @@ const InspiredStory = () => {
       }
     }
   }, [activity, activityId, createNewActivity, inspiredStoryActivity, router.query]);
-
-  console.log({ 'activity après creation': activity });
 
   //Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
@@ -77,7 +64,6 @@ const InspiredStory = () => {
       setImagesRandom(images);
     }
   }, [activity, getRandomImagesStory, village]);
-  console.log({ imagesRandom });
 
   //Get ramdom images when index page is launch only if no activityId in url
   //or when wheel is operated
@@ -90,13 +76,11 @@ const InspiredStory = () => {
   //Set imageUrl from imagesRandom in activity
   React.useEffect(() => {
     if (imagesRandom && activity && activity.data) {
-      console.log('je suis dans le if imagesRandom');
       const { object, place, odd } = activity.data as StoriesData;
       object.imageUrl = imagesRandom.object.imageUrl;
       place.imageUrl = imagesRandom.place.imageUrl;
       odd.imageUrl = imagesRandom.odd.imageUrl;
     }
-    console.log({ 'activity après getRamdomImages': activity?.data });
   }, [activity, getRandomImages, imagesRandom]);
 
   //Retrieve data from Inspiring story if activityId in url
@@ -105,22 +89,23 @@ const InspiredStory = () => {
       getInspiringStory();
     }
   }, [activity, activityId, getInspiringStory]);
-  console.log({ inspiredStoryActivity });
 
   //Set imageUrl from inspiredStoryActivity in activity
   React.useEffect(() => {
     if (inspiredStoryActivity && activity && activity.data) {
-      console.log('je suis dans le if inspiredStoryActivity');
       const { object, place, odd } = activity.data as StoriesData;
+      //update imageUrl
       object.imageUrl = inspiredStoryActivity.object.imageUrl;
       place.imageUrl = inspiredStoryActivity.place.imageUrl;
       odd.imageUrl = inspiredStoryActivity.odd.imageUrl;
+      //update inspiredStoryId
+      object.inspiredStoryId = inspiredStoryActivity.object.inspiredStoryId;
+      place.inspiredStoryId = inspiredStoryActivity.place.inspiredStoryId;
+      odd.inspiredStoryId = inspiredStoryActivity.odd.inspiredStoryId;
     }
-    console.log({ 'activity après getInspiringStory': activity?.data });
   }, [activity, inspiredStoryActivity]);
 
   const onClick = () => {
-    console.log('je passe dans le onClick');
     //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
     setInspiredStoryActivity(undefined);
     getRandomImages().catch();

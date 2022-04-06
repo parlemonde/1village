@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import React from 'react';
 
 import { Button, CircularProgress } from '@mui/material';
@@ -80,40 +81,44 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
         </div>
         {activityPhase >= 2 && activityType !== ActivityType.REACTION && (
           <div style={{ marginLeft: '1rem' }}>
-            {ActivityType.STORY ? (
+            {activityPhase >= 3 && (ActivityType.STORY || ActivityType.RE_INVENT_STORY) ? (
               <p style={{ fontWeight: 600 }}>Ou bien ré-écrivez l&apos;histoire !</p>
             ) : (
               <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
             )}
-            {ActivityType.STORY ? (
-              <Button
-                component="a"
-                href={`/re-inventer-une-histoire?activityId=${activityId}`}
-                variant="outlined"
-                color="primary"
-                style={{ width: '100%' }}
-              >
-                <RouletteIcon
-                  style={{
-                    fill: primaryColor,
-                    position: 'relative',
-                    display: 'inline-block',
-                    marginRight: '0.6rem',
-                  }}
-                />
-                Ré-inventer une histoire
-              </Button>
+            {activityPhase >= 3 && (ActivityType.STORY || ActivityType.RE_INVENT_STORY) ? (
+              <Link href={`/re-inventer-une-histoire?activityId=${activityId}`} passHref>
+                <Button
+                  component="a"
+                  href={`/re-inventer-une-histoire?activityId=${activityId}`}
+                  variant="outlined"
+                  color="primary"
+                  style={{ width: '100%' }}
+                >
+                  <RouletteIcon
+                    style={{
+                      fill: primaryColor,
+                      position: 'relative',
+                      display: 'inline-block',
+                      marginRight: '0.6rem',
+                    }}
+                  />
+                  Ré-inventer une histoire
+                </Button>
+              </Link>
             ) : (
-              <Button
-                component="a"
-                href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                variant="outlined"
-                color="primary"
-                style={{ width: '100%' }}
-              >
-                <ReactionIcon />
-                Réagir
-              </Button>
+              <Link href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`} passHref>
+                <Button
+                  component="a"
+                  href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+                  variant="outlined"
+                  color="primary"
+                  style={{ width: '100%' }}
+                >
+                  <ReactionIcon />
+                  Réagir
+                </Button>
+              </Link>
             )}
           </div>
         )}
