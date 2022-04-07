@@ -445,24 +445,15 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     activity.data
   ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
-    if (
-      activity.type === ActivityType.RE_INVENT_STORY &&
-      imagesData.object.inspiredStoryId &&
-      imagesData.place.inspiredStoryId &&
-      imagesData.odd.inspiredStoryId
-    ) {
+    if (imagesData.object.inspiredStoryId && imagesData.place.inspiredStoryId && imagesData.odd.inspiredStoryId) {
       imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
       imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;
       imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
     } else {
-      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT)).id;
-      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE)).id;
-      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD)).id;
+      next();
+      return;
     }
   }
-
-  //
-
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });

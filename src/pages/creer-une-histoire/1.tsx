@@ -73,7 +73,7 @@ const StoryStep1 = () => {
       data.place.inspiredStoryId = activity.id;
       data.odd.inspiredStoryId = activity.id;
     }
-  }, [activity]);
+  }, [activity, data]);
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);

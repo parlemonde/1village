@@ -73,16 +73,6 @@ const InspiredStory = () => {
     }
   }, [activityId, getRandomImages]);
 
-  //Set imageUrl from imagesRandom in activity
-  React.useEffect(() => {
-    if (imagesRandom && activity && activity.data) {
-      const { object, place, odd } = activity.data as StoriesData;
-      object.imageUrl = imagesRandom.object.imageUrl;
-      place.imageUrl = imagesRandom.place.imageUrl;
-      odd.imageUrl = imagesRandom.odd.imageUrl;
-    }
-  }, [activity, getRandomImages, imagesRandom]);
-
   //Retrieve data from Inspiring story if activityId in url
   React.useEffect(() => {
     if (activityId) {
@@ -90,20 +80,29 @@ const InspiredStory = () => {
     }
   }, [activity, activityId, getInspiringStory]);
 
-  //Set imageUrl from inspiredStoryActivity in activity
-  React.useEffect(() => {
-    if (inspiredStoryActivity && activity && activity.data) {
+  const updateData = (data: StoriesData | ImagesRandomData) => {
+    if (activity && activity.data) {
       const { object, place, odd } = activity.data as StoriesData;
       //update imageUrl
-      object.imageUrl = inspiredStoryActivity.object.imageUrl;
-      place.imageUrl = inspiredStoryActivity.place.imageUrl;
-      odd.imageUrl = inspiredStoryActivity.odd.imageUrl;
-      //update inspiredStoryId
-      object.inspiredStoryId = inspiredStoryActivity.object.inspiredStoryId;
-      place.inspiredStoryId = inspiredStoryActivity.place.inspiredStoryId;
-      odd.inspiredStoryId = inspiredStoryActivity.odd.inspiredStoryId;
+      object.imageUrl = data.object.imageUrl;
+      place.imageUrl = data.place.imageUrl;
+      odd.imageUrl = data.odd.imageUrl;
+      //update inspiredStoryId to trace images
+      object.inspiredStoryId = data.object.inspiredStoryId;
+      place.inspiredStoryId = data.place.inspiredStoryId;
+      odd.inspiredStoryId = data.odd.inspiredStoryId;
     }
-  }, [activity, inspiredStoryActivity]);
+  };
+
+  //Set imageUrl from inspiredStoryActivity or imagesRandom in activity
+  React.useEffect(() => {
+    if (inspiredStoryActivity && activity && activity.data) {
+      updateData(inspiredStoryActivity);
+    } else if (imagesRandom && activity && activity.data) {
+      updateData(imagesRandom);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity, inspiredStoryActivity, imagesRandom]);
 
   const onClick = () => {
     //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
