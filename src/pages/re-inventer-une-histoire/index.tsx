@@ -9,11 +9,13 @@ import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWhee
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useActivities } from 'src/services/useActivities';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { getQueryString } from 'src/utils';
 import { serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { ImagesRandomData, StoriesData } from 'types/story.type';
+import { ImageType } from 'types/story.type';
 
 // a) data vient de histoire inspirante => getActivites id ---->  DONE
 // b) UseEffect created si data est vide (en ce cas la on recupere que les images) => data {object, ...} StoriesData ---->  DONE
@@ -23,21 +25,28 @@ import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
-  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
+  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { getRandomImagesStory } = useImageStoryRequests();
+
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
   const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
+  const { activities } = useActivities({
+    page: 0,
+    type: ActivityType.STORY,
+  });
+  console.log('activities', activities);
 
-  console.log({ activityId });
-  console.log({ 'activity avant creation': activity });
+  // console.log('index page imagesRandom', imagesRandom);
+  // console.log({ activityId });
+  // console.log({ 'activity avant creation': activity });
 
   //Creation of new empty story activity no matter what
   const created = React.useRef(false);
   React.useEffect(() => {
-    console.log('je suis dans creation');
+    // console.log('je suis dans creation');
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
@@ -55,7 +64,7 @@ const InspiredStory = () => {
     }
   }, [activity, activityId, createNewActivity, inspiredStoryActivity, router.query]);
 
-  console.log({ 'activity après creation': activity });
+  // console.log({ 'activity après creation': activity });
 
   //Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
@@ -90,13 +99,13 @@ const InspiredStory = () => {
   //Set imageUrl from imagesRandom in activity
   React.useEffect(() => {
     if (imagesRandom && activity && activity.data) {
-      console.log('je suis dans le if imagesRandom');
+      // console.log('je suis dans le if imagesRandom');
       const { object, place, odd } = activity.data as StoriesData;
       object.imageUrl = imagesRandom.object.imageUrl;
       place.imageUrl = imagesRandom.place.imageUrl;
       odd.imageUrl = imagesRandom.odd.imageUrl;
     }
-    console.log({ 'activity après getRamdomImages': activity?.data });
+    // console.log({ 'activity après getRamdomImages': activity?.data });
   }, [activity, getRandomImages, imagesRandom]);
 
   //Retrieve data from Inspiring story if activityId in url
@@ -105,18 +114,18 @@ const InspiredStory = () => {
       getInspiringStory();
     }
   }, [activity, activityId, getInspiringStory]);
-  console.log({ inspiredStoryActivity });
+  // console.log({ inspiredStoryActivity });
 
   //Set imageUrl from inspiredStoryActivity in activity
   React.useEffect(() => {
     if (inspiredStoryActivity && activity && activity.data) {
-      console.log('je suis dans le if inspiredStoryActivity');
+      // console.log('je suis dans le if inspiredStoryActivity');
       const { object, place, odd } = activity.data as StoriesData;
       object.imageUrl = inspiredStoryActivity.object.imageUrl;
       place.imageUrl = inspiredStoryActivity.place.imageUrl;
       odd.imageUrl = inspiredStoryActivity.odd.imageUrl;
     }
-    console.log({ 'activity après getInspiringStory': activity?.data });
+    // console.log({ 'activity après getInspiringStory': activity?.data });
   }, [activity, inspiredStoryActivity]);
 
   const onClick = () => {

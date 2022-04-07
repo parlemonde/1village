@@ -27,18 +27,24 @@ storyController.get({ path: '', userType: UserType.TEACHER }, async (req: Reques
     next();
     return;
   }
+
   const objectImages = await getRepository(Image)
     .createQueryBuilder('image')
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
     .orderBy('RAND()')
     .getOne();
+  // .limit(6)
+  // .getMany();
+
   const placeImages = await getRepository(Image)
     .createQueryBuilder('image')
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.PLACE })
     .orderBy('RAND()')
     .getOne();
+  // .limit(6)
+  // .getMany();
 
   const oddImages = await getRepository(Image)
     .createQueryBuilder('image')
@@ -46,6 +52,8 @@ storyController.get({ path: '', userType: UserType.TEACHER }, async (req: Reques
     .andWhere('image.imageType = :type', { type: ImageType.ODD })
     .orderBy('RAND()')
     .getOne();
+  // .limit(6)
+  // .getMany();
 
   res.sendJSON({ object: objectImages, place: placeImages, odd: oddImages });
 });
