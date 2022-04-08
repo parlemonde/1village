@@ -67,6 +67,7 @@ const StoryStep1 = () => {
     }
   }, [currentPathName]);
 
+  //Set original story
   React.useEffect(() => {
     if (isOriginal && activity && activity.id) {
       data.isOriginal = true;
@@ -104,7 +105,6 @@ const StoryStep1 = () => {
 
   const onNext = () => {
     if (isOriginal && activity && activity.id) {
-      data.isOriginal = true;
       data.object.inspiredStoryId = activity.id;
     }
     save().catch(console.error);
