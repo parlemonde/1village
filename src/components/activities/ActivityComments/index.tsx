@@ -18,10 +18,39 @@ interface ActivityCommentsProps {
   activityPhase: number;
   usersMap: { [key: number]: User };
 }
+type ResponseDataStoriesId = {
+  image_activityId: number;
+};
 
 export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { users } = useVillageUsers();
+  const [storyActivityIds, setStoryActivityIds] = React.useState<number[]>([]);
+
+  //Get stories who was inspired by this activity
+  const getStoryActivityIds = React.useCallback(
+    async (id: number) => {
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/stories/${id}`,
+      });
+      if (!response.error && response.data) {
+        const { storyActivityIds } = response.data;
+        const idsStories = Array.from(
+          // eslint-disable-next-line camelcase
+          new Set(storyActivityIds.map(({ image_activityId }: ResponseDataStoriesId) => image_activityId)),
+        );
+        setStoryActivityIds(idsStories as number[]);
+      }
+    },
+    [axiosLoggedRequest],
+  );
+
+  React.useEffect(() => {
+    getStoryActivityIds(activityId).catch();
+  }, [activityId, getStoryActivityIds]);
+  console.log({ storyActivityIds });
+
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {

@@ -30,32 +30,44 @@ storyController.get({ path: '', userType: UserType.TEACHER }, async (req: Reques
 
   const objectImages = await getRepository(Image)
     .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
+    .where('image.villageId = :villageId', { villageId: villageId })
     .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
     .orderBy('RAND()')
     .getOne();
-  // .limit(6)
-  // .getMany();
 
   const placeImages = await getRepository(Image)
     .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
+    .where('image.villageId = :villageId', { villageId: villageId })
     .andWhere('image.imageType = :type', { type: ImageType.PLACE })
     .orderBy('RAND()')
     .getOne();
-  // .limit(6)
-  // .getMany();
 
   const oddImages = await getRepository(Image)
     .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
+    .where('image.villageId = :villageId', { villageId: villageId })
     .andWhere('image.imageType = :type', { type: ImageType.ODD })
     .orderBy('RAND()')
     .getOne();
-  // .limit(6)
-  // .getMany();
 
   res.sendJSON({ object: objectImages, place: placeImages, odd: oddImages });
+});
+
+storyController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const storyActivityIds = await getRepository(Image)
+    .createQueryBuilder('image')
+    .select('image.activityId')
+    .where('image.activityId <> :activityId', { activityId: id })
+    .andWhere('image.inspiredStoryId = :activityId', { activityId: id })
+    .getRawMany();
+
+  res.sendJSON({ storyActivityIds });
 });
 
 export { storyController };
