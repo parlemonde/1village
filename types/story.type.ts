@@ -50,6 +50,7 @@ export type GenericStoryElement = {
 // --- structure of each story ---
 export type StoryElement = GenericStoryElement & {
   description: string | null;
+  inspiredStoryId?: number | null;
 };
 
 // --- structure of each tale ---

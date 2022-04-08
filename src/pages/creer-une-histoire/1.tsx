@@ -67,6 +67,21 @@ const StoryStep1 = () => {
     }
   }, [currentPathName]);
 
+  //Set original story
+  React.useEffect(() => {
+    if (isOriginal && activity && activity.id) {
+      data.isOriginal = true;
+    }
+  }, [isOriginal, activity, data]);
+
+  React.useEffect(() => {
+    if (activity !== null && activity.id) {
+      data.object.inspiredStoryId = activity.id;
+      data.place.inspiredStoryId = activity.id;
+      data.odd.inspiredStoryId = activity.id;
+    }
+  }, [activity, data]);
+
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
     const { object } = data;
@@ -89,8 +104,8 @@ const StoryStep1 = () => {
   }, []);
 
   const onNext = () => {
-    if (isOriginal) {
-      data.isOriginal = true;
+    if (isOriginal && activity && activity.id) {
+      data.object.inspiredStoryId = activity.id;
     }
     save().catch(console.error);
     // save in local storage that the user is going to the next step.

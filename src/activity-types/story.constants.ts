@@ -5,16 +5,19 @@ export const DEFAULT_STORY_DATA: StoriesData = {
     imageId: 0,
     imageUrl: '',
     description: '',
+    inspiredStoryId: 0,
   },
   place: {
     imageId: 0,
     imageUrl: '',
     description: '',
+    inspiredStoryId: 0,
   },
   odd: {
     imageId: 0,
     imageUrl: '',
     description: '',
+    inspiredStoryId: 0,
   },
   tale: {
     imageId: 0,
