@@ -68,6 +68,12 @@ const StoryStep1 = () => {
   }, [currentPathName]);
 
   React.useEffect(() => {
+    if (isOriginal && activity && activity.id) {
+      data.isOriginal = true;
+    }
+  }, [isOriginal, activity, data]);
+
+  React.useEffect(() => {
     if (activity !== null && activity.id) {
       data.object.inspiredStoryId = activity.id;
       data.place.inspiredStoryId = activity.id;

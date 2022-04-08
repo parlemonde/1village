@@ -10,6 +10,7 @@ import { isStory } from 'src/activity-types/anyActivity';
 import { bgPage } from 'src/styles/variables.const';
 import type { StoryActivity } from 'types/story.type';
 
+import StoriesDataCardView from './StoriesDataCardView';
 import type { ActivityViewProps } from './activity-view.types';
 
 function truncateString(str: string, num: number) {
@@ -20,15 +21,23 @@ function truncateString(str: string, num: number) {
   }
 }
 
-export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
+export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryActivity>) => {
+  // console.log('StoryActivityView', activity);
+  const { object, place, odd } = activity.data;
+  const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId]));
+  // console.log('inspiredStoriesIds', inspiredStoriesIds);
+
   return (
     <div>
-      <div style={{ margin: '1rem 0' }}>
+      <div style={{ margin: '1rem' }}>
         <div className="text-center" style={{ marginBottom: '1rem' }}>
           <h3>{isStory(activity)}</h3>
         </div>
         {isStory(activity) && (
           <Grid container spacing={2}>
+            {activity.data.isOriginal === false && inspiredStoriesIds.length > 0 && (
+              <StoriesDataCardView inspiredStoriesIds={inspiredStoriesIds} user={user} />
+            )}
             <Grid item xs={12} md={12}>
               <p>{activity.data.tale.tale}</p>
             </Grid>
