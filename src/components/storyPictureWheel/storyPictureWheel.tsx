@@ -11,9 +11,10 @@ import type { StoriesData, ImagesRandomData } from 'types/story.type';
 interface StoryPictureWheelProps {
   images: StoriesData | ImagesRandomData;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
-const StoryPictureWheel = ({ images, onClick }: StoryPictureWheelProps) => {
+const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) => {
   const [rotate, setRotate] = React.useState(0);
   const [rolling, setRolling] = React.useState(false);
   const [objectImg, setObjectImg] = React.useState(images.object.imageUrl);
@@ -24,9 +25,6 @@ const StoryPictureWheel = ({ images, onClick }: StoryPictureWheelProps) => {
   // console.log('slotRef', slotRef);
   const storyImages = [images.object.imageUrl, images.place.imageUrl, images.odd.imageUrl] as string[];
   // console.log('storyImages', storyImages);
-  // console.log('objectImg', images.object.imageUrl);
-  // console.log('placeImg', images.place.imageUrl);
-  // console.log('oddImg', images.odd.imageUrl);
 
   // to trigger handle rotate
   const handleRotate = () => {

@@ -14,8 +14,8 @@ import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { getQueryString } from 'src/utils';
 import { serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
 import type { ImagesRandomData, StoriesData } from 'types/story.type';
-import { ImageType } from 'types/story.type';
 
 // a) data vient de histoire inspirante => getActivites id ---->  DONE
 // b) UseEffect created si data est vide (en ce cas la on recupere que les images) => data {object, ...} StoriesData ---->  DONE
@@ -26,20 +26,33 @@ import { ImageType } from 'types/story.type';
 const InspiredStory = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
-  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
-  const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { getRandomImagesStory } = useImageStoryRequests();
+  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { village } = React.useContext(VillageContext);
 
+  const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
   const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
-  const { activities } = useActivities({
-    page: 0,
-    type: ActivityType.STORY,
-  });
-  console.log('activities', activities);
 
-  // console.log('index page imagesRandom', imagesRandom);
+  React.useEffect(() => {
+    if (village) {
+      axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities${serializeToQueryUrl({
+          villageId: village?.id,
+          type: ActivityType.STORY,
+        })}`,
+      }).then((response) => {
+        if (!response.error && response.data) {
+          const storyActivities = response.data;
+          setStoryActivities(storyActivities as Activity[]);
+        }
+      });
+    }
+  }, [axiosLoggedRequest, village]);
+  console.log('storyActivities', storyActivities);
+
   // console.log({ activityId });
   // console.log({ 'activity avant creation': activity });
 
@@ -114,7 +127,7 @@ const InspiredStory = () => {
       getInspiringStory();
     }
   }, [activity, activityId, getInspiringStory]);
-  // console.log({ inspiredStoryActivity });
+  console.log({ inspiredStoryActivity });
 
   //Set imageUrl from inspiredStoryActivity in activity
   React.useEffect(() => {
@@ -129,7 +142,6 @@ const InspiredStory = () => {
   }, [activity, inspiredStoryActivity]);
 
   const onClick = () => {
-    console.log('je passe dans le onClick');
     //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
     setInspiredStoryActivity(undefined);
     getRandomImages().catch();
@@ -184,7 +196,6 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
-        {/* TODO: implementer le cas où la roulette doit être inactiver si qu'une seule histoire en DB*/}
         {inspiredStoryActivity ? (
           <StoryPictureWheel images={inspiredStoryActivity} onClick={onClick} />
         ) : (
