@@ -10,23 +10,48 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
-import { getQueryString } from 'src/utils';
+import { getQueryString, serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
 import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
-  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
   const { getRandomImagesStory } = useImageStoryRequests();
+  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { village } = React.useContext(VillageContext);
+
+  const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
   const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
 
   //Creation of new empty story activity no matter what
+  React.useEffect(() => {
+    if (village) {
+      axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities${serializeToQueryUrl({
+          villageId: village?.id,
+          type: ActivityType.STORY,
+        })}`,
+      }).then((response) => {
+        if (!response.error && response.data) {
+          const storyActivities = response.data;
+          setStoryActivities(storyActivities as Activity[]);
+        }
+      });
+    }
+  }, [axiosLoggedRequest, village]);
+
+  // console.log({ activityId });
+  // console.log({ 'activity avant creation': activity });
+
+  //Creation of new empty story activity no matter what
   const created = React.useRef(false);
   React.useEffect(() => {
+    // console.log('je suis dans creation');
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
@@ -159,7 +184,6 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
-        {/* TODO: implementer le cas où la roulette doit être inactiver si qu'une seule histoire en DB*/}
         {inspiredStoryActivity ? (
           <StoryPictureWheel images={inspiredStoryActivity} onClick={onClick} />
         ) : (
