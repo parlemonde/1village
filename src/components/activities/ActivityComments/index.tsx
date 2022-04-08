@@ -8,6 +8,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
+import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
 
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
@@ -49,7 +50,6 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
   React.useEffect(() => {
     getStoryActivityIds(activityId).catch();
   }, [activityId, getStoryActivityIds]);
-  console.log({ storyActivityIds });
 
   const userMap = React.useMemo(
     () =>
@@ -79,6 +79,8 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
           <h2>Réaction des Pélicopains</h2>
         </div>
       </div>
+      {/* Stories space */}
+      {storyActivityIds.length > 0 && user && <StoriesDataCardView inspiredStoriesIds={storyActivityIds} user={user} column noTitle />}
       {data.map((o) => {
         if (o.type === 'comment') {
           const comment = o.data;
