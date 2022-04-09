@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import type { AnthemData, Sample } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
+import { DraggableTrack } from 'src/components/DraggableTrack';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
@@ -144,6 +145,14 @@ const AnthemStep2 = () => {
               </>
             ))}
           </div>
+          <DraggableTrack
+            trackDuration={100}
+            coupletDuration={30}
+            initialCoupletStart={20}
+            onCoupletStartChange={(coupletStart) => {
+              console.log(coupletStart);
+            }}
+          />
         </div>
       </div>
       <StepsButton prev="/parametrer-hymne/1" next={onNext} />
