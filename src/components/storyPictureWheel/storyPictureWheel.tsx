@@ -6,7 +6,7 @@ import { Grid, Typography, CardMedia } from '@mui/material';
 
 import SlotMachineHandle from 'src/svg/story-activity/slot-machine-handle.svg';
 import SlotMachine from 'src/svg/story-activity/slot-machine.svg';
-import type { StoriesData, ImagesRandomData } from 'types/story.type';
+import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
 interface StoryPictureWheelProps {
   images: StoriesData | ImagesRandomData;
@@ -14,17 +14,31 @@ interface StoryPictureWheelProps {
   style?: React.CSSProperties;
 }
 
-const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) => {
+const StoryPictureWheel = ({ images, style, onClick }: StoryPictureWheelProps) => {
   const [rotate, setRotate] = React.useState(0);
   const [rolling, setRolling] = React.useState(false);
   const [objectImg, setObjectImg] = React.useState(images.object.imageUrl);
   const [placeImg, setPlacetImg] = React.useState(images.place.imageUrl);
   const [oddImg, setOddImg] = React.useState(images.odd.imageUrl);
-  const slotRef = [React.useRef(null), React.useRef(null), React.useRef(null)];
-  // console.log('React.useRef(null)', React.useRef(null));
-  // console.log('slotRef', slotRef);
-  const storyImages = [images.object.imageUrl, images.place.imageUrl, images.odd.imageUrl] as string[];
-  // console.log('storyImages', storyImages);
+
+  const slotRef = [React.useRef<HTMLDivElement>(null), React.useRef<HTMLDivElement>(null), React.useRef<HTMLDivElement>(null)];
+
+  // storyObjectImages
+  const objRandomImages: string[] = [];
+  const objImages = Object.values(images)[0].imageUrl;
+  objRandomImages.push(objImages);
+
+  // storyPlaceImages
+  const placeRandomImages: string[] = [];
+
+  const placeImages = Object.values(images)[1].imageUrl;
+  placeRandomImages.push(placeImages);
+
+  // storyObjectImages
+  const oddRandomImages: string[] = [];
+
+  const oddImages = Object.values(images)[2].imageUrl;
+  oddRandomImages.push(oddImages);
 
   // to trigger handle rotate
   const handleRotate = () => {
@@ -35,11 +49,9 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
   // to trigger rolling and maintain state
   const roll = () => {
     setRolling(true);
-    console.log('rolling', rolling);
     setTimeout(() => {
       setRolling(false);
     }, 700);
-
     // looping through all 3 slots to start rolling
     slotRef.forEach((slot, i) => {
       // this will trigger rolling effect
@@ -52,14 +64,14 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
 
   // this will create a rolling effect and return random selected option
   const triggerSlotRotation = (ref) => {
-    function setTop(top) {
+    function setTop(top: number) {
       ref.style.top = `${top}px`;
     }
     const options = ref.children;
-    const randomOption = Math.floor(Math.random() * storyImages.length);
+    const randomOption = Math.floor(Math.random() * objRandomImages.length);
     const choosenOption = options[randomOption];
     setTop(-choosenOption.offsetTop + 2);
-    return storyImages[randomOption];
+    return objRandomImages[randomOption];
   };
 
   return (
@@ -68,6 +80,7 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
         <Grid
           container
           spacing={1}
+          item
           xs={5}
           sx={{
             boxSizing: 'border-box',
@@ -86,9 +99,9 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
               <SlotMachine style={{ height: '25rem', width: '25rem' }} />
             </Paper>
             <div>
-              <div className={!rolling ? 'roll rolling' : 'roll'} onClick={!rolling && roll} disabled={rolling}>
+              <div className={!rolling ? 'roll rolling' : 'roll'} onClick={!rolling ? roll : undefined}>
                 <SlotMachineHandle
-                  style={{ display: 'block', marginLeft: '-3rem', marginTop: '5rem', height: '10rem', width: '10rem' }}
+                  style={{ ...style, display: 'block', marginLeft: '-3rem', marginTop: '5rem', height: '10rem', width: '10rem' }}
                   className="handle"
                   onClick={handleRotate}
                   onAnimationEnd={() => setRotate(0)}
@@ -96,14 +109,9 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
                 />
               </div>
             </div>
-            {/* <div className="button">
-              <div className={!rolling ? 'roll rolling' : 'roll'} onClick={!rolling && roll} disabled={rolling}>
-                {rolling ? 'Rolling...' : 'ROLL'}
-              </div>
-            </div> */}
           </Box>
 
-          {images.object.imageUrl && images.place.imageUrl && images.odd.imageUrl && (
+          {objectImg && placeImg && oddImg && (
             <div className="SlotMachine">
               <div className="cards">
                 <div className="slot">
@@ -112,9 +120,9 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
                   </Typography>
                   <section>
                     <div className="container" ref={slotRef[0]}>
-                      {storyImages.map((img, i) => (
-                        <div key={i}>
-                          <CardMedia sx={{ borderRadius: '0.5rem', mt: 1 }} component="img" height="70" image={img} alt="objet de l'histoire" />
+                      {objRandomImages.map((image, i) => (
+                        <div className="object" key={i}>
+                          <CardMedia sx={{ borderRadius: '0.5rem', mt: 1 }} component="img" height="70" image={image} alt="objet de l'histoire" />
                         </div>
                       ))}
                     </div>
@@ -126,9 +134,9 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
                   </Typography>
                   <section>
                     <div className="container" ref={slotRef[1]}>
-                      {storyImages.map((img, i) => (
+                      {placeRandomImages.map((image, i) => (
                         <div key={i}>
-                          <CardMedia sx={{ borderRadius: '0.5rem', mt: 1 }} component="img" height="70" image={img} alt="objet de l'histoire" />
+                          <CardMedia sx={{ borderRadius: '0.5rem', mt: 1 }} component="img" height="70" image={image} alt="objet de l'histoire" />
                         </div>
                       ))}
                     </div>
@@ -140,9 +148,9 @@ const StoryPictureWheel = ({ images, onClick, style }: StoryPictureWheelProps) =
                   </Typography>
                   <section>
                     <div className="container" ref={slotRef[2]}>
-                      {storyImages.map((img, i) => (
+                      {oddRandomImages.map((image, i) => (
                         <div key={i}>
-                          <CardMedia sx={{ borderRadius: '0.5rem', mt: 1 }} component="img" height="70" image={img} alt="objet de l'histoire" />
+                          <CardMedia sx={{ borderRadius: '0.5rem', mt: 1 }} component="img" height="70" image={image} alt="objet de l'histoire" />
                         </div>
                       ))}
                     </div>

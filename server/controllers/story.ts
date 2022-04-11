@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
 import { ImageType } from '../../types/story.type';
+import { Activity } from '../entities/activity';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { getQueryString } from '../utils';
@@ -33,27 +34,27 @@ storyController.get({ path: '', userType: UserType.TEACHER }, async (req: Reques
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
     .orderBy('RAND()')
+    // .limit(3)
+    // .getMany();
     .getOne();
-  // .limit(6)
-  // .getMany();
 
   const placeImages = await getRepository(Image)
     .createQueryBuilder('image')
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.PLACE })
     .orderBy('RAND()')
+    // .limit(3)
+    // .getMany();
     .getOne();
-  // .limit(6)
-  // .getMany();
 
   const oddImages = await getRepository(Image)
     .createQueryBuilder('image')
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.ODD })
     .orderBy('RAND()')
+    // .limit(3)
+    // .getMany();
     .getOne();
-  // .limit(6)
-  // .getMany();
 
   res.sendJSON({ object: objectImages, place: placeImages, odd: oddImages });
 });

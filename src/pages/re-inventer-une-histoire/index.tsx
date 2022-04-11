@@ -11,7 +11,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
 import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
@@ -26,8 +26,8 @@ const InspiredStory = () => {
   const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
   const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
+  const [disabled, setDisabled] = React.useState(true);
 
-  //Creation of new empty story activity no matter what
   React.useEffect(() => {
     if (village) {
       axiosLoggedRequest({
@@ -44,9 +44,6 @@ const InspiredStory = () => {
       });
     }
   }, [axiosLoggedRequest, village]);
-
-  // console.log({ activityId });
-  // console.log({ 'activity avant creation': activity });
 
   //Creation of new empty story activity no matter what
   const created = React.useRef(false);
@@ -67,7 +64,7 @@ const InspiredStory = () => {
         );
       }
     }
-  }, [activity, activityId, createNewActivity, inspiredStoryActivity, router.query]);
+  }, [activity, activityId, createNewActivity, router.query]);
 
   //Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
@@ -90,7 +87,7 @@ const InspiredStory = () => {
     }
   }, [activity, getRandomImagesStory, village]);
 
-  //Get ramdom images when index page is launch only if no activityId in url
+  //Get random images when index page is launch only if no activityId in url
   //or when wheel is operated
   React.useEffect(() => {
     if (!activityId) {
@@ -131,8 +128,12 @@ const InspiredStory = () => {
 
   const onClick = () => {
     //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
-    setInspiredStoryActivity(undefined);
-    getRandomImages().catch();
+    if (storyActivities.length <= 1) {
+      setDisabled(true);
+    } else {
+      setInspiredStoryActivity(undefined);
+      getRandomImages().catch();
+    }
   };
 
   const onNext = () => {
