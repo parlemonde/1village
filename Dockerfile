@@ -1,5 +1,5 @@
 # STAGE 1 - Typescript to Javascript
-FROM node:16.13.2-slim as build-dependencies
+FROM node:17.9.0-slim as build-dependencies
 
 ARG BUILD_VERSION
 
@@ -40,7 +40,7 @@ ENV NODE_ENV production
 RUN yarn build
 
 # STAGE 2 - Docker server
-FROM node:16.13.2-slim as prod
+FROM node:17.9.0-slim as prod
 
 # Create app directory
 WORKDIR /app
