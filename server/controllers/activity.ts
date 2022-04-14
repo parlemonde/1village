@@ -445,6 +445,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     activity.data
   ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
+    //TODO : faire en sorte de persister seulement si les images n'ont pas id pour reinvent story
     if (imagesData.object.inspiredStoryId && imagesData.place.inspiredStoryId && imagesData.odd.inspiredStoryId) {
       imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
       imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;

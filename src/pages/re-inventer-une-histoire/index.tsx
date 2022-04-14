@@ -9,9 +9,8 @@ import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWhee
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
 import type { ImagesRandomData, StoriesData } from 'types/story.type';
 
@@ -19,14 +18,11 @@ const InspiredStory = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { getRandomImagesStory } = useImageStoryRequests();
   const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
 
   const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
-  const [imagesRandom, setImagesRandom] = React.useState<ImagesRandomData>();
-  const [disabled, setDisabled] = React.useState(true);
 
   React.useEffect(() => {
     if (village) {
@@ -48,7 +44,6 @@ const InspiredStory = () => {
   //Creation of new empty story activity no matter what
   const created = React.useRef(false);
   React.useEffect(() => {
-    // console.log('je suis dans creation');
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
@@ -79,22 +74,6 @@ const InspiredStory = () => {
     }
   }, [activityId, axiosLoggedRequest, village]);
 
-  //Get Random Images from DB
-  const getRandomImages = React.useCallback(async () => {
-    if (village && activity && activity.data) {
-      const images = await getRandomImagesStory();
-      setImagesRandom(images);
-    }
-  }, [activity, getRandomImagesStory, village]);
-
-  //Get random images when index page is launch only if no activityId in url
-  //or when wheel is operated
-  React.useEffect(() => {
-    if (!activityId) {
-      getRandomImages().catch();
-    }
-  }, [activityId, getRandomImages]);
-
   //Retrieve data from Inspiring story if activityId in url
   React.useEffect(() => {
     if (activityId) {
@@ -102,13 +81,17 @@ const InspiredStory = () => {
     }
   }, [activity, activityId, getInspiringStory]);
 
-  const updateData = (data: StoriesData | ImagesRandomData) => {
+  const updateData = (data: StoriesData) => {
     if (activity && activity.data) {
       const { object, place, odd } = activity.data as StoriesData;
       //update imageUrl
       object.imageUrl = data.object.imageUrl;
       place.imageUrl = data.place.imageUrl;
       odd.imageUrl = data.odd.imageUrl;
+      object.imageId = data.object.imageId;
+      place.imageId = data.place.imageId;
+      odd.imageId = data.odd.imageId;
+      // we have to add the imageId to the activity
       //update inspiredStoryId to trace images
       object.inspiredStoryId = data.object.inspiredStoryId;
       place.inspiredStoryId = data.place.inspiredStoryId;
@@ -120,20 +103,14 @@ const InspiredStory = () => {
   React.useEffect(() => {
     if (inspiredStoryActivity && activity && activity.data) {
       updateData(inspiredStoryActivity);
-    } else if (imagesRandom && activity && activity.data) {
-      updateData(imagesRandom);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity, inspiredStoryActivity, imagesRandom]);
+  }, [activity, inspiredStoryActivity]);
 
   const onClick = () => {
     //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
-    if (storyActivities.length <= 1) {
-      setDisabled(true);
-    } else {
-      setInspiredStoryActivity(undefined);
-      getRandomImages().catch();
-    }
+    setInspiredStoryActivity(undefined);
+    // getRandomImages().catch();
   };
 
   const onNext = () => {
@@ -144,7 +121,7 @@ const InspiredStory = () => {
   if (activity === null || !isStory(activity)) {
     return <div></div>;
   }
-
+  console.log('activity', activity);
   return (
     <>
       <Base>
@@ -185,11 +162,7 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
-        {inspiredStoryActivity ? (
-          <StoryPictureWheel images={inspiredStoryActivity} onClick={onClick} />
-        ) : (
-          imagesRandom && <StoryPictureWheel images={imagesRandom} onClick={onClick} />
-        )}
+        <StoryPictureWheel objectImage={activity.data.object} placeImage={activity.data.place} oddImage={activity.data.odd} onClick={onClick} />
         <StepsButton next={onNext} />
       </Base>
     </>

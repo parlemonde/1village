@@ -22,10 +22,8 @@ function truncateString(str: string, num: number) {
 }
 
 export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryActivity>) => {
-  // console.log('StoryActivityView', activity);
   const { object, place, odd } = activity.data;
   const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId]));
-  // console.log('inspiredStoriesIds', inspiredStoriesIds);
 
   return (
     <div>
@@ -63,6 +61,7 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
             <Grid
               container
               spacing={1}
+              item
               xs={8}
               style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
             >

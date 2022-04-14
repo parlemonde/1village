@@ -24,17 +24,17 @@ export type ImageRandom = Image & {
   villageId: number;
 };
 
-// export type ImagesRandomData = {
-//   object: ImageRandom[];
-//   place: ImageRandom[];
-//   odd: ImageRandom[];
-// };
-
 export type ImagesRandomData = {
-  object: ImageRandom;
-  place: ImageRandom;
-  odd: ImageRandom;
+  object: ImageRandom[];
+  place: ImageRandom[];
+  odd: ImageRandom[];
 };
+
+// export type ImagesRandomData = {
+//   object: ImageRandom;
+//   place: ImageRandom;
+//   odd: ImageRandom;
+// };
 
 // Starting from here, the types are for Front.
 export type StoriesData = {

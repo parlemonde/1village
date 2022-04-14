@@ -83,14 +83,14 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
           {isSymbol(activity) && <ContentView content={activity.content} />}
           {isReportage(activity) && <ContentView content={activity.content} />}
           {isReaction(activity) && <ContentView content={activity.content} />}
+          {isStory(activity) && (
+            <Container maxWidth="lg">
+              <Box>
+                <StoryActivityView activity={activity} user={user} />
+              </Box>
+            </Container>
+          )}
         </div>
-        {isStory(activity) && (
-          <Container maxWidth="lg">
-            <Box>
-              <StoryActivityView activity={activity} user={user} />
-            </Box>
-          </Container>
-        )}
       </>
     )
   );

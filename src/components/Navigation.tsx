@@ -7,8 +7,11 @@ import { Button } from '@mui/material';
 
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useActivities } from 'src/services/useActivities';
+import { useActivity } from 'src/services/useActivity';
 import { useVillageRequests } from 'src/services/useVillages';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
@@ -23,6 +26,8 @@ import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { getQueryString } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
@@ -128,6 +133,18 @@ export const Navigation = (): JSX.Element => {
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const { activities } = useActivities({
+    limit: 200,
+    page: 0,
+    countries:
+      village && (isModerateur || village.activePhase >= 2)
+        ? village.countries.map((c) => c.isoCode.toUpperCase())
+        : user
+        ? [user.country.isoCode.toUpperCase()]
+        : [],
+    pelico: true,
+    type: ActivityType.STORY,
+  });
 
   const fixedTabs = React.useMemo(
     () => [
@@ -191,9 +208,12 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}
+                  disabled={
+                    village === null ||
+                    (tab.phase !== undefined && tab.phase > village.activePhase) ||
+                    (activities.length === 0 && village.activePhase >= 2 && tab.path.split('/')[1] === 're-inventer-une-histoire')
+                  }
                 >
-                  {/* We have to add a condition so once we create and publish the fisrt story, "re-invent a story" button is activated. */}
                   {tab.label}
                 </Button>
               </Link>
