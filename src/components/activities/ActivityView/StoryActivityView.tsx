@@ -61,7 +61,6 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
             <Grid
               container
               spacing={1}
-              item
               xs={8}
               style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
             >
