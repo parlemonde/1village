@@ -11,6 +11,7 @@ import { Grid, Button, TextField, Backdrop, CircularProgress, ButtonBase } from 
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -321,6 +322,7 @@ const StoryStep5 = () => {
               </Grid>
             </Grid>
           </div>
+          <StepsButton prev="/creer-une-histoire/4" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
