@@ -24,7 +24,7 @@ section {
   border-radius: 15px !important;
   border: 3px solid black !important;
   width: 80px;
-  height: 80px;
+  height: 300px;
   overflow: hidden;
   background-color: white;
   border-radius: 2px;
@@ -62,7 +62,7 @@ section {
 //     margin: 0 auto;
 // }
 .handle[wobble='1'] {
-  animation: wobble 1s 1;
+  animation: wobble 3s 1;
 }
 
 @keyframes wobble {
