@@ -13,7 +13,7 @@ const StorySuccess = () => {
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text" style={{ margin: '1rem 1.5rem' }}>
-            Votre reportage a bien été publié !
+            Votre histoire a bien été publiée !
           </p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
