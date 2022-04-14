@@ -101,7 +101,7 @@ const ReInventStoryStep3 = () => {
                         }}
                       >
                         {data?.odd?.imageUrl ? (
-                          <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.odd?.imageUrl} unoptimized />
+                          <Image layout="fill" objectFit="cover" alt="image du plat" src={data?.odd?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}

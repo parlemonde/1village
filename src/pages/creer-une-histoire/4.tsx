@@ -102,7 +102,7 @@ const StoryStep4 = () => {
                       }}
                     >
                       {data?.tale?.imageStory ? (
-                        <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.tale?.imageStory} unoptimized />
+                        <Image layout="fill" objectFit="cover" alt="image du plat" src={data?.tale?.imageStory} unoptimized />
                       ) : (
                         <AddIcon style={{ fontSize: '80px' }} />
                       )}
