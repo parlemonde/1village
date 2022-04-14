@@ -3,6 +3,7 @@ import React from 'react';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import type { StoriesData } from 'types/story.type';
 
 export const useImageStoryRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);

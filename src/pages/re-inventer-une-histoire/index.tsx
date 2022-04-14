@@ -12,7 +12,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
-import type { ImagesRandomData, StoriesData } from 'types/story.type';
+import type { StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
@@ -162,7 +162,7 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
-        <StoryPictureWheel objectImage={activity.data.object} placeImage={activity.data.place} oddImage={activity.data.odd} onClick={onClick} />
+        <StoryPictureWheel objectImage={activity.data.object} placeImage={activity.data.place} oddImage={activity.data.odd} />
         <StepsButton next={onNext} />
       </Base>
     </>

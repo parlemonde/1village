@@ -16,18 +16,18 @@ export interface Image {
   inspiredStoryId: number | null;
 }
 
-export type ImageRandom = Image & {
-  createDate: string;
-  updateDate: string;
-  deleteDate: string | null;
-  userId: number;
-  villageId: number;
-};
+// export type ImageRandom = Image & {
+//   createDate: string;
+//   updateDate: string;
+//   deleteDate: string | null;
+//   userId: number;
+//   villageId: number;
+// };
 
 export type ImagesRandomData = {
-  object: ImageRandom[];
-  place: ImageRandom[];
-  odd: ImageRandom[];
+  object: StoryElement[];
+  place: StoryElement[];
+  odd: StoryElement[];
 };
 
 // export type ImagesRandomData = {
