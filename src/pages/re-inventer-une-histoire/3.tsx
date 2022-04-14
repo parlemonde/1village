@@ -128,7 +128,6 @@ const ReInventStoryStep3 = () => {
                     setImageUrl={setImage}
                   />
                 </div>
-                <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
                 <FormControl variant="outlined" className="full-width" style={{ marginTop: '1rem' }}>
                   <InputLabel id="select-ODD">ODD</InputLabel>
                   <Select
