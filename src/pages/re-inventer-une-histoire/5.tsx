@@ -11,6 +11,7 @@ import { Grid, Button, TextField, Backdrop, CircularProgress, ButtonBase } from 
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -113,7 +114,7 @@ const ReInventStoryStep5 = () => {
             <>
               {!isValid && (
                 <p>
-                  <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                  <b>Avant de publier votre histoire, il faut corriger les étapes incomplètes, marquées en orange.</b>
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
@@ -328,6 +329,7 @@ const ReInventStoryStep5 = () => {
             </Grid>
           </div>
         </div>
+        <StepsButton prev="/re-inventer-une-histoire/4" />
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
