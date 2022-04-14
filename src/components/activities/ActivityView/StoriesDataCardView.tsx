@@ -11,9 +11,11 @@ import { ActivityCard } from '../ActivityCard';
 interface StoriesDataCardViewProps {
   inspiredStoriesIds: (number | null | undefined)[];
   user: User;
+  column?: boolean;
+  noTitle?: boolean;
 }
 
-const StoriesDataCardView = ({ inspiredStoriesIds, user }: StoriesDataCardViewProps) => {
+const StoriesDataCardView = ({ inspiredStoriesIds, user, column, noTitle }: StoriesDataCardViewProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const [dataStories, setdataStories] = React.useState<StoryActivity[]>([]);
 
@@ -39,15 +41,19 @@ const StoriesDataCardView = ({ inspiredStoriesIds, user }: StoriesDataCardViewPr
 
   return (
     <>
-      <p>
-        <strong>Notre histoire s&apos;inspire de ces histoires</strong>
-      </p>
+      {noTitle ? (
+        ''
+      ) : (
+        <p>
+          <strong>Notre histoire s&apos;inspire de ces histoires</strong>
+        </p>
+      )}
       <Grid container spacing={1} sx={{ mt: 1 }}>
         {dataStories &&
           dataStories.length > 0 &&
           dataStories.map((story) => (
             <>
-              <Grid item xs={4}>
+              <Grid item xs={column ? 12 : 4}>
                 <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
               </Grid>
             </>

@@ -8,6 +8,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
+import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
 
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
@@ -18,10 +19,38 @@ interface ActivityCommentsProps {
   activityPhase: number;
   usersMap: { [key: number]: User };
 }
+type ResponseDataStoriesId = {
+  image_activityId: number;
+};
 
 export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { users } = useVillageUsers();
+  const [storyActivityIds, setStoryActivityIds] = React.useState<number[]>([]);
+
+  //Get stories who was inspired by this activity
+  const getStoryActivityIds = React.useCallback(
+    async (id: number) => {
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/stories/${id}`,
+      });
+      if (!response.error && response.data) {
+        const { storyActivityIds } = response.data;
+        const idsStories = Array.from(
+          // eslint-disable-next-line camelcase
+          new Set(storyActivityIds.map(({ image_activityId }: ResponseDataStoriesId) => image_activityId)),
+        );
+        setStoryActivityIds(idsStories as number[]);
+      }
+    },
+    [axiosLoggedRequest],
+  );
+
+  React.useEffect(() => {
+    getStoryActivityIds(activityId).catch();
+  }, [activityId, getStoryActivityIds]);
+
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -50,6 +79,8 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
           <h2>Réaction des Pélicopains</h2>
         </div>
       </div>
+      {/* Stories space */}
+      {storyActivityIds.length > 0 && user && <StoriesDataCardView inspiredStoriesIds={storyActivityIds} user={user} column noTitle />}
       {data.map((o) => {
         if (o.type === 'comment') {
           const comment = o.data;

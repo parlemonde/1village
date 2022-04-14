@@ -11,11 +11,11 @@ import { Controller } from './controller';
 const storyController = new Controller('/stories');
 
 /**
- * Image controller to get all Images from image table.
+ * Image controller to get 1 random Images from each category image table.
  *
  * @param {string} path url path
  * @param {number} userType user profile type
- * @returns {string} Route API JSON response
+ * @returns {object} Route API JSON response
  */
 storyController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -30,40 +30,34 @@ storyController.get({ path: '', userType: UserType.TEACHER }, async (req: Reques
 
   const objectImages = await getRepository(Image)
     .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
+    .where('image.villageId = :villageId', { villageId: villageId })
     .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
     .orderBy('RAND()')
     .getOne();
-  // .limit(3)
-  // .getMany();
 
   const placeImages = await getRepository(Image)
     .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
+    .where('image.villageId = :villageId', { villageId: villageId })
     .andWhere('image.imageType = :type', { type: ImageType.PLACE })
     .orderBy('RAND()')
     .getOne();
-  // .limit(3)
-  // .getMany();
 
   const oddImages = await getRepository(Image)
     .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
+    .where('image.villageId = :villageId', { villageId: villageId })
     .andWhere('image.imageType = :type', { type: ImageType.ODD })
     .orderBy('RAND()')
     .getOne();
-  // .limit(3)
-  // .getMany();
 
   res.sendJSON({ object: objectImages, place: placeImages, odd: oddImages });
 });
 
 /**
- * Image controller to get all Images from image table.
+ * Image controller to get 3 random Images from each category image table.
  *
  * @param {string} path url path
  * @param {number} userType user profile type
- * @returns {string} Route API JSON response
+ * @returns {object} Route API JSON response
  */
 storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -101,6 +95,31 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     .getMany();
 
   res.sendJSON({ objects: objectImages, places: placeImages, odds: oddImages });
+});
+
+/**
+ * Image controller to get story activityId.
+ *
+ * @param {string} path url path
+ * @param {number} userType user profile type
+ * @returns {object} Route API JSON response
+ */
+storyController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const storyActivityIds = await getRepository(Image)
+    .createQueryBuilder('image')
+    .select('image.activityId')
+    .where('image.activityId <> :activityId', { activityId: id })
+    .andWhere('image.inspiredStoryId = :activityId', { activityId: id })
+    .getRawMany();
+
+  res.sendJSON({ storyActivityIds });
 });
 
 export { storyController };
