@@ -173,7 +173,6 @@ const StoryStep1 = () => {
                     setImageUrl={setImage}
                   />
                 </div>
-                <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
               </div>
               <TextField
                 error={isError && data?.object?.description === ''}

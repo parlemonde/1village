@@ -120,7 +120,6 @@ const StoryStep2 = () => {
                     setImageUrl={setImage}
                   />
                 </div>
-                <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
               </div>
               <TextField
                 id="standard-multiline-static"

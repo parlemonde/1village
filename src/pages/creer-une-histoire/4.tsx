@@ -128,7 +128,6 @@ const StoryStep4 = () => {
                   imageUrl={data?.tale?.imageStory || ''}
                   setImageUrl={setImage}
                 />
-                <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
               </div>
             </Grid>
             <TextField
