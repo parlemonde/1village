@@ -1,5 +1,7 @@
 import md5 from 'md5';
 
+import type { Activity } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -195,12 +197,24 @@ export const capitalize = (s: string): string => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-export function getUserDisplayName(user: User, isSelf: boolean): string {
+export function getUserDisplayName(user: User, isSelf: boolean, activity?: Activity): string {
   const userIsPelico = user.type >= UserType.MEDIATOR;
   if (userIsPelico) {
+    if (activity && activity.type === ActivityType.STORY) {
+      return 'Pelico a inventé une histoire du village idéal';
+    }
+    if (activity && activity.type === ActivityType.RE_INVENT_STORY) {
+      return 'Pelico a re-inventé une histoire du village idéal';
+    }
     return 'Pelico';
   }
   if (isSelf) {
+    if (activity && activity.type === ActivityType.STORY) {
+      return 'Votre classe a inventé une histoire du village idéal';
+    }
+    if (activity && activity.type === ActivityType.RE_INVENT_STORY) {
+      return 'Votre classe a re-inventé une histoire du village idéal';
+    }
     return 'Votre classe';
   }
   return capitalize(user.displayName || `La classe${user.level ? ' de ' + user.level : ''} à ${user.city}`);
