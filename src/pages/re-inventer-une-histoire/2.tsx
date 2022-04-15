@@ -48,7 +48,7 @@ const ReInventStoryStep2 = () => {
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { place } = data;
-    updateActivity({ data: { ...data, place: { ...place, imageUrl } } });
+    updateActivity({ data: { ...data, place: { ...place, imageId: 0, imageUrl, inspiredStoryId: activity?.id } } });
   };
 
   const onNext = () => {
