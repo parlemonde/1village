@@ -13,39 +13,32 @@ interface StoryPictureWheelProps {
   objectImage: StoryElement;
   placeImage: StoryElement;
   oddImage: StoryElement;
+  onImagesChange(objectImage: StoryElement, placeImage: StoryElement, oddImage: StoryElement): void;
   style?: React.CSSProperties;
 }
 
-const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPictureWheelProps) => {
-  const { getRandomImagesData, getRandomImagesStory } = useImageStoryRequests();
+const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, style }: StoryPictureWheelProps) => {
+  const { getRandomImagesData } = useImageStoryRequests();
   const [rotate, setRotate] = React.useState(0);
   const [rolling, setRolling] = React.useState(false);
 
   const [objectRandomImages, setObjectRandomImages] = React.useState<StoryElement[]>([]);
   const [placeRandomImages, setPlaceRandomImages] = React.useState<StoryElement[]>([]);
   const [oddRandomImages, setOddRandomImages] = React.useState<StoryElement[]>([]);
-  //When activityId is present
-  const [objectImg, setObjectImg] = React.useState<StoryElement>(objectImage);
-  const [placeImg, setPlaceImg] = React.useState<StoryElement>(placeImage);
-  const [oddImg, setOddImg] = React.useState<StoryElement>(oddImage);
 
-  console.table({ objectImg, placeImg, oddImg });
   const slotRef = [React.useRef<HTMLDivElement>(null), React.useRef<HTMLDivElement>(null), React.useRef<HTMLDivElement>(null)];
 
   //Get Random Images from DB
   const getRandomImages = React.useCallback(async () => {
-    console.log('get random images');
     const images = await getRandomImagesData();
     //Une fois images récuperé il faudrait faire une function pour trier les informations qu'on a bseoin
-    // et transformer en storyElement
-    console.log('fecthed images');
-    console.log('images', images);
+    //et transformer en storyElement
     //TODO : ! Factoriser ici
-    const ojectTransformed = [] as StoryElement[];
+    const objectTransformed = [] as StoryElement[];
     images.objects.forEach((image: { id: number; imageUrl: string; inspiredStoryId: number }) => {
-      ojectTransformed.push({ imageId: image.id, imageUrl: image.imageUrl, description: '', inspiredStoryId: image.inspiredStoryId });
+      objectTransformed.push({ imageId: image.id, imageUrl: image.imageUrl, description: '', inspiredStoryId: image.inspiredStoryId });
     });
-    setObjectRandomImages(ojectTransformed);
+    setObjectRandomImages(objectTransformed);
 
     const placeTransformed = [] as StoryElement[];
     images.places.forEach((image: { id: number; imageUrl: string; inspiredStoryId: number }) => {
@@ -58,34 +51,7 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPi
       oddTransformed.push({ imageId: image.id, imageUrl: image.imageUrl, description: '', inspiredStoryId: image.inspiredStoryId });
     });
     setOddRandomImages(oddTransformed);
-
-    // If no activityID => automatically set image to activity data
-    const image = await getRandomImagesStory();
-    console.log('image', image);
-    if (objectImg.imageUrl === '' && placeImg.imageUrl === '' && oddImg.imageUrl === '') {
-      console.log('init empty images');
-      setObjectImg({
-        ...objectImage,
-        imageUrl: image.object.imageUrl,
-        imageId: image.object.id,
-        description: '',
-        inspiredStoryId: image.object.inspiredStoryId,
-      });
-      setPlaceImg({
-        ...placeImage,
-        imageUrl: image.place.imageUrl,
-        imageId: image.place.id,
-        description: '',
-        inspiredStoryId: image.place.inspiredStoryId,
-      });
-      setOddImg({ ...oddImage, imageUrl: image.odd.imageUrl, imageId: image.odd.id, description: '', inspiredStoryId: image.odd.inspiredStoryId });
-
-      setObjectRandomImages((prev) => [objectImg, ...prev]);
-      setPlaceRandomImages((prev) => [placeImg, ...prev]);
-      setOddRandomImages((prev) => [oddImg, ...prev]);
-    }
-  }, [getRandomImagesData, getRandomImagesStory]);
-  console.log({ objectRandomImages });
+  }, [getRandomImagesData]);
 
   //Get random images when index page is launch only if no activityId in url
   //or when wheel is operated
@@ -97,6 +63,14 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPi
     }
   }, [getRandomImages]);
   // storyObjectImages
+
+  React.useEffect(() => {
+    // If no imageID (the activity has been already created) => automatically set image to activity data
+    if (objectRandomImages.length > 0 && objectImage.imageUrl === '') {
+      onImagesChange(objectRandomImages[0], placeRandomImages[0], oddRandomImages[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [objectRandomImages, placeRandomImages, oddRandomImages]);
 
   // to trigger handle rotate
   const handleRotate = () => {
@@ -110,16 +84,20 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPi
       setRolling(false);
     }, 700);
     // looping through all 3 slots to start rolling
+    const newValues = [] as StoryElement[];
     slotRef.forEach((slot, i) => {
       // this will trigger rolling effect
       const selectedIndex = triggerSlotRotation(slot.current);
-      console.log('selectedIndex', selectedIndex);
-      if (i + 1 == 1)
-        setObjectImg({ ...objectImg, imageId: objectRandomImages[selectedIndex].imageId, imageUrl: objectRandomImages[selectedIndex].imageUrl });
-      else if (i + 1 == 2)
-        setPlaceImg({ ...placeImg, imageId: placeRandomImages[selectedIndex].imageId, imageUrl: placeRandomImages[selectedIndex].imageUrl });
-      else setOddImg({ ...oddImg, imageId: oddRandomImages[selectedIndex].imageId, imageUrl: oddRandomImages[selectedIndex].imageUrl });
+      if (i + 1 == 1) {
+        newValues.push(objectRandomImages[selectedIndex]);
+      } else if (i + 1 == 2) {
+        newValues.push(placeRandomImages[selectedIndex]);
+      } else {
+        newValues.push(oddRandomImages[selectedIndex]);
+      }
     });
+
+    onImagesChange(newValues[0], newValues[1], newValues[2]);
   };
 
   // this will create a rolling effect and return random selected option
@@ -130,8 +108,6 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPi
     const options = ref.children;
     const randomOption = Math.floor(Math.random() * ref.children.length);
     const choosenOption = options[randomOption];
-    console.log('options[randomOption]', options[randomOption]);
-    console.log('choosenOption', choosenOption);
     setTop(-choosenOption.offsetTop + 2);
     return randomOption;
   };
@@ -173,7 +149,7 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPi
             </div>
           </Box>
 
-          {objectImg && placeImg && oddImg && (
+          {objectImage && placeImage && oddImage && (
             <div className="SlotMachine">
               <div className="cards">
                 <div className="slot">

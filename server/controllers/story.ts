@@ -75,7 +75,6 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
     .orderBy('RAND()')
-    .limit(3)
     .getMany();
 
   const placeImages = await getRepository(Image)
@@ -83,7 +82,6 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.PLACE })
     .orderBy('RAND()')
-    .limit(3)
     .getMany();
 
   const oddImages = await getRepository(Image)
@@ -91,7 +89,6 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.ODD })
     .orderBy('RAND()')
-    .limit(3)
     .getMany();
 
   res.sendJSON({ objects: objectImages, places: placeImages, odds: oddImages });

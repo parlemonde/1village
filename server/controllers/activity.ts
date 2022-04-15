@@ -446,24 +446,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
     //Save to image table only if ActivityType.STORY or ActivityType.RE_INVENT_STORY has new images
-    if (
-      activity.type === ActivityType.STORY &&
-      imagesData.object.inspiredStoryId &&
-      imagesData.place.inspiredStoryId &&
-      imagesData.odd.inspiredStoryId
-    ) {
+    if (!imagesData.object.imageId && imagesData.object.inspiredStoryId) {
       imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
+    }
+    if (!imagesData.place.imageId && imagesData.place.inspiredStoryId) {
       imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;
-      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
-    } else if (
-      activity.type === ActivityType.RE_INVENT_STORY &&
-      imagesData.object.inspiredStoryId &&
-      imagesData.place.inspiredStoryId &&
-      imagesData.odd.inspiredStoryId &&
-      (imagesData.object.imageId === 0 || imagesData.place.imageId === 0 || imagesData.odd.imageId === 0)
-    ) {
-      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
-      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData?.place?.inspiredStoryId)).id;
+    }
+    if (!imagesData.odd.imageId && imagesData.odd.inspiredStoryId) {
       imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
     }
   }

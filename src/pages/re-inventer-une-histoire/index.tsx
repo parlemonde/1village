@@ -12,7 +12,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
-import type { StoriesData } from 'types/story.type';
+import type { StoryElement, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
@@ -23,7 +23,11 @@ const InspiredStory = () => {
 
   const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
+  const [objectImage, setObjectImage] = React.useState<StoryElement>();
+  const [placeImage, setPlaceImage] = React.useState<StoryElement>();
+  const [oddImage, setOtImage] = React.useState<StoryElement>();
 
+  // TODO: implement function to block rotate handle if activities.length <= 1
   React.useEffect(() => {
     if (village) {
       axiosLoggedRequest({
@@ -61,6 +65,14 @@ const InspiredStory = () => {
     }
   }, [activity, activityId, createNewActivity, router.query]);
 
+  const onImagesChange = (objectTransformed: StoryElement, placeTransformed: StoryElement, oddTransformed: StoryElement) => {
+    if (activity && activity.data) {
+      activity.data.object = objectTransformed;
+      activity.data.place = placeTransformed;
+      activity.data.odd = oddTransformed;
+    }
+  };
+
   //Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
     if (village && activityId) {
@@ -88,10 +100,10 @@ const InspiredStory = () => {
       object.imageUrl = data.object.imageUrl;
       place.imageUrl = data.place.imageUrl;
       odd.imageUrl = data.odd.imageUrl;
+      //update imageId
       object.imageId = data.object.imageId;
       place.imageId = data.place.imageId;
       odd.imageId = data.odd.imageId;
-      // we have to add the imageId to the activity
       //update inspiredStoryId to trace images
       object.inspiredStoryId = data.object.inspiredStoryId;
       place.inspiredStoryId = data.place.inspiredStoryId;
@@ -106,12 +118,6 @@ const InspiredStory = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity, inspiredStoryActivity]);
-
-  // const onClick = () => {
-  //   //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
-  //   setInspiredStoryActivity(undefined);
-  //   getRandomImages().catch();
-  // };
 
   const onNext = () => {
     save().catch(console.error);
@@ -162,7 +168,12 @@ const InspiredStory = () => {
           </p>
         </div>
         {/* Roulette images */}
-        <StoryPictureWheel objectImage={activity.data.object} placeImage={activity.data.place} oddImage={activity.data.odd} />
+        <StoryPictureWheel
+          objectImage={activity.data.object}
+          placeImage={activity.data.place}
+          oddImage={activity.data.odd}
+          onImagesChange={onImagesChange}
+        />
         <StepsButton next={onNext} />
       </Base>
     </>
