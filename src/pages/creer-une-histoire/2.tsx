@@ -127,6 +127,8 @@ const StoryStep2 = () => {
                 value={data?.place?.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
+                multiline
+                maxRows={4}
                 style={{ width: '100%', marginTop: '25px', color: 'primary' }}
                 inputProps={{
                   maxLength: 400,
