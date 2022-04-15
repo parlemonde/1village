@@ -445,14 +445,26 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     activity.data
   ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
-    //TODO : faire en sorte de persister seulement si les images n'ont pas id pour reinvent story
-    if (imagesData.object.inspiredStoryId && imagesData.place.inspiredStoryId && imagesData.odd.inspiredStoryId) {
+    //Save to image table only if ActivityType.STORY or ActivityType.RE_INVENT_STORY has new images
+    if (
+      activity.type === ActivityType.STORY &&
+      imagesData.object.inspiredStoryId &&
+      imagesData.place.inspiredStoryId &&
+      imagesData.odd.inspiredStoryId
+    ) {
       imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
       imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;
       imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
-    } else {
-      next();
-      return;
+    } else if (
+      activity.type === ActivityType.RE_INVENT_STORY &&
+      imagesData.object.inspiredStoryId &&
+      imagesData.place.inspiredStoryId &&
+      imagesData.odd.inspiredStoryId &&
+      (imagesData.object.imageId === 0 || imagesData.place.imageId === 0 || imagesData.odd.imageId === 0)
+    ) {
+      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
+      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData?.place?.inspiredStoryId)).id;
+      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
     }
   }
   await getRepository(Activity).save(activity);
