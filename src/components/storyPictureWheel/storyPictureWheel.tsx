@@ -7,7 +7,7 @@ import { Grid, Typography, CardMedia } from '@mui/material';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import SlotMachineHandle from 'src/svg/story-activity/slot-machine-handle.svg';
 import SlotMachine from 'src/svg/story-activity/slot-machine.svg';
-import type { StoriesData, StoryElement } from 'types/story.type';
+import type { StoryElement } from 'types/story.type';
 
 interface StoryPictureWheelProps {
   objectImage: StoryElement;
@@ -167,7 +167,7 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, style }: StoryPi
                   className="handle"
                   onClick={handleRotate}
                   onAnimationEnd={() => setRotate(0)}
-                  wobble={rotate}
+                  rotate={rotate}
                 />
               </div>
             </div>
