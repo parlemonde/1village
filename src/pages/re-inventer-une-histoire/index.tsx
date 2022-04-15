@@ -107,11 +107,11 @@ const InspiredStory = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity, inspiredStoryActivity]);
 
-  const onClick = () => {
-    //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
-    setInspiredStoryActivity(undefined);
-    // getRandomImages().catch();
-  };
+  // const onClick = () => {
+  //   //to avoid having inspiredStoryActivity in state and imagesRandom in state at the same time
+  //   setInspiredStoryActivity(undefined);
+  //   getRandomImages().catch();
+  // };
 
   const onNext = () => {
     save().catch(console.error);
