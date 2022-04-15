@@ -32,11 +32,11 @@ const AnthemStep1 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
-  const updateContent = (verse: Sample[]): void => {
+  const updateContent = (verseLyrics: Sample[]): void => {
     if (!activity) {
       return;
     }
-    updateActivity({ data: { ...data, verseAudios: verse } });
+    updateActivity({ data: { ...data, verseAudios: verseLyrics } });
   };
 
   const onChangeContent = (index: number) => (newValue: string) => {
@@ -67,11 +67,6 @@ const AnthemStep1 = () => {
       }
     }
   }, [activity, createNewActivity, router]);
-
-  const onClose = (idx: number) => {
-    data.verseAudios[idx].display = false;
-    updateActivity({ data: { ...data, data } });
-  };
 
   if (!activity) {
     return (
@@ -110,8 +105,8 @@ const AnthemStep1 = () => {
                             data.verseTime = time;
                             updateActivity({ data: { ...data } });
                           }}
-                          onClose={onClose}
                           idx={idx}
+                          edit
                         />
                       )}
                       {!audio.value && (

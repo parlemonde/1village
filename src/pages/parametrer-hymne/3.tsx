@@ -48,8 +48,8 @@ const AnthemStep3 = () => {
         <p>Rajouter des syllabes au couplet, soit sur la même ligne, soit en passant à la ligne.</p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.verse.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} update={updateActivity} data={data} />
+            {data?.verseLyrics.map((el, index) => (
+              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} update={() => {}} data={data.verseLyrics} />
             ))}
           </div>
           <Card style={{ display: 'inline-block' }}>
@@ -67,7 +67,7 @@ const AnthemStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.verse.push({ value: 'LA', back: false });
+                  data?.verseLyrics.push({ value: 'LA', back: false });
                   updateActivity({ data: { ...data } });
                 }}
               >
@@ -86,7 +86,7 @@ const AnthemStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.verse.push({ value: 'LA', back: true });
+                  data?.verseLyrics.push({ value: 'LA', back: true });
                   updateActivity({ data: { ...data } });
                 }}
               >

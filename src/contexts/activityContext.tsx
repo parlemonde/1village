@@ -30,6 +30,7 @@ interface ActivityContextValue {
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<boolean>;
   createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData): Promise<void>;
+  getActivity(id: number): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>({
@@ -41,6 +42,7 @@ export const ActivityContext = React.createContext<ActivityContextValue>({
   deleteContent: () => {},
   save: async () => false,
   createActivityIfNotExist: async () => {},
+  getActivity: async () => {},
 });
 
 function getInitialActivity(): Activity | null {
@@ -346,6 +348,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         deleteContent,
         createActivityIfNotExist,
         save,
+        getActivity,
       }}
     >
       {children}

@@ -15,6 +15,7 @@ import { UserContext } from 'src/contexts/userContext';
 import TrackIcon from 'src/svg/anthem/track.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { concatAudios } from 'src/utils/audios';
+import { toTime } from 'src/utils/toTime';
 
 const AnthemStep2 = () => {
   const router = useRouter();
@@ -51,11 +52,6 @@ const AnthemStep2 = () => {
     router.push('/parametrer-hymne/3');
   };
 
-  const onClose = (idx: number) => {
-    data.introOutro[idx].display = false;
-    updateActivity({ data: { ...data } });
-  };
-
   if (!activity) {
     return (
       <Base>
@@ -63,15 +59,6 @@ const AnthemStep2 = () => {
       </Base>
     );
   }
-  const toTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    let seconds: string | number = Math.trunc(time - minutes * 60);
-
-    if (seconds < 10) {
-      seconds = '0' + seconds;
-    }
-    return minutes + ':' + seconds;
-  };
 
   return (
     <Base>
@@ -115,8 +102,8 @@ const AnthemStep2 = () => {
                           data.introOutro[idx].time = time;
                           updateActivity({ data: { ...data } });
                         }}
-                        onClose={onClose}
                         idx={idx}
+                        edit
                       />
                     )}
                     {!audio.value && (

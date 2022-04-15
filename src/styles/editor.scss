@@ -56,6 +56,26 @@
   margin: 1.5rem 0rem 1rem 0;
   padding: 0;
   border: 1px dashed $primary-color;
+  width: fit-content;
+  padding: 1px;
+  max-width: 50vh;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.syllable-editor-song {
+  background-color: white;
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  margin: 1.5rem 0rem 1rem 0;
+  padding: 0;
+  width: fit-content;
+  padding: 1px;
+  max-width: 50vh;
+  display: inline-block;
+  margin-right: 10px;
 }
 
   .editor {

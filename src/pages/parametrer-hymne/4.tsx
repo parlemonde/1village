@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ButtonBase, Card } from '@mui/material';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { AnthemData, Syllable } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -11,7 +11,7 @@ import { Steps } from 'src/components/Steps';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
-import Syllable from 'src/svg/anthem/syllable.svg';
+import SyllableIcon from 'src/svg/anthem/syllable.svg';
 
 const AnthemStep4 = () => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const AnthemStep4 = () => {
     if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
       errors.push(1);
     }
-    if (activity !== null && data.verse.filter((c) => !!c.value).length === 0) {
+    if (activity !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
       errors.push(2);
     }
 
@@ -44,6 +44,10 @@ const AnthemStep4 = () => {
     return <div></div>;
   }
 
+  const updateChorus = (chorus: Syllable[]) => {
+    updateActivity({ data: { ...data, chorus } });
+  };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -60,8 +64,8 @@ const AnthemStep4 = () => {
                 key={`syllableEditor--chorus--${index}`}
                 backline={el.back}
                 index={index}
-                update={updateActivity}
-                data={data}
+                update={updateChorus}
+                data={data.chorus}
                 editable
               />
             ))}
@@ -85,7 +89,7 @@ const AnthemStep4 = () => {
                   updateActivity({ data: { ...data } });
                 }}
               >
-                <Syllable height="1.25rem" />
+                <SyllableIcon height="1.25rem" />
                 <span className="text text--small" style={{ marginTop: '0.1rem' }}>
                   Syllabe
                 </span>

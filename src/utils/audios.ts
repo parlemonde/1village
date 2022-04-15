@@ -12,7 +12,7 @@ export const mixAudios = async (audios: Partial<Sample>[], req: (arg: AxiosReque
     .then((data) => {
       const len = Math.max(...data.map((buffer) => buffer.byteLength));
       const context = new OfflineAudioContext(2, len, 44100);
-      // TODO : change logic in order to retirethe double calls
+      // TODO : change logic in order to refacto the double calls
       const getDecoded = (src: string) =>
         fetch(src).then((response) => response.arrayBuffer().then((arrayBuffer) => context.decodeAudioData(arrayBuffer)));
       return Promise.all(sources.map(getDecoded)).then(async (data) => {
@@ -25,7 +25,7 @@ export const mixAudios = async (audios: Partial<Sample>[], req: (arg: AxiosReque
         mix.connect(mixedAudio);
 
         const formData = new FormData();
-        formData.append('audio', new Blob([audioBufferToWav(audioBuffer)], { type: 'audio/vnd.wav' }), 'finalMix.wav');
+        formData.append('audio', new Blob([audioBufferToWav(audioBuffer)], { type: 'audio/vnd.wav' }), 'anthemTemplate.wav');
         const response = await req({
           method: 'POST',
           url: '/audios',
@@ -110,8 +110,6 @@ const copyBufferToBuffer = ({ srcBuffer, destBuffer, srcOffset, destOffset, desi
         srcBuffer.copyFromChannel(array1, 0, srcOffset);
       }
     }
-  } else {
-    throw new Error('TODO: copyFromChannel polyfill');
   }
 
   if (typeof destBuffer.copyToChannel === 'function') {
@@ -119,12 +117,10 @@ const copyBufferToBuffer = ({ srcBuffer, destBuffer, srcOffset, destOffset, desi
     if (desiredNumberOfChannels === 2) {
       destBuffer.copyToChannel(array1, 1, destOffset);
     }
-  } else {
-    throw new Error('TODO: copyToChannel polyfill');
   }
 };
 
-const audioBufferToWav = (buffer: AudioBuffer, opt: { float32?: boolean } = {}) => {
+export const audioBufferToWav = (buffer: AudioBuffer, opt: { float32?: boolean } = {}) => {
   const numChannels = buffer.numberOfChannels;
   const sampleRate = buffer.sampleRate;
   const format = opt.float32 ? 3 : 1;
@@ -140,7 +136,7 @@ const audioBufferToWav = (buffer: AudioBuffer, opt: { float32?: boolean } = {}) 
   return encodeWAV(result, format, sampleRate, numChannels, bitDepth);
 };
 
-function encodeWAV(samples: Float32Array, format: number, sampleRate: number, numChannels: number, bitDepth: number) {
+const encodeWAV = (samples: Float32Array, format: number, sampleRate: number, numChannels: number, bitDepth: number) => {
   const bytesPerSample = bitDepth / 8;
   const blockAlign = numChannels * bytesPerSample;
 
@@ -181,7 +177,7 @@ function encodeWAV(samples: Float32Array, format: number, sampleRate: number, nu
   }
 
   return buffer;
-}
+};
 
 const interleave = (inputL: Float32Array, inputR: Float32Array) => {
   const length = inputL.length + inputR.length;
@@ -242,4 +238,57 @@ const mergeBuffers = (buffers: AudioBuffer[], ac: OfflineAudioContext) => {
     }
   }
   return out;
+};
+
+export const audioBufferSlice = async (url: string, begin: number, end: number, callback: (newArrayBuffer: AudioBuffer) => void) => {
+  const get = (src: string) => fetch(src).then((response) => response.arrayBuffer());
+  const audioArrayBuffer = await get(url);
+  const audioContext = new OfflineAudioContext(2, audioArrayBuffer.byteLength, 44100);
+  const getDecoded = (src: string) =>
+    fetch(src).then((response) => response.arrayBuffer().then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer)));
+  let buffer = await getDecoded(url);
+
+  if (buffer.numberOfChannels === 1) {
+    const newBuffer = audioContext.createBuffer(2, buffer.length, buffer.sampleRate);
+    const myData = new Float32Array(buffer.length);
+    buffer.copyFromChannel(myData, 0);
+    newBuffer.copyToChannel(myData, 0);
+    newBuffer.copyToChannel(myData, 1);
+    buffer = newBuffer;
+  }
+
+  const duration = buffer.duration;
+  const channels = buffer.numberOfChannels;
+  const rate = buffer.sampleRate;
+
+  if (typeof end === 'function') {
+    callback = end;
+    end = duration;
+  }
+
+  // milliseconds to seconds
+  begin = begin / 1000;
+  end = end / 1000;
+
+  if (begin < 0) {
+    begin = 0;
+  }
+
+  if (end > duration) {
+    end = duration;
+  }
+
+  const startOffset = rate * begin;
+  const endOffset = rate * end;
+  const frameCount = endOffset - startOffset;
+  const newArrayBuffer = audioContext.createBuffer(channels, endOffset - startOffset, rate);
+  const anotherArray = new Float32Array(frameCount);
+  const offset = 0;
+
+  for (let channel = 0; channel < channels; channel++) {
+    buffer.copyFromChannel(anotherArray, channel, startOffset);
+    newArrayBuffer.copyToChannel(anotherArray, channel, offset);
+  }
+
+  callback(newArrayBuffer);
 };

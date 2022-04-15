@@ -8,6 +8,7 @@ import { Button, Divider, TextField } from '@mui/material';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
+import Trash from 'src/svg/anthem/trash.svg';
 import { isValidHttpUrl } from 'src/utils';
 
 export interface AnthemEditorProps {
@@ -17,6 +18,7 @@ export interface AnthemEditorProps {
   setTime?(args: number): void;
   onClose?(idx: number): void;
   idx?: number;
+  edit?: boolean;
 }
 
 export const AnthemEditor = ({
@@ -26,6 +28,7 @@ export const AnthemEditor = ({
   setTime = () => {},
   onClose = () => {},
   idx = 0,
+  edit = false,
 }: AnthemEditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -148,20 +151,18 @@ export const AnthemEditor = ({
     <>
       {soundUrl && (
         <>
-          <div>
+          <div style={{ display: 'flex' }}>
             <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata} style={{ width: '250px', height: '30px' }}>
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
-            {/* <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => {
-                setIsModalOpen(true);
-              }}
-            >
-              {'Changer de son'}
-            </Button> */}
+            {edit && (
+              <Trash
+                style={{ height: '30px', width: '25px', marginLeft: '5px', cursor: 'pointer' }}
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              />
+            )}
           </div>
         </>
       )}
