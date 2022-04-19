@@ -14,6 +14,7 @@ import {
   isReaction,
   isReportage,
   isSymbol,
+  isVerseRecord,
 } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { AvatarImg } from 'src/components/Avatar';
@@ -40,6 +41,7 @@ import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
 import { ReportageCard } from './ReportageCard';
 import { SymbolCard } from './SymbolCard';
+import { VerseRecordCard } from './VerseRecordCard';
 import type { ActivityCardProps } from './activity-card.types';
 
 export const ActivityCard = ({
@@ -237,6 +239,17 @@ export const ActivityCard = ({
           )}
           {isReaction(activity) && (
             <ReactionCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isVerseRecord(activity) && (
+            <VerseRecordCard
               activity={activity}
               user={user}
               isSelf={isSelf}

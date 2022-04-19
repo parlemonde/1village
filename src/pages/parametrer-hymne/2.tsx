@@ -28,7 +28,7 @@ const AnthemStep2 = () => {
       return [0];
     }
     return [];
-  }, [activity]);
+  }, [data, data.verseAudios]);
 
   const updateContent = (content: Sample[]): void => {
     if (!activity) {
@@ -63,7 +63,12 @@ const AnthemStep2 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={1} />
+        <Steps
+          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
+          errorSteps={errorSteps}
+          activeStep={1}
+          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+        />
         <div className="width-900">
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
@@ -75,9 +80,9 @@ const AnthemStep2 = () => {
               :
             </p>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-              <span>Intro : {data.introOutro[0].time && <b>({toTime(data.introOutro[0].time)})</b>}</span>
-              <span>Couplet : {data.verseTime && <b>({toTime(data.verseTime)})</b>} </span>
-              <span>Outro : {data.introOutro[1].time && <b>({toTime(data.introOutro[1].time)})</b>}</span>
+              <span>Intro : {data.introOutro[0].time > 0 && <b>({toTime(data.introOutro[0].time)})</b>}</span>
+              <span>Couplet : {data.verseTime > 0 && <b>({toTime(data.verseTime)})</b>} </span>
+              <span>Outro : {data.introOutro[1].time > 0 && <b>({toTime(data.introOutro[1].time)})</b>}</span>
             </div>
             <img src="/static-images/vocal.png" style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
           </div>

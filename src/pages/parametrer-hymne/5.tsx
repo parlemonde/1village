@@ -39,7 +39,7 @@ const AnthemStep5 = () => {
       errors.push(3);
     }
     return errors;
-  }, [activity]);
+  }, [activity, data.chorus, data.introOutro, data.verseAudios, data.verseLyrics]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
@@ -67,7 +67,12 @@ const AnthemStep5 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={4} />
+        <Steps
+          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
+          errorSteps={errorSteps}
+          activeStep={4}
+          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+        />
         <div className="width-900">
           <h1>Pré-visualisez votre paramétrage et activez l&apos;hymne</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -133,8 +138,7 @@ const AnthemStep5 = () => {
               {data.verseLyrics.map((syllable) =>
                 syllable.back ? (
                   <>
-                    {syllable.value}
-                    <br />
+                    <br /> {syllable.value}{' '}
                   </>
                 ) : (
                   <>{syllable.value} </>
@@ -156,8 +160,7 @@ const AnthemStep5 = () => {
               {data.chorus.map((syllable) =>
                 syllable.back ? (
                   <>
-                    {syllable.value}
-                    <br />
+                    <br /> {syllable.value}{' '}
                   </>
                 ) : (
                   <>{syllable.value} </>

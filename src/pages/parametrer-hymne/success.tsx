@@ -24,7 +24,7 @@ const AnthemSuccess = () => {
     };
 
     updateVillage();
-  }, [activity]);
+  }, [activity, village, editVillage]);
 
   return (
     <Base>

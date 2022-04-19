@@ -14,6 +14,7 @@ export type VerseRecordData = {
   mixWithoutLyrics: string;
   classRecord: string;
   slicedRecord: string;
+  customizedMixWithVocals: string;
 };
 
 export type VerseRecordActivity = Activity<VerseRecordData>;

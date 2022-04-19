@@ -14,6 +14,7 @@ import type { QuestionActivity } from './question.types';
 import type { ReactionActivity } from './reaction.types';
 import type { ReportageActivity } from './reportage.types';
 import type { SymbolActivity } from './symbol.types';
+import type { VerseRecordActivity } from './verseRecord.types';
 
 export const isPresentation = (activity: Activity): activity is PresentationActivity => {
   return activity.type === ActivityType.PRESENTATION;
@@ -50,4 +51,7 @@ export const isReaction = (activity: Activity): activity is ReactionActivity => 
 };
 export const isAnthem = (activity: Activity): activity is AnthemActivity => {
   return activity.type === ActivityType.ANTHEM;
+};
+export const isVerseRecord = (activity: Activity): activity is VerseRecordActivity => {
+  return activity.type === ActivityType.VERSE_RECORD;
 };

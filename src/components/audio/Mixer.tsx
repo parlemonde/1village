@@ -20,12 +20,13 @@ const AudioMixer: React.FC<AudioMixerProps> = ({ data, time }: AudioMixerProps) 
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const activityData = (activity?.data as VerseRecordData) || null;
-  const [source, setSource] = React.useState(activityData.customizedMixBlob && URL.createObjectURL(activityData.customizedMixBlob));
+  const [source, setSource] = React.useState(activityData.customizedMix ? activityData.customizedMix : '');
   const [disabled, setDisabled] = React.useState(false);
   const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
+  const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
+
   /* eslint-disable-next-line */
     const audiosEl = data.map((audio: Audio) => React.useRef(new Audio(audio.value)));
-
   const ac = new AudioContext();
   const dest = ac.createMediaStreamDestination();
 
@@ -56,13 +57,15 @@ const AudioMixer: React.FC<AudioMixerProps> = ({ data, time }: AudioMixerProps) 
     setTimeout(() => recorder.stop(), time * 1000);
   };
 
-  const solo = (idx: number, isSolo: boolean) => {
-    const newVolumes: number[] = [];
+  const solo = (idx: number) => {
+    let newVolumes: number[] = [];
     audiosEl.map((audio, index) => {
-      newVolumes.push(audio.current.volume);
-      audio.current.volume = idx !== index ? (isSolo ? volumes[index] : 0) : audio.current.volume === 0 ? 1 : audio.current.volume;
+      newVolumes = volumes;
+      if (audio.current.volume !== 0) newVolumes[index] = audio.current.volume;
+      audio.current.volume = idx !== index ? (solos[idx] ? volumes[index] : 0) : audio.current.volume === 0 ? 1 : audio.current.volume;
     });
     setVolumes(newVolumes);
+    setSolos((solos: boolean[]) => solos.map((el, index) => (index === idx ? !el : false)));
   };
 
   const toggleVolume = (idx: number, isMuted: boolean) => {
@@ -75,7 +78,7 @@ const AudioMixer: React.FC<AudioMixerProps> = ({ data, time }: AudioMixerProps) 
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex' }}>
         {audiosEl.map((audio, idx) => (
-          <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} />
+          <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} solos={solos} />
         ))}
       </div>
 
@@ -97,20 +100,20 @@ export default AudioMixer;
 interface AudioMixProps {
   audio: React.MutableRefObject<HTMLAudioElement>;
   idx: number;
-  solo: (idx: number, isSolo: boolean) => void;
+  solo: (idx: number) => void;
   off: (idx: number, isMuted: boolean) => void;
+  solos: boolean[];
 }
-const AudioMix = ({ audio, idx, solo, off }: AudioMixProps) => {
+const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
   const [isMuted, setIsMuted] = React.useState(false);
-  const [isSolo, setIsSolo] = React.useState(false);
+  const color = solos[idx] ? 'gold' : primaryColor;
 
   const toggleMute = (idx: number) => {
     setIsMuted(isMuted ? false : true);
     off(idx, isMuted);
   };
   const toggleSolo = (idx: number) => {
-    setIsSolo(isSolo ? false : true);
-    solo(idx, isSolo);
+    solo(idx);
   };
 
   // eslint-disable-next-line no-empty-pattern
@@ -147,8 +150,8 @@ const AudioMix = ({ audio, idx, solo, off }: AudioMixProps) => {
       <div
         style={{
           fontSize: 'smaller',
-          borderColor: isSolo ? 'gold' : primaryColor,
-          border: 'solid',
+          borderColor: color,
+          borderStyle: 'solid',
           borderWidth: 'thin',
           width: '40px',
           height: '20px',
@@ -159,7 +162,7 @@ const AudioMix = ({ audio, idx, solo, off }: AudioMixProps) => {
           cursor: 'pointer',
         }}
       >
-        <span onClick={() => toggleSolo(idx)} style={{ color: isSolo ? 'gold' : primaryColor }}>
+        <span onClick={() => toggleSolo(idx)} style={{ color }}>
           SOLO
         </span>
       </div>
@@ -167,7 +170,7 @@ const AudioMix = ({ audio, idx, solo, off }: AudioMixProps) => {
         style={{
           fontSize: 'smaller',
           borderColor: primaryColor,
-          border: 'solid',
+          borderStyle: 'solid',
           borderWidth: 'thin',
           width: '40px',
           height: '20px',

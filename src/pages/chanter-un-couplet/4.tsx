@@ -19,7 +19,7 @@ import { audioBufferSlice, audioBufferToWav, mixAudios } from 'src/utils/audios'
 const SongStep4 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [trackDuration, setTrackDuration] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as VerseRecordData) || null;
@@ -27,12 +27,12 @@ const SongStep4 = () => {
   const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data.customizedMix) {
+    if (activity !== null && !data?.customizedMix) {
       errors.push(0);
     }
 
     return errors;
-  }, [activity]);
+  }, [activity, data?.customizedMix]);
 
   const onNext = () => {
     setIsLoading(true);
@@ -54,6 +54,7 @@ const SongStep4 = () => {
         updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
       });
     }
+    save().catch(console.error);
     setIsLoading(false);
     router.push('/chanter-un-couplet/5');
   };
@@ -61,7 +62,12 @@ const SongStep4 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']} activeStep={3} errorSteps={errorSteps} />
+        <Steps
+          steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
+          activeStep={3}
+          errorSteps={errorSteps}
+          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+        />
         <h1>Synchronisez votre voix sur l’hymne</h1>
         <p> Avez-vous bien chanter en rytme ?</p>
         <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le pour le caler sur l’hymne !</p>

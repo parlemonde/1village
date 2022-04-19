@@ -4,33 +4,15 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { useVillageRequests } from 'src/services/useVillages';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
-const AnthemSuccess = () => {
-  const { activity } = React.useContext(ActivityContext);
-  const { village } = React.useContext(VillageContext);
-  const { editVillage } = useVillageRequests();
-
-  React.useEffect(() => {
-    const updateVillage = async () => {
-      if (village && activity && !village.anthemId) {
-        await editVillage({ id: village.id, anthemId: activity.id });
-        window.location.reload();
-      }
-    };
-
-    updateVillage();
-  }, [activity]);
-
+const SongSuccess = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">Votre hymne a bien été paramétrée !</p>
+          <p className="text">Votre couplet a bien été publié !</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
@@ -45,4 +27,4 @@ const AnthemSuccess = () => {
   );
 };
 
-export default AnthemSuccess;
+export default SongSuccess;

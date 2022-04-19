@@ -11,7 +11,7 @@ import { Steps } from 'src/components/Steps';
 import AudioMixer from 'src/components/audio/Mixer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { concatAudios } from 'src/utils/audios';
+import { concatAudios, mixAudios } from 'src/utils/audios';
 
 const SongStep1 = () => {
   const router = useRouter();
@@ -20,11 +20,10 @@ const SongStep1 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = (activity?.data as VerseRecordData) || null;
-  data?.verseAudios.length === 7 && data?.verseAudios?.shift();
 
   const onNext = async () => {
     setIsLoading(true);
-    if (data.customizedMixBlob) {
+    if (data.customizedMixBlob && !data.customizedMix) {
       const formData = new FormData();
       formData.append('audio', data.customizedMixBlob, 'classVerse.webm');
       const response = await axiosLoggedRequest({
@@ -35,8 +34,9 @@ const SongStep1 = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      const value = await concatAudios([data.introOutro[0], { value: response.data.url }, data.introOutro[1]], axiosLoggedRequest);
-      updateActivity({ data: { ...data, mixWithoutLyrics: value, customizedMix: response.data.url } });
+      const customizedMixWithVocals = await mixAudios([data?.verseAudios[0], { value: response.data.url }], axiosLoggedRequest);
+      const mixWithoutLyrics = await concatAudios([data.introOutro[0], { value: response.data.url }, data.introOutro[1]], axiosLoggedRequest);
+      updateActivity({ data: { ...data, mixWithoutLyrics, customizedMixWithVocals, customizedMix: response.data.url } });
     }
     setIsLoading(false);
     router.push('/chanter-un-couplet/2');
@@ -53,14 +53,18 @@ const SongStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']} activeStep={0} />
+        <Steps
+          steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
+          activeStep={0}
+          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+        />
         <div className="width-900">
           <h1>Mixez votre couplet</h1>
           <p>
             Avant de composer votre couplet et de l&apos;enregistrer, je vous propose de moduler la musique de notre hymne, en jouant avec cette table
             de montage simplifiée.{' '}
           </p>
-          {data && <AudioMixer data={data?.verseAudios?.map((audio) => ({ value: audio.value, volume: 0.5 }))} time={data?.verseTime} />}
+          {data && <AudioMixer data={data?.verseAudios?.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 }))} time={data?.verseTime} />}
         </div>
       </div>
       <StepsButton next={onNext} />

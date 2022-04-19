@@ -13,17 +13,22 @@ const SongStep3 = () => {
   const data = (activity?.data as VerseRecordData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data.customizedMix) {
+    if (activity !== null && !data?.customizedMix) {
       errors.push(0);
     }
 
     return errors;
-  }, [activity]);
+  }, [activity, data?.customizedMix]);
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']} activeStep={2} errorSteps={errorSteps} />
+        <Steps
+          steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
+          activeStep={2}
+          errorSteps={errorSteps}
+          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+        />
         <h1>Enregistrez votre voix</h1>
         <p>
           À présent, il est temps d’enregistrer votre classe entrain de chanter votre couplet ! Pour vous aider, vous pouvez écouter l’hymne, avec
@@ -45,27 +50,13 @@ const SongStep3 = () => {
           <h2>Le refrain</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data?.chorus.map((el, index) => (
-              <SyllableEditor
-                key={`syllableEditor--verseLyrics--${index}`}
-                backline={el.back}
-                index={index}
-                update={() => {}}
-                data={data.chorus}
-                song
-              />
+              <SyllableEditor key={`syllableEditor--chorus--${index}`} backline={el.back} index={index} data={data.chorus} song />
             ))}
           </div>
           <h2>Votre couplet (démarre à {toTime(data.introOutro[0].time)})</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data?.verseLyrics.map((el, index) => (
-              <SyllableEditor
-                key={`syllableEditor--verseLyrics--${index}`}
-                backline={el.back}
-                index={index}
-                update={() => {}}
-                data={data.verseLyrics}
-                song
-              />
+              <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} backline={el.back} index={index} data={data.verseLyrics} song />
             ))}
           </div>
           <StepsButton prev="/chanter-un-couplet/2" next="/chanter-un-couplet/4" />

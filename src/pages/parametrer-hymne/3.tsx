@@ -26,7 +26,7 @@ const AnthemStep3 = () => {
       errors.push(1);
     }
     return errors;
-  }, [activity]);
+  }, [activity, data.verseAudios, data.introOutro]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -43,13 +43,18 @@ const AnthemStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={2} />
+        <Steps
+          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
+          errorSteps={errorSteps}
+          activeStep={2}
+          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+        />
         <h1>Paramétrer le couplet</h1>
         <p>Rajouter des syllabes au couplet, soit sur la même ligne, soit en passant à la ligne.</p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data?.verseLyrics.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} update={() => {}} data={data.verseLyrics} />
+              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} data={data.verseLyrics} />
             ))}
           </div>
           <Card style={{ display: 'inline-block' }}>

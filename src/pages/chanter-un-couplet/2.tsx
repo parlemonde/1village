@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { Syllable } from 'src/activity-types/anthem.types';
@@ -9,32 +10,43 @@ import { SyllableEditor } from 'src/components/activities/content/editors/Syllab
 import { ActivityContext } from 'src/contexts/activityContext';
 
 const SongStep2 = () => {
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const router = useRouter();
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const data = (activity?.data as VerseRecordData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data.customizedMix) {
+    if (activity !== null && !data?.customizedMix) {
       errors.push(0);
     }
 
     return errors;
-  }, [activity]);
+  }, [activity, data?.customizedMix]);
 
   const updateVerse = (verseLyrics: Syllable[]) => {
     updateActivity({ data: { ...data, verseLyrics } });
   };
 
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/chanter-un-couplet/3');
+  };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']} activeStep={1} errorSteps={errorSteps} />
+        <Steps
+          steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
+          activeStep={1}
+          errorSteps={errorSteps}
+          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+        />
         <h1>À vous d&apos;écrire le couplet !</h1>
         <p>
           Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
           N&apos;hésitez pas à ré-écouter le couplet.
         </p>
-        {data?.customizedMix ? (
-          <audio controls src={data?.customizedMix} />
+        {data?.customizedMixWithVocals ? (
+          <audio controls src={data?.customizedMixWithVocals} />
         ) : (
           <p>
             <b>Il manque votre mix du couplet !</b>
@@ -54,7 +66,7 @@ const SongStep2 = () => {
               />
             ))}
           </div>
-          <StepsButton prev="/chanter-un-couplet/1" next="/chanter-un-couplet/3" />
+          <StepsButton prev="/chanter-un-couplet/1" next={onNext} />
         </div>
       </div>
     </Base>

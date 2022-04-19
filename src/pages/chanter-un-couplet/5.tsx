@@ -23,7 +23,7 @@ const SongStep5 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data.customizedMix) {
+    if (activity !== null && !data?.customizedMix) {
       errors.push(0);
     }
     if ((activity !== null && !data.verse) || !data.slicedRecord) {
@@ -31,7 +31,7 @@ const SongStep5 = () => {
     }
 
     return errors;
-  }, [activity]);
+  }, [activity, data?.customizedMix]);
   const onPublish = async () => {
     setIsLoading(true);
     const success = await save(true);
@@ -48,7 +48,12 @@ const SongStep5 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']} activeStep={4} errorSteps={errorSteps} />
+        <Steps
+          steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
+          activeStep={4}
+          errorSteps={errorSteps}
+          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+        />
         <div className="width-900">
           <h1>Pré-visualisez votre paramétrage et activez l&apos;hymne</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -85,7 +90,7 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {data.customizedMix && <audio src={data.customizedMix} controls style={{ width: '350px', height: '60px' }} />}
+            {data?.customizedMix && <audio src={data?.customizedMix} controls style={{ width: '350px', height: '60px' }} />}
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de votre couplet</p>
           </div>
 
@@ -102,8 +107,7 @@ const SongStep5 = () => {
               {data.verseLyrics.map((syllable) =>
                 syllable.back ? (
                   <>
-                    {syllable.value}
-                    <br />
+                    <br /> {syllable.value}{' '}
                   </>
                 ) : (
                   <>{syllable.value} </>
