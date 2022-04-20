@@ -135,7 +135,8 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
   };
 
   // this will create a rolling effect and return random selected option
-  const triggerSlotRotation = (ref) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const triggerSlotRotation = (ref: any) => {
     function setTop(top: number) {
       ref.style.top = `${top}px`;
     }
