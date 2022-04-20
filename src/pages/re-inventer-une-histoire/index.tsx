@@ -9,9 +9,9 @@ import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWhee
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { getQueryString, serializeToQueryUrl } from 'src/utils';
+import { useActivities } from 'src/services/useActivities';
+import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import type { Activity } from 'types/activity.type';
 import type { StoryElement, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
@@ -20,30 +20,15 @@ const InspiredStory = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
+  const { user } = React.useContext(UserContext);
+  const { activities } = useActivities({
+    page: 0,
+    countries: user ? [user.country.isoCode.toUpperCase()] : [],
+    pelico: true,
+    type: ActivityType.STORY,
+  });
 
-  const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
-  const [objectImage, setObjectImage] = React.useState<StoryElement>();
-  const [placeImage, setPlaceImage] = React.useState<StoryElement>();
-  const [oddImage, setOtImage] = React.useState<StoryElement>();
-
-  // TODO: implement function to block rotate handle if activities.length <= 1
-  React.useEffect(() => {
-    if (village) {
-      axiosLoggedRequest({
-        method: 'GET',
-        url: `/activities${serializeToQueryUrl({
-          villageId: village?.id,
-          type: ActivityType.STORY,
-        })}`,
-      }).then((response) => {
-        if (!response.error && response.data) {
-          const storyActivities = response.data;
-          setStoryActivities(storyActivities as Activity[]);
-        }
-      });
-    }
-  }, [axiosLoggedRequest, village]);
 
   //Creation of new empty story activity no matter what
   const created = React.useRef(false);
@@ -120,14 +105,18 @@ const InspiredStory = () => {
   }, [activity, inspiredStoryActivity]);
 
   const onNext = () => {
-    save().catch(console.error);
-    router.push('/re-inventer-une-histoire/1');
+    if (activities.length > 1) {
+      save().catch(console.error);
+      router.push('/re-inventer-une-histoire/1');
+    } else {
+      return;
+    }
   };
 
   if (activity === null || !isStory(activity)) {
     return <div></div>;
   }
-  console.log('activity', activity);
+
   return (
     <>
       <Base>

@@ -23,7 +23,6 @@ const ReInventStoryStep1 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  // const [isOriginal, setIsOriginal] = React.useState(false);
   const data = activity?.data as StoriesData;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 

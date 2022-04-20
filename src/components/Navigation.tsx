@@ -9,7 +9,6 @@ import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useActivities } from 'src/services/useActivities';
 import { useVillageRequests } from 'src/services/useVillages';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
@@ -24,6 +23,7 @@ import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
@@ -125,23 +125,31 @@ const TABS_PER_PHASE: Tab[] = [
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const { activities } = useActivities({
-    limit: 200,
-    page: 0,
-    countries:
-      village && (isModerateur || village.activePhase >= 2)
-        ? village.countries.map((c) => c.isoCode.toUpperCase())
-        : user
-        ? [user.country.isoCode.toUpperCase()]
-        : [],
-    pelico: true,
-    type: ActivityType.STORY,
-  });
+  const [firstStoryCreated, setFirstStoryCreated] = React.useState(true);
+
+  const getStories = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities${serializeToQueryUrl({
+        villageId: village?.id,
+        type: ActivityType.STORY,
+      })}`,
+    });
+    if (response.data.length > 0) {
+      setFirstStoryCreated(true);
+    } else {
+      setFirstStoryCreated(false);
+    }
+  }, [axiosLoggedRequest, village?.id]);
+
+  React.useEffect(() => {
+    getStories();
+  }, [getStories]);
 
   const fixedTabs = React.useMemo(
     () => [
@@ -208,7 +216,7 @@ export const Navigation = (): JSX.Element => {
                   disabled={
                     village === null ||
                     (tab.phase !== undefined && tab.phase > village.activePhase) ||
-                    (activities.length === 0 && village.activePhase >= 2 && tab.path.split('/')[1] === 're-inventer-une-histoire')
+                    (!firstStoryCreated && village.activePhase === 3 && tab.path.split('/')[1] === 're-inventer-une-histoire')
                   }
                 >
                   {tab.label}
