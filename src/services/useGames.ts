@@ -36,7 +36,7 @@ export const useGameRequests = () => {
       if (response.error) {
         return 0;
       }
-      return response.data.games as number;
+      return (response.data as Array<Game>).length;
     },
     [axiosLoggedRequest, village],
   );

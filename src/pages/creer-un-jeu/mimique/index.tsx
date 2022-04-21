@@ -80,7 +80,7 @@ const Mimique = () => {
               float: 'right',
             }}
             disableElevation
-            disabled={hasUserCreatedMimics === true || mimicsCount === 0}
+            disabled={hasUserCreatedMimics === false || mimicsCount === 0}
           >
             Découvrir des mimiques
           </Button>
