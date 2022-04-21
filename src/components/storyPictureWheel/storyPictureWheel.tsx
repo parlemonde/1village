@@ -44,7 +44,7 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
           villageId: village?.id,
-          type: ActivityType.STORY,
+          type: ActivityType.STORY + ',' + ActivityType.RE_INVENT_STORY,
         })}`,
       }).then((response) => {
         if (!response.error && response.data) {

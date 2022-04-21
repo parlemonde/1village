@@ -7,6 +7,8 @@ import { UserType } from 'types/user.type';
 import { FirstPhase } from './FirstPhase';
 import { SecondPhase } from './SecondPhase';
 
+// import { ThirdPhase } from './ThirdPhase';
+
 export const WelcomeModal = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
@@ -21,6 +23,9 @@ export const WelcomeModal = () => {
   if (user.firstLogin === 1 && village.activePhase > 1) {
     return <SecondPhase />;
   }
+  // if (village.activePhase > 1) {
+  //   return <ThirdPhase />;
+  // }
 
   return null;
 };

@@ -105,12 +105,8 @@ const InspiredStory = () => {
   }, [activity, inspiredStoryActivity]);
 
   const onNext = () => {
-    if (activities.length > 1) {
-      save().catch(console.error);
-      router.push('/re-inventer-une-histoire/1');
-    } else {
-      return;
-    }
+    save().catch(console.error);
+    router.push('/re-inventer-une-histoire/1');
   };
 
   if (activity === null || !isStory(activity)) {
