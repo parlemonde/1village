@@ -9,7 +9,6 @@ import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWhee
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { StoryElement, StoriesData } from 'types/story.type';
@@ -20,13 +19,6 @@ const InspiredStory = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, createNewActivity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
-  const { activities } = useActivities({
-    page: 0,
-    countries: user ? [user.country.isoCode.toUpperCase()] : [],
-    pelico: true,
-    type: ActivityType.STORY,
-  });
 
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
 
