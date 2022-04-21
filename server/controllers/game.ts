@@ -120,23 +120,6 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
   res.sendJSON(game);
 });
 
-//--- Get number of games create ---
-gameController.get({ path: '/isGameCreateBeforePlaying', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    next();
-    return;
-  }
-  const userId = req.user.id;
-  const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
-  if (!villageId) {
-    next();
-    return;
-  }
-  const game = await getRepository(Game).createQueryBuilder('game').where('`game`.`userId` = :userId', { userId: userId }).getCount();
-  res.sendJSON({
-    game: game,
-  });
-});
 //--- Get number of games available ---
 gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const type = parseInt(getQueryString(req.query.type) || '0', 10);
