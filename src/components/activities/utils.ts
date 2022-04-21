@@ -4,6 +4,7 @@ import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
+import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
@@ -23,6 +24,7 @@ export const titles = {
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
   [ActivityType.STORY]: 'inventé une histoire',
+  [ActivityType.RE_INVENT_STORY]: 'ré-inventé une histoire',
 };
 
 export const icons = {
@@ -38,6 +40,7 @@ export const icons = {
   [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
   [ActivityType.STORY]: StoryIcon,
+  [ActivityType.RE_INVENT_STORY]: RouletteIcon,
 };
 
 export const DESC = {
@@ -96,6 +99,7 @@ const specificActivityPhase = {
   [ActivityType.REPORTAGE]: [2],
   [ActivityType.REACTION]: [2],
   [ActivityType.STORY]: [3],
+  [ActivityType.RE_INVENT_STORY]: [3],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];

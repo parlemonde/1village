@@ -23,6 +23,8 @@ import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { serializeToQueryUrl } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
@@ -123,11 +125,31 @@ const TABS_PER_PHASE: Tab[] = [
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [firstStoryCreated, setFirstStoryCreated] = React.useState(true);
+
+  const getStories = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities${serializeToQueryUrl({
+        villageId: village?.id,
+        type: ActivityType.STORY,
+      })}`,
+    });
+    if (response.data.length > 0) {
+      setFirstStoryCreated(true);
+    } else {
+      setFirstStoryCreated(false);
+    }
+  }, [axiosLoggedRequest, village?.id]);
+
+  React.useEffect(() => {
+    getStories();
+  }, [getStories]);
 
   const fixedTabs = React.useMemo(
     () => [
@@ -192,7 +214,9 @@ export const Navigation = (): JSX.Element => {
                   }}
                   disableElevation
                   disabled={
-                    village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.label === 'Ré-inventer une histoire'
+                    village === null ||
+                    (tab.phase !== undefined && tab.phase > village.activePhase) ||
+                    (!firstStoryCreated && village.activePhase === 3 && tab.path.split('/')[1] === 're-inventer-une-histoire')
                   }
                 >
                   {tab.label}

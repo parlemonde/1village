@@ -21,7 +21,7 @@ import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 import { UserType } from 'types/user.type';
 
-const StoryStep5 = () => {
+const ReInventStoryStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
@@ -55,9 +55,9 @@ const StoryStep5 = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     } else if (activity && !isStory(activity)) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     }
   }, [activity, router]);
 
@@ -65,7 +65,7 @@ const StoryStep5 = () => {
     setIsLoading(true);
     const success = await save(true);
     if (success) {
-      router.push('/creer-une-histoire/success');
+      router.push('/re-inventer-une-histoire/success');
     }
     setIsLoading(false);
   };
@@ -79,7 +79,13 @@ const StoryStep5 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
-          urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
+          urls={[
+            '/re-inventer-une-histoire/1?edit',
+            '/re-inventer-une-histoire/2',
+            '/re-inventer-une-histoire/3',
+            '/re-inventer-une-histoire/4',
+            '/re-inventer-une-histoire/5',
+          ]}
           activeStep={4}
           errorSteps={errorSteps}
         />
@@ -94,8 +100,8 @@ const StoryStep5 = () => {
 
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/creer-une-histoire/2" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/creer-une-histoire/2">
+              <Link href="/re-inventer-une-histoire/2" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/re-inventer-une-histoire/2">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -133,7 +139,7 @@ const StoryStep5 = () => {
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
-                  router.push(`/creer-une-histoire/1?edit=${activity.id}`);
+                  router.push(`/re-inventer-une-histoire/1?edit=${activity.id}`);
                 }}
                 status={errorSteps.includes(0) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
@@ -176,7 +182,7 @@ const StoryStep5 = () => {
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
-                  router.push(`/creer-une-histoire/2`);
+                  router.push(`/re-inventer-une-histoire/2`);
                 }}
                 status={errorSteps.includes(1) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
@@ -219,7 +225,7 @@ const StoryStep5 = () => {
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
-                  router.push(`/creer-une-histoire/3`);
+                  router.push(`/re-inventer-une-histoire/3`);
                 }}
                 status={errorSteps.includes(2) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
@@ -260,7 +266,7 @@ const StoryStep5 = () => {
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
-                  router.push(`/creer-une-histoire/4`);
+                  router.push(`/re-inventer-une-histoire/4`);
                 }}
                 status={errorSteps.includes(3) ? 'warning' : 'success'}
                 style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
@@ -297,8 +303,8 @@ const StoryStep5 = () => {
               </Grid>
             </Grid>
           </div>
-          <StepsButton prev="/creer-une-histoire/4" />
         </div>
+        <StepsButton prev="/re-inventer-une-histoire/4" />
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
@@ -307,4 +313,4 @@ const StoryStep5 = () => {
   );
 };
 
-export default StoryStep5;
+export default ReInventStoryStep5;

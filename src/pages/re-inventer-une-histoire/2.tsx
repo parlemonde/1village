@@ -17,7 +17,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
-const StoryStep2 = () => {
+const ReInventStoryStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
@@ -32,9 +32,9 @@ const StoryStep2 = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     } else if (activity && !isStory(activity)) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     }
   }, [activity, router]);
 
@@ -48,12 +48,12 @@ const StoryStep2 = () => {
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { place } = data;
-    updateActivity({ data: { ...data, place: { ...place, imageUrl } } });
+    updateActivity({ data: { ...data, place: { ...place, imageId: 0, imageUrl, inspiredStoryId: activity?.id } } });
   };
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/creer-une-histoire/3');
+    router.push('/re-inventer-une-histoire/3');
   };
 
   if (data === null || activity === null || !isStory(activity)) {
@@ -65,7 +65,13 @@ const StoryStep2 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
-          urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
+          urls={[
+            '/re-inventer-une-histoire/1?edit',
+            '/re-inventer-une-histoire/2',
+            '/re-inventer-une-histoire/3',
+            '/re-inventer-une-histoire/4',
+            '/re-inventer-une-histoire/5',
+          ]}
           activeStep={1}
           errorSteps={errorSteps}
         />
@@ -146,10 +152,10 @@ const StoryStep2 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev={`/creer-une-histoire/1?edit=${activity.id}`} next={onNext} />
+        <StepsButton prev={`/re-inventer-une-histoire/1?edit=${activity.id}`} next={onNext} />
       </div>
     </Base>
   );
 };
 
-export default StoryStep2;
+export default ReInventStoryStep2;

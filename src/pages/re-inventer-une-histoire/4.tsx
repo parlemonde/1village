@@ -17,7 +17,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
 import type { StoriesData, TaleElement } from 'types/story.type';
 
-const StoryStep4 = () => {
+const ReInventStoryStep4 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
@@ -42,9 +42,9 @@ const StoryStep4 = () => {
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     } else if (activity && !isStory(activity)) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     }
   }, [activity, router]);
 
@@ -63,7 +63,7 @@ const StoryStep4 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/creer-une-histoire/5');
+    router.push('/re-inventer-une-histoire/5');
   };
 
   if (data === null || activity === null || !isStory(activity)) {
@@ -75,7 +75,13 @@ const StoryStep4 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
-          urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
+          urls={[
+            '/re-inventer-une-histoire/1?edit',
+            '/re-inventer-une-histoire/2',
+            '/re-inventer-une-histoire/3',
+            '/re-inventer-une-histoire/4',
+            '/re-inventer-une-histoire/5',
+          ]}
           activeStep={3}
           errorSteps={errorSteps}
         />
@@ -142,10 +148,10 @@ const StoryStep4 = () => {
             />
           </Grid>
         </div>
-        <StepsButton prev="/creer-une-histoire/3" next={onNext} />
+        <StepsButton prev="/re-inventer-une-histoire/3" next={onNext} />
       </div>
     </Base>
   );
 };
 
-export default StoryStep4;
+export default ReInventStoryStep4;

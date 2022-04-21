@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import { TextField, Grid, ButtonBase } from '@mui/material';
+import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
+import { ODD_CHOICE } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -15,45 +16,46 @@ import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-import type { StoriesData, StoryElement } from 'types/story.type';
+import type { StoriesData } from 'types/story.type';
 
-const StoryStep2 = () => {
+const ReInventStoryStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
+  const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
 
   const errorSteps = React.useMemo(() => {
+    const errors = [];
     if (data !== null) {
-      return getErrorSteps(data.object, 1);
+      if (getErrorSteps(data.object, 1).length > 0) {
+        errors.push(0);
+      }
+      if (getErrorSteps(data.place, 2).length > 0) {
+        errors.push(1);
+      }
+      return errors;
     }
     return [];
   }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     } else if (activity && !isStory(activity)) {
-      router.push('/creer-une-histoire');
+      router.push('/re-inventer-une-histoire');
     }
   }, [activity, router]);
 
-  const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.slice(0, 400);
-    const { place } = data;
-    const newData = { ...data, place: { ...place, [key]: value } };
-    updateActivity({ data: newData });
-  };
-
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
-    const { place } = data;
-    updateActivity({ data: { ...data, place: { ...place, imageUrl } } });
+    const { odd } = data;
+    updateActivity({ data: { ...data, odd: { ...odd, imageId: 0, imageUrl, inspiredStoryId: activity?.id } } });
   };
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/creer-une-histoire/3');
+    router.push('/re-inventer-une-histoire/4');
   };
 
   if (data === null || activity === null || !isStory(activity)) {
@@ -65,16 +67,22 @@ const StoryStep2 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
-          urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
-          activeStep={1}
+          urls={[
+            '/re-inventer-une-histoire/1?edit',
+            '/re-inventer-une-histoire/2',
+            '/re-inventer-une-histoire/3',
+            '/re-inventer-une-histoire/4',
+            '/re-inventer-une-histoire/5',
+          ]}
+          activeStep={2}
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un lieu extraordinaire</h1>
+          <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>
           <p className="text">
-            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal a
-            atteint l’objectif du développement durable que vous choisirez en étape 3.
+            Grâce aux pouvoirs magiques de l’objet et du lieu choisis aux étapes précédentes, un des objectifs du développement durable a été atteint.
           </p>
+          <p className="text">Choisissez lequel et dessinez-le.</p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
@@ -92,15 +100,15 @@ const StoryStep2 = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        {data?.place?.imageUrl ? (
-                          <Image layout="fill" objectFit="cover" alt="image du plat" src={data?.place?.imageUrl} unoptimized />
+                        {data?.odd?.imageUrl ? (
+                          <Image layout="fill" objectFit="cover" alt="image du plat" src={data?.odd?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.place?.imageUrl && (
+                  {data?.odd?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
@@ -116,40 +124,39 @@ const StoryStep2 = () => {
                     id={0}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={data?.place?.imageUrl || ''}
+                    imageUrl={data?.odd?.imageUrl || ''}
                     setImageUrl={setImage}
                   />
                 </div>
+                <FormControl variant="outlined" className="full-width" style={{ marginTop: '1rem' }}>
+                  <InputLabel id="select-ODD">ODD</InputLabel>
+                  <Select
+                    labelId="select-ODD"
+                    id="select-ODD-outlined"
+                    value={oDDChoice || data?.odd?.description}
+                    onChange={(event) => {
+                      setODDChoice(event.target.value as string);
+                      const { odd } = data;
+                      updateActivity({ data: { ...data, odd: { ...odd, description: event.target.value } } });
+                    }}
+                    label="Village"
+                  >
+                    {(ODD_CHOICE || []).map((v, index) => (
+                      <MenuItem value={v.choice} key={index + 1}>
+                        {v.choice}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>Choisissez votre ODD </FormHelperText>
+                </FormControl>
               </div>
-              <TextField
-                id="standard-multiline-static"
-                label="Décrivez le lieu extraordinaire"
-                value={data?.place?.description || ''}
-                onChange={dataChange('description')}
-                variant="outlined"
-                multiline
-                maxRows={4}
-                style={{ width: '100%', marginTop: '25px', color: 'primary' }}
-                inputProps={{
-                  maxLength: 400,
-                }}
-              />
-              {data?.place?.description ? (
-                <div style={{ width: '100%', textAlign: 'right' }}>
-                  <span className="text text--small">{data.place.description.length}/400</span>
-                </div>
-              ) : (
-                <div style={{ width: '100%', textAlign: 'right' }}>
-                  <span className="text text--small">0/400</span>
-                </div>
-              )}
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev={`/creer-une-histoire/1?edit=${activity.id}`} next={onNext} />
+        <StepsButton prev="/re-inventer-une-histoire/2" next={onNext} />
       </div>
     </Base>
   );
 };
 
-export default StoryStep2;
+export default ReInventStoryStep3;

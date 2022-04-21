@@ -439,19 +439,23 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   // logic to create activity image
-  if (activity.type === ActivityType.STORY && activity.status === ActivityStatus.PUBLISHED && activity.data) {
+  if (
+    (activity.type === ActivityType.STORY || activity.type === ActivityType.RE_INVENT_STORY) &&
+    activity.status === ActivityStatus.PUBLISHED &&
+    activity.data
+  ) {
     const imagesData = activity.data as Omit<StoriesData, 'tale'>;
-    if (!imagesData.isOriginal) {
-      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, activity.id)).id;
-      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, activity.id)).id;
-      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, activity.id)).id;
-    } else {
-      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT)).id;
-      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE)).id;
-      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD)).id;
+    //Save to image table only if ActivityType.STORY or ActivityType.RE_INVENT_STORY has new images
+    if (!imagesData.object.imageId && imagesData.object.inspiredStoryId) {
+      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
+    }
+    if (!imagesData.place.imageId && imagesData.place.inspiredStoryId) {
+      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;
+    }
+    if (!imagesData.odd.imageId && imagesData.odd.inspiredStoryId) {
+      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
     }
   }
-
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });

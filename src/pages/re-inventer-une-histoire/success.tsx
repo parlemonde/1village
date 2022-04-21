@@ -7,7 +7,7 @@ import { Base } from 'src/components/Base';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
-const StorySuccess = () => {
+const InspiredStorySuccess = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
@@ -29,4 +29,4 @@ const StorySuccess = () => {
   );
 };
 
-export default StorySuccess;
+export default InspiredStorySuccess;

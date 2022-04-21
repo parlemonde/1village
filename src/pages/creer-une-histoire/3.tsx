@@ -12,11 +12,10 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { BackButton } from 'src/components/buttons/BackButton';
+import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-// import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 
 const StoryStep3 = () => {
@@ -25,7 +24,20 @@ const StoryStep3 = () => {
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
-  // const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
+
+  const errorSteps = React.useMemo(() => {
+    const errors = [];
+    if (data !== null) {
+      if (getErrorSteps(data.object, 1).length > 0) {
+        errors.push(0);
+      }
+      if (getErrorSteps(data.place, 2).length > 0) {
+        errors.push(1);
+      }
+      return errors;
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -53,11 +65,11 @@ const StoryStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/creer-une-histoire" />
         <Steps
           steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={2}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>
@@ -83,7 +95,7 @@ const StoryStep3 = () => {
                         }}
                       >
                         {data?.odd?.imageUrl ? (
-                          <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.odd?.imageUrl} unoptimized />
+                          <Image layout="fill" objectFit="cover" alt="image du plat" src={data?.odd?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
@@ -110,13 +122,12 @@ const StoryStep3 = () => {
                     setImageUrl={setImage}
                   />
                 </div>
-                <span style={{ fontSize: '0.7rem', marginLeft: '1rem' }}>Ce champ est obligatoire</span>
                 <FormControl variant="outlined" className="full-width" style={{ marginTop: '1rem' }}>
                   <InputLabel id="select-ODD">ODD</InputLabel>
                   <Select
                     labelId="select-ODD"
                     id="select-ODD-outlined"
-                    value={oDDChoice}
+                    value={oDDChoice || data?.odd?.description}
                     onChange={(event) => {
                       setODDChoice(event.target.value as string);
                       const { odd } = data;
@@ -130,7 +141,7 @@ const StoryStep3 = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>Choisissez votre </FormHelperText>
+                  <FormHelperText>Choisissez votre ODD </FormHelperText>
                 </FormControl>
               </div>
             </Grid>

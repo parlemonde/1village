@@ -10,17 +10,32 @@ import { isStory } from 'src/activity-types/anyActivity';
 import { bgPage } from 'src/styles/variables.const';
 import type { StoryActivity } from 'types/story.type';
 
+import StoriesDataCardView from './StoriesDataCardView';
 import type { ActivityViewProps } from './activity-view.types';
 
-export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
+// function truncateString(str: string, num: number) {
+//   if (str.length > num) {
+//     return str.slice(0, num) + '...';
+//   } else {
+//     return str;
+//   }
+// }
+
+export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryActivity>) => {
+  const { object, place, odd } = activity.data;
+  const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId]));
+
   return (
     <div>
-      <div style={{ margin: '1rem 0' }}>
+      <div style={{ margin: '1rem' }}>
         <div className="text-center" style={{ marginBottom: '1rem' }}>
           <h3>{isStory(activity)}</h3>
         </div>
         {isStory(activity) && (
           <Grid container spacing={2}>
+            {activity.data.isOriginal === false && inspiredStoriesIds.length > 0 && (
+              <StoriesDataCardView inspiredStoriesIds={inspiredStoriesIds} user={user} />
+            )}
             <Grid item xs={12} md={12}>
               <p>{activity.data.tale.tale}</p>
             </Grid>
@@ -40,23 +55,34 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
             )}
             <>
               <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>
-                Voilà le l’objet, le lieu et l’objectif du développement durable choisis par vos Pélicopains pour écrire leur histoire :{' '}
+                Voilà l’objet, le lieu et l’objectif du développement durable choisis par vos Pélicopains pour écrire leur histoire :{' '}
               </div>
             </>
             <Grid
               container
               spacing={1}
-              style={{ border: 'solid 10px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', margin: 0, maxWidth: 652 }}
+              xs={8}
+              style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
             >
               {activity.data.object.imageUrl && activity.data.place.imageUrl && activity.data.odd.imageUrl && (
                 <>
-                  <Grid item>
-                    <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
+                  <Grid item xs>
+                    <Card sx={{ mb: 1 }}>
                       <Typography
-                        sx={{ mx: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
-                        variant={'h3'}
+                        sx={{
+                          mb: 1.5,
+                          p: 2,
+                          height: '10rem',
+                          textAlign: 'center',
+                          borderRadius: '0.5rem',
+                          backgroundColor: '#DEDBDB',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                        variant={'subtitle2'}
                       >
                         {activity.data.object.description}
+                        {/* {activity.data.object.description && truncateString(activity.data.object.description, 50)} */}
                       </Typography>
                       <CardMedia
                         sx={{ borderRadius: '0.5rem', mt: 1 }}
@@ -67,13 +93,23 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       />
                     </Card>
                   </Grid>
-                  <Grid item>
-                    <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
+                  <Grid item xs>
+                    <Card sx={{ mb: 1 }}>
                       <Typography
-                        sx={{ mx: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
-                        variant={'h3'}
+                        sx={{
+                          mb: 1.5,
+                          p: 2,
+                          height: '10rem',
+                          textAlign: 'center',
+                          borderRadius: '0.5rem',
+                          backgroundColor: '#DEDBDB',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                        variant={'subtitle2'}
                       >
                         {activity.data.place.description}
+                        {/* {activity.data.place.description && truncateString(activity.data.place.description, 50)} */}
                       </Typography>{' '}
                       <CardMedia
                         sx={{ borderRadius: '0.5rem', mt: 1 }}
@@ -84,13 +120,23 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       />
                     </Card>
                   </Grid>
-                  <Grid item>
-                    <Card sx={{ minWidth: 195, maxWidth: 210, mb: 1 }}>
+                  <Grid item xs>
+                    <Card sx={{ mb: 1 }}>
                       <Typography
-                        sx={{ mx: 1.5, p: 2, minHeight: 75, maxHeight: 95, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }}
-                        variant={'h3'}
+                        sx={{
+                          mb: 1.5,
+                          p: 2,
+                          height: '10rem',
+                          textAlign: 'center',
+                          borderRadius: '0.5rem',
+                          backgroundColor: '#DEDBDB',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                        variant={'subtitle2'}
                       >
                         {activity.data.odd.description}
+                        {/* {activity.data.odd.description && truncateString(activity.data.odd.description, 45)} */}
                       </Typography>
                       <CardMedia
                         sx={{ borderRadius: '0.5rem', mt: 1 }}
