@@ -74,7 +74,7 @@ const AnthemStep2 = () => {
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>
               Pour mémoire voici la structure de l&apos;hymne{' '}
-              {data.introOutro[0].time && data.introOutro[1].time && data.verseTime && (
+              {data.introOutro[0].time > 0 && data.introOutro[1].time > 0 && data.verseTime > 0 && (
                 <b>({toTime(data.introOutro[0].time + data.introOutro[1].time + data.verseTime)})</b>
               )}
               :

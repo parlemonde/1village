@@ -15,6 +15,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { audioBufferSlice, audioBufferToWav, mixAudios } from 'src/utils/audios';
+import { toTime } from 'src/utils/toTime';
 
 const SongStep4 = () => {
   const router = useRouter();
@@ -25,6 +26,12 @@ const SongStep4 = () => {
   const data = (activity?.data as VerseRecordData) || null;
   const [displayEditor, setDisplayEditor] = React.useState(!!data?.classRecord);
   const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
+  const [classRecordAudio, setClassRecordAudio] = React.useState<HTMLAudioElement>();
+  const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const classRecord = data?.classRecord;
+  const customizedMix = data?.customizedMix;
+
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
     if (activity !== null && !data?.customizedMix) {
@@ -33,6 +40,11 @@ const SongStep4 = () => {
 
     return errors;
   }, [activity, data?.customizedMix]);
+
+  React.useEffect(() => {
+    setClassRecordAudio(new Audio(customizedMix));
+    setCustomizedMix(new Audio(classRecord));
+  }, [classRecord, customizedMix]);
 
   const onNext = () => {
     setIsLoading(true);
@@ -51,7 +63,7 @@ const SongStep4 = () => {
         });
 
         const verse = await mixAudios([{ value: data?.customizedMix }, { value: response.data.url }], axiosLoggedRequest);
-        updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
+        await updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
       });
     }
     save().catch(console.error);
@@ -68,12 +80,13 @@ const SongStep4 = () => {
           errorSteps={errorSteps}
           urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
-        <h1>Synchronisez votre voix sur l’hymne</h1>
-        <p> Avez-vous bien chanter en rytme ?</p>
-        <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le pour le caler sur l’hymne !</p>
-        {data?.customizedMix ? (
-          <audio controls src={data?.customizedMix} />
-        ) : (
+        <h1>Synchronisez votre voix sur l&apos;hymne</h1>
+        <p> Avez-vous bien chanter en rythme ?</p>
+        <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
+        <p>
+          Pour lancer le mix avec votre enregistrement couplés, appuyer sur le bouton <b>Jouer</b>
+        </p>
+        {!data?.customizedMix && (
           <p>
             <b>Il manque votre mix du couplet !</b>
           </p>
@@ -90,6 +103,25 @@ const SongStep4 = () => {
               }}
               edit={!!trackDuration}
             />
+          )}
+          {trackDuration > 0 && (
+            <Button
+              variant="contained"
+              style={{ height: '40px' }}
+              onClick={() => {
+                if (isPlaying) {
+                  classRecordAudio?.pause();
+                  customizedMixAudio?.pause();
+                  setIsPlaying(false);
+                } else {
+                  classRecordAudio?.play();
+                  customizedMixAudio?.play();
+                  setIsPlaying(true);
+                }
+              }}
+            >
+              {isPlaying ? `Pause ${toTime(verseStart)}` : `Jouer ${toTime(verseStart)}`}
+            </Button>
           )}
           {!trackDuration && (
             <Button
@@ -108,22 +140,30 @@ const SongStep4 = () => {
               Ajouter un son
             </Button>
           )}
-          {trackDuration &&
+          {trackDuration > 0 &&
             (data?.verseTime < trackDuration ? (
-              <>
+              <div style={{ height: '200px' }}>
                 <DraggableTrack
                   trackDuration={trackDuration}
                   coupletDuration={data?.verseTime}
                   initialCoupletStart={verseStart}
                   onCoupletStartChange={(coupletStart) => {
+                    classRecordAudio?.pause();
+                    customizedMixAudio?.pause();
                     setVerseStart(coupletStart);
                   }}
                   onChangeEnd={(coupletStart) => {
+                    if (classRecordAudio !== undefined && customizedMixAudio !== undefined) {
+                      classRecordAudio.currentTime = coupletStart;
+                      customizedMixAudio.currentTime = 0;
+                    }
+                    classRecordAudio?.play();
+                    customizedMixAudio?.play();
+                    setIsPlaying(true);
                     updateActivity({ data: { ...data, verseStart: coupletStart } });
                   }}
                 />
-                {verseStart}
-              </>
+              </div>
             ) : (
               <p>Votre enregistrement ne dure pas assez longtemps !</p>
             ))}

@@ -31,7 +31,8 @@ const SongStep5 = () => {
     }
 
     return errors;
-  }, [activity, data?.customizedMix]);
+  }, [activity, data]);
+
   const onPublish = async () => {
     setIsLoading(true);
     const success = await save(true);

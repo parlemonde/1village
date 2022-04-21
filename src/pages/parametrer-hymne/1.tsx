@@ -58,7 +58,7 @@ const AnthemStep1 = () => {
 
   React.useEffect(() => {
     if (!created.current) {
-      if (!activity && !('activity-id' in router.query) && localStorage.getItem('activity') === null && !('edit' in router.query)) {
+      if (!('activity-id' in router.query) && !('edit' in router.query)) {
         created.current = true;
         createNewActivity(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
       } else if (activity && !isAnthem(activity)) {

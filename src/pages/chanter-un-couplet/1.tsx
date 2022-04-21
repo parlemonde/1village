@@ -64,7 +64,11 @@ const SongStep1 = () => {
             Avant de composer votre couplet et de l&apos;enregistrer, je vous propose de moduler la musique de notre hymne, en jouant avec cette table
             de montage simplifiée.{' '}
           </p>
-          {data && <AudioMixer data={data?.verseAudios?.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 }))} time={data?.verseTime} />}
+          <p>
+            Après avoir lancer l&apos;enregistrement veuillez attendre la fin du minuteur pour passer à l&apos;étape suivante, vous pourrez écouter
+            votre mix avant de passer à la prochaine étape.{' '}
+          </p>
+          {data && <AudioMixer />}
         </div>
       </div>
       <StepsButton next={onNext} />

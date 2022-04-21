@@ -6,29 +6,41 @@ import { Button } from '@mui/material';
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor } from 'src/styles/variables.const';
+import DrumIcon from 'src/svg/anthem/drum.svg';
+import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
+import FluteIcon from 'src/svg/anthem/flute.svg';
+import GuitareIcon from 'src/svg/anthem/guitare.svg';
+import PianoIcon from 'src/svg/anthem/piano.svg';
+import TrumpetIcon from 'src/svg/anthem/trumpet.svg';
+import { toTime } from 'src/utils/toTime';
 
 interface Audio {
   value: string;
   volume: number;
 }
-interface AudioMixerProps {
-  data: Audio[];
-  time: number;
-}
 
-const AudioMixer: React.FC<AudioMixerProps> = ({ data, time }: AudioMixerProps) => {
+const AudioMixer: React.FC = () => {
   const { activity, updateActivity } = React.useContext(ActivityContext);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const activityData = (activity?.data as VerseRecordData) || null;
-  const [source, setSource] = React.useState(activityData.customizedMix ? activityData.customizedMix : '');
-  const [disabled, setDisabled] = React.useState(false);
+  const data = activityData?.verseAudios?.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 }));
+  const time = activityData?.verseTime;
+  const [source, setSource] = React.useState('');
+  const [isRecording, setIsRecording] = React.useState(false);
   const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
   const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
+  const [timeLeft, setTimeLeft] = React.useState(time);
+  const [ac, setAc] = React.useState<AudioContext>(new AudioContext());
+  const [intervalId, setIntervalId] = React.useState<number>();
+  const [audioSources, setAudioSources] = React.useState<(MediaElementAudioSourceNode | undefined)[]>([]);
+  const recorder = React.useRef<MediaRecorder>();
+
+  React.useEffect(() => {
+    setAc(new AudioContext());
+  }, []);
 
   /* eslint-disable-next-line */
     const audiosEl = data.map((audio: Audio) => React.useRef(new Audio(audio.value)));
-  const ac = new AudioContext();
-  const dest = ac.createMediaStreamDestination();
 
   audiosEl.map((audio) => (audio.current.onended = () => setIsPlaying(false)));
 
@@ -40,27 +52,42 @@ const AudioMixer: React.FC<AudioMixerProps> = ({ data, time }: AudioMixerProps) 
   const toStart = () => audiosEl.map((audio) => (audio.current.currentTime = 0));
 
   const recordSounds = () => {
+    setTimeLeft(time);
+    setIntervalId(window.setInterval(() => setTimeLeft((timeLeft: number) => timeLeft - 1), 1000));
     toStart();
-    setDisabled(true);
-    audiosEl.map((audio) => {
-      const source = ac.createMediaElementSource(audio.current);
-      source.connect(ac.destination);
-      source.connect(dest);
+    setIsRecording(true);
+    ac.resume();
+    const dest = ac.createMediaStreamDestination();
+    const sources = audioSources;
+    audiosEl.map((audio, index) => {
+      if (sources.length !== 6) sources[index] = ac.createMediaElementSource(audio.current);
+      sources?.[index]?.connect(ac.destination);
+      sources?.[index]?.connect(dest);
     });
-    const recorder = new MediaRecorder(dest.stream);
-    recorder.start();
-    recorder.ondataavailable = (ev) => {
+    setAudioSources(sources);
+    recorder.current = new MediaRecorder(dest.stream);
+    recorder?.current.start();
+    recorder.current.ondataavailable = (ev) => {
       updateActivity({ data: { ...activityData, customizedMixBlob: ev.data } });
       setSource(URL.createObjectURL(ev.data));
     };
+    setIsPlaying(true);
     audiosEl.map((audio) => audio.current.play());
-    setTimeout(() => recorder.stop(), time * 1000);
+    setTimeout(() => {
+      setIsRecording(false);
+      recorder?.current?.stop();
+    }, time * 1000);
+  };
+  const stopRecord = () => {
+    setIsRecording(false);
+    playPause();
+    toStart();
+    recorder?.current?.stop();
   };
 
   const solo = (idx: number) => {
-    let newVolumes: number[] = [];
+    const newVolumes: number[] = volumes;
     audiosEl.map((audio, index) => {
-      newVolumes = volumes;
       if (audio.current.volume !== 0) newVolumes[index] = audio.current.volume;
       audio.current.volume = idx !== index ? (solos[idx] ? volumes[index] : 0) : audio.current.volume === 0 ? 1 : audio.current.volume;
     });
@@ -74,22 +101,52 @@ const AudioMixer: React.FC<AudioMixerProps> = ({ data, time }: AudioMixerProps) 
     });
   };
 
+  if (timeLeft < 1) {
+    clearInterval(intervalId);
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex' }}>
-        {audiosEl.map((audio, idx) => (
-          <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} solos={solos} />
-        ))}
+      <div style={{ display: 'flex', height: 'auto' }}>
+        <div style={{ border: '4px solid #666666', borderRadius: '20px', overflow: 'auto' }}>
+          <div
+            style={{
+              height: 'auto',
+              margin: '0 auto',
+              padding: '10px',
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'space-around',
+            }}
+          >
+            <Button variant="contained" onClick={playPause} disabled={isRecording}>
+              {isPlaying ? 'Pause' : 'Jouer'}
+            </Button>
+            <Button variant="contained" onClick={toStart} disabled={isRecording}>
+              Recommencer
+            </Button>
+          </div>
+          {activityData?.customizedMix ? (
+            <audio
+              controls={!isRecording}
+              src={activityData.customizedMix}
+              style={{ width: '95%', height: '40px', marginTop: '10px', marginLeft: '10px' }}
+            />
+          ) : (
+            source && <audio controls={!isRecording} src={source} style={{ width: '95%', height: '40px', marginTop: '10px', marginLeft: '10px' }} />
+          )}
+          <div style={{ display: 'flex' }}>
+            {audiosEl.map((audio, idx) => (
+              <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} solos={solos} />
+            ))}
+          </div>
+        </div>
       </div>
-
-      <div style={{ margin: '100px' }}>
-        <Button variant="contained" onClick={playPause} disabled={disabled}>
-          {isPlaying ? 'Pause' : 'Play'}
+      <div style={{ width: '600px', display: 'flex', justifyContent: 'space-between' }}>
+        <span style={{ width: '200px', fontSize: '50px' }}>{isRecording && toTime(timeLeft)}</span>
+        <Button variant="contained" style={{ width: '200px', marginTop: '10px', height: '35px' }} onClick={isRecording ? stopRecord : recordSounds}>
+          {isRecording ? "Arrêter l'enregistrement" : 'Enregistrer'}
         </Button>
-        <Button variant="contained" onClick={recordSounds} disabled={disabled}>
-          record
-        </Button>
-        {source && <audio controls src={source} />}
       </div>
     </div>
   );
@@ -106,7 +163,9 @@ interface AudioMixProps {
 }
 const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
   const [isMuted, setIsMuted] = React.useState(false);
-  const color = solos[idx] ? 'gold' : primaryColor;
+  const color = solos[idx] ? 'gold' : 'grey';
+  const mutedColor = isMuted ? 'grey' : primaryColor;
+  const musicIcons = [PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
 
   const toggleMute = (idx: number) => {
     setIsMuted(isMuted ? false : true);
@@ -122,7 +181,7 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
   };
 
   return (
-    <div style={{ width: '100px', height: '250px' }}>
+    <div style={{ width: '100px', padding: '15px' }}>
       <Slider
         aria-label="Mixing Volume"
         defaultValue={0.5}
@@ -134,6 +193,7 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
         max={1}
         orientation="vertical"
         sx={{
+          height: '350px',
           color: 'gray',
           '& .MuiSlider-thumb': {
             backgroundImage: `url("/static-images/mix-button.png")`,
@@ -160,6 +220,7 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
           verticalAlign: 'middle',
           lineHeight: '20px',
           cursor: 'pointer',
+          margin: '3px 0px',
         }}
       >
         <span onClick={() => toggleSolo(idx)} style={{ color }}>
@@ -169,7 +230,7 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
       <div
         style={{
           fontSize: 'smaller',
-          borderColor: primaryColor,
+          borderColor: mutedColor,
           borderStyle: 'solid',
           borderWidth: 'thin',
           width: '40px',
@@ -179,12 +240,14 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
           verticalAlign: 'middle',
           lineHeight: '20px',
           cursor: 'pointer',
+          margin: '3px 0px',
         }}
       >
-        <span onClick={() => toggleMute(idx)} style={{ color: primaryColor }}>
-          {isMuted ? 'ON' : 'OFF'}
+        <span onClick={() => toggleMute(idx)} style={{ color: mutedColor }}>
+          {isMuted ? 'OFF' : 'ON'}
         </span>
       </div>
+      {React.createElement(musicIcons[idx], { key: `descimg--${idx}`, style: { width: '40px', height: '40px', margin: '3px 0px' } })}
     </div>
   );
 };

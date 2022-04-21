@@ -50,13 +50,13 @@ const SongStep3 = () => {
           <h2>Le refrain</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data?.chorus.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--chorus--${index}`} backline={el.back} index={index} data={data.chorus} song />
+              <SyllableEditor key={`syllableEditor--chorus--${index}`} backline={el.back} index={index} data={data?.chorus} song />
             ))}
           </div>
-          <h2>Votre couplet (démarre à {toTime(data.introOutro[0].time)})</h2>
+          <h2>Votre couplet (démarre à {toTime(data?.introOutro[0].time)})</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data?.verseLyrics.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} backline={el.back} index={index} data={data.verseLyrics} song />
+              <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} backline={el.back} index={index} data={data?.verseLyrics} song />
             ))}
           </div>
           <StepsButton prev="/chanter-un-couplet/2" next="/chanter-un-couplet/4" />
