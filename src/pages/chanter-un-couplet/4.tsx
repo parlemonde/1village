@@ -15,7 +15,6 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { audioBufferSlice, audioBufferToWav, mixAudios } from 'src/utils/audios';
-import { toTime } from 'src/utils/toTime';
 
 const SongStep4 = () => {
   const router = useRouter();
@@ -42,8 +41,8 @@ const SongStep4 = () => {
   }, [activity, data?.customizedMix]);
 
   React.useEffect(() => {
-    setClassRecordAudio(new Audio(customizedMix));
-    setCustomizedMix(new Audio(classRecord));
+    setClassRecordAudio(new Audio(classRecord));
+    setCustomizedMix(new Audio(customizedMix));
   }, [classRecord, customizedMix]);
 
   const onNext = () => {
@@ -92,37 +91,6 @@ const SongStep4 = () => {
           </p>
         )}
         <div className="width-900">
-          {displayEditor && (
-            <AnthemEditor
-              value={data?.classRecord}
-              onChange={(value) => {
-                updateActivity({ data: { ...data, classRecord: value } });
-              }}
-              setTime={(time) => {
-                setTrackDuration(time);
-              }}
-              edit={!!trackDuration}
-            />
-          )}
-          {trackDuration > 0 && (
-            <Button
-              variant="contained"
-              style={{ height: '40px' }}
-              onClick={() => {
-                if (isPlaying) {
-                  classRecordAudio?.pause();
-                  customizedMixAudio?.pause();
-                  setIsPlaying(false);
-                } else {
-                  classRecordAudio?.play();
-                  customizedMixAudio?.play();
-                  setIsPlaying(true);
-                }
-              }}
-            >
-              {isPlaying ? `Pause ${toTime(verseStart)}` : `Jouer ${toTime(verseStart)}`}
-            </Button>
-          )}
           {!trackDuration && (
             <Button
               onClick={() => setDisplayEditor(true)}
@@ -156,17 +124,61 @@ const SongStep4 = () => {
                     if (classRecordAudio !== undefined && customizedMixAudio !== undefined) {
                       classRecordAudio.currentTime = coupletStart;
                       customizedMixAudio.currentTime = 0;
+                      classRecordAudio?.play();
+                      customizedMixAudio?.play();
+                      setIsPlaying(true);
+                      updateActivity({ data: { ...data, verseStart: coupletStart } });
                     }
-                    classRecordAudio?.play();
-                    customizedMixAudio?.play();
-                    setIsPlaying(true);
-                    updateActivity({ data: { ...data, verseStart: coupletStart } });
                   }}
                 />
               </div>
             ) : (
               <p>Votre enregistrement ne dure pas assez longtemps !</p>
             ))}
+          <div
+            style={{
+              width: '60%',
+              margin: 'auto',
+              padding: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            {displayEditor && (
+              <AnthemEditor
+                value={data?.classRecord}
+                onChange={(value) => {
+                  classRecordAudio?.pause();
+                  customizedMixAudio?.pause();
+                  setIsPlaying(false);
+                  updateActivity({ data: { ...data, classRecord: value } });
+                }}
+                setTime={(time) => {
+                  setTrackDuration(time);
+                }}
+                edit
+              />
+            )}
+            {trackDuration > 0 && (
+              <Button
+                variant="contained"
+                style={{ height: '40px' }}
+                onClick={() => {
+                  if (isPlaying) {
+                    classRecordAudio?.pause();
+                    customizedMixAudio?.pause();
+                    setIsPlaying(false);
+                  } else {
+                    classRecordAudio?.play();
+                    customizedMixAudio?.play();
+                    setIsPlaying(true);
+                  }
+                }}
+              >
+                {isPlaying ? `Pause` : `Jouer`}
+              </Button>
+            )}
+          </div>
           <StepsButton prev="/chanter-un-couplet/3" next={onNext} />
           <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
             <CircularProgress color="inherit" />

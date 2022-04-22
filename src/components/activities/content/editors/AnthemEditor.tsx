@@ -19,6 +19,7 @@ export interface AnthemEditorProps {
   onClose?(idx: number): void;
   idx?: number;
   edit?: boolean;
+  audio?: boolean;
 }
 
 export const AnthemEditor = ({
