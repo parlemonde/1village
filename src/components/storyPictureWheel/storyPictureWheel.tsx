@@ -64,7 +64,6 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
   //Get Random Images from DB
   const getRandomImages = React.useCallback(async () => {
     const images = await getRandomImagesData();
-    console.log('images', images);
     //Une fois images récuperé il faudrait faire une function pour trier les informations qu'on a bseoin
     //et transformer en storyElement
     //TODO : ! Factoriser ici

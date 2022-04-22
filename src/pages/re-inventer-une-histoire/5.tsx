@@ -53,6 +53,8 @@ const ReInventStoryStep5 = () => {
 
   const isValid = errorSteps.length === 0;
 
+  //TODO : implémenter le cas où les 3 images on été changé et changer l'ACTIVITY.TYPE
+
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/re-inventer-une-histoire');
