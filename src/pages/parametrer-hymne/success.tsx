@@ -30,7 +30,7 @@ const AnthemSuccess = () => {
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">Votre hymne a bien été paramétrée !</p>
+          <p className="text">Votre hymne a bien été paramétré !</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
