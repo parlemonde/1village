@@ -19,8 +19,10 @@ export const ActivityType = {
   MASCOTTE: 8,
   REPORTAGE: 9,
   REACTION: 10,
-  STORY: 12,
-  RE_INVENT_STORY: 13,
+  ANTHEM: 11,
+  VERSE_RECORD: 12,
+  STORY: 13,
+  RE_INVENT_STORY: 14,
 };
 
 export const ActivityStatus = {
