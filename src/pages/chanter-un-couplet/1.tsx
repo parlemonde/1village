@@ -23,7 +23,7 @@ const SongStep1 = () => {
 
   const onNext = async () => {
     setIsLoading(true);
-    if (data.customizedMixBlob && !data.customizedMix) {
+    if (data.customizedMixBlob && data.customizedMixBlob.size > 0) {
       const formData = new FormData();
       formData.append('audio', data.customizedMixBlob, 'classVerse.webm');
       const response = await axiosLoggedRequest({
@@ -36,7 +36,7 @@ const SongStep1 = () => {
       });
       const customizedMixWithVocals = await mixAudios([data?.verseAudios[0], { value: response.data.url }], axiosLoggedRequest);
       const mixWithoutLyrics = await concatAudios([data.introOutro[0], { value: response.data.url }, data.introOutro[1]], axiosLoggedRequest);
-      updateActivity({ data: { ...data, mixWithoutLyrics, customizedMixWithVocals, customizedMix: response.data.url } });
+      updateActivity({ data: { ...data, mixWithoutLyrics, customizedMixWithVocals, customizedMix: response.data.url, customizedMixBlob: null } });
     }
     setIsLoading(false);
     router.push('/chanter-un-couplet/2');

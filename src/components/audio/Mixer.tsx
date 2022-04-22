@@ -40,7 +40,7 @@ const AudioMixer: React.FC = () => {
   }, []);
 
   /* eslint-disable-next-line */
-    const audiosEl = data.map((audio: Audio) => React.useRef(new Audio(audio.value)));
+  const audiosEl = data.map((audio: Audio) => React.useRef(new Audio(audio.value)));
 
   audiosEl.map((audio) => (audio.current.onended = () => setIsPlaying(false)));
 
@@ -52,9 +52,8 @@ const AudioMixer: React.FC = () => {
   const toStart = () => audiosEl.map((audio) => (audio.current.currentTime = 0));
 
   const recordSounds = () => {
-    setTimeLeft(time);
-    setIntervalId(window.setInterval(() => setTimeLeft((timeLeft: number) => timeLeft - 1), 1000));
     toStart();
+    setIntervalId(window.setInterval(() => setTimeLeft((timeLeft: number) => timeLeft - 1), 1000));
     setIsRecording(true);
     ac.resume();
     const dest = ac.createMediaStreamDestination();
@@ -82,6 +81,8 @@ const AudioMixer: React.FC = () => {
     setIsRecording(false);
     playPause();
     toStart();
+    clearInterval(intervalId);
+    setTimeLeft(time);
     recorder?.current?.stop();
   };
 
