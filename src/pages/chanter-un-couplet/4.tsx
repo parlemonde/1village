@@ -25,10 +25,8 @@ const SongStep4 = () => {
   const data = (activity?.data as VerseRecordData) || null;
   const [displayEditor, setDisplayEditor] = React.useState(!!data?.classRecord);
   const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
-  const [classRecordAudio, setClassRecordAudio] = React.useState<HTMLAudioElement>();
   const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const classRecord = data?.classRecord;
+  const [audioRef, setAudioRef] = React.useState<React.RefObject<HTMLAudioElement>>();
   const customizedMix = data?.customizedMix;
 
   const errorSteps = React.useMemo(() => {
@@ -41,11 +39,12 @@ const SongStep4 = () => {
   }, [activity, data?.customizedMix]);
 
   React.useEffect(() => {
-    setClassRecordAudio(new Audio(classRecord));
     setCustomizedMix(new Audio(customizedMix));
-  }, [classRecord, customizedMix]);
+  }, [customizedMix]);
 
   const onNext = () => {
+    audioRef?.current?.pause();
+    customizedMixAudio?.pause();
     setIsLoading(true);
     if (data?.classRecord) {
       audioBufferSlice(data?.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
@@ -82,16 +81,13 @@ const SongStep4 = () => {
         <h1>Synchronisez votre voix sur l&apos;hymne</h1>
         <p> Avez-vous bien chanter en rythme ?</p>
         <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
-        <p>
-          Pour lancer le mix avec votre enregistrement couplés, appuyer sur le bouton <b>Jouer</b>
-        </p>
         {!data?.customizedMix && (
           <p>
             <b>Il manque votre mix du couplet !</b>
           </p>
         )}
         <div className="width-900">
-          {!trackDuration && (
+          {(!trackDuration || !data?.classRecord) && (
             <Button
               onClick={() => setDisplayEditor(true)}
               variant="text"
@@ -116,19 +112,17 @@ const SongStep4 = () => {
                   coupletDuration={data?.verseTime}
                   initialCoupletStart={verseStart}
                   onCoupletStartChange={(coupletStart) => {
-                    classRecordAudio?.pause();
+                    audioRef!.current!.currentTime = coupletStart;
+                    audioRef?.current?.pause();
                     customizedMixAudio?.pause();
                     setVerseStart(coupletStart);
                   }}
                   onChangeEnd={(coupletStart) => {
-                    if (classRecordAudio !== undefined && customizedMixAudio !== undefined) {
-                      classRecordAudio.currentTime = coupletStart;
-                      customizedMixAudio.currentTime = 0;
-                      classRecordAudio?.play();
-                      customizedMixAudio?.play();
-                      setIsPlaying(true);
-                      updateActivity({ data: { ...data, verseStart: coupletStart } });
-                    }
+                    audioRef!.current!.currentTime = coupletStart;
+                    customizedMixAudio!.currentTime = 0;
+                    audioRef?.current?.play();
+                    customizedMixAudio?.play();
+                    updateActivity({ data: { ...data, verseStart: coupletStart } });
                   }}
                 />
               </div>
@@ -144,39 +138,28 @@ const SongStep4 = () => {
               justifyContent: 'space-between',
             }}
           >
-            {displayEditor && (
+            {(displayEditor || data?.classRecord) && (
               <AnthemEditor
                 value={data?.classRecord}
                 onChange={(value) => {
-                  classRecordAudio?.pause();
+                  audioRef?.current?.pause();
                   customizedMixAudio?.pause();
-                  setIsPlaying(false);
                   updateActivity({ data: { ...data, classRecord: value } });
                 }}
                 setTime={(time) => {
                   setTrackDuration(time);
                 }}
                 edit
-              />
-            )}
-            {trackDuration > 0 && (
-              <Button
-                variant="contained"
-                style={{ height: '40px' }}
-                onClick={() => {
-                  if (isPlaying) {
-                    classRecordAudio?.pause();
-                    customizedMixAudio?.pause();
-                    setIsPlaying(false);
-                  } else {
-                    classRecordAudio?.play();
-                    customizedMixAudio?.play();
-                    setIsPlaying(true);
-                  }
+                onPause={() => {
+                  audioRef?.current?.pause();
+                  customizedMixAudio?.pause();
                 }}
-              >
-                {isPlaying ? `Pause` : `Jouer`}
-              </Button>
+                onPlay={() => {
+                  audioRef?.current?.play();
+                  customizedMixAudio?.play();
+                }}
+                setAudioRef={setAudioRef}
+              />
             )}
           </div>
           <StepsButton prev="/chanter-un-couplet/3" next={onNext} />

@@ -15,6 +15,9 @@ export interface AnthemEditorProps {
   value?: string;
   onChange?(newValue: string): void;
   onDelete?(): void;
+  onPause?(): void;
+  onPlay?(): void;
+  setAudioRef?(audioRef: React.RefObject<HTMLAudioElement>): void;
   setTime?(args: number): void;
   onClose?(idx: number): void;
   idx?: number;
@@ -28,6 +31,9 @@ export const AnthemEditor = ({
   onDelete = () => {},
   setTime = () => {},
   onClose = () => {},
+  onPlay = () => {},
+  onPause = () => {},
+  setAudioRef = () => {},
   idx = 0,
   edit = false,
 }: AnthemEditorProps) => {
@@ -145,6 +151,7 @@ export const AnthemEditor = ({
   const onLoadedMetadata = () => {
     if (audioRef.current) {
       setTime(audioRef.current.duration);
+      setAudioRef(audioRef);
     }
   };
 
@@ -153,7 +160,15 @@ export const AnthemEditor = ({
       {soundUrl && (
         <>
           <div style={{ display: 'flex' }}>
-            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata} style={{ width: '250px', height: '30px' }}>
+            <audio
+              controls
+              src={soundUrl}
+              ref={audioRef}
+              onPlay={onPlay}
+              onPause={onPause}
+              onLoadedMetadata={onLoadedMetadata}
+              style={{ width: '250px', height: '30px' }}
+            >
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
             {edit && (

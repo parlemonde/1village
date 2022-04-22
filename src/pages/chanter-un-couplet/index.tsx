@@ -56,6 +56,14 @@ const Anthem = () => {
     router.push('/chanter-un-couplet/1');
   };
 
+  if (!anthemActivity) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
