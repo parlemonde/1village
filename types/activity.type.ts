@@ -49,6 +49,7 @@ export interface Activity<T extends AnyData = AnyData> {
   userId: number;
   commentCount?: number;
   isPinned?: boolean;
+  displayAsUser?: boolean; // For admins who wants to publish as their own, not Pelico.
 
   // village relation
   villageId: number;

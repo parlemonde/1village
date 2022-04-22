@@ -197,8 +197,11 @@ export const capitalize = (s: string): string => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-export function getUserDisplayName(user: User, isSelf: boolean, activity?: Activity): string {
+export function getUserDisplayName(user: User, isSelf: boolean, displayAsUser: boolean = false, activity?: Activity): string {
   const userIsPelico = user.type >= UserType.MEDIATOR;
+  if (userIsPelico && displayAsUser) {
+    return capitalize(user.displayName || user.pseudo);
+  }
   if (userIsPelico) {
     if (activity && activity.type === ActivityType.STORY) {
       return 'Pelico a inventé une histoire du village idéal';

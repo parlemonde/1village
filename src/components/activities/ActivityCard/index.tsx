@@ -83,10 +83,18 @@ export const ActivityCard = ({
         }}
       >
         <div className="activity-card__header">
-          {forComment || <AvatarImg user={user} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={noButtons} />}
+          {forComment || (
+            <AvatarImg
+              user={user}
+              size="small"
+              style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }}
+              noLink={noButtons}
+              displayAsUser={activity.displayAsUser}
+            />
+          )}
           <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
             <p className="text">
-              <UserDisplayName className="text" user={user} noLink={noButtons} />
+              <UserDisplayName className="text" user={user} noLink={noButtons} displayAsUser={activity.displayAsUser} />
               {' a '}
               {responseActivity && isReaction(activity) ? (
                 `${titles[activity.type]} ${REACTIONS[responseActivity?.type]}`
