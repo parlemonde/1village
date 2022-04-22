@@ -37,6 +37,7 @@ type AvatarImgProps = {
   onClick?: () => void;
   style?: React.CSSProperties;
   isRounded?: boolean;
+  displayAsUser?: boolean;
 };
 export const AvatarImg: React.FC<AvatarImgProps> = ({
   size = 'large',
@@ -47,10 +48,11 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
   style,
   noLink = false,
   isRounded = true,
+  displayAsUser = false,
 }: React.PropsWithChildren<AvatarImgProps>) => {
   const isPelico = user && user.type >= UserType.MEDIATOR;
 
-  if (isPelico) {
+  if (isPelico && !displayAsUser) {
     return (
       <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
         <PelicoSouriant style={{ width: '80%', height: 'auto' }} />
@@ -60,7 +62,7 @@ export const AvatarImg: React.FC<AvatarImgProps> = ({
 
   const imgSrc = user ? user.avatar || getGravatarUrl(user.email) || src : src;
 
-  if (!noLink && user && user.mascotteId) {
+  if (!isPelico && !noLink && user && user.mascotteId) {
     return (
       <Link href={`/activite/${user.mascotteId}`}>
         <a href={`/activite/${user.mascotteId}`}>

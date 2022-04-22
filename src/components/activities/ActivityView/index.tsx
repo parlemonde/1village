@@ -42,10 +42,10 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
       <div>
         {user !== null && (
           <div className="activity__header">
-            <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
+            <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} displayAsUser={activity.displayAsUser} />
             <div className="activity-card__header_info">
               <h2>
-                <UserDisplayName user={user} />
+                <UserDisplayName user={user} displayAsUser={activity.displayAsUser} />
               </h2>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
