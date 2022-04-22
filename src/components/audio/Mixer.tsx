@@ -111,8 +111,6 @@ const AudioMixer: React.FC = () => {
         <div style={{ border: '4px solid #666666', borderRadius: '20px', overflow: 'auto' }}>
           <div
             style={{
-              height: 'auto',
-              margin: '0 auto',
               padding: '10px',
               position: 'relative',
               display: 'flex',
@@ -126,20 +124,20 @@ const AudioMixer: React.FC = () => {
               Recommencer
             </Button>
           </div>
-          {activityData?.customizedMix ? (
-            <audio
-              controls={!isRecording}
-              src={activityData.customizedMix}
-              style={{ width: '95%', height: '40px', marginTop: '10px', marginLeft: '10px' }}
-            />
-          ) : (
-            source && <audio controls={!isRecording} src={source} style={{ width: '95%', height: '40px', marginTop: '10px', marginLeft: '10px' }} />
-          )}
           <div style={{ display: 'flex' }}>
             {audiosEl.map((audio, idx) => (
               <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} solos={solos} />
             ))}
           </div>
+          {activityData?.customizedMix ? (
+            <audio
+              controls={!isRecording}
+              src={activityData.customizedMix}
+              style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }}
+            />
+          ) : (
+            source && <audio controls={!isRecording} src={source} style={{ width: '95%', height: '40px', marginLeft: '10px' }} />
+          )}
         </div>
       </div>
       <div style={{ width: '600px', display: 'flex', justifyContent: 'space-between' }}>
@@ -220,7 +218,7 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
           verticalAlign: 'middle',
           lineHeight: '20px',
           cursor: 'pointer',
-          margin: '3px 0px',
+          margin: '10px 0px',
         }}
       >
         <span onClick={() => toggleSolo(idx)} style={{ color }}>
@@ -240,14 +238,14 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
           verticalAlign: 'middle',
           lineHeight: '20px',
           cursor: 'pointer',
-          margin: '3px 0px',
+          margin: '5px 0px',
         }}
       >
         <span onClick={() => toggleMute(idx)} style={{ color: mutedColor }}>
           {isMuted ? 'OFF' : 'ON'}
         </span>
       </div>
-      {React.createElement(musicIcons[idx], { key: `descimg--${idx}`, style: { width: '40px', height: '40px', margin: '3px 0px' } })}
+      {React.createElement(musicIcons[idx], { key: `descimg--${idx}`, style: { width: '40px', height: '40px', margin: '5px 0px' } })}
     </div>
   );
 };
