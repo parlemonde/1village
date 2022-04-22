@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -14,8 +13,7 @@ import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 
 export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<StoryActivity>) => {
-  console.log('activity', activity);
-  const firstImage = React.useMemo(() => activity.data.tale?.imageStory, [activity.data.tale?.imageStory]);
+  const firstImage = React.useMemo(() => activity.data.tale.imageStory, [activity.data.tale.imageStory]);
   const taleText = React.useMemo(() => activity.data.tale, [activity.data.tale]);
   const firstText = taleText.tale ? htmlToText(taleText.tale) : '';
 

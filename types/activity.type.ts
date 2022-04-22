@@ -19,8 +19,8 @@ export const ActivityType = {
   MASCOTTE: 8,
   REPORTAGE: 9,
   REACTION: 10,
-  STORY: 11,
-  RE_INVENT_STORY: 12,
+  STORY: 12,
+  RE_INVENT_STORY: 13,
 };
 
 export const ActivityStatus = {

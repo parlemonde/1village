@@ -138,7 +138,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         },
       });
       if (response.error) {
-        enqueueSnackbar('Une erreur inconnue dans village context est survenue...', {
+        enqueueSnackbar('Une erreur inconnue est survenue...', {
           variant: 'error',
         });
       } else {
