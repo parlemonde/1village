@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-import { DivIcon } from 'leaflet';
 import React from 'react';
 
 import Box from '@mui/material/Box';
@@ -125,7 +123,6 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
       // this will trigger rolling effect
       let selectedIndex;
       if (slot.current) selectedIndex = triggerSlotRotation(slot.current);
-      console.log({ SLOT: slot });
       if (i + 1 == 1 && selectedIndex !== undefined) {
         newValues.push(objectRandomImages[selectedIndex]);
       } else if (i + 1 == 2 && selectedIndex !== undefined) {
