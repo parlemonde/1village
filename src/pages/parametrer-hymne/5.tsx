@@ -39,7 +39,7 @@ const AnthemStep5 = () => {
       errors.push(3);
     }
     return errors;
-  }, [activity, data.chorus, data.introOutro, data.verseAudios, data.verseLyrics]);
+  }, [activity, data?.chorus, data?.introOutro, data?.verseAudios, data?.verseLyrics]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 

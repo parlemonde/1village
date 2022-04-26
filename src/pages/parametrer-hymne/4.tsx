@@ -30,7 +30,7 @@ const AnthemStep4 = () => {
     }
 
     return errors;
-  }, [activity, data.verseAudios, data.introOutro, data.verseLyrics]);
+  }, [activity, data?.verseAudios, data?.introOutro, data?.verseLyrics]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {

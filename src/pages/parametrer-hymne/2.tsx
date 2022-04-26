@@ -28,7 +28,7 @@ const AnthemStep2 = () => {
       return [0];
     }
     return [];
-  }, [data, data.verseAudios]);
+  }, [data, data?.verseAudios]);
 
   const updateContent = (content: Sample[]): void => {
     if (!activity) {

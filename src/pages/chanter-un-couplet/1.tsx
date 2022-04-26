@@ -65,8 +65,12 @@ const SongStep1 = () => {
             de montage simplifiée.{' '}
           </p>
           <p>
-            Après avoir lancer l&apos;enregistrement veuillez attendre la fin du minuteur pour passer à l&apos;étape suivante, vous pourrez écouter
-            votre mix avant de passer à la prochaine étape.{' '}
+            Lancez l&apos;enregistrement de votre couplet en appuyant sur le bouton bleu &quot;Enregistrer&quot; sous la table de mixage. Une fois
+            l&apos;enregistrement lancé, il vous faut enregistrer toute la durée du couplet indiqué par le minuteur.
+          </p>
+          <p>
+            Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
+            votre mix avant de passer à cette étape suivante !
           </p>
           {data && <AudioMixer />}
         </div>

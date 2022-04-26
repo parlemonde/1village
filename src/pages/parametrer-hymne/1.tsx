@@ -28,7 +28,7 @@ import { ActivityType } from 'types/activity.type';
 const AnthemStep1 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, createNewActivity, updateActivity, deleteContent } = React.useContext(ActivityContext);
+  const { activity, createNewActivity, updateActivity, deleteContent, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
@@ -49,6 +49,9 @@ const AnthemStep1 = () => {
     if (activity !== null && data.verseAudios.filter((c) => !!c.value).length === 7) {
       const value = await mixAudios(data.verseAudios, axiosLoggedRequest);
       updateActivity({ data: { ...data, finalVerse: value } });
+    }
+    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length > 0) {
+      save().catch(console.error);
     }
     setIsLoading(false);
     router.push('/parametrer-hymne/2');

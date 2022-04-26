@@ -160,7 +160,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         isPinned: false,
       };
       setActivity(newActivity);
-      if (type !== ActivityType.QUESTION) {
+      if (type !== ActivityType.QUESTION && type !== ActivityType.ANTHEM) {
         getDraft(type, subType).catch();
       }
       return true;
