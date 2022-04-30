@@ -30,6 +30,7 @@ const titles: Record<number, (activity: ActivityInterface<AnyData>) => string> =
   [ActivityType.SYMBOL]: () => 'Symbole',
   [ActivityType.REPORTAGE]: () => 'Reportage',
   [ActivityType.REACTION]: () => 'Réaction',
+  [ActivityType.VERSE_RECORD]: () => 'Couplet',
 };
 
 const Activity = () => {

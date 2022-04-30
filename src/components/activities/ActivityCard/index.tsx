@@ -3,6 +3,7 @@ import React from 'react';
 import Paper from '@mui/material/Paper';
 
 import {
+  isAnthem,
   isDefi,
   isEnigme,
   isFreeContent,
@@ -14,6 +15,7 @@ import {
   isReaction,
   isReportage,
   isSymbol,
+  isVerseRecord,
 } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { AvatarImg } from 'src/components/Avatar';
@@ -29,6 +31,7 @@ import { UserType } from 'types/user.type';
 
 import { titles, icons, REACTIONS } from '../utils';
 
+import { AnthemCard } from './AnthemCard';
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
 import { FreeContentCard } from './FreeContentCard';
@@ -40,6 +43,7 @@ import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
 import { ReportageCard } from './ReportageCard';
 import { SymbolCard } from './SymbolCard';
+import { VerseRecordCard } from './VerseRecordCard';
 import type { ActivityCardProps } from './activity-card.types';
 
 export const ActivityCard = ({
@@ -237,6 +241,28 @@ export const ActivityCard = ({
           )}
           {isReaction(activity) && (
             <ReactionCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isAnthem(activity) && (
+            <AnthemCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isVerseRecord(activity) && (
+            <VerseRecordCard
               activity={activity}
               user={user}
               isSelf={isSelf}
