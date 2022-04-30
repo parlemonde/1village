@@ -13,6 +13,7 @@ import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEd
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import TrackIcon from 'src/svg/anthem/track.svg';
+import Vocal from 'src/svg/anthem/vocal.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { concatAudios } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
@@ -79,7 +80,7 @@ const AnthemStep2 = () => {
               <span>Couplet : {data.verseTime > 0 && <b>({toTime(data.verseTime)})</b>} </span>
               <span>Outro : {data.introOutro[1].time > 0 && <b>({toTime(data.introOutro[1].time)})</b>}</span>
             </div>
-            <img src="/static-images/vocal.png" style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
+            <Vocal style={{ height: 'auto', width: '100%' }} />
           </div>
           <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
           <div style={{ display: 'flex', flexDirection: 'column' }}>

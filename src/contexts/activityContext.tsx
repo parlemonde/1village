@@ -32,7 +32,6 @@ interface ActivityContextValue {
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<ActivitySaveResponse>;
   createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData): Promise<void>;
-  getActivity(id: number): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>({
@@ -44,7 +43,6 @@ export const ActivityContext = React.createContext<ActivityContextValue>({
   deleteContent: () => {},
   save: async () => ({ success: false }),
   createActivityIfNotExist: async () => {},
-  getActivity: async () => {},
 });
 
 function getInitialActivity(): Activity | null {
@@ -199,39 +197,45 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     [user, village, axiosLoggedRequest, createNewActivity],
   );
 
-  const addContent = (type: ActivityContentType, value: string = '', index?: number) => {
-    if (!activity) {
-      return;
-    }
-    const newContent = activity.content ? [...activity.content] : [];
-    const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
-    if (index !== undefined) {
-      newContent.splice(index, 0, {
-        id: newId,
-        type,
-        value,
-      });
-    } else {
-      newContent.push({
-        id: newId,
-        type,
-        value,
-      });
-    }
-    updateActivity({ content: newContent });
-  };
+  const addContent = React.useCallback(
+    (type: ActivityContentType, value: string = '', index?: number) => {
+      if (!activity) {
+        return;
+      }
+      const newContent = activity.content ? [...activity.content] : [];
+      const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
+      if (index !== undefined) {
+        newContent.splice(index, 0, {
+          id: newId,
+          type,
+          value,
+        });
+      } else {
+        newContent.push({
+          id: newId,
+          type,
+          value,
+        });
+      }
+      updateActivity({ content: newContent });
+    },
+    [activity, updateActivity],
+  );
 
-  const deleteContent = (index: number) => {
-    if (!activity) {
-      return;
-    }
-    const newContent = activity.content ? [...activity.content] : [];
-    if (newContent.length <= index) {
-      return;
-    }
-    newContent.splice(index, 1);
-    updateActivity({ content: newContent });
-  };
+  const deleteContent = React.useCallback(
+    (index: number) => {
+      if (!activity) {
+        return;
+      }
+      const newContent = activity.content ? [...activity.content] : [];
+      if (newContent.length <= index) {
+        return;
+      }
+      newContent.splice(index, 1);
+      updateActivity({ content: newContent });
+    },
+    [activity, updateActivity],
+  );
 
   // Use ref to always save last activity
   const activityRef = React.useRef<Activity | null>(activity);
@@ -371,20 +375,22 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     [queryClient, createActivity, editActivity],
   );
 
+  const value = React.useMemo(
+    () => ({
+      activity,
+      setActivity,
+      updateActivity,
+      createNewActivity,
+      addContent,
+      deleteContent,
+      createActivityIfNotExist,
+      save,
+    }),
+    [activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save],
+  );
+
   return (
-    <ActivityContext.Provider
-      value={{
-        activity,
-        setActivity,
-        updateActivity,
-        createNewActivity,
-        addContent,
-        deleteContent,
-        createActivityIfNotExist,
-        save,
-        getActivity,
-      }}
-    >
+    <ActivityContext.Provider value={value}>
       {children}
       {draftStep > 0 && (
         <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>

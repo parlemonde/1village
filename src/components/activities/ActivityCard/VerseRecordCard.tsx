@@ -25,14 +25,14 @@ export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEdit
       <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
         <div className="text multine-with-ellipsis" style={{ maxHeight: `4rem` }}>
           <p>
-            {activity.data.verseLyrics.map((syllable) =>
+            {activity.data.verseLyrics.map((syllable, index) =>
               syllable.back ? (
-                <>
+                <React.Fragment key={index}>
                   <br />
                   {syllable.value}{' '}
-                </>
+                </React.Fragment>
               ) : (
-                <>{syllable.value} </>
+                <React.Fragment key={index}>{syllable.value} </React.Fragment>
               ),
             )}
           </p>

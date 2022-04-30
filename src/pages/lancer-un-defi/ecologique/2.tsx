@@ -60,7 +60,7 @@ const DefiEcoStep2 = () => {
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {"Pour l'illustrer, vous pouvez ajouter des photos ou tout expliquer en vidéo !"}
           </p>
-          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/ecologique/1?edit=${activity.id}`} next={onNext} />
         </div>
       </div>
