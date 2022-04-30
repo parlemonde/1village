@@ -15503,7 +15503,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/react-contenteditable-virtual-124795e92d/0/cache/react-contenteditable-npm-3.3.6-a4e01882b3-3ff8b78e63.zip/node_modules/react-contenteditable/",
           "packageDependencies": [
             ["react-contenteditable", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.3.6"],
-            ["@types/react", "npm:17.0.27"],
+            ["@types/react", "npm:17.0.38"],
             ["fast-deep-equal", "npm:3.1.3"],
             ["prop-types", "npm:15.8.1"],
             ["react", "npm:17.0.2"]

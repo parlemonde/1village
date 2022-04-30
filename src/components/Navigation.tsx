@@ -147,9 +147,9 @@ export const Navigation = (): JSX.Element => {
         icon:
           user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
-      ...(isModerateur ? [FREE_CONTENT, ANTHEM_PARAM] : []),
+      ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isModerateur],
+    [user, isModerateur, selectedPhase],
   );
   const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
