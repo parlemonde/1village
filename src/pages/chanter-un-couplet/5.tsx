@@ -23,15 +23,15 @@ const SongStep5 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data?.customizedMix) {
+    if (data !== null && !data?.customizedMix) {
       errors.push(0);
     }
-    if ((activity !== null && !data.verse) || !data.slicedRecord) {
+    if (data !== null && (!data.verse || !data.slicedRecord)) {
       errors.push(3);
     }
 
     return errors;
-  }, [activity, data]);
+  }, [data]);
 
   const onPublish = async () => {
     setIsLoading(true);
@@ -105,13 +105,13 @@ const SongStep5 = () => {
             />
             <p>Voilà la structure du couplet, découpé en syllabes :</p>
             <p>
-              {data.verseLyrics.map((syllable) =>
+              {data.verseLyrics.map((syllable, index) =>
                 syllable.back ? (
-                  <>
+                  <React.Fragment key={index}>
                     <br /> {syllable.value}{' '}
-                  </>
+                  </React.Fragment>
                 ) : (
-                  <>{syllable.value} </>
+                  <React.Fragment key={index}>{syllable.value} </React.Fragment>
                 ),
               )}
             </p>

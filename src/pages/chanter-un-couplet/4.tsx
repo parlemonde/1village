@@ -26,30 +26,37 @@ const SongStep4 = () => {
   const [displayEditor, setDisplayEditor] = React.useState(!!data?.classRecord);
   const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
   const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
-  const [audioRef, setAudioRef] = React.useState<React.RefObject<HTMLAudioElement>>();
   const customizedMix = data?.customizedMix;
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data?.customizedMix) {
+    if (data !== null && !data?.customizedMix) {
       errors.push(0);
     }
 
     return errors;
-  }, [activity, data?.customizedMix]);
+  }, [data]);
 
   React.useEffect(() => {
     setCustomizedMix(new Audio(customizedMix));
   }, [customizedMix]);
 
+  if (!activity || !data) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
+
   const onNext = () => {
-    audioRef?.current?.pause();
+    audioRef.current?.pause();
     customizedMixAudio?.pause();
     setIsLoading(true);
-    if (data?.classRecord) {
-      audioBufferSlice(data?.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
+    if (data.classRecord) {
+      audioBufferSlice(data.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
         const formData = new FormData();
-
         formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
         const response = await axiosLoggedRequest({
           method: 'POST',
@@ -59,13 +66,12 @@ const SongStep4 = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-
-        const verse = await mixAudios([{ value: data?.customizedMix }, { value: response.data.url }], axiosLoggedRequest);
-        await updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
+        const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosLoggedRequest);
+        updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
       });
     }
-    save().catch(console.error);
     setIsLoading(false);
+    save().catch(console.error);
     router.push('/chanter-un-couplet/5');
   };
 
@@ -87,7 +93,7 @@ const SongStep4 = () => {
           </p>
         )}
         <div className="width-900">
-          {(!trackDuration || !data?.classRecord) && (
+          {(!trackDuration || !data.classRecord) && (
             <Button
               onClick={() => setDisplayEditor(true)}
               variant="text"
@@ -105,6 +111,7 @@ const SongStep4 = () => {
             </Button>
           )}
           {trackDuration > 0 &&
+            data.classRecord &&
             (data?.verseTime < trackDuration ? (
               <div style={{ height: '200px' }}>
                 <DraggableTrack
@@ -112,16 +119,22 @@ const SongStep4 = () => {
                   coupletDuration={data?.verseTime}
                   initialCoupletStart={verseStart}
                   onCoupletStartChange={(coupletStart) => {
-                    audioRef!.current!.currentTime = coupletStart;
-                    audioRef?.current?.pause();
+                    if (!audioRef.current) {
+                      return;
+                    }
+                    audioRef.current.currentTime = coupletStart;
+                    audioRef.current.pause();
                     customizedMixAudio?.pause();
                     setVerseStart(coupletStart);
                   }}
                   onChangeEnd={(coupletStart) => {
-                    audioRef!.current!.currentTime = coupletStart;
-                    customizedMixAudio!.currentTime = 0;
-                    audioRef?.current?.play();
-                    customizedMixAudio?.play();
+                    if (!audioRef.current || !customizedMixAudio) {
+                      return;
+                    }
+                    audioRef.current.currentTime = coupletStart;
+                    customizedMixAudio.currentTime = 0;
+                    audioRef.current.play();
+                    customizedMixAudio.play();
                     updateActivity({ data: { ...data, verseStart: coupletStart } });
                   }}
                 />
@@ -158,7 +171,11 @@ const SongStep4 = () => {
                   audioRef?.current?.play();
                   customizedMixAudio?.play();
                 }}
-                setAudioRef={setAudioRef}
+                onDelete={() => {
+                  updateActivity({ data: { ...data, classRecord: '' } });
+                  setDisplayEditor(false);
+                }}
+                audioRef={audioRef}
               />
             )}
           </div>

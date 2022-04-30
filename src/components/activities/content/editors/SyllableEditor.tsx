@@ -67,8 +67,9 @@ export const SyllableEditor = ({ update = () => {}, index, backline = false, edi
               verticalAlign: 'text-bottom',
             }}
             onClick={() => {
-              data.splice(index, 1);
-              update(data);
+              const newData = [...data];
+              newData.splice(index, 1);
+              update(newData);
             }}
           />
         )}

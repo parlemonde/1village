@@ -16,16 +16,21 @@ import { concatAudios, mixAudios } from 'src/utils/audios';
 const SongStep1 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const data = (activity?.data as VerseRecordData) || null;
 
   const onNext = async () => {
+    save().catch(console.error);
+    router.push('/chanter-un-couplet/2');
+  };
+
+  const onUpdateAudioMix = async (newAudioMix: Blob) => {
     setIsLoading(true);
-    if (data.customizedMixBlob && data.customizedMixBlob.size > 0) {
+    if (newAudioMix.size > 0) {
       const formData = new FormData();
-      formData.append('audio', data.customizedMixBlob, 'classVerse.webm');
+      formData.append('audio', newAudioMix, 'classVerse.webm');
       const response = await axiosLoggedRequest({
         method: 'POST',
         url: '/audios',
@@ -39,10 +44,9 @@ const SongStep1 = () => {
       updateActivity({ data: { ...data, mixWithoutLyrics, customizedMixWithVocals, customizedMix: response.data.url, customizedMixBlob: null } });
     }
     setIsLoading(false);
-    router.push('/chanter-un-couplet/2');
   };
 
-  if (!activity) {
+  if (!activity || !data) {
     return (
       <Base>
         <div></div>
@@ -72,7 +76,12 @@ const SongStep1 = () => {
             Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
             votre mix avant de passer à cette étape suivante !
           </p>
-          {data && <AudioMixer />}
+          <AudioMixer
+            onUpdateAudioMix={onUpdateAudioMix}
+            verseTime={data.verseTime}
+            verseAudios={data.verseAudios}
+            audioSource={data.customizedMix}
+          />
         </div>
       </div>
       <StepsButton next={onNext} />

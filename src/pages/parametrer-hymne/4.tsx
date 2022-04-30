@@ -19,18 +19,18 @@ const AnthemStep4 = () => {
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
       errors.push(0);
     }
-    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
       errors.push(1);
     }
-    if (activity !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
+    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
       errors.push(2);
     }
 
     return errors;
-  }, [activity, data]);
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {

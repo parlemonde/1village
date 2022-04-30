@@ -15,12 +15,12 @@ const SongStep2 = () => {
   const data = (activity?.data as VerseRecordData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data?.customizedMix) {
+    if (data !== null && !data.customizedMix) {
       errors.push(0);
     }
 
     return errors;
-  }, [activity, data?.customizedMix]);
+  }, [data]);
 
   const updateVerse = (verseLyrics: Syllable[]) => {
     updateActivity({ data: { ...data, verseLyrics } });

@@ -19,14 +19,14 @@ const AnthemStep3 = () => {
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
       errors.push(0);
     }
-    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
       errors.push(1);
     }
     return errors;
-  }, [activity, data]);
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -58,8 +58,16 @@ const AnthemStep3 = () => {
         <p>Rajouter des syllabes au couplet, soit sur la même ligne, soit en passant à la ligne.</p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.verseLyrics.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} data={data.verseLyrics} />
+            {data.verseLyrics.map((el, index) => (
+              <SyllableEditor
+                key={`syllableEditor--${index}`}
+                backline={el.back}
+                index={index}
+                data={data.verseLyrics}
+                update={(verseLyrics) => {
+                  updateActivity({ data: { ...data, verseLyrics } });
+                }}
+              />
             ))}
           </div>
           <Card style={{ display: 'inline-block' }}>
@@ -77,8 +85,9 @@ const AnthemStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.verseLyrics.push({ value: 'LA', back: false });
-                  updateActivity({ data: { ...data } });
+                  const verseLyrics = [...data.verseLyrics];
+                  verseLyrics.push({ value: 'LA', back: false });
+                  updateActivity({ data: { ...data, verseLyrics } });
                 }}
               >
                 <Syllable height="1.25rem" />
@@ -96,8 +105,9 @@ const AnthemStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.verseLyrics.push({ value: 'LA', back: true });
-                  updateActivity({ data: { ...data } });
+                  const verseLyrics = [...data.verseLyrics];
+                  verseLyrics.push({ value: 'LA', back: true });
+                  updateActivity({ data: { ...data, verseLyrics } });
                 }}
               >
                 <SyllableBackline height="1.55rem" />

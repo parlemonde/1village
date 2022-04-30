@@ -6,9 +6,10 @@ import Alert from '@mui/material/Alert';
 import { Button, Divider, TextField } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
-import Trash from 'src/svg/anthem/trash.svg';
 import { isValidHttpUrl } from 'src/utils';
 
 export interface AnthemEditorProps {
@@ -17,9 +18,9 @@ export interface AnthemEditorProps {
   onDelete?(): void;
   onPause?(): void;
   onPlay?(): void;
-  setAudioRef?(audioRef: React.RefObject<HTMLAudioElement>): void;
   setTime?(args: number): void;
   onClose?(idx: number): void;
+  audioRef?: React.RefObject<HTMLAudioElement>;
   idx?: number;
   edit?: boolean;
   audio?: boolean;
@@ -33,7 +34,7 @@ export const AnthemEditor = ({
   onClose = () => {},
   onPlay = () => {},
   onPause = () => {},
-  setAudioRef = () => {},
+  audioRef,
   idx = 0,
   edit = false,
 }: AnthemEditorProps) => {
@@ -146,12 +147,10 @@ export const AnthemEditor = ({
       resetPreview();
     }
   };
-  const audioRef = React.useRef<HTMLAudioElement>(null);
 
   const onLoadedMetadata = () => {
-    if (audioRef.current) {
+    if (audioRef && audioRef.current) {
       setTime(audioRef.current.duration);
-      setAudioRef(audioRef);
     }
   };
 
@@ -171,7 +170,24 @@ export const AnthemEditor = ({
             >
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
-            {edit && <Trash style={{ height: '30px', width: '25px', marginLeft: '5px', cursor: 'pointer' }} onClick={onDelete} />}
+            {edit && (
+              <EditButton
+                style={{ marginLeft: '12px' }}
+                size="small"
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              />
+            )}
+            {edit && (
+              <DeleteButton
+                style={{ marginLeft: '6px' }}
+                color="red"
+                confirmTitle="Supprimer ce son ?"
+                confirmLabel="Voulez-vous vraiment supprimer ce son ?"
+                onDelete={onDelete}
+              ></DeleteButton>
+            )}
           </div>
         </>
       )}

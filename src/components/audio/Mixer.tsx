@@ -3,8 +3,7 @@ import React from 'react';
 import Slider from '@mui/material/Slider';
 import { Button } from '@mui/material';
 
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
-import { ActivityContext } from 'src/contexts/activityContext';
+import type { Sample } from 'src/activity-types/anthem.types';
 import { primaryColor } from 'src/styles/variables.const';
 import DrumIcon from 'src/svg/anthem/drum.svg';
 import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
@@ -19,110 +18,135 @@ interface Audio {
   volume: number;
 }
 
-const AudioMixer: React.FC = () => {
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+type AudioMixerProps = {
+  verseTime: number;
+  verseAudios: Sample[];
+  audioSource?: string;
+  onUpdateAudioMix: (newAudioMixBlob: Blob) => void;
+};
+const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: AudioMixerProps) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const activityData = (activity?.data as VerseRecordData) || null;
-  const data = activityData?.verseAudios?.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 }));
-  const time = activityData?.verseTime;
   const [source, setSource] = React.useState('');
   const [isRecording, setIsRecording] = React.useState(false);
-  const [timeOutId, setTimeOutId] = React.useState<number>(-1);
   const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
   const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
   const [counter, setCounter] = React.useState(0);
-  const [ac, setAc] = React.useState<AudioContext>(new AudioContext());
-  const [counterId, setCounterId] = React.useState<number>();
-  const [audioSources, setAudioSources] = React.useState<(MediaElementAudioSourceNode | undefined)[]>([]);
+  const counterIntervalId = React.useRef<number | undefined>(undefined);
+  const timeoutId = React.useRef<number | undefined>(undefined);
+  const audioContext = React.useRef<AudioContext | null>(null);
   const recorder = React.useRef<MediaRecorder | null>(null);
 
-  React.useEffect(() => {
-    setAc(new AudioContext());
-  }, []);
-
-  /* eslint-disable-next-line */
-    const audiosEl = data.map((audio: Audio) => React.useRef(new Audio(audio.value)));
-
-  audiosEl.map((audio) => (audio.current.onended = () => setIsPlaying(false)));
-  audiosEl[0].current.onended = () => setCounter(0);
-
-  const playPause = () => {
-    setIsPlaying(isPlaying ? false : true);
-    setCounter(audiosEl[0].current.currentTime);
-    if (isPlaying) {
-      clearInterval(counterId);
-    } else {
-      setCounterId(window.setInterval(() => setCounter((counter: number) => counter + 1), 1000));
-    }
-    audiosEl.map((audio) => (audio.current.paused ? audio.current.play() : audio.current.pause()));
-  };
-
-  const toStart = () => {
-    setCounter(0);
-    audiosEl.map((audio) => (audio.current.currentTime = 0));
-  };
-
-  const recordSounds = () => {
-    toStart();
-    clearInterval(counterId);
-    setCounterId(window.setInterval(() => setCounter((counter: number) => counter + 1), 1000));
-    setIsRecording(true);
-    ac.resume();
-    const dest = ac.createMediaStreamDestination();
-    const sources = audioSources;
-    audiosEl.map((audio, index) => {
-      if (sources.length !== 6) sources[index] = ac.createMediaElementSource(audio.current);
-      sources?.[index]?.connect(ac.destination);
-      sources?.[index]?.connect(dest);
+  const audiosTracks = React.useMemo(() => verseAudios.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 })), [verseAudios]);
+  const audiosEl = React.useMemo(() => {
+    const elements = audiosTracks.map((audio: Audio) => new Audio(audio.value));
+    elements.forEach((audio) => {
+      audio.volume = 0.5;
     });
-    setAudioSources(sources);
-    recorder.current = new MediaRecorder(dest.stream);
-    recorder?.current.start();
+    return elements;
+  }, [audiosTracks]);
+
+  const onPlay = React.useCallback(() => {
+    if (audiosEl.length === 0) {
+      return;
+    }
     setIsPlaying(true);
-    audiosEl.map((audio) => audio.current.play());
-    setTimeOutId(
-      window.setTimeout(() => {
-        recorder!.current!.ondataavailable = (ev) => {
-          updateActivity({ data: { ...activityData, customizedMixBlob: ev.data } });
+    window.clearInterval(counterIntervalId.current);
+    counterIntervalId.current = window.setInterval(() => setCounter((counter: number) => counter + 1), 1000);
+    audiosEl.forEach((audio) => {
+      audio.play();
+    });
+  }, [audiosEl]);
+
+  const onPause = React.useCallback(() => {
+    setIsPlaying(false);
+    window.clearInterval(counterIntervalId.current);
+    audiosEl.forEach((audio) => {
+      audio.pause();
+    });
+  }, [audiosEl]);
+
+  const onRestart = React.useCallback(() => {
+    setCounter(0);
+    audiosEl.forEach((audio) => {
+      audio.currentTime = 0;
+    });
+  }, [audiosEl]);
+
+  const onStop = React.useCallback(() => {
+    onPause();
+    onRestart();
+  }, [onPause, onRestart]);
+
+  const onStartRecord = async () => {
+    if (audioContext.current !== null) {
+      await audioContext.current.close();
+    }
+
+    // create audio context and recorder.
+    audioContext.current = new AudioContext();
+    const dest = audioContext.current.createMediaStreamDestination();
+    for (const audio of audiosEl) {
+      const source = audioContext.current.createMediaElementSource(audio);
+      source.connect(audioContext.current.destination);
+      source.connect(dest);
+    }
+    recorder.current = new MediaRecorder(dest.stream);
+    recorder.current.start();
+
+    // start recording
+    setIsRecording(true);
+    onRestart();
+    onPlay();
+    timeoutId.current = window.setTimeout(() => {
+      if (recorder.current !== null) {
+        recorder.current.ondataavailable = (ev) => {
+          onUpdateAudioMix(ev.data);
           setSource(URL.createObjectURL(ev.data));
         };
-        setIsRecording(false);
-        clearInterval(counterId);
-        setCounter(0);
-        if (recorder?.current?.state === 'recording') recorder?.current?.stop();
-      }, time * 1000),
-    );
+      }
+      onStop();
+      setIsRecording(false);
+      if (recorder.current) {
+        recorder.current.stop();
+      }
+    }, verseTime * 1000);
   };
 
-  const stopRecord = () => {
-    clearTimeout(timeOutId);
+  const onStopRecord = () => {
+    if (recorder.current) {
+      recorder.current.stop();
+    }
+    window.clearTimeout(timeoutId.current);
     setIsRecording(false);
-    playPause();
-    toStart();
-    clearInterval(counterId);
-    setCounter(0);
-    recorder?.current?.stop();
+    onStop();
   };
 
   const solo = (idx: number) => {
-    const newVolumes: number[] = volumes;
-    audiosEl.map((audio, index) => {
-      if (audio.current.volume !== 0) newVolumes[index] = audio.current.volume;
-      audio.current.volume = idx !== index ? (solos[idx] ? volumes[index] : 0) : audio.current.volume === 0 ? 1 : audio.current.volume;
+    const newVolumes = volumes.map((volume, index) => {
+      const audio = audiosEl[index];
+      if (!audio) {
+        return 0;
+      }
+      const newVolume = audio.volume !== 0 ? audio.volume : volume;
+      audio.volume = idx !== index ? (solos[idx] ? newVolume : 0) : audio.volume === 0 ? 1 : audio.volume;
+      return newVolume;
     });
     setVolumes(newVolumes);
     setSolos((solos: boolean[]) => solos.map((el, index) => (index === idx ? !el : false)));
   };
 
   const toggleVolume = (idx: number, isMuted: boolean) => {
-    audiosEl.map((audio, index) => {
-      audio.current.volume = idx === index ? (isMuted ? 1 : 0) : audio.current.volume;
+    audiosEl.forEach((audio, index) => {
+      audio.volume = idx === index ? (isMuted ? 1 : 0) : audio.volume;
     });
   };
 
-  if (counter >= Math.floor(time)) {
-    clearInterval(counterId);
-  }
+  React.useEffect(() => {
+    if (counter >= Math.floor(verseTime)) {
+      window.clearInterval(counterIntervalId.current);
+      onStop();
+    }
+  }, [counter, verseTime, onStop]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -136,13 +160,19 @@ const AudioMixer: React.FC = () => {
               justifyContent: 'space-around',
             }}
           >
-            <Button variant="contained" onClick={playPause} disabled={isRecording}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                isPlaying ? onPause() : onPlay();
+              }}
+              disabled={isRecording}
+            >
               {isPlaying ? 'Pause' : 'Jouer'}
             </Button>
             <span style={{ fontSize: '30px' }}>
-              {toTime(counter)}/{toTime(time)}
+              {toTime(counter)}/{toTime(verseTime)}
             </span>
-            <Button variant="contained" onClick={toStart} disabled={isRecording}>
+            <Button variant="contained" onClick={onRestart} disabled={isRecording}>
               Recommencer
             </Button>
           </div>
@@ -151,19 +181,19 @@ const AudioMixer: React.FC = () => {
               <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} solos={solos} />
             ))}
           </div>
-          {activityData?.customizedMix ? (
-            <audio
-              controls={!isRecording}
-              src={activityData.customizedMix}
-              style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }}
-            />
+          {audioSource ? (
+            <audio controls={!isRecording} src={audioSource} style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }} />
           ) : (
             source && <audio controls={!isRecording} src={source} style={{ width: '95%', height: '40px', marginLeft: '10px' }} />
           )}
         </div>
       </div>
       <div style={{ width: '600px', display: 'flex', justifyContent: 'space-between', flexDirection: 'row-reverse' }}>
-        <Button variant="contained" style={{ width: '200px', marginTop: '10px', height: '35px' }} onClick={isRecording ? stopRecord : recordSounds}>
+        <Button
+          variant="contained"
+          style={{ width: '200px', marginTop: '10px', height: '35px' }}
+          onClick={isRecording ? onStopRecord : onStartRecord}
+        >
           {isRecording ? "Arrêter l'enregistrement" : 'Enregistrer'}
         </Button>
       </div>
@@ -174,7 +204,7 @@ const AudioMixer: React.FC = () => {
 export default AudioMixer;
 
 interface AudioMixProps {
-  audio: React.MutableRefObject<HTMLAudioElement>;
+  audio: HTMLAudioElement;
   idx: number;
   solo: (idx: number) => void;
   off: (idx: number, isMuted: boolean) => void;
@@ -194,9 +224,8 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
     solo(idx);
   };
 
-  // eslint-disable-next-line no-empty-pattern
-  const handleChange = ({}, newValue: number | number[]) => {
-    audio.current.volume = newValue as number;
+  const handleChange = (_event: Event, newValue: number | number[]) => {
+    audio.volume = newValue as number;
   };
 
   return (

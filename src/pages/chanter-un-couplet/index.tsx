@@ -7,6 +7,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 
 const emptyAnthemActivity: AnthemData = {
@@ -24,23 +25,35 @@ const Anthem = () => {
   const { createNewActivity } = React.useContext(ActivityContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [anthemActivity, setAnthemActivity] = React.useState<AnthemData>(emptyAnthemActivity);
+  const [anthemActivityData, setAnthemActivityData] = React.useState<AnthemData>(emptyAnthemActivity);
 
+  const getAnthemData = React.useCallback(async () => {
+    if (!village || !village.anthemId) {
+      router.push('/');
+      return;
+    }
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities/${village.anthemId}`,
+    });
+    if (response.error) {
+      router.push('/');
+      return;
+    }
+
+    const newAnthemActivityData = (response.data as Activity<AnthemData>).data;
+    setAnthemActivityData(newAnthemActivityData);
+
+    if (!newAnthemActivityData.finalMix) {
+      router.push('/');
+    }
+  }, [axiosLoggedRequest, router, village]);
   React.useEffect(() => {
-    const getAnthemActivity = async () => {
-      const activity = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/activities/${village!.anthemId}`,
-      });
-
-      setAnthemActivity(activity.data.data);
-    };
-    if (!village!.anthemId) router.push('/');
-    if (!anthemActivity.finalMix && village) getAnthemActivity();
-  });
+    getAnthemData().catch(console.error);
+  }, [getAnthemData]);
 
   const onNext = () => {
-    const { chorus, verseAudios, introOutro, verseLyrics, verseTime } = anthemActivity;
+    const { chorus, verseAudios, introOutro, verseLyrics, verseTime } = anthemActivityData;
     createNewActivity(ActivityType.VERSE_RECORD, undefined, {
       verseAudios,
       introOutro,
@@ -56,7 +69,7 @@ const Anthem = () => {
     router.push('/chanter-un-couplet/1');
   };
 
-  if (!anthemActivity) {
+  if (!anthemActivityData) {
     return (
       <Base>
         <div></div>
@@ -72,7 +85,7 @@ const Anthem = () => {
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>Je vous propose de composer et chanter ensemble l&apos;hymne du village idéal !</p>
             <p>Écoutez d&apos;abord la musique et le refrain que j&apos;ai déjà composé pour vous.</p>
-            <audio controls src={anthemActivity?.finalMix} style={{ width: '100%', height: '40px' }} />
+            <audio controls src={anthemActivityData.finalMix} style={{ width: '100%', height: '40px' }} />
             <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet, et la conclusion.</p>
 
             <p>

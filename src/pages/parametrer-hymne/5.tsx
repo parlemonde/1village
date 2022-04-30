@@ -28,20 +28,20 @@ const AnthemStep5 = () => {
 
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
       errors.push(0);
     }
-    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
       errors.push(1);
     }
-    if (activity !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
+    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
       errors.push(2);
     }
-    if (activity !== null && data.chorus.filter((c) => !!c.value).length === 0) {
+    if (data !== null && data.chorus.filter((c) => !!c.value).length === 0) {
       errors.push(3);
     }
     return errors;
-  }, [activity, data]);
+  }, [data]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 

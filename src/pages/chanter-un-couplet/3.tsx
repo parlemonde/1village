@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
@@ -9,16 +10,22 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { toTime } from 'src/utils/toTime';
 
 const SongStep3 = () => {
-  const { activity } = React.useContext(ActivityContext);
+  const router = useRouter();
+  const { activity, save } = React.useContext(ActivityContext);
   const data = (activity?.data as VerseRecordData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && !data?.customizedMix) {
+    if (data !== null && !data.customizedMix) {
       errors.push(0);
     }
 
     return errors;
-  }, [activity, data?.customizedMix]);
+  }, [data]);
+
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/chanter-un-couplet/4');
+  };
 
   return (
     <Base>
@@ -59,7 +66,7 @@ const SongStep3 = () => {
               <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} backline={el.back} index={index} data={data?.verseLyrics} song />
             ))}
           </div>
-          <StepsButton prev="/chanter-un-couplet/2" next="/chanter-un-couplet/4" />
+          <StepsButton prev="/chanter-un-couplet/2" next={onNext} />
         </div>
       </div>
     </Base>
