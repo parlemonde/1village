@@ -15,12 +15,14 @@ import { Steps } from 'src/components/Steps';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useVillageRequests } from 'src/services/useVillages';
 import { ActivityStatus } from 'types/activity.type';
 
 const AnthemStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
+  const { editVillage } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
 
@@ -39,7 +41,7 @@ const AnthemStep5 = () => {
       errors.push(3);
     }
     return errors;
-  }, [activity, data?.chorus, data?.introOutro, data?.verseAudios, data?.verseLyrics]);
+  }, [activity, data]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
@@ -53,9 +55,12 @@ const AnthemStep5 = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save(true);
-    if (success) {
-      router.push('/parametrer-hymne/success');
+    const response = await save(true);
+    if (response.success) {
+      if (village !== null) {
+        await editVillage({ id: village.id, anthemId: response.activity.id });
+      }
+      window.location.assign('/parametrer-hymne/success'); // use window location assign to refresh the page and get an updated village.
     }
     setIsLoading(false);
   };
@@ -135,13 +140,13 @@ const AnthemStep5 = () => {
             />
             <p>Voilà la structure du couplet, découpé en syllabes :</p>
             <p>
-              {data.verseLyrics.map((syllable) =>
+              {data.verseLyrics.map((syllable, index) =>
                 syllable.back ? (
-                  <>
+                  <React.Fragment key={index}>
                     <br /> {syllable.value}{' '}
-                  </>
+                  </React.Fragment>
                 ) : (
-                  <>{syllable.value} </>
+                  <React.Fragment key={index}>{syllable.value} </React.Fragment>
                 ),
               )}
             </p>
@@ -157,13 +162,13 @@ const AnthemStep5 = () => {
             />
             <p>Voilà le refrain découpé en syllabes :</p>
             <p>
-              {data.chorus.map((syllable) =>
+              {data.chorus.map((syllable, index) =>
                 syllable.back ? (
-                  <>
+                  <React.Fragment key={index}>
                     <br /> {syllable.value}{' '}
-                  </>
+                  </React.Fragment>
                 ) : (
-                  <>{syllable.value} </>
+                  <React.Fragment key={index}>{syllable.value} </React.Fragment>
                 ),
               )}
             </p>

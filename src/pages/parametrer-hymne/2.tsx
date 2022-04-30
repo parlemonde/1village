@@ -5,7 +5,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { AnthemData, Sample } from 'src/activity-types/anthem.types';
+import type { AnthemData } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
@@ -20,7 +20,7 @@ import { toTime } from 'src/utils/toTime';
 const AnthemStep2 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, updateActivity, deleteContent } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
@@ -28,18 +28,12 @@ const AnthemStep2 = () => {
       return [0];
     }
     return [];
-  }, [data, data?.verseAudios]);
+  }, [data]);
 
-  const updateContent = (content: Sample[]): void => {
-    if (!activity) {
-      return;
-    }
-    updateActivity({ data: { ...data, introOutro: content } });
-  };
-
-  const onChangeContent = (index: number) => (newValue: string) => {
-    data.introOutro[index].value = newValue;
-    updateContent(data.introOutro);
+  const onUpdateIntroOutro = (index: number) => (newValue: string) => {
+    const introOutro = [...data.introOutro];
+    introOutro[index] = { ...introOutro[index], value: newValue, display: newValue === '' ? false : introOutro[index].display };
+    updateActivity({ data: { ...data, introOutro } });
   };
 
   const onNext = async () => {
@@ -48,11 +42,12 @@ const AnthemStep2 = () => {
       const value = await concatAudios([data.introOutro[0], { value: data.finalVerse }, data.introOutro[1]], axiosLoggedRequest);
       updateActivity({ data: { ...data, finalMix: value } });
     }
+    save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/3');
   };
 
-  if (!activity) {
+  if (!activity || !data) {
     return (
       <Base>
         <div></div>
@@ -67,7 +62,7 @@ const AnthemStep2 = () => {
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
           activeStep={1}
-          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+          urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
         <div className="width-900">
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>
@@ -88,20 +83,20 @@ const AnthemStep2 = () => {
           </div>
           <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {data?.introOutro.map((audio, idx) => (
-              <>
+            {data.introOutro.map((audio, idx) => (
+              <React.Fragment key={idx}>
                 {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de l&apos;outro</div>}
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                   <TrackIcon />
                   <div style={{ width: '250px', marginLeft: '10px' }}>{audio.label} : </div>
                   <div>
-                    {data?.introOutro[idx].display && (
+                    {data.introOutro[idx].display && (
                       <AnthemEditor
                         key={`anthem-editChorus--${idx}`}
                         value={audio.value}
-                        onChange={onChangeContent(idx)}
+                        onChange={onUpdateIntroOutro(idx)}
                         onDelete={() => {
-                          deleteContent(idx);
+                          onUpdateIntroOutro(idx)('');
                         }}
                         setTime={(time) => {
                           data.introOutro[idx].time = time;
@@ -133,12 +128,12 @@ const AnthemStep2 = () => {
                     )}
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>
       </div>
-      <StepsButton prev="/parametrer-hymne/1" next={onNext} />
+      <StepsButton prev="/parametrer-hymne/1?edit" next={onNext} />
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

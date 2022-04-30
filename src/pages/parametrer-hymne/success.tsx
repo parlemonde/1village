@@ -4,28 +4,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { useVillageRequests } from 'src/services/useVillages';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const AnthemSuccess = () => {
-  const { activity } = React.useContext(ActivityContext);
-  const { village } = React.useContext(VillageContext);
-  const { editVillage } = useVillageRequests();
-
-  React.useEffect(() => {
-    const updateVillage = async () => {
-      if (village && activity && !village.anthemId) {
-        await editVillage({ id: village.id, anthemId: activity.id });
-        window.location.reload();
-      }
-    };
-
-    updateVillage();
-  }, [activity, village, editVillage]);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>

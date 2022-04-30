@@ -23,7 +23,7 @@ export const titles = {
   [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
-  [ActivityType.ANTHEM]: 'créé une hymne',
+  [ActivityType.ANTHEM]: 'créé un hymne',
   [ActivityType.VERSE_RECORD]: 'chanté un couplet',
 };
 
@@ -55,7 +55,7 @@ export const DESC = {
   [ActivityType.SYMBOL]: 'un symbole',
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
-  [ActivityType.ANTHEM]: 'une hymne',
+  [ActivityType.ANTHEM]: 'un hymne',
   [ActivityType.VERSE_RECORD]: 'un couplet',
 };
 
@@ -71,7 +71,7 @@ export const REACTIONS = {
   [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
-  [ActivityType.ANTHEM]: 'cette hymne',
+  [ActivityType.ANTHEM]: 'cet hymne',
   [ActivityType.VERSE_RECORD]: 'ce couplet',
 };
 
@@ -87,7 +87,7 @@ export const labels = {
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
-  [ActivityType.ANTHEM]: 'Répondre à cette hymne par :',
+  [ActivityType.ANTHEM]: 'Répondre à cet hymne par :',
   [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
 };
 

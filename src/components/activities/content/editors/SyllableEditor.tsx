@@ -14,14 +14,7 @@ type SyllableEditorProps = {
   data: Syllable[];
 };
 
-export const SyllableEditor: React.FC<SyllableEditorProps> = ({
-  update = () => {},
-  index,
-  backline = false,
-  editable = false,
-  data,
-  song = false,
-}: React.PropsWithChildren<SyllableEditorProps>) => {
+export const SyllableEditor = ({ update = () => {}, index, backline = false, editable = false, data, song = false }: SyllableEditorProps) => {
   const contentEditableRef = React.useRef() as React.MutableRefObject<HTMLSpanElement>;
 
   return (

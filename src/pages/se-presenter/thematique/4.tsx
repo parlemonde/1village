@@ -39,7 +39,7 @@ const PresentationStep4 = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/se-presenter/success');
     }

@@ -35,7 +35,7 @@ const SongStep5 = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/chanter-un-couplet/success');
     }

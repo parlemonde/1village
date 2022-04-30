@@ -15,7 +15,7 @@ import Syllable from 'src/svg/anthem/syllable.svg';
 
 const AnthemStep3 = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
@@ -26,7 +26,7 @@ const AnthemStep3 = () => {
       errors.push(1);
     }
     return errors;
-  }, [activity, data?.verseAudios, data?.introOutro]);
+  }, [activity, data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -39,6 +39,11 @@ const AnthemStep3 = () => {
   if (data === null || activity === null || !isAnthem(activity)) {
     return <div></div>;
   }
+
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/parametrer-hymne/4');
+  };
 
   return (
     <Base>
@@ -102,7 +107,7 @@ const AnthemStep3 = () => {
               </ButtonBase>
             </div>
           </Card>
-          <StepsButton prev="/parametrer-hymne/2" next="/parametrer-hymne/4" />
+          <StepsButton prev="/parametrer-hymne/2" next={onNext} />
         </div>
       </div>
     </Base>

@@ -171,14 +171,7 @@ export const AnthemEditor = ({
             >
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
-            {edit && (
-              <Trash
-                style={{ height: '30px', width: '25px', marginLeft: '5px', cursor: 'pointer' }}
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
-              />
-            )}
+            {edit && <Trash style={{ height: '30px', width: '25px', marginLeft: '5px', cursor: 'pointer' }} onClick={onDelete} />}
           </div>
         </>
       )}
