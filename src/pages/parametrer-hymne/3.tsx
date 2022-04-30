@@ -15,18 +15,18 @@ import Syllable from 'src/svg/anthem/syllable.svg';
 
 const AnthemStep3 = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
       errors.push(0);
     }
-    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
       errors.push(1);
     }
     return errors;
-  }, [activity]);
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -40,16 +40,34 @@ const AnthemStep3 = () => {
     return <div></div>;
   }
 
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/parametrer-hymne/4');
+  };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={2} />
+        <Steps
+          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
+          errorSteps={errorSteps}
+          activeStep={2}
+          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+        />
         <h1>Paramétrer le couplet</h1>
         <p>Rajouter des syllabes au couplet, soit sur la même ligne, soit en passant à la ligne.</p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.verse.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--${index}`} backline={el.back} index={index} update={updateActivity} data={data} />
+            {data.verseLyrics.map((el, index) => (
+              <SyllableEditor
+                key={`syllableEditor--${index}`}
+                backline={el.back}
+                index={index}
+                data={data.verseLyrics}
+                update={(verseLyrics) => {
+                  updateActivity({ data: { ...data, verseLyrics } });
+                }}
+              />
             ))}
           </div>
           <Card style={{ display: 'inline-block' }}>
@@ -67,8 +85,9 @@ const AnthemStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.verse.push({ value: 'LA', back: false });
-                  updateActivity({ data: { ...data } });
+                  const verseLyrics = [...data.verseLyrics];
+                  verseLyrics.push({ value: 'LA', back: false });
+                  updateActivity({ data: { ...data, verseLyrics } });
                 }}
               >
                 <Syllable height="1.25rem" />
@@ -86,8 +105,9 @@ const AnthemStep3 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.verse.push({ value: 'LA', back: true });
-                  updateActivity({ data: { ...data } });
+                  const verseLyrics = [...data.verseLyrics];
+                  verseLyrics.push({ value: 'LA', back: true });
+                  updateActivity({ data: { ...data, verseLyrics } });
                 }}
               >
                 <SyllableBackline height="1.55rem" />
@@ -97,7 +117,7 @@ const AnthemStep3 = () => {
               </ButtonBase>
             </div>
           </Card>
-          <StepsButton prev="/parametrer-hymne/2" next="/parametrer-hymne/4" />
+          <StepsButton prev="/parametrer-hymne/2" next={onNext} />
         </div>
       </div>
     </Base>

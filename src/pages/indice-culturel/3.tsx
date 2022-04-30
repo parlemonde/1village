@@ -51,7 +51,7 @@ const IndiceStep3 = () => {
       return;
     }
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/indice-culturel/success');
     }

@@ -39,6 +39,7 @@ audioController.upload(
 
     // 2- get file name
     const uuid = uuidv4();
+
     const extension = path.extname(req.file.originalname).substring(1);
     // todo: check extension or return.
     logger.info(`Extension: ${extension}`);

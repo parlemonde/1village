@@ -2,6 +2,7 @@ import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
+import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
@@ -22,7 +23,8 @@ export const titles = {
   [ActivityType.SYMBOL]: 'créé un symbole',
   [ActivityType.REPORTAGE]: 'réalisé un reportage',
   [ActivityType.REACTION]: 'réagi à',
-  [ActivityType.ANTHEM]: 'créé une hymne',
+  [ActivityType.ANTHEM]: 'créé un hymne',
+  [ActivityType.VERSE_RECORD]: 'chanté un couplet',
 };
 
 export const icons = {
@@ -38,6 +40,7 @@ export const icons = {
   [ActivityType.REPORTAGE]: ReportageIcon,
   [ActivityType.REACTION]: ReactionIcon,
   [ActivityType.ANTHEM]: AnthemIcon,
+  [ActivityType.VERSE_RECORD]: MusicIcon,
 };
 
 export const DESC = {
@@ -52,7 +55,8 @@ export const DESC = {
   [ActivityType.SYMBOL]: 'un symbole',
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
-  [ActivityType.ANTHEM]: 'une hymne',
+  [ActivityType.ANTHEM]: 'un hymne',
+  [ActivityType.VERSE_RECORD]: 'un couplet',
 };
 
 export const REACTIONS = {
@@ -67,7 +71,8 @@ export const REACTIONS = {
   [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
-  [ActivityType.ANTHEM]: 'cette hymne',
+  [ActivityType.ANTHEM]: 'cet hymne',
+  [ActivityType.VERSE_RECORD]: 'ce couplet',
 };
 
 export const labels = {
@@ -82,7 +87,8 @@ export const labels = {
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
-  [ActivityType.ANTHEM]: 'Répondre à cette hymne par :',
+  [ActivityType.ANTHEM]: 'Répondre à cet hymne par :',
+  [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
 };
 
 const specificActivityPhase = {
@@ -98,6 +104,7 @@ const specificActivityPhase = {
   [ActivityType.REPORTAGE]: [2],
   [ActivityType.REACTION]: [2],
   [ActivityType.ANTHEM]: [],
+  [ActivityType.VERSE_RECORD]: [3],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];

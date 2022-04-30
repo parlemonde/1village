@@ -7,65 +7,42 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
-import { isAnthem } from 'src/activity-types/anyActivity';
+import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { useVillageRequests } from 'src/services/useVillages';
 import { ActivityStatus } from 'types/activity.type';
 
-const AnthemStep5 = () => {
+const SongStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
-  const { village } = React.useContext(VillageContext);
-  const { editVillage } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as AnthemData) || null;
-
+  const data = (activity?.data as VerseRecordData) || null;
+  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && !data?.customizedMix) {
       errors.push(0);
     }
-    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
-      errors.push(1);
-    }
-    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
-      errors.push(2);
-    }
-    if (data !== null && data.chorus.filter((c) => !!c.value).length === 0) {
+    if (data !== null && (!data.verse || !data.slicedRecord)) {
       errors.push(3);
     }
+
     return errors;
   }, [data]);
 
-  const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-
-  React.useEffect(() => {
-    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/parametrer-hymne');
-    } else if (activity && !isAnthem(activity)) {
-      router.push('/parametrer-hymne');
-    }
-  }, [activity, router, village]);
-
   const onPublish = async () => {
     setIsLoading(true);
-    const response = await save(true);
-    if (response.success) {
-      if (village !== null) {
-        await editVillage({ id: village.id, anthemId: response.activity.id });
-      }
-      window.location.assign('/parametrer-hymne/success'); // use window location assign to refresh the page and get an updated village.
+    const { success } = await save(true);
+    if (success) {
+      router.push('/chanter-un-couplet/success');
     }
     setIsLoading(false);
   };
 
-  if (data === null || activity === null || !isAnthem(activity)) {
+  if (data === null || activity === null) {
     return <div></div>;
   }
 
@@ -73,23 +50,23 @@ const AnthemStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
-          errorSteps={errorSteps}
+          steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={4}
-          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+          errorSteps={errorSteps}
+          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre paramétrage et activez l&apos;hymne</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Voici la pré-visualisation de votre paramétrage.
+            Voici la pré-visualisation de votre couplet.
             {isEdit
               ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : activez ce paramétrage dans ce village-monde !'}
+              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/parametrer-hymne/4" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/parametrer-hymne/4">
+              <Link href="/chanter-un-couplet/4" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/chanter-un-couplet/4">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -100,7 +77,7 @@ const AnthemStep5 = () => {
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
               <Button variant="outlined" color="primary" onClick={onPublish} disabled={errorSteps.length !== 0}>
-                Paramétrer
+                Publier
               </Button>
             </div>
           )}
@@ -108,34 +85,22 @@ const AnthemStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push('/parametrer-hymne/1');
+                router.push('/chanter-un-couplet/1');
               }}
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {data.finalVerse && <audio src={data.finalVerse} controls style={{ width: '350px', height: '60px' }} />}
-            <p style={{ margin: '0.5rem 0' }}>Écoutez le mix par défaut du couplet (les 7 pistes mélangées)</p>
+            {data?.customizedMix && <audio src={data?.customizedMix} controls style={{ width: '350px', height: '60px' }} />}
+            <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de votre couplet</p>
           </div>
 
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(1) })}>
             <EditButton
               onClick={() => {
-                router.push('/parametrer-hymne/2');
+                router.push('/chanter-un-couplet/3');
               }}
               status={errorSteps.includes(1) ? 'warning' : 'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            {data.finalMix && <audio src={data.finalMix} controls style={{ width: '350px', height: '60px' }} />}
-            <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de l&apos;hymne (intro + refrain + couplet mixé + outro)</p>
-          </div>
-
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(2) })}>
-            <EditButton
-              onClick={() => {
-                router.push('/parametrer-hymne/3');
-              }}
-              status={errorSteps.includes(2) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
             <p>Voilà la structure du couplet, découpé en syllabes :</p>
@@ -155,26 +120,29 @@ const AnthemStep5 = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(3) })}>
             <EditButton
               onClick={() => {
-                router.push('/parametrer-hymne/4');
+                router.push('/chanter-un-couplet/4');
               }}
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <p>Voilà le refrain découpé en syllabes :</p>
-            <p>
-              {data.chorus.map((syllable, index) =>
-                syllable.back ? (
-                  <React.Fragment key={index}>
-                    <br /> {syllable.value}{' '}
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment key={index}>{syllable.value} </React.Fragment>
-                ),
-              )}
-            </p>
+            {data.slicedRecord && <audio src={data.slicedRecord} controls style={{ width: '350px', height: '60px' }} />}
+            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet (seulement votre voix)</p>
           </div>
 
-          <StepsButton prev="/parametrer-hymne/4" />
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(3) })}>
+            <EditButton
+              onClick={() => {
+                router.push('/chanter-un-couplet/4');
+              }}
+              status={errorSteps.includes(3) ? 'warning' : 'success'}
+              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            />
+
+            {data.verse && <audio src={data.verse} controls style={{ width: '350px', height: '60px' }} />}
+            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé à la mélodie</p>
+          </div>
+
+          <StepsButton prev="/chanter-un-couplet/4" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -184,4 +152,4 @@ const AnthemStep5 = () => {
   );
 };
 
-export default AnthemStep5;
+export default SongStep5;

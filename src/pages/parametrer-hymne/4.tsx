@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ButtonBase, Card } from '@mui/material';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { AnthemData, Syllable } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -11,26 +11,26 @@ import { Steps } from 'src/components/Steps';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
-import Syllable from 'src/svg/anthem/syllable.svg';
+import SyllableIcon from 'src/svg/anthem/syllable.svg';
 
 const AnthemStep4 = () => {
   const router = useRouter();
-  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
       errors.push(0);
     }
-    if (activity !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
       errors.push(1);
     }
-    if (activity !== null && data.verse.filter((c) => !!c.value).length === 0) {
+    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
       errors.push(2);
     }
 
     return errors;
-  }, [activity]);
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -44,10 +44,24 @@ const AnthemStep4 = () => {
     return <div></div>;
   }
 
+  const updateChorus = (chorus: Syllable[]) => {
+    updateActivity({ data: { ...data, chorus } });
+  };
+
+  const onNext = () => {
+    save().catch(console.error);
+    router.push('/parametrer-hymne/5');
+  };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} errorSteps={errorSteps} activeStep={3} />
+        <Steps
+          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
+          errorSteps={errorSteps}
+          activeStep={3}
+          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+        />
         <h1>Paramétrer le refrain</h1>
         <p>
           Rajouter des syllabes au refrain, soit sur la même ligne, soit en passant à la ligne. Puis remplacez les &quot;La&quot; par les syllabes du
@@ -60,8 +74,8 @@ const AnthemStep4 = () => {
                 key={`syllableEditor--chorus--${index}`}
                 backline={el.back}
                 index={index}
-                update={updateActivity}
-                data={data}
+                update={updateChorus}
+                data={data.chorus}
                 editable
               />
             ))}
@@ -85,7 +99,7 @@ const AnthemStep4 = () => {
                   updateActivity({ data: { ...data } });
                 }}
               >
-                <Syllable height="1.25rem" />
+                <SyllableIcon height="1.25rem" />
                 <span className="text text--small" style={{ marginTop: '0.1rem' }}>
                   Syllabe
                 </span>
@@ -111,7 +125,7 @@ const AnthemStep4 = () => {
               </ButtonBase>
             </div>
           </Card>
-          <StepsButton prev="/parametrer-hymne/3" next="/parametrer-hymne/5" />
+          <StepsButton prev="/parametrer-hymne/3" next={onNext} />
         </div>
       </div>
     </Base>

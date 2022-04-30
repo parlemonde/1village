@@ -1,57 +1,24 @@
 import ContentEditable from 'react-contenteditable';
 import React from 'react';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { Syllable } from 'src/activity-types/anthem.types';
 import BacklineIcon from 'src/svg/anthem/backline.svg';
 import TrashIcon from 'src/svg/anthem/trash.svg';
-import type { Activity } from 'types/activity.type';
 
 type SyllableEditorProps = {
-  update: (activity: Partial<Activity>) => void;
+  update?: (data: Syllable[]) => void;
   index: number;
   backline?: boolean;
   editable?: boolean;
-  data: AnthemData;
+  song?: boolean;
+  data: Syllable[];
 };
 
-export const SyllableEditor: React.FC<SyllableEditorProps> = ({
-  update,
-  index,
-  backline = false,
-  editable = false,
-  data,
-}: React.PropsWithChildren<SyllableEditorProps>) => {
-  const part = editable ? 'chorus' : 'verse';
+export const SyllableEditor = ({ update = () => {}, index, backline = false, editable = false, data, song = false }: SyllableEditorProps) => {
+  const contentEditableRef = React.useRef() as React.MutableRefObject<HTMLSpanElement>;
 
   return (
     <>
-      <div
-        className="syllable-editor"
-        style={{ width: 'fit-content', padding: '1px', maxWidth: '50vh', display: 'inline-block', marginRight: '10px' }}
-      >
-        <ContentEditable
-          onChange={(e) => {
-            data[part][index].value = e.target.value;
-            update({ data: { ...data, [part]: data[part] } });
-          }}
-          disabled={!editable}
-          tagName="span"
-          html={data[part][index].value}
-          style={{ margin: '0 10px 0 5px', color: '#4c3ed9', fontSize: 'smaller' }}
-        />
-
-        <TrashIcon
-          height="1.25rem"
-          style={{
-            verticalAlign: 'text-bottom',
-          }}
-          onClick={() => {
-            data[part].splice(index, 1);
-            update({ data: { ...data, [part]: data[part] } });
-          }}
-        />
-      </div>
-
       {backline && (
         <>
           <BacklineIcon height="1.45rem" style={{ marginTop: '25px' }} />
@@ -62,6 +29,51 @@ export const SyllableEditor: React.FC<SyllableEditorProps> = ({
           ></div>
         </>
       )}
+      <div className={`syllable-editor${song ? '-song' : ''}`}>
+        <ContentEditable
+          innerRef={contentEditableRef}
+          onChange={(e) => {
+            data[index].value = e.target.value;
+            update(data);
+          }}
+          onBlur={() => {
+            if (data[index].value === '') data[index].value = 'LA';
+            update(data);
+          }}
+          onFocus={() => {
+            if (window.getSelection) {
+              const selection = window.getSelection();
+              const range = document.createRange();
+              range.selectNodeContents(contentEditableRef.current);
+              selection?.removeAllRanges();
+              selection?.addRange(range);
+            }
+          }}
+          disabled={!editable}
+          tagName="span"
+          html={data[index].value}
+          style={{
+            margin: '0 10px 0 5px',
+            color: song ? '#666666' : '#4c3ed9',
+            fontSize: song ? 'large' : 'smaller',
+            borderBottom: song ? '1px solid #000' : 'none',
+          }}
+        />
+
+        {!song && (
+          <TrashIcon
+            height="1.25rem"
+            style={{
+              verticalAlign: 'text-bottom',
+            }}
+            onClick={() => {
+              const newData = [...data];
+              newData.splice(index, 1);
+              update(newData);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 };

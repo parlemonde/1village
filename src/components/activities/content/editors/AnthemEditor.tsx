@@ -6,6 +6,8 @@ import Alert from '@mui/material/Alert';
 import { Button, Divider, TextField } from '@mui/material';
 
 import { Modal } from 'src/components/Modal';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
@@ -14,9 +16,14 @@ export interface AnthemEditorProps {
   value?: string;
   onChange?(newValue: string): void;
   onDelete?(): void;
+  onPause?(): void;
+  onPlay?(): void;
   setTime?(args: number): void;
   onClose?(idx: number): void;
+  audioRef?: React.RefObject<HTMLAudioElement>;
   idx?: number;
+  edit?: boolean;
+  audio?: boolean;
 }
 
 export const AnthemEditor = ({
@@ -25,7 +32,11 @@ export const AnthemEditor = ({
   onDelete = () => {},
   setTime = () => {},
   onClose = () => {},
+  onPlay = () => {},
+  onPause = () => {},
+  audioRef,
   idx = 0,
+  edit = false,
 }: AnthemEditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -136,10 +147,9 @@ export const AnthemEditor = ({
       resetPreview();
     }
   };
-  const audioRef = React.useRef<HTMLAudioElement>(null);
 
   const onLoadedMetadata = () => {
-    if (audioRef.current) {
+    if (audioRef && audioRef.current) {
       setTime(audioRef.current.duration);
     }
   };
@@ -148,20 +158,36 @@ export const AnthemEditor = ({
     <>
       {soundUrl && (
         <>
-          <div>
-            <audio controls src={soundUrl} ref={audioRef} onLoadedMetadata={onLoadedMetadata} style={{ width: '250px', height: '30px' }}>
+          <div style={{ display: 'flex' }}>
+            <audio
+              controls
+              src={soundUrl}
+              ref={audioRef}
+              onPlay={onPlay}
+              onPause={onPause}
+              onLoadedMetadata={onLoadedMetadata}
+              style={{ width: '250px', height: '30px' }}
+            >
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>
-            {/* <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              onClick={() => {
-                setIsModalOpen(true);
-              }}
-            >
-              {'Changer de son'}
-            </Button> */}
+            {edit && (
+              <EditButton
+                style={{ marginLeft: '12px' }}
+                size="small"
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              />
+            )}
+            {edit && (
+              <DeleteButton
+                style={{ marginLeft: '6px' }}
+                color="red"
+                confirmTitle="Supprimer ce son ?"
+                confirmLabel="Voulez-vous vraiment supprimer ce son ?"
+                onDelete={onDelete}
+              ></DeleteButton>
+            )}
           </div>
         </>
       )}

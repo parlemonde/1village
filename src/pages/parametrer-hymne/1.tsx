@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
-import type { AnthemData, Sample } from 'src/activity-types/anthem.types';
+import type { AnthemData } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -28,20 +28,36 @@ import { ActivityType } from 'types/activity.type';
 const AnthemStep1 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, createNewActivity, updateActivity, deleteContent } = React.useContext(ActivityContext);
+  const { activity, createActivityIfNotExist, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
-  const updateContent = (verse: Sample[]): void => {
-    if (!activity) {
-      return;
-    }
-    updateActivity({ data: { ...data, verseAudios: verse } });
-  };
 
-  const onChangeContent = (index: number) => (newValue: string) => {
-    data.verseAudios[index].value = newValue;
-    updateContent(data.verseAudios);
+  const created = React.useRef(false);
+  React.useEffect(() => {
+    if (!created.current) {
+      if (!('activity-id' in router.query) && !('edit' in router.query)) {
+        created.current = true;
+        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
+      } else if (activity && !isAnthem(activity)) {
+        created.current = true;
+        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
+      }
+    }
+  }, [activity, createActivityIfNotExist, router]);
+
+  if (!activity || !data) {
+    return (
+      <Base>
+        <div></div>
+      </Base>
+    );
+  }
+
+  const onUpdateVerseAudios = (index: number) => (newValue: string) => {
+    const verseAudios = [...data.verseAudios];
+    verseAudios[index] = { ...verseAudios[index], value: newValue, display: newValue === '' ? false : verseAudios[index].display };
+    updateActivity({ data: { ...data, verseAudios } });
   };
 
   const onNext = async () => {
@@ -50,49 +66,27 @@ const AnthemStep1 = () => {
       const value = await mixAudios(data.verseAudios, axiosLoggedRequest);
       updateActivity({ data: { ...data, finalVerse: value } });
     }
+    save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/2');
   };
 
-  const created = React.useRef(false);
-
-  React.useEffect(() => {
-    if (!created.current) {
-      if (!activity && !('activity-id' in router.query) && localStorage.getItem('activity') === null && !('edit' in router.query)) {
-        created.current = true;
-        createNewActivity(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
-      } else if (activity && !isAnthem(activity)) {
-        created.current = true;
-        createNewActivity(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
-      }
-    }
-  }, [activity, createNewActivity, router]);
-
-  const onClose = (idx: number) => {
-    data.verseAudios[idx].display = false;
-    updateActivity({ data: { ...data, data } });
-  };
-
-  if (!activity) {
-    return (
-      <Base>
-        <div></div>
-      </Base>
-    );
-  }
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']} activeStep={0} />
+        <Steps
+          steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
+          activeStep={0}
+          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+        />
         <div className="width-900">
           <h1>Mettre en ligne les pistes sonores du couplet</h1>
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p style={{ margin: '25px 0 25px' }}>La piste vocal du couplet, La La.</p>
             {data &&
-              data?.verseAudios?.map((audio, idx) => (
-                <>
+              data.verseAudios.map((audio, idx) => (
+                <React.Fragment key={idx}>
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     {React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}
@@ -102,16 +96,16 @@ const AnthemStep1 = () => {
                         <AnthemEditor
                           key={`anthem-edit--${idx}`}
                           value={audio.value}
-                          onChange={onChangeContent(idx)}
+                          onChange={onUpdateVerseAudios(idx)}
                           onDelete={() => {
-                            deleteContent(idx);
+                            onUpdateVerseAudios(idx)('');
                           }}
                           setTime={(time) => {
                             data.verseTime = time;
                             updateActivity({ data: { ...data } });
                           }}
-                          onClose={onClose}
                           idx={idx}
+                          edit
                         />
                       )}
                       {!audio.value && (
@@ -136,7 +130,7 @@ const AnthemStep1 = () => {
                       )}
                     </div>
                   </div>
-                </>
+                </React.Fragment>
               ))}
           </div>
         </div>

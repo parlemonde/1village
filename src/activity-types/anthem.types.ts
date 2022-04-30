@@ -3,7 +3,7 @@ import type { Activity } from 'types/activity.type';
 export type AnthemData = {
   verseAudios: Sample[];
   introOutro: Sample[];
-  verse: Syllable[];
+  verseLyrics: Syllable[];
   chorus: Syllable[];
   finalVerse: string;
   finalMix: string;
@@ -20,7 +20,7 @@ export type Sample = {
   display: boolean;
   label: string;
   type: SampleType;
-  time?: number;
+  time: number;
 };
 
 export enum SampleType {

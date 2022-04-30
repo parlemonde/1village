@@ -14,6 +14,8 @@ import { ActivityType, ActivityStatus } from 'types/activity.type';
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 
+type ActivitySaveResponse = { success: false } | { success: true; activity: Activity };
+
 interface ActivityContextValue {
   activity: Activity | null;
   setActivity(newActivity: Activity | null): void;
@@ -28,7 +30,7 @@ interface ActivityContextValue {
   ): boolean;
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
-  save(publish?: boolean): Promise<boolean>;
+  save(publish?: boolean): Promise<ActivitySaveResponse>;
   createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData): Promise<void>;
 }
 
@@ -39,7 +41,7 @@ export const ActivityContext = React.createContext<ActivityContextValue>({
   createNewActivity: () => false,
   addContent: () => {},
   deleteContent: () => {},
-  save: async () => false,
+  save: async () => ({ success: false }),
   createActivityIfNotExist: async () => {},
 });
 
@@ -158,7 +160,7 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         isPinned: false,
       };
       setActivity(newActivity);
-      if (type !== ActivityType.QUESTION) {
+      if (type !== ActivityType.QUESTION && type !== ActivityType.ANTHEM) {
         getDraft(type, subType).catch();
       }
       return true;
@@ -174,12 +176,20 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
 
       const userId = user.id;
       const villageId = village.id;
-      const response = await axiosLoggedRequest({
+      const responsePublished = await axiosLoggedRequest({
         method: 'GET',
-        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId }),
+        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId, status: ActivityStatus.PUBLISHED }),
       });
-      if (response.data && response.data.length > 0) {
-        setActivity(response.data[0]);
+      const responseDraft = await axiosLoggedRequest({
+        method: 'GET',
+        url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId, status: ActivityStatus.DRAFT }),
+      });
+      const response = [
+        ...(responsePublished.error ? [] : (responsePublished.data as Activity[])),
+        ...(responseDraft.error ? [] : (responseDraft.data as Activity[])),
+      ];
+      if (response.length > 0) {
+        setActivity(response[0]);
       } else {
         createNewActivity(type, subType, initialData);
       }
@@ -187,56 +197,70 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
     [user, village, axiosLoggedRequest, createNewActivity],
   );
 
-  const addContent = (type: ActivityContentType, value: string = '', index?: number) => {
-    if (!activity) {
-      return;
-    }
-    const newContent = activity.content ? [...activity.content] : [];
-    const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
-    if (index !== undefined) {
-      newContent.splice(index, 0, {
-        id: newId,
-        type,
-        value,
-      });
-    } else {
-      newContent.push({
-        id: newId,
-        type,
-        value,
-      });
-    }
-    updateActivity({ content: newContent });
-  };
+  const addContent = React.useCallback(
+    (type: ActivityContentType, value: string = '', index?: number) => {
+      if (!activity) {
+        return;
+      }
+      const newContent = activity.content ? [...activity.content] : [];
+      const newId = Math.max(1, ...newContent.map((p) => p.id)) + 1;
+      if (index !== undefined) {
+        newContent.splice(index, 0, {
+          id: newId,
+          type,
+          value,
+        });
+      } else {
+        newContent.push({
+          id: newId,
+          type,
+          value,
+        });
+      }
+      updateActivity({ content: newContent });
+    },
+    [activity, updateActivity],
+  );
 
-  const deleteContent = (index: number) => {
-    if (!activity) {
-      return;
-    }
-    const newContent = activity.content ? [...activity.content] : [];
-    if (newContent.length <= index) {
-      return;
-    }
-    newContent.splice(index, 1);
-    updateActivity({ content: newContent });
-  };
+  const deleteContent = React.useCallback(
+    (index: number) => {
+      if (!activity) {
+        return;
+      }
+      const newContent = activity.content ? [...activity.content] : [];
+      if (newContent.length <= index) {
+        return;
+      }
+      newContent.splice(index, 1);
+      updateActivity({ content: newContent });
+    },
+    [activity, updateActivity],
+  );
+
+  // Use ref to always save last activity
+  const activityRef = React.useRef<Activity | null>(activity);
+  React.useEffect(() => {
+    activityRef.current = activity;
+  }, [activity]);
 
   const createActivity = React.useCallback(
-    async (publish: boolean) => {
-      if (!activity || !village) {
-        return false;
+    async (publish: boolean): Promise<ActivitySaveResponse> => {
+      if (!activityRef.current || !village) {
+        return {
+          success: false,
+        };
       }
       const data: Partial<Activity> = {
-        phase: getActivityPhase(activity.type, village.activePhase),
-        type: activity.type,
-        subType: activity.subType,
-        villageId: activity.villageId,
-        responseActivityId: activity.responseActivityId,
-        responseType: activity.responseType,
+        phase: getActivityPhase(activityRef.current.type, village.activePhase),
+        type: activityRef.current.type,
+        subType: activityRef.current.subType,
+        villageId: activityRef.current.villageId,
+        responseActivityId: activityRef.current.responseActivityId,
+        responseType: activityRef.current.responseType,
         status: publish ? ActivityStatus.PUBLISHED : ActivityStatus.DRAFT,
-        content: activity.content,
-        data: activity.data,
-        isPinned: activity.isPinned,
+        content: activityRef.current.content,
+        data: activityRef.current.data,
+        isPinned: activityRef.current.isPinned,
       };
       if (!publish) {
         if (data.data) {
@@ -253,33 +277,40 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
         data,
       });
       if (response.error) {
-        return false;
+        return {
+          success: false,
+        };
       } else {
         setActivity(response.data);
-        return true;
+        return {
+          success: true,
+          activity: response.data as Activity,
+        };
       }
     },
-    [axiosLoggedRequest, activity, village],
+    [axiosLoggedRequest, village],
   );
 
   const editActivity = React.useCallback(
-    async (publish: boolean) => {
-      if (!activity || !village) {
-        return false;
+    async (publish: boolean): Promise<ActivitySaveResponse> => {
+      if (!activityRef.current || !village) {
+        return {
+          success: false,
+        };
       }
       const data: Partial<Activity> = {
-        content: activity.content,
-        data: activity.data,
-        isPinned: activity.isPinned,
-        displayAsUser: activity.displayAsUser,
+        content: activityRef.current.content,
+        data: activityRef.current.data,
+        isPinned: activityRef.current.isPinned,
+        displayAsUser: activityRef.current.displayAsUser,
       };
       // if not yet published, the response type and isPinned can be changed.
-      if (activity.status === ActivityStatus.DRAFT) {
-        data.responseActivityId = activity.responseActivityId;
-        data.responseType = activity.responseType;
+      if (activityRef.current.status === ActivityStatus.DRAFT) {
+        data.responseActivityId = activityRef.current.responseActivityId;
+        data.responseType = activityRef.current.responseType;
       }
       if (publish) {
-        data.phase = getActivityPhase(activity.type, village.activePhase);
+        data.phase = getActivityPhase(activityRef.current.type, village.activePhase);
         data.status = ActivityStatus.PUBLISHED;
       } else {
         if (data.data) {
@@ -292,33 +323,42 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       }
       const response = await axiosLoggedRequest({
         method: 'PUT',
-        url: `/activities/${activity.id}`,
+        url: `/activities/${activityRef.current.id}`,
         data,
       });
       if (response.error) {
-        return false;
+        return {
+          success: false,
+        };
       }
       setActivity(response.data);
-      return true;
+      return {
+        success: true,
+        activity: response.data as Activity,
+      };
     },
-    [axiosLoggedRequest, activity, village],
+    [axiosLoggedRequest, village],
   );
 
   const save = React.useCallback(
-    async (publish: boolean = false) => {
-      if (activity === null) {
-        return false;
+    async (publish: boolean = false): Promise<ActivitySaveResponse> => {
+      if (activityRef.current === null) {
+        return {
+          success: false,
+        };
       }
-      if (activity.status !== ActivityStatus.DRAFT && !publish) {
-        return false; // don't save draft for already published activities.
+      if (activityRef.current.status !== ActivityStatus.DRAFT && !publish) {
+        return {
+          success: false,
+        }; // don't save draft for already published activities.
       }
       if (!publish) {
         clearTimeout(draftStepTimeout.current);
         setDraftStep(1);
       }
       queryClient.invalidateQueries('activities');
-      let result = false;
-      if (activity.id === 0) {
+      let result: ActivitySaveResponse = { success: false };
+      if (activityRef.current.id === 0) {
         result = await createActivity(publish);
       } else {
         result = await editActivity(publish);
@@ -332,22 +372,25 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
       }
       return result;
     },
-    [queryClient, createActivity, editActivity, activity],
+    [queryClient, createActivity, editActivity],
+  );
+
+  const value = React.useMemo(
+    () => ({
+      activity,
+      setActivity,
+      updateActivity,
+      createNewActivity,
+      addContent,
+      deleteContent,
+      createActivityIfNotExist,
+      save,
+    }),
+    [activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save],
   );
 
   return (
-    <ActivityContext.Provider
-      value={{
-        activity,
-        setActivity,
-        updateActivity,
-        createNewActivity,
-        addContent,
-        deleteContent,
-        createActivityIfNotExist,
-        save,
-      }}
-    >
+    <ActivityContext.Provider value={value}>
       {children}
       {draftStep > 0 && (
         <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>

@@ -102,7 +102,6 @@ const DefiStep3 = () => {
             updateContent={updateContent}
             addContent={addIndiceContent}
             deleteContent={deleteIndiceContent}
-            save={save}
           />
 
           <StepsButton prev="/lancer-un-defi/linguistique/2" next={onNext} />
