@@ -57,7 +57,7 @@ const ReactionStep2 = () => {
         />
         <div className="width-900">
           <h1>Réagissez à l&apos;activité sélectionnée</h1>
-          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={url} next={onNext} />
         </div>
       </div>

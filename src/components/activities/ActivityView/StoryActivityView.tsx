@@ -24,6 +24,7 @@ import type { ActivityViewProps } from './activity-view.types';
 export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryActivity>) => {
   const { object, place, odd } = activity.data;
   const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId]));
+  console.log('inspiredStoriesIds', inspiredStoriesIds);
 
   return (
     <div>

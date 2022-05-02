@@ -19,8 +19,10 @@ export const ActivityType = {
   MASCOTTE: 8,
   REPORTAGE: 9,
   REACTION: 10,
-  STORY: 11,
-  RE_INVENT_STORY: 12,
+  ANTHEM: 11,
+  VERSE_RECORD: 12,
+  STORY: 13,
+  RE_INVENT_STORY: 14,
 };
 
 export const ActivityStatus = {
@@ -49,6 +51,7 @@ export interface Activity<T extends AnyData = AnyData> {
   userId: number;
   commentCount?: number;
   isPinned?: boolean;
+  displayAsUser?: boolean; // For admins who wants to publish as their own, not Pelico.
 
   // village relation
   villageId: number;

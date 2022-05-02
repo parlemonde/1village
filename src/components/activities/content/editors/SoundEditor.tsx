@@ -19,6 +19,7 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
   const { enqueueSnackbar } = useSnackbar();
 
   const [soundUrl, setSoundUrl] = React.useState(value);
+
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
   const [tempSoundUrl, setTempSoundUrl] = React.useState('');
 

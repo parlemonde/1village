@@ -90,7 +90,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   }, [router.events]);
 
   // Let all h5p iframe to automatically resize.
-  React.useEffect(initH5p, []);
+  React.useEffect(() => initH5p(csrfToken), [csrfToken]);
 
   const isOnAdmin = router.pathname.slice(1, 6) === 'admin';
 

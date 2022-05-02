@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
@@ -38,6 +38,13 @@ export class Village implements VillageInterface {
     default: VillagePhase.DISCOVER,
   })
   public activePhase: number;
+
+  @OneToOne(() => Activity, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'anthemId' })
+  public anthem: Activity | null;
+
+  @Column({ nullable: true })
+  public anthemId: number | null;
 
   @OneToMany(() => User, (user: User) => user.village)
   public users: User[];

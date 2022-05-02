@@ -12,9 +12,55 @@ import { Controller } from './controller';
 
 const gameController = new Controller('/games');
 
+type GameGetter = {
+  limit?: number;
+  page?: number;
+  villageId: number;
+  type: number;
+  userId?: number;
+};
+
+/**
+ * return games
+ * @param limit -  by default 200 - optional
+ * @param pages -  indicate number of page to render by default 0 - optional
+ * @param villageId id from village
+ * @param type game type
+ * @param userId -  id of user - optional
+ *
+ * @returns Game[]
+ */
+const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: GameGetter) => {
+  let subQueryBuilder = getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.villageId = :villageId', { villageId: villageId })
+    .andWhere('game.type = :type', { type: type });
+  if (userId !== undefined) {
+    subQueryBuilder = subQueryBuilder.andWhere('game.userId = :userId', { userId });
+  }
+
+  const games = await subQueryBuilder
+    .orderBy()
+    .limit(limit)
+    .offset(page * limit)
+    .getMany();
+
+  return games;
+};
+
 //--- Get all games ---
-gameController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  const games = await getRepository(Game).find();
+gameController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const userId = getQueryString(req.query.userId) === 'self' ? req.user.id : undefined;
+  const type = parseInt(getQueryString(req.query.type) || '0', 10);
+  const villageId = Number(getQueryString(req.query.villageId)) || 0;
+
+  const games = await getGames({ villageId, type, userId });
+
   res.sendJSON(games);
 });
 
@@ -87,7 +133,6 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     next();
     return;
   }
-  // const game = await getRepository(Game).createQueryBuilder('game').where('`game`.`userId` = :userId', { userId: userId }).getOne();
   const count = await getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')

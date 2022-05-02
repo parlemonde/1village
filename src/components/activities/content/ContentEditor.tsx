@@ -16,7 +16,6 @@ interface ContentEditorProps {
   updateContent(newContent: ActivityContent[]): void;
   addContent(type: ActivityContentType, value?: string): void;
   deleteContent(index: number): void;
-  save(): Promise<boolean>;
 }
 
 const ContentEditor = ({ content, updateContent, addContent, deleteContent }: ContentEditorProps) => {

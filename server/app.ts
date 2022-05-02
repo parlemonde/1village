@@ -104,6 +104,16 @@ async function start() {
   // [5] --- Add frontend ---
   app.get('/country-flags/*', handleErrors(authenticate(UserType.TEACHER)), express.static(path.join(__dirname, '../../public/country-flags')));
   app.use(express.static(path.join(__dirname, '../../public'))); // app.js is located at ./dist/server and public at ./public
+
+  // Send 404 for static files not found by express static.
+  app.get('/static-js/*', (_, res: Response) => {
+    res.status(404).send('Error 404 - Not found.');
+  });
+  app.get('/static-images/*', (_, res: Response) => {
+    res.status(404).send('Error 404 - Not found.');
+  });
+
+  // NextJS and all pages
   app.get('/_next/*', (req, res) => {
     handle(req, res).catch((e) => console.error(e));
   });
