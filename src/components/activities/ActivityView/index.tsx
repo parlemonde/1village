@@ -16,6 +16,7 @@ import {
   isReportage,
   isStory,
   isSymbol,
+  isVerseRecord,
 } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -34,6 +35,7 @@ import { EnigmeActivityView } from './EnigmeActivityView';
 import { FreeContentView } from './FreeContentView';
 import { MascotteActivityView } from './MascotteActivityView';
 import { StoryActivityView } from './StoryActivityView';
+import { VerseActivityView } from './VerseActivityView';
 import type { ActivityViewProps } from './activity-view.types';
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
@@ -89,6 +91,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
             </Box>
           </Container>
         )}
+        {isVerseRecord(activity) && <VerseActivityView activity={activity} user={user} />}
       </div>
     )
   );

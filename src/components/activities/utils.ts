@@ -1,6 +1,8 @@
+import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
+import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
@@ -25,6 +27,8 @@ export const titles = {
   [ActivityType.REACTION]: 'réagi à',
   [ActivityType.STORY]: 'inventé une histoire',
   [ActivityType.RE_INVENT_STORY]: 'ré-inventé une histoire',
+  [ActivityType.ANTHEM]: 'créé un hymne',
+  [ActivityType.VERSE_RECORD]: 'chanté un couplet',
 };
 
 export const icons = {
@@ -41,6 +45,8 @@ export const icons = {
   [ActivityType.REACTION]: ReactionIcon,
   [ActivityType.STORY]: StoryIcon,
   [ActivityType.RE_INVENT_STORY]: RouletteIcon,
+  [ActivityType.ANTHEM]: AnthemIcon,
+  [ActivityType.VERSE_RECORD]: MusicIcon,
 };
 
 export const DESC = {
@@ -56,6 +62,8 @@ export const DESC = {
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
   [ActivityType.STORY]: 'une histoire',
+  [ActivityType.ANTHEM]: 'un hymne',
+  [ActivityType.VERSE_RECORD]: 'un couplet',
 };
 
 export const REACTIONS = {
@@ -70,6 +78,8 @@ export const REACTIONS = {
   [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
+  [ActivityType.ANTHEM]: 'cet hymne',
+  [ActivityType.VERSE_RECORD]: 'ce couplet',
 };
 
 export const labels = {
@@ -84,6 +94,8 @@ export const labels = {
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
+  [ActivityType.ANTHEM]: 'Répondre à cet hymne par :',
+  [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
 };
 
 const specificActivityPhase = {
@@ -100,6 +112,8 @@ const specificActivityPhase = {
   [ActivityType.REACTION]: [2],
   [ActivityType.STORY]: [3],
   [ActivityType.RE_INVENT_STORY]: [3],
+  [ActivityType.ANTHEM]: [],
+  [ActivityType.VERSE_RECORD]: [3],
 };
 export const getActivityPhase = (activityType: number, activePhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];

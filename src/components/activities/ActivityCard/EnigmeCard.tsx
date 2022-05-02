@@ -44,7 +44,9 @@ export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
               position: 'relative',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+            </Link>
           </div>
         </div>
       )}

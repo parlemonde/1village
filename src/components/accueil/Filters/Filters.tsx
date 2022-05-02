@@ -26,7 +26,7 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
   ],
   [
     { key: 0, label: 'Toutes', value: 'all' },
-    { key: 1, label: 'Hymne', value: [10] },
+    { key: 1, label: 'Couplet', value: [12] },
   ],
 ];
 
