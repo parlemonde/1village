@@ -85,6 +85,7 @@ const AnthemStep1 = () => {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p style={{ margin: '25px 0 25px' }}>La piste vocal du couplet, La La.</p>
             {data &&
+              data.verseAudios.length > 0 &&
               data.verseAudios.map((audio, idx) => (
                 <React.Fragment key={idx}>
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
