@@ -1,9 +1,11 @@
 import React from 'react';
 
+import type { Activity } from 'server/entities/activity';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
+import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { User } from 'types/user.type';
 
@@ -19,36 +21,21 @@ interface ActivityCommentsProps {
   activityPhase: number;
   usersMap: { [key: number]: User };
 }
-type ResponseDataStoriesId = {
-  image_activityId: number;
-};
-
 export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
-  const [storyActivityIds, setStoryActivityIds] = React.useState<number[]>([]);
+  const { getInspiredStories } = useImageStoryRequests();
+  const [dataStories, setDataStories] = React.useState<Activity[]>([]);
 
-  //Get stories who was inspired by this activity
-  const getStoryActivityIds = React.useCallback(
-    async (id: number) => {
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/stories/${id}`,
-      });
-      if (!response.error && response.data) {
-        const { storyActivityIds } = response.data;
-        const idsStories = Array.from(
-          // eslint-disable-next-line camelcase
-          new Set(storyActivityIds.map(({ image_activityId }: ResponseDataStoriesId) => image_activityId)),
-        );
-        setStoryActivityIds(idsStories as number[]);
-      }
-    },
-    [axiosLoggedRequest],
-  );
+  //Get stories activities which was inspired by this story activity
+  const getStoryActivityIds = React.useCallback(async () => {
+    await getInspiredStories(activityId).then((data) => {
+      setDataStories(data as Activity[]);
+    });
+  }, [activityId, getInspiredStories]);
 
   React.useEffect(() => {
-    getStoryActivityIds(activityId).catch();
+    getStoryActivityIds().catch();
   }, [activityId, getStoryActivityIds]);
 
   const userMap = React.useMemo(
@@ -80,7 +67,7 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
         </div>
       </div>
       {/* Stories space */}
-      {storyActivityIds.length > 0 && user && <StoriesDataCardView inspiredStoriesIds={storyActivityIds} user={user} column noTitle />}
+      {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} user={user} column noTitle />}
       {data.map((o) => {
         if (o.type === 'comment') {
           const comment = o.data;

@@ -7,7 +7,9 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import { isStory } from 'src/activity-types/anyActivity';
+import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { bgPage } from 'src/styles/variables.const';
+import type { Activity } from 'types/activity.type';
 import type { StoryActivity } from 'types/story.type';
 
 import StoriesDataCardView from './StoriesDataCardView';
@@ -24,7 +26,23 @@ import type { ActivityViewProps } from './activity-view.types';
 export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryActivity>) => {
   const { object, place, odd } = activity.data;
   const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId]));
-  console.log('inspiredStoriesIds', inspiredStoriesIds);
+  const [dataStories, setDataStories] = React.useState<Activity[]>([]);
+  const { getStoriesFromIds } = useImageStoryRequests();
+
+  //Get stories activity from story inspiredIds keys
+  const getStoryActivity = React.useCallback(async () => {
+    if (inspiredStoriesIds.length > 0) {
+      const dataStoryRetrieve = await getStoriesFromIds(inspiredStoriesIds as number[]);
+      if (dataStoryRetrieve && dataStoryRetrieve.length > 0) {
+        setDataStories(dataStoryRetrieve as Activity[]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getStoriesFromIds]);
+
+  React.useEffect(() => {
+    getStoryActivity().catch();
+  }, [getStoryActivity]);
 
   return (
     <div>
@@ -34,9 +52,7 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
         </div>
         {isStory(activity) && (
           <Grid container spacing={2}>
-            {activity.data.isOriginal === false && inspiredStoriesIds.length > 0 && (
-              <StoriesDataCardView inspiredStoriesIds={inspiredStoriesIds} user={user} />
-            )}
+            {dataStories && dataStories.length > 0 && <StoriesDataCardView dataStories={dataStories} user={user} />}
             <Grid item xs={12} md={12}>
               <p>{activity.data.tale.tale}</p>
             </Grid>

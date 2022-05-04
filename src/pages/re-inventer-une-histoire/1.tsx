@@ -26,17 +26,17 @@ const ReInventStoryStep1 = () => {
   const data = activity?.data as StoriesData;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
+  // Update the "object step" image url, when upload an image.
+  const setImage = (imageUrl: string) => {
+    const { object } = data;
+    updateActivity({ data: { ...data, object: { ...object, imageId: 0, imageUrl, inspiredStoryId: activity?.id } } });
+  };
+
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
     const { object } = data;
     const newData = { ...data, object: { ...object, [key]: value } };
     updateActivity({ data: newData });
-  };
-
-  // Update the "object step" image url, when upload an image.
-  const setImage = (imageUrl: string) => {
-    const { object } = data;
-    updateActivity({ data: { ...data, object: { ...object, imageId: 0, imageUrl, inspiredStoryId: activity?.id } } });
   };
 
   React.useEffect(() => {
@@ -48,10 +48,6 @@ const ReInventStoryStep1 = () => {
   }, []);
 
   const onNext = () => {
-    //TODO: implementer le cas où je change l'image et si ça devient une histoire original.
-    // if (isOriginal) {
-    //   data.isOriginal = true;
-    // }
     save().catch(console.error);
     // save in local storage that the user is going to the next step.
     window.sessionStorage.setItem(`re-invent-a-story-step-1-next`, 'true');

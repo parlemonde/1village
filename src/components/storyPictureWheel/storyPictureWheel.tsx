@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 
 import Box from '@mui/material/Box';
@@ -64,7 +63,6 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
   //Get Random Images from DB
   const getRandomImages = React.useCallback(async () => {
     const images = await getRandomImagesData();
-    console.log('images', images);
     //Une fois images récuperé il faudrait faire une function pour trier les informations qu'on a bseoin
     //et transformer en storyElement
     //TODO : ! Factoriser ici
@@ -123,13 +121,14 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
     const newValues = [] as StoryElement[];
     slotRef.forEach((slot, i) => {
       // this will trigger rolling effect
-      const selectedIndex = triggerSlotRotation(slot.current);
-      if (i + 1 == 1) {
+      let selectedIndex;
+      if (slot.current) selectedIndex = triggerSlotRotation(slot.current);
+      if (i + 1 == 1 && selectedIndex !== undefined) {
         newValues.push(objectRandomImages[selectedIndex]);
-      } else if (i + 1 == 2) {
+      } else if (i + 1 == 2 && selectedIndex !== undefined) {
         newValues.push(placeRandomImages[selectedIndex]);
       } else {
-        newValues.push(oddRandomImages[selectedIndex]);
+        if (selectedIndex !== undefined) newValues.push(oddRandomImages[selectedIndex]);
       }
     });
 
@@ -138,14 +137,14 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
 
   // this will create a rolling effect and return random selected option
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const triggerSlotRotation = (ref: any) => {
+  const triggerSlotRotation = (ref: HTMLDivElement) => {
     function setTop(top: number) {
       ref.style.top = `${top}px`;
     }
     const options = ref.children;
     const randomOption = Math.floor(Math.random() * ref.children.length);
     const choosenOption = options[randomOption];
-    setTop(-choosenOption.offsetTop + 2);
+    setTop(-(choosenOption as HTMLElement).offsetTop + 2);
     return randomOption;
   };
 

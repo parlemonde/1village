@@ -24,9 +24,7 @@ const StoryStep1 = () => {
   const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  const [isOriginal, setIsOriginal] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
-  const currentPathName = router.pathname.split('/')[1] || '';
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   // Create the story activity.
@@ -61,26 +59,26 @@ const StoryStep1 = () => {
     }
   }, [activity, createNewActivity, router.query]);
 
-  React.useEffect(() => {
-    if (currentPathName === 'creer-une-histoire') {
-      setIsOriginal(true);
-    }
-  }, [currentPathName]);
-
-  //Set original story
-  React.useEffect(() => {
-    if (isOriginal && activity && activity.id) {
-      data.isOriginal = true;
-    }
-  }, [isOriginal, activity, data]);
+  const dataChangeStrategies = {
+    object: () => {
+      updateActivity({
+        data: {
+          ...data,
+          object: { ...data.object, inspiredStoryId: activity?.id },
+          place: { ...data.place, inspiredStoryId: activity?.id },
+          odd: { ...data.odd, inspiredStoryId: activity?.id },
+          isOriginal: true,
+        },
+      });
+    },
+  };
 
   React.useEffect(() => {
     if (activity !== null && activity.id) {
-      data.object.inspiredStoryId = activity.id;
-      data.place.inspiredStoryId = activity.id;
-      data.odd.inspiredStoryId = activity.id;
+      dataChangeStrategies['object']();
     }
-  }, [activity, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity]);
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
@@ -104,9 +102,6 @@ const StoryStep1 = () => {
   }, []);
 
   const onNext = () => {
-    if (isOriginal && activity && activity.id) {
-      data.object.inspiredStoryId = activity.id;
-    }
     save().catch(console.error);
     // save in local storage that the user is going to the next step.
     window.sessionStorage.setItem(`story-step-1-next`, 'true');
