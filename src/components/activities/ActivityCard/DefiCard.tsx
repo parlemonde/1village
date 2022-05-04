@@ -43,9 +43,12 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              cursor: 'pointer',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            </Link>
           </div>
         </div>
       )}

@@ -150,8 +150,13 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     }
   };
 
+  const value = React.useMemo(
+    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase }),
+    [village, selectedPhase, showSelectVillageModal, setSelectedPhase],
+  );
+
   return (
-    <VillageContext.Provider value={{ village, selectedPhase, showSelectVillageModal, setSelectedPhase }}>
+    <VillageContext.Provider value={value}>
       {children}
       <Modal
         open={isModalOpen}

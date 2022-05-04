@@ -39,9 +39,12 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              cursor: 'pointer',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+            </Link>
           </div>
         </div>
       ) : firstVideo ? (
@@ -52,10 +55,12 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
-              pointerEvents: 'none', //Disable click on video
+              cursor: 'pointer',
             }}
           >
-            <ReactPlayer width="100%" height="100%" url={firstVideo.value} light />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <ReactPlayer width="100%" height="100%" url={firstVideo.value} light />
+            </Link>
           </div>
         </div>
       ) : (

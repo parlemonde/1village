@@ -58,7 +58,7 @@ const ReactionStep3 = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/reagir-a-une-activite/success');
     }

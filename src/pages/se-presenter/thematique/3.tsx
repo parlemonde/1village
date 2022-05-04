@@ -46,7 +46,7 @@ const PresentationStep3 = () => {
         <Steps steps={(isEdit ? [] : ['Démarrer']).concat(['Choix du thème', 'Présentation', 'Prévisualisation'])} activeStep={isEdit ? 1 : 2} />
         <div className="width-900">
           <h1>{PRESENTATION_THEMATIQUE[data.theme].title}</h1>
-          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/se-presenter/thematique/2" next={onNext} />
         </div>
       </div>

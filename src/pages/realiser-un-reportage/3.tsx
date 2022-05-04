@@ -59,7 +59,7 @@ const ReportageStep3 = () => {
       return;
     }
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/realiser-un-reportage/success');
     }
