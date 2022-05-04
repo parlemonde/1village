@@ -17,7 +17,7 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { bgPage, primaryColor, warningColor } from 'src/styles/variables.const';
-import { ActivityStatus } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 import { UserType } from 'types/user.type';
 
@@ -56,7 +56,7 @@ const StoryStep5 = () => {
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/creer-une-histoire');
-    } else if (activity && !isStory(activity)) {
+    } else if (activity && !isStory(activity) && activity.type !== ActivityType.STORY) {
       router.push('/creer-une-histoire');
     }
   }, [activity, router]);

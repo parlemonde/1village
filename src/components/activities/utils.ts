@@ -62,6 +62,7 @@ export const DESC = {
   [ActivityType.REPORTAGE]: 'un reportage',
   [ActivityType.REACTION]: 'une réaction',
   [ActivityType.STORY]: 'une histoire',
+  [ActivityType.RE_INVENT_STORY]: 'une histoire ré-inventée',
   [ActivityType.ANTHEM]: 'un hymne',
   [ActivityType.VERSE_RECORD]: 'un couplet',
 };
@@ -78,6 +79,8 @@ export const REACTIONS = {
   [ActivityType.SYMBOL]: 'ce symbole',
   [ActivityType.REPORTAGE]: 'ce reportage',
   [ActivityType.REACTION]: 'cette réaction',
+  [ActivityType.STORY]: 'cette histoire',
+  [ActivityType.RE_INVENT_STORY]: 'cette histoire ré-inventée',
   [ActivityType.ANTHEM]: 'cet hymne',
   [ActivityType.VERSE_RECORD]: 'ce couplet',
 };
@@ -94,6 +97,8 @@ export const labels = {
   [ActivityType.SYMBOL]: 'Répondre à ce symbole par :',
   [ActivityType.REPORTAGE]: 'Répondre à ce reportage par :',
   [ActivityType.REACTION]: 'Répondre à cette réaction par :',
+  [ActivityType.STORY]: 'Répondre à cette histoire par :',
+  [ActivityType.RE_INVENT_STORY]: 'Répondre à cette histoire ré-inventée par :',
   [ActivityType.ANTHEM]: 'Répondre à cet hymne par :',
   [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
 };

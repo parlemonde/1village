@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import type { StoryActivity } from 'types/story.type';
 
 import { CommentIcon } from './CommentIcon';
@@ -64,7 +65,9 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
                   href={
                     isDraft && activity.data.draftUrl
                       ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/creer-une-histoire/5?activity-id=${activity.id}`
+                      : activity.type === ActivityType.STORY
+                      ? `/creer-une-histoire/5?activity-id=${activity.id}`
+                      : `/re-inventer-une-histoire/5?activity-id=${activity.id}`
                   }
                   passHref
                 >
@@ -73,7 +76,9 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
                     href={
                       isDraft && activity.data.draftUrl
                         ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/creer-une-histoire/5?activity-id=${activity.id}`
+                        : activity.type === ActivityType.STORY
+                        ? `/creer-une-histoire/5?activity-id=${activity.id}`
+                        : `/re-inventer-une-histoire/5?activity-id=${activity.id}`
                     }
                     color="secondary"
                     variant="contained"

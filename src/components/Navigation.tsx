@@ -147,13 +147,13 @@ export const Navigation = (): JSX.Element => {
       // ---- PHASE 3 ----
       {
         label: 'Inventer une histoire',
-        path: '/creer-une-histoire/',
+        path: '/creer-une-histoire',
         icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
       },
       {
         label: 'Ré-inventer une histoire',
-        path: '/re-inventer-une-histoire/',
+        path: '/re-inventer-une-histoire',
         icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
       },

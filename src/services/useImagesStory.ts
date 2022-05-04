@@ -8,22 +8,6 @@ export const useImageStoryRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
-  const getRandomImagesStory = React.useCallback(async () => {
-    if (!village) {
-      return 0;
-    }
-    const response = await axiosLoggedRequest({
-      method: 'GET',
-      url: `/stories${serializeToQueryUrl({
-        villageId: village.id,
-      })}`,
-    });
-    if (response.error) {
-      return 0;
-    }
-    return response.data;
-  }, [axiosLoggedRequest, village]);
-
   const getRandomImagesData = React.useCallback(async () => {
     if (!village) {
       return 0;
@@ -40,5 +24,5 @@ export const useImageStoryRequests = () => {
     return response.data;
   }, [axiosLoggedRequest, village]);
 
-  return { getRandomImagesStory, getRandomImagesData };
+  return { getRandomImagesData };
 };

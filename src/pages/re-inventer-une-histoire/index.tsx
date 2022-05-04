@@ -120,15 +120,15 @@ const InspiredStory = () => {
           </p>
           <p className="text">
             Afin de fêter la fin de cette belle aventure, je vous propose de me rejoindre, vous et votre mascotte, dans mon monde imaginaire, afin de
-            bâtir tous ensemble notre village idéal.
+            bâtir tous ensemble notre village idéal.{' '}
           </p>
           <p className="text">
             1, 2, 3 fermez les yeux... Et <strong>vous voilà arrivés dans notre village idéal.</strong> Je vous accueille chaleureusement et vous fait
             faire la visite !
           </p>
           <p className="text">
-            J’ai beaucoup travaillé à rendre cet endroit idéal... et pour cela, je me suis attelé à réaliser les 17 objectifs du développement
-            durable. (les ODDs) défini par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.
+            J’ai beaucoup travaillé à rendre cet endroit idéal... et pour cela, je me suis attelé à réaliser les 17 objectifs du développement durable
+            (les ODDs) défini par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.{' '}
           </p>
           <p className="text">
             Pendant cette visite, je vous présente notamment un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong> qui nous ont
@@ -137,11 +137,13 @@ const InspiredStory = () => {
           </p>
           <p className="text">
             Pour vous guider, je vous propose de commencer par choisir, décrire et dessiner un objet magique, un lieu extraordinaire et un des 17 ODDs
-            de votre choix.
+            de votre choix. Puisez votre inspiration parmi les éléments déjà imaginés par vos Pélicopains !<br></br>
+            Actionnez la manette autant de fois que vous le souhaitez pour choisir différentes sources d’inspirations, tirées de toutes les histoires
+            déjà proposées par tes Pélicopains.
           </p>
           <p className="text">
             Laissez libre court à votre imagination ! Souvenez-vous que si l’objectif du développement durable est bien réel, l’objet et lieu que vous
-            choisissez pour l’atteindre sont magiques !
+            choisissez pour l’atteindre sont <i>magiques</i> !
           </p>
         </div>
         {/* Roulette images */}
