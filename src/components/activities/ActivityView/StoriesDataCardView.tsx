@@ -2,43 +2,19 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { UserContext } from 'src/contexts/userContext';
-import type { StoryActivity } from 'types/story.type';
+import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
 
 interface StoriesDataCardViewProps {
-  inspiredStoriesIds: (number | null | undefined)[];
+  dataStories: Activity[];
   user: User;
   column?: boolean;
   noTitle?: boolean;
 }
 
-const StoriesDataCardView = ({ inspiredStoriesIds, user, column, noTitle }: StoriesDataCardViewProps) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-  const [dataStories, setdataStories] = React.useState<StoryActivity[]>([]);
-
-  const getActivityStory = React.useCallback(
-    async (inspiredStoriesIds) => {
-      inspiredStoriesIds.forEach(async (id: number) => {
-        const response = await axiosLoggedRequest({
-          method: 'GET',
-          url: `/activities/${id}`,
-        });
-        if (!response.error && response.data) {
-          setdataStories((prev) => [...prev, response.data as StoryActivity]);
-        }
-      });
-    },
-    [axiosLoggedRequest],
-  );
-
-  React.useEffect(() => {
-    getActivityStory(inspiredStoriesIds).catch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getActivityStory]);
-
+const StoriesDataCardView = ({ dataStories, user, column, noTitle }: StoriesDataCardViewProps) => {
   return (
     <>
       {noTitle ? (
