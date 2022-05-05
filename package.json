@@ -2,7 +2,7 @@
   "name": "1village",
   "version": "1.0.0",
   "description": "1Village, application de Par Le Monde",
-  "main": "dist/app.js",
+  "main": "dist/start.js",
   "author": "Par Le Monde",
   "license": "GPL-3.0-only",
   "scripts": {
@@ -14,9 +14,10 @@
     "lint:fix": "yarn eslint src --fix && yarn eslint server --fix",
     "typscript": "yarn tsc -p . && yarn tsc --project server/tsconfig.json --noEmit",
     "test": "yarn jest",
-    "start-dev": "yarn build:server && node dist/server/app.js",
-    "start": "NODE_ENV=production node dist/server/app.js",
-    "dev": "nodemon"
+    "start-dev": "yarn build:server && node dist/server/start.js",
+    "start": "NODE_ENV=production node dist/server/start.js",
+    "dev": "yarn nodemon",
+    "dev-staging": "NODE_USE_STAGING=true yarn nodemon"
   },
   "jest": {
     "testEnvironment": "node",
@@ -137,6 +138,7 @@
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
     "next": "^12.0.9",
+    "node-fetch": "^3.2.4",
     "nodemailer": "^6.7.2",
     "notistack": "^2.0.3",
     "nprogress": "^0.2.0",
