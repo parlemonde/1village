@@ -66,7 +66,7 @@ const StoryStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
+          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={2}
           errorSteps={errorSteps}

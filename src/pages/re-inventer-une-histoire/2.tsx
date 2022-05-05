@@ -64,7 +64,7 @@ const ReInventStoryStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
+          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
           urls={[
             '/re-inventer-une-histoire/1?edit',
             '/re-inventer-une-histoire/2',

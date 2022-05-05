@@ -78,7 +78,7 @@ const StoryStep1 = () => {
       dataChangeStrategies['object']();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity]);
+  }, []);
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
@@ -113,7 +113,7 @@ const StoryStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/creer-une-histoire" />}
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualitation']}
+          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={0}
         />
