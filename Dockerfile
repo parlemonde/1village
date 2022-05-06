@@ -65,4 +65,4 @@ ENV NODE_ENV production
 
 EXPOSE 5000
 
-CMD [ "yarn", "node", "./dist/server/app.js" ]
+CMD [ "yarn", "node", "./dist/server/start.js" ]
