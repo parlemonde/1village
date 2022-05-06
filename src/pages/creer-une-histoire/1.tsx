@@ -59,27 +59,6 @@ const StoryStep1 = () => {
     }
   }, [activity, createNewActivity, router.query]);
 
-  const dataChangeStrategies = {
-    object: () => {
-      updateActivity({
-        data: {
-          ...data,
-          object: { ...data.object, inspiredStoryId: activity?.id },
-          place: { ...data.place, inspiredStoryId: activity?.id },
-          odd: { ...data.odd, inspiredStoryId: activity?.id },
-          isOriginal: true,
-        },
-      });
-    },
-  };
-
-  React.useEffect(() => {
-    if (activity !== null && activity.id) {
-      dataChangeStrategies['object']();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
     const { object } = data;
