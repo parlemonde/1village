@@ -40,7 +40,9 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStori
     storyCard = (
       <>
         {dataStoriesFromInspiredIds.map((story) => (
-          <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+          <Grid item xs={column ? 12 : 4} key={story.id}>
+            <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+          </Grid>
         ))}
       </>
     );
@@ -48,7 +50,9 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStori
     storyCard = (
       <>
         {dataStories.map((story) => (
-          <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+          <Grid item xs={column ? 12 : 4} key={story.id}>
+            <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+          </Grid>
         ))}
       </>
     );
@@ -63,9 +67,7 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStori
         </p>
       )}
       <Grid container spacing={1} sx={{ mt: 1 }}>
-        <Grid item xs={column ? 12 : 4}>
-          {storyCard}
-        </Grid>
+        {storyCard}
       </Grid>
     </>
   );
