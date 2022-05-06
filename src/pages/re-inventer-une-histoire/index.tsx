@@ -17,7 +17,7 @@ const InspiredStory = () => {
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { activity, createNewActivity, updateActivity, save } = React.useContext(ActivityContext);
   const { village } = React.useContext(VillageContext);
 
   const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
@@ -73,18 +73,14 @@ const InspiredStory = () => {
   const updateData = (data: StoriesData) => {
     if (activity && activity.data) {
       const { object, place, odd } = activity.data as StoriesData;
-      //update imageUrl
-      object.imageUrl = data.object.imageUrl;
-      place.imageUrl = data.place.imageUrl;
-      odd.imageUrl = data.odd.imageUrl;
-      //update imageId
-      object.imageId = data.object.imageId;
-      place.imageId = data.place.imageId;
-      odd.imageId = data.odd.imageId;
-      //update inspiredStoryId to trace images
-      object.inspiredStoryId = data.object.inspiredStoryId;
-      place.inspiredStoryId = data.place.inspiredStoryId;
-      odd.inspiredStoryId = data.odd.inspiredStoryId;
+      updateActivity({
+        data: {
+          ...activity.data,
+          object: { ...object, imageId: data.object.imageId, imageUrl: data.object.imageUrl, inspiredStoryId: data.object.inspiredStoryId },
+          place: { ...place, imageId: data.place.imageId, imageUrl: data.place.imageUrl, inspiredStoryId: data.place.inspiredStoryId },
+          odd: { ...odd, imageId: data.odd.imageId, imageUrl: data.odd.imageUrl, inspiredStoryId: data.odd.inspiredStoryId },
+        },
+      });
     }
   };
 
@@ -94,7 +90,7 @@ const InspiredStory = () => {
       updateData(inspiredStoryActivity);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity, inspiredStoryActivity]);
+  }, []);
 
   const onNext = () => {
     save().catch(console.error);
