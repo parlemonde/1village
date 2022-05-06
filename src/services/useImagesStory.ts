@@ -47,13 +47,18 @@ export const useImageStoryRequests = () => {
       if (!village) {
         return;
       }
-      const stories = [] as Activity[];
-      activityStoryIds.forEach(async (activityStoryId) => {
+      const getStoryData = async (id: number) =>
         await axiosLoggedRequest({
           method: 'GET',
-          url: `/activities/${activityStoryId}`,
-        }).then((response) => stories.push(response.data));
-      });
+          url: `/activities/${id}`,
+        });
+      const stories = [] as Activity[];
+      // https://advancedweb.hu/how-to-use-async-functions-with-array-foreach-in-javascript/
+      await Promise.all(
+        activityStoryIds.map(async (activityStoryId) => {
+          await getStoryData(activityStoryId).then((response) => stories.push(response.data));
+        }),
+      );
       return stories;
     },
     [axiosLoggedRequest, village],

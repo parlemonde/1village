@@ -2,19 +2,57 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
+import { useImageStoryRequests } from 'src/services/useImagesStory';
 import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
 
 interface StoriesDataCardViewProps {
-  dataStories: Activity[];
+  dataStories?: Activity[];
   user: User;
   column?: boolean;
   noTitle?: boolean;
+  inspiredStoriesIds?: (number | null | undefined)[];
 }
 
-const StoriesDataCardView = ({ dataStories, user, column, noTitle }: StoriesDataCardViewProps) => {
+const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStoriesIds }: StoriesDataCardViewProps) => {
+  const { getStoriesFromIds } = useImageStoryRequests();
+  const [dataStoriesFromInspiredIds, setDataStoriesFromInspiredIds] = React.useState<Activity[]>([]);
+
+  //Get stories activity from story inspiredIds keys
+  const getStoryActivity = React.useCallback(async () => {
+    const datas = await getStoriesFromIds(inspiredStoriesIds as number[]).then((data) => setDataStoriesFromInspiredIds(data as Activity[]));
+    return datas;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (inspiredStoriesIds) {
+      getStoryActivity().catch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  let storyCard = <></>;
+
+  if (dataStoriesFromInspiredIds.length > 0) {
+    storyCard = (
+      <>
+        {dataStoriesFromInspiredIds.map((story) => (
+          <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+        ))}
+      </>
+    );
+  } else if (dataStories && dataStories.length > 0) {
+    storyCard = (
+      <>
+        {dataStories.map((story) => (
+          <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+        ))}
+      </>
+    );
+  }
   return (
     <>
       {noTitle ? (
@@ -25,15 +63,9 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle }: StoriesData
         </p>
       )}
       <Grid container spacing={1} sx={{ mt: 1 }}>
-        {dataStories &&
-          dataStories.length > 0 &&
-          dataStories.map((story) => (
-            <>
-              <Grid item xs={column ? 12 : 4}>
-                <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
-              </Grid>
-            </>
-          ))}
+        <Grid item xs={column ? 12 : 4}>
+          {storyCard}
+        </Grid>
       </Grid>
     </>
   );
