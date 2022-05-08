@@ -36,7 +36,7 @@
     "@next/eslint-plugin-next": "12.0.9",
     "@svgr/webpack": "6.2.0",
     "@swc/core": "1.2.139",
-    "@swc/jest": "0.2.17",
+    "@swc/jest": "0.2.21",
     "@types/cookie-parser": "1.4.2",
     "@types/cors": "2.8.12",
     "@types/cpx": "1.5.2",

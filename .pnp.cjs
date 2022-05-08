@@ -45,7 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@next/eslint-plugin-next", "npm:12.0.9"],
             ["@svgr/webpack", "npm:6.2.0"],
             ["@swc/core", "npm:1.2.139"],
-            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.17"],
+            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],
             ["@types/cookie-parser", "npm:1.4.2"],
             ["@types/cors", "npm:2.8.12"],
             ["@types/cpx", "npm:1.5.2"],
@@ -181,7 +181,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@next/eslint-plugin-next", "npm:12.0.9"],
             ["@svgr/webpack", "npm:6.2.0"],
             ["@swc/core", "npm:1.2.139"],
-            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.17"],
+            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],
             ["@types/cookie-parser", "npm:1.4.2"],
             ["@types/cors", "npm:2.8.12"],
             ["@types/cpx", "npm:1.5.2"],
@@ -5055,17 +5055,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@swc/jest", [
-        ["npm:0.2.17", {
-          "packageLocation": "./.yarn/cache/@swc-jest-npm-0.2.17-eac7a37005-33e08c71ad.zip/node_modules/@swc/jest/",
+        ["npm:0.2.21", {
+          "packageLocation": "./.yarn/cache/@swc-jest-npm-0.2.21-c576292610-8208032fc7.zip/node_modules/@swc/jest/",
           "packageDependencies": [
-            ["@swc/jest", "npm:0.2.17"]
+            ["@swc/jest", "npm:0.2.21"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.17", {
-          "packageLocation": "./.yarn/__virtual__/@swc-jest-virtual-04320a8540/0/cache/@swc-jest-npm-0.2.17-eac7a37005-33e08c71ad.zip/node_modules/@swc/jest/",
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21", {
+          "packageLocation": "./.yarn/__virtual__/@swc-jest-virtual-1357f3be82/0/cache/@swc-jest-npm-0.2.21-c576292610-8208032fc7.zip/node_modules/@swc/jest/",
           "packageDependencies": [
-            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.17"],
+            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],
             ["@jest/create-cache-key-function", "npm:27.5.1"],
             ["@swc/core", "npm:1.2.139"],
             ["@types/swc__core", null]

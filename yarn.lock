@@ -19,7 +19,7 @@ __metadata:
     "@next/eslint-plugin-next": 12.0.9
     "@svgr/webpack": 6.2.0
     "@swc/core": 1.2.139
-    "@swc/jest": 0.2.17
+    "@swc/jest": 0.2.21
     "@types/cookie-parser": 1.4.2
     "@types/cors": 2.8.12
     "@types/cpx": 1.5.2
@@ -3114,14 +3114,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/jest@npm:0.2.17":
-  version: 0.2.17
-  resolution: "@swc/jest@npm:0.2.17"
+"@swc/jest@npm:0.2.21":
+  version: 0.2.21
+  resolution: "@swc/jest@npm:0.2.21"
   dependencies:
     "@jest/create-cache-key-function": ^27.4.2
   peerDependencies:
     "@swc/core": "*"
-  checksum: 33e08c71adaa3d46f47b888b954c8f61513804a1b3ee24fdc13ccbbb89ca6c96b474eef4002b96edcd6090a308a1aafd313073ae4bcd6339fcc3a22e2f29f1b7
+  checksum: 8208032fc7ccc26a9bcae744b7b7dc2d3ea313af1ea049e95dfe3c8b6abd708c6f8fd0a2cce45315e7e5627044f6c3e08363b89eb958df7d8a8693a2e45edecb
   languageName: node
   linkType: hard
 
