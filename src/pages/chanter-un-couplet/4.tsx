@@ -175,7 +175,7 @@ const SongStep4 = () => {
                   updateActivity({ data: { ...data, classRecord: '' } });
                   setDisplayEditor(false);
                 }}
-                audioRef={audioRef}
+                ref={audioRef}
               />
             )}
           </div>
