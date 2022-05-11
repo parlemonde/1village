@@ -1,113 +1,103 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Grid, Typography, CardMedia, Tooltip } from '@mui/material';
 
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import SlotMachineHandle from 'src/svg/story-activity/slot-machine-handle.svg';
 import SlotMachine from 'src/svg/story-activity/slot-machine.svg';
-import { serializeToQueryUrl } from 'src/utils';
-import type { Activity } from 'types/activity.type';
-import { ActivityType } from 'types/activity.type';
 import type { StoryElement } from 'types/story.type';
 
+type BackendImage = { id: number; imageUrl: string; inspiredStoryId: number };
+
 interface StoryPictureWheelProps {
-  objectImage: StoryElement;
-  placeImage: StoryElement;
-  oddImage: StoryElement;
+  initialObjectImage: StoryElement | null;
+  initialPlaceImage: StoryElement | null;
+  initialOddImage: StoryElement | null;
   onImagesChange(objectImage: StoryElement, placeImage: StoryElement, oddImage: StoryElement): void;
   style?: React.CSSProperties;
 }
 
-const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, style }: StoryPictureWheelProps) => {
+const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddImage, onImagesChange, style }: StoryPictureWheelProps) => {
   const { getRandomImagesData } = useImageStoryRequests();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
-  const [ableToRotate, setAbleToRotate] = React.useState(false);
-  const [rotate, setRotate] = React.useState(0);
+  const [isRotating, setIsRotating] = React.useState(0);
   const [rolling, setRolling] = React.useState(false);
-  const [storyActivities, setStoryActivities] = React.useState<Activity[]>([]);
 
-  const [objectRandomImages, setObjectRandomImages] = React.useState<StoryElement[]>([]);
-  const [placeRandomImages, setPlaceRandomImages] = React.useState<StoryElement[]>([]);
-  const [oddRandomImages, setOddRandomImages] = React.useState<StoryElement[]>([]);
+  const [allImages, setAllImages] = React.useState<{
+    object: StoryElement[];
+    place: StoryElement[];
+    odd: StoryElement[];
+  }>({
+    object: [],
+    place: [],
+    odd: [],
+  });
 
-  const slotRef = [React.useRef<HTMLDivElement>(null), React.useRef<HTMLDivElement>(null), React.useRef<HTMLDivElement>(null)];
+  const objectRandomImages = React.useMemo(
+    () => (initialObjectImage ? [initialObjectImage, ...allImages.object.filter((i) => i.imageId !== initialObjectImage.imageId)] : allImages.object),
+    [initialObjectImage, allImages],
+  );
+  const placeRandomImages = React.useMemo(
+    () => (initialPlaceImage ? [initialPlaceImage, ...allImages.place.filter((i) => i.imageId !== initialPlaceImage.imageId)] : allImages.place),
+    [initialPlaceImage, allImages],
+  );
+  const oddRandomImages = React.useMemo(
+    () => (initialOddImage ? [initialOddImage, ...allImages.odd.filter((i) => i.imageId !== initialOddImage.imageId)] : allImages.odd),
+    [initialOddImage, allImages],
+  );
 
-  // TODO: implement function to block rotate handle if activities.length <= 1
-  React.useEffect(() => {
-    if (village) {
-      axiosLoggedRequest({
-        method: 'GET',
-        url: `/activities${serializeToQueryUrl({
-          villageId: village?.id,
-          type: ActivityType.STORY + ',' + ActivityType.RE_INVENT_STORY,
-        })}`,
-      }).then((response) => {
-        if (!response.error && response.data) {
-          const storyActivities = response.data;
-          setStoryActivities(storyActivities as Activity[]);
-          if (storyActivities.length <= 1) {
-            setAbleToRotate(false);
-          } else {
-            setAbleToRotate(true);
-          }
-        }
-      });
-    }
-  }, [ableToRotate, axiosLoggedRequest, village]);
+  const slotRef1 = React.useRef<HTMLDivElement | null>(null);
+  const slotRef2 = React.useRef<HTMLDivElement | null>(null);
+  const slotRef3 = React.useRef<HTMLDivElement | null>(null);
+
+  const ableToRotate = objectRandomImages.length > 1 && placeRandomImages.length > 1 && oddRandomImages.length > 1;
 
   //Get Random Images from DB
   const getRandomImages = React.useCallback(async () => {
     const images = await getRandomImagesData();
-    //Une fois images récuperé il faudrait faire une function pour trier les informations qu'on a bseoin
-    //et transformer en storyElement
-    //TODO : ! Factoriser ici
-    const objectTransformed = [] as StoryElement[];
-    images.objects.forEach((image: { id: number; imageUrl: string; inspiredStoryId: number }) => {
-      objectTransformed.push({ imageId: image.id, imageUrl: image.imageUrl, description: '', inspiredStoryId: image.inspiredStoryId });
+    setAllImages({
+      object: images.objects.map((image: BackendImage) => ({
+        imageId: image.id,
+        imageUrl: image.imageUrl,
+        description: '',
+        inspiredStoryId: image.inspiredStoryId,
+      })),
+      place: images.places.map((image: BackendImage) => ({
+        imageId: image.id,
+        imageUrl: image.imageUrl,
+        description: '',
+        inspiredStoryId: image.inspiredStoryId,
+      })),
+      odd: images.odds.map((image: BackendImage) => ({
+        imageId: image.id,
+        imageUrl: image.imageUrl,
+        description: '',
+        inspiredStoryId: image.inspiredStoryId,
+      })),
     });
-    setObjectRandomImages(objectTransformed);
-
-    const placeTransformed = [] as StoryElement[];
-    images.places.forEach((image: { id: number; imageUrl: string; inspiredStoryId: number }) => {
-      placeTransformed.push({ imageId: image.id, imageUrl: image.imageUrl, description: '', inspiredStoryId: image.inspiredStoryId });
-    });
-    setPlaceRandomImages(placeTransformed);
-
-    const oddTransformed = [] as StoryElement[];
-    images.odds.forEach((image: { id: number; imageUrl: string; inspiredStoryId: number }) => {
-      oddTransformed.push({ imageId: image.id, imageUrl: image.imageUrl, description: '', inspiredStoryId: image.inspiredStoryId });
-    });
-    setOddRandomImages(oddTransformed);
   }, [getRandomImagesData]);
 
-  //Get random images when index page is launch only if no activityId in url
-  //or when wheel is operated
-  const imagesFetched = React.useRef(false);
   React.useEffect(() => {
-    if (!imagesFetched.current) {
-      getRandomImages().catch();
-      imagesFetched.current = true;
-    }
+    getRandomImages().catch();
   }, [getRandomImages]);
-  // storyObjectImages
 
   React.useEffect(() => {
-    // If no imageID (the activity has been already created) => automatically set image to activity data
-    if (objectRandomImages.length > 0 && objectImage.imageUrl === '') {
+    if (objectRandomImages.length > 1 && placeRandomImages.length > 1 && oddRandomImages.length > 1) {
       onImagesChange(objectRandomImages[0], placeRandomImages[0], oddRandomImages[0]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [objectRandomImages, placeRandomImages, oddRandomImages]);
+    [slotRef1, slotRef2, slotRef3].forEach((slot) => {
+      if (slot.current) {
+        slot.current.style.top = '0px';
+      }
+    });
+  }, [objectRandomImages, placeRandomImages, oddRandomImages, onImagesChange]);
 
   // to trigger handle rotate
   const handleRotate = () => {
     if (ableToRotate === true) {
-      setRotate(rotate + 1);
+      setIsRotating(isRotating + 1);
     }
   };
 
@@ -119,7 +109,7 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
     }, 700);
     // looping through all 3 slots to start rolling
     const newValues = [] as StoryElement[];
-    slotRef.forEach((slot, i) => {
+    [slotRef1, slotRef2, slotRef3].forEach((slot, i) => {
       // this will trigger rolling effect
       let selectedIndex;
       if (slot.current) selectedIndex = triggerSlotRotation(slot.current);
@@ -136,7 +126,6 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
   };
 
   // this will create a rolling effect and return random selected option
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const triggerSlotRotation = (ref: HTMLDivElement) => {
     function setTop(top: number) {
       ref.style.top = `${top}px`;
@@ -173,7 +162,7 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
               <SlotMachine style={{ height: '25rem', width: '25rem' }} />
             </Paper>
             <div>
-              {storyActivities.length <= 1 && ableToRotate === false ? (
+              {ableToRotate === false ? (
                 <Tooltip title="Créez au moins 2 histoires" followCursor>
                   <div>
                     <SlotMachineHandle
@@ -199,85 +188,82 @@ const StoryPictureWheel = ({ objectImage, placeImage, oddImage, onImagesChange, 
                       height: '10rem',
                       width: '10rem',
                     }}
-                    className="handle"
+                    className={classNames('handle', { 'handle--is-rotating': isRotating })}
                     onClick={handleRotate}
-                    onAnimationEnd={() => setRotate(0)}
-                    rotate={rotate}
+                    onAnimationEnd={() => setIsRotating(0)}
                   />
                 </div>
               )}
             </div>
           </Box>
 
-          {objectImage && placeImage && oddImage && (
-            <div className="SlotMachine">
-              <div className="cards">
-                <div className="slot">
-                  <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                    Objet
-                  </Typography>
-                  <section>
-                    <div className="container" ref={slotRef[0]}>
-                      {objectRandomImages &&
-                        objectRandomImages.map((obj, i) => (
-                          <div className="object" key={i}>
-                            <CardMedia
-                              sx={{ borderRadius: '0.5rem', mt: 1 }}
-                              component="img"
-                              height="70"
-                              image={obj.imageUrl ? obj.imageUrl : ''}
-                              alt="objet de l'histoire"
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </section>
-                </div>
-                <div className="slot">
-                  <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                    Lieu
-                  </Typography>
-                  <section>
-                    <div className="container" ref={slotRef[1]}>
-                      {placeRandomImages &&
-                        placeRandomImages.map((obj, i) => (
-                          <div key={i}>
-                            <CardMedia
-                              sx={{ borderRadius: '0.5rem', mt: 1 }}
-                              component="img"
-                              height="70"
-                              image={obj.imageUrl ? obj.imageUrl : ''}
-                              alt="objet de l'histoire"
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </section>
-                </div>
-                <div className="slot">
-                  <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                    ODD
-                  </Typography>
-                  <section>
-                    <div className="container" ref={slotRef[2]}>
-                      {oddRandomImages &&
-                        oddRandomImages.map((obj, i) => (
-                          <div key={i}>
-                            <CardMedia
-                              sx={{ borderRadius: '0.5rem', mt: 1 }}
-                              component="img"
-                              height="70"
-                              image={obj.imageUrl ? obj.imageUrl : ''}
-                              alt="objet de l'histoire"
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </section>
-                </div>
+          <div className="SlotMachine">
+            <div className="cards">
+              <div className="slot">
+                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                  Objet
+                </Typography>
+                <section>
+                  <div className="container" ref={slotRef1}>
+                    {objectRandomImages &&
+                      objectRandomImages.map((obj, i) => (
+                        <div className="object" key={i}>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            component="img"
+                            height="70"
+                            image={obj.imageUrl ? obj.imageUrl : ''}
+                            alt="objet de l'histoire"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </section>
+              </div>
+              <div className="slot">
+                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                  Lieu
+                </Typography>
+                <section>
+                  <div className="container" ref={slotRef2}>
+                    {placeRandomImages &&
+                      placeRandomImages.map((obj, i) => (
+                        <div key={i}>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            component="img"
+                            height="70"
+                            image={obj.imageUrl ? obj.imageUrl : ''}
+                            alt="objet de l'histoire"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </section>
+              </div>
+              <div className="slot">
+                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                  ODD
+                </Typography>
+                <section>
+                  <div className="container" ref={slotRef3}>
+                    {oddRandomImages &&
+                      oddRandomImages.map((obj, i) => (
+                        <div key={i}>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            component="img"
+                            height="70"
+                            image={obj.imageUrl ? obj.imageUrl : ''}
+                            alt="objet de l'histoire"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </section>
               </div>
             </div>
-          )}
+          </div>
         </Grid>
       </Grid>
     </>

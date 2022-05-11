@@ -62,6 +62,7 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
               container
               spacing={1}
               xs={8}
+              item
               style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
             >
               {activity.data.object.imageUrl && activity.data.place.imageUrl && activity.data.odd.imageUrl && (

@@ -1,105 +1,58 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { isStory } from 'src/activity-types/anyActivity';
 import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWheel';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { StoryElement, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
-  const activityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
+  const inspiredActivityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { activity, createNewActivity, updateActivity, save } = React.useContext(ActivityContext);
-  const { village } = React.useContext(VillageContext);
+  const { createNewActivity } = React.useContext(ActivityContext);
 
-  const [inspiredStoryActivity, setInspiredStoryActivity] = React.useState<StoriesData>();
+  const [inspiredImages, setInspiredImages] = React.useState<{ object: StoryElement; place: StoryElement; odd: StoryElement } | null>(null);
+  const [storyData, setStoryData] = React.useState<StoriesData>(DEFAULT_STORY_DATA);
 
-  //Creation of new empty story activity no matter what
-  const created = React.useRef(false);
-  React.useEffect(() => {
-    if (!created.current) {
-      if (!('edit' in router.query)) {
-        created.current = true;
-        createNewActivity(
-          ActivityType.RE_INVENT_STORY,
-          undefined,
-          {
-            ...DEFAULT_STORY_DATA,
-          },
-          null,
-          null,
-          undefined,
-        );
-      }
-    }
-  }, [activity, activityId, createNewActivity, router.query]);
+  const onImagesChange = React.useCallback((object: StoryElement, place: StoryElement, odd: StoryElement) => {
+    setStoryData((prevStoryData) => ({
+      ...prevStoryData,
+      object,
+      place,
+      odd,
+    }));
+  }, []);
 
-  const onImagesChange = (objectTransformed: StoryElement, placeTransformed: StoryElement, oddTransformed: StoryElement) => {
-    if (activity && activity.data) {
-      activity.data.object = objectTransformed;
-      activity.data.place = placeTransformed;
-      activity.data.odd = oddTransformed;
-    }
-  };
-
-  //Get data from Inspiring story
+  // Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
-    if (village && activityId) {
+    if (inspiredActivityId) {
       const response = await axiosLoggedRequest({
         method: 'GET',
-        url: `/activities/${activityId}`,
+        url: `/activities/${inspiredActivityId}`,
       });
       if (!response.error && response.data) {
-        setInspiredStoryActivity(response.data.data as StoriesData);
+        setInspiredImages(response.data.data);
       }
     }
-  }, [activityId, axiosLoggedRequest, village]);
+  }, [inspiredActivityId, axiosLoggedRequest]);
 
   //Retrieve data from Inspiring story if activityId in url
   React.useEffect(() => {
-    if (activityId) {
+    if (inspiredActivityId) {
       getInspiringStory();
     }
-  }, [activity, activityId, getInspiringStory]);
-
-  const updateData = (data: StoriesData) => {
-    if (activity && activity.data) {
-      const { object, place, odd } = activity.data as StoriesData;
-      updateActivity({
-        data: {
-          ...activity.data,
-          object: { ...object, imageId: data.object.imageId, imageUrl: data.object.imageUrl, inspiredStoryId: data.object.inspiredStoryId },
-          place: { ...place, imageId: data.place.imageId, imageUrl: data.place.imageUrl, inspiredStoryId: data.place.inspiredStoryId },
-          odd: { ...odd, imageId: data.odd.imageId, imageUrl: data.odd.imageUrl, inspiredStoryId: data.odd.inspiredStoryId },
-        },
-      });
-    }
-  };
-
-  //Set imageUrl from inspiredStoryActivity or imagesRandom in activity
-  React.useEffect(() => {
-    if (inspiredStoryActivity && activity && activity.data) {
-      updateData(inspiredStoryActivity);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [inspiredActivityId, getInspiringStory]);
 
   const onNext = () => {
-    save().catch(console.error);
+    createNewActivity(ActivityType.RE_INVENT_STORY, undefined, storyData);
     router.push('/re-inventer-une-histoire/1');
   };
-
-  if (activity === null || !isStory(activity)) {
-    return <div></div>;
-  }
 
   return (
     <>
@@ -144,9 +97,9 @@ const InspiredStory = () => {
         </div>
         {/* Roulette images */}
         <StoryPictureWheel
-          objectImage={activity.data.object}
-          placeImage={activity.data.place}
-          oddImage={activity.data.odd}
+          initialObjectImage={inspiredImages ? inspiredImages.object : null}
+          initialPlaceImage={inspiredImages ? inspiredImages.place : null}
+          initialOddImage={inspiredImages ? inspiredImages.odd : null}
           onImagesChange={onImagesChange}
         />
         <StepsButton next={onNext} />

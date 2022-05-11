@@ -34,6 +34,7 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     .createQueryBuilder('image')
     .where('image.villageId = :villageId', { villageId })
     .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
+    .orderBy('RAND()')
     .getMany();
 
   const placeImages = await getRepository(Image)

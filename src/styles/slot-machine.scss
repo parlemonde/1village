@@ -51,8 +51,10 @@ section {
   text-align: center;
 }
 
-.handle[rotate='1'] {
-  animation: rotate 0.7s 1;
+.handle {
+  &--is-rotating {
+    animation: rotate 0.7s 1;
+  }
 }
 
 @keyframes rotate {
