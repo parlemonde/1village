@@ -63,11 +63,20 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
               spacing={1}
               xs={8}
               item
-              style={{ border: 'solid 8px', borderRadius: '1rem', color: 'grey', boxSizing: 'border-box', width: 'inherit', paddingRight: '8px' }}
+              style={{
+                border: 'solid 8px',
+                borderRadius: '1rem',
+                color: 'grey',
+                boxSizing: 'border-box',
+                width: 'inherit',
+                paddingRight: '8px',
+                paddingLeft: '8px',
+                paddingTop: '8px',
+              }}
             >
               {activity.data.object.imageUrl && activity.data.place.imageUrl && activity.data.odd.imageUrl && (
                 <>
-                  <Grid item xs>
+                  <Grid item xs style={{ paddingTop: '0px', paddingLeft: '0px' }}>
                     <Card sx={{ mb: 1 }}>
                       <Typography
                         sx={{
@@ -94,7 +103,7 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
                       />
                     </Card>
                   </Grid>
-                  <Grid item xs>
+                  <Grid item xs style={{ paddingTop: '0px' }}>
                     <Card sx={{ mb: 1 }}>
                       <Typography
                         sx={{
@@ -121,7 +130,7 @@ export const StoryActivityView = ({ activity, user }: ActivityViewProps<StoryAct
                       />
                     </Card>
                   </Grid>
-                  <Grid item xs>
+                  <Grid item xs style={{ paddingTop: '0px' }}>
                     <Card sx={{ mb: 1 }}>
                       <Typography
                         sx={{
