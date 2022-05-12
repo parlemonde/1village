@@ -209,7 +209,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                       objectRandomImages.map((obj, i) => (
                         <div className="object" key={i}>
                           <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
                             component="img"
                             height="70"
                             image={obj.imageUrl ? obj.imageUrl : ''}
@@ -230,7 +230,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                       placeRandomImages.map((obj, i) => (
                         <div key={i}>
                           <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
                             component="img"
                             height="70"
                             image={obj.imageUrl ? obj.imageUrl : ''}
@@ -251,7 +251,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                       oddRandomImages.map((obj, i) => (
                         <div key={i}>
                           <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
                             component="img"
                             height="70"
                             image={obj.imageUrl ? obj.imageUrl : ''}
