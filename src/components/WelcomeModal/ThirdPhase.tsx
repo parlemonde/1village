@@ -21,14 +21,14 @@ export const ThirdPhase = () => {
     const response = await axiosLoggedRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
-      data: { firstLogin: 2 },
+      data: { firstLogin: 3 },
     });
     if (response.error) {
       enqueueSnackbar('Une erreur inconnue est survenue...', {
         variant: 'error',
       });
     } else {
-      setUser({ ...(user || {}), firstLogin: 2 });
+      setUser({ ...(user || {}), firstLogin: 3 });
     }
   };
 
@@ -47,12 +47,11 @@ export const ThirdPhase = () => {
           <>
             <div id="new-user-desc" style={{ minHeight: '15rem', display: 'flex', justifyContent: 'center', textAlign: 'center', marginTop: '2rem' }}>
               <div>
-                <p>Si vous n&apos;avez pas encore résolu l&apos;énigme avec votre classe, retournez sur la phase 2.</p>
+                <p>{'Si vous voulez poursuivre les échanges avec vos pélicopains, retournez sur la phase 2'}</p>
                 <Button
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                     event.preventDefault();
-                    updateUser();
                     setSelectedPhase(2);
                     setIsModalOpen(false);
                   }}
@@ -69,7 +68,7 @@ export const ThirdPhase = () => {
                 </Button>
               </div>
               <div>
-                <p>Si vous souhaitez débuter les échanges avec vos Pélicopains, poursuivez sur la phase 3.</p>
+                <p>{"Si vous souhaitez débuter l'imagination du village idéal, poursuivez sur la phase 3."}</p>
                 <Button
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {

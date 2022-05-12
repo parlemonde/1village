@@ -20,24 +20,25 @@ export interface AnthemEditorProps {
   onPlay?(): void;
   setTime?(args: number): void;
   onClose?(idx: number): void;
-  audioRef?: React.RefObject<HTMLAudioElement>;
   idx?: number;
   edit?: boolean;
   audio?: boolean;
 }
 
-export const AnthemEditor = ({
-  value = '',
-  onChange = () => {},
-  onDelete = () => {},
-  setTime = () => {},
-  onClose = () => {},
-  onPlay = () => {},
-  onPause = () => {},
-  audioRef,
-  idx = 0,
-  edit = false,
-}: AnthemEditorProps) => {
+const AnthemEditorWithRef = (
+  {
+    value = '',
+    onChange = () => {},
+    onDelete = () => {},
+    setTime = () => {},
+    onClose = () => {},
+    onPlay = () => {},
+    onPause = () => {},
+    idx = 0,
+    edit = false,
+  }: AnthemEditorProps,
+  ref?: React.ForwardedRef<HTMLAudioElement | null>,
+) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -54,6 +55,9 @@ export const AnthemEditor = ({
   const [file, setFile] = React.useState<File | null>(null);
   const inputFile = React.useRef<HTMLInputElement>(null);
   const prevUpload = React.useRef<string | null>(null);
+
+  const localRef = React.useRef<HTMLAudioElement | null>(null);
+  const audioRef = ref !== undefined && ref !== null && typeof ref !== 'function' ? ref : localRef;
 
   const prevIsModalOpen = React.useRef<boolean | null>(null);
   React.useEffect(() => {
@@ -149,7 +153,7 @@ export const AnthemEditor = ({
   };
 
   const onLoadedMetadata = () => {
-    if (audioRef && audioRef.current) {
+    if (audioRef.current) {
       setTime(audioRef.current.duration);
     }
   };
@@ -281,3 +285,5 @@ export const AnthemEditor = ({
     </>
   );
 };
+
+export const AnthemEditor = React.forwardRef(AnthemEditorWithRef);

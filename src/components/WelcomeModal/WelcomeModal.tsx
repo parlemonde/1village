@@ -6,6 +6,7 @@ import { UserType } from 'types/user.type';
 
 import { FirstPhase } from './FirstPhase';
 import { SecondPhase } from './SecondPhase';
+import { ThirdPhase } from './ThirdPhase';
 
 // import { ThirdPhase } from './ThirdPhase';
 
@@ -23,9 +24,9 @@ export const WelcomeModal = () => {
   if (user.firstLogin === 1 && village.activePhase > 1) {
     return <SecondPhase />;
   }
-  // if (village.activePhase > 1) {
-  //   return <ThirdPhase />;
-  // }
+  if (user.firstLogin === 2 && village.activePhase > 2) {
+    return <ThirdPhase />;
+  }
 
   return null;
 };

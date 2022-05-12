@@ -32,16 +32,17 @@ const AnthemStep1 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
+  const [times, setTimes] = React.useState<Record<number, number>>({});
 
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
+        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA, true);
       } else if (activity && !isAnthem(activity)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA);
+        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA, true);
       }
     }
   }, [activity, createActivityIfNotExist, router]);
@@ -64,7 +65,7 @@ const AnthemStep1 = () => {
     setIsLoading(true);
     if (activity !== null && data.verseAudios.filter((c) => !!c.value).length === 7) {
       const value = await mixAudios(data.verseAudios, axiosLoggedRequest);
-      updateActivity({ data: { ...data, finalVerse: value } });
+      updateActivity({ data: { ...data, finalVerse: value, verseTime: Math.max(0, ...Object.values(times)) } });
     }
     save().catch(console.error);
     setIsLoading(false);
@@ -101,8 +102,7 @@ const AnthemStep1 = () => {
                             onUpdateVerseAudios(idx)('');
                           }}
                           setTime={(time) => {
-                            data.verseTime = time;
-                            updateActivity({ data: { ...data } });
+                            setTimes({ ...times, [idx]: time });
                           }}
                           idx={idx}
                           edit
