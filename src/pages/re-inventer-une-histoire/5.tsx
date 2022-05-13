@@ -64,6 +64,7 @@ const ReInventStoryStep5 = () => {
   }, [activity, router]);
 
   const onPublish = async () => {
+    window.sessionStorage.setItem(`re-invent-a-story-step-1-next`, 'false');
     setIsLoading(true);
     const success = await save(true);
     if (success) {

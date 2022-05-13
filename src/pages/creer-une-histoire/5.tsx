@@ -62,6 +62,7 @@ const StoryStep5 = () => {
   }, [activity, router]);
 
   const onPublish = async () => {
+    window.sessionStorage.setItem(`story-step-1-next`, 'false');
     setIsLoading(true);
     const success = await save(true);
     if (success) {
