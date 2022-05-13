@@ -163,7 +163,7 @@ const ReInventStoryStep5 = () => {
                       }}
                     >
                       {data?.object?.imageUrl && (
-                        <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.object?.imageUrl} unoptimized />
+                        <Image layout="fill" objectFit="contain" alt="image de l'objet" src={data?.object?.imageUrl} unoptimized />
                       )}
                     </div>
                   </KeepRatio>
@@ -206,7 +206,7 @@ const ReInventStoryStep5 = () => {
                       }}
                     >
                       {data?.place?.imageUrl && (
-                        <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.place?.imageUrl} unoptimized />
+                        <Image layout="fill" objectFit="contain" alt="image de la lieu" src={data?.place?.imageUrl} unoptimized />
                       )}
                     </div>
                   </KeepRatio>
@@ -248,7 +248,15 @@ const ReInventStoryStep5 = () => {
                         border: `1px solid ${!isValid && data?.odd?.imageUrl === '' ? warningColor : primaryColor}`,
                       }}
                     >
-                      {data?.odd?.imageUrl && <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.odd?.imageUrl} unoptimized />}
+                      {data?.odd?.imageUrl && (
+                        <Image
+                          layout="fill"
+                          objectFit="contain"
+                          alt="image de l'objectif de développement durable"
+                          src={data?.odd?.imageUrl}
+                          unoptimized
+                        />
+                      )}
                     </div>
                   </KeepRatio>
                 </ButtonBase>
@@ -290,7 +298,7 @@ const ReInventStoryStep5 = () => {
                       }}
                     >
                       {data?.tale?.imageStory && (
-                        <Image layout="fill" objectFit="contain" alt="image du plat" src={data?.tale?.imageStory} unoptimized />
+                        <Image layout="fill" objectFit="contain" alt="image de l'histoire" src={data?.tale?.imageStory} unoptimized />
                       )}
                     </div>
                   </KeepRatio>

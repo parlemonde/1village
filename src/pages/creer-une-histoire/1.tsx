@@ -120,7 +120,7 @@ const StoryStep1 = () => {
                         }}
                       >
                         {data?.object?.imageUrl ? (
-                          <Image layout="fill" objectFit="cover" alt="image du plat" src={data?.object?.imageUrl} unoptimized />
+                          <Image layout="fill" objectFit="cover" alt="image de l'objet" src={data?.object?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
