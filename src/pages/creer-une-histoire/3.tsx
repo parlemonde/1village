@@ -50,7 +50,7 @@ const StoryStep3 = () => {
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { odd } = data;
-    updateActivity({ data: { ...data, odd: { ...odd, imageUrl } } });
+    updateActivity({ data: { ...data, odd: { ...odd, inspiredStoryId: activity?.id, imageUrl } } });
   };
 
   const onNext = () => {

@@ -38,27 +38,6 @@ const StoryStep2 = () => {
     }
   }, [activity, router]);
 
-  const dataChangeStrategies = {
-    object: () => {
-      updateActivity({
-        data: {
-          ...data,
-          object: { ...data.object, inspiredStoryId: activity?.id },
-          place: { ...data.place, inspiredStoryId: activity?.id },
-          odd: { ...data.odd, inspiredStoryId: activity?.id },
-          isOriginal: true,
-        },
-      });
-    },
-  };
-
-  React.useEffect(() => {
-    if (activity !== null && activity.id) {
-      dataChangeStrategies['object']();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
     const { place } = data;
@@ -68,8 +47,15 @@ const StoryStep2 = () => {
 
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
-    const { place } = data;
-    updateActivity({ data: { ...data, place: { ...place, imageUrl } } });
+    const { object, place } = data;
+    updateActivity({
+      data: {
+        ...data,
+        object: { ...object, inspiredStoryId: activity?.id },
+        place: { ...place, inspiredStoryId: activity?.id, imageUrl },
+        isOriginal: true,
+      },
+    });
   };
 
   const onNext = () => {
