@@ -24,15 +24,13 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStori
   const getStoryActivity = React.useCallback(async () => {
     const datas = await getStoriesFromIds(inspiredStoriesIds as number[]).then((data) => setDataStoriesFromInspiredIds(data as Activity[]));
     return datas;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getStoriesFromIds, inspiredStoriesIds]);
 
   React.useEffect(() => {
     if (inspiredStoriesIds) {
       getStoryActivity().catch();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getStoryActivity, inspiredStoriesIds]);
 
   let storyCard = <></>;
 
