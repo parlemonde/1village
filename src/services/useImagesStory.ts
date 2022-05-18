@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useQueryClient, useQuery } from 'react-query';
+import { useQueryClient } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
@@ -85,19 +85,19 @@ export const useImageStories = () => {
   return { getInspiredStories, getStoriesByIds, getRandomImagesData };
 };
 
-export const useImageStoryRequests = (activityId: number | null) => {
+export const useImageStoryRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteStoryImage = React.useCallback(
-    async (id: number) => {
+    async (id: number | null) => {
       if (!id) {
         return;
       }
       const response = await axiosLoggedRequest({
         method: 'DELETE',
-        url: `/activities/${activityId}/stories/${id}`,
+        url: `/stories/${id}`,
       });
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
@@ -108,7 +108,7 @@ export const useImageStoryRequests = (activityId: number | null) => {
       queryClient.invalidateQueries('stories');
       queryClient.invalidateQueries('activities');
     },
-    [activityId, axiosLoggedRequest, enqueueSnackbar, queryClient],
+    [axiosLoggedRequest, enqueueSnackbar, queryClient],
   );
 
   return {

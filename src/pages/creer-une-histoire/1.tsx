@@ -20,14 +20,10 @@ import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
-interface StoryProps {
-  activityId: number;
-}
-
-const StoryStep1 = ({ activityId }: StoryProps) => {
+const StoryStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
-  const { deleteStoryImage } = useImageStoryRequests(activityId);
+  const { deleteStoryImage } = useImageStoryRequests();
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
@@ -75,7 +71,8 @@ const StoryStep1 = ({ activityId }: StoryProps) => {
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { object } = data;
-    updateActivity({ data: { ...data, object: { ...object, imageUrl } } });
+    // imageId = 0 when we are changing the image of the object step.
+    updateActivity({ data: { ...data, object: { ...object, imageUrl, imageId: 0 } } });
   };
 
   React.useEffect(() => {
@@ -133,15 +130,12 @@ const StoryStep1 = ({ activityId }: StoryProps) => {
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.object?.imageUrl && data.object.imageId && (
+                  {data?.object?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
-                        // onDelete={() => {
-                        //   setImage('');
-                        // }}
                         onDelete={() => {
-                          console.log('delete');
                           deleteStoryImage(data.object.imageId);
+                          setImage('');
                         }}
                         confirmLabel="Êtes-vous sur de vouloir supprimer l'image ?"
                         confirmTitle="Supprimer l'image"

@@ -53,9 +53,15 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
   res.sendJSON({ objects: objectImages, places: placeImages, odds: oddImages });
 });
 
-// --- Delete an image. ---
+/**
+ * Delete an image when it's not used by anyone.
+ *
+ * @param {string} path url path
+ * @param {number} userType user profile type
+ * @returns {void} status Ok or NOK
+ */
+
 storyController.delete({ path: '/:imageId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  const activityId = parseInt(req.params.id, 10) ?? 0;
   const id = parseInt(req.params.imageId, 10) ?? 0;
   const image = await getRepository(Image).findOne({ where: { id } });
   const isAdmin = req.user && req.user.type >= UserType.ADMIN;
@@ -63,11 +69,10 @@ storyController.delete({ path: '/:imageId', userType: UserType.TEACHER }, async 
     res.status(204).send();
     return;
   } else if (isAdmin) {
-    await getRepository(Image).delete({ id, activityId });
+    await getRepository(Image).delete({ id });
   } else {
-    await getRepository(Image).delete({ id, activityId, userId: req.user?.id ?? 0 });
+    await getRepository(Image).delete({ id, userId: req.user?.id ?? 0 });
   }
-
   res.status(204).send();
 });
 

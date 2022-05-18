@@ -15,12 +15,14 @@ import { ImageModal } from 'src/components/activities/content/editors/ImageEdito
 import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
 import type { StoriesData } from 'types/story.type';
 
 const StoryStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
+  const { deleteStoryImage } = useImageStoryRequests();
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
@@ -50,7 +52,7 @@ const StoryStep3 = () => {
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { odd } = data;
-    updateActivity({ data: { ...data, odd: { ...odd, inspiredStoryId: activity?.id, imageUrl } } });
+    updateActivity({ data: { ...data, odd: { ...odd, inspiredStoryId: activity?.id, imageUrl, imageId: 0 } } });
   };
 
   const onNext = () => {
@@ -112,6 +114,7 @@ const StoryStep3 = () => {
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
+                          deleteStoryImage(data.odd.imageId);
                           setImage('');
                         }}
                         confirmLabel="Êtes-vous sur de vouloir supprimer l'image ?"
