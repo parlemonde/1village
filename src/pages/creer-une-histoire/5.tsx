@@ -30,7 +30,6 @@ const StoryStep5 = () => {
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
   const isUserObservator = user?.type === UserType.OBSERVATOR;
 
-  // console.table([data.object, data.place, data.odd, data.tale]);
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
@@ -60,6 +59,8 @@ const StoryStep5 = () => {
       router.push('/creer-une-histoire');
     }
   }, [activity, router]);
+
+  //TODO : useEffect here for update inspiredStoryId if equal to 0
 
   const onPublish = async () => {
     window.sessionStorage.setItem(`story-step-1-next`, 'false');

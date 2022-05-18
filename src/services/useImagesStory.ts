@@ -2,6 +2,7 @@ import { useSnackbar } from 'notistack';
 import { useQueryClient } from 'react-query';
 import React from 'react';
 
+import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
@@ -13,6 +14,38 @@ export const useImageStories = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
+  // This function is to fetch all RE_INVENT_STORY in activity table page.
+  const getAllStories = React.useCallback(
+    async (imageId: number) => {
+      if (!village) {
+        return;
+      }
+      console.log('I am here');
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities${serializeToQueryUrl({
+          villageId: village?.id,
+          type: ActivityType.RE_INVENT_STORY,
+        })}`,
+      });
+      if (response.error && response.data) {
+        return;
+      }
+      const stories = [] as Activity[];
+      response.data.forEach((activity: Activity) => {
+        const data = activity.data as StoriesData;
+        if (data.object.imageId === imageId || data.place.imageId === imageId || data.odd.imageId === imageId) {
+          stories.push(activity);
+          return;
+        }
+      });
+
+      return stories;
+    },
+    [axiosLoggedRequest, village],
+  );
+
+  // This function is to display story activity cards in activity page.
   const getInspiredStories = React.useCallback(
     async (activityStoryId: number) => {
       if (!village) {
@@ -44,6 +77,7 @@ export const useImageStories = () => {
     [axiosLoggedRequest, village],
   );
 
+  // Fetch stories by their Id
   const getStoriesByIds = React.useCallback(
     async (activityStoryIds: number[]) => {
       if (!village) {
@@ -66,6 +100,7 @@ export const useImageStories = () => {
     [axiosLoggedRequest, village],
   );
 
+  // This is a function that returns random images for slot machine
   const getRandomImagesData = React.useCallback(async () => {
     if (!village) {
       return 0;
@@ -82,23 +117,80 @@ export const useImageStories = () => {
     return response.data;
   }, [axiosLoggedRequest, village]);
 
-  return { getInspiredStories, getStoriesByIds, getRandomImagesData };
+  return { getAllStories, getInspiredStories, getStoriesByIds, getRandomImagesData };
 };
 
 export const useImageStoryRequests = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
+  const { getAllStories } = useImageStories();
+  const { activity, createNewActivity } = React.useContext(ActivityContext);
+  //1. Get activities Reinvent story
+  //2. Filter with id of image we are looking for
+  //3. If True (image id = object.imageId) => new activity
+  //4. If False => update activity and delete old image
 
   const deleteStoryImage = React.useCallback(
-    async (id: number | null) => {
+    async (id: number | null, data: StoriesData, step?: number) => {
       if (!id) {
+        return;
+      }
+
+      // This will return an array of used images.
+      const storiesDatas = await getAllStories(id).catch();
+      if (activity && storiesDatas && storiesDatas.length >= 1) {
+        let newActivityData = {} as StoriesData;
+        if (step === 1) {
+          newActivityData = {
+            ...data,
+            object: {
+              ...data.object,
+              imageId: 0,
+              imageUrl: '',
+              inspiredStoryId: 0,
+            },
+          };
+        } else if (step === 2) {
+          newActivityData = {
+            ...data,
+            place: {
+              ...data.place,
+              imageId: 0,
+              imageUrl: '',
+              inspiredStoryId: 0,
+            },
+          };
+        } else if (step === 3) {
+          newActivityData = {
+            ...data,
+            odd: {
+              ...data.odd,
+              imageId: 0,
+              imageUrl: '',
+              inspiredStoryId: 0,
+            },
+          };
+        }
+        createNewActivity(
+          ActivityType.STORY,
+          undefined,
+          {
+            ...newActivityData,
+          },
+          null,
+          null,
+          undefined,
+        );
+        //We exit the function because no delete intended
+        console.log({ newActivityData });
         return;
       }
       const response = await axiosLoggedRequest({
         method: 'DELETE',
         url: `/stories/${id}`,
       });
+      console.log('je suis dans delete');
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
@@ -108,7 +200,7 @@ export const useImageStoryRequests = () => {
       queryClient.invalidateQueries('stories');
       queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, enqueueSnackbar, queryClient],
+    [axiosLoggedRequest, enqueueSnackbar, getAllStories, queryClient],
   );
 
   return {

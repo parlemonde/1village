@@ -134,7 +134,7 @@ const StoryStep1 = () => {
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
-                          deleteStoryImage(data.object.imageId);
+                          deleteStoryImage(data.object.imageId, data, 1);
                           setImage('');
                         }}
                         confirmLabel="Êtes-vous sur de vouloir supprimer l'image ?"
