@@ -22,7 +22,6 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     next();
     return;
   }
-
   const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
 
   if (!villageId) {
@@ -52,6 +51,24 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     .getMany();
 
   res.sendJSON({ objects: objectImages, places: placeImages, odds: oddImages });
+});
+
+// --- Delete an image. ---
+storyController.delete({ path: '/:imageId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  const activityId = parseInt(req.params.id, 10) ?? 0;
+  const id = parseInt(req.params.imageId, 10) ?? 0;
+  const image = await getRepository(Image).findOne({ where: { id } });
+  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  if (image === undefined) {
+    res.status(204).send();
+    return;
+  } else if (isAdmin) {
+    await getRepository(Image).delete({ id, activityId });
+  } else {
+    await getRepository(Image).delete({ id, activityId, userId: req.user?.id ?? 0 });
+  }
+
+  res.status(204).send();
 });
 
 export { storyController };

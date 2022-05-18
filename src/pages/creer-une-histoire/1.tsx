@@ -15,13 +15,19 @@ import { ImageModal } from 'src/components/activities/content/editors/ImageEdito
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
-const StoryStep1 = () => {
+interface StoryProps {
+  activityId: number;
+}
+
+const StoryStep1 = ({ activityId }: StoryProps) => {
   const router = useRouter();
   const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { deleteStoryImage } = useImageStoryRequests(activityId);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
@@ -127,11 +133,15 @@ const StoryStep1 = () => {
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.object?.imageUrl && (
+                  {data?.object?.imageUrl && data.object.imageId && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
+                        // onDelete={() => {
+                        //   setImage('');
+                        // }}
                         onDelete={() => {
-                          setImage('');
+                          console.log('delete');
+                          deleteStoryImage(data.object.imageId);
                         }}
                         confirmLabel="Êtes-vous sur de vouloir supprimer l'image ?"
                         confirmTitle="Supprimer l'image"

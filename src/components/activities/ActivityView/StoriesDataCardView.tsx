@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { useImageStoryRequests } from 'src/services/useImagesStory';
+import { useImageStories } from 'src/services/useImagesStory';
 import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
@@ -17,14 +17,14 @@ interface StoriesDataCardViewProps {
 }
 
 const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStoriesIds }: StoriesDataCardViewProps) => {
-  const { getStoriesFromIds } = useImageStoryRequests();
+  const { getStoriesByIds } = useImageStories();
   const [dataStoriesFromInspiredIds, setDataStoriesFromInspiredIds] = React.useState<Activity[]>([]);
 
   //Get stories activity from story inspiredIds keys
   const getStoryActivity = React.useCallback(async () => {
-    const datas = await getStoriesFromIds(inspiredStoriesIds as number[]).then((data) => setDataStoriesFromInspiredIds(data as Activity[]));
+    const datas = await getStoriesByIds(inspiredStoriesIds as number[]).then((data) => setDataStoriesFromInspiredIds(data as Activity[]));
     return datas;
-  }, [getStoriesFromIds, inspiredStoriesIds]);
+  }, [getStoriesByIds, inspiredStoriesIds]);
 
   React.useEffect(() => {
     if (inspiredStoriesIds) {

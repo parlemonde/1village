@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Grid, Typography, CardMedia, Tooltip } from '@mui/material';
 
-import { useImageStoryRequests } from 'src/services/useImagesStory';
+import { useImageStories } from 'src/services/useImagesStory';
 import SlotMachineHandle from 'src/svg/story-activity/slot-machine-handle.svg';
 import SlotMachine from 'src/svg/story-activity/slot-machine.svg';
 import type { StoryElement } from 'types/story.type';
@@ -21,7 +21,7 @@ interface StoryPictureWheelProps {
 }
 
 const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddImage, onImagesChange, style }: StoryPictureWheelProps) => {
-  const { getRandomImagesData } = useImageStoryRequests();
+  const { getRandomImagesData } = useImageStories();
   const [isRotating, setIsRotating] = React.useState(0);
   const [rolling, setRolling] = React.useState(false);
 

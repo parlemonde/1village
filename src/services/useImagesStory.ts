@@ -1,3 +1,5 @@
+import { useSnackbar } from 'notistack';
+import { useQueryClient, useQuery } from 'react-query';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
@@ -7,7 +9,7 @@ import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 
-export const useImageStoryRequests = () => {
+export const useImageStories = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
@@ -42,7 +44,7 @@ export const useImageStoryRequests = () => {
     [axiosLoggedRequest, village],
   );
 
-  const getStoriesFromIds = React.useCallback(
+  const getStoriesByIds = React.useCallback(
     async (activityStoryIds: number[]) => {
       if (!village) {
         return;
@@ -80,5 +82,36 @@ export const useImageStoryRequests = () => {
     return response.data;
   }, [axiosLoggedRequest, village]);
 
-  return { getInspiredStories, getStoriesFromIds, getRandomImagesData };
+  return { getInspiredStories, getStoriesByIds, getRandomImagesData };
+};
+
+export const useImageStoryRequests = (activityId: number | null) => {
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const deleteStoryImage = React.useCallback(
+    async (id: number) => {
+      if (!id) {
+        return;
+      }
+      const response = await axiosLoggedRequest({
+        method: 'DELETE',
+        url: `/activities/${activityId}/stories/${id}`,
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+        return;
+      }
+      queryClient.invalidateQueries('stories');
+      queryClient.invalidateQueries('activities');
+    },
+    [activityId, axiosLoggedRequest, enqueueSnackbar, queryClient],
+  );
+
+  return {
+    deleteStoryImage,
+  };
 };

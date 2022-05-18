@@ -5,7 +5,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
-import { useImageStoryRequests } from 'src/services/useImagesStory';
+import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { User } from 'types/user.type';
 
@@ -24,7 +24,7 @@ interface ActivityCommentsProps {
 export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
-  const { getInspiredStories } = useImageStoryRequests();
+  const { getInspiredStories } = useImageStories();
   const [dataStories, setDataStories] = React.useState<Activity[]>([]);
 
   //Get stories activities which was inspired by this story activity
