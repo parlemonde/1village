@@ -23,7 +23,7 @@ import { UserType } from 'types/user.type';
 
 const StoryStep5 = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
+  const { activity, save, updateActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
@@ -61,8 +61,23 @@ const StoryStep5 = () => {
   }, [activity, router]);
 
   //TODO : useEffect here for update inspiredStoryId if equal to 0
+  React.useEffect(() => {
+    if (data !== null && (data.object.inspiredStoryId === 0 || data.place.inspiredStoryId === 0 || data.odd.inspiredStoryId === 0)) {
+      console.log(' I am in use effect condition');
+      updateActivity({
+        data: {
+          ...data,
+          object: { ...data.object, inspiredStoryId: activity?.id },
+          place: { ...data.place, inspiredStoryId: activity?.id },
+          odd: { ...data.odd, inspiredStoryId: activity?.id },
+        },
+      });
+      console.log('step 5 data', data);
+    }
+  }, [activity?.id, data, updateActivity]);
 
   const onPublish = async () => {
+    console.log({ activity });
     window.sessionStorage.setItem(`story-step-1-next`, 'false');
     setIsLoading(true);
     const success = await save(true);
