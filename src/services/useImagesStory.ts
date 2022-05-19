@@ -20,7 +20,6 @@ export const useImageStories = () => {
       if (!village) {
         return;
       }
-      console.log('I am here');
       const response = await axiosLoggedRequest({
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
@@ -182,15 +181,13 @@ export const useImageStoryRequests = () => {
           null,
           undefined,
         );
-        //We exit the function because no delete intended
-        console.log({ newActivityData });
+        //We exit the function because no delete is expected
         return;
       }
       const response = await axiosLoggedRequest({
         method: 'DELETE',
         url: `/stories/${id}`,
       });
-      console.log('je suis dans delete');
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
@@ -200,7 +197,7 @@ export const useImageStoryRequests = () => {
       queryClient.invalidateQueries('stories');
       queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, enqueueSnackbar, getAllStories, queryClient],
+    [activity, axiosLoggedRequest, createNewActivity, enqueueSnackbar, getAllStories, queryClient],
   );
 
   return {

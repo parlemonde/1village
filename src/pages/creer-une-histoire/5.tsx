@@ -60,10 +60,9 @@ const StoryStep5 = () => {
     }
   }, [activity, router]);
 
-  //TODO : useEffect here for update inspiredStoryId if equal to 0
+  // useEffect here to update inspiredStoryId if equal to 0
   React.useEffect(() => {
     if (data !== null && (data.object.inspiredStoryId === 0 || data.place.inspiredStoryId === 0 || data.odd.inspiredStoryId === 0)) {
-      console.log(' I am in use effect condition');
       updateActivity({
         data: {
           ...data,
@@ -72,12 +71,10 @@ const StoryStep5 = () => {
           odd: { ...data.odd, inspiredStoryId: activity?.id },
         },
       });
-      console.log('step 5 data', data);
     }
   }, [activity?.id, data, updateActivity]);
 
   const onPublish = async () => {
-    console.log({ activity });
     window.sessionStorage.setItem(`story-step-1-next`, 'false');
     setIsLoading(true);
     const success = await save(true);

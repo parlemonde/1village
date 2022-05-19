@@ -54,7 +54,7 @@ const StoryStep2 = () => {
     updateActivity({
       data: {
         ...data,
-        object: { ...object, inspiredStoryId: activity?.id, imageId: 0 },
+        object: { ...object, inspiredStoryId: activity?.id },
         place: { ...place, inspiredStoryId: activity?.id, imageUrl, imageId: 0 },
         isOriginal: true,
       },
