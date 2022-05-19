@@ -31,7 +31,7 @@ interface ActivityContextValue {
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<ActivitySaveResponse>;
-  createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData): Promise<void>;
+  createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>({
@@ -169,12 +169,12 @@ export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithC
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: number, subType?: number, initialData?: AnyData) => {
+    async (type: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean) => {
       if (user === null || village === null) {
         return;
       }
 
-      const userId = user.id;
+      const userId = isVillageActivity ? undefined : user.id;
       const villageId = village.id;
       const responsePublished = await axiosLoggedRequest({
         method: 'GET',

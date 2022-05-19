@@ -7,7 +7,7 @@ import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 
-export const SecondPhase = () => {
+export const ThirdPhase = () => {
   const { setSelectedPhase } = React.useContext(VillageContext);
   const { axiosLoggedRequest, user, setUser } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -21,14 +21,14 @@ export const SecondPhase = () => {
     const response = await axiosLoggedRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
-      data: { firstLogin: 2 },
+      data: { firstLogin: 3 },
     });
     if (response.error) {
       enqueueSnackbar('Une erreur inconnue est survenue...', {
         variant: 'error',
       });
     } else {
-      setUser({ ...(user || {}), firstLogin: 2 });
+      setUser({ ...(user || {}), firstLogin: 3 });
     }
   };
 
@@ -36,7 +36,7 @@ export const SecondPhase = () => {
     <div style={{ width: '100%' }}>
       <Modal
         open={isModalOpen}
-        title="La phase 2 est active, et l'identité de vos Pélicopains est dévoilée !"
+        title="La phase 3 est active !"
         maxWidth="md"
         fullWidth
         onClose={() => {}}
@@ -47,33 +47,11 @@ export const SecondPhase = () => {
           <>
             <div id="new-user-desc" style={{ minHeight: '15rem', display: 'flex', justifyContent: 'center', textAlign: 'center', marginTop: '2rem' }}>
               <div>
-                <p>Si vous n&apos;avez pas encore résolu l&apos;énigme avec votre classe, retournez sur la phase 1.</p>
+                <p>{'Si vous voulez poursuivre les échanges avec vos pélicopains, retournez sur la phase 2'}</p>
                 <Button
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                     event.preventDefault();
-                    setSelectedPhase(1);
-                    setIsModalOpen(false);
-                  }}
-                  href={'/'}
-                  color="primary"
-                  variant={'outlined'}
-                  className="navigation__button full-width"
-                  style={{
-                    justifyContent: 'flex-start',
-                    width: 'auto',
-                  }}
-                >
-                  Retourner sur la phase 1
-                </Button>
-              </div>
-              <div>
-                <p>Si vous souhaitez débuter les échanges avec vos Pélicopains, poursuivez sur la phase 2.</p>
-                <Button
-                  component="a"
-                  onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                    event.preventDefault();
-                    updateUser();
                     setSelectedPhase(2);
                     setIsModalOpen(false);
                   }}
@@ -86,7 +64,29 @@ export const SecondPhase = () => {
                     width: 'auto',
                   }}
                 >
-                  Poursuivre sur la phase 2
+                  Retourner sur la phase 2
+                </Button>
+              </div>
+              <div>
+                <p>{"Si vous souhaitez débuter l'imagination du village idéal, poursuivez sur la phase 3."}</p>
+                <Button
+                  component="a"
+                  onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                    event.preventDefault();
+                    updateUser();
+                    setSelectedPhase(3);
+                    setIsModalOpen(false);
+                  }}
+                  href={'/'}
+                  color="primary"
+                  variant={'outlined'}
+                  className="navigation__button full-width"
+                  style={{
+                    justifyContent: 'flex-start',
+                    width: 'auto',
+                  }}
+                >
+                  Poursuivre sur la phase 3
                 </Button>
               </div>
             </div>
