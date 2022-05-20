@@ -33,19 +33,7 @@ const StoryStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      if (!('edit' in router.query)) {
-        created.current = true;
-        createNewActivity(
-          ActivityType.STORY,
-          undefined,
-          {
-            ...DEFAULT_STORY_DATA,
-          },
-          null,
-          null,
-          undefined,
-        );
-      } else if (activity && !isStory(activity)) {
+      if (!('edit' in router.query) || (activity && !isStory(activity))) {
         created.current = true;
         createNewActivity(
           ActivityType.STORY,

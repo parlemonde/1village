@@ -164,11 +164,11 @@ const StoryStep5 = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.object?.imageUrl === '' ? warningColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data.object?.imageUrl === '' ? warningColor : primaryColor}`,
                       }}
                     >
-                      {data?.object?.imageUrl && (
-                        <Image layout="fill" objectFit="contain" alt="image de l'objet" src={data?.object?.imageUrl} unoptimized />
+                      {data.object?.imageUrl && (
+                        <Image layout="fill" objectFit="contain" alt="image de l'objet" src={data.object?.imageUrl} unoptimized />
                       )}
                     </div>
                   </KeepRatio>
@@ -179,7 +179,7 @@ const StoryStep5 = () => {
                   className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}
                   style={{ margin: '0.5rem' }}
                 >
-                  <p>{data?.object?.description || ''}</p>
+                  <p>{data.object?.description || ''}</p>
                 </div>
               </Grid>
             </Grid>
@@ -207,12 +207,10 @@ const StoryStep5 = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.place?.imageUrl === '' ? warningColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data.place?.imageUrl === '' ? warningColor : primaryColor}`,
                       }}
                     >
-                      {data?.place?.imageUrl && (
-                        <Image layout="fill" objectFit="contain" alt="image du lieu" src={data?.place?.imageUrl} unoptimized />
-                      )}
+                      {data.place?.imageUrl && <Image layout="fill" objectFit="contain" alt="image du lieu" src={data.place?.imageUrl} unoptimized />}
                     </div>
                   </KeepRatio>
                 </ButtonBase>
@@ -222,7 +220,7 @@ const StoryStep5 = () => {
                   className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}
                   style={{ margin: '0.5rem' }}
                 >
-                  <p>{data?.place?.description || ''}</p>
+                  <p>{data.place?.description || ''}</p>
                 </div>
               </Grid>
             </Grid>
@@ -250,15 +248,15 @@ const StoryStep5 = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.odd?.imageUrl === '' ? warningColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data.odd?.imageUrl === '' ? warningColor : primaryColor}`,
                       }}
                     >
-                      {data?.odd?.imageUrl && (
+                      {data.odd?.imageUrl && (
                         <Image
                           layout="fill"
                           objectFit="contain"
                           alt="image de l'objectif de développement durable"
-                          src={data?.odd?.imageUrl}
+                          src={data.odd?.imageUrl}
                           unoptimized
                         />
                       )}
@@ -271,7 +269,7 @@ const StoryStep5 = () => {
                   className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}
                   style={{ margin: '0.5rem' }}
                 >
-                  <p>{data?.odd?.description || ''}</p>
+                  <p>{data.odd?.description || ''}</p>
                 </div>
               </Grid>
             </Grid>
@@ -299,11 +297,11 @@ const StoryStep5 = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.tale?.imageStory === '' ? warningColor : primaryColor}`,
+                        border: `1px solid ${!isValid && data.tale?.imageStory === '' ? warningColor : primaryColor}`,
                       }}
                     >
-                      {data?.tale?.imageStory && (
-                        <Image layout="fill" objectFit="contain" alt="image de l'histoire" src={data?.tale?.imageStory} unoptimized />
+                      {data.tale?.imageStory && (
+                        <Image layout="fill" objectFit="contain" alt="image de l'histoire" src={data.tale?.imageStory} unoptimized />
                       )}
                     </div>
                   </KeepRatio>
@@ -314,7 +312,7 @@ const StoryStep5 = () => {
                   className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(3) })}
                   style={{ margin: '0.5rem' }}
                 >
-                  <p>{data?.tale?.tale || ''}</p>
+                  <p>{data.tale?.tale || ''}</p>
                 </div>
               </Grid>
             </Grid>

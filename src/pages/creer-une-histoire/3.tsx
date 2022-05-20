@@ -96,12 +96,12 @@ const StoryStep3 = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        {data?.odd?.imageUrl ? (
+                        {data.odd?.imageUrl ? (
                           <Image
                             layout="fill"
                             objectFit="cover"
                             alt="image de l'objectif de développement durable"
-                            src={data?.odd?.imageUrl}
+                            src={data.odd?.imageUrl}
                             unoptimized
                           />
                         ) : (
@@ -110,7 +110,7 @@ const StoryStep3 = () => {
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.odd?.imageUrl && (
+                  {data.odd?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
@@ -127,7 +127,7 @@ const StoryStep3 = () => {
                     id={0}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={data?.odd?.imageUrl || ''}
+                    imageUrl={data.odd?.imageUrl || ''}
                     setImageUrl={setImage}
                   />
                 </div>
@@ -136,7 +136,7 @@ const StoryStep3 = () => {
                   <Select
                     labelId="select-ODD"
                     id="select-ODD-outlined"
-                    value={oDDChoice || data?.odd?.description}
+                    value={oDDChoice || data.odd?.description}
                     onChange={(event) => {
                       setODDChoice(event.target.value as string);
                       const { odd } = data;

@@ -102,15 +102,15 @@ const StoryStep2 = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        {data?.place?.imageUrl ? (
-                          <Image layout="fill" objectFit="cover" alt="image du lieu" src={data?.place?.imageUrl} unoptimized />
+                        {data.place?.imageUrl ? (
+                          <Image layout="fill" objectFit="cover" alt="image du lieu" src={data.place?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.place?.imageUrl && (
+                  {data.place?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
@@ -127,7 +127,7 @@ const StoryStep2 = () => {
                     id={0}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={data?.place?.imageUrl || ''}
+                    imageUrl={data.place?.imageUrl || ''}
                     setImageUrl={setImage}
                   />
                 </div>
@@ -135,7 +135,7 @@ const StoryStep2 = () => {
               <TextField
                 id="standard-multiline-static"
                 label="Décrivez le lieu extraordinaire"
-                value={data?.place?.description || ''}
+                value={data.place?.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
                 multiline
@@ -145,7 +145,7 @@ const StoryStep2 = () => {
                   maxLength: 400,
                 }}
               />
-              {data?.place?.description ? (
+              {data.place?.description ? (
                 <div style={{ width: '100%', textAlign: 'right' }}>
                   <span className="text text--small">{data.place.description.length}/400</span>
                 </div>

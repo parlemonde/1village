@@ -101,15 +101,15 @@ const StoryStep4 = () => {
                         justifyContent: 'center',
                       }}
                     >
-                      {data?.tale?.imageStory ? (
-                        <Image layout="fill" objectFit="cover" alt="image de l'histoire" src={data?.tale?.imageStory} unoptimized />
+                      {data.tale?.imageStory ? (
+                        <Image layout="fill" objectFit="cover" alt="image de l'histoire" src={data.tale?.imageStory} unoptimized />
                       ) : (
                         <AddIcon style={{ fontSize: '80px' }} />
                       )}
                     </div>
                   </KeepRatio>
                 </ButtonBase>
-                {data?.tale?.imageStory && (
+                {data.tale?.imageStory && (
                   <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                     <DeleteButton
                       onDelete={() => {
@@ -125,7 +125,7 @@ const StoryStep4 = () => {
                   id={0}
                   isModalOpen={isImageModalOpen}
                   setIsModalOpen={setIsImageModalOpen}
-                  imageUrl={data?.tale?.imageStory || ''}
+                  imageUrl={data.tale?.imageStory || ''}
                   setImageUrl={setImage}
                 />
               </div>
@@ -135,7 +135,7 @@ const StoryStep4 = () => {
               label="Écrivez votre histoire du Village idéal"
               rows={8}
               multiline
-              value={data?.tale?.tale || ''}
+              value={data.tale?.tale || ''}
               onChange={dataChange('tale')}
               variant="outlined"
               style={{ width: '100%', marginTop: '25px', color: 'primary' }}
