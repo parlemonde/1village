@@ -29,26 +29,26 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     return;
   }
 
-  const objectImages = await getRepository(Image)
-    .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
-    .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
-    .orderBy('RAND()')
-    .getMany();
-
-  const placeImages = await getRepository(Image)
-    .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
-    .andWhere('image.imageType = :type', { type: ImageType.PLACE })
-    .orderBy('RAND()')
-    .getMany();
-
-  const oddImages = await getRepository(Image)
-    .createQueryBuilder('image')
-    .where('image.villageId = :villageId', { villageId })
-    .andWhere('image.imageType = :type', { type: ImageType.ODD })
-    .orderBy('RAND()')
-    .getMany();
+  const [objectImages, placeImages, oddImages] = await Promise.all([
+    getRepository(Image)
+      .createQueryBuilder('image')
+      .where('image.villageId = :villageId', { villageId })
+      .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
+      .orderBy('RAND()')
+      .getMany(),
+    getRepository(Image)
+      .createQueryBuilder('image')
+      .where('image.villageId = :villageId', { villageId })
+      .andWhere('image.imageType = :type', { type: ImageType.PLACE })
+      .orderBy('RAND()')
+      .getMany(),
+    getRepository(Image)
+      .createQueryBuilder('image')
+      .where('image.villageId = :villageId', { villageId })
+      .andWhere('image.imageType = :type', { type: ImageType.ODD })
+      .orderBy('RAND()')
+      .getMany(),
+  ]);
 
   res.sendJSON({ objects: objectImages, places: placeImages, odds: oddImages });
 });
@@ -68,11 +68,7 @@ storyController.delete({ path: '/:imageId', userType: UserType.TEACHER }, async 
   if (image === undefined) {
     res.status(204).send();
     return;
-  } else if (isAdmin) {
-    await getRepository(Image).delete({ id });
-  } else {
-    await getRepository(Image).delete({ id, userId: req.user?.id ?? 0 });
-  }
+  } else isAdmin ? await getRepository(Image).delete({ id }) : await getRepository(Image).delete({ id, userId: req.user?.id ?? 0 });
   res.status(204).send();
 });
 
