@@ -88,7 +88,6 @@ export const useImageStories = () => {
           url: `/activities/${id}`,
         });
       const stories = [] as Activity[];
-      // https://advancedweb.hu/how-to-use-async-functions-with-array-foreach-in-javascript/
       await Promise.all(
         activityStoryIds.map(async (activityStoryId) => {
           await getStoryData(activityStoryId).then((response) => stories.push(response.data));
@@ -125,29 +124,27 @@ export const useImageStoryRequests = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { getAllStories } = useImageStories();
   const { activity, createNewActivity } = React.useContext(ActivityContext);
-  //1. Get activities Reinvent story
-  //2. Filter with id of image we are looking for
-  //3. If True (image id = object.imageId) => new activity
-  //4. If False => update activity and delete old image
 
   const deleteStoryImage = React.useCallback(
     async (id: number | null, data: StoriesData, step?: number) => {
       if (!id) {
         return;
       }
-
       // This will return an array of used images.
       const storiesDatas = await getAllStories(id).catch();
       if (activity && storiesDatas && storiesDatas.length >= 1) {
         let newActivityData = {} as StoriesData;
+        const imageData = {
+          imageId: 0,
+          imageUrl: '',
+          inspiredStoryId: 0,
+        };
         if (step === 1) {
           newActivityData = {
             ...data,
             object: {
               ...data.object,
-              imageId: 0,
-              imageUrl: '',
-              inspiredStoryId: 0,
+              ...imageData,
             },
           };
         } else if (step === 2) {
@@ -155,9 +152,7 @@ export const useImageStoryRequests = () => {
             ...data,
             place: {
               ...data.place,
-              imageId: 0,
-              imageUrl: '',
-              inspiredStoryId: 0,
+              ...imageData,
             },
           };
         } else if (step === 3) {
@@ -165,9 +160,7 @@ export const useImageStoryRequests = () => {
             ...data,
             odd: {
               ...data.odd,
-              imageId: 0,
-              imageUrl: '',
-              inspiredStoryId: 0,
+              ...imageData,
             },
           };
         }
