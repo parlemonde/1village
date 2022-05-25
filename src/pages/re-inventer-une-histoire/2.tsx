@@ -30,13 +30,6 @@ const ReInventStoryStep2 = () => {
     return [];
   }, [data]);
 
-  // Useful when image is changed in step 1
-  React.useEffect(() => {
-    if (data.object.inspiredStoryId === 0) {
-      updateActivity({ data: { ...data, object: { ...data.object, inspiredStoryId: activity?.id } } });
-    }
-  }, [activity?.id, data, updateActivity]);
-
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/re-inventer-une-histoire');
@@ -55,7 +48,7 @@ const ReInventStoryStep2 = () => {
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { place } = data;
-    updateActivity({ data: { ...data, place: { ...place, imageId: 0, imageUrl, inspiredStoryId: activity?.id } } });
+    updateActivity({ data: { ...data, place: { ...place, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
   };
 
   const onNext = () => {

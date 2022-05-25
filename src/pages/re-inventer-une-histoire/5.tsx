@@ -23,14 +23,13 @@ import { UserType } from 'types/user.type';
 
 const ReInventStoryStep5 = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
+  const { activity, save, updateActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
   const isUserObservator = user?.type === UserType.OBSERVATOR;
 
-  // console.table([data.object, data.place, data.odd, data.tale]);
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
@@ -54,6 +53,32 @@ const ReInventStoryStep5 = () => {
   const isValid = errorSteps.length === 0;
 
   //TODO : implémenter le cas où les 3 images on été changé et changer l'ACTIVITY.TYPE
+
+  // useEffect here to update inspiredStoryId if equal to 0
+  React.useEffect(() => {
+    if (data !== null && data.object.inspiredStoryId === 0) {
+      updateActivity({
+        data: {
+          ...data,
+          object: { ...data.object, inspiredStoryId: activity?.id },
+        },
+      });
+    } else if (data !== null && data.place.inspiredStoryId === 0) {
+      updateActivity({
+        data: {
+          ...data,
+          place: { ...data.place, inspiredStoryId: activity?.id },
+        },
+      });
+    } else if (data !== null && data.odd.inspiredStoryId === 0) {
+      updateActivity({
+        data: {
+          ...data,
+          odd: { ...data.odd, inspiredStoryId: activity?.id },
+        },
+      });
+    }
+  }, [activity?.id, data, updateActivity]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {

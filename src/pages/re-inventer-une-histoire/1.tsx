@@ -26,17 +26,17 @@ const ReInventStoryStep1 = () => {
   const data = activity?.data as StoriesData;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
-  // Update the "object step" image url, when upload an image.
-  const setImage = (imageUrl: string) => {
-    const { object } = data;
-    updateActivity({ data: { ...data, object: { ...object, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
-  };
-
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
     const { object } = data;
     const newData = { ...data, object: { ...object, [key]: value } };
     updateActivity({ data: newData });
+  };
+
+  // Update the "object step" image url, when upload an image.
+  const setImage = (imageUrl: string) => {
+    const { object } = data;
+    updateActivity({ data: { ...data, object: { ...object, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
   };
 
   React.useEffect(() => {
