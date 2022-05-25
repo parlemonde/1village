@@ -1,22 +1,18 @@
-import classNames from 'classnames';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Tooltip } from '@mui/material';
-import { Grid, Button, Backdrop, CircularProgress, ButtonBase } from '@mui/material';
+import { Button, Backdrop, CircularProgress } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
-import { KeepRatio } from 'src/components/KeepRatio';
+import { ImageStepContainer } from 'src/components/FinalStep/ImageStepContainer';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
-import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { bgPage, primaryColor, warningColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
 import type { StoriesData, StoryElement } from 'types/story.type';
 import { UserType } from 'types/user.type';
@@ -166,182 +162,40 @@ const ReInventStoryStep5 = () => {
           )}
 
           {/* Object */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(0) })}>
-            <Grid display="flex" direction="row" alignItems="center" spacing={2}>
-              <EditButton
-                onClick={() => {
-                  router.push(`/re-inventer-une-histoire/1?edit=${activity.id}`);
-                }}
-                status={errorSteps.includes(0) ? 'warning' : 'success'}
-                style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-              />
-              <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', pointerEvents: 'none' }}>
-                  <KeepRatio ratio={2 / 3} width="100%">
-                    <div
-                      style={{
-                        backgroundColor: bgPage,
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.object?.imageUrl === '' ? warningColor : primaryColor}`,
-                      }}
-                    >
-                      {data?.object?.imageUrl && (
-                        <Image layout="fill" objectFit="contain" alt="image de l'objet" src={data?.object?.imageUrl} unoptimized />
-                      )}
-                    </div>
-                  </KeepRatio>
-                </ButtonBase>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <div
-                  className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}
-                  style={{ margin: '0.5rem' }}
-                >
-                  <p>{data?.object?.description || ''}</p>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+          <ImageStepContainer
+            urlStep={`/re-inventer-une-histoire/1?edit=${activity.id}`}
+            imageUrl={data?.object?.imageUrl}
+            isValid={isValid}
+            error={errorSteps.includes(0)}
+            description={data?.object?.description}
+          />
 
           {/* Place */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(1) })}>
-            <Grid display="flex" direction="row" alignItems="center" spacing={2}>
-              <EditButton
-                onClick={() => {
-                  router.push(`/re-inventer-une-histoire/2`);
-                }}
-                status={errorSteps.includes(1) ? 'warning' : 'success'}
-                style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-              />
-              <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', pointerEvents: 'none' }}>
-                  <KeepRatio ratio={2 / 3} width="100%">
-                    <div
-                      style={{
-                        backgroundColor: bgPage,
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.place?.imageUrl === '' ? warningColor : primaryColor}`,
-                      }}
-                    >
-                      {data?.place?.imageUrl && (
-                        <Image layout="fill" objectFit="contain" alt="image de la lieu" src={data?.place?.imageUrl} unoptimized />
-                      )}
-                    </div>
-                  </KeepRatio>
-                </ButtonBase>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <div
-                  className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}
-                  style={{ margin: '0.5rem' }}
-                >
-                  <p>{data?.place?.description || ''}</p>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+          <ImageStepContainer
+            urlStep={`/re-inventer-une-histoire/2`}
+            imageUrl={data?.place?.imageUrl}
+            isValid={isValid}
+            error={errorSteps.includes(1)}
+            description={data?.place?.description}
+          />
 
           {/* ODD */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(2) })}>
-            <Grid display="flex" direction="row" alignItems="center" spacing={2}>
-              <EditButton
-                onClick={() => {
-                  router.push(`/re-inventer-une-histoire/3`);
-                }}
-                status={errorSteps.includes(2) ? 'warning' : 'success'}
-                style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-              />
-              <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', pointerEvents: 'none' }}>
-                  <KeepRatio ratio={2 / 3} width="100%">
-                    <div
-                      style={{
-                        backgroundColor: bgPage,
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.odd?.imageUrl === '' ? warningColor : primaryColor}`,
-                      }}
-                    >
-                      {data?.odd?.imageUrl && (
-                        <Image
-                          layout="fill"
-                          objectFit="contain"
-                          alt="image de l'objectif de développement durable"
-                          src={data?.odd?.imageUrl}
-                          unoptimized
-                        />
-                      )}
-                    </div>
-                  </KeepRatio>
-                </ButtonBase>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <div
-                  className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}
-                  style={{ margin: '0.5rem' }}
-                >
-                  <p>{data?.odd?.description || ''}</p>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+          <ImageStepContainer
+            urlStep={`/re-inventer-une-histoire/3`}
+            imageUrl={data?.odd?.imageUrl}
+            isValid={isValid}
+            error={errorSteps.includes(2)}
+            description={data?.odd?.description}
+          />
 
           {/* Tale */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(3) })}>
-            <Grid display="flex" direction="row" alignItems="center" spacing={2}>
-              <EditButton
-                onClick={() => {
-                  router.push(`/re-inventer-une-histoire/4`);
-                }}
-                status={errorSteps.includes(3) ? 'warning' : 'success'}
-                style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-              />
-              <Grid item xs={12} md={4}>
-                <ButtonBase style={{ width: '100%', pointerEvents: 'none' }}>
-                  <KeepRatio ratio={2 / 3} width="100%">
-                    <div
-                      style={{
-                        backgroundColor: bgPage,
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '0.5rem',
-                        border: `1px solid ${!isValid && data?.tale?.imageStory === '' ? warningColor : primaryColor}`,
-                      }}
-                    >
-                      {data?.tale?.imageStory && (
-                        <Image layout="fill" objectFit="contain" alt="image de l'histoire" src={data?.tale?.imageStory} unoptimized />
-                      )}
-                    </div>
-                  </KeepRatio>
-                </ButtonBase>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <div
-                  className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(3) })}
-                  style={{ margin: '0.5rem' }}
-                >
-                  <p>{data?.tale?.tale || ''}</p>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+          <ImageStepContainer
+            urlStep={`/re-inventer-une-histoire/4`}
+            imageUrl={data?.tale?.imageStory}
+            isValid={isValid}
+            error={errorSteps.includes(3)}
+            description={data?.tale?.tale}
+          />
         </div>
         <StepsButton prev="/re-inventer-une-histoire/4" />
       </div>
