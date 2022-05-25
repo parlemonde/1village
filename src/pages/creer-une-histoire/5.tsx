@@ -143,7 +143,7 @@ const StoryStep5 = () => {
           )}
 
           {/* Object */}
-          <div className={classNames('preview-block')}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(0) })}>
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
@@ -186,7 +186,7 @@ const StoryStep5 = () => {
           </div>
 
           {/* Place */}
-          <div className={classNames('preview-block')}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(1) })}>
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
@@ -227,7 +227,7 @@ const StoryStep5 = () => {
           </div>
 
           {/* ODD */}
-          <div className={classNames('preview-block')}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(2) })}>
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
@@ -276,7 +276,7 @@ const StoryStep5 = () => {
           </div>
 
           {/* Tale */}
-          <div className={classNames('preview-block')}>
+          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(3) })}>
             <Grid display="flex" direction="row" alignItems="center" spacing={2}>
               <EditButton
                 onClick={() => {
