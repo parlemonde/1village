@@ -18,7 +18,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { bgPage, primaryColor, warningColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
-import type { StoriesData } from 'types/story.type';
+import type { StoriesData, StoryElement } from 'types/story.type';
 import { UserType } from 'types/user.type';
 
 const ReInventStoryStep5 = () => {
@@ -52,33 +52,36 @@ const ReInventStoryStep5 = () => {
 
   const isValid = errorSteps.length === 0;
 
-  //TODO : implémenter le cas où les 3 images on été changé et changer l'ACTIVITY.TYPE
+  const dataStoryToUpdate = React.useCallback(
+    (key: keyof StoriesData): StoriesData => {
+      const { [key]: item } = data;
+      return {
+        ...data,
+        [key]: {
+          ...(item as StoryElement),
+          inspiredStoryId: activity?.id,
+        },
+      };
+    },
+    [data, activity],
+  );
 
   // useEffect here to update inspiredStoryId if equal to 0
   React.useEffect(() => {
     if (data !== null && data.object.inspiredStoryId === 0) {
       updateActivity({
-        data: {
-          ...data,
-          object: { ...data.object, inspiredStoryId: activity?.id },
-        },
+        data: dataStoryToUpdate('object'),
       });
     } else if (data !== null && data.place.inspiredStoryId === 0) {
       updateActivity({
-        data: {
-          ...data,
-          place: { ...data.place, inspiredStoryId: activity?.id },
-        },
+        data: dataStoryToUpdate('place'),
       });
     } else if (data !== null && data.odd.inspiredStoryId === 0) {
       updateActivity({
-        data: {
-          ...data,
-          odd: { ...data.odd, inspiredStoryId: activity?.id },
-        },
+        data: dataStoryToUpdate('odd'),
       });
     }
-  }, [activity?.id, data, updateActivity]);
+  }, [data, dataStoryToUpdate, updateActivity]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
