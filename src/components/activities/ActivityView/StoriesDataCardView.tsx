@@ -3,6 +3,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 
 import { useImageStories } from 'src/services/useImagesStory';
+import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
@@ -10,27 +11,29 @@ import { ActivityCard } from '../ActivityCard';
 
 interface StoriesDataCardViewProps {
   dataStories?: Activity[];
-  user: User;
   column?: boolean;
   noTitle?: boolean;
-  inspiredStoriesIds?: (number | null | undefined)[];
+  inspiredStoriesIds?: number[];
 }
 
-const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStoriesIds }: StoriesDataCardViewProps) => {
+const StoriesDataCardView = ({ dataStories, column, noTitle, inspiredStoriesIds }: StoriesDataCardViewProps) => {
   const { getStoriesByIds } = useImageStories();
   const [dataStoriesFromInspiredIds, setDataStoriesFromInspiredIds] = React.useState<Activity[]>([]);
-
-  //Get stories activity from story inspiredIds keys
-  const getStoryActivity = React.useCallback(async () => {
-    const datas = await getStoriesByIds(inspiredStoriesIds as number[]).then((data) => setDataStoriesFromInspiredIds(data as Activity[]));
-    return datas;
-  }, [getStoriesByIds, inspiredStoriesIds]);
+  const { users } = useVillageUsers();
+  const usersMap = React.useMemo(() => {
+    return users.reduce<{ [key: number]: User }>((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {});
+  }, [users]);
 
   React.useEffect(() => {
     if (inspiredStoriesIds) {
-      getStoryActivity().catch();
+      getStoriesByIds(inspiredStoriesIds)
+        .then((data) => setDataStoriesFromInspiredIds(data as Activity[]))
+        .catch();
     }
-  }, [getStoryActivity, inspiredStoriesIds]);
+  }, [inspiredStoriesIds, getStoriesByIds]);
 
   let storyCard = <></>;
 
@@ -38,8 +41,8 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStori
     storyCard = (
       <>
         {dataStoriesFromInspiredIds.map((story) => (
-          <Grid item xs={column ? 12 : 4} key={story.id}>
-            <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+          <Grid item xs={column ? 12 : 12 / dataStoriesFromInspiredIds.length} key={story.id}>
+            <ActivityCard key={story.id} activity={story} user={usersMap[story.userId]} isSelf={false} noButtons={false} showEditButtons={false} />
           </Grid>
         ))}
       </>
@@ -48,8 +51,8 @@ const StoriesDataCardView = ({ dataStories, user, column, noTitle, inspiredStori
     storyCard = (
       <>
         {dataStories.map((story) => (
-          <Grid item xs={column ? 12 : 4} key={story.id}>
-            <ActivityCard key={story.id} activity={story} user={user} isSelf={false} noButtons={false} showEditButtons={false} />
+          <Grid item xs={column ? 12 : 12 / dataStories.length} key={story.id}>
+            <ActivityCard key={story.id} activity={story} user={usersMap[story.userId]} isSelf={false} noButtons={false} showEditButtons={false} />
           </Grid>
         ))}
       </>

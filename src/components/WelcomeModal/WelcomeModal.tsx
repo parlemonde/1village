@@ -8,8 +8,6 @@ import { FirstPhase } from './FirstPhase';
 import { SecondPhase } from './SecondPhase';
 import { ThirdPhase } from './ThirdPhase';
 
-// import { ThirdPhase } from './ThirdPhase';
-
 export const WelcomeModal = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);

@@ -1,9 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Container } from '@mui/material';
-import { Box } from '@mui/system';
-
 import {
   isDefi,
   isEnigme,
@@ -84,13 +81,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
         {isSymbol(activity) && <ContentView content={activity.content} />}
         {isReportage(activity) && <ContentView content={activity.content} />}
         {isReaction(activity) && <ContentView content={activity.content} />}
-        {isStory(activity) && (
-          <Container maxWidth="lg">
-            <Box>
-              <StoryActivityView activity={activity} user={user} />
-            </Box>
-          </Container>
-        )}
+        {isStory(activity) && <StoryActivityView activity={activity} user={user} />}
         {isVerseRecord(activity) && <VerseActivityView activity={activity} user={user} />}
       </div>
     )

@@ -64,25 +64,25 @@ export const Navigation = (): JSX.Element => {
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [firstStoryCreated, setFirstStoryCreated] = React.useState(true);
+  const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
 
   const getStories = React.useCallback(async () => {
+    if (!village) {
+      setFirstStoryCreated(false);
+      return;
+    }
     const response = await axiosLoggedRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl({
-        villageId: village?.id,
+        villageId: village.id,
         type: ActivityType.STORY,
       })}`,
     });
-    if (response.data.length > 0) {
-      setFirstStoryCreated(true);
-    } else {
-      setFirstStoryCreated(false);
-    }
-  }, [axiosLoggedRequest, village?.id]);
+    setFirstStoryCreated(response.data.length > 0);
+  }, [axiosLoggedRequest, village]);
 
   React.useEffect(() => {
-    getStories();
+    getStories().catch(console.error);
   }, [getStories]);
 
   // check color of icons
@@ -156,6 +156,7 @@ export const Navigation = (): JSX.Element => {
         path: '/re-inventer-une-histoire',
         icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
+        disabled: firstStoryCreated === false,
       },
       {
         label: 'Chanter un couplet',
@@ -165,7 +166,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [village],
+    [village, firstStoryCreated],
   );
 
   const fixedTabs = React.useMemo(
@@ -219,7 +220,7 @@ export const Navigation = (): JSX.Element => {
                     router.push(tab.path);
                   }}
                   href={tab.path}
-                  color={'primary'}
+                  color="primary"
                   startIcon={tab.icon}
                   variant={tab.path.split('/')[1] === currentPathName ? 'contained' : 'outlined'}
                   className="navigation__button full-width"
@@ -230,12 +231,7 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={
-                    village === null ||
-                    (tab.phase !== undefined && tab.phase > village.activePhase) ||
-                    (!firstStoryCreated && village.activePhase === 3 && tab.path.split('/')[1] === 're-inventer-une-histoire')
-                  }
-                  // disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.disabled}
+                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.disabled}
                 >
                   {tab.label}
                 </Button>

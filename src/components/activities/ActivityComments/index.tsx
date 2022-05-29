@@ -1,12 +1,12 @@
 import React from 'react';
 
-import type { Activity } from 'server/entities/activity';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
+import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
@@ -28,15 +28,13 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
   const [dataStories, setDataStories] = React.useState<Activity[]>([]);
 
   //Get stories activities which was inspired by this story activity
-  const getStoryActivityIds = React.useCallback(async () => {
-    await getInspiredStories(activityId).then((data) => {
-      setDataStories(data as Activity[]);
-    });
-  }, [activityId, getInspiredStories]);
-
   React.useEffect(() => {
-    getStoryActivityIds().catch();
-  }, [activityId, getStoryActivityIds]);
+    getInspiredStories(activityId)
+      .then((data) => {
+        setDataStories(data as Activity[]);
+      })
+      .catch();
+  }, [activityId, getInspiredStories]);
 
   const userMap = React.useMemo(
     () =>
@@ -67,7 +65,7 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
         </div>
       </div>
       {/* Stories space */}
-      {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} user={user} column noTitle />}
+      {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} column noTitle />}
       {data.map((o) => {
         if (o.type === 'comment') {
           const comment = o.data;
