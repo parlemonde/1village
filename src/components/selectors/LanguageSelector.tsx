@@ -15,27 +15,30 @@ interface LanguageSelectorProps {
   label?: string | React.ReactNode;
   value?: string;
   onChange?(newValue: string): void;
+  filterLanguages?: string[];
   style?: React.CSSProperties;
 }
 
-export const LanguageSelector = ({ label, value = '', onChange, style }: LanguageSelectorProps) => {
+export const LanguageSelector = ({ label, value = '', onChange, filterLanguages, style }: LanguageSelectorProps) => {
   const { languages } = useLanguages();
   const options: LanguageOption[] = React.useMemo(
     () =>
-      languages.map((option) => {
-        const firstLetter = option.french[0].toUpperCase();
-        return {
-          firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-          ...option,
-        };
-      }),
-    [languages],
+      languages
+        .filter(filterLanguages ? (c) => filterLanguages.find((c3) => c3.toLowerCase() === c.alpha3_b.toLowerCase()) : () => true)
+        .map((option) => {
+          const firstLetter = option.french[0].toUpperCase();
+          return {
+            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+            ...option,
+          };
+        }),
+    [filterLanguages, languages],
   );
   const [option, setOption] = React.useState<LanguageOption | null>(null);
 
   React.useEffect(() => {
-    if (value && value.length == 2 && languages.map((c) => c.alpha2).find((c2) => c2.toLowerCase() === value.toLowerCase())) {
-      const newOption = options.find((o) => o.alpha2.toLowerCase() === value.toLowerCase()) || null;
+    if (value && value.length == 3 && languages.map((c) => c.alpha3_b).find((c2) => c2.toLowerCase() === value.toLowerCase())) {
+      const newOption = options.find((o) => o.alpha3_b.toLowerCase() === value.toLowerCase()) || null;
       setOption(newOption);
     } else {
       setOption(null);
@@ -48,7 +51,7 @@ export const LanguageSelector = ({ label, value = '', onChange, style }: Languag
         setOption(newOption);
       }
       if (onChange) {
-        onChange(newOption ? newOption.alpha2 : '');
+        onChange(newOption ? newOption.alpha3_b : '');
       }
     },
     [value, onChange],
@@ -60,7 +63,7 @@ export const LanguageSelector = ({ label, value = '', onChange, style }: Languag
       groupBy={(option) => option.firstLetter}
       value={option}
       onChange={onChangeOption}
-      isOptionEqualToValue={(option, value) => option.alpha2 === value.alpha2}
+      isOptionEqualToValue={(option, value) => option.alpha3_b === value.alpha3_b}
       getOptionLabel={(option) => option.french}
       style={style}
       renderOption={(props, option) => (

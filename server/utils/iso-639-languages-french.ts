@@ -45,13 +45,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Afro-Asiatic languages',
-    french: 'afro-asiatiques, langues',
-    alpha2: '',
-    alpha3_b: 'afa',
-    alpha3_t: '',
-  },
-  {
     english: 'Afrihili',
     french: 'afrihili',
     alpha2: '',
@@ -101,13 +94,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Algonquian languages',
-    french: 'algonquines, langues',
-    alpha2: '',
-    alpha3_b: 'alg',
-    alpha3_t: '',
-  },
-  {
     english: 'Southern Altai',
     french: 'altai du Sud',
     alpha2: '',
@@ -122,13 +108,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'english, Old (ca.450-1100)',
-    french: 'anglo-saxon (ca.450-1100)',
-    alpha2: '',
-    alpha3_b: 'ang',
-    alpha3_t: '',
-  },
-  {
     english: 'Angika',
     french: 'angika',
     alpha2: '',
@@ -136,24 +115,10 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Apache languages',
-    french: 'apaches, langues',
-    alpha2: '',
-    alpha3_b: 'apa',
-    alpha3_t: '',
-  },
-  {
     english: 'Arabic',
     french: 'arabe',
     alpha2: 'ar',
     alpha3_b: 'ara',
-    alpha3_t: '',
-  },
-  {
-    english: 'Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)',
-    french: "araméen d'empire (700-300 BCE)",
-    alpha2: '',
-    alpha3_b: 'arc',
     alpha3_t: '',
   },
   {
@@ -185,13 +150,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Artificial languages',
-    french: 'artificielles, langues',
-    alpha2: '',
-    alpha3_b: 'art',
-    alpha3_t: '',
-  },
-  {
     english: 'Arawak',
     french: 'arawak',
     alpha2: '',
@@ -203,27 +161,6 @@ export const languages: Language[] = [
     french: 'assamais',
     alpha2: 'as',
     alpha3_b: 'asm',
-    alpha3_t: '',
-  },
-  {
-    english: 'Asturian; Bable; Leonese; Asturleonese',
-    french: 'asturien; bable; léonais; asturoléonais',
-    alpha2: '',
-    alpha3_b: 'ast',
-    alpha3_t: '',
-  },
-  {
-    english: 'Athapascan languages',
-    french: 'athapascanes, langues',
-    alpha2: '',
-    alpha3_b: 'ath',
-    alpha3_t: '',
-  },
-  {
-    english: 'Australian languages',
-    french: 'australiennes, langues',
-    alpha2: '',
-    alpha3_b: 'aus',
     alpha3_t: '',
   },
   {
@@ -259,20 +196,6 @@ export const languages: Language[] = [
     french: 'azéri',
     alpha2: 'az',
     alpha3_b: 'aze',
-    alpha3_t: '',
-  },
-  {
-    english: 'Banda languages',
-    french: 'banda, langues',
-    alpha2: '',
-    alpha3_b: 'bad',
-    alpha3_t: '',
-  },
-  {
-    english: 'Bamileke languages',
-    french: 'bamiléké, langues',
-    alpha2: '',
-    alpha3_b: 'bai',
     alpha3_t: '',
   },
   {
@@ -318,13 +241,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Baltic languages',
-    french: 'baltes, langues',
-    alpha2: '',
-    alpha3_b: 'bat',
-    alpha3_t: '',
-  },
-  {
     english: 'Beja; Bedawiyet',
     french: 'bedja',
     alpha2: '',
@@ -353,24 +269,10 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Berber languages',
-    french: 'berbères, langues',
-    alpha2: '',
-    alpha3_b: 'ber',
-    alpha3_t: '',
-  },
-  {
     english: 'Bhojpuri',
     french: 'bhojpuri',
     alpha2: '',
     alpha3_b: 'bho',
-    alpha3_t: '',
-  },
-  {
-    english: 'Bihari languages',
-    french: 'langues biharis',
-    alpha2: 'bh',
-    alpha3_b: 'bih',
     alpha3_t: '',
   },
   {
@@ -402,13 +304,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Bantu languages',
-    french: 'bantou, langues',
-    alpha2: '',
-    alpha3_b: 'bnt',
-    alpha3_t: '',
-  },
-  {
     english: 'Bosnian',
     french: 'bosniaque',
     alpha2: 'bs',
@@ -427,13 +322,6 @@ export const languages: Language[] = [
     french: 'breton',
     alpha2: 'br',
     alpha3_b: 'bre',
-    alpha3_t: '',
-  },
-  {
-    english: 'Batak languages',
-    french: 'batak, langues',
-    alpha2: '',
-    alpha3_b: 'btk',
     alpha3_t: '',
   },
   {
@@ -479,13 +367,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Central American Indian languages',
-    french: "amérindiennes de L'Amérique centrale, langues",
-    alpha2: '',
-    alpha3_b: 'cai',
-    alpha3_t: '',
-  },
-  {
     english: 'Galibi Carib',
     french: 'karib; galibi; carib',
     alpha2: '',
@@ -500,24 +381,10 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Caucasian languages',
-    french: 'caucasiennes, langues',
-    alpha2: '',
-    alpha3_b: 'cau',
-    alpha3_t: '',
-  },
-  {
     english: 'Cebuano',
     french: 'cebuano',
     alpha2: '',
     alpha3_b: 'ceb',
-    alpha3_t: '',
-  },
-  {
-    english: 'Celtic languages',
-    french: 'celtiques, langues; celtes, langues',
-    alpha2: '',
-    alpha3_b: 'cel',
     alpha3_t: '',
   },
   {
@@ -598,13 +465,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic',
-    french: "slavon d'église; vieux slave; slavon liturgique; vieux bulgare",
-    alpha2: 'cu',
-    alpha3_b: 'chu',
-    alpha3_t: '',
-  },
-  {
     english: 'Chuvash',
     french: 'tchouvache',
     alpha2: 'cv',
@@ -616,13 +476,6 @@ export const languages: Language[] = [
     french: 'cheyenne',
     alpha2: '',
     alpha3_b: 'chy',
-    alpha3_t: '',
-  },
-  {
-    english: 'Chamic languages',
-    french: 'chames, langues',
-    alpha2: '',
-    alpha3_b: 'cmc',
     alpha3_t: '',
   },
   {
@@ -703,13 +556,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Cushitic languages',
-    french: 'couchitiques, langues',
-    alpha2: '',
-    alpha3_b: 'cus',
-    alpha3_t: '',
-  },
-  {
     english: 'Czech',
     french: 'tchèque',
     alpha2: 'cs',
@@ -735,13 +581,6 @@ export const languages: Language[] = [
     french: 'dargwa',
     alpha2: '',
     alpha3_b: 'dar',
-    alpha3_t: '',
-  },
-  {
-    english: 'Land Dayak languages',
-    french: 'dayak, langues',
-    alpha2: '',
-    alpha3_b: 'day',
     alpha3_t: '',
   },
   {
@@ -787,13 +626,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Dravidian languages',
-    french: 'dravidiennes, langues',
-    alpha2: '',
-    alpha3_b: 'dra',
-    alpha3_t: '',
-  },
-  {
     english: 'Lower Sorbian',
     french: 'bas-sorabe',
     alpha2: '',
@@ -805,13 +637,6 @@ export const languages: Language[] = [
     french: 'douala',
     alpha2: '',
     alpha3_b: 'dua',
-    alpha3_t: '',
-  },
-  {
-    english: 'Dutch, Middle (ca.1050-1350)',
-    french: 'néerlandais moyen (ca. 1050-1350)',
-    alpha2: '',
-    alpha3_b: 'dum',
     alpha3_t: '',
   },
   {
@@ -868,13 +693,6 @@ export const languages: Language[] = [
     french: 'anglais',
     alpha2: 'en',
     alpha3_b: 'eng',
-    alpha3_t: '',
-  },
-  {
-    english: 'english, Middle (1100-1500)',
-    french: 'anglais moyen (1100-1500)',
-    alpha2: '',
-    alpha3_b: 'enm',
     alpha3_t: '',
   },
   {
@@ -948,13 +766,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Finno-Ugrian languages',
-    french: 'finno-ougriennes, langues',
-    alpha2: '',
-    alpha3_b: 'fiu',
-    alpha3_t: '',
-  },
-  {
     english: 'Fon',
     french: 'fon',
     alpha2: '',
@@ -967,20 +778,6 @@ export const languages: Language[] = [
     alpha2: 'fr',
     alpha3_b: 'fre',
     alpha3_t: 'fra',
-  },
-  {
-    english: 'french, Middle (ca.1400-1600)',
-    french: 'français moyen (1400-1600)',
-    alpha2: '',
-    alpha3_b: 'frm',
-    alpha3_t: '',
-  },
-  {
-    english: 'french, Old (842-ca.1400)',
-    french: 'français ancien (842-ca.1400)',
-    alpha2: '',
-    alpha3_b: 'fro',
-    alpha3_t: '',
   },
   {
     english: 'Northern Frisian',
@@ -1039,13 +836,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Germanic languages',
-    french: 'germaniques, langues',
-    alpha2: '',
-    alpha3_b: 'gem',
-    alpha3_t: '',
-  },
-  {
     english: 'Georgian',
     french: 'géorgien',
     alpha2: 'ka',
@@ -1099,20 +889,6 @@ export const languages: Language[] = [
     french: 'manx; mannois',
     alpha2: 'gv',
     alpha3_b: 'glv',
-    alpha3_t: '',
-  },
-  {
-    english: 'German, Middle High (ca.1050-1500)',
-    french: 'allemand, moyen haut (ca. 1050-1500)',
-    alpha2: '',
-    alpha3_b: 'gmh',
-    alpha3_t: '',
-  },
-  {
-    english: 'German, Old High (ca.750-1050)',
-    french: 'allemand, vieux haut (ca. 750-1050)',
-    alpha2: '',
-    alpha3_b: 'goh',
     alpha3_t: '',
   },
   {
@@ -1235,13 +1011,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Himachali languages; Western Pahari languages',
-    french: 'langues himachalis; langues paharis occidentales',
-    alpha2: '',
-    alpha3_b: 'him',
-    alpha3_t: '',
-  },
-  {
     english: 'Hindi',
     french: 'hindi',
     alpha2: 'hi',
@@ -1333,13 +1102,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Ijo languages',
-    french: 'ijo, langues',
-    alpha2: '',
-    alpha3_b: 'ijo',
-    alpha3_t: '',
-  },
-  {
     english: 'Inuktitut',
     french: 'inuktitut',
     alpha2: 'iu',
@@ -1368,24 +1130,10 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Indic languages',
-    french: 'indo-aryennes, langues',
-    alpha2: '',
-    alpha3_b: 'inc',
-    alpha3_t: '',
-  },
-  {
     english: 'Indonesian',
     french: 'indonésien',
     alpha2: 'id',
     alpha3_b: 'ind',
-    alpha3_t: '',
-  },
-  {
-    english: 'Indo-European languages',
-    french: 'indo-européennes, langues',
-    alpha2: '',
-    alpha3_b: 'ine',
     alpha3_t: '',
   },
   {
@@ -1400,20 +1148,6 @@ export const languages: Language[] = [
     french: 'inupiaq',
     alpha2: 'ik',
     alpha3_b: 'ipk',
-    alpha3_t: '',
-  },
-  {
-    english: 'Iranian languages',
-    french: 'iraniennes, langues',
-    alpha2: '',
-    alpha3_b: 'ira',
-    alpha3_t: '',
-  },
-  {
-    english: 'Iroquoian languages',
-    french: 'iroquoises, langues',
-    alpha2: '',
-    alpha3_b: 'iro',
     alpha3_t: '',
   },
   {
@@ -1501,13 +1235,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Karen languages',
-    french: 'karen, langues',
-    alpha2: '',
-    alpha3_b: 'kar',
-    alpha3_t: '',
-  },
-  {
     english: 'Kashmiri',
     french: 'kashmiri',
     alpha2: 'ks',
@@ -1547,13 +1274,6 @@ export const languages: Language[] = [
     french: 'khasi',
     alpha2: '',
     alpha3_b: 'kha',
-    alpha3_t: '',
-  },
-  {
-    english: 'Khoisan languages',
-    french: 'khoïsan, langues',
-    alpha2: '',
-    alpha3_b: 'khi',
     alpha3_t: '',
   },
   {
@@ -1652,13 +1372,6 @@ export const languages: Language[] = [
     french: 'carélien',
     alpha2: '',
     alpha3_b: 'krl',
-    alpha3_t: '',
-  },
-  {
-    english: 'Kru languages',
-    french: 'krou, langues',
-    alpha2: '',
-    alpha3_b: 'kro',
     alpha3_t: '',
   },
   {
@@ -1900,13 +1613,6 @@ export const languages: Language[] = [
     alpha3_t: 'mri',
   },
   {
-    english: 'Austronesian languages',
-    french: 'austronésiennes, langues',
-    alpha2: '',
-    alpha3_b: 'map',
-    alpha3_t: '',
-  },
-  {
     english: 'Marathi',
     french: 'marathe',
     alpha2: 'mr',
@@ -1949,13 +1655,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Irish, Middle (900-1200)',
-    french: 'irlandais moyen (900-1200)',
-    alpha2: '',
-    alpha3_b: 'mga',
-    alpha3_t: '',
-  },
-  {
     english: "Mi'kmaq; Micmac",
     french: "mi'kmaq; micmac",
     alpha2: '',
@@ -1967,20 +1666,6 @@ export const languages: Language[] = [
     french: 'minangkabau',
     alpha2: '',
     alpha3_b: 'min',
-    alpha3_t: '',
-  },
-  {
-    english: 'Uncoded languages',
-    french: 'langues non codées',
-    alpha2: '',
-    alpha3_b: 'mis',
-    alpha3_t: '',
-  },
-  {
-    english: 'Mon-Khmer languages',
-    french: 'môn-khmer, langues',
-    alpha2: '',
-    alpha3_b: 'mkh',
     alpha3_t: '',
   },
   {
@@ -2012,13 +1697,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Manobo languages',
-    french: 'manobo, langues',
-    alpha2: '',
-    alpha3_b: 'mno',
-    alpha3_t: '',
-  },
-  {
     english: 'Mohawk',
     french: 'mohawk',
     alpha2: '',
@@ -2037,20 +1715,6 @@ export const languages: Language[] = [
     french: 'moré',
     alpha2: '',
     alpha3_b: 'mos',
-    alpha3_t: '',
-  },
-  {
-    english: 'Multiple languages',
-    french: 'multilingue',
-    alpha2: '',
-    alpha3_b: 'mul',
-    alpha3_t: '',
-  },
-  {
-    english: 'Munda languages',
-    french: 'mounda, langues',
-    alpha2: '',
-    alpha3_b: 'mun',
     alpha3_t: '',
   },
   {
@@ -2075,31 +1739,10 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Mayan languages',
-    french: 'maya, langues',
-    alpha2: '',
-    alpha3_b: 'myn',
-    alpha3_t: '',
-  },
-  {
     english: 'Erzya',
     french: 'erza',
     alpha2: '',
     alpha3_b: 'myv',
-    alpha3_t: '',
-  },
-  {
-    english: 'Nahuatl languages',
-    french: 'nahuatl, langues',
-    alpha2: '',
-    alpha3_b: 'nah',
-    alpha3_t: '',
-  },
-  {
-    english: 'North American Indian languages',
-    french: 'nord-amérindiennes, langues',
-    alpha2: '',
-    alpha3_b: 'nai',
     alpha3_t: '',
   },
   {
@@ -2145,13 +1788,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Low German; Low Saxon; German, Low; Saxon, Low',
-    french: 'bas allemand; bas saxon; allemand, bas; saxon, bas',
-    alpha2: '',
-    alpha3_b: 'nds',
-    alpha3_t: '',
-  },
-  {
     english: 'Nepali',
     french: 'népalais',
     alpha2: 'ne',
@@ -2170,13 +1806,6 @@ export const languages: Language[] = [
     french: 'nias',
     alpha2: '',
     alpha3_b: 'nia',
-    alpha3_t: '',
-  },
-  {
-    english: 'Niger-Kordofanian languages',
-    french: 'nigéro-kordofaniennes, langues',
-    alpha2: '',
-    alpha3_b: 'nic',
     alpha3_t: '',
   },
   {
@@ -2233,13 +1862,6 @@ export const languages: Language[] = [
     french: 'pedi; sepedi; sotho du Nord',
     alpha2: '',
     alpha3_b: 'nso',
-    alpha3_t: '',
-  },
-  {
-    english: 'Nubian languages',
-    french: 'nubiennes, langues',
-    alpha2: '',
-    alpha3_b: 'nub',
     alpha3_t: '',
   },
   {
@@ -2334,20 +1956,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Otomian languages',
-    french: 'otomi, langues',
-    alpha2: '',
-    alpha3_b: 'oto',
-    alpha3_t: '',
-  },
-  {
-    english: 'Papuan languages',
-    french: 'papoues, langues',
-    alpha2: '',
-    alpha3_b: 'paa',
-    alpha3_t: '',
-  },
-  {
     english: 'Pangasinan',
     french: 'pangasinan',
     alpha2: '',
@@ -2390,25 +1998,11 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Persian, Old (ca.600-400 B.C.)',
-    french: 'perse, vieux (ca. 600-400 av. J.-C.)',
-    alpha2: '',
-    alpha3_b: 'peo',
-    alpha3_t: '',
-  },
-  {
     english: 'Persian',
     french: 'persan',
     alpha2: 'fa',
     alpha3_b: 'per',
     alpha3_t: 'fas',
-  },
-  {
-    english: 'Philippine languages',
-    french: 'philippines, langues',
-    alpha2: '',
-    alpha3_b: 'phi',
-    alpha3_t: '',
   },
   {
     english: 'Phoenician',
@@ -2446,13 +2040,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Prakrit languages',
-    french: 'prâkrit, langues',
-    alpha2: '',
-    alpha3_b: 'pra',
-    alpha3_t: '',
-  },
-  {
     english: 'Provençal, Old (to 1500); Occitan, Old (to 1500)',
     french: "provençal ancien (jusqu'à 1500); occitan ancien (jusqu'à 1500)",
     alpha2: '',
@@ -2464,13 +2051,6 @@ export const languages: Language[] = [
     french: 'pachto',
     alpha2: 'ps',
     alpha3_b: 'pus',
-    alpha3_t: '',
-  },
-  {
-    english: 'Reserved for local use',
-    french: "réservée à l'usage local",
-    alpha2: '',
-    alpha3_b: 'qaa-qtz',
     alpha3_t: '',
   },
   {
@@ -2502,13 +2082,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Romance languages',
-    french: 'romanes, langues',
-    alpha2: '',
-    alpha3_b: 'roa',
-    alpha3_t: '',
-  },
-  {
     english: 'Romansh',
     french: 'romanche',
     alpha2: 'rm',
@@ -2537,13 +2110,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Aromanian; Arumanian; Macedo-Romanian',
-    french: 'aroumain; macédo-roumain',
-    alpha2: '',
-    alpha3_b: 'rup',
-    alpha3_t: '',
-  },
-  {
     english: 'Russian',
     french: 'russe',
     alpha2: 'ru',
@@ -2569,20 +2135,6 @@ export const languages: Language[] = [
     french: 'iakoute',
     alpha2: '',
     alpha3_b: 'sah',
-    alpha3_t: '',
-  },
-  {
-    english: 'South American Indian languages',
-    french: 'sud-amérindiennes, langues',
-    alpha2: '',
-    alpha3_b: 'sai',
-    alpha3_t: '',
-  },
-  {
-    english: 'Salishan languages',
-    french: 'salishennes, langues',
-    alpha2: '',
-    alpha3_b: 'sal',
     alpha3_t: '',
   },
   {
@@ -2635,20 +2187,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Semitic languages',
-    french: 'sémitiques, langues',
-    alpha2: '',
-    alpha3_b: 'sem',
-    alpha3_t: '',
-  },
-  {
-    english: 'Irish, Old (to 900)',
-    french: "irlandais ancien (jusqu'à 900)",
-    alpha2: '',
-    alpha3_b: 'sga',
-    alpha3_t: '',
-  },
-  {
     english: 'Sign Languages',
     french: 'langues des signes',
     alpha2: '',
@@ -2677,27 +2215,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Siouan languages',
-    french: 'sioux, langues',
-    alpha2: '',
-    alpha3_b: 'sio',
-    alpha3_t: '',
-  },
-  {
-    english: 'Sino-Tibetan languages',
-    french: 'sino-tibétaines, langues',
-    alpha2: '',
-    alpha3_b: 'sit',
-    alpha3_t: '',
-  },
-  {
-    english: 'Slavic languages',
-    french: 'slaves, langues',
-    alpha2: '',
-    alpha3_b: 'sla',
-    alpha3_t: '',
-  },
-  {
     english: 'Slovak',
     french: 'slovaque',
     alpha2: 'sk',
@@ -2723,13 +2240,6 @@ export const languages: Language[] = [
     french: 'sami du Nord',
     alpha2: 'se',
     alpha3_b: 'sme',
-    alpha3_t: '',
-  },
-  {
-    english: 'Sami languages',
-    french: 'sames, langues',
-    alpha2: '',
-    alpha3_b: 'smi',
     alpha3_t: '',
   },
   {
@@ -2796,13 +2306,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Songhai languages',
-    french: 'songhai, langues',
-    alpha2: '',
-    alpha3_b: 'son',
-    alpha3_t: '',
-  },
-  {
     english: 'Sotho, Southern',
     french: 'sotho du Sud',
     alpha2: 'st',
@@ -2842,13 +2345,6 @@ export const languages: Language[] = [
     french: 'sérère',
     alpha2: '',
     alpha3_b: 'srr',
-    alpha3_t: '',
-  },
-  {
-    english: 'Nilo-Saharan languages',
-    french: 'nilo-sahariennes, langues',
-    alpha2: '',
-    alpha3_b: 'ssa',
     alpha3_t: '',
   },
   {
@@ -2901,13 +2397,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Classical Syriac',
-    french: 'syriaque classique',
-    alpha2: '',
-    alpha3_b: 'syc',
-    alpha3_t: '',
-  },
-  {
     english: 'Syriac',
     french: 'syriaque',
     alpha2: '',
@@ -2919,13 +2408,6 @@ export const languages: Language[] = [
     french: 'tahitien',
     alpha2: 'ty',
     alpha3_b: 'tah',
-    alpha3_t: '',
-  },
-  {
-    english: 'Tai languages',
-    french: 'tai, langues',
-    alpha2: '',
-    alpha3_b: 'tai',
     alpha3_t: '',
   },
   {
@@ -3104,24 +2586,10 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Tupi languages',
-    french: 'tupi, langues',
-    alpha2: '',
-    alpha3_b: 'tup',
-    alpha3_t: '',
-  },
-  {
     english: 'Turkish',
     french: 'turc',
     alpha2: 'tr',
     alpha3_b: 'tur',
-    alpha3_t: '',
-  },
-  {
-    english: 'Altaic languages',
-    french: 'altaïques, langues',
-    alpha2: '',
-    alpha3_b: 'tut',
     alpha3_t: '',
   },
   {
@@ -3237,13 +2705,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Wakashan languages',
-    french: 'wakashanes, langues',
-    alpha2: '',
-    alpha3_b: 'wak',
-    alpha3_t: '',
-  },
-  {
     english: 'Wolaitta; Wolaytta',
     french: 'wolaitta; wolaytta',
     alpha2: '',
@@ -3270,13 +2731,6 @@ export const languages: Language[] = [
     alpha2: 'cy',
     alpha3_b: 'wel',
     alpha3_t: 'cym',
-  },
-  {
-    english: 'Sorbian languages',
-    french: 'sorabes, langues',
-    alpha2: '',
-    alpha3_b: 'wen',
-    alpha3_t: '',
   },
   {
     english: 'Walloon',
@@ -3335,13 +2789,6 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
   {
-    english: 'Yupik languages',
-    french: 'yupik, langues',
-    alpha2: '',
-    alpha3_b: 'ypk',
-    alpha3_t: '',
-  },
-  {
     english: 'Zapotec',
     french: 'zapotèque',
     alpha2: '',
@@ -3374,13 +2821,6 @@ export const languages: Language[] = [
     french: 'zhuang; chuang',
     alpha2: 'za',
     alpha3_b: 'zha',
-    alpha3_t: '',
-  },
-  {
-    english: 'Zande languages',
-    french: 'zandé, langues',
-    alpha2: '',
-    alpha3_b: 'znd',
     alpha3_t: '',
   },
   {

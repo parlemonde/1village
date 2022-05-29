@@ -71,7 +71,7 @@ const DefiStep1 = () => {
 
   React.useEffect(() => {
     if (data !== null && 'languageCode' in data && data.languageCode.length > 2) {
-      setOtherValue(data.languageCode.slice(0, 2).toLowerCase());
+      setOtherValue(data.languageCode.slice(0, 3).toLowerCase());
     }
   }, [data]);
 
@@ -107,7 +107,7 @@ const DefiStep1 = () => {
         if (language) {
           acc.push({
             label: capitalize(language.french),
-            value: language.alpha2,
+            value: language.alpha3_b,
           });
         }
         return acc;
@@ -132,7 +132,7 @@ const DefiStep1 = () => {
 
   const setLanguage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const languageCode = (event.target as HTMLInputElement).value;
-    const language = languages.find((l) => l.alpha2.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
+    const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
     updateActivity({ data: { ...data, languageCode, language } });
   };
   const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,7 +181,7 @@ const DefiStep1 = () => {
                     <div style={{ display: 'flex', width: '100%' }}>
                       <FormControlLabel
                         disabled={otherValue.length === 0}
-                        value={`${otherValue.toLowerCase()}_other`}
+                        value={otherValue.toLowerCase()}
                         control={<Radio />}
                         label="Autre :"
                         style={{ cursor: 'pointer' }}
@@ -191,7 +191,7 @@ const DefiStep1 = () => {
                         value={otherValue}
                         onChange={(v) => {
                           setOtherValue(v);
-                          const language = languages.find((l) => l.alpha2.toLowerCase() === v.toLowerCase())?.french ?? '';
+                          const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
                           updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
                         }}
                       />
