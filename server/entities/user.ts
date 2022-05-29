@@ -8,6 +8,7 @@ import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
 import { Game } from './game';
+import { Image } from './image';
 import { Village } from './village';
 
 export { UserType };
@@ -111,6 +112,9 @@ export class User implements UserInterface {
 
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
   public gameResponses: GameResponse[];
+
+  @OneToMany(() => Image, (image: Image) => image.user)
+  public images: Image[];
 
   public mascotteId?: number;
 }

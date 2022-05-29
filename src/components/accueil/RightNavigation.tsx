@@ -176,11 +176,18 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
                     le {toDate(activity.createDate as string)}
                     {ActivityIcon && (
                       <ActivityIcon
-                        style={{ float: 'right', fill: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
+                        style={{
+                          float: 'right',
+                          fill: primaryColor,
+                          margin: '1.5rem 0.65rem 0 0',
+                          width: '2rem',
+                          height: 'auto',
+                          alignSelf: 'center',
+                        }}
                       />
                     )}
                   </div>
-                  <div style={{ float: 'right', paddingBottom: '1rem' }}>
+                  <div style={{ paddingBottom: '1rem' }}>
                     <CommentIcon count={activity.commentCount} activityId={activity.id} />
                     <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
                       {"Voir l'activité"}

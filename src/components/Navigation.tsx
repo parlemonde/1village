@@ -20,9 +20,13 @@ import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
+import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
+import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { serializeToQueryUrl } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
@@ -55,11 +59,31 @@ const ANTHEM_PARAM: Tab = {
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
+
+  const getStories = React.useCallback(async () => {
+    if (!village) {
+      setFirstStoryCreated(false);
+      return;
+    }
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities${serializeToQueryUrl({
+        villageId: village.id,
+        type: ActivityType.STORY,
+      })}`,
+    });
+    setFirstStoryCreated(response.data.length > 0);
+  }, [axiosLoggedRequest, village]);
+
+  React.useEffect(() => {
+    getStories().catch(console.error);
+  }, [getStories]);
 
   // check color of icons
   const TABS_PER_PHASE: Tab[] = React.useMemo(
@@ -122,10 +146,17 @@ export const Navigation = (): JSX.Element => {
       },
       // ---- PHASE 3 ----
       {
-        label: 'Jouer ensemble',
-        path: '/creer-un-jeu',
-        icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        label: 'Inventer une histoire',
+        path: '/creer-une-histoire',
+        icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
+      },
+      {
+        label: 'Ré-inventer une histoire',
+        path: '/re-inventer-une-histoire',
+        icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+        disabled: firstStoryCreated === false,
       },
       {
         label: 'Chanter un couplet',
@@ -135,7 +166,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [village],
+    [village, firstStoryCreated],
   );
 
   const fixedTabs = React.useMemo(
