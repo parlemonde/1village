@@ -115,7 +115,11 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                   color="primary"
                   style={{ width: '100%' }}
                 >
-                  <ReactionIcon />
+                  <ReactionIcon
+                    style={{
+                      fill: primaryColor,
+                    }}
+                  />
                   Réagir
                 </Button>
               </Link>
