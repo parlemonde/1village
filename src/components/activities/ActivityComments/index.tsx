@@ -4,10 +4,13 @@ import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
+import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
+import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 import { ActivityCard } from '../ActivityCard';
+import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
 
 import { AddComment } from './AddComment';
 import { CommentCard } from './CommentCard';
@@ -18,10 +21,21 @@ interface ActivityCommentsProps {
   activityPhase: number;
   usersMap: { [key: number]: User };
 }
-
 export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
+  const { getInspiredStories } = useImageStories();
+  const [dataStories, setDataStories] = React.useState<Activity[]>([]);
+
+  //Get stories activities which was inspired by this story activity
+  React.useEffect(() => {
+    getInspiredStories(activityId)
+      .then((data) => {
+        setDataStories(data as Activity[]);
+      })
+      .catch();
+  }, [activityId, getInspiredStories]);
+
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -50,6 +64,8 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
           <h2>Réaction des Pélicopains</h2>
         </div>
       </div>
+      {/* Stories space */}
+      {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} column noTitle />}
       {data.map((o) => {
         if (o.type === 'comment') {
           const comment = o.data;

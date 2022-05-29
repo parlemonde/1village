@@ -14,6 +14,7 @@ import {
   isQuestion,
   isReaction,
   isReportage,
+  isStory,
   isSymbol,
   isVerseRecord,
 } from 'src/activity-types/anyActivity';
@@ -42,6 +43,7 @@ import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
 import { ReportageCard } from './ReportageCard';
+import { StoryCard } from './StoryCard';
 import { SymbolCard } from './SymbolCard';
 import { VerseRecordCard } from './VerseRecordCard';
 import type { ActivityCardProps } from './activity-card.types';
@@ -241,6 +243,17 @@ export const ActivityCard = ({
           )}
           {isReaction(activity) && (
             <ReactionCard
+              activity={activity}
+              user={user}
+              isSelf={isSelf}
+              noButtons={noButtons}
+              showEditButtons={showEditButtons}
+              isDraft={isDraft}
+              onDelete={onDelete}
+            />
+          )}
+          {isStory(activity) && (
+            <StoryCard
               activity={activity}
               user={user}
               isSelf={isSelf}
