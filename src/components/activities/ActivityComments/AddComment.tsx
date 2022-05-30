@@ -81,12 +81,12 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
         </div>
         {activityPhase >= 2 && activityType !== ActivityType.REACTION && (
           <div style={{ marginLeft: '1rem' }}>
-            {activityPhase >= 3 && (ActivityType.STORY || ActivityType.RE_INVENT_STORY) ? (
+            {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
               <p style={{ fontWeight: 600 }}>Ou bien ré-écrivez l&apos;histoire !</p>
             ) : (
               <p style={{ fontWeight: 600 }}>Ou bien réagissez en détail</p>
             )}
-            {activityPhase >= 3 && (ActivityType.STORY || ActivityType.RE_INVENT_STORY) ? (
+            {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
               <Link href={`/re-inventer-une-histoire?activityId=${activityId}`} passHref>
                 <Button
                   component="a"
@@ -115,7 +115,11 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                   color="primary"
                   style={{ width: '100%' }}
                 >
-                  <ReactionIcon />
+                  <ReactionIcon
+                    style={{
+                      fill: primaryColor,
+                    }}
+                  />
                   Réagir
                 </Button>
               </Link>

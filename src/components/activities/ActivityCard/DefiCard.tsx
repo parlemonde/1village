@@ -15,7 +15,7 @@ import type { ActivityCardProps } from './activity-card.types';
 
 export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);
-  const link = isCookingActivity ? 'culinaire/5' : isEco(activity) ? 'ecologique/5' : 'linguistique/6';
+  const link = isCookingActivity ? 'culinaire/4' : isEco(activity) ? 'ecologique/4' : 'linguistique/5';
 
   const firstImage = React.useMemo(() => {
     if (isCookingActivity) {
