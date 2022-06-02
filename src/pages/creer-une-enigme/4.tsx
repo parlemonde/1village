@@ -76,7 +76,7 @@ const EnigmeStep4 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[getSubcategoryName(activity.data.theme, data, activity.subType).title, 'Énigme', 'Réponse', 'Prévisualisation']}
+          steps={[getSubcategoryName(activity.data.theme, data, activity.subType), 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
           activeStep={3}
           errorSteps={errorSteps}
@@ -138,7 +138,7 @@ const EnigmeStep4 = () => {
             />
             {activity.subType === -1 ? (
               <p style={{ margin: '0.5rem 0' }}>
-                <strong>{data.themeName === undefined || data.themeName === '' ? '' : getCategoryName(activity.subType, data).title}</strong>
+                <strong>{data.themeName === undefined || data.themeName === '' ? '' : getCategoryName(activity.subType, data)}</strong>
               </p>
             ) : (
               <p style={{ margin: '0.5rem 0' }}>

@@ -110,7 +110,7 @@ const EnigmeStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/creer-une-enigme" />}
         <Steps
-          steps={[getCategoryName(activity.subType, data).title || 'Thème', 'Énigme', 'Réponse', 'Prévisualisation']}
+          steps={[getCategoryName(activity.subType, data) || 'Thème', 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
           activeStep={0}
         />

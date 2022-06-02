@@ -63,7 +63,7 @@ const EnigmeStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[getSubcategoryName(activity.data.theme, data, activity.subType).title, 'Énigme', 'Réponse', 'Prévisualisation']}
+          steps={[getSubcategoryName(activity.data.theme, data, activity.subType), 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
           activeStep={2}
           errorSteps={errorSteps}
