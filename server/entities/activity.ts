@@ -15,6 +15,7 @@ import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
 
 import { Game } from './game';
+import { Image } from './image';
 import { User } from './user';
 import { Village } from './village';
 
@@ -97,8 +98,17 @@ export class Activity implements ActivityInterface<AnyData> {
   })
   public isPinned: boolean;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public displayAsUser?: boolean;
+
   public commentCount?: number;
 
   @OneToMany(() => Game, (game: Game) => game.activity)
   public games: Game[];
+
+  @OneToMany(() => Image, (image: Image) => image.activity)
+  public images: Image[];
 }

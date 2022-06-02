@@ -17,7 +17,6 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
-import { getQueryString } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiStep1 = () => {
@@ -31,37 +30,22 @@ const DefiStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
-      const responseActivityType =
-        'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.COOKING,
-          {
-            name: '',
-            history: '',
-            explanation: '',
-            defiIndex: null,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.COOKING, {
+          name: '',
+          history: '',
+          explanation: '',
+          defiIndex: null,
+        });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isCooking(activity)))) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.COOKING,
-          {
-            name: '',
-            history: '',
-            explanation: '',
-            defiIndex: null,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.COOKING, {
+          name: '',
+          history: '',
+          explanation: '',
+          defiIndex: null,
+        });
       }
     }
   }, [activity, createNewActivity, router]);

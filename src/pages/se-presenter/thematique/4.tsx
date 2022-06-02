@@ -12,14 +12,10 @@ import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constan
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
-import ActivityLink from 'src/components/activities/Link';
-import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';
-import { REACTIONS } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { useActivity } from 'src/services/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -27,7 +23,6 @@ const PresentationStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
-  const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const [isLoading, setIsLoading] = React.useState(false);
   const isUserObservator = user?.type === UserType.OBSERVATOR;
 
@@ -44,7 +39,7 @@ const PresentationStep4 = () => {
 
   const onPublish = async () => {
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/se-presenter/success');
     }
@@ -94,26 +89,6 @@ const PresentationStep4 = () => {
                 </Button>
               )}
             </div>
-          )}
-
-          {!isEdit && activity.responseActivityId === null && <ActivityLink url={`/se-presenter/thematique/1?edit=${activity.id}`} />}
-
-          {responseActivity !== null && (
-            <>
-              <span className="text text--small text--success">Présentation en réaction à {REACTIONS[responseActivity.type]}</span>
-              <div className="preview-block">
-                {!isEdit && (
-                  <EditButton
-                    onClick={() => {
-                      router.push(`/se-presenter/thematique/1?edit=${activity.id}`);
-                    }}
-                    status={'success'}
-                    style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-                  />
-                )}
-                <Activities activities={[responseActivity]} noButtons />
-              </div>
-            </>
           )}
 
           <span className="text text--small text--success">Thème</span>

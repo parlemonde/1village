@@ -70,56 +70,62 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
    * @param remember
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
-  const login = async (username: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
-    const response = await axiosRequest({
-      method: 'POST',
-      url: '/login',
-      headers,
-      data: {
-        username,
-        password,
-        getRefreshToken: remember,
-      },
-      baseURL: '',
-    });
-    if (response.error) {
+  const login = React.useCallback(
+    async (username: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
+      const response = await axiosRequest({
+        method: 'POST',
+        url: '/login',
+        headers,
+        data: {
+          username,
+          password,
+          getRefreshToken: remember,
+        },
+        baseURL: '',
+      });
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+
+      setUser(response.data.user || null);
       return {
-        success: false,
-        errorCode: response.data?.errorCode || 0,
+        success: true,
+        errorCode: 0,
       };
-    }
+    },
+    [headers, setUser],
+  );
 
-    setUser(response.data.user || null);
-    return {
-      success: true,
-      errorCode: 0,
-    };
-  };
-
-  const loginWithSso = async (code: string): Promise<{ success: boolean; errorCode: number }> => {
-    const response = await axiosRequest({
-      method: 'POST',
-      url: '/login-sso-plm',
-      headers,
-      data: {
-        code,
-      },
-      baseURL: '',
-    });
-    if (response.error) {
+  const loginWithSso = React.useCallback(
+    async (code: string): Promise<{ success: boolean; errorCode: number }> => {
+      const response = await axiosRequest({
+        method: 'POST',
+        url: '/login-sso-plm',
+        headers,
+        data: {
+          code,
+        },
+        baseURL: '',
+      });
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+      setUser(response.data.user || null);
       return {
-        success: false,
-        errorCode: response.data?.errorCode || 0,
+        success: true,
+        errorCode: 0,
       };
-    }
-    setUser(response.data.user || null);
-    return {
-      success: true,
-      errorCode: 0,
-    };
-  };
+    },
+    [headers, setUser],
+  );
 
-  const logout = async (): Promise<void> => {
+  const logout = React.useCallback(async (): Promise<void> => {
     // reject access token and server will delete cookies
     await axiosRequest({
       method: 'POST',
@@ -129,9 +135,9 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
     });
     setUser(null);
     router.push('/');
-  };
+  }, [headers, router, setUser]);
 
-  const deleteAccount = async (): Promise<boolean> => {
+  const deleteAccount = React.useCallback(async (): Promise<boolean> => {
     if (!user) {
       return false;
     }
@@ -146,7 +152,7 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
     setUser(null);
     router.push('/');
     return true;
-  };
+  }, [router, user, headers, setUser]);
 
   /**
    * Signup the user.
@@ -154,28 +160,31 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
    * @param user
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
-  const signup = async (user: User, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
-    const response = await axiosRequest({
-      method: 'POST',
-      headers,
-      url: '/users',
-      data: {
-        inviteCode,
-        ...user,
-      },
-    });
-    if (response.error) {
+  const signup = React.useCallback(
+    async (user: User, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
+      const response = await axiosRequest({
+        method: 'POST',
+        headers,
+        url: '/users',
+        data: {
+          inviteCode,
+          ...user,
+        },
+      });
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+      setUser(response.data.user || null);
       return {
-        success: false,
-        errorCode: response.data?.errorCode || 0,
+        success: true,
+        errorCode: 0,
       };
-    }
-    setUser(response.data.user || null);
-    return {
-      success: true,
-      errorCode: 0,
-    };
-  };
+    },
+    [headers, setUser],
+  );
 
   /**
    * Updates the user password.
@@ -183,27 +192,30 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
    * @param user
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
-  const updatePassword = async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
-    const response = await axiosRequest({
-      method: 'POST',
-      headers,
-      url: '/users/update-password',
-      data: {
-        ...user,
-      },
-    });
-    if (response.error) {
+  const updatePassword = React.useCallback(
+    async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
+      const response = await axiosRequest({
+        method: 'POST',
+        headers,
+        url: '/users/update-password',
+        data: {
+          ...user,
+        },
+      });
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+      setUser(response.data.user || null);
       return {
-        success: false,
-        errorCode: response.data?.errorCode || 0,
+        success: true,
+        errorCode: 0,
       };
-    }
-    setUser(response.data.user || null);
-    return {
-      success: true,
-      errorCode: 0,
-    };
-  };
+    },
+    [headers, setUser],
+  );
 
   /**
    * Verifies the user email.
@@ -211,27 +223,30 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
    * @param user
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
-  const verifyEmail = async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
-    const response = await axiosRequest({
-      method: 'POST',
-      headers,
-      url: '/users/verify-email',
-      data: {
-        ...user,
-      },
-    });
-    if (response.error) {
+  const verifyEmail = React.useCallback(
+    async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
+      const response = await axiosRequest({
+        method: 'POST',
+        headers,
+        url: '/users/verify-email',
+        data: {
+          ...user,
+        },
+      });
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+      setUser(response.data.user || null);
       return {
-        success: false,
-        errorCode: response.data?.errorCode || 0,
+        success: true,
+        errorCode: 0,
       };
-    }
-    setUser(response.data.user || null);
-    return {
-      success: true,
-      errorCode: 0,
-    };
-  };
+    },
+    [headers, setUser],
+  );
 
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
@@ -255,23 +270,22 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
     [headers],
   );
 
-  return (
-    <UserContext.Provider
-      value={{
-        user,
-        isLoggedIn,
-        login,
-        loginWithSso,
-        axiosLoggedRequest,
-        signup,
-        updatePassword,
-        verifyEmail,
-        logout,
-        deleteAccount,
-        setUser,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+  const value = React.useMemo(
+    () => ({
+      user,
+      isLoggedIn,
+      login,
+      loginWithSso,
+      axiosLoggedRequest,
+      signup,
+      updatePassword,
+      verifyEmail,
+      logout,
+      deleteAccount,
+      setUser,
+    }),
+    [user, isLoggedIn, login, loginWithSso, axiosLoggedRequest, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser],
   );
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

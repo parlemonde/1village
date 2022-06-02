@@ -15,7 +15,7 @@ import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const EnigmeStep3 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
 
   const data = (activity?.data as EnigmeData) || null;
   const indiceContentIndex = data?.indiceContentIndex ?? 0;
@@ -92,7 +92,6 @@ const EnigmeStep3 = () => {
             updateContent={updateContent}
             addContent={addIndiceContent}
             deleteContent={deleteIndiceContent}
-            save={save}
           />
           <StepsButton prev={`/creer-une-enigme/2`} next="/creer-une-enigme/4" />
         </div>

@@ -18,7 +18,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { secondaryColor } from 'src/styles/variables.const';
-import { capitalize, getQueryString } from 'src/utils';
+import { capitalize } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const getArticle = (language: string) => {
@@ -45,48 +45,33 @@ const DefiStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
-      const responseActivityType =
-        'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.LANGUAGE,
-          {
-            languageCode: '',
-            language: '',
-            languageIndex: 0,
-            objectIndex: -1,
-            defiIndex: null,
-            explanationContentIndex: 1,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.LANGUAGE, {
+          languageCode: '',
+          language: '',
+          languageIndex: 0,
+          objectIndex: -1,
+          defiIndex: null,
+          explanationContentIndex: 1,
+        });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
         created.current = true;
-        createNewActivity(
-          ActivityType.DEFI,
-          DEFI.LANGUAGE,
-          {
-            languageCode: '',
-            language: '',
-            languageIndex: 0,
-            objectIndex: -1,
-            defiIndex: null,
-            explanationContentIndex: 1,
-          },
-          responseActivityId,
-          responseActivityType,
-        );
+        createNewActivity(ActivityType.DEFI, DEFI.LANGUAGE, {
+          languageCode: '',
+          language: '',
+          languageIndex: 0,
+          objectIndex: -1,
+          defiIndex: null,
+          explanationContentIndex: 1,
+        });
       }
     }
   }, [activity, createNewActivity, router]);
 
   React.useEffect(() => {
     if (data !== null && 'languageCode' in data && data.languageCode.length > 2) {
-      setOtherValue(data.languageCode.slice(0, 2).toLowerCase());
+      setOtherValue(data.languageCode.slice(0, 3).toLowerCase());
     }
   }, [data]);
 
@@ -122,7 +107,7 @@ const DefiStep1 = () => {
         if (language) {
           acc.push({
             label: capitalize(language.french),
-            value: language.alpha2,
+            value: language.alpha3_b,
           });
         }
         return acc;
@@ -147,7 +132,7 @@ const DefiStep1 = () => {
 
   const setLanguage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const languageCode = (event.target as HTMLInputElement).value;
-    const language = languages.find((l) => l.alpha2.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
+    const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
     updateActivity({ data: { ...data, languageCode, language } });
   };
   const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,7 +181,7 @@ const DefiStep1 = () => {
                     <div style={{ display: 'flex', width: '100%' }}>
                       <FormControlLabel
                         disabled={otherValue.length === 0}
-                        value={`${otherValue.toLowerCase()}_other`}
+                        value={otherValue.toLowerCase()}
                         control={<Radio />}
                         label="Autre :"
                         style={{ cursor: 'pointer' }}
@@ -206,7 +191,7 @@ const DefiStep1 = () => {
                         value={otherValue}
                         onChange={(v) => {
                           setOtherValue(v);
-                          const language = languages.find((l) => l.alpha2.toLowerCase() === v.toLowerCase())?.french ?? '';
+                          const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
                           updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
                         }}
                       />

@@ -52,7 +52,6 @@ export const SecondPhase = () => {
                   component="a"
                   onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                     event.preventDefault();
-                    updateUser();
                     setSelectedPhase(1);
                     setIsModalOpen(false);
                   }}

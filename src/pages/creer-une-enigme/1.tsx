@@ -18,7 +18,6 @@ import { ActivityStatus, ActivityType } from 'types/activity.type';
 const EnigmeStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
-  const selectRef = React.useRef<HTMLDivElement>(null);
   const [otherOpen, setIsOtherOpen] = React.useState(false);
   const data = (activity?.data as EnigmeData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -41,9 +40,6 @@ const EnigmeStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      const responseActivityId = 'responseActivityId' in router.query ? parseInt(getQueryString(router.query.responseActivityId), 10) ?? null : null;
-      const responseActivityType =
-        'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
       if (!('edit' in router.query)) {
         created.current = true;
         createNewActivity(
@@ -53,18 +49,13 @@ const EnigmeStep1 = () => {
             theme: null,
             indiceContentIndex: 1,
           },
-          responseActivityId,
-          responseActivityType,
+          null,
+          null,
           [
             { type: 'text', id: 0, value: '' }, //empty content for step2
             { type: 'text', id: 1, value: '' }, //empty content for step3
           ],
         );
-        if (responseActivityId !== null) {
-          if (selectRef.current) {
-            selectRef.current.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
       } else if (activity && (!isEnigme(activity) || activity.subType !== enigmeTypeIndex)) {
         created.current = true;
         createNewActivity(
@@ -74,18 +65,13 @@ const EnigmeStep1 = () => {
             theme: null,
             indiceContentIndex: 1,
           },
-          responseActivityId,
-          responseActivityType,
+          null,
+          null,
           [
             { type: 'text', id: 0, value: '' }, //empty content for step2
             { type: 'text', id: 1, value: '' }, //empty content for step3
           ],
         );
-        if (responseActivityId !== null) {
-          if (selectRef.current) {
-            selectRef.current.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
       }
     }
   }, [activity, createNewActivity, enigmeTypeIndex, router]);

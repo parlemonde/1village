@@ -31,9 +31,12 @@ export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEdit
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              cursor: 'pointer',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            </Link>
           </div>
         </div>
       )}
@@ -53,7 +56,7 @@ export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEdit
               <>
                 <Link href={`/activite/${activity.id}`} passHref>
                   <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
-                    {'Voir le message de Pelico'}
+                    {activity.displayAsUser ? 'Voir le message' : 'Voir le message de Pelico'}
                   </Button>
                 </Link>
               </>

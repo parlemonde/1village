@@ -16,7 +16,8 @@
     "test": "yarn jest",
     "start-dev": "yarn build:server && node dist/server/start.js",
     "start": "NODE_ENV=production node dist/server/start.js",
-    "dev": "nodemon"
+    "dev": "yarn nodemon",
+    "dev-staging": "NODE_USE_STAGING=true yarn nodemon"
   },
   "jest": {
     "testEnvironment": "node",
@@ -141,11 +142,13 @@
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
     "next": "^12.0.9",
+    "node-fetch": "^3.2.4",
     "nodemailer": "^6.7.2",
     "notistack": "^2.0.3",
     "nprogress": "^0.2.0",
     "query-string": "^7.1.0",
     "react": "^17.0.2",
+    "react-contenteditable": "^3.3.6",
     "react-dom": "^17.0.2",
     "react-player": "^2.9.0",
     "react-query": "^3.34.12",

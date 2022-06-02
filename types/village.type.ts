@@ -11,4 +11,5 @@ export interface Village {
   name: string;
   countries: Country[];
   activePhase: number;
+  anthemId: number | null;
 }

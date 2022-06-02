@@ -3,10 +3,13 @@ import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import type { GameData, GamesData } from '../../types/game.type';
+import type { StoriesData, StoryElement } from '../../types/story.type';
+import { ImageType } from '../../types/story.type';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { Game } from '../entities/game';
+import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -243,6 +246,7 @@ type CreateActivityData = {
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
+  displayAsUser?: boolean;
 };
 
 // --- create activity's schema ---
@@ -289,6 +293,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
       nullable: true,
     },
     isPinned: { type: 'boolean', nullable: true },
+    displayAsUser: { type: 'boolean', nullable: true },
   },
   required: ['type', 'data', 'content'],
   additionalProperties: false,
@@ -336,6 +341,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.responseActivityId = data.responseActivityId ?? null;
   activity.responseType = data.responseType ?? null;
   activity.isPinned = data.isPinned || false;
+  activity.displayAsUser = data.displayAsUser || false;
 
   await getRepository(Activity).save(activity);
 
@@ -349,6 +355,7 @@ type UpdateActivity = {
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
+  displayAsUser?: boolean;
   data?: AnyData;
   content?: ActivityContent[];
 };
@@ -370,6 +377,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
       nullable: true,
     },
     isPinned: { type: 'boolean', nullable: true },
+    displayAsUser: { type: 'boolean', nullable: true },
     data: {
       type: 'object',
       additionalProperties: true,
@@ -424,9 +432,11 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;
+  activity.displayAsUser = data.displayAsUser !== undefined ? data.displayAsUser : activity.displayAsUser;
   activity.data = data.data ?? activity.data;
   activity.content = data.content ?? activity.content;
 
+  // logic to create a activity game
   if (activity.type === ActivityType.GAME && activity.status === ActivityStatus.PUBLISHED && activity.data) {
     const gamesData = activity.data as GamesData;
     gamesData.game1.gameId = (await createGame(gamesData.game1, activity)).id;
@@ -434,6 +444,24 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     gamesData.game3.gameId = (await createGame(gamesData.game3, activity)).id;
   }
 
+  // logic to create activity image
+  if (
+    (activity.type === ActivityType.STORY || activity.type === ActivityType.RE_INVENT_STORY) &&
+    activity.status === ActivityStatus.PUBLISHED &&
+    activity.data
+  ) {
+    const imagesData = activity.data as Omit<StoriesData, 'tale'>;
+    //Save to image table only if ActivityType.STORY or ActivityType.RE_INVENT_STORY has new images
+    if (!imagesData.object.imageId && imagesData.object.inspiredStoryId) {
+      imagesData.object.imageId = (await createStory(imagesData.object, activity, ImageType.OBJECT, imagesData.object.inspiredStoryId)).id;
+    }
+    if (!imagesData.place.imageId && imagesData.place.inspiredStoryId) {
+      imagesData.place.imageId = (await createStory(imagesData.place, activity, ImageType.PLACE, imagesData.place.inspiredStoryId)).id;
+    }
+    if (!imagesData.odd.imageId && imagesData.odd.inspiredStoryId) {
+      imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
+    }
+  }
   await getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
@@ -477,6 +505,21 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   game.content = JSON.stringify(data);
   await getRepository(Game).save(game);
   return game;
+};
+
+// --- create a image ---
+const createStory = async (data: StoryElement, activity: Activity, type: ImageType, inspiredStoryId: number = 0): Promise<Image> => {
+  const id = data.imageId;
+  const storyImage = id ? await getRepository(Image).findOneOrFail({ where: { id: data.imageId } }) : new Image();
+  // delete data['imageId'];
+  storyImage.activityId = activity.id;
+  storyImage.villageId = activity.villageId;
+  storyImage.userId = activity.userId;
+  storyImage.imageType = type;
+  storyImage.imageUrl = data.imageUrl;
+  storyImage.inspiredStoryId = inspiredStoryId;
+  await getRepository(Image).save(storyImage);
+  return storyImage;
 };
 
 // --- Delete an activity --- (Soft delete)

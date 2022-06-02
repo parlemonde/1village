@@ -52,7 +52,7 @@ const ContenuLibre = () => {
       return;
     }
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       router.push('/contenu-libre/success');
     }

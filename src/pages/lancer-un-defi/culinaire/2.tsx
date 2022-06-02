@@ -61,7 +61,7 @@ const DefiStep2 = () => {
             À vous de montrer aux Pelicopains comment cuisiner ce plat ! Pensez à présenter les ingrédients, les étapes, et donnez vos astuces de
             chef.
           </p>
-          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/culinaire/1?edit=${activity.id}`} next={onNext} />
         </div>
       </div>

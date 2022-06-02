@@ -10,6 +10,7 @@ import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
 import 'src/styles/mon-compte.scss';
 import 'src/styles/se-presenter.scss';
+import 'src/styles/slot-machine.scss';
 
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
@@ -88,7 +89,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   }, [router.events]);
 
   // Let all h5p iframe to automatically resize.
-  React.useEffect(initH5p, []);
+  React.useEffect(() => initH5p(csrfToken), [csrfToken]);
 
   const isOnAdmin = router.pathname.slice(1, 6) === 'admin';
 

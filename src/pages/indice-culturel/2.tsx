@@ -60,7 +60,7 @@ const IndiceStep2 = () => {
             </a>
             , un outil d&apos;aide à l&apos;écriture audiovisuel !
           </p>
-          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} save={save} />
+          <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/indice-culturel/1?edit" next={onNext} />
         </div>
       </div>

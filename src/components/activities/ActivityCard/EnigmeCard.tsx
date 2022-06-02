@@ -15,11 +15,11 @@ import type { ActivityCardProps } from './activity-card.types';
 
 export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<EnigmeActivity>) => {
   const firstImage = React.useMemo(
-    () => activity.content.slice(activity.data.indiceContentIndex, activity.content.length).find((c) => c.type === 'image'),
+    () => activity.content.slice(0, activity.data.indiceContentIndex).find((c) => c.type === 'image'),
     [activity.content, activity.data.indiceContentIndex],
   );
   const firstTextContent = React.useMemo(
-    () => activity.content.slice(activity.data.indiceContentIndex, activity.content.length).find((c) => c.type === 'text'),
+    () => activity.content.slice(0, activity.data.indiceContentIndex).find((c) => c.type === 'text'),
     [activity.content, activity.data.indiceContentIndex],
   );
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
@@ -44,7 +44,9 @@ export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
               position: 'relative',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+            </Link>
           </div>
         </div>
       )}

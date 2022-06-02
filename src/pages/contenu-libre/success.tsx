@@ -12,7 +12,7 @@ const FreeContentSuccess = () => {
     <Base>
       <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">Votre publication a bien été publié !</p>
+          <p className="text">Votre publication a bien été publiée !</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         </div>
         <div className="text-center">
