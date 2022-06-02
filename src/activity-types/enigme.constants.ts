@@ -142,8 +142,8 @@ export function getEnigmeTimeLeft(activity: EnigmeActivity): number {
 // This function is used only in step 1
 export function getCategoryName(activitySubType: number | null | undefined, activityData: EnigmeData) {
   return activitySubType === -1 // this is when we choose a category 'autre' in index page
-    ? { title: activityData.themeName || 'Thème' }
-    : { title: ENIGME_TYPES[activitySubType || 0].title };
+    ? activityData.themeName || 'Thème'
+    : ENIGME_TYPES[activitySubType || 0].title;
 }
 
 // This function is used starting from step 2
@@ -151,12 +151,12 @@ export function getSubcategoryName(theme: number | null | undefined, activityDat
   if (activitySubType === -1) {
     return getCategoryName(activitySubType, activityData);
   } else if (activitySubType === null || activitySubType === undefined) {
-    return { title: 'Thème' };
+    return 'Thème';
   } else if (theme === null || theme === undefined) {
-    return { title: ENIGME_TYPES[activitySubType || 0].title };
+    return ENIGME_TYPES[activitySubType || 0].title;
   } else if (theme === -1 && activityData.themeName === '') {
-    return { title: ENIGME_TYPES[activitySubType || 0].title };
+    return ENIGME_TYPES[activitySubType || 0].title;
   }
   const { subCategories } = ENIGME_TYPES[activitySubType];
-  return theme === -1 ? { title: activityData.themeName || '' } : { title: subCategories[theme].label };
+  return theme === -1 ? activityData.themeName || '' : subCategories[theme].label;
 }
