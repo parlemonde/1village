@@ -76,7 +76,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:17.0.38"],
             ["@types/react-dom", "npm:17.0.11"],
             ["@types/sass", "npm:1.43.1"],
-            ["@types/sharp", "npm:0.29.5"],
+            ["@types/sharp", "npm:0.30.4"],
             ["@types/sortablejs", "npm:1.10.7"],
             ["@types/string-similarity", "npm:4.0.0"],
             ["@types/three", "npm:0.137.0"],
@@ -148,7 +148,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["resize-observer-polyfill", "npm:1.5.1"],
             ["safe-buffer", "npm:5.2.1"],
             ["sass", "npm:1.49.0"],
-            ["sharp", "npm:0.29.3"],
+            ["sharp", "npm:0.30.6"],
             ["sortablejs", "npm:1.14.0"],
             ["string-similarity", "npm:4.0.4"],
             ["three", "npm:0.137.5"],
@@ -212,7 +212,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:17.0.38"],
             ["@types/react-dom", "npm:17.0.11"],
             ["@types/sass", "npm:1.43.1"],
-            ["@types/sharp", "npm:0.29.5"],
+            ["@types/sharp", "npm:0.30.4"],
             ["@types/sortablejs", "npm:1.10.7"],
             ["@types/string-similarity", "npm:4.0.0"],
             ["@types/three", "npm:0.137.0"],
@@ -284,7 +284,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["resize-observer-polyfill", "npm:1.5.1"],
             ["safe-buffer", "npm:5.2.1"],
             ["sass", "npm:1.49.0"],
-            ["sharp", "npm:0.29.3"],
+            ["sharp", "npm:0.30.6"],
             ["sortablejs", "npm:1.14.0"],
             ["string-similarity", "npm:4.0.4"],
             ["three", "npm:0.137.5"],
@@ -5814,10 +5814,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/sharp", [
-        ["npm:0.29.5", {
-          "packageLocation": "./.yarn/cache/@types-sharp-npm-0.29.5-355ce4677f-085cd5237a.zip/node_modules/@types/sharp/",
+        ["npm:0.30.4", {
+          "packageLocation": "./.yarn/cache/@types-sharp-npm-0.30.4-a8626c5794-3ebeaf55aa.zip/node_modules/@types/sharp/",
           "packageDependencies": [
-            ["@types/sharp", "npm:0.29.5"],
+            ["@types/sharp", "npm:0.30.4"],
             ["@types/node", "npm:16.7.1"]
           ],
           "linkType": "HARD",
@@ -8247,10 +8247,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:4.2.0", {
-          "packageLocation": "./.yarn/cache/color-npm-4.2.0-ea42aa584e-a5e7d8e8b4.zip/node_modules/color/",
+        ["npm:4.2.3", {
+          "packageLocation": "./.yarn/cache/color-npm-4.2.3-4a23227581-0579629c02.zip/node_modules/color/",
           "packageDependencies": [
-            ["color", "npm:4.2.0"],
+            ["color", "npm:4.2.3"],
             ["color-convert", "npm:2.0.1"],
             ["color-string", "npm:1.9.0"]
           ],
@@ -9186,6 +9186,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/detect-libc-npm-1.0.3-c30ac344d4-daaaed925f.zip/node_modules/detect-libc/",
           "packageDependencies": [
             ["detect-libc", "npm:1.0.3"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.0.1", {
+          "packageLocation": "./.yarn/cache/detect-libc-npm-2.0.1-2699cb2ac4-ccb05fcabb.zip/node_modules/detect-libc/",
+          "packageDependencies": [
+            ["detect-libc", "npm:2.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -14249,6 +14256,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node-gyp", "npm:8.4.0"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:5.0.0", {
+          "packageLocation": "./.yarn/unplugged/node-addon-api-npm-5.0.0-c0def7fecf/node_modules/node-addon-api/",
+          "packageDependencies": [
+            ["node-addon-api", "npm:5.0.0"],
+            ["node-gyp", "npm:8.4.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["node-domexception", [
@@ -15102,18 +15117,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prebuild-install", [
-        ["npm:7.0.0", {
-          "packageLocation": "./.yarn/cache/prebuild-install-npm-7.0.0-6678eb1e5c-413783f746.zip/node_modules/prebuild-install/",
+        ["npm:7.1.1", {
+          "packageLocation": "./.yarn/cache/prebuild-install-npm-7.1.1-cb9fc9d341-dbf96d0146.zip/node_modules/prebuild-install/",
           "packageDependencies": [
-            ["prebuild-install", "npm:7.0.0"],
-            ["detect-libc", "npm:1.0.3"],
+            ["prebuild-install", "npm:7.1.1"],
+            ["detect-libc", "npm:2.0.1"],
             ["expand-template", "npm:2.0.3"],
             ["github-from-package", "npm:0.0.0"],
             ["minimist", "npm:1.2.5"],
             ["mkdirp-classic", "npm:0.5.3"],
             ["napi-build-utils", "npm:1.0.2"],
             ["node-abi", "npm:3.5.0"],
-            ["npmlog", "npm:4.1.2"],
             ["pump", "npm:3.0.0"],
             ["rc", "npm:1.2.8"],
             ["simple-get", "npm:4.0.0"],
@@ -16304,6 +16318,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lru-cache", "npm:6.0.0"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:7.3.7", {
+          "packageLocation": "./.yarn/cache/semver-npm-7.3.7-3bfe704194-2fa3e87756.zip/node_modules/semver/",
+          "packageDependencies": [
+            ["semver", "npm:7.3.7"],
+            ["lru-cache", "npm:6.0.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["semver-diff", [
@@ -16422,17 +16444,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["sharp", [
-        ["npm:0.29.3", {
-          "packageLocation": "./.yarn/unplugged/sharp-npm-0.29.3-70033a2ec2/node_modules/sharp/",
+        ["npm:0.30.6", {
+          "packageLocation": "./.yarn/unplugged/sharp-npm-0.30.6-4067fc2ceb/node_modules/sharp/",
           "packageDependencies": [
-            ["sharp", "npm:0.29.3"],
-            ["color", "npm:4.2.0"],
-            ["detect-libc", "npm:1.0.3"],
-            ["node-addon-api", "npm:4.2.0"],
+            ["sharp", "npm:0.30.6"],
+            ["color", "npm:4.2.3"],
+            ["detect-libc", "npm:2.0.1"],
+            ["node-addon-api", "npm:5.0.0"],
             ["node-gyp", "npm:8.4.0"],
-            ["prebuild-install", "npm:7.0.0"],
-            ["semver", "npm:7.3.5"],
-            ["simple-get", "npm:4.0.0"],
+            ["prebuild-install", "npm:7.1.1"],
+            ["semver", "npm:7.3.7"],
+            ["simple-get", "npm:4.0.1"],
             ["tar-fs", "npm:2.1.1"],
             ["tunnel-agent", "npm:0.6.0"]
           ],
@@ -16509,6 +16531,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/simple-get-npm-4.0.0-14ed0bd6c2-8af4fb788b.zip/node_modules/simple-get/",
           "packageDependencies": [
             ["simple-get", "npm:4.0.0"],
+            ["decompress-response", "npm:6.0.0"],
+            ["once", "npm:1.4.0"],
+            ["simple-concat", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:4.0.1", {
+          "packageLocation": "./.yarn/cache/simple-get-npm-4.0.1-fa2a97645d-e4132fd27c.zip/node_modules/simple-get/",
+          "packageDependencies": [
+            ["simple-get", "npm:4.0.1"],
             ["decompress-response", "npm:6.0.0"],
             ["once", "npm:1.4.0"],
             ["simple-concat", "npm:1.0.1"]
