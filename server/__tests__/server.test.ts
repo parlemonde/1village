@@ -1,14 +1,14 @@
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import path from 'path';
 import request from 'supertest';
+import { createConnection, getConnection } from 'typeorm';
 
 import { getApp } from '../app';
 
-import { connectToDatabase } from './mock';
-
-// Mock database to create a in-memory db for testing.
+// Mock database to close database with myssql.
 jest.mock('../utils/database', () => ({
-  // __esModule: true,
-  connectToDatabase: async () => await connectToDatabase(),
+  __esModule: true,
+  connectToDatabase: async () => Promise.resolve(),
 }));
 
 // Mock frontend NextJS library. We don't need it for testing.
@@ -51,6 +51,20 @@ jest.mock('../authentication/login', () => ({
 //Info : https://medium.com/welldone-software/jest-how-to-mock-a-function-call-inside-a-module-21c05c57a39f
 
 describe('test entry point', () => {
+  beforeAll(() => {
+    return createConnection({
+      type: 'sqlite',
+      database: ':memory:',
+      dropSchema: true,
+      entities: [path.join(__dirname, '../entities/*.js')],
+      synchronize: true,
+      logging: false,
+    });
+  });
+  afterAll(() => {
+    const conn = getConnection();
+    return conn.close();
+  });
   describe('server and login', () => {
     describe('server is OK', () => {
       it('should return 200', async () => {

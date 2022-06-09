@@ -1,13 +1,14 @@
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import path from 'path';
 import supertest from 'supertest';
-import { createConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 
 import { getApp } from '../app';
-import { createGame } from '../controllers/activity';
 import { Activity } from '../entities/activity';
 import { User } from '../entities/user';
 import { Village } from '../entities/village';
+
+import { getTokenMock } from './mock';
 
 export const activity = {
   id: 18,
@@ -63,19 +64,10 @@ export const mimique = {
   value: '',
 };
 
-// Mock database to create a in-memory db for testing.
+// Mock database to close database with myssql.
 jest.mock('../utils/database', () => ({
   __esModule: true,
-  connectToDatabase: async () => {
-    return createConnection({
-      type: 'sqlite',
-      database: ':memory:',
-      dropSchema: true,
-      entities: [path.join(__dirname, '../entities/*.js')],
-      synchronize: true,
-      logging: false,
-    });
-  },
+  connectToDatabase: async () => Promise.resolve(),
 }));
 
 // Mock frontend NextJS library. We don't need it for testing.
@@ -90,6 +82,20 @@ jest.mock('next', () => ({
 }));
 
 describe('game', () => {
+  beforeAll(() => {
+    return createConnection({
+      type: 'sqlite',
+      database: ':memory:',
+      dropSchema: true,
+      entities: [path.join(__dirname, '../entities/*.js')],
+      synchronize: true,
+      logging: false,
+    });
+  });
+  afterAll(() => {
+    const conn = getConnection();
+    return conn.close();
+  });
   describe('get games', () => {
     describe('given game does not exist', () => {
       it('should return 404', async () => {
@@ -105,11 +111,17 @@ describe('game', () => {
     });
 
     describe('given game does exist', () => {
+      // let token: string;
+      // beforeEach(async () => {
+      //   token = await getTokenMock();
+      // });
+
       it('should return 200 status and the game', async () => {
-        const game = await mimique;
+        const game = mimique;
         try {
           const app = await getApp();
           const { body, statusCode } = await supertest(app).get(`/api/games/${game.id}`);
+          // .set({ Authorization: 'bearer ' + token, 'Content-Type': 'application/json' });
           expect(statusCode).toBe(200);
           expect(body.id).toEqual(game.id);
         } catch (e) {
