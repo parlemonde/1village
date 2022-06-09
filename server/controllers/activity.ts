@@ -494,7 +494,7 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
 });
 
 // --- create a game ---
-const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
+export const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
   const id = data.gameId;
   const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
   delete data['gameId'];
