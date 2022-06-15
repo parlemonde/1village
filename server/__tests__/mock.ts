@@ -2,6 +2,11 @@ import supertest from 'supertest';
 
 import { getApp } from '../app';
 
+/**
+ * function to create a token for the use of PLM's api
+ * @param auth empty object with token string property
+ * @returns auth with token inside
+ */
 export function loginUser(auth: { token: string }) {
   return async function () {
     const app = await getApp();
@@ -18,7 +23,9 @@ export function loginUser(auth: { token: string }) {
       });
   };
 }
-
+/**
+ * Mock for fake user to the response for login request
+ */
 export const fakeUser = {
   id: 1,
   email: 'teacher1@mail.io',
