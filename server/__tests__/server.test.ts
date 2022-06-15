@@ -1,14 +1,15 @@
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import path from 'path';
-import request from 'supertest';
+import supertest from 'supertest';
 import { createConnection, getConnection } from 'typeorm';
 
 import { getApp } from '../app';
 
-// Mock database to close database with myssql.
+import { fakeUser } from './mock';
+
+// Mock connection to database to avoid error message in console.
 jest.mock('../utils/database', () => ({
-  __esModule: true,
-  connectToDatabase: async () => Promise.resolve(),
+  connection: Promise.resolve(),
 }));
 
 // Mock frontend NextJS library. We don't need it for testing.
@@ -22,33 +23,12 @@ jest.mock('next', () => ({
   }),
 }));
 
-const fakeUser = {
-  id: 1,
-  email: 'teacher1@mail.io',
-  pseudo: 'teacher1',
-  level: 'CM1',
-  school: 'École polyvalente publique Tandou',
-  city: 'Paris',
-  postalCode: '75019',
-  address: '16 Rue Tandou, 75019 Paris',
-  avatar: null,
-  displayName: null,
-  accountRegistration: 0,
-  passwordHash: '$argon2i$v=19$m=4096,t=3,p=1$pR8B4dcw4skHCh8MjvMxBg$o4nkDI5WaV0xrOVJiR2qoNlU2WVonOsrGAb9IYScWyg',
-  firstLogin: 3,
-  type: 0,
-  villageId: 1,
-  country: { isoCode: 'FR', name: 'France' },
-  position: { lat: 48.8863442, lng: 2.380321 },
-};
-
 jest.mock('../authentication/login', () => ({
   __esModule: true,
   login: async () => ({
     user: fakeUser,
   }),
 }));
-//Info : https://medium.com/welldone-software/jest-how-to-mock-a-function-call-inside-a-module-21c05c57a39f
 
 describe('test entry point', () => {
   beforeAll(() => {
@@ -71,18 +51,18 @@ describe('test entry point', () => {
         try {
           const app = await getApp();
 
-          await request(app).get('/api').expect(200);
+          await supertest(app).get('/api').expect(200);
         } catch (e) {
           expect(400);
         }
       });
     });
 
-    describe('Login', () => {
+    describe('Login is', () => {
       it('should return 200', async () => {
         try {
           const app = await getApp();
-          const response = await request(app).post('/login').set('Accept', 'application/json');
+          const response = await supertest(app).post('/login').set('Accept', 'application/json');
           expect(response.status).toBe(200);
         } catch (e) {
           expect(400);

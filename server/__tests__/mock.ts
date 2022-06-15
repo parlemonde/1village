@@ -1,30 +1,40 @@
-import path from 'path';
-import request from 'supertest';
-import { createConnection } from 'typeorm';
+import supertest from 'supertest';
 
 import { getApp } from '../app';
 
-// Mock database to create a in-memory db for testing.
-export const connectToDatabase = async () => {
-  return createConnection({
-    type: 'sqlite',
-    database: ':memory:',
-    dropSchema: true,
-    entities: [path.join(__dirname, '../entities/*.js')],
-    synchronize: true,
-    logging: false,
-  });
-};
-
-export async function getTokenMock() {
-  let token = 'your token';
-  const app = await getApp();
-  await request(app)
-    .post('/login')
-    .set('Accept', 'application/json')
-    .end(function (err, res) {
-      if (err) throw err;
-      token = res.body.accessToken;
-    });
-  return token;
+export function loginUser(auth: { token: string }) {
+  return async function () {
+    const app = await getApp();
+    supertest(app)
+      .post('/login')
+      .send({
+        email: 'teacher1@mail.io',
+        password: 'helloWorld*',
+      })
+      .expect(200)
+      .end(function (err, res) {
+        if (err) throw err;
+        return (auth.token = res.body.token);
+      });
+  };
 }
+
+export const fakeUser = {
+  id: 1,
+  email: 'teacher1@mail.io',
+  pseudo: 'teacher1',
+  level: 'CM1',
+  school: 'École polyvalente publique Tandou',
+  city: 'Paris',
+  postalCode: '75019',
+  address: '16 Rue Tandou, 75019 Paris',
+  avatar: null,
+  displayName: null,
+  accountRegistration: 0,
+  passwordHash: '$argon2i$v=19$m=16,t=2,p=1$cTY0aFpyUmF2ZkhERnRSQQ$j7XF79KQqmGGay1bqtxNuQ',
+  firstLogin: 3,
+  type: 0,
+  villageId: 1,
+  country: { isoCode: 'FR', name: 'France' },
+  position: { lat: 48.8863442, lng: 2.380321 },
+};
