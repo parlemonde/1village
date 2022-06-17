@@ -141,37 +141,37 @@ const StoryStep5 = () => {
           {/* Object */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/1?edit=${activity.id}`}
-            imageUrl={data?.object?.imageUrl}
+            imageUrl={data.object?.imageUrl}
             isValid={isValid}
             error={errorSteps.includes(0)}
-            description={data?.object?.description}
+            description={data.object?.description}
           />
 
           {/* Place */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/2`}
-            imageUrl={data?.place?.imageUrl}
+            imageUrl={data.place?.imageUrl}
             isValid={isValid}
             error={errorSteps.includes(1)}
-            description={data?.place?.description}
+            description={data.place?.description}
           />
 
           {/* ODD */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/3`}
-            imageUrl={data?.odd?.imageUrl}
+            imageUrl={data.odd?.imageUrl}
             isValid={isValid}
             error={errorSteps.includes(2)}
-            description={data?.odd?.description}
+            description={data.odd?.description}
           />
 
           {/* Tale */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/4`}
-            imageUrl={data?.tale?.imageStory}
+            imageUrl={data.tale?.imageStory}
             isValid={isValid}
             error={errorSteps.includes(3)}
-            description={data?.tale?.tale}
+            description={data.tale?.tale}
           />
           <StepsButton prev="/creer-une-histoire/4" />
         </div>
