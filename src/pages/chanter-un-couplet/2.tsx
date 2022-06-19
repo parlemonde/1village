@@ -57,12 +57,12 @@ const SongStep2 = () => {
             {data?.verseLyrics.map((el, index) => (
               <SyllableEditor
                 key={`syllableEditor--verseLyrics--${index}`}
-                backline={el.back}
-                index={index}
-                update={updateVerse}
-                data={data.verseLyrics}
-                editable
-                song
+                value={el}
+                onChange={(newValue) => {
+                  const newVerseLyrics = [...data.verseLyrics];
+                  newVerseLyrics[index] = newValue;
+                  updateVerse(newVerseLyrics);
+                }}
               />
             ))}
           </div>

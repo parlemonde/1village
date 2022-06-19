@@ -53,6 +53,10 @@ const AnthemStep4 = () => {
     router.push('/parametrer-hymne/5');
   };
 
+  if (!data) {
+    return <Base></Base>;
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -69,14 +73,23 @@ const AnthemStep4 = () => {
         </p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.chorus.map((el, index) => (
+            {data.chorus.map((el, index) => (
               <SyllableEditor
                 key={`syllableEditor--chorus--${index}`}
-                backline={el.back}
-                index={index}
-                update={updateChorus}
-                data={data.chorus}
-                editable
+                value={el}
+                onChange={(newValue) => {
+                  const newChorus = [...data.chorus];
+                  newChorus[index] = newValue;
+                  updateChorus(newChorus);
+                }}
+                onDelete={() => {
+                  const newChorus = [...data.chorus];
+                  const deleted = newChorus.splice(index, 1);
+                  if (deleted.length > 0 && deleted[0].back && newChorus.length > index) {
+                    newChorus[index] = { ...newChorus[index], back: true };
+                  }
+                  updateChorus(newChorus);
+                }}
               />
             ))}
           </div>

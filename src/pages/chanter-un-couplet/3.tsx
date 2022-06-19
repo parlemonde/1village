@@ -27,6 +27,10 @@ const SongStep3 = () => {
     router.push('/chanter-un-couplet/4');
   };
 
+  if (!data) {
+    return <Base></Base>;
+  }
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -47,8 +51,8 @@ const SongStep3 = () => {
         </p>
         <p>Vous pouvez également chanter a cappella, ou en enregistrant un élève portant un casque.</p>
         <div className="width-900">
-          {data?.mixWithoutLyrics ? (
-            <audio controls src={data?.mixWithoutLyrics} />
+          {data.mixWithoutLyrics ? (
+            <audio controls src={data.mixWithoutLyrics} />
           ) : (
             <p>
               <b>Il manque votre mix du couplet !</b>
@@ -56,14 +60,14 @@ const SongStep3 = () => {
           )}
           <h2>Le refrain</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.chorus.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--chorus--${index}`} backline={el.back} index={index} data={data?.chorus} song />
+            {data.chorus.map((el, index) => (
+              <SyllableEditor key={`syllableEditor--chorus--${index}`} value={el} />
             ))}
           </div>
-          <h2>Votre couplet (démarre à {toTime(data?.introOutro[0].time)})</h2>
+          <h2>Votre couplet (démarre à {toTime(data.introOutro[0].time)})</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.verseLyrics.map((el, index) => (
-              <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} backline={el.back} index={index} data={data?.verseLyrics} song />
+            {data.verseLyrics.map((el, index) => (
+              <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} value={el} />
             ))}
           </div>
           <StepsButton prev="/chanter-un-couplet/2" next={onNext} />
