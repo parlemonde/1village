@@ -61,10 +61,13 @@ const AnthemStep3 = () => {
             {data.verseLyrics.map((el, index) => (
               <SyllableEditor
                 key={`syllableEditor--${index}`}
-                backline={el.back}
-                index={index}
-                data={data.verseLyrics}
-                update={(verseLyrics) => {
+                value={el}
+                onDelete={() => {
+                  const verseLyrics = [...data.verseLyrics];
+                  const deleted = verseLyrics.splice(index, 1);
+                  if (deleted.length > 0 && deleted[0].back && verseLyrics.length > index) {
+                    verseLyrics[index] = { ...verseLyrics[index], back: true };
+                  }
                   updateActivity({ data: { ...data, verseLyrics } });
                 }}
               />
