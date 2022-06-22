@@ -15,8 +15,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 
 const MascotteStep3 = () => {
   const router = useRouter();
-  const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const shouldSave = React.useRef(false);
+  const { activity, updateActivity } = React.useContext(ActivityContext);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -37,15 +36,7 @@ const MascotteStep3 = () => {
   const dataChange = (key: keyof MascotteData) => (newValue: string[]) => {
     const newData: MascotteData = { ...data, [key]: newValue };
     updateActivity({ data: newData });
-    shouldSave.current = true;
   };
-
-  React.useEffect(() => {
-    if (shouldSave.current) {
-      shouldSave.current = false;
-      save().catch();
-    }
-  }, [data?.fluentLanguages, data?.minorLanguages, data?.wantedForeignLanguages, data?.currencies, save]);
 
   if (!activity) return <Base>Redirecting ...</Base>;
 
