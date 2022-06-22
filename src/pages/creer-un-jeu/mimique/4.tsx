@@ -45,6 +45,10 @@ const MimiqueStep4 = () => {
   }, [activity, router]);
 
   const onPublish = async () => {
+    //Reset error in step to not show error in next mimic creation
+    window.sessionStorage.removeItem(`mimic-step-1ère-next`);
+    window.sessionStorage.removeItem(`mimic-step-2ème-next`);
+    window.sessionStorage.removeItem(`mimic-step-3ème-next`);
     setIsLoading(true);
     const { success } = await save(true);
     if (success) {
