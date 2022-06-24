@@ -105,7 +105,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
               className="text"
               style={{ fontSize: '0.9rem', margin: '0 0.25rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
             >
-              <strong>{userMascotte.data.mascotteName}</strong>, notre mascotte
+              <strong>{userMascotte.data.mascotteName}</strong>
             </span>
           ) : (
             <span
