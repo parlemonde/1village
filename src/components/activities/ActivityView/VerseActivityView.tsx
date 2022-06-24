@@ -11,7 +11,7 @@ export const VerseActivityView = ({ activity }: ActivityViewProps<VerseRecordAct
     <div>
       <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>Voilà les paroles de notre couplet :</div>
       {activity.data.verseLyrics.map((el, index) => (
-        <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} backline={el.back} index={index} data={activity.data.verseLyrics} song />
+        <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} value={el} />
       ))}
       <div>
         <audio controls src={activity.data.verse} />
