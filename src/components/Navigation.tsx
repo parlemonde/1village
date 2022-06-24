@@ -62,6 +62,7 @@ export const Navigation = (): JSX.Element => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
+  const isAdmin = user !== null && user.type === UserType.SUPER_ADMIN;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -204,8 +205,8 @@ export const Navigation = (): JSX.Element => {
                 isMistery={
                   !village ||
                   !user ||
-                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isObservator) ||
-                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && !isObservator)
+                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isObservator && !isAdmin) ||
+                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && !isObservator && !isAdmin)
                 }
               ></Flag>
             ))}
