@@ -251,7 +251,7 @@ const PlayMimique = () => {
           )}
           <Grid item xs={12} md={12}>
             {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-            {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>}
+            {/* {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>} */}
             {(found || foundError) && (
               <>
                 <h2>Origine de cette mimique :</h2>
@@ -263,13 +263,17 @@ const PlayMimique = () => {
         <Modal
           open={errorModalOpen}
           title="Oups"
-          cancelLabel="Réessayer"
+          cancelLabel={foundError ? 'Fermer' : 'Réessayer'}
           maxWidth="lg"
           ariaDescribedBy="new-user-desc"
           ariaLabelledBy="new-user-title"
           onClose={() => setErrorModalOpen(false)}
         >
-          Dommage ! Ce n’est pas cette réponse. Essayez encore !
+          {foundError ? (
+            <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>
+          ) : (
+            <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
+          )}
         </Modal>
         <Modal
           open={lastMimiqueModalOpen}
