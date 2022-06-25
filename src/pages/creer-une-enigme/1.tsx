@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, TextField } from '@mui/material';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
-import { ENIGME_DATA, ENIGME_TYPES, getEnigme } from 'src/activity-types/enigme.constants';
+import { ENIGME_TYPES, getCategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -47,6 +47,7 @@ const EnigmeStep1 = () => {
           enigmeTypeIndex,
           {
             theme: null,
+            themeName: '',
             indiceContentIndex: 1,
           },
           null,
@@ -63,6 +64,7 @@ const EnigmeStep1 = () => {
           enigmeTypeIndex,
           {
             theme: null,
+            themeName: '',
             indiceContentIndex: 1,
           },
           null,
@@ -76,20 +78,6 @@ const EnigmeStep1 = () => {
     }
   }, [activity, createNewActivity, enigmeTypeIndex, router]);
 
-  const onClick = (index: number) => () => {
-    if (index === -1) {
-      if (!data.themeName) {
-        return;
-      }
-      updateActivity({ data: { ...data, theme: index, themeName: data.themeName.toLowerCase() } });
-    } else {
-      const newData = data;
-      delete newData.themeName;
-      updateActivity({ data: { ...newData, theme: index } });
-    }
-    router.push('/creer-une-enigme/2');
-  };
-
   const onNext = () => {
     router.push('/creer-une-enigme/2');
   };
@@ -98,15 +86,31 @@ const EnigmeStep1 = () => {
     return <div></div>;
   }
 
+  const updateData = (newData: Partial<EnigmeData>) => {
+    updateActivity({ data: { ...data, ...newData } });
+  };
+
+  const onClick = (index: number) => () => {
+    if (index === -1) {
+      if (!data.themeName) {
+        return;
+      }
+      updateData({ theme: index, themeName: data.themeName.toLowerCase() });
+    } else {
+      updateData({ theme: index, themeName: undefined });
+    }
+    router.push('/creer-une-enigme/2');
+  };
+
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
-  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
+  const { subCategories } = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
 
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/creer-une-enigme" />}
         <Steps
-          steps={[getEnigme(activity.subType, data).step1 || 'Thème', 'Énigme', 'Réponse', 'Prévisualisation']}
+          steps={[getCategoryName(activity.subType, data) || 'Thème', 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
           activeStep={0}
         />
@@ -119,9 +123,9 @@ const EnigmeStep1 = () => {
                 utilisé comme indice supplémentaire par les Pélicopains.
               </p>
               <TextField
-                value={data.themeName}
+                value={data.themeName || ''}
                 onChange={(event) => {
-                  updateActivity({ data: { themeName: event.target.value.slice(0, 400) } });
+                  updateData({ themeName: event.target.value.slice(0, 400) });
                 }}
                 label="Énigme à créer"
                 variant="outlined"
@@ -140,8 +144,8 @@ const EnigmeStep1 = () => {
                 {enigmeType.description}
               </p>
               <div>
-                {enigmeData.map((t, index) => (
-                  <ThemeChoiceButton key={index} label={t.label} description={t.description} onClick={onClick(index)} />
+                {subCategories.map((subCat, index) => (
+                  <ThemeChoiceButton key={index} label={subCat.label} description={subCat.description} onClick={onClick(index)} />
                 ))}
                 <ThemeChoiceButton
                   isOpen={otherOpen}

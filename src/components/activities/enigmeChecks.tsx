@@ -1,7 +1,8 @@
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 
 export const isFirstStepValid = (data: EnigmeData): boolean => {
-  if (data?.theme === null) return false;
+  if (data.theme === -1 && data.themeName === undefined) return false;
+  if (data.themeName === null || data.themeName === '') return false;
   return true;
 };
 

@@ -3,8 +3,8 @@ import React from 'react';
 
 import { Button, Card } from '@mui/material';
 
-import { ENIGME_DATA, ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
-import type { EnigmeActivity } from 'src/activity-types/enigme.types';
+import { ENIGME_TYPES, getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
+import type { EnigmeActivity, EnigmeData } from 'src/activity-types/enigme.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import Timer from 'src/svg/enigme/timer.svg';
@@ -18,8 +18,9 @@ type EnigmeActivityViewProps = ActivityViewProps<EnigmeActivity> & {
 export const EnigmeActivityView = ({ activity, isAnswer }: EnigmeActivityViewProps) => {
   const [showClue, setShowClue] = React.useState(false);
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
-  const enigmeData = ENIGME_DATA[activity.subType ?? 0] ?? ENIGME_DATA[0];
+  const { subCategories } = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
   const timeLeft = getEnigmeTimeLeft(activity);
+  const data = (activity?.data as EnigmeData) || null;
 
   if (isAnswer && timeLeft > 0) {
     return (
@@ -95,10 +96,7 @@ export const EnigmeActivityView = ({ activity, isAnswer }: EnigmeActivityViewPro
               <h3>Indice supplémentaire</h3>
               <p className="text" style={{ margin: 0, padding: 0 }}>
                 {`${enigmeType.title2} est `}
-                <strong>
-                  {(activity.data.theme === -1 ? activity.data.themeName ?? '' : enigmeData[activity.data.theme]?.step ?? '').toLowerCase()}
-                </strong>{' '}
-                !
+                <strong>{(activity.data.theme === -1 ? activity.data.themeName ?? '' : subCategories[data.theme].label ?? '').toLowerCase()}</strong>!
               </p>
             </Card>
           )}
