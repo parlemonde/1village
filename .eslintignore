@@ -1,6 +1,5 @@
 .next
 .vscode
 .yarn
-.*.js
 dist
 node_modules
