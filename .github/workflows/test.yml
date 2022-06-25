@@ -23,7 +23,7 @@ jobs:
 
       # [4] test typescript.
       - name: Run typescript
-        run: yarn typscript
+        run: yarn typescript
 
   lint:
     runs-on: ubuntu-latest

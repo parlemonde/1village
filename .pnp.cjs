@@ -42,6 +42,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@mui/system", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.8.5"],\
             ["@next/eslint-plugin-next", "npm:12.1.6"],\
             ["@svgr/webpack", "npm:6.2.1"],\
+            ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.57"],\
             ["@swc/core", "npm:1.2.205"],\
             ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
             ["@types/cookie-parser", "npm:1.4.3"],\
@@ -176,6 +177,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@mui/system", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.8.5"],\
             ["@next/eslint-plugin-next", "npm:12.1.6"],\
             ["@svgr/webpack", "npm:6.2.1"],\
+            ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.57"],\
             ["@swc/core", "npm:1.2.205"],\
             ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
             ["@types/cookie-parser", "npm:1.4.3"],\
@@ -5191,6 +5193,36 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@svgr/core", "npm:6.2.1"],\
             ["@svgr/plugin-jsx", "virtual:4cf4760ae3d4da52544534a9503ba3feb62980605ad62a9c1ff7edfedc9f61fa5304493d8b8652e14ff321dc138c33a48bbb9d4851d03192767eeaaa4534e815#npm:6.2.1"],\
             ["@svgr/plugin-svgo", "virtual:c497fb9616b3acb524ac0ccbbb1f910c0db99a973c6379114fb7469c77bf3a2954dcf6d1c48ccc12a790b966c952694499e004303fdb0e6fdd5711e42e7b7990#npm:6.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@swc/cli", [\
+        ["npm:0.1.57", {\
+          "packageLocation": "./.yarn/cache/@swc-cli-npm-0.1.57-161586148e-d19f02233f.zip/node_modules/@swc/cli/",\
+          "packageDependencies": [\
+            ["@swc/cli", "npm:0.1.57"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.57", {\
+          "packageLocation": "./.yarn/__virtual__/@swc-cli-virtual-fcccfc9aaf/0/cache/@swc-cli-npm-0.1.57-161586148e-d19f02233f.zip/node_modules/@swc/cli/",\
+          "packageDependencies": [\
+            ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.57"],\
+            ["@swc/core", "npm:1.2.205"],\
+            ["@types/chokidar", null],\
+            ["@types/swc__core", null],\
+            ["chokidar", null],\
+            ["commander", "npm:7.2.0"],\
+            ["fast-glob", "npm:3.2.11"],\
+            ["slash", "npm:3.0.0"],\
+            ["source-map", "npm:0.7.4"]\
+          ],\
+          "packagePeers": [\
+            "@swc/core",\
+            "@types/chokidar",\
+            "@types/swc__core",\
+            "chokidar"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -16871,6 +16903,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/source-map-npm-0.7.3-e3b4f7982a-cd24efb3b8.zip/node_modules/source-map/",\
           "packageDependencies": [\
             ["source-map", "npm:0.7.3"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:0.7.4", {\
+          "packageLocation": "./.yarn/cache/source-map-npm-0.7.4-bc8d018ab6-01cc5a74b1.zip/node_modules/source-map/",\
+          "packageDependencies": [\
+            ["source-map", "npm:0.7.4"]\
           ],\
           "linkType": "HARD"\
         }]\
