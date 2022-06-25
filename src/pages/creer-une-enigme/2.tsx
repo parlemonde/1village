@@ -79,7 +79,6 @@ const EnigmeStep2 = () => {
             updateContent={updateContent}
             addContent={addDescriptionContent}
             deleteContent={deleteDescriptionContent}
-            save={save}
           />
           <StepsButton prev={`/creer-une-enigme/1?edit=${activity.id}`} next={onNext} />
         </div>

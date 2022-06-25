@@ -11,6 +11,7 @@ import { TextField } from '@mui/material';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
+import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
@@ -19,6 +20,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { SSO_HOSTNAME } from 'src/utils/sso';
+import { getUserDisplayName } from 'src/utils';
 import type { User } from 'types/user.type';
 
 const Presentation = () => {
@@ -71,6 +73,7 @@ const Presentation = () => {
       address: newUser.address,
       pseudo: newUser.pseudo,
       email: newUser.email,
+      displayName: newUser.displayName,
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -85,6 +88,28 @@ const Presentation = () => {
     } else {
       setUser({ ...user, ...updatedValues });
       enqueueSnackbar('Compte mis à jour avec succès !', {
+        variant: 'success',
+      });
+    }
+    setIsLoading(false);
+  };
+  const updateAvatar = async (avatar: string) => {
+    setIsLoading(true);
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: {
+        avatar,
+      },
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...user, avatar });
+      enqueueSnackbar('Avatar mis à jour avec succès !', {
         variant: 'success',
       });
     }
@@ -168,7 +193,11 @@ const Presentation = () => {
             Photo de profil :
           </label>
           <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
-            <AvatarImg user={user} size="small" noLink />
+            {editMode === 0 ? (
+              <AvatarEditor id={0} value={user.avatar || undefined} onChange={updateAvatar} />
+            ) : (
+              <AvatarImg user={user} size="small" noLink displayAsUser />
+            )}
           </div>
         </div>
 
@@ -220,6 +249,16 @@ const Presentation = () => {
           isEditMode={editMode === 0}
           onChange={(postalCode) => {
             setNewUser((u) => (!u ? u : { ...u, postalCode }));
+          }}
+        />
+        <PanelInput
+          value={newUser.displayName || ''}
+          defaultValue={getUserDisplayName(user, false, true)}
+          label="Nom affiché sur vos publications :"
+          placeholder={getUserDisplayName(user, false, true)}
+          isEditMode={editMode === 0}
+          onChange={(displayName) => {
+            setNewUser((u) => (!u ? u : { ...u, displayName }));
           }}
         />
         {editMode === 0 && (

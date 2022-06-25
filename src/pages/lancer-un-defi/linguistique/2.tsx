@@ -19,7 +19,7 @@ import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const DefiStep2 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+  const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
 
   const data = (activity?.data as LanguageDefiData) || null;
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
@@ -115,7 +115,6 @@ const DefiStep2 = () => {
                 updateContent={updateContent}
                 addContent={addDescriptionContent}
                 deleteContent={deleteDescriptionContent}
-                save={save}
               />
             </>
           )}

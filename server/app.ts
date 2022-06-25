@@ -1,8 +1,3 @@
-// --- Load environment variables ---
-// eslint-disable-next-line arca/newline-after-import-section
-import { config } from 'dotenv';
-config();
-
 // eslint-disable-next-line arca/import-ordering
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -26,7 +21,7 @@ import { setVillage } from './middlewares/setVillage';
 import { removeTrailingSlash } from './middlewares/trailingSlash';
 import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
-import { onError, normalizePort, getDefaultDirectives } from './utils/server';
+import { getDefaultDirectives } from './utils/server';
 
 const isDevENV = process.env.NODE_ENV !== 'production';
 const frontendHandler = next({ dev: isDevENV });
@@ -39,7 +34,7 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-async function start() {
+export async function getApp() {
   // Connect to DB
   const connection: Connection | null = await connectToDatabase();
   if (connection === null) {
@@ -104,6 +99,16 @@ async function start() {
   // [5] --- Add frontend ---
   app.get('/country-flags/*', handleErrors(authenticate(UserType.TEACHER)), express.static(path.join(__dirname, '../../public/country-flags')));
   app.use(express.static(path.join(__dirname, '../../public'))); // app.js is located at ./dist/server and public at ./public
+
+  // Send 404 for static files not found by express static.
+  app.get('/static-js/*', (_, res: Response) => {
+    res.status(404).send('Error 404 - Not found.');
+  });
+  app.get('/static-images/*', (_, res: Response) => {
+    res.status(404).send('Error 404 - Not found.');
+  });
+
+  // NextJS and all pages
   app.get('/_next/*', (req, res) => {
     handle(req, res).catch((e) => console.error(e));
   });
@@ -131,16 +136,5 @@ async function start() {
     res.status(404).send('Error 404 - Not found.');
   });
 
-  // [7] --- Start server ---
-  const port = normalizePort(process.env.PORT || '5000');
-  const server = app.listen(port);
-  server.on('error', onError);
-  server.on('listening', () => {
-    logger.info(`App listening on port ${port}!`);
-  });
+  return app;
 }
-
-start().catch((e: Error) => {
-  console.error(e);
-  process.exit(0);
-});

@@ -47,8 +47,12 @@ const ContenuLibre = () => {
     return <Base></Base>;
   }
 
-  const handleChange = () => {
+  const handlePinnedChange = () => {
     updateActivity({ isPinned: !activity.isPinned });
+  };
+
+  const handleUserChange = () => {
+    updateActivity({ displayAsUser: !activity.displayAsUser });
   };
 
   const dataChange = (key: keyof FreeContentData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +103,11 @@ const ContenuLibre = () => {
           />
           <div>
             Épingler la publication ?
-            <Switch checked={activity?.isPinned} onChange={handleChange} value={activity?.isPinned} color="primary" />
+            <Switch checked={activity.isPinned} onChange={handlePinnedChange} value={activity.isPinned} color="primary" />
+          </div>
+          <div>
+            Publier sous votre nom la publication ? (Pas Pelico)
+            <Switch checked={activity.displayAsUser} onChange={handleUserChange} value={activity.displayAsUser} color="primary" />
           </div>
           <p className="text">Image à la une :</p>
           <div className="editor" style={{ marginTop: 0 }}>

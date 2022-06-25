@@ -3,21 +3,25 @@ import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { getUserDisplayName } from 'src/utils';
+import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 type UserDisplayNameProps = {
   user: User;
+  activity?: Activity;
   noLink?: boolean;
+  displayAsUser?: boolean;
   className?: string;
   style?: React.CSSProperties;
 };
-export const UserDisplayName = ({ user, className, style, noLink = false }: UserDisplayNameProps) => {
+
+export const UserDisplayName = ({ user, activity, className, style, noLink = false, displayAsUser = false }: UserDisplayNameProps) => {
   const userId = React.useContext(UserContext)?.user?.id ?? 0;
   const isSelf = userId === user.id;
   const isPelico = user && user.type >= UserType.MEDIATOR;
 
-  if (isPelico) {
+  if (isPelico && !displayAsUser) {
     return (
       <span className={className} style={style}>
         Pelico
@@ -25,12 +29,12 @@ export const UserDisplayName = ({ user, className, style, noLink = false }: User
     );
   }
 
-  if (!noLink && user && user.mascotteId) {
+  if (!isPelico && !noLink && user && user.mascotteId) {
     return (
       <Link href={`/activite/${user.mascotteId}`}>
         <a href={`/activite/${user.mascotteId}`}>
           <span className={className} style={style}>
-            {getUserDisplayName(user, isSelf)}
+            {getUserDisplayName(user, isSelf, false, activity)}
           </span>
         </a>
       </Link>
@@ -38,7 +42,7 @@ export const UserDisplayName = ({ user, className, style, noLink = false }: User
   }
   return (
     <span className={className} style={style}>
-      {getUserDisplayName(user, isSelf)}
+      {getUserDisplayName(user, isSelf, displayAsUser, activity)}
     </span>
   );
 };

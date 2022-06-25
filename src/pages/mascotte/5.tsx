@@ -106,7 +106,7 @@ const MascotteStep4 = () => {
       return;
     }
     setIsLoading(true);
-    const success = await save(true);
+    const { success } = await save(true);
     if (success) {
       const newUser: Partial<User> = {};
       if ((activity.data as MascotteData).mascotteImage) {

@@ -1,0 +1,70 @@
+@import 'variables';
+
+.SlotMachine {
+  position: absolute;
+  margin-top: 7rem;
+  width: 365px;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-around;
+}
+
+.slot {
+  // position: relative;
+  position: relative;
+  display: inline-block;
+  height: 100px;
+  width: 80px;
+}
+
+section {
+  position: absolute;
+  border-radius: 15px !important;
+  border: 3px solid black !important;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  background-color: white;
+  border-radius: 2px;
+  border: 1px solid lightgrey;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 25px;
+  line-height: 60px;
+  cursor: default;
+}
+
+.container {
+  position: absolute;
+  top: -6px;
+  width: 100%;
+  transition: top ease-in-out 0.5s;
+  text-align: center;
+}
+
+.roll {
+  width: 50px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.handle {
+  &--is-rotating {
+    animation: rotate 0.7s 1;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

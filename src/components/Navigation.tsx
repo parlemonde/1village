@@ -10,17 +10,23 @@ import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
+import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
+import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
+import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
+import StoryIcon from 'src/svg/navigation/story-icon.svg';
 import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
+import { serializeToQueryUrl } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
@@ -31,6 +37,7 @@ interface Tab {
   path: string;
   icon: React.ReactNode;
   phase?: number;
+  disabled?: boolean;
 }
 
 const ACCUEIL: Tab = {
@@ -43,82 +50,125 @@ const FREE_CONTENT: Tab = {
   path: '/contenu-libre',
   icon: <FreeContentIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
 };
-
-// check color of icons
-const TABS_PER_PHASE: Tab[] = [
-  // ---- PHASE 1 ----
-  {
-    label: 'Présenter un indice culturel',
-    path: '/indice-culturel',
-    icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 1,
-  },
-  {
-    label: 'Présenter un symbole',
-    path: '/symbole',
-    icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 1,
-  },
-  {
-    label: 'Poser une question',
-    path: '/poser-une-question/1',
-    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 1,
-  },
-  // ---- PHASE 2 ----
-  {
-    label: 'Réaliser un reportage',
-    path: '/realiser-un-reportage',
-    icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Lancer un défi',
-    path: '/lancer-un-defi',
-    icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Jouer ensemble',
-    path: '/creer-un-jeu',
-    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Créer une énigme',
-    path: '/creer-une-enigme',
-    icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Poser une question',
-    path: '/poser-une-question/1',
-    icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  {
-    label: 'Réagir à une activité',
-    path: '/reagir-a-une-activite/1',
-    icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 2,
-  },
-  // ---- PHASE 3 ----
-  {
-    label: 'Jouer ensemble',
-    path: '/creer-un-jeu',
-    icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-    phase: 3,
-  },
-];
+const ANTHEM_PARAM: Tab = {
+  label: "Paramétrer l'hymne",
+  path: '/parametrer-hymne',
+  icon: <AnthemIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+};
 
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  const isObservator = user !== null && user.type === UserType.OBSERVATOR;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
+
+  const getStories = React.useCallback(async () => {
+    if (!village) {
+      setFirstStoryCreated(false);
+      return;
+    }
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities${serializeToQueryUrl({
+        villageId: village.id,
+        type: ActivityType.STORY,
+      })}`,
+    });
+    setFirstStoryCreated(response.data.length > 0);
+  }, [axiosLoggedRequest, village]);
+
+  React.useEffect(() => {
+    getStories().catch(console.error);
+  }, [getStories]);
+
+  // check color of icons
+  const TABS_PER_PHASE: Tab[] = React.useMemo(
+    () => [
+      // ---- PHASE 1 ----
+      {
+        label: 'Présenter un indice culturel',
+        path: '/indice-culturel',
+        icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+      },
+      {
+        label: 'Présenter un symbole',
+        path: '/symbole',
+        icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+      },
+      {
+        label: 'Poser une question',
+        path: '/poser-une-question/1',
+        icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+      },
+      // ---- PHASE 2 ----
+      {
+        label: 'Réaliser un reportage',
+        path: '/realiser-un-reportage',
+        icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+      },
+      {
+        label: 'Lancer un défi',
+        path: '/lancer-un-defi',
+        icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+      },
+      {
+        label: 'Jouer ensemble',
+        path: '/creer-un-jeu',
+        icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+      },
+      {
+        label: 'Créer une énigme',
+        path: '/creer-une-enigme',
+        icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+      },
+      {
+        label: 'Poser une question',
+        path: '/poser-une-question/1',
+        icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+      },
+      {
+        label: 'Réagir à une activité',
+        path: '/reagir-a-une-activite/1',
+        icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 2,
+      },
+      // ---- PHASE 3 ----
+      {
+        label: 'Inventer une histoire',
+        path: '/creer-une-histoire',
+        icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+      },
+      {
+        label: 'Ré-inventer une histoire',
+        path: '/re-inventer-une-histoire',
+        icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+        disabled: firstStoryCreated === false,
+      },
+      {
+        label: 'Chanter un couplet',
+        path: '/chanter-un-couplet',
+        icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+        disabled: !village?.anthemId,
+      },
+    ],
+    [village, firstStoryCreated],
+  );
 
   const fixedTabs = React.useMemo(
     () => [
@@ -129,11 +179,11 @@ export const Navigation = (): JSX.Element => {
         icon:
           user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
       },
-      ...(isModerateur ? [FREE_CONTENT] : []),
+      ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isModerateur],
+    [user, isModerateur, selectedPhase],
   );
-  const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase]);
+  const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
   const currentPathName = router.pathname.split('/')[1] || '';
 
@@ -154,8 +204,8 @@ export const Navigation = (): JSX.Element => {
                 isMistery={
                   !village ||
                   !user ||
-                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur) ||
-                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && !isModerateur)
+                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && !isObservator) ||
+                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && !isObservator)
                 }
               ></Flag>
             ))}
@@ -182,7 +232,7 @@ export const Navigation = (): JSX.Element => {
                     width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
-                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase)}
+                  disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.disabled}
                 >
                   {tab.label}
                 </Button>

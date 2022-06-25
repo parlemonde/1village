@@ -53,10 +53,12 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
-              pointerEvents: 'none', //Disable click on video
+              cursor: 'pointer',
             }}
           >
-            <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+            <Link href="/creer-un-jeu/mimique" passHref>
+              <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+            </Link>
           </div>
         </div>
       )}

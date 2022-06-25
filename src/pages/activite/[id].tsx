@@ -15,20 +15,24 @@ import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
 import { getQueryString } from 'src/utils';
+import type { AnyData, Activity as ActivityInterface } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
-const titles = {
-  [ActivityType.MASCOTTE]: 'Mascotte',
-  [ActivityType.PRESENTATION]: 'Présentation',
-  [ActivityType.DEFI]: 'Défi',
-  [ActivityType.ENIGME]: 'Énigme',
-  [ActivityType.QUESTION]: 'Question',
-  [ActivityType.CONTENU_LIBRE]: 'Message de Pelico',
-  [ActivityType.INDICE]: 'Indice culturel',
-  [ActivityType.SYMBOL]: 'Symbole',
-  [ActivityType.REPORTAGE]: 'Reportage',
-  [ActivityType.REACTION]: 'Réaction',
+const titles: Record<number, (activity: ActivityInterface<AnyData>) => string> = {
+  [ActivityType.MASCOTTE]: () => 'Mascotte',
+  [ActivityType.PRESENTATION]: () => 'Présentation',
+  [ActivityType.DEFI]: () => 'Défi',
+  [ActivityType.ENIGME]: () => 'Énigme',
+  [ActivityType.QUESTION]: () => 'Question',
+  [ActivityType.CONTENU_LIBRE]: (a) => (a.displayAsUser ? `Message` : 'Message de Pelico'),
+  [ActivityType.INDICE]: () => 'Indice culturel',
+  [ActivityType.SYMBOL]: () => 'Symbole',
+  [ActivityType.REPORTAGE]: () => 'Reportage',
+  [ActivityType.REACTION]: () => 'Réaction',
+  [ActivityType.STORY]: () => 'Histoire',
+  [ActivityType.RE_INVENT_STORY]: () => 'Ré-inventer une histoire',
+  [ActivityType.VERSE_RECORD]: () => 'Couplet',
 };
 
 const Activity = () => {
@@ -60,8 +64,10 @@ const Activity = () => {
     return null;
   }
 
+  const title = (titles[activity.type] || (() => ''))(activity);
+
   return (
-    <Base rightNav={<RightNavigation activityUser={activityUser} />} hideLeftNav showSubHeader>
+    <Base rightNav={<RightNavigation activityUser={activityUser} displayAsUser={activity.displayAsUser} />} hideLeftNav showSubHeader>
       <div className="activity__back-container">
         <Link href="/">
           <a className="activity__back-button">
@@ -74,7 +80,7 @@ const Activity = () => {
             <ChevronRightIcon />
             <Link href={`/activite/${activity.id}`}>
               <a href={`/activite/${activity.id}`} className="activity__back-button">
-                Activité - {titles[activity.type]}
+                Activité - {title}
               </a>
             </Link>
             <ChevronRightIcon />
@@ -83,16 +89,26 @@ const Activity = () => {
         ) : (
           <>
             <ChevronRightIcon />
-            <span className="activity__back-button activity__back-button--lighter">Activité - {titles[activity.type]}</span>
+            <span className="activity__back-button activity__back-button--lighter">Activité - {title}</span>
           </>
         )}
       </div>
+      {activity.type === ActivityType.STORY || activity.type === ActivityType.RE_INVENT_STORY ? (
+        <>
+          <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
+          <div className="activity__container">
+            {!isAnswer && (
+              <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="activity__container">
+          <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
 
-      <div className="activity__container">
-        <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
-
-        {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />}
-      </div>
+          {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />}
+        </div>
+      )}
     </Base>
   );
 };

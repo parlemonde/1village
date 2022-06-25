@@ -26,7 +26,9 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
   ],
   [
     { key: 0, label: 'Toutes', value: 'all' },
-    { key: 1, label: 'Hymne', value: [10] },
+    { key: 1, label: 'Couplet', value: [12] },
+    { key: 2, label: 'Histoire', value: [13] },
+    { key: 3, label: 'Histoire ré-inventée', value: [14] },
   ],
 ];
 

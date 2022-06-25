@@ -42,11 +42,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const [village, setVillage] = React.useState<Village | null>(initialVillage);
   const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
-  const [selectedPhase, setSelectedPhase] = React.useState(
-    initialVillage && ((user?.type || UserType.TEACHER) >= UserType.OBSERVATOR || initialVillage.activePhase <= (user?.firstLogin || 1))
-      ? initialVillage.activePhase
-      : 1,
-  );
+  const [selectedPhase, setSelectedPhase] = React.useState(user?.firstLogin || 1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(
     initialVillage === null && user && user.type === UserType.TEACHER ? true : false,
@@ -150,8 +146,13 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     }
   };
 
+  const value = React.useMemo(
+    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase }),
+    [village, selectedPhase, showSelectVillageModal, setSelectedPhase],
+  );
+
   return (
-    <VillageContext.Provider value={{ village, selectedPhase, showSelectVillageModal, setSelectedPhase }}>
+    <VillageContext.Provider value={value}>
       {children}
       <Modal
         open={isModalOpen}

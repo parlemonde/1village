@@ -4,11 +4,13 @@
   position: relative;
   white-space: pre-wrap;
 }
+
 /* @noflip */
 .public-DraftStyleDefault-ltr {
   direction: ltr;
   // text-align: left;
 }
+
 /* @noflip */
 .public-DraftStyleDefault-rtl {
   direction: rtl;
@@ -18,9 +20,11 @@
 .center-aligned-block {
   text-align: center;
 }
+
 .right-aligned-block {
   text-align: right;
 }
+
 /**
  * These rules provide appropriate text direction for counter pseudo-elements.
  */
@@ -28,10 +32,12 @@
 .public-DraftStyleDefault-listLTR {
   direction: ltr;
 }
+
 /* @noflip */
 .public-DraftStyleDefault-listRTL {
   direction: rtl;
 }
+
 /**
  * Default spacing for list container elements. Override with CSS as needed.
  */
@@ -51,6 +57,7 @@
   padding: 0;
   border: 1px dashed $primary-color;
   border-radius: 5px;
+
   &--with-drag-handle {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -71,9 +78,11 @@
     min-width: 0;
     padding: 0.5rem 2.2rem 0.5rem 0.5rem;
     min-height: 4rem;
+
     &--without-padding {
       padding: 0 2.2rem 0 0;
     }
+
     &--without-min-height {
       min-height: unset;
     }
@@ -100,10 +109,12 @@
     border-radius: 5px;
   }
 }
+
 .activity-data {
   margin: 1rem 0rem;
   padding: 0;
 }
+
 .preview-block {
   border: 1px dashed $success-color;
   padding: 0.5rem;
@@ -125,11 +136,13 @@
   transform: translate(-0.5rem, -0.5rem);
   z-index: 20;
 }
+
 @include for-small-screen {
   .text-editor__toolbar-container {
     top: calc(123px + 0.5rem);
   }
 }
+
 .text-editor__toolbar {
   display: none;
   position: absolute;
@@ -139,10 +152,12 @@
   transform: translateY(calc(-100% - 5px));
   left: -1px;
 }
+
 .text-editor__toolbar--visible {
   display: block;
   animation: fadeInFromNone 0.15s ease-out;
 }
+
 @keyframes fadeInFromNone {
   0% {
     display: none;

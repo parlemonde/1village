@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
@@ -8,6 +8,7 @@ import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
 import { Game } from './game';
+import { Image } from './image';
 import { User } from './user';
 
 export { VillagePhase };
@@ -38,6 +39,13 @@ export class Village implements VillageInterface {
   })
   public activePhase: number;
 
+  @OneToOne(() => Activity, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'anthemId' })
+  public anthem: Activity | null;
+
+  @Column({ nullable: true })
+  public anthemId: number | null;
+
   @OneToMany(() => User, (user: User) => user.village)
   public users: User[];
 
@@ -49,4 +57,7 @@ export class Village implements VillageInterface {
 
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
   public gameResponses: GameResponse[];
+
+  @OneToMany(() => Image, (image: Image) => image.village)
+  public images: Image[];
 }

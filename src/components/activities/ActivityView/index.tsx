@@ -11,7 +11,9 @@ import {
   isQuestion,
   isReaction,
   isReportage,
+  isStory,
   isSymbol,
+  isVerseRecord,
 } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -29,6 +31,8 @@ import { DefiActivityView } from './DefiActivityView';
 import { EnigmeActivityView } from './EnigmeActivityView';
 import { FreeContentView } from './FreeContentView';
 import { MascotteActivityView } from './MascotteActivityView';
+import { StoryActivityView } from './StoryActivityView';
+import { VerseActivityView } from './VerseActivityView';
 import type { ActivityViewProps } from './activity-view.types';
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
@@ -42,10 +46,10 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
       <div>
         {user !== null && (
           <div className="activity__header">
-            <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
+            <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} displayAsUser={activity.displayAsUser} />
             <div className="activity-card__header_info">
               <h2>
-                <UserDisplayName user={user} />
+                <UserDisplayName user={user} activity={activity} displayAsUser={activity.displayAsUser} />
               </h2>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
@@ -77,6 +81,8 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
         {isSymbol(activity) && <ContentView content={activity.content} />}
         {isReportage(activity) && <ContentView content={activity.content} />}
         {isReaction(activity) && <ContentView content={activity.content} />}
+        {isStory(activity) && <StoryActivityView activity={activity} user={user} />}
+        {isVerseRecord(activity) && <VerseActivityView activity={activity} user={user} />}
       </div>
     )
   );
