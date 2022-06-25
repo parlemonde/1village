@@ -1,12 +1,11 @@
 import React from 'react';
 
-import type { ActivityContent } from 'types/activity.type';
-
 import { H5pView } from './views/H5pView';
 import { ImageView } from './views/ImageView';
 import { SoundView } from './views/SoundView';
 import { TextView } from './views/TextView';
 import { VideoView } from './views/VideoView';
+import type { ActivityContent } from 'types/activity.type';
 
 type ContentViewProps = { content: ActivityContent[] };
 

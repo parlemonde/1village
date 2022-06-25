@@ -10,13 +10,12 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+import { UserContext } from './userContext';
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 import { getCookie, setCookie } from 'src/utils/cookies';
 import { UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
-
-import { UserContext } from './userContext';
 
 interface VillageContextValue {
   village: Village | null;

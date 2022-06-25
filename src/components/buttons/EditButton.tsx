@@ -1,10 +1,10 @@
 import React from 'react';
 
 import EditIcon from '@mui/icons-material/Edit';
+import type { ButtonProps } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import type { Theme } from '@mui/material/styles';
-import type { ButtonProps } from '@mui/material';
 
 import { successColor, errorColor, warningColor } from 'src/styles/variables.const';
 

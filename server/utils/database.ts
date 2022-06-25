@@ -5,7 +5,6 @@ import type { Connection, ConnectionOptions } from 'typeorm';
 import { createConnection, getRepository } from 'typeorm';
 
 import { User, UserType } from '../entities/user';
-
 import { sleep } from './index';
 import { logger } from './logger';
 

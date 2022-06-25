@@ -1,6 +1,5 @@
-import type { CookingDefiData } from 'src/activity-types/defi.types';
-
 import { isFirstStepValid, isThirdStepValid } from '../defiChecksCooking';
+import type { CookingDefiData } from 'src/activity-types/defi.types';
 
 const validData = {
   name: 'Lorem ipsum dolor',

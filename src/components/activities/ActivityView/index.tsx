@@ -1,6 +1,14 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { REACTIONS } from '../utils';
+import { DefiActivityView } from './DefiActivityView';
+import { EnigmeActivityView } from './EnigmeActivityView';
+import { FreeContentView } from './FreeContentView';
+import { MascotteActivityView } from './MascotteActivityView';
+import { StoryActivityView } from './StoryActivityView';
+import { VerseActivityView } from './VerseActivityView';
+import type { ActivityViewProps } from './activity-view.types';
 import {
   isDefi,
   isEnigme,
@@ -24,16 +32,6 @@ import { useActivity } from 'src/services/useActivity';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
 import { UserType } from 'types/user.type';
-
-import { REACTIONS } from '../utils';
-
-import { DefiActivityView } from './DefiActivityView';
-import { EnigmeActivityView } from './EnigmeActivityView';
-import { FreeContentView } from './FreeContentView';
-import { MascotteActivityView } from './MascotteActivityView';
-import { StoryActivityView } from './StoryActivityView';
-import { VerseActivityView } from './VerseActivityView';
-import type { ActivityViewProps } from './activity-view.types';
 
 export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();

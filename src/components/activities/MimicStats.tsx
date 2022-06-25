@@ -1,15 +1,13 @@
 import React from 'react';
 
 import type { LinearProgressProps } from '@mui/material';
-import { LinearProgress, Typography } from '@mui/material';
-import { Grid } from '@mui/material';
+import { LinearProgress, Typography, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 
+import { Flag } from '../Flag';
 import type { GameResponse } from 'types/gameResponse.type';
 import { MimicResponseValue } from 'types/mimicResponse.type';
 import type { User } from 'types/user.type';
-
-import { Flag } from '../Flag';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (

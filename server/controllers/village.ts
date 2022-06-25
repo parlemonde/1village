@@ -6,9 +6,8 @@ import { UserType } from '../entities/user';
 import { Village } from '../entities/village';
 import { createVillagesFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
-import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { valueOrDefault } from '../utils';
-
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
 const villageController = new Controller('/villages');

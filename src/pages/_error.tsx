@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import type { NextPageContext } from 'next';
+import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@mui/material';

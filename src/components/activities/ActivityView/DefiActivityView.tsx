@@ -3,12 +3,11 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
+import type { ActivityViewProps } from './activity-view.types';
 import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.constants';
 import type { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) => {
   return (

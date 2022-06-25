@@ -1,26 +1,25 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useQueryClient } from 'react-query';
 import React from 'react';
+import { useQueryClient } from 'react-query';
 
+import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Tooltip } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import type { QuestionActivity } from 'src/activity-types/question.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { getActivityPhase } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { ActivityType } from 'types/activity.type';
-import { ActivityStatus } from 'types/activity.type';
+import { ActivityType, ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 const Question3 = () => {

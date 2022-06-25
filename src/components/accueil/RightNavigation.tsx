@@ -3,6 +3,9 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { AvatarImg } from '../Avatar';
+import { Flag } from '../Flag';
+import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { Map } from 'src/components/Map';
 import { icons, DESC } from 'src/components/activities/utils';
@@ -16,10 +19,6 @@ import { getUserDisplayName, toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
-
-import { AvatarImg } from '../Avatar';
-import { Flag } from '../Flag';
-import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 
 export const RightNavigation = ({ activityUser, displayAsUser = false }: { activityUser: User; displayAsUser?: boolean }) => {
   const [localTime, setLocalTime] = React.useState<string | null>(null);

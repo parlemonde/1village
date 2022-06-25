@@ -7,10 +7,10 @@ import LanguageIcon from '@mui/icons-material/Language';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 
 const DRAWER_WIDTH = 220;

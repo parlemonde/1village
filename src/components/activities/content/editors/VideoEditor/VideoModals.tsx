@@ -1,20 +1,19 @@
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
+import React from 'react';
 import ReactPlayer from 'react-player';
 import { useQueryClient } from 'react-query';
-import React from 'react';
 
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Alert from '@mui/material/Alert';
 import { Button, Divider, TextField } from '@mui/material';
+import Alert from '@mui/material/Alert';
 
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { useCopy } from 'src/hooks/useCopy';
-import { defaultTextButtonStyle } from 'src/styles/variables.const';
-import { fontDetailColor, bgPage } from 'src/styles/variables.const';
+import { defaultTextButtonStyle, fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 
 interface VideoModalsProps {

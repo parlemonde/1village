@@ -2,12 +2,11 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
+import { ActivityCard } from '../ActivityCard';
 import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Activity } from 'types/activity.type';
 import type { User } from 'types/user.type';
-
-import { ActivityCard } from '../ActivityCard';
 
 interface StoriesDataCardViewProps {
   dataStories?: Activity[];

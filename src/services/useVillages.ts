@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
+import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
-import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import type { Village } from 'types/village.type';

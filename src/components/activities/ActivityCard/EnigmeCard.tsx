@@ -4,14 +4,13 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { CommentIcon } from './CommentIcon';
+import type { ActivityCardProps } from './activity-card.types';
 import { ENIGME_TYPES } from 'src/activity-types/enigme.constants';
 import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 
 export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<EnigmeActivity>) => {
   const firstImage = React.useMemo(

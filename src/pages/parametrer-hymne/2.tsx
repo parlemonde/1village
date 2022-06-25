@@ -7,8 +7,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import type { AnthemData } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';

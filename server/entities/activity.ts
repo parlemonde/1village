@@ -13,7 +13,6 @@ import {
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
-
 import { Game } from './game';
 import { Image } from './image';
 import { User } from './user';

@@ -4,7 +4,6 @@ import type { NextFunction, Request, Response } from 'express';
 import { getUserFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
-
 import { getAccessToken } from './lib/tokens';
 
 const secret: string = process.env.APP_SECRET || '';

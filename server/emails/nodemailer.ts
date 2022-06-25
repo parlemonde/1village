@@ -1,5 +1,5 @@
-import type Mail from 'nodemailer/lib/mailer';
 import nodemailer from 'nodemailer';
+import type Mail from 'nodemailer/lib/mailer';
 
 import { logger } from '../utils/logger';
 

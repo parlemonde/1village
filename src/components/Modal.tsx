@@ -1,17 +1,17 @@
 import React from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
+import { CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import MuiDialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import type { LinearProgressProps } from '@mui/material/LinearProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { CircularProgress } from '@mui/material';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';

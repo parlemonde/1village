@@ -6,8 +6,8 @@ import { ButtonBase, TextField, Card } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 

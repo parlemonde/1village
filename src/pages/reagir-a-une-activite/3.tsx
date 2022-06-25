@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Tooltip } from '@mui/material';
 
 import { isReaction } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import ActivityLink from 'src/components/activities/Link';
 import { Activities } from 'src/components/activities/List';
 import { ContentView } from 'src/components/activities/content/ContentView';

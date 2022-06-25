@@ -3,8 +3,8 @@ import React from 'react';
 
 import { isReaction } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';

@@ -2,6 +2,22 @@ import React from 'react';
 
 import Paper from '@mui/material/Paper';
 
+import { titles, icons, REACTIONS } from '../utils';
+import { AnthemCard } from './AnthemCard';
+import { DefiCard } from './DefiCard';
+import { EnigmeCard } from './EnigmeCard';
+import { FreeContentCard } from './FreeContentCard';
+import { IndiceCard } from './IndiceCard';
+import { MascotteCard } from './MascotteCard';
+import { MimicCard } from './MimicCard';
+import { PresentationCard } from './PresentationCard';
+import { QuestionCard } from './QuestionCard';
+import { ReactionCard } from './ReactionCard';
+import { ReportageCard } from './ReportageCard';
+import { StoryCard } from './StoryCard';
+import { SymbolCard } from './SymbolCard';
+import { VerseRecordCard } from './VerseRecordCard';
+import type { ActivityCardProps } from './activity-card.types';
 import {
   isAnthem,
   isDefi,
@@ -29,24 +45,6 @@ import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { UserType } from 'types/user.type';
-
-import { titles, icons, REACTIONS } from '../utils';
-
-import { AnthemCard } from './AnthemCard';
-import { DefiCard } from './DefiCard';
-import { EnigmeCard } from './EnigmeCard';
-import { FreeContentCard } from './FreeContentCard';
-import { IndiceCard } from './IndiceCard';
-import { MascotteCard } from './MascotteCard';
-import { MimicCard } from './MimicCard';
-import { PresentationCard } from './PresentationCard';
-import { QuestionCard } from './QuestionCard';
-import { ReactionCard } from './ReactionCard';
-import { ReportageCard } from './ReportageCard';
-import { StoryCard } from './StoryCard';
-import { SymbolCard } from './SymbolCard';
-import { VerseRecordCard } from './VerseRecordCard';
-import type { ActivityCardProps } from './activity-card.types';
 
 export const ActivityCard = ({
   activity,

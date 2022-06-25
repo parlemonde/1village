@@ -1,13 +1,12 @@
 import type { Vector3, Camera } from 'three';
 import { Group, CylinderGeometry, MeshStandardMaterial, Mesh, TextureLoader } from 'three';
 
-import { clamp, getGravatarUrl } from 'src/utils';
-import type { User } from 'types/user.type';
-
 import { polar2Cartesian } from '../lib/coords-utils';
 import type { HoverableObject } from '../lib/hoverable-object';
 import { loadGLB } from '../lib/load-glb';
 import { GLOBE_RADIUS } from '../world-map.constants';
+import { clamp, getGravatarUrl } from 'src/utils';
+import type { User } from 'types/user.type';
 
 export const getPins = async (users: Array<User>, cameraPos: Vector3): Promise<Group> => {
   const pins = new Group();

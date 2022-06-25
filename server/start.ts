@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
-import { getStagingApp } from './app-staging';
 import { getApp } from './app';
+import { getStagingApp } from './app-staging';
 import { logger } from './utils/logger';
 import { normalizePort, onError } from './utils/server';
 

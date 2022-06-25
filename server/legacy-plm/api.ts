@@ -4,7 +4,6 @@ import { getRepository } from 'typeorm';
 
 import { User } from '../entities/user';
 import { logger } from '../utils/logger';
-
 import type { PLM_User } from './user';
 import { createPLMUserToDB } from './user';
 import type { PLM_Village } from './village';

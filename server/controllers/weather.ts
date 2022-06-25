@@ -4,9 +4,8 @@ import axios from 'axios';
 import type { Weather } from '../../types/weather.type';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
-import { logger } from '../utils/logger';
 import { getQueryString, serializeToQueryUrl } from '../utils';
-
+import { logger } from '../utils/logger';
 import { Controller } from './controller';
 
 // types from OpenWeather API.

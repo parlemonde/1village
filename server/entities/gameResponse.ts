@@ -1,7 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 import type { GameResponse as GameResponseInterface } from '../../types/gameResponse.type';
-
 import { Game } from './game';
 import { User } from './user';
 import { Village } from './village';

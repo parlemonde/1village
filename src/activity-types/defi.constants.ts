@@ -1,5 +1,3 @@
-import { replaceTokens } from 'src/utils';
-
 import type {
   DefiActivity,
   CookingDefiActivity,
@@ -9,6 +7,7 @@ import type {
   LanguageDefiActivity,
   LanguageDefiData,
 } from './defi.types';
+import { replaceTokens } from 'src/utils';
 
 export const COOKING_DEFIS = [
   {

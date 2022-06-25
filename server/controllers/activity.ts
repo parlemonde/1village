@@ -13,9 +13,8 @@ import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
-import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { getQueryString } from '../utils';
-
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { commentController } from './comment';
 import { Controller } from './controller';
 

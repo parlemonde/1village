@@ -1,18 +1,18 @@
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import { useQueryClient } from 'react-query';
 import React from 'react';
+import { useQueryClient } from 'react-query';
 
-import CircularProgress from '@mui/material/CircularProgress';
 import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { getMascotteContent } from 'src/activity-types/mascotte.constants';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ImageView } from 'src/components/activities/content/views/ImageView';
 import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { EditButton } from 'src/components/buttons/EditButton';

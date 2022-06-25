@@ -1,13 +1,13 @@
 import React from 'react';
 
 import NoSsr from '@mui/material/NoSsr';
+import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Table from '@mui/material/Table';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument

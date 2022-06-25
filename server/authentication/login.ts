@@ -7,7 +7,6 @@ import { User } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
-
 import { getAccessToken } from './lib/tokens';
 
 const secret: string = process.env.APP_SECRET || '';

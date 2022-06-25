@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import type { SourceProps } from 'react-player/base';
-import ReactPlayer from 'react-player';
 import React from 'react';
+import ReactPlayer from 'react-player';
+import type { SourceProps } from 'react-player/base';
 
 import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress, Tooltip } from '@mui/material';
 

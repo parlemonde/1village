@@ -1,14 +1,12 @@
 import React from 'react';
 
-import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
-
 import { H5pView } from '../content/views/H5pView';
 import { ImageView } from '../content/views/ImageView';
 import { SoundView } from '../content/views/SoundView';
 import { TextView } from '../content/views/TextView';
 import { VideoView } from '../content/views/VideoView';
-
 import type { ActivityViewProps } from './activity-view.types';
+import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
 
 const resultObj = (p: { id: number; value: string }) => ({
   text: <TextView id={p.id} value={p.value} key={p.id} />,

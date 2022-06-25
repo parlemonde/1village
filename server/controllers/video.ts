@@ -5,7 +5,6 @@ import { Video } from '../entities/video';
 import { deleteVideo, getVideoLink, uploadVideo, getPictureForVideo } from '../fileUpload';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
-
 import { Controller } from './controller';
 
 const videoController = new Controller('/videos');

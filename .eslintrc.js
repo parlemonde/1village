@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       globalReturn: true,
@@ -8,55 +8,101 @@ module.exports = {
       objectLiteralDuplicateProperties: false,
       jsx: true,
     },
-    ecmaVersion: 2018,
-    sourceType: "module",
+    ecmaVersion: 2021,
+    sourceType: 'module',
   },
-  plugins: ["@typescript-eslint", "prettier", "arca"],
+  plugins: ['import', '@typescript-eslint', 'prettier'],
   extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended",
-    "plugin:@next/next/recommended"
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:@next/next/recommended',
   ],
   rules: {
-    "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-inferrable-types": "off",
-    "@typescript-eslint/member-delimiter-style": [
-      "error",
+    // misc
+    'no-console': ['error', { allow: ['warn', 'error'] }],
+    camelcase: ['error', { properties: 'always' }],
+
+    // force import types
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+        prefer: 'type-imports',
+        disallowTypeAnnotations: false,
+      },
+    ],
+
+    // plugin:import
+    'import/newline-after-import': ['error', { count: 1 }],
+    'import/order': [
+      'error',
+      {
+        pathGroups: [
+          {
+            pattern: '@mui/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: 'src/**',
+            group: 'sibling',
+          },
+          {
+            pattern: 'types/**',
+            group: 'sibling',
+          },
+        ],
+        groups: [
+          ['builtin', 'external', 'internal'],
+          ['parent', 'sibling', 'index'],
+        ],
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc', caseInsensitive: false },
+      },
+    ],
+
+    // react
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+
+    // typescript
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-inferrable-types': 'off',
+    '@typescript-eslint/member-delimiter-style': [
+      'error',
       {
         multiline: {
-          delimiter: "semi",
+          delimiter: 'semi',
           requireLast: true,
         },
         singleline: {
-          delimiter: "semi",
+          delimiter: 'semi',
           requireLast: false,
         },
       },
     ],
-    '@typescript-eslint/consistent-type-imports': [
-      'error',
-      {
-          prefer: 'type-imports',
-          disallowTypeAnnotations: false
-      }
-    ],
-    "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
-    "no-console": ["error", { allow: ["warn", "error"] }],
-    "camelcase": ["error", { "properties": "always" }],
-    "arca/import-ordering": ["error", { sections: ["@material-ui", "@mui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],
-    "arca/newline-after-import-section": ["error", { sections: ["@material-ui", "@mui", "^(src|types|server)/", "^\\.\\./", "^\\./"] }],
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+
+    // "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
   },
   settings: {
-    "react": {
-      "version": "detect",
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.svg'],
+      },
+      typescript: {}, // this loads <rootdir>/tsconfig.json to eslint
+    },
+    react: {
+      version: 'detect',
     },
   },
 };

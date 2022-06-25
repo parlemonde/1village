@@ -3,17 +3,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Tooltip } from '@mui/material';
 
 import { isReportage } from 'src/activity-types/anyActivity';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { getErrorSteps } from 'src/components/activities/reportageChecks';
 import { EditButton } from 'src/components/buttons/EditButton';

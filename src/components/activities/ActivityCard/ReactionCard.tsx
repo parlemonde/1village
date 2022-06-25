@@ -4,13 +4,12 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { CommentIcon } from './CommentIcon';
+import type { ActivityCardProps } from './activity-card.types';
 import type { ReactionActivity } from 'src/activity-types/reaction.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 
 export const ReactionCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ReactionActivity>) => {
   const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);

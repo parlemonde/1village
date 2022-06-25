@@ -1,9 +1,8 @@
-import type Mail from 'nodemailer/lib/mailer';
 import nodemailer from 'nodemailer';
+import type Mail from 'nodemailer/lib/mailer';
 import path from 'path';
 
 import { logger } from '../utils/logger';
-
 import { getNodeMailer } from './nodemailer';
 import { renderFile } from './renderFile';
 

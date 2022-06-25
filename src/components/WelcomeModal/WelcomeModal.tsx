@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { UserType } from 'types/user.type';
-
 import { FirstPhase } from './FirstPhase';
 import { SecondPhase } from './SecondPhase';
 import { ThirdPhase } from './ThirdPhase';
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { UserType } from 'types/user.type';
 
 export const WelcomeModal = () => {
   const { user } = React.useContext(UserContext);

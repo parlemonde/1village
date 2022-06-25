@@ -4,10 +4,9 @@ import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
 import { VillagePhase } from '../../types/village.type';
 import { countriesMap } from '../utils/countries-map';
-
 import { Activity } from './activity';
-import { GameResponse } from './gameResponse';
 import { Game } from './game';
+import { GameResponse } from './gameResponse';
 import { Image } from './image';
 import { User } from './user';
 

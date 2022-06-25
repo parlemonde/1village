@@ -1,9 +1,4 @@
-import type { Activity } from 'types/activity.type';
-import { ActivityType } from 'types/activity.type';
-import type { StoryActivity } from 'types/story.type';
-
 import type { GameActivity } from '../../types/game.type';
-
 import type { AnthemActivity } from './anthem.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
@@ -16,6 +11,9 @@ import type { ReactionActivity } from './reaction.types';
 import type { ReportageActivity } from './reportage.types';
 import type { SymbolActivity } from './symbol.types';
 import type { VerseRecordActivity } from './verseRecord.types';
+import { ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
+import type { StoryActivity } from 'types/story.type';
 
 export const isPresentation = (activity: Activity): activity is PresentationActivity => {
   return activity.type === ActivityType.PRESENTATION;

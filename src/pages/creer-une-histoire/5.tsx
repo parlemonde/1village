@@ -2,14 +2,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Tooltip } from '@mui/material';
-import { Button, Backdrop, CircularProgress } from '@mui/material';
+import { Tooltip, Button, Backdrop, CircularProgress } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { ImageStepContainer } from 'src/components/FinalStep/ImageStepContainer';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';

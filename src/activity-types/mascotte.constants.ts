@@ -1,9 +1,8 @@
+import type { MascotteData } from './mascotte.types';
 import { capitalize, naturalJoin, pluralS } from 'src/utils';
 import type { Country } from 'types/country.type';
 import type { Currency } from 'types/currency.type';
 import type { Language } from 'types/language.type';
-
-import type { MascotteData } from './mascotte.types';
 
 export const DEFAULT_MASCOTTE_DATA: MascotteData = {
   presentation: '',

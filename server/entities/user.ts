@@ -4,10 +4,9 @@ import type { Country } from '../../types/country.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
-
 import { Activity } from './activity';
-import { GameResponse } from './gameResponse';
 import { Game } from './game';
+import { GameResponse } from './gameResponse';
 import { Image } from './image';
 import { Village } from './village';
 

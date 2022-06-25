@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { logger } from '../utils/logger';
-
 import { Controller } from './controller';
 
 const XAPI_SERVER_URL = process.env.XAPI_URL || '';

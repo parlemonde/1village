@@ -2,12 +2,11 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
-import { GameResponse } from '../entities/gameResponse';
 import { Game } from '../entities/game';
+import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
-import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { getQueryString } from '../utils';
-
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
 const gameController = new Controller('/games');

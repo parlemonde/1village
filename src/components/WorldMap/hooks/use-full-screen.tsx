@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 

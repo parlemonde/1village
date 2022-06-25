@@ -1,19 +1,18 @@
 import Image from 'next/image';
 import React from 'react';
 
-import CardMedia from '@mui/material/CardMedia';
+import { Container } from '@mui/material';
 import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { Container } from '@mui/material';
 import { Box } from '@mui/system';
-
-import { isStory } from 'src/activity-types/anyActivity';
-import { bgPage } from 'src/styles/variables.const';
-import type { StoryActivity } from 'types/story.type';
 
 import StoriesDataCardView from './StoriesDataCardView';
 import type { ActivityViewProps } from './activity-view.types';
+import { isStory } from 'src/activity-types/anyActivity';
+import { bgPage } from 'src/styles/variables.const';
+import type { StoryActivity } from 'types/story.type';
 
 export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
   const { object, place, odd } = activity.data;

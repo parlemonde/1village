@@ -7,7 +7,6 @@ import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
-
 import { Controller } from './controller';
 
 const commentController = new Controller('/comments');

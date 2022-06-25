@@ -2,10 +2,9 @@ import React from 'react';
 
 import Checkbox from '@mui/material/Checkbox';
 
+import { FilterSelect } from './FilterSelect';
 import { Flag } from 'src/components/Flag';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
-
-import { FilterSelect } from './FilterSelect';
 
 export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | number[] }[][] = [
   [

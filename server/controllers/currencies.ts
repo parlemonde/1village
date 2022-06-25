@@ -1,6 +1,5 @@
 import { UserType } from '../entities/user';
 import { currencies } from '../utils/iso-4217-currencies-french';
-
 import { Controller } from './controller';
 
 const currencyController = new Controller('/currencies');

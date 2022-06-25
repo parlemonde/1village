@@ -4,8 +4,8 @@ import { Checkbox } from '@mui/material';
 
 import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/mascotteChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';

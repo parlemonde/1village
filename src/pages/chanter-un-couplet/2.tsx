@@ -4,8 +4,8 @@ import React from 'react';
 import type { Syllable } from 'src/activity-types/anthem.types';
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 

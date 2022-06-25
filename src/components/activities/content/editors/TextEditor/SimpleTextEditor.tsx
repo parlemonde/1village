@@ -17,10 +17,8 @@ import {
 import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
-import Paper from '@mui/material/Paper';
 import { Divider } from '@mui/material';
-
-import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
+import Paper from '@mui/material/Paper';
 
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
@@ -29,6 +27,7 @@ import type { LinkValue } from './toolbar/Link';
 import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
+import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
 function blockStyleFn(block: ContentBlock): string {
   const blockAlignment = block.getData() && block.getData().get('text-align');

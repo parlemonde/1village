@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, Link as RegisterLink } from '@mui/material';
-import { NoSsr } from '@mui/material';
+import { Button, Link as RegisterLink, NoSsr } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import Logo from 'src/svg/logo.svg';

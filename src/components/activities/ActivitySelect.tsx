@@ -3,14 +3,13 @@ import React from 'react';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Button, CircularProgress } from '@mui/material';
 
+import { Activities } from './List';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
 import type { Activity } from 'types/activity.type';
-
-import { Activities } from './List';
 
 const ACTIVITIES_PER_PAGE = 10;
 

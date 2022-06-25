@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Box } from '@mui/material';
 
 import { useLanguages } from 'src/services/useLanguages';
 import type { Language } from 'types/language.type';

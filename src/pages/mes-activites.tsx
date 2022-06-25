@@ -1,5 +1,5 @@
-import { useQueryClient } from 'react-query';
 import React from 'react';
+import { useQueryClient } from 'react-query';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';

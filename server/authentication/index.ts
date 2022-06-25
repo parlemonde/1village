@@ -4,7 +4,6 @@ import morgan from 'morgan';
 
 import { handleErrors } from '../middlewares/handleErrors';
 import { jsonify } from '../middlewares/jsonify';
-
 import { login } from './login';
 import { logout } from './logout';
 import { loginWithPlmSSO } from './plm_sso';

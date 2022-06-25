@@ -3,11 +3,9 @@ import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase } from '@mui/material';
 
-import { AvatarImg } from 'src/components/Avatar';
-
 import type { EditorProps } from '../../content.types';
-
 import { ImageModal } from './ImageModal';
+import { AvatarImg } from 'src/components/Avatar';
 
 export const AvatarEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {}, isRounded = true }: EditorProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);

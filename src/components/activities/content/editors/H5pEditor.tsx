@@ -1,14 +1,12 @@
 import React from 'react';
 
-import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-
-import { H5p } from 'src/components/H5p';
-import { Modal } from 'src/components/Modal';
+import TextField from '@mui/material/TextField';
 
 import type { EditorProps } from '../content.types';
-
 import { EditorContainer } from './EditorContainer';
+import { H5p } from 'src/components/H5p';
+import { Modal } from 'src/components/Modal';
 
 const IFRAME_REGEX = /<\s*iframe([^>]*)>.*?<\s*\/\s*iframe>/im;
 const SRC_REGEX = /src\s*=\s*"(.+?)"/im;

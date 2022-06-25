@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import React from 'react';
 
-import { KeepRatio } from 'src/components/KeepRatio';
-
 import type { ViewProps } from '../content.types';
+import { KeepRatio } from 'src/components/KeepRatio';
 
 export const ImageView = ({ value }: ViewProps) => {
   return (

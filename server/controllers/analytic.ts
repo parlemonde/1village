@@ -2,15 +2,13 @@ import type { JSONSchemaType } from 'ajv';
 import useragent from 'express-useragent';
 import { getRepository, Between } from 'typeorm';
 
-import type { AnalyticData } from '../../types/analytics.type';
-import type { NavigationPerf, BrowserPerf } from '../../types/analytics.type';
+import type { AnalyticData, NavigationPerf, BrowserPerf } from '../../types/analytics.type';
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
+import { generateTemporaryToken, getQueryString } from '../utils';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
-import { generateTemporaryToken, getQueryString } from '../utils';
-
 import { Controller } from './controller';
 
 const analyticController = new Controller('/analytics');

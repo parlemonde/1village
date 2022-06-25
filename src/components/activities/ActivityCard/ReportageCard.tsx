@@ -1,18 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import ReactPlayer from 'react-player';
 import React from 'react';
+import ReactPlayer from 'react-player';
 
 import { Button } from '@mui/material';
 
+import { CommentIcon } from './CommentIcon';
+import type { ActivityCardProps } from './activity-card.types';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageActivity } from 'src/activity-types/reportage.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 
 export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ReportageActivity>) => {
   const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);

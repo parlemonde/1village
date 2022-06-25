@@ -1,9 +1,8 @@
-// eslint-disable-next-line arca/import-ordering
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import rateLimit from 'express-rate-limit';
 import type { Response, RequestHandler } from 'express';
 import express, { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import next from 'next';

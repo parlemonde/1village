@@ -6,8 +6,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import AudioMixer from 'src/components/audio/Mixer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';

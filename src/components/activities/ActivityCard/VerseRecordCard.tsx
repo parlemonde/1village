@@ -3,11 +3,10 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import type { VerseRecordActivity } from 'src/activity-types/verseRecord.types';
-import { RedButton } from 'src/components/buttons/RedButton';
-
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
+import type { VerseRecordActivity } from 'src/activity-types/verseRecord.types';
+import { RedButton } from 'src/components/buttons/RedButton';
 
 export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<VerseRecordActivity>) => (
   <div

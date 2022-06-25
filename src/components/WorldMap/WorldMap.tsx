@@ -1,11 +1,9 @@
-// eslint-disable-next-line arca/import-ordering -- Should be imported after leaflet.
-import {} from 'leaflet.fullscreen';
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import L from 'leaflet';
-import ReactDOM from 'react-dom';
+import {} from 'leaflet.fullscreen';
 import * as React from 'react';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import ReactDOM from 'react-dom';
 import {
   Scene,
   PerspectiveCamera,
@@ -19,14 +17,11 @@ import {
   Raycaster,
   Mesh,
 } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Button, ButtonGroup, CircularProgress } from '@mui/material';
-
-import { useVillageUsers } from 'src/services/useVillageUsers';
-import { clamp, debounce, throttle } from 'src/utils';
-import { UserType } from 'types/user.type';
 
 import { UserPopover } from './UserPopover';
 import { getCapitals } from './data/capitals';
@@ -39,6 +34,9 @@ import { cartesian2Polar, polar2Cartesian } from './lib/coords-utils';
 import { disposeNode } from './lib/dispose-node';
 import { getAtmosphereGlow } from './lib/get-atmosphere-glow';
 import { GLOBE_IMAGE_URL, BACKGROUND_IMAGE_URL, SKY_RADIUS, MAX_DISTANCE, MIN_DISTANCE, GLOBE_RADIUS } from './world-map.constants';
+import { useVillageUsers } from 'src/services/useVillageUsers';
+import { clamp, debounce, throttle } from 'src/utils';
+import { UserType } from 'types/user.type';
 
 const isWebGLAvailable = () => {
   try {

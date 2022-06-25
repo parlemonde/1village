@@ -1,7 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import L from 'leaflet';
-// eslint-disable-next-line arca/import-ordering -- Should be imported after leaflet.
 import {} from 'leaflet.fullscreen';
 import maplibregl from 'maplibre-gl';
 import React from 'react';

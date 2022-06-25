@@ -3,12 +3,10 @@ import type { Object3D, Scene, Raycaster, Camera } from 'three';
 
 import Card from '@mui/material/Card';
 
-import type { User } from 'types/user.type';
-
 import { UserPopover } from '../UserPopover';
 import type { HoverableObject } from '../lib/hoverable-object';
-import { onResetHoveredObject } from '../lib/hoverable-object';
-import { isHoverable } from '../lib/hoverable-object';
+import { onResetHoveredObject, isHoverable } from '../lib/hoverable-object';
+import type { User } from 'types/user.type';
 
 export const useObjectHover = () => {
   const canvasBoundingRectRef = React.useRef<DOMRect | null>(null);

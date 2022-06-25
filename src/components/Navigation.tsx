@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
-import Switch from '@mui/material/Switch';
 import { Button } from '@mui/material';
+import Switch from '@mui/material/Switch';
 
+import { AvatarImg } from './Avatar';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
@@ -29,8 +30,6 @@ import { serializeToQueryUrl } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
-
-import { AvatarImg } from './Avatar';
 
 interface Tab {
   label: string;

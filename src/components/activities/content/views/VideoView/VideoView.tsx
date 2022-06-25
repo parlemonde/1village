@@ -1,14 +1,13 @@
 import { useSnackbar } from 'notistack';
-import ReactPlayer from 'react-player';
 import React from 'react';
+import ReactPlayer from 'react-player';
 
 import { Button, CircularProgress } from '@mui/material';
 
+import type { ViewProps } from '../../content.types';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { UserContext } from 'src/contexts/userContext';
 import { serializeToQueryUrl } from 'src/utils';
-
-import type { ViewProps } from '../../content.types';
 
 const VideoView = ({ value }: ViewProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);

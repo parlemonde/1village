@@ -5,7 +5,6 @@ import { ImageType } from '../../types/story.type';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { getQueryString } from '../utils';
-
 import { Controller } from './controller';
 
 const storyController = new Controller('/stories');

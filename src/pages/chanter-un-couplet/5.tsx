@@ -9,8 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';

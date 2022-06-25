@@ -3,7 +3,6 @@ import type { JSONSchemaType } from 'ajv';
 import type { Request, Response } from 'express';
 
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
-
 import { getNewAccessToken } from './lib/tokens';
 
 type TokenParams = {

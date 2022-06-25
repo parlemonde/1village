@@ -1,18 +1,17 @@
 import Link from 'next/link';
-import ReactPlayer from 'react-player';
 import React from 'react';
+import ReactPlayer from 'react-player';
 
 import { Button } from '@mui/material';
 
+import { CommentIcon } from './CommentIcon';
+import type { ActivityCardProps } from './activity-card.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
 import type { GameActivity, MimicsData } from 'types/game.type';
 import { GameType } from 'types/game.type';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
   const { village } = React.useContext(VillageContext);

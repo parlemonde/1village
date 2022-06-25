@@ -4,18 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
-import { Tooltip } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isCooking, getDefi, DEFI } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { getErrorSteps } from 'src/components/activities/defiChecksCooking';
 import { EditButton } from 'src/components/buttons/EditButton';

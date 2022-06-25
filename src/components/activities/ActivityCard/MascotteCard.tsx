@@ -3,13 +3,12 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { CommentIcon } from './CommentIcon';
+import type { ActivityCardProps } from './activity-card.types';
 import type { MascotteActivity } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
-
-import { CommentIcon } from './CommentIcon';
-import type { ActivityCardProps } from './activity-card.types';
 
 export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<MascotteActivity>) => {
   const firstText = React.useMemo(() => activity.content.find((c) => c.type === 'text')?.value || '', [activity.content]);

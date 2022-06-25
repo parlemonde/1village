@@ -6,15 +6,14 @@ import { TextField } from '@mui/material';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
 import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
 import { Steps } from 'src/components/Steps';
+import { StepsButton } from 'src/components/StepsButtons';
 import { Activities } from 'src/components/activities/List';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { getQueryString } from 'src/utils';
-import { serializeToQueryUrl } from 'src/utils';
+import { getQueryString, serializeToQueryUrl } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
 

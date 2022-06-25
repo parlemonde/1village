@@ -20,8 +20,8 @@ import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';

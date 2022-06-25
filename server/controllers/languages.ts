@@ -1,6 +1,5 @@
 import { UserType } from '../entities/user';
 import { languages } from '../utils/iso-639-languages-french';
-
 import { Controller } from './controller';
 
 const languageController = new Controller('/languages');

@@ -8,11 +8,10 @@ import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
-import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
-
 import { Controller } from './controller';
 
 const userController = new Controller('/users');

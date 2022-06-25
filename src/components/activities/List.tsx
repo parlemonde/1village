@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { ActivityCard } from './ActivityCard';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivity } from 'src/services/useActivity';
@@ -10,8 +11,6 @@ import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const
 import ArrowRight from 'src/svg/arrow-right.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import type { Activity } from 'types/activity.type';
-
-import { ActivityCard } from './ActivityCard';
 
 interface ActivitiesProps {
   activities: Activity[];

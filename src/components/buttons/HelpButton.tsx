@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Button from '@mui/material/Button';
 import type { ButtonProps } from '@mui/material';
+import Button from '@mui/material/Button';
 
 import { helpColor, helpColorDarker } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';

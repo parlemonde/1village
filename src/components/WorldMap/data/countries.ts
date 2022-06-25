@@ -1,13 +1,12 @@
 import type { FeatureCollection, Geometry, Position } from 'geojson';
-import { ConicPolygonBufferGeometry } from 'three-conic-polygon-geometry';
 import type { Object3D } from 'three';
 import { Group, MeshBasicMaterial, DoubleSide, Mesh, Line, LineBasicMaterial } from 'three';
-
-import { axiosRequest } from 'src/utils/axiosRequest';
+import { ConicPolygonBufferGeometry } from 'three-conic-polygon-geometry';
 
 import { GeoJsonGeometry } from '../lib/geo-json-geometry';
 import type { HoverableObject } from '../lib/hoverable-object';
 import { GLOBE_RADIUS } from '../world-map.constants';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 // eslint-disable-next-line camelcase
 export type GeoJSONCountriesData = FeatureCollection<Geometry, { iso2: string; name: string; nameFR: string; continent: string }>;

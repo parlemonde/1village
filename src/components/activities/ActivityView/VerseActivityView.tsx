@@ -1,10 +1,9 @@
 import React from 'react';
 
+import type { ActivityViewProps } from './activity-view.types';
 import type { VerseRecordActivity } from 'src/activity-types/verseRecord.types';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { bgPage } from 'src/styles/variables.const';
-
-import type { ActivityViewProps } from './activity-view.types';
 
 export const VerseActivityView = ({ activity }: ActivityViewProps<VerseRecordActivity>) => {
   return (

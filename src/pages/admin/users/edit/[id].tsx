@@ -18,8 +18,8 @@ import { CountrySelector } from 'src/components/selectors/CountrySelector';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
-import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
 import { getQueryString } from 'src/utils';
+import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
 import type { User } from 'types/user.type';
 import { UserType, userTypeNames } from 'types/user.type';
 

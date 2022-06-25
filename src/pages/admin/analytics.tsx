@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import MaterialLink from '@mui/material/Link';
 import { Paper, Grid } from '@mui/material';
+import MaterialLink from '@mui/material/Link';
 
 import { BarWidget } from 'src/components/admin/analytics/BarWidget';
 import { TimePicker, getToday } from 'src/components/admin/analytics/TimePicker';

@@ -5,10 +5,9 @@ import React from 'react';
 
 import { Grid, ButtonBase } from '@mui/material';
 
-import { bgPage, primaryColor, warningColor } from 'src/styles/variables.const';
-
 import { KeepRatio } from '../KeepRatio';
 import { EditButton } from '../buttons/EditButton';
+import { bgPage, primaryColor, warningColor } from 'src/styles/variables.const';
 
 type ImageStepContainerProps = {
   urlStep: string;

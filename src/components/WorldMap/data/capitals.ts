@@ -2,10 +2,9 @@ import type { FeatureCollection, Point } from 'geojson';
 import { CircleBufferGeometry, Group, Mesh, MeshLambertMaterial, Vector3 } from 'three';
 import { Text } from 'troika-three-text';
 
-import { axiosRequest } from 'src/utils/axiosRequest';
-
 import { polar2Cartesian } from '../lib/coords-utils';
 import { GLOBE_RADIUS } from '../world-map.constants';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export type GeoJSONCityData = FeatureCollection<Point, { cityNameFR: string; iso2: string }>;
 export type GeoLabel = GeoJSONCityData['features'][0];

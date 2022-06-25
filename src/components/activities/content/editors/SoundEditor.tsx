@@ -2,17 +2,15 @@ import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Alert from '@mui/material/Alert';
 import { Button, Divider, TextField } from '@mui/material';
+import Alert from '@mui/material/Alert';
 
+import type { EditorProps } from '../content.types';
+import { EditorContainer } from './EditorContainer';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage, primaryColor } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
-
-import type { EditorProps } from '../content.types';
-
-import { EditorContainer } from './EditorContainer';
 
 export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);

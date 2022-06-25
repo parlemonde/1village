@@ -1,6 +1,6 @@
+import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
-import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import type { Country } from 'types/country.type';
