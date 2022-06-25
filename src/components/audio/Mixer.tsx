@@ -234,7 +234,6 @@ const AudioMix = ({ audio, idx, solo, off, solos }: AudioMixProps) => {
         aria-label="Mixing Volume"
         defaultValue={0.5}
         onChange={handleChange}
-        axis="y"
         step={0.1}
         marks
         min={0}
