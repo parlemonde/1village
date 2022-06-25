@@ -21,6 +21,19 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
     (id) => id !== activity.id && id !== undefined && id !== null,
   ) as number[];
 
+  const getHeightTypography = (objectDescription: string, placeDescription: string, oddDescription: string) => {
+    const objectDescriptionLenght = objectDescription.length;
+    const placeDescriptionLenght = placeDescription.length;
+    const oddDescriptionLenght = oddDescription.length;
+
+    if (oddDescriptionLenght > placeDescriptionLenght && oddDescriptionLenght > objectDescriptionLenght) {
+      return '10rem';
+    }
+    return objectDescriptionLenght > placeDescriptionLenght
+      ? `${(objectDescriptionLenght * 20) / 400}rem`
+      : `${(placeDescriptionLenght * 20) / 400}rem`;
+  };
+
   return (
     <Container maxWidth="lg">
       <Box>
@@ -30,9 +43,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
           </div>
           {isStory(activity) && (
             <Grid container spacing={2}>
-              {activity.data.isOriginal === false && inspiredStoriesIds && inspiredStoriesIds.length > 0 && (
-                <StoriesDataCardView inspiredStoriesIds={inspiredStoriesIds} />
-              )}
+              {activity.data.isOriginal === false && inspiredStoriesIds.length > 0 && <StoriesDataCardView inspiredStoriesIds={inspiredStoriesIds} />}
               <Grid item xs={12} md={12}>
                 <p>{activity.data.tale.tale}</p>
               </Grid>
@@ -71,91 +82,108 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                   paddingTop: '8px',
                 }}
               >
-                {activity.data.object.imageUrl && activity.data.place.imageUrl && activity.data.odd.imageUrl && (
-                  <>
-                    <Grid item xs style={{ paddingTop: '0px', paddingLeft: '0px' }}>
-                      <Card sx={{ mb: 1 }}>
-                        <Typography
-                          sx={{
-                            mb: 1.5,
-                            p: 2,
-                            height: '10rem',
-                            textAlign: 'center',
-                            borderRadius: '0.5rem',
-                            backgroundColor: '#DEDBDB',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                          variant={'subtitle2'}
-                        >
-                          {activity.data.object.description}
-                          {/* {activity.data.object.description && truncateString(activity.data.object.description, 50)} */}
-                        </Typography>
-                        <CardMedia
-                          sx={{ borderRadius: '0.5rem', mt: 1 }}
-                          component="img"
-                          height="150"
-                          image={activity.data.object.imageUrl}
-                          alt="objet de l'histoire"
-                        />
-                      </Card>
-                    </Grid>
-                    <Grid item xs style={{ paddingTop: '0px' }}>
-                      <Card sx={{ mb: 1 }}>
-                        <Typography
-                          sx={{
-                            mb: 1.5,
-                            p: 2,
-                            height: '10rem',
-                            textAlign: 'center',
-                            borderRadius: '0.5rem',
-                            backgroundColor: '#DEDBDB',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                          variant={'subtitle2'}
-                        >
-                          {activity.data.place.description}
-                          {/* {activity.data.place.description && truncateString(activity.data.place.description, 50)} */}
-                        </Typography>{' '}
-                        <CardMedia
-                          sx={{ borderRadius: '0.5rem', mt: 1 }}
-                          component="img"
-                          height="150"
-                          image={activity.data.place.imageUrl}
-                          alt="lieu de l'histoire"
-                        />
-                      </Card>
-                    </Grid>
-                    <Grid item xs style={{ paddingTop: '0px' }}>
-                      <Card sx={{ mb: 1 }}>
-                        <Typography
-                          sx={{
-                            mb: 1.5,
-                            p: 2,
-                            height: '10rem',
-                            textAlign: 'center',
-                            borderRadius: '0.5rem',
-                            backgroundColor: '#DEDBDB',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                          variant={'subtitle2'}
-                        >
-                          {activity.data.odd.description}
-                          {/* {activity.data.odd.description && truncateString(activity.data.odd.description, 45)} */}
-                        </Typography>
-                        <CardMedia
-                          sx={{ borderRadius: '0.5rem', mt: 1 }}
-                          component="img"
-                          height="150"
-                          image={activity.data.odd.imageUrl}
-                          alt="Objectifs de développement durable de l'histoire"
-                        />
-                      </Card>
-                    </Grid>
-                  </>
-                )}
+                {activity.data.object.imageUrl &&
+                  activity.data.place.imageUrl &&
+                  activity.data.odd.imageUrl &&
+                  activity.data.object.description !== null &&
+                  activity.data.place.description !== null &&
+                  activity.data.odd.description !== null && (
+                    <>
+                      <Grid item xs style={{ paddingTop: '0px', paddingLeft: '0px' }}>
+                        <Card sx={{ mb: 1 }}>
+                          <Typography
+                            sx={{
+                              mb: 1.5,
+                              p: 2,
+                              height: getHeightTypography(
+                                activity.data.object.description,
+                                activity.data.place.description,
+                                activity.data.odd.description,
+                              ),
+                              textAlign: 'center',
+                              borderRadius: '0.5rem',
+                              backgroundColor: '#DEDBDB',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                            variant={'subtitle2'}
+                          >
+                            {activity.data.object.description}
+                            {/* {activity.data.object.description && truncateString(activity.data.object.description, 50)} */}
+                          </Typography>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            component="img"
+                            height="150"
+                            image={activity.data.object.imageUrl}
+                            alt="objet de l'histoire"
+                          />
+                        </Card>
+                      </Grid>
+                      <Grid item xs style={{ paddingTop: '0px' }}>
+                        <Card sx={{ mb: 1 }}>
+                          <Typography
+                            sx={{
+                              mb: 1.5,
+                              p: 2,
+                              height: getHeightTypography(
+                                activity.data.object.description,
+                                activity.data.place.description,
+                                activity.data.odd.description,
+                              ),
+                              textAlign: 'center',
+                              borderRadius: '0.5rem',
+                              backgroundColor: '#DEDBDB',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                            variant={'subtitle2'}
+                          >
+                            {activity.data.place.description}
+                            {/* {activity.data.place.description && truncateString(activity.data.place.description, 50)} */}
+                          </Typography>{' '}
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            component="img"
+                            height="150"
+                            image={activity.data.place.imageUrl}
+                            alt="lieu de l'histoire"
+                          />
+                        </Card>
+                      </Grid>
+                      <Grid item xs style={{ paddingTop: '0px' }}>
+                        <Card sx={{ mb: 1 }}>
+                          <Typography
+                            sx={{
+                              mb: 1.5,
+                              p: 2,
+                              height: getHeightTypography(
+                                activity.data.object.description,
+                                activity.data.place.description,
+                                activity.data.odd.description,
+                              ),
+                              textAlign: 'center',
+                              borderRadius: '0.5rem',
+                              backgroundColor: '#DEDBDB',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                            variant={'subtitle2'}
+                          >
+                            {activity.data.odd.description}
+                            {/* {activity.data.odd.description && truncateString(activity.data.odd.description, 45)} */}
+                          </Typography>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 1 }}
+                            component="img"
+                            height="150"
+                            image={activity.data.odd.imageUrl}
+                            alt="Objectifs de développement durable de l'histoire"
+                          />
+                        </Card>
+                      </Grid>
+                    </>
+                  )}
               </Grid>
             </Grid>
           )}
