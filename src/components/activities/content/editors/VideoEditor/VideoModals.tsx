@@ -25,14 +25,7 @@ interface VideoModalsProps {
   onDeleteEditor?: () => void;
 }
 
-export const VideoModals: React.FC<VideoModalsProps> = ({
-  id,
-  isModalOpen,
-  setIsModalOpen,
-  videoUrl,
-  setVideoUrl,
-  onDeleteEditor = () => {},
-}: VideoModalsProps) => {
+export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVideoUrl, onDeleteEditor = () => {} }: VideoModalsProps) => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();

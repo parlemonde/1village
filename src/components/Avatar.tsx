@@ -39,7 +39,7 @@ type AvatarImgProps = {
   isRounded?: boolean;
   displayAsUser?: boolean;
 };
-export const AvatarImg: React.FC<AvatarImgProps> = ({
+export const AvatarImg = ({
   size = 'large',
   src = '',
   user,

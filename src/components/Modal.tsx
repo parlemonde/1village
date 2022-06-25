@@ -81,7 +81,7 @@ interface ModalProps {
   progress?: number;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal = ({
   open = true,
   onClose = () => {},
   onConfirm,

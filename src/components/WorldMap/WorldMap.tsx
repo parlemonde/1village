@@ -47,7 +47,7 @@ const isWebGLAvailable = () => {
   }
 };
 
-const WorldMap: React.FC = () => {
+const WorldMap = () => {
   const { users } = useVillageUsers();
 
   const leafletRef = React.useRef<HTMLDivElement | null>(null);

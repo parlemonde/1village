@@ -8,7 +8,7 @@ import { EditorContainer } from '../EditorContainer';
 import { VideoModals } from './VideoModals';
 import { primaryColor } from 'src/styles/variables.const';
 
-export const VideoEditor: React.FC<EditorProps> = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
+export const VideoEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
 
   return (

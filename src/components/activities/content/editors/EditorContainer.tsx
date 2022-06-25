@@ -16,7 +16,7 @@ interface EditorContainerProps {
   noMinHeight?: boolean;
 }
 
-export const EditorContainer: React.FC<EditorContainerProps> = ({
+export const EditorContainer = ({
   deleteButtonProps,
   children,
   className,

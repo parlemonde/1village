@@ -42,12 +42,7 @@ interface UserContextProviderProps {
   csrfToken: string;
 }
 
-export const UserContextProvider: React.FC<UserContextProviderProps> = ({
-  user,
-  setUser,
-  csrfToken,
-  children,
-}: React.PropsWithChildren<UserContextProviderProps>) => {
+export const UserContextProvider = ({ user, setUser, csrfToken, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
   const headers = React.useMemo(
     () => ({

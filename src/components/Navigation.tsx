@@ -86,7 +86,7 @@ export const Navigation = (): JSX.Element => {
   }, [getStories]);
 
   // check color of icons
-  const TABS_PER_PHASE: Tab[] = React.useMemo(
+  const TABS_PER_PHASE = React.useMemo<Tab[]>(
     () => [
       // ---- PHASE 1 ----
       {
@@ -169,7 +169,7 @@ export const Navigation = (): JSX.Element => {
     [village, firstStoryCreated],
   );
 
-  const fixedTabs = React.useMemo(
+  const fixedTabs = React.useMemo<Tab[]>(
     () => [
       ACCUEIL,
       {
@@ -182,7 +182,7 @@ export const Navigation = (): JSX.Element => {
     ],
     [user, isModerateur, selectedPhase],
   );
-  const phaseTabs = React.useMemo(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
+  const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
   const currentPathName = router.pathname.split('/')[1] || '';
 

@@ -11,13 +11,7 @@ interface BaseProps {
   style?: React.CSSProperties;
 }
 
-export const Base: React.FC<BaseProps> = ({
-  children,
-  rightNav,
-  hideLeftNav = false,
-  showSubHeader = false,
-  style,
-}: React.PropsWithChildren<BaseProps>) => {
+export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = false, style }: React.PropsWithChildren<BaseProps>) => {
   return (
     <>
       {!hideLeftNav && <Navigation />}

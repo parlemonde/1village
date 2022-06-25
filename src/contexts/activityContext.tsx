@@ -60,7 +60,7 @@ function saveActivityInSession(activity: Activity | null): void {
 }
 const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, false);
 
-export const ActivityContextProvider: React.FC = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
+export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);

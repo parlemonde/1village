@@ -8,7 +8,7 @@ interface KeepRatioProps {
   className?: string;
 }
 
-export const KeepRatio: React.FC<KeepRatioProps> = ({
+export const KeepRatio = ({
   width = '100%',
   maxWidth = '100%',
   minHeight = 0,

@@ -11,7 +11,7 @@ interface AdminTileProps {
   style?: React.CSSProperties;
 }
 
-export const AdminTile: React.FC<AdminTileProps> = ({
+export const AdminTile = ({
   title,
   children = null,
   toolbarButton = null,

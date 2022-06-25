@@ -58,7 +58,8 @@ export async function streamFile(file: string, req: Request, res: Response, next
       res.writeHead(416, {
         'Content-Range': `bytes */${size}`,
       });
-      return res.end();
+      res.end();
+      return;
     }
 
     /** Sending Partial Content With HTTP Code 206 */
