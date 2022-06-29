@@ -24,9 +24,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
     const objectDescriptionLenght = objectDescription.length;
     const placeDescriptionLenght = placeDescription.length;
     const oddDescriptionLenght = oddDescription.length;
-    console.log({ objectDescriptionLenght: (objectDescriptionLenght * 20) / 400 });
-    console.log({ placeDescriptionLenght });
-    console.log({ oddDescriptionLenght });
 
     if (oddDescriptionLenght > placeDescriptionLenght && oddDescriptionLenght > objectDescriptionLenght) {
       return '10rem';
