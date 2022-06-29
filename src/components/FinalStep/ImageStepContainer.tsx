@@ -24,7 +24,7 @@ export function ImageStepContainer({ urlStep, imageUrl, isValid, error, descript
         'preview-block--warning': error,
       })}
     >
-      <Grid display="flex" direction="row" alignItems="center" spacing={2}>
+      <Grid container display="flex" direction="row" alignItems="center" spacing={2}>
         <EditButton
           onClick={() => {
             router.push(urlStep);
