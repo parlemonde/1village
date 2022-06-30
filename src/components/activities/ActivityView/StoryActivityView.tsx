@@ -29,8 +29,8 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
       return '10rem';
     }
     return objectDescriptionLenght > placeDescriptionLenght
-      ? `${(objectDescriptionLenght * 20) / 400}rem`
-      : `${(placeDescriptionLenght * 20) / 400}rem`;
+      ? `${(objectDescriptionLenght * 25) / 400}rem` // (lenght * Max height (rem)) / Max lenght (400 here)
+      : `${(placeDescriptionLenght * 25) / 400}rem`;
   };
 
   return (
@@ -93,7 +93,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           <Typography
                             sx={{
                               mb: 1.5,
-                              p: 2,
+                              p: 1,
                               height: getHeightTypography(
                                 activity.data.object.description,
                                 activity.data.place.description,
@@ -108,7 +108,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                             variant={'subtitle2'}
                           >
                             {activity.data.object.description}
-                            {/* {activity.data.object.description && truncateString(activity.data.object.description, 50)} */}
                           </Typography>
                           <CardMedia
                             sx={{ borderRadius: '0.5rem', mt: 1 }}
@@ -124,7 +123,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           <Typography
                             sx={{
                               mb: 1.5,
-                              p: 2,
+                              p: 1,
                               height: getHeightTypography(
                                 activity.data.object.description,
                                 activity.data.place.description,
@@ -139,7 +138,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                             variant={'subtitle2'}
                           >
                             {activity.data.place.description}
-                            {/* {activity.data.place.description && truncateString(activity.data.place.description, 50)} */}
                           </Typography>{' '}
                           <CardMedia
                             sx={{ borderRadius: '0.5rem', mt: 1 }}
@@ -155,7 +153,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           <Typography
                             sx={{
                               mb: 1.5,
-                              p: 2,
+                              p: 1,
                               height: getHeightTypography(
                                 activity.data.object.description,
                                 activity.data.place.description,
@@ -170,7 +168,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                             variant={'subtitle2'}
                           >
                             {activity.data.odd.description}
-                            {/* {activity.data.odd.description && truncateString(activity.data.odd.description, 45)} */}
                           </Typography>
                           <CardMedia
                             sx={{ borderRadius: '0.5rem', mt: 1 }}
