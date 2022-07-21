@@ -98,7 +98,8 @@ const Activity = () => {
           <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
           <div className="activity__container">
             {!isAnswer && (
-              <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />
+              // <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />
+              <ActivityComments activity={activity} usersMap={usersMap} />
             )}
           </div>
         </>
@@ -106,7 +107,8 @@ const Activity = () => {
         <div className="activity__container">
           <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
 
-          {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />}
+          {/* {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />} */}
+          {!isAnswer && <ActivityComments activity={activity} usersMap={usersMap} />}
         </div>
       )}
     </Base>

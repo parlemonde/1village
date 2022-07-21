@@ -10,16 +10,14 @@ import { useActivities } from 'src/services/useActivities';
 import { useComments } from 'src/services/useComments';
 import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import type { Activity } from 'types/activity.type';
+import type { Activity, AnyData } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
 interface ActivityCommentsProps {
-  activityId: number;
-  activityType: number;
-  activityPhase: number;
+  activity: Activity<AnyData>;
   usersMap: { [key: number]: User };
 }
-export const ActivityComments = ({ activityId, activityType, activityPhase, usersMap }: ActivityCommentsProps) => {
+export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) => {
   const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const { getInspiredStories } = useImageStories();
@@ -27,12 +25,12 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
 
   //Get stories activities which was inspired by this story activity
   React.useEffect(() => {
-    getInspiredStories(activityId)
+    getInspiredStories(activity.id)
       .then((data) => {
         setDataStories(data as Activity[]);
       })
       .catch();
-  }, [activityId, getInspiredStories]);
+  }, [activity.id, getInspiredStories]);
 
   const userMap = React.useMemo(
     () =>
@@ -42,11 +40,11 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
       }, {}),
     [users],
   );
-  const { comments } = useComments(activityId);
+  const { comments } = useComments(activity.id);
   const { activities } = useActivities({
     limit: 200,
     page: 0,
-    responseActivityId: activityId,
+    responseActivityId: activity.id,
   });
 
   const data = React.useMemo(() => {
@@ -67,7 +65,7 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
       {data.map((o) => {
         if (o.type === 'comment') {
           const comment = o.data;
-          return <CommentCard key={comment.id} activityId={activityId} comment={comment} user={usersMap[comment.userId] ?? null} />;
+          return <CommentCard key={comment.id} activity={activity} comment={comment} user={usersMap[comment.userId] ?? null} />;
         } else {
           const activity = o.data;
           const activityUser = userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined;
@@ -81,7 +79,7 @@ export const ActivityComments = ({ activityId, activityType, activityPhase, user
           );
         }
       })}
-      <AddComment activityId={activityId} activityType={activityType} activityPhase={activityPhase} />
+      <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />
     </div>
   );
 };
