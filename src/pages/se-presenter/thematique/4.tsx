@@ -24,7 +24,7 @@ const PresentationStep4 = () => {
   const { activity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
 
   const data = activity?.data || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -69,13 +69,13 @@ const PresentationStep4 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator}>
                 Enregistrer les changements
               </Button>
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              {isUserObservator ? (
+              {isObservator ? (
                 <Tooltip title="Action non autorisée" arrow>
                   <span>
                     <Button variant="outlined" color="primary" disabled>
