@@ -24,10 +24,14 @@
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/src/",
-      "<rootDir>/server/"
+      "<rootDir>/server/",
+      "<rootDir>/types/"
     ],
     "transform": {
       "^.+\\.(t|j)sx?$": "@swc/jest"
+    },
+    "moduleNameMapper": {
+      "\\.svg$": "<rootDir>/src/__mock__/svg.ts"
     }
   },
   "resolutions": {
