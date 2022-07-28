@@ -16,12 +16,14 @@ import { ImageModal } from 'src/components/activities/content/editors/ImageEdito
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { bgPage } from 'src/styles/variables.const';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity, save } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -32,7 +34,7 @@ const DefiStep1 = () => {
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(ActivityType.DEFI, DEFI.COOKING, {
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.COOKING, {
           name: '',
           history: '',
           explanation: '',
@@ -40,7 +42,7 @@ const DefiStep1 = () => {
         });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isCooking(activity)))) {
         created.current = true;
-        createNewActivity(ActivityType.DEFI, DEFI.COOKING, {
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.COOKING, {
           name: '',
           history: '',
           explanation: '',
@@ -48,7 +50,7 @@ const DefiStep1 = () => {
         });
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   const dataChange = (key: 'name' | 'history' | 'explanation') => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 600);

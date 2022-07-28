@@ -14,6 +14,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import DrumIcon from 'src/svg/anthem/drum.svg';
 import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
 import FluteIcon from 'src/svg/anthem/flute.svg';
@@ -29,6 +30,7 @@ const AnthemStep1 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, createActivityIfNotExist, updateActivity, save } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
@@ -39,13 +41,13 @@ const AnthemStep1 = () => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA, true);
+        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       } else if (activity && !isAnthem(activity)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, undefined, DEFAULT_ANTHEM_DATA, true);
+        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       }
     }
-  }, [activity, createActivityIfNotExist, router]);
+  }, [activity, createActivityIfNotExist, router, selectedPhase]);
 
   if (!activity || !data) {
     return (

@@ -60,7 +60,7 @@ const Question3 = () => {
     const data: Partial<QuestionActivity> = {
       type: ActivityType.QUESTION,
       villageId: village.id,
-      phase: getActivityPhase(ActivityType.QUESTION, selectedPhase),
+      phase: getActivityPhase(ActivityType.QUESTION, village.activePhase, selectedPhase),
       data: {},
       content: [
         {

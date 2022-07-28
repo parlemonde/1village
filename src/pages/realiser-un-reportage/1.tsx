@@ -20,7 +20,7 @@ import type { Activity } from 'types/activity.type';
 const ReportageStep1 = () => {
   const router = useRouter();
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const [reportageActivities, setReportageActivities] = React.useState<Activity[]>([]);
   const [showErrors, setShowErrors] = React.useState(false);
@@ -34,19 +34,19 @@ const ReportageStep1 = () => {
       created.current = true;
       if (!('edit' in router.query)) {
         const reportageType = parseInt(getQueryString(router.query['category']) || '0', 10) || 0;
-        createNewActivity(ActivityType.REPORTAGE, reportageType, {
+        createNewActivity(ActivityType.REPORTAGE, selectedPhase, reportageType, {
           theme: reportageType,
         });
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   React.useEffect(() => {
     if (village) {
       axiosLoggedRequest({
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
-          villageId: village?.id,
+          villageId: village.id,
           type: ActivityType.REPORTAGE,
         })}`,
       }).then((response) => {

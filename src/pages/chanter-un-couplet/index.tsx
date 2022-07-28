@@ -24,7 +24,7 @@ const Anthem = () => {
   const router = useRouter();
   const { createNewActivity } = React.useContext(ActivityContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
   const [anthemActivityData, setAnthemActivityData] = React.useState<AnthemData>(emptyAnthemActivity);
 
   const getAnthemData = React.useCallback(async () => {
@@ -54,7 +54,7 @@ const Anthem = () => {
 
   const onNext = () => {
     const { chorus, verseAudios, introOutro, verseLyrics, verseTime } = anthemActivityData;
-    createNewActivity(ActivityType.VERSE_RECORD, undefined, {
+    createNewActivity(ActivityType.VERSE_RECORD, selectedPhase, undefined, {
       verseAudios,
       introOutro,
       verseTime,

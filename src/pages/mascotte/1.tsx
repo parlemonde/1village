@@ -20,11 +20,16 @@ import { getUserDisplayName, pluralS } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const MascotteStep1 = () => {
+  //Récupérer la phase sélectinnée et publier la mascotte selon la phase
+  // Rem : La publication ne peut se faire que dans la phase 1 pour le moment : resolve in utils.ts
+  const { selectedPhase } = React.useContext(VillageContext);
+  console.log({ selectedPhase });
   const router = useRouter();
   const [showError, setShowError] = React.useState(false);
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
+  console.log({ activity });
 
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -45,19 +50,19 @@ const MascotteStep1 = () => {
     if (!created.current) {
       if (!activity && !('activity-id' in router.query) && localStorage.getItem('activity') === null && !('edit' in router.query)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.MASCOTTE, undefined, {
+        createActivityIfNotExist(ActivityType.MASCOTTE, selectedPhase, undefined, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       } else if (activity && !isMascotte(activity)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.MASCOTTE, undefined, {
+        createActivityIfNotExist(ActivityType.MASCOTTE, selectedPhase, undefined, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       }
     }
-  }, [user, village, activity, labelPresentation, createActivityIfNotExist, router]);
+  }, [user, village, activity, labelPresentation, createActivityIfNotExist, router, selectedPhase]);
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = {

@@ -5,6 +5,7 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -12,10 +13,12 @@ const ContenuLibre = () => {
   const router = useRouter();
   const { createNewActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
+  const { selectedPhase } = React.useContext(VillageContext);
+
   const isModerator = user !== null && user.type >= UserType.MEDIATOR;
 
   const onNext = () => {
-    const success = createNewActivity(ActivityType.CONTENU_LIBRE);
+    const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
     if (success) {
       router.push('/contenu-libre/1');
     }
