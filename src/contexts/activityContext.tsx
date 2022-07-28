@@ -21,6 +21,7 @@ interface ActivityContextValue {
   updateActivity(newActivity: Partial<Activity>): void;
   createNewActivity(
     type: number,
+    selectedPhase: number,
     subType?: number,
     initialData?: AnyData,
     responseActivityId?: number | null,
@@ -30,7 +31,7 @@ interface ActivityContextValue {
   addContent(type: ActivityContentType, value?: string, index?: number): void;
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<ActivitySaveResponse>;
-  createActivityIfNotExist(type: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean): Promise<void>;
+  createActivityIfNotExist(type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean): Promise<void>;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>({
@@ -135,6 +136,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   const createNewActivity = React.useCallback(
     (
       type: number,
+      selectedPhase: number,
       subType?: number,
       initialData?: AnyData,
       responseActivityId?: number | null,
@@ -146,7 +148,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       }
       const newActivity: Activity = {
         id: 0,
-        phase: getActivityPhase(type, village.activePhase),
+        phase: getActivityPhase(type, village.activePhase, selectedPhase),
         type: type,
         subType: subType,
         status: ActivityStatus.DRAFT,
@@ -168,7 +170,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   );
 
   const createActivityIfNotExist = React.useCallback(
-    async (type: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean) => {
+    async (type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean) => {
       if (user === null || village === null) {
         return;
       }
@@ -190,7 +192,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       if (response.length > 0) {
         setActivity(response[0]);
       } else {
-        createNewActivity(type, subType, initialData);
+        createNewActivity(type, selectedPhase, subType, initialData);
       }
     },
     [user, village, axiosLoggedRequest, createNewActivity],
@@ -250,7 +252,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         };
       }
       const data: Partial<Activity> = {
-        phase: getActivityPhase(activityRef.current.type, village.activePhase),
+        phase: getActivityPhase(activityRef.current.type, village.activePhase, activityRef.current.phase),
         type: activityRef.current.type,
         subType: activityRef.current.subType,
         villageId: activityRef.current.villageId,
@@ -309,7 +311,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         data.responseType = activityRef.current.responseType;
       }
       if (publish) {
-        data.phase = getActivityPhase(activityRef.current.type, village.activePhase);
+        data.phase = getActivityPhase(activityRef.current.type, village.activePhase, activityRef.current.phase);
         data.status = ActivityStatus.PUBLISHED;
       } else {
         if (data.data) {

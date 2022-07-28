@@ -29,7 +29,7 @@ export const isSecondStepValid = (data: MascotteData): boolean => {
   if (data?.personality1 === '') return false;
   if (data?.personality2 === '') return false;
   if (data?.personality3 === '') return false;
-  if (data?.countries === []) return false;
+  if (data?.countries.length === 0) return false;
   if (data?.game === '') return false;
   if (data?.sport === '') return false;
   return true;
