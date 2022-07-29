@@ -14,7 +14,7 @@
     "lint:fix": "yarn eslint . --fix",
     "typescript:server": "yarn tsc --project server/tsconfig.json --noEmit",
     "typescript": "yarn tsc -p . && yarn typescript:server",
-    "test": "yarn jest",
+    "test": "yarn jest --runInBand",
     "start-dev": "yarn build:server && node dist/server/start.js",
     "start": "NODE_ENV=production node dist/server/start.js",
     "dev": "yarn nodemon",

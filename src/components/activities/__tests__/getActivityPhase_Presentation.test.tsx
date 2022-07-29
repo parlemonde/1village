@@ -1,4 +1,4 @@
-import { getActivityPhase } from '../getActivityPhase';
+import { getActivityPhase } from '../utils';
 import { ActivityType } from 'types/activity.type';
 
 //https://til.hashrocket.com/posts/lmnsdtce3y-import-absolute-paths-in-typescript-jest-tests
