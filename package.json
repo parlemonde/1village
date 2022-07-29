@@ -22,8 +22,11 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "verbose": true,
+    "forceExit": true,
     "roots": [
       "<rootDir>/src/",
+      "<rootDir>/src/svg",
       "<rootDir>/server/",
       "<rootDir>/types/"
     ],
@@ -31,7 +34,10 @@
       "^.+\\.(t|j)sx?$": "@swc/jest"
     },
     "moduleNameMapper": {
-      "\\.svg$": "<rootDir>/src/__mock__/svg.ts"
+      "\\.svg": "<rootDir>/__mocks__/svg.js",
+      "types/(.*)$": "<rootDir>/types/$1",
+      "server/(.*)$": "<rootDir>/server/$1",
+      "src/(.*)$": "<rootDir>/src/$1"
     }
   },
   "resolutions": {

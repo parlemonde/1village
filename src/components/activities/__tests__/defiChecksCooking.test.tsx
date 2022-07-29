@@ -34,6 +34,7 @@ describe('Test isFirstStepValid from DefiCheckCooking', () => {
     expect(isFirstStepValid(defiCooking)).toBe(false);
   });
 });
+
 describe('Test isThirdStepValid from DefiCheckCooking', () => {
   it('should be true with index not null', () => {
     const defiCooking = {
