@@ -7,7 +7,7 @@ import { Card, CircularProgress } from '@mui/material';
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 import { Modal } from 'src/components/Modal';
-import { getActivityPhase } from 'src/components/activities/getActivityPhase';
+import { getActivityPhase } from 'src/components/activities/utils';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import type { Activity, AnyData, ActivityContentType, ActivityContent } from 'types/activity.type';

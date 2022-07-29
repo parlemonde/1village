@@ -14,7 +14,7 @@ import type { QuestionActivity } from 'src/activity-types/question.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { getActivityPhase } from 'src/components/activities/getActivityPhase';
+import { getActivityPhase } from 'src/components/activities/utils';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';

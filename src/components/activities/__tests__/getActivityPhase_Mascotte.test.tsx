@@ -1,5 +1,3 @@
-// import { getActivityPhase } from '../getActivityPhase';
-
 import { getActivityPhase } from '../utils';
 import { ActivityType } from 'types/activity.type';
 
