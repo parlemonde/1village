@@ -25,7 +25,7 @@ import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
-const MascotteStep4 = () => {
+const MascotteStep5 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
@@ -267,4 +267,4 @@ const MascotteStep4 = () => {
   );
 };
 
-export default MascotteStep4;
+export default MascotteStep5;
