@@ -142,7 +142,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           <Map
             position={activityUser.position}
             zoom={3}
-            markers={[{ position: activityUser.position, label: activityUser.address, activityCreator: activityUser.mascotteId }]}
+            markers={[{ position: activityUser.position, label: activityUser.address, userMascotte: activityUser.mascotteId }]}
           />
         </div>
       </div>
