@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -22,7 +21,6 @@ import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const RightNavigation = ({ activityUser, displayAsUser = false }: { activityUser: User; displayAsUser?: boolean }) => {
-  const router = useRouter();
   const [localTime, setLocalTime] = React.useState<string | null>(null);
   const { user } = React.useContext(UserContext);
   const weather = useWeather({ activityUser });
@@ -35,10 +33,6 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
   });
   const isPelico = activityUser.type > UserType.TEACHER;
   const isMediator = user !== null && user.type > UserType.TEACHER;
-
-  const onclick = React.useCallback(() => {
-    router.push(`/activite/${activityUser.mascotteId}`);
-  }, [activityUser.mascotteId, router]);
 
   // ---- Get user weather and time ----
   React.useEffect(() => {
@@ -100,9 +94,9 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
           <span style={{ marginRight: '0.3rem', display: 'flex' }}>
             {activityUser.avatar ? (
-              <AvatarImg user={activityUser} size="extra-small" noLink onClick={onclick} style={{ cursor: 'pointer' }} />
+              <AvatarImg user={activityUser} size="extra-small" noLink />
             ) : (
-              <UserIcon style={{ fill: 'currentcolor', cursor: 'pointer' }} width="30px" onClick={onclick} />
+              <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
             )}
           </span>
           {userMascotte && isMascotte(userMascotte) ? (
@@ -139,11 +133,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       )}
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
         <div style={{ height: '14rem' }}>
-          <Map
-            position={activityUser.position}
-            zoom={3}
-            markers={[{ position: activityUser.position, label: activityUser.address, activityCreatorMascotte: activityUser.mascotteId }]}
-          />
+          <Map position={activityUser.position} zoom={3} markers={[{ position: activityUser.position, label: activityUser.address }]} />
         </div>
       </div>
       {weather !== null && (
