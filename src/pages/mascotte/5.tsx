@@ -164,28 +164,21 @@ const MascotteStep5 = () => {
                 </Button>
               </div>
             ) : (
-              <>
-                {!isValid && (
-                  <p>
-                    <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
-                  </p>
+              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                {isUserObservator ? (
+                  <Tooltip title="Action non autorisée" arrow>
+                    <span>
+                      <Button variant="outlined" color="primary" disabled>
+                        Publier
+                      </Button>
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                    Publier
+                  </Button>
                 )}
-                <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                  {isUserObservator ? (
-                    <Tooltip title="Action non autorisée" arrow>
-                      <span>
-                        <Button variant="outlined" color="primary" disabled>
-                          Publier
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  ) : (
-                    <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
-                      Publier
-                    </Button>
-                  )}
-                </div>
-              </>
+              </div>
             )}
             <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
               <EditButton

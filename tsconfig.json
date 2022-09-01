@@ -29,6 +29,5 @@
     "incremental": true
   },
   "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "types/**/*.ts"],
-  "paths": { "src/*": ["src/*"], "tests/*": ["__tests__/*"] },
   "exclude": ["node_modules"]
 }

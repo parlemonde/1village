@@ -18,7 +18,7 @@ type MapMarker = {
   position: Position;
   label?: string;
   onDragEnd?: (newPos: Position) => void;
-  userMascotte: User['mascotteId'];
+  activityCreatorMascotte: User['mascotteId'];
 };
 
 type MapProps = {
@@ -32,7 +32,7 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
   const mapRef = React.useRef<HTMLDivElement | null>(null);
   const initialPosition = React.useRef(position);
   const initialMarkers = React.useRef(markers);
-  const { activity: userMascotte } = useActivity(markers[0].userMascotte || -1);
+  const { activity: userMascotte } = useActivity(markers[0].activityCreatorMascotte || -1);
 
   React.useEffect(() => {
     if (!mapRef.current) {

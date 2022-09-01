@@ -34,7 +34,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
     userId: activityUser?.id ?? 0,
   });
   const isPelico = activityUser.type > UserType.TEACHER;
-  const isMediator = user !== null && user.type >= UserType.MEDIATOR;
+  const isMediator = user !== null && user.type > UserType.TEACHER;
 
   const onclick = React.useCallback(() => {
     router.push(`/activite/${activityUser.mascotteId}`);
@@ -142,7 +142,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           <Map
             position={activityUser.position}
             zoom={3}
-            markers={[{ position: activityUser.position, label: activityUser.address, userMascotte: activityUser.mascotteId }]}
+            markers={[{ position: activityUser.position, label: activityUser.address, activityCreatorMascotte: activityUser.mascotteId }]}
           />
         </div>
       </div>
