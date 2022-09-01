@@ -3,9 +3,12 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
 import maplibregl from 'maplibre-gl';
+import { useRouter } from 'next/router';
 import React from 'react';
 
+import { useActivity } from 'src/services/useActivity';
 import { primaryColor } from 'src/styles/variables.const';
+import type { User } from 'types/user.type';
 
 type Position = {
   lat: number;
@@ -15,6 +18,7 @@ type MapMarker = {
   position: Position;
   label?: string;
   onDragEnd?: (newPos: Position) => void;
+  activityCreatorMascotte: User['mascotteId'];
 };
 
 type MapProps = {
@@ -24,9 +28,11 @@ type MapProps = {
 };
 
 const Map = ({ position, zoom, markers = [] }: MapProps) => {
+  const router = useRouter();
   const mapRef = React.useRef<HTMLDivElement | null>(null);
   const initialPosition = React.useRef(position);
   const initialMarkers = React.useRef(markers);
+  const { activity: userMascotte } = useActivity(markers[0].activityCreatorMascotte || -1);
 
   React.useEffect(() => {
     if (!mapRef.current) {
@@ -57,6 +63,9 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
         })
           .setLngLat(m.position)
           .addTo(map);
+        marker.getElement().addEventListener('click', () => {
+          router.push(`/activite/${userMascotte?.id}`);
+        });
         if (m.onDragEnd !== undefined) {
           const func = m.onDragEnd;
           const onMarkerDragEnd = () => {
@@ -112,7 +121,7 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
     return () => {
       map.remove();
     };
-  }, [zoom]);
+  }, [router, userMascotte?.id, zoom]);
 
   return <div ref={mapRef}></div>;
 };
