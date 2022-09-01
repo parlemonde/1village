@@ -385,7 +385,6 @@ export const FirstPhase = () => {
                       onDragEnd: (newPos: { lat: number; lng: number }) => {
                         setPosition(newPos);
                       },
-                      userMascotte: newUser.mascotteId,
                     },
                   ]}
                 />

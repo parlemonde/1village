@@ -2,7 +2,6 @@ import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
-import { useRouter } from 'next/router';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -17,7 +16,6 @@ import {
   BackSide,
   Raycaster,
   Mesh,
-  Vector2,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -50,7 +48,6 @@ const isWebGLAvailable = () => {
 };
 
 const WorldMap = () => {
-  const router = useRouter();
   const { users } = useVillageUsers();
 
   const leafletRef = React.useRef<HTMLDivElement | null>(null);
@@ -151,36 +148,6 @@ const WorldMap = () => {
     onCameraChangeThrottled();
   };
 
-  const onPinClick = React.useCallback(
-    (event: MouseEvent) => {
-      event.preventDefault();
-      const raycaster = new Raycaster();
-      const pointer = new Vector2();
-      if (!threeData.current) {
-        return;
-      }
-      const { scene, camera } = threeData.current;
-      // First we need to map the mouse coordinates to the rectangle
-      // between (1,1) (1, -1) (-1, -1) and (-1, 1)
-      pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      // Then we use the mapped mouse coordinates to setFromCamera the raycaster
-      // raycaster is used to detect interaction with a 3D model, in this case a pin
-      raycaster.setFromCamera(pointer, camera);
-      // After that we use the raycaster to find all objects that intersect
-      // with the ray raycaster.intersectObjects(scene.children, true)
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      const pins = scene.children.find((child) => child.name === 'pins');
-
-      if (intersects.length > 0 && pins) {
-        if (pins.children.find((child) => child.userData.user.country.name === intersects[0].object.userData.countryName)) {
-          router.push('/ma-classe');
-        }
-      }
-    },
-    [router],
-  );
-
   const init = React.useCallback(async () => {
     if (!isWebGLAvailable()) {
       setUseLeafletFallback(true);
@@ -246,12 +213,11 @@ const WorldMap = () => {
       };
       requestAnimationFrame(render);
       window.addEventListener('resize', onResizeDebounced);
-      renderer.domElement.addEventListener('click', onPinClick, false);
       setTimeout(() => {
         setIsInitialized(true);
       }, 100);
     }
-  }, [render, onCameraChangeThrottled, onResizeDebounced, onPinClick]);
+  }, [render, onCameraChangeThrottled, onResizeDebounced]);
 
   const clearScene = React.useCallback(() => {
     if (animationFrameRef.current) {

@@ -3,7 +3,13 @@
     "baseUrl": ".",
     "allowJs": true,
     "jsx": "preserve",
-    "lib": ["dom", "es2017", "es2016.array.include", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "es2017",
+      "es2016.array.include",
+      "dom.iterable",
+      "esnext"
+    ],
     "target": "es6",
     "outDir": "dist/next",
     "removeComments": true,
@@ -28,7 +34,13 @@
     "isolatedModules": true,
     "incremental": true
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "types/**/*.ts"],
-  "paths": { "src/*": ["src/*"], "tests/*": ["__tests__/*"] },
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
