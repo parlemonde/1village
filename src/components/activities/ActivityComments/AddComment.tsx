@@ -2,15 +2,16 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
-import { primaryColor } from 'src/styles/variables.const';
+import { primaryColor, bgPage } from 'src/styles/variables.const';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import { ActivityType } from 'types/activity.type';
+import { UserType } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -22,6 +23,7 @@ interface AddCommentProps {
 
 export const AddComment = ({ activityId, activityType, activityPhase }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
+  const isObservator = user?.type === UserType.OBSERVATOR;
   const { addComment } = useCommentRequests(activityId);
   const [newComment, setNewComment] = React.useState('');
   const [newCommentLength, setNewCommentLength] = React.useState(0);
@@ -67,9 +69,19 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 <span className="text text--primary">{newCommentLength}/400</span>
               </div>
               <div style={{ width: '100%', textAlign: 'left', marginTop: '0.5rem' }}>
-                <Button variant="outlined" color="primary" onClick={comment}>
-                  Commenter
-                </Button>
+                {isObservator ? (
+                  <Tooltip title="Action non autorisée" arrow>
+                    <span>
+                      <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
+                        Commenter
+                      </Button>
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
+                    Commenter
+                  </Button>
+                )}
               </div>
             </div>
             {loading && (
@@ -108,20 +120,42 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
               </Link>
             ) : (
               <Link href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`} passHref>
-                <Button
-                  component="a"
-                  href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                  variant="outlined"
-                  color="primary"
-                  style={{ width: '100%' }}
-                >
-                  <ReactionIcon
-                    style={{
-                      fill: primaryColor,
-                    }}
-                  />
-                  Réagir
-                </Button>
+                {isObservator ? (
+                  <Tooltip title="Action non autorisée" arrow>
+                    <span>
+                      <Button
+                        component="a"
+                        href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+                        variant="outlined"
+                        color="primary"
+                        style={{ width: '100%' }}
+                        disabled
+                      >
+                        <ReactionIcon
+                          style={{
+                            fill: bgPage,
+                          }}
+                        />
+                        Réagir
+                      </Button>
+                    </span>
+                  </Tooltip>
+                ) : (
+                  <Button
+                    component="a"
+                    href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+                    variant="outlined"
+                    color="primary"
+                    style={{ width: '100%' }}
+                  >
+                    <ReactionIcon
+                      style={{
+                        fill: primaryColor,
+                      }}
+                    />
+                    Réagir
+                  </Button>
+                )}
               </Link>
             )}
           </div>

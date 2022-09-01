@@ -32,7 +32,7 @@ const ReactionStep3 = () => {
 
   const data = activity?.data || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
     const fieldStep2 = activity?.content.filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
@@ -93,7 +93,7 @@ const ReactionStep3 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator}>
                 Enregistrer les changements
               </Button>
             </div>
@@ -104,7 +104,7 @@ const ReactionStep3 = () => {
                   <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
                 </p>
               )}
-              {isUserObservator ? (
+              {isObservator ? (
                 <Tooltip title="Action non autorisée" arrow>
                   <span>
                     <Button variant="outlined" color="primary" disabled>
