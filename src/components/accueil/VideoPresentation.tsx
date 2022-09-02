@@ -36,8 +36,8 @@ export const VideoPresentation = () => {
           <div className="text-center" style={{ overflow: 'auto' }}>
             {!resolved ? (
               <>
-                <Logo style={{ width: '40px', height: 'auto', marginTop: '2rem' }} />
-                <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '60vh' }}>
+                <Logo style={{ width: '40px', height: 'auto', marginTop: '4rem' }} />
+                <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
                   <p style={{ margin: '0 0 2rem 0' }}>
                     <strong>Quelle est la qualité dont vous avez besoin pour embarquer avec Pélico dans l’aventure ?</strong>
                   </p>
@@ -56,7 +56,7 @@ export const VideoPresentation = () => {
                       id="outlined-helperText"
                       value={value}
                       placeholder="Un indice : un proverbe français dit que c’est un défaut, mais pour Pelico il s’agit d’une qualité"
-                      label="Indice"
+                      label="Votre réponse"
                       InputLabelProps={{
                         shrink: true,
                       }}

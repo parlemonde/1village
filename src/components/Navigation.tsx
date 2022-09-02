@@ -203,8 +203,8 @@ export const Navigation = (): JSX.Element => {
                 isMistery={
                   !village ||
                   !user ||
-                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && isObservator && !isModerateur) ||
-                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && isObservator && !isModerateur)
+                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator)) ||
+                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator))
                 }
               ></Flag>
             ))}
