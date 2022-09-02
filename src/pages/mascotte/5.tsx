@@ -165,11 +165,6 @@ const MascotteStep5 = () => {
               </div>
             ) : (
               <>
-                {!isValid && (
-                  <p>
-                    <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
-                  </p>
-                )}
                 <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
                   {isObservator ? (
                     <Tooltip title="Action non autorisée" arrow>

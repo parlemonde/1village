@@ -63,9 +63,11 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
         })
           .setLngLat(m.position)
           .addTo(map);
-        marker.getElement().addEventListener('click', () => {
-          router.push(`/activite/${userMascotte?.id}`);
-        });
+        if (userMascotte?.id) {
+          marker.getElement().addEventListener('click', () => {
+            router.push(`/activite/${userMascotte?.id}`);
+          });
+        }
         if (m.onDragEnd !== undefined) {
           const func = m.onDragEnd;
           const onMarkerDragEnd = () => {

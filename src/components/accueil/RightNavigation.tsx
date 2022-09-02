@@ -99,10 +99,10 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       >
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
           <span style={{ marginRight: '0.3rem', display: 'flex' }}>
-            {activityUser.avatar ? (
+            {activityUser.avatar && activityUser.mascotteId ? (
               <AvatarImg user={activityUser} size="extra-small" noLink onClick={onclick} style={{ cursor: 'pointer' }} />
             ) : (
-              <UserIcon style={{ fill: 'currentcolor', cursor: 'pointer' }} width="30px" onClick={onclick} />
+              <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
             )}
           </span>
           {userMascotte && isMascotte(userMascotte) ? (
