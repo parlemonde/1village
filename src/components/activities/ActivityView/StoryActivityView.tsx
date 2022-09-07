@@ -17,7 +17,6 @@ import type { StoryActivity } from 'types/story.type';
 
 export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
   const { object, place, odd } = activity.data;
-  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId])).filter(
     (id) => id !== activity.id && id !== undefined && id !== null,
   ) as number[];
