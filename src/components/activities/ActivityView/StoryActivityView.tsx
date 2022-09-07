@@ -11,6 +11,7 @@ import { Box } from '@mui/system';
 import StoriesDataCardView from './StoriesDataCardView';
 import type { ActivityViewProps } from './activity-view.types';
 import { isStory } from 'src/activity-types/anyActivity';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
 import type { StoryActivity } from 'types/story.type';
 
@@ -56,7 +57,10 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       position: 'relative',
                     }}
                   >
-                    <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} />
+                    {/* <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} /> */}
+                    <LightBox url={activity.data.tale.imageStory}>
+                      <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} />
+                    </LightBox>
                   </div>
                 </Grid>
               )}
