@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 import { RedButton } from 'src/components/buttons/RedButton';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
@@ -35,7 +36,9 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               position: 'relative',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            <LightBox url={firstImage}>
+              <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            </LightBox>
           </div>
         </div>
       )}
