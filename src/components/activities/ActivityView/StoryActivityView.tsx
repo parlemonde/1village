@@ -57,7 +57,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       position: 'relative',
                     }}
                   >
-                    {/* <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} /> */}
                     <LightBox url={activity.data.tale.imageStory}>
                       <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} />
                     </LightBox>
