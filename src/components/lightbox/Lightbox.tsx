@@ -18,7 +18,6 @@ export const LightBox = ({ url, children }: LightBoxProps) => {
       </div>
       <Modal
         open={isModalOpen}
-        noCloseOutsideModal
         fullWidth
         maxWidth="md"
         noCancelButton
