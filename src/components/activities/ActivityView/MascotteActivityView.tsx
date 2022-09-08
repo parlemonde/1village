@@ -6,6 +6,7 @@ import { ImageView } from '../content/views/ImageView';
 import type { ActivityViewProps } from './activity-view.types';
 import type { MascotteActivity } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 
 export const MascotteActivityView = ({ activity }: ActivityViewProps<MascotteActivity>) => {
   return (
@@ -23,13 +24,15 @@ export const MascotteActivityView = ({ activity }: ActivityViewProps<MascotteAct
                   ))}
               </div>
             </Grid>
-            <Grid item xs={12} md={12} style={{ display: 'flex' }}>
+            <Grid item xs={12} md={12} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <ImageView id={1} value={activity.data.classImg} />
-              {activity.data.classImgDesc}
+              <p>{activity.data.classImgDesc}</p>
             </Grid>
             <Grid item xs={12} md={4}>
               <Box display="flex" justifyContent="center" m={4}>
-                <AvatarImg src={activity.data.mascotteImage} noLink />
+                <LightBox url={activity.data.mascotteImage}>
+                  <AvatarImg src={activity.data.mascotteImage} noLink />
+                </LightBox>
               </Box>
             </Grid>
             <Grid item xs={12} md={8}>
