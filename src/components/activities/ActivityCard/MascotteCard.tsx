@@ -32,7 +32,9 @@ export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
             backgroundColor: bgPage,
           }}
         >
-          <AvatarImg size="medium" src={activity.data.mascotteImage} noLink />
+          <Link href={`/activite/${activity.id}`} passHref>
+            <AvatarImg size="medium" src={activity.data.mascotteImage} noLink />
+          </Link>
         </div>
       </div>
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
