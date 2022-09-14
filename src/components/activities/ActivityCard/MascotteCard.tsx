@@ -8,7 +8,6 @@ import type { ActivityCardProps } from './activity-card.types';
 import type { MascotteActivity } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { RedButton } from 'src/components/buttons/RedButton';
-import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
 
 export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<MascotteActivity>) => {
@@ -33,9 +32,7 @@ export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
             backgroundColor: bgPage,
           }}
         >
-          <LightBox url={activity.data.mascotteImage}>
-            <AvatarImg size="medium" src={activity.data.mascotteImage} noLink />
-          </LightBox>
+          <AvatarImg size="medium" src={activity.data.mascotteImage} noLink />
         </div>
       </div>
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
