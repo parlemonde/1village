@@ -57,7 +57,6 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       position: 'relative',
                     }}
                   >
-                    {/* <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} /> */}
                     <LightBox url={activity.data.tale.imageStory}>
                       <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} />
                     </LightBox>
@@ -113,13 +112,15 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           >
                             {activity.data.object.description}
                           </Typography>
-                          <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 1 }}
-                            component="img"
-                            height="150"
-                            image={activity.data.object.imageUrl}
-                            alt="objet de l'histoire"
-                          />
+                          <LightBox url={activity.data.object.imageUrl}>
+                            <CardMedia
+                              sx={{ borderRadius: '0.5rem', mt: 1 }}
+                              component="img"
+                              height="150"
+                              image={activity.data.object.imageUrl}
+                              alt="objet de l'histoire"
+                            />
+                          </LightBox>
                         </Card>
                       </Grid>
                       <Grid item xs style={{ paddingTop: '0px' }}>
@@ -143,13 +144,15 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           >
                             {activity.data.place.description}
                           </Typography>{' '}
-                          <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 1 }}
-                            component="img"
-                            height="150"
-                            image={activity.data.place.imageUrl}
-                            alt="lieu de l'histoire"
-                          />
+                          <LightBox url={activity.data.place.imageUrl}>
+                            <CardMedia
+                              sx={{ borderRadius: '0.5rem', mt: 1 }}
+                              component="img"
+                              height="150"
+                              image={activity.data.place.imageUrl}
+                              alt="lieu de l'histoire"
+                            />
+                          </LightBox>
                         </Card>
                       </Grid>
                       <Grid item xs style={{ paddingTop: '0px' }}>
@@ -173,13 +176,15 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           >
                             {activity.data.odd.description}
                           </Typography>
-                          <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 1 }}
-                            component="img"
-                            height="150"
-                            image={activity.data.odd.imageUrl}
-                            alt="Objectifs de développement durable de l'histoire"
-                          />
+                          <LightBox url={activity.data.odd.imageUrl}>
+                            <CardMedia
+                              sx={{ borderRadius: '0.5rem', mt: 1 }}
+                              component="img"
+                              height="150"
+                              image={activity.data.odd.imageUrl}
+                              alt="Objectifs de développement durable de l'histoire"
+                            />
+                          </LightBox>
                         </Card>
                       </Grid>
                     </>
