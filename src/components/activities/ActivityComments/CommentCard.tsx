@@ -95,7 +95,7 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
         <Paper elevation={2} className="activity__comment-card">
           <UserDisplayName className="text text--bold" user={user} />
           <p className="text text--small">
-            Publié le {toDate(activity.createDate as string)}
+            Publié le {toDate(new Date().toISOString())}
             <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
           </p>
 
