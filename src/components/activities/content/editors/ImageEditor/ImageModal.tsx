@@ -10,6 +10,7 @@ import type { ImgCroppieRef } from 'src/components/ImgCroppie';
 import { ImgCroppie } from 'src/components/ImgCroppie';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { Modal } from 'src/components/Modal';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
@@ -264,7 +265,9 @@ export const ImageModal = ({
                   position: 'relative',
                 }}
               >
-                <Image layout="fill" objectFit="contain" src={preview.url} unoptimized />
+                <LightBox url={preview.url}>
+                  <Image layout="fill" objectFit="contain" src={preview.url} unoptimized />
+                </LightBox>
               </div>
             ) : null}
             {preview.mode === 2 && <Alert severity="error">{"Erreur: impossible de charger l'image."}</Alert>}

@@ -13,6 +13,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
@@ -122,7 +123,9 @@ const ContenuLibre = () => {
                       position: 'relative',
                     }}
                   >
-                    <Image layout="fill" objectFit="contain" src={imageUrl} unoptimized />
+                    <LightBox url={imageUrl}>
+                      <Image layout="fill" objectFit="contain" src={imageUrl} unoptimized />
+                    </LightBox>
                   </div>
                 )}
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
