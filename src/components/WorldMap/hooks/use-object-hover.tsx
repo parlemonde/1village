@@ -96,12 +96,14 @@ export const useObjectHover = () => {
 
   const onClick = React.useCallback(
     (camera: Camera, cameraAltitude: number) => {
-      if (hoveredObject !== null && hoveredObject.userData.isClickable) {
+      if (hoveredObject !== null && mascotteData?.mascotteId) {
         hoveredObject.onClick(camera, cameraAltitude);
         router.push(`/activite/${mascotteActivityId}`);
+      } else {
+        return;
       }
     },
-    [hoveredObject, mascotteActivityId, router],
+    [hoveredObject, mascotteActivityId, mascotteData?.mascotteId, router],
   );
 
   const resetCanvasBoundingRect = React.useCallback(() => {

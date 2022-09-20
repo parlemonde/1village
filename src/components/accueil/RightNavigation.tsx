@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
@@ -83,7 +83,6 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       </div>
     );
   }
-
   return (
     <>
       <div
@@ -102,7 +101,11 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
             {activityUser.avatar && activityUser.mascotteId ? (
               <AvatarImg user={activityUser} size="extra-small" noLink onClick={onclick} style={{ cursor: 'pointer' }} />
             ) : (
-              <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
+              <Tooltip title="Veuillez créer une mascotte" arrow>
+                <span style={{ alignItems: 'center' }}>
+                  <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
+                </span>
+              </Tooltip>
             )}
           </span>
           {userMascotte && isMascotte(userMascotte) ? (
