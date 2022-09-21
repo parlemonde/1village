@@ -94,10 +94,12 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
       ) : (
         <Paper elevation={2} className="activity__comment-card">
           <UserDisplayName className="text text--bold" user={user} />
-          <p className="text text--small">
-            Publié le {toDate(new Date().toISOString())}
-            <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
-          </p>
+          {user.country && comment && (
+            <p className="text text--small">
+              Publié le {`${toDate(comment.createDate as string)}`}
+              <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+            </p>
+          )}
 
           <div dangerouslySetInnerHTML={{ __html: comment.text }} className="break-long-words" />
           {isSelf && (
