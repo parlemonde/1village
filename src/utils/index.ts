@@ -1,6 +1,5 @@
 import md5 from 'md5';
 
-import UserIcon from 'src/svg/user-icon.svg';
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
@@ -150,11 +149,6 @@ export function isValidHttpUrl(value: string): boolean {
 export const getGravatarUrl = (email: string): string => {
   const hash = md5(email.trim().toLowerCase());
   return `https://www.gravatar.com/avatar/${hash}?s40&r=g&d=identicon`;
-};
-
-export const getPersonAvatar = () => {
-  const noAvatar = UserIcon;
-  return noAvatar;
 };
 
 export const toDate = (date: string): string => {
