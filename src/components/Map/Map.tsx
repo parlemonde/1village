@@ -69,8 +69,8 @@ const Map = ({ position, zoom, markers = [] }: MapProps) => {
             router.push(`/activite/${userMascotte?.id}`);
           });
         } else if (!userMascotte) {
-          <Tooltip title="Action non autorisée" arrow>
-            <span></span>
+          <Tooltip title="la classe n'a pas encore de mascotte">
+            <span style={{ cursor: 'not-allowed' }}></span>
           </Tooltip>;
         }
         if (m.onDragEnd !== undefined) {

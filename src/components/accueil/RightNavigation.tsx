@@ -101,8 +101,8 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
             {activityUser.avatar && activityUser.mascotteId ? (
               <AvatarImg user={activityUser} size="extra-small" noLink onClick={onclick} style={{ cursor: 'pointer' }} />
             ) : (
-              <Tooltip title="Veuillez créer une mascotte" arrow>
-                <span style={{ alignItems: 'center' }}>
+              <Tooltip title="la classe n'a pas encore de mascotte">
+                <span style={{ alignItems: 'center', cursor: 'not-allowed' }}>
                   <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
                 </span>
               </Tooltip>
