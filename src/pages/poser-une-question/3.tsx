@@ -33,7 +33,7 @@ const Question3 = () => {
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
   const questionsCount = content?.length ?? 0;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -60,7 +60,7 @@ const Question3 = () => {
     const data: Partial<QuestionActivity> = {
       type: ActivityType.QUESTION,
       villageId: village.id,
-      phase: getActivityPhase(ActivityType.QUESTION, selectedPhase),
+      phase: getActivityPhase(ActivityType.QUESTION, village.activePhase, selectedPhase),
       data: {},
       content: [
         {
@@ -134,7 +134,7 @@ const Question3 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator}>
                 Enregistrer les changements
               </Button>
             </div>
@@ -146,7 +146,7 @@ const Question3 = () => {
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                {isUserObservator ? (
+                {isObservator ? (
                   <Tooltip title="Action non autorisée" arrow>
                     <span>
                       <Button variant="outlined" color="primary" disabled>

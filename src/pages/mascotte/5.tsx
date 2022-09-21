@@ -25,7 +25,7 @@ import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
-const MascotteStep4 = () => {
+const MascotteStep5 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
@@ -36,7 +36,7 @@ const MascotteStep4 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
   const data = (activity?.data as MascotteData) || null;
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
@@ -159,19 +159,14 @@ const MascotteStep4 = () => {
             )}
             {isEdit ? (
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator}>
                   Enregistrer les changements
                 </Button>
               </div>
             ) : (
               <>
-                {!isValid && (
-                  <p>
-                    <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
-                  </p>
-                )}
                 <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                  {isUserObservator ? (
+                  {isObservator ? (
                     <Tooltip title="Action non autorisée" arrow>
                       <span>
                         <Button variant="outlined" color="primary" disabled>
@@ -267,4 +262,4 @@ const MascotteStep4 = () => {
   );
 };
 
-export default MascotteStep4;
+export default MascotteStep5;

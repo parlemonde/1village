@@ -15,6 +15,7 @@ import { ImageModal } from 'src/components/activities/content/editors/ImageEdito
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
@@ -23,6 +24,7 @@ import type { StoriesData, StoryElement } from 'types/story.type';
 const StoryStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, createNewActivity, save } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const { deleteStoryImage } = useImageStoryRequests();
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
@@ -37,6 +39,7 @@ const StoryStep1 = () => {
         created.current = true;
         createNewActivity(
           ActivityType.STORY,
+          selectedPhase,
           undefined,
           {
             ...DEFAULT_STORY_DATA,
@@ -47,7 +50,7 @@ const StoryStep1 = () => {
         );
       }
     }
-  }, [activity, createNewActivity, router.query]);
+  }, [activity, createNewActivity, router.query, selectedPhase]);
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);

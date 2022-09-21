@@ -2,11 +2,10 @@ import Link from 'next/link';
 import React from 'react';
 
 import PersonIcon from '@mui/icons-material/Person';
-import { Avatar } from '@mui/material';
+import { Avatar, Tooltip } from '@mui/material';
 
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
-import { getGravatarUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -60,7 +59,7 @@ export const AvatarImg = ({
     );
   }
 
-  const imgSrc = user ? user.avatar || getGravatarUrl(user.email) || src : src;
+  const imgSrc = user ? user.avatar || src : src;
 
   if (!isPelico && !noLink && user && user.mascotteId) {
     return (
@@ -73,9 +72,20 @@ export const AvatarImg = ({
       </Link>
     );
   }
+
   return (
     <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
-      {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+      {user && user.mascotteId === undefined ? (
+        <Tooltip title="Veuillez créer une mascotte" arrow>
+          <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+          </span>
+        </Tooltip>
+      ) : (
+        <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+        </span>
+      )}
     </Avatar>
   );
 };

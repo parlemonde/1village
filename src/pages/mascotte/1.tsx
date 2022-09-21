@@ -20,6 +20,7 @@ import { getUserDisplayName, pluralS } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const MascotteStep1 = () => {
+  const { selectedPhase } = React.useContext(VillageContext);
   const router = useRouter();
   const [showError, setShowError] = React.useState(false);
   const { activity, updateActivity, createActivityIfNotExist, save } = React.useContext(ActivityContext);
@@ -45,19 +46,19 @@ const MascotteStep1 = () => {
     if (!created.current) {
       if (!activity && !('activity-id' in router.query) && localStorage.getItem('activity') === null && !('edit' in router.query)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.MASCOTTE, undefined, {
+        createActivityIfNotExist(ActivityType.MASCOTTE, selectedPhase, undefined, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       } else if (activity && !isMascotte(activity)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.MASCOTTE, undefined, {
+        createActivityIfNotExist(ActivityType.MASCOTTE, selectedPhase, undefined, {
           ...DEFAULT_MASCOTTE_DATA,
           presentation: labelPresentation,
         }).catch(console.error);
       }
     }
-  }, [user, village, activity, labelPresentation, createActivityIfNotExist, router]);
+  }, [user, village, activity, labelPresentation, createActivityIfNotExist, router, selectedPhase]);
 
   const dataChange = (key: keyof MascotteData) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const newData = {
