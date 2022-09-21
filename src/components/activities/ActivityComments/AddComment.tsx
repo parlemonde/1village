@@ -119,18 +119,11 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 </Button>
               </Link>
             ) : (
-              <Link href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`} passHref>
+              <>
                 {isObservator ? (
                   <Tooltip title="Action non autorisée" arrow>
                     <span>
-                      <Button
-                        component="a"
-                        href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                        variant="outlined"
-                        color="primary"
-                        style={{ width: '100%' }}
-                        disabled
-                      >
+                      <Button component="a" variant="outlined" color="primary" style={{ width: '100%' }} disabled={isObservator}>
                         <ReactionIcon
                           style={{
                             fill: bgPage,
@@ -141,22 +134,24 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                     </span>
                   </Tooltip>
                 ) : (
-                  <Button
-                    component="a"
-                    href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
-                    variant="outlined"
-                    color="primary"
-                    style={{ width: '100%' }}
-                  >
-                    <ReactionIcon
-                      style={{
-                        fill: primaryColor,
-                      }}
-                    />
-                    Réagir
-                  </Button>
+                  <Link href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`} passHref>
+                    <Button
+                      component="a"
+                      href={`/reagir-a-une-activite/1?responseActivityId=${activityId}&responseActivityType=${activityType}`}
+                      variant="outlined"
+                      color="primary"
+                      style={{ width: '100%' }}
+                    >
+                      <ReactionIcon
+                        style={{
+                          fill: primaryColor,
+                        }}
+                      />
+                      Réagir
+                    </Button>
+                  </Link>
                 )}
-              </Link>
+              </>
             )}
           </div>
         )}
