@@ -76,7 +76,7 @@ export const AvatarImg = ({
   return (
     <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
       {user && user.mascotteId === undefined ? (
-        <Tooltip title="Veuillez créer une mascotte" arrow>
+        <Tooltip title="la classe n'a pas encore de mascotte" style={{ cursor: 'not-allowed' }}>
           <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
           </span>
