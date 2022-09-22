@@ -37,6 +37,7 @@ type AvatarImgProps = {
   style?: React.CSSProperties;
   isRounded?: boolean;
   displayAsUser?: boolean;
+  noToolTip?: boolean;
 };
 export const AvatarImg = ({
   size = 'large',
@@ -48,6 +49,7 @@ export const AvatarImg = ({
   noLink = false,
   isRounded = true,
   displayAsUser = false,
+  noToolTip = false,
 }: React.PropsWithChildren<AvatarImgProps>) => {
   const isPelico = user && user.type >= UserType.MEDIATOR;
 
@@ -73,6 +75,15 @@ export const AvatarImg = ({
     );
   }
 
+  if (noToolTip) {
+    return (
+      <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
+        <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+        </span>
+      </Avatar>
+    );
+  }
   return (
     <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
       {user && user.mascotteId === undefined ? (
