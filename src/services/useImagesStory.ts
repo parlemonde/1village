@@ -124,6 +124,7 @@ export const useImageStoryRequests = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { getAllStories } = useImageStories();
   const { activity, createNewActivity } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
 
   const deleteStoryImage = React.useCallback(
     async (id: number | null, data: StoriesData, step?: number) => {
@@ -166,6 +167,7 @@ export const useImageStoryRequests = () => {
         }
         createNewActivity(
           ActivityType.STORY,
+          selectedPhase,
           undefined,
           {
             ...newActivityData,
@@ -190,7 +192,7 @@ export const useImageStoryRequests = () => {
       queryClient.invalidateQueries('stories');
       queryClient.invalidateQueries('activities');
     },
-    [activity, axiosLoggedRequest, createNewActivity, enqueueSnackbar, getAllStories, queryClient],
+    [activity, axiosLoggedRequest, createNewActivity, enqueueSnackbar, getAllStories, queryClient, selectedPhase],
   );
 
   return {
