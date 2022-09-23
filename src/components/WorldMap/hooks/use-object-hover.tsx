@@ -129,7 +129,7 @@ export const useObjectHover = () => {
     onMouseLeave,
     resetCanvasBoundingRect,
     onClick,
-    cursorStyle: hoveredObject !== null && hoveredObject.userData.isClickable ? 'pointer' : 'default',
+    cursorStyle: hoveredObject !== null && hoveredObject.userData.isClickable ? (mascotteData?.mascotteId ? 'pointer' : 'not-allowed') : 'default',
     popover,
   };
 };

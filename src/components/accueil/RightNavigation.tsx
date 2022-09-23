@@ -15,7 +15,6 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivity } from 'src/services/useActivity';
 import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
-import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { getUserDisplayName, toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
@@ -103,7 +102,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
             ) : (
               <Tooltip title="la classe n'a pas encore de mascotte">
                 <span style={{ alignItems: 'center', cursor: 'not-allowed' }}>
-                  <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
+                  <AvatarImg user={activityUser} size="extra-small" />
                 </span>
               </Tooltip>
             )}

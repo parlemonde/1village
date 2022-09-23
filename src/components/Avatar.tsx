@@ -6,6 +6,7 @@ import { Avatar, Tooltip } from '@mui/material';
 
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
+import { getGravatarUrl } from 'src/utils';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -61,7 +62,7 @@ export const AvatarImg = ({
     );
   }
 
-  const imgSrc = user ? user.avatar || src : src;
+  const imgSrc = user ? user.avatar || getGravatarUrl(user.email) || src : src;
 
   if (!isPelico && !noLink && user && user.mascotteId) {
     return (
@@ -85,18 +86,18 @@ export const AvatarImg = ({
     );
   }
   return (
-    <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
+    <>
       {user && user.mascotteId === undefined ? (
         <Tooltip title="la classe n'a pas encore de mascotte">
-          <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'not-allowed' }}>
+          <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
             {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
-          </span>
+          </Avatar>
         </Tooltip>
       ) : (
-        <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
           {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
-        </span>
+        </Avatar>
       )}
-    </Avatar>
+    </>
   );
 };
