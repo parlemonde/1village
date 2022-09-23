@@ -35,7 +35,9 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               position: 'relative',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            <Link href={`/activite/${activity.id}`} passHref>
+              <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            </Link>
           </div>
         </div>
       )}
