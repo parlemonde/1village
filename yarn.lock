@@ -16,7 +16,7 @@ __metadata:
     "@mui/icons-material": ^5.8.4
     "@mui/material": ^5.8.5
     "@mui/system": ^5.8.5
-    "@next/eslint-plugin-next": ^12.1.6
+    "@next/eslint-plugin-next": 12.3.1
     "@svgr/webpack": 6.2.1
     "@swc/cli": ^0.1.57
     "@swc/core": 1.2.205
@@ -2896,12 +2896,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:^12.1.6":
-  version: 12.1.6
-  resolution: "@next/eslint-plugin-next@npm:12.1.6"
+"@next/eslint-plugin-next@npm:12.3.1":
+  version: 12.3.1
+  resolution: "@next/eslint-plugin-next@npm:12.3.1"
   dependencies:
     glob: 7.1.7
-  checksum: 33dcaf71f299d3c8a0744cad512369f92d7a355f3c0d57f2496e888e4242080c49226ec2c59ba2efac04b3a1df51c36019b853b4177df082ca4621a1713a2229
+  checksum: 157b1126f016a0090b62f590d9c331c58221c4efaf3453c294a0d26e75497704617549480e9bba3ddaf278a355359133dd239c3960f684f2abe575553ec59a96
   languageName: node
   linkType: hard
 
