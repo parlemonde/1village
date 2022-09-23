@@ -23,7 +23,7 @@ const StoryStep5 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
     const errors = [];
@@ -108,7 +108,7 @@ const StoryStep5 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator || !isValid}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator || !isValid}>
                 Enregistrer les changements
               </Button>
             </div>
@@ -120,7 +120,7 @@ const StoryStep5 = () => {
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                {isUserObservator ? (
+                {isObservator ? (
                   <Tooltip title="Action non autorisée" arrow>
                     <span>
                       <Button variant="outlined" color="primary" disabled>

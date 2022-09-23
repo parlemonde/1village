@@ -96,17 +96,12 @@ const Activity = () => {
       {activity.type === ActivityType.STORY || activity.type === ActivityType.RE_INVENT_STORY ? (
         <>
           <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
-          <div className="activity__container">
-            {!isAnswer && (
-              <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />
-            )}
-          </div>
+          <div className="activity__container">{!isAnswer && <ActivityComments activity={activity} usersMap={usersMap} />}</div>
         </>
       ) : (
         <div className="activity__container">
           <ActivityView activity={activity} user={activityUser} isSelf={userIsSelf} />
-
-          {!isAnswer && <ActivityComments activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} usersMap={usersMap} />}
+          {!isAnswer && <ActivityComments activity={activity} usersMap={usersMap} />}
         </div>
       )}
     </Base>
