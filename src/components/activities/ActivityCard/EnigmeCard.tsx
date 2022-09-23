@@ -41,6 +41,7 @@ export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              cursor: 'pointer',
             }}
           >
             <Link href={`/activite/${activity.id}`} passHref>

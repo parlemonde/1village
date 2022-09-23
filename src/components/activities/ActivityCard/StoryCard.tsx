@@ -33,6 +33,7 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              cursor: 'pointer',
             }}
           >
             <Link href={`/activite/${activity.id}`} passHref>
