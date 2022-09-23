@@ -65,6 +65,7 @@ export const Navigation = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
+  const [mascotteId, setMascotteId] = React.useState(0);
 
   const getStories = React.useCallback(async () => {
     if (!village) {
@@ -85,13 +86,28 @@ export const Navigation = (): JSX.Element => {
     getStories().catch(console.error);
   }, [getStories]);
 
+  const getMascotte = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities/mascotte`,
+    });
+    if (!response.error) {
+      setMascotteId(response.data.id);
+    }
+  }, [axiosLoggedRequest]);
+
+  // Get mascotte
+  React.useEffect(() => {
+    getMascotte().catch(console.error);
+  }, [getMascotte]);
+
   // check color of icons
   const TABS_PER_PHASE = React.useMemo<Tab[]>(
     () => [
       // ---- PHASE 1 ----
       {
         label: 'Créer sa mascotte',
-        path: '/mascotte/1',
+        path: mascotteId !== 0 ? `/mascotte/5?activity-id=${mascotteId}` : '/mascotte/1',
         icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
       },
@@ -166,7 +182,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [village, firstStoryCreated],
+    [village, firstStoryCreated, mascotteId],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
