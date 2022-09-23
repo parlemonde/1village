@@ -30,7 +30,7 @@ const EnigmeStep4 = () => {
 
   const data = (activity?.data as EnigmeData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
   const indiceContentIndex = data?.indiceContentIndex ?? 0;
 
   const errorSteps = React.useMemo(() => {
@@ -108,7 +108,7 @@ const EnigmeStep4 = () => {
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                {isUserObservator ? (
+                {isObservator ? (
                   <Tooltip title="Action non autorisée" arrow>
                     <span>
                       <Button variant="outlined" color="primary" disabled>
