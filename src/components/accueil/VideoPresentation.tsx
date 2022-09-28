@@ -8,9 +8,6 @@ import Logo from 'src/svg/logo.svg';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 import { SSO_HOST, CLIENT_ID, onLoginSSO } from 'src/utils/sso';
 
-// create a component for riddle
-// conditional rendering of video presentation
-
 export const VideoPresentation = () => {
   const [value, setValue] = React.useState('');
   const [resolved, setResolved] = React.useState<boolean>(false);
@@ -82,7 +79,7 @@ export const VideoPresentation = () => {
                   </h1>
                 </div>
                 <iframe
-                  src="https://player.vimeo.com/video/641938406?h=181d44f047"
+                  src="https://player.vimeo.com/video/754287113?h=181d44f047"
                   width="640"
                   height="360"
                   frameBorder="0"
