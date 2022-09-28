@@ -32,7 +32,7 @@ const DefiStep4 = () => {
 
   const data = (activity?.data as CookingDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
     const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
@@ -91,7 +91,7 @@ const DefiStep4 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator}>
                 Enregistrer les changements
               </Button>
             </div>
@@ -103,7 +103,7 @@ const DefiStep4 = () => {
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                {isUserObservator ? (
+                {isObservator ? (
                   <Tooltip title="Action non autorisée" arrow>
                     <span>
                       <Button variant="outlined" color="primary" disabled>

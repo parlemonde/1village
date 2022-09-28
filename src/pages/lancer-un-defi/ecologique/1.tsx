@@ -9,11 +9,13 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const DefiEcoStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const data = (activity?.data as EcoDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
@@ -27,19 +29,19 @@ const DefiEcoStep1 = () => {
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(ActivityType.DEFI, DEFI.ECO, {
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.ECO, {
           type: null,
           defiIndex: null,
         });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isEco(activity)))) {
         created.current = true;
-        createNewActivity(ActivityType.DEFI, DEFI.ECO, {
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.ECO, {
           type: null,
           defiIndex: null,
         });
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isEco(activity))) {
     return <div></div>;

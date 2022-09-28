@@ -4,26 +4,29 @@ import React from 'react';
 import { Button, CircularProgress, Paper } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
+import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
+import { toDate } from 'src/utils';
+import type { Activity, AnyData } from 'types/activity.type';
 import type { Comment } from 'types/comment.type';
 import type { User } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
 interface CommentCardProps {
-  activityId: number;
+  activity: Activity<AnyData>;
   comment: Comment;
   user: User | null;
 }
 
-export const CommentCard = ({ activityId, comment, user }: CommentCardProps) => {
+export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
   const { user: selfUser } = React.useContext(UserContext);
-  const { editComment, deleteComment } = useCommentRequests(activityId);
+  const { editComment, deleteComment } = useCommentRequests(activity.id);
   const [newComment, setNewComment] = React.useState('');
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
@@ -91,6 +94,13 @@ export const CommentCard = ({ activityId, comment, user }: CommentCardProps) => 
       ) : (
         <Paper elevation={2} className="activity__comment-card">
           <UserDisplayName className="text text--bold" user={user} />
+          {user.country && comment && (
+            <p className="text text--small">
+              Publié le {`${toDate(comment.createDate as string)}`}
+              <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+            </p>
+          )}
+
           <div dangerouslySetInnerHTML={{ __html: comment.text }} className="break-long-words" />
           {isSelf && (
             <div style={{ position: 'absolute', right: '0.25rem', top: '0.25rem' }}>

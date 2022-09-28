@@ -12,6 +12,7 @@ import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { ActivityType } from 'types/activity.type';
+import { PhaseType } from 'types/phase.type';
 
 export const titles = {
   [ActivityType.MASCOTTE]: 'créé une mascotte',
@@ -104,31 +105,33 @@ export const labels = {
 };
 
 const specificActivityPhase = {
-  [ActivityType.MASCOTTE]: [1],
-  [ActivityType.PRESENTATION]: [1, 2, 3],
-  [ActivityType.DEFI]: [2],
-  [ActivityType.GAME]: [2],
-  [ActivityType.ENIGME]: [2],
-  [ActivityType.QUESTION]: [1, 2, 3],
-  [ActivityType.CONTENU_LIBRE]: [1, 2, 3],
-  [ActivityType.INDICE]: [1],
-  [ActivityType.SYMBOL]: [1],
-  [ActivityType.REPORTAGE]: [2],
-  [ActivityType.REACTION]: [2],
-  [ActivityType.STORY]: [3],
-  [ActivityType.RE_INVENT_STORY]: [3],
+  [ActivityType.MASCOTTE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.PRESENTATION]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.DEFI]: [PhaseType.TWO],
+  [ActivityType.GAME]: [PhaseType.TWO],
+  [ActivityType.ENIGME]: [PhaseType.TWO],
+  [ActivityType.QUESTION]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.CONTENU_LIBRE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.INDICE]: [PhaseType.ONE],
+  [ActivityType.SYMBOL]: [PhaseType.ONE],
+  [ActivityType.REPORTAGE]: [PhaseType.TWO],
+  [ActivityType.REACTION]: [PhaseType.TWO],
+  [ActivityType.STORY]: [PhaseType.THREE],
+  [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
   [ActivityType.ANTHEM]: [],
-  [ActivityType.VERSE_RECORD]: [3],
+  [ActivityType.VERSE_RECORD]: [PhaseType.THREE],
 };
-export const getActivityPhase = (activityType: number, activePhase: number) => {
-  const availablePhases = specificActivityPhase[activityType] || [1, 2, 3];
+export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {
+  const availablePhases = specificActivityPhase[activityType] || [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE];
+  //Anthem case
   if (availablePhases.length === 0) {
-    return activePhase; // should not happen
-  } else if (availablePhases.length === 1) {
-    return availablePhases[0];
-  } else if (specificActivityPhase[activityType].includes(activePhase)) {
     return activePhase;
   }
+  //Other cases : verified if selectedPhase is include in ActivityPhase
+  if (availablePhases.includes(selectedPhase) && selectedPhase <= activePhase) {
+    return selectedPhase;
+  }
+  //default value in any other case : old logic keeped here
   return availablePhases
     .filter((p) => p <= activePhase)
     .concat([1])

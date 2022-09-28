@@ -7,6 +7,7 @@ import { Steps } from 'src/components/Steps';
 import { ActivitySelect } from 'src/components/activities/ActivitySelect';
 import { DESC } from 'src/components/activities/utils';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
@@ -18,16 +19,17 @@ interface SelectedActivityInfos {
 const ReactionStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const selectRef = React.useRef<HTMLDivElement>(null);
   const [selectedActivity, setSelectedActivity] = React.useState<SelectedActivityInfos>({ id: null, type: null });
   const activitiesTypes = [ActivityType.ENIGME, ActivityType.DEFI, ActivityType.QUESTION, ActivityType.CONTENU_LIBRE, ActivityType.REPORTAGE];
 
   const onNext = () => {
     if (!activity || !isReaction(activity) || activity.responseActivityId !== selectedActivity.id) {
-      createNewActivity(ActivityType.REACTION, undefined, { content: activity?.content }, selectedActivity.id, selectedActivity.type);
+      createNewActivity(ActivityType.REACTION, selectedPhase, undefined, { content: activity?.content }, selectedActivity.id, selectedActivity.type);
     }
     if ('edit' in router.query && activity) {
-      updateActivity({ content: activity?.content, responseActivityId: selectedActivity.id, responseType: selectedActivity.type });
+      updateActivity({ content: activity.content, responseActivityId: selectedActivity.id, responseType: selectedActivity.type });
     }
 
     router.push('/reagir-a-une-activite/2');
@@ -48,7 +50,7 @@ const ReactionStep1 = () => {
         'responseActivityType' in router.query ? parseInt(getQueryString(router.query.responseActivityType), 10) ?? null : null;
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(ActivityType.REACTION, undefined, {}, responseActivityId, responseActivityType);
+        createNewActivity(ActivityType.REACTION, selectedPhase, undefined, {}, responseActivityId, responseActivityType);
         setSelectedActivity({ id: responseActivityId, type: responseActivityType });
         if (responseActivityId !== null) {
           if (selectRef.current) {
@@ -57,7 +59,7 @@ const ReactionStep1 = () => {
         }
       } else if (activity && !isReaction(activity)) {
         created.current = true;
-        createNewActivity(ActivityType.REACTION, undefined, {}, responseActivityId, responseActivityType);
+        createNewActivity(ActivityType.REACTION, selectedPhase, undefined, {}, responseActivityId, responseActivityType);
         if (responseActivityId !== null) {
           if (selectRef.current) {
             selectRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -65,7 +67,7 @@ const ReactionStep1 = () => {
         }
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   return (
     <Base>

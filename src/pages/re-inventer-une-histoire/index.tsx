@@ -7,6 +7,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWheel';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { StoryElement, StoriesData } from 'types/story.type';
@@ -16,6 +17,7 @@ const InspiredStory = () => {
   const inspiredActivityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { createNewActivity } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
 
   const [inspiredImages, setInspiredImages] = React.useState<{ object: StoryElement; place: StoryElement; odd: StoryElement } | null>(null);
   const [storyData, setStoryData] = React.useState<StoriesData>(DEFAULT_STORY_DATA);
@@ -50,7 +52,8 @@ const InspiredStory = () => {
   }, [inspiredActivityId, getInspiringStory]);
 
   const onNext = () => {
-    createNewActivity(ActivityType.RE_INVENT_STORY, undefined, storyData);
+    //TODO: implement first time and only one story in db
+    createNewActivity(ActivityType.RE_INVENT_STORY, selectedPhase, undefined, storyData);
     router.push('/re-inventer-une-histoire/1');
   };
 

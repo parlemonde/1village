@@ -29,7 +29,7 @@ const ReportageStep3 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity != null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  const isUserObservator = user?.type === UserType.OBSERVATOR;
+  const isObservator = user?.type === UserType.OBSERVATOR;
   const data = (activity?.data as ReportageData) || null;
 
   const errorSteps = React.useMemo(() => {
@@ -99,13 +99,13 @@ const ReportageStep3 = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isUserObservator}>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={isObservator}>
                 Enregistrer les changements
               </Button>
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              {isUserObservator ? (
+              {isObservator ? (
                 <Tooltip title="Action non autorisée" arrow>
                   <span>
                     <Button variant="outlined" color="primary" disabled>

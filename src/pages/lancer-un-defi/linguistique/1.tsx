@@ -15,6 +15,7 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import { LanguageSelector } from 'src/components/selectors/LanguageSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { secondaryColor } from 'src/styles/variables.const';
@@ -34,6 +35,7 @@ const getArticle = (language: string) => {
 const DefiStep1 = () => {
   const router = useRouter();
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const { activity, save, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { languages } = useLanguages();
   const [mascotteId, setMascotteId] = React.useState(0);
@@ -47,7 +49,7 @@ const DefiStep1 = () => {
     if (!created.current) {
       if (!('edit' in router.query)) {
         created.current = true;
-        createNewActivity(ActivityType.DEFI, DEFI.LANGUAGE, {
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.LANGUAGE, {
           languageCode: '',
           language: '',
           languageIndex: 0,
@@ -57,7 +59,7 @@ const DefiStep1 = () => {
         });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
         created.current = true;
-        createNewActivity(ActivityType.DEFI, DEFI.LANGUAGE, {
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.LANGUAGE, {
           languageCode: '',
           language: '',
           languageIndex: 0,
@@ -67,7 +69,7 @@ const DefiStep1 = () => {
         });
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   React.useEffect(() => {
     if (data !== null && 'languageCode' in data && data.languageCode.length > 2) {
