@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import router from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -11,6 +12,7 @@ import type { EnigmeActivity } from 'src/activity-types/enigme.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
+import { LinkNotAllowedInPath } from 'types/activity.type';
 
 export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<EnigmeActivity>) => {
   const firstImage = React.useMemo(
@@ -44,9 +46,14 @@ export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
               cursor: 'pointer',
             }}
           >
-            <Link href={`/activite/${activity.id}`} passHref>
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
-            </Link>
+            ) : (
+              <Link href={`/activite/${activity.id}`} passHref>
+                <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+              </Link>
+            )}
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import router from 'next/router';
 import React from 'react';
 import ReactPlayer from 'react-player';
 
@@ -12,6 +13,7 @@ import type { ReportageActivity } from 'src/activity-types/reportage.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
+import { LinkNotAllowedInPath } from 'types/activity.type';
 
 export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ReportageActivity>) => {
   const firstImage = React.useMemo(() => activity.content.find((c) => c.type === 'image'), [activity.content]);
@@ -41,9 +43,14 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               cursor: 'pointer',
             }}
           >
-            <Link href={`/activite/${activity.id}`} passHref>
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
-            </Link>
+            ) : (
+              <Link href={`/activite/${activity.id}`} passHref>
+                <Image layout="fill" objectFit="contain" src={firstImage.value} unoptimized />
+              </Link>
+            )}
           </div>
         </div>
       ) : firstVideo ? (
@@ -57,9 +64,14 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
               cursor: 'pointer',
             }}
           >
-            <Link href={`/activite/${activity.id}`} passHref>
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <ReactPlayer width="100%" height="100%" url={firstVideo.value} light />
-            </Link>
+            ) : (
+              <Link href={`/activite/${activity.id}`} passHref>
+                <ReactPlayer width="100%" height="100%" url={firstVideo.value} light />
+              </Link>
+            )}
           </div>
         </div>
       ) : (
