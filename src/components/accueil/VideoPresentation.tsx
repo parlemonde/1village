@@ -62,7 +62,7 @@ export const VideoPresentation = () => {
                       }}
                       onChange={handleChange}
                       error={showError}
-                      helperText={showError ? 'Ce n’est pas le bon indice' : ''}
+                      helperText={showError ? "Il s'agit d'une autre qualité, essaye à nouveau" : ''}
                     />
                   </Box>
                   <Button component="a" style={{ marginTop: '1rem' }} variant="outlined" color="primary" onClick={onSend}>
