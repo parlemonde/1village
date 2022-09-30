@@ -89,13 +89,15 @@ export const AvatarImg = ({
     <>
       {user && user.mascotteId === undefined ? (
         <Tooltip title="la classe n'a pas encore de mascotte">
-          <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
-            {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
-          </Avatar>
+          <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'not-allowed' }}>
+            <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
+              {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+            </Avatar>
+          </span>
         </Tooltip>
       ) : (
         <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
-          {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+          {children || <PersonIcon style={{ width: '10px', height: 'auto' }} />}
         </Avatar>
       )}
     </>
