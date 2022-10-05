@@ -18,10 +18,6 @@ export const countries: Country[] = [
     name: 'Antigua-Et-Barbuda',
   },
   {
-    isoCode: 'AI',
-    name: 'Anguilla',
-  },
-  {
     isoCode: 'AL',
     name: 'Albanie',
   },
@@ -34,20 +30,12 @@ export const countries: Country[] = [
     name: 'Angola',
   },
   {
-    isoCode: 'AP',
-    name: 'R\u00e9gion Asie/Pacifique',
-  },
-  {
-    isoCode: 'AQ',
-    name: 'Antarctique',
-  },
-  {
     isoCode: 'AR',
     name: 'Argentine',
   },
   {
-    isoCode: 'AS',
-    name: 'Samoa Am\u00e9ricaines',
+    isoCode: 'WS',
+    name: 'Samoa',
   },
   {
     isoCode: 'AT',
@@ -60,10 +48,6 @@ export const countries: Country[] = [
   {
     isoCode: 'AW',
     name: 'Aruba',
-  },
-  {
-    isoCode: 'AX',
-    name: '\u00celes \u00c5land',
   },
   {
     isoCode: 'AZ',
@@ -86,6 +70,10 @@ export const countries: Country[] = [
     name: 'Belgique',
   },
   {
+    isoCode: 'BZ',
+    name: 'Belize',
+  },
+  {
     isoCode: 'BF',
     name: 'Burkina Faso',
   },
@@ -106,24 +94,12 @@ export const countries: Country[] = [
     name: 'B\u00e9nin',
   },
   {
-    isoCode: 'BL',
-    name: 'Saint-Barth\u00e9lemy',
-  },
-  {
-    isoCode: 'BM',
-    name: 'Bermudes',
-  },
-  {
     isoCode: 'BN',
     name: 'Brunei Darussalam',
   },
   {
     isoCode: 'BO',
     name: '\u00c9tat Plurinational De Bolivie',
-  },
-  {
-    isoCode: 'BQ',
-    name: 'Bonaire, Saint-Eustache Et Saba',
   },
   {
     isoCode: 'BR',
@@ -136,10 +112,6 @@ export const countries: Country[] = [
   {
     isoCode: 'BT',
     name: 'Bhoutan',
-  },
-  {
-    isoCode: 'BV',
-    name: '\u00cele Bouvet',
   },
   {
     isoCode: 'BW',
@@ -156,10 +128,6 @@ export const countries: Country[] = [
   {
     isoCode: 'CA',
     name: 'Canada',
-  },
-  {
-    isoCode: 'CC',
-    name: '\u00celes Cocos',
   },
   {
     isoCode: 'CD',
@@ -180,10 +148,6 @@ export const countries: Country[] = [
   {
     isoCode: 'CI',
     name: "C\u00f4te D'Ivoire",
-  },
-  {
-    isoCode: 'CK',
-    name: '\u00celes Cook',
   },
   {
     isoCode: 'CL',
@@ -216,10 +180,6 @@ export const countries: Country[] = [
   {
     isoCode: 'CW',
     name: 'Cura\u00e7ao',
-  },
-  {
-    isoCode: 'CX',
-    name: '\u00cele Christmas',
   },
   {
     isoCode: 'CY',
@@ -282,10 +242,6 @@ export const countries: Country[] = [
     name: '\u00c9thiopie',
   },
   {
-    isoCode: 'EU',
-    name: 'Europe',
-  },
-  {
     isoCode: 'FI',
     name: 'Finlande',
   },
@@ -294,16 +250,8 @@ export const countries: Country[] = [
     name: 'Fidji',
   },
   {
-    isoCode: 'FK',
-    name: '\u00celes Malouines',
-  },
-  {
     isoCode: 'FM',
     name: '\u00c9tats F\u00e9d\u00e9r\u00e9s De Micron\u00e9sie',
-  },
-  {
-    isoCode: 'FO',
-    name: '\u00celes F\u00e9ro\u00e9',
   },
   {
     isoCode: 'FR',
@@ -326,24 +274,8 @@ export const countries: Country[] = [
     name: 'G\u00e9orgie',
   },
   {
-    isoCode: 'GF',
-    name: 'Guyane',
-  },
-  {
-    isoCode: 'GG',
-    name: 'Guernesey',
-  },
-  {
     isoCode: 'GH',
     name: 'Ghana',
-  },
-  {
-    isoCode: 'GI',
-    name: 'Gibraltar',
-  },
-  {
-    isoCode: 'GL',
-    name: 'Groenland',
   },
   {
     isoCode: 'GM',
@@ -354,10 +286,6 @@ export const countries: Country[] = [
     name: 'Guin\u00e9e',
   },
   {
-    isoCode: 'GP',
-    name: 'Guadeloupe',
-  },
-  {
     isoCode: 'GQ',
     name: 'Guin\u00e9e \u00c9quatoriale',
   },
@@ -366,16 +294,8 @@ export const countries: Country[] = [
     name: 'Gr\u00e8ce',
   },
   {
-    isoCode: 'GS',
-    name: 'G\u00e9orgie Du Sud-Et-Les \u00celes Sandwich Du Sud',
-  },
-  {
     isoCode: 'GT',
     name: 'Guatemala',
-  },
-  {
-    isoCode: 'GU',
-    name: 'Guam',
   },
   {
     isoCode: 'GW',
@@ -384,14 +304,6 @@ export const countries: Country[] = [
   {
     isoCode: 'GY',
     name: 'Guyana',
-  },
-  {
-    isoCode: 'HK',
-    name: 'Hong Kong',
-  },
-  {
-    isoCode: 'HM',
-    name: '\u00celes Heard-Et-MacDonald',
   },
   {
     isoCode: 'HN',
@@ -422,16 +334,8 @@ export const countries: Country[] = [
     name: 'Isra\u00ebl',
   },
   {
-    isoCode: 'IM',
-    name: '\u00cele De Man',
-  },
-  {
     isoCode: 'IN',
     name: 'Inde',
-  },
-  {
-    isoCode: 'IO',
-    name: "Territoire Britannique De L'oc\u00e9an Indien",
   },
   {
     isoCode: 'IQ',
@@ -448,10 +352,6 @@ export const countries: Country[] = [
   {
     isoCode: 'IT',
     name: 'Italie',
-  },
-  {
-    isoCode: 'JE',
-    name: 'Jersey',
   },
   {
     isoCode: 'JM',
@@ -500,10 +400,6 @@ export const countries: Country[] = [
   {
     isoCode: 'KW',
     name: 'Kowe\u00eft',
-  },
-  {
-    isoCode: 'KY',
-    name: '\u00celes Ca\u00efmans',
   },
   {
     isoCode: 'KZ',
@@ -570,20 +466,12 @@ export const countries: Country[] = [
     name: 'Mont\u00e9n\u00e9gro',
   },
   {
-    isoCode: 'MF',
-    name: 'Saint-Martin (Partie Fran\u00e7aise)',
-  },
-  {
     isoCode: 'MG',
     name: 'Madagascar',
   },
   {
-    isoCode: 'MH',
-    name: '\u00celes Marshall',
-  },
-  {
     isoCode: 'MK',
-    name: 'Mac\u00e9doine',
+    name: 'Mac\u00e9doine Du Nord',
   },
   {
     isoCode: 'ML',
@@ -598,24 +486,8 @@ export const countries: Country[] = [
     name: 'Mongolie',
   },
   {
-    isoCode: 'MO',
-    name: 'Macao',
-  },
-  {
-    isoCode: 'MP',
-    name: '\u00celes Mariannes Du Nord',
-  },
-  {
-    isoCode: 'MQ',
-    name: 'Martinique',
-  },
-  {
     isoCode: 'MR',
     name: 'Mauritanie',
-  },
-  {
-    isoCode: 'MS',
-    name: 'Montserrat',
   },
   {
     isoCode: 'MT',
@@ -650,16 +522,8 @@ export const countries: Country[] = [
     name: 'Namibie',
   },
   {
-    isoCode: 'NC',
-    name: 'Nouvelle-Cal\u00e9donie',
-  },
-  {
     isoCode: 'NE',
     name: 'Niger',
-  },
-  {
-    isoCode: 'NF',
-    name: '\u00cele Norfolk',
   },
   {
     isoCode: 'NG',
@@ -706,14 +570,6 @@ export const countries: Country[] = [
     name: 'P\u00e9rou',
   },
   {
-    isoCode: 'PF',
-    name: 'Polyn\u00e9sie Fran\u00e7aise',
-  },
-  {
-    isoCode: 'PG',
-    name: 'Papouasie-Nouvelle-Guin\u00e9e',
-  },
-  {
     isoCode: 'PH',
     name: 'Philippines',
   },
@@ -724,18 +580,6 @@ export const countries: Country[] = [
   {
     isoCode: 'PL',
     name: 'Pologne',
-  },
-  {
-    isoCode: 'PM',
-    name: 'Saint-Pierre-Et-Miquelon',
-  },
-  {
-    isoCode: 'PN',
-    name: 'Pitcairn',
-  },
-  {
-    isoCode: 'PR',
-    name: 'Porto Rico',
   },
   {
     isoCode: 'PS',
@@ -756,10 +600,6 @@ export const countries: Country[] = [
   {
     isoCode: 'QA',
     name: 'Qatar',
-  },
-  {
-    isoCode: 'RE',
-    name: 'R\u00e9union',
   },
   {
     isoCode: 'RO',
@@ -802,16 +642,8 @@ export const countries: Country[] = [
     name: 'Singapour',
   },
   {
-    isoCode: 'SH',
-    name: 'Sainte-H\u00e9l\u00e8ne',
-  },
-  {
     isoCode: 'SI',
     name: 'Slov\u00e9nie',
-  },
-  {
-    isoCode: 'SJ',
-    name: 'Svalbard Et Jan Mayen',
   },
   {
     isoCode: 'SK',
@@ -850,10 +682,6 @@ export const countries: Country[] = [
     name: 'R\u00e9publique Du Salvador',
   },
   {
-    isoCode: 'SX',
-    name: 'Saint-Martin (Partie N\u00e9erlandaise)',
-  },
-  {
     isoCode: 'SY',
     name: 'R\u00e9publique Arabe Syrienne',
   },
@@ -862,16 +690,8 @@ export const countries: Country[] = [
     name: 'Swaziland',
   },
   {
-    isoCode: 'TC',
-    name: '\u00celes Turks-Et-Ca\u00efcos',
-  },
-  {
     isoCode: 'TD',
     name: 'Tchad',
-  },
-  {
-    isoCode: 'TF',
-    name: 'Terres Australes Fran\u00e7aises',
   },
   {
     isoCode: 'TG',
@@ -884,10 +704,6 @@ export const countries: Country[] = [
   {
     isoCode: 'TJ',
     name: 'Tadjikistan',
-  },
-  {
-    isoCode: 'TK',
-    name: 'Tokelau',
   },
   {
     isoCode: 'TL',
@@ -934,10 +750,6 @@ export const countries: Country[] = [
     name: 'Ouganda',
   },
   {
-    isoCode: 'UM',
-    name: '\u00celes Mineures \u00c9loign\u00e9es Des \u00c9tats-Unis',
-  },
-  {
     isoCode: 'US',
     name: '\u00c9tats-Unis',
   },
@@ -962,14 +774,6 @@ export const countries: Country[] = [
     name: 'Venezuela',
   },
   {
-    isoCode: 'VG',
-    name: '\u00celes Vierges Britanniques',
-  },
-  {
-    isoCode: 'VI',
-    name: '\u00celes Vierges Des \u00c9tats-Unis',
-  },
-  {
     isoCode: 'VN',
     name: 'Viet Nam',
   },
@@ -978,20 +782,12 @@ export const countries: Country[] = [
     name: 'Vanuatu',
   },
   {
-    isoCode: 'WF',
-    name: 'Wallis Et Futuna',
-  },
-  {
     isoCode: 'WS',
     name: 'Samoa',
   },
   {
     isoCode: 'YE',
     name: 'Y\u00e9men',
-  },
-  {
-    isoCode: 'YT',
-    name: 'Mayotte',
   },
   {
     isoCode: 'ZA',
