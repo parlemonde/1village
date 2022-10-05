@@ -56,7 +56,7 @@ export const AvatarImg = ({
     return (
       <Link href="/pelico-profil">
         <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
-          <PelicoSouriant style={{ width: '80%', height: 'auto' }} />
+          <PelicoSouriant style={{ width: '80%', height: 'auto', cursor: 'pointer' }} />
         </Avatar>
       </Link>
     );

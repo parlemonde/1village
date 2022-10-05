@@ -98,7 +98,13 @@ export const ActivityCard = ({
           )}
           <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
             <p className="text">
-              <UserDisplayName className="text" user={user} noLink={noButtons} displayAsUser={activity.displayAsUser} />
+              <UserDisplayName
+                className="text"
+                user={user}
+                noLink={noButtons}
+                displayAsUser={activity.displayAsUser}
+                style={userIsPelico ? { cursor: 'pointer' } : {}}
+              />
               {' a '}
               {responseActivity && isReaction(activity) ? (
                 <strong>
@@ -112,7 +118,7 @@ export const ActivityCard = ({
               <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
               {userIsPelico ? (
                 <Link href={`/pelico-profil`}>
-                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
                 </Link>
               ) : (
                 <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
