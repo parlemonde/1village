@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import type { Object3D, Scene, Raycaster, Camera } from 'three';
 
@@ -9,6 +10,7 @@ import { onResetHoveredObject, isHoverable } from '../lib/hoverable-object';
 import type { User } from 'types/user.type';
 
 export const useObjectHover = () => {
+  const router = useRouter();
   const canvasBoundingRectRef = React.useRef<DOMRect | null>(null);
 
   // Mouse position
@@ -21,6 +23,9 @@ export const useObjectHover = () => {
 
   // HoverableObjects
   const hoverableObjectsRef = React.useRef<Object3D[]>([]);
+
+  const mascotteData = hoveredObject?.userData['user'] as User | undefined;
+  const mascotteActivityId = mascotteData?.mascotteId;
 
   const setHoverableObjects = React.useCallback((scene: Scene, showDecors: boolean = true) => {
     const addObjectFrom = (children: Object3D[]): Object3D[] => {
@@ -91,11 +96,14 @@ export const useObjectHover = () => {
 
   const onClick = React.useCallback(
     (camera: Camera, cameraAltitude: number) => {
-      if (hoveredObject !== null && hoveredObject.userData.isClickable) {
+      if (hoveredObject !== null && mascotteData?.mascotteId) {
         hoveredObject.onClick(camera, cameraAltitude);
+        router.push(`/activite/${mascotteActivityId}`);
+      } else {
+        return;
       }
     },
-    [hoveredObject],
+    [hoveredObject, mascotteActivityId, mascotteData?.mascotteId, router],
   );
 
   const resetCanvasBoundingRect = React.useCallback(() => {
@@ -121,7 +129,7 @@ export const useObjectHover = () => {
     onMouseLeave,
     resetCanvasBoundingRect,
     onClick,
-    cursorStyle: hoveredObject !== null && hoveredObject.userData.isClickable ? 'pointer' : 'default',
+    cursorStyle: hoveredObject !== null && hoveredObject.userData.isClickable ? (mascotteData?.mascotteId ? 'pointer' : 'not-allowed') : 'default',
     popover,
   };
 };

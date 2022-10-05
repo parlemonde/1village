@@ -8,9 +8,6 @@ import Logo from 'src/svg/logo.svg';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 import { SSO_HOST, CLIENT_ID, onLoginSSO } from 'src/utils/sso';
 
-// create a component for riddle
-// conditional rendering of video presentation
-
 export const VideoPresentation = () => {
   const [value, setValue] = React.useState('');
   const [resolved, setResolved] = React.useState<boolean>(false);
@@ -39,8 +36,8 @@ export const VideoPresentation = () => {
           <div className="text-center" style={{ overflow: 'auto' }}>
             {!resolved ? (
               <>
-                <Logo style={{ width: '40px', height: 'auto', marginTop: '2rem' }} />
-                <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: '60vh' }}>
+                <Logo style={{ width: '40px', height: 'auto', marginTop: '4rem' }} />
+                <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
                   <p style={{ margin: '0 0 2rem 0' }}>
                     <strong>Quelle est la qualité dont vous avez besoin pour embarquer avec Pélico dans l’aventure ?</strong>
                   </p>
@@ -59,13 +56,13 @@ export const VideoPresentation = () => {
                       id="outlined-helperText"
                       value={value}
                       placeholder="Un indice : un proverbe français dit que c’est un défaut, mais pour Pelico il s’agit d’une qualité"
-                      label="Indice"
+                      label="Votre réponse"
                       InputLabelProps={{
                         shrink: true,
                       }}
                       onChange={handleChange}
                       error={showError}
-                      helperText={showError ? 'Ce n’est pas le bon indice' : ''}
+                      helperText={showError ? "Il s'agit d'une autre qualité, essaye à nouveau" : ''}
                     />
                   </Box>
                   <Button component="a" style={{ marginTop: '1rem' }} variant="outlined" color="primary" onClick={onSend}>
@@ -82,7 +79,7 @@ export const VideoPresentation = () => {
                   </h1>
                 </div>
                 <iframe
-                  src="https://player.vimeo.com/video/641938406?h=181d44f047"
+                  src="https://player.vimeo.com/video/754287113?h=181d44f047"
                   width="640"
                   height="360"
                   frameBorder="0"

@@ -65,6 +65,7 @@ export const Navigation = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
+  const [mascotteId, setMascotteId] = React.useState(0);
 
   const getStories = React.useCallback(async () => {
     if (!village) {
@@ -85,10 +86,31 @@ export const Navigation = (): JSX.Element => {
     getStories().catch(console.error);
   }, [getStories]);
 
+  const getMascotte = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: `/activities/mascotte`,
+    });
+    if (!response.error) {
+      setMascotteId(response.data.id);
+    }
+  }, [axiosLoggedRequest]);
+
+  // Get mascotte
+  React.useEffect(() => {
+    getMascotte().catch(console.error);
+  }, [getMascotte]);
+
   // check color of icons
   const TABS_PER_PHASE = React.useMemo<Tab[]>(
     () => [
       // ---- PHASE 1 ----
+      {
+        label: 'Créer sa mascotte',
+        path: mascotteId !== 0 ? `/mascotte/5?activity-id=${mascotteId}` : '/mascotte/1',
+        icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+      },
       {
         label: 'Présenter un indice culturel',
         path: '/indice-culturel',
@@ -99,12 +121,6 @@ export const Navigation = (): JSX.Element => {
         label: 'Présenter un symbole',
         path: '/symbole',
         icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-      },
-      {
-        label: 'Poser une question',
-        path: '/poser-une-question/1',
-        icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
       },
       // ---- PHASE 2 ----
@@ -166,7 +182,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [village, firstStoryCreated],
+    [village, firstStoryCreated, mascotteId],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
@@ -175,8 +191,7 @@ export const Navigation = (): JSX.Element => {
       {
         label: 'Notre classe',
         path: '/ma-classe',
-        icon:
-          user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
       },
       ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],

@@ -110,7 +110,7 @@ const specificActivityPhase = {
   [ActivityType.DEFI]: [PhaseType.TWO],
   [ActivityType.GAME]: [PhaseType.TWO],
   [ActivityType.ENIGME]: [PhaseType.TWO],
-  [ActivityType.QUESTION]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.QUESTION]: [PhaseType.TWO, PhaseType.THREE],
   [ActivityType.CONTENU_LIBRE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.INDICE]: [PhaseType.ONE],
   [ActivityType.SYMBOL]: [PhaseType.ONE],

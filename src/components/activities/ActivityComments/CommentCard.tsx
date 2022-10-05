@@ -11,10 +11,12 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor } from 'src/styles/variables.const';
+import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { toDate } from 'src/utils';
 import type { Activity, AnyData } from 'types/activity.type';
 import type { Comment } from 'types/comment.type';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -31,6 +33,7 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
+  const isPelico = user && user.type >= UserType.MEDIATOR;
 
   if (!user) {
     return null;
@@ -97,10 +100,13 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
           {user.country && comment && (
             <p className="text text--small">
               Publié le {`${toDate(comment.createDate as string)}`}
-              <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+              {isPelico ? (
+                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+              ) : (
+                <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+              )}
             </p>
           )}
-
           <div dangerouslySetInnerHTML={{ __html: comment.text }} className="break-long-words" />
           {isSelf && (
             <div style={{ position: 'absolute', right: '0.25rem', top: '0.25rem' }}>
