@@ -66,7 +66,6 @@ export const Navigation = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
-  // const [mascotteId, setMascotteId] = React.useState(0);
   const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
 
   const getStories = React.useCallback(async () => {
@@ -200,7 +199,6 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    // [village, firstStoryCreated, mascotteId],
     [firstStoryCreated, mascotteActivity, village],
   );
 
