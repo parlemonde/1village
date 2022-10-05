@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import router from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -10,6 +11,7 @@ import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentActivity } from 'src/activity-types/freeContent.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
+import { LinkNotAllowedInPath } from 'types/activity.type';
 
 export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<FreeContentActivity>) => {
   const firstImage = React.useMemo(() => getImage(activity.content, activity.data), [activity]);
@@ -33,9 +35,14 @@ export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEdit
               cursor: 'pointer',
             }}
           >
-            <Link href={`/activite/${activity.id}`} passHref>
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
-            </Link>
+            ) : (
+              <Link href={`/activite/${activity.id}`} passHref>
+                <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+              </Link>
+            )}
           </div>
         </div>
       )}

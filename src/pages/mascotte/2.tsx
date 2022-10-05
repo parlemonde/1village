@@ -52,9 +52,8 @@ const MascotteStep2 = () => {
   React.useEffect(() => {
     if (data !== null && data.mascotteImage !== prevImage.current) {
       prevImage.current = data.mascotteImage;
-      save().catch();
     }
-  }, [data, save]);
+  }, [data]);
   const countryChange = (countryCodes: string[]) => {
     updateActivity({ data: { ...data, countries: countryCodes } });
   };

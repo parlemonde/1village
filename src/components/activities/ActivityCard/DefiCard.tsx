@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -11,6 +12,7 @@ import type { DefiActivity, CookingDefiData } from 'src/activity-types/defi.type
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
+import { LinkNotAllowedInPath } from 'types/activity.type';
 
 export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<DefiActivity>) => {
   const isCookingActivity = isCooking(activity);
@@ -25,6 +27,7 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
   }, [isCookingActivity, activity]);
   const firstTextContent = React.useMemo(() => activity.content.find((c) => c.type === 'text'), [activity.content]);
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
+  const router = useRouter();
 
   return (
     <div
@@ -45,9 +48,14 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
               cursor: 'pointer',
             }}
           >
-            <Link href={`/activite/${activity.id}`} passHref>
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
-            </Link>
+            ) : (
+              <Link href={`/activite/${activity.id}`} passHref>
+                <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+              </Link>
+            )}
           </div>
         </div>
       )}

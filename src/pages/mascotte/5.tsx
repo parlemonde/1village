@@ -164,21 +164,23 @@ const MascotteStep5 = () => {
                 </Button>
               </div>
             ) : (
-              <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                {isObservator ? (
-                  <Tooltip title="Action non autorisée" arrow>
-                    <span>
-                      <Button variant="outlined" color="primary" disabled>
-                        Publier
-                      </Button>
-                    </span>
-                  </Tooltip>
-                ) : (
-                  <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
-                    Publier
-                  </Button>
-                )}
-              </div>
+              <>
+                <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+                  {isObservator ? (
+                    <Tooltip title="Action non autorisée" arrow>
+                      <span>
+                        <Button variant="outlined" color="primary" disabled>
+                          Publier
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
+                      Publier
+                    </Button>
+                  )}
+                </div>
+              </>
             )}
             <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
               <EditButton
