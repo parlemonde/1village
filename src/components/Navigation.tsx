@@ -27,7 +27,8 @@ import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
@@ -65,7 +66,8 @@ export const Navigation = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
-  const [mascotteId, setMascotteId] = React.useState(0);
+  // const [mascotteId, setMascotteId] = React.useState(0);
+  const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
 
   const getStories = React.useCallback(async () => {
     if (!village) {
@@ -86,19 +88,30 @@ export const Navigation = (): JSX.Element => {
     getStories().catch(console.error);
   }, [getStories]);
 
-  const getMascotte = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
-      method: 'GET',
-      url: `/activities/mascotte`,
-    });
-    if (!response.error) {
-      setMascotteId(response.data.id);
-    }
-  }, [axiosLoggedRequest]);
+  const getMascotte = React.useCallback(
+    async (type: number) => {
+      if (!village) {
+        return;
+      }
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities/draft${serializeToQueryUrl({
+          villageId: village.id,
+          type,
+        })}`,
+      });
+      if (response.error) {
+        setMascotteActivity(null);
+      } else {
+        setMascotteActivity(response.data.draft);
+      }
+    },
+    [village, axiosLoggedRequest],
+  );
 
   // Get mascotte
   React.useEffect(() => {
-    getMascotte().catch(console.error);
+    getMascotte(ActivityType.MASCOTTE).catch(console.error);
   }, [getMascotte]);
 
   // check color of icons
@@ -107,7 +120,12 @@ export const Navigation = (): JSX.Element => {
       // ---- PHASE 1 ----
       {
         label: 'Créer sa mascotte',
-        path: mascotteId !== 0 ? `/mascotte/5?activity-id=${mascotteId}` : '/mascotte/1',
+        path:
+          mascotteActivity && mascotteActivity.id !== 0 && mascotteActivity.status === ActivityStatus.PUBLISHED
+            ? `/mascotte/5?activity-id=${mascotteActivity?.id}`
+            : mascotteActivity && mascotteActivity.status === ActivityStatus.DRAFT
+            ? `${mascotteActivity.data.draftUrl}?activity-id=${mascotteActivity.id}`
+            : '/mascotte/1',
         icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
       },
@@ -182,7 +200,8 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [village, firstStoryCreated, mascotteId],
+    // [village, firstStoryCreated, mascotteId],
+    [firstStoryCreated, mascotteActivity, village],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
