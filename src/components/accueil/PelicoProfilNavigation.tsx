@@ -1,29 +1,23 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 
-import { AvatarImg } from '../Avatar';
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 import { icons, DESC } from 'src/components/activities/utils';
 import { useActivities } from 'src/services/useActivities';
-import { primaryColor } from 'src/styles/variables.const';
-import { getUserDisplayName, toDate } from 'src/utils';
+import { bgPage, primaryColor } from 'src/styles/variables.const';
+import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
+import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 
-export const PelicoProfilNavigation = ({ activeUser, displayAsUser = false }: { activeUser: User; displayAsUser?: boolean }) => {
-  const router = useRouter();
+export const PelicoProfilNavigation = ({ activeUser }: { activeUser: User }) => {
   const { activities } = useActivities({
     limit: 200,
     page: 0,
     type: [],
     userId: activeUser?.id ?? 0,
   });
-
-  const onclick = React.useCallback(() => {
-    router.push(`/activite/${activeUser.mascotteId}`);
-  }, [activeUser.mascotteId, router]);
 
   return (
     <>
@@ -40,10 +34,12 @@ export const PelicoProfilNavigation = ({ activeUser, displayAsUser = false }: { 
       >
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
           <span style={{ marginRight: '0.3rem', display: 'flex' }}>
-            <AvatarImg user={activeUser} size="extra-small" noLink displayAsUser={displayAsUser} onClick={onclick} style={{ cursor: 'pointer' }} />
+            <Avatar alt={'avatar'} style={{ width: '30px', height: '30px', backgroundColor: bgPage }}>
+              <PelicoSouriant style={{ width: '80%', height: 'auto' }} />
+            </Avatar>
           </span>
           <span className="text">
-            <strong>{getUserDisplayName(activeUser, false, displayAsUser)}</strong>
+            <strong>Pelico</strong>
           </span>
         </div>
       </div>
