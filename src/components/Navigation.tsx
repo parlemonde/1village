@@ -27,7 +27,8 @@ import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import type { Activity } from 'types/activity.type';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
@@ -65,6 +66,7 @@ export const Navigation = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [firstStoryCreated, setFirstStoryCreated] = React.useState(false);
+  const [mascotteActivity, setMascotteActivity] = React.useState<Activity | null>(null);
 
   const getStories = React.useCallback(async () => {
     if (!village) {
@@ -85,10 +87,47 @@ export const Navigation = (): JSX.Element => {
     getStories().catch(console.error);
   }, [getStories]);
 
+  const getMascotte = React.useCallback(
+    async (type: number) => {
+      if (!village) {
+        return;
+      }
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/activities/draft${serializeToQueryUrl({
+          villageId: village.id,
+          type,
+        })}`,
+      });
+      if (response.error) {
+        setMascotteActivity(null);
+      } else {
+        setMascotteActivity(response.data.draft);
+      }
+    },
+    [village, axiosLoggedRequest],
+  );
+
+  // Get mascotte
+  React.useEffect(() => {
+    getMascotte(ActivityType.MASCOTTE).catch(console.error);
+  }, [getMascotte]);
+
   // check color of icons
   const TABS_PER_PHASE = React.useMemo<Tab[]>(
     () => [
       // ---- PHASE 1 ----
+      {
+        label: 'Créer sa mascotte',
+        path:
+          mascotteActivity && mascotteActivity.id !== 0 && mascotteActivity.status === ActivityStatus.PUBLISHED
+            ? `/mascotte/5?activity-id=${mascotteActivity?.id}`
+            : mascotteActivity && mascotteActivity.status === ActivityStatus.DRAFT
+            ? `${mascotteActivity.data.draftUrl}?activity-id=${mascotteActivity.id}`
+            : '/mascotte/1',
+        icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 1,
+      },
       {
         label: 'Présenter un indice culturel',
         path: '/indice-culturel',
@@ -99,12 +138,6 @@ export const Navigation = (): JSX.Element => {
         label: 'Présenter un symbole',
         path: '/symbole',
         icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-      },
-      {
-        label: 'Poser une question',
-        path: '/poser-une-question/1',
-        icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
       },
       // ---- PHASE 2 ----
@@ -166,7 +199,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [village, firstStoryCreated],
+    [firstStoryCreated, mascotteActivity, village],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
@@ -175,8 +208,7 @@ export const Navigation = (): JSX.Element => {
       {
         label: 'Notre classe',
         path: '/ma-classe',
-        icon:
-          user && user.avatar ? <AvatarImg user={user} size="extra-small" noLink /> : <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
       },
       ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import router from 'next/router';
 import React from 'react';
 import ReactPlayer from 'react-player';
 
@@ -10,6 +11,7 @@ import { RedButton } from 'src/components/buttons/RedButton';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
+import { LinkNotAllowedInPath } from 'types/activity.type';
 import type { GameActivity, MimicsData } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
@@ -55,9 +57,14 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               cursor: 'pointer',
             }}
           >
-            <Link href="/creer-un-jeu/mimique" passHref>
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
-            </Link>
+            ) : (
+              <Link href="/creer-un-jeu/mimique" passHref>
+                <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+              </Link>
+            )}
           </div>
         </div>
       )}
