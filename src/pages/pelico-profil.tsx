@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Box } from '@mui/material';
 
 import { Base } from 'src/components/Base';
+import { PelicoProfilNavigation } from 'src/components/accueil/PelicoProfilNavigation';
+import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
 
+//
 const PelicoProfil = () => {
+  const { user } = useContext(UserContext);
+
   return (
     <>
-      <Base rightNav>
+      <Base rightNav={<PelicoProfilNavigation activeUser={user} />}>
         <Box
           sx={{
             marginLeft: '2%',
