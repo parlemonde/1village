@@ -62,6 +62,7 @@ export const Navigation = (): JSX.Element => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
+  const isTeacher = user !== null && user.type === UserType.TEACHER;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -127,6 +128,7 @@ export const Navigation = (): JSX.Element => {
             : '/mascotte/1',
         icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
+        disabled: !isTeacher,
       },
       {
         label: 'Présenter un indice culturel',
@@ -199,7 +201,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [firstStoryCreated, mascotteActivity, village],
+    [firstStoryCreated, mascotteActivity, village, isTeacher],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
@@ -209,10 +211,11 @@ export const Navigation = (): JSX.Element => {
         label: 'Notre classe',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
+        disabled: !isTeacher,
       },
       ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isModerateur, selectedPhase],
+    [user, isModerateur, selectedPhase, isTeacher],
   );
   const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
@@ -260,7 +263,7 @@ export const Navigation = (): JSX.Element => {
                     justifyContent: 'flex-start',
                     paddingRight: '0.1rem',
                     marginBottom: '0.8rem',
-                    width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
+                    width: tab.path.split('/')[1] === currentPathName ? '100%' : '100%',
                   }}
                   disableElevation
                   disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.disabled}

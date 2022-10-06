@@ -168,7 +168,7 @@ const MascotteStep5 = () => {
             ) : (
               <>
                 <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-                  {isObservator ? (
+                  {!isTeacher ? (
                     <Tooltip title="Action non autorisée" arrow>
                       <span>
                         <Button variant="outlined" color="primary" disabled>
