@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import Paper from '@mui/material/Paper';
@@ -89,6 +90,7 @@ export const ActivityCard = ({
             <AvatarImg
               user={user}
               size="small"
+              src={userIsPelico ? '/pelico-profil' : ''}
               style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }}
               noLink={noButtons}
               displayAsUser={activity.displayAsUser}
@@ -96,7 +98,13 @@ export const ActivityCard = ({
           )}
           <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
             <p className="text">
-              <UserDisplayName className="text" user={user} noLink={noButtons} displayAsUser={activity.displayAsUser} />
+              <UserDisplayName
+                className="text"
+                user={user}
+                noLink={noButtons}
+                displayAsUser={activity.displayAsUser}
+                style={userIsPelico ? { cursor: 'pointer' } : {}}
+              />
               {' a '}
               {responseActivity && isReaction(activity) ? (
                 <strong>
@@ -109,7 +117,9 @@ export const ActivityCard = ({
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
               {userIsPelico ? (
-                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+                <Link href={`/pelico-profil`}>
+                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
+                </Link>
               ) : (
                 <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
