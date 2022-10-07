@@ -62,7 +62,7 @@ export const VideoPresentation = () => {
                       }}
                       onChange={handleChange}
                       error={showError}
-                      helperText={showError ? 'Ce n’est pas le bon indice' : ''}
+                      helperText={showError ? "Il s'agit d'une autre qualité, essaye à nouveau" : ''}
                     />
                   </Box>
                   <Button component="a" style={{ marginTop: '1rem' }} variant="outlined" color="primary" onClick={onSend}>
@@ -79,7 +79,7 @@ export const VideoPresentation = () => {
                   </h1>
                 </div>
                 <iframe
-                  src="https://player.vimeo.com/video/641938406?h=181d44f047"
+                  src="https://player.vimeo.com/video/754287113?h=181d44f047"
                   width="640"
                   height="360"
                   frameBorder="0"

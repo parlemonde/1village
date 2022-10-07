@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, Tooltip } from '@mui/material';
+import { Button, Link, Tooltip } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
@@ -72,21 +72,16 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
             padding: '0 0.5rem',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
-            <span style={{ marginRight: '0.3rem', display: 'flex' }}>
-              <AvatarImg
-                user={activityUser}
-                size="extra-small"
-                noLink
-                displayAsUser={displayAsUser}
-                onClick={onclick}
-                style={{ cursor: 'pointer' }}
-              />
-            </span>
-            <span className="text">
-              <strong>{getUserDisplayName(activityUser, false, displayAsUser)}</strong>
-            </span>
-          </div>
+          <Link href="/pelico-profil" underline="none" color="inherit">
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0, cursor: 'pointer' }}>
+              <span style={{ marginRight: '0.3rem', display: 'flex' }}>
+                <AvatarImg user={activityUser} size="extra-small" noLink displayAsUser={displayAsUser} onClick={onclick} />
+              </span>
+              <span className="text">
+                <strong>Pelico</strong>
+              </span>
+            </div>
+          </Link>
         </div>
         <div
           className="bg-secondary vertical-bottom-margin"
