@@ -14,14 +14,14 @@ const PelicoProfil = () => {
   return (
     <>
       {user && (
-        <Base rightNav={<PelicoProfilNavigation activeUser={user} />}>
+        <Base rightNav={<PelicoProfilNavigation />}>
           <Box
             sx={{
               marginLeft: '2%',
               marginRight: '2%',
             }}
           >
-            <h1 style={{ marginTop: '0.5rem', color: primaryColor }}>La page profil de Pélico</h1>
+            <h1 style={{ marginTop: '0.5rem', color: primaryColor }}>Pelico, la mascotte d&apos;1Village, se présente</h1>
             <div style={{ display: 'inline-block', textAlign: 'justify' }}>
               <p className="text">
                 Bonjour les Pélicopains,
