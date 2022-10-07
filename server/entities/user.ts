@@ -50,7 +50,7 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 300, select: false })
   public passwordHash?: string;
 
-  @Column({ type: 'varchar', length: 95, default: '', select: false })
+  @Column({ type: 'varchar', length: 300, default: '', select: false })
   public verificationHash?: string;
 
   @Column({ type: 'tinyint', default: 0 })
