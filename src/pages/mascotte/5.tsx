@@ -36,8 +36,6 @@ const MascotteStep5 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
-  // const isObservator = user?.type === UserType.OBSERVATOR;
-  // const isMediator = user?.type === UserType.MEDIATOR;
   const isTeacher = user?.type === UserType.TEACHER;
   const data = (activity?.data as MascotteData) || null;
   const errorSteps = React.useMemo(() => {

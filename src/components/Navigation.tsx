@@ -262,7 +262,7 @@ export const Navigation = (): JSX.Element => {
                     justifyContent: 'flex-start',
                     paddingRight: '0.1rem',
                     marginBottom: '0.8rem',
-                    width: tab.path.split('/')[1] === currentPathName ? '100%' : '100%',
+                    width: tab.path.split('/')[1] === currentPathName ? '108%' : '100%',
                   }}
                   disableElevation
                   disabled={village === null || (tab.phase !== undefined && tab.phase > village.activePhase) || tab.disabled}
