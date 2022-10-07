@@ -9,14 +9,13 @@ import { bgPage, primaryColor } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import type { User } from 'types/user.type';
 
-export const PelicoProfilNavigation = ({ activeUser }: { activeUser: User }) => {
+export const PelicoProfilNavigation = () => {
   const { activities } = useActivities({
     limit: 200,
     page: 0,
     type: [],
-    userId: activeUser?.id ?? 0,
+    userId: 1,
   });
 
   return (
