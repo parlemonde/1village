@@ -211,11 +211,10 @@ export const Navigation = (): JSX.Element => {
         label: 'Notre classe',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
-        disabled: !isTeacher,
       },
       ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isModerateur, selectedPhase, isTeacher],
+    [user, isModerateur, selectedPhase],
   );
   const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
