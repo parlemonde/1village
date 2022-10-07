@@ -5,9 +5,13 @@ import { VideoPresentation } from 'src/components/accueil/VideoPresentation';
 import { UserContext } from 'src/contexts/userContext';
 
 const Home = () => {
-  const { isLoggedIn } = React.useContext(UserContext);
+  const { isLoggedIn, loginWithSso } = React.useContext(UserContext);
 
   if (!isLoggedIn) {
+    return <VideoPresentation />;
+  }
+
+  if (!loginWithSso) {
     return <VideoPresentation />;
   }
 
