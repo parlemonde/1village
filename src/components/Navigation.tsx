@@ -62,6 +62,7 @@ export const Navigation = (): JSX.Element => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
+  const isTeacher = user !== null && user.type === UserType.TEACHER;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -127,6 +128,7 @@ export const Navigation = (): JSX.Element => {
             : '/mascotte/1',
         icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
+        disabled: !isTeacher,
       },
       {
         label: 'Présenter un indice culturel',
@@ -199,7 +201,7 @@ export const Navigation = (): JSX.Element => {
         disabled: !village?.anthemId,
       },
     ],
-    [firstStoryCreated, mascotteActivity, village],
+    [firstStoryCreated, mascotteActivity, village, isTeacher],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
