@@ -46,6 +46,12 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(
     initialVillage === null && user && user.type === UserType.TEACHER ? true : false,
   );
+
+  const currentUserType = user ? user.type : null;
+  React.useEffect(() => {
+    setShowUnassignedModal(initialVillage === null && currentUserType !== null && currentUserType <= UserType.MEDIATOR ? true : false);
+  }, [initialVillage, currentUserType]);
+
   const currentVillageId = village ? village.id : -1;
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
