@@ -56,9 +56,11 @@ export const AvatarImg = ({
 
   if (isPelico && !displayAsUser) {
     return (
-      <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
-        <PelicoSouriant style={{ width: '80%', height: 'auto' }} />
-      </Avatar>
+      <Link href="/pelico-profil">
+        <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
+          <PelicoSouriant style={{ width: '80%', height: 'auto', cursor: 'pointer' }} />
+        </Avatar>
+      </Link>
     );
   }
 

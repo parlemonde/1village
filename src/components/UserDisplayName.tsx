@@ -23,9 +23,11 @@ export const UserDisplayName = ({ user, activity, className, style, noLink = fal
 
   if (isPelico && !displayAsUser) {
     return (
-      <span className={className} style={style}>
-        Pelico
-      </span>
+      <Link href="/pelico-profil" style={{ cursor: 'pointer' }}>
+        <span className={className} style={style}>
+          Pelico
+        </span>
+      </Link>
     );
   }
 
