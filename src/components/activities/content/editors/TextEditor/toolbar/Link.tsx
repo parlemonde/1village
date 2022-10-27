@@ -230,6 +230,9 @@ export const linkToHTML = (
   },
   text: string,
 ): string | undefined => {
+  if (entity.type === 'LINK' && entity.data.url.includes('/activite/')) {
+    return `${entity.data.url}`;
+  }
   if (entity.type === 'LINK') {
     return `<a href="${entity.data.url}" class="text text--primary" target="_blanck" rel="noopener">${text}</a>`;
   }

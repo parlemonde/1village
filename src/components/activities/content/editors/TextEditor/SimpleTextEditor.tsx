@@ -141,7 +141,7 @@ export const SimpleTextEditor = ({
 
   const onEditorChange = (newEditorState: EditorState) => {
     const newHTMLValue = draftToHtml(convertToRaw(newEditorState.getCurrentContent()), undefined, undefined, linkToHTML);
-    previousValue.current = newHTMLValue;
+    previousValue.current = newHTMLValue.includes('/activite/') ? '' : newHTMLValue;
     const content = editorState.getCurrentContent();
     const success = onChange(newHTMLValue, content.getPlainText('').length);
     if (success === undefined || success) {
