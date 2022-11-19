@@ -22,12 +22,22 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "verbose": true,
+    "forceExit": true,
     "roots": [
       "<rootDir>/src/",
-      "<rootDir>/server/"
+      "<rootDir>/src/svg",
+      "<rootDir>/server/",
+      "<rootDir>/types/"
     ],
     "transform": {
       "^.+\\.(t|j)sx?$": "@swc/jest"
+    },
+    "moduleNameMapper": {
+      "\\.svg": "<rootDir>/__mocks__/svg.js",
+      "types/(.*)$": "<rootDir>/types/$1",
+      "server/(.*)$": "<rootDir>/server/$1",
+      "src/(.*)$": "<rootDir>/src/$1"
     }
   },
   "resolutions": {
