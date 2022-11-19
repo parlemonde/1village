@@ -12,6 +12,7 @@ import { Activities } from 'src/components/activities/List';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { getQueryString } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
@@ -20,6 +21,7 @@ const SymbolStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const [showErrors, setShowErrors] = React.useState(false);
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
   const { activities } = useActivities({
@@ -37,12 +39,12 @@ const SymbolStep1 = () => {
       created.current = true;
       if (!('edit' in router.query)) {
         const symbolType = parseInt(getQueryString(router.query['category']) || '0', 10) || 0;
-        createNewActivity(ActivityType.SYMBOL, symbolType, {
+        createNewActivity(ActivityType.SYMBOL, selectedPhase, symbolType, {
           theme: 0,
         });
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   const onNext = () => {
     if (activity === null || data === null || (activity.subType === -1 && !data.symbol)) {

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import PersonIcon from '@mui/icons-material/Person';
-import { Avatar } from '@mui/material';
+import { Avatar, Tooltip } from '@mui/material';
 
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
@@ -38,6 +38,7 @@ type AvatarImgProps = {
   style?: React.CSSProperties;
   isRounded?: boolean;
   displayAsUser?: boolean;
+  noToolTip?: boolean;
 };
 export const AvatarImg = ({
   size = 'large',
@@ -49,14 +50,17 @@ export const AvatarImg = ({
   noLink = false,
   isRounded = true,
   displayAsUser = false,
+  noToolTip = false,
 }: React.PropsWithChildren<AvatarImgProps>) => {
   const isPelico = user && user.type >= UserType.MEDIATOR;
 
   if (isPelico && !displayAsUser) {
     return (
-      <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
-        <PelicoSouriant style={{ width: '80%', height: 'auto' }} />
-      </Avatar>
+      <Link href="/pelico-profil">
+        <Avatar alt={'avatar'} sx={styles[size]} onClick={onClick} style={{ ...style, backgroundColor: bgPage }}>
+          <PelicoSouriant style={{ width: '80%', height: 'auto', cursor: 'pointer' }} />
+        </Avatar>
+      </Link>
     );
   }
 
@@ -73,9 +77,31 @@ export const AvatarImg = ({
       </Link>
     );
   }
+
+  if (noToolTip) {
+    return (
+      <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
+        <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+        </span>
+      </Avatar>
+    );
+  }
   return (
-    <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
-      {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
-    </Avatar>
+    <>
+      {user && user.mascotteId === undefined ? (
+        <Tooltip title="la classe n'a pas encore de mascotte">
+          <span style={{ display: 'flex', justifyContent: 'center', cursor: 'not-allowed' }}>
+            <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
+              {children || <PersonIcon style={{ width: '65%', height: 'auto' }} />}
+            </Avatar>
+          </span>
+        </Tooltip>
+      ) : (
+        <Avatar alt={'avatar'} sx={styles[size]} src={imgSrc} onClick={onClick} style={style} variant={!isRounded ? 'square' : undefined}>
+          {children || <PersonIcon style={{ width: '10px', height: 'auto' }} />}
+        </Avatar>
+      )}
+    </>
   );
 };

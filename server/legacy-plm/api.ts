@@ -33,7 +33,7 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
     });
     const plmUser = userResponse.data as PLM_User;
     let user = await getRepository(User).findOne({
-      where: { email: plmUser.user_email },
+      where: { email: plmUser.email },
     });
     if (user === undefined) {
       user = await createPLMUserToDB(plmUser);

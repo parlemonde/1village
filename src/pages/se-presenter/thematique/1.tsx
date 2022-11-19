@@ -6,11 +6,13 @@ import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
 
 const PresentationStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
 
   const onNext = () => () => {
     router.push('/se-presenter/thematique/2');
@@ -21,12 +23,12 @@ const PresentationStep1 = () => {
     if (!created.current) {
       created.current = true;
       if (!('edit' in router.query)) {
-        createNewActivity(ActivityType.PRESENTATION, undefined, {
+        createNewActivity(ActivityType.PRESENTATION, selectedPhase, undefined, {
           theme: 0,
         });
       }
     }
-  }, [createNewActivity, router]);
+  }, [createNewActivity, router, selectedPhase]);
 
   if (!activity) {
     return (

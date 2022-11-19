@@ -10,7 +10,7 @@ export type PLM_Village = {
   id: string; // number in string
   creator_id: string; // number in string
   name: string;
-  slug: string;
+  slug: string; // format: 'village-monde-country1-country2'
   description: string;
   status: 'private' | 'hidden' | 'public';
   parent_id: string; // number in string
@@ -21,6 +21,7 @@ export type PLM_Village = {
 async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   const plmId = parseInt(plmVillage.id, 10) || 0;
   const name = plmVillage.name;
+  const slug = plmVillage.slug;
 
   // not used villages
   if (plmVillage.status !== 'private' || plmId === 8) {
@@ -36,8 +37,8 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   }
 
   // get countries and create village
-  logger.info(`Try to create village with name: ${name}`);
-  const villageCountries = (name.toLowerCase().startsWith('village monde') ? name.slice(14) : name).split(/[-–]/).filter((s) => s.length > 0);
+  logger.info(`Try to create village with slug: ${slug}`);
+  const villageCountries = (slug.startsWith('village-monde-') ? slug.slice(14) : slug).split(/[-–]/).filter((s) => s.length > 0);
   if (villageCountries.length === 2) {
     const c1 = stringSimilarity.findBestMatch(
       villageCountries[0].trim().toLowerCase(),

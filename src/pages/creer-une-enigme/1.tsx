@@ -12,12 +12,14 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const EnigmeStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const [otherOpen, setIsOtherOpen] = React.useState(false);
   const data = (activity?.data as EnigmeData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -44,6 +46,7 @@ const EnigmeStep1 = () => {
         created.current = true;
         createNewActivity(
           ActivityType.ENIGME,
+          selectedPhase,
           enigmeTypeIndex,
           {
             theme: null,
@@ -61,6 +64,7 @@ const EnigmeStep1 = () => {
         created.current = true;
         createNewActivity(
           ActivityType.ENIGME,
+          selectedPhase,
           enigmeTypeIndex,
           {
             theme: null,
@@ -76,7 +80,7 @@ const EnigmeStep1 = () => {
         );
       }
     }
-  }, [activity, createNewActivity, enigmeTypeIndex, router]);
+  }, [activity, createNewActivity, enigmeTypeIndex, router, selectedPhase]);
 
   const onNext = () => {
     router.push('/creer-une-enigme/2');

@@ -23,7 +23,7 @@ import { UserType } from 'types/user.type';
 const Question1 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, createNewActivity } = React.useContext(ActivityContext);
   const { users } = useVillageUsers();
   const isMediator = user !== null && user.type > UserType.TEACHER;
@@ -46,10 +46,10 @@ const Question1 = () => {
     if (!created.current) {
       created.current = true;
       if (!('edit' in router.query)) {
-        createNewActivity(ActivityType.QUESTION);
+        createNewActivity(ActivityType.QUESTION, selectedPhase);
       }
     }
-  }, [activity, createNewActivity, router]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   const userMap = React.useMemo(
     () =>

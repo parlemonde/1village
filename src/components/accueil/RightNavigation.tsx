@@ -1,7 +1,8 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Button, Link, Tooltip } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
@@ -14,13 +15,13 @@ import { useActivities } from 'src/services/useActivities';
 import { useActivity } from 'src/services/useActivity';
 import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
-import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { getUserDisplayName, toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const RightNavigation = ({ activityUser, displayAsUser = false }: { activityUser: User; displayAsUser?: boolean }) => {
+  const router = useRouter();
   const [localTime, setLocalTime] = React.useState<string | null>(null);
   const { user } = React.useContext(UserContext);
   const weather = useWeather({ activityUser });
@@ -33,6 +34,10 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
   });
   const isPelico = activityUser.type > UserType.TEACHER;
   const isMediator = user !== null && user.type > UserType.TEACHER;
+
+  const onclick = React.useCallback(() => {
+    router.push(`/activite/${activityUser.mascotteId}`);
+  }, [activityUser.mascotteId, router]);
 
   // ---- Get user weather and time ----
   React.useEffect(() => {
@@ -55,29 +60,73 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
 
   if (isPelico) {
     return (
-      <div
-        className="bg-secondary vertical-bottom-margin with-sub-header-height"
-        style={{
-          borderRadius: '10px',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 0.5rem',
-        }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
-          <span style={{ marginRight: '0.3rem', display: 'flex' }}>
-            <AvatarImg user={activityUser} size="extra-small" noLink displayAsUser={displayAsUser} />
-          </span>
-          <span className="text">
-            <strong>{getUserDisplayName(activityUser, false, displayAsUser)}</strong>
-          </span>
+      <>
+        <div
+          className="bg-secondary vertical-bottom-margin with-sub-header-height"
+          style={{
+            borderRadius: '10px',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 0.5rem',
+          }}
+        >
+          <Link href="/pelico-profil" underline="none" color="inherit">
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0, cursor: 'pointer' }}>
+              <span style={{ marginRight: '0.3rem', display: 'flex' }}>
+                <AvatarImg user={activityUser} size="extra-small" noLink displayAsUser={displayAsUser} onClick={onclick} />
+              </span>
+              <span className="text">
+                <strong>Pelico</strong>
+              </span>
+            </div>
+          </Link>
         </div>
-      </div>
+        <div
+          className="bg-secondary vertical-bottom-margin"
+          style={{ padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
+        >
+          <h3>
+            <b>Dernières activités de Pelico</b>
+          </h3>
+          {activities.slice(0, 3).map((activity, index) => {
+            const ActivityIcon = icons[activity.type] || null;
+            return (
+              <div key={index}>
+                {activity.type !== ActivityType.GAME && (
+                  <>
+                    <div style={{ fontSize: 'smaller', paddingBottom: '1rem' }}>
+                      <strong>{DESC[activity.type]},&nbsp;</strong>
+                      le {toDate(activity.createDate as string)}
+                      {ActivityIcon && (
+                        <ActivityIcon
+                          style={{
+                            float: 'right',
+                            fill: primaryColor,
+                            margin: '1.5rem 0.65rem 0 0',
+                            width: '2rem',
+                            height: 'auto',
+                            alignSelf: 'center',
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div style={{ paddingBottom: '1rem' }}>
+                      <CommentIcon count={activity.commentCount} activityId={activity.id} />
+                      <Button component="a" color="primary" variant="outlined" href={`/activite/${activity.id}`}>
+                        {"Voir l'activité"}
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </>
     );
   }
-
   return (
     <>
       <div
@@ -93,10 +142,14 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       >
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0 }}>
           <span style={{ marginRight: '0.3rem', display: 'flex' }}>
-            {activityUser.avatar ? (
-              <AvatarImg user={activityUser} size="extra-small" noLink />
+            {activityUser.avatar && activityUser.mascotteId ? (
+              <AvatarImg user={activityUser} size="extra-small" noLink onClick={onclick} style={{ cursor: 'pointer' }} />
             ) : (
-              <UserIcon style={{ fill: 'currentcolor' }} width="30px" />
+              <Tooltip title="la classe n'a pas encore de mascotte">
+                <span style={{ alignItems: 'center', cursor: 'not-allowed' }}>
+                  <AvatarImg user={activityUser} size="extra-small" />
+                </span>
+              </Tooltip>
             )}
           </span>
           {userMascotte && isMascotte(userMascotte) ? (
@@ -133,7 +186,11 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       )}
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
         <div style={{ height: '14rem' }}>
-          <Map position={activityUser.position} zoom={3} markers={[{ position: activityUser.position, label: activityUser.address }]} />
+          <Map
+            position={activityUser.position}
+            zoom={3}
+            markers={[{ position: activityUser.position, label: activityUser.address, activityCreatorMascotte: activityUser.mascotteId }]}
+          />
         </div>
       </div>
       {weather !== null && (

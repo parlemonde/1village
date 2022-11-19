@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import router from 'next/router';
 import React from 'react';
 
 import { Button } from '@mui/material';
@@ -9,7 +10,7 @@ import type { ActivityCardProps } from './activity-card.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { htmlToText } from 'src/utils';
-import { ActivityType } from 'types/activity.type';
+import { ActivityType, LinkNotAllowedInPath } from 'types/activity.type';
 import type { StoryActivity } from 'types/story.type';
 
 export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<StoryActivity>) => {
@@ -33,9 +34,17 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
               width: '100%',
               backgroundColor: bgPage,
               position: 'relative',
+              cursor: 'pointer',
             }}
           >
-            <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            {/* Link is disabled for reaction activity */}
+            {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
+              <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+            ) : (
+              <Link href={`/activite/${activity.id}`} passHref>
+                <Image layout="fill" objectFit="contain" src={firstImage} unoptimized />
+              </Link>
+            )}
           </div>
         </div>
       )}
