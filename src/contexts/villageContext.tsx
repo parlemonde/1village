@@ -41,11 +41,14 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const [village, setVillage] = React.useState<Village | null>(initialVillage);
   const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
-  const [selectedPhase, setSelectedPhase] = React.useState(user?.firstLogin || 1);
+  const [selectedPhase, setSelectedPhase] = React.useState(user !== null ? (user.firstLogin === 0 ? 1 : user.firstLogin) : -1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [showUnassignedModal, setShowUnassignedModal] = React.useState(
-    initialVillage === null && user && user.type === UserType.TEACHER ? true : false,
-  );
+  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type <= UserType.MEDIATOR);
+
+  React.useEffect(() => {
+    setShowUnassignedModal(user !== null && user.villageId === null && user.type <= UserType.MEDIATOR);
+  }, [user]);
+
   const currentVillageId = village ? village.id : -1;
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);

@@ -9,6 +9,7 @@ import { BackButton } from 'src/components/buttons/BackButton';
 import MimicSelector from 'src/components/selectors/MimicSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { MimicData, MimicsData } from 'types/game.type';
@@ -18,6 +19,7 @@ const MimiqueStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, createNewActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
+  const { selectedPhase } = React.useContext(VillageContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
 
   const created = React.useRef(false);
@@ -25,18 +27,18 @@ const MimiqueStep1 = () => {
     if (!created.current) {
       created.current = true;
       if (!activity || !('edit' in router.query)) {
-        createNewActivity(ActivityType.GAME, GameType.MIMIC, {
+        createNewActivity(ActivityType.GAME, selectedPhase, GameType.MIMIC, {
           ...DEFAULT_MIMIC_DATA,
           presentation: labelPresentation,
         });
       } else if (activity && (!isGame(activity) || !isMimic(activity))) {
-        createNewActivity(ActivityType.GAME, GameType.MIMIC, {
+        createNewActivity(ActivityType.GAME, selectedPhase, GameType.MIMIC, {
           ...DEFAULT_MIMIC_DATA,
           presentation: labelPresentation,
         });
       }
     }
-  }, [activity, labelPresentation, createNewActivity, router]);
+  }, [activity, labelPresentation, createNewActivity, router, selectedPhase]);
 
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 

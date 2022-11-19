@@ -233,6 +233,7 @@ const WorldMap = () => {
     window.removeEventListener('resize', onResizeDebounced);
   }, [onResizeDebounced]);
 
+  //display globe with countries and capitals
   React.useEffect(() => {
     setIsInitialized(false);
     init().catch();
@@ -247,6 +248,7 @@ const WorldMap = () => {
     onCameraChangeThrottled();
   }, [onHoverClick, onCameraChangeThrottled]);
 
+  //add leaflet fallback if webgl is not available
   React.useEffect(() => {
     if (useLeafletFallback) {
       if (leafletRef.current) {
@@ -277,6 +279,7 @@ const WorldMap = () => {
     return;
   }, [useLeafletFallback]);
 
+  // add 3D pin models to leaflet map
   const addPins = React.useCallback(async () => {
     if (!isInitialized) {
       return;
@@ -322,7 +325,7 @@ const WorldMap = () => {
     );
     scene.add(pins);
     setHoverableObjects(scene, showDecorsRef.current);
-  }, [isInitialized, users, useLeafletFallback, setHoverableObjects]);
+  }, [isInitialized, useLeafletFallback, users, setHoverableObjects]);
   React.useEffect(() => {
     addPins().catch();
   }, [addPins]);

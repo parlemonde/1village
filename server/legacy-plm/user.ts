@@ -9,15 +9,13 @@ import { countries } from '../utils/iso-3166-countries-french';
 import { logger } from '../utils/logger';
 
 export type PLM_User = {
-  ID: string; // number in string
-  user_login: string;
-  user_nicename: string;
-  user_email: string;
-  user_registered: string; // date "YYYY-MM-DD HH:MM:SS",
-  user_status: string; // number in string
-  display_name: string;
-  spam: string; // boolean in string ("0" or "1")
-  deleted: string; // boolean in string ("0" or "1")
+  id: string;
+  email: string;
+  peuso: string;
+  school: string;
+  address: string;
+  city: string;
+  postalCode: string;
   country: string;
   groups: Array<{
     name: string; // village name
@@ -26,11 +24,6 @@ export type PLM_User = {
     is_mod: string; // boolean in string ("0" or "1")
     user_title: string;
   }>;
-  meta: Array<{
-    key: string;
-    value: string; // can be a number
-  }>;
-  db_error: string;
 };
 
 const MEDIATEUR_GROUP_ID = 10;
@@ -51,17 +44,14 @@ async function getVillage(plmIds: number[]): Promise<Village | null> {
   return null;
 }
 
-function getMetaValue(plmUser: PLM_User, key: string): string {
-  return (plmUser.meta ?? []).find((meta) => meta.key.toLowerCase() === key.toLowerCase())?.value ?? '';
-}
-
 export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
-  // 1- Find village
   let village: Village | null = null;
+  let countryCode: string = 'FR';
   let userType = UserType.TEACHER;
   const userGroups = plmUser.groups || [];
   const groupIds = userGroups.map((g) => parseInt(g.id, 10)).filter((n) => !Number.isNaN(n));
 
+  // 1- Find village
   if (groupIds.length > 0) {
     village = await getVillage(groupIds);
   }
@@ -70,7 +60,6 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   }
 
   // 2- Find country
-  let country: string | null = null;
   if (plmUser.country) {
     const matchs = village !== null ? village.countries : countries;
     const c = stringSimilarity.findBestMatch(
@@ -78,28 +67,24 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
       matchs.map((c) => c.name.toLowerCase()),
     );
     if (c.bestMatch.rating > 0.55) {
-      country = matchs[c.bestMatchIndex].isoCode;
+      countryCode = matchs[c.bestMatchIndex].isoCode;
     }
   }
-  // last fallback
-  if (country === null) {
-    country = 'FR';
-  }
-  if (village !== null && !village.countryCodes.includes(country)) {
-    country = village.countryCodes[0];
+  if (village !== null && !village.countryCodes.includes(countryCode)) {
+    countryCode = village.countryCodes[0];
   }
 
   // 3- Add user
   const user = new User();
-  user.email = plmUser.user_email;
-  user.pseudo = plmUser.user_login.slice(0, 50);
+  user.email = plmUser.email;
+  user.pseudo = plmUser.peuso;
   user.level = '';
-  user.school = getMetaValue(plmUser, "Nom de l'école").slice(0, 255);
-  user.city = (getMetaValue(plmUser, 'Ville') || getMetaValue(plmUser, 'Académie')).slice(0, 128);
-  user.postalCode = getMetaValue(plmUser, "Code postal de l'école").slice(0, 20);
-  user.address = getMetaValue(plmUser, 'Rue').slice(0, 255);
+  user.school = plmUser.school || '';
+  user.city = plmUser.city || '';
+  user.postalCode = plmUser.postalCode || '';
+  user.address = plmUser.address || '';
   user.villageId = village?.id || null;
-  user.countryCode = country;
+  user.countryCode = countryCode;
   user.type = userType;
   user.passwordHash = '';
   user.verificationHash = '';

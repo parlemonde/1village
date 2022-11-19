@@ -7,6 +7,7 @@ import type { ActivityViewProps } from './activity-view.types';
 import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.constants';
 import type { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
+import { LightBox } from 'src/components/lightbox/Lightbox';
 import { bgPage } from 'src/styles/variables.const';
 
 export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) => {
@@ -29,7 +30,9 @@ export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) 
             {activity.data.image && (
               <Grid item xs={12} md={4}>
                 <div style={{ width: '100%', height: '100%', minHeight: '200px', position: 'relative' }}>
-                  <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.image} />
+                  <LightBox url={activity.data.image}>
+                    <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.image} />
+                  </LightBox>
                 </div>
               </Grid>
             )}
