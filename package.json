@@ -22,12 +22,17 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "verbose": true,
     "forceExit": true,
+    "moduleDirectories": [
+      ".",
+      "types",
+      "node_modules"
+    ],
     "roots": [
       "<rootDir>/src/",
       "<rootDir>/src/svg",
-      "<rootDir>/server/",
-      "<rootDir>/types/"
+      "<rootDir>/server/"
     ],
     "transform": {
       "^.+\\.(t|j)sx?$": "@swc/jest"
