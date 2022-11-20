@@ -24,6 +24,9 @@
     "testEnvironment": "node",
     "verbose": true,
     "forceExit": true,
+    "testMatch": [
+      "**/**/*.test.t(s|sx)"
+    ],
     "moduleDirectories": [
       ".",
       "types",
