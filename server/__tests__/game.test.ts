@@ -13,6 +13,13 @@ import { fakeUser, loginUser } from './mock';
 jest.mock('../utils/database', () => ({
   connection: Promise.resolve(),
 }));
+// Mock nodemailer to avoid message in console.
+jest.mock('../emails/nodemailer', () => ({
+  __esModule: true,
+  getNodeMailer: async () => ({
+    t: null,
+  }),
+}));
 
 // Mock frontend NextJS library. We don't need it for testing.
 jest.mock('next', () => ({
