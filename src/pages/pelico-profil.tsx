@@ -7,6 +7,7 @@ import { PelicoProfilNavigation } from 'src/components/accueil/PelicoProfilNavig
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
 
+
 //
 const PelicoProfil = () => {
   const { user } = React.useContext(UserContext);
