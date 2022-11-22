@@ -1,12 +1,10 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
+import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { PelicoProfilNavigation } from 'src/components/accueil/PelicoProfilNavigation';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
-
 
 //
 const PelicoProfil = () => {

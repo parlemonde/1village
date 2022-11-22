@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Avatar, Button } from '@mui/material';
+import React from 'react';
 
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 import { icons, DESC } from 'src/components/activities/utils';
@@ -11,7 +10,7 @@ import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
 export const PelicoProfilNavigation = () => {
-  const { activities } = useActivities({pelico: true, limit: 5});
+  const { activities } = useActivities({ pelico: true, limit: 5 });
 
   return (
     <>
