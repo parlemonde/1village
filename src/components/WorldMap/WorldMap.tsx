@@ -1,5 +1,8 @@
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Button, ButtonGroup, CircularProgress } from '@mui/material';
 import L from 'leaflet';
 import {} from 'leaflet.fullscreen';
 import * as React from 'react';
@@ -18,10 +21,6 @@ import {
   Mesh,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Button, ButtonGroup, CircularProgress } from '@mui/material';
 
 import { UserPopover } from './UserPopover';
 import { getCapitals } from './data/capitals';
