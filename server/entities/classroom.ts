@@ -16,13 +16,13 @@ export class Classroom {
   public villageId!: number;
 
   @Column()
-  public name!: string;
+  public name?: string;
 
   @Column()
-  public avatar: number;
+  public avatar?: string;
 
   @Column()
-  public delayedDays: number;
+  public delayedDays?: number;
 
   @OneToOne(() => User, (user) => user.classroom)
   public user!: User;
