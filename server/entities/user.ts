@@ -1,13 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { Classroom } from './classroom';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
+import { UserToStudent } from './userToStudent';
 import { Village } from './village';
 
 export { UserType };
@@ -103,6 +105,15 @@ export class User implements UserInterface {
 
   public position: { lat: number; lng: number };
 
+  @Column({ type: 'varchar', length: 400, nullable: true, default: null })
+  public language?: string | null;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public hasAcceptedNewsletter?: boolean;
+
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
 
@@ -116,4 +127,11 @@ export class User implements UserInterface {
   public images: Image[];
 
   public mascotteId?: number;
+
+  @OneToOne(() => Classroom)
+  @JoinColumn()
+  classroom: Classroom | null;
+
+  @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
+  public userToStudents!: UserToStudent[];
 }
