@@ -32,6 +32,8 @@ classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req
   res.json(classroom);
 });
 
+type CreateClassroomData = {};
+
 /**
  * Classroom controller to create a teacher's class parameters.
  * ExpressMiddleware signature
@@ -39,7 +41,7 @@ classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req
  * @param {object} res Express response object
  * @returns {string} Route API JSON response
  */
-classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   const classroom = new Classroom();
   classroom.userId = data.userId;
@@ -47,7 +49,9 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   classroom.name = data.name;
   classroom.avatar = data.avatar ?? null;
   classroom.delayedDays = data.delayedDays ?? null;
-  res.json();
+
+  await getRepository(Classroom).save(classroom);
+  res.json(classroom);
 });
 
 /**
