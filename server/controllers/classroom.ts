@@ -1,8 +1,10 @@
+import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import { Classroom } from '../entities/classroom';
 import { UserType } from '../entities/user';
+import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
 /**
@@ -32,7 +34,26 @@ classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req
   res.json(classroom);
 });
 
-type CreateClassroomData = {};
+type CreateClassroomData = {
+  userId: number;
+  villageId: number;
+  name?: string;
+  avatar?: string;
+  delayedDays?: number;
+};
+
+const createClassroomValidator = ajv.compile({
+  type: 'object',
+  properties: {
+    userId: { type: 'number', nullable: false },
+    villageId: { type: 'number', nullable: false },
+    name: { type: 'string', nullable: true },
+    avatar: { type: 'string', nullable: true },
+    delayedDays: { type: 'number', nullable: true },
+  },
+  required: ['userId', 'villageId'],
+  additionalProperties: false,
+} as JSONSchemaType<CreateClassroomData>);
 
 /**
  * Classroom controller to create a teacher's class parameters.
@@ -41,8 +62,12 @@ type CreateClassroomData = {};
  * @param {object} res Express response object
  * @returns {string} Route API JSON response
  */
+
 classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
+  if (!createClassroomValidator(data)) {
+    sendInvalidDataError(createClassroomValidator);
+  }
   const classroom = new Classroom();
   classroom.userId = data.userId;
   classroom.villageId = data.villageId;
@@ -61,6 +86,7 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
  * @param {object} res Express response object
  * @returns {string} Route API JSON response
  */
+
 classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   res.json();
 });
@@ -72,6 +98,7 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
  * @param {object} res Express response object
  * @returns {string} Route API JSON response
  */
+
 classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   res.json();
 });
