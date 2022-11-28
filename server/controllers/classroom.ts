@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 
 import { Classroom } from '../entities/classroom';
 import { UserType } from '../entities/user';
+import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
@@ -68,6 +69,9 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   if (!createClassroomValidator(data)) {
     sendInvalidDataError(createClassroomValidator);
   }
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
   const classroom = new Classroom();
   classroom.userId = data.userId;
   classroom.villageId = data.villageId;
@@ -79,6 +83,23 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   res.json(classroom);
 });
 
+type UpdateClassroomData = {
+  name?: string;
+  avatar?: string;
+  delayedDays?: number;
+};
+
+const updateClassroomValidator = ajv.compile({
+  type: 'object',
+  properties: {
+    name: { type: 'string', nullable: true },
+    avatar: { type: 'string', nullable: true },
+    delayedDays: { type: 'number', nullable: true },
+  },
+  required: [],
+  additionalProperties: false,
+} as JSONSchemaType<UpdateClassroomData>);
+
 /**
  * Classroom controller to modify a teacher's class parameters.
  * ExpressMiddleware signature
@@ -88,7 +109,25 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
  */
 
 classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  res.json();
+  const data = req.body;
+  if (!updateClassroomValidator(data)) {
+    sendInvalidDataError(updateClassroomValidator);
+  }
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const id = parseInt(req.params.id, 10) || 0;
+  const classroom = await getRepository(Classroom).findOne({ where: { id } });
+
+  if (!classroom) return next();
+
+  classroom.avatar = data.avatar ?? classroom.avatar;
+  classroom.delayedDays = data.delayedDays ?? classroom.delayedDays;
+  classroom.name = data.name ?? classroom.name;
+
+  await getRepository(Classroom).save(classroom);
+  res.json(classroom);
 });
 
 /**
@@ -100,5 +139,10 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
  */
 
 classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  res.json();
+  const id = parseInt(req.params.id, 10) || 0;
+  const classroom = await getRepository(Classroom).findOne({ where: { id } });
+  if (!classroom || !req.user) return res.status(204).send();
+
+  await getRepository(Classroom).delete({ id });
+  res.status(204).send();
 });
