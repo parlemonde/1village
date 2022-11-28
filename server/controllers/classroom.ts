@@ -129,7 +129,7 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
  * @returns {string} Route API JSON response
  */
 
-classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   const classroom = await getRepository(Classroom).findOne({ where: { id } });
   if (!classroom || !req.user) return res.status(204).send();
