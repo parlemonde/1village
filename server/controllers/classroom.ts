@@ -8,15 +8,6 @@ import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
-/**
- * Classroom controller
- * 1. il faut CRUD
- *  GET /classrooms/:id
- *  POST
- *  PUT /classrooms/:id
- *  DELETE /classrooms/:id
- *
- */
 const classroomController = new Controller('/classrooms');
 
 /**
