@@ -8,7 +8,7 @@ import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
-const classroomController = new Controller('/classrooms');
+export const classroomController = new Controller('/classrooms');
 
 /**
  * Classroom controller to get teacher's class parameters.
