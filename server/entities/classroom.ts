@@ -15,14 +15,14 @@ export class Classroom {
   @Column()
   public villageId!: number;
 
-  @Column()
-  public name?: string;
+  @Column({ nullable: true, default: null })
+  public name: string;
 
-  @Column()
-  public avatar?: string;
+  @Column({ nullable: true, default: null })
+  public avatar: string;
 
-  @Column()
-  public delayedDays?: number;
+  @Column({ nullable: true, default: null })
+  public delayedDays: number;
 
   @OneToOne(() => User, (user) => user.classroom)
   public user!: User;
