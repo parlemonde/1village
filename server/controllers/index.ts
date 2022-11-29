@@ -11,6 +11,7 @@ import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
 import { storyController } from './story';
+import { teacherController } from './teacher';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';
@@ -35,6 +36,7 @@ const controllers = [
   storyController,
   xapiController,
   classroomController,
+  teacherController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {
