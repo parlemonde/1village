@@ -15,6 +15,7 @@ import { videoController } from './video';
 import { villageController } from './village';
 import { weatherController } from './weather';
 import { xapiController } from './xapi';
+import { studentController } from './student';
 
 const controllerRouter = Router();
 const controllers = [
@@ -33,6 +34,7 @@ const controllers = [
   weatherController,
   storyController,
   xapiController,
+  studentController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {

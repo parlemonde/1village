@@ -7,6 +7,7 @@ export enum UserType {
   MEDIATOR = 2,
   ADMIN = 3,
   SUPER_ADMIN = 4,
+  FAMILY = 5,
 }
 
 export const userTypeNames = {
