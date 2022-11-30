@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { send } from 'process';
 import { createQueryBuilder, getRepository } from 'typeorm';
 
 import { UserType } from '../entities/user';
@@ -34,7 +33,6 @@ teacherController.delete({ path: '/detach/:id', userType: UserType.TEACHER }, as
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
-  // detach le / les comptes attecher a un compte éleve
   const userId = parseInt(req.params.id, 10) || 0;
   const studentId = req.params.studentId;
   const student = await getRepository(UserToStudent).find({ where: { userId: userId, studentId: studentId } });
