@@ -6,6 +6,7 @@ import type {
   EcoDefiData,
   LanguageDefiActivity,
   LanguageDefiData,
+  FreeDefiActivity,
 } from './defi.types';
 import { replaceTokens } from 'src/utils';
 
@@ -94,6 +95,7 @@ export const DEFI = {
   COOKING: 0,
   ECO: 1,
   LANGUAGE: 2,
+  FREE: 3,
 };
 
 export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData): string => {
@@ -137,4 +139,7 @@ export const isEco = (activity: DefiActivity): activity is EcoDefiActivity => {
 };
 export const isLanguage = (activity: DefiActivity): activity is LanguageDefiActivity => {
   return activity.subType === DEFI.LANGUAGE;
+};
+export const isFree = (activity: DefiActivity): activity is FreeDefiActivity => {
+  return activity.subType === DEFI.FREE;
 };
