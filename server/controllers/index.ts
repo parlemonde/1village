@@ -10,12 +10,12 @@ import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
 import { storyController } from './story';
+import { studentController } from './student';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';
 import { weatherController } from './weather';
 import { xapiController } from './xapi';
-import { studentController } from './student';
 
 const controllerRouter = Router();
 const controllers = [

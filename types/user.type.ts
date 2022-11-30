@@ -16,6 +16,7 @@ export const userTypeNames = {
   [UserType.MEDIATOR]: 'Médiateur',
   [UserType.ADMIN]: 'Admin',
   [UserType.SUPER_ADMIN]: 'Super admin',
+  [UserType.FAMILY]: 'Parent',
 };
 
 export interface User {

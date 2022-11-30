@@ -91,7 +91,7 @@ const updateStudentValidator = ajv.compile({
  * @returns {string} Route API JSON response
  */
 
-studentController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+studentController.put({ path: '/:id', userType: UserType.TEACHER && UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateStudentValidator(data)) {
     sendInvalidDataError(updateStudentValidator);
@@ -128,3 +128,5 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
   await getRepository(Student).delete({ id });
   res.status(204).send();
 });
+
+export { studentController };
