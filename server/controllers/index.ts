@@ -4,6 +4,7 @@ import { activityController } from './activity';
 import { analyticController } from './analytic';
 import { archiveController } from './archive';
 import { audioController } from './audio';
+import { classroomController } from './classroom';
 import { countryController } from './countries';
 import { currencyController } from './currencies';
 import { gameController } from './game';
@@ -34,6 +35,7 @@ const controllers = [
   weatherController,
   storyController,
   xapiController,
+  classroomController,
   studentController,
 ];
 
