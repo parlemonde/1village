@@ -14,7 +14,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
-const DefiLibreStep1 = () => {
+const FreeDefiStep1 = () => {
   const router = useRouter();
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
@@ -93,4 +93,4 @@ const DefiLibreStep1 = () => {
   );
 };
 
-export default DefiLibreStep1;
+export default FreeDefiStep1;
