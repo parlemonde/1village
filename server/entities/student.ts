@@ -17,6 +17,9 @@ export class Student {
   @Column({ type: 'varchar', length: 255 })
   public lastname!: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  public hashedCode!: string;
+
   //classroom relation
   @ManyToOne(() => Classroom, (classroom) => classroom.students)
   @JoinColumn({ name: 'classroomId' })
