@@ -91,6 +91,16 @@ export const LANGUAGE_DEFIS = [
   },
 ];
 
+export const FREE_DEFIS = [
+  {
+    title: 'Réalisez notre action à votre tour',
+    description: 'Les Pelicopains devront réaliser la même action que vous',
+  },
+  {
+    title: 'Réalisez une autre action sur le même thème',
+    description: 'Les Pelicopains devront réaliser une action sur le thème {{theme}}',
+  },
+];
 export const DEFI = {
   COOKING: 0,
   ECO: 1,

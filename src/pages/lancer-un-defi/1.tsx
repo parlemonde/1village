@@ -37,11 +37,13 @@ const FreeDefiStep1 = () => {
         created.current = true;
         createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.FREE, {
           themeName: '',
+          defiIndex: null,
         });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isFree(activity)))) {
         created.current = true;
         createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.FREE, {
           themeName: '',
+          defiIndex: null,
         });
       }
     }

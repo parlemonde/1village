@@ -27,6 +27,8 @@ export type LanguageDefiData = {
 
 export type FreeDefiData = {
   themeName: string;
+  defiIndex: number;
+  defi?: string;
 };
 
 export type CookingDefiActivity = Activity<CookingDefiData>;
