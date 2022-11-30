@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { FormControl, FormControlLabel, Grid, Radio, RadioGroup, Select, Chip, NativeSelect } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-import { AvatarImg } from 'src/components/Avatar';
+// import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -18,7 +18,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
-import { secondaryColor } from 'src/styles/variables.const';
+// import { secondaryColor } from 'src/styles/variables.const';
 import { capitalize } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
@@ -154,7 +154,7 @@ const DefiStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={['Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -165,42 +165,38 @@ const DefiStep1 = () => {
           activeStep={0}
         />
         <div className="width-900">
-          <h1>Choix de la langue</h1>
+          <h1>Choisissez dans quelle langue vous souhaitez lancer le défi</h1>
           <div>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={4} style={{ padding: '1rem' }}>
+              {/* <Grid item xs={12} md={4} style={{ padding: '1rem' }}>
                 <div style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                   {user && <AvatarImg user={user} size="large" />}
                 </div>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <p className="text">Votre mascotte sait parler ces langues, dans laquelle allez-vous créer votre défi ?</p>
-                <div style={{ border: `1px dashed ${secondaryColor}`, padding: '1rem', borderRadius: '5px' }}>
-                  <RadioGroup aria-label="gender" name="gender1" value={data.languageCode} onChange={setLanguage}>
-                    {mascotteLanguages.map((l) => (
-                      <FormControlLabel key={l.value} value={l.value} control={<Radio />} label={l.label} style={{ cursor: 'pointer' }} />
-                    ))}
-                    <div style={{ display: 'flex', width: '100%' }}>
-                      <FormControlLabel
-                        disabled={otherValue.length === 0}
-                        value={otherValue.toLowerCase()}
-                        control={<Radio />}
-                        label="Autre :"
-                        style={{ cursor: 'pointer' }}
-                      />
-                      <LanguageSelector
-                        style={{ flex: 1, minWidth: 0 }}
-                        value={otherValue}
-                        onChange={(v) => {
-                          setOtherValue(v);
-                          const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
-                          updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
-                        }}
-                      />
-                    </div>
-                  </RadioGroup>
-                </div>
-              </Grid>
+              </Grid> */}
+              <FormControl fullWidth>
+                <p className="text">Vous pourrez ensuite choisir le thème de votre défi.</p>
+                <Select native chip aria-label="gender" name="gender1" value={data.languageCode} onChange={setLanguage}>
+                  <h1>Langues parlées par votre mascotte</h1>
+                  {mascotteLanguages.map((l) => (
+                    <option native key={l.value} value={l.value} label={l.label} style={{ cursor: 'pointer' }} />
+                  ))}
+                  <h1>Autres langues</h1>
+                  <div style={{ display: 'flex', width: '100%' }}>
+                    <option value={otherValue.toLowerCase()} style={{ cursor: 'pointer' }} />
+                    <LanguageSelector
+                      native
+                      multiple={false}
+                      style={{ flex: 1, minWidth: 0 }}
+                      value={otherValue}
+                      onChange={(v) => {
+                        setOtherValue(v);
+                        const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
+                        updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
+                      }}
+                    />
+                  </div>
+                </Select>
+              </FormControl>
             </Grid>
             {data.languageCode && (
               <div style={{ margin: '1rem 0' }}>
