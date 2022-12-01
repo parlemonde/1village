@@ -72,7 +72,7 @@ const FreeDefiStep3 = () => {
         <Steps
           steps={[data.themeName || 'Théme', 'Action', 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/1?edit', '/lancer-un-defi/2', '/lancer-un-defi/3', '/lancer-un-defi/4']}
-          activeStep={1}
+          activeStep={2}
           errorSteps={errorSteps}
         />
         <div className="width-900">
@@ -97,16 +97,14 @@ const FreeDefiStep3 = () => {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 0' }}>
                     <span style={{ marginRight: '0.3rem' }}>Défi : </span>
-                    {data !== null && (
-                      <TextField
-                        variant="standard"
-                        value={data.defi || ''}
-                        onChange={(event) => {
-                          updateActivity({ data: { ...data, defi: event.target.value } });
-                        }}
-                        style={{ minWidth: '0', flex: 1 }}
-                      />
-                    )}
+                    <TextField
+                      variant="standard"
+                      value={data.defi || ''}
+                      onChange={(event) => {
+                        updateActivity({ data: { ...data, defi: event.target.value } });
+                      }}
+                      style={{ minWidth: '0', flex: 1 }}
+                    />
                   </div>
                   <div className="text-center" style={{ marginTop: '0.8rem' }}>
                     <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
