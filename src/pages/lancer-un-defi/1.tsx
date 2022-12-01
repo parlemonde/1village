@@ -16,17 +16,16 @@ import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const FreeDefiStep1 = () => {
   const router = useRouter();
-  const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
+  const { activity, createNewActivity, updateActivity, save } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
   const [showErrors, setShowErrors] = React.useState(false);
 
   const data = (activity?.data as FreeDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
 
-  const onNext = () => () => {
-    if (activity === null || data === null || !data.themeName) {
-      setShowErrors(true);
-    }
+  const onNext = () => {
+    save().catch(console.error);
+    window.sessionStorage.setItem(`defi-free-step-1-next`, 'true');
     router.push('/lancer-un-defi/2');
   };
 
@@ -49,13 +48,21 @@ const FreeDefiStep1 = () => {
     }
   }, [activity, createNewActivity, router, selectedPhase]);
 
+  React.useEffect(() => {
+    // if user navigated to the next step already, let's show the errors if there are any.
+    if (window.sessionStorage.getItem(`defi-free-step-1-next`) === 'true') {
+      setShowErrors(true);
+      window.sessionStorage.setItem(`defi-free-step-1-next`, 'false');
+    }
+  }, []);
+
   const theme = React.useMemo(() => {
-    if (data && !data.themeName) return 'Theme';
+    if (!data || (data && data.themeName.length === 0)) return 'Theme';
     return data.themeName;
   }, [data]);
 
   if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isFree(activity))) {
-    return <div> Hello</div>;
+    return <div></div>;
   }
 
   return (
@@ -88,7 +95,7 @@ const FreeDefiStep1 = () => {
             helperText={showErrors && !data.themeName ? 'Ce champ est obligatoire' : `${data.themeName?.length || 0}/80`}
             sx={{ width: '100%', margin: '1rem 0 1rem 0' }}
           />
-          <StepsButton next={onNext} />
+          {<StepsButton next={onNext} />}
         </div>
       </div>
     </Base>
