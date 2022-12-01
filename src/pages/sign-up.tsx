@@ -1,6 +1,5 @@
 import { ajvResolver } from '@hookform/resolvers/ajv';
 import type { JSONSchemaType } from 'ajv';
-import { useRouter } from 'next/router';
 import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
@@ -10,6 +9,7 @@ import { Box } from '@mui/material';
 import { Base } from 'src/components/Base';
 import { useUserRequests } from 'src/services/useUsers';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 interface SignUpSchema {
   firstname: string;
@@ -59,31 +59,35 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: ajvResolver(schema) });
 
-  const router = useRouter();
   const { addUser } = useUserRequests();
-  /* 
-  const { newUser, setNewUser } = React.useState<Partial<User>>({
-    email: '',
-    pseudo: '',
-    firstname: '',
-    lastname: '',
-    city: '',
-    address: '',
-    postalCode: '',
-    school: '',
-    level: '',
-    type: UserType.FAMILY,
-    country: {
-      isoCode: '',
-      name: '',
-    },
-  });
- */
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
-    await addUser({ ...data });
+  const [newUser, setNewUser] = React.useState<Partial<User>>();
+  /*   const handleChange = (e) => {
+    const { firstname, lastname, email, value } = e.target;
+    setNewUser((prevState) => ({ ...prevState, {
+      [firstname]: value }
+    }));
+  }; */
 
-    // router.push('/users');
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setNewUser({
+      email: data.email,
+      pseudo: data.firstname + ' ' + data.lastname[0].toUpperCase(),
+      firstname: data.firstname,
+      lastname: data.lastname,
+      city: '',
+      address: '',
+      postalCode: '',
+      school: '',
+      level: '',
+      type: UserType.FAMILY,
+      country: {
+        isoCode: '',
+        name: '',
+      },
+    });
+    console.log('data = ' + data);
+    console.log('newUser = ' + newUser);
+    await addUser({ ...newUser });
   };
 
   return (

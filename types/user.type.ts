@@ -2,25 +2,29 @@ import type { Country } from './country.type';
 import type { Village } from './village.type';
 
 export enum UserType {
-  TEACHER = 0,
-  OBSERVATOR = 1,
-  MEDIATOR = 2,
-  ADMIN = 3,
-  SUPER_ADMIN = 4,
+  SUPER_ADMIN = 0,
+  ADMIN = 1,
+  TEACHER = 2,
+  MEDIATOR = 3,
+  OBSERVATOR = 4,
+  FAMILY = 5,
 }
 
 export const userTypeNames = {
-  [UserType.TEACHER]: 'Professeur',
-  [UserType.OBSERVATOR]: 'Observateur',
-  [UserType.MEDIATOR]: 'Médiateur',
-  [UserType.ADMIN]: 'Admin',
   [UserType.SUPER_ADMIN]: 'Super admin',
+  [UserType.ADMIN]: 'Admin',
+  [UserType.TEACHER]: 'Professeur',
+  [UserType.MEDIATOR]: 'Médiateur',
+  [UserType.OBSERVATOR]: 'Observateur',
+  [UserType.FAMILY]: 'Parent',
 };
 
 export interface User {
   id: number;
   email: string;
   pseudo: string;
+  firstname: string;
+  lastname: string;
   school: string;
   level: string;
   city: string;
