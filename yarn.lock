@@ -13,6 +13,7 @@ __metadata:
     "@emotion/react": ^11.9.3
     "@emotion/server": ^11.4.0
     "@emotion/styled": ^11.9.3
+    "@hookform/resolvers": ^2.9.10
     "@mui/icons-material": ^5.8.4
     "@mui/material": ^5.8.5
     "@mui/system": ^5.8.5
@@ -59,7 +60,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": 5.29.0
     "@typescript-eslint/parser": 5.29.0
     "@yarnpkg/pnpify": 4.0.0-rc.10
-    ajv: 8.11.0
+    ajv: ^8.11.2
     ajv-formats: ^2.1.1
     argon2: ^0.28.5
     aws-sdk: ^2.1162.0
@@ -116,6 +117,7 @@ __metadata:
     query-string: ^7.1.1
     react: ^17.0.2
     react-dom: ^17.0.2
+    react-hook-form: ^7.40.0
     react-player: ^2.10.1
     react-query: ^3.39.1
     resize-observer-polyfill: ^1.5.1
@@ -2288,6 +2290,15 @@ __metadata:
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
   checksum: d05081e0887a49c178b75ee3067bd6ee086f73c154d121b854fb2e044e8a89cb1cbb6de3a0dd93a519b80f0531fda68b099dd7256205f7fbb3490324342f2217
+  languageName: node
+  linkType: hard
+
+"@hookform/resolvers@npm:^2.9.10":
+  version: 2.9.10
+  resolution: "@hookform/resolvers@npm:2.9.10"
+  peerDependencies:
+    react-hook-form: ^7.0.0
+  checksum: ae3395372d6ff11506a72bb6b3c57046bd14b457c2fe1f0485f60cf2dba0ef4484e3a2fb5a0f6a217f6d701393ebc3683a2ede7c81c6f13e71f965f520c7af16
   languageName: node
   linkType: hard
 
@@ -4865,18 +4876,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:8.11.0":
-  version: 8.11.0
-  resolution: "ajv@npm:8.11.0"
-  dependencies:
-    fast-deep-equal: ^3.1.1
-    json-schema-traverse: ^1.0.0
-    require-from-string: ^2.0.2
-    uri-js: ^4.2.2
-  checksum: 5e0ff226806763be73e93dd7805b634f6f5921e3e90ca04acdf8db81eed9d8d3f0d4c5f1213047f45ebbf8047ffe0c840fa1ef2ec42c3a644899f69aa72b5bef
-  languageName: node
-  linkType: hard
-
 "ajv@npm:^6.10.0, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
@@ -4898,6 +4897,18 @@ __metadata:
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
   checksum: 690ffb9408415fdab43686b3f92037ba0c8362f5d0709a123ba3fb546e6ad81414455f80a2b5cc432ce924afe9864671198f022bc331a19c072d4ede152ec3ca
+  languageName: node
+  linkType: hard
+
+"ajv@npm:^8.11.2":
+  version: 8.11.2
+  resolution: "ajv@npm:8.11.2"
+  dependencies:
+    fast-deep-equal: ^3.1.1
+    json-schema-traverse: ^1.0.0
+    require-from-string: ^2.0.2
+    uri-js: ^4.2.2
+  checksum: 53435bf79ee7d1eabba8085962dba4c08d08593334b304db7772887f0b7beebc1b3d957432f7437ed4b60e53b5d966a57b439869890209c50fed610459999e3e
   languageName: node
   linkType: hard
 
@@ -12417,6 +12428,15 @@ fsevents@^1.0.0:
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.40.0":
+  version: 7.40.0
+  resolution: "react-hook-form@npm:7.40.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 8187981c14cc2e016c263a7427ffc5617b126efed97003e259efff1af991d12bef5cb599d824385f760a03a0676eb0d19007aa3ebcc65832cfe819b3802530c5
   languageName: node
   linkType: hard
 
