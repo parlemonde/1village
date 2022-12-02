@@ -59,6 +59,18 @@ const DefiStep2 = () => {
     updateActivity({ data: { ...data, objectIndex: Number((event.target as HTMLInputElement).value) } });
   };
 
+  const onClick = (index: number) => () => {
+    if (index === -1) {
+      if (!data.defi) {
+        return;
+      }
+      updateActivity({ data: { ...data, defiIndex: index, defi: data.defi.toLowerCase() } });
+    } else {
+      const newData = data;
+      delete newData.defi;
+      updateActivity({ data: { ...newData, defiIndex: index } });
+    }
+  };
   const onNext = () => {
     router.push('/lancer-un-defi/linguistique/3');
   };
@@ -79,16 +91,21 @@ const DefiStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>{'Choisissez le thème de votre défi linguistique'}</h1>
+          <h1>Choisissez le thème de votre défi linguistique</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Vous pourrez ensuite le présenter en détail.
           </p>
-          <FormControl variant="outlined" style={{ width: '100%' }}>
+          <div>
+            {LANGUAGE_OBJECTS.map((l, index) => (
+              <ThemeChoiceButton key={index} label={l.title} onClick={onClick(index)} />
+            ))}
+          </div>
+          {/* <FormControl variant="outlined" style={{ width: '100%' }}>
             <div
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={data.objectIndex === -1 ? '' : data.objectIndex}
-              onChange={onObjectChange}
+              onChange={onClick}
             >
               {LANGUAGE_OBJECTS.map((l, index) => (
                 <ThemeChoiceButton key={index} value={index}>
@@ -96,7 +113,7 @@ const DefiStep2 = () => {
                 </ThemeChoiceButton>
               ))}
             </div>
-          </FormControl>
+          </FormControl> */}
           {data.objectIndex !== -1 && (
             <>
               <p className="text" style={{ fontSize: '1.1rem' }}>
