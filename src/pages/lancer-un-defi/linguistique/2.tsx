@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, Select, MenuItem } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
@@ -12,6 +11,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
+import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { warningColor } from 'src/styles/variables.const';
 import { replaceTokens } from 'src/utils';
@@ -55,8 +55,8 @@ const DefiStep2 = () => {
     updateActivity({ data: { ...data, explanationContentIndex: explanationContentIndex - 1 } });
   };
 
-  const onObjectChange = (event: SelectChangeEvent<string | number>) => {
-    updateActivity({ data: { ...data, objectIndex: Number(event.target.value) } });
+  const onObjectChange = (event: React.ChangeEvent<HTMLInputElement | number>) => {
+    updateActivity({ data: { ...data, objectIndex: Number((event.target as HTMLInputElement).value) } });
   };
 
   const onNext = () => {
@@ -67,7 +67,7 @@ const DefiStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={['Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -79,23 +79,23 @@ const DefiStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>{"Choix de l'objet"}</h1>
+          <h1>{'Choisissez le thème de votre défi linguistique'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Choisissez ce que vous souhaitez présenter :
+            Vous pourrez ensuite le présenter en détail.
           </p>
           <FormControl variant="outlined" style={{ width: '100%' }}>
-            <Select
+            <div
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={data.objectIndex === -1 ? '' : data.objectIndex}
               onChange={onObjectChange}
             >
               {LANGUAGE_OBJECTS.map((l, index) => (
-                <MenuItem key={index} value={index}>
+                <ThemeChoiceButton key={index} value={index}>
                   {l.title}
-                </MenuItem>
+                </ThemeChoiceButton>
               ))}
-            </Select>
+            </div>
           </FormControl>
           {data.objectIndex !== -1 && (
             <>

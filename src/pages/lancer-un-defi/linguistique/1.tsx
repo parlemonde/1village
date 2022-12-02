@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { FormControl, FormControlLabel, Grid, Stack, Radio, RadioGroup, Select, Chip, NativeSelect, FormLabel, MenuItem, Box } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+import { FormControlLabel, Grid, Radio, RadioGroup, Select, Chip, NativeSelect, FormLabel, MenuItem, Box, Input, FormControl } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-// import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -18,7 +18,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
-// import { secondaryColor } from 'src/styles/variables.const';
 import { capitalize } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
@@ -132,7 +131,7 @@ const DefiStep1 = () => {
     router.push('/lancer-un-defi/linguistique/2');
   };
 
-  const setLanguage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setLanguage = (event: SelectChangeEvent<string>) => {
     const languageCode = (event.target as HTMLInputElement).value;
     const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
     updateActivity({ data: { ...data, languageCode, language } });
@@ -168,32 +167,49 @@ const DefiStep1 = () => {
           <h1>Choisissez dans quelle langue vous souhaitez lancer le défi</h1>
           <div>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={4} style={{ padding: '1rem' }}>
+              <Grid item xs={12} md={8}>
                 <p className="text">Vous pourrez ensuite choisir le thème de votre défi.</p>
-                <Select 
-                style={{ border: `1px dashed`, padding: '1rem', borderRadius: '5px' }} 
-                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}>
-                  <Box aria-label="gender" name="gender1" value={data.languageCode} onChange={setLanguage}>
+                <FormControl variant="outlined" style={{ width: '100%' }}>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    aria-label="gender"
+                    name="gender1"
+                    value={data.languageCode}
+                    onChange={setLanguage}
+                  >
                     <h1>Langues parlées par votre mascotte</h1>
                     {mascotteLanguages.map((l) => (
-                      <Chip key={l.value} value={l.value} style={{ cursor: 'pointer' }} />
+                      <MenuItem key={l.value} value={l.value}></MenuItem>
                     ))}
+
                     <div style={{ display: 'flex', width: '100%' }}>
-                      <Chip disabled={otherValue.length === 0} value={otherValue.toLowerCase()} style={{ cursor: 'pointer' }} />
-                      <h1>Autres langues</h1>
                       <LanguageSelector
-                        // multiple={false}
+                        // apiRef={apiRef}
+                        value={otherValue.toLowerCase()}
+                        label={<h1>Autres langues</h1>}
                         style={{ flex: 1, minWidth: 0 }}
-                        value={otherValue}
                         onChange={(v) => {
                           setOtherValue(v);
                           const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
                           updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
                         }}
                       />
+                      {/* <h1>Autres langues</h1> */}
+                      {/* <LanguageSelector
+                      // multiple={false}
+                      style={{ flex: 1, minWidth: 0 }}
+                      label={<h1>Autres langues</h1>}
+                      value={otherValue}
+                      onChange={(v) => {
+                        setOtherValue(v);
+                        const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
+                        updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
+                      }}
+                    /> */}
                     </div>
-                  </Box>
-                </Select>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             {data.languageCode && (
