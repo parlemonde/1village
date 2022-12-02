@@ -6,6 +6,8 @@ import type {
   EcoDefiData,
   LanguageDefiActivity,
   LanguageDefiData,
+  FreeDefiActivity,
+  FreeDefiData,
 } from './defi.types';
 import { replaceTokens } from 'src/utils';
 
@@ -90,13 +92,26 @@ export const LANGUAGE_DEFIS = [
   },
 ];
 
+export const FREE_DEFIS = [
+  {
+    title: 'Réalisez notre action à votre tour',
+    description: 'Les Pelicopains devront réaliser la même action que vous',
+  },
+  {
+    title: 'Réalisez une autre action sur le même thème',
+    description: 'Les Pelicopains devront réaliser une action sur le thème {{theme}}',
+  },
+];
 export const DEFI = {
   COOKING: 0,
   ECO: 1,
   LANGUAGE: 2,
+  FREE: 3,
 };
 
-export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData): string => {
+//TODO : factoriser en mode clean code le getDefi
+//https://stackoverflow.com/questions/8900652/what-does-do-in-javascript
+export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData | FreeDefiData): string => {
   if (subtype === DEFI.ECO) {
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
@@ -116,6 +131,9 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
           : LANGUAGE_OBJECTS[(data as LanguageDefiData).objectIndex % LANGUAGE_OBJECTS.length].title2,
       language: (data as LanguageDefiData).language,
     });
+  }
+  if (subtype === DEFI.FREE) {
+    return data.defiIndex === -1 && data.defi ? data.defi : FREE_DEFIS[(data.defiIndex ?? 0) % FREE_DEFIS.length].title;
   }
   return data.defiIndex === -1 && data.defi ? data.defi : COOKING_DEFIS[(data.defiIndex ?? 0) % COOKING_DEFIS.length].title;
 };
@@ -137,4 +155,7 @@ export const isEco = (activity: DefiActivity): activity is EcoDefiActivity => {
 };
 export const isLanguage = (activity: DefiActivity): activity is LanguageDefiActivity => {
   return activity.subType === DEFI.LANGUAGE;
+};
+export const isFree = (activity: DefiActivity): activity is FreeDefiActivity => {
+  return activity.subType === DEFI.FREE;
 };
