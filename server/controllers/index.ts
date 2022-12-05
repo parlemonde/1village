@@ -11,6 +11,7 @@ import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
 import { storyController } from './story';
+import { teacherController } from './teacher';
 import { studentController } from './student';
 import { userController } from './user';
 import { videoController } from './video';
@@ -36,6 +37,7 @@ const controllers = [
   storyController,
   xapiController,
   classroomController,
+  teacherController,
   studentController,
 ];
 
