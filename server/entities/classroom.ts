@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 import { Student } from './student';
 import { User } from './user';
@@ -28,6 +28,7 @@ export class Classroom {
   public users: User;
 
   @ManyToOne(() => Village, (village) => village.classrooms)
+  @JoinColumn({ name: 'villageId' })
   public village: Village;
 
   @OneToMany(() => Student, (student: Student) => student.classroom)

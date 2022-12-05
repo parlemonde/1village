@@ -17,9 +17,6 @@ export class Student {
   @Column({ type: 'varchar', length: 255, nullable: true })
   public lastname: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  public hashedCode: string;
-
   @Column({ type: 'varchar', length: 255, nullable: true })
   public hashedCode: string;
 
