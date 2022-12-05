@@ -8,7 +8,7 @@ import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
-const studentController = new Controller('/student');
+const studentController = new Controller('/students');
 
 /**
  * Student controller to get student's info.
@@ -19,7 +19,7 @@ const studentController = new Controller('/student');
  * @returns {string} Route API JSON response
  */
 
-studentController.get({ path: '/:id', userType: UserType.TEACHER && UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
+studentController.get({ path: '/:id', userType: UserType.TEACHER || UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const student = await getRepository(Student).findOne({ where: { id } });
   if (student === undefined) return next();
@@ -30,7 +30,7 @@ type CreateStudentData = {
   classroomId: number;
   firstname?: string;
   lastname?: string;
-  hashedCode: string;
+  hashedCode?: string;
 };
 
 const createStudentValidator = ajv.compile({
@@ -39,9 +39,9 @@ const createStudentValidator = ajv.compile({
     classroomId: { type: 'number', nullable: false },
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
-    hashedCode: { type: 'string', nullable: false },
+    hashedCode: { type: 'string', nullable: true },
   },
-  required: ['classroomId', 'hashedCode'],
+  required: ['classroomId'],
   additionalProperties: false,
 } as JSONSchemaType<CreateStudentData>);
 
@@ -65,7 +65,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   student.classroomId = data.classroomId;
   student.firstname = data.firstname ?? null;
   student.lastname = data.lastname ?? null;
-  student.hashedCode = data.hashedCode;
+  student.hashedCode = data.hashedCode ?? null;
 
   await getRepository(Student).save(student);
   res.json(student);
@@ -94,7 +94,7 @@ const updateStudentValidator = ajv.compile({
  * @returns {string} Route API JSON response
  */
 
-studentController.put({ path: '/:id', userType: UserType.TEACHER && UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
+studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!updateStudentValidator(data)) {
     sendInvalidDataError(updateStudentValidator);

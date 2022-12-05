@@ -7,13 +7,13 @@ import { Village } from './village';
 @Entity()
 export class Classroom {
   @PrimaryGeneratedColumn()
-  public id!: number;
+  public id: number;
 
   @Column()
-  public userId!: number;
+  public userId: number;
 
   @Column()
-  public villageId!: number;
+  public villageId: number;
 
   @Column({ nullable: true, default: null })
   public name: string;
@@ -25,11 +25,11 @@ export class Classroom {
   public delayedDays: number;
 
   @OneToOne(() => User, (user) => user.classroom)
-  public user!: User;
+  public users: User;
 
   @ManyToOne(() => Village, (village) => village.classrooms)
-  public village!: Village;
+  public village: Village;
 
-  @OneToMany(() => Student, (student) => student.classroom)
-  public students!: Student;
+  @OneToMany(() => Student, (student: Student) => student.classroom)
+  public students: Student;
 }
