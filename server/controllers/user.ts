@@ -89,8 +89,10 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
-  pseudo: string;
-  countryCode: string;
+  pseudo?: string;
+  firstname?: string;
+  lastname?: string;
+  countryCode?: string;
   level?: string;
   school?: string;
   city?: string;
@@ -107,8 +109,10 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
   properties: {
     email: { type: 'string', format: 'email' },
-    pseudo: { type: 'string' },
-    countryCode: { type: 'string' },
+    pseudo: { type: 'string', nullable: true },
+    firstname: { type: 'string', nullable: true },
+    lastname: { type: 'string', nullable: true },
+    countryCode: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
     city: { type: 'string', nullable: true },
@@ -117,15 +121,19 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     avatar: { type: 'string', nullable: true },
     displayName: { type: 'string', nullable: true },
     password: { type: 'string', nullable: true },
-    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    type: {
+      type: 'number',
+      nullable: true,
+      enum: [UserType.FAMILY, UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN],
+    },
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
   },
-  required: ['email', 'pseudo'],
+  required: ['email'],
   additionalProperties: false,
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
-userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+userController.post({ path: '' }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
@@ -137,7 +145,9 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
 
   const user = new User();
   user.email = data.email;
-  user.pseudo = data.pseudo;
+  user.pseudo = data.pseudo || '';
+  user.firstname = data.firstname || '';
+  user.lastname = data.lastname || '';
   user.level = data.level || '';
   user.school = data.school || '';
   user.address = data.address || '';
@@ -146,7 +156,7 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.avatar = data.avatar || null;
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
-  user.countryCode = data.countryCode;
+  user.countryCode = data.countryCode || '';
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, UserType.TEACHER);
   } else {

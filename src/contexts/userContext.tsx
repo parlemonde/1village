@@ -4,7 +4,7 @@ import React from 'react';
 
 import type { AxiosReturnType } from 'src/utils/axiosRequest';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { User } from 'types/user.type';
+import type { User, UserForm } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
@@ -14,7 +14,7 @@ interface UserContextValue {
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
   axiosLoggedRequest(req: AxiosRequestConfig): Promise<AxiosReturnType>;
-  signup(user: User, inviteCode?: string): UserContextFunc;
+  signup(user: UserForm, inviteCode?: string): UserContextFunc;
   updatePassword(user: Partial<User>): UserContextFunc;
   verifyEmail(user: Partial<User>): UserContextFunc;
   logout(): Promise<void>;
@@ -52,7 +52,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
   );
 
   React.useEffect(() => {
-    if (user === null && router.pathname !== '/login' && router.pathname !== '/') {
+    if (user === null && router.pathname !== '/login' && router.pathname !== '/sign-up' && router.pathname !== '/') {
       router.push('/login');
     }
   }, [user, router]);
@@ -156,7 +156,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
   const signup = React.useCallback(
-    async (user: User, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
+    async (user: UserForm, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
         method: 'POST',
         headers,

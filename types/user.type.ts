@@ -52,3 +52,13 @@ export interface User {
 
   mascotteId?: number;
 }
+
+export type UserForm = {
+  firstname: string;
+  lastname: string;
+  pseudo: string;
+  email: string;
+  password: string;
+  passwordConfirmation?: string;
+  type: UserType.FAMILY;
+};

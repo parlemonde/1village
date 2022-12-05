@@ -20,8 +20,14 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 255, unique: true })
   public email: string;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 50, default: '' })
   public pseudo: string;
+
+  @Column({ type: 'varchar', length: 50, default: '' })
+  public firstname: string;
+
+  @Column({ type: 'varchar', length: 50, default: '' })
+  public lastname: string;
 
   @Column({ type: 'varchar', length: 50, default: '' })
   public level: string;
