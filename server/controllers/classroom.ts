@@ -16,7 +16,7 @@ export const classroomController = new Controller('/classrooms');
  * @param {string} id classroom id
  * @param {object} req Express request object
  * @param {object} res Express response object
- * @returns {string} Route API JSON response
+ * @return {object} Route API JSON response
  */
 
 classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +52,7 @@ const createClassroomValidator = ajv.compile({
  * ExpressMiddleware signature
  * @param {object} req Express request object
  * @param {object} res Express response object
- * @returns {string} Route API JSON response
+ * @return {object} Route API JSON response
  */
 
 classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
@@ -96,7 +96,7 @@ const updateClassroomValidator = ajv.compile({
  * ExpressMiddleware signature
  * @param {object} req Express request object
  * @param {object} res Express response object
- * @returns {string} Route API JSON response
+ * @returns {object} Route API JSON response
  */
 
 classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
@@ -126,7 +126,7 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
  * ExpressMiddleware signature
  * @param {object} req Express request object
  * @param {object} res Express response object
- * @returns {string} Route API JSON response
+ * @return {number} Route API JSON response
  */
 
 classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
