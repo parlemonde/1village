@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 
 import { Student } from './student';
 import { User } from './user';
@@ -18,8 +18,10 @@ export class UserToStudent {
   public hashedCode!: string;
 
   @ManyToOne(() => User, (user) => user.userToStudents)
+  @JoinColumn({ name: 'userId' })
   public user!: User;
 
   @ManyToOne(() => Student, (student) => student.userToStudents)
+  @JoinColumn({ name: 'studentId' })
   public student!: Student;
 }
