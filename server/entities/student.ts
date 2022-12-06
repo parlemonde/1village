@@ -9,7 +9,7 @@ export class Student {
   public id: number;
 
   @Column()
-  public classroomId!: number;
+  public classroomId: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   public firstname: string;
