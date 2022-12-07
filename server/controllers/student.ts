@@ -31,6 +31,7 @@ type CreateStudentData = {
   firstname?: string;
   lastname?: string;
   hashedCode?: string;
+  numLinkedAccount?: number;
 };
 
 const createStudentValidator = ajv.compile({
@@ -40,6 +41,7 @@ const createStudentValidator = ajv.compile({
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
     hashedCode: { type: 'string', nullable: true },
+    numLinkedAccount: { type: 'number', nullable: true },
   },
   required: ['classroomId'],
   additionalProperties: false,
@@ -66,6 +68,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   student.firstname = data.firstname ?? null;
   student.lastname = data.lastname ?? null;
   student.hashedCode = data.hashedCode ?? null;
+  student.numLinkedAccount = data.numLinkedAccount ?? null;
 
   await getRepository(Student).save(student);
   res.json(student);
