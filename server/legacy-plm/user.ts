@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
 import stringSimilarity from 'string-similarity';
-import { getRepository, In } from 'typeorm';
+import { In } from 'typeorm';
 
 import { User, UserType } from '../entities/user';
 import { Village } from '../entities/village';
+import { AppDataSource } from '../utils/data-source';
 import { setUserPosition } from '../utils/get-pos';
 import { countries } from '../utils/iso-3166-countries-french';
 import { logger } from '../utils/logger';
@@ -31,7 +32,7 @@ const MEDIATEUR_GROUP_ID = 10;
 async function getVillage(plmIds: number[]): Promise<Village | null> {
   try {
     // Find the village
-    const dbVillage = await getRepository(Village).findOne({
+    const dbVillage = await AppDataSource.getRepository(Village).findOne({
       where: { plmId: In(plmIds) },
     });
     if (dbVillage) {
@@ -92,7 +93,7 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.position = { lat: 0, lng: 0 };
 
   await setUserPosition(user);
-  await getRepository(User).save(user);
+  await AppDataSource.getRepository(User).save(user);
 
   delete user.passwordHash;
   delete user.verificationHash;
