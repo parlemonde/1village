@@ -1,6 +1,7 @@
 import path from 'path';
 import type { DataSourceOptions } from 'typeorm';
 import { DataSource } from 'typeorm';
+import 'dotenv/config';
 
 const DEFAULT_TYPE = 'mysql' as const;
 const DEFAULT_HOST = 'localhost';
@@ -35,8 +36,9 @@ function getAppDataSource(): DataSource {
     charset: 'utf8mb4_unicode_ci',
     logging: process.env.NODE_ENV !== 'production',
     entities: [path.join(__dirname, '../entities/*.js')],
+    migrations: [path.join(__dirname, '../migrations/*.js')],
     subscribers: [],
-    synchronize: true,
+    synchronize: false,
     ...connectionOptions,
   });
 }
