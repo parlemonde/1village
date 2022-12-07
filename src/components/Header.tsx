@@ -71,7 +71,7 @@ export const Header = () => {
                 </Button>
               </div>
             )}
-            {user.type >= UserType.ADMIN && (
+            {user.type <= UserType.ADMIN && (
               <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
                   {"Aller à l'interface Admin"}

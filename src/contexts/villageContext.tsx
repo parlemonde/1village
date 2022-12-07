@@ -43,10 +43,10 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
   const [selectedPhase, setSelectedPhase] = React.useState(user !== null ? (user.firstLogin === 0 ? 1 : user.firstLogin) : -1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type <= UserType.MEDIATOR);
+  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type >= UserType.MEDIATOR);
 
   React.useEffect(() => {
-    setShowUnassignedModal(user !== null && user.villageId === null && user.type <= UserType.MEDIATOR);
+    setShowUnassignedModal(user !== null && user.villageId === null && user.type >= UserType.MEDIATOR);
   }, [user]);
 
   const currentVillageId = village ? village.id : -1;
@@ -100,7 +100,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
       setVillage(newVillage);
       setSelectedPhase(newVillage ? newVillage.activePhase : 1);
     }
-    if (userVillageId === -1 && user.type > UserType.TEACHER) {
+    if (userVillageId === -1 && user.type < UserType.TEACHER) {
       showSelectVillageModal();
     }
     if (userVillageId === -1 && user.type === UserType.TEACHER) {
@@ -188,7 +188,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         {(villages || []).length === 0 ? (
           <>
             <p>Aucun village existe !</p>
-            {user !== null && user.type >= UserType.ADMIN ? (
+            {user !== null && user.type <= UserType.ADMIN ? (
               <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}
@@ -218,7 +218,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
                 ))}
               </Select>
             </FormControl>
-            {village === null && user !== null && user.type >= UserType.ADMIN && (
+            {village === null && user !== null && user.type <= UserType.ADMIN && (
               <>
                 <Divider style={{ margin: '1rem 0' }} />
                 <Link href="/admin/villages" passHref>

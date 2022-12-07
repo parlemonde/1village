@@ -86,7 +86,7 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
   if (!villageId) {
     next();
     return;
@@ -127,7 +127,7 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
   if (!villageId) {
     next();
     return;

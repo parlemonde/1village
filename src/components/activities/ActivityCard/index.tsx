@@ -63,7 +63,7 @@ export const ActivityCard = ({
   if (!user) {
     return null;
   }
-  const userIsPelico = user.type >= UserType.MEDIATOR;
+  const userIsPelico = user.type <= UserType.MEDIATOR;
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 

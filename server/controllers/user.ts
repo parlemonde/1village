@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository, MoreThan } from 'typeorm';
+import { getRepository, LessThan } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
@@ -20,7 +20,7 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
   let users: User[] = [];
   if (req.query.villageId) {
     users = await getRepository(User).find({
-      where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null, type: MoreThan(`${UserType.TEACHER}`) }],
+      where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null, type: LessThan(`${UserType.TEACHER}`) }],
     });
     const ids = users.map((u) => u.id);
     const mascottes = (
@@ -51,7 +51,7 @@ userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -89,8 +89,10 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
-  pseudo: string;
-  countryCode: string;
+  pseudo?: string;
+  firstname?: string;
+  lastname?: string;
+  countryCode?: string;
   level?: string;
   school?: string;
   city?: string;
@@ -107,8 +109,10 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
   properties: {
     email: { type: 'string', format: 'email' },
-    pseudo: { type: 'string' },
-    countryCode: { type: 'string' },
+    pseudo: { type: 'string', nullable: true },
+    firstname: { type: 'string', nullable: true },
+    lastname: { type: 'string', nullable: true },
+    countryCode: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
     city: { type: 'string', nullable: true },
@@ -117,11 +121,15 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     avatar: { type: 'string', nullable: true },
     displayName: { type: 'string', nullable: true },
     password: { type: 'string', nullable: true },
-    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    type: {
+      type: 'number',
+      nullable: true,
+      enum: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR],
+    },
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
   },
-  required: ['email', 'pseudo'],
+  required: ['email'],
   additionalProperties: false,
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
@@ -137,7 +145,9 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
 
   const user = new User();
   user.email = data.email;
-  user.pseudo = data.pseudo;
+  user.pseudo = data.pseudo || '';
+  user.firstname = data.firstname || '';
+  user.lastname = data.lastname || '';
   user.level = data.level || '';
   user.school = data.school || '';
   user.address = data.address || '';
@@ -146,8 +156,8 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.avatar = data.avatar || null;
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
-  user.countryCode = data.countryCode;
-  if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
+  user.countryCode = data.countryCode || '';
+  if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, UserType.TEACHER);
   } else {
     user.type = UserType.TEACHER;
@@ -169,6 +179,8 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
 type EditUserData = {
   email?: string;
   pseudo?: string;
+  firstname?: string;
+  lastname?: string;
   countryCode?: string;
   level?: string;
   school?: string;
@@ -188,6 +200,8 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   properties: {
     email: { type: 'string', format: 'email', nullable: true },
     pseudo: { type: 'string', nullable: true },
+    firstname: { type: 'string', nullable: true },
+    lastname: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
@@ -196,7 +210,11 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     address: { type: 'string', nullable: true },
     avatar: { type: 'string', nullable: true },
     displayName: { type: 'string', nullable: true },
-    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    type: {
+      type: 'number',
+      nullable: true,
+      enum: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR],
+    },
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
@@ -219,7 +237,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -243,7 +261,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
-  if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
+  if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   }
@@ -305,7 +323,7 @@ userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: 
   const id = parseInt(req.params.id, 10) || 0;
   const user = await getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
     res.status(204).send();
     return;

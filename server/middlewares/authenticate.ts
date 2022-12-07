@@ -86,7 +86,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
         res.status(401).send('invalid access token');
         return;
       } // class: 0 < admin: 1 < superAdmin: 2
-      if (userType !== undefined && user !== undefined && user.type < userType) {
+      if (userType !== undefined && user !== undefined && user.type > userType) {
         res.status(403).send('Forbidden');
         return;
       }

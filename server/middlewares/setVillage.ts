@@ -9,7 +9,7 @@ export async function setVillage(req: Request, res: Response, next: NextFunction
   let villageId = -1;
   if (user && user.villageId) {
     villageId = user.villageId;
-  } else if (user && user.type > UserType.TEACHER) {
+  } else if (user && user.type !== UserType.TEACHER) {
     villageId = req.cookies?.['village-id'] || -1;
   }
   req.village =

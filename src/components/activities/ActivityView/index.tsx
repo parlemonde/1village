@@ -37,7 +37,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const isAnswer = activity && isEnigme(activity) && 'reponse' in router.query;
-  const isPelico = user !== null && user.type >= UserType.MEDIATOR;
+  const isPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   return (
     activity && (
