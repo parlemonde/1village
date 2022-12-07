@@ -1,6 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
+import type { FindOperator } from 'typeorm';
 import { MoreThan, IsNull } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
@@ -21,7 +22,13 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
   let users: User[] = [];
   if (req.query.villageId) {
     users = await AppDataSource.getRepository(User).find({
-      where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: IsNull(), type: MoreThan(UserType.TEACHER) }],
+      where: [
+        { villageId: Number(getQueryString(req.query.villageId)) || 0 },
+        // Fix for enums, they are stored as string in mySQL, so the comparison should be done with a string.
+        // But Typeorm expect a number...
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { villageId: IsNull(), type: MoreThan(`${UserType.TEACHER}`) as FindOperator<any> },
+      ],
     });
     const ids = users.map((u) => u.id);
     const mascottes = (
