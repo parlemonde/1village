@@ -1,12 +1,13 @@
 import type { JSONSchemaType } from 'ajv';
 import useragent from 'express-useragent';
-import { getRepository, Between } from 'typeorm';
+import { Between } from 'typeorm';
 
 import type { AnalyticData, NavigationPerf, BrowserPerf } from '../../types/analytics.type';
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
 import { generateTemporaryToken, getQueryString } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import { Controller } from './controller';
@@ -92,9 +93,9 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
   }
 
   // [1] get pageview and sessions.
-  const pageViews = await getRepository(AnalyticPageView).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
-  const allSessions = await getRepository(AnalyticSession).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
-  const allPerfs = await getRepository(AnalyticPerformance).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
+  const pageViews = await AppDataSource.getRepository(AnalyticPageView).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
+  const allSessions = await AppDataSource.getRepository(AnalyticSession).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
+  const allPerfs = await AppDataSource.getRepository(AnalyticPerformance).find({ where: { date: Between(from, to) }, order: { date: 'ASC' } });
   const allDurations = allSessions.filter((s) => s.duration !== null).map((s) => s.duration as number);
   const labels: number[] = [];
 
@@ -264,7 +265,7 @@ analyticController.router.post(
       }
 
       // Retrieve current user session or save the new one.
-      let sessionCount = await getRepository(AnalyticSession).count({ where: { id: data.sessionId } });
+      let sessionCount = await AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } });
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
         const session = new AnalyticSession();
         session.id = data.sessionId;
@@ -277,7 +278,7 @@ analyticController.router.post(
         session.width = data.width || 0;
         session.duration = null;
         session.initialPage = data.location;
-        await getRepository(AnalyticSession).save(session);
+        await AppDataSource.getRepository(AnalyticSession).save(session);
         sessionCount = 1;
       }
 
@@ -294,21 +295,21 @@ analyticController.router.post(
         pageView.date = new Date();
         pageView.page = data.location;
         pageView.referrer = data.referrer || null;
-        getRepository(AnalyticPageView).save(pageView).catch(); // no need to wait
+        AppDataSource.getRepository(AnalyticPageView).save(pageView).catch(); // no need to wait
       } else if (data.event === 'navigation-stats' && data.params && data.params.perf) {
         const pagePerf = new AnalyticPerformance();
         pagePerf.sessionId = data.sessionId;
         pagePerf.date = new Date();
         pagePerf.data = data.params.perf as unknown as NavigationPerf;
-        getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
+        AppDataSource.getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
       } else if (data.event === 'perf-stats' && data.params && data.params.perf) {
         const pagePerf = new AnalyticPerformance();
         pagePerf.sessionId = data.sessionId;
         pagePerf.date = new Date();
         pagePerf.data = data.params.perf as BrowserPerf;
-        getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
+        AppDataSource.getRepository(AnalyticPerformance).save(pagePerf).catch(); // no need to wait
       } else if (data.event === 'session' && data.params?.duration) {
-        getRepository(AnalyticSession).update({ id: data.sessionId }, { duration: data.params?.duration }).catch(); // no need to wait
+        AppDataSource.getRepository(AnalyticSession).update({ id: data.sessionId }, { duration: data.params?.duration }).catch(); // no need to wait
       }
     } catch (e) {
       logger.error(e);

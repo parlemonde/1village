@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from 'express';
-import { getRepository } from 'typeorm';
 
 import { ImageType } from '../../types/story.type';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { getQueryString } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
 const storyController = new Controller('/stories');
@@ -29,19 +29,19 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
   }
 
   const [objectImages, placeImages, oddImages] = await Promise.all([
-    getRepository(Image)
+    AppDataSource.getRepository(Image)
       .createQueryBuilder('image')
       .where('image.villageId = :villageId', { villageId })
       .andWhere('image.imageType = :type', { type: ImageType.OBJECT })
       .orderBy('RAND()')
       .getMany(),
-    getRepository(Image)
+    AppDataSource.getRepository(Image)
       .createQueryBuilder('image')
       .where('image.villageId = :villageId', { villageId })
       .andWhere('image.imageType = :type', { type: ImageType.PLACE })
       .orderBy('RAND()')
       .getMany(),
-    getRepository(Image)
+    AppDataSource.getRepository(Image)
       .createQueryBuilder('image')
       .where('image.villageId = :villageId', { villageId })
       .andWhere('image.imageType = :type', { type: ImageType.ODD })
@@ -62,12 +62,15 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
 
 storyController.delete({ path: '/:imageId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.imageId, 10);
-  const image = await getRepository(Image).findOne({ where: { id } });
+  const image = await AppDataSource.getRepository(Image).findOne({ where: { id } });
   const isAdmin = req.user && req.user.type >= UserType.ADMIN;
   if (image === undefined) {
     res.status(204).send();
     return;
-  } else isAdmin ? await getRepository(Image).delete({ id }) : await getRepository(Image).delete({ id, userId: req.user?.id ?? 0 });
+  } else
+    isAdmin
+      ? await AppDataSource.getRepository(Image).delete({ id })
+      : await AppDataSource.getRepository(Image).delete({ id, userId: req.user?.id ?? 0 });
   res.status(204).send();
 });
 
