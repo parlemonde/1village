@@ -167,7 +167,7 @@
     "three": "0.141.0",
     "three-conic-polygon-geometry": "^1.5.1",
     "troika-three-text": "^0.46.4",
-    "typeorm": "^0.2.41",
+    "typeorm": "^0.3.11",
     "uuid": "^8.3.2",
     "vimeo": "^2.1.1",
     "web-vitals": "^2.1.4",
