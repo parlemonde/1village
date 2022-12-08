@@ -1,6 +1,17 @@
+import path from 'path';
 import supertest from 'supertest';
+import { DataSource } from 'typeorm';
 
 import { getApp } from '../app';
+
+export const appDataSource = new DataSource({
+  type: 'sqlite',
+  database: ':memory:',
+  dropSchema: true,
+  entities: [path.join(__dirname, '../entities/*.js')],
+  synchronize: true,
+  logging: false,
+});
 
 /**
  * function to create a token for the use of PLM's api

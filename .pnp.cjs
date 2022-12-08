@@ -148,6 +148,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sass", "npm:1.53.0"],\
             ["sharp", "npm:0.30.7"],\
             ["sortablejs", "npm:1.15.0"],\
+            ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2"],\
             ["string-similarity", "npm:4.0.4"],\
             ["supertest", "npm:6.3.3"],\
             ["three", "npm:0.141.0"],\
@@ -285,6 +286,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sass", "npm:1.53.0"],\
             ["sharp", "npm:0.30.7"],\
             ["sortablejs", "npm:1.15.0"],\
+            ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2"],\
             ["string-similarity", "npm:4.0.4"],\
             ["supertest", "npm:6.3.3"],\
             ["three", "npm:0.141.0"],\
@@ -4331,6 +4333,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@mapbox/node-pre-gyp", [\
+        ["npm:1.0.10", {\
+          "packageLocation": "./.yarn/cache/@mapbox-node-pre-gyp-npm-1.0.10-1811160047-1a98db05d9.zip/node_modules/@mapbox/node-pre-gyp/",\
+          "packageDependencies": [\
+            ["@mapbox/node-pre-gyp", "npm:1.0.10"],\
+            ["detect-libc", "npm:2.0.1"],\
+            ["https-proxy-agent", "npm:5.0.0"],\
+            ["make-dir", "npm:3.1.0"],\
+            ["node-fetch", "virtual:7ef8e735579bc90514a76a01d20c7e4bad0199264ae1b9c6741cb9c534782e52ee1e790691603ec132756174d8766261ada111a64842daefd25955aad0f9f79c#npm:2.6.7"],\
+            ["nopt", "npm:5.0.0"],\
+            ["npmlog", "npm:5.0.1"],\
+            ["rimraf", "npm:3.0.2"],\
+            ["semver", "npm:7.3.5"],\
+            ["tar", "npm:6.1.11"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:1.0.9", {\
           "packageLocation": "./.yarn/cache/@mapbox-node-pre-gyp-npm-1.0.9-7ef8e73557-1b9c4c87a6.zip/node_modules/@mapbox/node-pre-gyp/",\
           "packageDependencies": [\
@@ -7294,6 +7312,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/are-we-there-yet-npm-2.0.0-7d2f5201ce-6c80b4fd04.zip/node_modules/are-we-there-yet/",\
           "packageDependencies": [\
             ["are-we-there-yet", "npm:2.0.0"],\
+            ["delegates", "npm:1.0.0"],\
+            ["readable-stream", "npm:3.6.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/are-we-there-yet-npm-3.0.1-3395b1512f-52590c2486.zip/node_modules/are-we-there-yet/",\
+          "packageDependencies": [\
+            ["are-we-there-yet", "npm:3.0.1"],\
             ["delegates", "npm:1.0.0"],\
             ["readable-stream", "npm:3.6.0"]\
           ],\
@@ -11237,6 +11264,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["wide-align", "npm:1.1.5"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:4.0.4", {\
+          "packageLocation": "./.yarn/cache/gauge-npm-4.0.4-8f878385e9-788b6bfe52.zip/node_modules/gauge/",\
+          "packageDependencies": [\
+            ["gauge", "npm:4.0.4"],\
+            ["aproba", "npm:2.0.0"],\
+            ["color-support", "npm:1.1.3"],\
+            ["console-control-strings", "npm:1.1.0"],\
+            ["has-unicode", "npm:2.0.1"],\
+            ["signal-exit", "npm:3.0.7"],\
+            ["string-width", "npm:4.2.3"],\
+            ["strip-ansi", "npm:6.0.1"],\
+            ["wide-align", "npm:1.1.5"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["generate-function", [\
@@ -14744,6 +14786,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["which", "npm:2.0.2"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:8.4.1", {\
+          "packageLocation": "./.yarn/unplugged/node-gyp-npm-8.4.1-13c90a9c9b/node_modules/node-gyp/",\
+          "packageDependencies": [\
+            ["node-gyp", "npm:8.4.1"],\
+            ["env-paths", "npm:2.2.1"],\
+            ["glob", "npm:7.2.0"],\
+            ["graceful-fs", "npm:4.2.8"],\
+            ["make-fetch-happen", "npm:9.1.0"],\
+            ["nopt", "npm:5.0.0"],\
+            ["npmlog", "npm:6.0.2"],\
+            ["rimraf", "npm:3.0.2"],\
+            ["semver", "npm:7.3.5"],\
+            ["tar", "npm:6.1.11"],\
+            ["which", "npm:2.0.2"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["node-int64", [\
@@ -14919,6 +14978,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["are-we-there-yet", "npm:2.0.0"],\
             ["console-control-strings", "npm:1.1.0"],\
             ["gauge", "npm:3.0.1"],\
+            ["set-blocking", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:6.0.2", {\
+          "packageLocation": "./.yarn/cache/npmlog-npm-6.0.2-e0e69455c7-ae238cd264.zip/node_modules/npmlog/",\
+          "packageDependencies": [\
+            ["npmlog", "npm:6.0.2"],\
+            ["are-we-there-yet", "npm:3.0.1"],\
+            ["console-control-strings", "npm:1.1.0"],\
+            ["gauge", "npm:4.0.4"],\
             ["set-blocking", "npm:2.0.0"]\
           ],\
           "linkType": "HARD"\
@@ -17111,6 +17181,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["sqlite3", [\
+        ["npm:5.1.2", {\
+          "packageLocation": "./.yarn/unplugged/sqlite3-virtual-fd3140b2a2/node_modules/sqlite3/",\
+          "packageDependencies": [\
+            ["sqlite3", "npm:5.1.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2", {\
+          "packageLocation": "./.yarn/unplugged/sqlite3-virtual-fd3140b2a2/node_modules/sqlite3/",\
+          "packageDependencies": [\
+            ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2"],\
+            ["@mapbox/node-pre-gyp", "npm:1.0.10"],\
+            ["@types/node-gyp", null],\
+            ["node-addon-api", "npm:4.3.0"],\
+            ["node-gyp", "npm:8.4.1"],\
+            ["tar", "npm:6.1.11"]\
+          ],\
+          "packagePeers": [\
+            "@types/node-gyp"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["sqlstring", [\
         ["npm:2.3.2", {\
           "packageLocation": "./.yarn/cache/sqlstring-npm-2.3.2-56762cd529-6d17a604dc.zip/node_modules/sqlstring/",\
@@ -18260,7 +18354,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["reflect-metadata", "npm:0.1.13"],\
             ["sha.js", "npm:2.4.11"],\
             ["sql.js", null],\
-            ["sqlite3", null],\
+            ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2"],\
             ["ts-node", null],\
             ["tslib", "npm:2.4.1"],\
             ["typeorm-aurora-data-api-driver", null],\

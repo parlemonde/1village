@@ -1,10 +1,8 @@
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import path from 'path';
 import supertest from 'supertest';
-import { createConnection, getConnection } from 'typeorm';
 
 import { getApp } from '../app';
-import { fakeUser, loginUser } from './mock';
+import { appDataSource, fakeUser, loginUser } from './mock';
 
 // Mock connection to database to avoid error message in console.
 jest.mock('../utils/database', () => ({
@@ -38,20 +36,12 @@ jest.mock('../authentication/login', () => ({
 
 describe('Story api test', () => {
   beforeAll(() => {
-    return createConnection({
-      type: 'sqlite',
-      database: ':memory:',
-      dropSchema: true,
-      entities: [path.join(__dirname, '../entities/*.js')],
-      synchronize: true,
-      logging: false,
-    });
+    return appDataSource.initialize();
   });
   afterAll(() => {
-    const conn = getConnection();
-    return conn.close();
+    // return conn.close();
+    return appDataSource.destroy();
   });
-
   describe('Images use in original stories', () => {
     const auth = { token: '' };
     beforeAll(async () => {
