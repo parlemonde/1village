@@ -97,10 +97,17 @@ const DefiStep2 = () => {
           </p>
           <div>
             {LANGUAGE_OBJECTS.map((l, index) => (
-              <ThemeChoiceButton key={index} label={l.title} onClick={onClick(index)} />
+              <ThemeChoiceButton
+                key={index}
+                label={l.title}
+                description={replaceTokens(l.desc1, {
+                  language: data.language && data.language.length > 0 ? data.language : "<langue choisie à l'étape 1>",
+                })}
+                onClick={onClick(index)}
+              />
             ))}
-          </div>
-          {/* <FormControl variant="outlined" style={{ width: '100%' }}>
+
+            {/* <FormControl variant="outlined" style={{ width: '100%' }}>
             <div
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
@@ -114,27 +121,34 @@ const DefiStep2 = () => {
               ))}
             </div>
           </FormControl> */}
-          {data.objectIndex !== -1 && (
-            <>
-              <p className="text" style={{ fontSize: '1.1rem' }}>
-                {/* if there is no language selected in the previous step: */}
-                {data.language === '' ? (
-                  <span style={{ color: warningColor, fontWeight: 'bold' }}>Veuillez choisir une langue à l&apos;étape 1.</span>
-                ) : (
-                  replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
-                    language: data.language,
-                  })
-                )}
-                Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
-              </p>
-              <ContentEditor
-                content={activity.content.slice(0, explanationContentIndex)}
-                updateContent={updateContent}
-                addContent={addDescriptionContent}
-                deleteContent={deleteDescriptionContent}
+          <ThemeChoiceButton
+              isOpen={otherOpen}
+              onClick={() => {
+                onObjectChange(!otherOpen);
+              }}
               />
-            </>
-          )}
+            {data.objectIndex !== -1 && (
+              <>
+                <p className="text" style={{ fontSize: '1.1rem' }}>
+                  {/* if there is no language selected in the previous step: */}
+                  {data.language === '' ? (
+                    <span style={{ color: warningColor, fontWeight: 'bold' }}>Veuillez choisir une langue à l&apos;étape 1.</span>
+                  ) : (
+                    replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
+                      language: data.language,
+                    })
+                  )}
+                  Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
+                </p>
+                <ContentEditor
+                  content={activity.content.slice(0, explanationContentIndex)}
+                  updateContent={updateContent}
+                  addContent={addDescriptionContent}
+                  deleteContent={deleteDescriptionContent}
+                />
+              </>
+            )}
+          </div>
           <StepsButton prev={`/lancer-un-defi/linguistique/1?edit=${activity?.id}`} next={onNext} />
         </div>
       </div>
