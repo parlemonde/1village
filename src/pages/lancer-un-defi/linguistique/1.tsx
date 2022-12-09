@@ -2,12 +2,27 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { FormControlLabel, Grid, Radio, RadioGroup, Select, Chip, NativeSelect, FormLabel, MenuItem, Box, Input, FormControl } from '@mui/material';
+import {
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Select,
+  Chip,
+  NativeSelect,
+  FormLabel,
+  MenuItem,
+  Box,
+  InputLabel,
+  FormControl,
+  Divider,
+} from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
+import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -131,13 +146,13 @@ const DefiStep1 = () => {
     router.push('/lancer-un-defi/linguistique/2');
   };
 
-  const setLanguage = (event: SelectChangeEvent<string>) => {
-    const languageCode = (event.target as HTMLInputElement).value;
+  const setLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const languageCode = (event.target as HTMLSelectElement).value;
     const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
     updateActivity({ data: { ...data, languageCode, language } });
   };
-  const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateActivity({ data: { ...data, languageIndex: parseInt((event.target as HTMLInputElement).value, 10) } });
+  const setLanguageIndex = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    updateActivity({ data: { ...data, languageIndex: parseInt((event.target as HTMLSelectElement).value, 10) } });
   };
 
   if (!activity) {
@@ -163,40 +178,49 @@ const DefiStep1 = () => {
           ]}
           activeStep={0}
         />
+        <div style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+          {user && <AvatarImg user={user} size="large" />}
+        </div>
+
         <div className="width-900">
           <h1>Choisissez dans quelle langue vous souhaitez lancer le défi</h1>
           <div>
             <Grid container spacing={2}>
               <Grid item xs={12} md={8}>
                 <p className="text">Vous pourrez ensuite choisir le thème de votre défi.</p>
-                <FormControl variant="outlined" style={{ width: '100%' }}>
+                <FormControl variant="outlined" className="full-width" style={{ width: '100%' }}>
+                  <InputLabel id="demo-simple-select">Langue</InputLabel>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     aria-label="gender"
                     name="gender1"
                     value={data.languageCode}
-                    onChange={setLanguage}
+                    onChange={(setLanguage: React.ChangeEvent<HTMLSelectElement>)}
+                    label="Langue"
                   >
                     <h1>Langues parlées par votre mascotte</h1>
                     {mascotteLanguages.map((l) => (
-                      <MenuItem key={l.value} value={l.value}></MenuItem>
+                      <MenuItem key={l.value} value={l.value} style={{ cursor: 'pointer' }}></MenuItem>
                     ))}
-
+                    <Divider />
                     <div style={{ display: 'flex', width: '100%' }}>
+                      <h1>Autres langues</h1>
+                      {languages.map((v) => (
+                        <MenuItem
+                          key={otherValue.toLowerCase()}
+                          value={otherValue.toLowerCase()}
+                          style={{ cursor: 'pointer' }}
+                          onChange={(v) => {
+                            setOtherValue(v);
+                            const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
+                            updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
+                          }}
+                        ></MenuItem>
+                      ))}
+                    </div>
+                    {/* <h1>Autres langues</h1>
                       <LanguageSelector
-                        // apiRef={apiRef}
-                        value={otherValue.toLowerCase()}
-                        label={<h1>Autres langues</h1>}
-                        style={{ flex: 1, minWidth: 0 }}
-                        onChange={(v) => {
-                          setOtherValue(v);
-                          const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
-                          updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
-                        }}
-                      />
-                      {/* <h1>Autres langues</h1> */}
-                      {/* <LanguageSelector
                       // multiple={false}
                       style={{ flex: 1, minWidth: 0 }}
                       label={<h1>Autres langues</h1>}
@@ -206,8 +230,7 @@ const DefiStep1 = () => {
                         const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
                         updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
                       }}
-                    /> */}
-                    </div>
+                    />  */}
                   </Select>
                 </FormControl>
               </Grid>
