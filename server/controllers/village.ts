@@ -1,12 +1,12 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 
 import { UserType } from '../entities/user';
 import { Village } from '../entities/village';
 import { createVillagesFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { valueOrDefault } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
@@ -14,7 +14,7 @@ const villageController = new Controller('/villages');
 
 //--- Get all villages ---
 villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
-  const villages = await getRepository(Village).find();
+  const villages = await AppDataSource.getRepository(Village).find();
   res.sendJSON(villages);
 });
 
@@ -25,7 +25,7 @@ villageController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: 
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const village = await getRepository(Village).findOne({ where: { id } });
+  const village = await AppDataSource.getRepository(Village).findOne({ where: { id } });
   if (!village || (req.user.type === UserType.TEACHER && req.user.villageId !== village.id)) {
     next();
     return;
@@ -57,7 +57,7 @@ villageController.post({ path: '', userType: UserType.ADMIN }, async (req: Reque
   const village = new Village();
   village.name = data.name;
   village.countryCodes = data.countries;
-  await getRepository(Village).save(village);
+  await AppDataSource.getRepository(Village).save(village);
   res.sendJSON(village);
 });
 
@@ -87,7 +87,7 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const village = await getRepository(Village).findOne({ where: { id } });
+  const village = await AppDataSource.getRepository(Village).findOne({ where: { id } });
   if (!village) {
     next();
     return;
@@ -98,14 +98,14 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
   village.activePhase = valueOrDefault(data.activePhase, village.activePhase);
   village.anthemId = valueOrDefault(data.anthemId, village.anthemId);
 
-  await getRepository(Village).save(village);
+  await AppDataSource.getRepository(Village).save(village);
   res.sendJSON(village);
 });
 
 //--- delete a village ---
 villageController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
-  await getRepository(Village).delete({ id });
+  await AppDataSource.getRepository(Village).delete({ id });
   res.status(204).send();
 });
 

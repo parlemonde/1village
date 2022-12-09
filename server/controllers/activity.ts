@@ -1,6 +1,6 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { IsNull } from 'typeorm';
 
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
@@ -14,6 +14,7 @@ import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { commentController } from './comment';
 import { Controller } from './controller';
@@ -38,7 +39,7 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
   if (ids.length === 0) {
     return {};
   }
-  const queryBuilder = await getRepository(Activity)
+  const queryBuilder = await AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .select('activity.id')
     .addSelect('IFNULL(`commentCount`, 0) + IFNULL(`activityCount`, 0)', 'comments')
@@ -84,7 +85,7 @@ const getActivities = async ({
   responseActivityId,
 }: ActivityGetter) => {
   // get ids
-  let subQueryBuilder = getRepository(Activity).createQueryBuilder('activity').where('activity.status = :status', { status });
+  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').where('activity.status = :status', { status });
   if (villageId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
   }
@@ -173,10 +174,10 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
 // --- Get one activity. ---
 activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({
+  const activity = await AppDataSource.getRepository(Activity).findOne({
     where: { id },
   });
-  if (activity === undefined) {
+  if (activity === null) {
     next();
     return;
   }
@@ -196,16 +197,16 @@ activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (re
     return;
   }
 
-  const search: { userId: number; villageId: number; type: string; status: string; subType?: number } = {
+  const search: { userId: number; villageId: number; type: number; status: number; subType?: number } = {
     userId: req.user?.id ?? 0,
     villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : 0,
-    type: `${req.query.type ? Number(getQueryString(req.query.type)) || 0 : 0}`,
-    status: `${ActivityStatus.DRAFT}`,
+    type: req.query.type ? Number(getQueryString(req.query.type)) || 0 : 0,
+    status: ActivityStatus.DRAFT,
   };
   if (req.query.subType !== undefined) {
     search.subType = req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : 0;
   }
-  const activity = await getRepository(Activity).findOne({
+  const activity = await AppDataSource.getRepository(Activity).findOne({
     where: search,
   });
   res.sendJSON({ draft: activity || null });
@@ -217,7 +218,7 @@ activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async 
     next();
     return;
   }
-  const activity = await getRepository(Activity).findOne({
+  const activity = await AppDataSource.getRepository(Activity).findOne({
     where: {
       userId: req.user.id,
       type: ActivityType.MASCOTTE,
@@ -319,11 +320,11 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 
   // Delete old draft if needed.
   if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
-    await getRepository(Activity).delete({
+    await AppDataSource.getRepository(Activity).delete({
       userId: req.user.id,
       villageId,
       type: data.type,
-      subType: data.subType ?? null,
+      subType: data.subType ?? IsNull(),
       status: ActivityStatus.DRAFT,
     });
   }
@@ -342,7 +343,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.isPinned = data.isPinned || false;
   activity.displayAsUser = data.displayAsUser || false;
 
-  await getRepository(Activity).save(activity);
+  await AppDataSource.getRepository(Activity).save(activity);
 
   res.sendJSON(activity);
 });
@@ -414,8 +415,8 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id } });
-  if (activity === undefined) {
+  const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+  if (activity === null) {
     next();
     return;
   }
@@ -461,7 +462,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       imagesData.odd.imageId = (await createStory(imagesData.odd, activity, ImageType.ODD, imagesData.odd.inspiredStoryId)).id;
     }
   }
-  await getRepository(Activity).save(activity);
+  await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
 
@@ -472,8 +473,8 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id } });
-  if (activity === undefined || activity.type !== ActivityType.QUESTION || activity.userId === user.id) {
+  const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+  if (activity === null || activity.type !== ActivityType.QUESTION || activity.userId === user.id) {
     next();
     return;
   }
@@ -488,28 +489,28 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   }
 
   activity.data.askSame = askSame.join(',');
-  await getRepository(Activity).save(activity);
+  await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
 
 // --- create a game ---
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
   const id = data.gameId;
-  const game = id ? await getRepository(Game).findOneOrFail({ where: { id: data.gameId } }) : new Game();
+  const game = id ? await AppDataSource.getRepository(Game).findOneOrFail({ where: { id: data.gameId || 0 } }) : new Game();
   delete data['gameId'];
   game.activityId = activity.id;
   game.villageId = activity.villageId;
   game.userId = activity.userId;
   game.type = activity.subType;
   game.content = JSON.stringify(data);
-  await getRepository(Game).save(game);
+  await AppDataSource.getRepository(Game).save(game);
   return game;
 };
 
 // --- create a image ---
 const createStory = async (data: StoryElement, activity: Activity, type: ImageType, inspiredStoryId: number = 0): Promise<Image> => {
   const id = data.imageId;
-  const storyImage = id ? await getRepository(Image).findOneOrFail({ where: { id: data.imageId } }) : new Image();
+  const storyImage = id ? await AppDataSource.getRepository(Image).findOneOrFail({ where: { id: data.imageId || 0 } }) : new Image();
   // delete data['imageId'];
   storyImage.activityId = activity.id;
   storyImage.villageId = activity.villageId;
@@ -517,15 +518,15 @@ const createStory = async (data: StoryElement, activity: Activity, type: ImageTy
   storyImage.imageType = type;
   storyImage.imageUrl = data.imageUrl;
   storyImage.inspiredStoryId = inspiredStoryId;
-  await getRepository(Image).save(storyImage);
+  await AppDataSource.getRepository(Image).save(storyImage);
   return storyImage;
 };
 
 // --- Delete an activity --- (Soft delete)
 activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const activity = await getRepository(Activity).findOne({ where: { id } });
-  if (activity === undefined || req.user === undefined) {
+  const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+  if (activity === null || req.user === undefined) {
     res.status(204).send();
     return;
   }
@@ -536,9 +537,9 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
 
   if (activity.status === ActivityStatus.DRAFT) {
     // No soft delete for drafts.
-    await getRepository(Activity).delete({ id });
+    await AppDataSource.getRepository(Activity).delete({ id });
   } else {
-    await getRepository(Activity).softDelete({ id });
+    await AppDataSource.getRepository(Activity).softDelete({ id });
   }
   res.status(204).send();
 });

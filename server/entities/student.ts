@@ -20,6 +20,9 @@ export class Student {
   @Column({ type: 'varchar', length: 255, nullable: true })
   public hashedCode: string;
 
+  @Column({ type: 'tinyint', nullable: true })
+  public numLinkedAccount: number;
+
   //classroom relation
   @ManyToOne(() => Classroom, (classroom) => classroom.students)
   @JoinColumn({ name: 'classroomId' })
