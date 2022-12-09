@@ -1,7 +1,7 @@
 export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound';
 export interface ActivityContent {
   id: number; // needed to sort content.
-  type: ActivityContentType;
+  type?: ActivityContentType | null;
   value: string;
 }
 

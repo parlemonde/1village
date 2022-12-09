@@ -1,5 +1,5 @@
 export interface EditorProps {
-  id: number;
+  id?: number | null;
   value?: string;
   onChange?(newValue: string): void;
   onDelete?(): void;
