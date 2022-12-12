@@ -1,3 +1,4 @@
+import { jsPDF } from 'jspdf';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -18,21 +19,25 @@ const Communication = () => {
   };
 
   const [textValue, setTextValue] = useState(
-    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français.\n1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant%\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\nBonne journée',
+    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée',
   );
   const [keywordPresence, setKeywordPresence] = useState(true);
-
-  const checkForStudentCode = (customText: string) => {
-    const codeString = '%identifiant%';
-    if (customText.split(/\s+|\./).filter((word) => word === codeString).length === 1) {
+  const textDefaultValue =
+    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée';
+  const doc = new jsPDF({
+    orientation: 'p',
+    unit: 'mm',
+    format: 'a4',
+    putOnlyUsedFonts: true,
+    floatPrecision: 16, // or "smart", default is 16
+  }).text(textDefaultValue, 10, 10);
+  useEffect(() => {
+    const keywordRegex = new RegExp(/%identifiant/gm);
+    if (textValue.match(keywordRegex)) {
       setKeywordPresence(true);
     } else {
       setKeywordPresence(false);
     }
-  };
-
-  useEffect(() => {
-    checkForStudentCode(textValue);
   }, [textValue]);
 
   return (
@@ -51,21 +56,32 @@ const Communication = () => {
             pouvez modifier, ou traduire dans une autre langue.
           </p>
           <p>
-            Comme vous pourrez le constater, ce texte contient le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant%</span> : vous devez
+            Comme vous pourrez le constater, ce texte contient le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> : vous devez
             le laisser sous ce format.{' '}
           </p>
           <p>
             Ainsi, vous pourrez générer autant de textes de présentation que d’élèves dans votre classe : à vous ensuite de les imprimer et les
-            transmettre aux familles. Dans chaque texte, le mot-variable %identifiant% aura été remplacé automatiquement par l’identifiant unique
-            généré à l’étape précédente.
+            transmettre aux familles. Dans chaque texte, le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> aura été remplacé
+            automatiquement par l’identifiant unique généré à l’étape précédente.
           </p>
-          <TextEditor inlineToolbar withBorder value={textValue} onChange={(value) => setTextValue(value)} />
-          <Button>Télécharger au format PDF</Button>
+          <TextEditor
+            inlineToolbar
+            error={false || !keywordPresence}
+            withBorder
+            value={textDefaultValue}
+            onChange={(value) => {
+              doc.text(textValue, 10, 10);
+              setTextValue(value);
+            }}
+          />
+          <Button variant="outlined">Télécharger au format PDF</Button>
           <Button
-            disabled={keywordPresence}
+            disabled={!keywordPresence}
             onClick={() => {
               console.log('si');
+              doc.save('identifiants-eleves.pdf');
             }}
+            variant="outlined"
           >
             Imprimer
           </Button>
