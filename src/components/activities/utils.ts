@@ -104,22 +104,22 @@ export const labels = {
   [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
 };
 
-const specificActivityPhase = {
-  [ActivityType.MASCOTTE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+export const specificActivityPhase = {
   [ActivityType.PRESENTATION]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
-  [ActivityType.DEFI]: [PhaseType.TWO],
-  [ActivityType.GAME]: [PhaseType.TWO],
   [ActivityType.ENIGME]: [PhaseType.TWO],
+  [ActivityType.DEFI]: [PhaseType.TWO],
   [ActivityType.QUESTION]: [PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.GAME]: [PhaseType.TWO],
   [ActivityType.CONTENU_LIBRE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.INDICE]: [PhaseType.ONE],
   [ActivityType.SYMBOL]: [PhaseType.ONE],
+  [ActivityType.MASCOTTE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.REPORTAGE]: [PhaseType.TWO],
   [ActivityType.REACTION]: [PhaseType.TWO],
-  [ActivityType.STORY]: [PhaseType.THREE],
-  [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
   [ActivityType.ANTHEM]: [],
   [ActivityType.VERSE_RECORD]: [PhaseType.THREE],
+  [ActivityType.STORY]: [PhaseType.THREE],
+  [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
 };
 export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {
   const availablePhases = specificActivityPhase[activityType] || [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE];
