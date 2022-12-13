@@ -1,11 +1,11 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
 
 import { getNewAccessToken } from '../authentication/lib/tokens';
 import type { UserType } from '../entities/user';
 import { User } from '../entities/user';
 import { getHeader } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 
 const secret: string = process.env.APP_SECRET || '';
 
@@ -81,16 +81,18 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       } else {
         data = decoded;
       }
-      const user = await getRepository(User).findOne({ where: { id: data.userId } });
+      const user = await AppDataSource.getRepository(User).findOne({ where: { id: data.userId } });
       if (user === undefined && userType !== undefined) {
         res.status(401).send('invalid access token');
         return;
       } // class: 0 < admin: 1 < superAdmin: 2
-      if (userType !== undefined && user !== undefined && user.type > userType) {
+      if (userType !== undefined && user !== null && user.type > userType) {
         res.status(403).send('Forbidden');
         return;
       }
-      req.user = user;
+      if (user !== null) {
+        req.user = user;
+      }
     } catch (_e) {
       if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
