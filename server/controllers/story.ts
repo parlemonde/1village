@@ -24,6 +24,9 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
   const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
 
   if (!villageId) {
+    if (villageId) {
+      return 'toto et tata';
+    }
     next();
     return;
   }
