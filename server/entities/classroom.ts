@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 import { Student } from './student';
@@ -24,13 +25,13 @@ export class Classroom {
   @Column({ nullable: true, default: null })
   public delayedDays: number;
 
-  @OneToOne(() => User, (user) => user.classroom)
-  public users: User;
+  @OneToOne(() => User)
+  public users: Relation<User>;
 
   @ManyToOne(() => Village, (village) => village.classrooms)
   @JoinColumn({ name: 'villageId' })
-  public village: Village;
+  public village: Relation<Village>;
 
   @OneToMany(() => Student, (student: Student) => student.classroom)
-  public students: Student;
+  public students: Relation<Student>[];
 }

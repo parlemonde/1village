@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
+  Relation,
 } from 'typeorm';
 
 import type { Game as GameInterface } from '../../types/game.type';
@@ -31,24 +32,24 @@ export class Game implements GameInterface {
 
   @ManyToOne(() => User, (user: User) => user.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  public user: User | null;
+  public user: Relation<User> | null;
   @Column({ nullable: false })
   public userId: number;
 
   @ManyToOne(() => Village, (village: Village) => village.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
+  public village: Relation<Village> | null;
   @Column({ nullable: false })
   public villageId: number;
 
   @ManyToOne(() => Activity, (activity: Activity) => activity.games, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })
-  public activity: Activity | null;
+  public activity: Relation<Activity> | null;
   @Column({ nullable: false })
   public activityId: number;
 
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.game)
-  public responses: GameResponse[];
+  public responses: Relation<GameResponse>[];
 
   @Column({ type: 'tinyint', nullable: true })
   public type: number | null;

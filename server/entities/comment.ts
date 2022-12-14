@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Relation } from 'typeorm';
 
 import type { Comment as CommentInterface } from '../../types/comment.type';
 import { Activity } from './activity';
@@ -12,12 +12,12 @@ export class Comment implements CommentInterface {
   // activity
   @ManyToOne(() => Activity, (activity: Activity) => activity.content, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })
-  public activity: Activity;
+  public activity: Relation<Activity>;
 
   // user relation
   @ManyToOne(() => User, (user: User) => user.activities, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  public user: User | null;
+  public user: Relation<User> | null;
 
   @Column({ nullable: false })
   public userId: number;

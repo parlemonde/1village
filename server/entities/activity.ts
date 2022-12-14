@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import {
   Column,
   Entity,
@@ -64,7 +65,7 @@ export class Activity implements ActivityInterface<AnyData> {
   // user relation
   @ManyToOne(() => User, (user: User) => user.activities, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  public user: User | null;
+  public user: Relation<User> | null;
 
   @Column({ nullable: false })
   public userId: number;
@@ -72,7 +73,7 @@ export class Activity implements ActivityInterface<AnyData> {
   // village relation
   @ManyToOne(() => Village, (village: Village) => village.activities, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
+  public village: Relation<Village> | null;
 
   @Column({ nullable: false })
   public villageId: number;
@@ -80,7 +81,7 @@ export class Activity implements ActivityInterface<AnyData> {
   // Answer other activity
   @ManyToOne(() => Activity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'responseActivityId' })
-  public responseActivity: Activity | null;
+  public responseActivity: Relation<Activity> | null;
 
   @Column({ nullable: true })
   public responseActivityId: number | null;
@@ -106,8 +107,8 @@ export class Activity implements ActivityInterface<AnyData> {
   public commentCount?: number;
 
   @OneToMany(() => Game, (game: Game) => game.activity)
-  public games: Game[];
+  public games: Relation<Game>[];
 
   @OneToMany(() => Image, (image: Image) => image.activity)
-  public images: Image[];
+  public images: Relation<Image>[];
 }

@@ -1,4 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  ManyToOne,
+  JoinColumn,
+  Relation,
+} from 'typeorm';
 
 import type { Image as ImageInterface } from '../../types/story.type';
 import { Activity } from './activity';
@@ -20,21 +30,21 @@ export class Image implements ImageInterface {
 
   @ManyToOne(() => User, (user: User) => user.images, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  public user: User | null;
+  public user: Relation<User> | null;
 
   @Column({ nullable: false })
   public userId: number;
 
   @ManyToOne(() => Village, (village: Village) => village.images, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
+  public village: Relation<Village> | null;
 
   @Column({ nullable: false })
   public villageId: number;
 
   @ManyToOne(() => Activity, (activity: Activity) => activity.images, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'activityId' })
-  public activity: Activity | null;
+  public activity: Relation<Activity> | null;
 
   @Column({ nullable: false })
   public activityId: number;

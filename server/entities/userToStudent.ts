@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 
 import { Student } from './student';
@@ -19,9 +20,9 @@ export class UserToStudent {
 
   @ManyToOne(() => User, (user) => user.userToStudents)
   @JoinColumn({ name: 'userId' })
-  public user!: User;
+  public user!: Relation<User>;
 
   @ManyToOne(() => Student, (student) => student.userToStudents)
   @JoinColumn({ name: 'studentId' })
-  public student!: Student;
+  public student!: Relation<Student>;
 }

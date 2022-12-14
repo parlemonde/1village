@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
@@ -41,26 +42,26 @@ export class Village implements VillageInterface {
 
   @OneToOne(() => Activity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'anthemId' })
-  public anthem: Activity | null;
+  public anthem: Relation<Activity> | null;
 
   @Column({ nullable: true })
   public anthemId: number | null;
 
   @OneToMany(() => User, (user: User) => user.village)
-  public users: User[];
+  public users: Relation<User>[];
 
   @OneToMany(() => Activity, (activity: Activity) => activity.village)
-  public activities: Activity[];
+  public activities: Relation<Activity>[];
 
   @OneToMany(() => Game, (game: Game) => game.village)
-  public games: Game[];
+  public games: Relation<Game>[];
 
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
-  public gameResponses: GameResponse[];
+  public gameResponses: Relation<GameResponse>[];
 
   @OneToMany(() => Image, (image: Image) => image.village)
-  public images: Image[];
+  public images: Relation<Image>[];
 
   @OneToMany(() => Classroom, (classroom: Classroom) => classroom.village)
-  public classrooms: Classroom[];
+  public classrooms: Relation<Classroom>[];
 }

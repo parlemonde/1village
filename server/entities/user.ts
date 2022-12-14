@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
@@ -73,7 +74,7 @@ export class User implements UserInterface {
 
   @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
+  public village: Relation<Village> | null;
 
   @Column({ nullable: true })
   public villageId: number | null;
@@ -121,23 +122,23 @@ export class User implements UserInterface {
   public hasAcceptedNewsletter?: boolean;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
-  public activities: Activity[];
+  public activities: Relation<Activity>[];
 
   @OneToMany(() => Game, (game: Game) => game.user)
-  public games: Game[];
+  public games: Relation<Game>[];
 
   @OneToMany(() => GameResponse, (gameResponse: GameResponse) => gameResponse.user)
-  public gameResponses: GameResponse[];
+  public gameResponses: Relation<GameResponse>[];
 
   @OneToMany(() => Image, (image: Image) => image.user)
-  public images: Image[];
+  public images: Relation<Image>[];
 
   public mascotteId?: number;
 
   @OneToOne(() => Classroom)
   @JoinColumn()
-  classroom: Classroom | null;
+  classroom: Relation<Classroom> | null;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
-  public userToStudents!: UserToStudent[];
+  public userToStudents!: Relation<UserToStudent>[];
 }

@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 
 import { Classroom } from './classroom';
@@ -26,8 +27,8 @@ export class Student {
   //classroom relation
   @ManyToOne(() => Classroom, (classroom) => classroom.students)
   @JoinColumn({ name: 'classroomId' })
-  classroom: Classroom | null;
+  classroom: Relation<Classroom> | null;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.student)
-  public userToStudents: UserToStudent[] | null;
+  public userToStudents: Relation<UserToStudent>[] | null;
 }

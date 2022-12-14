@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Column, Entity, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 import type {
@@ -48,7 +49,7 @@ export class AnalyticPageView implements AnalyticPageViewInteface {
 
   @ManyToOne(() => AnalyticSession, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sessionId' })
-  public session: AnalyticSession;
+  public session: Relation<AnalyticSession>;
 
   @Column({ type: 'varchar', length: 36, nullable: false })
   public sessionId: string;
@@ -70,7 +71,7 @@ export class AnalyticPerformance implements AnalyticPerformanceInterface {
 
   @ManyToOne(() => AnalyticSession, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sessionId' })
-  public session: AnalyticSession;
+  public session: Relation<AnalyticSession>;
 
   @Column({ type: 'varchar', length: 36, nullable: false })
   public sessionId: string;

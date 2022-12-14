@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 
 import type { Video as VideoInterface } from '../../types/video.type';
@@ -14,7 +15,7 @@ export class Video implements VideoInterface {
   // user relation
   @ManyToOne(() => User, (user: User) => user.activities, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  public user: User | null;
+  public user: Relation<User> | null;
 
   @Column({ nullable: false })
   public userId: number;
