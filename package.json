@@ -19,9 +19,9 @@
     "start": "yarn migration:run && NODE_ENV=production node dist/server/start.js",
     "dev": "yarn nodemon",
     "dev-staging": "NODE_USE_STAGING=true yarn nodemon",
-    "migration:create": "cd server && mkdir migrations && cd migrations && yarn typeorm migration:create",
+    "migration:create": "cd server && mkdir -p migrations && cd migrations && yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
-    "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js"
+    "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true"
   },
   "jest": {
     "testEnvironment": "node",
