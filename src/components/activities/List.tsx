@@ -9,6 +9,7 @@ import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
+import EyeVisibility from 'src/svg/eye-visibility.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import type { Activity } from 'types/activity.type';
 
@@ -16,10 +17,12 @@ interface ActivitiesProps {
   activities: Activity[];
   withLinks?: boolean;
   noButtons?: boolean;
+  withEye?: boolean;
   onSelect?: (index: number) => void;
+  handleClick?: (event: Event) => void;
 }
 
-export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
+export const Activities = ({ activities, noButtons = false, withLinks = false, withEye = false, onSelect, handleClick }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState<{
     selectedActivityId: number | null;
     responseActivityId?: number | null;
@@ -135,6 +138,17 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
                   </div>
                 </div>
               </div>
+            );
+          }
+          if (withEye) {
+            return (
+              // TODO : faire un mini compososant 
+              // <Button key={activity.id} onClick={(e) => console.log(key)}>
+              //   {/* <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}> */}
+              //   <EyeVisibility style={{ width: '10%', height: 'auto' }} />
+              //   <div style={{ width: '80%' }}>{card}</div>
+              //   {/* </div> */}
+              // </Button>
             );
           }
           return card;

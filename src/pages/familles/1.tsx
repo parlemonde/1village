@@ -4,8 +4,12 @@ import React, { useRef } from 'react';
 import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
 import { Base } from 'src/components/Base';
+import OverflowContainer from 'src/components/OverflowContainer';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { Activities } from 'src/components/activities/List';
+import { VillageContext } from 'src/contexts/villageContext';
+import { useActivities } from 'src/services/useActivities';
 
 type Props = {
   text1: string;
@@ -60,12 +64,26 @@ const ClassroomParamStep1 = () => {
   const [isDisabled, setIsDisabled] = React.useState(true);
   const radioSelectedRef = useRef('default');
 
+  const { village } = React.useContext(VillageContext);
+  const { activities } = useActivities({
+    limit: 300,
+    page: 0,
+    countries: village?.countries.reduce((list, countrie) => {
+      const { isoCode } = countrie;
+      list.push(isoCode);
+      return list;
+    }, new Array<string>()),
+  });
+
   const handleDaysDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDaysDelay(Number((event.target as HTMLInputElement).value));
   };
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     radioSelectedRef.current = event.target.value;
+  };
+  const handleClick = (event: Event) => {
+    const target = event.target as HTMLButtonElement;
+    if (target) console.log(target.value);
   };
   const toggle = (bool: boolean) => {
     setIsDisabled(bool);
@@ -81,13 +99,14 @@ const ClassroomParamStep1 = () => {
         urls={['/familles/1?edit', '/familles/2', '/familles/3', 'familles/4']}
         activeStep={0}
       />
+
+      {/* Main  */}
       <div className="width-900">
         <h1>Choisissez ce que voient les familles</h1>
         <p className="text">
           Vous allez inviter les familles de vos élèves à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en ligne.
           Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 4 options :
         </p>
-        {/* <RadioGroup aria-label="visibility" value={radioSelectedRef} onChange={handleRadioSelect}> */}
         <RadioGroup aria-label="visibility" onChange={handleRadioSelect} defaultValue={radioSelectedRef.current}>
           <FormControlLabel
             value="default"
@@ -115,7 +134,12 @@ const ClassroomParamStep1 = () => {
           />
         </RadioGroup>
         <StepsButton next={onNext} />
+
+        {/* Activity Container */}
         <p className="text">Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.</p>
+        <OverflowContainer>
+          <Activities activities={activities} handleClick={handleClick} withEye />
+        </OverflowContainer>
       </div>
     </Base>
   );
