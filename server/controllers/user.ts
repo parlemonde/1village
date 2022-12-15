@@ -110,6 +110,7 @@ type CreateUserData = {
   type?: UserType;
   villageId?: number;
   firstLogin?: number;
+  language?: string;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -128,6 +129,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
+    language: { type: 'string', nullable: true },
   },
   required: ['email', 'pseudo'],
   additionalProperties: false,
@@ -154,6 +156,7 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.avatar = data.avatar || null;
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
+  user.language = data.language || null;
   user.countryCode = data.countryCode;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, UserType.TEACHER);
@@ -190,6 +193,7 @@ type EditUserData = {
   accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
+  language?: string;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
@@ -218,6 +222,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
       required: ['lat', 'lng'],
       additionalProperties: false,
     },
+    language: { type: 'string', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -251,6 +256,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
+  user.language = valueOrDefault(data.language, user.language) || null;
   if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);

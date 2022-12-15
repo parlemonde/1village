@@ -38,6 +38,10 @@ export const Header = () => {
     setAnchorEl(null);
     router.push('/mes-videos');
   };
+  const goToFamilies = () => {
+    setAnchorEl(null);
+    router.push('/mes-familles');
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -105,6 +109,7 @@ export const Header = () => {
               >
                 <MenuItem onClick={goToAccount}>Mon compte</MenuItem>
                 <MenuItem onClick={goToVideos}>Mes vidéos</MenuItem>
+                <MenuItem onClick={goToFamilies}>Mes familles</MenuItem>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>
