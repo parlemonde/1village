@@ -1,7 +1,6 @@
+import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';

@@ -1,11 +1,10 @@
-import Link from 'next/link';
-import React from 'react';
-
 import { Button } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Link from 'next/link';
+import React from 'react';
 
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 

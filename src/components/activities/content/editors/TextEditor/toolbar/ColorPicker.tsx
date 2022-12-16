@@ -1,10 +1,9 @@
-import React from 'react';
-
 import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import React from 'react';
 
 const colors = [
   'rgb(46, 52, 59)',
