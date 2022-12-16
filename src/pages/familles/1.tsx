@@ -1,15 +1,18 @@
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 
-import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { Activities } from 'src/components/activities/List';
+import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
+import { useVillageUsers } from 'src/services/useVillageUsers';
+import EyeVisibility from 'src/svg/eye-visibility.svg';
 
 type Props = {
   text1: string;
@@ -75,6 +78,17 @@ const ClassroomParamStep1 = () => {
     }, new Array<string>()),
   });
 
+  const { user } = React.useContext(UserContext);
+  const { users } = useVillageUsers();
+  const userMap = React.useMemo(
+    () =>
+      users.reduce<{ [key: number]: number }>((acc, u, index) => {
+        acc[u.id] = index;
+        return acc;
+      }, {}),
+    [users],
+  );
+
   const handleDaysDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDaysDelay(Number((event.target as HTMLInputElement).value));
   };
@@ -138,7 +152,23 @@ const ClassroomParamStep1 = () => {
         {/* Activity Container */}
         <p className="text">Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.</p>
         <OverflowContainer>
-          <Activities activities={activities} handleClick={handleClick} withEye />
+          {activities.map((activity) => (
+            <Button
+              key={activity.id}
+              sx={{ display: 'flex', gap: '2rem', justifyContent: 'space-around', width: '100%' }}
+              onClick={() => console.log(activity)}
+            >
+              <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+              <div style={{ width: '100%' }}>
+                <ActivityCard
+                  activity={activity}
+                  isSelf={user !== null && activity.userId === user.id}
+                  user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
+                  noButtons={true}
+                />
+              </div>
+            </Button>
+          ))}
         </OverflowContainer>
       </div>
     </Base>
