@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
+import React from 'react';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic } from 'src/activity-types/game.constants';

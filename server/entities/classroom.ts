@@ -27,10 +27,10 @@ export class Classroom {
   @OneToOne(() => User, (user) => user.classroom)
   public users: User;
 
-  @ManyToOne(() => Village, (village) => village.classrooms)
+  @ManyToOne(() => Village, (village: Village) => village.classrooms)
   @JoinColumn({ name: 'villageId' })
   public village: Village;
 
   @OneToMany(() => Student, (student: Student) => student.classroom)
-  public students: Student;
+  public students: Student[];
 }

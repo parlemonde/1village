@@ -34,7 +34,7 @@ teacherController.delete({ path: '/detach/:id', userType: UserType.TEACHER }, as
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const userId = parseInt(req.params.id, 10) || 0;
-  const studentId = req.params.studentId;
+  const studentId = parseInt(req.params.studentId);
   const student = await getRepository(UserToStudent).find({ where: { userId: userId, studentId: studentId } });
   if (!student) return res.status(204).send();
   await createQueryBuilder('UserToStudent').delete().from(UserToStudent).where({ userId: userId, studentId: studentId }).execute();

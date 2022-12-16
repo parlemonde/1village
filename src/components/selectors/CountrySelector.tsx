@@ -1,8 +1,7 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import React from 'react';
 
 import { useCountries } from 'src/services/useCountries';
 import { countryToFlag } from 'src/utils';
