@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, Select, MenuItem } from '@mui/material';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
