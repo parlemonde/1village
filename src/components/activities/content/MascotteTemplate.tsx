@@ -1,8 +1,7 @@
-import Link from 'next/link';
-import React from 'react';
-
 import { Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
+import Link from 'next/link';
+import React from 'react';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserDisplayName } from 'src/components/UserDisplayName';

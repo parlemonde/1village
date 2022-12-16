@@ -34,6 +34,17 @@ async function createMySQLDB(): Promise<void> {
   }
 }
 
+async function createTablesIfNotExist(): Promise<void> {
+  const query: Array<{ count: number }> = await AppDataSource.query(
+    `SELECT COUNT(*) as count FROM INFORMATION_SCHEMA.tables WHERE TABLE_SCHEMA = ?`,
+    [process.env.DB_NAME || DEFAULT_NAME],
+  );
+  // There could be the migrations table already
+  if (query.length === 1 && query[0].count < 2) {
+    await AppDataSource.synchronize();
+  }
+}
+
 async function createSuperAdminUser(): Promise<void> {
   if (!process.env.ADMIN_PSEUDO || !process.env.ADMIN_PASSWORD) {
     return;
@@ -65,15 +76,17 @@ export async function connectToDatabase(tries: number = 10): Promise<boolean> {
   }
   try {
     await AppDataSource.initialize();
+    await createTablesIfNotExist();
     await createSuperAdminUser();
     return true;
   } catch (e) {
-    logger.error(e);
-    logger.info('Could not connect to database. Retry in 10 seconds...');
     if (((e as Error) || '').toString().includes('Unknown database')) {
       await createMySQLDB();
+    } else {
+      logger.error(e);
+      logger.info('Could not connect to database. Retry in 10 seconds...');
+      await sleep(10000);
     }
-    await sleep(10000);
     return connectToDatabase(tries - 1);
   }
 }
