@@ -24,10 +24,10 @@ export class Student {
   public numLinkedAccount: number;
 
   //classroom relation
-  @ManyToOne(() => Classroom, (classroom) => classroom.students)
+  @ManyToOne(() => Classroom, (classroom: Classroom) => classroom.students)
   @JoinColumn({ name: 'classroomId' })
-  classroom: Classroom | null;
+  public classroom: Classroom | null;
 
-  @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.student)
+  @OneToMany(() => UserToStudent, (userToStudent: UserToStudent) => userToStudent.student)
   public userToStudents: UserToStudent[] | null;
 }

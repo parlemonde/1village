@@ -105,14 +105,17 @@ export class User implements UserInterface {
 
   public position: { lat: number; lng: number };
 
-  @Column({ type: 'varchar', length: 400, nullable: true, default: null })
-  public language?: string | null;
+  // @Column({
+  //   type: 'boolean',
+  //   default: false,
+  // })
+  // public hasAcceptedNewsletter?: boolean;
 
-  @Column({
-    type: 'boolean',
-    default: false,
-  })
-  public hasAcceptedNewsletter?: boolean;
+  // @Column({ type: 'varchar', length: 400, nullable: true, default: null })
+  // public language: string | null;
+
+  @Column({ nullable: true })
+  public classroomId: number | null;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
@@ -129,8 +132,7 @@ export class User implements UserInterface {
   public mascotteId?: number;
 
   @OneToOne(() => Classroom)
-  @JoinColumn()
-  classroom: Classroom | null;
+  public classroom: Classroom | null;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
   public userToStudents!: UserToStudent[];
