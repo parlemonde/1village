@@ -103,6 +103,12 @@ export class Activity implements ActivityInterface<AnyData> {
   })
   public displayAsUser?: boolean;
 
+  @Column({
+    type: 'boolean',
+    default: true,
+  })
+  public isVisibleToParent?: boolean;
+
   public commentCount?: number;
 
   @OneToMany(() => Game, (game: Game) => game.activity)
