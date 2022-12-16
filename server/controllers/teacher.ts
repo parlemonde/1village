@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
-import { createQueryBuilder, getRepository } from 'typeorm';
 
 import { UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { AppDataSource } from '../utils/data-source';
 import { inviteCodeGenerator } from '../utils/inviteCodeGenerator';
 import { Controller } from './controller';
 
@@ -35,8 +35,13 @@ teacherController.delete({ path: '/detach/:id', userType: UserType.TEACHER }, as
   }
   const userId = parseInt(req.params.id, 10) || 0;
   const studentId = parseInt(req.params.studentId);
-  const student = await getRepository(UserToStudent).find({ where: { userId: userId, studentId: studentId } });
+  const student = await AppDataSource.getRepository(UserToStudent).find({ where: { userId: userId, studentId: studentId } });
   if (!student) return res.status(204).send();
-  await createQueryBuilder('UserToStudent').delete().from(UserToStudent).where({ userId: userId, studentId: studentId }).execute();
+  await AppDataSource.getRepository(UserToStudent)
+    .createQueryBuilder('UserToStudent')
+    .delete()
+    .from(UserToStudent)
+    .where({ userId: userId, studentId: studentId })
+    .execute();
   res.status(204).send();
 });
