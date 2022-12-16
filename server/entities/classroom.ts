@@ -28,7 +28,7 @@ export class Classroom {
   @OneToOne(() => User)
   public users: Relation<User>;
 
-  @ManyToOne(() => Village, (village) => village.classrooms)
+  @ManyToOne(() => Village, (village: Village) => village.classrooms)
   @JoinColumn({ name: 'villageId' })
   public village: Relation<Village>;
 

@@ -19,28 +19,32 @@
     "start": "yarn migration:run && NODE_ENV=production node dist/server/start.js",
     "dev": "yarn nodemon",
     "dev-staging": "NODE_USE_STAGING=true yarn nodemon",
-    "migration:create": "cd server && mkdir migrations && cd migrations && yarn typeorm migration:create",
+    "migration:create": "cd server && mkdir -p migrations && cd migrations && yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
-    "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js"
+    "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true"
   },
   "jest": {
     "testEnvironment": "node",
     "verbose": true,
     "forceExit": true,
+    "testMatch": [
+      "**/**/*.test.t(s|sx)"
+    ],
+    "moduleDirectories": [
+      "<rootDir>",
+      "types",
+      "node_modules"
+    ],
     "roots": [
       "<rootDir>/src/",
       "<rootDir>/src/svg",
-      "<rootDir>/server/",
-      "<rootDir>/types/"
+      "<rootDir>/server/"
     ],
     "transform": {
       "^.+\\.(t|j)sx?$": "@swc/jest"
     },
     "moduleNameMapper": {
-      "\\.svg": "<rootDir>/__mocks__/svg.js",
-      "types/(.*)$": "<rootDir>/types/$1",
-      "server/(.*)$": "<rootDir>/server/$1",
-      "src/(.*)$": "<rootDir>/src/$1"
+      "\\.svg": "<rootDir>/__mocks__/svg.js"
     }
   },
   "resolutions": {
@@ -83,6 +87,7 @@
     "@types/sharp": "0.30.4",
     "@types/sortablejs": "1.13.0",
     "@types/string-similarity": "4.0.0",
+    "@types/supertest": "^2.0.12",
     "@types/three": "0.141.0",
     "@types/uuid": "8.3.4",
     "@types/vimeo": "2.1.4",
@@ -103,6 +108,8 @@
     "jest": "28.1.1",
     "nodemon": "^2.0.20",
     "prettier": "2.7.1",
+    "sqlite3": "^5.1.2",
+    "supertest": "^6.3.3",
     "typescript": "4.7.4",
     "webpack": "5.73.0",
     "webpack-bundle-analyzer": "4.5.0"
