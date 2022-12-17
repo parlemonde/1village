@@ -124,7 +124,7 @@ export const specificActivityPhase = {
   [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
 };
 export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {
-  const availablePhases = specificActivityPhase[activityType] || [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE];
+  const availablePhases = specificActivityPhase[activityType];
   //Anthem case
   if (availablePhases.length === 0) {
     return activePhase;
