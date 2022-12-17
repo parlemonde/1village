@@ -133,11 +133,7 @@ export const getActivityPhase = (activityType: number, activePhase: number, sele
   if (availablePhases.includes(selectedPhase) && selectedPhase <= activePhase) {
     return selectedPhase;
   }
-  //default value in any other case : old logic keeped here
-  // return availablePhases
-  //   .filter((p) => p <= activePhase)
-  //   .concat([1])
-  //   .sort((a, b) => b - a)[0];
+
   return fail('Not possible!');
 };
 

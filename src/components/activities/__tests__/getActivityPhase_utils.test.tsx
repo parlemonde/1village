@@ -1,6 +1,5 @@
 import { specificActivityPhase, getActivityPhase } from '../utils';
 import { ActivityType } from 'types/activity.type';
-import { PhaseType } from 'types/phase.type';
 
 //TODO: tester uniquement si les activités sont dans les bonnes phases
 describe('Test function getActivityPhase', () => {
