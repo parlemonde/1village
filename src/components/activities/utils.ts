@@ -1,3 +1,5 @@
+import { NeverDepth } from 'three';
+
 import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
@@ -132,8 +134,13 @@ export const getActivityPhase = (activityType: number, activePhase: number, sele
     return selectedPhase;
   }
   //default value in any other case : old logic keeped here
-  return availablePhases
-    .filter((p) => p <= activePhase)
-    .concat([1])
-    .sort((a, b) => b - a)[0];
+  // return availablePhases
+  //   .filter((p) => p <= activePhase)
+  //   .concat([1])
+  //   .sort((a, b) => b - a)[0];
+  return fail('Not possible!');
 };
+
+function fail(message: string): never {
+  throw new Error(message);
+}
