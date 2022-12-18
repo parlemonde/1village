@@ -1,7 +1,6 @@
+import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
-
-import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
@@ -78,7 +77,7 @@ const ClassroomParamStep1 = () => {
     }, new Array<string>()),
   });
 
-  const { user } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { users } = useVillageUsers();
   const userMap = React.useMemo(
     () =>
@@ -95,9 +94,13 @@ const ClassroomParamStep1 = () => {
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     radioSelectedRef.current = event.target.value;
   };
-  const handleClick = (event: Event) => {
-    const target = event.target as HTMLButtonElement;
-    if (target) console.log(target.value);
+  const handleClick = (id: number) => {
+    // const target = event.target as HTMLButtonElement;
+    // if (target) console.log(target.value);
+    axiosLoggedRequest({
+      method: 'PUT',
+      url: `/teachers/set-activity-visibility${id}`,
+    });
   };
   const toggle = (bool: boolean) => {
     setIsDisabled(bool);
@@ -156,7 +159,7 @@ const ClassroomParamStep1 = () => {
             <Button
               key={activity.id}
               sx={{ display: 'flex', gap: '2rem', justifyContent: 'space-around', width: '100%' }}
-              onClick={() => console.log(activity)}
+              onClick={() => handleClick()}
             >
               <EyeVisibility style={{ width: '8%', height: 'auto' }} />
               <div style={{ width: '100%' }}>

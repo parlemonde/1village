@@ -1,10 +1,13 @@
-import type { Request, Response } from 'express';
+// import type { JSONSchemaType } from 'ajv';
+import type { NextFunction, Request, Response } from 'express';
 
+import { Activity } from '../entities/activity';
 import { UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { inviteCodeGenerator } from '../utils/inviteCodeGenerator';
+// import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
 export const teacherController = new Controller('/teachers');
@@ -22,6 +25,55 @@ teacherController.get({ path: '/invite', userType: UserType.TEACHER }, async (re
   const inviteCode = inviteCodeGenerator(10);
   res.json({ inviteCode: inviteCode });
 });
+
+// type UpdateActivityVisibilityData = {
+//   isVisible: boolean;
+// };
+
+// const updateActivityVisibilityValidator = ajv.compile({
+//   type: 'object',
+//   properties: {
+//     isVisible: { type: 'boolean', nullable: false },
+//   },
+//   required: ['isVisible'],
+//   additionalProperties: false,
+// } as JSONSchemaType<UpdateActivityVisibilityData>);
+
+/**
+ * Endpoint to create a unique invite code for a teacher
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @return {string} JSON Response invite code
+ */
+teacherController.put(
+  { path: '/set-activity-visibility/:id', userType: UserType.TEACHER },
+  async (req: Request, res: Response, next: NextFunction) => {
+    // const data = req.body;
+    // if (!updateActivityVisibilityValidator(data)) {
+    //   sendInvalidDataError(updateActivityVisibilityValidator);
+    // }
+    if (!req.user) {
+      throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+    }
+    //Doc : https://orkhan.gitbook.io/typeorm/docs/update-query-builder
+    const activityId = parseInt(req.params.id, 10) || 0;
+    // const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
+    const activity = await AppDataSource.getRepository(Activity)
+      .createQueryBuilder('activity')
+      .select('activity.isVisibleToParent')
+      .where('id = :id', { id: activityId })
+      .execute();
+
+    if (!activity) return next();
+
+    await AppDataSource.createQueryBuilder()
+      .update(Activity)
+      .set({ isVisibleToParent: !activity.isVisibleToParent })
+      .where('id = :id', { id: activityId })
+      .execute();
+    res.status(204).send();
+  },
+);
 
 /**
  * Endpoint to delete a student's parent attach to the profil for the teacher and his classroom
