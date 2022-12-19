@@ -9,7 +9,6 @@ export class ActivityVisibilityAttribut1671183969283 implements MigrationInterfa
       new TableColumn({
         name: 'isVisibleToParent',
         type: 'tinyint',
-        isNullable: true,
         default: '1',
       }),
     );
