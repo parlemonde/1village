@@ -13,7 +13,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 
-type Props = {
+type TextInputContainerProps = {
   text1: string;
   text2?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +26,7 @@ type Props = {
  * @param value value of the input
  * @param object text object containing text to display
  */
-const TextnInputContainer = ({ onChange, value, ...props }: Props) => {
+const TextnInputContainer = ({ onChange, value, ...props }: TextInputContainerProps) => {
   const { text1, text2 } = props;
   const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
   return (
@@ -67,7 +67,7 @@ const ClassroomParamStep1 = () => {
   const radioSelectedRef = useRef('default');
 
   const { village } = React.useContext(VillageContext);
-  const { activities } = useActivities({
+  const { activities, refetch } = useActivities({
     limit: 300,
     page: 0,
     countries: village?.countries.reduce((list, countrie) => {
@@ -87,7 +87,6 @@ const ClassroomParamStep1 = () => {
       }, {}),
     [users],
   );
-
   const handleDaysDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDaysDelay(Number((event.target as HTMLInputElement).value));
   };
@@ -95,11 +94,11 @@ const ClassroomParamStep1 = () => {
     radioSelectedRef.current = event.target.value;
   };
   const handleClick = (id: number) => {
-    // const target = event.target as HTMLButtonElement;
-    // if (target) console.log(target.value);
     axiosLoggedRequest({
       method: 'PUT',
-      url: `/teachers/set-activity-visibility${id}`,
+      url: `/teachers/set-activity-visibility/${id}`,
+    }).then(() => {
+      refetch();
     });
   };
   const toggle = (bool: boolean) => {
@@ -158,8 +157,17 @@ const ClassroomParamStep1 = () => {
           {activities.map((activity) => (
             <Button
               key={activity.id}
-              sx={{ display: 'flex', gap: '2rem', justifyContent: 'space-around', width: '100%' }}
-              onClick={() => handleClick()}
+              sx={{
+                display: 'flex',
+                gap: '2rem',
+                justifyContent: 'space-around',
+                width: '95%',
+                padding: '0 1rem',
+                marginBottom: '1rem',
+                filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
+                backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.04)',
+              }}
+              onClick={() => handleClick(activity.id)}
             >
               <EyeVisibility style={{ width: '8%', height: 'auto' }} />
               <div style={{ width: '100%' }}>
