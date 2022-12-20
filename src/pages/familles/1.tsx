@@ -6,50 +6,15 @@ import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import type { FilterArgs } from 'src/components/accueil/Filters';
+import { Filters } from 'src/components/accueil/Filters';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
+import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
-
-type TextInputContainerProps = {
-  text1: string;
-  text2?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value: number;
-};
-
-/**
- * Container to display text and input inline
- * @param onChange function to handle changes
- * @param value value of the input
- * @param object text object containing text to display
- */
-const TextnInputContainer = ({ onChange, value, ...props }: TextInputContainerProps) => {
-  const { text1, text2 } = props;
-  const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
-  return (
-    <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start' }}>
-      <span style={spanStyle}>{text1}</span>
-      <TextField
-        className="textnInputContainer__textfield"
-        variant="standard"
-        type="number"
-        inputProps={{ min: 0 }}
-        // onFocus={onFocusInput('totalStudent')}
-        size="small"
-        value={value}
-        onChange={onChange}
-        sx={{
-          width: '2rem',
-          marginRight: '5px',
-        }}
-      />
-      <span style={spanStyle}>{text2}</span>
-    </div>
-  );
-};
 
 const content1 = {
   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
@@ -60,21 +25,34 @@ const content2 = {
   text2: 'jours après leurs publication',
 };
 
+//TODO: ouvrir un nouvel onglet pour les activités
+//TODO: factoriser le code méthode SOLID
 const ClassroomParamStep1 = () => {
   const router = useRouter();
   const [daysDelay, setDaysDelay] = React.useState(0);
   const [isDisabled, setIsDisabled] = React.useState(true);
+
   const radioSelectedRef = useRef('default');
 
   const { village } = React.useContext(VillageContext);
+  // filters logic
+  const filterCountries = React.useMemo(() => (village ? village.countries.map((c) => c.isoCode) : []), [village]);
+  const [filters, setFilters] = React.useState<FilterArgs>({
+    selectedType: 0,
+    types: 'all',
+    status: 0,
+    countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
+      acc[c] = true;
+      return acc;
+    }, {}),
+    pelico: true,
+  });
   const { activities, refetch } = useActivities({
     limit: 300,
     page: 0,
-    countries: village?.countries.reduce((list, countrie) => {
-      const { isoCode } = countrie;
-      list.push(isoCode);
-      return list;
-    }, new Array<string>()),
+    countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
+    pelico: filters.pelico,
+    type: filters.types === 'all' ? undefined : filters.types,
   });
 
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
@@ -87,6 +65,7 @@ const ClassroomParamStep1 = () => {
       }, {}),
     [users],
   );
+
   const handleDaysDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDaysDelay(Number((event.target as HTMLInputElement).value));
   };
@@ -149,27 +128,44 @@ const ClassroomParamStep1 = () => {
             disabled={isDisabled}
           />
         </RadioGroup>
-        <StepsButton next={onNext} />
+        <div style={{ margin: '-1rem 0' }}>
+          <StepsButton next={onNext} />
+        </div>
 
         {/* Activity Container */}
         <p className="text">Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.</p>
-        <OverflowContainer>
+        {/* phase is set to 4 to match the array with ALL activities */}
+        <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={4} />
+        <OverflowContainer
+          style={{
+            height: '30vh',
+            overflowY: 'scroll',
+            marginBottom: '3rem',
+            border: '1px solid rgba(76, 62, 217, 0.5)',
+            borderRadius: '3px',
+            padding: '1rem 0 1rem .5rem',
+          }}
+        >
           {activities.map((activity) => (
             <Button
               key={activity.id}
               sx={{
                 display: 'flex',
                 gap: '2rem',
-                justifyContent: 'space-around',
+                justifyContent: 'space-evenly',
                 width: '95%',
                 padding: '0 1rem',
                 marginBottom: '1rem',
                 filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
-                backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.04)',
+                backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
               }}
               onClick={() => handleClick(activity.id)}
             >
-              <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+              {activity.isVisibleToParent ? (
+                <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+              ) : (
+                <EyeClosed style={{ width: '8%', height: 'auto' }} />
+              )}
               <div style={{ width: '100%' }}>
                 <ActivityCard
                   activity={activity}
@@ -187,3 +183,41 @@ const ClassroomParamStep1 = () => {
 };
 
 export default ClassroomParamStep1;
+
+type TextInputContainerProps = {
+  text1: string;
+  text2?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: number;
+};
+
+/**
+ * Container to display text and input inline
+ * @param onChange function to handle changes
+ * @param value value of the input
+ * @param object text object containing text to display
+ */
+const TextnInputContainer = ({ onChange, value, ...props }: TextInputContainerProps) => {
+  const { text1, text2 } = props;
+  const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
+  return (
+    <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start' }}>
+      <span style={spanStyle}>{text1}</span>
+      <TextField
+        className="textnInputContainer__textfield"
+        variant="standard"
+        type="number"
+        inputProps={{ min: 0 }}
+        // onFocus={onFocusInput('totalStudent')}
+        size="small"
+        value={value}
+        onChange={onChange}
+        sx={{
+          width: '2rem',
+          marginRight: '5px',
+        }}
+      />
+      <span style={spanStyle}>{text2}</span>
+    </div>
+  );
+};
