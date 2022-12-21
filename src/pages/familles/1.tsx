@@ -29,8 +29,8 @@ const content2 = {
 //TODO: factoriser le code méthode SOLID
 const ClassroomParamStep1 = () => {
   const router = useRouter();
-  const [daysDelay, setDaysDelay] = React.useState(0);
-  const [isDisabled, setIsDisabled] = React.useState(true);
+  const [daysDelay, setDaysDelay] = React.useState({ options2: 0, options4: 0 });
+  const [isDisabled, setIsDisabled] = React.useState({ options2: true, options4: true });
 
   const radioSelectedRef = useRef('default');
 
@@ -66,8 +66,8 @@ const ClassroomParamStep1 = () => {
     [users],
   );
 
-  const handleDaysDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDaysDelay(Number((event.target as HTMLInputElement).value));
+  const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    setDaysDelay({ ...daysDelay, [key]: Number((event.target as HTMLInputElement).value) });
   };
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     radioSelectedRef.current = event.target.value;
@@ -80,8 +80,8 @@ const ClassroomParamStep1 = () => {
       refetch();
     });
   };
-  const toggle = (bool: boolean) => {
-    setIsDisabled(bool);
+  const toggle = (key: string, bool: boolean) => {
+    setIsDisabled({ ...isDisabled, [key]: bool });
   };
   const onNext = () => {
     router.push('/familles/2');
@@ -105,27 +105,45 @@ const ClassroomParamStep1 = () => {
         <RadioGroup aria-label="visibility" onChange={handleRadioSelect} defaultValue={radioSelectedRef.current}>
           <FormControlLabel
             value="default"
+            name="options1"
             control={<Radio />}
             label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
           />
           <FormControlLabel
             value="timeDelay"
+            name="options2"
             control={<Radio />}
-            label={<TextnInputContainer {...content1} onChange={handleDaysDelay} value={daysDelay} />}
-            onClick={() => toggle(false)}
-            disabled={isDisabled}
+            label={
+              <TextnInputContainer
+                {...content1}
+                onChange={(e) => handleDaysDelay('options2', e)}
+                value={daysDelay.options2}
+                disabled={isDisabled.options2}
+              />
+            }
+            onClick={() => toggle('options2', false)}
+            disabled={isDisabled.options2}
           />
           <FormControlLabel
             value="ownClass"
+            name="options3"
             control={<Radio />}
             label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
           />
           <FormControlLabel
             value="ownClass&TimeDelay"
+            name="options4"
             control={<Radio />}
-            label={<TextnInputContainer {...content2} onChange={handleDaysDelay} value={daysDelay} />}
-            onClick={() => toggle(false)}
-            disabled={isDisabled}
+            label={
+              <TextnInputContainer
+                {...content2}
+                onChange={(e) => handleDaysDelay('options4', e)}
+                value={daysDelay.options4}
+                disabled={isDisabled.options4}
+              />
+            }
+            onClick={() => toggle('options4', false)}
+            disabled={isDisabled.options4}
           />
         </RadioGroup>
         <div style={{ margin: '-1rem 0' }}>
@@ -153,7 +171,7 @@ const ClassroomParamStep1 = () => {
                 display: 'flex',
                 gap: '2rem',
                 justifyContent: 'space-evenly',
-                width: '95%',
+                width: '99%',
                 padding: '0 1rem',
                 marginBottom: '1rem',
                 filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
@@ -161,6 +179,7 @@ const ClassroomParamStep1 = () => {
               }}
               onClick={() => handleClick(activity.id)}
             >
+              {/* UI logic for activity disable */}
               {activity.isVisibleToParent ? (
                 <EyeVisibility style={{ width: '8%', height: 'auto' }} />
               ) : (
@@ -189,6 +208,7 @@ type TextInputContainerProps = {
   text2?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: number;
+  disabled?: boolean;
 };
 
 /**
@@ -197,7 +217,7 @@ type TextInputContainerProps = {
  * @param value value of the input
  * @param object text object containing text to display
  */
-const TextnInputContainer = ({ onChange, value, ...props }: TextInputContainerProps) => {
+const TextnInputContainer = ({ onChange, value, disabled, ...props }: TextInputContainerProps) => {
   const { text1, text2 } = props;
   const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
   return (
@@ -212,6 +232,7 @@ const TextnInputContainer = ({ onChange, value, ...props }: TextInputContainerPr
         size="small"
         value={value}
         onChange={onChange}
+        disabled={disabled}
         sx={{
           width: '2rem',
           marginRight: '5px',
