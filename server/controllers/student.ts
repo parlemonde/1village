@@ -1,10 +1,10 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 
 import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
@@ -21,7 +21,7 @@ const studentController = new Controller('/students');
 
 studentController.get({ path: '/:id', userType: UserType.TEACHER || UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const student = await getRepository(Student).findOne({ where: { id } });
+  const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (student === undefined) return next();
   res.json(student);
 });
@@ -70,7 +70,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   student.hashedCode = data.hashedCode ?? null;
   student.numLinkedAccount = data.numLinkedAccount ?? null;
 
-  await getRepository(Student).save(student);
+  await AppDataSource.getRepository(Student).save(student);
   res.json(student);
 });
 
@@ -107,14 +107,14 @@ studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const student = await getRepository(Student).findOne({ where: { id } });
+  const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
 
   if (!student) return next();
 
   student.firstname = data.firstname ?? student.firstname;
   student.lastname = data.lastname ?? student.lastname;
 
-  await getRepository(Student).save(student);
+  await AppDataSource.getRepository(Student).save(student);
   res.json(student);
 });
 
@@ -128,10 +128,10 @@ studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
 
 studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const student = await getRepository(Student).findOne({ where: { id } });
+  const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (!student || !req.user) return res.status(204).send();
 
-  await getRepository(Student).delete({ id });
+  await AppDataSource.getRepository(Student).delete({ id });
   res.status(204).send();
 });
 
