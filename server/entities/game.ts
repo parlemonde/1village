@@ -1,3 +1,4 @@
+import type { Relation } from 'typeorm';
 import {
   Column,
   Entity,
@@ -8,7 +9,6 @@ import {
   ManyToOne,
   OneToMany,
   JoinColumn,
-  Relation,
 } from 'typeorm';
 
 import type { Game as GameInterface } from '../../types/game.type';

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Relation } from 'typeorm';
+import type { Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 import type { Comment as CommentInterface } from '../../types/comment.type';
 import { Activity } from './activity';

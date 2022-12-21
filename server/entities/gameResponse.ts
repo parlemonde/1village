@@ -1,14 +1,5 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  ManyToOne,
-  JoinColumn,
-  Relation,
-} from 'typeorm';
+import type { Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 import type { GameResponse as GameResponseInterface } from '../../types/gameResponse.type';
 import { Game } from './game';
