@@ -27,7 +27,7 @@ const content2 = {
 
 //TODO: ouvrir un nouvel onglet pour les activités
 //TODO: factoriser le code méthode SOLID
-const ClassroomParamStep1 = () => {
+const ClassroomParamStep1Visibility = () => {
   const router = useRouter();
   const [daysDelay, setDaysDelay] = React.useState({ options2: 0, options4: 0 });
   const [isDisabled, setIsDisabled] = React.useState({ options2: true, options4: true });
@@ -201,7 +201,7 @@ const ClassroomParamStep1 = () => {
   );
 };
 
-export default ClassroomParamStep1;
+export default ClassroomParamStep1Visibility;
 
 type TextInputContainerProps = {
   text1: string;
