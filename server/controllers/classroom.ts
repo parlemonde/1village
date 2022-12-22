@@ -66,8 +66,8 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   }
   // Verification if the classrom already created
   // * Memo:  this logic may change in the future if teacher can have multiple classes
-  const verification = await AppDataSource.getRepository(Classroom).findOne({ where: { userId: data.userid } });
-  if (verification) return next();
+  const verification = await AppDataSource.getRepository(Classroom).find({ where: { userId: req.user.id } });
+  if (verification.length !== 0) return res.status(303).send('Classroom already exit');
 
   const classroom = new Classroom();
   classroom.userId = data.userId;

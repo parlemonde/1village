@@ -46,7 +46,6 @@ interface MyAppOwnProps {
   csrfToken: string | null;
   user: User | null;
   village: Village | null;
-  classroom: Classroom | null;
 }
 type MyAppProps = AppProps &
   MyAppOwnProps & {
@@ -68,18 +67,17 @@ NProgress.configure({ showSpinner: false });
 
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
-} = ({
-  Component,
-  pageProps,
-  router,
-  user: initialUser,
-  csrfToken,
-  village: initialVillage,
-  classroom: initialClassroomData,
-  emotionCache = clientSideEmotionCache,
-}: MyAppProps) => {
+} = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
-  const [classroom, setClassroom] = React.useState<Classroom | null>(initialClassroomData || null);
+  const [classroom, setClassroom] = React.useState<Classroom | null>(null);
+
+  React.useEffect(() => {
+    if (user) {
+      fetchClassroom(user.id).then((classroom) => {
+        setClassroom(classroom);
+      });
+    }
+  }, [user]);
 
   const onRouterChangeStart = (): void => {
     NProgress.start();
@@ -176,7 +174,6 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
     user: null,
     csrfToken: '',
     village: null,
-    classroom: null,
   };
   if (ctxRequest === null) {
     // client code
@@ -184,23 +181,24 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
     initialData.csrfToken = data?.props?.csrfToken || null;
     initialData.user = data?.props?.user || null;
     initialData.village = data?.props?.village || null;
-    initialData.classroom = data?.props?.classroom || null;
   } else {
     // server code
     initialData.csrfToken = ctxRequest.csrfToken || null;
     initialData.user = ctxRequest.user || null;
     initialData.village = ctxRequest.village || null;
-    // initialData.classroom = ctxRequest.classroom || null;
   }
-  //Data feching for classroom
-  const response = await axiosRequest({
-    method: 'GET',
-    url: `/classrooms/${ctxRequest?.user?.id}`,
-  });
-  if (response.error) return { ...appProps, ...initialData };
-  initialData.classroom = response.data?.classroom;
 
   return { ...appProps, ...initialData };
 };
+
+async function fetchClassroom(userId: number) {
+  const response = await axiosRequest({
+    method: 'GET',
+    url: `/classrooms/${userId}`,
+  });
+  if (response.error) return null;
+  if (response.data === null) return null;
+  return response.data.classroom;
+}
 
 export default MyApp;
