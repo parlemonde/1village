@@ -21,12 +21,13 @@ const content1 = {
   text2: 'jours après leurs publication',
 };
 const content2 = {
-  text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
+  text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais seulement celles publiées par notre classe et',
   text2: 'jours après leurs publication',
 };
 
 //TODO: ouvrir un nouvel onglet pour les activités
 //TODO: factoriser le code méthode SOLID
+//TODO: traiter les erreurs de react forward avec les activityCard
 const ClassroomParamStep1Visibility = () => {
   const router = useRouter();
   const [daysDelay, setDaysDelay] = React.useState({ options2: 0, options4: 0 });
@@ -116,7 +117,7 @@ const ClassroomParamStep1Visibility = () => {
             label={
               <TextnInputContainer
                 {...content1}
-                onChange={(e) => handleDaysDelay('options2', e)}
+                onChange={(event) => handleDaysDelay('options2', event)}
                 value={daysDelay.options2}
                 disabled={isDisabled.options2}
               />
@@ -137,7 +138,7 @@ const ClassroomParamStep1Visibility = () => {
             label={
               <TextnInputContainer
                 {...content2}
-                onChange={(e) => handleDaysDelay('options4', e)}
+                onChange={(event) => handleDaysDelay('options4', event)}
                 value={daysDelay.options4}
                 disabled={isDisabled.options4}
               />
@@ -221,7 +222,7 @@ const TextnInputContainer = ({ onChange, value, disabled, ...props }: TextInputC
   const { text1, text2 } = props;
   const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
   return (
-    <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start' }}>
+    <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap' }}>
       <span style={spanStyle}>{text1}</span>
       <TextField
         className="textnInputContainer__textfield"
