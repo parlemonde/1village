@@ -30,12 +30,15 @@ import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
+import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
 import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { initH5p } from 'src/utils/initH5p';
+import type { Classroom } from 'types/classroom.type';
 import type { User } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
@@ -43,6 +46,7 @@ interface MyAppOwnProps {
   csrfToken: string | null;
   user: User | null;
   village: Village | null;
+  classroom: Classroom | null;
 }
 type MyAppProps = AppProps &
   MyAppOwnProps & {
@@ -64,8 +68,18 @@ NProgress.configure({ showSpinner: false });
 
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
-} = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
+} = ({
+  Component,
+  pageProps,
+  router,
+  user: initialUser,
+  csrfToken,
+  village: initialVillage,
+  classroom: initialClassroomData,
+  emotionCache = clientSideEmotionCache,
+}: MyAppProps) => {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
+  const [classroom, setClassroom] = React.useState<Classroom | null>(initialClassroomData || null);
 
   const onRouterChangeStart = (): void => {
     NProgress.start();
@@ -123,27 +137,29 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken || ''}>
               <VillageContextProvider initialVillage={initialVillage}>
-                <ActivityContextProvider>
-                  {isOnAdmin ? (
-                    <div>
-                      <AdminHeader />
-                      <div style={{ display: 'flex', width: '100%' }}>
-                        <AdminNavigation />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <Component {...pageProps} />
+                <ClassroomContextProvider classroom={classroom} setClassroom={setClassroom}>
+                  <ActivityContextProvider>
+                    {isOnAdmin ? (
+                      <div>
+                        <AdminHeader />
+                        <div style={{ display: 'flex', width: '100%' }}>
+                          <AdminNavigation />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <Component {...pageProps} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
-                    <div className="app-container">
-                      <Header />
+                    ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
+                      <div className="app-container">
+                        <Header />
+                        <Component {...pageProps} />
+                        <WelcomeModal />
+                      </div>
+                    ) : (
                       <Component {...pageProps} />
-                      <WelcomeModal />
-                    </div>
-                  ) : (
-                    <Component {...pageProps} />
-                  )}
-                </ActivityContextProvider>
+                    )}
+                  </ActivityContextProvider>
+                </ClassroomContextProvider>
               </VillageContextProvider>
             </UserContextProvider>
           </QueryClientProvider>
@@ -160,6 +176,7 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
     user: null,
     csrfToken: '',
     village: null,
+    classroom: null,
   };
   if (ctxRequest === null) {
     // client code
@@ -167,12 +184,22 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
     initialData.csrfToken = data?.props?.csrfToken || null;
     initialData.user = data?.props?.user || null;
     initialData.village = data?.props?.village || null;
+    initialData.classroom = data?.props?.classroom || null;
   } else {
     // server code
     initialData.csrfToken = ctxRequest.csrfToken || null;
     initialData.user = ctxRequest.user || null;
     initialData.village = ctxRequest.village || null;
+    // initialData.classroom = ctxRequest.classroom || null;
   }
+  //Data feching for classroom
+  const response = await axiosRequest({
+    method: 'GET',
+    url: `/classrooms/${ctxRequest?.user?.id}`,
+  });
+  if (response.error) return { ...appProps, ...initialData };
+  initialData.classroom = response.data?.classroom;
+
   return { ...appProps, ...initialData };
 };
 

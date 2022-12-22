@@ -19,7 +19,7 @@ export type Args = {
   responseActivityId?: number;
 };
 
-export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args): { activities: Activity[] } => {
+export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args) => {
   const { village } = React.useContext(VillageContext);
   const { axiosLoggedRequest } = React.useContext(UserContext);
 
@@ -50,7 +50,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     }
     return response.data;
   }, [args, type, countries, pelico, userId, villageId, axiosLoggedRequest]);
-  const { data, isLoading, error } = useQuery<Activity[], unknown>(
+  const { data, isLoading, error, refetch } = useQuery<Activity[], unknown>(
     ['activities', { ...args, type, userId, countries, pelico, villageId }],
     getActivities,
   );
@@ -64,5 +64,6 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
 
   return {
     activities: error ? [] : isLoading ? prevData.current : data || [],
+    refetch: refetch,
   };
 };
