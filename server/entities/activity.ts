@@ -67,7 +67,7 @@ export class Activity implements ActivityInterface<AnyData> {
   @JoinColumn({ name: 'userId' })
   public user: User | null;
 
-  @Index({ unique: true })
+  @Index()
   @Column({ nullable: false })
   public userId: number;
 

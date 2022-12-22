@@ -7,7 +7,6 @@ export class CreateActivityIndex1671226984879 implements MigrationInterface {
       'activity',
       new TableIndex({
         columnNames: ['userId'],
-        isUnique: true,
       }),
     );
   }
