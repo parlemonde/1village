@@ -25,7 +25,7 @@ teacherController.get({ path: '/invite', userType: UserType.TEACHER }, async (re
 });
 
 /**
- * Endpoint to create a unique invite code for a teacher
+ * Endpoint to change the visibility for one activity
  * @param {object} req Express request object
  * @param {object} res Express response object
  * @return {string} JSON Response invite code
