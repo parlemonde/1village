@@ -74,6 +74,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   res.json(student);
 });
 
+//--- Update a student ---
 type UpdateStudentData = {
   firstname?: string;
   lastname?: string;
