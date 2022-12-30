@@ -145,9 +145,23 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       if (response.error) {
         router.push('/');
       } else {
-        setStudent(response.data);
+        setStudent(response.data as Student);
       }
-    }, []);
+    }, [axiosLoggedRequest]);
+
+    const getStudents = React.useCallback(
+      async (id: number) => {
+        const response = await axiosLoggedRequest({
+          method: 'GET',
+          url: `/students`,
+        });
+        if (response.error) {
+          router.push('/');
+        } else {
+          setStudents(response.data as Student[]);
+        }
+      }, [axiosLoggedRequest]);
+  
 
   /**
    * Delete an access for a relative's student
