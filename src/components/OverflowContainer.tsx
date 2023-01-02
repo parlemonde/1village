@@ -1,7 +1,21 @@
 import React from 'react';
 
-function OverflowContainer() {
-  return <div>OverflowContainer</div>;
+/**
+ * Container to handle overflow
+ * @param children JSX Element children
+ * @returns
+ */
+
+interface ContainerProps {
+  style?: React.CSSProperties;
+}
+
+function OverflowContainer({ children, style }: React.PropsWithChildren<ContainerProps>) {
+  return (
+    <div className="scrollbar" style={{ ...style }}>
+      {children}
+    </div>
+  );
 }
 
 export default OverflowContainer;

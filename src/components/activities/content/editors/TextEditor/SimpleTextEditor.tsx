@@ -26,7 +26,7 @@ import type { LinkValue } from './toolbar/Link';
 import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
-import { fontDetailColor, primaryColor } from 'src/styles/variables.const';
+import { errorColor, fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
 function blockStyleFn(block: ContentBlock): string {
   const blockAlignment = block.getData() && block.getData().get('text-align');
@@ -46,6 +46,7 @@ interface SimpleTextEditorProps {
   withBorder?: boolean;
   noBlock?: boolean;
   maxLen?: number;
+  error?: boolean;
 }
 
 export const SimpleTextEditor = ({
@@ -58,6 +59,7 @@ export const SimpleTextEditor = ({
   withBorder = false,
   noBlock = false,
   maxLen,
+  error = false,
 }: SimpleTextEditorProps) => {
   const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty(new CompositeDecorator([LinkDecorator])));
   const [linkModalOpen, setLinkModalOpen] = React.useState(false);
@@ -251,7 +253,7 @@ export const SimpleTextEditor = ({
         withBorder
           ? {
               margin: '-1px',
-              borderColor: primaryColor,
+              borderColor: !error ? primaryColor : errorColor,
               borderBottomLeftRadius: 0,
               borderBottomRightRadius: 0,
             }
@@ -286,6 +288,7 @@ export const SimpleTextEditor = ({
     <div
       ref={editorContainerRef}
       className={classnames('text-editor', { 'text-editor--with-border': withBorder })}
+      style={{ borderColor: !error ? primaryColor : errorColor }}
       onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
         if (editorRef.current) {
           event.preventDefault();
@@ -308,7 +311,14 @@ export const SimpleTextEditor = ({
           </div>
         </div>
       )}
-      <div style={{ position: 'relative', margin: withBorder ? '0.25rem' : 0, minHeight: withBorder ? '3rem' : 'unset' }}>
+      <div
+        style={{
+          position: 'relative',
+          margin: withBorder ? '0.25rem' : 0,
+          minHeight: withBorder ? '3rem' : 'unset',
+          borderColor: !error ? primaryColor : errorColor,
+        }}
+      >
         {displayPlaceholder && <div style={{ position: 'absolute', color: fontDetailColor }}>{placeholder}</div>}
         <div
           onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {

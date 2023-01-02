@@ -24,6 +24,12 @@ export class Classroom {
   @Column({ nullable: true, default: null })
   public delayedDays: number;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public hasVisibilitySetToClass?: boolean;
+
   @OneToOne(() => User, (user) => user.classroom)
   public users: User;
 
