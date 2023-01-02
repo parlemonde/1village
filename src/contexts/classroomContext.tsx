@@ -55,7 +55,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // * Classroom is create automatically for all teacher if it not exits already
+  // * Classroom is create automatically for all teacher if it does not exit already
   React.useEffect(() => {
     if (classroom === null) {
       createClassroom();
@@ -120,12 +120,13 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     () => ({
       classroom,
       getClassroom,
+      setClassroom,
       updateClassroomParameters,
       // setStudentList,
       // getStudentList,
       // deleteAccessTorRelatives,
     }),
-    [classroom, getClassroom, updateClassroomParameters],
+    [classroom, getClassroom, setClassroom, updateClassroomParameters],
   );
   return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
 };
