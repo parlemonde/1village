@@ -28,9 +28,9 @@ studentController.get({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
 
 type CreateStudentData = {
   classroomId: number;
-  firstname?: string;
-  lastname?: string;
-  hashedCode?: string;
+  firstname: string;
+  lastname: string;
+  hashedCode: string;
   numLinkedAccount?: number;
 };
 
@@ -38,9 +38,9 @@ const createStudentValidator = ajv.compile({
   type: 'object',
   properties: {
     classroomId: { type: 'number', nullable: false },
-    firstname: { type: 'string', nullable: true },
-    lastname: { type: 'string', nullable: true },
-    hashedCode: { type: 'string', nullable: true },
+    firstname: { type: 'string', nullable: false },
+    lastname: { type: 'string', nullable: false },
+    hashedCode: { type: 'string', nullable: false },
     numLinkedAccount: { type: 'number', nullable: true },
   },
   required: ['classroomId'],
@@ -65,9 +65,9 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   }
   const student = new Student();
   student.classroomId = data.classroomId;
-  student.firstname = data.firstname ?? null;
-  student.lastname = data.lastname ?? null;
-  student.hashedCode = data.hashedCode ?? null;
+  student.firstname = data.firstname;
+  student.lastname = data.lastname;
+  student.hashedCode = data.hashedCode;
   student.numLinkedAccount = data.numLinkedAccount ?? null;
 
   await AppDataSource.getRepository(Student).save(student);

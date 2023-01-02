@@ -133,9 +133,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
 
   // const setStudent = React.useCallback(() => {}, []);
 
-  /**
-   * Get the list of students in the classroom
-   */
+ 
   const getStudent = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
@@ -149,6 +147,10 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       }
     }, [axiosLoggedRequest]);
 
+ /**
+   * Get the list of students in the classroom
+   */
+  
     const getStudents = React.useCallback(
       async (id: number) => {
         const response = await axiosLoggedRequest({

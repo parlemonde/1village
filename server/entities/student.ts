@@ -11,13 +11,13 @@ export class Student {
   @Column()
   public classroomId: number;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 100 })
   public firstname: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255 })
   public lastname: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255 })
   public hashedCode: string;
 
   @Column({ type: 'tinyint', nullable: true })
