@@ -1,3 +1,4 @@
+import router from 'next/router';
 import React from 'react';
 
 import { UserContext } from './userContext';
@@ -11,17 +12,19 @@ interface ClassroomContextValue {
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
-  student: Student | null;
+  students: [Student] | null;
   setStudent: (value: React.SetStateAction<Student | null>) => void;
   getStudent(): Promise<void>;
 }
-
 
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
   classroom: null,
   setClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
+  students: null,
+  setStudent: () => {},
+  getStudent: async () => {},
 });
 
 interface ClassroomContextProviderProps {
@@ -34,6 +37,8 @@ interface ClassroomContextProviderProps {
 export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
+  const [students, setStudent] = React.useState([]);
+
   console.log({ classroom });
   /**
    * Creation of the classroom
@@ -133,7 +138,6 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
 
   // const setStudent = React.useCallback(() => {}, []);
 
- 
   const getStudent = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
@@ -145,25 +149,28 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       } else {
         setStudent(response.data as Student);
       }
-    }, [axiosLoggedRequest]);
+    },
+    [axiosLoggedRequest],
+  );
 
- /**
+  /**
    * Get the list of students in the classroom
    */
-  
-    const getStudents = React.useCallback(
-      async (id: number) => {
-        const response = await axiosLoggedRequest({
-          method: 'GET',
-          url: `/students`,
-        });
-        if (response.error) {
-          router.push('/');
-        } else {
-          setStudents(response.data as Student[]);
-        }
-      }, [axiosLoggedRequest]);
-  
+
+  const getStudents = React.useCallback(
+    async (id: number) => {
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/students`,
+      });
+      if (response.error) {
+        router.push('/');
+      } else {
+        setStudents(response.data as Student[]);
+      }
+    },
+    [axiosLoggedRequest],
+  );
 
   /**
    * Delete an access for a relative's student
