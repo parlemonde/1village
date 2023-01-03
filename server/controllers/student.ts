@@ -5,6 +5,7 @@ import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
+import { inviteCodeGenerator } from '../utils/inviteCodeGenerator';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
@@ -67,8 +68,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   student.classroomId = data.classroomId;
   student.firstname = data.firstname;
   student.lastname = data.lastname;
-  student.hashedCode = data.hashedCode;
-  student.numLinkedAccount = data.numLinkedAccount ?? null;
+  student.hashedCode = inviteCodeGenerator(8);
 
   await AppDataSource.getRepository(Student).save(student);
   res.json(student);

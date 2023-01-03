@@ -2,7 +2,6 @@ import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { Classroom } from 'server/entities/classroom';
 import { DeleteButton } from 'src/buttons/DeleteButton';
 
 import { Base } from 'src/components/Base';
@@ -15,7 +14,6 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Student } from 'types/student.type';
-import { StudentType } from 'types/student.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -28,9 +26,8 @@ const ClassroomParamStep2 = () => {
     hashedCode: '',
     numLinkedAccount: '',
   });
-  const [students, setStudents] = React.useState([]);
   const { user } = React.useContext(UserContext);
-  const { createStudent } = React.useContext(ClassroomContext);
+  const { createStudent, deleteStudent } = React.useContext(ClassroomContext);
   const addStudent = (field: Extract<keyof Student, string>) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setStudent({ ...student, [field]: event.target.value });
   };
@@ -41,7 +38,7 @@ const ClassroomParamStep2 = () => {
   // };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStudents([...students, student]);
+    createStudent([...students, student]);
   };
   const isTeacher = user?.type === UserType.TEACHER;
   const onNext = () => {
@@ -101,7 +98,7 @@ const ClassroomParamStep2 = () => {
               // onChange={addStudent("firstname")}
               // onChange={(event) => addStudent(event.target.value)}
               onChange={(event) => setStudent({ ...student, firstname: event.target.value })}
-              disable={false}
+              disabled={false}
             />
           </label>
           {'  '}
@@ -113,7 +110,7 @@ const ClassroomParamStep2 = () => {
               type="lastname"
               value={student.lastname ?? ''}
               onChange={(event) => setStudent({ ...student, lastname: event.target.value })}
-              disable={false}
+              disabled={false}
             />
           </label>
           {'  '}
@@ -149,3 +146,4 @@ const ClassroomParamStep2 = () => {
 };
 
 export default ClassroomParamStep2;
+
