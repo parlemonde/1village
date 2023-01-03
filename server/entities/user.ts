@@ -128,5 +128,5 @@ export class User implements UserInterface {
   public mascotteId?: number;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
-  public userToStudents!: UserToStudent[];
+  public userToStudents: UserToStudent[];
 }

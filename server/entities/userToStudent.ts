@@ -6,22 +6,19 @@ import { User } from './user';
 @Entity()
 export class UserToStudent {
   @PrimaryGeneratedColumn()
-  public id!: number;
+  public id: number;
 
-  @Column()
-  public userId!: number;
+  @Column({ nullable: true, default: 0 })
+  public userId: number;
 
-  @Column()
-  public studentId!: number;
-
-  @Column()
-  public hashedCode!: string;
+  @Column({ nullable: true, default: 0 })
+  public studentId: number;
 
   @ManyToOne(() => User, (user) => user.userToStudents)
   @JoinColumn({ name: 'userId' })
-  public user!: User;
+  public user: User;
 
   @ManyToOne(() => Student, (student) => student.userToStudents)
   @JoinColumn({ name: 'studentId' })
-  public student!: Student;
+  public student: Student;
 }

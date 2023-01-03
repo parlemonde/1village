@@ -541,4 +541,23 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
   res.sendJSON({ success: true });
 });
 
+// Get the visibility parameters for Family members
+userController.get({ path: '/visibility-params' }, async (req: Request, res: Response, _: NextFunction) => {
+  // il faut un user id
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+  // get du params avec une multiple jointure user_student > student > classroom
+  const visibilityParams = await AppDataSource.getRepository('UserToStudent').find({
+    relations: {
+      student: true,
+      clasroom: true,
+    },
+    where: {
+      userId: req.user.id,
+    },
+  });
+  res.json(visibilityParams);
+});
+
 export { userController };

@@ -37,6 +37,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       villageId,
       countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
+      //TODO: add params for visibility
     };
     if (userId !== undefined) {
       query.userId = userId;
