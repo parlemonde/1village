@@ -12,33 +12,28 @@ interface ClassroomContextValue {
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
+  student: Student | null;
   students: [Student] | null;
   setStudent: (value: React.SetStateAction<Student | null>) => void;
   getStudent(): Promise<void>;
 }
-
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
   classroom: null,
   setClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
   students: null,
-  setStudent: () => {},
   getStudent: async () => {},
 });
-
 interface ClassroomContextProviderProps {
   classroom: Classroom | null;
   setClassroom(value: React.SetStateAction<Classroom | null>): void;
 }
-
 //TODO : il faut alimenter le ClassroomContext avec les fonctions
-
 export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [students, setStudent] = React.useState([]);
-
+  const [students, setStudents] = React.useState([]);
   console.log({ classroom });
   /**
    * Creation of the classroom
@@ -64,14 +59,12 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   // * Classroom is create automatically for all teacher if it not exits already
   React.useEffect(() => {
     if (classroom === null) {
       createClassroom();
     }
   }, [classroom, createClassroom]);
-
   /**
    * Get teacher's classroom
    */
@@ -90,7 +83,6 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   /**
    * Update teacher's classroom Parameters
    */
@@ -109,24 +101,24 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   //TODO : les fonctions sont à titre d'exemple ci-dessous
   /**
    * Set the list of students in the classrom
    */
-
-  const createStudent = React.useCallback(async () => {
+  const createStudent = React.useCallback(async ({ firstname, lastname }: StudentCreateData) => {
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
     await axiosLoggedRequest({
       method: 'POST',
       url: '/students',
       data: {
-        classroomId: user.id,
+        classroomId: classroom.id,
+        firstname,
+        lastname,
       },
     })
       .then((response) => {
-        setStudent(response.data.student);
+        setStudents((prevState) => [...prevState, response.data.student]);
         console.log({ response });
         return response.data.student;
       })
@@ -135,9 +127,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   // const setStudent = React.useCallback(() => {}, []);
-
   const getStudent = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
@@ -147,16 +137,14 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       if (response.error) {
         router.push('/');
       } else {
-        setStudent(response.data as Student);
+        setStudents(response.data as Student);
       }
     },
     [axiosLoggedRequest],
   );
-
   /**
    * Get the list of students in the classroom
    */
-
   const getStudents = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
@@ -172,30 +160,54 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     [axiosLoggedRequest],
   );
 
+  const deleteStudent = React.useCallback(async () => {
+    if (user?.type !== UserType.TEACHER) return;
+    if (!classroom) return;
+    await axiosLoggedRequest({
+      method: 'DELETE',
+      url: '/students',
+      data: {
+        hashCode,
+      },
+    })
+      .then((response) => {
+        setStudents(response.data.student);
+        console.log({ response });
+        return response.data.student;
+      })
+      .catch((err) => {
+        return err.message;
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /**
    * Delete an access for a relative's student
    */
   const deleteAccessTorRelatives = React.useCallback(() => {}, []);
-
   const value = React.useMemo(
     () => ({
       classroom,
       getClassroom,
       updateClassroomParameters,
-      setStudent,
+      students,
       getStudent,
       // setStudentList,
       // getStudentList,
       // deleteAccessTorRelatives,
     }),
-    [classroom, getClassroom, updateClassroomParameters, setStudent, getStudent],
+    [classroom, getClassroom, updateClassroomParameters, students, getStudent],
   );
   return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
 };
-
 interface ClassroomUpdateData {
   name?: string;
   avatar?: string;
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
+}
+
+interface StudentCreateData {
+  firstname: string;
+  lastname: string;
 }

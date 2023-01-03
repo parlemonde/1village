@@ -3,19 +3,17 @@ import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 't
 import { Student } from './student';
 import { User } from './user';
 
+type User = import('./user');
 @Entity()
 export class UserToStudent {
   @PrimaryGeneratedColumn()
-  public id!: number;
+  public id: number;
 
   @Column()
-  public userId!: number;
+  public userId: number;
 
   @Column()
-  public studentId!: number;
-
-  @Column()
-  public hashedCode!: string;
+  public studentId: number;
 
   @ManyToOne(() => User, (user) => user.userToStudents)
   @JoinColumn({ name: 'userId' })
