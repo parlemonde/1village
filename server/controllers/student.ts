@@ -65,25 +65,20 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const student = new Student();
-  student.classroomId = data.classroomId;
+  student.classroom = data.classroomId;
   student.firstname = data.firstname ?? null;
   student.lastname = data.lastname ?? null;
   student.hashedCode = data.hashedCode ?? null;
-  student.numLinkedAccount = data.numLinkedAccount ?? null;
 
   const studentCreated = await AppDataSource.getRepository(Student).save(student);
 
   //Insert of new student in table user_to_student
-  const userToStudent = new UserToStudent();
-  userToStudent.userId = studentCreated.id;
+  await AppDataSource.createQueryBuilder()
+    .insert()
+    .into(UserToStudent)
+    .values([{ student: { id: studentCreated.id } }])
+    .execute();
 
-  await AppDataSource.getRepository(UserToStudent).save(userToStudent);
-  // await AppDataSource.createQueryBuilder()
-  //   .insert()
-  //   .into(UserToStudent)
-  //   // .values([{ studentId: studentCreated.id, userId: 0 }])
-  //   .values([{ studentId: studentCreated.id }])
-  //   .execute();
   res.json(studentCreated);
 });
 
