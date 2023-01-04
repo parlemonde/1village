@@ -542,19 +542,17 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
 });
 
 // Get the visibility parameters for Family members
-userController.get({ path: '/visibility-params' }, async (req: Request, res: Response, _: NextFunction) => {
-  // il faut un user id
+userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response, _: NextFunction) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
-  // get du params avec une multiple jointure user_student > student > classroom
   const visibilityParams = await AppDataSource.getRepository('UserToStudent').find({
     relations: {
-      student: true,
-      clasroom: true,
+      //* Doc: https://orkhan.gitbook.io/typeorm/docs/find-options
+      student: { classroom: true },
     },
     where: {
-      userId: req.user.id,
+      user: { id: req.user.id },
     },
   });
   res.json(visibilityParams);
