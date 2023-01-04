@@ -13,7 +13,7 @@ interface ClassroomContextValue {
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
   student: Student | null;
-  students: [Student] | null;
+  students: Student[] | null;
   setStudent: (value: React.SetStateAction<Student | null>) => void;
   getStudent(): Promise<void>;
 }
@@ -22,8 +22,12 @@ export const ClassroomContext = React.createContext<ClassroomContextValue>({
   setClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
+  student: null,
   students: null,
   getStudent: async () => {},
+  setStudent: function (value: React.SetStateAction<Student | null>): void {
+    throw new Error('Function not implemented.');
+  },
 });
 interface ClassroomContextProviderProps {
   classroom: Classroom | null;
@@ -33,8 +37,9 @@ interface ClassroomContextProviderProps {
 export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [students, setStudents] = React.useState([]);
-  console.log({ classroom });
+  const [student, getStudent] = React.useState<Student | null>(null);
+  const [students, setStudents] = React.useState<Student[] | null>(null);
+
   /**
    * Creation of the classroom
    */
@@ -51,7 +56,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     })
       .then((response) => {
         setClassroom(response.data.classroom);
-        console.log({ response });
+        // console.log({ response });
         return response.data.classroom;
       })
       .catch((err) => {
@@ -119,7 +124,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     })
       .then((response) => {
         setStudents((prevState) => [...prevState, response.data.student]);
-        console.log({ response });
+        // console.log({ response });
         return response.data.student;
       })
       .catch((err) => {
@@ -198,8 +203,23 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     }),
     [classroom, getClassroom, updateClassroomParameters, students, getStudent],
   );
-  return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
+  return (
+    <ClassroomContext.Provider
+      value={{
+        classroom,
+        setClassroom,
+        getClassroom,
+        updateClassroomParameters,
+        student: null,
+        students,
+        setStudent: (value: React.SetStateAction<Student>) => setStudents(value),
+      }}
+    >
+      {children}
+    </ClassroomContext.Provider>
+  );
 };
+
 interface ClassroomUpdateData {
   name?: string;
   avatar?: string;

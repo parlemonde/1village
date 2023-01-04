@@ -8,9 +8,6 @@ export class Student {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
-  public classroomId: number;
-
   @Column({ type: 'varchar', length: 100 })
   public firstname: string;
 

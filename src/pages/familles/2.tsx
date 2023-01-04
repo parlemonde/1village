@@ -14,7 +14,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Student } from 'types/student.type';
-import type { User } from 'types/user.type';
+import { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 const ClassroomParamStep2 = () => {

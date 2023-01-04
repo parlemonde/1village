@@ -65,7 +65,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const student = new Student();
-  student.classroomId = data.classroomId;
+  student.classroom = data.classroomId;
   student.firstname = data.firstname;
   student.lastname = data.lastname;
   student.hashedCode = inviteCodeGenerator(8);
