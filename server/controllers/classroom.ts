@@ -21,7 +21,12 @@ export const classroomController = new Controller('/classrooms');
 
 classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { userId: id } });
+  const classroom = await AppDataSource.getRepository(Classroom).findOne({
+    relations: {
+      user: true,
+    },
+    where: { user: { id } },
+  });
   if (classroom === undefined) return next();
   res.json(classroom);
 });
@@ -56,7 +61,7 @@ const createClassroomValidator = ajv.compile({
  * @return {object} Route API JSON response
  */
 
-classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createClassroomValidator(data)) {
     sendInvalidDataError(createClassroomValidator);
@@ -66,14 +71,17 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   }
   // Verification if the classrom already created
   // * Memo:  this logic may change in the future if teacher can have multiple classes
-  const verification = await AppDataSource.getRepository(Classroom).find({ where: { userId: req.user.id } });
+  const verification = await AppDataSource.getRepository(Classroom).find({
+    where: { user: { id: req.user.id } },
+  });
   if (verification.length !== 0) return res.status(303).send('Classroom already exit');
 
-  const classroom = new Classroom();
-  classroom.userId = data.userId;
-  classroom.villageId = data.villageId;
+  const classroom = await AppDataSource.createQueryBuilder()
+    .insert()
+    .into(Classroom)
+    .values([{ user: { id: data.userId }, village: { id: data.villageId } }])
+    .execute();
 
-  await AppDataSource.getRepository(Classroom).save(classroom);
   res.json(classroom);
 });
 
