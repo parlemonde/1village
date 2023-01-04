@@ -9,12 +9,6 @@ export class Classroom {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
-  public userId: number;
-
-  @Column()
-  public villageId: number;
-
   @Column({ nullable: true, default: null })
   public name: string;
 
