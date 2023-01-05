@@ -1,10 +1,10 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 
 import { Classroom } from '../entities/classroom';
 import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
@@ -21,7 +21,7 @@ export const classroomController = new Controller('/classrooms');
 
 classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const classroom = await getRepository(Classroom).findOne({ where: { id } });
+  const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { userId: id } });
   if (classroom === undefined) return next();
   res.json(classroom);
 });
@@ -42,6 +42,7 @@ const createClassroomValidator = ajv.compile({
     name: { type: 'string', nullable: true },
     avatar: { type: 'string', nullable: true },
     delayedDays: { type: 'number', nullable: true },
+    hasVisibilitySetToClass: { type: 'boolean', nullable: true },
   },
   required: ['userId', 'villageId'],
   additionalProperties: false,
@@ -55,7 +56,7 @@ const createClassroomValidator = ajv.compile({
  * @return {object} Route API JSON response
  */
 
-classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!createClassroomValidator(data)) {
     sendInvalidDataError(createClassroomValidator);
@@ -63,14 +64,16 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
+  // Verification if the classrom already created
+  // * Memo:  this logic may change in the future if teacher can have multiple classes
+  const verification = await AppDataSource.getRepository(Classroom).find({ where: { userId: req.user.id } });
+  if (verification.length !== 0) return res.status(303).send('Classroom already exit');
+
   const classroom = new Classroom();
   classroom.userId = data.userId;
   classroom.villageId = data.villageId;
-  classroom.name = data.name;
-  classroom.avatar = data.avatar ?? null;
-  classroom.delayedDays = data.delayedDays ?? null;
 
-  await getRepository(Classroom).save(classroom);
+  await AppDataSource.getRepository(Classroom).save(classroom);
   res.json(classroom);
 });
 
@@ -86,6 +89,7 @@ const updateClassroomValidator = ajv.compile({
     name: { type: 'string', nullable: true },
     avatar: { type: 'string', nullable: true },
     delayedDays: { type: 'number', nullable: true },
+    hasVisibilitySetToClass: { type: 'boolean', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -109,7 +113,8 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
   }
 
   const id = parseInt(req.params.id, 10) || 0;
-  const classroom = await getRepository(Classroom).findOne({ where: { id } });
+  // * Memo:  this logic may change in the future if teacher can have multiple classes
+  const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { id } });
 
   if (!classroom) return next();
 
@@ -117,7 +122,7 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
   classroom.delayedDays = data.delayedDays ?? classroom.delayedDays;
   classroom.name = data.name ?? classroom.name;
 
-  await getRepository(Classroom).save(classroom);
+  await AppDataSource.getRepository(Classroom).save(classroom);
   res.json(classroom);
 });
 
@@ -131,9 +136,9 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
 
 classroomController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const classroom = await getRepository(Classroom).findOne({ where: { id } });
+  const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { id } });
   if (!classroom || !req.user) return res.status(204).send();
 
-  await getRepository(Classroom).delete({ id });
+  await AppDataSource.getRepository(Classroom).delete({ id });
   res.status(204).send();
 });

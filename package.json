@@ -31,7 +31,7 @@
       "**/**/*.test.t(s|sx)"
     ],
     "moduleDirectories": [
-      ".",
+      "<rootDir>",
       "types",
       "node_modules"
     ],
@@ -150,8 +150,10 @@
     "immutable": "^4.1.0",
     "json-stable-stringify": "^1.0.1",
     "jsonwebtoken": "^8.5.1",
+    "jspdf": "^2.5.1",
     "leaflet": "^1.8.0",
     "leaflet.fullscreen": "^2.4.0",
+    "lint": "^0.8.19",
     "maplibre-gl": "2.1.9",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",
@@ -167,7 +169,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-player": "^2.10.1",
-    "react-query": "^3.39.1",
+    "react-query": "^3.39.2",
     "resize-observer-polyfill": "^1.5.1",
     "safe-buffer": "^5.2.1",
     "sass": "^1.53.0",

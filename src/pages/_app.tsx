@@ -14,6 +14,8 @@ import 'src/styles/slot-machine.scss';
 
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 import type { Request } from 'express';
 import App from 'next/app';
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
@@ -23,20 +25,20 @@ import NProgress from 'nprogress';
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
-
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
+import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
 import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { initH5p } from 'src/utils/initH5p';
+import type { Classroom } from 'types/classroom.type';
 import type { User } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
@@ -67,6 +69,15 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
+  const [classroom, setClassroom] = React.useState<Classroom | null>(null);
+
+  React.useEffect(() => {
+    if (user) {
+      fetchClassroom(user.id).then((classroom) => {
+        setClassroom(classroom);
+      });
+    }
+  }, [user]);
 
   const onRouterChangeStart = (): void => {
     NProgress.start();
@@ -124,27 +135,29 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken || ''}>
               <VillageContextProvider initialVillage={initialVillage}>
-                <ActivityContextProvider>
-                  {isOnAdmin ? (
-                    <div>
-                      <AdminHeader />
-                      <div style={{ display: 'flex', width: '100%' }}>
-                        <AdminNavigation />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <Component {...pageProps} />
+                <ClassroomContextProvider classroom={classroom} setClassroom={setClassroom}>
+                  <ActivityContextProvider>
+                    {isOnAdmin ? (
+                      <div>
+                        <AdminHeader />
+                        <div style={{ display: 'flex', width: '100%' }}>
+                          <AdminNavigation />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <Component {...pageProps} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
-                    <div className="app-container">
-                      <Header />
+                    ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
+                      <div className="app-container">
+                        <Header />
+                        <Component {...pageProps} />
+                        <WelcomeModal />
+                      </div>
+                    ) : (
                       <Component {...pageProps} />
-                      <WelcomeModal />
-                    </div>
-                  ) : (
-                    <Component {...pageProps} />
-                  )}
-                </ActivityContextProvider>
+                    )}
+                  </ActivityContextProvider>
+                </ClassroomContextProvider>
               </VillageContextProvider>
             </UserContextProvider>
           </QueryClientProvider>
@@ -174,7 +187,18 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
     initialData.user = ctxRequest.user || null;
     initialData.village = ctxRequest.village || null;
   }
+
   return { ...appProps, ...initialData };
 };
+
+async function fetchClassroom(userId: number) {
+  const response = await axiosRequest({
+    method: 'GET',
+    url: `/classrooms/${userId}`,
+  });
+  if (response.error) return null;
+  if (response.data === null) return null;
+  return response.data.classroom;
+}
 
 export default MyApp;

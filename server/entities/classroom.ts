@@ -24,13 +24,20 @@ export class Classroom {
   @Column({ nullable: true, default: null })
   public delayedDays: number;
 
-  @OneToOne(() => User, (user) => user.classroom)
-  public users: User;
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public hasVisibilitySetToClass?: boolean;
 
-  @ManyToOne(() => Village, (village) => village.classrooms)
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'userId' })
+  public user: User;
+
+  @ManyToOne(() => Village, (village: Village) => village.classrooms)
   @JoinColumn({ name: 'villageId' })
   public village: Village;
 
   @OneToMany(() => Student, (student: Student) => student.classroom)
-  public students: Student;
+  public students: Student[];
 }

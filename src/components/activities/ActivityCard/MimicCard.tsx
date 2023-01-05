@@ -1,9 +1,8 @@
+import { Button } from '@mui/material';
 import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 import ReactPlayer from 'react-player';
-
-import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';

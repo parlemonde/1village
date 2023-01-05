@@ -1,11 +1,10 @@
-import React from 'react';
-
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Checkbox from '@mui/material/Checkbox';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import React from 'react';
 
 import { primaryColor } from 'src/styles/variables.const';
 
@@ -95,7 +94,7 @@ export const FilterSelect = <T,>({ value, onChange, name, options }: FilterSelec
               <ExpandLessIcon />
             </div>
 
-            <div style={{ padding: '0 0.4rem' }}>
+            <div style={{ padding: '0 0.4rem', overflowY: 'auto', height: '125px' }}>
               <FormGroup>
                 {options.map((option) => (
                   <FormControlLabel

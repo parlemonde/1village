@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Box, InputBase } from '@mui/material';
+import React from 'react';
 
 import type { Syllable } from 'src/activity-types/anthem.types';
 import { primaryColor } from 'src/styles/variables.const';
