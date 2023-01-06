@@ -1,21 +1,33 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class UpdateUserTypeEnum1593203874479 implements MigrationInterface {
+export class UpdateUserType1593203874479 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Update the values in the "type" column to match the new enum values
-    await queryRunner.query(`UPDATE user SET type = 0 WHERE type = 3`);
-    await queryRunner.query(`UPDATE user SET type = 1 WHERE type = 4`);
-    await queryRunner.query(`UPDATE user SET type = 2 WHERE type = 2`);
-    await queryRunner.query(`UPDATE user SET type = 3 WHERE type = 1`);
-    await queryRunner.query(`UPDATE user SET type = 4 WHERE type = 0`);
+    await queryRunner.query(`
+      UPDATE users
+      SET type = 
+        CASE
+          WHEN type = 'TEACHER' THEN '3'
+          WHEN type = 'OBSERVATOR' THEN '5'
+          WHEN type = 'MEDIATOR' THEN '2'
+          WHEN type = 'ADMIN' THEN '1'
+          WHEN type = 'SUPER_ADMIN' THEN '0'
+          WHEN type = 'FAMILY' THEN '4'
+        END
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Update the values in the "type" column to match the old enum values
-    await queryRunner.query(`UPDATE user SET type = 4 WHERE type = 1`);
-    await queryRunner.query(`UPDATE user SET type = 3 WHERE type = 0`);
-    await queryRunner.query(`UPDATE user SET type = 2 WHERE type = 2`);
-    await queryRunner.query(`UPDATE user SET type = 1 WHERE type = 3`);
-    await queryRunner.query(`UPDATE user SET type = 0 WHERE type = 4`);
+    await queryRunner.query(`
+      UPDATE users
+      SET type = 
+        CASE
+          WHEN type = '3' THEN 'TEACHER'
+          WHEN type = '5' THEN 'OBSERVATOR'
+          WHEN type = '2' THEN 'MEDIATOR'
+          WHEN type = '1' THEN 'ADMIN'
+          WHEN type = '0' THEN 'SUPER_ADMIN'
+          WHEN type = '4' THEN 'FAMILY'
+        END
+    `);
   }
 }
