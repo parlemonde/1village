@@ -64,8 +64,7 @@ export class User implements UserInterface {
   public firstLogin: number;
 
   @Column({
-    type: 'enum',
-    enum: UserType,
+    type: 'tinyint',
     default: UserType.TEACHER,
   })
   type: UserType;
