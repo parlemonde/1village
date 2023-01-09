@@ -22,9 +22,14 @@ export const Accueil = () => {
   const isMediator = user !== null && user.type >= UserType.MEDIATOR;
   const filterCountries = React.useMemo(
     () =>
-      !village || (selectedPhase === 1 && !isMediator) ? (user ? [user.country.isoCode.toUpperCase()] : []) : village.countries.map((c) => c.isoCode),
+      !village || (selectedPhase === 1 && !isMediator)
+        ? user && user.country !== null
+          ? [user.country.isoCode.toUpperCase()]
+          : []
+        : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isMediator],
   );
+  //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
     types: 'all',

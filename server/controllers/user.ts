@@ -8,6 +8,7 @@ import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { User, UserType } from '../entities/user';
+import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
@@ -542,19 +543,16 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
 });
 
 // Get the visibility parameters for Family members
-userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response, _: NextFunction) => {
+userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
-  const visibilityParams = await AppDataSource.getRepository('UserToStudent').find({
-    relations: {
-      //* Doc: https://orkhan.gitbook.io/typeorm/docs/find-options
-      student: { classroom: true },
-    },
-    where: {
-      user: { id: req.user.id },
-    },
-  });
+  const visibilityParams = await AppDataSource.getRepository(UserToStudent)
+    .createQueryBuilder('userStudent')
+    .innerJoinAndSelect('userStudent.student', 'student')
+    .innerJoinAndSelect('student.classroom', 'classroom')
+    .where('userStudent.user = :familyId', { familyId: req.user.id })
+    .getRawMany(); //* Here it's getRawMany because for some reason we lost 2 attributes otherwise classroom.userId and classroom.villageId
   res.json(visibilityParams);
 });
 

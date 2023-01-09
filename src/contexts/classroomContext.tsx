@@ -29,7 +29,6 @@ interface ClassroomContextProviderProps {
 export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  console.log({ classroom });
   /**
    * Creation of the classroom
    */
@@ -46,7 +45,6 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     })
       .then((response) => {
         setClassroom(response.data.classroom);
-        console.log({ response });
         return response.data.classroom;
       })
       .catch((err) => {
@@ -100,31 +98,12 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //TODO : les fonctions sont à titre d'exemple ci-dessous
-  /**
-   * Set the list of students in the classrom
-   */
-  const setStudentList = React.useCallback(() => {}, []);
-
-  /**
-   * Get the list of students in the classroom
-   */
-  const getStudentList = React.useCallback(() => {}, []);
-
-  /**
-   * Delete an access for a relative's student
-   */
-  const deleteAccessTorRelatives = React.useCallback(() => {}, []);
-
   const value = React.useMemo(
     () => ({
       classroom,
       getClassroom,
       setClassroom,
       updateClassroomParameters,
-      // setStudentList,
-      // getStudentList,
-      // deleteAccessTorRelatives,
     }),
     [classroom, getClassroom, setClassroom, updateClassroomParameters],
   );

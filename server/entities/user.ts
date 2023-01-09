@@ -71,7 +71,7 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   public villageId: number | null;
 
-  @Column({ type: 'varchar', length: 2, nullable: false })
+  @Column({ type: 'varchar', length: 2, nullable: true })
   set countryCode(newCountryCode: string) {
     this.country = countriesMap[newCountryCode] || countriesMap['FR'];
   }
