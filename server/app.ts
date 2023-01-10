@@ -7,10 +7,12 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import next from 'next';
 import path from 'path';
+import { send } from 'process';
 import type { Connection } from 'typeorm';
 
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';
+import { Email, sendMail } from './emails';
 import { UserType } from './entities/user';
 import { authenticate } from './middlewares/authenticate';
 import { crsfProtection } from './middlewares/csrfCheck';
@@ -86,6 +88,14 @@ export async function getApp() {
     }),
   );
   backRouter.use(jsonify);
+  backRouter.get('/testmail', (_, res: Response) => {
+    sendMail(Email.CONFIRMATION_EMAIL, 'yan.labarthe@gmail.com', {
+      firstname: 'yan',
+      email: 'yan1.labarthe@gmail.com',
+      verfificationHash: 'abc',
+    });
+    res.status(200).send('Hello World 1Village!');
+  });
   backRouter.get('/', (_, res: Response) => {
     res.status(200).send('Hello World 1Village!');
   });

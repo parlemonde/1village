@@ -116,6 +116,7 @@ const SignUpForm = () => {
     event.preventDefault();
     /*     console.log(newUser);
     console.log(validate(newUser)); */
+
     if (!isFormValid) {
       /*       console.log(validate.errors);
        */

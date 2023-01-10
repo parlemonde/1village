@@ -91,7 +91,7 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
     plmoEmail: `contact@${domain}`,
   };
   try {
-    // const html = await renderFile(path.join(__dirname, 'templates', templateData.filename), renderOptions);
+    const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     const text = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     // send mail with defined transport object
     const info = await transporter.sendMail({
@@ -99,7 +99,7 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
       to: receiverEmail, // receiver address
       subject: templateData.subject, // Subject line
       text, // plain text body
-      // html, // html body
+      html, // html body
     });
 
     logger.info(`Message sent: ${info.messageId}`);
