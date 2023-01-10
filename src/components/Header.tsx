@@ -1,7 +1,3 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-
 // import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button } from '@mui/material';
@@ -9,6 +5,9 @@ import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -30,13 +29,10 @@ export const Header = () => {
       setAnchorEl(event.currentTarget);
     }
   };
-  const goToAccount = () => {
+
+  const goTopage = (page: string) => {
     setAnchorEl(null);
-    router.push('/mon-compte');
-  };
-  const goToVideos = () => {
-    setAnchorEl(null);
-    router.push('/mes-videos');
+    router.push(page);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -103,8 +99,9 @@ export const Header = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={goToAccount}>Mon compte</MenuItem>
-                <MenuItem onClick={goToVideos}>Mes vidéos</MenuItem>
+                <MenuItem onClick={() => goTopage('/mon-compte')}>Mon compte</MenuItem>
+                <MenuItem onClick={() => goTopage('/mes-videos')}>Mes vidéos</MenuItem>
+                <MenuItem onClick={() => goTopage('/familles/1')}>Mes familles</MenuItem>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>

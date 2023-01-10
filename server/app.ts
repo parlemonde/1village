@@ -7,8 +7,6 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import next from 'next';
 import path from 'path';
-import { send } from 'process';
-import type { Connection } from 'typeorm';
 
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';
@@ -37,11 +35,11 @@ const limiter = rateLimit({
 
 export async function getApp() {
   // Connect to DB
-  const connection: Connection | null = await connectToDatabase();
-  if (connection === null) {
+  const isConnected = await connectToDatabase();
+  if (!isConnected) {
     throw new Error('Could not connect to database...');
   }
-  logger.info(`Database connection established: ${connection.isConnected}`);
+  logger.info(`Database connection established!`);
 
   // Prepare frontend routes
   await frontendHandler.prepare();

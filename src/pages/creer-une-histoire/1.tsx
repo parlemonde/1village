@@ -1,9 +1,8 @@
+import AddIcon from '@mui/icons-material/Add';
+import { TextField, Grid, ButtonBase } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import AddIcon from '@mui/icons-material/Add';
-import { TextField, Grid, ButtonBase } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';

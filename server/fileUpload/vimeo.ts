@@ -1,7 +1,7 @@
-import { getRepository } from 'typeorm';
 import { Vimeo } from 'vimeo';
 
 import { Video } from '../entities/video';
+import { AppDataSource } from '../utils/data-source';
 import { logger } from '../utils/logger';
 
 type VimeoVideoLink = {
@@ -109,7 +109,7 @@ export class VimeoClass {
       video.id = videoID;
       video.userId = userId;
       video.name = name.slice(0, 64);
-      await getRepository(Video).save(video);
+      await AppDataSource.getRepository(Video).save(video);
     }
 
     // Put video in 1village folder.
@@ -148,7 +148,7 @@ export class VimeoClass {
     });
 
     if (success) {
-      await getRepository(Video).delete({ id: videoId });
+      await AppDataSource.getRepository(Video).delete({ id: videoId });
     }
 
     return success;

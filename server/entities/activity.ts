@@ -8,6 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  Index,
 } from 'typeorm';
 
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
@@ -66,6 +67,7 @@ export class Activity implements ActivityInterface<AnyData> {
   @JoinColumn({ name: 'userId' })
   public user: User | null;
 
+  @Index()
   @Column({ nullable: false })
   public userId: number;
 
@@ -102,6 +104,12 @@ export class Activity implements ActivityInterface<AnyData> {
     default: false,
   })
   public displayAsUser?: boolean;
+
+  @Column({
+    type: 'boolean',
+    default: true,
+  })
+  public isVisibleToParent?: boolean;
 
   public commentCount?: number;
 

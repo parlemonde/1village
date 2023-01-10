@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import stringSimilarity from 'string-similarity';
-import { getRepository } from 'typeorm';
 
 import { Village } from '../entities/village';
+import { AppDataSource } from '../utils/data-source';
 import { countries } from '../utils/iso-3166-countries-french';
 import { logger } from '../utils/logger';
 
@@ -29,7 +29,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   }
 
   // Check if village already exists
-  const dbVillageCount = await getRepository(Village).count({
+  const dbVillageCount = await AppDataSource.getRepository(Village).count({
     where: { plmId },
   });
   if (dbVillageCount > 0) {
@@ -55,7 +55,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
       newVillage.countryCodes = [countries[c1.bestMatchIndex].isoCode, countries[c2.bestMatchIndex].isoCode];
       newVillage.name = name;
       newVillage.plmId = plmId;
-      await getRepository(Village).save(newVillage);
+      await AppDataSource.getRepository(Village).save(newVillage);
       return true;
     }
   }
@@ -64,7 +64,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   newVillage.countryCodes = ['FR', 'FR'];
   newVillage.name = name;
   newVillage.plmId = plmId;
-  await getRepository(Village).save(newVillage);
+  await AppDataSource.getRepository(Village).save(newVillage);
   return true;
 }
 

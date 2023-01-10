@@ -8,6 +8,7 @@ import { Activity } from './activity';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
+import { UserToStudent } from './userToStudent';
 import { Village } from './village';
 
 export { UserType };
@@ -112,6 +113,15 @@ export class User implements UserInterface {
 
   public position: { lat: number; lng: number };
 
+  @Column({ type: 'varchar', length: 400, nullable: true, default: null })
+  public language?: string | null;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  public hasAcceptedNewsletter?: boolean;
+
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
 
@@ -125,4 +135,7 @@ export class User implements UserInterface {
   public images: Image[];
 
   public mascotteId?: number;
+
+  @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
+  public userToStudents!: UserToStudent[];
 }

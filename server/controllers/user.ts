@@ -1,7 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository, MoreThan } from 'typeorm';
+import type { FindOperator } from 'typeorm';
+import { MoreThan, IsNull } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
@@ -9,6 +10,7 @@ import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
@@ -19,12 +21,18 @@ const userController = new Controller('/users');
 userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   let users: User[] = [];
   if (req.query.villageId) {
-    users = await getRepository(User).find({
-      where: [{ villageId: Number(getQueryString(req.query.villageId)) || 0 }, { villageId: null, type: MoreThan(`${UserType.TEACHER}`) }],
+    users = await AppDataSource.getRepository(User).find({
+      where: [
+        { villageId: Number(getQueryString(req.query.villageId)) || 0 },
+        // Fix for enums, they are stored as string in mySQL, so the comparison should be done with a string.
+        // But Typeorm expect a number...
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { villageId: IsNull(), type: MoreThan(`${UserType.TEACHER}`) as FindOperator<any> },
+      ],
     });
     const ids = users.map((u) => u.id);
     const mascottes = (
-      await getRepository(Activity)
+      await AppDataSource.getRepository(Activity)
         .createQueryBuilder('activity')
         .select('userId')
         .addSelect('id')
@@ -41,7 +49,7 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
       user.mascotteId = mascottes[user.id] || undefined;
     }
   } else {
-    users = await getRepository(User).find();
+    users = await AppDataSource.getRepository(User).find();
   }
   res.sendJSON(users);
 });
@@ -49,10 +57,10 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
 // --- Get one user. ---
 userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await getRepository(User).findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type >= UserType.ADMIN;
-  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+  if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
   }
@@ -66,7 +74,7 @@ userController.get({ path: '/pseudo/:pseudo' }, async (req: Request, res: Respon
     res.sendJSON({ available: true });
   }
   res.sendJSON({
-    available: (await getRepository(User).count({ where: { pseudo } })) === 0,
+    available: (await AppDataSource.getRepository(User).count({ where: { pseudo } })) === 0,
   });
 });
 
@@ -171,7 +179,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
     await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verfificationHash: user.verificationHash });
   }
   await setUserPosition(user);
-  await getRepository(User).save(user);
+  await AppDataSource.getRepository(User).save(user);
   delete user.passwordHash;
   delete user.verificationHash;
   res.sendJSON(user);
@@ -229,10 +237,10 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
 userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await getRepository(User).findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type >= UserType.ADMIN;
-  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+  if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
   }
@@ -262,7 +270,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   if (data.position) {
     user.position = data.position;
   }
-  await getRepository(User).save(user);
+  await AppDataSource.getRepository(User).save(user);
   res.sendJSON(user);
 });
 
@@ -283,9 +291,9 @@ const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
 userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await getRepository(User).createQueryBuilder().addSelect('User.passwordHash').where('User.id = :id', { id }).getOne();
+  const user = await AppDataSource.getRepository(User).createQueryBuilder().addSelect('User.passwordHash').where('User.id = :id', { id }).getOne();
   const isSelfProfile = req.user && req.user.id === id;
-  if (user === undefined || !isSelfProfile) {
+  if (user === null || !isSelfProfile) {
     next();
     return;
   }
@@ -305,7 +313,7 @@ userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async 
   }
   if (isPasswordCorrect) {
     user.passwordHash = await argon2.hash(data.newPassword);
-    await getRepository(User).save(user);
+    await AppDataSource.getRepository(User).save(user);
   } else {
     throw new AppError('Mot de passe invalide', ErrorCode.INVALID_PASSWORD);
   }
@@ -315,7 +323,7 @@ userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async 
 // --- Delete an user. ---
 userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await getRepository(User).findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type >= UserType.ADMIN;
   if (user === undefined || (!isSelfProfile && !isAdmin)) {
@@ -323,7 +331,7 @@ userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: 
     return;
   }
 
-  await getRepository(User).delete({ id });
+  await AppDataSource.getRepository(User).delete({ id });
   res.status(204).send();
 });
 
@@ -349,7 +357,7 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
     return;
   }
 
-  const user = await getRepository(User)
+  const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.verificationHash')
     .where('User.email = :email', { email: data.email })
@@ -372,7 +380,7 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
   // save user
   user.accountRegistration = 0;
   user.verificationHash = '';
-  await getRepository(User).save(user);
+  await AppDataSource.getRepository(User).save(user);
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);
@@ -407,7 +415,7 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
     return;
   }
 
-  const user = await getRepository(User).findOne({ where: { email: data.email } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { email: data.email } });
   if (!user) {
     next();
     return;
@@ -419,7 +427,7 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   // update user
   const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
-  await getRepository(User).save(user);
+  await AppDataSource.getRepository(User).save(user);
 
   // send mail with verification password
   // await sendMail(Email.RESET_PASSWORD, user.email, { resetCode: temporaryPassword }, req.body.languageCode || undefined);
@@ -450,7 +458,7 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
     return;
   }
 
-  const user = await getRepository(User)
+  const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.verificationHash')
     .where('User.email = :email', { email: data.email })
@@ -482,7 +490,7 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
   user.passwordHash = await argon2.hash(password);
   user.accountRegistration = 0;
   user.verificationHash = '';
-  await getRepository(User).save(user);
+  await AppDataSource.getRepository(User).save(user);
 
   // login user
   const { accessToken } = await getAccessToken(user.id, false);

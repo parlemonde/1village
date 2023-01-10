@@ -1,6 +1,5 @@
-import React from 'react';
-
 import Checkbox from '@mui/material/Checkbox';
+import React from 'react';
 
 import { FilterSelect } from './FilterSelect';
 import { Flag } from 'src/components/Flag';
@@ -28,6 +27,22 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
     { key: 1, label: 'Couplet', value: [12] },
     { key: 2, label: 'Histoire', value: [13] },
     { key: 3, label: 'Histoire ré-inventée', value: [14] },
+  ],
+  // ! Special for teacher in there dashboard (Better Comments to highlight)
+  [
+    { key: 0, label: 'Toutes', value: 'all' },
+    { key: 1, label: 'Énigmes', value: [1] },
+    { key: 2, label: 'Défis', value: [2] },
+    { key: 3, label: 'Questions', value: [3] },
+    { key: 4, label: 'Jeux', value: [4] },
+    { key: 5, label: 'Indices culturels', value: [6] },
+    { key: 6, label: 'Symboles', value: [7] },
+    { key: 7, label: 'Mascotte', value: [8] },
+    { key: 8, label: 'Reportages', value: [9] },
+    { key: 9, label: 'Réactions', value: [10] },
+    { key: 10, label: 'Couplet', value: [12] },
+    { key: 11, label: 'Histoire', value: [13] },
+    { key: 12, label: 'Histoire ré-inventée', value: [14] },
   ],
 ];
 
