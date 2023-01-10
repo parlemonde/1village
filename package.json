@@ -19,7 +19,7 @@
     "start": "NODE_ENV=production node dist/server/start.js",
     "dev": "yarn nodemon",
     "dev-staging": "NODE_USE_STAGING=true yarn nodemon",
-    "typeorm": "typeorm-ts-node-commonjs",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "jest": {
     "testEnvironment": "node",
