@@ -4,20 +4,38 @@ import type { Village } from './village.type';
 export enum UserType {
   SUPER_ADMIN = 0,
   ADMIN = 1,
-  TEACHER = 2,
-  MEDIATOR = 3,
-  OBSERVATOR = 4,
-  FAMILY = 5,
+  MEDIATOR = 2,
+  TEACHER = 3,
+  FAMILY = 4,
+  OBSERVATOR = 5,
 }
 
 export const userTypeNames = {
   [UserType.SUPER_ADMIN]: 'Super admin',
   [UserType.ADMIN]: 'Admin',
-  [UserType.TEACHER]: 'Professeur',
   [UserType.MEDIATOR]: 'Médiateur',
-  [UserType.OBSERVATOR]: 'Observateur',
+  [UserType.TEACHER]: 'Professeur',
   [UserType.FAMILY]: 'Parent',
+  [UserType.OBSERVATOR]: 'Observateur',
 };
+
+/* export enum UserType {
+  SUPER_ADMIN = 0,
+  ADMIN = 1,
+  MEDIATOR = 2,
+  TEACHER = 3,
+  FAMILY = 4,
+  OBSERVATOR = 5,
+}
+
+export const userTypeNames = {
+  [UserType.SUPER_ADMIN]: 'Super admin',
+  [UserType.ADMIN]: 'Admin',
+  [UserType.MEDIATOR]: 'Médiateur',
+  [UserType.TEACHER]: 'Professeur',
+  [UserType.FAMILY]: 'Parent',
+  [UserType.OBSERVATOR]: 'Observateur',
+}; */
 
 export interface User {
   id: number;

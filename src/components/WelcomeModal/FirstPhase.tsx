@@ -40,7 +40,7 @@ export const FirstPhase = () => {
     setNewUser(user);
   }, [user]);
 
-  if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
+  if (user === null || newUser === null || village === null || user.type <= UserType.MEDIATOR) {
     return null;
   }
 

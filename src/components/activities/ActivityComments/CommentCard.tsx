@@ -32,7 +32,7 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
-  const isPelico = user && user.type >= UserType.MEDIATOR;
+  const isPelico = user && user.type <= UserType.MEDIATOR;
 
   if (!user) {
     return null;

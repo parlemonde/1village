@@ -51,7 +51,7 @@ export const AvatarImg = ({
   displayAsUser = false,
   noToolTip = false,
 }: React.PropsWithChildren<AvatarImgProps>) => {
-  const isPelico = user && user.type >= UserType.MEDIATOR;
+  const isPelico = user && user.type <= UserType.MEDIATOR;
 
   if (isPelico && !displayAsUser) {
     return (

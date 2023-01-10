@@ -125,10 +125,10 @@ export async function getApp() {
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
-      // if (req.user === undefined && req.path !== '/login' && req.path !== '/') {
-      //   res.redirect('/login');
-      //   return;
-      // }
+      if (req.user === undefined && req.path !== '/login' && req.path !== '/') {
+        res.redirect('/login');
+        return;
+      }
       if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type < UserType.ADMIN)) {
         res.redirect('/');
         return;

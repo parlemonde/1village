@@ -27,7 +27,7 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 50, default: '' })
   public firstname: string;
 
-  @Column({ type: 'varchar', length: 50, default: '' })
+  @Column({ type: 'varchar', length: 100, default: '' })
   public lastname: string;
 
   @Column({ type: 'varchar', length: 50, default: '' })
@@ -67,8 +67,7 @@ export class User implements UserInterface {
   public isValidated: number;
 
   @Column({
-    type: 'enum',
-    enum: UserType,
+    type: 'tinyint',
     default: UserType.TEACHER,
   })
   type: UserType;

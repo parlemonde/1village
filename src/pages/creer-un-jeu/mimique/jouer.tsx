@@ -102,8 +102,8 @@ const PlayMimique = () => {
     }
     return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
   }, [game, userMap, users]);
-  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
-  const userIsPelico = user !== null && user.type >= UserType.OBSERVATOR;
+  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type <= UserType.MEDIATOR;
+  const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
   const ableToValidate = selected !== null;
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
