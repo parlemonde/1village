@@ -24,8 +24,6 @@ interface ClassroomContextProviderProps {
   setClassroom(value: React.SetStateAction<Classroom | null>): void;
 }
 
-//TODO : il faut alimenter le ClassroomContext avec les fonctions
-
 export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
@@ -33,7 +31,8 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
    * Creation of the classroom
    */
   const createClassroom = React.useCallback(async () => {
-    if (user?.type !== UserType.TEACHER) return;
+    if (!user) return;
+    if (user.type !== UserType.TEACHER) return;
     if (!village) return;
     await axiosLoggedRequest({
       method: 'POST',
@@ -55,6 +54,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
 
   // * Classroom is create automatically for all teacher if it does not exit already
   React.useEffect(() => {
+    //TODO: add getClassroom over here and if null launch createClassroom
     if (classroom === null) {
       createClassroom();
     }
@@ -65,7 +65,8 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
    */
   // * Might be useless if I have a classroom object
   const getClassroom = React.useCallback(async () => {
-    if (user?.type !== UserType.TEACHER) return;
+    if (!user) return;
+    if (user.type !== UserType.TEACHER) return;
     await axiosLoggedRequest({
       method: 'GET',
       url: `/classrooms/${user.id}`,
@@ -83,10 +84,11 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
    * Update teacher's classroom Parameters
    */
   const updateClassroomParameters = React.useCallback(async (data: ClassroomUpdateData) => {
-    if (user?.type !== UserType.TEACHER) return;
+    if (!user) return;
+    if (user.type !== UserType.TEACHER) return;
     await axiosLoggedRequest({
       method: 'PUT',
-      url: `/classrooms/${user.id}`,
+      url: `/classrooms/${user.id}`, //TODO: mettre classroom id et pas userId
       data: { ...data },
     })
       .then((response) => {

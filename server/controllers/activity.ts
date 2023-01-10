@@ -36,6 +36,7 @@ type ActivityGetter = {
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
   teacherId?: number;
+  visibleToParent: boolean;
 };
 
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
@@ -89,6 +90,7 @@ const getActivities = async ({
   delayedDays,
   hasVisibilitySetToClass,
   teacherId,
+  visibleToParent,
 }: ActivityGetter) => {
   // get ids
   let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').where('activity.status = :status', { status });
@@ -103,6 +105,10 @@ const getActivities = async ({
   }
   if (phase !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.phase = :phase', { phase });
+  }
+  if (visibleToParent) {
+    // * Here if user is a parent, we only select activities with the attribute is set to true
+    subQueryBuilder = subQueryBuilder.andWhere('activity.isVisibleToParent = :visibleToParent', { visibleToParent });
   }
   if (responseActivityId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
@@ -162,7 +168,6 @@ const getActivities = async ({
 // --- Get all activities. ---
 activityController.get({ path: '' }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-  if (req.user.type !== UserType.TEACHER && req.user.type !== UserType.FAMILY) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
 
   const activities = await getActivities({
     limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
@@ -184,6 +189,7 @@ activityController.get({ path: '' }, async (req: Request, res: Response) => {
     delayedDays: req.query.delayedDays && req.query.delayedDays !== '0' ? Number(getQueryString(req.query.delayedDays)) : undefined,
     hasVisibilitySetToClass: req.query.hasVisibilitySetToClass === 'true' ? true : undefined,
     teacherId: req.query.teacherId ? Number(getQueryString(req.query.teacherId)) : undefined,
+    visibleToParent: req.user.type === UserType.FAMILY ? true : false,
   });
   res.sendJSON(activities);
 });

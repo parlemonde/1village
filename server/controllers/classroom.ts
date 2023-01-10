@@ -120,15 +120,19 @@ classroomController.put({ path: '/:id', userType: UserType.TEACHER }, async (req
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const id = parseInt(req.params.id, 10) || 0;
+  const userId = parseInt(req.params.id, 10) || 0;
   // * Memo:  this logic may change in the future if teacher can have multiple classes
-  const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { id } });
+  const classroom = await AppDataSource.getRepository(Classroom)
+    .createQueryBuilder('classroom')
+    .where('classroom.userId = :userId', { userId: userId })
+    .getOne();
 
   if (!classroom) return next();
 
   classroom.avatar = data.avatar ?? classroom.avatar;
-  classroom.delayedDays = data.delayedDays ?? classroom.delayedDays;
   classroom.name = data.name ?? classroom.name;
+  classroom.delayedDays = data.delayedDays ?? classroom.delayedDays;
+  classroom.hasVisibilitySetToClass = data.hasVisibilitySetToClass ?? classroom.hasVisibilitySetToClass;
 
   await AppDataSource.getRepository(Classroom).save(classroom);
   res.json(classroom);

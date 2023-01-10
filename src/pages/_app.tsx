@@ -71,6 +71,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
 
+  //Todo: will have to go here if fetch in context directly
   React.useEffect(() => {
     if (user) {
       fetchClassroom(user.id).then((classroom) => {
