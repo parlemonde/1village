@@ -1,8 +1,7 @@
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
 import React, { useEffect, useState } from 'react';
 
 import { Base } from 'src/components/Base';
+import { useUserRequests } from 'src/services/useUsers';
 import type { UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -15,7 +14,6 @@ const SignUpForm = () => {
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
@@ -24,7 +22,9 @@ const SignUpForm = () => {
     type: UserType.FAMILY,
   });
 
-  const registerValidationSchema = {
+  const { addUser } = useUserRequests();
+
+  /*  const registerValidationSchema = {
     type: 'object',
     properties: {
       email: {
@@ -66,8 +66,7 @@ const SignUpForm = () => {
   };
 
   const ajv = new Ajv();
-  addFormats(ajv);
-  const validate = ajv.compile(registerValidationSchema);
+  addFormats(ajv); */
 
   useEffect(() => {
     let newErrorMessage = '';
@@ -106,20 +105,17 @@ const SignUpForm = () => {
     });
   }, [email, firstname, lastname, password, confirmPassword]);
 
-  useEffect(() => {
-    if (validate(newUser) === true) {
-      setIsFormValid(true);
-    }
-  }, [newUser, validate]);
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     /*     console.log(newUser);
     console.log(validate(newUser)); */
 
-    if (!isFormValid) {
-      /*       console.log(validate.errors);
-       */
+    if (isPasswordMatch === false || firstname === '' || lastname === '' || isEmailValid === false || errorMessage !== '') {
+      console.log('Incorrect');
+    } else {
+      console.log(newUser);
+      addUser(newUser);
+      console.log('it worked maybe, i dont know');
     }
   }
 
