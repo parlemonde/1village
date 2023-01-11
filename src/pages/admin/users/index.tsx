@@ -88,19 +88,34 @@ const Users = () => {
       >
         <AdminTable
           emptyPlaceholder="Vous n'avez pas encore d'utilisateur !"
-          data={users.map((u) => ({
-            id: u.id,
-            pseudo: u.pseudo,
-            email: u.email,
-            school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
-            country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
-            village: u.villageId ? (
-              villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-            ) : (
-              <span style={{ color: 'grey' }}>Non assigné</span>
-            ),
-            type: <Chip size="small" label={userTypeNames[u.type]} />,
-          }))}
+          data={users.map((u) =>
+            u.country
+              ? {
+                  id: u.id,
+                  pseudo: u.pseudo,
+                  email: u.email,
+                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                  country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
+                  village: u.villageId ? (
+                    villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+                  ) : (
+                    <span style={{ color: 'grey' }}>Non assigné</span>
+                  ),
+                  type: <Chip size="small" label={userTypeNames[u.type]} />,
+                }
+              : {
+                  id: u.id,
+                  pseudo: u.pseudo,
+                  email: u.email,
+                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                  village: u.villageId ? (
+                    villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+                  ) : (
+                    <span style={{ color: 'grey' }}>Non assigné</span>
+                  ),
+                  type: <Chip size="small" label={userTypeNames[u.type]} />,
+                },
+          )}
           columns={[
             { key: 'pseudo', label: 'Pseudo', sortable: true },
             { key: 'email', label: 'Email', sortable: true },

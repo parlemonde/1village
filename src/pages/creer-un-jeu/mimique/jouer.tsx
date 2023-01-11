@@ -227,13 +227,15 @@ const PlayMimique = () => {
 
           {(found || foundError) && (
             <>
-              <MimicStats
-                gameResponses={gameResponses}
-                choices={choices}
-                country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
-                userMap={userMap}
-                users={users}
-              />
+              {user.country && (
+                <MimicStats
+                  gameResponses={gameResponses}
+                  choices={choices}
+                  country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
+                  userMap={userMap}
+                  users={users}
+                />
+              )}
 
               <MimicStats
                 gameResponses={gameResponses}

@@ -25,7 +25,7 @@ const IndiceStep1 = () => {
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
   const { activities } = useActivities({
     page: 0,
-    countries: user ? [user.country?.isoCode.toUpperCase()] : [],
+    countries: user?.country ? [user.country?.isoCode.toUpperCase()] : [],
     pelico: true,
     type: ActivityType.INDICE,
   });
