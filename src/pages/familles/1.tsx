@@ -1,6 +1,6 @@
-import { Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
+import React, { useReducer } from 'react';
 
 import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
@@ -9,12 +9,14 @@ import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
+import type { InitialStateOptionsProps } from 'types/classroom.type';
 
 const content1 = {
   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
@@ -28,12 +30,75 @@ const content2 = {
 //TODO: ouvrir un nouvel onglet pour les activités
 //TODO: factoriser le code méthode SOLID
 //TODO: traiter les erreurs de react forward avec les activityCard
+
+const initialStateOptions = {
+  default: {
+    delayedDays: 0,
+    hasVisibilitySetToClass: false,
+  },
+  timeDelay: {
+    delayedDays: 0,
+    hasVisibilitySetToClass: false, // reset to default
+  },
+  ownClassTimeDelay: {
+    delayedDays: 0,
+    hasVisibilitySetToClass: true, //this is always true
+  },
+  ownClass: {
+    delayedDays: 0, // reset to default
+    hasVisibilitySetToClass: true, //this is always true
+  },
+};
+
+function reducer(
+  state: InitialStateOptionsProps,
+  action: {
+    type: string;
+    data: number;
+  },
+) {
+  switch (action.type) {
+    case 'default':
+      return {
+        ...state,
+        default: {
+          ...state.default,
+        },
+      };
+    case 'timeDelay':
+      return {
+        ...state,
+        timeDelay: {
+          ...state.timeDelay,
+          delayedDays: action.data,
+        },
+      };
+    case 'ownClass':
+      return {
+        ...state,
+        ownClass: {
+          ...state.ownClass,
+        },
+      };
+    case 'ownClassTimeDelay':
+      return {
+        ...state,
+        ownClassTimeDelay: {
+          ...state.ownClassTimeDelay,
+          delayedDays: action.data,
+        },
+      };
+    default:
+      return state;
+  }
+}
+
 const ClassroomParamStep1Visibility = () => {
   const router = useRouter();
-  const [daysDelay, setDaysDelay] = React.useState({ options2: 0, options4: 0 });
-  const [isDisabled, setIsDisabled] = React.useState({ options2: true, options4: true });
-
-  const radioSelectedRef = useRef('default');
+  const [state, dispatch] = useReducer(reducer, initialStateOptions);
+  const [isDisabled, setIsDisabled] = React.useState({ timeDelay: true, ownClassTimeDelay: true });
+  const [radioValue, setRadioValue] = React.useState('default');
+  const { updateClassroomParameters } = React.useContext(ClassroomContext);
 
   const { village } = React.useContext(VillageContext);
   // filters logic
@@ -68,12 +133,38 @@ const ClassroomParamStep1Visibility = () => {
   );
 
   const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
-    setDaysDelay({ ...daysDelay, [key]: Number((event.target as HTMLInputElement).value) });
+    key === 'timeDelay'
+      ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
+      : dispatch({ type: 'ownClassTimeDelay', data: Number((event.target as HTMLInputElement).value) });
   };
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    radioSelectedRef.current = event.target.value;
+    setRadioValue((event.target as HTMLInputElement).value);
+    (event.target as HTMLInputElement).value === 'default' ? dispatch({ type: 'default', data: 0 }) : dispatch({ type: 'ownClass', data: 0 });
   };
-  const handleClick = (id: number) => {
+
+  const handSubmitSelection = (key: string) => {
+    switch (key) {
+      case 'default':
+        updateClassroomParameters(state.default);
+        break;
+      case 'timeDelay':
+        // state.ownClass.delayedDays !== 0 && updateClassroomParameters(state.timeDelay);
+        updateClassroomParameters(state.timeDelay);
+        break;
+      case 'ownClass':
+        updateClassroomParameters(state.ownClass);
+        break;
+      case 'ownClassTimeDelay':
+        // state.ownClassTimeDelay.delayedDays !== 0 && updateClassroomParameters(state.ownClassTimeDelay);
+        updateClassroomParameters(state.ownClassTimeDelay);
+        break;
+      default:
+        updateClassroomParameters(state.default);
+        break;
+    }
+  };
+
+  const handleActivityVisibility = (id: number) => {
     axiosLoggedRequest({
       method: 'PUT',
       url: `/teachers/set-activity-visibility/${id}`,
@@ -81,7 +172,7 @@ const ClassroomParamStep1Visibility = () => {
       refetch();
     });
   };
-  const toggle = (key: string, bool: boolean) => {
+  const toggleInput = (key: string, bool: boolean) => {
     setIsDisabled({ ...isDisabled, [key]: bool });
   };
   const onNext = () => {
@@ -103,50 +194,56 @@ const ClassroomParamStep1Visibility = () => {
           Vous allez inviter les familles de vos élèves à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en ligne.
           Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 4 options :
         </p>
-        <RadioGroup aria-label="visibility" onChange={handleRadioSelect} defaultValue={radioSelectedRef.current}>
-          <FormControlLabel
-            value="default"
-            name="options1"
-            control={<Radio />}
-            label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
-          />
-          <FormControlLabel
-            value="timeDelay"
-            name="options2"
-            control={<Radio />}
-            label={
-              <TextnInputContainer
-                {...content1}
-                onChange={(event) => handleDaysDelay('options2', event)}
-                value={daysDelay.options2}
-                disabled={isDisabled.options2}
-              />
-            }
-            onClick={() => toggle('options2', false)}
-            disabled={isDisabled.options2}
-          />
-          <FormControlLabel
-            value="ownClass"
-            name="options3"
-            control={<Radio />}
-            label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
-          />
-          <FormControlLabel
-            value="ownClass&TimeDelay"
-            name="options4"
-            control={<Radio />}
-            label={
-              <TextnInputContainer
-                {...content2}
-                onChange={(event) => handleDaysDelay('options4', event)}
-                value={daysDelay.options4}
-                disabled={isDisabled.options4}
-              />
-            }
-            onClick={() => toggle('options4', false)}
-            disabled={isDisabled.options4}
-          />
-        </RadioGroup>
+        <FormControl>
+          <RadioGroup aria-label="visibility" onChange={handleRadioSelect} value={radioValue}>
+            <FormControlLabel
+              value="default"
+              name="default"
+              control={<Radio />}
+              label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
+              onFocus={() => handSubmitSelection('default')}
+            />
+            <FormControlLabel
+              value="timeDelay"
+              name="timeDelay"
+              control={<Radio />}
+              label={
+                <TextnInputContainer
+                  {...content1}
+                  onChange={(event) => handleDaysDelay('timeDelay', event)}
+                  onBlur={() => handSubmitSelection('timeDelay')}
+                  value={state.timeDelay.delayedDays}
+                  disabled={isDisabled.timeDelay}
+                />
+              }
+              onClick={() => toggleInput('timeDelay', false)}
+              disabled={isDisabled.timeDelay}
+            />
+            <FormControlLabel
+              value="ownClass"
+              name="ownClass"
+              control={<Radio />}
+              label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
+              onFocus={() => handSubmitSelection('ownClass')}
+            />
+            <FormControlLabel
+              value="ownClassTimeDelay"
+              name="ownClassTimeDelay"
+              control={<Radio />}
+              label={
+                <TextnInputContainer
+                  {...content2}
+                  onChange={(event) => handleDaysDelay('ownClassTimeDelay', event)}
+                  onBlur={() => handSubmitSelection('ownClassTimeDelay')}
+                  value={state.ownClassTimeDelay.delayedDays}
+                  disabled={isDisabled.ownClassTimeDelay}
+                />
+              }
+              onClick={() => toggleInput('ownClassTimeDelay', false)}
+              disabled={isDisabled.ownClassTimeDelay}
+            />
+          </RadioGroup>
+        </FormControl>
         <div style={{ margin: '-1rem 0' }}>
           <StepsButton next={onNext} />
         </div>
@@ -178,7 +275,7 @@ const ClassroomParamStep1Visibility = () => {
                 filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
                 backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
               }}
-              onClick={() => handleClick(activity.id)}
+              onClick={() => handleActivityVisibility(activity.id)}
             >
               {/* UI logic for activity disable */}
               {activity.isVisibleToParent ? (
@@ -208,6 +305,7 @@ type TextInputContainerProps = {
   text1: string;
   text2?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: () => void;
   value: number;
   disabled?: boolean;
 };
@@ -218,7 +316,7 @@ type TextInputContainerProps = {
  * @param value value of the input
  * @param object text object containing text to display
  */
-const TextnInputContainer = ({ onChange, value, disabled, ...props }: TextInputContainerProps) => {
+const TextnInputContainer = ({ onChange, onBlur, value, disabled, ...props }: TextInputContainerProps) => {
   const { text1, text2 } = props;
   const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
   return (
@@ -229,10 +327,10 @@ const TextnInputContainer = ({ onChange, value, disabled, ...props }: TextInputC
         variant="standard"
         type="number"
         inputProps={{ min: 0 }}
-        // onFocus={onFocusInput('totalStudent')}
         size="small"
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         disabled={disabled}
         sx={{
           width: '2rem',

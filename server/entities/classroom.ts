@@ -9,26 +9,21 @@ export class Classroom {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column()
-  public userId: number;
-
-  @Column()
-  public villageId: number;
-
   @Column({ nullable: true, default: null })
   public name: string;
 
   @Column({ nullable: true, default: null })
   public avatar: string;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true, default: 0 })
   public delayedDays: number;
 
   @Column({
     type: 'boolean',
+    nullable: true,
     default: false,
   })
-  public hasVisibilitySetToClass?: boolean;
+  public hasVisibilitySetToClass: boolean;
 
   @OneToOne(() => User)
   @JoinColumn({ name: 'userId' })

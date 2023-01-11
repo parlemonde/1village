@@ -7,3 +7,15 @@ export interface Classroom {
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
 }
+
+export type StateOptions = {
+  delayedDays: number;
+  hasVisibilitySetToClass: boolean;
+};
+
+export interface InitialStateOptionsProps {
+  default: StateOptions;
+  timeDelay: StateOptions;
+  ownClass: StateOptions;
+  ownClassTimeDelay: StateOptions;
+}

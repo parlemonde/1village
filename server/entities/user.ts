@@ -76,7 +76,7 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   public villageId: number | null;
 
-  @Column({ type: 'varchar', length: 2, nullable: false })
+  @Column({ type: 'varchar', length: 2, nullable: true })
   set countryCode(newCountryCode: string) {
     this.country = countriesMap[newCountryCode] || countriesMap['FR'];
   }
@@ -133,5 +133,5 @@ export class User implements UserInterface {
   public mascotteId?: number;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
-  public userToStudents!: UserToStudent[];
+  public userToStudents: UserToStudent[];
 }
