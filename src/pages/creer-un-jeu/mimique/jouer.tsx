@@ -230,7 +230,7 @@ const PlayMimique = () => {
               <MimicStats
                 gameResponses={gameResponses}
                 choices={choices}
-                country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
+                country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
                 userMap={userMap}
                 users={users}
               />
@@ -239,7 +239,7 @@ const PlayMimique = () => {
                 gameResponses={gameResponses}
                 choices={choices}
                 country={
-                  userIsPelico ? village.countries[1].isoCode : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
+                  userIsPelico ? village.countries[1].isoCode : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
                 }
                 userMap={userMap}
                 users={users}

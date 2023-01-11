@@ -24,7 +24,7 @@ export const Accueil = () => {
     () =>
       !village || (selectedPhase === 1 && !isMediator)
         ? user && user.country !== null
-          ? [user.country.isoCode.toUpperCase()]
+          ? [user.country?.isoCode.toUpperCase()]
           : []
         : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isMediator],
