@@ -137,7 +137,7 @@ export async function getApp() {
       await handle(req, res);
     }),
   );
-
+  //TODO: Mettre un redirection si on tape url famille
   // [6] --- Last fallback ---
   app.use(morgan(isDevENV ? 'dev' : 'combined'), (_, res: Response) => {
     res.status(404).send('Error 404 - Not found.');

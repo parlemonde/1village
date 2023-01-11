@@ -102,7 +102,7 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
               {isPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
-                <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </p>
           )}

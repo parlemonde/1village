@@ -79,12 +79,12 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   public villageId: number | null;
 
-  @Column({ type: 'varchar', length: 2, nullable: false })
+  @Column({ type: 'varchar', length: 2, nullable: true })
   set countryCode(newCountryCode: string) {
     this.country = countriesMap[newCountryCode] || countriesMap['FR'];
   }
   get countryCode() {
-    return this.country.isoCode;
+    return this.country?.isoCode;
   }
   public country: Country;
 
@@ -136,5 +136,5 @@ export class User implements UserInterface {
   public mascotteId?: number;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
-  public userToStudents!: UserToStudent[];
+  public userToStudents: UserToStudent[];
 }

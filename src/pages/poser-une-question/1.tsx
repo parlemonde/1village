@@ -32,8 +32,8 @@ const Question1 = () => {
     countries:
       village && (isMediator || village.activePhase >= 2)
         ? village.countries.map((c) => c.isoCode.toUpperCase())
-        : user
-        ? [user.country.isoCode.toUpperCase()]
+        : user?.country
+        ? [user.country?.isoCode.toUpperCase()]
         : [],
     pelico: true,
     type: ActivityType.QUESTION,

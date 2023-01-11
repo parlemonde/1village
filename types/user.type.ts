@@ -19,6 +19,8 @@ export const userTypeNames = {
   [UserType.OBSERVATOR]: 'Observateur',
 };
 
+// ====== OLD USERTYPES ======
+
 /* export enum UserType {
   SUPER_ADMIN = 0,
   ADMIN = 1,
@@ -66,7 +68,7 @@ export interface User {
   village: Village | null;
 
   // country relation
-  country: Country;
+  country: Country | null;
 
   mascotteId?: number;
 }
@@ -79,3 +81,21 @@ export type UserForm = {
   passwordConfirmation?: string;
   type: UserType.FAMILY;
 };
+export interface UserParamClassroom {
+  classroom_avatar: string | null;
+  classroom_delayedDays: number;
+  classroom_hasVisibilitySetToClass: number; //! boolean in reality but since I used getRawMany for specific reason, boolean is in fact Tinyint in mysql and it return a number instead
+  classroom_id: number;
+  classroom_name: string | null;
+  classroom_userId: number;
+  classroom_villageId: number;
+  student_classroomId: number;
+  student_firstname: string | null;
+  student_hashedCode: string | null;
+  student_id: number;
+  student_lastname: string | null;
+  student_numLinkedAccount: number;
+  userStudent_id: number;
+  userStudent_studentId: number;
+  userStudent_userId: number;
+}

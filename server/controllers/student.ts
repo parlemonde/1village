@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from 'express';
 
 import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
+import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -64,14 +65,21 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const student = new Student();
-  student.classroomId = data.classroomId;
+  student.classroom = data.classroomId;
   student.firstname = data.firstname ?? null;
   student.lastname = data.lastname ?? null;
   student.hashedCode = data.hashedCode ?? null;
-  student.numLinkedAccount = data.numLinkedAccount ?? null;
 
-  await AppDataSource.getRepository(Student).save(student);
-  res.json(student);
+  const studentCreated = await AppDataSource.getRepository(Student).save(student);
+
+  //Insert of new student in table user_to_student
+  await AppDataSource.createQueryBuilder()
+    .insert()
+    .into(UserToStudent)
+    .values([{ student: { id: studentCreated.id } }])
+    .execute();
+
+  res.json(studentCreated);
 });
 
 type UpdateStudentData = {

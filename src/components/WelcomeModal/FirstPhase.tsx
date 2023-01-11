@@ -223,8 +223,8 @@ export const FirstPhase = () => {
             <span style={{ fontSize: '1.1rem' }}>Votre pays</span>
             <br />
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
-              <span style={{ marginRight: '0.5rem' }}>{user ? user.country.name : ''}</span>
-              {user && <Flag country={user.country.isoCode}></Flag>}
+              <span style={{ marginRight: '0.5rem' }}>{user ? user.country?.name : ''}</span>
+              {user && <Flag country={user.country?.isoCode}></Flag>}
             </h2>
             <Button
               color="inherit"
@@ -320,7 +320,7 @@ export const FirstPhase = () => {
                     setNewUser((u) => ({ ...u, postalCode }));
                   }}
                 />
-                <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
+                <PanelInput value={user.country?.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
                 <PanelInput
                   style={{ marginTop: '2rem' }}
                   value={newUser.displayName || ''}
