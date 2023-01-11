@@ -81,7 +81,7 @@ export class User implements UserInterface {
     this.country = countriesMap[newCountryCode] || countriesMap['FR'];
   }
   get countryCode() {
-    return this.country.isoCode;
+    return this.country?.isoCode;
   }
   public country: Country;
 

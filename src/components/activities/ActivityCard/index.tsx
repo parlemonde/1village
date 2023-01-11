@@ -120,7 +120,7 @@ export const ActivityCard = ({
                   <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
                 </Link>
               ) : (
-                <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </div>
           </div>

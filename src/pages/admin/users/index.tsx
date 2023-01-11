@@ -93,7 +93,7 @@ const Users = () => {
             pseudo: u.pseudo,
             email: u.email,
             school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
-            country: `${countryToFlag(u.country.isoCode)} ${u.country.name}`,
+            country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
             village: u.villageId ? (
               villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
             ) : (
