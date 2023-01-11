@@ -31,7 +31,7 @@ interface mimicStatProps {
 
 export const MimicStats = ({ gameResponses, choices, country, userMap, users }: mimicStatProps) => {
   const countryResponses = React.useMemo(() => {
-    return gameResponses.filter((responseGame) => users[userMap[responseGame.userId]]?.country.isoCode === country);
+    return gameResponses.filter((responseGame) => users[userMap[responseGame.userId]]?.country?.isoCode === country);
   }, [country, gameResponses, userMap, users]);
   const responseCount = countryResponses.length;
   const stats = React.useMemo(() => {

@@ -120,7 +120,7 @@ export async function getApp() {
         res.redirect('/login');
         return;
       }
-      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type < UserType.ADMIN)) {
+      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type > UserType.ADMIN)) {
         res.redirect('/');
         return;
       }

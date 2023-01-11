@@ -102,8 +102,8 @@ const PlayMimique = () => {
     }
     return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
   }, [game, userMap, users]);
-  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
-  const userIsPelico = user !== null && user.type >= UserType.OBSERVATOR;
+  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type <= UserType.MEDIATOR;
+  const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
   const ableToValidate = selected !== null;
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
@@ -168,7 +168,7 @@ const PlayMimique = () => {
               {gameCreatorIsPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
-                <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={gameCreator.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </p>
           </div>
@@ -227,19 +227,21 @@ const PlayMimique = () => {
 
           {(found || foundError) && (
             <>
-              <MimicStats
-                gameResponses={gameResponses}
-                choices={choices}
-                country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
-                userMap={userMap}
-                users={users}
-              />
+              {user.country && (
+                <MimicStats
+                  gameResponses={gameResponses}
+                  choices={choices}
+                  country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
+                  userMap={userMap}
+                  users={users}
+                />
+              )}
 
               <MimicStats
                 gameResponses={gameResponses}
                 choices={choices}
                 country={
-                  userIsPelico ? village.countries[1].isoCode : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
+                  userIsPelico ? village.countries[1].isoCode : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
                 }
                 userMap={userMap}
                 users={users}

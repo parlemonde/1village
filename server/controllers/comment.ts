@@ -98,7 +98,7 @@ commentController.put({ path: '/:commentId', userType: UserType.TEACHER }, async
 commentController.delete({ path: '/:commentId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const id = parseInt(req.params.commentId, 10) ?? 0;
-  if (req.user && req.user.type >= UserType.ADMIN) {
+  if (req.user && req.user.type <= UserType.ADMIN) {
     await AppDataSource.getRepository(Comment).delete({ id, activityId });
   } else {
     await AppDataSource.getRepository(Comment).delete({ id, activityId, userId: req.user?.id ?? 0 });

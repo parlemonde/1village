@@ -16,7 +16,7 @@ interface AddContentCardProps {
 
 export const AddContentCard = ({ addContent = () => {} }: AddContentCardProps) => {
   const { user } = React.useContext(UserContext);
-  const isPelico = user !== null && user.type >= UserType.MEDIATOR;
+  const isPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   return (
     <Card style={{ display: 'inline-block' }}>

@@ -124,19 +124,19 @@ const getActivities = async ({
   } else if (pelico && countries !== undefined && countries.length > 0) {
     subQueryBuilder = subQueryBuilder
       .innerJoin('activity.user', 'user')
-      .andWhere('((user.countryCode IN (:countries) AND user.type <= :userType) OR user.type >= :userType2)', {
+      .andWhere('((user.countryCode IN (:countries) AND user.type >= :userType) OR user.type <= :userType2)', {
         countries,
-        userType: UserType.OBSERVATOR,
+        userType: UserType.TEACHER,
         userType2: UserType.MEDIATOR,
       });
   } else if (pelico && countries !== undefined && countries.length === 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type >= :userType2', {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type <= :userType2', {
       userType2: UserType.MEDIATOR,
     });
   } else if (!pelico && countries !== undefined && countries.length > 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type <= :userType', {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type >= :userType', {
       countries,
-      userType: UserType.OBSERVATOR,
+      userType: UserType.TEACHER,
     });
   } else if (!pelico && countries !== undefined) {
     return [];
@@ -236,7 +236,7 @@ activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (re
 });
 
 activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res, next) => {
-  if (!req.user || req.user.type >= UserType.MEDIATOR) {
+  if (!req.user || req.user.type <= UserType.MEDIATOR) {
     // no mascotte for pelico
     next();
     return;
@@ -336,7 +336,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const villageId = req.user.type >= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
+  const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
   if (villageId === null) {
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
@@ -443,7 +443,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     next();
     return;
   }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+  if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     next();
     return;
   }
@@ -553,7 +553,7 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
     res.status(204).send();
     return;
   }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+  if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     res.status(204).send();
     return;
   }

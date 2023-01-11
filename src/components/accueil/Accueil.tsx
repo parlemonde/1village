@@ -19,12 +19,12 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediator = user !== null && user.type >= UserType.MEDIATOR;
+  const isMediator = user !== null && user.type <= UserType.MEDIATOR;
   const filterCountries = React.useMemo(
     () =>
       !village || (selectedPhase === 1 && !isMediator)
         ? user && user.country !== null
-          ? [user.country.isoCode.toUpperCase()]
+          ? [user.country?.isoCode.toUpperCase()]
           : []
         : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isMediator],

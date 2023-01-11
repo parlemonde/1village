@@ -25,6 +25,12 @@ export class User implements UserInterface {
   public pseudo: string;
 
   @Column({ type: 'varchar', length: 50, default: '' })
+  public firstname: string;
+
+  @Column({ type: 'varchar', length: 100, default: '' })
+  public lastname: string;
+
+  @Column({ type: 'varchar', length: 50, default: '' })
   public level: string;
 
   @Column({ type: 'varchar', length: 255, default: '' })
@@ -58,8 +64,7 @@ export class User implements UserInterface {
   public firstLogin: number;
 
   @Column({
-    type: 'enum',
-    enum: UserType,
+    type: 'tinyint',
     default: UserType.TEACHER,
   })
   type: UserType;
@@ -76,7 +81,7 @@ export class User implements UserInterface {
     this.country = countriesMap[newCountryCode] || countriesMap['FR'];
   }
   get countryCode() {
-    return this.country.isoCode;
+    return this.country?.isoCode;
   }
   public country: Country;
 

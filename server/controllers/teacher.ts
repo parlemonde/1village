@@ -11,16 +11,24 @@ import { Controller } from './controller';
 export const teacherController = new Controller('/teachers');
 
 /**
+
  * Endpoint to create a unique invite code for a teacher
+
  * @param {object} req Express request object
+
  * @param {object} res Express response object
+
  * @return {string} JSON Response invite code
+
  */
+
 teacherController.get({ path: '/invite', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
+
   const inviteCode = inviteCodeGenerator(10);
+
   res.json({ inviteCode: inviteCode });
 });
 
@@ -55,12 +63,16 @@ teacherController.put(
  * Endpoint to delete a student's parent attach to the profil for the teacher and his classroom
  * @param {object} req Express request object
  * @param {object} res Express response object
+
  * @return {number} Route API JSON response
+
  */
+
 teacherController.delete({ path: '/detach/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
+
   const userId = parseInt(req.params.id, 10) || 0;
   const studentId = parseInt(req.params.studentId);
   const student = await AppDataSource.getRepository(UserToStudent).find({ where: { userId: userId, studentId: studentId } });
