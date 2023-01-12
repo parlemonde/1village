@@ -1,7 +1,14 @@
 export interface Student {
-    id: number;
-    classroomId: number;
-    firstname?: string;
-    lastname?: string;
-    numLinkedAccount?: number;
-  }
+  id: number;
+  classroomId: number;
+  firstname?: string;
+  lastname?: string;
+  hashedCode?: string;
+  numLinkedAccount?: number;
+}
+// Show only the data visible for the student form
+export interface StudentForm {
+  firstname: string;
+  lastname: string;
+  hashedCode: string;
+}

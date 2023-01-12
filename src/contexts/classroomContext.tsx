@@ -12,33 +12,44 @@ interface ClassroomContextValue {
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
-  student: Student | null;
+  // student: Student | null;
   students: Student[] | null;
-  setStudent: (value: React.SetStateAction<Student | null>) => void;
-  getStudent(): Promise<void>;
+  setStudents: (value: React.SetStateAction<Student[]>) => void;
+  /*   getStudent(): Promise<void>; */
 }
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
   classroom: null,
   setClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
-  student: null,
+  // student: null,
   students: null,
-  getStudent: async () => {},
-  setStudent: function (value: React.SetStateAction<Student | null>): void {
-    throw new Error('Function not implemented.');
-  },
+  /*   getStudent: async () => {}, */
+  setStudents: async () => {},
+  // setStudent: function (value: React.SetStateAction<Student | null>): void {
+  //   throw new Error('Function not implemented.');
+  // },
 });
+
 interface ClassroomContextProviderProps {
   classroom: Classroom | null;
   setClassroom(value: React.SetStateAction<Classroom | null>): void;
+  // initialStudent: Student | null;
+  students: Student[] | null;
+  setStudents(value: React.SetStateAction<Student[]>): void;
 }
+
 //TODO : il faut alimenter le ClassroomContext avec les fonctions
-export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
+export const ClassroomContextProvider = ({
+  classroom,
+  setClassroom,
+  // initialStudent,
+  children,
+}: React.PropsWithChildren<ClassroomContextProviderProps>) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const [student, getStudent] = React.useState<Student | null>(null);
-  const [students, setStudents] = React.useState<Student[] | null>(null);
+  /*   const [student, setStudent] = React.useState<Student | null>(initialStudent); */
+  const [students, setStudents] = React.useState<Student[]>([]);
 
   /**
    * Creation of the classroom
@@ -109,7 +120,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
   /**
    * Add new students in the classrom
    */
-  const createStudent = React.useCallback(async ({ firstname, lastname, hashCode }: StudentCreateData) => {
+  const createStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: Student) => {
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
     await axiosLoggedRequest({
@@ -118,16 +129,15 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       data: {
         firstname,
         lastname,
-        hashCode,
+        hashedCode,
       },
     })
       .then((response) => {
-        // Save the previous state of the students array
-        const prevStudents = [...students];
         // Add the new student to the array
-        const newStudents = [...prevStudents, response.data.student];
+        // const newStudents = [...students, response.data.student];
         // Update the state with the new array
-        setStudents(newStudents);
+        // setStudents(newStudents);
+        setStudents(response.data.student);
         return response.data.student;
       })
       .catch((err) => {
@@ -140,21 +150,20 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
   /**
    * Update one student
    */
-  const setStudent = React.useCallback(async (data: ClassroomUpdateData) => {
-    if (user?.type !== UserType.TEACHER) return;
-    await axiosLoggedRequest({
-      method: 'PUT',
-      url: `/students/${id}`,
-      data: { ...data },
-    })
-      .then((response) => {
-        return response.data.classroom;
-      })
-      .catch((err) => {
-        return err.message;
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // const setStudent = React.useCallback(async (data: ClassroomUpdateData) => {
+  //   if (user?.type !== UserType.TEACHER) return;
+  //   await axiosLoggedRequest({
+  //     method: 'PUT',
+  //     url: `/students/${student.id}`,
+  //     data: { ...data },
+  //   })
+  //     .then((response) => {
+  //       return response.data.classroom;
+  //     })
+  //     .catch((err) => {
+  //       return err.message;
+  //     });
+  // }, []);
 
   const getStudent = React.useCallback(
     async (id: number) => {
@@ -181,8 +190,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       url: `/students`,
     })
       .then((response) => {
-        setStudents(response.data.student);
-        return response.data as Students;
+        return setStudents(response.data as Student[]);
       })
       .catch((err) => {
         return err.message;
@@ -190,14 +198,14 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [axiosLoggedRequest]);
 
-  const deleteStudent = React.useCallback(async () => {
+  const deleteStudent = React.useCallback(async (hashedCode: string) => {
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
     await axiosLoggedRequest({
       method: 'DELETE',
       url: '/students',
       data: {
-        hashCode,
+        hashedCode,
       },
     })
       .then((response) => {
@@ -214,7 +222,7 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
   /**
    * Delete an access for a relative's student
    */
-  const deleteAccessTorRelatives = React.useCallback(() => {}, []);
+  // const deleteAccessTorRelatives = React.useCallback(() => {}, []);
 
   const value = React.useMemo(
     () => ({
@@ -222,29 +230,32 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       setClassroom,
       getClassroom,
       updateClassroomParameters,
-      student: null,
       students,
-      getStudent,
+      setStudents,
+      //getStudent,
       createStudent,
       deleteStudent,
-      setStudent: (value: React.SetStateAction<Student>) => setStudents(value),
+      getStudents,
+      // setStudent: (value: React.SetStateAction<Student>) => setStudents(value),
       // getStudentList,
       // deleteAccessTorRelatives,
     }),
-    [classroom, setClassroom, getClassroom, updateClassroomParameters, students, getStudent, createStudent, deleteStudent],
+    [classroom, setClassroom, getClassroom, updateClassroomParameters, students, createStudent, deleteStudent, getStudents, setStudents],
   );
+  //getStudent
+  //setStudent
   return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
 };
 
-interface ClassroomUpdateData {
+export interface ClassroomUpdateData {
   name?: string;
   avatar?: string;
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
 }
 
-interface StudentCreateData {
-  firstname: string;
-  lastname: string;
-  hashCode: string;
-}
+// export interface StudentCreateData {
+//   firstname: string;
+//   lastname: string;
+//   hashedCode: string;
+// }
