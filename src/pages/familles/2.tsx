@@ -1,5 +1,4 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton, TextField, Tooltip } from '@mui/material';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -7,56 +6,54 @@ import React, { useEffect, useState } from 'react';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
+import { bgPage } from 'src/styles/variables.const';
 import type { Student, StudentForm } from 'types/student.type';
 import { User, UserType } from 'types/user.type';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
-  const { students, setStudents } = React.useContext(ClassroomContext);
-  // const [students, setStudents] = React.useState([
-  //   { firstname: 'Charline', lastname: 'Barbelette', hashedCode: 'dgdghhd' },
-  //   { firstname: 'Charline2', lastname: 'Barbelette2', hashedCode: 'dgdghhd2' },
-  //   { firstname: 'Charline3', lastname: 'Barbelette3', hashedCode: 'dgdghhd3' },
-  // ]);
-  /* const addStudent = (field: Extract<keyof Student, string>) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStudents({ ...student, [field]: event.target.value });
-  }; */
-  const [firstname, setFirstName] = React.useState('');
-  const [lastname, setLastName] = React.useState('');
-  const [hashedCode, setHashedCode] = React.useState<string>('');
-  const [student, setStudent] = React.useState<StudentForm>({
-    firstname: '',
-    lastname: '',
-    hashedCode: '',
-  });
+  const { user } = React.useContext(UserContext);
+  const { students, setStudents, createStudent, deleteStudent } = React.useContext(ClassroomContext);
+  const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
+  const firstnameRef = React.useRef<HTMLInputElement>(null);
+  const lastnameRef = React.useRef<HTMLInputElement>(null);
+  // const data = (student?.data as Student) || null;
 
-  /*   const addStudent = (): void => {
-    const newStudent = { firstname: firstname, lastname: lastname, hashCode: hashCode };
-    setStudents([...students, newStudent]);
-    setFirstName('');
-    setLastName('');
-    setHashCode('');
-  }; */
+  //TODO: issu to disabled the button for both input if empty (firstname)
+  //TODO: issu to send the data to the bdd
+  //TODO: issu with the button delete, find the student
 
-  useEffect(() => {
-    setStudent({
-      firstname: firstname,
-      lastname: lastname,
-      hashedCode: hashedCode,
-    });
-  }, [firstname, lastname, hashedCode]);
-
+  const [value, setValue] = React.useState('');
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(student);
-    // setStudent(event.target.value);
-    createStudent([...students, student]);
+    console.log(firstnameRef, lastnameRef);
+    if (firstnameRef.current?.value === '' || lastnameRef.current?.value === '') return;
+
+    //create of new student
+    const newStudent = {
+      id: 6,
+      classroomId: 1,
+      firstname: firstnameRef.current?.value,
+      lastname: lastnameRef.current?.value,
+      hashedCode: '5plk5',
+    };
+
+    //Set the list of students
+    setStudents([...students, newStudent]);
+    //Save in the bdd  createStudent(newStudent as Omit<Student, 'id' | 'classroomId' | 'numLinkedAccount'>);
+    createStudent(newStudent);
   };
   const isTeacher = user?.type === UserType.TEACHER;
+
+  // const isEnable = { isTeacher, firstnameRef, lastnameRef };
+
   const onNext = () => {
     router.push('/familles/3');
   };
@@ -71,31 +68,13 @@ const ClassroomParamStep2 = () => {
       <div className="width-900">
         <h1>Ajouter un identifiant par élève</h1>
         <p className="text">
-          Pour sécuriser la connexion des familles, nous allons créer un identifiant unique à chaque élève de votre classe. Ensuite chaque famille
-          pourra créer jusqu'à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou les
-          grandes-soeurs pourront accéder à 1Village. Vous devez donc créer autant d'identifiants qu'il y a d'élèves dans votre classe. Vous pourrez
-          rajouter des identifiants en cours d'années, lorsqu'un nouvel élève arrive dans votre classe.
+          Pour sécuriser la connexion des familles, nous allons créer{' '}
+          <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque élève de votre classe. </span> <br></br>Ensuite chaque famille pourra
+          créer jusqu&apos;à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou les
+          grandes-soeurs pourront accéder à 1Village. <br></br>
+          <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;élèves dans votre classe. Vous pourrez rajouter des
+          identifiants en cours d&apos;années, lorsqu&apos;un nouvel élève arrive dans votre classe.
         </p>
-        {/* <TextField
-          value={student.firstname}
-          defaultValue={'non renseignée'}
-          placeholder="Prénom"
-          isEditMode={editMode === 0}
-          onChange={(firstname) => {
-            setStudent((u) => (!u ? u : { ...u, firstname }));
-          onChange={(firstname) => {
-            addStudent((u) => (!u ? u : { ...u, firstname }));
-          }}
-        />
-        <TextField
-          value={student.lastname}
-          defaultValue={'non renseignée'}
-          placeholder="Nom"
-          isEditMode={editMode === 0}
-          onChange={(lastname) => {
-            setStudent((u) => (!u ? u : { ...u, lastname }));
-          }}
-        /> */}
 
         <form onSubmit={handleSubmit}>
           <label>
@@ -104,10 +83,11 @@ const ClassroomParamStep2 = () => {
               size="small"
               placeholder="Prénom"
               type="firstname"
-              value={student.firstname}
-              onChange={(event) => {
-                setFirstName(event.target.value);
-              }}
+              value={value}
+              onChange={handleChange}
+              //   setFirstName(event.target.value);
+              // }}
+              inputRef={firstnameRef}
             />
           </label>
           {'  '}
@@ -117,52 +97,51 @@ const ClassroomParamStep2 = () => {
               size="small"
               placeholder="Nom"
               type="lastname"
-              value={student.lastname}
-              onChange={(event) => {
-                setLastName(event.target.value);
-              }}
+              // value={value}
+              // onChange={handleChange}
+              // value={student.lastname}
+              // onChange={(event) => {
+              //   setLastName(event.target.value);
+              // }}
+              inputRef={lastnameRef}
             />
           </label>
           {'  '}
-          <Button type="submit" disabled={!isTeacher || !student.firstname || !student.lastname} variant="outlined">
+          {/* <Button type="submit" disabled={!isTeacher || !student.firstname || !student.lastname || !firstnameRef.current?.value || !lastnameRef.current?.value} variant="outlined"> */}
+          <Button type="submit" variant="outlined" disabled={!value}>
             Ajouter un élève
           </Button>
         </form>
-        {/* <div className="students">
-          {students.map((student: Student) => (
-            <div key={student.hashedCode}>
-              {student.firstname} {student.lastname}
-              console.log(students);
-              {/* <DeleteButton /> /* 
-              {/* <ContentEditor content={student.content} deleteContent={deleteContent} /> */}
-        {/* </div> */}
-        {/* ))} */}
-        {/* </div> */}
-
         <div className="students-list">
-          {students.map((student) => (
-            <div className="student-name" key={student.hashedCode}>
-              <div className="firstname">
-                <span>{student.firstname}</span>
-              </div>
-              <div className="lastname">
-                <span> {student.lastname} </span>
-              </div>
-            </div>
-          ))}
+          {students.length > 0
+            ? students.map((student) => (
+                <div className="student-name" key={student.hashedCode}>
+                  <div className="firstname">
+                    {student.firstname} {student.lastname}{' '}
+                    {/* {data.student && (
+          <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}> */}
+                    <DeleteButton
+                      onDelete={() => {
+                        deleteStudent(student.id);
+                      }}
+                      confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
+                      confirmTitle="Supprimer l'élève"
+                      style={{ backgroundColor: bgPage }}
+                    />
+                    {/* </div>
+        )} */}
+                    {/* <ImageModal
+          id={0}
+          isModalOpen={isImageModalOpen}
+          setIsModalOpen={setIsImageModalOpen}
+          imageUrl={data.student? || ''}
+          setStudents={setStudents}
+        /> */}
+                  </div>
+                </div>
+              ))
+            : null}
         </div>
-        {/* <Tooltip title="Supprimer">
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              setDeleteIndex(users.findIndex((u) => u.id === id));
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip> */}
-
-        {/* <input type="button" value="Ajouter un élève" onClick={addStudent}/> */}
         <StepsButton prev={'/familles/1?edit'} next={onNext} />
       </div>
     </Base>

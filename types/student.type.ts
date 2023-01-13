@@ -8,7 +8,7 @@ export interface Student {
 }
 // Show only the data visible for the student form
 export interface StudentForm {
-  firstname: string;
-  lastname: string;
-  hashedCode: string;
+  firstname?: string;
+  lastname?: string;
+  hashedCode?: string;
 }

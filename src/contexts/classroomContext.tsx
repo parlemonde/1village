@@ -1,10 +1,9 @@
-import router from 'next/router';
 import React from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 import type { Classroom } from 'types/classroom.type';
-import type { Student } from 'types/student.type';
+import type { Student, StudentForm } from 'types/student.type';
 import { UserType } from 'types/user.type';
 
 interface ClassroomContextValue {
@@ -12,9 +11,10 @@ interface ClassroomContextValue {
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
-  // student: Student | null;
-  students: Student[] | null;
-  setStudents: (value: React.SetStateAction<Student[]>) => void;
+  createStudent({ firstname, lastname, hashedCode }: Student): Promise<void>;
+  deleteStudent({ firstname, lastname, hashedCode }: Student): Promise<void>;
+  students: Student[];
+  setStudents: (value: React.SetStateAction<StudentForm[] | Student[]>) => void;
   /*   getStudent(): Promise<void>; */
 }
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
@@ -22,8 +22,9 @@ export const ClassroomContext = React.createContext<ClassroomContextValue>({
   setClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
-  // student: null,
-  students: null,
+  createStudent: async () => {},
+  deleteStudent: async () => {},
+  students: [],
   /*   getStudent: async () => {}, */
   setStudents: async () => {},
   // setStudent: function (value: React.SetStateAction<Student | null>): void {
@@ -35,8 +36,8 @@ interface ClassroomContextProviderProps {
   classroom: Classroom | null;
   setClassroom(value: React.SetStateAction<Classroom | null>): void;
   // initialStudent: Student | null;
-  students: Student[] | null;
-  setStudents(value: React.SetStateAction<Student[]>): void;
+  students: Student[];
+  setStudents(value: React.SetStateAction<StudentForm[] | Student[]>): void;
 }
 
 //TODO : il faut alimenter le ClassroomContext avec les fonctions
@@ -49,7 +50,7 @@ export const ClassroomContextProvider = ({
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   /*   const [student, setStudent] = React.useState<Student | null>(initialStudent); */
-  const [students, setStudents] = React.useState<Student[]>([]);
+  const [students, setStudents] = React.useState<StudentForm[] | Student[]>([]);
 
   /**
    * Creation of the classroom
@@ -121,6 +122,7 @@ export const ClassroomContextProvider = ({
    * Add new students in the classrom
    */
   const createStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: Student) => {
+    console.trace();
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
     await axiosLoggedRequest({
@@ -137,6 +139,7 @@ export const ClassroomContextProvider = ({
         // const newStudents = [...students, response.data.student];
         // Update the state with the new array
         // setStudents(newStudents);
+        console.log('response');
         setStudents(response.data.student);
         return response.data.student;
       })
@@ -190,7 +193,8 @@ export const ClassroomContextProvider = ({
       url: `/students`,
     })
       .then((response) => {
-        return setStudents(response.data as Student[]);
+        setStudents(response.data as Student[]);
+        return response.data as Student[];
       })
       .catch((err) => {
         return err.message;
