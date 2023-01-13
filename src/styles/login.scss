@@ -25,13 +25,10 @@
 
 .login__form {
   display: flex;
-  margin: auto 0;
+  flex-direction: column;
   padding: 1rem 0 0 0;
   align-items: center;
   justify-content: flex-start;
-  flex-direction: column;
-  width: 95%;
-  max-width: 300px;
 }
 
 .login__divider {
