@@ -13,13 +13,9 @@ export const teacherController = new Controller('/teachers');
 /**
 
  * Endpoint to create a unique invite code for a teacher
-
  * @param {object} req Express request object
-
  * @param {object} res Express response object
-
  * @return {string} JSON Response invite code
-
  */
 
 teacherController.get({ path: '/invite', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
@@ -60,28 +56,27 @@ teacherController.put(
 );
 
 /**
- * Endpoint to delete a student's parent attach to the profil for the teacher and his classroom
+ * Endpoint to "delete" a student's parent attach to the profil for the teacher and his classroom
  * @param {object} req Express request object
  * @param {object} res Express response object
-
  * @return {number} Route API JSON response
 
  */
 
-teacherController.delete({ path: '/detach/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+teacherController.delete({ path: '/detach/:parentId/:studendId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
+  const parentId = parseInt(req.params.parentId, 10) || 0;
+  const studentId = parseInt(req.params.studendId, 10) || 0;
+  const student = await AppDataSource.getRepository(UserToStudent).find({ where: { user: { id: parentId }, student: { id: studentId } } });
 
-  const userId = parseInt(req.params.id, 10) || 0;
-  const studentId = parseInt(req.params.studentId);
-  const student = await AppDataSource.getRepository(UserToStudent).find({ where: { userId: userId, studentId: studentId } });
   if (!student) return res.status(204).send();
   await AppDataSource.getRepository(UserToStudent)
-    .createQueryBuilder('UserToStudent')
-    .delete()
-    .from(UserToStudent)
-    .where({ userId: userId, studentId: studentId })
+    .createQueryBuilder()
+    .update(UserToStudent)
+    .set({ user: { id: undefined } })
+    .where({ user: { id: parentId }, student: { id: studentId } })
     .execute();
   res.status(204).send();
 });
