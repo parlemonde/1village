@@ -18,25 +18,6 @@ export const userTypeNames = {
   [UserType.FAMILY]: 'Parent',
   [UserType.OBSERVATOR]: 'Observateur',
 };
-
-/* export enum UserType {
-  SUPER_ADMIN = 0,
-  ADMIN = 1,
-  MEDIATOR = 2,
-  TEACHER = 3,
-  FAMILY = 4,
-  OBSERVATOR = 5,
-}
-
-export const userTypeNames = {
-  [UserType.SUPER_ADMIN]: 'Super admin',
-  [UserType.ADMIN]: 'Admin',
-  [UserType.MEDIATOR]: 'Médiateur',
-  [UserType.TEACHER]: 'Professeur',
-  [UserType.FAMILY]: 'Parent',
-  [UserType.OBSERVATOR]: 'Observateur',
-}; */
-
 export interface User {
   id: number;
   email: string;
