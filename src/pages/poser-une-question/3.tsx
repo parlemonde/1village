@@ -1,13 +1,12 @@
+import { Tooltip } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
-
-import { Tooltip } from '@mui/material';
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import type { QuestionActivity } from 'src/activity-types/question.types';
@@ -29,7 +28,6 @@ const Question3 = () => {
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
   const questionsCount = content?.length ?? 0;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -87,7 +85,8 @@ const Question3 = () => {
       return;
     }
     setIsLoading(true);
-    if (activity.id === 0) {
+    //This condition below may be useless because there is always a draft created with an id !
+    if (activity.id !== 0) {
       await Promise.all(content.map((question) => createQuestionActivity(question.value)));
       queryClient.invalidateQueries('activities');
     } else {

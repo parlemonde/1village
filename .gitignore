@@ -64,3 +64,5 @@ test.js
 test.html
 docker-compose.build.yml
 docker-compose.bdd.yml
+
+*.http

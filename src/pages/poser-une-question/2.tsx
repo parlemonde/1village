@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase, TextField, Card } from '@mui/material';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
@@ -45,6 +44,7 @@ const Question2 = () => {
       return;
     }
     const content = [...activity.content];
+
     if (content.length >= 3) {
       return;
     }
