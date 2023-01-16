@@ -1,6 +1,7 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Button, Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel, Link, TextField } from '@mui/material';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { KeepRatio } from '../KeepRatio';
@@ -9,20 +10,50 @@ import { UserContext } from 'src/contexts/userContext';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
 
+const errorMessages = {
+  0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
+  1: 'Identifiant invalides',
+};
+
+function isRedirectValid(redirect: string) {
+  // inner redirection.
+  if (redirect.startsWith('/')) return true;
+  // external, allow only same domain.
+  try {
+    const url = new URL(redirect);
+    return url.hostname.slice(-15) === '.parlemonde.org';
+  } catch {
+    return false;
+  }
+}
+
 export const SignInParent = ({ page, setPage }: SetPageProps) => {
+  const router = useRouter();
   const { login } = React.useContext(UserContext);
   const [showPassword, setShowPassword] = React.useState(false);
+  const redirect = React.useRef<string>('/');
   //Doc : https://devtrium.com/posts/react-typescript-how-to-type-hooks
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
   const rememberRef = React.useRef<HTMLInputElement>();
+  const [errorCode, setErrorCode] = React.useState(-1);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (emailRef.current === null || passwordRef.current === null || rememberRef.current === undefined) return; //This is for Typescript compiler but useless alone
     if (emailRef.current.value === '' || passwordRef.current.value === '') return; //This is to unabled submit if no data
-    login(emailRef.current.value, passwordRef.current.value, rememberRef.current.checked);
+    login(emailRef.current.value, passwordRef.current.value, rememberRef.current.checked)
+      .then((response) => {
+        if (response.success) {
+          router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
+        } else {
+          setErrorCode(response.errorCode || 1);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -69,8 +100,7 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
               label="Adresse email"
               placeholder="Entrez votre adresse email"
               name="username"
-              // error={errorCode === 1}
-              // helperText={errorCode === 1 ? errorMessages[1] : null}
+              error={errorCode === 1}
               InputLabelProps={{ shrink: true }}
               inputRef={emailRef}
               sx={{
@@ -79,12 +109,15 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
               }}
             />
             <FormControl sx={{ width: '30ch', mb: 1 }} variant="standard">
-              <InputLabel htmlFor="password">Mot de passe</InputLabel>
+              <InputLabel htmlFor="password" error={errorCode === 1}>
+                Mot de passe
+              </InputLabel>
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 inputRef={passwordRef}
                 placeholder="Entrez votre mot de passe"
+                error={errorCode === 1}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
@@ -94,6 +127,7 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
                 }
               />
             </FormControl>
+            <small style={{ color: 'tomato', fontWeight: 'bold' }}>{errorCode === 1 ? errorMessages[1] : null}</small>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
               <FormControlLabel
                 label="Se souvenir de moi"
