@@ -63,9 +63,6 @@ export class User implements UserInterface {
   @Column({ type: 'tinyint', default: 0 })
   public firstLogin: number;
 
-  @Column({ type: 'tinyint', default: 0 })
-  public isValidated: number;
-
   @Column({
     type: 'tinyint',
     default: UserType.TEACHER,
