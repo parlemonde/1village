@@ -1,4 +1,6 @@
-import { Button, Link, TextField } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 
@@ -20,7 +22,7 @@ const SignUpForm = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
-  // const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
@@ -117,6 +119,10 @@ const SignUpForm = () => {
     validate();
   };
 
+  const handleClickShowPassword = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
   const passwordMessage = passwordMessageRef.current;
 
   return (
@@ -209,11 +215,16 @@ const SignUpForm = () => {
                 placeholder="Entrez votre nom de passe"
                 name="password"
                 autoComplete="off"
-                type="password"
-                inputProps={{
-                  autoComplete: 'off',
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                        {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
-                // type={isPasswordVisible === false ? 'password' : 'text'}
+                type={isPasswordVisible === false ? 'password' : 'text'}
                 error={isPasswordValid === false}
                 helperText={isPasswordValid === true ? '8 caractères minimum, une majuscule et un chiffre' : passwordMessage}
                 InputLabelProps={{ shrink: true }}
