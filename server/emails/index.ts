@@ -19,15 +19,17 @@ getNodeMailer()
 export enum Email {
   INVALID_VILLAGE,
   INVALID_COUNTRY,
+  CONFIRMATION_EMAIL,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
+  [Email.CONFIRMATION_EMAIL]: { firstname: string; email: string; verfificationHash: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
 type emailData = {
-  // filename: string; // todo add when using html
+  // filename?: string; // todo add when using html
   filenameText: string;
   subject: string;
   args: { [key: string]: string };
@@ -47,6 +49,15 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
     return {
       filenameText: 'invalid_country.txt',
       subject: "Une classe 1Village n'est pas dans son pays !",
+      args: {
+        ...options,
+      },
+    };
+  }
+  if (email === Email.CONFIRMATION_EMAIL) {
+    return {
+      filenameText: 'confirmation_email.html',
+      subject: 'Email de confirmation de votre compte 1Village',
       args: {
         ...options,
       },
@@ -80,16 +91,15 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
     plmoEmail: `contact@${domain}`,
   };
   try {
-    // const html = await renderFile(path.join(__dirname, 'templates', templateData.filename), renderOptions);
+    const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     const text = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
-
     // send mail with defined transport object
     const info = await transporter.sendMail({
       from: `"1Village - Par Le Monde" <ne-pas-repondre@${domain}>`, // sender address
       to: receiverEmail, // receiver address
       subject: templateData.subject, // Subject line
       text, // plain text body
-      // html, // html body
+      html, // html body
     });
 
     logger.info(`Message sent: ${info.messageId}`);

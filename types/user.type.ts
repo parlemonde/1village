@@ -22,6 +22,8 @@ export interface User {
   id: number;
   email: string;
   pseudo: string;
+  firstname: string;
+  lastname: string;
   school: string;
   level: string;
   city: string;
@@ -50,6 +52,14 @@ export interface User {
   mascotteId?: number;
 }
 
+export type UserForm = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  passwordConfirmation?: string;
+  type: UserType.FAMILY;
+};
 export interface UserParamClassroom {
   classroom_avatar: string | null;
   classroom_delayedDays: number;

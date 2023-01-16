@@ -21,7 +21,7 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 255, unique: true })
   public email: string;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 50, default: '' })
   public pseudo: string;
 
   @Column({ type: 'varchar', length: 50, default: '' })
@@ -62,6 +62,9 @@ export class User implements UserInterface {
 
   @Column({ type: 'tinyint', default: 0 })
   public firstLogin: number;
+
+  @Column({ type: 'tinyint', default: 0 })
+  public isValidated: number;
 
   @Column({
     type: 'tinyint',

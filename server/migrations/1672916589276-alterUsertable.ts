@@ -8,7 +8,7 @@ export class MyMigration1579323075000 implements MigrationInterface {
       new TableColumn({
         name: 'newtype',
         type: 'tinyint',
-        isNullable: true,
+        // isNullable: true,
       }),
     );
 

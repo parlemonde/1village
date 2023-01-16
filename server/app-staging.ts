@@ -78,10 +78,11 @@ export async function getStagingApp() {
         }
       }
 
-      if (req.user === undefined && req.path !== '/login' && req.path !== '/') {
+      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up' && req.path !== '/login') {
         res.redirect('/login');
         return;
       }
+
       if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type > UserType.ADMIN)) {
         res.redirect('/');
         return;

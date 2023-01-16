@@ -57,7 +57,7 @@ const Communication = () => {
         count++;
         if (count === 2) {
           count = 0;
-          toPrint = '';
+          //  toPrint = '';
         }
       }
     }

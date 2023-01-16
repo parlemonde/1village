@@ -142,7 +142,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   additionalProperties: false,
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
-userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+userController.post({ path: '' }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
@@ -176,7 +176,9 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
   // todo: send mail with verification password to validate the email adress.
-
+  if (data.firstname) {
+    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verfificationHash: user.verificationHash });
+  }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
   delete user.passwordHash;
