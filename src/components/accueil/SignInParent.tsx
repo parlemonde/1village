@@ -103,6 +103,7 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
               error={errorCode === 1}
               InputLabelProps={{ shrink: true }}
               inputRef={emailRef}
+              onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
               sx={{
                 width: '30ch',
                 mb: '1rem',
@@ -118,6 +119,7 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
                 inputRef={passwordRef}
                 placeholder="Entrez votre mot de passe"
                 error={errorCode === 1}
+                onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
@@ -140,23 +142,13 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
                     ml: '-7px',
                   },
                 }}
-                control={
-                  <Checkbox
-                    color="primary"
-                    size="small"
-                    onChange={() => {
-                      console.info('Check');
-                      // setUser((u) => ({ ...u, remember: !u.remember }));
-                    }}
-                  />
-                }
+                control={<Checkbox color="primary" size="small" />}
               />
               <Link
                 component="button"
                 variant="caption"
-                onClick={() => {
-                  console.info("I'm a button.");
-                }}
+                // TODO: Add api for forget password
+                onClick={() => {}}
                 sx={{
                   placeSelf: 'center',
                 }}
@@ -172,7 +164,7 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
             component="button"
             variant="h3"
             onClick={() => {
-              console.info("I'm a button.");
+              router.push('/signup');
             }}
             sx={{
               fontSize: '0.875rem',
