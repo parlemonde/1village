@@ -5,6 +5,7 @@ import { KeepRatio } from '../KeepRatio';
 import type { SetPageProps } from './NewHome';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_classe.svg';
+import { onLoginSSO, SSO_HOST, CLIENT_ID } from 'src/utils/sso';
 
 export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
   return (
@@ -53,15 +54,22 @@ export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
             allowFullScreen
             style={{ height: '65%', width: '80%' }}
           ></iframe>
-          <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
+          <Button
+            color="primary"
+            variant="outlined"
+            style={{ marginTop: '0.8rem' }}
+            onClick={onLoginSSO}
+            disabled={SSO_HOST.length && CLIENT_ID ? false : true}
+          >
             Se connecter
           </Button>
           <Link
             component="button"
             variant="h3"
-            onClick={() => {
-              console.info("I'm a button.");
-            }}
+            href="https://prof.parlemonde.org/1village/"
+            rel="noreferrer"
+            target="_blank"
+            underline="none"
             sx={{
               fontSize: '0.875rem',
               mt: 2,
