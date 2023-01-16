@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { Button, Link, TextField } from '@mui/material';
+import { useRouter } from 'next/router';
+import React, { useRef, useState } from 'react';
 
-import { Base } from 'src/components/Base';
+import { KeepRatio } from '../components/KeepRatio';
 import { useUserRequests } from 'src/services/useUsers';
-import type { UserForm } from 'types/user.type';
+import ArrowBack from 'src/svg/arrow_back.svg';
+import Logo from 'src/svg/logo_1village_famille.svg';
 import { UserType } from 'types/user.type';
+import type { UserForm } from 'types/user.type';
 
 const SignUpForm = () => {
   const [email, setEmail] = useState<string>('');
   const [firstname, setFirstname] = useState<string>('');
-  const [lastname, setLastName] = useState<string>('');
+  const [isFirstnameValid, setIsFirstnameValid] = useState<boolean>(true);
+  const [lastname, setLastname] = useState<string>('');
+  const [isLastnameValid, setIsLastnameValid] = useState<boolean>(true);
   const [password, setPassword] = useState<string>('');
+  const passwordMessageRef = useRef<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  // const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
@@ -23,79 +31,71 @@ const SignUpForm = () => {
   });
 
   const { addUser } = useUserRequests();
+  const router = useRouter();
 
-  /*  const registerValidationSchema = {
-    type: 'object',
-    properties: {
-      email: {
-        type: 'string',
-        format: 'email',
-      },
-      firstName: {
-        type: 'string',
-        minLength: 1,
-      },
-      lastName: {
-        type: 'string',
-        minLength: 1,
-      },
-      password: {
-        type: 'string',
-        minLength: 8,
-        pattern: '^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$',
-      },
-      confirmPassword: {
-        type: 'string',
-        minLength: 8,
-        pattern: '^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$',
-      },
-    },
-    required: ['email', 'firstName', 'lastName', 'password', 'confirmPassword'],
-    oneOf: [
-      {
-        properties: {
-          password: {
-            const: {
-              $data: '1/confirmPassword',
-            },
-          },
-        },
-        required: ['password'],
-      },
-    ],
-  };
-
-  const ajv = new Ajv();
-  addFormats(ajv); */
-
-  useEffect(() => {
-    let newErrorMessage = '';
+  const validate = () => {
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
-    if (!password.match(/\d/)) {
-      newErrorMessage = 'Password must contain at least one number';
-    }
-    if (!password.match(/[A-Z]/)) {
-      if (newErrorMessage) {
-        newErrorMessage += ', and ';
+    if (password !== '') {
+      passwordMessageRef.current = '';
+      setIsPasswordValid(false);
+
+      if (!password.match(/\d/)) {
+        passwordMessageRef.current = 'Le mot de passe doit contenir un chiffre';
       }
-      newErrorMessage += 'at least one uppercase letter';
-    }
-    if (password.length < 8) {
-      if (newErrorMessage) {
-        newErrorMessage += ', and ';
+      if (!password.match(/[A-Z]/)) {
+        if (passwordMessageRef.current) {
+          passwordMessageRef.current += ' et ';
+        }
+        passwordMessageRef.current += ' une lettre majuscule';
       }
-      newErrorMessage += 'be at least 8 characters long';
-    }
-    if (email.match(emailRegex)) {
-      setIsEmailValid(true);
-    } else {
-      setIsEmailValid(false);
+      if (password.length < 8) {
+        if (passwordMessageRef.current) {
+          passwordMessageRef.current += ' et ';
+        }
+        passwordMessageRef.current += 'faire au moins 8 caractères';
+      }
+
+      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length < 8) {
+        setIsPasswordValid(false);
+      } else {
+        setIsPasswordValid(true);
+      }
     }
 
-    setIsPasswordMatch(password === confirmPassword);
-    setErrorMessage(newErrorMessage ? `Password must ${newErrorMessage}` : '');
+    if (confirmPassword !== '') {
+      if (password !== confirmPassword) {
+        setIsPasswordMatch(false);
+      } else {
+        setIsPasswordMatch(true);
+      }
+    }
+
+    if (email !== '') {
+      if (!emailRegex.test(email)) {
+        setIsEmailValid(false);
+      } else {
+        setIsEmailValid(true);
+      }
+    }
+
+    if (lastname !== '') {
+      if (lastname.length > 1) {
+        setIsLastnameValid(true);
+      } else {
+        setIsLastnameValid(false);
+      }
+    }
+
+    if (firstname !== '') {
+      if (firstname.length > 1) {
+        setIsFirstnameValid(true);
+      } else {
+        setIsFirstnameValid(false);
+      }
+    }
+
     setNewUser({
       email: email,
       firstname: firstname,
@@ -103,84 +103,159 @@ const SignUpForm = () => {
       password: password,
       type: UserType.FAMILY,
     });
-  }, [email, firstname, lastname, password, confirmPassword]);
+  };
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    /*     console.log(newUser);
-    console.log(validate(newUser)); */
-
-    if (isPasswordMatch === false || firstname === '' || lastname === '' || isEmailValid === false || errorMessage !== '') {
-      console.log('Incorrect');
-    } else {
-      console.log(newUser);
+    validate();
+    if (isPasswordValid && isPasswordMatch && isEmailValid) {
       addUser(newUser);
-      console.log('it worked maybe, i dont know');
     }
-  }
+  };
+
+  const handleBlur = () => {
+    validate();
+  };
+
+  const passwordMessage = passwordMessageRef.current;
 
   return (
-    <Base>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
+    <>
+      <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '10px',
+            background: 'white',
+            width: '95%',
+            maxWidth: '1200px',
+            borderRadius: '10px',
+            marginBottom: '2rem',
+          }}
+        >
+          <Logo style={{ width: '11rem', height: 'auto', margin: '10px 0 5px 10px' }} />
+          <h1 style={{ placeSelf: 'center' }}>Parent d&apos;élèves</h1>
+          <Link
+            component="button"
+            variant="h3"
+            onClick={() => {
+              router.push('/');
             }}
-          />
-          {!isEmailValid && <p>Please enter a valid email address</p>}
-        </label>
-        <br />
-        <label>
-          Firstname:
-          <input
-            type="text"
-            value={firstname}
-            onChange={(event) => {
-              setFirstname(event.target.value);
+            sx={{
+              placeSelf: 'center end',
+              marginRight: '1rem',
+              fontSize: '0.875rem',
             }}
-          />
-        </label>
-        <br />
-        <label>
-          Lastname:
-          <input
-            type="text"
-            value={lastname}
-            onChange={(event) => {
-              setLastName(event.target.value);
-            }}
-          />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          {errorMessage && <p>{errorMessage}</p>}
-        </label>
-        <br />
-        <label>
-          Confirm Password:
-          <input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
-          {!isPasswordMatch && <p>Passwords do not match</p>}
-        </label>
-        <br />
-        <input
-          type="submit"
-          value="Submit"
-          disabled={isPasswordMatch === false || firstname === '' || lastname === '' || isEmailValid === false || errorMessage !== '' ? true : false}
-        />
-      </form>
-    </Base>
+          >
+            <ArrowBack /> Retour à la page de connexion
+          </Link>
+        </div>
+        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
+          <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
+            <h2>Créer un compte</h2>
+            <form onSubmit={handleSubmit} className="login__form">
+              <TextField
+                variant="standard"
+                label="Adresse email"
+                placeholder="Entrez votre adresse email"
+                name="email"
+                error={!isEmailValid}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '30ch',
+                  mb: '1rem',
+                }}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
+                onBlur={handleBlur}
+              />
+              <TextField
+                variant="standard"
+                label="Prénom"
+                placeholder="Entrez votre prénom"
+                name="firstname"
+                error={!isFirstnameValid}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '30ch',
+                  mb: '1rem',
+                }}
+                onChange={(event) => {
+                  setFirstname(event.target.value);
+                }}
+                onBlur={handleBlur}
+              />
+              <TextField
+                variant="standard"
+                label="Nom de famille"
+                placeholder="Entrez votre nom de famille"
+                name="lastname"
+                error={!isLastnameValid}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '30ch',
+                  mb: '1rem',
+                }}
+                onChange={(event) => {
+                  setLastname(event.target.value);
+                }}
+                onBlur={handleBlur}
+              />
+              <TextField
+                variant="standard"
+                label="Mot de passe"
+                placeholder="Entrez votre nom de passe"
+                name="password"
+                autoComplete="off"
+                type="password"
+                inputProps={{
+                  autoComplete: 'off',
+                }}
+                // type={isPasswordVisible === false ? 'password' : 'text'}
+                error={isPasswordValid === false}
+                helperText={isPasswordValid === true ? '8 caractères minimum, une majuscule et un chiffre' : passwordMessage}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '30ch',
+                  mb: '1rem',
+                }}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
+                onBlur={handleBlur}
+              />
+              <TextField
+                variant="standard"
+                label="Confirmation de mot de passe"
+                placeholder="Confirmez votre mot de passe"
+                autoComplete="off"
+                name="confirmPassword"
+                type="password"
+                inputProps={{
+                  autoComplete: 'off',
+                }}
+                error={isPasswordMatch === false}
+                helperText={isPasswordMatch === false ? 'Les mots de passes doivent être identiques' : null}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '30ch',
+                  mb: '1rem',
+                }}
+                onChange={(event) => {
+                  setConfirmPassword(event.target.value);
+                }}
+                onBlur={handleBlur}
+              />
+              <Button type="submit" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
+                S&apos;inscrire
+              </Button>
+            </form>
+          </div>
+        </KeepRatio>
+      </div>
+    </>
   );
 };
 
