@@ -78,12 +78,17 @@ export async function getStagingApp() {
         }
       }
 
-      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up' && req.path !== '/login') {
-        res.redirect('/login');
+      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up') {
+        res.redirect('/');
         return;
       }
 
-      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type > UserType.ADMIN)) {
+      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type !== UserType.ADMIN)) {
+        res.redirect('/');
+        return;
+      }
+
+      if (req.path.includes('familles') && (!req.user || req.user.type !== UserType.TEACHER)) {
         res.redirect('/');
         return;
       }
