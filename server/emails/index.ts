@@ -24,7 +24,7 @@ export enum Email {
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
-  [Email.CONFIRMATION_EMAIL]: { firstname: string; email: string; verfificationHash: string };
+  [Email.CONFIRMATION_EMAIL]: { firstname: string; email: string; verificationHash: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
@@ -63,6 +63,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
       },
     };
   }
+
   return undefined;
 }
 
@@ -90,6 +91,8 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
     receiverEmail,
     plmoEmail: `contact@${domain}`,
   };
+
+  console.log(renderOptions);
   try {
     const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     const text = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);

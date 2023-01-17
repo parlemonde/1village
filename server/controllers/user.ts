@@ -177,7 +177,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.verificationHash = await argon2.hash(temporaryPassword);
   // todo: send mail with verification password to validate the email adress.
   if (data.firstname) {
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verfificationHash: user.verificationHash });
+    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: user.verificationHash });
   }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);

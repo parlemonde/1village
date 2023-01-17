@@ -90,7 +90,7 @@ export async function getApp() {
     sendMail(Email.CONFIRMATION_EMAIL, 'yan.labarthe@gmail.com', {
       firstname: 'yan',
       email: 'yan1.labarthe@gmail.com',
-      verfificationHash: 'abc',
+      verificationHash: 'abc',
     });
     res.status(200).send('Hello World 1Village!');
   });
