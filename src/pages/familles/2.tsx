@@ -27,21 +27,22 @@ const ClassroomParamStep2 = () => {
   //TODO: issu to send the data to the bdd
   //TODO: issu with the button delete, find the student
 
-  const [value, setValue] = React.useState('');
+  // const [value, setValue] = React.useState('');
   const handleChange = (event) => {
     setValue(event.target.value);
   };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(firstnameRef, lastnameRef);
-    if (firstnameRef.current?.value === '' || lastnameRef.current?.value === '') return;
+     if (firstnameRef.current === null || lastnameRef.current === null) return;
+    // if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
 
     //create of new student
     const newStudent = {
-      id: 6,
-      classroomId: 1,
-      firstname: firstnameRef.current?.value,
-      lastname: lastnameRef.current?.value,
+      // id: '',
+      // classroomId,
+      firstname: firstnameRef.current.value,
+      lastname: lastnameRef.current.value,
       hashedCode: '5plk5',
     };
 
@@ -83,7 +84,7 @@ const ClassroomParamStep2 = () => {
               size="small"
               placeholder="Prénom"
               type="firstname"
-              value={value}
+              // value={value}
               onChange={handleChange}
               //   setFirstName(event.target.value);
               // }}
@@ -98,7 +99,7 @@ const ClassroomParamStep2 = () => {
               placeholder="Nom"
               type="lastname"
               // value={value}
-              // onChange={handleChange}
+              onChange={handleChange}
               // value={student.lastname}
               // onChange={(event) => {
               //   setLastName(event.target.value);
@@ -108,7 +109,7 @@ const ClassroomParamStep2 = () => {
           </label>
           {'  '}
           {/* <Button type="submit" disabled={!isTeacher || !student.firstname || !student.lastname || !firstnameRef.current?.value || !lastnameRef.current?.value} variant="outlined"> */}
-          <Button type="submit" variant="outlined" disabled={!value}>
+          <Button type="submit" variant="outlined" disabled={firstnameRef?.current?.value === '' || lastnameRef?.current?.value === ''}>
             Ajouter un élève
           </Button>
         </form>

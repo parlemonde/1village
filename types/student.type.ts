@@ -1,4 +1,4 @@
-export interface Student {
+export interface Student<T extends {
   id: number;
   classroomId: number;
   firstname?: string;
@@ -6,6 +6,7 @@ export interface Student {
   hashedCode?: string;
   numLinkedAccount?: number;
 }
+& { data: T}
 // Show only the data visible for the student form
 export interface StudentForm {
   firstname?: string;

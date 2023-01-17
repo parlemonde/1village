@@ -13,7 +13,7 @@ interface ClassroomContextValue {
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
   createStudent({ firstname, lastname, hashedCode }: Student): Promise<void>;
   deleteStudent({ firstname, lastname, hashedCode }: Student): Promise<void>;
-  students: Student[];
+  students: Student[] | StudentForm[];
   setStudents: (value: React.SetStateAction<StudentForm[] | Student[]>) => void;
   /*   getStudent(): Promise<void>; */
 }
@@ -121,31 +121,32 @@ export const ClassroomContextProvider = ({
   /**
    * Add new students in the classrom
    */
-  const createStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: Student) => {
+  const createStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: StudentForm | Student) => {
     console.trace();
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
-    await axiosLoggedRequest({
-      method: 'POST',
-      url: '/students',
-      data: {
-        firstname,
-        lastname,
-        hashedCode,
-      },
-    })
-      .then((response) => {
-        // Add the new student to the array
-        // const newStudents = [...students, response.data.student];
-        // Update the state with the new array
-        // setStudents(newStudents);
-        console.log('response');
-        setStudents(response.data.student);
-        return response.data.student;
+    if (firstname && (lastname as StudentForm))
+      await axiosLoggedRequest({
+        method: 'POST',
+        url: '/students',
+        data: {
+          firstname,
+          lastname,
+          hashedCode,
+        },
       })
-      .catch((err) => {
-        return err.message;
-      });
+        .then((response) => {
+          // Add the new student to the array
+          // const newStudents = [...students, response.data.student];
+          // Update the state with the new array
+          // setStudents(newStudents);
+          console.log('response');
+          setStudents(response.data.student);
+          return response.data.student;
+        })
+        .catch((err) => {
+          return err.message;
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // const setStudent = React.useCallback(() => {}, []);
@@ -202,13 +203,15 @@ export const ClassroomContextProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [axiosLoggedRequest]);
 
-  const deleteStudent = React.useCallback(async (hashedCode: string) => {
+  const deleteStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: Student) => {
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
     await axiosLoggedRequest({
       method: 'DELETE',
       url: '/students',
       data: {
+        firstname,
+        lastname,
         hashedCode,
       },
     })
@@ -241,7 +244,6 @@ export const ClassroomContextProvider = ({
       deleteStudent,
       getStudents,
       // setStudent: (value: React.SetStateAction<Student>) => setStudents(value),
-      // getStudentList,
       // deleteAccessTorRelatives,
     }),
     [classroom, setClassroom, getClassroom, updateClassroomParameters, students, createStudent, deleteStudent, getStudents, setStudents],
