@@ -59,7 +59,11 @@ export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
-  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  //* NOTE: might be interesting to make a hook for this below
+  const isPelico =
+    (user !== null && user.type === UserType.MEDIATOR) ||
+    (user !== null && user.type === UserType.ADMIN) ||
+    (user !== null && user.type === UserType.SUPER_ADMIN);
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
   const isTeacher = user !== null && user.type === UserType.TEACHER;
   const { editVillage } = useVillageRequests();
@@ -211,9 +215,9 @@ export const Navigation = (): JSX.Element => {
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
       },
-      ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
+      ...(isPelico ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isModerateur, selectedPhase],
+    [user, isPelico, selectedPhase],
   );
   const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
@@ -236,8 +240,8 @@ export const Navigation = (): JSX.Element => {
                 isMistery={
                   !village ||
                   !user ||
-                  (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator)) ||
-                  (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator))
+                  (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator)) ||
+                  (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator))
                 }
               ></Flag>
             ))}
@@ -272,7 +276,7 @@ export const Navigation = (): JSX.Element => {
             ))}
           </div>
         ))}
-        {village && isModerateur && selectedPhase >= 2 && (
+        {village && isPelico && selectedPhase >= 2 && (
           <div
             className="navigation__content with-shadow"
             style={{ padding: '0 0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}
