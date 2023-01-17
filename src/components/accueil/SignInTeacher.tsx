@@ -119,8 +119,6 @@ export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
             </Tooltip>
           )}
           <Link
-            component="button"
-            variant="h3"
             href="https://prof.parlemonde.org/1village/"
             rel="noreferrer"
             target="_blank"
@@ -128,6 +126,7 @@ export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
             sx={{
               fontSize: '0.875rem',
               mt: 2,
+              fontWeight: 'bold',
             }}
           >
             S&apos;inscrire
