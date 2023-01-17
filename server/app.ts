@@ -86,6 +86,7 @@ export async function getApp() {
     }),
   );
   backRouter.use(jsonify);
+  // ! a enlever une fois que les tests finies
   backRouter.get('/testmail', (_, res: Response) => {
     sendMail(Email.CONFIRMATION_EMAIL, 'yan.labarthe@gmail.com', {
       firstname: 'yan',
@@ -125,12 +126,17 @@ export async function getApp() {
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
-      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up' && req.path !== '/login') {
-        res.redirect('/login');
+      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up') {
+        res.redirect('/');
         return;
       }
 
-      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type < UserType.ADMIN)) {
+      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type !== UserType.ADMIN)) {
+        res.redirect('/');
+        return;
+      }
+
+      if (req.path.includes('familles') && (!req.user || req.user.type !== UserType.TEACHER)) {
         res.redirect('/');
         return;
       }
@@ -138,7 +144,7 @@ export async function getApp() {
       await handle(req, res);
     }),
   );
-  //TODO: Mettre un redirection si on tape url famille
+
   // [6] --- Last fallback ---
   app.use(morgan(isDevENV ? 'dev' : 'combined'), (_, res: Response) => {
     res.status(404).send('Error 404 - Not found.');
