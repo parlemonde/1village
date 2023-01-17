@@ -6,6 +6,7 @@ import React from 'react';
 
 import { KeepRatio } from '../KeepRatio';
 import type { SetPageProps } from './NewHome';
+import { isRedirectValid } from './NewHome';
 import { UserContext } from 'src/contexts/userContext';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
@@ -14,18 +15,6 @@ const errorMessages = {
   0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
   1: 'Identifiant invalides',
 };
-
-function isRedirectValid(redirect: string) {
-  // inner redirection.
-  if (redirect.startsWith('/')) return true;
-  // external, allow only same domain.
-  try {
-    const url = new URL(redirect);
-    return url.hostname.slice(-15) === '.parlemonde.org';
-  } catch {
-    return false;
-  }
-}
 
 export const SignInParent = ({ page, setPage }: SetPageProps) => {
   const router = useRouter();

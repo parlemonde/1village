@@ -1,13 +1,64 @@
-import { Button, Link } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Link, Tooltip } from '@mui/material';
+import { useRouter } from 'next/router';
+import qs from 'qs';
 import React from 'react';
 
 import { KeepRatio } from '../KeepRatio';
 import type { SetPageProps } from './NewHome';
+import { isRedirectValid } from './NewHome';
+import { UserContext } from 'src/contexts/userContext';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_classe.svg';
 import { onLoginSSO, SSO_HOST, CLIENT_ID } from 'src/utils/sso';
 
+const errorMessages = {
+  0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
+  1: 'Identifiant invalides',
+  2: 'Compte bloqué, trop de tentatives de connexion. Veuillez réinitialiser votre mot de passe.',
+};
+
 export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
+  const router = useRouter();
+  const { loginWithSso } = React.useContext(UserContext);
+  const redirect = React.useRef<string>('/');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [errorCode, setErrorCode] = React.useState(-1);
+  const firstCall = React.useRef(false);
+
+  const loginSSO = React.useCallback(
+    async (code: string) => {
+      if (firstCall.current === false) {
+        firstCall.current = true;
+        setIsLoading(true);
+        const response = await loginWithSso(code);
+        if (response.success) {
+          router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
+        } else {
+          setErrorCode(response.errorCode || 0);
+        }
+        setIsLoading(false);
+      }
+    },
+    [loginWithSso, router],
+  );
+
+  React.useEffect(() => {
+    const urlQueryParams = qs.parse(window.location.search);
+    try {
+      redirect.current = decodeURI((urlQueryParams.redirect as string) || '/');
+    } catch (e) {
+      redirect.current = '/';
+    }
+    if (urlQueryParams.state && urlQueryParams.code) {
+      const state = window.sessionStorage.getItem('oauth-state') || '';
+      if (state === decodeURI(urlQueryParams.state as string)) {
+        loginSSO(decodeURI(urlQueryParams.code as string)).catch();
+      } else {
+        setErrorCode(0);
+      }
+    }
+  }, [loginSSO]);
+
   return (
     <>
       <div
@@ -54,15 +105,19 @@ export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
             allowFullScreen
             style={{ height: '65%', width: '80%' }}
           ></iframe>
-          <Button
-            color="primary"
-            variant="outlined"
-            style={{ marginTop: '0.8rem' }}
-            onClick={onLoginSSO}
-            disabled={SSO_HOST.length && CLIENT_ID ? false : true}
-          >
-            Se connecter
-          </Button>
+          {SSO_HOST.length && CLIENT_ID ? (
+            <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} onClick={onLoginSSO}>
+              Se connecter
+            </Button>
+          ) : (
+            <Tooltip title="Vous devez posséder un compte enseignant pour vous connecter" arrow>
+              <span>
+                <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} disabled>
+                  Se connecter
+                </Button>
+              </span>
+            </Tooltip>
+          )}
           <Link
             component="button"
             variant="h3"
@@ -77,8 +132,14 @@ export const SignInTeacher = ({ page, setPage }: SetPageProps) => {
           >
             S&apos;inscrire
           </Link>
+
+          {/* Bloc error text */}
+          <small style={{ color: 'tomato', fontWeight: 'bold' }}>{errorCode !== -1 ? errorMessages[errorCode as 0] || errorMessages[0] : null}</small>
         </div>
       </KeepRatio>
+      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };
