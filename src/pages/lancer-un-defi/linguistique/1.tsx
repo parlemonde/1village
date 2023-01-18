@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import type { SelectChangeEvent } from '@mui/material';
 import {
   FormControlLabel,
@@ -17,12 +14,13 @@ import {
   FormControl,
   Divider,
 } from '@mui/material';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
-import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -87,6 +85,7 @@ const DefiStep1 = () => {
 
   React.useEffect(() => {
     if (data !== null && 'languageCode' in data && data.languageCode.length > 2) {
+      console.log('je suis ici');
       setOtherValue(data.languageCode.slice(0, 3).toLowerCase());
     }
   }, [data]);
@@ -163,6 +162,19 @@ const DefiStep1 = () => {
     );
   }
 
+  //   const mascotteLanguages = [
+  // {label: 'Français', value: 'fr'},
+  // {label: 'Afar', value: 'aar'},
+  // {label: 'Acoli', value: 'ach'},
+  // {label: 'Bengali', value: 'ben'},
+  // {label: 'Avar', value: 'ava'}
+  // ]
+
+  const LanguagesToRemove = mascotteLanguages.reduce((list, currentValue) => {
+    list.push(currentValue.label);
+    return list;
+  }, new Array<string>());
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -178,9 +190,6 @@ const DefiStep1 = () => {
           ]}
           activeStep={0}
         />
-        <div style={{ display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-          {user && <AvatarImg user={user} size="large" />}
-        </div>
 
         <div className="width-900">
           <h1>Choisissez dans quelle langue vous souhaitez lancer le défi</h1>
@@ -189,36 +198,46 @@ const DefiStep1 = () => {
               <Grid item xs={12} md={8}>
                 <p className="text">Vous pourrez ensuite choisir le thème de votre défi.</p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%' }}>
-                  <InputLabel id="demo-simple-select">Langue</InputLabel>
+                  {/* <InputLabel id="demo-simple-select">Langue</InputLabel> */}
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     aria-label="gender"
                     name="gender1"
                     value={data.languageCode}
-                    onChange={(setLanguage: React.ChangeEvent<HTMLSelectElement>)}
+                    onChange={() => setLanguage}
                     label="Langue"
                   >
                     <h1>Langues parlées par votre mascotte</h1>
-                    {mascotteLanguages.map((l) => (
-                      <MenuItem key={l.value} value={l.value} style={{ cursor: 'pointer' }}></MenuItem>
-                    ))}
+                    {mascotteLanguages.map(
+                      (value) => (
+                        <li key={value.label} style={{ cursor: 'pointer' }}>
+                          {value.label}
+                        </li>
+                      ),
+                      // <MenuItem key={l.value} value={l.value} style={{ cursor: 'pointer' }} />
+                    )}
                     <Divider />
-                    <div style={{ display: 'flex', width: '100%' }}>
-                      <h1>Autres langues</h1>
-                      {languages.map((v) => (
-                        <MenuItem
-                          key={otherValue.toLowerCase()}
-                          value={otherValue.toLowerCase()}
-                          style={{ cursor: 'pointer' }}
-                          onChange={(v) => {
-                            setOtherValue(v);
-                            const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
-                            updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
-                          }}
-                        ></MenuItem>
+                    <h1>Autres langues</h1>
+                    {languages
+                      // .filter(filterLanguages ? (!mascotteLanguages) => filterLanguages.find((c3) => c3.toLowerCase() === c.alpha3_b.toLowerCase()) : () => true)
+                      .filter((language) => !LanguagesToRemove.includes(language.french))
+                      .map((language) => (
+                        <p key={language.french} style={{ cursor: 'pointer' }}>
+                          {language.french}
+                        </p>
                       ))}
-                    </div>
+                    ,
+                    {/* <LanguageSelector
+                        key={otherValue.toLowerCase()}
+                        value={otherValue.toLowerCase()}
+                        style={{ height: '30vh', overflowY: 'scroll', cursor: 'pointer' }}
+                        onChange={(v) => {
+                          setOtherValue(v);
+                          const language = languages.find((l) => l.alpha3_b.toLowerCase() === v.toLowerCase())?.french ?? '';
+                          updateActivity({ data: { ...data, languageCode: `${v.toLowerCase()}_other`, language } });
+                        }}
+                      /> */}
                     {/* <h1>Autres langues</h1>
                       <LanguageSelector
                       // multiple={false}

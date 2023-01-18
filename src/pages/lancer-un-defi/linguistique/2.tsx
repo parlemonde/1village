@@ -1,7 +1,6 @@
+import { FormControl, Select, MenuItem } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { FormControl, Select, MenuItem } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
@@ -121,12 +120,12 @@ const DefiStep2 = () => {
               ))}
             </div>
           </FormControl> */}
-          <ThemeChoiceButton
+            {/* <ThemeChoiceButton
               isOpen={otherOpen}
               onClick={() => {
                 onObjectChange(!otherOpen);
               }}
-              />
+            /> */}
             {data.objectIndex !== -1 && (
               <>
                 <p className="text" style={{ fontSize: '1.1rem' }}>
