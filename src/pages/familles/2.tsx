@@ -28,14 +28,20 @@ const ClassroomParamStep2 = () => {
   //TODO: issu with the button delete, find the student
 
   // const [value, setValue] = React.useState('');
+  const [disable, setBtnDisable] = React.useState(false);
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setBtnDisable(firstnameRef?.current?.value === null || lastnameRef?.current?.value === null);
   };
+  // const handleLastNameChange = (event) => {
+  //   useEffect(() => {
+  //     lastnameRef.current = event.target.value;
+  //   });
+  // };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(firstnameRef, lastnameRef);
-     if (firstnameRef.current === null || lastnameRef.current === null) return;
-    // if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
+    if (firstnameRef.current === null || lastnameRef.current === null) return;
+    if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
 
     //create of new student
     const newStudent = {
@@ -43,12 +49,12 @@ const ClassroomParamStep2 = () => {
       // classroomId,
       firstname: firstnameRef.current.value,
       lastname: lastnameRef.current.value,
-      hashedCode: '5plk5',
-    };
+      hashedCode: '7',
+    } as Student;
 
     //Set the list of students
     setStudents([...students, newStudent]);
-    //Save in the bdd  createStudent(newStudent as Omit<Student, 'id' | 'classroomId' | 'numLinkedAccount'>);
+    //Save in the bdd
     createStudent(newStudent);
   };
   const isTeacher = user?.type === UserType.TEACHER;
@@ -109,7 +115,7 @@ const ClassroomParamStep2 = () => {
           </label>
           {'  '}
           {/* <Button type="submit" disabled={!isTeacher || !student.firstname || !student.lastname || !firstnameRef.current?.value || !lastnameRef.current?.value} variant="outlined"> */}
-          <Button type="submit" variant="outlined" disabled={firstnameRef?.current?.value === '' || lastnameRef?.current?.value === ''}>
+          <Button type="submit" variant="outlined" disabled={disable}>
             Ajouter un élève
           </Button>
         </form>
@@ -123,7 +129,7 @@ const ClassroomParamStep2 = () => {
           <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}> */}
                     <DeleteButton
                       onDelete={() => {
-                        deleteStudent(student.id);
+                        deleteStudent(student);
                       }}
                       confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
                       confirmTitle="Supprimer l'élève"

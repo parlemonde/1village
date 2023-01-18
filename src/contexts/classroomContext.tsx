@@ -11,10 +11,10 @@ interface ClassroomContextValue {
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
-  createStudent({ firstname, lastname, hashedCode }: Student): Promise<void>;
-  deleteStudent({ firstname, lastname, hashedCode }: Student): Promise<void>;
-  students: Student[] | StudentForm[];
-  setStudents: (value: React.SetStateAction<StudentForm[] | Student[]>) => void;
+  createStudent({ firstname, lastname, hashedCode }: StudentForm): Promise<void>;
+  deleteStudent({ firstname, lastname, hashedCode }: StudentForm): Promise<void>;
+  students: Student[];
+  setStudents: (value: React.SetStateAction<Student[]>) => void;
   /*   getStudent(): Promise<void>; */
 }
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
@@ -37,7 +37,7 @@ interface ClassroomContextProviderProps {
   setClassroom(value: React.SetStateAction<Classroom | null>): void;
   // initialStudent: Student | null;
   students: Student[];
-  setStudents(value: React.SetStateAction<StudentForm[] | Student[]>): void;
+  setStudents(value: React.SetStateAction<Student[]>): void;
 }
 
 //TODO : il faut alimenter le ClassroomContext avec les fonctions
@@ -50,7 +50,7 @@ export const ClassroomContextProvider = ({
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   /*   const [student, setStudent] = React.useState<Student | null>(initialStudent); */
-  const [students, setStudents] = React.useState<StudentForm[] | Student[]>([]);
+  const [students, setStudents] = React.useState<Student[]>([]);
 
   /**
    * Creation of the classroom
@@ -121,32 +121,32 @@ export const ClassroomContextProvider = ({
   /**
    * Add new students in the classrom
    */
-  const createStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: StudentForm | Student) => {
-    console.trace();
+  const createStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: StudentForm) => {
+    // console.trace();
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
-    if (firstname && (lastname as StudentForm))
-      await axiosLoggedRequest({
-        method: 'POST',
-        url: '/students',
-        data: {
-          firstname,
-          lastname,
-          hashedCode,
-        },
+    if (firstname && (lastname as StudentForm)) console.log('response');
+    await axiosLoggedRequest({
+      method: 'POST',
+      url: '/students',
+      data: {
+        firstname,
+        lastname,
+        hashedCode,
+      },
+    })
+      .then((response) => {
+        // Add the new student to the array
+        // const newStudents = [...students, response.data.student];
+        // Update the state with the new array
+        // setStudents(newStudents);
+        console.log('response');
+        setStudents(response.data.student);
+        return response.data.student;
       })
-        .then((response) => {
-          // Add the new student to the array
-          // const newStudents = [...students, response.data.student];
-          // Update the state with the new array
-          // setStudents(newStudents);
-          console.log('response');
-          setStudents(response.data.student);
-          return response.data.student;
-        })
-        .catch((err) => {
-          return err.message;
-        });
+      .catch((err) => {
+        return err.message;
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // const setStudent = React.useCallback(() => {}, []);
@@ -203,7 +203,7 @@ export const ClassroomContextProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [axiosLoggedRequest]);
 
-  const deleteStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: Student) => {
+  const deleteStudent = React.useCallback(async ({ firstname, lastname, hashedCode }: StudentForm) => {
     if (user?.type !== UserType.TEACHER) return;
     if (!classroom) return;
     await axiosLoggedRequest({
