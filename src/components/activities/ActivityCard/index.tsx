@@ -62,7 +62,7 @@ export const ActivityCard = ({
   if (!user) {
     return null;
   }
-  const userIsPelico = user.type >= UserType.MEDIATOR;
+  const isPelico = user.type <= UserType.MEDIATOR;
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
@@ -89,7 +89,7 @@ export const ActivityCard = ({
             <AvatarImg
               user={user}
               size="small"
-              src={userIsPelico ? '/pelico-profil' : ''}
+              src={isPelico ? '/pelico-profil' : ''}
               style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }}
               noLink={noButtons}
               displayAsUser={activity.displayAsUser}
@@ -102,7 +102,7 @@ export const ActivityCard = ({
                 user={user}
                 noLink={noButtons}
                 displayAsUser={activity.displayAsUser}
-                style={userIsPelico ? { cursor: 'pointer' } : {}}
+                style={isPelico ? { cursor: 'pointer' } : {}}
               />
               {' a '}
               {responseActivity && isReaction(activity) ? (
@@ -114,13 +114,13 @@ export const ActivityCard = ({
               )}
             </p>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
-              {userIsPelico ? (
+              <p className="text text--small">Publié le {toDate(activity.updateDate as string)} </p>
+              {isPelico ? (
                 <Link href={`/pelico-profil`}>
                   <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
                 </Link>
               ) : (
-                <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </div>
           </div>

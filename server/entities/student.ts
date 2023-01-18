@@ -8,7 +8,7 @@ export class Student {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   public firstname: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -23,8 +23,8 @@ export class Student {
   //classroom relation
   @ManyToOne(() => Classroom, (classroom: Classroom) => classroom.students)
   @JoinColumn({ name: 'classroomId' })
-  public classroom: Classroom | null;
+  classroom: Classroom;
 
-  @OneToMany(() => UserToStudent, (userToStudent: UserToStudent) => userToStudent.student)
-  public userToStudents: UserToStudent[] | null;
+  @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.student)
+  public userToStudents: UserToStudent[];
 }

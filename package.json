@@ -21,7 +21,8 @@
     "dev-staging": "NODE_USE_STAGING=true yarn nodemon",
     "migration:create": "cd server && mkdir -p migrations && cd migrations && yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
-    "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true"
+    "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "jest": {
     "testEnvironment": "node",
@@ -109,6 +110,8 @@
     "prettier": "2.7.1",
     "sqlite3": "^5.1.2",
     "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "4.7.4",
     "webpack": "5.73.0",
     "webpack-bundle-analyzer": "4.5.0"
   },
@@ -117,10 +120,11 @@
     "@emotion/react": "^11.9.3",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.9.3",
+    "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
     "@mui/system": "^5.8.5",
-    "ajv": "8.11.0",
+    "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",
     "argon2": "^0.28.5",
     "aws-sdk": "^2.1162.0",

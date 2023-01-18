@@ -168,7 +168,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           )}
         </div>
         <span style={{ marginLeft: '0.25rem', display: 'flex' }}>
-          <Flag country={activityUser.country.isoCode}></Flag>
+          <Flag country={activityUser.country?.isoCode}></Flag>
         </span>
       </div>
       {isMediator && (
@@ -206,7 +206,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           }}
         >
           <div style={{ marginBottom: '1rem' }}>
-            <Flag country={activityUser.country.isoCode}></Flag> {activityUser.city}
+            <Flag country={activityUser.country?.isoCode}></Flag> {activityUser.city}
           </div>
           {localTime}
           <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />

@@ -10,6 +10,7 @@ import path from 'path';
 
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';
+import { Email, sendMail } from './emails';
 import { UserType } from './entities/user';
 import { authenticate } from './middlewares/authenticate';
 import { crsfProtection } from './middlewares/csrfCheck';
@@ -85,6 +86,15 @@ export async function getApp() {
     }),
   );
   backRouter.use(jsonify);
+  // ! a enlever une fois que les tests finies
+  backRouter.get('/testmail', (_, res: Response) => {
+    sendMail(Email.CONFIRMATION_EMAIL, 'yan.labarthe@gmail.com', {
+      firstname: 'yan',
+      email: 'yan1.labarthe@gmail.com',
+      verificationHash: 'abc',
+    });
+    res.status(200).send('Hello World 1Village!');
+  });
   backRouter.get('/', (_, res: Response) => {
     res.status(200).send('Hello World 1Village!');
   });
@@ -116,11 +126,17 @@ export async function getApp() {
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
-      if (req.user === undefined && req.path !== '/login' && req.path !== '/') {
-        res.redirect('/login');
+      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up') {
+        res.redirect('/');
         return;
       }
-      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type < UserType.ADMIN)) {
+
+      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type !== UserType.ADMIN)) {
+        res.redirect('/');
+        return;
+      }
+
+      if (req.path.includes('familles') && (!req.user || req.user.type !== UserType.TEACHER)) {
         res.redirect('/');
         return;
       }

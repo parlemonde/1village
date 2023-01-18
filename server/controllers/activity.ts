@@ -33,6 +33,10 @@ type ActivityGetter = {
   userId?: number;
   status?: number;
   responseActivityId?: number;
+  delayedDays?: number;
+  hasVisibilitySetToClass?: boolean;
+  teacherId?: number;
+  visibleToParent: boolean;
 };
 
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
@@ -83,6 +87,10 @@ const getActivities = async ({
   status = 0,
   userId,
   responseActivityId,
+  delayedDays,
+  hasVisibilitySetToClass,
+  teacherId,
+  visibleToParent,
 }: ActivityGetter) => {
   // get ids
   let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').where('activity.status = :status', { status });
@@ -98,28 +106,37 @@ const getActivities = async ({
   if (phase !== null) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.phase = :phase', { phase });
   }
+  if (visibleToParent) {
+    // * Here if user is a parent, we only select activities with the attribute is set to true
+    subQueryBuilder = subQueryBuilder.andWhere('activity.isVisibleToParent = :visibleToParent', { visibleToParent });
+  }
   if (responseActivityId !== undefined) {
     subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
   } else if (userId !== undefined) {
     subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
       userId,
     });
+  } else if (delayedDays !== undefined) {
+    // * Memo: we only select activity with updateDate + delayedDays lesser than current date
+    subQueryBuilder = subQueryBuilder.andWhere(`DATE_ADD(activity.updateDate, INTERVAL :delayedDays DAY) <= CURDATE()`, { delayedDays: delayedDays });
+  } else if (hasVisibilitySetToClass !== undefined && teacherId !== undefined) {
+    subQueryBuilder = subQueryBuilder.andWhere('activity.user = :teacherId', { teacherId: teacherId });
   } else if (pelico && countries !== undefined && countries.length > 0) {
     subQueryBuilder = subQueryBuilder
       .innerJoin('activity.user', 'user')
-      .andWhere('((user.countryCode IN (:countries) AND user.type <= :userType) OR user.type >= :userType2)', {
+      .andWhere('((user.countryCode IN (:countries) AND user.type >= :userType) OR user.type <= :userType2)', {
         countries,
-        userType: UserType.OBSERVATOR,
+        userType: UserType.TEACHER,
         userType2: UserType.MEDIATOR,
       });
   } else if (pelico && countries !== undefined && countries.length === 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type >= :userType2', {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type <= :userType2', {
       userType2: UserType.MEDIATOR,
     });
   } else if (!pelico && countries !== undefined && countries.length > 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type <= :userType', {
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type >= :userType', {
       countries,
-      userType: UserType.OBSERVATOR,
+      userType: UserType.TEACHER,
     });
   } else if (!pelico && countries !== undefined) {
     return [];
@@ -127,7 +144,7 @@ const getActivities = async ({
 
   const activities = await subQueryBuilder
     .orderBy('activity.isPinned', 'DESC')
-    .addOrderBy('activity.createDate', 'DESC')
+    .addOrderBy('activity.updateDate', 'DESC')
     .limit(limit)
     .offset(page * limit)
     .getMany();
@@ -149,7 +166,9 @@ const getActivities = async ({
 };
 
 // --- Get all activities. ---
-activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+activityController.get({ path: '' }, async (req: Request, res: Response) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+
   const activities = await getActivities({
     limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
     page: req.query.page ? Number(getQueryString(req.query.page)) || 0 : undefined,
@@ -167,6 +186,10 @@ activityController.get({ path: '', userType: UserType.TEACHER }, async (req: Req
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
     responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
+    delayedDays: req.query.delayedDays && req.query.delayedDays !== '0' ? Number(getQueryString(req.query.delayedDays)) : undefined,
+    hasVisibilitySetToClass: req.query.hasVisibilitySetToClass === 'true' ? true : undefined,
+    teacherId: req.query.teacherId ? Number(getQueryString(req.query.teacherId)) : undefined,
+    visibleToParent: req.user.type === UserType.FAMILY ? true : false,
   });
   res.sendJSON(activities);
 });
@@ -213,7 +236,7 @@ activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (re
 });
 
 activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res, next) => {
-  if (!req.user || req.user.type >= UserType.MEDIATOR) {
+  if (!req.user || req.user.type <= UserType.MEDIATOR) {
     // no mascotte for pelico
     next();
     return;
@@ -313,7 +336,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const villageId = req.user.type >= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
+  const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
   if (villageId === null) {
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
@@ -420,7 +443,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     next();
     return;
   }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+  if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     next();
     return;
   }
@@ -530,7 +553,7 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
     res.status(204).send();
     return;
   }
-  if (activity.userId !== req.user.id && req.user.type < UserType.ADMIN) {
+  if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     res.status(204).send();
     return;
   }

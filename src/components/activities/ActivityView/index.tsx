@@ -37,7 +37,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
   const router = useRouter();
   const { activity: responseActivity } = useActivity(activity?.responseActivityId ?? -1);
   const isAnswer = activity && isEnigme(activity) && 'reponse' in router.query;
-  const isPelico = user !== null && user.type >= UserType.MEDIATOR;
+  const isPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   return (
     activity && (
@@ -54,7 +54,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
                 {isPelico ? (
                   <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
                 ) : (
-                  <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                  <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
                 )}
               </div>
             </div>

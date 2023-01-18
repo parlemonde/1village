@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import React from 'react';
 
 interface PanelInputProps {
-  value: string;
+  value: string | undefined;
   defaultValue?: string;
   label: string;
   placeholder?: string;

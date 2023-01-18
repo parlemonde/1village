@@ -198,7 +198,7 @@ export const capitalize = (s: string): string => {
 };
 
 export function getUserDisplayName(user: User, isSelf: boolean, displayAsUser: boolean = false, activity?: Activity): string {
-  const userIsPelico = user.type >= UserType.MEDIATOR;
+  const userIsPelico = user.type <= UserType.MEDIATOR;
   if (userIsPelico && displayAsUser) {
     return capitalize(user.displayName || user.pseudo);
   }

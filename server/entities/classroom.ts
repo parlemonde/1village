@@ -15,16 +15,18 @@ export class Classroom {
   @Column({ nullable: true, default: null })
   public avatar: string;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true, default: 0 })
   public delayedDays: number;
 
   @Column({
     type: 'boolean',
+    nullable: true,
     default: false,
   })
-  public hasVisibilitySetToClass?: boolean;
+  public hasVisibilitySetToClass: boolean;
 
   @OneToOne(() => User)
+  @JoinColumn({ name: 'userId' })
   public user: User;
 
   @ManyToOne(() => Village, (village: Village) => village.classrooms)

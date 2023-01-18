@@ -11,7 +11,7 @@ export const WelcomeModal = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
-  if (!user || !village || user.type >= UserType.OBSERVATOR) {
+  if (!user || !village || user.type <= UserType.MEDIATOR) {
     return null;
   }
 

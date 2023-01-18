@@ -57,7 +57,7 @@ const Communication = () => {
         count++;
         if (count === 2) {
           count = 0;
-          toPrint = '';
+          //  toPrint = '';
         }
       }
     }
@@ -73,6 +73,39 @@ const Communication = () => {
       y: 10,
     });
   };
+
+  /* import React from "react";
+
+import "./styles.css";
+
+const MyComponentToPrint = () => {
+  return <div>Hello, world!</div>;
+};
+
+export default function App() {
+  const toPrintEl = React.useRef(null);
+
+  const onPrint = () => {
+    var newWin = window.open("", "Print-Window");
+    newWin.document.open();
+    newWin.document.write(
+      `<html><body onload="window.print()">${toPrintEl.current.innerHTML}</body></html>`
+    );
+    newWin.document.close();
+    setTimeout(function () {
+      newWin.close();
+    }, 10);
+  };
+  return (
+    <div className="App">
+      <button onClick={onPrint}>print</button>
+      <div ref={toPrintEl} style={{ display: "none" }}>
+        <MyComponentToPrint />
+      </div>
+    </div>
+  );
+}
+ */
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

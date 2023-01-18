@@ -71,6 +71,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
 
+  //Todo: will have to go here if fetch in context directly
   React.useEffect(() => {
     if (user) {
       fetchClassroom(user.id).then((classroom) => {
@@ -147,7 +148,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                           </div>
                         </div>
                       </div>
-                    ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
+                    ) : user !== null && router.pathname !== '/login' && router.pathname !== '/sign-up' && router.pathname !== '/404' ? (
                       <div className="app-container">
                         <Header />
                         <Component {...pageProps} />

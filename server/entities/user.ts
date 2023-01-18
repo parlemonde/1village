@@ -1,11 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { UserType } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
-import { Classroom } from './classroom';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
@@ -22,8 +21,14 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 255, unique: true })
   public email: string;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 50, default: '' })
   public pseudo: string;
+
+  @Column({ type: 'varchar', length: 50, default: '' })
+  public firstname: string;
+
+  @Column({ type: 'varchar', length: 100, default: '' })
+  public lastname: string;
 
   @Column({ type: 'varchar', length: 50, default: '' })
   public level: string;
@@ -59,8 +64,7 @@ export class User implements UserInterface {
   public firstLogin: number;
 
   @Column({
-    type: 'enum',
-    enum: UserType,
+    type: 'tinyint',
     default: UserType.TEACHER,
   })
   type: UserType;
@@ -72,12 +76,12 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   public villageId: number | null;
 
-  @Column({ type: 'varchar', length: 2, nullable: false })
+  @Column({ type: 'varchar', length: 2, nullable: true })
   set countryCode(newCountryCode: string) {
     this.country = countriesMap[newCountryCode] || countriesMap['FR'];
   }
   get countryCode() {
-    return this.country.isoCode;
+    return this.country?.isoCode;
   }
   public country: Country;
 

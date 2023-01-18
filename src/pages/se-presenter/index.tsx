@@ -61,10 +61,10 @@ const Presentation = () => {
   }, [axiosLoggedRequest]);
 
   React.useEffect(() => {
-    if (user && user.type < UserType.MEDIATOR) {
+    if (user && user.type > UserType.MEDIATOR) {
       getMascotte().catch();
     }
-    if (user && user.type >= UserType.MEDIATOR) {
+    if (user && user.type <= UserType.MEDIATOR) {
       setCurrentActivities([{ ...activities[0], disabledText: 'Pelico ne peut pas créer de mascotte !' }, activities[1]]);
     }
   }, [user, getMascotte]);
