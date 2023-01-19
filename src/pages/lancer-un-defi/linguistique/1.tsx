@@ -200,20 +200,22 @@ const DefiStep1 = () => {
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%' }}>
                   {/* <InputLabel id="demo-simple-select">Langue</InputLabel> */}
                   <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    aria-label="gender"
-                    name="gender1"
+                    // labelId="demo-simple-select-outlined-label"
+                    // id="demo-simple-select-outlined"
+                    // aria-label="gender"
+                    // name="gender1"
+                    style={{ width: '100%', marginBottom: '1rem' }}
                     value={data.languageCode}
                     onChange={() => setLanguage}
-                    label="Langue"
+                    label="Langues"
+                    placeholder="Langues"
                   >
                     <h1>Langues parlées par votre mascotte</h1>
                     {mascotteLanguages.map(
                       (value) => (
-                        <li key={value.label} style={{ cursor: 'pointer' }}>
+                        <MenuItem key={value.label} style={{ cursor: 'pointer' }}>
                           {value.label}
-                        </li>
+                        </MenuItem>
                       ),
                       // <MenuItem key={l.value} value={l.value} style={{ cursor: 'pointer' }} />
                     )}
@@ -223,9 +225,9 @@ const DefiStep1 = () => {
                       // .filter(filterLanguages ? (!mascotteLanguages) => filterLanguages.find((c3) => c3.toLowerCase() === c.alpha3_b.toLowerCase()) : () => true)
                       .filter((language) => !LanguagesToRemove.includes(language.french))
                       .map((language) => (
-                        <p key={language.french} style={{ cursor: 'pointer' }}>
+                        <MenuItem key={language.french} style={{ cursor: 'pointer' }}>
                           {language.french}
-                        </p>
+                        </MenuItem>
                       ))}
                     ,
                     {/* <LanguageSelector
