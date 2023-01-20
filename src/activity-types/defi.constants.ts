@@ -46,35 +46,35 @@ export const LANGUAGE_SCHOOL = [
 ];
 export const LANGUAGE_OBJECTS = [
   {
-    title: 'Un mot trésor',
-    title2: 'le mot trésor',
-    desc1: 'Écrivez en {{language}} le mot trésor que vous avez choisi.',
-    desc2: 'Expliquez pourquoi vous avez choisi ce mot trésor, ce qu’il signifie et quand vous l’utilisez.',
+    title: 'Un mot précieux',
+    title2: 'le mot précieux',
+    desc1: "Choisissez un mot 'précieux' qui a quelque chose d'original (prononciation,origine...) dans la langue {{language}}.",
+    desc2: 'Expliquez pourquoi vous avez choisi ce mot précieux, ce qu’il signifie et quand vous l’utilisez.',
   },
   {
     title: 'Une expression',
     title2: "l'expression",
-    desc1: "Écrivez en {{language}} l'expression que vous avez choisie.",
+    desc1: 'Choisissez une expression surprenante dans la langue {{language}}.',
     desc2: 'Expliquez pourquoi vous avez choisi cette expression, ce qu’elle signifie et quand vous l’utilisez.',
   },
   {
     title: 'Une poésie',
     title2: 'la poésie',
-    desc1: 'Écrivez en {{language}} la poésie que vous avez choisie.',
+    desc1: 'Choisissez une poésie écrite dans la langue {{language}}.',
     desc2: 'Expliquez pourquoi vous avez choisi cette poésie, ce qu’elle signifie et quand vous l’utilisez.',
   },
   {
     title: 'Une chanson',
     title2: 'la chanson',
-    desc1: 'Écrivez en {{language}} la chanson que vous avez choisie.',
+    desc1: 'Choisissez une chanson écrite dans la langue {{language}}.',
     desc2: 'Expliquez pourquoi vous avez choisi cette chanson, ce qu’elle signifie et quand vous l’utilisez.',
   },
-  {
-    title: 'Autre',
-    title2: '',
-    desc1: 'Écrivez en {{language}} ce que vous avez choisi.',
-    desc2: 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.',
-  },
+  // {
+  //   title: 'Autre',
+  //   title2: '',
+  //   desc1: 'Choisissez vous-même le thème.',
+  //   desc2: 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.',
+  // },
 ];
 export const LANGUAGE_DEFIS = [
   {

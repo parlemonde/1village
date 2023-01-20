@@ -80,7 +80,13 @@ const DefiStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={[
+            data.languageCode || data.themeName || 'Langue',
+            LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
+            'Présentation',
+            'Défi',
+            'Prévisualisation',
+          ]}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',

@@ -1,7 +1,6 @@
+import { TextField, Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { TextField, Button } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, LANGUAGE_DEFIS, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
@@ -73,7 +72,13 @@ const DefiStep4 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={[
+            data.languageCode || data.themeName || 'Langue',
+            LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
+            'Présentation',
+            'Défi',
+            'Prévisualisation',
+          ]}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
