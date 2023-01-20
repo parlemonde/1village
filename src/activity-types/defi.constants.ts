@@ -44,7 +44,7 @@ export const LANGUAGE_SCHOOL = [
   'qu’on utilise pour faire cours',
   'qu’on apprend comme langue étrangère',
 ];
-export const LANGUAGE_OBJECTS = [
+export const LANGUAGE_THEMES = [
   {
     title: 'Un mot précieux',
     title2: 'le mot précieux',
@@ -127,8 +127,8 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     return replaceTokens(defi, {
       object:
         data.defiIndex === 0
-          ? LANGUAGE_OBJECTS[(data as LanguageDefiData).defiIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
-          : LANGUAGE_OBJECTS[(data as LanguageDefiData).defiIndex % LANGUAGE_OBJECTS.length].title2,
+          ? LANGUAGE_THEMES[(data as LanguageDefiData).defiIndex % LANGUAGE_THEMES.length].title.toLowerCase()
+          : LANGUAGE_THEMES[(data as LanguageDefiData).defiIndex % LANGUAGE_THEMES.length].title2,
       language: (data as LanguageDefiData).languageCode,
     });
   }
@@ -141,7 +141,7 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
 export const getLanguageObject = (data: LanguageDefiData): string => {
   const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
   return replaceTokens(object, {
-    object: data.objectIndex === -1 ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
+    object: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
     language: data.languageCode,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });

@@ -3,14 +3,13 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import { isLanguage, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { warningColor } from 'src/styles/variables.const';
 import { replaceTokens } from 'src/utils';
 
 const DefiStep2 = () => {
@@ -40,14 +39,11 @@ const DefiStep2 = () => {
 
   const onClick = (index: number) => () => {
     if (index === -1) {
-      if (!data.themeName) {
-        return;
-      }
-      updateActivity({ data: { ...data, defiIndex: null, hasSelectedThemeNameOther: true } });
+      updateActivity({ data: { ...data, themeIndex: null, hasSelectedThemeNameOther: true } });
     } else {
       const newData = data;
       delete newData.defi;
-      updateActivity({ data: { ...newData, defiIndex: index, hasSelectedThemeNameOther: false } });
+      updateActivity({ data: { ...newData, themeIndex: index, hasSelectedThemeNameOther: false } });
     }
     router.push('/lancer-un-defi/linguistique/3');
   };
@@ -65,7 +61,7 @@ const DefiStep2 = () => {
             '/lancer-un-defi/linguistique/5',
           ]}
           activeStep={1}
-          // errorSteps={errorSteps}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Choisissez le thème de votre défi linguistique</h1>
@@ -73,7 +69,7 @@ const DefiStep2 = () => {
             Vous pourrez ensuite le présenter en détail.
           </p>
           <div>
-            {LANGUAGE_OBJECTS.map((l, index) => (
+            {LANGUAGE_THEMES.map((l, index) => (
               <ThemeChoiceButton
                 key={index}
                 label={l.title}

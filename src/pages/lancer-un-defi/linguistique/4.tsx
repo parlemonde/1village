@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_DEFIS, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import { isLanguage, LANGUAGE_DEFIS, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -21,12 +21,10 @@ const DefiStep4 = () => {
   const data = (activity?.data as LanguageDefiData) || null;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.slice(0, activity?.content.length - 1).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
     const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
 
     if (data !== null) {
-      const errors = getErrorSteps(data, 1); // corresponde to step 1
-      if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
+      const errors = getErrorSteps(data, 3); // corresponde to step 1
       if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
       return errors;
     }
@@ -56,14 +54,11 @@ const DefiStep4 = () => {
 
   const onClick = (index: number) => () => {
     if (index === -1) {
-      if (!data.defi) {
-        return;
-      }
-      updateActivity({ data: { ...data, defi: data.defi.toLowerCase() } });
+      updateActivity({ data: { ...data, defi: data.defi?.toLowerCase(), hasSelectedDefiNameOther: true } });
     } else {
       const newData = data;
       delete newData.defi;
-      updateActivity({ data: { ...newData, defiIndex: index } });
+      updateActivity({ data: { ...newData, defiIndex: index, hasSelectedDefiNameOther: false } });
     }
     router.push('/lancer-un-defi/linguistique/5');
   };
@@ -74,7 +69,7 @@ const DefiStep4 = () => {
         <Steps
           steps={[
             data.languageCode || data.themeName || 'Langue',
-            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
+            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_THEMES[data.themeIndex].title || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',
@@ -87,7 +82,7 @@ const DefiStep4 = () => {
             '/lancer-un-defi/linguistique/5',
           ]}
           activeStep={3}
-          // errorSteps={errorSteps}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Quel défi voulez-vous lancer aux Pelicopains ?</h1>
@@ -100,8 +95,8 @@ const DefiStep4 = () => {
                     index === 0
                       ? data.hasSelectedThemeNameOther
                         ? data.themeName
-                        : LANGUAGE_OBJECTS[data?.defiIndex]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
-                      : ((data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_OBJECTS[data?.defiIndex]?.title2) ??
+                        : LANGUAGE_THEMES[data?.themeIndex]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
+                      : ((data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_THEMES[data?.themeIndex]?.title2) ??
                         " < objet choisi à l'étape 2 > ",
                   language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "< langue choisie à l'étape 1 > ",
                 })}

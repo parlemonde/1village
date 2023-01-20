@@ -21,8 +21,9 @@ export type LanguageDefiData = {
   languageCode: string;
   language: string;
   languageIndex: number;
-  objectIndex: number;
+  themeIndex: number;
   defiIndex: number;
+  hasSelectedDefiNameOther: boolean;
   explanationContentIndex: number;
   defi?: string;
 };

@@ -51,8 +51,9 @@ const DefiStep1 = () => {
           languageCode: '',
           language: '',
           languageIndex: 0,
-          objectIndex: -1,
+          themeIndex: null,
           defiIndex: null,
+          hasSelectedDefiNameOther: false,
           explanationContentIndex: 1,
         });
       } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
@@ -63,8 +64,9 @@ const DefiStep1 = () => {
           languageCode: '',
           language: '',
           languageIndex: 0,
-          objectIndex: -1,
+          themeIndex: null,
           defiIndex: null,
+          hasSelectedDefiNameOther: false,
           explanationContentIndex: 1,
         });
       }
