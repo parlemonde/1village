@@ -86,7 +86,7 @@ const DefiStep2 = () => {
               }}
               additionalContent={
                 <div className="text-center">
-                  <h3>Donnez un nom à votre thème :</h3>
+                  <h3>Par exemple un proverbe...</h3>
                   <div style={{ display: 'inline-flex', alignItems: 'center', margin: '0.5rem 0' }}>
                     <span style={{ marginRight: '0.3rem' }}></span>
                     {data !== null && (
@@ -100,27 +100,13 @@ const DefiStep2 = () => {
                     )}
                   </div>
                   <br />
-                  <p
-                    className="text text--small"
-                    style={{
-                      display: 'inline-block',
-                      textAlign: 'justify',
-                      padding: '4px',
-                      border: '1px dashed',
-                      borderRadius: '4px',
-                      maxWidth: '480px',
-                    }}
-                  >
-                    Le thème est un <strong>défi supplémentaire</strong> pour les autres classes.
-                  </p>
-                  <br />
                   <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
                     Continuer
                   </Button>
                 </div>
               }
               label="Autre"
-              description={`Choisissez vous-même le thème.`}
+              description={`Choisissez une autre façon de présenter votre langue.`}
             />
           </div>
         </div>
