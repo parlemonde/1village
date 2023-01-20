@@ -1,15 +1,14 @@
+import { Tooltip } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Tooltip } from '@mui/material';
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, getDefi, getLanguageObject, DEFI, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import { isLanguage, getDefi, getLanguageObject, DEFI, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -34,14 +33,11 @@ const DefiStep5 = () => {
   const isObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.slice(0, activity?.content.length - 1).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
     const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
 
     if (data !== null) {
-      const errors = getErrorSteps(data, 1); // corresponde to step 1
-      if (fieldStep2?.length === 0) errors.push(1); //corresponding to step 2
+      const errors = getErrorSteps(data, 4); // corresponde to step 1
       if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
-      if (data.defiIndex === null) errors.push(3); //corresponding to step 4
       return errors;
     }
     return [];
@@ -74,7 +70,13 @@ const DefiStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={[
+            data.languageCode || data.themeName || 'Langue',
+            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
+            'Présentation',
+            'Défi',
+            'Prévisualisation',
+          ]}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -141,7 +143,7 @@ const DefiStep5 = () => {
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
-            L&apos;expression
+            Le thème
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
@@ -151,16 +153,11 @@ const DefiStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <span>
-              {LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title} :
-              <span>
-                <ContentView content={activity.content.slice(0, explanationContentIndex)} />
-              </span>
-            </span>
+            <span>{data.hasSelectedThemeNameOther ? data.themeName : data.themeIndex && LANGUAGE_THEMES[data.themeIndex].title}</span>
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
-            Explication
+            Présentation
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}>
             <EditButton
@@ -184,7 +181,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {data.defiIndex === null ? '' : getDefi(DEFI.LANGUAGE, data)}
+            Votre défi : {data.defi ? data.defi : data.defiIndex ? getDefi(DEFI.LANGUAGE, data) : ''}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />
