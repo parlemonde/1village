@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from '@mui/material';
-import { FormControlLabel, Grid, Radio, RadioGroup, Select, MenuItem, InputLabel, FormControl, Divider } from '@mui/material';
+import { ListSubheader, FormControlLabel, Grid, Radio, RadioGroup, Select, MenuItem, InputLabel, FormControl, Divider } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -47,6 +47,7 @@ const DefiStep1 = () => {
         created.current = true;
         createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.LANGUAGE, {
           themeName: '',
+          hasSelectedThemeNameOther: false,
           languageCode: '',
           language: '',
           languageIndex: 0,
@@ -58,6 +59,7 @@ const DefiStep1 = () => {
         created.current = true;
         createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.LANGUAGE, {
           themeName: '',
+          hasSelectedThemeNameOther: false,
           languageCode: '',
           language: '',
           languageIndex: 0,
@@ -115,12 +117,6 @@ const DefiStep1 = () => {
     );
   }, [mascotte, languages]);
 
-  const theme = React.useMemo(() => {
-    if (!data || (data && (data.themeName.length === 0 || data.languageCode.length === 0))) return 'Langue';
-    if (data.themeName.length > 0) return data.themeName;
-    return data.languageCode;
-  }, [data]);
-
   if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
     return <div></div>;
   }
@@ -157,7 +153,7 @@ const DefiStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
-          steps={[theme, 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
+          steps={[data.languageCode || data.themeName || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -177,20 +173,24 @@ const DefiStep1 = () => {
                   Vous pourrez ensuite choisir le thème de votre défi.
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
-                  <InputLabel id="demo-simple-select">Langue</InputLabel>
+                  <InputLabel id="demo-simple-select">Langues</InputLabel>
                   <Select style={{ width: '100%', marginBottom: '1rem' }} value={data.languageCode} onChange={handleLanguage} label="Langues">
-                    <h1>Langues parlées par votre mascotte</h1>
+                    <ListSubheader>
+                      <h1>Langues parlées par votre mascotte</h1>
+                    </ListSubheader>
                     {mascotteLanguages.map((language) => (
                       <MenuItem value={language.label.toLowerCase()} key={language.label.toLowerCase()} style={{ cursor: 'pointer' }}>
                         {language.label.toLowerCase()}
                       </MenuItem>
                     ))}
                     <Divider />
-                    <h1>Autres langues</h1>
+                    <ListSubheader>
+                      <h1>Autres langues</h1>
+                    </ListSubheader>
                     {languages
                       .filter((language) => !LanguagesToRemove.includes(language.french))
                       .map((language) => (
-                        <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer', maxHeight: 100 }}>
+                        <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
                           {language.french}
                         </MenuItem>
                       ))}

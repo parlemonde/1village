@@ -17,6 +17,7 @@ export type EcoDefiData = {
 
 export type LanguageDefiData = {
   themeName: string;
+  hasSelectedThemeNameOther: boolean;
   languageCode: string;
   language: string;
   languageIndex: number;

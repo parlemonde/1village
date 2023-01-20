@@ -81,8 +81,8 @@ const DefiStep3 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.languageCode || data.themeName || 'Langue',
-            LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
+            data.languageCode || 'Langue',
+            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',
@@ -95,7 +95,7 @@ const DefiStep3 = () => {
             '/lancer-un-defi/linguistique/5',
           ]}
           activeStep={2}
-          errorSteps={errorSteps}
+          // errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>{'Explication'}</h1>

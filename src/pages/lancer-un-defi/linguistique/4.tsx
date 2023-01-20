@@ -59,7 +59,7 @@ const DefiStep4 = () => {
       if (!data.defi) {
         return;
       }
-      updateActivity({ data: { ...data, defiIndex: index, defi: data.defi.toLowerCase() } });
+      updateActivity({ data: { ...data, defi: data.defi.toLowerCase() } });
     } else {
       const newData = data;
       delete newData.defi;
@@ -74,7 +74,7 @@ const DefiStep4 = () => {
         <Steps
           steps={[
             data.languageCode || data.themeName || 'Langue',
-            LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
+            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',
@@ -87,7 +87,7 @@ const DefiStep4 = () => {
             '/lancer-un-defi/linguistique/5',
           ]}
           activeStep={3}
-          errorSteps={errorSteps}
+          // errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Quel défi voulez-vous lancer aux Pelicopains ?</h1>
@@ -98,9 +98,12 @@ const DefiStep4 = () => {
                 label={replaceTokens(t.title, {
                   object:
                     index === 0
-                      ? LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
-                      : LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title2 ?? " < objet choisi à l'étape 2 > ",
-                  language: data?.language && data?.language.length > 0 ? data?.language : "< langue choisie à l'étape 1 > ",
+                      ? data.hasSelectedThemeNameOther
+                        ? data.themeName
+                        : LANGUAGE_OBJECTS[data?.defiIndex]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
+                      : ((data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_OBJECTS[data?.defiIndex]?.title2) ??
+                        " < objet choisi à l'étape 2 > ",
+                  language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "< langue choisie à l'étape 1 > ",
                 })}
                 description={t.description}
                 onClick={onClick(index)}

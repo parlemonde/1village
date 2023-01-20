@@ -75,7 +75,7 @@ const DefiStep5 = () => {
         <Steps
           steps={[
             data.languageCode || data.themeName || 'Langue',
-            LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
+            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_OBJECTS[data.defiIndex].title || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',
@@ -88,7 +88,7 @@ const DefiStep5 = () => {
             '/lancer-un-defi/linguistique/5',
           ]}
           activeStep={4}
-          errorSteps={errorSteps}
+          // errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre défi{!isEdit && ', et publiez-la'}</h1>
@@ -146,7 +146,7 @@ const DefiStep5 = () => {
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
-            L&apos;expression
+            Le thème
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
@@ -156,16 +156,11 @@ const DefiStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <span>
-              {LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.title} :
-              <span>
-                <ContentView content={activity.content.slice(0, explanationContentIndex)} />
-              </span>
-            </span>
+            <span>{data.hasSelectedThemeNameOther ? data.themeName : data.defiIndex && LANGUAGE_OBJECTS[data.defiIndex].title}</span>
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
-            Explication
+            Présentation
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}>
             <EditButton
@@ -189,7 +184,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {data.defiIndex === null ? '' : getDefi(DEFI.LANGUAGE, data)}
+            Votre défi : {data.defi ? data.defi : data.defiIndex ? getDefi(DEFI.LANGUAGE, data) : ''}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />

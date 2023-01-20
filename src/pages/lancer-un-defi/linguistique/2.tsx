@@ -1,4 +1,4 @@
-import { FormControl, Select, MenuItem, TextField, Button } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -7,8 +7,6 @@ import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants'
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -42,14 +40,14 @@ const DefiStep2 = () => {
 
   const onClick = (index: number) => () => {
     if (index === -1) {
-      if (!data.defi) {
+      if (!data.themeName) {
         return;
       }
-      updateActivity({ data: { ...data, defiIndex: index } });
+      updateActivity({ data: { ...data, defiIndex: null, hasSelectedThemeNameOther: true } });
     } else {
       const newData = data;
       delete newData.defi;
-      updateActivity({ data: { ...newData, defiIndex: index } });
+      updateActivity({ data: { ...newData, defiIndex: index, hasSelectedThemeNameOther: false } });
     }
     router.push('/lancer-un-defi/linguistique/3');
   };
@@ -67,7 +65,7 @@ const DefiStep2 = () => {
             '/lancer-un-defi/linguistique/5',
           ]}
           activeStep={1}
-          errorSteps={errorSteps}
+          // errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Choisissez le thème de votre défi linguistique</h1>
@@ -92,7 +90,7 @@ const DefiStep2 = () => {
               }}
               additionalContent={
                 <div className="text-center">
-                  <h3>Donnez un nom à la thème :</h3>
+                  <h3>Donnez un nom à votre thème :</h3>
                   <div style={{ display: 'inline-flex', alignItems: 'center', margin: '0.5rem 0' }}>
                     <span style={{ marginRight: '0.3rem' }}></span>
                     {data !== null && (
@@ -117,7 +115,7 @@ const DefiStep2 = () => {
                       maxWidth: '480px',
                     }}
                   >
-                    La thème est un <strong>défi supplémentaire</strong> pour les autres classes.
+                    Le thème est un <strong>défi supplémentaire</strong> pour les autres classes.
                   </p>
                   <br />
                   <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
@@ -126,7 +124,7 @@ const DefiStep2 = () => {
                 </div>
               }
               label="Autre"
-              description={`Choississez vous-même le thème`}
+              description={`Choisissez vous-même le thème.`}
             />
           </div>
         </div>

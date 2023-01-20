@@ -78,7 +78,7 @@ export const LANGUAGE_OBJECTS = [
 ];
 export const LANGUAGE_DEFIS = [
   {
-    title: 'Trouvez {{object}} qui veut dire la même chose dans une autre langue',
+    title: 'Trouvez {{object}} similaire dans une autre langue',
     description: 'Les Pelicopains devront envoyer un texte, un son ou une vidéo.',
   },
   {
@@ -87,7 +87,7 @@ export const LANGUAGE_DEFIS = [
   },
   {
     title: 'Écrivez {{object}} en {{language}}',
-    description: 'Les Pelicopains devront envoyer une image ou une vidéo.',
+    description: 'Les Pelicopains devront envoyer un texte, une image ou une vidéo.',
   },
 ];
 
@@ -115,10 +115,11 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
   if (subtype === DEFI.LANGUAGE) {
-    const defi = data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
-    if ((data as LanguageDefiData).objectIndex === -1) {
-      return '';
-    }
+    // const defi = data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
+    const defi = data.defi ? data.defi : LANGUAGE_DEFIS[data.defiIndex].title;
+    // if ((data as LanguageDefiData).objectIndex === -1) {
+    //   return '';
+    // }
     // We are going to implement this later when we add "other" category in language challenge.
     // if ((data as LanguageDefiData).objectIndex === 4 && data.defiIndex === 0) {
     //   return 'Trouvez la même chose dans une autre langue';
@@ -126,9 +127,9 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     return replaceTokens(defi, {
       object:
         data.defiIndex === 0
-          ? LANGUAGE_OBJECTS[(data as LanguageDefiData).objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
-          : LANGUAGE_OBJECTS[(data as LanguageDefiData).objectIndex % LANGUAGE_OBJECTS.length].title2,
-      language: (data as LanguageDefiData).language,
+          ? LANGUAGE_OBJECTS[(data as LanguageDefiData).defiIndex % LANGUAGE_OBJECTS.length].title.toLowerCase()
+          : LANGUAGE_OBJECTS[(data as LanguageDefiData).defiIndex % LANGUAGE_OBJECTS.length].title2,
+      language: (data as LanguageDefiData).languageCode,
     });
   }
   if (subtype === DEFI.FREE) {
@@ -141,7 +142,7 @@ export const getLanguageObject = (data: LanguageDefiData): string => {
   const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
   return replaceTokens(object, {
     object: data.objectIndex === -1 ? 'un défi' : LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].title.toLowerCase(),
-    language: data.language,
+    language: data.languageCode,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });
 };
