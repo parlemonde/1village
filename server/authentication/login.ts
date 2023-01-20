@@ -1,10 +1,10 @@
 import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 
 import { User } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import { getAccessToken } from './lib/tokens';
@@ -39,13 +39,13 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     return;
   }
 
-  const user = await getRepository(User)
+  const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.passwordHash')
     .where('User.email = :username OR User.pseudo = :username', { username: data.username })
     .getOne();
 
-  if (user === undefined) {
+  if (user === null) {
     throw new AppError('Invalid username', ErrorCode.INVALID_USERNAME);
   }
 
@@ -66,11 +66,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
 
   if (!isPasswordCorrect) {
     user.accountRegistration += 1;
-    await getRepository(User).save(user);
+    await AppDataSource.getRepository(User).save(user);
     throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
   } else if (user.accountRegistration > 0 && user.accountRegistration < 4) {
     user.accountRegistration = 0;
-    await getRepository(User).save(user);
+    await AppDataSource.getRepository(User).save(user);
   }
 
   const { accessToken, refreshToken } = await getAccessToken(user.id, !!data.getRefreshToken);

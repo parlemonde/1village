@@ -45,6 +45,7 @@ const Question2 = () => {
       return;
     }
     const content = [...activity.content];
+
     if (content.length >= 3) {
       return;
     }
