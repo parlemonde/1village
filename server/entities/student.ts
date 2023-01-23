@@ -17,7 +17,7 @@ export class Student {
   @Column({ type: 'varchar', length: 255 })
   public hashedCode: string;
 
-  @Column({ type: 'tinyint', nullable: true })
+  @Column({ type: 'tinyint', nullable: true, default: 0 })
   public numLinkedAccount: number;
 
   //classroom relation
