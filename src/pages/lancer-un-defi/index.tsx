@@ -1,45 +1,17 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
-import { SuggestionCarousel } from 'src/components/SuggestionCarousel';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import CulinaireIcon from 'src/svg/defi/culinaire.svg';
 import EcologiqueIcon from 'src/svg/defi/ecologique.svg';
 import LinguistiqueIcon from 'src/svg/defi/linguistique.svg';
-
-const suggestions = [
-  {
-    title: 'Défi linguistique',
-    button: 'Linguistique',
-    href: '/lancer-un-defi/linguistique/1',
-    text: 'Créez un défi linguistique !',
-    icon: LinguistiqueIcon,
-    disabled: false,
-  },
-  {
-    title: 'Défi culinaire',
-    button: 'Culinaire',
-    href: '/lancer-un-defi/culinaire/1',
-    text: 'Créez un défi culinaire !',
-    icon: CulinaireIcon,
-    disabled: false,
-  },
-  {
-    title: 'Défi écologique',
-    button: 'Écologique',
-    href: '/lancer-un-defi/ecologique/1',
-    text: 'Créez un défi écologique !',
-    icon: EcologiqueIcon,
-    disabled: false,
-  },
-];
 
 const activities = [
   {
     label: 'Défi linguistique',
     href: '/lancer-un-defi/linguistique/1',
     icon: LinguistiqueIcon,
-    disabled: false,
+    disabled: true,
     disabledText: 'Bientôt disponible',
   },
   {
@@ -56,6 +28,12 @@ const activities = [
     disabled: false,
     disabledText: 'Bientôt disponible',
   },
+  {
+    label: 'Créer un défi sur un thème libre',
+    href: '/lancer-un-defi/1',
+    disabled: false,
+    disabledText: 'Bientôt disponible',
+  },
 ];
 
 const Defi = () => {
@@ -63,10 +41,6 @@ const Defi = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
-          <h1>{"Suggestions d'activités"}</h1>
-          <div style={{ padding: '1rem', textAlign: 'center' }}>
-            <SuggestionCarousel suggestions={suggestions} />
-          </div>
           <h1>Choisissez le défi que vous souhaitez réaliser</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
             {'Dans cette activité, nous vous proposons de lancer un défi aux Pélicopains. Cela peut être un défi linguistique, culinaire ou même '}

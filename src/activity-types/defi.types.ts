@@ -25,8 +25,15 @@ export type LanguageDefiData = {
   defi?: string;
 };
 
+export type FreeDefiData = {
+  themeName: string;
+  defiIndex: number;
+  defi?: string;
+};
+
 export type CookingDefiActivity = Activity<CookingDefiData>;
 export type EcoDefiActivity = Activity<EcoDefiData>;
 export type LanguageDefiActivity = Activity<LanguageDefiData>;
+export type FreeDefiActivity = Activity<FreeDefiData>;
 
-export type DefiActivity = CookingDefiActivity | EcoDefiActivity | LanguageDefiActivity;
+export type DefiActivity = CookingDefiActivity | EcoDefiActivity | LanguageDefiActivity | FreeDefiActivity;

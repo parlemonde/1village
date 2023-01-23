@@ -66,3 +66,4 @@ docker-compose.build.yml
 docker-compose.bdd.yml
 
 *.http
+
