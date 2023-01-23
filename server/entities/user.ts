@@ -109,7 +109,7 @@ export class User implements UserInterface {
 
   public position: { lat: number; lng: number };
 
-  @Column({type: 'boolean', default: false})
+  @Column({ type: 'boolean', default: false })
   public hasAcceptedNewsletter: boolean;
 
   @Column({ type: 'varchar', length: 400, default: null })

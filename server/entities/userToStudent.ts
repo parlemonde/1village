@@ -3,7 +3,6 @@ import { Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { Student } from './student';
 import { User } from './user';
 
-type User = import('./user');
 @Entity()
 export class UserToStudent {
   @PrimaryGeneratedColumn()
