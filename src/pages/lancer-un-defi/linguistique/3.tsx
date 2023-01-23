@@ -77,7 +77,7 @@ const DefiStep3 = () => {
         <Steps
           steps={[
             data.languageCode || 'Langue',
-            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_THEMES[data.themeIndex].title || 'Thème',
+            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',

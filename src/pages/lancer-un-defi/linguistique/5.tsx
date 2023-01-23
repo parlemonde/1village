@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, getDefi, getLanguageObject, DEFI, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
+import { isLanguage, getDefi, getLanguageTheme, DEFI, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -71,8 +71,8 @@ const DefiStep5 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.languageCode || data.themeName || 'Langue',
-            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
+            data.languageCode || 'Langue',
+            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',
@@ -139,7 +139,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {data.languageIndex !== 0 ? getLanguageObject(data) : ''}
+            {data.languageIndex !== 0 ? getLanguageTheme(data) : ''}
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
@@ -153,7 +153,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <span>{data.hasSelectedThemeNameOther ? data.themeName : data.themeIndex && LANGUAGE_THEMES[data.themeIndex].title}</span>
+            <span>{data.hasSelectedThemeNameOther ? data.themeName : data.themeIndex !== null ? LANGUAGE_THEMES[data.themeIndex].title : ''}</span>
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
@@ -181,7 +181,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {data.defi ? data.defi : data.defiIndex ? getDefi(DEFI.LANGUAGE, data) : ''}
+            Votre défi : {data.hasSelectedDefiNameOther ? data.defi : data.defiIndex ? getDefi(DEFI.LANGUAGE, data) : ''}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />

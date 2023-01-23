@@ -52,7 +52,7 @@ const DefiStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[data.languageCode || data.themeName || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
+          steps={[data.languageCode || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',

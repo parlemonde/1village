@@ -1,11 +1,11 @@
 import type {
+  LanguageDefiData,
   DefiActivity,
   CookingDefiActivity,
   CookingDefiData,
   EcoDefiActivity,
   EcoDefiData,
   LanguageDefiActivity,
-  LanguageDefiData,
   FreeDefiActivity,
   FreeDefiData,
 } from './defi.types';
@@ -69,24 +69,18 @@ export const LANGUAGE_THEMES = [
     desc1: 'Choisissez une chanson écrite dans la langue {{language}}.',
     desc2: 'Expliquez pourquoi vous avez choisi cette chanson, ce qu’elle signifie et quand vous l’utilisez.',
   },
-  // {
-  //   title: 'Autre',
-  //   title2: '',
-  //   desc1: 'Choisissez vous-même le thème.',
-  //   desc2: 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.',
-  // },
 ];
 export const LANGUAGE_DEFIS = [
   {
-    title: 'Trouvez {{object}} similaire dans une autre langue',
+    title: 'Trouvez {{theme}} similaire dans une autre langue',
     description: 'Les Pelicopains devront envoyer un texte, un son ou une vidéo.',
   },
   {
-    title: 'Répétez à l’oral {{object}} en {{language}}',
+    title: 'Répétez à l’oral {{theme}} en {{language}}',
     description: 'Les Pelicopains devront envoyer un son ou une vidéo.',
   },
   {
-    title: 'Écrivez {{object}} en {{language}}',
+    title: 'Écrivez {{theme}} en {{language}}',
     description: 'Les Pelicopains devront envoyer un texte, une image ou une vidéo.',
   },
 ];
@@ -114,21 +108,10 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
   if (subtype === DEFI.ECO) {
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
-  if (subtype === DEFI.LANGUAGE) {
-    // const defi = data.defiIndex === -1 && data.defi ? data.defi : LANGUAGE_DEFIS[(data.defiIndex ?? 0) % LANGUAGE_DEFIS.length].title;
-    const defi = data.defi ? data.defi : LANGUAGE_DEFIS[data.defiIndex].title;
-    // if ((data as LanguageDefiData).objectIndex === -1) {
-    //   return '';
-    // }
-    // We are going to implement this later when we add "other" category in language challenge.
-    // if ((data as LanguageDefiData).objectIndex === 4 && data.defiIndex === 0) {
-    //   return 'Trouvez la même chose dans une autre langue';
-    // }
+  if (subtype === DEFI.LANGUAGE && 'language' in data) {
+    const defi = LANGUAGE_DEFIS[data.defiIndex].title;
     return replaceTokens(defi, {
-      object:
-        data.defiIndex === 0
-          ? LANGUAGE_THEMES[(data as LanguageDefiData).defiIndex % LANGUAGE_THEMES.length].title.toLowerCase()
-          : LANGUAGE_THEMES[(data as LanguageDefiData).defiIndex % LANGUAGE_THEMES.length].title2,
+      theme: LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase(),
       language: (data as LanguageDefiData).languageCode,
     });
   }
@@ -138,10 +121,10 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
   return data.defiIndex === -1 && data.defi ? data.defi : COOKING_DEFIS[(data.defiIndex ?? 0) % COOKING_DEFIS.length].title;
 };
 
-export const getLanguageObject = (data: LanguageDefiData): string => {
-  const object = 'Voila {{object}} en {{language}}, une langue {{school}}.';
-  return replaceTokens(object, {
-    object: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
+export const getLanguageTheme = (data: LanguageDefiData): string => {
+  const theme = 'Voila {{theme}} en {{language}}, une langue {{school}}.';
+  return replaceTokens(theme, {
+    theme: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
     language: data.languageCode,
     school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
   });

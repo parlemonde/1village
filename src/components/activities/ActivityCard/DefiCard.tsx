@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
-import { ECO_ACTIONS, getDefi, getLanguageObject, isCooking, isEco, isLanguage } from 'src/activity-types/defi.constants';
+import { ECO_ACTIONS, getDefi, getLanguageTheme, isCooking, isEco, isLanguage } from 'src/activity-types/defi.constants';
 import type { DefiActivity, CookingDefiData } from 'src/activity-types/defi.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -66,7 +66,7 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
             : isEco(activity)
             ? ECO_ACTIONS[activity.data.type]
             : isLanguage(activity)
-            ? getLanguageObject(activity.data)
+            ? getLanguageTheme(activity.data)
             : null}
         </h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>

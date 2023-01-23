@@ -68,8 +68,8 @@ const DefiStep4 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.languageCode || data.themeName || 'Langue',
-            (data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_THEMES[data.themeIndex].title || 'Thème',
+            data.languageCode || 'Langue',
+            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
             'Présentation',
             'Défi',
             'Prévisualisation',
@@ -91,13 +91,9 @@ const DefiStep4 = () => {
               <ThemeChoiceButton
                 key={index}
                 label={replaceTokens(t.title, {
-                  object:
-                    index === 0
-                      ? data.hasSelectedThemeNameOther
-                        ? data.themeName
-                        : LANGUAGE_THEMES[data?.themeIndex]?.title.toLowerCase() ?? " < objet choisi à l'étape 2 > "
-                      : ((data.hasSelectedThemeNameOther && data.themeName) || LANGUAGE_THEMES[data?.themeIndex]?.title2) ??
-                        " < objet choisi à l'étape 2 > ",
+                  theme: data.hasSelectedThemeNameOther
+                    ? data.themeName
+                    : (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title.toLowerCase()) || " < thème choisi à l'étape 2 > ",
                   language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "< langue choisie à l'étape 1 > ",
                 })}
                 description={t.description}
