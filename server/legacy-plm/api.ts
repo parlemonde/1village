@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { getRepository } from 'typeorm';
 
 import { User } from '../entities/user';
+import { AppDataSource } from '../utils/data-source';
 import { logger } from '../utils/logger';
 import type { PLM_User } from './user';
 import { createPLMUserToDB } from './user';
@@ -32,10 +32,10 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
       url: `${plmSsoUrl}/oauth/me/?access_token=${access_token}`,
     });
     const plmUser = userResponse.data as PLM_User;
-    let user = await getRepository(User).findOne({
+    let user = await AppDataSource.getRepository(User).findOne({
       where: { email: plmUser.email },
     });
-    if (user === undefined) {
+    if (user === null) {
       user = await createPLMUserToDB(plmUser);
     }
     return user;

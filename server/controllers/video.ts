@@ -1,16 +1,15 @@
-import { getRepository } from 'typeorm';
-
 import { UserType } from '../entities/user';
 import { Video } from '../entities/video';
 import { deleteVideo, getVideoLink, uploadVideo, getPictureForVideo } from '../fileUpload';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
 const videoController = new Controller('/videos');
 
 videoController.get({ path: '', userType: UserType.TEACHER }, async (req, res) => {
-  const videos = await getRepository(Video).find({ where: { userId: req.user?.id ?? 0 } });
+  const videos = await AppDataSource.getRepository(Video).find({ where: { userId: req.user?.id ?? 0 } });
   res.sendJSON(videos);
 });
 
@@ -60,8 +59,8 @@ videoController.upload(
 // --- Delete a video ---
 videoController.delete({ path: '/:videoId', userType: UserType.TEACHER }, async (req, res) => {
   const videoId = parseInt(req.params.videoId, 10) ?? 0;
-  const video = await getRepository(Video).findOne({ where: { id: videoId, userId: req.user?.id ?? 0 } });
-  if (video !== undefined) {
+  const video = await AppDataSource.getRepository(Video).findOne({ where: { id: videoId, userId: req.user?.id ?? 0 } });
+  if (video !== null) {
     const success = await deleteVideo(video.id);
     if (!success) {
       throw new AppError('Erreur', ErrorCode.UNKNOWN);
