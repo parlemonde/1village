@@ -39,10 +39,7 @@ export const Header = () => {
     setAnchorEl(null);
     router.push(page);
   };
-  const goToFamilies = () => {
-    setAnchorEl(null);
-    router.push('/mes-familles');
-  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };

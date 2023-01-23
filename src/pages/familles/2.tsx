@@ -1,65 +1,43 @@
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
-import { UserContext } from 'src/contexts/userContext';
 import { bgPage } from 'src/styles/variables.const';
-import type { Student, StudentForm } from 'types/student.type';
-import { User, UserType } from 'types/user.type';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
-  const { students, setStudents, createStudent, deleteStudent } = React.useContext(ClassroomContext);
-  const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
+  const { students, createStudent, deleteStudent } = React.useContext(ClassroomContext);
+  const [isBtndisable, setBtnDisable] = React.useState(true);
   const firstnameRef = React.useRef<HTMLInputElement>(null);
   const lastnameRef = React.useRef<HTMLInputElement>(null);
-  // const data = (student?.data as Student) || null;
 
   //TODO: issu to disabled the button for both input if empty (firstname)
   //TODO: issu to send the data to the bdd
   //TODO: issu with the button delete, find the student
 
-  // const [value, setValue] = React.useState('');
-  const [disable, setBtnDisable] = React.useState(false);
-  const handleChange = (event) => {
-    setBtnDisable(firstnameRef?.current?.value === null || lastnameRef?.current?.value === null);
+  const handleChange = () => {
+    if (firstnameRef.current === null || lastnameRef.current === null) return;
+    if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
+    setBtnDisable(firstnameRef.current.value === null && lastnameRef.current.value === null);
   };
-  // const handleLastNameChange = (event) => {
-  //   useEffect(() => {
-  //     lastnameRef.current = event.target.value;
-  //   });
-  // };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(firstnameRef, lastnameRef);
     if (firstnameRef.current === null || lastnameRef.current === null) return;
     if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
 
-    //create of new student
     const newStudent = {
-      // id: '',
-      // classroomId,
       firstname: firstnameRef.current.value,
       lastname: lastnameRef.current.value,
-      hashedCode: '7',
-    } as Student;
-
-    //Set the list of students
-    setStudents([...students, newStudent]);
-    //Save in the bdd
+    };
     createStudent(newStudent);
   };
-  const isTeacher = user?.type === UserType.TEACHER;
-
-  // const isEnable = { isTeacher, firstnameRef, lastnameRef };
 
   const onNext = () => {
     router.push('/familles/3');
@@ -90,61 +68,45 @@ const ClassroomParamStep2 = () => {
               size="small"
               placeholder="Prénom"
               type="firstname"
-              // value={value}
               onChange={handleChange}
-              //   setFirstName(event.target.value);
-              // }}
               inputRef={firstnameRef}
+              sx={{
+                marginRight: 1,
+              }}
             />
           </label>
-          {'  '}
           <label>
             <TextField
               variant="standard"
               size="small"
               placeholder="Nom"
               type="lastname"
-              // value={value}
               onChange={handleChange}
-              // value={student.lastname}
-              // onChange={(event) => {
-              //   setLastName(event.target.value);
-              // }}
               inputRef={lastnameRef}
+              sx={{
+                marginRight: 1,
+              }}
             />
           </label>
-          {'  '}
-          {/* <Button type="submit" disabled={!isTeacher || !student.firstname || !student.lastname || !firstnameRef.current?.value || !lastnameRef.current?.value} variant="outlined"> */}
-          <Button type="submit" variant="outlined" disabled={disable}>
+          <Button type="submit" variant="outlined" disabled={isBtndisable}>
             Ajouter un élève
           </Button>
         </form>
         <div className="students-list">
           {students.length > 0
             ? students.map((student) => (
-                <div className="student-name" key={student.hashedCode}>
-                  <div className="firstname">
-                    {student.firstname} {student.lastname}{' '}
-                    {/* {data.student && (
-          <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}> */}
-                    <DeleteButton
-                      onDelete={() => {
-                        deleteStudent(student);
-                      }}
-                      confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
-                      confirmTitle="Supprimer l'élève"
-                      style={{ backgroundColor: bgPage }}
-                    />
-                    {/* </div>
-        )} */}
-                    {/* <ImageModal
-          id={0}
-          isModalOpen={isImageModalOpen}
-          setIsModalOpen={setIsImageModalOpen}
-          imageUrl={data.student? || ''}
-          setStudents={setStudents}
-        /> */}
-                  </div>
+                <div key={student.hashedCode} style={{ display: 'grid', gridTemplateColumns: '40px 1fr' }}>
+                  <DeleteButton
+                    onDelete={() => {
+                      deleteStudent(student.id);
+                    }}
+                    confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
+                    confirmTitle="Supprimer l'élève"
+                    style={{ backgroundColor: bgPage, placeSelf: 'center start' }}
+                  />
+                  <p style={{ placeSelf: 'center start' }}>
+                    {student.firstname} {student.lastname}
+                  </p>
                 </div>
               ))
             : null}

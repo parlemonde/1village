@@ -36,9 +36,7 @@ import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
 import createEmotionCache from 'src/styles/createEmotionCache';
 import theme from 'src/styles/theme';
-import { axiosRequest } from 'src/utils/axiosRequest';
 import { initH5p } from 'src/utils/initH5p';
-import type { Classroom } from 'types/classroom.type';
 import type { User } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
@@ -69,16 +67,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
-  const [classroom, setClassroom] = React.useState<Classroom | null>(null);
-
-  //Todo: will have to go here if fetch in context directly
-  React.useEffect(() => {
-    if (user) {
-      fetchClassroom(user.id).then((classroom) => {
-        setClassroom(classroom);
-      });
-    }
-  }, [user]);
 
   const onRouterChangeStart = (): void => {
     NProgress.start();
@@ -136,7 +124,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken || ''}>
               <VillageContextProvider initialVillage={initialVillage}>
-                <ClassroomContextProvider classroom={classroom} setClassroom={setClassroom}>
+                <ClassroomContextProvider>
                   <ActivityContextProvider>
                     {isOnAdmin ? (
                       <div>
@@ -191,15 +179,5 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
 
   return { ...appProps, ...initialData };
 };
-
-async function fetchClassroom(userId: number) {
-  const response = await axiosRequest({
-    method: 'GET',
-    url: `/classrooms/${userId}`,
-  });
-  if (response.error) return null;
-  if (response.data === null) return null;
-  return response.data.classroom;
-}
 
 export default MyApp;
