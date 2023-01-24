@@ -105,11 +105,17 @@ export const DEFI = {
 //TODO : factoriser en mode clean code le getDefi
 //https://stackoverflow.com/questions/8900652/what-does-do-in-javascript
 export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData | FreeDefiData): string => {
+  // eslint-disable-next-line no-console
+  console.info({ data });
   if (subtype === DEFI.ECO) {
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
   if (subtype === DEFI.LANGUAGE && 'language' in data) {
+    // eslint-disable-next-line no-console
+    console.info('Language');
     const defi = data.defiIndex !== null ? LANGUAGE_DEFIS[data.defiIndex].title : '';
+    // eslint-disable-next-line no-console
+    console.info({ defi });
     return replaceTokens(defi, {
       theme: data.defiIndex !== null ? LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase() : '',
       language: data.languageCode,
