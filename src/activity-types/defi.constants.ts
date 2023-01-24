@@ -111,8 +111,8 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
   if (subtype === DEFI.LANGUAGE && 'language' in data && 'themeIndex' in data) {
     const defi = data.defiIndex !== null ? LANGUAGE_DEFIS[data.defiIndex].title : '';
     return replaceTokens(defi, {
-      theme: data.defiIndex !== null ? LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase() : '',
-      language: data.languageCode,
+      theme: data.themeIndex !== null ? LANGUAGE_THEMES[data.themeIndex].title2.toLowerCase() : "< thème choisi à l'étape 2 >",
+      language: data.languageCode.length > 0 ? data.languageCode : "< langue choisie à l'étape 1 >",
     });
   }
   if (subtype === DEFI.FREE) {

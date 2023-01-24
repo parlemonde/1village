@@ -181,7 +181,7 @@ const DefiStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            Votre défi : {data.hasSelectedDefiNameOther ? data.defi : data.defiIndex ? getDefi(DEFI.LANGUAGE, data) : ''}
+            Votre défi : {data.hasSelectedDefiNameOther ? data.defi : data.defiIndex !== null ? getDefi(DEFI.LANGUAGE, data) : ''}
           </div>
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />
