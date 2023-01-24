@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type {
   LanguageDefiData,
   DefiActivity,
@@ -106,36 +105,24 @@ export const DEFI = {
 //TODO : factoriser en mode clean code le getDefi
 //https://stackoverflow.com/questions/8900652/what-does-do-in-javascript
 export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | LanguageDefiData | FreeDefiData): string => {
-  console.info({ data });
   if (subtype === DEFI.ECO) {
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
   if (subtype === DEFI.LANGUAGE && 'language' in data) {
-    console.info('Language');
     const defi = data.defiIndex !== null ? LANGUAGE_DEFIS[data.defiIndex].title : '';
-    console.info({ defi });
     return replaceTokens(defi, {
       theme: data.defiIndex !== null ? LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase() : '',
       language: data.languageCode,
     });
   }
   if (subtype === DEFI.FREE) {
-    console.log('Free');
-    console.log('Free', data.defiIndex === -1 && data.defi ? data.defi : FREE_DEFIS[(data.defiIndex ?? 0) % FREE_DEFIS.length].title);
     return data.defiIndex === -1 && data.defi ? data.defi : FREE_DEFIS[(data.defiIndex ?? 0) % FREE_DEFIS.length].title;
   }
   return data.defiIndex === -1 && data.defi ? data.defi : COOKING_DEFIS[(data.defiIndex ?? 0) % COOKING_DEFIS.length].title;
 };
 
 export const getLanguageTheme = (data: LanguageDefiData): string => {
-  console.log('getLanguageTheme');
   const theme = 'Voila {{theme}} en {{language}}, une langue {{school}}.';
-  console.log({ getLanguageTheme: data });
-  console.log('test 1 getLanguageTheme', LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase());
-  console.log(
-    'test 2 getLanguageTheme',
-    data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
-  );
   return replaceTokens(theme, {
     theme: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
     language: data.languageCode,
