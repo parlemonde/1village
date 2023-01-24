@@ -109,10 +109,10 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
   if (subtype === DEFI.LANGUAGE && 'language' in data) {
-    const defi = LANGUAGE_DEFIS[data.defiIndex].title;
+    const defi = data.defiIndex !== null ? LANGUAGE_DEFIS[data.defiIndex].title : '';
     return replaceTokens(defi, {
-      theme: LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase(),
-      language: (data as LanguageDefiData).languageCode,
+      theme: data.defiIndex !== null ? LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase() : '',
+      language: data.languageCode,
     });
   }
   if (subtype === DEFI.FREE) {
