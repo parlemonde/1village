@@ -108,7 +108,7 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
   if (subtype === DEFI.ECO) {
     return data.defiIndex === -1 && data.defi ? data.defi : ECO_DEFIS[(data.defiIndex ?? 0) % ECO_DEFIS.length].title;
   }
-  if (subtype === DEFI.LANGUAGE && 'language' in data) {
+  if (subtype === DEFI.LANGUAGE && 'language' in data && 'themeIndex' in data) {
     const defi = data.defiIndex !== null ? LANGUAGE_DEFIS[data.defiIndex].title : '';
     return replaceTokens(defi, {
       theme: data.defiIndex !== null ? LANGUAGE_THEMES[data.defiIndex].title2.toLowerCase() : '',
@@ -122,12 +122,15 @@ export const getDefi = (subtype: number, data: CookingDefiData | EcoDefiData | L
 };
 
 export const getLanguageTheme = (data: LanguageDefiData): string => {
-  const theme = 'Voila {{theme}} en {{language}}, une langue {{school}}.';
-  return replaceTokens(theme, {
-    theme: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
-    language: data.languageCode,
-    school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
-  });
+  if ('language' in data && 'themeIndex' in data) {
+    const theme = 'Voila {{theme}} en {{language}}, une langue {{school}}.';
+    return replaceTokens(theme, {
+      theme: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
+      language: data.languageCode,
+      school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
+    });
+  }
+  return '';
 };
 
 export const isCooking = (activity: DefiActivity): activity is CookingDefiActivity => {
