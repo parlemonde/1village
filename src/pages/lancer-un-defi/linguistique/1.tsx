@@ -96,7 +96,12 @@ const DefiStep1 = () => {
         },
       ];
     }
-    const l = (mascotte?.data as MascotteData)?.fluentLanguages ?? [];
+    const l =
+      [
+        ...(mascotte.data as MascotteData).fluentLanguages,
+        ...(mascotte.data as MascotteData).minorLanguages,
+        ...(mascotte.data as MascotteData).wantedForeignLanguages,
+      ] ?? [];
     return l.reduce<{ label: string; value: string }[]>(
       (acc, l) => {
         if (l === 'fre') {
