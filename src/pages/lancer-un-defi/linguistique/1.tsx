@@ -82,6 +82,7 @@ const DefiStep1 = () => {
       setMascotteId(response.data.id === -1 ? 0 : response.data.id);
     }
   }, [axiosLoggedRequest]);
+
   React.useEffect(() => {
     getMascotteId().catch(console.error);
   }, [getMascotteId]);
@@ -146,7 +147,7 @@ const DefiStep1 = () => {
   }
 
   const LanguagesToRemove = mascotteLanguages.reduce((list, currentValue) => {
-    list.push(currentValue.label);
+    list.push(currentValue.value);
     return list;
   }, new Array<string>());
 
@@ -190,7 +191,7 @@ const DefiStep1 = () => {
                       <h1>Autres langues</h1>
                     </ListSubheader>
                     {languages
-                      .filter((language) => !LanguagesToRemove.includes(language.french))
+                      .filter((language) => !LanguagesToRemove.includes(language.alpha3_b))
                       .map((language) => (
                         <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
                           {language.french}
