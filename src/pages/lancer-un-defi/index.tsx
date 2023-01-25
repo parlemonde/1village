@@ -11,7 +11,7 @@ const activities = [
     label: 'Défi linguistique',
     href: '/lancer-un-defi/linguistique/1',
     icon: LinguistiqueIcon,
-    disabled: false,
+    disabled: true,
     disabledText: 'Bientôt disponible',
   },
   {
