@@ -97,7 +97,7 @@ const DefiStep3 = () => {
           <p className="text" style={{ fontSize: '1.1rem' }}>
             {data.hasSelectedThemeNameOther
               ? 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.'
-              : LANGUAGE_THEMES[data?.defiIndex % LANGUAGE_THEMES.length]?.desc2}
+              : LANGUAGE_THEMES[data?.themeIndex % LANGUAGE_THEMES.length]?.desc2}
           </p>
 
           <ContentEditor
