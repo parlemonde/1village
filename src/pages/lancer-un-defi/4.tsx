@@ -1,11 +1,12 @@
-import { Tooltip } from '@mui/material';
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Tooltip } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isFree, getDefi, DEFI } from 'src/activity-types/defi.constants';
@@ -54,9 +55,6 @@ const FreeDefiStep4 = () => {
   const onPublish = async () => {
     setIsLoading(true);
     const { success } = await save(true);
-    if (window.sessionStorage.getItem(`defi-free-step-1-next`) === 'true') {
-      window.sessionStorage.setItem(`defi-free-step-1-next`, 'false');
-    }
     if (success) {
       router.push('/lancer-un-defi/success');
     }
