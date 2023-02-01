@@ -1,7 +1,6 @@
 import { specificActivityPhase, getActivityPhase } from '../utils';
 import { ActivityType } from 'types/activity.type';
 
-//TODO: tester uniquement si les activités sont dans les bonnes phases
 describe('Test function getActivityPhase', () => {
   describe('for active phase 1', () => {
     const activePhase = 1;
