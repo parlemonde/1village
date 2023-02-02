@@ -142,7 +142,7 @@ const ClassroomParamStep1Visibility = () => {
     (event.target as HTMLInputElement).value === 'default' ? dispatch({ type: 'default', data: 0 }) : dispatch({ type: 'ownClass', data: 0 });
   };
 
-  const handSubmitSelection = (key: string) => {
+  const handleSelectionVisibility = (key: string) => {
     switch (key) {
       case 'default':
         updateClassroomParameters(state.default);
@@ -201,7 +201,7 @@ const ClassroomParamStep1Visibility = () => {
               name="default"
               control={<Radio />}
               label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
-              onFocus={() => handSubmitSelection('default')}
+              onFocus={() => handleSelectionVisibility('default')}
             />
             <FormControlLabel
               value="timeDelay"
@@ -211,7 +211,7 @@ const ClassroomParamStep1Visibility = () => {
                 <TextnInputContainer
                   {...content1}
                   onChange={(event) => handleDaysDelay('timeDelay', event)}
-                  onBlur={() => handSubmitSelection('timeDelay')}
+                  onBlur={() => handleSelectionVisibility('timeDelay')}
                   value={state.timeDelay.delayedDays}
                   disabled={isDisabled.timeDelay}
                 />
@@ -224,7 +224,7 @@ const ClassroomParamStep1Visibility = () => {
               name="ownClass"
               control={<Radio />}
               label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
-              onFocus={() => handSubmitSelection('ownClass')}
+              onFocus={() => handleSelectionVisibility('ownClass')}
             />
             <FormControlLabel
               value="ownClassTimeDelay"
@@ -234,7 +234,7 @@ const ClassroomParamStep1Visibility = () => {
                 <TextnInputContainer
                   {...content2}
                   onChange={(event) => handleDaysDelay('ownClassTimeDelay', event)}
-                  onBlur={() => handSubmitSelection('ownClassTimeDelay')}
+                  onBlur={() => handleSelectionVisibility('ownClassTimeDelay')}
                   value={state.ownClassTimeDelay.delayedDays}
                   disabled={isDisabled.ownClassTimeDelay}
                 />
