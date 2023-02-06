@@ -73,11 +73,11 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   const studentCreated = await AppDataSource.getRepository(Student).save(student);
 
   //Insert of new student in table user_to_student
-  await AppDataSource.createQueryBuilder()
-    .insert()
-    .into(UserToStudent)
-    .values([{ student: { id: studentCreated.id } }])
-    .execute();
+  // await AppDataSource.createQueryBuilder()
+  //   .insert()
+  //   .into(UserToStudent)
+  //   .values([{ student: { id: studentCreated.id } }])
+  //   .execute();
 
   res.json(studentCreated);
 });
