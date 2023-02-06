@@ -2,7 +2,9 @@ import React from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
+import { serializeToQueryUrl } from 'src/utils';
 import type { Classroom } from 'types/classroom.type';
+import type { Student, StudentForm } from 'types/student.type';
 import { UserType } from 'types/user.type';
 
 interface ClassroomContextValue {
@@ -10,23 +12,47 @@ interface ClassroomContextValue {
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
+  createStudent({ firstname, lastname }: StudentForm): Promise<void>;
+  deleteStudent(id: number): Promise<void>;
+  students: Student[];
+  setStudents: (value: React.SetStateAction<Student[]>) => void;
+  /*   getOneStudent(): Promise<void>; */
 }
-
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
   classroom: null,
   setClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
+  createStudent: async () => {},
+  deleteStudent: async () => {},
+  students: [],
+  /*   getOneStudent: async () => {}, */
+  setStudents: async () => {},
 });
 
 interface ClassroomContextProviderProps {
-  classroom: Classroom | null;
-  setClassroom(value: React.SetStateAction<Classroom | null>): void;
+  children: React.ReactNode;
 }
 
-export const ClassroomContextProvider = ({ classroom, setClassroom, children }: React.PropsWithChildren<ClassroomContextProviderProps>) => {
+export const ClassroomContextProvider = ({ children }: ClassroomContextProviderProps) => {
   const { user, axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
+  const [students, setStudents] = React.useState<Student[]>([]);
+  const [classroom, setClassroom] = React.useState<Classroom | null>(null);
+
+  const fetchClassroom = React.useCallback(
+    async (userId: number) => {
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/classrooms/${userId}`,
+      });
+      if (response.error) return null;
+      if (response.data === null) return null;
+      return response.data;
+    },
+    [axiosLoggedRequest],
+  );
+
   /**
    * Creation of the classroom
    */
@@ -49,21 +75,49 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       .catch((err) => {
         return err.message;
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [axiosLoggedRequest, user, village]);
+
+  /**
+   * Get the list of students in the classroom
+   * @param {number} classroomId classroom id
+   */
+  const getStudents = React.useCallback(
+    async (classroomId: number) => {
+      await axiosLoggedRequest({
+        method: 'GET',
+        url: `/students${serializeToQueryUrl({
+          classroomId,
+        })}`,
+      })
+        .then((response) => {
+          setStudents(response.data as Student[]);
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    [axiosLoggedRequest],
+  );
 
   // * Classroom is create automatically for all teacher if it does not exit already
   React.useEffect(() => {
-    //TODO: add getClassroom over here and if null launch createClassroom
-    if (classroom === null) {
-      createClassroom();
+    if (user && user.type === UserType.TEACHER) {
+      fetchClassroom(user.id)
+        .then((classroom) => {
+          setClassroom(classroom);
+          if (students.length === 0) {
+            getStudents(classroom.id);
+          }
+        })
+        .catch(() => {
+          createClassroom();
+        });
     }
-  }, [classroom, createClassroom]);
+  }, [createClassroom, fetchClassroom, getStudents, students, user]);
 
   /**
    * Get teacher's classroom
    */
-  // * Might be useless if I have a classroom object
   const getClassroom = React.useCallback(async () => {
     if (!user) return;
     if (user.type !== UserType.TEACHER) return;
@@ -77,42 +131,138 @@ export const ClassroomContextProvider = ({ classroom, setClassroom, children }: 
       .catch((err) => {
         return err.message;
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [axiosLoggedRequest, user]);
 
   /**
    * Update teacher's classroom Parameters
    */
-  const updateClassroomParameters = React.useCallback(async (data: ClassroomUpdateData) => {
-    if (!user) return;
-    if (user.type !== UserType.TEACHER) return;
-    await axiosLoggedRequest({
-      method: 'PUT',
-      url: `/classrooms/${user.id}`, //TODO: mettre classroom id et pas userId
-      data: { ...data },
-    })
-      .then((response) => {
-        return response.data.classroom;
+  const updateClassroomParameters = React.useCallback(
+    async (data: ClassroomUpdateData) => {
+      if (!user) return;
+      if (user.type !== UserType.TEACHER) return;
+      await axiosLoggedRequest({
+        method: 'PUT',
+        url: `/classrooms/${user.id}`,
+        data: { ...data },
       })
-      .catch((err) => {
-        return err.message;
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+        .then((response) => {
+          return response.data.classroom;
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    [axiosLoggedRequest, user],
+  );
+
+  /**
+   * Add new students in the classrom
+   */
+  const createStudent = React.useCallback(
+    async ({ firstname, lastname }: StudentForm) => {
+      if (!user) return;
+      if (user.type !== UserType.TEACHER) return;
+      if (!classroom) return;
+      if (!firstname && !lastname) return;
+
+      await axiosLoggedRequest({
+        method: 'POST',
+        url: '/students',
+        data: {
+          classroomId: classroom.id,
+          firstname,
+          lastname,
+        },
+      })
+        .then((response) => {
+          setStudents([...students, response.data]);
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    [axiosLoggedRequest, classroom, students, user],
+  );
+
+  /**
+   * Update one student
+   */
+  // const setStudent = React.useCallback(async (data: ClassroomUpdateData) => {
+  //   if (user?.type !== UserType.TEACHER) return;
+  //   await axiosLoggedRequest({
+  //     method: 'PUT',
+  //     url: `/students/${student.id}`,
+  //     data: { ...data },
+  //   })
+  //     .then((response) => {
+  //       return response.data.classroom;
+  //     })
+  //     .catch((err) => {
+  //       return err.message;
+  //     });
+  // }, []);
+
+  const getOneStudent = React.useCallback(
+    async (id: number) => {
+      await axiosLoggedRequest({
+        method: 'GET',
+        url: `/students/${id}`,
+      })
+        .then((response) => {
+          return response.data as Student;
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    [axiosLoggedRequest],
+  );
+
+  const deleteStudent = React.useCallback(
+    async (studentId: number) => {
+      if (!user) return;
+      if (user.type !== UserType.TEACHER) return;
+      if (!classroom) return;
+      await axiosLoggedRequest({
+        method: 'DELETE',
+        url: `/students/${studentId}`,
+      })
+        .then(() => {
+          const newStudents = students.filter((student) => student.id !== studentId);
+          setStudents([...newStudents]);
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    [axiosLoggedRequest, classroom, students, user],
+  );
+
+  /**
+   * Delete an access for a relative's student
+   */
+  // const deleteAccessTorRelatives = React.useCallback(() => {}, []);
 
   const value = React.useMemo(
     () => ({
       classroom,
-      getClassroom,
       setClassroom,
+      getClassroom,
       updateClassroomParameters,
+      students,
+      setStudents,
+      //getOneStudent,
+      createStudent,
+      deleteStudent,
+      getStudents,
+      // deleteAccessTorRelatives,
     }),
-    [classroom, getClassroom, setClassroom, updateClassroomParameters],
+    [classroom, setClassroom, getClassroom, updateClassroomParameters, students, createStudent, deleteStudent, getStudents, setStudents],
   );
   return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
 };
 
-interface ClassroomUpdateData {
+export interface ClassroomUpdateData {
   name?: string;
   avatar?: string;
   delayedDays?: number;
