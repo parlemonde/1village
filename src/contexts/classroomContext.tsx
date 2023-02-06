@@ -113,7 +113,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           createClassroom();
         });
     }
-  }, [createClassroom, fetchClassroom, getStudents, students, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createClassroom, fetchClassroom, getStudents, user]);
 
   /**
    * Get teacher's classroom
