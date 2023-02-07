@@ -74,7 +74,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
             res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
             next();
           } else {
-            res.status(401).send('invalid access token1');
+            res.status(401).send('invalid access token');
           }
           return;
         }
@@ -83,7 +83,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       const user = await AppDataSource.getRepository(User).findOne({ where: { id: data.userId } });
       if (user === undefined && userType !== undefined) {
-        res.status(401).send('invalid access token2');
+        res.status(401).send('invalid access token');
         return;
       } // class: 0 < admin: 1 < superAdmin: 2
       if (userType !== undefined && user !== null && user.type > userType) {
