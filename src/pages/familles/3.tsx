@@ -1,5 +1,4 @@
 import { Button } from '@mui/material';
-import { jsPDF } from 'jspdf';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -18,19 +17,13 @@ const Communication = () => {
   };
 
   const [textValue, setTextValue] = useState(
-    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée',
+    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée \n\n====================================================================',
   );
   const [keywordPresence, setKeywordPresence] = useState(true);
   const textDefaultValue =
-    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée';
+    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée \n\n====================================================================';
 
   const arrayOfCodes = ['SJEZA', 'DUHSDI', 'dzihziue', 'iezuhezi'];
-
-  const doc = new jsPDF({
-    orientation: 'p',
-    unit: 'pt',
-    format: 'a4',
-  });
 
   useEffect(() => {
     const keywordRegex = new RegExp(/%identifiant/gm);
@@ -41,71 +34,22 @@ const Communication = () => {
     }
   }, [textValue]);
 
-  const handleSubmit = () => {
+  const onPrint = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
     const messagesWithId: string[] = [];
-    let toPrint: string = '';
+    const newWin = window.open('', 'Print-Window');
 
     arrayOfCodes.forEach((code) => {
       messagesWithId.push(textValue.replaceAll(keywordRegex, '<strong><u>' + code + '</u></strong>'));
     });
 
-    if (textValue.length > 500) {
-      let count = 0;
-      for (let i = 0; i < messagesWithId.length; i++) {
-        toPrint += messagesWithId[i];
-        count++;
-        if (count === 2) {
-          count = 0;
-          //  toPrint = '';
-        }
-      }
+    if (newWin) {
+      newWin.document.open();
+      newWin.document.write(`<html><body>${messagesWithId.join('')}<script>window.print()</script></body></html>`);
+      newWin.document.close();
     }
-
-    doc.html(toPrint, {
-      callback: function (doc) {
-        doc.save('test.pdf');
-      },
-      autoPaging: 'slice',
-      width: 575,
-      windowWidth: 834,
-      x: 10,
-      y: 10,
-    });
   };
 
-  /* import React from "react";
-
-import "./styles.css";
-
-const MyComponentToPrint = () => {
-  return <div>Hello, world!</div>;
-};
-
-export default function App() {
-  const toPrintEl = React.useRef(null);
-
-  const onPrint = () => {
-    var newWin = window.open("", "Print-Window");
-    newWin.document.open();
-    newWin.document.write(
-      `<html><body onload="window.print()">${toPrintEl.current.innerHTML}</body></html>`
-    );
-    newWin.document.close();
-    setTimeout(function () {
-      newWin.close();
-    }, 10);
-  };
-  return (
-    <div className="App">
-      <button onClick={onPrint}>print</button>
-      <div ref={toPrintEl} style={{ display: "none" }}>
-        <MyComponentToPrint />
-      </div>
-    </div>
-  );
-}
- */
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -139,13 +83,7 @@ export default function App() {
               setTextValue(value);
             }}
           />
-          <Button
-            disabled={!keywordPresence}
-            onClick={() => {
-              handleSubmit();
-            }}
-            variant="outlined"
-          >
+          <Button disabled={!keywordPresence} id="myButton" onClick={onPrint} variant="outlined">
             Imprimer
           </Button>
           <StepsButton prev="/famille/2" next={onNext} />
