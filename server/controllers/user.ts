@@ -345,45 +345,45 @@ userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: 
 });
 
 // --- Verify email. ---
-type VerifyData = {
-  email: string;
-  verifyToken: string;
-};
-const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
-  type: 'object',
-  properties: {
-    email: { type: 'string', format: 'email' },
-    verifyToken: { type: 'string' },
-  },
-  required: ['email', 'verifyToken'],
-  additionalProperties: false,
-};
-const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
-userController.post({ path: '/verify-email' }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
-  if (!verifyUserValidator(data)) {
-    sendInvalidDataError(verifyUserValidator);
-    return;
-  }
+// type VerifyData = {
+//   email: string;
+//   verifyToken: string;
+// };
+// const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
+//   type: 'object',
+//   properties: {
+//     email: { type: 'string', format: 'email' },
+//     verifyToken: { type: 'string' },
+//   },
+//   required: ['email', 'verifyToken'],
+//   additionalProperties: false,
+// };
+// const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
+// if (!verifyUserValidator(data)) {
+//   sendInvalidDataError(verifyUserValidator);
+//   return;
+// }
+userController.get({ path: '/verify-email', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  const data = req.params;
 
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.verificationHash')
     .where('User.email = :email', { email: data.email })
     .getOne();
-  if (!user) {
-    next();
-    return;
-  }
 
   let isverifyTokenCorrect: boolean = false;
-  try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
-  } catch (e) {
-    logger.error(JSON.stringify(e));
-  }
-  if (!isverifyTokenCorrect) {
-    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
+  if (user) {
+    try {
+      isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash);
+    } catch (e) {
+      logger.error(JSON.stringify(e));
+    }
+    if (!isverifyTokenCorrect) {
+      throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
+    }
+  } else {
+    return console.log('=====lol======');
   }
 
   // save user

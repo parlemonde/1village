@@ -12,6 +12,9 @@ const secret: string = process.env.APP_SECRET || '';
 export function authenticate(userType: UserType | undefined = undefined): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     let token: string;
+    console.log('==================COOKIES======================');
+    console.log(req.cookies);
+    console.log('==================COOKIES======================');
     if (req.cookies && req.cookies['access-token']) {
       if (!req.isCsrfValid && req.method !== 'GET') {
         // check cookie was not stolen
@@ -74,7 +77,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
             res.cookie('refresh-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
             next();
           } else {
-            res.status(401).send('invalid access token');
+            res.status(401).send('invalid access token1');
           }
           return;
         }
@@ -83,7 +86,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       }
       const user = await AppDataSource.getRepository(User).findOne({ where: { id: data.userId } });
       if (user === undefined && userType !== undefined) {
-        res.status(401).send('invalid access token');
+        res.status(401).send('invalid access token2');
         return;
       } // class: 0 < admin: 1 < superAdmin: 2
       if (userType !== undefined && user !== null && user.type > userType) {
@@ -93,7 +96,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       if (user !== null) {
         req.user = user;
       }
-    } catch (_e) {
+    } catch (err) {
       if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
         res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
