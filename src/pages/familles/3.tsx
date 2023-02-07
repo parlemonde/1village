@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -83,9 +83,11 @@ const Communication = () => {
               setTextValue(value);
             }}
           />
-          <Button disabled={!keywordPresence} id="myButton" onClick={onPrint} variant="outlined">
-            Imprimer
-          </Button>
+          <Box marginTop="10px" textAlign="center">
+            <Button disabled={!keywordPresence} id="myButton" onClick={onPrint} variant="outlined">
+              Imprimer
+            </Button>
+          </Box>
           <StepsButton prev="/famille/2" next={onNext} />
         </div>
       </div>
