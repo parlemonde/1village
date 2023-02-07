@@ -12,9 +12,6 @@ const secret: string = process.env.APP_SECRET || '';
 export function authenticate(userType: UserType | undefined = undefined): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     let token: string;
-    console.log('==================COOKIES======================');
-    console.log(req.cookies);
-    console.log('==================COOKIES======================');
     if (req.cookies && req.cookies['access-token']) {
       if (!req.isCsrfValid && req.method !== 'GET') {
         // check cookie was not stolen
