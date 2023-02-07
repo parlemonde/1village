@@ -113,6 +113,7 @@ type CreateUserData = {
   type?: UserType;
   villageId?: number;
   firstLogin?: number;
+  language?: string;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -137,6 +138,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     },
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
+    language: { type: 'string', nullable: true },
   },
   required: ['email'],
   additionalProperties: false,
@@ -205,6 +207,7 @@ type EditUserData = {
   accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
+  language?: string;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
@@ -239,6 +242,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
       required: ['lat', 'lng'],
       additionalProperties: false,
     },
+    language: { type: 'string', nullable: true },
   },
   required: [],
   additionalProperties: false,

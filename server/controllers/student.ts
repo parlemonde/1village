@@ -5,11 +5,28 @@ import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
+import { getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
+import { inviteCodeGenerator } from '../utils/inviteCodeGenerator';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
 const studentController = new Controller('/students');
+
+/**
+ * Student controller to get student list.
+ * ExpressMiddleware signature
+ * @param {string} id classroom id
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @returns {string} Route API JSON response
+ */
+
+studentController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  const classroomId = Number(getQueryString(req.query.classroomId)) || 0;
+  const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroomId } } });
+  res.json(students);
+});
 
 /**
  * Student controller to get student's info.
@@ -29,20 +46,16 @@ studentController.get({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
 
 type CreateStudentData = {
   classroomId: number;
-  firstname?: string;
-  lastname?: string;
-  hashedCode?: string;
-  numLinkedAccount?: number;
+  firstname: string;
+  lastname: string;
 };
 
 const createStudentValidator = ajv.compile({
   type: 'object',
   properties: {
     classroomId: { type: 'number', nullable: false },
-    firstname: { type: 'string', nullable: true },
-    lastname: { type: 'string', nullable: true },
-    hashedCode: { type: 'string', nullable: true },
-    numLinkedAccount: { type: 'number', nullable: true },
+    firstname: { type: 'string', nullable: false },
+    lastname: { type: 'string', nullable: false },
   },
   required: ['classroomId'],
   additionalProperties: false,
@@ -68,20 +81,21 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   student.classroom = data.classroomId;
   student.firstname = data.firstname ?? null;
   student.lastname = data.lastname ?? null;
-  student.hashedCode = data.hashedCode ?? null;
+  student.hashedCode = inviteCodeGenerator(10);
 
   const studentCreated = await AppDataSource.getRepository(Student).save(student);
 
   //Insert of new student in table user_to_student
-  await AppDataSource.createQueryBuilder()
-    .insert()
-    .into(UserToStudent)
-    .values([{ student: { id: studentCreated.id } }])
-    .execute();
+  // await AppDataSource.createQueryBuilder()
+  //   .insert()
+  //   .into(UserToStudent)
+  //   .values([{ student: { id: studentCreated.id } }])
+  //   .execute();
 
   res.json(studentCreated);
 });
 
+//--- Update a student ---
 type UpdateStudentData = {
   firstname?: string;
   lastname?: string;
@@ -137,9 +151,20 @@ studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
 studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
-  if (!student || !req.user) return res.status(204).send();
-
+  if (!student) return res.status(204).send();
+  //check if student has already been associated to a parent or relative
+  const isAssociated = await AppDataSource.getRepository(UserToStudent).findOne({ where: { student: { id: id } } });
+  console.log('ASSOCIATED', isAssociated);
   await AppDataSource.getRepository(Student).delete({ id });
+  if (isAssociated) {
+    await AppDataSource.getRepository(UserToStudent)
+      .createQueryBuilder()
+      .update(UserToStudent)
+      .set({ student: { id: undefined } })
+      .where({ student: { id: id } })
+      .execute();
+  }
+
   res.status(204).send();
 });
 

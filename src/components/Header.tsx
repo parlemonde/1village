@@ -39,6 +39,7 @@ export const Header = () => {
     setAnchorEl(null);
     router.push(page);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
