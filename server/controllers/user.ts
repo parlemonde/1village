@@ -383,7 +383,7 @@ userController.get({ path: '/verify-email', userType: UserType.FAMILY }, async (
       throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
     }
   } else {
-    return console.log('=====lol======');
+    return;
   }
 
   // save user
