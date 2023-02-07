@@ -16,5 +16,7 @@ export class CreateUserStudentTable1675763247781 implements MigrationInterface {
     `);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(``);
+  }
 }
