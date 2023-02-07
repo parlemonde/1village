@@ -1,8 +1,23 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 import { TableColumn } from 'typeorm';
 
-export class MyMigration1579323075000 implements MigrationInterface {
+export class AlterUserTable1675763659256 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.addColumns('user', [
+      new TableColumn({
+        name: 'firstname',
+        type: 'varchar',
+        length: '50',
+        default: '""',
+      }),
+      new TableColumn({
+        name: 'lastname',
+        type: 'varchar',
+        length: '100',
+        default: '""',
+      }),
+    ]);
+
     await queryRunner.addColumn(
       'user',
       new TableColumn({
@@ -33,9 +48,8 @@ export class MyMigration1579323075000 implements MigrationInterface {
     await queryRunner.renameColumn('user', 'newtype', 'type');
   }
 
-  // ========== DOWN FUNCTION ==========
-
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropColumns('user', ['firstname', 'lastname']);
     // Map the tinyint values to the old enum values
     const mapping = {
       3: '0', // TEACHER = 3
