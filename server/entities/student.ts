@@ -25,8 +25,6 @@ export class Student {
   @JoinColumn({ name: 'classroomId' })
   classroom: Classroom;
 
-  @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.student, {
-    cascade: ['insert', 'update', 'remove'],
-  })
+  @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.student)
   public userToStudents: UserToStudent[];
 }
