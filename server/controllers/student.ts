@@ -153,9 +153,7 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (!student) return res.status(204).send();
   //check if student has already been associated to a parent or relative
-  const isAssociated = await AppDataSource.getRepository(UserToStudent).findOne({ where: { student: { id: id } } });
-  console.log('ASSOCIATED', isAssociated);
-  await AppDataSource.getRepository(Student).delete({ id });
+  const isAssociated = await AppDataSource.getRepository(UserToStudent).findOne({ where: { student: { id: id } }, relations: { user: true } });
   if (isAssociated) {
     await AppDataSource.getRepository(UserToStudent)
       .createQueryBuilder()
@@ -163,6 +161,7 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
       .set({ student: { id: undefined } })
       .where({ student: { id: id } })
       .execute();
+    await AppDataSource.getRepository(Student).delete({ id });
   }
 
   res.status(204).send();
