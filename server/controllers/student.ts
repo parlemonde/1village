@@ -153,7 +153,7 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (!student) return res.status(204).send();
   //check if student has already been associated to a parent or relative
-  const isAssociated = await AppDataSource.getRepository(UserToStudent).findOne({ where: { student: { id: id } }, relations: { user: true } });
+  const isAssociated = await AppDataSource.getRepository(UserToStudent).find({ where: { student: { id: id } }, relations: { user: true } });
   if (isAssociated) {
     await AppDataSource.getRepository(UserToStudent)
       .createQueryBuilder()
