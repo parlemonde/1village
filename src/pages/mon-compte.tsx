@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, TextField } from '@mui/material';
+import { Alert, AlertTitle, Checkbox, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -20,6 +20,7 @@ import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
@@ -30,6 +31,7 @@ const Presentation = () => {
     confirmNew: '',
     current: '',
   });
+  const [newsletterChecked, setNewsletterChecked] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -182,102 +184,103 @@ const Presentation = () => {
   return (
     <Base>
       <h1>Paramètres du compte</h1>
-      <div className="account__panel">
-        <h2>Paramètres du profil</h2>
-        <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
+      {user.type === UserType.TEACHER ? (
+        <div className="account__panel">
+          <h2>Paramètres du profil</h2>
+          <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
 
-        <div style={{ margin: '0.5rem' }}>
-          <label className="text text--bold" style={{ display: 'block' }}>
-            Photo de profil :
-          </label>
-          <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
-            {editMode === 0 ? (
-              <AvatarEditor id={0} value={user.avatar || undefined} onChange={updateAvatar} />
-            ) : (
-              <AvatarImg user={user} size="small" noLink displayAsUser />
-            )}
+          <div style={{ margin: '0.5rem' }}>
+            <label className="text text--bold" style={{ display: 'block' }}>
+              Photo de profil :
+            </label>
+            <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
+              {editMode === 0 ? (
+                <AvatarEditor id={0} value={user.avatar || undefined} onChange={updateAvatar} />
+              ) : (
+                <AvatarImg user={user} size="small" noLink displayAsUser />
+              )}
+            </div>
           </div>
+
+          <PanelInput
+            value={newUser.school}
+            defaultValue={'non renseignée'}
+            label="École :"
+            placeholder="Nom de votre école"
+            isEditMode={editMode === 0}
+            onChange={(school) => {
+              setNewUser((u) => (!u ? u : { ...u, school }));
+            }}
+          />
+          <PanelInput
+            value={newUser.level}
+            defaultValue={'non renseigné'}
+            label="Niveau de la classe :"
+            placeholder="Niveau de votre classe"
+            isEditMode={editMode === 0}
+            onChange={(level) => {
+              setNewUser((u) => (!u ? u : { ...u, level }));
+            }}
+          />
+          <PanelInput
+            value={newUser.address}
+            defaultValue={'non renseigné'}
+            label="Adresse de l'école :"
+            placeholder="Adresse"
+            isEditMode={editMode === 0}
+            onChange={(address) => {
+              setNewUser((u) => (!u ? u : { ...u, address }));
+            }}
+          />
+          <PanelInput
+            value={newUser.city}
+            defaultValue={'non renseigné'}
+            label="Ville :"
+            placeholder="Ville"
+            isEditMode={editMode === 0}
+            onChange={(city) => {
+              setNewUser((u) => (!u ? u : { ...u, city }));
+            }}
+          />
+          <PanelInput
+            value={newUser.postalCode}
+            defaultValue={'non renseigné'}
+            label="Code postal :"
+            placeholder="Code postal"
+            isEditMode={editMode === 0}
+            onChange={(postalCode) => {
+              setNewUser((u) => (!u ? u : { ...u, postalCode }));
+            }}
+          />
+          <PanelInput
+            value={newUser.displayName || ''}
+            defaultValue={getUserDisplayName(user, false, true)}
+            label="Nom affiché sur vos publications :"
+            placeholder={getUserDisplayName(user, false, true)}
+            isEditMode={editMode === 0}
+            onChange={(displayName) => {
+              setNewUser((u) => (!u ? u : { ...u, displayName }));
+            }}
+          />
+          {editMode === 0 && (
+            <div className="text-center">
+              <Button
+                color="inherit"
+                size="small"
+                sx={defaultContainedButtonStyle}
+                variant="contained"
+                style={{ margin: '0.5rem' }}
+                onClick={updateEditMode(-1)}
+              >
+                Annuler
+              </Button>
+              <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
+                Enregistrer
+              </Button>
+            </div>
+          )}
         </div>
-
-        <PanelInput
-          value={newUser.school}
-          defaultValue={'non renseignée'}
-          label="École :"
-          placeholder="Nom de votre école"
-          isEditMode={editMode === 0}
-          onChange={(school) => {
-            setNewUser((u) => (!u ? u : { ...u, school }));
-          }}
-        />
-        <PanelInput
-          value={newUser.level}
-          defaultValue={'non renseigné'}
-          label="Niveau de la classe :"
-          placeholder="Niveau de votre classe"
-          isEditMode={editMode === 0}
-          onChange={(level) => {
-            setNewUser((u) => (!u ? u : { ...u, level }));
-          }}
-        />
-        <PanelInput
-          value={newUser.address}
-          defaultValue={'non renseigné'}
-          label="Adresse de l'école :"
-          placeholder="Adresse"
-          isEditMode={editMode === 0}
-          onChange={(address) => {
-            setNewUser((u) => (!u ? u : { ...u, address }));
-          }}
-        />
-        <PanelInput
-          value={newUser.city}
-          defaultValue={'non renseigné'}
-          label="Ville :"
-          placeholder="Ville"
-          isEditMode={editMode === 0}
-          onChange={(city) => {
-            setNewUser((u) => (!u ? u : { ...u, city }));
-          }}
-        />
-        <PanelInput
-          value={newUser.postalCode}
-          defaultValue={'non renseigné'}
-          label="Code postal :"
-          placeholder="Code postal"
-          isEditMode={editMode === 0}
-          onChange={(postalCode) => {
-            setNewUser((u) => (!u ? u : { ...u, postalCode }));
-          }}
-        />
-        <PanelInput
-          value={newUser.displayName || ''}
-          defaultValue={getUserDisplayName(user, false, true)}
-          label="Nom affiché sur vos publications :"
-          placeholder={getUserDisplayName(user, false, true)}
-          isEditMode={editMode === 0}
-          onChange={(displayName) => {
-            setNewUser((u) => (!u ? u : { ...u, displayName }));
-          }}
-        />
-        {editMode === 0 && (
-          <div className="text-center">
-            <Button
-              color="inherit"
-              size="small"
-              sx={defaultContainedButtonStyle}
-              variant="contained"
-              style={{ margin: '0.5rem' }}
-              onClick={updateEditMode(-1)}
-            >
-              Annuler
-            </Button>
-            <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
-              Enregistrer
-            </Button>
-          </div>
-        )}
-      </div>
-
+      ) : null}
       <div className="account__panel">
         <h2>Identifiants de connection</h2>
         <div className="account__panel-edit-button">
@@ -309,8 +312,8 @@ const Presentation = () => {
         <PanelInput
           value={newUser.email}
           defaultValue={''}
-          label="Email du professeur :"
-          placeholder="Email du professeur"
+          label="Email:"
+          placeholder="Adresse Email"
           isEditMode={editMode === 1}
           onChange={(email) => {
             setNewUser((u) => (!u ? u : { ...u, email }));
@@ -339,7 +342,101 @@ const Presentation = () => {
           </>
         )}
       </div>
+      {user.type === UserType.FAMILY ? (
+        <div className="account__panel">
+          <h2>Préférence de communication</h2>
+          <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
+            <label style={{ cursor: 'pointer' }}>
+              <Checkbox
+                checked={newsletterChecked}
+                onChange={(event) => {
+                  setNewsletterChecked(event.target.checked);
+                }}
+              />
+              <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
+            </label>
+          </div>
+          <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
 
+          <PanelInput
+            value={newUser.school}
+            defaultValue={'non renseignée'}
+            label="École :"
+            placeholder="Nom de votre école"
+            isEditMode={editMode === 0}
+            onChange={(school) => {
+              setNewUser((u) => (!u ? u : { ...u, school }));
+            }}
+          />
+          <PanelInput
+            value={newUser.level}
+            defaultValue={'non renseigné'}
+            label="Niveau de la classe :"
+            placeholder="Niveau de votre classe"
+            isEditMode={editMode === 0}
+            onChange={(level) => {
+              setNewUser((u) => (!u ? u : { ...u, level }));
+            }}
+          />
+          <PanelInput
+            value={newUser.address}
+            defaultValue={'non renseigné'}
+            label="Adresse de l'école :"
+            placeholder="Adresse"
+            isEditMode={editMode === 0}
+            onChange={(address) => {
+              setNewUser((u) => (!u ? u : { ...u, address }));
+            }}
+          />
+          <PanelInput
+            value={newUser.city}
+            defaultValue={'non renseigné'}
+            label="Ville :"
+            placeholder="Ville"
+            isEditMode={editMode === 0}
+            onChange={(city) => {
+              setNewUser((u) => (!u ? u : { ...u, city }));
+            }}
+          />
+          <PanelInput
+            value={newUser.postalCode}
+            defaultValue={'non renseigné'}
+            label="Code postal :"
+            placeholder="Code postal"
+            isEditMode={editMode === 0}
+            onChange={(postalCode) => {
+              setNewUser((u) => (!u ? u : { ...u, postalCode }));
+            }}
+          />
+          <PanelInput
+            value={newUser.displayName || ''}
+            defaultValue={getUserDisplayName(user, false, true)}
+            label="Nom affiché sur vos publications :"
+            placeholder={getUserDisplayName(user, false, true)}
+            isEditMode={editMode === 0}
+            onChange={(displayName) => {
+              setNewUser((u) => (!u ? u : { ...u, displayName }));
+            }}
+          />
+          {editMode === 0 && (
+            <div className="text-center">
+              <Button
+                color="inherit"
+                size="small"
+                sx={defaultContainedButtonStyle}
+                variant="contained"
+                style={{ margin: '0.5rem' }}
+                onClick={updateEditMode(-1)}
+              >
+                Annuler
+              </Button>
+              <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
+                Enregistrer
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : null}
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
         {/* <div style={{ margin: '1rem 0.5rem' }}>
