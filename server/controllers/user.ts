@@ -166,16 +166,14 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
   user.countryCode = data.countryCode || '';
-  if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
-    user.type = valueOrDefault(data.type, UserType.TEACHER);
-  } else {
-    user.type = UserType.TEACHER;
-  }
+  user.type = data.type || UserType.TEACHER;
+
   user.accountRegistration = data.password === undefined ? 3 : 0;
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
-  // todo: send mail with verification password to validate the email adress.
+
+  // send confirmation email
   if (data.firstname) {
     await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: user.verificationHash });
   }
@@ -363,7 +361,7 @@ userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: 
 //   sendInvalidDataError(verifyUserValidator);
 //   return;
 // }
-userController.get({ path: '/verify-email', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+userController.get({ path: '/verify-email' }, async (req: Request, res: Response) => {
   const data = req.params;
 
   const user = await AppDataSource.getRepository(User)

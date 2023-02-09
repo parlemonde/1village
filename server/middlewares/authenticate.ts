@@ -11,6 +11,10 @@ const secret: string = process.env.APP_SECRET || '';
 
 export function authenticate(userType: UserType | undefined = undefined): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    console.log('USERTYPE BEFORE=========', userType);
+    console.log('===========+CONSOLE TRACE+===========');
+    console.trace();
+    console.log('===========+CONSOLE TRACE+===========');
     let token: string;
     if (req.cookies && req.cookies['access-token']) {
       if (!req.isCsrfValid && req.method !== 'GET') {
@@ -60,10 +64,15 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
 
     // authenticate
     try {
+      console.log('COOKIES====' + req.cookies);
+      console.log('TOKEN=====' + token);
+      console.log('SECRET=====' + secret);
+      console.log('USERTYPE==== pré jwt ===' + userType);
       const decoded: string | { userId: number; iat: number; exp: number } = jwt.verify(token, secret) as
         | string
         | { userId: number; iat: number; exp: number };
       let data: { userId: number; iat: number; exp: number };
+      console.log('USERTYPE==== post jwt ===' + userType);
       if (typeof decoded === 'string') {
         try {
           data = JSON.parse(decoded);
@@ -93,7 +102,10 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       if (user !== null) {
         req.user = user;
       }
-    } catch (_e) {
+    } catch (err) {
+      console.log('ERR====== ' + err);
+      console.log('REQ.METHOD =====' + req.method);
+      console.log('UserType======' + userType);
       if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
         res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
