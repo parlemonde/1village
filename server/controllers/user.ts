@@ -56,7 +56,7 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
 });
 
 // --- Get one user. ---
-userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -170,7 +170,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER;
 
-  user.accountRegistration = data.password === undefined ? 3 : 0;
+  user.accountRegistration = 4; // Block account on sign-up and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
@@ -347,37 +347,36 @@ userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: 
 });
 
 // --- Verify email. ---
-// type VerifyData = {
-//   email: string;
-//   verifyToken: string;
-// };
-// const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
-//   type: 'object',
-//   properties: {
-//     email: { type: 'string', format: 'email' },
-//     verifyToken: { type: 'string' },
-//   },
-//   required: ['email', 'verifyToken'],
-//   additionalProperties: false,
-// };
-// const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
-// if (!verifyUserValidator(data)) {
-//   sendInvalidDataError(verifyUserValidator);
-//   return;
-// }
+type VerifyData = {
+  email?: string;
+  verificationHash?: string;
+};
+const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
+  type: 'object',
+  properties: {
+    email: { type: 'string', format: 'email', nullable: true },
+    verificationHash: { type: 'string', nullable: true },
+  },
+  additionalProperties: false,
+};
+const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
 userController.get({ path: '/verify-email' }, async (req: Request, res: Response) => {
-  const data = req.params;
+  const data = req.query;
+  if (!verifyUserValidator(data)) {
+    sendInvalidDataError(verifyUserValidator);
+    return;
+  }
 
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.verificationHash')
-    .where('User.email = :email', { email: data.email })
+    .where('User.email = :email', { email: data.email || '' })
     .getOne();
 
   let isverifyTokenCorrect: boolean = false;
   if (user) {
     try {
-      isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash);
+      isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash || '');
     } catch (e) {
       logger.error(JSON.stringify(e));
     }
@@ -385,7 +384,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
       throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
     }
   } else {
-    return;
+    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
@@ -403,7 +402,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
     sameSite: 'strict',
   });
   delete user.verificationHash;
-  res.sendJSON({ user: user, accessToken });
+  res.redirect('/');
 });
 
 // --- Reset pwd. ---
