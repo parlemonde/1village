@@ -1,4 +1,5 @@
-import { Alert, AlertTitle, Checkbox, TextField } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+import { Alert, AlertTitle, Checkbox, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -6,6 +7,8 @@ import NoSsr from '@mui/material/NoSsr';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
+import type { LanguageDefiData } from 'src/activity-types/defi.types';
+import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
@@ -14,24 +17,42 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { useActivity } from 'src/services/useActivity';
+import { useLanguages } from 'src/services/useLanguages';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
-import { getUserDisplayName } from 'src/utils';
+import { getUserDisplayName, capitalize } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
+const getArticle = (language: string) => {
+  if (language.length === 0) {
+    return '';
+  }
+  if ('aeiou'.includes(language[0])) {
+    return "l'";
+  }
+  return 'le ';
+};
+
 const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
+  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const { languages } = useLanguages();
+  const [mascotteId, setMascotteId] = React.useState(0);
+  const { activity: mascotte } = useActivity(mascotteId);
+  const data = (activity?.data as LanguageDefiData) || null;
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
     current: '',
   });
-  const [newsletterChecked, setNewsletterChecked] = React.useState(false);
+  const [newsletterChecked, setNewsletterChecked] = React.useState(true);
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -45,8 +66,59 @@ const Presentation = () => {
   if (!user || !newUser) {
     return <div></div>;
   }
+  // Const Profil Parent (maybe in the future for teacher too?) for favorite language
+  const getMascotteId = React.useCallback(async () => {
+    const response = await axiosLoggedRequest({
+      method: 'GET',
+      url: '/activities/mascotte',
+    });
+    if (!response.error) {
+      setMascotteId(response.data.id === -1 ? 0 : response.data.id);
+    }
+  }, [axiosLoggedRequest]);
 
-  // checks
+  React.useEffect(() => {
+    getMascotteId().catch(console.error);
+  }, [getMascotteId]);
+
+  const mascotteLanguages = React.useMemo(() => {
+    if (!mascotte || !languages) {
+      return [
+        {
+          label: 'Français',
+          value: 'fr',
+        },
+      ];
+    }
+    const l =
+      [
+        ...(mascotte.data as MascotteData).fluentLanguages,
+        ...(mascotte.data as MascotteData).minorLanguages,
+        ...(mascotte.data as MascotteData).wantedForeignLanguages,
+      ] ?? [];
+    return l.reduce<{ label: string; value: string }[]>(
+      (acc, l) => {
+        if (l === 'fre') {
+          return acc;
+        }
+        const language = languages.find((o) => o.alpha3_b === l);
+        if (language) {
+          acc.push({
+            label: capitalize(language.french),
+            value: language.alpha3_b,
+          });
+        }
+        return acc;
+      },
+      [
+        {
+          label: 'Français',
+          value: 'fr',
+        },
+      ],
+    );
+  }, [mascotte, languages]);
+  // checks Profil Teacher
   const checkEmailAndPseudo = async () => {
     const pseudoValid = await isPseudoValid(newUser.pseudo, user.pseudo);
     setErrors((e) => ({
@@ -181,6 +253,14 @@ const Presentation = () => {
       setEditMode(newEditMode);
     };
 
+  const handleLanguage = (event: SelectChangeEvent<string>) => {
+    const languageCode = (event.target as HTMLSelectElement).value;
+    const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
+    updateActivity({ data: { ...data, languageCode, language } });
+  };
+  const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateActivity({ data: { ...data, languageIndex: parseInt((event.target as HTMLInputElement).value, 10) } });
+  };
   return (
     <Base>
       <h1>Paramètres du compte</h1>
@@ -356,85 +436,26 @@ const Presentation = () => {
               <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
             </label>
           </div>
-          <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
-
-          <PanelInput
-            value={newUser.school}
-            defaultValue={'non renseignée'}
-            label="École :"
-            placeholder="Nom de votre école"
-            isEditMode={editMode === 0}
-            onChange={(school) => {
-              setNewUser((u) => (!u ? u : { ...u, school }));
-            }}
-          />
-          <PanelInput
-            value={newUser.level}
-            defaultValue={'non renseigné'}
-            label="Niveau de la classe :"
-            placeholder="Niveau de votre classe"
-            isEditMode={editMode === 0}
-            onChange={(level) => {
-              setNewUser((u) => (!u ? u : { ...u, level }));
-            }}
-          />
-          <PanelInput
-            value={newUser.address}
-            defaultValue={'non renseigné'}
-            label="Adresse de l'école :"
-            placeholder="Adresse"
-            isEditMode={editMode === 0}
-            onChange={(address) => {
-              setNewUser((u) => (!u ? u : { ...u, address }));
-            }}
-          />
-          <PanelInput
-            value={newUser.city}
-            defaultValue={'non renseigné'}
-            label="Ville :"
-            placeholder="Ville"
-            isEditMode={editMode === 0}
-            onChange={(city) => {
-              setNewUser((u) => (!u ? u : { ...u, city }));
-            }}
-          />
-          <PanelInput
-            value={newUser.postalCode}
-            defaultValue={'non renseigné'}
-            label="Code postal :"
-            placeholder="Code postal"
-            isEditMode={editMode === 0}
-            onChange={(postalCode) => {
-              setNewUser((u) => (!u ? u : { ...u, postalCode }));
-            }}
-          />
-          <PanelInput
-            value={newUser.displayName || ''}
-            defaultValue={getUserDisplayName(user, false, true)}
-            label="Nom affiché sur vos publications :"
-            placeholder={getUserDisplayName(user, false, true)}
-            isEditMode={editMode === 0}
-            onChange={(displayName) => {
-              setNewUser((u) => (!u ? u : { ...u, displayName }));
-            }}
-          />
-          {editMode === 0 && (
-            <div className="text-center">
-              <Button
-                color="inherit"
-                size="small"
-                sx={defaultContainedButtonStyle}
-                variant="contained"
-                style={{ margin: '0.5rem' }}
-                onClick={updateEditMode(-1)}
-              >
-                Annuler
-              </Button>
-              <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
-                Enregistrer
-              </Button>
-            </div>
-          )}
+          <h1>Choix de la langue de communication</h1>
+          <div>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={8}>
+                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
+                  Choix de la langue de communication
+                </p>
+                <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
+                  <InputLabel id="demo-simple-select">Choisir</InputLabel>
+                  <Select style={{ width: '100%', marginBottom: '1rem' }} value={data.languageCode} onChange={handleLanguage} label="Langues">
+                    {languages.map((language) => (
+                      <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
+                        {language.french}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </div>
         </div>
       ) : null}
       <div className="account__panel">
