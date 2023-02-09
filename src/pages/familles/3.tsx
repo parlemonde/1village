@@ -148,7 +148,7 @@ export default function App() {
           >
             Imprimer
           </Button>
-          <StepsButton prev="/famille/2" next={onNext} />
+          <StepsButton prev="/familles/2" next={onNext} />
         </div>
       </div>
     </Base>

@@ -17,8 +17,7 @@ const ClassroomParamStep2 = () => {
   const firstnameRef = React.useRef<HTMLInputElement>(null);
   const lastnameRef = React.useRef<HTMLInputElement>(null);
 
-  //TODO: issu to disabled the button for both input if empty (firstname)
-  //TODO: issu to send the data to the bdd
+  //TODO: delete input after submit
   //TODO: issu with the button delete, find the student
 
   const handleChange = () => {
@@ -37,8 +36,9 @@ const ClassroomParamStep2 = () => {
       lastname: lastnameRef.current.value,
     };
     createStudent(newStudent);
+    firstnameRef.current.value = '';
+    lastnameRef.current.value = '';
   };
-
   const onNext = () => {
     router.push('/familles/3');
   };
