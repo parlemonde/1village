@@ -16,6 +16,17 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
         length: '100',
         default: '""',
       }),
+      new TableColumn({
+        name: 'language',
+        type: 'varchar',
+        length: '400',
+        default: '""',
+      }),
+      new TableColumn({
+        name: 'hasAcceptedNewsletter',
+        type: 'tinyint',
+        default: '1',
+      }),
     ]);
 
     await queryRunner.addColumn(
@@ -49,7 +60,7 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropColumns('user', ['firstname', 'lastname']);
+    await queryRunner.dropColumns('user', ['firstname', 'lastname', 'language', 'hasAcceptedNewsletter']);
     // Map the tinyint values to the old enum values
     const mapping = {
       3: '0', // TEACHER = 3
