@@ -1,8 +1,8 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
+import { Box, Button, Checkbox, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { KeepRatio } from '../components/KeepRatio';
 import { useUserRequests } from 'src/services/useUsers';
@@ -26,6 +26,7 @@ const SignUpForm = () => {
   const [isConfirmationPasswordVisible, setIsConfirmationPasswordVisible] = useState<boolean>(false);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
+  const [isCGUread, setIsCGUread] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
@@ -34,11 +35,12 @@ const SignUpForm = () => {
     type: UserType.FAMILY,
   });
   const [isSubmitSuccessfull, setIsSubmitSuccessfull] = useState<boolean>(false);
+  const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
 
   const { addUser } = useUserRequests();
   const router = useRouter();
 
-  const validate = () => {
+  useEffect(() => {
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
@@ -108,12 +110,31 @@ const SignUpForm = () => {
       password: password,
       type: UserType.FAMILY,
     });
-  };
+
+    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+      setIsRegisterDataValid(true);
+    }
+    if (!isCGUread || !isEmailValid || !isFirstnameValid || !isPasswordMatch || !isPasswordValid || !isLastnameValid) {
+      setIsRegisterDataValid(false);
+    }
+  }, [
+    confirmPassword,
+    email,
+    firstname,
+    isCGUread,
+    isEmailValid,
+    isFirstnameValid,
+    isLastnameValid,
+    isPasswordMatch,
+    isPasswordValid,
+    isRegisterDataValid,
+    lastname,
+    password,
+  ]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    validate();
-    if (isPasswordValid && isPasswordMatch && isEmailValid) {
+    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
       try {
         await addUser(newUser);
         setIsSubmitSuccessfull(true);
@@ -124,10 +145,6 @@ const SignUpForm = () => {
         setIsEmailUsed(true);
       }
     }
-  };
-
-  const handleBlur = () => {
-    validate();
   };
 
   const handleClickShowPassword = () => {
@@ -194,7 +211,6 @@ const SignUpForm = () => {
                       setEmail(event.target.value);
                       setIsEmailUsed(false);
                     }}
-                    onBlur={handleBlur}
                   />
                   <TextField
                     variant="standard"
@@ -210,7 +226,6 @@ const SignUpForm = () => {
                     onChange={(event) => {
                       setFirstname(event.target.value);
                     }}
-                    onBlur={handleBlur}
                   />
                   <TextField
                     variant="standard"
@@ -226,7 +241,6 @@ const SignUpForm = () => {
                     onChange={(event) => {
                       setLastname(event.target.value);
                     }}
-                    onBlur={handleBlur}
                   />
                   <TextField
                     variant="standard"
@@ -254,7 +268,6 @@ const SignUpForm = () => {
                     onChange={(event) => {
                       setPassword(event.target.value);
                     }}
-                    onBlur={handleBlur}
                   />
                   <TextField
                     variant="standard"
@@ -282,9 +295,17 @@ const SignUpForm = () => {
                     onChange={(event) => {
                       setConfirmPassword(event.target.value);
                     }}
-                    onBlur={handleBlur}
                   />
-                  <Button type="submit" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
+
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '1rem' }}>
+                    <Checkbox
+                      onChange={() => {
+                        setIsCGUread(!isCGUread);
+                      }}
+                    />
+                    <div style={{ fontSize: 'smaller' }}>Je délcare avoir lu et accepté les CGU</div>
+                  </Box>
+                  <Button type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
                     S&apos;inscrire
                   </Button>
                 </form>

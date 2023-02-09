@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import { Base } from 'src/components/Base';
+import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -16,6 +17,7 @@ const Communication = () => {
   const onNext = () => {
     router.push('/familles/4');
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { students } = React.useContext(ClassroomContext);
   const [textValue, setTextValue] = useState(
@@ -23,7 +25,7 @@ const Communication = () => {
   );
   const [keywordPresence, setKeywordPresence] = useState(true);
   const textDefaultValue =
-    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée \n\n====================================================================';
+    'Bonjour,\n\nNotre classe participeau projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique %identifiant\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée \n\n====================================================================';
 
   useEffect(() => {
     const keywordRegex = new RegExp(/%identifiant/gm);
@@ -37,16 +39,20 @@ const Communication = () => {
   const onPrint = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
     const messagesWithId: string[] = [];
-    const newWin = window.open('', 'Print-Window');
+    if (keywordPresence) {
+      const newWin = window.open('', 'Print-Window');
 
-    students.forEach((student) => {
-      messagesWithId.push(textValue.replaceAll(keywordRegex, '<strong><u>' + student.hashedCode + '</u></strong>'));
-    });
+      students.forEach((student) => {
+        messagesWithId.push(textValue.replaceAll(keywordRegex, '<strong><u>' + student.hashedCode + '</u></strong>'));
+      });
 
-    if (newWin) {
-      newWin.document.open();
-      newWin.document.write(`<html><body>${messagesWithId.join('')}<script>window.print()</script></body></html>`);
-      newWin.document.close();
+      if (newWin) {
+        newWin.document.open();
+        newWin.document.write(`<html><body>${messagesWithId.join('')}<script>window.print()</script></body></html>`);
+        newWin.document.close();
+      }
+    } else {
+      setIsModalOpen(true);
     }
   };
 
@@ -84,10 +90,20 @@ const Communication = () => {
             }}
           />
           <Box marginTop="10px" textAlign="center">
-            <Button disabled={!keywordPresence} id="myButton" onClick={onPrint} variant="outlined">
+            <Button id="myButton" onClick={onPrint} variant="outlined">
               Imprimer
             </Button>
           </Box>
+          <Modal
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            ariaDescribedBy={'activate-phase-desc'}
+            ariaLabelledBy={'activate-phase'}
+            noTitle
+            confirmLabel="confirmer"
+          >
+            <div>Votre message doit contenir l&apos;identifiant enfant suivant: %identifiant</div>
+          </Modal>
           <StepsButton prev="/familles/2" next={onNext} />
         </div>
       </div>
