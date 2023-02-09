@@ -177,7 +177,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
 
   // send confirmation email
   if (data.firstname) {
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: user.verificationHash });
+    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: temporaryPassword });
   }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
@@ -360,6 +360,7 @@ const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
   additionalProperties: false,
 };
 const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
+
 userController.get({ path: '/verify-email' }, async (req: Request, res: Response) => {
   const data = req.query;
   if (!verifyUserValidator(data)) {
@@ -370,21 +371,23 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.verificationHash')
-    .where('User.email = :email', { email: data.email || '' })
+    .where('User.email = :email', { email: data.email })
     .getOne();
 
   let isverifyTokenCorrect: boolean = false;
-  if (user) {
+
+  if (user && user.verificationHash && data.verificationHash) {
     try {
-      isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash || '');
+      /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
+      isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
     } catch (e) {
       logger.error(JSON.stringify(e));
     }
     if (!isverifyTokenCorrect) {
-      throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
+      throw new AppError('Invalid verify token1', ErrorCode.INVALID_PASSWORD);
     }
   } else {
-    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid verify token2', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
