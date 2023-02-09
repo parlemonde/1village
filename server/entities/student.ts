@@ -11,17 +11,17 @@ export class Student {
   @Column({ type: 'varchar', length: 100, nullable: true })
   public firstname: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255 })
   public lastname: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255 })
   public hashedCode: string;
 
-  @Column({ type: 'tinyint', nullable: true })
+  @Column({ type: 'tinyint', nullable: true, default: 0 })
   public numLinkedAccount: number;
 
   //classroom relation
-  @ManyToOne(() => Classroom, (classroom) => classroom.students)
+  @ManyToOne(() => Classroom, (classroom: Classroom) => classroom.students)
   @JoinColumn({ name: 'classroomId' })
   classroom: Classroom;
 
