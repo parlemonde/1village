@@ -172,7 +172,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER;
   user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
-  user.language = data.language || '';
+  user.language = data.language || 'français';
 
   user.accountRegistration = 4; // Block account on sign-up and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';

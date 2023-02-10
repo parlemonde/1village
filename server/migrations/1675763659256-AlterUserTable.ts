@@ -25,7 +25,7 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
       new TableColumn({
         name: 'hasAcceptedNewsletter',
         type: 'tinyint',
-        default: '1',
+        default: '0',
       }),
     ]);
 
