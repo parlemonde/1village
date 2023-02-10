@@ -21,11 +21,29 @@ const Communication = () => {
 
   const { students } = React.useContext(ClassroomContext);
   const [textValue, setTextValue] = useState(
-    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée \n\n====================================================================',
+    `
+    <p>Bonjour, 
+    </br>
+    </br>
+    Notre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 
+    1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.</p>
+    
+    <p>Si vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :</p>
+    
+    <ol>
+    <li>Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.</li>
+    <li>Confirmez votre adresse mail en cliquant sur le lien envoyé</li>
+    <li>Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong></li>
+    </ol>
+    
+    <p>Jusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.
+    </br>
+    </br>
+    Bonne journée</p>
+    `,
   );
   const [keywordPresence, setKeywordPresence] = useState(true);
-  const textDefaultValue =
-    'Bonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée \n\n====================================================================';
+  const textDefaultValue = `\nBonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée\n\n`;
 
   useEffect(() => {
     const keywordRegex = new RegExp(/%identifiant/gm);
@@ -43,12 +61,16 @@ const Communication = () => {
       const newWin = window.open('', 'Print-Window');
 
       students.forEach((student) => {
-        messagesWithId.push(textValue.replaceAll(keywordRegex, '<strong><u>' + student.hashedCode + '</u></strong>'));
+        messagesWithId.push(textValue.replaceAll(keywordRegex, '<u>' + student.hashedCode + '</u>'));
       });
 
       if (newWin) {
         newWin.document.open();
-        newWin.document.write(`<html><body>${messagesWithId.join('')}<script>window.print()</script></body></html>`);
+        newWin.document.write(
+          `<html><body>${messagesWithId.join(
+            '------------------------------------------------------------------------------------------------------------------------',
+          )}<script>window.print()</script></body></html>`,
+        );
         newWin.document.close();
       }
     } else {
@@ -62,14 +84,14 @@ const Communication = () => {
         <BackButton href="/contenu-libre" />
         <Steps
           steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-          urls={['/famille/1', '/famille/2', '/famille/3', '/famille/4']}
+          urls={['/familles/1', '/familles/2', '/familles/3', '/familles/4']}
           activeStep={2}
         />
         <div className="width-900">
-          <h1>Ecrivez le contenu de votre génie</h1>
+          <h1> Communiquer les identifiants aux familles</h1>
           <p className="text">
-            Communiquer les identifiants aux familles Pour inviter les familles à se connecter, nous avons préparé un texte de présentation, que vous
-            pouvez modifier, ou traduire dans une autre langue.
+            Pour inviter les familles à se connecter, nous avons préparé un texte de présentation, que vous pouvez modifier, ou traduire dans une
+            autre langue.
           </p>
           <p>
             Comme vous pourrez le constater, ce texte contient le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> : vous devez
