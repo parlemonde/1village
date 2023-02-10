@@ -114,6 +114,7 @@ type CreateUserData = {
   villageId?: number;
   firstLogin?: number;
   language?: string;
+  hasAcceptedNewsletter?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -139,6 +140,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
     language: { type: 'string', nullable: true },
+    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
   },
   required: ['email'],
   additionalProperties: false,
@@ -169,6 +171,8 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.villageId = data.villageId || null;
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER;
+  user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
+  user.language = data.language || '';
 
   user.accountRegistration = 4; // Block account on sign-up and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';

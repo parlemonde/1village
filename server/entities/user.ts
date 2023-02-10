@@ -112,8 +112,8 @@ export class User implements UserInterface {
   @Column({ type: 'boolean', default: false })
   public hasAcceptedNewsletter: boolean;
 
-  @Column({ type: 'varchar', length: 400, default: null })
-  public language: string | null;
+  @Column({ type: 'varchar', length: 400, default: '' })
+  public language: string;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];

@@ -1,6 +1,7 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Checkbox, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, MenuItem, Select, TextField } from '@mui/material';
+import { height } from '@mui/system';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -28,13 +29,16 @@ const SignUpForm = () => {
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
   const [isCGUread, setIsCGUread] = useState<boolean>(false);
-  const [IsNewsletterAccepted, setIsNewsletterAccepted] = useState<boolean>(false);
+  const [language, setLanguage] = useState('');
+  const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
     lastname: lastname,
     password: password,
     type: UserType.FAMILY,
+    hasAcceptedNewsletter: hasAcceptedNewsletter,
+    language: language,
   });
   const [isSubmitSuccessfull, setIsSubmitSuccessfull] = useState<boolean>(false);
   const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
@@ -112,6 +116,8 @@ const SignUpForm = () => {
       lastname: lastname,
       password: password,
       type: UserType.FAMILY,
+      hasAcceptedNewsletter: hasAcceptedNewsletter,
+      language: language,
     });
 
     if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
@@ -133,6 +139,8 @@ const SignUpForm = () => {
     isRegisterDataValid,
     lastname,
     password,
+    hasAcceptedNewsletter,
+    language,
   ]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -299,43 +307,43 @@ const SignUpForm = () => {
                       setConfirmPassword(event.target.value);
                     }}
                   />
-                  <div>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} md={8}>
-                        <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
-                          Choix de la langue de communication
-                        </p>
-                        <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
-                          <InputLabel id="demo-simple-select">Choisir</InputLabel>
-                          <Select style={{ width: '100%', marginBottom: '1rem' }} label="Langues">
-                            {languages.languages.map((language) => (
-                              <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
-                                {language.french}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </div>
 
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '1rem' }}>
+                  <FormControl variant="outlined" className="full-width" style={{ width: '30ch' }}>
+                    <InputLabel id="demo-simple-select">Langue de préférence</InputLabel>
+                    <Select
+                      label="Choisir une langue préférée"
+                      onChange={(e) => {
+                        setLanguage(e.target.value as string);
+                      }}
+                      style={{ width: '95%', height: '85%', marginBottom: '1rem' }}
+                    >
+                      {languages.languages.map((language) => (
+                        <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
+                          {language.french}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
                     <Checkbox
+                      sx={{ margin: '0', padding: '0' }}
                       onChange={() => {
                         setIsCGUread(!isCGUread);
                       }}
                     />
-                    <div style={{ fontSize: 'smaller' }}>
+                    <div style={{ fontSize: 'x-small', margin: '0', padding: '0', textAlign: 'left' }}>
                       Accepter les <u>conditions générales d&apos;utilisation</u>
                     </div>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '1rem' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
                     <Checkbox
+                      sx={{ margin: '0', padding: '0' }}
                       onChange={() => {
-                        setIsNewsletterAccepted(!IsNewsletterAccepted);
+                        setHasAcceptedNewsletter(!hasAcceptedNewsletter);
                       }}
                     />
-                    <div style={{ fontSize: 'smaller' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
+                    <div style={{ fontSize: 'x-small' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
                   </Box>
                   <Button type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
                     S&apos;inscrire
