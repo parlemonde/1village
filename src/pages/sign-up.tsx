@@ -1,10 +1,11 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, Checkbox, IconButton, InputAdornment, Link, TextField } from '@mui/material';
+import { Box, Button, Checkbox, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, MenuItem, Select, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { KeepRatio } from '../components/KeepRatio';
+import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
@@ -27,6 +28,7 @@ const SignUpForm = () => {
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
   const [isCGUread, setIsCGUread] = useState<boolean>(false);
+  const [IsNewsletterAccepted, setIsNewsletterAccepted] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
@@ -36,6 +38,7 @@ const SignUpForm = () => {
   });
   const [isSubmitSuccessfull, setIsSubmitSuccessfull] = useState<boolean>(false);
   const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
+  const languages = useLanguages();
 
   const { addUser } = useUserRequests();
   const router = useRouter();
@@ -296,6 +299,25 @@ const SignUpForm = () => {
                       setConfirmPassword(event.target.value);
                     }}
                   />
+                  <div>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} md={8}>
+                        <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
+                          Choix de la langue de communication
+                        </p>
+                        <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
+                          <InputLabel id="demo-simple-select">Choisir</InputLabel>
+                          <Select style={{ width: '100%', marginBottom: '1rem' }} label="Langues">
+                            {languages.languages.map((language) => (
+                              <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
+                                {language.french}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </div>
 
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '1rem' }}>
                     <Checkbox
@@ -303,7 +325,17 @@ const SignUpForm = () => {
                         setIsCGUread(!isCGUread);
                       }}
                     />
-                    <div style={{ fontSize: 'smaller' }}>Je délcare avoir lu et accepté les CGU</div>
+                    <div style={{ fontSize: 'smaller' }}>
+                      Accepter les <u>conditions générales d&apos;utilisation</u>
+                    </div>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '1rem' }}>
+                    <Checkbox
+                      onChange={() => {
+                        setIsNewsletterAccepted(!IsNewsletterAccepted);
+                      }}
+                    />
+                    <div style={{ fontSize: 'smaller' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
                   </Box>
                   <Button type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
                     S&apos;inscrire
