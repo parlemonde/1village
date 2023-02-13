@@ -1,0 +1,19 @@
+@import 'variables';
+
+.register__container {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+.register__button {
+  margin-top: 1rem;
+  @media (max-width: $small-screen) {
+    margin-top: 0.5rem;
+  }
+}

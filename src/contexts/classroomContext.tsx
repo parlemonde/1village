@@ -113,7 +113,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           createClassroom();
         });
     }
-  }, [createClassroom, fetchClassroom, getStudents, students, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createClassroom, fetchClassroom, getStudents, user]);
 
   /**
    * Get teacher's classroom
@@ -202,21 +203,21 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   //     });
   // }, []);
 
-  const getOneStudent = React.useCallback(
-    async (id: number) => {
-      await axiosLoggedRequest({
-        method: 'GET',
-        url: `/students/${id}`,
-      })
-        .then((response) => {
-          return response.data as Student;
-        })
-        .catch((err) => {
-          return err.message;
-        });
-    },
-    [axiosLoggedRequest],
-  );
+  // const getOneStudent = React.useCallback(
+  //   async (id: number) => {
+  //     await axiosLoggedRequest({
+  //       method: 'GET',
+  //       url: `/students/${id}`,
+  //     })
+  //       .then((response) => {
+  //         return response.data as Student;
+  //       })
+  //       .catch((err) => {
+  //         return err.message;
+  //       });
+  //   },
+  //   [axiosLoggedRequest],
+  // );
 
   const deleteStudent = React.useCallback(
     async (studentId: number) => {

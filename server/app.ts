@@ -87,14 +87,6 @@ export async function getApp() {
   );
   backRouter.use(jsonify);
   // ! a enlever une fois que les tests finies
-  backRouter.get('/testmail', (_, res: Response) => {
-    sendMail(Email.CONFIRMATION_EMAIL, 'yan.labarthe@gmail.com', {
-      firstname: 'yan',
-      email: 'yan1.labarthe@gmail.com',
-      verificationHash: 'abc',
-    });
-    res.status(200).send('Hello World 1Village!');
-  });
   backRouter.get('/', (_, res: Response) => {
     res.status(200).send('Hello World 1Village!');
   });

@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
-import type { User as UserInterface } from '../../types/user.type';
 import { UserType } from '../../types/user.type';
+import type { User as UserInterface } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
 import { Game } from './game';
@@ -112,8 +112,8 @@ export class User implements UserInterface {
   @Column({ type: 'boolean', default: false })
   public hasAcceptedNewsletter: boolean;
 
-  @Column({ type: 'varchar', length: 400, default: null })
-  public language?: string | null;
+  @Column({ type: 'varchar', length: 400, default: 'français' })
+  public language: string;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
