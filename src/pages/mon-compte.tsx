@@ -34,7 +34,8 @@ const Presentation = () => {
     confirmNew: '',
     current: '',
   });
-  const [newsletterChecked, setNewsletterChecked] = React.useState(true);
+  const [hasAcceptedNewsletter, sethasAcceptedNewsletter] = React.useState(true);
+  const [language, setLanguage] = React.useState('');
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
