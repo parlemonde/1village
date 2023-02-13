@@ -1,7 +1,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Checkbox, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, MenuItem, Select, TextField } from '@mui/material';
-import { height } from '@mui/system';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -200,7 +199,7 @@ const SignUpForm = () => {
             <ArrowBack /> Retour à la page de connexion
           </Link>
         </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
+        <KeepRatio ratio={0.55} width="95%" maxWidth="1200px" minHeight="600px" className="register__container">
           <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
             {!isSubmitSuccessfull ? (
               <>
@@ -223,96 +222,90 @@ const SignUpForm = () => {
                       setIsEmailUsed(false);
                     }}
                   />
-                  <div style={{ width: '50%', float: 'left' }}>
-                    <TextField
-                      variant="standard"
-                      label="Prénom"
-                      placeholder="Entrez votre prénom"
-                      name="firstname"
-                      error={!isFirstnameValid}
-                      InputLabelProps={{ shrink: true }}
-                      sx={{
-                        width: '30ch',
-                        mb: '1rem',
-                        pr: '1rem',
-                      }}
-                      onChange={(event) => {
-                        setFirstname(event.target.value);
-                      }}
-                    />
-                    <TextField
-                      variant="standard"
-                      label="Nom de famille"
-                      placeholder="Entrez votre nom de famille"
-                      name="lastname"
-                      error={!isLastnameValid}
-                      InputLabelProps={{ shrink: true }}
-                      sx={{
-                        width: '30ch',
-                        mb: '1rem',
-                      }}
-                      onChange={(event) => {
-                        setLastname(event.target.value);
-                      }}
-                    />
-                  </div>
-                  <div style={{ width: '50%', float: 'left' }}>
-                    <TextField
-                      variant="standard"
-                      label="Mot de passe"
-                      placeholder="Entrez votre nom de passe"
-                      name="password"
-                      autoComplete="off"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
-                              {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      type={isPasswordVisible === false ? 'password' : 'text'}
-                      error={isPasswordValid === false}
-                      helperText={isPasswordValid === true ? '8 lettres minimum, une majuscule et un chiffre' : passwordMessage}
-                      InputLabelProps={{ shrink: true }}
-                      sx={{
-                        width: '30ch',
-                        mb: '1rem',
-                        pr: '1rem',
-                      }}
-                      onChange={(event) => {
-                        setPassword(event.target.value);
-                      }}
-                    />
-                    <TextField
-                      variant="standard"
-                      label="Confirmation de mot de passe"
-                      placeholder="Confirmez votre mot de passe"
-                      autoComplete="off"
-                      name="confirmPassword"
-                      type={isConfirmationPasswordVisible === false ? 'password' : 'text'}
-                      error={isPasswordMatch === false}
-                      helperText={isPasswordMatch === false ? 'Les mots de passes doivent être identiques' : null}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton aria-label="toggle password visibility" onClick={handleClickShowConfirmationPassword}>
-                              {isConfirmationPasswordVisible ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                      sx={{
-                        width: '30ch',
-                        mb: '1rem',
-                      }}
-                      onChange={(event) => {
-                        setConfirmPassword(event.target.value);
-                      }}
-                    />
-                  </div>
+                  <TextField
+                    variant="standard"
+                    label="Prénom"
+                    placeholder="Entrez votre prénom"
+                    name="firstname"
+                    error={!isFirstnameValid}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      width: '30ch',
+                      mb: '1rem',
+                    }}
+                    onChange={(event) => {
+                      setFirstname(event.target.value);
+                    }}
+                  />
+                  <TextField
+                    variant="standard"
+                    label="Nom de famille"
+                    placeholder="Entrez votre nom de famille"
+                    name="lastname"
+                    error={!isLastnameValid}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      width: '30ch',
+                      mb: '1rem',
+                    }}
+                    onChange={(event) => {
+                      setLastname(event.target.value);
+                    }}
+                  />
+                  <TextField
+                    variant="standard"
+                    label="Mot de passe"
+                    placeholder="Entrez votre nom de passe"
+                    name="password"
+                    autoComplete="off"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                            {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    type={isPasswordVisible === false ? 'password' : 'text'}
+                    error={isPasswordValid === false}
+                    helperText={isPasswordValid === true ? '8 lettres minimum, une majuscule et un chiffre' : passwordMessage}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      width: '30ch',
+                      mb: '1rem',
+                    }}
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                    }}
+                  />
+                  <TextField
+                    variant="standard"
+                    label="Confirmation de mot de passe"
+                    placeholder="Confirmez votre mot de passe"
+                    autoComplete="off"
+                    name="confirmPassword"
+                    type={isConfirmationPasswordVisible === false ? 'password' : 'text'}
+                    error={isPasswordMatch === false}
+                    helperText={isPasswordMatch === false ? 'Les mots de passes doivent être identiques' : null}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton aria-label="toggle password visibility" onClick={handleClickShowConfirmationPassword}>
+                            {isConfirmationPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{
+                      width: '30ch',
+                      mb: '1rem',
+                    }}
+                    onChange={(event) => {
+                      setConfirmPassword(event.target.value);
+                    }}
+                  />
                   <FormControl variant="outlined" className="full-width" style={{ width: '30ch' }}>
                     <InputLabel id="demo-simple-select">Langue de préférence</InputLabel>
                     <Select
