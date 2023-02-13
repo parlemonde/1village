@@ -1,6 +1,20 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, Checkbox, FormControl, Grid, IconButton, InputAdornment, InputLabel, Link, MenuItem, Select, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Link,
+  MenuItem,
+  Select,
+  TextField,
+  useMediaQuery,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -342,9 +356,11 @@ const SignUpForm = () => {
                     />
                     <div style={{ fontSize: 'x-small' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
                   </Box>
-                  <Button type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
-                    S&apos;inscrire
-                  </Button>
+                  <div className="register__button">
+                    <Button sx={{ paddingX: '3rem' }} type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
+                      S&apos;inscrire
+                    </Button>
+                  </div>
                 </form>
               </>
             ) : (
