@@ -92,7 +92,6 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
     plmoEmail: `contact@${domain}`,
   };
 
-  console.log(renderOptions);
   try {
     const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     const text = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
