@@ -34,7 +34,7 @@ const Presentation = () => {
     confirmNew: '',
     current: '',
   });
-  const [hasAcceptedNewsletter, sethasAcceptedNewsletter] = React.useState(true);
+  const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = React.useState(true);
   const [language, setLanguage] = React.useState('');
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
@@ -50,7 +50,7 @@ const Presentation = () => {
     return <div></div>;
   }
   // checks Profil Parent
-  const checked = newUser.
+
   // checks Profil Teacher
   const checkEmailAndPseudo = async () => {
     const pseudoValid = await isPseudoValid(newUser.pseudo, user.pseudo);
@@ -186,7 +186,10 @@ const Presentation = () => {
       setEditMode(newEditMode);
     };
 
-  // const handleLanguage = (event: SelectChangeEvent<string>) => {};
+  // const handleLanguage = (event: SelectChangeEvent<string>) => {
+  //   const languageCode = (event.target as HTMLSelectElement).value;
+  //   const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
+  // };
   // const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {};
   return (
     <Base>
@@ -356,8 +359,9 @@ const Presentation = () => {
             <label style={{ cursor: 'pointer' }}>
               <Checkbox
                 value={newUser.hasAcceptedNewsletter}
-                checked={newsletterChecked === true && newUser.hasAcceptedNewsletter === true}
-                onChange={(hasAcceptedNewsletter) => {
+                checked={newUser.hasAcceptedNewsletter === true}
+                onChange={() => {
+                  // setHasAcceptedNewsletter(!hasAcceptedNewsletter);
                   setNewUser((u) => (!u ? u : { ...u, hasAcceptedNewsletter }));
                 }}
               />
@@ -372,13 +376,17 @@ const Presentation = () => {
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
                   <InputLabel id="demo-simple-select">Choisir</InputLabel>
-                  {/* <Select style={{ width: '100%', marginBottom: '1rem' }} value={} onChange={} label="Langues">
+                  <Select
+                    style={{ width: '100%', marginBottom: '1rem' }}
+                    // onChange={}
+                    label="Langues"
+                  >
                     {languages.map((language) => (
                       <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
                         {language.french}
                       </MenuItem>
                     ))}
-                  </Select> */}
+                  </Select>
                 </FormControl>
               </Grid>
             </Grid>
