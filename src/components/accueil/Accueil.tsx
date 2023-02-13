@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import React from 'react';
 
+import { LinkChild } from './LinkChild';
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
@@ -82,11 +83,18 @@ export const Accueil = () => {
   }, [activities]);
 
   if (!village) {
-    return <Base showSubHeader></Base>;
+    return user && user.type === UserType.FAMILY ? (
+      <Base showSubHeader>
+        <LinkChild />
+      </Base>
+    ) : (
+      <Base showSubHeader></Base>
+    );
   }
 
   return (
     <Base showSubHeader>
+      <LinkChild />
       {selectedPhase <= village.activePhase ? (
         <>
           <KeepRatio ratio={1 / 3}>
