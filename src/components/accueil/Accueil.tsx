@@ -84,7 +84,7 @@ export const Accueil = () => {
 
   if (!village) {
     return user && user.type === UserType.FAMILY ? (
-      <Base showSubHeader>
+      <Base>
         <LinkChild />
       </Base>
     ) : (
