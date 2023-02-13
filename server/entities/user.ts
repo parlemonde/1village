@@ -113,7 +113,7 @@ export class User implements UserInterface {
   public hasAcceptedNewsletter: boolean;
 
   @Column({ type: 'varchar', length: 400, default: null })
-  public language: string | null;
+  public language?: string | null;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];

@@ -7,8 +7,6 @@ import NoSsr from '@mui/material/NoSsr';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import type { LanguageDefiData } from 'src/activity-types/defi.types';
-import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
@@ -17,9 +15,7 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
-import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
-import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName, capitalize } from 'src/utils';
@@ -28,25 +24,11 @@ import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
-const getArticle = (language: string) => {
-  if (language.length === 0) {
-    return '';
-  }
-  if ('aeiou'.includes(language[0])) {
-    return "l'";
-  }
-  return 'le ';
-};
-
 const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
-  const { activity, updateActivity } = React.useContext(ActivityContext);
   const { languages } = useLanguages();
-  const [mascotteId, setMascotteId] = React.useState(0);
-  const { activity: mascotte } = useActivity(mascotteId);
-  const data = (activity?.data as LanguageDefiData) || null;
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
@@ -66,58 +48,8 @@ const Presentation = () => {
   if (!user || !newUser) {
     return <div></div>;
   }
-  // Const Profil Parent (maybe in the future for teacher too?) for favorite language
-  const getMascotteId = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
-      method: 'GET',
-      url: '/activities/mascotte',
-    });
-    if (!response.error) {
-      setMascotteId(response.data.id === -1 ? 0 : response.data.id);
-    }
-  }, [axiosLoggedRequest]);
-
-  React.useEffect(() => {
-    getMascotteId().catch(console.error);
-  }, [getMascotteId]);
-
-  const mascotteLanguages = React.useMemo(() => {
-    if (!mascotte || !languages) {
-      return [
-        {
-          label: 'Français',
-          value: 'fr',
-        },
-      ];
-    }
-    const l =
-      [
-        ...(mascotte.data as MascotteData).fluentLanguages,
-        ...(mascotte.data as MascotteData).minorLanguages,
-        ...(mascotte.data as MascotteData).wantedForeignLanguages,
-      ] ?? [];
-    return l.reduce<{ label: string; value: string }[]>(
-      (acc, l) => {
-        if (l === 'fre') {
-          return acc;
-        }
-        const language = languages.find((o) => o.alpha3_b === l);
-        if (language) {
-          acc.push({
-            label: capitalize(language.french),
-            value: language.alpha3_b,
-          });
-        }
-        return acc;
-      },
-      [
-        {
-          label: 'Français',
-          value: 'fr',
-        },
-      ],
-    );
-  }, [mascotte, languages]);
+  // checks Profil Parent
+  const checked = newUser.
   // checks Profil Teacher
   const checkEmailAndPseudo = async () => {
     const pseudoValid = await isPseudoValid(newUser.pseudo, user.pseudo);
@@ -253,14 +185,8 @@ const Presentation = () => {
       setEditMode(newEditMode);
     };
 
-  const handleLanguage = (event: SelectChangeEvent<string>) => {
-    const languageCode = (event.target as HTMLSelectElement).value;
-    const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
-    updateActivity({ data: { ...data, languageCode, language } });
-  };
-  const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateActivity({ data: { ...data, languageIndex: parseInt((event.target as HTMLInputElement).value, 10) } });
-  };
+  // const handleLanguage = (event: SelectChangeEvent<string>) => {};
+  // const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {};
   return (
     <Base>
       <h1>Paramètres du compte</h1>
@@ -425,18 +351,18 @@ const Presentation = () => {
       {user.type === UserType.FAMILY ? (
         <div className="account__panel">
           <h2>Préférence de communication</h2>
-          <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
+          <div style={{ maxWidth: '800px', width: '100%', textAlign: 'left' }}>
             <label style={{ cursor: 'pointer' }}>
               <Checkbox
-                checked={newsletterChecked}
-                onChange={(event) => {
-                  setNewsletterChecked(event.target.checked);
+                value={newUser.hasAcceptedNewsletter}
+                checked={newsletterChecked === true && newUser.hasAcceptedNewsletter === true}
+                onChange={(hasAcceptedNewsletter) => {
+                  setNewUser((u) => (!u ? u : { ...u, hasAcceptedNewsletter }));
                 }}
               />
               <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
             </label>
           </div>
-          <h1>Choix de la langue de communication</h1>
           <div>
             <Grid container spacing={2}>
               <Grid item xs={12} md={8}>
@@ -445,13 +371,13 @@ const Presentation = () => {
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
                   <InputLabel id="demo-simple-select">Choisir</InputLabel>
-                  <Select style={{ width: '100%', marginBottom: '1rem' }} value={data.languageCode} onChange={handleLanguage} label="Langues">
+                  {/* <Select style={{ width: '100%', marginBottom: '1rem' }} value={} onChange={} label="Langues">
                     {languages.map((language) => (
                       <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
                         {language.french}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </Grid>
             </Grid>

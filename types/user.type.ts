@@ -33,6 +33,8 @@ export interface User {
     lat: number;
     lng: number;
   };
+  hasAcceptedNewsletter: boolean;
+  language: string;
 
   avatar: string | null;
   displayName: string | null;

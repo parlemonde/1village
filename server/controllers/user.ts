@@ -113,6 +113,7 @@ type CreateUserData = {
   type?: UserType;
   villageId?: number;
   firstLogin?: number;
+  hasAcceptedNewsletter?: boolean;
   language?: string;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
@@ -138,6 +139,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     },
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
+    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
   },
   required: ['email'],
@@ -167,6 +169,8 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.avatar = data.avatar || null;
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
+  user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
+  user.language = data.language || null;
   user.countryCode = data.countryCode || '';
   if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, UserType.TEACHER);
@@ -207,7 +211,8 @@ type EditUserData = {
   accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
-  language?: string;
+  hasAcceptedNewsletter?: boolean | false;
+  language?: string | null;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
@@ -242,6 +247,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
       required: ['lat', 'lng'],
       additionalProperties: false,
     },
+    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
   },
   required: [],
