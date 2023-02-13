@@ -8,6 +8,7 @@ import 'src/styles/editor.scss';
 import 'src/styles/fonts.scss';
 import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
+import 'src/styles/register.scss';
 import 'src/styles/mon-compte.scss';
 import 'src/styles/se-presenter.scss';
 import 'src/styles/slot-machine.scss';

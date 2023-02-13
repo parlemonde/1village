@@ -33,6 +33,8 @@ export interface User {
     lat: number;
     lng: number;
   };
+  language: string;
+  hasAcceptedNewsletter: boolean;
 
   avatar: string | null;
   displayName: string | null;
@@ -59,6 +61,8 @@ export type UserForm = {
   password: string;
   passwordConfirmation?: string;
   type: UserType.FAMILY;
+  hasAcceptedNewsletter: boolean;
+  language: string;
 };
 export interface UserParamClassroom {
   classroom_avatar: string | null;

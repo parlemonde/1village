@@ -56,7 +56,7 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
 });
 
 // --- Get one user. ---
-userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -114,6 +114,7 @@ type CreateUserData = {
   villageId?: number;
   firstLogin?: number;
   language?: string;
+  hasAcceptedNewsletter?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -139,6 +140,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
     language: { type: 'string', nullable: true },
+    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
   },
   required: ['email'],
   additionalProperties: false,
@@ -168,18 +170,18 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
   user.countryCode = data.countryCode || '';
-  if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
-    user.type = valueOrDefault(data.type, UserType.TEACHER);
-  } else {
-    user.type = UserType.TEACHER;
-  }
-  user.accountRegistration = data.password === undefined ? 3 : 0;
+  user.type = data.type || UserType.TEACHER;
+  user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
+  user.language = data.language || 'français';
+
+  user.accountRegistration = 4; // Block account on sign-up and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
-  // todo: send mail with verification password to validate the email adress.
+
+  // send confirmation email
   if (data.firstname) {
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: user.verificationHash });
+    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: temporaryPassword });
   }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
@@ -350,21 +352,21 @@ userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: 
 
 // --- Verify email. ---
 type VerifyData = {
-  email: string;
-  verifyToken: string;
+  email?: string;
+  verificationHash?: string;
 };
 const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
-    verifyToken: { type: 'string' },
+    email: { type: 'string', format: 'email', nullable: true },
+    verificationHash: { type: 'string', nullable: true },
   },
-  required: ['email', 'verifyToken'],
   additionalProperties: false,
 };
 const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
-userController.post({ path: '/verify-email' }, async (req: Request, res: Response, next: NextFunction) => {
-  const data = req.body;
+
+userController.get({ path: '/verify-email' }, async (req: Request, res: Response) => {
+  const data = req.query;
   if (!verifyUserValidator(data)) {
     sendInvalidDataError(verifyUserValidator);
     return;
@@ -375,19 +377,21 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
     .addSelect('User.verificationHash')
     .where('User.email = :email', { email: data.email })
     .getOne();
-  if (!user) {
-    next();
-    return;
-  }
 
   let isverifyTokenCorrect: boolean = false;
-  try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
-  } catch (e) {
-    logger.error(JSON.stringify(e));
-  }
-  if (!isverifyTokenCorrect) {
-    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
+
+  if (user && user.verificationHash && data.verificationHash) {
+    try {
+      /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
+      isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
+    } catch (e) {
+      logger.error(JSON.stringify(e));
+    }
+    if (!isverifyTokenCorrect) {
+      throw new AppError('Invalid verify token1', ErrorCode.INVALID_PASSWORD);
+    }
+  } else {
+    throw new AppError('Invalid verify token2', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
@@ -405,7 +409,7 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
     sameSite: 'strict',
   });
   delete user.verificationHash;
-  res.sendJSON({ user: user, accessToken });
+  res.redirect('/');
 });
 
 // --- Reset pwd. ---

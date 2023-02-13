@@ -52,10 +52,17 @@ export const useUserRequests = () => {
           countryCode: country?.isoCode,
         },
       });
-      if (response.error) {
+      if (response.data.message) {
+        if (response.data.message.includes('Duplicate entry')) {
+          enqueueSnackbar('Une erreur est survenue...', {
+            variant: 'error',
+          });
+          return Promise.reject(new Error('Email already exists'));
+        }
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
         });
+
         return null;
       }
       enqueueSnackbar('Utilisateur créé avec succès!', {
