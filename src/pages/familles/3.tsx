@@ -57,20 +57,33 @@ const Communication = () => {
   const onPrint = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
     const messagesWithId: string[] = [];
+    let count = 0;
     if (keywordPresence) {
       const newWin = window.open('', 'Print-Window');
 
       students.forEach((student) => {
+        messagesWithId.push(`<div>Élève : <strong>${student.firstname} ${student.lastname}</strong></div>`);
         messagesWithId.push(textValue.replaceAll(keywordRegex, '<u>' + student.hashedCode + '</u>'));
+        messagesWithId.push(`<div>--------------------------------------------------------</div>`);
+        count += 1;
+        if (textValue.length > 700 && count === 2) {
+          messagesWithId.push(`<p style="page-break-after: always;">&nbsp;</p>`);
+          count = 0;
+        } else if (textValue.length > 450 && count === 3) {
+          messagesWithId.push(`<p style="page-break-after: always;">&nbsp;</p>`);
+          count = 0;
+        } else if (textValue.length > 200 && count === 4) {
+          messagesWithId.push(`<p style="page-break-after: always;">&nbsp;</p>`);
+          count = 0;
+        } else if (count === 5) {
+          messagesWithId.push(`<p style="page-break-after: always;">&nbsp;</p>`);
+          count = 0;
+        }
       });
 
       if (newWin) {
         newWin.document.open();
-        newWin.document.write(
-          `<html><body>${messagesWithId.join(
-            '------------------------------------------------------------------------------------------------------------------------',
-          )}<script>window.print()</script></body></html>`,
-        );
+        newWin.document.write(`<html><body>${messagesWithId.join(' ')}<script>window.print()</script></body></html>`);
         newWin.document.close();
       }
     } else {

@@ -24,7 +24,7 @@ export enum Email {
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
-  [Email.CONFIRMATION_EMAIL]: { firstname: string; email: string; verificationHash: string };
+  [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 

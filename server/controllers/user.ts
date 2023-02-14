@@ -181,7 +181,13 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
 
   // send confirmation email
   if (data.firstname) {
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: temporaryPassword });
+    const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+    await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+      url: frontUrl,
+      firstname: data.firstname,
+      email: data.email,
+      verificationHash: temporaryPassword,
+    });
   }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
@@ -446,8 +452,6 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   user.verificationHash = await argon2.hash(temporaryPassword);
   await AppDataSource.getRepository(User).save(user);
 
-  // send mail with verification password
-  // await sendMail(Email.RESET_PASSWORD, user.email, { resetCode: temporaryPassword }, req.body.languageCode || undefined);
   res.sendJSON({ success: true });
 });
 

@@ -62,7 +62,7 @@ export type UserForm = {
   passwordConfirmation?: string;
   type: UserType.FAMILY;
   hasAcceptedNewsletter: boolean;
-  language: string;
+  language: string | undefined;
 };
 export interface UserParamClassroom {
   classroom_avatar: string | null;
