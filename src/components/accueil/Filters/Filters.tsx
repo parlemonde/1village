@@ -37,6 +37,7 @@ export type FilterArgs = {
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
+  searchTerm: string;
 };
 
 interface FiltersProps {
@@ -116,7 +117,18 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
         </label>
       </div>
       <div>
-        <input type="text" placeholder="Rechercher" style={{ margin: '0 0.5rem' }} />
+        <input
+          type="text"
+          value={filters.searchTerm}
+          placeholder="Rechercher"
+          style={{ margin: '0 0.5rem' }}
+          onChange={(event) => {
+            onChange({
+              ...filters,
+              searchTerm: event.target.value,
+            });
+          }}
+        />
       </div>
     </div>
   );

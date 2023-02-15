@@ -35,6 +35,7 @@ export const Accueil = () => {
       return acc;
     }, {}),
     pelico: true,
+    searchTerm: '',
   });
 
   const { activities } = useActivities({
@@ -61,6 +62,7 @@ export const Accueil = () => {
 
   function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
     console.log(activitiesData);
+    console.log(filters.searchTerm);
     return activitiesData;
   }
 
