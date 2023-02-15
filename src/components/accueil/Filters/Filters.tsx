@@ -115,6 +115,9 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
           <PelicoReflechit style={{ position: 'relative', zIndex: 10, height: '28px', width: 'auto', marginTop: '-10px', marginLeft: '-5px' }} />
         </label>
       </div>
+      <div>
+        <input type="text" placeholder="Rechercher" style={{ margin: '0 0.5rem' }} />
+      </div>
     </div>
   );
 };
