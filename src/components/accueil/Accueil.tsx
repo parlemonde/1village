@@ -82,7 +82,7 @@ export const Accueil = () => {
     if (activity.data.title && activity.data.title.toLowerCase().indexOf(lowerTerm) !== -1) {
       return true;
     }
-    // subtype @todo
+    // @todo subtype
 
     return false;
   }
@@ -105,7 +105,7 @@ export const Accueil = () => {
     } else {
       return [];
     }
-  }, [activities]);
+  }, [activities, filters.searchTerm]);
 
   if (!village) {
     return <Base showSubHeader></Base>;
