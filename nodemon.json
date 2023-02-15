@@ -2,8 +2,8 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules", "src"],
-  "watch": ["server"],
+  "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules"],
+  "watch": ["server","src"],
   "exec": "yarn start-dev",
-  "ext": "ts, yaml"
+  "ext": "ts, yaml, tsx, js, jsx"
 }
