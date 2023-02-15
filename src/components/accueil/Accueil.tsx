@@ -59,6 +59,11 @@ export const Accueil = () => {
     return activitiesWithLastMimic;
   }
 
+  function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
+    console.log(activitiesData);
+    return activitiesData;
+  }
+
   // on selected phase change, select all activities.
   React.useEffect(() => {
     setFilters((prevFilters) => ({
@@ -71,7 +76,9 @@ export const Accueil = () => {
   //Preload of the activities filtered only one mimic
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      return filterActivitiesWithLastMimicGame(activities);
+      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      const activitiesFilterBySearchTerm = filterActivitiesByTerm(activitiesWithLastMimic);
+      return activitiesFilterBySearchTerm;
     } else {
       return [];
     }
