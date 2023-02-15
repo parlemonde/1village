@@ -63,7 +63,9 @@ export const Accueil = () => {
   function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
     console.log(activitiesData);
     console.log(filters.searchTerm);
-    return activitiesData;
+
+    const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => activity.content[0].value.indexOf(filters.searchTerm) !== -1);
+    return activitiesFilteredBySearchTerm;
   }
 
   // on selected phase change, select all activities.
