@@ -64,8 +64,27 @@ export const Accueil = () => {
     console.log(activitiesData);
     console.log(filters.searchTerm);
 
-    const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => activity.content[0].value.indexOf(filters.searchTerm) !== -1);
+    const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => filterActvityByTerm(activity, filters.searchTerm));
     return activitiesFilteredBySearchTerm;
+  }
+  // to check a given activity contains a given term
+  function filterActvityByTerm(activity, term) {
+    // for cas insensivitive search
+    const lowerTerm = term.toLowerCase();
+    if (activity.content[0].value.toLowerCase().indexOf(lowerTerm) !== -1) {
+      return true;
+    }
+    //resume if exists
+    if (activity.data.resume && activity.data.resume.toLowerCase().indexOf(lowerTerm) !== -1) {
+      return true;
+    }
+    // title if exists
+    if (activity.data.title && activity.data.title.toLowerCase().indexOf(lowerTerm) !== -1) {
+      return true;
+    }
+    // subtype @todo
+
+    return false;
   }
 
   // on selected phase change, select all activities.
