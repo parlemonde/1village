@@ -52,8 +52,15 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
   );
 
   React.useEffect(() => {
-    if (user === null && router.pathname !== '/login' && router.pathname !== '/sign-up' && router.pathname !== '/') {
-      router.push('/login');
+    if (
+      user === null &&
+      router.pathname !== '/login' &&
+      router.pathname !== '/sign-up' &&
+      router.pathname !== '/' &&
+      router.pathname !== '/reset-password' &&
+      router.pathname !== '/update-password'
+    ) {
+      router.push('/');
     }
   }, [user, router]);
 
@@ -65,6 +72,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
    * @param remember
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
+  //reset-password
   const login = React.useCallback(
     async (username: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({

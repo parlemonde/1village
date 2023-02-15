@@ -450,7 +450,15 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   // update user
   const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
+
   await AppDataSource.getRepository(User).save(user);
+
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+  await sendMail(Email.RESET_PASSWORD_EMAIL, data.email, {
+    url: frontUrl,
+    email: user.email,
+    verificationHash: temporaryPassword,
+  });
 
   res.sendJSON({ success: true });
 });
@@ -458,17 +466,17 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
 // --- Update pwd. ---
 type UpdateData = {
   email: string;
-  verifyToken: string;
+  verificationHash: string;
   password: string;
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdateData> = {
   type: 'object',
   properties: {
     email: { type: 'string', format: 'email' },
-    verifyToken: { type: 'string' },
+    verificationHash: { type: 'string' },
     password: { type: 'string' },
   },
-  required: ['email', 'verifyToken', 'password'],
+  required: ['email', 'verificationHash', 'password'],
   additionalProperties: false,
 };
 const updateUserValidator = ajv.compile(UPDATE_SCHEMA);
@@ -495,7 +503,7 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
 
   let isverifyTokenCorrect: boolean = false;
   try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash);
   } catch (e) {
     logger.error(JSON.stringify(e));
   }

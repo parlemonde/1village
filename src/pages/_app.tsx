@@ -137,7 +137,12 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                           </div>
                         </div>
                       </div>
-                    ) : user !== null && router.pathname !== '/login' && router.pathname !== '/sign-up' && router.pathname !== '/404' ? (
+                    ) : user !== null &&
+                      router.pathname !== '/login' &&
+                      router.pathname !== '/sign-up' &&
+                      router.pathname !== '/reset-password' &&
+                      router.pathname !== '/update-password' &&
+                      router.pathname !== '/404' ? (
                       <div className="app-container">
                         <Header />
                         <Component {...pageProps} />

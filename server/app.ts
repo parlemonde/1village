@@ -10,7 +10,6 @@ import path from 'path';
 
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';
-import { Email, sendMail } from './emails';
 import { UserType } from './entities/user';
 import { authenticate } from './middlewares/authenticate';
 import { crsfProtection } from './middlewares/csrfCheck';
@@ -118,7 +117,14 @@ export async function getApp() {
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
-      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up') {
+      if (
+        req.user === undefined &&
+        req.path !== '/' &&
+        req.path !== '/sign-up' &&
+        req.path !== '/login' &&
+        req.path !== '/reset-password' &&
+        req.path !== '/update-password'
+      ) {
         res.redirect('/');
         return;
       }

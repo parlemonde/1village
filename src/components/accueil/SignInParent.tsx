@@ -162,6 +162,21 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
           >
             Créer un compte
           </Link>
+          <div>
+            <Link
+              component="button"
+              variant="h3"
+              onClick={() => {
+                router.push('/reset-password');
+              }}
+              sx={{
+                fontSize: '0.875rem',
+                mt: 2,
+              }}
+            >
+              Mot de passe oublié
+            </Link>
+          </div>
         </div>
       </KeepRatio>
     </>

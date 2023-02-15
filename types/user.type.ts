@@ -64,6 +64,13 @@ export type UserForm = {
   hasAcceptedNewsletter: boolean;
   language: string | undefined;
 };
+
+export type UserUpdatePassword = {
+  email: string;
+  password: string;
+  verificationHash: string;
+  passwordConfirmation?: string;
+};
 export interface UserParamClassroom {
   classroom_avatar: string | null;
   classroom_delayedDays: number;
