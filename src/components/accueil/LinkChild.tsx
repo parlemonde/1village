@@ -1,14 +1,28 @@
 import { Button, TextField } from '@mui/material';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 
+import { UserContext } from 'src/contexts/userContext';
+
 export const LinkChild = () => {
+  const { linkStudent } = React.useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
   const hashedCodeRef = React.useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (hashedCodeRef.current === null) return;
     if (hashedCodeRef.current.value === '') return;
-
+    linkStudent(hashedCodeRef.current.value).then((response) => {
+      if (response.success === false) {
+        enqueueSnackbar("Le rattachement n'a pas fonctionné ! Veuillez renseigner un identifiant valide", {
+          variant: 'error',
+        });
+      }
+      enqueueSnackbar('Rattachement réalisé avec succès!', {
+        variant: 'success',
+      });
+    });
     hashedCodeRef.current.value = '';
   };
 
