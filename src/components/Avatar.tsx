@@ -40,7 +40,7 @@ type AvatarImgProps = {
   displayAsUser?: boolean;
   noToolTip?: boolean;
 };
-export const AvatarImg = ({
+export const AvatarImg: React.FC = ({
   size = 'large',
   src = '',
   user,
