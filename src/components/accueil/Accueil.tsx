@@ -3,9 +3,11 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { isGame } from 'src/activity-types/anyActivity';
+import { DEFI } from 'src/activity-types/defi.constants';
 import { ENIGME } from 'src/activity-types/enigme.constants';
 import { isMimic } from 'src/activity-types/game.constants';
 import { INDICE } from 'src/activity-types/indice.constants';
+import { REPORTAGE } from 'src/activity-types/reportage.constants';
 import { SYMBOL } from 'src/activity-types/symbol.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
@@ -73,6 +75,8 @@ export const Accueil = () => {
     ENIGME: ENIGME,
     INDICE: INDICE,
     SYMBOL: SYMBOL,
+    DEFI: DEFI,
+    REPORTAGE: REPORTAGE,
   };
   const getSubtype = (typeName: string, subTypeValue: number): string | undefined => {
     const result = Object.keys(SUBTYPE_MAPPER[typeName] || {}).find((key) => SUBTYPE_MAPPER[typeName][key] === subTypeValue);
