@@ -119,7 +119,8 @@ const updateStudentValidator = ajv.compile({
  * @returns {string} Route API JSON response
  */
 
-studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
+studentController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const data = req.body;
   if (!updateStudentValidator(data)) {
     sendInvalidDataError(updateStudentValidator);

@@ -115,7 +115,6 @@ type CreateUserData = {
   firstLogin?: number;
   hasAcceptedNewsletter?: boolean;
   language?: string;
-  hasAcceptedNewsletter?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -142,7 +141,6 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     firstLogin: { type: 'number', nullable: true },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
-    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
   },
   required: ['email'],
   additionalProperties: false,
@@ -172,11 +170,9 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
   user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
-  user.language = data.language || null;
-  user.countryCode = data.countryCode || '';
-  user.type = data.type || UserType.TEACHER;
-  user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
   user.language = data.language || 'français';
+  user.countryCode = data.countryCode || '';
+  user.type = data.type || UserType.TEACHER || UserType.FAMILY;
 
   user.accountRegistration = 4; // Block account on sign-up and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
@@ -256,7 +252,8 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -291,6 +288,8 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   if (data.position) {
     user.position = data.position;
   }
+  user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
+  user.language = valueOrDefault(data.language, user.language);
   await AppDataSource.getRepository(User).save(user);
   res.sendJSON(user);
 });
@@ -310,7 +309,8 @@ const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
   additionalProperties: false,
 };
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
-userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id/password' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).createQueryBuilder().addSelect('User.passwordHash').where('User.id = :id', { id }).getOne();
   const isSelfProfile = req.user && req.user.id === id;
@@ -342,7 +342,8 @@ userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async 
 });
 
 // --- Delete an user. ---
-userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.delete({ path: '/:id' }, async (req: Request, res: Response) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;

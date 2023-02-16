@@ -50,6 +50,11 @@ export class User implements UserInterface {
 
   @Column({ type: 'varchar', length: 400, nullable: true, default: null })
   public displayName: string | null;
+  @Column({ type: 'boolean', default: false })
+  public hasAcceptedNewsletter: boolean;
+
+  @Column({ type: 'varchar', length: 400, default: 'français' })
+  public language: string;
 
   @Column({ default: 0 })
   public accountRegistration: number; // 0 to 3 -> Ok, 4 -> Account blocked, 10 -> Account use PLM SSO
@@ -108,12 +113,6 @@ export class User implements UserInterface {
   }
 
   public position: { lat: number; lng: number };
-
-  @Column({ type: 'boolean', default: false })
-  public hasAcceptedNewsletter: boolean;
-
-  @Column({ type: 'varchar', length: 400, default: 'français' })
-  public language: string;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];

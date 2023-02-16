@@ -34,7 +34,7 @@ const Presentation = () => {
     confirmNew: '',
     current: '',
   });
-  const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = React.useState(true);
+  // const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = React.useState(false);
   const [language, setLanguage] = React.useState('');
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
@@ -46,13 +46,15 @@ const Presentation = () => {
     pwdConfirm: false,
   });
 
-  if (!user || !newUser) {
-    return <div></div>;
-  }
+  // if (!user || !newUser) {
+  //   return <div></div>;
+  // }
   // checks Profil Parent
 
   // checks Profil Teacher
   const checkEmailAndPseudo = async () => {
+    if (!newUser) return;
+    if (!user) return;
     const pseudoValid = await isPseudoValid(newUser.pseudo, user.pseudo);
     setErrors((e) => ({
       ...e,
@@ -69,6 +71,8 @@ const Presentation = () => {
   };
 
   const updateUser = async () => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const updatedValues = {
       school: newUser.school,
@@ -79,6 +83,8 @@ const Presentation = () => {
       pseudo: newUser.pseudo,
       email: newUser.email,
       displayName: newUser.displayName,
+      hasAcceptedNewsletter: newUser.hasAcceptedNewsletter,
+      language: newUser.language,
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -99,6 +105,8 @@ const Presentation = () => {
     setIsLoading(false);
   };
   const updateAvatar = async (avatar: string) => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -121,6 +129,8 @@ const Presentation = () => {
     setIsLoading(false);
   };
   const updatePwd = async () => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -143,7 +153,59 @@ const Presentation = () => {
     setIsLoading(false);
   };
 
+  const updateCheckBox = async (checked: boolean) => {
+    if (!newUser) return;
+    if (!user) return;
+    setIsLoading(true);
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: {
+        hasAcceptedNewsletter: checked,
+      },
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...user, hasAcceptedNewsletter: checked });
+      enqueueSnackbar('Choix mis à jour avec succès !', {
+        variant: 'success',
+      });
+    }
+    setIsLoading(false);
+  };
+
+  const updateLang = async (language: string) => {
+    if (!newUser) return;
+    if (!user) return;
+    setIsLoading(true);
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: {
+        language,
+      },
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...user, language });
+      enqueueSnackbar('Choix mis à jour avec succès !', {
+        variant: 'success',
+      });
+    }
+    setIsLoading(false);
+  };
+
   const deleteAccount = async () => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const response = await axiosLoggedRequest({
       method: 'DELETE',
@@ -186,11 +248,10 @@ const Presentation = () => {
       setEditMode(newEditMode);
     };
 
-  // const handleLanguage = (event: SelectChangeEvent<string>) => {
-  //   const languageCode = (event.target as HTMLSelectElement).value;
-  //   const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
-  // };
-  // const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {};
+  if (!user || !newUser) {
+    return <div></div>;
+  }
+
   return (
     <Base>
       <h1>Paramètres du compte</h1>
@@ -359,10 +420,8 @@ const Presentation = () => {
             <label style={{ cursor: 'pointer' }}>
               <Checkbox
                 value={newUser.hasAcceptedNewsletter}
-                checked={newUser.hasAcceptedNewsletter === true}
-                onChange={() => {
-                  // setHasAcceptedNewsletter(!hasAcceptedNewsletter);
-                  setNewUser((u) => (!u ? u : { ...u, hasAcceptedNewsletter }));
+                onChange={(event) => {
+                  updateCheckBox(event.target.checked);
                 }}
               />
               <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
@@ -374,11 +433,14 @@ const Presentation = () => {
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
                   Choix de la langue de communication
                 </p>
-                <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
+                <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                   <InputLabel id="demo-simple-select">Choisir</InputLabel>
                   <Select
+                    value={newUser.language}
                     style={{ width: '100%', marginBottom: '1rem' }}
-                    // onChange={}
+                    onChange={(event) => {
+                      updateLang(event.target.value);
+                    }}
                     label="Langues"
                   >
                     {languages.map((language) => (
