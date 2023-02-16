@@ -386,7 +386,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
 
   let isverifyTokenCorrect: boolean = false;
 
-  if (user && user.verificationHash && data.verificationHash) {
+  if (user && user.verificationHash && data.verificationHash && user.isVerified) {
     try {
       /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
       isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
@@ -403,6 +403,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
   // save user
   user.accountRegistration = 0;
   user.verificationHash = '';
+  user.isVerified = true;
   await AppDataSource.getRepository(User).save(user);
 
   // login user
