@@ -3,7 +3,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { isGame } from 'src/activity-types/anyActivity';
+import { ENIGME } from 'src/activity-types/enigme.constants';
 import { isMimic } from 'src/activity-types/game.constants';
+import { INDICE } from 'src/activity-types/indice.constants';
+import { SYMBOL } from 'src/activity-types/symbol.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
@@ -15,6 +18,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 import type { Activity, AnyData } from 'types/activity.type';
+import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
@@ -60,13 +64,33 @@ export const Accueil = () => {
     return activitiesWithLastMimic;
   }
 
-  function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-    console.log(activitiesData);
-    console.log(filters.searchTerm);
+  const getType = (typeValue: number): string | undefined => {
+    const type = Object.keys(ActivityType).find((key) => ActivityType[key] === typeValue);
+    return type;
+  };
 
+  const SUBTYPE_MAPPER = {
+    ENIGME: ENIGME,
+    INDICE: INDICE,
+    SYMBOL: SYMBOL,
+  };
+  const getSubtype = (typeName: string, subTypeValue: number): string | undefined => {
+    const result = Object.keys(SUBTYPE_MAPPER[typeName] || {}).find((key) => SUBTYPE_MAPPER[typeName][key] === subTypeValue);
+    return result;
+  };
+
+  function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
+    const activitiesFilteredBySearchTermOnType = activitiesData.filter((activity) => {
+      const type = getType(activity.type);
+      const subType = getSubtype(type, activity.subType);
+      return subType?.toLowerCase().indexOf(filters.searchTerm.toLowerCase()) >= 0;
+    });
     const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => filterActvityByTerm(activity, filters.searchTerm));
-    return activitiesFilteredBySearchTerm;
+    let agregatedFilters = [...activitiesFilteredBySearchTerm, ...activitiesFilteredBySearchTermOnType];
+    agregatedFilters = [...new Set(agregatedFilters)];
+    return agregatedFilters;
   }
+
   // to check a given activity contains a given term
   function filterActvityByTerm(activity, term) {
     // for cas insensivitive search
@@ -100,7 +124,7 @@ export const Accueil = () => {
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
       const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
-      const activitiesFilterBySearchTerm = filterActivitiesByTerm(activitiesWithLastMimic);
+      const activitiesFilterBySearchTerm = filters.searchTerm.length > 2 ? filterActivitiesByTerm(activitiesWithLastMimic) : activitiesWithLastMimic;
       return activitiesFilterBySearchTerm;
     } else {
       return [];
