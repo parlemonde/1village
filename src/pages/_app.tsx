@@ -142,6 +142,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       router.pathname !== '/sign-up' &&
                       router.pathname !== '/reset-password' &&
                       router.pathname !== '/update-password' &&
+                      router.pathname !== '/user-verified' &&
                       router.pathname !== '/404' ? (
                       <div className="app-container">
                         <Header />

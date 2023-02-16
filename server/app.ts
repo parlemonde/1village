@@ -122,6 +122,7 @@ export async function getApp() {
         req.path !== '/' &&
         req.path !== '/sign-up' &&
         req.path !== '/login' &&
+        req.path !== '/user-verified' &&
         req.path !== '/reset-password' &&
         req.path !== '/update-password'
       ) {

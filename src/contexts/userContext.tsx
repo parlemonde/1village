@@ -58,6 +58,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       router.pathname !== '/sign-up' &&
       router.pathname !== '/' &&
       router.pathname !== '/reset-password' &&
+      router.pathname !== '/user-verified' &&
       router.pathname !== '/update-password'
     ) {
       router.push('/');

@@ -11,7 +11,7 @@ import Logo from 'src/svg/logo_1village_famille.svg';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import type { UserUpdatePassword } from 'types/user.type';
 
-const SignUpForm = () => {
+const UpdatePassword = () => {
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
   const [isConfirmationPasswordTouched, setIsConfirmationPasswordTouched] = useState(false);
   const [password, setPassword] = useState<string>('');
@@ -231,4 +231,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default UpdatePassword;

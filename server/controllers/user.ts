@@ -386,7 +386,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
 
   let isverifyTokenCorrect: boolean = false;
 
-  if (user && user.verificationHash && data.verificationHash && user.isVerified) {
+  if (user && user.verificationHash && data.verificationHash && !user.isVerified) {
     try {
       /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
       isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
@@ -394,10 +394,10 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
       logger.error(JSON.stringify(e));
     }
     if (!isverifyTokenCorrect) {
-      throw new AppError('Invalid verify token1', ErrorCode.INVALID_PASSWORD);
+      throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
     }
   } else {
-    throw new AppError('Invalid verify token2', ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
@@ -416,7 +416,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
     sameSite: 'strict',
   });
   delete user.verificationHash;
-  res.redirect('/');
+  res.redirect('/user-verified');
 });
 
 // --- Reset pwd. ---

@@ -3,31 +3,53 @@ import { TableColumn } from 'typeorm';
 
 export class AlterUserTable1675763659256 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.addColumns('user', [
-      new TableColumn({
-        name: 'firstname',
+    const user = 'user';
+    const firstname = 'firstname';
+    const lastname = 'lastname';
+    const language = 'language';
+    const hasAcceptedNewsletter = 'hasAcceptedNewsletter';
+    const isVerified = 'isVerified';
+    const table = await queryRunner.getTable(user);
+
+    const columnsToAdd = [
+      {
+        name: firstname,
         type: 'varchar',
         length: '50',
         default: '""',
-      }),
-      new TableColumn({
-        name: 'lastname',
+      },
+      {
+        name: lastname,
         type: 'varchar',
         length: '100',
         default: '""',
-      }),
-      new TableColumn({
-        name: 'language',
+      },
+      {
+        name: language,
         type: 'varchar',
         length: '400',
         default: '""',
-      }),
-      new TableColumn({
-        name: 'hasAcceptedNewsletter',
+      },
+      {
+        name: hasAcceptedNewsletter,
         type: 'tinyint',
         default: '0',
-      }),
-    ]);
+      },
+      {
+        name: isVerified,
+        type: 'boolean',
+        default: false,
+      },
+    ];
+
+    if (table) {
+      for (const columnToAdd of columnsToAdd) {
+        const column = table.columns.find((c) => c.name === columnToAdd.name);
+        if (!column) {
+          await queryRunner.addColumn(user, new TableColumn(columnToAdd));
+        }
+      }
+    }
 
     await queryRunner.addColumn(
       'user',
@@ -60,7 +82,7 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropColumns('user', ['firstname', 'lastname', 'language', 'hasAcceptedNewsletter']);
+    await queryRunner.dropColumns('user', ['firstname', 'lastname', 'language', 'hasAcceptedNewsletter', 'isVerified']);
     // Map the tinyint values to the old enum values
     const mapping = {
       3: '0', // TEACHER = 3
