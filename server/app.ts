@@ -120,7 +120,7 @@ export async function getApp() {
       if (
         req.user === undefined &&
         req.path !== '/' &&
-        req.path !== '/sign-up' &&
+        req.path !== '/inscription' &&
         req.path !== '/login' &&
         req.path !== '/user-verified' &&
         req.path !== '/reset-password' &&

@@ -55,7 +55,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     if (
       user === null &&
       router.pathname !== '/login' &&
-      router.pathname !== '/sign-up' &&
+      router.pathname !== '/inscription' &&
       router.pathname !== '/' &&
       router.pathname !== '/reset-password' &&
       router.pathname !== '/user-verified' &&

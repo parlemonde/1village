@@ -13,7 +13,7 @@ import Logo from 'src/svg/logo_1village_famille.svg';
 import { UserType } from 'types/user.type';
 import type { UserForm } from 'types/user.type';
 
-const SignUpForm = () => {
+const Inscription = () => {
   const [email, setEmail] = useState<string>('');
   const [firstname, setFirstname] = useState<string>('');
   const [isFirstnameValid, setIsFirstnameValid] = useState<boolean>(true);
@@ -358,4 +358,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default Inscription;

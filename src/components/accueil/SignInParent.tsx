@@ -153,7 +153,7 @@ export const SignInParent = ({ page, setPage }: SetPageProps) => {
             component="button"
             variant="h3"
             onClick={() => {
-              router.push('/sign-up');
+              router.push('/inscription');
             }}
             sx={{
               fontSize: '0.875rem',

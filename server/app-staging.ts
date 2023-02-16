@@ -78,7 +78,7 @@ export async function getStagingApp() {
         }
       }
 
-      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up') {
+      if (req.user === undefined && req.path !== '/' && req.path !== '/inscription') {
         res.redirect('/');
         return;
       }
