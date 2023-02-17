@@ -15,7 +15,7 @@ const errorMessages = {
   1: 'Identifiant invalides',
 };
 
-export const SignInParent = () => {
+const SignInParent = () => {
   const router = useRouter();
   const { login } = React.useContext(UserContext);
   const [showPassword, setShowPassword] = React.useState(false);
@@ -190,3 +190,5 @@ export const SignInParent = () => {
     </>
   );
 };
+
+export default SignInParent;
