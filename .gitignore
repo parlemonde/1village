@@ -64,4 +64,10 @@ test.js
 test.html
 docker-compose.build.yml
 docker-compose.bdd.yml
+<<<<<<< HEAD
 *.http
+=======
+
+*.http
+
+>>>>>>> 4f088003a6705dd30114f34891cbb9a50939a814
