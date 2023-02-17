@@ -140,10 +140,39 @@ export const useUserRequests = () => {
     [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
+  const verifyUser = React.useCallback(
+    async (email: string) => {
+      const response = await axiosLoggedRequest({
+        method: 'POST',
+        url: '/users/resend-verification-email',
+        data: {
+          email: email,
+        },
+      });
+      if (response.data.message) {
+        if (response.data.message.includes('Bad request')) {
+          enqueueSnackbar('Une erreur est survenue...', {
+            variant: 'error',
+          });
+          return Promise.reject(new Error('Email already exists'));
+        }
+
+        return null;
+      }
+      enqueueSnackbar('Email envoyé avec succès', {
+        variant: 'success',
+      });
+      queryClient.invalidateQueries('users');
+      return response.data as User;
+    },
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+  );
+
   return {
     addUser,
     editUser,
     editUserPassword,
     deleteUser,
+    verifyUser,
   };
 };

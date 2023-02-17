@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -56,6 +56,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     logger.error(JSON.stringify(e));
   }
 
+  if (user.type === UserType.FAMILY) {
+    if (user.accountRegistration === 4 && user.isVerified === false) {
+      throw new AppError('Unverified account, Please verify your account', ErrorCode.UNVERIFIED_ACCOUNT);
+    }
+  }
   if (user.accountRegistration === 4) {
     throw new AppError('Account blocked. Please reset password', ErrorCode.ACCOUNT_BLOCKED);
   }

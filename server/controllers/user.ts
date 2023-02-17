@@ -419,6 +419,70 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
   res.redirect('/user-verified');
 });
 
+// === RESEND VERIFICATION EMAIL ===
+type ResendEmailData = {
+  email?: string;
+};
+
+const RESEND_EMAIL_SCHEMA: JSONSchemaType<ResendEmailData> = {
+  type: 'object',
+  properties: {
+    email: { type: 'string', format: 'email', nullable: true },
+  },
+  additionalProperties: false,
+};
+const resendEmailValidator = ajv.compile(RESEND_EMAIL_SCHEMA);
+
+userController.post({ path: '/resend-verification-email' }, async (req: Request, res: Response) => {
+  const data = req.body;
+
+  // Check if the email is valid
+  if (!resendEmailValidator(data)) {
+    sendInvalidDataError(resendEmailValidator);
+    return;
+  }
+
+  // Get the user by email
+  const user = await AppDataSource.getRepository(User).createQueryBuilder().where('User.email = :email', { email: data.email }).getOne();
+
+  if (!user) {
+    throw new AppError('Invalid data', ErrorCode.INVALID_DATA);
+  }
+
+  // If the user is already verified, return an error
+  if (user.isVerified) {
+    throw new AppError('User is already verified', ErrorCode.ALREADY_VERIFIED_ACCOUNT);
+  }
+
+  // Generate a new verification hash
+  const temporaryVerificationHash = generateTemporaryToken(20);
+
+  // Update the user with the new verification hash and save it
+  user.verificationHash = await argon2.hash(temporaryVerificationHash);
+  await AppDataSource.getRepository(User).save(user);
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+
+  // Send the verification email with the new hash
+  if (data.email) {
+    try {
+      sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+        url: frontUrl,
+        firstname: user.firstname,
+        email: data.email,
+        verificationHash: temporaryVerificationHash,
+      });
+
+      res.status(200).json({
+        message: 'Verification email sent successfully',
+      });
+    } catch (err) {
+      res.status(400).json({ message: 'Bad request' });
+    }
+  }
+  res.status(400);
+  // Return a success response
+});
+
 // --- Reset pwd. ---
 type ResetData = {
   email: string;
