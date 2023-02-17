@@ -4,7 +4,7 @@ import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
 import { UserContext } from 'src/contexts/userContext';
-import type { User } from 'types/user.type';
+import type { User, UserUpdatePassword } from 'types/user.type';
 
 export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
@@ -97,6 +97,29 @@ export const useUserRequests = () => {
     [axiosLoggedRequest, queryClient, enqueueSnackbar],
   );
 
+  const editUserPassword = React.useCallback(
+    async (updatedUser: Partial<UserUpdatePassword>) => {
+      const { email, password, verificationHash } = updatedUser;
+      const response = await axiosLoggedRequest({
+        method: 'POST',
+        url: `/users/update-password`,
+        data: { email: email, password: password, verificationHash: verificationHash },
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+        return null;
+      }
+      enqueueSnackbar('Mot de passe modifié avec succès!', {
+        variant: 'success',
+      });
+      queryClient.invalidateQueries('users');
+      return response.data as User;
+    },
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+  );
+
   const deleteUser = React.useCallback(
     async (id: number) => {
       const response = await axiosLoggedRequest({
@@ -120,6 +143,7 @@ export const useUserRequests = () => {
   return {
     addUser,
     editUser,
+    editUserPassword,
     deleteUser,
   };
 };

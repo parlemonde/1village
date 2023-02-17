@@ -20,11 +20,13 @@ export enum Email {
   INVALID_VILLAGE,
   INVALID_COUNTRY,
   CONFIRMATION_EMAIL,
+  RESET_PASSWORD_EMAIL,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
-  [Email.CONFIRMATION_EMAIL]: { firstname: string; email: string; verificationHash: string };
+  [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
+  [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
@@ -54,6 +56,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
       },
     };
   }
+
   if (email === Email.CONFIRMATION_EMAIL) {
     return {
       filenameText: 'confirmation_email.html',
@@ -64,6 +67,15 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
     };
   }
 
+  if (email === Email.RESET_PASSWORD_EMAIL) {
+    return {
+      filenameText: 'reset-password-email.html',
+      subject: 'Mot de passe oublié - 1Village',
+      args: {
+        ...options,
+      },
+    };
+  }
   return undefined;
 }
 
