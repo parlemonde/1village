@@ -121,7 +121,8 @@ export async function getApp() {
         req.user === undefined &&
         req.path !== '/' &&
         req.path !== '/inscription' &&
-        req.path !== '/login' &&
+        req.path !== '/connexion' &&
+        req.path !== '/professeur' &&
         req.path !== '/user-verified' &&
         req.path !== '/reset-password' &&
         req.path !== '/update-password'

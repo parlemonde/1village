@@ -68,9 +68,23 @@ const ResetPassword: React.FunctionComponent = () => {
             maxWidth: '1200px',
             borderRadius: '10px',
             marginBottom: '2rem',
+            alignItems: 'center',
           }}
         >
-          <Logo style={{ width: '11rem', height: 'auto', margin: '10px 0 5px 10px' }} />
+          <Link
+            component="button"
+            variant="h3"
+            onClick={() => {
+              router.push('/');
+            }}
+            sx={{
+              placeSelf: 'flex-start',
+              marginRight: '1rem',
+              fontSize: '0.875rem',
+            }}
+          >
+            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
+          </Link>
           <h1 style={{ placeSelf: 'center' }}>Mot de passe oublié</h1>
           <Link
             component="button"
@@ -81,12 +95,13 @@ const ResetPassword: React.FunctionComponent = () => {
             sx={{
               marginRight: '1rem',
               fontSize: '0.875rem',
+              textAlign: 'end',
             }}
           >
             <ArrowBack /> Retour à la page de connexion
           </Link>
         </div>
-        <KeepRatio ratio={0.55} width="95%" maxWidth="1200px" minHeight="600px" className="register__container">
+        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="register__container">
           <div
             className="text-center"
             style={{

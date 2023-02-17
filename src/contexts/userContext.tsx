@@ -54,11 +54,12 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
   React.useEffect(() => {
     if (
       user === null &&
-      router.pathname !== '/login' &&
-      router.pathname !== '/inscription' &&
       router.pathname !== '/' &&
-      router.pathname !== '/reset-password' &&
+      router.pathname !== '/inscription' &&
+      router.pathname !== '/connexion' &&
+      router.pathname !== '/professeur' &&
       router.pathname !== '/user-verified' &&
+      router.pathname !== '/reset-password' &&
       router.pathname !== '/update-password'
     ) {
       router.push('/');

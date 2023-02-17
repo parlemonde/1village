@@ -117,10 +117,9 @@ const UpdatePassword = () => {
             maxWidth: '1200px',
             borderRadius: '10px',
             marginBottom: '2rem',
+            alignItems: 'center',
           }}
         >
-          <Logo style={{ width: '11rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          <h1 style={{ placeSelf: 'center' }}>Modifier mot de passe</h1>
           <Link
             component="button"
             variant="h3"
@@ -128,9 +127,24 @@ const UpdatePassword = () => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'center end',
+              placeSelf: 'flex-start',
               marginRight: '1rem',
               fontSize: '0.875rem',
+            }}
+          >
+            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
+          </Link>
+          <h1 style={{ placeSelf: 'center' }}>Mot de passe oublié</h1>
+          <Link
+            component="button"
+            variant="h3"
+            onClick={() => {
+              router.push('/');
+            }}
+            sx={{
+              marginRight: '1rem',
+              fontSize: '0.875rem',
+              textAlign: 'end',
             }}
           >
             <ArrowBack /> Retour à la page de connexion
