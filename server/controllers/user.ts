@@ -209,7 +209,7 @@ type EditUserData = {
   accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
-  hasAcceptedNewsletter?: boolean | false;
+  hasAcceptedNewsletter?: boolean;
   language?: string | null;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {

@@ -1,4 +1,3 @@
-import type { SelectChangeEvent } from '@mui/material';
 import { Alert, AlertTitle, Checkbox, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
@@ -28,6 +27,7 @@ const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
+  // const { isChecked } = React.useState();
   const { languages } = useLanguages();
   const [pwd, setPwd] = React.useState({
     new: '',
@@ -46,12 +46,8 @@ const Presentation = () => {
     pwdConfirm: false,
   });
 
-  // if (!user || !newUser) {
-  //   return <div></div>;
-  // }
-  // checks Profil Parent
+  const isChecked = { isChecked: newUser?.hasAcceptedNewsletter === true };
 
-  // checks Profil Teacher
   const checkEmailAndPseudo = async () => {
     if (!newUser) return;
     if (!user) return;
@@ -420,6 +416,7 @@ const Presentation = () => {
             <label style={{ cursor: 'pointer' }}>
               <Checkbox
                 value={newUser.hasAcceptedNewsletter}
+                checked={!isChecked}
                 onChange={(event) => {
                   updateCheckBox(event.target.checked);
                 }}
