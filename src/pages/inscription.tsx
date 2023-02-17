@@ -203,7 +203,7 @@ const Inscription = () => {
             component="button"
             variant="h3"
             onClick={() => {
-              router.push('/');
+              router.push('/connexion');
             }}
             sx={{
               marginRight: '1rem',

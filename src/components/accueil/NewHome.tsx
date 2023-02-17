@@ -68,7 +68,7 @@ export const NewHome = () => {
               <Home
                 style={{ width: '15rem', height: 'auto', margin: '74px auto 4px' }}
                 onClick={() => {
-                  router.push('/inscription');
+                  router.push('/connexion');
                 }}
               />
               <Button
@@ -76,7 +76,7 @@ export const NewHome = () => {
                 variant="outlined"
                 style={{ marginTop: '0.8rem' }}
                 onClick={() => {
-                  router.push('/inscription');
+                  router.push('/connexion');
                 }}
               >
                 1Village en famille
