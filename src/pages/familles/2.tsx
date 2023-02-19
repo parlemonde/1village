@@ -17,8 +17,7 @@ const ClassroomParamStep2 = () => {
   const firstnameRef = React.useRef<HTMLInputElement>(null);
   const lastnameRef = React.useRef<HTMLInputElement>(null);
 
-  //TODO: delete input after submit
-  //TODO: issu with the button delete, find the student
+  //TODO: must be unique student 
 
   const handleChange = () => {
     if (firstnameRef.current === null || lastnameRef.current === null) return;

@@ -18,6 +18,7 @@ const Communication = () => {
     router.push('/familles/4');
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [btndisabled, setBtndisabled] = React.useState(true);
 
   const { students } = React.useContext(ClassroomContext);
   const [textValue, setTextValue] = useState(
@@ -139,7 +140,7 @@ const Communication = () => {
           >
             <div>Votre message doit contenir l&apos;identifiant enfant suivant: %identifiant</div>
           </Modal>
-          <StepsButton prev="/familles/2" next={onNext} />
+          <StepsButton prev="/familles/2" next={(disabled = { btndisabled })} />
         </div>
       </div>
     </Base>
