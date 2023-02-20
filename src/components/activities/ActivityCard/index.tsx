@@ -31,6 +31,7 @@ import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
+import { isEnigme, isReaction } from 'src/activity-types/anyActivity';
 
 const CardTypeMapper = {
   [ActivityType.MASCOTTE]: MascotteCard,
