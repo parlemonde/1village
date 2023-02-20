@@ -61,9 +61,8 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       router.pathname !== '/user-verified' &&
       router.pathname !== '/reset-password' &&
       router.pathname !== '/update-password'
-    ) {
+    )
       router.push('/');
-    }
   }, [user, router]);
 
   /**
