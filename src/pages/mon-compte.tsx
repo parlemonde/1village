@@ -27,7 +27,6 @@ const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
-  // const { isChecked } = React.useState();
   const { languages } = useLanguages();
   const [pwd, setPwd] = React.useState({
     new: '',
@@ -45,8 +44,6 @@ const Presentation = () => {
     pwd: false,
     pwdConfirm: false,
   });
-
-  const isChecked = { isChecked: newUser?.hasAcceptedNewsletter === true };
 
   const checkEmailAndPseudo = async () => {
     if (!newUser) return;
@@ -416,7 +413,7 @@ const Presentation = () => {
             <label style={{ cursor: 'pointer' }}>
               <Checkbox
                 value={newUser.hasAcceptedNewsletter}
-                checked={!isChecked}
+                checked={user !== null && user.hasAcceptedNewsletter}
                 onChange={(event) => {
                   updateCheckBox(event.target.checked);
                 }}
