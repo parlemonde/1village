@@ -19,7 +19,11 @@ import { Controller } from './controller';
 
 const userController = new Controller('/users');
 // --- Get all users. ---
-userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.get({ path: '' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
   let users: User[] = [];
   if (req.query.villageId) {
     users = await AppDataSource.getRepository(User).find({

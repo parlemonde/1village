@@ -52,6 +52,7 @@ export interface User {
   country: Country | null;
 
   mascotteId?: number;
+  hasStudentLinked: boolean;
 }
 
 export type UserForm = {
