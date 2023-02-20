@@ -120,10 +120,28 @@ const Inscription = () => {
       language: language,
     });
 
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+    if (
+      isCGUread &&
+      isEmailValid &&
+      isFirstnameValid &&
+      isPasswordMatch &&
+      isPasswordValid &&
+      isLastnameValid &&
+      firstname.length !== 0 &&
+      lastname.length !== 0
+    ) {
       setIsRegisterDataValid(true);
     }
-    if (!isCGUread || !isEmailValid || !isFirstnameValid || !isPasswordMatch || !isPasswordValid || !isLastnameValid) {
+    if (
+      !isCGUread ||
+      !isEmailValid ||
+      !isFirstnameValid ||
+      !isPasswordMatch ||
+      !isPasswordValid ||
+      !isLastnameValid ||
+      firstname.length === 0 ||
+      lastname.length === 0
+    ) {
       setIsRegisterDataValid(false);
     }
   }, [
