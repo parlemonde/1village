@@ -16,17 +16,27 @@ export type EcoDefiData = {
 };
 
 export type LanguageDefiData = {
+  themeName: string;
+  hasSelectedThemeNameOther: boolean;
   languageCode: string;
   language: string;
   languageIndex: number;
-  objectIndex: number;
+  themeIndex: number;
   defiIndex: number;
+  hasSelectedDefiNameOther: boolean;
   explanationContentIndex: number;
+  defi?: string;
+};
+
+export type FreeDefiData = {
+  themeName: string;
+  defiIndex: number;
   defi?: string;
 };
 
 export type CookingDefiActivity = Activity<CookingDefiData>;
 export type EcoDefiActivity = Activity<EcoDefiData>;
 export type LanguageDefiActivity = Activity<LanguageDefiData>;
+export type FreeDefiActivity = Activity<FreeDefiData>;
 
-export type DefiActivity = CookingDefiActivity | EcoDefiActivity | LanguageDefiActivity;
+export type DefiActivity = CookingDefiActivity | EcoDefiActivity | LanguageDefiActivity | FreeDefiActivity;

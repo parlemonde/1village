@@ -65,6 +65,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     logger.error(JSON.stringify(e));
   }
 
+  if (user.type === UserType.FAMILY) {
+    if (user.accountRegistration === 4 && user.isVerified === false) {
+      throw new AppError('Unverified account, Please verify your account', ErrorCode.UNVERIFIED_ACCOUNT);
+    }
+  }
   if (user.accountRegistration === 4) {
     throw new AppError('Account blocked. Please reset password', ErrorCode.ACCOUNT_BLOCKED);
   }

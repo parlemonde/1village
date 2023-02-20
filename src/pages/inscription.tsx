@@ -1,10 +1,11 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, Checkbox, FormControl, IconButton, InputAdornment, InputLabel, Link, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Checkbox, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { KeepRatio } from '../components/KeepRatio';
+import LanguageFilter from 'src/components/LanguageFilter';
 import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
@@ -12,7 +13,7 @@ import Logo from 'src/svg/logo_1village_famille.svg';
 import { UserType } from 'types/user.type';
 import type { UserForm } from 'types/user.type';
 
-const SignUpForm = () => {
+const Inscription = () => {
   const [email, setEmail] = useState<string>('');
   const [firstname, setFirstname] = useState<string>('');
   const [isFirstnameValid, setIsFirstnameValid] = useState<boolean>(true);
@@ -28,8 +29,8 @@ const SignUpForm = () => {
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
   const [isCGUread, setIsCGUread] = useState<boolean>(false);
-  const [language, setLanguage] = useState('');
   const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = useState<boolean>(false);
+  const [language, setLanguage] = useState<string>('français');
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
@@ -41,14 +42,13 @@ const SignUpForm = () => {
   });
   const [isSubmitSuccessfull, setIsSubmitSuccessfull] = useState<boolean>(false);
   const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
-  const languages = useLanguages();
+  const { languages } = useLanguages();
 
   const { addUser } = useUserRequests();
   const router = useRouter();
 
   useEffect(() => {
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (password !== '') {
       passwordMessageRef.current = '';
@@ -119,10 +119,28 @@ const SignUpForm = () => {
       language: language,
     });
 
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+    if (
+      isCGUread &&
+      isEmailValid &&
+      isFirstnameValid &&
+      isPasswordMatch &&
+      isPasswordValid &&
+      isLastnameValid &&
+      firstname.length !== 0 &&
+      lastname.length !== 0
+    ) {
       setIsRegisterDataValid(true);
     }
-    if (!isCGUread || !isEmailValid || !isFirstnameValid || !isPasswordMatch || !isPasswordValid || !isLastnameValid) {
+    if (
+      !isCGUread ||
+      !isEmailValid ||
+      !isFirstnameValid ||
+      !isPasswordMatch ||
+      !isPasswordValid ||
+      !isLastnameValid ||
+      firstname.length === 0 ||
+      lastname.length === 0
+    ) {
       setIsRegisterDataValid(false);
     }
   }, [
@@ -147,13 +165,14 @@ const SignUpForm = () => {
     if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
       try {
         await addUser(newUser);
-        setIsSubmitSuccessfull(true);
-        setTimeout(() => {
-          router.push('/');
-        }, 10000);
       } catch (err) {
         setIsEmailUsed(true);
       }
+
+      setIsSubmitSuccessfull(true);
+      setTimeout(() => {
+        router.push('/');
+      }, 10000);
     }
   };
 
@@ -180,10 +199,9 @@ const SignUpForm = () => {
             maxWidth: '1200px',
             borderRadius: '10px',
             marginBottom: '2rem',
+            alignItems: 'center',
           }}
         >
-          <Logo style={{ width: '11rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          <h1 style={{ placeSelf: 'center' }}>Parent d&apos;élèves</h1>
           <Link
             component="button"
             variant="h3"
@@ -191,9 +209,24 @@ const SignUpForm = () => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'center end',
+              placeSelf: 'flex-start',
               marginRight: '1rem',
               fontSize: '0.875rem',
+            }}
+          >
+            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
+          </Link>
+          <h1 style={{ placeSelf: 'center' }}>Créer un compte</h1>
+          <Link
+            component="button"
+            variant="h3"
+            onClick={() => {
+              router.push('/connexion');
+            }}
+            sx={{
+              marginRight: '1rem',
+              fontSize: '0.875rem',
+              textAlign: 'end',
             }}
           >
             <ArrowBack /> Retour à la page de connexion
@@ -216,6 +249,9 @@ const SignUpForm = () => {
                     sx={{
                       width: '30ch',
                       mb: '1rem',
+                      '& .MuiAutocomplete-root': {
+                        backgroundColor: 'white',
+                      },
                     }}
                     onChange={(event) => {
                       setEmail(event.target.value);
@@ -232,6 +268,9 @@ const SignUpForm = () => {
                     sx={{
                       width: '30ch',
                       mb: '1rem',
+                      '& .MuiAutocomplete-root': {
+                        backgroundColor: 'white',
+                      },
                     }}
                     onChange={(event) => {
                       setFirstname(event.target.value);
@@ -306,22 +345,9 @@ const SignUpForm = () => {
                       setConfirmPassword(event.target.value);
                     }}
                   />
-                  <FormControl variant="outlined" className="full-width" style={{ width: '30ch' }}>
-                    <InputLabel id="demo-simple-select">Langue de préférence</InputLabel>
-                    <Select
-                      label="Choisir une langue préférée"
-                      onChange={(e) => {
-                        setLanguage(e.target.value as string);
-                      }}
-                      style={{ width: '95%', height: '85%', marginBottom: '1rem' }}
-                    >
-                      {languages.languages.map((language) => (
-                        <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
-                          {language.french}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+
+                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
+
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
                     <Checkbox
                       sx={{ margin: '0', padding: '0' }}
@@ -329,8 +355,17 @@ const SignUpForm = () => {
                         setIsCGUread(!isCGUread);
                       }}
                     />
-                    <div style={{ fontSize: 'x-small', margin: '0', padding: '0', textAlign: 'left' }}>
-                      Accepter les <u>conditions générales d&apos;utilisation</u>
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter les <u>conditions générales d&apos;utilisation **</u>
                     </div>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
@@ -340,7 +375,18 @@ const SignUpForm = () => {
                         setHasAcceptedNewsletter(!hasAcceptedNewsletter);
                       }}
                     />
-                    <div style={{ fontSize: 'x-small' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter de recevoir des nouvelles du projet 1Village
+                    </div>
                   </Box>
                   <div className="register__button">
                     <Button sx={{ paddingX: '3rem' }} type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
@@ -364,4 +410,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default Inscription;
