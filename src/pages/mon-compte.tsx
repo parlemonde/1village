@@ -17,8 +17,9 @@ import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { useLanguages } from 'src/services/useLanguages';
+import { useUserRequests } from 'src/services/useUsers';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
-import { getUserDisplayName, capitalize } from 'src/utils';
+import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
@@ -29,12 +30,12 @@ const Presentation = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
   const { languages } = useLanguages();
+  const { editUser } = useUserRequests();
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
     current: '',
   });
-  // const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = React.useState(false);
   const [language, setLanguage] = React.useState('');
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
@@ -245,6 +246,10 @@ const Presentation = () => {
   if (!user || !newUser) {
     return <div></div>;
   }
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    await editUser(newUser);
+  };
 
   return (
     <Base>
@@ -431,8 +436,14 @@ const Presentation = () => {
                   Choix de la langue de communication
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                  <InputLabel id="demo-simple-select">Choisir</InputLabel>
-                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
+                  {/* <InputLabel id="demo-simple-select">Choisir</InputLabel> */}
+                  <LanguageFilter
+                    languages={languages}
+                    language={language}
+                    setLanguage={setLanguage}
+                    sx={{ width: '30ch', mb: '1rem' }}
+                    // onChange={handleChange}
+                  />
                 </FormControl>
               </Grid>
             </Grid>

@@ -119,6 +119,7 @@ type CreateUserData = {
   firstLogin?: number;
   hasAcceptedNewsletter?: boolean;
   language?: string;
+  hasStudentLinked?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
@@ -145,6 +146,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     firstLogin: { type: 'number', nullable: true },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
+    hasStudentLinked: { type: 'boolean', nullable: true },
   },
   required: ['email'],
   additionalProperties: false,
@@ -175,6 +177,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.villageId = data.villageId || null;
   user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
   user.language = data.language || 'français';
+  user.hasStudentLinked = data.hasStudentLinked || false;
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
 
@@ -221,6 +224,7 @@ type EditUserData = {
   position?: { lat: number; lng: number };
   hasAcceptedNewsletter?: boolean;
   language?: string | null;
+  hasStudentLinked?: boolean;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
@@ -257,6 +261,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
+    hasStudentLinked: { type: 'boolean', nullable: true },
   },
   required: [],
   additionalProperties: false,
@@ -300,6 +305,7 @@ userController.put({ path: '/:id' }, async (req: Request, res: Response, next: N
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
+  user.hasStudentLinked = valueOrDefault(data.hasStudentLinked, user.hasStudentLinked);
   await AppDataSource.getRepository(User).save(user);
   res.sendJSON(user);
 });
