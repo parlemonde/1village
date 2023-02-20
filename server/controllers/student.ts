@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
 import { Student } from '../entities/student';
-import { UserType } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
@@ -86,13 +86,67 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   const studentCreated = await AppDataSource.getRepository(Student).save(student);
 
   //Insert of new student in table user_to_student
-  // await AppDataSource.createQueryBuilder()
-  //   .insert()
-  //   .into(UserToStudent)
-  //   .values([{ student: { id: studentCreated.id } }])
-  //   .execute();
+  await AppDataSource.createQueryBuilder()
+    .insert()
+    .into(UserToStudent)
+    .values([{ student: { id: studentCreated.id } }])
+    .execute();
 
   res.json(studentCreated);
+});
+
+type LinkStudentData = {
+  hashedCode: string;
+};
+
+const linkStudentValidator = ajv.compile({
+  type: 'object',
+  properties: {
+    hashedCode: { type: 'string', nullable: false },
+  },
+  required: ['hashedCode'],
+  additionalProperties: false,
+} as JSONSchemaType<LinkStudentData>);
+
+/**
+ * Student controller to link a student to a relative.
+ * ExpressMiddleware signature
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @returns {string} Route API JSON response
+ */
+studentController.post({ path: '/link-student', userType: UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
+  const data = req.body;
+  if (!linkStudentValidator(data)) {
+    sendInvalidDataError(linkStudentValidator);
+  }
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const student = await AppDataSource.getRepository(Student).findOne({
+    relations: {
+      classroom: { village: true },
+    },
+    where: { hashedCode: data.hashedCode },
+  });
+  if (!student) return next();
+
+  await AppDataSource.getRepository(UserToStudent)
+    .createQueryBuilder()
+    .update(UserToStudent)
+    .set({ user: { id: req.user.id } })
+    .where({ student: { id: student.id } })
+    .execute();
+
+  await AppDataSource.getRepository(User)
+    .createQueryBuilder()
+    .update(User)
+    .set({ villageId: student.classroom.village.id, hasStudentLinked: true })
+    .where('id = :id', { id: req.user.id })
+    .execute();
+
+  res.status(200).send('Link to child has been completed successfully');
 });
 
 //--- Update a student ---
@@ -149,6 +203,9 @@ studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
  */
 
 studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
   const id = parseInt(req.params.id, 10) || 0;
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (!student) return res.status(204).send();
@@ -162,6 +219,12 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
       .where({ student: { id: id } })
       .execute();
     await AppDataSource.getRepository(Student).delete({ id });
+    await AppDataSource.getRepository(User)
+      .createQueryBuilder()
+      .update(User)
+      .set({ villageId: undefined, hasStudentLinked: true })
+      .where('id = :id', { id: req.user.id })
+      .execute();
   }
 
   res.status(204).send();

@@ -214,7 +214,7 @@ activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req:
 });
 
 // --- Get draft activity for type and subtype  ---
-activityController.get({ path: '/draft', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.get({ path: '/draft' }, async (req: Request, res: Response, next: NextFunction) => {
   if (req.query.villageId === undefined || req.query.type === undefined) {
     next();
     return;

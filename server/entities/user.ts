@@ -115,6 +115,9 @@ export class User implements UserInterface {
   @Column({ type: 'boolean', default: false })
   public hasAcceptedNewsletter: boolean;
 
+  @Column({ type: 'boolean', default: false })
+  public hasStudentLinked: boolean;
+
   @Column({ type: 'varchar', length: 400, default: 'français' })
   public language: string;
 

@@ -9,6 +9,7 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
     const language = 'language';
     const hasAcceptedNewsletter = 'hasAcceptedNewsletter';
     const isVerified = 'isVerified';
+    const hasStudentLinked = 'hasStudentLinked';
     const table = await queryRunner.getTable(user);
 
     const columnsToAdd = [
@@ -40,6 +41,11 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
         type: 'boolean',
         default: false,
       },
+      {
+        name: hasStudentLinked,
+        type: 'boolean',
+        default: false,
+      },
     ];
 
     if (table) {
@@ -56,7 +62,6 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
       new TableColumn({
         name: 'newtype',
         type: 'tinyint',
-        // isNullable: true,
       }),
     );
 
@@ -82,7 +87,7 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropColumns('user', ['firstname', 'lastname', 'language', 'hasAcceptedNewsletter', 'isVerified']);
+    await queryRunner.dropColumns('user', ['firstname', 'lastname', 'language', 'hasAcceptedNewsletter', 'isVerified', 'hasStudentLinked']);
     // Map the tinyint values to the old enum values
     const mapping = {
       3: '0', // TEACHER = 3
