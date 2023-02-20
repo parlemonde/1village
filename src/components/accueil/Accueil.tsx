@@ -96,7 +96,7 @@ export const Accueil = () => {
   }
 
   // to check a given activity contains a given term
-  function filterActvityByTerm(activity, term) {
+  function filterActvityByTerm(activity: Activity, term: string) {
     // for cas insensivitive search
     const lowerTerm = term.toLowerCase();
     if (activity.content[0].value.toLowerCase().indexOf(lowerTerm) !== -1) {
