@@ -30,7 +30,7 @@ const Inscription = () => {
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
   const [isCGUread, setIsCGUread] = useState<boolean>(false);
   const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string | undefined>('français');
+  const [language, setLanguage] = useState<string>('français');
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
@@ -48,8 +48,7 @@ const Inscription = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (password !== '') {
       passwordMessageRef.current = '';
@@ -166,13 +165,14 @@ const Inscription = () => {
     if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
       try {
         await addUser(newUser);
-        setIsSubmitSuccessfull(true);
-        setTimeout(() => {
-          router.push('/');
-        }, 10000);
       } catch (err) {
         setIsEmailUsed(true);
       }
+
+      setIsSubmitSuccessfull(true);
+      setTimeout(() => {
+        router.push('/');
+      }, 10000);
     }
   };
 

@@ -52,6 +52,7 @@ export interface User {
   country: Country | null;
 
   mascotteId?: number;
+  hasStudentLinked: boolean;
 }
 
 export type UserForm = {
@@ -62,7 +63,7 @@ export type UserForm = {
   passwordConfirmation?: string;
   type: UserType.FAMILY;
   hasAcceptedNewsletter: boolean;
-  language: string | undefined;
+  language: string;
 };
 
 export type UserUpdatePassword = {

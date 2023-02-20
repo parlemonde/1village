@@ -117,7 +117,16 @@ export async function getApp() {
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
-      if (req.user === undefined && req.path !== '/') {
+      if (
+        req.user === undefined &&
+        req.path !== '/' &&
+        req.path !== '/inscription' &&
+        req.path !== '/connexion' &&
+        req.path !== '/professeur' &&
+        req.path !== '/user-verified' &&
+        req.path !== '/reset-password' &&
+        req.path !== '/update-password'
+      ) {
         res.redirect('/');
         return;
       }
@@ -127,7 +136,6 @@ export async function getApp() {
         (req.path === '/inscription' ||
           req.path === '/connexion' ||
           req.path === '/professeur' ||
-          req.path === '/user-verified' ||
           req.path === '/reset-password' ||
           req.path === '/update-password')
       ) {
