@@ -360,19 +360,21 @@ const Presentation = () => {
             Votre <strong>pseudo</strong> et votre <strong>email</strong> sont vos identifiants de connection.
           </Alert>
         )}
-        <PanelInput
-          value={newUser.pseudo}
-          defaultValue={''}
-          label="Pseudo de la classe :"
-          placeholder="Pseudo de la classe"
-          isEditMode={editMode === 1}
-          onChange={(pseudo) => {
-            setNewUser((u) => (!u ? u : { ...u, pseudo }));
-          }}
-          errorMsg="Pseudo indisponible"
-          hasError={errors.pseudo}
-          onBlur={checkEmailAndPseudo}
-        />
+        {user.type === UserType.TEACHER ? (
+          <PanelInput
+            value={newUser.pseudo}
+            defaultValue={''}
+            label="Pseudo de la classe :"
+            placeholder="Pseudo de la classe"
+            isEditMode={editMode === 1}
+            onChange={(pseudo) => {
+              setNewUser((u) => (!u ? u : { ...u, pseudo }));
+            }}
+            errorMsg="Pseudo indisponible"
+            hasError={errors.pseudo}
+            onBlur={checkEmailAndPseudo}
+          />
+        ) : null}
         <PanelInput
           value={newUser.email}
           defaultValue={''}
