@@ -28,7 +28,7 @@ export const LinkChild = () => {
     hashedCodeRef.current.value = '';
     setTimeout(() => {
       router.reload();
-    }, 5 * 1000);
+    }, 2 * 1000);
   };
 
   return (
