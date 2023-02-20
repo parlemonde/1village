@@ -92,6 +92,19 @@ export async function getStagingApp() {
         return;
       }
 
+      if (
+        req.user &&
+        (req.path === '/inscription' ||
+          req.path === '/connexion' ||
+          req.path === '/professeur' ||
+          req.path === '/user-verified' ||
+          req.path === '/reset-password' ||
+          req.path === '/update-password')
+      ) {
+        res.redirect('/');
+        return;
+      }
+
       if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type !== UserType.ADMIN)) {
         res.redirect('/');
         return;

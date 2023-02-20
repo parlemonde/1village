@@ -7,13 +7,9 @@ import React from 'react';
 import { KeepRatio } from '../components/KeepRatio';
 import { isRedirectValid } from '../components/accueil/NewHome';
 import { UserContext } from 'src/contexts/userContext';
+import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
-
-const errorMessages = {
-  0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
-  1: 'Identifiant invalides',
-};
 
 const SignInParent = () => {
   const router = useRouter();
@@ -25,6 +21,20 @@ const SignInParent = () => {
   const passwordRef = React.useRef<HTMLInputElement>(null);
   const rememberRef = React.useRef<HTMLInputElement>();
   const [errorCode, setErrorCode] = React.useState(-1);
+  const [isError, setIsError] = React.useState<boolean>(false);
+  const [isEmailError, setIsEmailError] = React.useState<boolean>(false);
+  const [isEmailSent, setIsEmailSent] = React.useState<boolean>(false);
+
+  const { verifyUser } = useUserRequests();
+
+  const errorMessages: {
+    [key: number]: string;
+  } = {
+    0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
+    1: 'Identifiant invalides',
+    3: 'Compte bloqué',
+    20: 'Compte non verifié - Veuillez consulter vos emails',
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,8 +45,10 @@ const SignInParent = () => {
       .then((response) => {
         if (response.success) {
           router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
+          setIsError(false);
         } else {
           setErrorCode(response.errorCode || 1);
+          setIsError(true);
         }
       })
       .catch((error) => {
@@ -92,13 +104,13 @@ const SignInParent = () => {
         <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
           <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
             <h2>Se connecter</h2>
-            <form onSubmit={handleSubmit} className="login__form">
+            <form onSubmit={handleSubmit} id="myForm" className="login__form">
               <TextField
                 variant="standard"
                 label="Adresse email"
                 placeholder="Entrez votre adresse email"
                 name="username"
-                error={errorCode === 1}
+                error={isError}
                 InputLabelProps={{ shrink: true }}
                 inputRef={emailRef}
                 onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
@@ -116,7 +128,7 @@ const SignInParent = () => {
                   type={showPassword ? 'text' : 'password'}
                   inputRef={passwordRef}
                   placeholder="Entrez votre mot de passe"
-                  error={errorCode === 1}
+                  error={isError}
                   onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
                   endAdornment={
                     <InputAdornment position="end">
@@ -127,8 +139,29 @@ const SignInParent = () => {
                   }
                 />
               </FormControl>
-              <small style={{ color: 'tomato', fontWeight: 'bold' }}>{errorCode === 1 ? errorMessages[1] : null}</small>
-              <div style={{ display: 'grid', gridTemplateColumns: 'max-content 1fr', alignItems: 'center' }}>
+              <small style={{ color: 'tomato', fontWeight: 'bold' }}>{isError ? errorMessages[errorCode] : null}</small>
+
+              <small
+                style={!isEmailSent ? { color: 'blue', textDecoration: 'underline' } : {}}
+                onClick={async () => {
+                  if (emailRef?.current?.value) {
+                    try {
+                      await verifyUser(emailRef?.current?.value);
+                      setIsEmailSent(true);
+                    } catch (err) {
+                      setIsEmailError(true);
+                      setIsEmailSent(false);
+                    }
+                  }
+                }}
+              >
+                {errorCode === 20 && !isEmailSent ? `Je n'ai pas reçu d'email : cliquer ici` : null}
+                {errorCode === 20 && isEmailSent ? `Email envoyé` : null}
+              </small>
+              {isEmailError && <small style={{ color: 'tomato', fontWeight: 'bold' }}>Email incorrect</small>}
+            </form>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ margin: 'auto', display: 'grid', gridTemplateColumns: 'max-content 1fr', alignItems: 'center' }}>
                 <FormControlLabel
                   label="Se souvenir de moi"
                   inputRef={rememberRef}
@@ -158,10 +191,11 @@ const SignInParent = () => {
                 </Link>
               </div>
 
-              <Button type="submit" color="primary" variant="outlined" style={{ marginTop: '0.8rem' }}>
+              <Button form="myForm" type="submit" color="primary" variant="outlined" style={{ marginTop: '0.8rem', margin: 'auto' }}>
                 Se connecter
               </Button>
-            </form>
+            </div>
+
             <Link
               component="button"
               variant="h3"

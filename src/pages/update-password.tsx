@@ -139,7 +139,7 @@ const UpdatePassword = () => {
             component="button"
             variant="h3"
             onClick={() => {
-              router.push('/');
+              router.push('/connexion');
             }}
             sx={{
               marginRight: '1rem',
@@ -150,8 +150,17 @@ const UpdatePassword = () => {
             <ArrowBack /> Retour à la page de connexion
           </Link>
         </div>
-        <KeepRatio ratio={0.55} width="95%" maxWidth="1200px" minHeight="600px" className="register__container">
-          <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
+        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="register__container">
+          <div
+            className="text-center"
+            style={{
+              margin: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'left', // Add this property to align the text to the left
+            }}
+          >
             {!isSubmitSuccessfull ? (
               <>
                 <h2>Définir un nouveau mot de passe</h2>
@@ -219,7 +228,7 @@ const UpdatePassword = () => {
 
                   <div className="register__button">
                     <Button
-                      sx={{ paddingX: '3rem' }}
+                      sx={{ paddingX: '3rem', marginBottom: '2rem' }}
                       type="submit"
                       color="primary"
                       variant="outlined"
