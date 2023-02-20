@@ -62,7 +62,14 @@ export type UserForm = {
   passwordConfirmation?: string;
   type: UserType.FAMILY;
   hasAcceptedNewsletter: boolean;
-  language: string;
+  language: string | undefined;
+};
+
+export type UserUpdatePassword = {
+  email: string;
+  password: string;
+  verificationHash: string;
+  passwordConfirmation?: string;
 };
 export interface UserParamClassroom {
   classroom_avatar: string | null;

@@ -78,7 +78,29 @@ export async function getStagingApp() {
         }
       }
 
-      if (req.user === undefined && req.path !== '/' && req.path !== '/sign-up') {
+      if (
+        req.user === undefined &&
+        req.path !== '/' &&
+        req.path !== '/inscription' &&
+        req.path !== '/connexion' &&
+        req.path !== '/professeur' &&
+        req.path !== '/user-verified' &&
+        req.path !== '/reset-password' &&
+        req.path !== '/update-password'
+      ) {
+        res.redirect('/');
+        return;
+      }
+
+      if (
+        req.user &&
+        (req.path === '/inscription' ||
+          req.path === '/connexion' ||
+          req.path === '/professeur' ||
+          req.path === '/user-verified' ||
+          req.path === '/reset-password' ||
+          req.path === '/update-password')
+      ) {
         res.redirect('/');
         return;
       }

@@ -174,14 +174,20 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
 
-  user.accountRegistration = 4; // Block account on sign-up and wait for user to verify its email.
+  user.accountRegistration = 4; // Block account on inscription and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
 
   // send confirmation email
   if (data.firstname) {
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, { firstname: data.firstname, email: data.email, verificationHash: temporaryPassword });
+    const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+    await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+      url: frontUrl,
+      firstname: data.firstname,
+      email: data.email,
+      verificationHash: temporaryPassword,
+    });
   }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
@@ -387,7 +393,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
 
   let isverifyTokenCorrect: boolean = false;
 
-  if (user && user.verificationHash && data.verificationHash) {
+  if (user && user.verificationHash && data.verificationHash && !user.isVerified) {
     try {
       /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
       isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
@@ -395,15 +401,16 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
       logger.error(JSON.stringify(e));
     }
     if (!isverifyTokenCorrect) {
-      throw new AppError('Invalid verify token1', ErrorCode.INVALID_PASSWORD);
+      throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
     }
   } else {
-    throw new AppError('Invalid verify token2', ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
   user.accountRegistration = 0;
   user.verificationHash = '';
+  user.isVerified = true;
   await AppDataSource.getRepository(User).save(user);
 
   // login user
@@ -416,7 +423,71 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
     sameSite: 'strict',
   });
   delete user.verificationHash;
-  res.redirect('/');
+  res.redirect('/user-verified');
+});
+
+// === RESEND VERIFICATION EMAIL ===
+type ResendEmailData = {
+  email?: string;
+};
+
+const RESEND_EMAIL_SCHEMA: JSONSchemaType<ResendEmailData> = {
+  type: 'object',
+  properties: {
+    email: { type: 'string', format: 'email', nullable: true },
+  },
+  additionalProperties: false,
+};
+const resendEmailValidator = ajv.compile(RESEND_EMAIL_SCHEMA);
+
+userController.post({ path: '/resend-verification-email' }, async (req: Request, res: Response) => {
+  const data = req.body;
+
+  // Check if the email is valid
+  if (!resendEmailValidator(data)) {
+    sendInvalidDataError(resendEmailValidator);
+    return;
+  }
+
+  // Get the user by email
+  const user = await AppDataSource.getRepository(User).createQueryBuilder().where('User.email = :email', { email: data.email }).getOne();
+
+  if (!user) {
+    throw new AppError('Invalid data', ErrorCode.INVALID_DATA);
+  }
+
+  // If the user is already verified, return an error
+  if (user.isVerified) {
+    throw new AppError('User is already verified', ErrorCode.ALREADY_VERIFIED_ACCOUNT);
+  }
+
+  // Generate a new verification hash
+  const temporaryVerificationHash = generateTemporaryToken(20);
+
+  // Update the user with the new verification hash and save it
+  user.verificationHash = await argon2.hash(temporaryVerificationHash);
+  await AppDataSource.getRepository(User).save(user);
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+
+  // Send the verification email with the new hash
+  if (data.email) {
+    try {
+      sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+        url: frontUrl,
+        firstname: user.firstname,
+        email: data.email,
+        verificationHash: temporaryVerificationHash,
+      });
+
+      res.status(200).json({
+        message: 'Verification email sent successfully',
+      });
+    } catch (err) {
+      res.status(400).json({ message: 'Bad request' });
+    }
+  }
+  res.status(400);
+  // Return a success response
 });
 
 // --- Reset pwd. ---
@@ -451,27 +522,33 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   // update user
   const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
+
   await AppDataSource.getRepository(User).save(user);
 
-  // send mail with verification password
-  // await sendMail(Email.RESET_PASSWORD, user.email, { resetCode: temporaryPassword }, req.body.languageCode || undefined);
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+  await sendMail(Email.RESET_PASSWORD_EMAIL, data.email, {
+    url: frontUrl,
+    email: user.email,
+    verificationHash: temporaryPassword,
+  });
+
   res.sendJSON({ success: true });
 });
 
 // --- Update pwd. ---
 type UpdateData = {
   email: string;
-  verifyToken: string;
+  verificationHash: string;
   password: string;
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdateData> = {
   type: 'object',
   properties: {
     email: { type: 'string', format: 'email' },
-    verifyToken: { type: 'string' },
+    verificationHash: { type: 'string' },
     password: { type: 'string' },
   },
-  required: ['email', 'verifyToken', 'password'],
+  required: ['email', 'verificationHash', 'password'],
   additionalProperties: false,
 };
 const updateUserValidator = ajv.compile(UPDATE_SCHEMA);
@@ -498,7 +575,7 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
 
   let isverifyTokenCorrect: boolean = false;
   try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash);
   } catch (e) {
     logger.error(JSON.stringify(e));
   }

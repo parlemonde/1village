@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 
 import type { ActivityViewProps } from './activity-view.types';
-import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageObject } from 'src/activity-types/defi.constants';
+import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageTheme } from 'src/activity-types/defi.constants';
 import type { DefiActivity } from 'src/activity-types/defi.types';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { LightBox } from 'src/components/lightbox/Lightbox';
@@ -20,7 +20,7 @@ export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) 
               : isEco(activity)
               ? ECO_ACTIONS[activity.data.type]
               : isLanguage(activity)
-              ? getLanguageObject(activity.data)
+              ? getLanguageTheme(activity.data)
               : null}
           </h3>
         </div>

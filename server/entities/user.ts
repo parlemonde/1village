@@ -65,6 +65,9 @@ export class User implements UserInterface {
   @Column({ type: 'varchar', length: 300, default: '', select: false })
   public verificationHash?: string;
 
+  @Column({ type: 'boolean', default: false })
+  public isVerified: boolean;
+
   @Column({ type: 'tinyint', default: 0 })
   public firstLogin: number;
 

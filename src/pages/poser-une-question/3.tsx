@@ -28,7 +28,6 @@ const Question3 = () => {
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-
   const content = React.useMemo(() => activity?.content?.filter((q) => q.value) ?? null, [activity]);
   const questionsCount = content?.length ?? 0;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -86,7 +85,8 @@ const Question3 = () => {
       return;
     }
     setIsLoading(true);
-    if (activity.id === 0) {
+    //This condition below may be useless because there is always a draft created with an id !
+    if (activity.id !== 0) {
       await Promise.all(content.map((question) => createQuestionActivity(question.value)));
       queryClient.invalidateQueries('activities');
     } else {
