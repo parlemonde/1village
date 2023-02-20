@@ -43,6 +43,6 @@ export class AlterActivityTable1675763496759 implements MigrationInterface {
     }
 
     await queryRunner.dropColumn(activity, isVisibleToParent);
-    await queryRunner.dropIndex('activity', 'userId');
+    await queryRunner.dropIndex('activity', indexActivity);
   }
 }

@@ -21,24 +21,15 @@ export class AlterUserTable1675763659256 implements MigrationInterface {
       },
       {
         name: lastname,
-      },
-      {
-        name: lastname,
         type: 'varchar',
         length: '100',
         default: '""',
       },
       {
         name: language,
-      },
-      {
-        name: language,
         type: 'varchar',
         length: '400',
         default: '""',
-      },
-      {
-        name: hasAcceptedNewsletter,
       },
       {
         name: hasAcceptedNewsletter,
