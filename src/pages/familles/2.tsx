@@ -17,7 +17,7 @@ const ClassroomParamStep2 = () => {
   const firstnameRef = React.useRef<HTMLInputElement>(null);
   const lastnameRef = React.useRef<HTMLInputElement>(null);
 
-  //TODO: must be unique student 
+  //TODO: must be unique student
 
   const handleChange = () => {
     if (firstnameRef.current === null || lastnameRef.current === null) return;

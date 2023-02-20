@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
 
-interface StepsButtonProps {
+export interface StepsButtonProps {
   prev?: string | (() => void);
   next?: string | (() => void);
 }

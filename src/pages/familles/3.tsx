@@ -1,5 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Tooltip } from '@mui/material';
+import next from 'next';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -18,7 +20,7 @@ const Communication = () => {
     router.push('/familles/4');
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [btndisabled, setBtndisabled] = React.useState(true);
+  // const [btndisabled, setBtndisabled] = React.useState(true);
 
   const { students } = React.useContext(ClassroomContext);
   const [textValue, setTextValue] = useState(
@@ -98,7 +100,7 @@ const Communication = () => {
         <BackButton href="/contenu-libre" />
         <Steps
           steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-          urls={['/familles/1', '/familles/2', '/familles/3', '/familles/4']}
+          urls={['/familles/1', '/familles/2', '/familles/3', 'familles/4']}
           activeStep={2}
         />
         <div className="width-900">
@@ -140,7 +142,29 @@ const Communication = () => {
           >
             <div>Votre message doit contenir l&apos;identifiant enfant suivant: %identifiant</div>
           </Modal>
-          <StepsButton prev="/familles/2" next={(disabled = { btndisabled })} />
+          <StepsButton
+            prev="/familles/2"
+            next={
+              onNext
+              // ((disabled = { btndisabled  }))
+            }
+          />
+          {/* {next !== undefined &&
+            (typeof next === 'string' ? (
+              <Link href={next} passHref>
+                <Button component="a" href={next} variant="outlined" style={{ float: 'right' }} color="primary">
+                  Étape suivante
+                  <ChevronRightIcon />
+                </Button>
+              </Link>
+            ) : (
+              <Tooltip title="Bientôt disponible">
+                <Button variant="outlined" style={{ float: 'right' }} color="primary">
+                  Étape suivante
+                  <ChevronRightIcon />
+                </Button>
+              </Tooltip>
+            ))} */}
         </div>
       </div>
     </Base>
