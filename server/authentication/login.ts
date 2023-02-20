@@ -2,7 +2,8 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
+import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -38,7 +39,6 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     sendInvalidDataError(loginValidator);
     return;
   }
-
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.passwordHash')
@@ -48,7 +48,16 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   if (user === null) {
     throw new AppError('Invalid username', ErrorCode.INVALID_USERNAME);
   }
-
+  //Here we will change the logic to test if user parent is connected to a student or not during registration
+  let hasStudentLinked: boolean = false;
+  if (user.type === UserType.FAMILY) {
+    hasStudentLinked =
+      (await AppDataSource.getRepository(UserToStudent)
+        .createQueryBuilder('userToStudent')
+        .select('userToStudent.userId')
+        .where('userToStudent.userId = :userId', { userId: user.id })
+        .getCount()) > 0;
+  }
   let isPasswordCorrect: boolean = false;
   try {
     isPasswordCorrect = await argon2.verify(user.passwordHash || '', data.password);
@@ -91,5 +100,5 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     });
   }
   delete user.passwordHash;
-  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken });
+  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken, hasStudentLinked: hasStudentLinked });
 }

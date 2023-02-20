@@ -1,10 +1,12 @@
 import { Button, TextField } from '@mui/material';
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 
 export const LinkChild = () => {
+  const router = useRouter();
   const { linkStudent } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const hashedCodeRef = React.useRef<HTMLInputElement>(null);
@@ -24,6 +26,9 @@ export const LinkChild = () => {
       });
     });
     hashedCodeRef.current.value = '';
+    setTimeout(() => {
+      router.reload();
+    }, 5 * 1000);
   };
 
   return (

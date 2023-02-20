@@ -20,16 +20,17 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediator = user !== null && user.type <= UserType.MEDIATOR;
+  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
   const filterCountries = React.useMemo(
     () =>
-      !village || (selectedPhase === 1 && !isMediator)
+      !village || (selectedPhase === 1 && !isMediatorOrFamily)
         ? user && user.country !== null
           ? [user.country?.isoCode.toUpperCase()]
           : []
         : village.countries.map((c) => c.isoCode),
-    [selectedPhase, village, user, isMediator],
+    [selectedPhase, village, user, isMediatorOrFamily],
   );
+
   //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
@@ -82,20 +83,17 @@ export const Accueil = () => {
     }
   }, [activities]);
 
-  if (!village) {
-    return user && user.type === UserType.FAMILY ? (
+  if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
+    return (
       <Base>
         <LinkChild />
       </Base>
-    ) : (
-      <Base showSubHeader></Base>
     );
   }
 
   return (
     <Base showSubHeader>
-      <LinkChild />
-      {selectedPhase <= village.activePhase ? (
+      {village && selectedPhase <= village.activePhase ? (
         <>
           <KeepRatio ratio={1 / 3}>
             <WorldMap />
@@ -114,7 +112,7 @@ export const Accueil = () => {
           </h1>
           <PelicoReflechit style={{ width: '50%', height: 'auto', maxWidth: '360px' }} />
           <Button
-            onClick={() => setSelectedPhase(village.activePhase)}
+            onClick={() => village && setSelectedPhase(village.activePhase)}
             color="primary"
             variant="outlined"
             className="navigation__button"

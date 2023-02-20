@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
 import { Student } from '../entities/student';
-import { UserType } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
@@ -124,7 +124,12 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const student = await AppDataSource.getRepository(Student).findOne({ where: { hashedCode: data.hashedCode } });
+  const student = await AppDataSource.getRepository(Student).findOne({
+    relations: {
+      classroom: { village: true },
+    },
+    where: { hashedCode: data.hashedCode },
+  });
   if (!student) return next();
 
   await AppDataSource.getRepository(UserToStudent)
@@ -132,6 +137,13 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
     .update(UserToStudent)
     .set({ user: { id: req.user.id } })
     .where({ student: { id: student.id } })
+    .execute();
+
+  await AppDataSource.getRepository(User)
+    .createQueryBuilder()
+    .update(User)
+    .set({ villageId: student.classroom.village.id, hasStudentLinked: true })
+    .where('id = :id', { id: req.user.id })
     .execute();
 
   res.status(200).send('Link to child has been completed successfully');
@@ -191,6 +203,9 @@ studentController.put({ path: '/:id', userType: UserType.TEACHER || UserType.FAM
  */
 
 studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
   const id = parseInt(req.params.id, 10) || 0;
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (!student) return res.status(204).send();
@@ -204,6 +219,12 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
       .where({ student: { id: id } })
       .execute();
     await AppDataSource.getRepository(Student).delete({ id });
+    await AppDataSource.getRepository(User)
+      .createQueryBuilder()
+      .update(User)
+      .set({ villageId: undefined, hasStudentLinked: true })
+      .where('id = :id', { id: req.user.id })
+      .execute();
   }
 
   res.status(204).send();
