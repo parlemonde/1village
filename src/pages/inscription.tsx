@@ -355,8 +355,17 @@ const Inscription = () => {
                         setIsCGUread(!isCGUread);
                       }}
                     />
-                    <div style={{ fontSize: 'x-small', margin: '0', padding: '0', textAlign: 'left' }}>
-                      Accepter les <u>conditions générales d&apos;utilisation</u>
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter les <u>conditions générales d&apos;utilisation **</u>
                     </div>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
@@ -366,7 +375,18 @@ const Inscription = () => {
                         setHasAcceptedNewsletter(!hasAcceptedNewsletter);
                       }}
                     />
-                    <div style={{ fontSize: 'x-small' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter de recevoir des nouvelles du projet 1Village
+                    </div>
                   </Box>
                   <div className="register__button">
                     <Button sx={{ paddingX: '3rem' }} type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>

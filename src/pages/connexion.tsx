@@ -155,7 +155,7 @@ const SignInParent = () => {
                   }
                 }}
               >
-                {errorCode === 20 && !isEmailSent ? `Je n'ai pas reçu d'email` : null}
+                {errorCode === 20 && !isEmailSent ? `Je n'ai pas reçu d'email : cliquer ici` : null}
                 {errorCode === 20 && isEmailSent ? `Email envoyé` : null}
               </small>
               {isEmailError && <small style={{ color: 'tomato', fontWeight: 'bold' }}>Email incorrect</small>}
