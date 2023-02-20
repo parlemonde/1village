@@ -46,7 +46,7 @@ const ClassroomParamStep2 = () => {
     <Base>
       <Steps
         steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-        urls={['/familles/1?edit', '/familles/2', '/familles/3', 'familles/4']}
+        urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
         activeStep={1}
       />
       <div className="width-900">
