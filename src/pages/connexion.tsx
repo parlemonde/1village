@@ -140,7 +140,27 @@ const SignInParent = () => {
                 />
               </FormControl>
               <small style={{ color: 'tomato', fontWeight: 'bold' }}>{isError ? errorMessages[errorCode] : null}</small>
-
+              {errorCode === 3 && (
+                <small
+                  onClick={() => {
+                    router.push('/reset-password');
+                  }}
+                  style={{ color: 'blue', textDecoration: 'underline' }}
+                >
+                  mot de passe oublié
+                </small>
+              )}
+              {errorCode === 1 ||
+                (errorCode === 2 && (
+                  <small
+                    onClick={() => {
+                      router.push('/reset-password');
+                    }}
+                    style={{ color: 'tomato', fontWeight: 'bold' }}
+                  >
+                    identifiants invalides
+                  </small>
+                ))}
               <small
                 style={!isEmailSent ? { color: 'blue', textDecoration: 'underline' } : {}}
                 onClick={async () => {
@@ -158,6 +178,7 @@ const SignInParent = () => {
                 {errorCode === 20 && !isEmailSent ? `Je n'ai pas reçu d'email : cliquer ici` : null}
                 {errorCode === 20 && isEmailSent ? `Email envoyé` : null}
               </small>
+
               {isEmailError && <small style={{ color: 'tomato', fontWeight: 'bold' }}>Email incorrect</small>}
             </form>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

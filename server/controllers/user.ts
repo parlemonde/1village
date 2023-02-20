@@ -519,6 +519,7 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   // update user
   const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
+  user.accountRegistration = 0;
 
   await AppDataSource.getRepository(User).save(user);
 
