@@ -62,7 +62,7 @@ export type UserForm = {
   passwordConfirmation?: string;
   type: UserType.FAMILY;
   hasAcceptedNewsletter: boolean;
-  language: string | undefined;
+  language: string;
 };
 
 export type UserUpdatePassword = {

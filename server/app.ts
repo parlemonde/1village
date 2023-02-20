@@ -127,7 +127,6 @@ export async function getApp() {
         (req.path === '/inscription' ||
           req.path === '/connexion' ||
           req.path === '/professeur' ||
-          req.path === '/user-verified' ||
           req.path === '/reset-password' ||
           req.path === '/update-password')
       ) {

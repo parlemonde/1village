@@ -12,7 +12,7 @@ interface LanguageOption {
 interface Props {
   languages: Language[];
   language: string | undefined;
-  setLanguage: (language: string | undefined) => void;
+  setLanguage: React.Dispatch<React.SetStateAction<string>>;
   sx?: SxProps<Theme>;
 }
 
@@ -26,7 +26,7 @@ const LanguageFilter = ({ languages, language, setLanguage, sx }: Props) => {
       value={language ? { key: language, language: languages.find((l) => l.alpha2 === language)! } : undefined}
       disableClearable
       onChange={(_event, newValue: LanguageOption | null) => {
-        setLanguage(newValue?.language.alpha2 ?? undefined);
+        setLanguage(newValue?.language.alpha2 ?? 'fr');
       }}
       renderInput={(params) => <TextField {...params} label="Langue" fullWidth />}
     />
