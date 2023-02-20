@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Checkbox, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, AlertTitle, Autocomplete, Checkbox, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -8,6 +8,7 @@ import React from 'react';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -431,20 +432,7 @@ const Presentation = () => {
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                   <InputLabel id="demo-simple-select">Choisir</InputLabel>
-                  <Select
-                    value={newUser.language}
-                    style={{ width: '100%', marginBottom: '1rem' }}
-                    onChange={(event) => {
-                      updateLang(event.target.value);
-                    }}
-                    label="Langues"
-                  >
-                    {languages.map((language) => (
-                      <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
-                        {language.french}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
                 </FormControl>
               </Grid>
             </Grid>
