@@ -173,7 +173,7 @@ const Presentation = () => {
     setIsLoading(false);
   };
 
-  const updateLang = async (language: string) => {
+  const updateLanguage = async (language: string) => {
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);
@@ -190,7 +190,7 @@ const Presentation = () => {
         variant: 'error',
       });
     } else {
-      setUser({ ...user, language });
+      setUser({ ...user, language: language });
       enqueueSnackbar('Choix mis à jour avec succès !', {
         variant: 'success',
       });
@@ -394,6 +394,18 @@ const Presentation = () => {
           hasError={errors.email}
           onBlur={checkEmailAndPseudo}
         />
+        {/* ============= TEST INPUT =========== */}
+        <PanelInput
+          value={newUser.language}
+          defaultValue={''}
+          label="Language:"
+          placeholder="Langue"
+          isEditMode={editMode === 1}
+          onChange={(language) => {
+            setNewUser((u) => (!u ? u : { ...u, language: language }));
+          }}
+          errorMsg="Langue invalide"
+        />
         {user.accountRegistration !== 10 && (
           <>
             <div style={{ margin: '1rem 0.5rem' }}>
@@ -437,13 +449,7 @@ const Presentation = () => {
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                   {/* <InputLabel id="demo-simple-select">Choisir</InputLabel> */}
-                  <LanguageFilter
-                    languages={languages}
-                    language={language}
-                    setLanguage={setLanguage}
-                    sx={{ width: '30ch', mb: '1rem' }}
-                    // onChange={handleChange}
-                  />
+                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
                 </FormControl>
               </Grid>
             </Grid>
