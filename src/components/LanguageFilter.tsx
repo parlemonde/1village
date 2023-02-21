@@ -26,7 +26,7 @@ const LanguageFilter = ({ languages, language, setLanguage, sx }: Props) => {
       value={language ? { key: language, language: languages.find((l) => l.alpha2 === language)! } : undefined}
       disableClearable
       onChange={(_event, newValue: LanguageOption | null) => {
-        setLanguage(newValue?.language.alpha2 ?? 'fr');
+        setLanguage(newValue?.language.french ?? 'français');
       }}
       renderInput={(params) => <TextField {...params} label="Langue" fullWidth />}
     />

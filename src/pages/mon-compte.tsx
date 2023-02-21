@@ -266,6 +266,24 @@ const Presentation = () => {
             setNewUser((u) => (!u ? u : { ...u, displayName }));
           }}
         />
+        <PanelInput
+          value={newUser.language}
+          defaultValue={'non renseigné'}
+          label="Language :"
+          placeholder="Langue"
+          style={{ visibility: 'hidden' }}
+          isEditMode={editMode === 0}
+          onChange={() => {
+            setNewUser((u) => (!u ? u : { ...u, language }));
+          }}
+        />
+        {editMode === -1 && (
+          <span>
+            <strong>langue: </strong>
+            {language}
+          </span>
+        )}
+        {editMode === 0 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
         {editMode === 0 && (
           <div className="text-center">
             <Button
@@ -326,18 +344,7 @@ const Presentation = () => {
           hasError={errors.email}
           onBlur={checkEmailAndPseudo}
         />
-        <PanelInput
-          value={newUser.language}
-          defaultValue={'non renseigné'}
-          label="Language :"
-          placeholder="Langue"
-          style={{ visibility: 'hidden' }}
-          isEditMode={editMode === 1}
-          onChange={() => {
-            setNewUser((u) => (!u ? u : { ...u, language }));
-          }}
-        />
-        {editMode === 1 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
+
         {user.accountRegistration !== 10 && (
           <>
             <div style={{ margin: '1rem 0.5rem' }}>
