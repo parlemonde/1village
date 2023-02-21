@@ -1,9 +1,8 @@
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { KeepRatio } from '../KeepRatio';
-import { UserContext } from 'src/contexts/userContext';
 import Home from 'src/svg/home.svg';
 import Logo from 'src/svg/logo_1village.svg';
 import School from 'src/svg/school.svg';
@@ -22,11 +21,6 @@ export function isRedirectValid(redirect: string) {
 
 export const NewHome = () => {
   const router = useRouter();
-  const { isLoggedIn } = useContext(UserContext);
-
-  if (isLoggedIn) {
-    router.reload();
-  }
 
   return (
     <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
