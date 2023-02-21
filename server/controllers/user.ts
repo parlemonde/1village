@@ -260,7 +260,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -288,6 +288,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
+  user.language = valueOrDefault(data.language, user.language);
   if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
