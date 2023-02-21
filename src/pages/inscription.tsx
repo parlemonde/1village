@@ -30,7 +30,7 @@ const Inscription = () => {
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
   const [isCGUread, setIsCGUread] = useState<boolean>(false);
   const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string | undefined>('français');
+  const [language, setLanguage] = useState<string>('français');
   const [newUser, setNewUser] = useState<UserForm>({
     email: email,
     firstname: firstname,
@@ -48,8 +48,7 @@ const Inscription = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (password !== '') {
       passwordMessageRef.current = '';
@@ -120,10 +119,28 @@ const Inscription = () => {
       language: language,
     });
 
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+    if (
+      isCGUread &&
+      isEmailValid &&
+      isFirstnameValid &&
+      isPasswordMatch &&
+      isPasswordValid &&
+      isLastnameValid &&
+      firstname.length !== 0 &&
+      lastname.length !== 0
+    ) {
       setIsRegisterDataValid(true);
     }
-    if (!isCGUread || !isEmailValid || !isFirstnameValid || !isPasswordMatch || !isPasswordValid || !isLastnameValid) {
+    if (
+      !isCGUread ||
+      !isEmailValid ||
+      !isFirstnameValid ||
+      !isPasswordMatch ||
+      !isPasswordValid ||
+      !isLastnameValid ||
+      firstname.length === 0 ||
+      lastname.length === 0
+    ) {
       setIsRegisterDataValid(false);
     }
   }, [
@@ -148,13 +165,14 @@ const Inscription = () => {
     if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
       try {
         await addUser(newUser);
-        setIsSubmitSuccessfull(true);
-        setTimeout(() => {
-          router.push('/');
-        }, 10000);
       } catch (err) {
         setIsEmailUsed(true);
       }
+
+      setIsSubmitSuccessfull(true);
+      setTimeout(() => {
+        router.push('/');
+      }, 10000);
     }
   };
 
@@ -337,8 +355,17 @@ const Inscription = () => {
                         setIsCGUread(!isCGUread);
                       }}
                     />
-                    <div style={{ fontSize: 'x-small', margin: '0', padding: '0', textAlign: 'left' }}>
-                      Accepter les <u>conditions générales d&apos;utilisation</u>
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter les <u>conditions générales d&apos;utilisation **</u>
                     </div>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
@@ -348,7 +375,18 @@ const Inscription = () => {
                         setHasAcceptedNewsletter(!hasAcceptedNewsletter);
                       }}
                     />
-                    <div style={{ fontSize: 'x-small' }}>Accepter de recevoir des nouvelles du projet 1Village</div>
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter de recevoir des nouvelles du projet 1Village
+                    </div>
                   </Box>
                   <div className="register__button">
                     <Button sx={{ paddingX: '3rem' }} type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>

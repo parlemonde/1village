@@ -12,6 +12,8 @@ export enum ErrorCode {
   USE_SSO = 5,
   DONT_USO_SSO = 6,
   INVALID_DATA = 10,
+  UNVERIFIED_ACCOUNT = 20,
+  ALREADY_VERIFIED_ACCOUNT = 21,
 }
 
 export class AppError extends Error {

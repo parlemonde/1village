@@ -66,6 +66,7 @@ export const Navigation = (): JSX.Element => {
     (user !== null && user.type === UserType.SUPER_ADMIN);
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
   const isTeacher = user !== null && user.type === UserType.TEACHER;
+  const isParent = user !== null && user.type === UserType.FAMILY;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -138,12 +139,14 @@ export const Navigation = (): JSX.Element => {
         path: '/indice-culturel',
         icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
+        disabled: isParent,
       },
       {
         label: 'Présenter un symbole',
         path: '/symbole',
         icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
+        disabled: isParent,
       },
       // ---- PHASE 2 ----
       {
@@ -151,36 +154,42 @@ export const Navigation = (): JSX.Element => {
         path: '/realiser-un-reportage',
         icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Lancer un défi',
         path: '/lancer-un-defi',
         icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Jouer ensemble',
         path: '/creer-un-jeu',
         icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Créer une énigme',
         path: '/creer-une-enigme',
         icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Poser une question',
         path: '/poser-une-question/1',
         icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Réagir à une activité',
         path: '/reagir-a-une-activite/1',
         icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       // ---- PHASE 3 ----
       {
@@ -188,23 +197,24 @@ export const Navigation = (): JSX.Element => {
         path: '/creer-une-histoire',
         icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
+        disabled: isParent,
       },
       {
         label: 'Ré-inventer une histoire',
         path: '/re-inventer-une-histoire',
         icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
-        disabled: firstStoryCreated === false,
+        disabled: firstStoryCreated === false || isParent,
       },
       {
         label: 'Chanter un couplet',
         path: '/chanter-un-couplet',
         icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
-        disabled: !village?.anthemId,
+        disabled: !village?.anthemId || isParent,
       },
     ],
-    [firstStoryCreated, mascotteActivity, village, isTeacher],
+    [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
@@ -214,14 +224,19 @@ export const Navigation = (): JSX.Element => {
         label: 'Notre classe',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
+        disabled: isParent,
       },
       ...(isPelico ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isPelico, selectedPhase],
+    [user, isPelico, selectedPhase, isParent],
   );
   const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
   const currentPathName = router.pathname.split('/')[1] || '';
+
+  if (!user) {
+    return <div></div>;
+  }
 
   return (
     <nav className="navigation">

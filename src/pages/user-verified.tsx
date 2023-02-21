@@ -12,7 +12,7 @@ const UserVerified: React.FunctionComponent = () => {
 
   setTimeout(() => {
     router.push('/');
-  }, 10000);
+  }, 5000);
 
   return (
     <>
@@ -60,7 +60,7 @@ const UserVerified: React.FunctionComponent = () => {
             <ArrowBack /> Retour à la page de connexion
           </Link>
         </div>
-        <KeepRatio ratio={0.55} width="95%" maxWidth="1200px" minHeight="600px" className="register__container">
+        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="register__container">
           <div
             className="text-center"
             style={{

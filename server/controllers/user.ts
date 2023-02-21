@@ -19,7 +19,11 @@ import { Controller } from './controller';
 
 const userController = new Controller('/users');
 // --- Get all users. ---
-userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.get({ path: '' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
   let users: User[] = [];
   if (req.query.villageId) {
     users = await AppDataSource.getRepository(User).find({
@@ -256,7 +260,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
@@ -284,6 +288,7 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
+  user.language = valueOrDefault(data.language, user.language);
   if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
@@ -419,6 +424,70 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
   res.redirect('/user-verified');
 });
 
+// === RESEND VERIFICATION EMAIL ===
+type ResendEmailData = {
+  email?: string;
+};
+
+const RESEND_EMAIL_SCHEMA: JSONSchemaType<ResendEmailData> = {
+  type: 'object',
+  properties: {
+    email: { type: 'string', format: 'email', nullable: true },
+  },
+  additionalProperties: false,
+};
+const resendEmailValidator = ajv.compile(RESEND_EMAIL_SCHEMA);
+
+userController.post({ path: '/resend-verification-email' }, async (req: Request, res: Response) => {
+  const data = req.body;
+
+  // Check if the email is valid
+  if (!resendEmailValidator(data)) {
+    sendInvalidDataError(resendEmailValidator);
+    return;
+  }
+
+  // Get the user by email
+  const user = await AppDataSource.getRepository(User).createQueryBuilder().where('User.email = :email', { email: data.email }).getOne();
+
+  if (!user) {
+    throw new AppError('Invalid data', ErrorCode.INVALID_DATA);
+  }
+
+  // If the user is already verified, return an error
+  if (user.isVerified) {
+    throw new AppError('User is already verified', ErrorCode.ALREADY_VERIFIED_ACCOUNT);
+  }
+
+  // Generate a new verification hash
+  const temporaryVerificationHash = generateTemporaryToken(20);
+
+  // Update the user with the new verification hash and save it
+  user.verificationHash = await argon2.hash(temporaryVerificationHash);
+  await AppDataSource.getRepository(User).save(user);
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+
+  // Send the verification email with the new hash
+  if (data.email) {
+    try {
+      sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+        url: frontUrl,
+        firstname: user.firstname,
+        email: data.email,
+        verificationHash: temporaryVerificationHash,
+      });
+
+      res.status(200).json({
+        message: 'Verification email sent successfully',
+      });
+    } catch (err) {
+      res.status(400).json({ message: 'Bad request' });
+    }
+  }
+  res.status(400);
+  // Return a success response
+});
+
 // --- Reset pwd. ---
 type ResetData = {
   email: string;
@@ -451,6 +520,7 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   // update user
   const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
+  user.accountRegistration = 0;
 
   await AppDataSource.getRepository(User).save(user);
 

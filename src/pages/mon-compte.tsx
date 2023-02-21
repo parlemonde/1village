@@ -8,6 +8,7 @@ import React from 'react';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -15,6 +16,7 @@ import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
+import { useLanguages } from 'src/services/useLanguages';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
@@ -25,6 +27,7 @@ const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
+  const [language, setLanguage] = React.useState(user?.language || 'français');
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
@@ -39,6 +42,7 @@ const Presentation = () => {
     pwd: false,
     pwdConfirm: false,
   });
+  const { languages } = useLanguages();
 
   if (!user || !newUser) {
     return <div></div>;
@@ -72,7 +76,9 @@ const Presentation = () => {
       pseudo: newUser.pseudo,
       email: newUser.email,
       displayName: newUser.displayName,
+      language: language,
     };
+
     const response = await axiosLoggedRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
@@ -176,6 +182,7 @@ const Presentation = () => {
         setNewUser(user);
         setDeleteConfirm('');
       }
+
       setEditMode(newEditMode);
     };
 
@@ -259,6 +266,24 @@ const Presentation = () => {
             setNewUser((u) => (!u ? u : { ...u, displayName }));
           }}
         />
+        <PanelInput
+          value={newUser.language}
+          defaultValue={'non renseigné'}
+          label="Language :"
+          placeholder="Langue"
+          style={{ visibility: 'hidden' }}
+          isEditMode={editMode === 0}
+          onChange={() => {
+            setNewUser((u) => (!u ? u : { ...u, language }));
+          }}
+        />
+        {editMode === -1 && (
+          <span>
+            <strong>langue: </strong>
+            {language}
+          </span>
+        )}
+        {editMode === 0 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
         {editMode === 0 && (
           <div className="text-center">
             <Button
@@ -319,6 +344,7 @@ const Presentation = () => {
           hasError={errors.email}
           onBlur={checkEmailAndPseudo}
         />
+
         {user.accountRegistration !== 10 && (
           <>
             <div style={{ margin: '1rem 0.5rem' }}>
