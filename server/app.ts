@@ -96,7 +96,7 @@ export async function getApp() {
   app.use('/api', backRouter);
 
   // [5] --- Add frontend ---
-  app.get('/country-flags/*', handleErrors(authenticate(UserType.TEACHER)), express.static(path.join(__dirname, '../../public/country-flags')));
+  app.get('/country-flags/*', handleErrors(authenticate()), express.static(path.join(__dirname, '../../public/country-flags')));
   app.use(express.static(path.join(__dirname, '../../public'))); // app.js is located at ./dist/server and public at ./public
 
   // Send 404 for static files not found by express static.

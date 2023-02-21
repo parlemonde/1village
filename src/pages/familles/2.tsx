@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
@@ -16,6 +17,7 @@ const ClassroomParamStep2 = () => {
   const [isBtndisable, setBtnDisable] = React.useState(true);
   const firstnameRef = React.useRef<HTMLInputElement>(null);
   const lastnameRef = React.useRef<HTMLInputElement>(null);
+  const [isDuplicateModalOn, setIsDuplicateModalOn] = React.useState(false);
 
   //TODO: delete input after submit
   //TODO: issu with the button delete, find the student
@@ -35,9 +37,30 @@ const ClassroomParamStep2 = () => {
       firstname: firstnameRef.current.value,
       lastname: lastnameRef.current.value,
     };
+
+    for (const student of students) {
+      if (
+        student.firstname?.toLocaleLowerCase() === firstnameRef.current.value.toLocaleLowerCase() &&
+        student.lastname?.toLocaleLowerCase() === lastnameRef.current.value.toLocaleLowerCase()
+      ) {
+        setIsDuplicateModalOn(true);
+        return;
+      }
+    }
     createStudent(newStudent);
     firstnameRef.current.value = '';
     lastnameRef.current.value = '';
+  };
+
+  const onConfirm = () => {
+    if (firstnameRef.current === null || lastnameRef.current === null) return;
+    if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
+    const newStudent = {
+      firstname: firstnameRef.current.value,
+      lastname: lastnameRef.current.value,
+    };
+    createStudent(newStudent);
+    setIsDuplicateModalOn(false);
   };
   const onNext = () => {
     router.push('/familles/3');
@@ -92,6 +115,21 @@ const ClassroomParamStep2 = () => {
             Ajouter un élève
           </Button>
         </form>
+        {isDuplicateModalOn && (
+          <Modal
+            onClose={() => {
+              setIsDuplicateModalOn(false);
+            }}
+            ariaLabelledBy={''}
+            ariaDescribedBy={''}
+            onConfirm={onConfirm}
+            confirmLabel="confirmer"
+            title="Elève déjà existant"
+          >
+            Un élève que vous avez ajouté possède déjà ce nom. <br />
+            Souhaitez-vous ajouter un autre élève à ce nom ?
+          </Modal>
+        )}
         <div className="students-list">
           {students.length > 0
             ? students.map((student) => (

@@ -12,7 +12,7 @@ const UserVerified: React.FunctionComponent = () => {
 
   setTimeout(() => {
     router.push('/');
-  }, 10000);
+  }, 5000);
 
   return (
     <>
