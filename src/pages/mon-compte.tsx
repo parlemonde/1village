@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Autocomplete, Checkbox, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, AlertTitle, Checkbox, Grid, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -30,7 +30,6 @@ const Presentation = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
   const { languages } = useLanguages();
-  const { editUser } = useUserRequests();
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
@@ -79,7 +78,7 @@ const Presentation = () => {
       email: newUser.email,
       displayName: newUser.displayName,
       hasAcceptedNewsletter: newUser.hasAcceptedNewsletter,
-      language: newUser.language,
+      language: language,
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -173,30 +172,30 @@ const Presentation = () => {
     setIsLoading(false);
   };
 
-  const updateLanguage = async (language: string) => {
-    if (!newUser) return;
-    if (!user) return;
-    setIsLoading(true);
-    const response = await axiosLoggedRequest({
-      method: 'PUT',
-      url: `/users/${user.id}`,
-      data: {
-        language,
-      },
-    });
-    if (response.error) {
-      setNewUser(user);
-      enqueueSnackbar('Une erreur inconnue est survenue...', {
-        variant: 'error',
-      });
-    } else {
-      setUser({ ...user, language: language });
-      enqueueSnackbar('Choix mis à jour avec succès !', {
-        variant: 'success',
-      });
-    }
-    setIsLoading(false);
-  };
+  // const updateLanguage = async (language: string) => {
+  //   if (!newUser) return;
+  //   if (!user) return;
+  //   setIsLoading(true);
+  //   const response = await axiosLoggedRequest({
+  //     method: 'PUT',
+  //     url: `/users/${user.id}`,
+  //     data: {
+  //       language,
+  //     },
+  //   });
+  //   if (response.error) {
+  //     setNewUser(user);
+  //     enqueueSnackbar('Une erreur inconnue est survenue...', {
+  //       variant: 'error',
+  //     });
+  //   } else {
+  //     setUser({ ...user, language: language });
+  //     enqueueSnackbar('Choix mis à jour avec succès !', {
+  //       variant: 'success',
+  //     });
+  //   }
+  //   setIsLoading(false);
+  // };
 
   const deleteAccount = async () => {
     if (!newUser) return;
@@ -246,10 +245,10 @@ const Presentation = () => {
   if (!user || !newUser) {
     return <div></div>;
   }
-  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    await editUser(newUser);
-  };
+  // const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   event.preventDefault();
+  //   await editUser(newUser);
+  // };
 
   return (
     <Base>
@@ -332,6 +331,7 @@ const Presentation = () => {
               setNewUser((u) => (!u ? u : { ...u, displayName }));
             }}
           />
+
           {editMode === 0 && (
             <div className="text-center">
               <Button
@@ -395,7 +395,7 @@ const Presentation = () => {
           onBlur={checkEmailAndPseudo}
         />
         {/* ============= TEST INPUT =========== */}
-        <PanelInput
+        {/* <PanelInput
           value={newUser.language}
           defaultValue={''}
           label="Language:"
@@ -405,7 +405,7 @@ const Presentation = () => {
             setNewUser((u) => (!u ? u : { ...u, language: language }));
           }}
           errorMsg="Langue invalide"
-        />
+        /> */}
         {user.accountRegistration !== 10 && (
           <>
             <div style={{ margin: '1rem 0.5rem' }}>
@@ -429,19 +429,77 @@ const Presentation = () => {
       {user.type === UserType.FAMILY ? (
         <div className="account__panel">
           <h2>Préférence de communication</h2>
+          <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
           <div style={{ maxWidth: '800px', width: '100%', textAlign: 'left' }}>
             <label style={{ cursor: 'pointer' }}>
-              <Checkbox
-                value={newUser.hasAcceptedNewsletter}
-                checked={user !== null && user.hasAcceptedNewsletter}
-                onChange={(event) => {
-                  updateCheckBox(event.target.checked);
+              {/* <PanelInput
+                value={newUser.language}
+                defaultValue={''}
+                label="Language:"
+                placeholder="Langue"
+                isEditMode={editMode === 1}
+                onChange={(language) => {
+                  setNewUser((u) => (!u ? u : { ...u, language: language }));
                 }}
-              />
-              <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
+                errorMsg="Langue invalide"
+              /> */}
+              <div>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={8}>
+                    <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
+                      Choix de la langue de communication
+                    </p>
+                    <PanelInput
+                      value={newUser.language}
+                      defaultValue={'non renseigné'}
+                      label="Language :"
+                      placeholder="Langue"
+                      // style={{ visibility: 'hidden' }}
+                      isEditMode={editMode === 0}
+                      onChange={() => {
+                        setNewUser((u) => (!u ? u : { ...u, language }));
+                      }}
+                    />
+                    {/* {editMode === -1 && (
+                <span>
+                  <strong>Langue: </strong>
+                  {language}
+                </span>
+              )} */}
+                    {editMode === 0 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
+                    {editMode === 0 && (
+                      <div className="text-center">
+                        <Button
+                          color="inherit"
+                          size="small"
+                          sx={defaultContainedButtonStyle}
+                          variant="contained"
+                          style={{ margin: '0.5rem' }}
+                          onClick={updateEditMode(-1)}
+                        >
+                          Annuler
+                        </Button>
+                        <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
+                          Enregistrer
+                        </Button>
+                      </div>
+                    )}
+                  </Grid>
+                </Grid>
+              </div>
+              <div style={{ marginTop: '20px' }}>
+                <Checkbox
+                  value={newUser.hasAcceptedNewsletter}
+                  checked={user !== null && user.hasAcceptedNewsletter}
+                  onChange={(event) => {
+                    updateCheckBox(event.target.checked);
+                  }}
+                />
+                <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
+              </div>
             </label>
           </div>
-          <div>
+          {/* <div>
             <Grid container spacing={2}>
               <Grid item xs={12} md={8}>
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
@@ -449,11 +507,11 @@ const Presentation = () => {
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
                   {/* <InputLabel id="demo-simple-select">Choisir</InputLabel> */}
-                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
+          {/* <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
                 </FormControl>
               </Grid>
             </Grid>
-          </div>
+          </div> */}
         </div>
       ) : null}
       <div className="account__panel">
