@@ -47,8 +47,6 @@ const ClassroomParamStep2 = () => {
         return;
       }
     }
-
-    console.log(students);
     createStudent(newStudent);
     firstnameRef.current.value = '';
     lastnameRef.current.value = '';
