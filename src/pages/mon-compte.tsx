@@ -27,7 +27,7 @@ const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
-  const [language, setLanguage] = React.useState(user?.language || 'fr');
+  const [language, setLanguage] = React.useState(user?.language || 'français');
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
