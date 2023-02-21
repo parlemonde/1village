@@ -7,7 +7,6 @@ import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { BackButton } from 'src/components/buttons/BackButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
@@ -94,7 +93,6 @@ const Communication = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <BackButton href="/contenu-libre" />
         <Steps
           steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
           urls={['/familles/1', '/familles/2', '/familles/3', '/familles/4']}

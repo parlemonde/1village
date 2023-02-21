@@ -9,6 +9,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { BackButton } from 'src/components/buttons/BackButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -181,9 +182,10 @@ const ClassroomParamStep1Visibility = () => {
 
   return (
     <Base>
+      <BackButton href="/" />
       <Steps
         steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-        urls={['/familles/1?edit', '/familles/2', '/familles/3', 'familles/4']}
+        urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
         activeStep={0}
       />
 
