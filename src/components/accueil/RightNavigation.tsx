@@ -1,7 +1,8 @@
-import { Button, Link, Tooltip } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Button, Link, Tooltip } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
