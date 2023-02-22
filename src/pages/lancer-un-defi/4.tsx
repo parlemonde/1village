@@ -1,54 +1,53 @@
-import { Tooltip } from '@mui/material';
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Tooltip } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, getDefi, getLanguageTheme, DEFI, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
-import type { LanguageDefiData } from 'src/activity-types/defi.types';
+import { isFree, getDefi, DEFI } from 'src/activity-types/defi.constants';
+import type { FreeDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
-import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
+import { getErrorSteps } from 'src/components/activities/defiChecksFree';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
-const DefiStep5 = () => {
+const FreeDefiStep4 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const data = (activity?.data as LanguageDefiData) || null;
-  const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
+  const data = (activity?.data as FreeDefiData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const isObservator = user?.type === UserType.OBSERVATOR;
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep3 = activity?.content.slice(1, activity?.content.length).filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 3
-
-    if (data !== null) {
-      const errors = getErrorSteps(data, 4); // corresponde to step 1
-      if (fieldStep3?.length === 0) errors.push(2); //corresponding to step 3
+    const fieldStep2 = activity?.content.filter((d) => d.value !== ''); // if value is empty in step 2
+    if (data !== null && fieldStep2?.length === 0) {
+      const errors = getErrorSteps(data, 2);
+      errors.push(1); //corresponding to step 2
       return errors;
     }
+    if (data !== null) return getErrorSteps(data, 2);
     return [];
   }, [activity?.content, data]);
-
   const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
       router.push('/lancer-un-defi');
-    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
+    } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isFree(activity)))) {
       router.push('/lancer-un-defi');
     }
   }, [activity, router]);
@@ -62,7 +61,7 @@ const DefiStep5 = () => {
     setIsLoading(false);
   };
 
-  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
+  if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isFree(activity))) {
     return <div></div>;
   }
 
@@ -70,21 +69,9 @@ const DefiStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[
-            data.languageCode || 'Langue',
-            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
-            'Présentation',
-            'Défi',
-            'Prévisualisation',
-          ]}
-          urls={[
-            '/lancer-un-defi/linguistique/1?edit',
-            '/lancer-un-defi/linguistique/2',
-            '/lancer-un-defi/linguistique/3',
-            '/lancer-un-defi/linguistique/4',
-            '/lancer-un-defi/linguistique/5',
-          ]}
-          activeStep={4}
+          steps={[data.themeName || 'Théme', 'Action', 'Le défi', 'Prévisualisation']}
+          urls={['/lancer-un-defi/1?edit', '/lancer-un-defi/2', '/lancer-un-defi/3', '/lancer-un-defi/4']}
+          activeStep={3}
           errorSteps={errorSteps}
         />
         <div className="width-900">
@@ -93,12 +80,12 @@ const DefiStep5 = () => {
             Voici la pré-visualisation de votre défi.
             {isEdit
               ? " Vous pouvez le modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez le modifier, et quand vous êtes prêts : publiez-le dans votre village-monde !'}
+              : 'Vous pouvez le modifier, et quand vous êtes prêts : publiez-le dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-              <Link href="/lancer-un-defi/linguistique/5" passHref>
-                <Button component="a" color="secondary" variant="contained" href="/lancer-un-defi/linguistique/5">
+              <Link href="/lancer-un-defi/4" passHref>
+                <Button component="a" color="secondary" variant="contained" href="/lancer-un-defi/4">
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
@@ -110,7 +97,7 @@ const DefiStep5 = () => {
             <>
               {!isValid && (
                 <p>
-                  <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
+                  <b>Avant de publier votre pr&eacute;sentation, il faut corriger les &eacute;tapes incompl&egrave;tes, marqu&eacute;es en orange.</b>
                 </p>
               )}
               <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
@@ -131,60 +118,49 @@ const DefiStep5 = () => {
             </>
           )}
 
+          <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(0) })}>
+            Th&eacute;me
+          </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push(`/lancer-un-defi/linguistique/1?edit=${activity.id}`);
+                router.push(`/lancer-un-defi/1?edit=${activity.id}`);
               }}
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {data.languageIndex !== 0 ? getLanguageTheme(data) : ''}
+            {data.themeName}
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(1) })}>
-            Le thème
+            Action
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(1) })}>
             <EditButton
               onClick={() => {
-                router.push('/lancer-un-defi/linguistique/2');
+                router.push('/lancer-un-defi/2');
               }}
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <span>{data.hasSelectedThemeNameOther ? data.themeName : data.themeIndex !== null ? LANGUAGE_THEMES[data.themeIndex].title : ''}</span>
+            <ContentView content={activity.content} />
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(2) })}>
-            Présentation
+            Le d&eacute;fi lanc&eacute; aux P&eacute;licopains
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(2) })}>
             <EditButton
               onClick={() => {
-                router.push('/lancer-un-defi/linguistique/3');
+                router.push('/lancer-un-defi/3');
               }}
               status={errorSteps.includes(2) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <ContentView content={activity.content.slice(explanationContentIndex, activity.content.length)} />
+            Votre d&eacute;fi : {data.defiIndex !== null ? getDefi(DEFI.FREE, data) : ''}
           </div>
 
-          <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(3) })}>
-            Le défi lancé aux Pélicopains
-          </span>
-          <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(3) })}>
-            <EditButton
-              onClick={() => {
-                router.push('/lancer-un-defi/linguistique/4');
-              }}
-              status={errorSteps.includes(3) ? 'warning' : 'success'}
-              style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
-            />
-            Votre défi : {data.hasSelectedDefiNameOther ? data.defi : data.defiIndex !== null ? getDefi(DEFI.LANGUAGE, data) : ''}
-          </div>
-
-          <StepsButton prev="/lancer-un-defi/linguistique/4" />
+          <StepsButton prev="/lancer-un-defi/3" />
         </div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
@@ -194,4 +170,4 @@ const DefiStep5 = () => {
   );
 };
 
-export default DefiStep5;
+export default FreeDefiStep4;
