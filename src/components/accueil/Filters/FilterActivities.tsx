@@ -35,12 +35,11 @@ export function filterActivityByTerm(activity: Activity, term: string) {
   if (activity.content[0].value.toLowerCase().indexOf(lowerTerm) !== -1) {
     return true;
   }
+
+  const dataStr = JSON.stringify(activity.data);
+
   //resume if exists
-  if (activity.data.resume && typeof activity.data.resume === 'string' && activity.data.resume.toLowerCase().indexOf(lowerTerm) !== -1) {
-    return true;
-  }
-  // title if exists
-  if (activity.data.title && typeof activity.data.title === 'string' && activity.data.title.toLowerCase().indexOf(lowerTerm) !== -1) {
+  if (dataStr.toLowerCase().indexOf(lowerTerm) !== -1) {
     return true;
   }
   return false;

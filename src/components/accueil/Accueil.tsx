@@ -59,7 +59,7 @@ export const Accueil = () => {
     if (activities && activities.length > 0) {
       const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
       const activitiesFilterBySearchTerm =
-        filters.searchTerm.length > 2 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
+        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
       return activitiesFilterBySearchTerm;
     } else {
       return [];
