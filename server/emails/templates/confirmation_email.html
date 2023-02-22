@@ -8,7 +8,18 @@
   </head>
   <body>
     <h1>Confirmation d'email</h1>
-    <p>Bienvenue {{firstname}} ! Merci de cliquer sur le lien suivant pour confirmer votre email</p>
-    <a href="{{url}}/user-verified?email={{email}}&verificationHash={{verificationHash}}">valider mon email</a>
+    <p>
+      Bonjour {{firstname}}, 
+Pour activer votre compte, merci de cliquer sur ce lien : <a href="{{url}}/user-verified?email={{email}}&verificationHash={{verificationHash}}">valider mon email</a>
+Une fois votre compte activé, vous pourrez renseigner l’identifiant de votre enfant transmis par son professeur, et accéder aux échanges en ligne sur 1Village. 
+À bientôt, 
+<br/>
+<br/>
+Hello {{firstname}}, 
+To activate your account, please click on the following link:  <a href="{{url}}/user-verified?email={{email}}&verificationHash={{verificationHash}}">approve my email</a>
+Once activated, you will need to input the child id provided by the teacher, in order to access the 1Village website.  
+Best,
+</p>
+    
   </body>
 </html>
