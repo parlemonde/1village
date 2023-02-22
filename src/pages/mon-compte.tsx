@@ -455,7 +455,7 @@ const Presentation = () => {
                       defaultValue={'non renseigné'}
                       label="Language :"
                       placeholder="Langue"
-                      style={{ visibility: 'hidden' }}
+                      // style={{ visibility: 'hidden' }}
                       isEditMode={editMode === 0}
                       onChange={() => {
                         setNewUser((u) => (!u ? u : { ...u, language }));
