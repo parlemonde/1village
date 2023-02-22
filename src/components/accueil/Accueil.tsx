@@ -2,14 +2,6 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-// import { getType, getSubtype } from 'src/activity-types/activity.constants';
-// import { isGame } from 'src/activity-types/anyActivity';
-// import { DEFI } from 'src/activity-types/defi.constants';
-// import { ENIGME } from 'src/activity-types/enigme.constants';
-// import { isMimic } from 'src/activity-types/game.constants';
-// import { INDICE } from 'src/activity-types/indice.constants';
-// import { REPORTAGE } from 'src/activity-types/reportage.constants';
-// import { SYMBOL } from 'src/activity-types/symbol.constants';
 import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
@@ -21,8 +13,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
-// import type { Activity, AnyData } from 'types/activity.type';
-// import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
@@ -55,66 +45,6 @@ export const Accueil = () => {
     phase: selectedPhase,
   });
 
-  // function filterActivitiesWithLastMimicGame(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-  //   const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && isMimic(activity)); // Get the index of this last mimic
-  //   if (indexOfLastMimic === -1) {
-  //     return activitiesData;
-  //   }
-  //   const mostRecentMimic = activitiesData[indexOfLastMimic]; // Get the last mimic created
-  //   const activitiesWithoutMimic = activitiesData.filter((activity) => !isGame(activity) || !isMimic(activity)); // Remove all mimics in activities
-  //   const activitiesWithLastMimic = [...activitiesWithoutMimic];
-  //   activitiesWithLastMimic.splice(indexOfLastMimic, 0, mostRecentMimic); // Put the last mimic created at the same spot in the array
-
-  //   return activitiesWithLastMimic;
-  // }
-
-  // const getType = (typeValue: number): string | undefined => {
-  //   const type = Object.keys(ActivityType).find((key) => ActivityType[key] === typeValue);
-  //   return type;
-  // };
-
-  // const SUBTYPE_MAPPER = {
-  //   ENIGME: ENIGME,
-  //   INDICE: INDICE,
-  //   SYMBOL: SYMBOL,
-  //   DEFI: DEFI,
-  //   REPORTAGE: REPORTAGE,
-  // };
-  // const getSubtype = (typeName: string, subTypeValue: number): string | undefined => {
-  //   const result = Object.keys(SUBTYPE_MAPPER[typeName] || {}).find((key) => SUBTYPE_MAPPER[typeName][key] === subTypeValue);
-  //   return result;
-  // };
-
-  // function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-  //   const activitiesFilteredBySearchTermOnType = activitiesData.filter((activity) => {
-  //     const type = getType(activity.type);
-  //     const subType = getSubtype(type, activity.subType);
-  //     return subType?.toLowerCase().indexOf(filters.searchTerm.toLowerCase()) >= 0;
-  //   });
-  //   const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => filterActivityByTerm(activity, filters.searchTerm));
-  //   let agregatedFilters = [...activitiesFilteredBySearchTerm, ...activitiesFilteredBySearchTermOnType];
-  //   agregatedFilters = [...new Set(agregatedFilters)];
-  //   return agregatedFilters;
-  // }
-
-  // // to check a given activity contains a given term
-  // function filterActivityByTerm(activity: Activity, term: string) {
-  //   // for cas insensivitive search
-  //   const lowerTerm = term.toLowerCase();
-  //   if (activity.content[0].value.toLowerCase().indexOf(lowerTerm) !== -1) {
-  //     return true;
-  //   }
-  //   //resume if exists
-  //   if (activity.data.resume && activity.data.resume.toLowerCase().indexOf(lowerTerm) !== -1) {
-  //     return true;
-  //   }
-  //   // title if exists
-  //   if (activity.data.title && activity.data.title.toLowerCase().indexOf(lowerTerm) !== -1) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   // on selected phase change, select all activities.
   React.useEffect(() => {
     setFilters((prevFilters) => ({
@@ -128,7 +58,8 @@ export const Accueil = () => {
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
       const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
-      const activitiesFilterBySearchTerm = filters.searchTerm.length > 2 ? filterActivitiesByTerm(activitiesWithLastMimic) : activitiesWithLastMimic;
+      const activitiesFilterBySearchTerm =
+        filters.searchTerm.length > 2 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
       return activitiesFilterBySearchTerm;
     } else {
       return [];

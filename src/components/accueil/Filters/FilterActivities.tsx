@@ -16,13 +16,13 @@ export function filterActivitiesWithLastMimicGame(activitiesData: Activity<AnyDa
   return activitiesWithLastMimic;
 }
 
-export function filterActivitiesByTerm(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
+export function filterActivitiesByTerm(activitiesData: Activity<AnyData>[], searchTerm: string): Activity<AnyData>[] {
   const activitiesFilteredBySearchTermOnType = activitiesData.filter((activity) => {
     const type = getType(activity.type);
-    const subType = getSubtype(type, activity.subType);
-    return subType?.toLowerCase().indexOf(filters.searchTerm.toLowerCase()) >= 0;
+    const subType = type && activity.subType !== null && activity.subType !== undefined ? getSubtype(type, activity.subType) : undefined;
+    return subType && subType.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0;
   });
-  const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => filterActivityByTerm(activity, filters.searchTerm));
+  const activitiesFilteredBySearchTerm = activitiesData.filter((activity) => filterActivityByTerm(activity, searchTerm));
   let agregatedFilters = [...activitiesFilteredBySearchTerm, ...activitiesFilteredBySearchTermOnType];
   agregatedFilters = [...new Set(agregatedFilters)];
   return agregatedFilters;
@@ -36,11 +36,11 @@ export function filterActivityByTerm(activity: Activity, term: string) {
     return true;
   }
   //resume if exists
-  if (activity.data.resume && activity.data.resume.toLowerCase().indexOf(lowerTerm) !== -1) {
+  if (activity.data.resume && typeof activity.data.resume === 'string' && activity.data.resume.toLowerCase().indexOf(lowerTerm) !== -1) {
     return true;
   }
   // title if exists
-  if (activity.data.title && activity.data.title.toLowerCase().indexOf(lowerTerm) !== -1) {
+  if (activity.data.title && typeof activity.data.title === 'string' && activity.data.title.toLowerCase().indexOf(lowerTerm) !== -1) {
     return true;
   }
   return false;
