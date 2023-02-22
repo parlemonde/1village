@@ -1,6 +1,6 @@
 import { Link } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import ArrowBack from 'src/svg/arrow_back.svg';
@@ -10,9 +10,17 @@ import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 const UserVerified: React.FunctionComponent = () => {
   const router = useRouter();
 
-  setTimeout(() => {
-    router.push('/');
-  }, 5000);
+  const timeoutRef = useRef<number>(null);
+  useEffect(() => {
+    timeoutRef.current = window.setTimeout(() => {
+      router.push('/');
+    }, 5000);
+    return () => {
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [router]);
 
   return (
     <>
