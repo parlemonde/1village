@@ -1,9 +1,10 @@
 import * as argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import { getRepository, MoreThan } from 'typeorm';
+import { MoreThan } from 'typeorm';
 
 import { Token } from '../../entities/token';
 import { generateTemporaryToken } from '../../utils';
+import { AppDataSource } from '../../utils/data-source';
 
 const secret: string = process.env.APP_SECRET || '';
 
@@ -21,7 +22,7 @@ export async function getAccessToken(
     const token = new Token();
     token.token = await argon2.hash(rToken);
     token.userId = userId;
-    await getRepository(Token).save(token);
+    await AppDataSource.getRepository(Token).save(token);
     refreshToken = `${token.id}-${rToken}`;
   }
 
@@ -38,13 +39,13 @@ export async function getNewAccessToken(refreshToken: string): Promise<{
   const expiredDate = new Date(new Date().getTime() - 7890000000); // now minus 3 months.
 
   const refreshTokenID: string = refreshToken.split('-')[0];
-  const token = await getRepository(Token).findOne({
+  const token = await AppDataSource.getRepository(Token).findOne({
     where: {
       id: parseInt(refreshTokenID, 10) || 0,
       date: MoreThan(expiredDate),
     },
   });
-  if (token === undefined || !(await argon2.verify(token.token, refreshToken.slice(refreshTokenID.length + 1)))) {
+  if (token === null || !(await argon2.verify(token.token, refreshToken.slice(refreshTokenID.length + 1)))) {
     await revokeRefreshToken(refreshToken);
     return null;
   }
@@ -58,7 +59,7 @@ export async function getNewAccessToken(refreshToken: string): Promise<{
 
 export async function revokeRefreshToken(refreshToken: string): Promise<void> {
   const refreshTokenID: string = refreshToken.split('-')[0];
-  await getRepository(Token).delete({
+  await AppDataSource.getRepository(Token).delete({
     id: parseInt(refreshTokenID, 10) || 0,
   });
 }

@@ -1,28 +1,23 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { SelectChangeEvent } from '@mui/material';
-import { FormControl, Select, MenuItem } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import { isLanguage, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
-import { StepsButton } from 'src/components/StepsButtons';
-import { ContentEditor } from 'src/components/activities/content';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
+import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { warningColor } from 'src/styles/variables.const';
 import { replaceTokens } from 'src/utils';
-import type { ActivityContent, ActivityContentType } from 'types/activity.type';
 
 const DefiStep2 = () => {
   const router = useRouter();
-  const { activity, updateActivity, addContent, deleteContent } = React.useContext(ActivityContext);
-
+  const { activity, updateActivity } = React.useContext(ActivityContext);
+  const [isChoiceOtherOpen, setIsChoiceOtherOpen] = React.useState(false);
   const data = (activity?.data as LanguageDefiData) || null;
-  const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
@@ -43,23 +38,14 @@ const DefiStep2 = () => {
     return <div></div>;
   }
 
-  const updateContent = (content: ActivityContent[]): void => {
-    updateActivity({ content: [...content, ...activity.content.slice(explanationContentIndex, activity.content.length)] });
-  };
-  const addDescriptionContent = (type: ActivityContentType, value?: string) => {
-    addContent(type, value, explanationContentIndex);
-    updateActivity({ data: { ...data, explanationContentIndex: explanationContentIndex + 1 } });
-  };
-  const deleteDescriptionContent = (index: number) => {
-    deleteContent(index);
-    updateActivity({ data: { ...data, explanationContentIndex: explanationContentIndex - 1 } });
-  };
-
-  const onObjectChange = (event: SelectChangeEvent<string | number>) => {
-    updateActivity({ data: { ...data, objectIndex: Number(event.target.value) } });
-  };
-
-  const onNext = () => {
+  const onClick = (index: number) => () => {
+    if (index === -1) {
+      updateActivity({ data: { ...data, themeIndex: null, hasSelectedThemeNameOther: true } });
+    } else {
+      const newData = data;
+      delete newData.defi;
+      updateActivity({ data: { ...newData, themeIndex: index, hasSelectedThemeNameOther: false } });
+    }
     router.push('/lancer-un-defi/linguistique/3');
   };
 
@@ -67,7 +53,7 @@ const DefiStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={[data.languageCode || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -79,46 +65,51 @@ const DefiStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>{"Choix de l'objet"}</h1>
+          <h1>Choisissez le thème de votre défi linguistique</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Choisissez ce que vous souhaitez présenter :
+            Vous pourrez ensuite le présenter en détail.
           </p>
-          <FormControl variant="outlined" style={{ width: '100%' }}>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={data.objectIndex === -1 ? '' : data.objectIndex}
-              onChange={onObjectChange}
-            >
-              {LANGUAGE_OBJECTS.map((l, index) => (
-                <MenuItem key={index} value={index}>
-                  {l.title}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {data.objectIndex !== -1 && (
-            <>
-              <p className="text" style={{ fontSize: '1.1rem' }}>
-                {/* if there is no language selected in the previous step: */}
-                {data.language === '' ? (
-                  <span style={{ color: warningColor, fontWeight: 'bold' }}>Veuillez choisir une langue à l&apos;étape 1.</span>
-                ) : (
-                  replaceTokens(LANGUAGE_OBJECTS[data.objectIndex % LANGUAGE_OBJECTS.length].desc1, {
-                    language: data.language,
-                  })
-                )}
-                Vous pouvez rajouter une vidéo ou un son pour qu’on entende la prononciation.
-              </p>
-              <ContentEditor
-                content={activity.content.slice(0, explanationContentIndex)}
-                updateContent={updateContent}
-                addContent={addDescriptionContent}
-                deleteContent={deleteDescriptionContent}
+          <div>
+            {LANGUAGE_THEMES.map((l, index) => (
+              <ThemeChoiceButton
+                key={index}
+                label={l.title}
+                description={replaceTokens(l.desc1, {
+                  language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "<langue choisie à l'étape 1>",
+                })}
+                onClick={onClick(index)}
               />
-            </>
-          )}
-          <StepsButton prev={`/lancer-un-defi/linguistique/1?edit=${activity?.id}`} next={onNext} />
+            ))}
+            <ThemeChoiceButton
+              isOpen={isChoiceOtherOpen}
+              onClick={() => {
+                setIsChoiceOtherOpen(!isChoiceOtherOpen);
+              }}
+              additionalContent={
+                <div className="text-center">
+                  <h3>Par exemple un proverbe...</h3>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', margin: '0.5rem 0' }}>
+                    <span style={{ marginRight: '0.3rem' }}></span>
+                    {data !== null && (
+                      <TextField
+                        variant="standard"
+                        value={data.themeName || ''}
+                        onChange={(event) => {
+                          updateActivity({ data: { ...data, themeName: event.target.value } });
+                        }}
+                      />
+                    )}
+                  </div>
+                  <br />
+                  <Button color="primary" size="small" variant="outlined" onClick={onClick(-1)}>
+                    Continuer
+                  </Button>
+                </div>
+              }
+              label="Autre"
+              description={`Choisissez une autre façon de présenter votre langue.`}
+            />
+          </div>
         </div>
       </div>
     </Base>

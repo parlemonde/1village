@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { isDefi } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_OBJECTS } from 'src/activity-types/defi.constants';
+import { isLanguage, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -20,16 +20,11 @@ const DefiStep3 = () => {
   const explanationContentIndex = Math.max(data?.explanationContentIndex ?? 0, 0);
 
   const errorSteps = React.useMemo(() => {
-    const fieldStep2 = activity?.content.filter((d) => d.value !== '' && d.value !== '<p></p>\n'); // if value is empty in step 2
-    if (data !== null && fieldStep2?.length === 0) {
+    if (data !== null) {
       return getErrorSteps(data, 2);
     }
-    if (data !== null && data.language.length === 0) {
-      const errors = getErrorSteps(data, 1); //corresponding to step 1
-      return errors;
-    }
     return [];
-  }, [activity, data]);
+  }, [data]);
 
   const contentAdded = React.useRef(false);
   React.useEffect(() => {
@@ -80,7 +75,13 @@ const DefiStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Choix de la langue', "Choix de l'objet", 'Explication', 'Le défi', 'Prévisualisation']}
+          steps={[
+            data.languageCode || 'Langue',
+            (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
+            'Présentation',
+            'Défi',
+            'Prévisualisation',
+          ]}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -94,7 +95,9 @@ const DefiStep3 = () => {
         <div className="width-900">
           <h1>{'Explication'}</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            {LANGUAGE_OBJECTS[data?.objectIndex % LANGUAGE_OBJECTS.length]?.desc2}
+            {data.hasSelectedThemeNameOther
+              ? 'Expliquez pourquoi votre choix, ce qu’il signifie et quand vous l’utilisez.'
+              : LANGUAGE_THEMES[data?.themeIndex % LANGUAGE_THEMES.length]?.desc2}
           </p>
 
           <ContentEditor

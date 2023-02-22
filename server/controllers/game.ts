@@ -1,11 +1,11 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
 import { getQueryString } from '../utils';
+import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { Controller } from './controller';
 
@@ -30,7 +30,7 @@ type GameGetter = {
  * @returns Game[]
  */
 const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: GameGetter) => {
-  let subQueryBuilder = getRepository(Game)
+  let subQueryBuilder = AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .where('game.villageId = :villageId', { villageId: villageId })
     .andWhere('game.type = :type', { type: type });
@@ -70,7 +70,7 @@ gameController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const game = await getRepository(Game).findOne({ where: { id } });
+  const game = await AppDataSource.getRepository(Game).findOne({ where: { id } });
   if (!game || (req.user.type === UserType.TEACHER && req.user.villageId !== game.villageId)) {
     next();
     return;
@@ -91,7 +91,7 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
     next();
     return;
   }
-  const game = await getRepository(Game)
+  const game = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
     .where('game.userId <> :userId', { userId: userId })
@@ -132,7 +132,7 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     next();
     return;
   }
-  const count = await getRepository(Game)
+  const count = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
     .where('`game`.`userId` <> :userId', { userId: userId })
@@ -164,7 +164,7 @@ gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async
     return;
   }
   const gameId = parseInt(req.params.gameId, 10) || 0;
-  const gameResponses = await getRepository(GameResponse)
+  const gameResponses = await AppDataSource.getRepository(GameResponse)
     .createQueryBuilder('gameResponse')
     .leftJoinAndSelect('gameResponse.user', 'user')
     .where('`gameResponse`.`gameId` = :gameId', { gameId: gameId })
@@ -207,12 +207,12 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
     return;
   }
 
-  const game = await getRepository(Game).findOne({ where: { id: id } });
+  const game = await AppDataSource.getRepository(Game).findOne({ where: { id: id } });
   if (!game) {
     next();
     return;
   }
-  const responses = await getRepository(GameResponse).find({ where: { userId: userId, gameId: id } });
+  const responses = await AppDataSource.getRepository(GameResponse).find({ where: { userId: userId, gameId: id } });
   if (responses.length > 2) {
     next();
     return;
@@ -224,7 +224,7 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   gameResponse.villageId = game.villageId;
   gameResponse.userId = userId;
 
-  await getRepository(GameResponse).save(gameResponse);
+  await AppDataSource.getRepository(GameResponse).save(gameResponse);
 
   res.sendJSON(GameResponse);
 });
