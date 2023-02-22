@@ -148,6 +148,7 @@ const Presentation = () => {
   };
 
   const updateCheckBox = async (checked: boolean) => {
+    console.trace();
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);
@@ -454,18 +455,18 @@ const Presentation = () => {
                       defaultValue={'non renseigné'}
                       label="Language :"
                       placeholder="Langue"
-                      // style={{ visibility: 'hidden' }}
+                      style={{ visibility: 'hidden' }}
                       isEditMode={editMode === 0}
                       onChange={() => {
                         setNewUser((u) => (!u ? u : { ...u, language }));
                       }}
                     />
-                    {/* {editMode === -1 && (
-                <span>
-                  <strong>Langue: </strong>
-                  {language}
-                </span>
-              )} */}
+                    {editMode === -1 && (
+                      <span>
+                        <strong>Langue: </strong>
+                        {language}
+                      </span>
+                    )}
                     {editMode === 0 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
                     {editMode === 0 && (
                       <div className="text-center">
@@ -487,17 +488,21 @@ const Presentation = () => {
                   </Grid>
                 </Grid>
               </div>
-              <div style={{ marginTop: '20px' }}>
-                <Checkbox
-                  value={newUser.hasAcceptedNewsletter}
-                  checked={user !== null && user.hasAcceptedNewsletter}
-                  onChange={(event) => {
-                    updateCheckBox(event.target.checked);
-                  }}
-                />
-                <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
-              </div>
             </label>
+            <div style={{ marginTop: '20px' }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={8}>
+                  <Checkbox
+                    value={newUser.hasAcceptedNewsletter}
+                    checked={user !== null && user.hasAcceptedNewsletter}
+                    onChange={(event) => {
+                      updateCheckBox(event.target.checked);
+                    }}
+                  />
+                  <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
+                </Grid>
+              </Grid>
+            </div>
           </div>
           {/* <div>
             <Grid container spacing={2}>
