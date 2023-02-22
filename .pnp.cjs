@@ -62,6 +62,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mime-types", "npm:2.1.1"],\
             ["@types/morgan", "npm:1.9.3"],\
             ["@types/multer", "npm:1.4.7"],\
+            ["@types/node", "npm:16.11.41"],\
             ["@types/nodemailer", "npm:6.4.4"],\
             ["@types/nprogress", "npm:0.2.0"],\
             ["@types/prettier", "npm:2.6.3"],\
@@ -203,6 +204,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mime-types", "npm:2.1.1"],\
             ["@types/morgan", "npm:1.9.3"],\
             ["@types/multer", "npm:1.4.7"],\
+            ["@types/node", "npm:16.11.41"],\
             ["@types/nodemailer", "npm:6.4.4"],\
             ["@types/nprogress", "npm:0.2.0"],\
             ["@types/prettier", "npm:2.6.3"],\
@@ -6084,6 +6086,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/node", [\
+        ["npm:16.11.41", {\
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.41-e10b7bd53b-808e4d6575.zip/node_modules/@types/node/",\
+          "packageDependencies": [\
+            ["@types/node", "npm:16.11.41"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:16.7.1", {\
           "packageLocation": "./.yarn/cache/@types-node-npm-16.7.1-ed9db6a0db-fcf1a2c7b1.zip/node_modules/@types/node/",\
           "packageDependencies": [\
@@ -19115,7 +19124,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tsconfig/node12", "npm:1.0.11"],\
             ["@tsconfig/node14", "npm:1.0.3"],\
             ["@tsconfig/node16", "npm:1.0.3"],\
-            ["@types/node", null],\
+            ["@types/node", "npm:16.11.41"],\
             ["@types/swc__core", null],\
             ["@types/swc__wasm", null],\
             ["@types/typescript", null],\

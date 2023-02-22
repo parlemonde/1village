@@ -26,7 +26,7 @@ const SignInParent = () => {
   const [isEmailError, setIsEmailError] = React.useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = React.useState<boolean>(false);
 
-  const { verifyUser } = useUserRequests();
+  const { resendVerificationEmail } = useUserRequests();
 
   const errorMessages: {
     [key: number]: string;
@@ -167,7 +167,7 @@ const SignInParent = () => {
                 onClick={async () => {
                   if (emailRef?.current?.value) {
                     try {
-                      await verifyUser(emailRef?.current?.value);
+                      await resendVerificationEmail(emailRef?.current?.value);
                       setIsEmailSent(true);
                     } catch (err) {
                       setIsEmailError(true);

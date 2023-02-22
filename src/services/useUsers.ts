@@ -141,6 +141,31 @@ export const useUserRequests = () => {
   );
 
   const verifyUser = React.useCallback(
+    async (email: string, verificationHash: string) => {
+      const response = await axiosLoggedRequest({
+        method: 'POST',
+        url: '/users/verify-email',
+        data: {
+          email: email,
+          verificationHash: verificationHash,
+        },
+      });
+      if (response.error) {
+        enqueueSnackbar('Une erreur est survenue...', {
+          variant: 'error',
+        });
+        throw new Error('invalid token');
+      }
+      enqueueSnackbar('Utilisateur verifié avec succès', {
+        variant: 'success',
+      });
+      queryClient.invalidateQueries('users');
+      return response.data.user as User;
+    },
+    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+  );
+
+  const resendVerificationEmail = React.useCallback(
     async (email: string) => {
       const response = await axiosLoggedRequest({
         method: 'POST',
@@ -174,5 +199,6 @@ export const useUserRequests = () => {
     editUserPassword,
     deleteUser,
     verifyUser,
+    resendVerificationEmail,
   };
 };
