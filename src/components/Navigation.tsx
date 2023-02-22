@@ -242,7 +242,7 @@ export const Navigation = (): JSX.Element => {
   return (
     <nav className="navigation">
       <div style={{ position: 'relative' }}>
-        {user.type === UserType.FAMILY && (
+        {user.type !== UserType.FAMILY && (
           <div
             className="navigation__content navigation__content--is-header with-shadow"
             style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
