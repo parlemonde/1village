@@ -19,8 +19,7 @@ const ClassroomParamStep2 = () => {
   const lastnameRef = React.useRef<HTMLInputElement>(null);
   const [isDuplicateModalOn, setIsDuplicateModalOn] = React.useState(false);
 
-  //TODO: delete input after submit
-  //TODO: issu with the button delete, find the student
+  //TODO: must be unique student
 
   const handleChange = () => {
     if (firstnameRef.current === null || lastnameRef.current === null) return;
@@ -70,7 +69,7 @@ const ClassroomParamStep2 = () => {
     <Base>
       <Steps
         steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-        urls={['/familles/1?edit', '/familles/2', '/familles/3', 'familles/4']}
+        urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
         activeStep={1}
       />
       <div className="width-900">
