@@ -1,11 +1,12 @@
-import { Tooltip } from '@mui/material';
-import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Tooltip } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, getDefi, getLanguageTheme, DEFI, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
