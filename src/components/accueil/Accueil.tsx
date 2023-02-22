@@ -1,5 +1,6 @@
-import { Button } from '@mui/material';
 import React from 'react';
+
+import { Button } from '@mui/material';
 
 import { LinkChild } from './LinkChild';
 import { isGame } from 'src/activity-types/anyActivity';
