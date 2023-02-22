@@ -95,7 +95,7 @@ export const FilterSelect = <T,>({ value, onChange, name, options }: FilterSelec
               <ExpandLessIcon />
             </div>
 
-            <div style={{ padding: '0 0.4rem' }}>
+            <div style={{ padding: '0 0.4rem', overflowY: 'auto', height: '125px' }}>
               <FormGroup>
                 {options.map((option) => (
                   <FormControlLabel

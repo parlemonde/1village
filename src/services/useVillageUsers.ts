@@ -15,7 +15,7 @@ export const useVillageUsers = (): { users: User[] } => {
 
   const villageId = village ? village.id : null;
   const isPelico = user !== null && user.type > UserType.TEACHER;
-  const userCountryIsoCode = user ? user.country.isoCode : null;
+  const userCountryIsoCode = user ? user.country?.isoCode : null;
 
   const getUsers: QueryFunction<User[]> = React.useCallback(async () => {
     if (villageId === null || userCountryIsoCode === null) {
@@ -29,7 +29,7 @@ export const useVillageUsers = (): { users: User[] } => {
       return [];
     }
     if (selectedPhase === 1 && !isPelico) {
-      return (response.data as User[]).filter((user) => user.country.isoCode === userCountryIsoCode || user.type > UserType.TEACHER);
+      return (response.data as User[]).filter((user) => user.country?.isoCode === userCountryIsoCode || user.type > UserType.TEACHER);
     }
     return response.data as User[];
   }, [villageId, selectedPhase, userCountryIsoCode, isPelico, axiosLoggedRequest]);

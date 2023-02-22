@@ -4,7 +4,7 @@ import React from 'react';
 
 import type { AxiosReturnType } from 'src/utils/axiosRequest';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { User } from 'types/user.type';
+import type { User, UserForm } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
@@ -14,12 +14,13 @@ interface UserContextValue {
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
   axiosLoggedRequest(req: AxiosRequestConfig): Promise<AxiosReturnType>;
-  signup(user: User, inviteCode?: string): UserContextFunc;
+  signup(user: UserForm, inviteCode?: string): UserContextFunc;
   updatePassword(user: Partial<User>): UserContextFunc;
   verifyEmail(user: Partial<User>): UserContextFunc;
   logout(): Promise<void>;
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
+  linkStudent(hashedCode: string): UserContextFunc;
 }
 
 export const UserContext = React.createContext<UserContextValue>({
@@ -34,6 +35,7 @@ export const UserContext = React.createContext<UserContextValue>({
   logout: async () => {},
   deleteAccount: async () => false,
   setUser: () => {},
+  linkStudent: async () => ({ success: false, errorCode: 0 }),
 });
 
 interface UserContextProviderProps {
@@ -52,9 +54,17 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
   );
 
   React.useEffect(() => {
-    if (user === null && router.pathname !== '/login' && router.pathname !== '/') {
-      router.push('/login');
-    }
+    if (
+      user === null &&
+      router.pathname !== '/' &&
+      router.pathname !== '/inscription' &&
+      router.pathname !== '/connexion' &&
+      router.pathname !== '/professeur' &&
+      router.pathname !== '/user-verified' &&
+      router.pathname !== '/reset-password' &&
+      router.pathname !== '/update-password'
+    )
+      router.push('/');
   }, [user, router]);
 
   /**
@@ -65,6 +75,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
    * @param remember
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
+  //reset-password
   const login = React.useCallback(
     async (username: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
@@ -156,7 +167,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
    * @returns {Promise<{success: boolean, errorCode: number}>}
    */
   const signup = React.useCallback(
-    async (user: User, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
+    async (user: UserForm, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
         method: 'POST',
         headers,
@@ -243,6 +254,34 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     [headers, setUser],
   );
 
+  /**
+   * Function to associate a child for user Parents
+   * @param hashedCode string code givent to parent
+   */
+  const linkStudent = React.useCallback(
+    async (hashedCode: string) => {
+      const response = await axiosRequest({
+        method: 'POST',
+        headers,
+        url: '/students/link-student',
+        data: {
+          hashedCode,
+        },
+      });
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+      return {
+        success: true,
+        errorCode: 0,
+      };
+    },
+    [headers],
+  );
+
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
   /**
@@ -278,8 +317,9 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       logout,
       deleteAccount,
       setUser,
+      linkStudent,
     }),
-    [user, isLoggedIn, login, loginWithSso, axiosLoggedRequest, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser],
+    [user, isLoggedIn, login, loginWithSso, axiosLoggedRequest, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

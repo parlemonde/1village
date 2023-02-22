@@ -21,7 +21,7 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
     next();
     return;
   }
-  const villageId = req.user.type >= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
 
   if (!villageId) {
     next();
@@ -63,7 +63,7 @@ storyController.get({ path: '/all', userType: UserType.TEACHER }, async (req: Re
 storyController.delete({ path: '/:imageId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.imageId, 10);
   const image = await AppDataSource.getRepository(Image).findOne({ where: { id } });
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (image === undefined) {
     res.status(204).send();
     return;

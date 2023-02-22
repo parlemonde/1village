@@ -85,6 +85,7 @@ export async function getApp() {
     }),
   );
   backRouter.use(jsonify);
+  // ! a enlever une fois que les tests finies
   backRouter.get('/', (_, res: Response) => {
     res.status(200).send('Hello World 1Village!');
   });
@@ -95,7 +96,7 @@ export async function getApp() {
   app.use('/api', backRouter);
 
   // [5] --- Add frontend ---
-  app.get('/country-flags/*', handleErrors(authenticate(UserType.TEACHER)), express.static(path.join(__dirname, '../../public/country-flags')));
+  app.get('/country-flags/*', handleErrors(authenticate()), express.static(path.join(__dirname, '../../public/country-flags')));
   app.use(express.static(path.join(__dirname, '../../public'))); // app.js is located at ./dist/server and public at ./public
 
   // Send 404 for static files not found by express static.
@@ -116,11 +117,38 @@ export async function getApp() {
     handleErrors(authenticate()),
     handleErrors(setVillage),
     handleErrors(async (req, res) => {
-      if (req.user === undefined && req.path !== '/login' && req.path !== '/') {
-        res.redirect('/login');
+      if (
+        req.user === undefined &&
+        req.path !== '/' &&
+        req.path !== '/inscription' &&
+        req.path !== '/connexion' &&
+        req.path !== '/professeur' &&
+        req.path !== '/user-verified' &&
+        req.path !== '/reset-password' &&
+        req.path !== '/update-password'
+      ) {
+        res.redirect('/');
         return;
       }
-      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type < UserType.ADMIN)) {
+
+      if (
+        req.user &&
+        (req.path === '/inscription' ||
+          req.path === '/connexion' ||
+          req.path === '/professeur' ||
+          req.path === '/reset-password' ||
+          req.path === '/update-password')
+      ) {
+        res.redirect('/');
+        return;
+      }
+
+      if (req.path.slice(1, 6) === 'admin' && (!req.user || req.user.type !== UserType.ADMIN)) {
+        res.redirect('/');
+        return;
+      }
+
+      if (req.path.includes('familles') && (!req.user || req.user.type !== UserType.TEACHER)) {
         res.redirect('/');
         return;
       }

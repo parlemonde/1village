@@ -19,7 +19,7 @@ villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: 
 });
 
 //--- Get one village ---
-villageController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+villageController.get({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
     return;
