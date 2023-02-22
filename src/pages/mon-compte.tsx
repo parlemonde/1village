@@ -396,7 +396,7 @@ const Presentation = () => {
           onBlur={checkEmailAndPseudo}
         />
         {/* ============= TEST INPUT =========== */}
-        {/* <PanelInput
+        <PanelInput
           value={newUser.language}
           defaultValue={''}
           label="Language:"
@@ -406,7 +406,7 @@ const Presentation = () => {
             setNewUser((u) => (!u ? u : { ...u, language: language }));
           }}
           errorMsg="Langue invalide"
-        /> */}
+        />
         {user.accountRegistration !== 10 && (
           <>
             <div style={{ margin: '1rem 0.5rem' }}>
@@ -450,23 +450,26 @@ const Presentation = () => {
                     <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
                       Choix de la langue de communication
                     </p>
+
+                    <div>
+                      {editMode === -1 && (
+                        <span>
+                          <strong>Langue: </strong>
+                          {language}
+                        </span>
+                      )}
+                    </div>
                     <PanelInput
                       value={newUser.language}
-                      defaultValue={'non renseigné'}
+                      defaultValue={''}
                       label="Language :"
                       placeholder="Langue"
-                      // style={{ visibility: 'hidden' }}
+                      style={{ visibility: 'hidden' }}
                       isEditMode={editMode === 0}
                       onChange={() => {
                         setNewUser((u) => (!u ? u : { ...u, language }));
                       }}
                     />
-                    {editMode === -1 && (
-                      <span>
-                        <strong>Langue: </strong>
-                        {language}
-                      </span>
-                    )}
                     {editMode === 0 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
                     {editMode === 0 && (
                       <div className="text-center">
@@ -489,20 +492,18 @@ const Presentation = () => {
                 </Grid>
               </div>
             </label>
-            <div style={{ marginTop: '20px' }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={8}>
-                  <Checkbox
-                    value={newUser.hasAcceptedNewsletter}
-                    checked={user !== null && user.hasAcceptedNewsletter}
-                    onChange={(event) => {
-                      updateCheckBox(event.target.checked);
-                    }}
-                  />
-                  <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
-                </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={8}>
+                <Checkbox
+                  value={newUser.hasAcceptedNewsletter}
+                  checked={user !== null && user.hasAcceptedNewsletter}
+                  onChange={(event) => {
+                    updateCheckBox(event.target.checked);
+                  }}
+                />
+                <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
               </Grid>
-            </div>
+            </Grid>
           </div>
           {/* <div>
             <Grid container spacing={2}>
