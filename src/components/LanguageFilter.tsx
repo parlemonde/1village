@@ -23,7 +23,7 @@ const LanguageFilter = ({ languages, language, setLanguage, sx }: Props) => {
       getOptionLabel={(option) => option.language?.french ?? ''}
       sx={sx}
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      value={language ? { key: language, language: languages.find((l) => l.alpha2 === language)! } : undefined}
+      value={language ? { key: language, language: languages.find((l) => l.french === language)! } : undefined}
       disableClearable
       onChange={(_event, newValue: LanguageOption | null) => {
         setLanguage(newValue?.language.french ?? 'français');
