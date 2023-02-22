@@ -1,7 +1,8 @@
-import Card from '@mui/material/Card';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import type { Object3D, Scene, Raycaster, Camera } from 'three';
+
+import Card from '@mui/material/Card';
 
 import { UserPopover } from '../UserPopover';
 import type { HoverableObject } from '../lib/hoverable-object';

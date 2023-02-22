@@ -1,10 +1,11 @@
+import { useSnackbar } from 'notistack';
+import React from 'react';
+
 import { Alert, AlertTitle, Checkbox, Grid, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import NoSsr from '@mui/material/NoSsr';
-import { useSnackbar } from 'notistack';
-import React from 'react';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -17,7 +18,7 @@ import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { useLanguages } from 'src/services/useLanguages';
-import { useUserRequests } from 'src/services/useUsers';
+// import { useUserRequests } from 'src/services/useUsers';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
@@ -148,7 +149,6 @@ const Presentation = () => {
   };
 
   const updateCheckBox = async (checked: boolean) => {
-    console.trace();
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);

@@ -1,7 +1,8 @@
-import { Backdrop, Button, CircularProgress, Link, Tooltip } from '@mui/material';
 import { useRouter } from 'next/router';
-import qs from 'qs';
+import qs from 'query-string';
 import React from 'react';
+
+import { Backdrop, Button, CircularProgress, Link, Tooltip } from '@mui/material';
 
 import { KeepRatio } from '../components/KeepRatio';
 import { isRedirectValid } from '../components/accueil/NewHome';
