@@ -1,27 +1,41 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
 import { Link } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
+import { UserContext } from 'src/contexts/userContext';
+import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const UserVerified: React.FunctionComponent = () => {
   const router = useRouter();
+  const { verifyUser } = useUserRequests();
+  const timeoutRef = useRef<number | null>(null);
+  const { email, verificationHash } = router.query;
+  const { isLoggedIn, setUser } = useContext(UserContext);
 
-  const timeoutRef = useRef<number>(null);
   useEffect(() => {
-    timeoutRef.current = window.setTimeout(() => {
-      router.push('/');
-    }, 5000);
-    return () => {
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [router]);
+    if (typeof email === 'string' && typeof verificationHash === 'string') {
+      verifyUser(email, verificationHash).then(setUser).catch();
+    }
+  }, [email, router, setUser, verificationHash, verifyUser]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      timeoutRef.current = window.setTimeout(() => {
+        router.push('/');
+      }, 5000);
+      return () => {
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+        }
+      };
+    }
+    return () => {};
+  }, [isLoggedIn, router]);
 
   return (
     <>

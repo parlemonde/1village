@@ -376,8 +376,8 @@ const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
 };
 const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
 
-userController.get({ path: '/verify-email' }, async (req: Request, res: Response) => {
-  const data = req.query;
+userController.post({ path: '/verify-email' }, async (req: Request, res: Response) => {
+  const data = req.body;
   if (!verifyUserValidator(data)) {
     sendInvalidDataError(verifyUserValidator);
     return;
@@ -421,7 +421,7 @@ userController.get({ path: '/verify-email' }, async (req: Request, res: Response
     sameSite: 'strict',
   });
   delete user.verificationHash;
-  res.redirect('/user-verified');
+  res.sendJSON({ user, accessToken });
 });
 
 // === RESEND VERIFICATION EMAIL ===

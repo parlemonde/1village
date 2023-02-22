@@ -99,7 +99,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
       setVillage(newVillage);
       setSelectedPhase(newVillage ? newVillage.activePhase : 1);
     }
-    if ((userVillageId === -1 && user.type !== UserType.TEACHER) || (userVillageId === -1 && user.type !== UserType.FAMILY)) {
+    if (userVillageId === -1 && user.type !== UserType.FAMILY) {
       showSelectVillageModal();
     }
     if (userVillageId === -1 && user.type === UserType.TEACHER) {
