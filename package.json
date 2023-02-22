@@ -183,5 +183,5 @@
     "web-vitals": "^2.1.4",
     "winston": "^3.8.0"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.4.1"
 }
