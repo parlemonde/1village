@@ -195,7 +195,7 @@ activityController.get({ path: '' }, async (req: Request, res: Response) => {
 });
 
 // --- Get one activity. ---
-activityController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.get({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({
     where: { id },
@@ -235,7 +235,7 @@ activityController.get({ path: '/draft' }, async (req: Request, res: Response, n
   res.sendJSON({ draft: activity || null });
 });
 
-activityController.get({ path: '/mascotte', userType: UserType.TEACHER }, async (req, res, next) => {
+activityController.get({ path: '/mascotte' }, async (req, res, next) => {
   if (!req.user || req.user.type <= UserType.MEDIATOR) {
     // no mascotte for pelico
     next();
