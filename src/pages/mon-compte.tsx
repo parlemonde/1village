@@ -36,7 +36,7 @@ const Presentation = () => {
     confirmNew: '',
     current: '',
   });
-  const [language, setLanguage] = React.useState('');
+  const [language, setLanguage] = React.useState(user?.language || 'francais');
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -80,6 +80,30 @@ const Presentation = () => {
       displayName: newUser.displayName,
       hasAcceptedNewsletter: newUser.hasAcceptedNewsletter,
       language: language,
+    };
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: updatedValues,
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...user, ...updatedValues });
+      enqueueSnackbar('Compte mis à jour avec succès !', {
+        variant: 'success',
+      });
+    }
+    setIsLoading(false);
+  };
+  const updateLanguage = async () => {
+    if (!user) return;
+    setIsLoading(true);
+    const updatedValues = {
+      language,
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -173,31 +197,6 @@ const Presentation = () => {
     setIsLoading(false);
   };
 
-  // const updateLanguage = async (language: string) => {
-  //   if (!newUser) return;
-  //   if (!user) return;
-  //   setIsLoading(true);
-  //   const response = await axiosLoggedRequest({
-  //     method: 'PUT',
-  //     url: `/users/${user.id}`,
-  //     data: {
-  //       language,
-  //     },
-  //   });
-  //   if (response.error) {
-  //     setNewUser(user);
-  //     enqueueSnackbar('Une erreur inconnue est survenue...', {
-  //       variant: 'error',
-  //     });
-  //   } else {
-  //     setUser({ ...user, language: language });
-  //     enqueueSnackbar('Choix mis à jour avec succès !', {
-  //       variant: 'success',
-  //     });
-  //   }
-  //   setIsLoading(false);
-  // };
-
   const deleteAccount = async () => {
     if (!newUser) return;
     if (!user) return;
@@ -220,7 +219,7 @@ const Presentation = () => {
   };
 
   const updateEditMode =
-    (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) =>
+    (newEditMode: number, save: 'user' | 'pwd' | 'delete' | 'language' | null = null) =>
     async () => {
       if (save === 'user') {
         await checkEmailAndPseudo();
@@ -234,6 +233,8 @@ const Presentation = () => {
           return;
         }
         await updatePwd();
+      } else if (save === 'language') {
+        await updateLanguage();
       } else if (save === 'delete') {
         deleteAccount();
       } else {
@@ -479,11 +480,20 @@ const Presentation = () => {
                           sx={defaultContainedButtonStyle}
                           variant="contained"
                           style={{ margin: '0.5rem' }}
-                          onClick={updateEditMode(-1)}
+                          onClick={() => {
+                            setLanguage(user?.language || 'francais');
+                            setEditMode(-1);
+                          }}
                         >
                           Annuler
                         </Button>
-                        <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="secondary"
+                          style={{ margin: '0.2rem' }}
+                          onClick={updateEditMode(-1, 'language')}
+                        >
                           Enregistrer
                         </Button>
                       </div>
