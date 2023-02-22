@@ -69,18 +69,6 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
           onChange({ ...filters, types: option.value, selectedType: option.key });
         }}
       />
-      {/* <FilterSelect
-        name="Status"
-        options={[
-          { key: 0, label: 'Tous' },
-          { key: 1, label: 'En cours' },
-          { key: 2, label: 'Terminées' },
-        ]}
-        value={filters.status}
-        onChange={(newStatus) => {
-          onChange({ ...filters, status: newStatus.key });
-        }}
-      /> */}
       <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
         {countries.map((c) => (
           <label key={c} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
