@@ -83,7 +83,7 @@ export async function getStagingApp() {
         req.path !== '/' &&
         req.path !== '/inscription' &&
         req.path !== '/connexion' &&
-        req.path !== '/professeur' &&
+        req.path !== '/login' &&
         req.path !== '/user-verified' &&
         req.path !== '/reset-password' &&
         req.path !== '/update-password'
@@ -96,7 +96,7 @@ export async function getStagingApp() {
         req.user &&
         (req.path === '/inscription' ||
           req.path === '/connexion' ||
-          req.path === '/professeur' ||
+          req.path === '/login' ||
           req.path === '/reset-password' ||
           req.path === '/update-password')
       ) {

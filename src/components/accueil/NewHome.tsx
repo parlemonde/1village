@@ -49,7 +49,7 @@ export const NewHome = () => {
               <School
                 style={{ width: '15rem', height: 'auto', margin: 'auto' }}
                 onClick={() => {
-                  router.push('/professeur');
+                  router.push('/login');
                 }}
               />
               <Button
@@ -57,7 +57,7 @@ export const NewHome = () => {
                 variant="outlined"
                 style={{ marginTop: '0.8rem' }}
                 onClick={() => {
-                  router.push('/professeur');
+                  router.push('/login');
                 }}
               >
                 1Village en classe
