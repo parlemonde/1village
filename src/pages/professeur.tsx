@@ -58,7 +58,8 @@ const SignInTeacher = () => {
         setErrorCode(0);
       }
     }
-  }, [loginSSO]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
