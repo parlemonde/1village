@@ -27,10 +27,14 @@ const SignInTeacher = () => {
 
   const loginSSO = React.useCallback(
     async (code: string) => {
+      console.trace();
+      console.log('firstCall', firstCall.current);
       if (firstCall.current === false) {
+        console.log('je suis dans la condition LoginSSO');
         firstCall.current = true;
         setIsLoading(true);
         const response = await loginWithSso(code);
+        console.log({ loginSSOResponse: response });
         if (response.success) {
           router.push(isRedirectValid(redirect.current) ? redirect.current : '/');
         } else {
