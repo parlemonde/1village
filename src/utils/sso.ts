@@ -11,7 +11,7 @@ export function onLoginSSO() {
   const state = generateTemporaryToken();
   window.sessionStorage.setItem('oauth-state', state);
   const url = `${encodeURI(SSO_HOST)}/oauth/authorize?response_type=code&client_id=${encodeURI(CLIENT_ID)}&redirect_uri=${encodeURI(
-    window.location.origin + '/professeur',
+    window.location.origin + '/login',
   )}&state=${encodeURI(state)}`;
   window.location.replace(url);
 }
