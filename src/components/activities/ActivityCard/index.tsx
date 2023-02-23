@@ -69,7 +69,7 @@ export const ActivityCard = ({
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
-  const UsedCard: React.FC = CardTypeMapper[activity.type];
+  const UsedCard: (props: ActivityCardProps) => JSX.Element = CardTypeMapper[activity.type];
 
   return (
     <Paper
