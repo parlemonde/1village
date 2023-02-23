@@ -69,7 +69,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = React.useState<User | null>(initialUser || null);
-
+  console.log(user);
   const onRouterChangeStart = (): void => {
     NProgress.start();
   };

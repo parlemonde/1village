@@ -107,6 +107,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
 
   const loginWithSso = React.useCallback(
     async (code: string): Promise<{ success: boolean; errorCode: number }> => {
+      console.trace();
       const response = await axiosRequest({
         method: 'POST',
         url: '/login-sso-plm',
@@ -116,6 +117,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         },
         baseURL: '',
       });
+      console.log(response);
       if (response.error) {
         return {
           success: false,
