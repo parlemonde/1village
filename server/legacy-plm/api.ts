@@ -22,7 +22,7 @@ export async function getUserFromPLM(code: string): Promise<User | null> {
         grant_type: 'authorization_code',
         client_id,
         client_secret,
-        redirect_uri: `${process.env.HOST_URL}/login`,
+        redirect_uri: `${process.env.HOST_URL}/professeur`,
         code,
       },
     });

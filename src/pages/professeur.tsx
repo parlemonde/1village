@@ -44,7 +44,7 @@ const SignInTeacher = () => {
 
   React.useEffect(() => {
     const urlQueryParams = qs.parse(window.location.search);
-    console.log(urlQueryParams);
+    console.log({ urlQueryParams });
     try {
       redirect.current = decodeURI((urlQueryParams.redirect as string) || '/');
     } catch (e) {
