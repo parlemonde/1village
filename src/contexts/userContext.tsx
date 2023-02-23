@@ -117,7 +117,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         },
         baseURL: '',
       });
-      console.log(response);
+      console.log('response login SSO', response);
       if (response.error) {
         return {
           success: false,
