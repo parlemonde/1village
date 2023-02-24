@@ -82,9 +82,11 @@ const Communication = () => {
       });
 
       if (newWin) {
-        newWin.document.open();
-        newWin.document.write(`<html><body>${messagesWithId.join(' ')}<script>window.print()</script></body></html>`);
-        newWin.document.close();
+        const doc = newWin.document;
+        doc.open();
+        doc.body.innerHTML = messagesWithId.join(' ');
+        doc.body.innerHTML += '<script>window.print()</script>';
+        doc.close();
       }
     } else {
       setIsModalOpen(true);
