@@ -504,8 +504,6 @@ userController.post({ path: '/resend-verification-email' }, async (req: Request,
 
       res.status(200).json({
         message: 'Verification email sent successfully',
-        data: data,
-        user: user,
       });
     } catch (err) {
       res.status(400).json({ message: 'Bad request' });
