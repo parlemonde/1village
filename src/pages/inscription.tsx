@@ -168,6 +168,7 @@ const Inscription = () => {
         await addUser(newUser);
       } catch (err) {
         setIsEmailUsed(true);
+        return;
       }
 
       setIsSubmitSuccessfull(true);

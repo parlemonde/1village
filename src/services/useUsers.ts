@@ -57,7 +57,7 @@ export const useUserRequests = () => {
           enqueueSnackbar('Une erreur est survenue...', {
             variant: 'error',
           });
-          return Promise.reject(new Error('Email already exists'));
+          return Promise.reject(new Error('Duplicate Entry'));
         }
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
