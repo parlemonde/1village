@@ -70,6 +70,7 @@ const SignInTeacher = () => {
             gap: '10px',
             background: 'white',
             width: '95%',
+            height: '48px',
             maxWidth: '1200px',
             borderRadius: '10px',
             marginBottom: '2rem',

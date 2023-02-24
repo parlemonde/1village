@@ -33,12 +33,13 @@ export const NewHome = () => {
             gap: '10px',
             background: 'white',
             width: '95%',
+            height: '48px',
             maxWidth: '1200px',
             borderRadius: '10px',
             marginBottom: '2rem',
           }}
         >
-          <Logo style={{ width: '9rem', height: 'auto', margin: '10px 0 5px 10px' }} />
+          <Logo style={{ width: '25%', height: 'auto', margin: '0 10px', alignSelf: 'center' }} />
           <h1 style={{ placeSelf: 'center' }}>Vous êtes...</h1>
         </div>
         <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
