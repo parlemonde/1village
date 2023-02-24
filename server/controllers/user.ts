@@ -153,14 +153,14 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
 userController.post({ path: '' }, async (req: Request, res: Response) => {
-  function generatePseudo(data: CreateUserData): string {
+  async function generatePseudo(data: CreateUserData): Promise<string> {
     const firstName = data.firstname || '';
     const lastName = data.lastname || '';
     const randomNum = Math.floor(Math.random() * 10000);
 
     let pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${randomNum}`;
 
-    while (checkIfPseudoExists(pseudo)) {
+    while (await checkIfPseudoExists(pseudo)) {
       pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${Math.floor(Math.random() * 10000)}`;
     }
     return pseudo;
