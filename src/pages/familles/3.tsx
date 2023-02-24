@@ -84,7 +84,7 @@ const Communication = () => {
       if (newWin) {
         newWin.document.open();
         newWin.document.write(
-          `<html><body>${messagesWithId.join(' ')}<script> window.onload = function() { window.print(); }</script></body></html>`,
+          `<html><script> window.onload = function() { window.print(); }</script><body>${messagesWithId.join(' ')}</body></html>`,
         );
         newWin.document.close();
       }
