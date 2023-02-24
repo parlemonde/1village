@@ -99,6 +99,24 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
   res.sendJSON(pos);
 });
 
+function generatePseudo(data: CreateUserData): string {
+  const firstName = data.firstname || '';
+  const lastName = data.lastname || '';
+  const randomNum = Math.floor(Math.random() * 10000);
+
+  let pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${randomNum}`;
+
+  while (checkIfPseudoExists(pseudo)) {
+    pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${Math.floor(Math.random() * 10000)}`;
+  }
+  return pseudo;
+}
+
+async function checkIfPseudoExists(pseudo: string): Promise<boolean> {
+  const userRepo = AppDataSource.getRepository(User);
+  const existingUser = await userRepo.findOne({ where: { pseudo } });
+  return !!existingUser;
+}
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
@@ -164,7 +182,6 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
 
   const user = new User();
   user.email = data.email;
-  user.pseudo = data.pseudo || '';
   user.firstname = data.firstname || '';
   user.lastname = data.lastname || '';
   user.level = data.level || '';
@@ -180,6 +197,18 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.hasStudentLinked = data.hasStudentLinked || false;
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
+
+  // Generate unique pseudo
+  let pseudo = data.pseudo;
+  if (!pseudo) {
+    pseudo = generatePseudo(data);
+  } else {
+    const pseudoExists = await checkIfPseudoExists(pseudo);
+    if (pseudoExists) {
+      throw new AppError('Pseudo already exists', ErrorCode.PSEUDO_ALREADY_EXISTS);
+    }
+  }
+  user.pseudo = pseudo;
 
   user.accountRegistration = 4; // Block account on inscription and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
