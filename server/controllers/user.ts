@@ -495,7 +495,7 @@ userController.post({ path: '/resend-verification-email' }, async (req: Request,
 
   if (data.email) {
     try {
-      sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+      await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
         url: frontUrl,
         firstname: user.firstname,
         email: data.email,
