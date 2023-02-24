@@ -170,6 +170,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
     const userRepo = AppDataSource.getRepository(User);
     const existingUser = await userRepo.findOne({ where: { pseudo } });
     return !!existingUser;
+    /* The !! is a double negation operator. It converts the value following it to a boolean, where any truthy value (i.e., any non-null, non-undefined, non-zero value) is converted to true, and any falsy value (i.e., null, undefined, 0, false, '', etc.) is converted to false. */
   }
   const data = req.body;
   if (!createUserValidator(data)) {
@@ -503,6 +504,8 @@ userController.post({ path: '/resend-verification-email' }, async (req: Request,
 
       res.status(200).json({
         message: 'Verification email sent successfully',
+        data: data,
+        user: user,
       });
     } catch (err) {
       res.status(400).json({ message: 'Bad request' });
