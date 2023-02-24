@@ -99,24 +99,6 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
   res.sendJSON(pos);
 });
 
-function generatePseudo(data: CreateUserData): string {
-  const firstName = data.firstname || '';
-  const lastName = data.lastname || '';
-  const randomNum = Math.floor(Math.random() * 10000);
-
-  let pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${randomNum}`;
-
-  while (checkIfPseudoExists(pseudo)) {
-    pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${Math.floor(Math.random() * 10000)}`;
-  }
-  return pseudo;
-}
-
-async function checkIfPseudoExists(pseudo: string): Promise<boolean> {
-  const userRepo = AppDataSource.getRepository(User);
-  const existingUser = await userRepo.findOne({ where: { pseudo } });
-  return !!existingUser;
-}
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
@@ -171,6 +153,24 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
 userController.post({ path: '' }, async (req: Request, res: Response) => {
+  function generatePseudo(data: CreateUserData): string {
+    const firstName = data.firstname || '';
+    const lastName = data.lastname || '';
+    const randomNum = Math.floor(Math.random() * 10000);
+
+    let pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${randomNum}`;
+
+    while (checkIfPseudoExists(pseudo)) {
+      pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${Math.floor(Math.random() * 10000)}`;
+    }
+    return pseudo;
+  }
+
+  async function checkIfPseudoExists(pseudo: string): Promise<boolean> {
+    const userRepo = AppDataSource.getRepository(User);
+    const existingUser = await userRepo.findOne({ where: { pseudo } });
+    return !!existingUser;
+  }
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
