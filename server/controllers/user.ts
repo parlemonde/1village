@@ -201,7 +201,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   // Generate unique pseudo
   let pseudo = data.pseudo;
   if (!pseudo) {
-    pseudo = generatePseudo(data);
+    pseudo = await generatePseudo(data);
   } else {
     const pseudoExists = await checkIfPseudoExists(pseudo);
     if (pseudoExists) {
