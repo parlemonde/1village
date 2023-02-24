@@ -84,9 +84,13 @@ const Communication = () => {
       if (newWin) {
         newWin.document.open();
         newWin.document.write(
-          `<!DOCTYPE html><html><body onload="window.print()">${messagesWithId.join(' ')}</body><script>window.print()</script></html>`,
+          `<!DOCTYPE html><html><body onload="window.print()">
+          ${messagesWithId.join(' ')}</body><script>window.print()</script></html>`,
         );
-        newWin.document.close();
+        newWin.document.getElementsByTagName('body')[0].onload = function () {
+          newWin.self.focus();
+          newWin.print();
+        };
       }
     } else {
       setIsModalOpen(true);
