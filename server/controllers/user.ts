@@ -215,16 +215,6 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
 
-  // send confirmation email
-  if (data.firstname) {
-    const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
-      url: frontUrl,
-      firstname: data.firstname,
-      email: data.email,
-      verificationHash: temporaryPassword,
-    });
-  }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
   delete user.passwordHash;
@@ -465,7 +455,7 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
   res.sendJSON({ user, accessToken });
 });
 
-// === RESEND VERIFICATION EMAIL ===
+// ===== RESEND VERIFICATION EMAIL =====
 type ResendEmailData = {
   email?: string;
 };
@@ -482,33 +472,26 @@ const resendEmailValidator = ajv.compile(RESEND_EMAIL_SCHEMA);
 userController.post({ path: '/resend-verification-email' }, async (req: Request, res: Response) => {
   const data = req.body;
 
-  // Check if the email is valid
   if (!resendEmailValidator(data)) {
     sendInvalidDataError(resendEmailValidator);
     return;
   }
 
-  // Get the user by email
   const user = await AppDataSource.getRepository(User).createQueryBuilder().where('User.email = :email', { email: data.email }).getOne();
 
   if (!user) {
     throw new AppError('Invalid data', ErrorCode.INVALID_DATA);
   }
-
-  // If the user is already verified, return an error
   if (user.isVerified) {
     throw new AppError('User is already verified', ErrorCode.ALREADY_VERIFIED_ACCOUNT);
   }
 
-  // Generate a new verification hash
   const temporaryVerificationHash = generateTemporaryToken(20);
 
-  // Update the user with the new verification hash and save it
   user.verificationHash = await argon2.hash(temporaryVerificationHash);
   await AppDataSource.getRepository(User).save(user);
   const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
 
-  // Send the verification email with the new hash
   if (data.email) {
     try {
       sendMail(Email.CONFIRMATION_EMAIL, data.email, {
