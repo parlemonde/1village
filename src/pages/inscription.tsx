@@ -175,7 +175,7 @@ const Inscription = () => {
       setIsSubmitSuccessfull(true);
       setTimeout(() => {
         router.push('/');
-      }, 10000);
+      }, 5000);
     }
   };
 
