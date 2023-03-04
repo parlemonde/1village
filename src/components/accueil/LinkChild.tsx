@@ -21,10 +21,11 @@ export const LinkChild = () => {
         enqueueSnackbar("Le rattachement n'a pas fonctionné ! Veuillez renseigner un identifiant valide", {
           variant: 'error',
         });
+      } else {
+        enqueueSnackbar('Rattachement réalisé avec succès!', {
+          variant: 'success',
+        });
       }
-      enqueueSnackbar('Rattachement réalisé avec succès!', {
-        variant: 'success',
-      });
     });
     hashedCodeRef.current.value = '';
     setTimeout(() => {
