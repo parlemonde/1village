@@ -124,7 +124,7 @@ type CreateUserData = {
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
+    email: { type: 'string' },
     pseudo: { type: 'string', nullable: true },
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
