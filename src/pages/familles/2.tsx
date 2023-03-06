@@ -306,7 +306,6 @@ const ClassroomParamStep2 = () => {
                     </form>
                   ) : (
                     <>
-                      <p>{student.numLinkedAccount}</p>
                       <p style={{ flex: 1 }}>
                         {student.firstname} {student.lastname}
                       </p>
