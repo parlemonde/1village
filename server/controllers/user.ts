@@ -153,6 +153,25 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
 };
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
 userController.post({ path: '' }, async (req: Request, res: Response) => {
+  async function generatePseudo(data: CreateUserData): Promise<string> {
+    const firstName = data.firstname || '';
+    const lastName = data.lastname || '';
+    const randomNum = Math.floor(Math.random() * 10000);
+
+    let pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${randomNum}`;
+
+    while (await checkIfPseudoExists(pseudo)) {
+      pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${Math.floor(Math.random() * 10000)}`;
+    }
+    return pseudo;
+  }
+
+  async function checkIfPseudoExists(pseudo: string): Promise<boolean> {
+    const userRepo = AppDataSource.getRepository(User);
+    const existingUser = await userRepo.findOne({ where: { pseudo } });
+    return !!existingUser;
+    /* The !! is a double negation operator. It converts the value following it to a boolean, where any truthy value (i.e., any non-null, non-undefined, non-zero value) is converted to true, and any falsy value (i.e., null, undefined, 0, false, '', etc.) is converted to false. */
+  }
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
@@ -164,7 +183,6 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
 
   const user = new User();
   user.email = data.email;
-  user.pseudo = data.pseudo || '';
   user.firstname = data.firstname || '';
   user.lastname = data.lastname || '';
   user.level = data.level || '';
@@ -181,21 +199,23 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
 
+  // Generate unique pseudo
+  let pseudo = data.pseudo;
+  if (!pseudo) {
+    pseudo = await generatePseudo(data);
+  } else {
+    const pseudoExists = await checkIfPseudoExists(pseudo);
+    if (pseudoExists) {
+      throw new AppError('Pseudo already exists', ErrorCode.PSEUDO_ALREADY_EXISTS);
+    }
+  }
+  user.pseudo = pseudo;
+
   user.accountRegistration = 4; // Block account on inscription and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
 
-  // send confirmation email
-  if (data.firstname) {
-    const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
-    await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
-      url: frontUrl,
-      firstname: data.firstname,
-      email: data.email,
-      verificationHash: temporaryPassword,
-    });
-  }
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
   delete user.passwordHash;
@@ -436,7 +456,7 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
   res.sendJSON({ user, accessToken });
 });
 
-// === RESEND VERIFICATION EMAIL ===
+// ===== RESEND VERIFICATION EMAIL =====
 type ResendEmailData = {
   email?: string;
 };
@@ -453,36 +473,29 @@ const resendEmailValidator = ajv.compile(RESEND_EMAIL_SCHEMA);
 userController.post({ path: '/resend-verification-email' }, async (req: Request, res: Response) => {
   const data = req.body;
 
-  // Check if the email is valid
   if (!resendEmailValidator(data)) {
     sendInvalidDataError(resendEmailValidator);
     return;
   }
 
-  // Get the user by email
   const user = await AppDataSource.getRepository(User).createQueryBuilder().where('User.email = :email', { email: data.email }).getOne();
 
   if (!user) {
     throw new AppError('Invalid data', ErrorCode.INVALID_DATA);
   }
-
-  // If the user is already verified, return an error
   if (user.isVerified) {
     throw new AppError('User is already verified', ErrorCode.ALREADY_VERIFIED_ACCOUNT);
   }
 
-  // Generate a new verification hash
   const temporaryVerificationHash = generateTemporaryToken(20);
 
-  // Update the user with the new verification hash and save it
   user.verificationHash = await argon2.hash(temporaryVerificationHash);
   await AppDataSource.getRepository(User).save(user);
   const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
 
-  // Send the verification email with the new hash
   if (data.email) {
     try {
-      sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+      await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
         url: frontUrl,
         firstname: user.firstname,
         email: data.email,

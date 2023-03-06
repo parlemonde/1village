@@ -45,7 +45,7 @@ const Inscription = () => {
   const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
   const { languages } = useLanguages();
 
-  const { addUser } = useUserRequests();
+  const { addUser, resendVerificationEmail } = useUserRequests();
   const router = useRouter();
 
   useEffect(() => {
@@ -168,12 +168,14 @@ const Inscription = () => {
         await addUser(newUser);
       } catch (err) {
         setIsEmailUsed(true);
+        return;
       }
 
+      resendVerificationEmail(newUser.email);
       setIsSubmitSuccessfull(true);
       setTimeout(() => {
         router.push('/');
-      }, 10000);
+      }, 5000);
     }
   };
 

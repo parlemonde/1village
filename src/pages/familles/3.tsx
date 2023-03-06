@@ -58,14 +58,16 @@ const Communication = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
     const messagesWithId: string[] = [];
     let count = 0;
+
     if (keywordPresence) {
-      const newWin = window.open('', 'Print-Window');
+      const newWin = window.open('http://localhost:5000/familles/3/print.js', 'Print-Window');
 
       students.forEach((student) => {
         messagesWithId.push(`<div>Élève : <strong>${student.firstname} ${student.lastname}</strong></div>`);
         messagesWithId.push(textValue.replaceAll(keywordRegex, '<u>' + student.hashedCode + '</u>'));
         messagesWithId.push(`<div>--------------------------------------------------------</div>`);
         count += 1;
+
         if (textValue.length > 700 && count === 2) {
           messagesWithId.push(`<p style="page-break-after: always;">&nbsp;</p>`);
           count = 0;
@@ -82,15 +84,16 @@ const Communication = () => {
       });
 
       if (newWin) {
-        newWin.document.open();
-        newWin.document.write(`<html><body>${messagesWithId.join(' ')}<script>window.print()</script></body></html>`);
-        newWin.document.close();
+        newWin.document.write(`<html><body>${messagesWithId.join(' ')}</body></html>`);
+
+        const printScript = newWin.document.createElement('script');
+        printScript.setAttribute('src', '/print.js');
+        newWin.document.getElementsByTagName('head')[0].appendChild(printScript);
       }
     } else {
       setIsModalOpen(true);
     }
   };
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

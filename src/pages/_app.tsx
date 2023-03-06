@@ -141,7 +141,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                     ) : user !== null &&
                       router.pathname !== '/inscription' &&
                       router.pathname !== '/connexion' &&
-                      router.pathname !== '/professeur' &&
+                      router.pathname !== '/login' &&
                       router.pathname !== '/user-verified' &&
                       router.pathname !== '/reset-password' &&
                       router.pathname !== '/update-password' &&

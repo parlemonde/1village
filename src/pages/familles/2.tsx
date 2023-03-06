@@ -1,6 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
+import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 
@@ -10,15 +13,23 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
+import { UserContext } from 'src/contexts/userContext';
 import { bgPage } from 'src/styles/variables.const';
+import { isNormalizedStringEqual } from 'src/utils/isNormalizedStringEqual';
+import type { Student } from 'types/student.type';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();
-  const { students, createStudent, deleteStudent } = React.useContext(ClassroomContext);
+  const { axiosLoggedRequest } = React.useContext(UserContext);
+
+  const { students, setStudents, createStudent, deleteStudent } = React.useContext(ClassroomContext);
   const [isBtndisable, setBtnDisable] = React.useState(true);
   const firstnameRef = React.useRef<HTMLInputElement>(null);
   const lastnameRef = React.useRef<HTMLInputElement>(null);
   const [isDuplicateModalOn, setIsDuplicateModalOn] = React.useState(false);
+  const [isDuplicateWarningModal, setIsDuplicateWarningModal] = React.useState(false);
+  const [editableStudent, setEditableStudent] = useState(null);
+  const [inputError, setInputError] = useState(false);
 
   //TODO: must be unique student
 
@@ -28,40 +39,156 @@ const ClassroomParamStep2 = () => {
     setBtnDisable(firstnameRef.current.value === null && lastnameRef.current.value === null);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (firstnameRef.current === null || lastnameRef.current === null) return;
-    if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
+    // === ATTENTION === There is 2 modals in this code, one which is a simple warning (the check under this), which's used for the update
+    if (isDuplicateWarningModal) {
+      setIsDuplicateWarningModal(false);
+    } else {
+      if (firstnameRef.current === null || lastnameRef.current === null) return;
+      if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
 
+      const newStudent = {
+        firstname: firstnameRef.current.value,
+        lastname: lastnameRef.current.value,
+      };
+
+      let isDuplicate = false;
+
+      for (const student of students) {
+        if (isNormalizedStringEqual(student.firstname, newStudent.firstname) && isNormalizedStringEqual(student.lastname, newStudent.lastname)) {
+          isDuplicate = true;
+          break;
+        }
+      }
+
+      if (isDuplicate) {
+        setIsDuplicateModalOn(true);
+      } else {
+        await createStudent(newStudent);
+
+        // Reset the input fields
+        firstnameRef.current.value = '';
+        lastnameRef.current.value = '';
+
+        // Close the duplicate modal
+        setIsDuplicateModalOn(false);
+      }
+    }
+  };
+
+  const onModalConfirm = async () => {
     const newStudent = {
       firstname: firstnameRef.current.value,
       lastname: lastnameRef.current.value,
+    };
+
+    await createStudent(newStudent);
+
+    // Reset the input fields
+    firstnameRef.current.value = '';
+    lastnameRef.current.value = '';
+
+    // Close the duplicate modal
+    setIsDuplicateModalOn(false);
+  };
+
+  const handleEdit = (student: Student) => {
+    setEditableStudent(student);
+    if (firstnameRef.current && lastnameRef.current) {
+      firstnameRef.current.value = student.firstname;
+      lastnameRef.current.value = student.lastname;
+    }
+  };
+
+  const handleSave = async (e, student) => {
+    e.preventDefault();
+
+    const updatedStudent = {
+      id: student.id,
+      firstname: e.target[0].value,
+      lastname: e.target[1].value,
     };
 
     for (const student of students) {
       if (
-        student.firstname?.toLocaleLowerCase() === firstnameRef.current.value.toLocaleLowerCase() &&
-        student.lastname?.toLocaleLowerCase() === lastnameRef.current.value.toLocaleLowerCase()
+        isNormalizedStringEqual(student.firstname, updatedStudent.firstname) &&
+        isNormalizedStringEqual(student.lastname, updatedStudent.lastname)
       ) {
-        setIsDuplicateModalOn(true);
+        setIsDuplicateWarningModal(true);
         return;
       }
     }
-    createStudent(newStudent);
-    firstnameRef.current.value = '';
-    lastnameRef.current.value = '';
+
+    if (updatedStudent.firstname === '' || updatedStudent.lastname === '') {
+      setInputError(true);
+    } else {
+      try {
+        const updatedData = await editStudent(updatedStudent);
+        // Update the state with the updated student data
+        setStudents((prevStudents) => {
+          const index = prevStudents.findIndex((s) => s.id === updatedData.id);
+          const updatedStudents = [...prevStudents];
+          updatedStudents[index] = updatedData;
+          setEditableStudent(null); // Change from setEditableStudent(false)
+          return updatedStudents;
+        });
+      } catch (err) {
+        return err;
+      }
+    }
   };
 
-  const onConfirm = () => {
-    if (firstnameRef.current === null || lastnameRef.current === null) return;
-    if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
-    const newStudent = {
+  const onEditModalConfirm = async () => {
+    if (!editableStudent) {
+      // editableStudent is not defined, handle error
+      return;
+    }
+
+    const updatedStudent = {
+      id: editableStudent.id,
       firstname: firstnameRef.current.value,
       lastname: lastnameRef.current.value,
     };
-    createStudent(newStudent);
-    setIsDuplicateModalOn(false);
+
+    try {
+      const updatedData = await editStudent(updatedStudent);
+
+      // Update the state with the updated student data
+      setStudents((prevStudents) => {
+        const index = prevStudents.findIndex((s) => s.id === updatedData.id);
+        const updatedStudents = [...prevStudents];
+        updatedStudents[index] = updatedData;
+        return updatedStudents;
+      });
+
+      // Close the edit modal
+      setIsDuplicateWarningModal(false);
+      setEditableStudent(null);
+    } catch (err) {
+      return err;
+    }
   };
+
+  const handleCancel = () => {
+    setEditableStudent(false);
+  };
+
+  const editStudent = async (updatedStudent: Promise<Partial<Student>>) => {
+    const { id, ...rest } = await updatedStudent;
+
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/students/${id}`,
+      data: { ...rest },
+    });
+
+    if (response.error) {
+      throw response.error;
+    }
+    return response.data;
+  };
+
   const onNext = () => {
     router.push('/familles/3');
   };
@@ -122,7 +249,7 @@ const ClassroomParamStep2 = () => {
             }}
             ariaLabelledBy={''}
             ariaDescribedBy={''}
-            onConfirm={onConfirm}
+            onConfirm={onModalConfirm}
             confirmLabel="confirmer"
             title="Elève déjà existant"
           >
@@ -130,25 +257,91 @@ const ClassroomParamStep2 = () => {
             Souhaitez-vous ajouter un autre élève à ce nom ?
           </Modal>
         )}
-        <div className="students-list">
-          {students.length > 0
-            ? students.map((student) => (
-                <div key={student.hashedCode} style={{ display: 'grid', gridTemplateColumns: '40px 1fr' }}>
-                  <DeleteButton
-                    onDelete={() => {
-                      deleteStudent(student.id);
-                    }}
-                    confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
-                    confirmTitle="Supprimer l'élève"
-                    style={{ backgroundColor: bgPage, placeSelf: 'center start' }}
-                  />
-                  <p style={{ placeSelf: 'center start' }}>
-                    {student.firstname} {student.lastname}
-                  </p>
-                </div>
+        {isDuplicateWarningModal && (
+          <Modal
+            onClose={() => {
+              setIsDuplicateWarningModal(false);
+            }}
+            ariaLabelledBy={''}
+            ariaDescribedBy={''}
+            onConfirm={onEditModalConfirm}
+            confirmLabel="confirmer"
+            title="Elève déjà existant"
+          >
+            Attention !! <br />
+            Un élève de votre classe possède déjà ce nom / prénom <br />
+            S&apos;il s&apos;agit d&apos;une erreur veuillez supprimer le nouvel élève.
+          </Modal>
+        )}
+
+        <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '45%', minWidth: '350px' }}>
+          {students.length > 0 &&
+            students
+              .map((student) => (
+                <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
+                  {editableStudent === student ? (
+                    <form onSubmit={(e) => handleSave(e, student)} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                      <input
+                        type="text"
+                        defaultValue={student.firstname}
+                        style={{ flex: 1, marginRight: '10px' }}
+                        error={inputError}
+                        onChange={() => {
+                          setInputError(false);
+                        }}
+                      />
+                      <input
+                        type="text"
+                        defaultValue={student.lastname}
+                        style={{ flex: 1, marginRight: '10px' }}
+                        error={inputError}
+                        onChange={() => {
+                          setInputError(false);
+                        }}
+                      />
+                      <button type="submit">Enregistrer</button>
+                      <button type="button" onClick={handleCancel}>
+                        Annuler
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      <p style={{ flex: 1 }}>
+                        {student.firstname} {student.lastname}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <button
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '31.6px',
+                            height: '31,6px',
+                            padding: '3px',
+                            border: '1px solid currentColor',
+                            borderRadius: '50%',
+                            borderColor: '#4c3ed9',
+                          }}
+                        >
+                          <ModeEditOutlineRoundedIcon color="primary" onClick={() => handleEdit(student)} />
+                        </button>
+
+                        <DeleteButton
+                          onDelete={() => {
+                            deleteStudent(student.id);
+                          }}
+                          confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
+                          confirmTitle="Supprimer l'élève"
+                          style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
+                        />
+                      </div>
+                    </>
+                  )}
+                </span>
               ))
-            : null}
+              .reverse()}
         </div>
+
         <StepsButton prev={'/familles/1?edit'} next={onNext} />
       </div>
     </Base>
