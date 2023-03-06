@@ -37,6 +37,7 @@ export type FilterArgs = {
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
+  searchTerm: string;
 };
 
 interface FiltersProps {
@@ -68,18 +69,6 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
           onChange({ ...filters, types: option.value, selectedType: option.key });
         }}
       />
-      {/* <FilterSelect
-        name="Status"
-        options={[
-          { key: 0, label: 'Tous' },
-          { key: 1, label: 'En cours' },
-          { key: 2, label: 'Terminées' },
-        ]}
-        value={filters.status}
-        onChange={(newStatus) => {
-          onChange({ ...filters, status: newStatus.key });
-        }}
-      /> */}
       <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
         {countries.map((c) => (
           <label key={c} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
@@ -114,6 +103,20 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
           />
           <PelicoReflechit style={{ position: 'relative', zIndex: 10, height: '28px', width: 'auto', marginTop: '-10px', marginLeft: '-5px' }} />
         </label>
+      </div>
+      <div>
+        <input
+          type="text"
+          value={filters.searchTerm}
+          placeholder="Rechercher"
+          style={{ margin: '0 0.5rem' }}
+          onChange={(event) => {
+            onChange({
+              ...filters,
+              searchTerm: event.target.value,
+            });
+          }}
+        />
       </div>
     </div>
   );
