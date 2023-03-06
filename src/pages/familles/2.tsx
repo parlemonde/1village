@@ -110,10 +110,10 @@ const ClassroomParamStep2 = () => {
       lastname: e.target[1].value,
     };
 
-    for (const student of students) {
+    for (const existingStudent of students) {
       if (
-        isNormalizedStringEqual(student.firstname, updatedStudent.firstname) &&
-        isNormalizedStringEqual(student.lastname, updatedStudent.lastname)
+        isNormalizedStringEqual(existingStudent.firstname, updatedStudent.firstname) &&
+        isNormalizedStringEqual(existingStudent.lastname, updatedStudent.lastname)
       ) {
         setIsDuplicateWarningModal(true);
         return;

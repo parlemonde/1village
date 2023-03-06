@@ -151,6 +151,8 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   required: ['email'],
   additionalProperties: false,
 };
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
 userController.post({ path: '' }, async (req: Request, res: Response) => {
   async function generatePseudo(data: CreateUserData): Promise<string> {
@@ -179,6 +181,10 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   }
   if (data.password !== undefined && !isPasswordValid(data.password)) {
     throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
+  }
+
+  if (!emailRegex.test(data.email)) {
+    throw new AppError('Invalid email', ErrorCode.INVALID_EMAIL);
   }
 
   const user = new User();
