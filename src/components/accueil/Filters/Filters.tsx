@@ -53,6 +53,8 @@ export type FilterArgs = {
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
+  selectedPhase: string | number;
+  phase: number;
 };
 
 interface FiltersProps {
@@ -82,6 +84,14 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
         value={filters.selectedType}
         onChange={(option) => {
           onChange({ ...filters, types: option.value, selectedType: option.key });
+        }}
+      />
+      <FilterSelect
+        name="Phases"
+        options={ACTIVITIES_PER_PHASE[phase - 1] || []}
+        value={filters.selectedPhase}
+        onChange={(option) => {
+          onChange({ ...filters, selectedPhase: option.key });
         }}
       />
       {/* <FilterSelect
