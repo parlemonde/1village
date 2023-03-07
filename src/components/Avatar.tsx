@@ -40,7 +40,7 @@ type AvatarImgProps = {
   displayAsUser?: boolean;
   noToolTip?: boolean;
 };
-export const AvatarImg = (props: AvatarImgProps) => JSX.Element ({
+export const AvatarImg = ({
   size = 'large',
   src = '',
   user,
