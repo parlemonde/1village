@@ -25,6 +25,14 @@ module.exports = {
     'plugin:@next/next/recommended',
   ],
   rules: {
+    // Windoqws eol
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
+
     // misc
     'no-console': ['error', { allow: ['warn', 'error'] }],
     camelcase: ['error', { properties: 'always' }],

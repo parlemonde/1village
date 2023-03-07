@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic } from 'src/activity-types/game.constants';
+import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
@@ -14,7 +13,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
-import type { Activity, AnyData } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
@@ -35,6 +33,7 @@ export const Accueil = () => {
       return acc;
     }, {}),
     pelico: true,
+    searchTerm: '',
   });
 
   const { activities } = useActivities({
@@ -45,19 +44,6 @@ export const Accueil = () => {
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
   });
-
-  function filterActivitiesWithLastMimicGame(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-    const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && isMimic(activity)); // Get the index of this last mimic
-    if (indexOfLastMimic === -1) {
-      return activitiesData;
-    }
-    const mostRecentMimic = activitiesData[indexOfLastMimic]; // Get the last mimic created
-    const activitiesWithoutMimic = activitiesData.filter((activity) => !isGame(activity) || !isMimic(activity)); // Remove all mimics in activities
-    const activitiesWithLastMimic = [...activitiesWithoutMimic];
-    activitiesWithLastMimic.splice(indexOfLastMimic, 0, mostRecentMimic); // Put the last mimic created at the same spot in the array
-
-    return activitiesWithLastMimic;
-  }
 
   // on selected phase change, select all activities.
   React.useEffect(() => {
@@ -71,11 +57,14 @@ export const Accueil = () => {
   //Preload of the activities filtered only one mimic
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      return filterActivitiesWithLastMimicGame(activities);
+      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      const activitiesFilterBySearchTerm =
+        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
+      return activitiesFilterBySearchTerm;
     } else {
       return [];
     }
-  }, [activities]);
+  }, [activities, filters.searchTerm]);
 
   if (!village) {
     return <Base showSubHeader></Base>;
