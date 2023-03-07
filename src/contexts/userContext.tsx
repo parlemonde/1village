@@ -59,7 +59,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       router.pathname !== '/' &&
       router.pathname !== '/inscription' &&
       router.pathname !== '/connexion' &&
-      router.pathname !== '/professeur' &&
+      router.pathname !== '/login' &&
       router.pathname !== '/user-verified' &&
       router.pathname !== '/reset-password' &&
       router.pathname !== '/update-password'
@@ -77,13 +77,13 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
    */
   //reset-password
   const login = React.useCallback(
-    async (username: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
+    async (email: string, password: string, remember: boolean = false): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
         method: 'POST',
         url: '/login',
         headers,
         data: {
-          username,
+          email,
           password,
           getRefreshToken: remember,
         },

@@ -14,18 +14,18 @@ const secret: string = process.env.APP_SECRET || '';
 
 // --- LOGIN ---
 type LoginData = {
-  username: string;
+  email: string;
   password: string;
   getRefreshToken?: boolean;
 };
 const LOGIN_SCHEMA: JSONSchemaType<LoginData> = {
   type: 'object',
   properties: {
-    username: { type: 'string' },
+    email: { type: 'string' },
     password: { type: 'string' },
     getRefreshToken: { type: 'boolean', nullable: true },
   },
-  required: ['username', 'password'],
+  required: ['email', 'password'],
   additionalProperties: false,
 };
 const loginValidator = ajv.compile(LOGIN_SCHEMA);
@@ -42,11 +42,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.passwordHash')
-    .where('User.email = :username OR User.pseudo = :username', { username: data.username })
+    .where('User.email = :email', { email: data.email })
     .getOne();
 
   if (user === null) {
-    throw new AppError('Invalid username', ErrorCode.INVALID_USERNAME);
+    throw new AppError('Invalid credentials', ErrorCode.INVALID_USERNAME);
   }
   //Here we will change the logic to test if user parent is connected to a student or not during registration
   let hasStudentLinked: boolean = false;
@@ -81,7 +81,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   if (!isPasswordCorrect) {
     user.accountRegistration += 1;
     await AppDataSource.getRepository(User).save(user);
-    throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid credentials', ErrorCode.INVALID_PASSWORD);
   } else if (user.accountRegistration > 0 && user.accountRegistration < 4) {
     user.accountRegistration = 0;
     await AppDataSource.getRepository(User).save(user);
