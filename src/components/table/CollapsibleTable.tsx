@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useContext } from 'react';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -14,24 +15,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number, price: number) {
+import { ClassroomContext } from 'src/contexts/classroomContext';
+
+function createData(name: string, numAccountLinked: number, studentCode: string | undefined) {
   return {
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
+    numAccountLinked,
+    studentCode,
+    subRowContent: [
       {
-        date: '2020-01-05',
-        customerId: '11091700',
-        amount: 3,
+        email: '2020-01-05',
       },
       {
-        date: '2020-01-02',
-        customerId: 'Anonymous',
-        amount: 1,
+        email: '2020-01-02',
       },
     ],
   };
@@ -52,10 +48,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         <TableCell component="th" scope="row">
           {row.name}
         </TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell align="right">{row.numAccountLinked}</TableCell>
+        <TableCell align="right">{row.studentCode}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -74,14 +68,14 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
+                  {row.subRowContent.map((historyRow, index) => (
+                    <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        {historyRow.date}
+                        {historyRow.email}
                       </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">{Math.round(historyRow.amount * row.price * 100) / 100}</TableCell>
+                      <TableCell>AYAYA</TableCell>
+                      <TableCell align="right">TOTO</TableCell>
+                      <TableCell align="right">AAAAAA</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -94,26 +88,22 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   );
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-];
-
 export default function CollapsibleTable() {
+  const { students } = useContext(ClassroomContext);
+  const rows: any[] = [];
+  for (const student of students) {
+    createData(student.firstname + ' ' + student.lastname, student.numLinkedAccount || 0, student.hashedCode);
+  }
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Prénom et nom de l&apos;élève</TableCell>
+            <TableCell align="right">Accès familles</TableCell>
+            <TableCell align="right">Code élève</TableCell>
+            <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
