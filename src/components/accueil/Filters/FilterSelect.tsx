@@ -12,7 +12,7 @@ import { primaryColor } from 'src/styles/variables.const';
 type Option<T> = {
   key: number | string;
   label: string;
-  value: T;
+  value: T | 'all';
 };
 
 interface FilterSelectProps<T> {
