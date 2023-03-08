@@ -242,28 +242,26 @@ export const Navigation = (): JSX.Element => {
   return (
     <nav className="navigation">
       <div style={{ position: 'relative' }}>
-        {user.type !== UserType.FAMILY && (
-          <div
-            className="navigation__content navigation__content--is-header with-shadow"
-            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
-            {village &&
-              village.countries.map((country: Country) => (
-                <Flag
-                  style={{ margin: '0.25rem' }}
-                  key={country.isoCode}
-                  country={country.isoCode}
-                  isMistery={
-                    !village ||
-                    !user ||
-                    (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator)) ||
-                    (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator))
-                  }
-                ></Flag>
-              ))}
-          </div>
-        )}
+        <div
+          className="navigation__content navigation__content--is-header with-shadow"
+          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
+          {village &&
+            village.countries.map((country: Country) => (
+              <Flag
+                style={{ margin: '0.25rem' }}
+                key={country.isoCode}
+                country={country.isoCode}
+                isMistery={
+                  !village ||
+                  !user ||
+                  (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator)) ||
+                  (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator))
+                }
+              ></Flag>
+            ))}
+        </div>
         {[fixedTabs, phaseTabs].map((tabs, index) => (
           <div key={`tabs_${index}`} className="navigation__content with-shadow" style={{ padding: '1rem 0.5rem 0.2rem 0.5rem' }}>
             {tabs.map((tab) => (

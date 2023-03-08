@@ -142,7 +142,11 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
   await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .update(User)
-    .set({ villageId: student.classroom.village.id, hasStudentLinked: true })
+    .set({
+      villageId: student.classroom.village.id,
+      hasStudentLinked: true,
+      firstLogin: student.classroom.village.activePhase,
+    })
     .where('id = :id', { id: req.user.id })
     .execute();
 
