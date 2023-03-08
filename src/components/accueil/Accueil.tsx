@@ -92,10 +92,6 @@ export const Accueil = () => {
       </Base>
     );
   }
-
-  console.log(user);
-  console.log(village);
-
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (
