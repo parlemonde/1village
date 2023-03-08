@@ -5,6 +5,7 @@ import React from 'react';
 import type { AxiosReturnType } from 'src/utils/axiosRequest';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User, UserForm } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
@@ -21,6 +22,7 @@ interface UserContextValue {
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
+  getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
 export const UserContext = React.createContext<UserContextValue>({
@@ -36,6 +38,7 @@ export const UserContext = React.createContext<UserContextValue>({
   deleteAccount: async () => false,
   setUser: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
+  getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
 
 interface UserContextProviderProps {
@@ -304,6 +307,24 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     [headers],
   );
 
+  /**
+   * Get classroom as familly
+   */
+  const getClassroomAsFamily = React.useCallback(
+    async (userId: number) => {
+      if (!user) return;
+      if (user.type !== UserType.FAMILY) return;
+      const response = await axiosLoggedRequest({
+        method: 'GET',
+        url: `/classrooms/${userId}`,
+      });
+      if (response.error) return null;
+      if (response.data === null) return null;
+      return response.data;
+    },
+    [axiosLoggedRequest, user],
+  );
+
   const value = React.useMemo(
     () => ({
       user,
@@ -318,8 +339,23 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       deleteAccount,
       setUser,
       linkStudent,
+      getClassroomAsFamily,
     }),
-    [user, isLoggedIn, login, loginWithSso, axiosLoggedRequest, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent],
+    [
+      user,
+      isLoggedIn,
+      login,
+      loginWithSso,
+      axiosLoggedRequest,
+      signup,
+      updatePassword,
+      verifyEmail,
+      logout,
+      deleteAccount,
+      setUser,
+      linkStudent,
+      getClassroomAsFamily,
+    ],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -54,24 +54,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   );
 
   /**
-   * Get classroom as familly
-   */
-  const getClassroomAsFamily = React.useCallback(
-    async (userId: number) => {
-      if (!user) return;
-      if (user.type !== UserType.FAMILY) return;
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/classrooms/${userId}`,
-      });
-      if (response.error) return null;
-      if (response.data === null) return null;
-      return response.data;
-    },
-    [axiosLoggedRequest, user],
-  );
-
-  /**
    * Creation of the classroom
    */
   const createClassroom = React.useCallback(async () => {
@@ -131,13 +113,9 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           createClassroom();
         });
     }
-    if (user && user.type === UserType.FAMILY) {
-      getClassroomAsFamily(user.id).then((classroom) => {
-        return setClassroom(classroom);
-      });
-    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createClassroom, getClassroomAsFamily, fetchClassroom, getStudents, user]);
+  }, [createClassroom, fetchClassroom, getStudents, user]);
 
   /**
    * Get teacher's classroom
@@ -272,7 +250,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       classroom,
       setClassroom,
       getClassroom,
-      getClassroomAsFamily,
       updateClassroomParameters,
       students,
       setStudents,
@@ -282,18 +259,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       getStudents,
       // deleteAccessTorRelatives,
     }),
-    [
-      classroom,
-      setClassroom,
-      getClassroom,
-      getClassroomAsFamily,
-      updateClassroomParameters,
-      students,
-      createStudent,
-      deleteStudent,
-      getStudents,
-      setStudents,
-    ],
+    [classroom, setClassroom, getClassroom, updateClassroomParameters, students, createStudent, deleteStudent, getStudents, setStudents],
   );
   return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
 };
