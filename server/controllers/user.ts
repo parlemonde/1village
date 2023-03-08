@@ -684,6 +684,50 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
   res.sendJSON({ success: true });
 });
 
+userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+  res.json();
+});
+
+userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  // Retrieve the user's linked student
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: req.user.id } },
+    relations: ['student', 'student.classroom', 'student.classroom.village'],
+  });
+
+  if (!userToStudent) {
+    res.status(404).json({ message: 'No linked student found' });
+    return;
+  }
+
+  const { student } = userToStudent;
+  const { classroom } = student;
+  const { village } = classroom;
+
+  res.json({
+    student: {
+      id: student.id,
+      lastname: student.lastname,
+      classroom: {
+        id: classroom.id,
+        name: classroom.name,
+        village: {
+          id: village.id,
+          name: village.name,
+          activePhase: village.activePhase,
+        },
+      },
+    },
+  });
+});
+
 // Get the visibility parameters for Family members
 userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {
