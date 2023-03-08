@@ -316,7 +316,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       if (user.type !== UserType.FAMILY) return;
       const response = await axiosLoggedRequest({
         method: 'GET',
-        url: `/classrooms/${userId}`,
+        url: `/users/get-classroom/${userId}`,
       });
       if (response.error) return null;
       if (response.data === null) return null;
