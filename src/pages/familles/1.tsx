@@ -136,10 +136,6 @@ const ClassroomParamStep1Visibility = () => {
       }, {}),
     [users],
   );
-
-  // const handlePhaseSelection = (phase: string) => {
-  //   setSelectedPhase(phase);
-  // };
   const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
     key === 'timeDelay'
       ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
