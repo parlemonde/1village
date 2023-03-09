@@ -102,7 +102,7 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
-  pseudo?: string;
+  pseudo: string;
   firstname?: string;
   lastname?: string;
   countryCode?: string;
@@ -125,7 +125,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
   properties: {
     email: { type: 'string' },
-    pseudo: { type: 'string', nullable: true },
+    pseudo: { type: 'string' },
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
@@ -148,7 +148,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     language: { type: 'string', nullable: true },
     hasStudentLinked: { type: 'boolean', nullable: true },
   },
-  required: ['email'],
+  required: ['email', 'pseudo'],
   additionalProperties: false,
 };
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -191,6 +191,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.email = data.email;
   user.firstname = data.firstname || '';
   user.lastname = data.lastname || '';
+  user.pseudo = data.pseudo;
   user.level = data.level || '';
   user.school = data.school || '';
   user.address = data.address || '';
@@ -210,16 +211,18 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   }
 
   // Generate unique pseudo
-  let pseudo = data.pseudo;
-  if (!pseudo) {
-    pseudo = await generatePseudo(data);
-  } else {
-    const pseudoExists = await checkIfPseudoExists(pseudo);
-    if (pseudoExists) {
-      throw new AppError('Pseudo already exists', ErrorCode.PSEUDO_ALREADY_EXISTS);
+  if (user.type === UserType.FAMILY) {
+    let pseudo = data.pseudo;
+    if (!pseudo) {
+      pseudo = await generatePseudo(data);
+    } else {
+      const pseudoExists = await checkIfPseudoExists(pseudo);
+      if (pseudoExists) {
+        throw new AppError('Pseudo already exists', ErrorCode.PSEUDO_ALREADY_EXISTS);
+      }
     }
+    user.pseudo = pseudo;
   }
-  user.pseudo = pseudo;
 
   user.accountRegistration = 4; // Block account on inscription and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
