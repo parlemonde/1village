@@ -684,13 +684,6 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
   res.sendJSON({ success: true });
 });
 
-userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
-  if (!req.user) {
-    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-  }
-  res.json();
-});
-
 userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
@@ -699,7 +692,7 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, as
   // Retrieve the user's linked student
   const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
     where: { user: { id: req.user.id } },
-    relations: ['student', 'student.classroom', 'student.classroom.village'],
+    relations: ['student', 'student.classroom', 'student.classroom.village', 'student.classroom.user'],
   });
 
   if (!userToStudent) {
@@ -709,20 +702,14 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, as
 
   const { student } = userToStudent;
   const { classroom } = student;
-  const { village } = classroom;
 
   res.json({
     student: {
       id: student.id,
+      firstname: student.firstname,
       lastname: student.lastname,
       classroom: {
-        id: classroom.id,
-        name: classroom.name,
-        village: {
-          id: village.id,
-          name: village.name,
-          activePhase: village.activePhase,
-        },
+        user: classroom.user.countryCode,
       },
     },
   });

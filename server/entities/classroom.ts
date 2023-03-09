@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
+import type { Country } from '../../types/country.type';
+import { countriesMap } from '../utils/countries-map';
 import { Student } from './student';
 import { User } from './user';
 import { Village } from './village';
@@ -17,6 +19,15 @@ export class Classroom {
 
   @Column({ nullable: true, default: 0 })
   public delayedDays: number;
+
+  @Column({ type: 'varchar', length: 2, nullable: true })
+  set countryCode(newCountryCode: string) {
+    this.country = countriesMap[newCountryCode] || countriesMap['FR'];
+  }
+  get countryCode() {
+    return this.country?.isoCode;
+  }
+  public country: Country;
 
   @Column({
     type: 'boolean',

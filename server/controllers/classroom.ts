@@ -79,7 +79,7 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   const classroom = await AppDataSource.createQueryBuilder()
     .insert()
     .into(Classroom)
-    .values([{ user: { id: data.userId }, village: { id: data.villageId } }])
+    .values([{ user: { id: data.userId }, village: { id: data.villageId }, country: { isoCode: data.userIsoCode, name: data.userCountryName } }])
     .execute();
 
   res.json(classroom);

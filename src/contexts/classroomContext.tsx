@@ -4,6 +4,7 @@ import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import type { Classroom } from 'types/classroom.type';
+import type { Country } from 'types/country.type';
 import type { Student, StudentForm } from 'types/student.type';
 import { UserType } from 'types/user.type';
 
@@ -35,7 +36,7 @@ interface ClassroomContextProviderProps {
 }
 
 export const ClassroomContextProvider = ({ children }: ClassroomContextProviderProps) => {
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user, axiosLoggedRequest, getClassroomAsFamily } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [students, setStudents] = React.useState<Student[]>([]);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
@@ -66,6 +67,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       data: {
         userId: user.id,
         villageId: village.id,
+        userIsoCode: user.country?.isoCode,
+        userCountryName: user.country?.name,
       },
     })
       .then((response) => {
@@ -112,6 +115,10 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
         .catch(() => {
           createClassroom();
         });
+    }
+
+    if (user && user.type === UserType.FAMILY) {
+      getClassroomAsFamily(user.id);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

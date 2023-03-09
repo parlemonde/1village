@@ -1,11 +1,20 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
+import { TableColumn } from 'typeorm';
 
 export class alterToken1678113524215 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE token MODIFY token VARCHAR(300);`);
+    await queryRunner.addColumn(
+      'classroom',
+      new TableColumn({
+        name: 'country',
+        type: 'varchar',
+        length: '2',
+        isNullable: true,
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE token MODIFY token VARCHAR(95);`);
+    await queryRunner.dropColumn('classroom', 'country');
   }
 }
