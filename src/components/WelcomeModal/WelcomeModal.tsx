@@ -15,7 +15,7 @@ export const WelcomeModal = () => {
     return null;
   }
 
-  if (user.firstLogin === 0 && user.type !== UserType.FAMILY) {
+  if (user.firstLogin === 0 && user.type === UserType.TEACHER) {
     return <FirstPhase />;
   }
   if (user.firstLogin === 1 && village.activePhase > 1) {

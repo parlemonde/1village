@@ -204,6 +204,10 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.hasStudentLinked = data.hasStudentLinked || false;
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
+  if (user.type === UserType.TEACHER) {
+    user.isVerified = true;
+    user.accountRegistration = 0;
+  }
 
   // Generate unique pseudo
   let pseudo = data.pseudo;
