@@ -358,7 +358,7 @@ export const FirstPhase = () => {
                       },
                     ],
                   }}
-                  user={{ ...user, ...newUser, type: 0, id: -1 }}
+                  user={{ ...user, ...newUser, type: user.type, id: -1 }}
                   noButtons
                 />
               </div>

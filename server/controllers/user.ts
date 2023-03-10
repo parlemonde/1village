@@ -298,6 +298,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
+
 userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
