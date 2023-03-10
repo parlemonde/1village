@@ -56,13 +56,11 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
 
   return (
     <div>
-      {data.length !== 0 && (
-        <div className="activity__divider">
-          <div className="activity__divider--text">
-            <h2>Réaction des Pélicopains</h2>
-          </div>
+      <div className="activity__divider">
+        <div className="activity__divider--text">
+          <h2>Réaction des Pélicopains</h2>
         </div>
-      )}
+      </div>
       {/* Stories space */}
       {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} column noTitle />}
       {data.map((o) => {
