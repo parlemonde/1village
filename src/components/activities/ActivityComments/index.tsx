@@ -12,6 +12,7 @@ import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Activity, AnyData } from 'types/activity.type';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 interface ActivityCommentsProps {
   activity: Activity<AnyData>;
@@ -55,11 +56,13 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
 
   return (
     <div>
-      <div className="activity__divider">
-        <div className="activity__divider--text">
-          <h2>Réaction des Pélicopains</h2>
+      {data.length !== 0 && (
+        <div className="activity__divider">
+          <div className="activity__divider--text">
+            <h2>Réaction des Pélicopains</h2>
+          </div>
         </div>
-      </div>
+      )}
       {/* Stories space */}
       {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} column noTitle />}
       {data.map((o) => {
@@ -79,7 +82,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
           );
         }
       })}
-      <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />
+      {user?.type !== UserType.FAMILY && <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />}
     </div>
   );
 };
