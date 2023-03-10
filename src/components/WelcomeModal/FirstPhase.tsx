@@ -327,7 +327,7 @@ export const FirstPhase = () => {
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
                   label="Nom affiché :"
-                  placeholder={getUserDisplayName({ ...user, ...newUser, type: 0 }, false)}
+                  placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
                   onChange={(displayName) => {
                     setNewUser((u) => ({ ...u, displayName }));

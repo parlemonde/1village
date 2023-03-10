@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useReducer } from 'react';
 
-import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
@@ -115,7 +115,7 @@ const ClassroomParamStep1Visibility = () => {
     }, {}),
     pelico: true,
   });
-  const { activities, refetch } = useActivities({
+  const { activities, refetch, isLoading } = useActivities({
     limit: 300,
     page: 0,
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
@@ -265,37 +265,46 @@ const ClassroomParamStep1Visibility = () => {
             padding: '1rem 0 1rem .5rem',
           }}
         >
-          {activities.map((activity) => (
-            <Button
-              key={activity.id}
-              sx={{
-                display: 'flex',
-                gap: '2rem',
-                justifyContent: 'space-evenly',
-                width: '99%',
-                padding: '0 1rem',
-                marginBottom: '1rem',
-                filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
-                backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
-              }}
-              onClick={() => handleActivityVisibility(activity.id)}
-            >
-              {/* UI logic for activity disable */}
-              {activity.isVisibleToParent ? (
-                <EyeVisibility style={{ width: '8%', height: 'auto' }} />
-              ) : (
-                <EyeClosed style={{ width: '8%', height: 'auto' }} />
-              )}
-              <div style={{ width: '100%' }}>
-                <ActivityCard
-                  activity={activity}
-                  isSelf={user !== null && activity.userId === user.id}
-                  user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
-                  noButtons={true}
-                />
-              </div>
-            </Button>
-          ))}
+          {isLoading ? (
+            <div className="loading-spinner">
+              <CircularProgress />
+              <p>Loading activities...</p>
+            </div>
+          ) : (
+            <>
+              {activities.map((activity) => (
+                <Button
+                  key={activity.id}
+                  sx={{
+                    display: 'flex',
+                    gap: '2rem',
+                    justifyContent: 'space-evenly',
+                    width: '99%',
+                    padding: '0 1rem',
+                    marginBottom: '1rem',
+                    filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
+                    backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
+                  }}
+                  onClick={() => handleActivityVisibility(activity.id)}
+                >
+                  {/* UI logic for activity disable */}
+                  {activity.isVisibleToParent ? (
+                    <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+                  ) : (
+                    <EyeClosed style={{ width: '8%', height: 'auto' }} />
+                  )}
+                  <div style={{ width: '100%' }}>
+                    <ActivityCard
+                      activity={activity}
+                      isSelf={user !== null && activity.userId === user.id}
+                      user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
+                      noButtons={true}
+                    />
+                  </div>
+                </Button>
+              ))}
+            </>
+          )}
         </OverflowContainer>
       </div>
     </Base>

@@ -40,6 +40,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (!user) {
       return [];
     }
+
     // ! Warning: this is only working if the parent as one child in db
     // ! This code will need to evolve to include use case of multiple children
     // ! For exemple add parameter studentId to getVisibilityParams when student is selected
@@ -70,6 +71,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     }
     return response.data;
   }, [user, getVisibilityFamilyParams, args, type, villageId, countries, pelico, userId, axiosLoggedRequest]);
+
   const { data, isLoading, error, refetch } = useQuery<Activity[], unknown>(
     ['activities', { ...args, type, userId, countries, pelico, villageId }],
     getActivities,
@@ -82,8 +84,12 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     }
   }, [data]);
 
+  const activities = error ? [] : isLoading ? prevData.current : data || [];
+
   return {
-    activities: error ? [] : isLoading ? prevData.current : data || [],
-    refetch: refetch,
+    activities,
+    isLoading,
+    error,
+    refetch,
   };
 };
