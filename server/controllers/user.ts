@@ -215,9 +215,10 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   if (!pseudo) {
     pseudo = await generatePseudo(data);
   } else {
-    const pseudoExists = await checkIfPseudoExists(pseudo);
-    if (pseudoExists) {
-      throw new AppError('Pseudo already exists', ErrorCode.PSEUDO_ALREADY_EXISTS);
+    let pseudoExists = await checkIfPseudoExists(pseudo);
+    while (pseudoExists) {
+      pseudo = await generatePseudo(data);
+      pseudoExists = await checkIfPseudoExists(pseudo);
     }
   }
   user.pseudo = pseudo;
