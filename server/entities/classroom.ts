@@ -36,7 +36,7 @@ export class Classroom {
   })
   public hasVisibilitySetToClass: boolean;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   public user: User;
 

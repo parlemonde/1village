@@ -21,7 +21,7 @@ export class Student {
   public numLinkedAccount: number;
 
   //classroom relation
-  @ManyToOne(() => Classroom, (classroom: Classroom) => classroom.students)
+  @ManyToOne(() => Classroom, (classroom: Classroom) => classroom.students, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'classroomId' })
   classroom: Classroom;
 
