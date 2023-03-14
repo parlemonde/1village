@@ -109,12 +109,15 @@ const ClassroomParamStep1Visibility = () => {
     selectedType: 0,
     types: 'all',
     status: 0,
+    selectedPhase: 0,
+    // phases: 'all',
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
       acc[c] = true;
       return acc;
     }, {}),
     pelico: true,
   });
+  
   const { activities, refetch, isLoading } = useActivities({
     limit: 300,
     page: 0,
@@ -133,7 +136,6 @@ const ClassroomParamStep1Visibility = () => {
       }, {}),
     [users],
   );
-
   const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
     key === 'timeDelay'
       ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
@@ -254,7 +256,7 @@ const ClassroomParamStep1Visibility = () => {
         {/* Activity Container */}
         <p className="text">Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.</p>
         {/* phase is set to 4 to match the array with ALL activities */}
-        <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={4} />
+        <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={4} isMesFamilles={true} />
         <OverflowContainer
           style={{
             height: '30vh',
