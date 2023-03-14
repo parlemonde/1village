@@ -49,6 +49,7 @@ export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | 
 
 export type FilterArgs = {
   selectedType: string | number;
+  selectedPhase: string | number;
   types: number[] | 'all';
   status: number;
   countries: { [key: string]: boolean };
@@ -60,9 +61,10 @@ interface FiltersProps {
   filters: FilterArgs;
   onChange: React.Dispatch<React.SetStateAction<FilterArgs>>;
   phase: number;
+  isMesFamilles?: boolean;
 }
 
-export const Filters = ({ filters, onChange, countries = [], phase }: FiltersProps) => {
+export const Filters = ({ filters, onChange, countries = [], phase, isMesFamilles }: FiltersProps) => {
   React.useEffect(() => {
     onChange((f) => ({
       ...f,
@@ -84,6 +86,21 @@ export const Filters = ({ filters, onChange, countries = [], phase }: FiltersPro
           onChange({ ...filters, types: option.value, selectedType: option.key });
         }}
       />
+      {isMesFamilles && (
+        <FilterSelect
+          name="Phases"
+          options={[
+            { key: 0, label: `Toutes`, value: 'all' },
+            { key: 1, label: `Phase 1`, value: [6, 7, 3, 8] },
+            { key: 2, label: `Phase 2`, value: [9, 2, 4, 1, 3, 10] },
+            { key: 3, label: `Phase 3`, value: [12, 13, 14] },
+          ]}
+          value={filters.selectedPhase}
+          onChange={(option) => {
+            onChange({ ...filters, types: option.value, selectedPhase: option.key });
+          }}
+        />
+      )}
       {/* <FilterSelect
         name="Status"
         options={[

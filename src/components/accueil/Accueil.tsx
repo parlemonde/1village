@@ -37,6 +37,7 @@ export const Accueil = () => {
   //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
+    selectedPhase: 0,
     types: 'all',
     status: 0,
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
@@ -93,12 +94,12 @@ export const Accueil = () => {
       </Base>
     );
   }
-
+  
   console.log('USER====', user);
   console.log('VILLAGE====', village);
   console.log('CLASSROOM====', classroom);
   console.log('PARENTCLASSROOM====', parentClassroom);
-
+  
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (

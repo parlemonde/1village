@@ -18,7 +18,6 @@ import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { useLanguages } from 'src/services/useLanguages';
-// import { useUserRequests } from 'src/services/useUsers';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
@@ -247,10 +246,6 @@ const Presentation = () => {
   if (!user || !newUser) {
     return <div></div>;
   }
-  // const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   event.preventDefault();
-  //   await editUser(newUser);
-  // };
 
   return (
     <Base>
@@ -333,7 +328,6 @@ const Presentation = () => {
               setNewUser((u) => (!u ? u : { ...u, displayName }));
             }}
           />
-
           {editMode === 0 && (
             <div className="text-center">
               <Button
@@ -396,18 +390,6 @@ const Presentation = () => {
           hasError={errors.email}
           onBlur={checkEmailAndPseudo}
         />
-        {/* ============= TEST INPUT =========== */}
-        <PanelInput
-          value={newUser.language}
-          defaultValue={''}
-          label="Language:"
-          placeholder="Langue"
-          isEditMode={editMode === 1}
-          onChange={(language) => {
-            setNewUser((u) => (!u ? u : { ...u, language: language }));
-          }}
-          errorMsg="Langue invalide"
-        />
         {user.accountRegistration !== 10 && (
           <>
             <div style={{ margin: '1rem 0.5rem' }}>
@@ -434,17 +416,6 @@ const Presentation = () => {
           <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
           <div style={{ maxWidth: '800px', width: '100%', textAlign: 'left' }}>
             <label style={{ cursor: 'pointer' }}>
-              {/* <PanelInput
-                value={newUser.language}
-                defaultValue={''}
-                label="Language:"
-                placeholder="Langue"
-                isEditMode={editMode === 1}
-                onChange={(language) => {
-                  setNewUser((u) => (!u ? u : { ...u, language: language }));
-                }}
-                errorMsg="Langue invalide"
-              /> */}
               <div>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={8}>
@@ -515,19 +486,6 @@ const Presentation = () => {
               </Grid>
             </Grid>
           </div>
-          {/* <div>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={8}>
-                <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
-                  Choix de la langue de communication
-                </p>
-                <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
-                  {/* <InputLabel id="demo-simple-select">Choisir</InputLabel> */}
-          {/* <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </div> */}
         </div>
       ) : null}
       <div className="account__panel">
