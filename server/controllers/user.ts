@@ -7,6 +7,8 @@ import { LessThan, IsNull } from 'typeorm';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Classroom } from '../entities/classroom';
+import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -15,6 +17,7 @@ import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
+import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
 import { Controller } from './controller';
 
 const userController = new Controller('/users');
@@ -395,16 +398,44 @@ userController.put({ path: '/:id/password' }, async (req: Request, res: Response
 // --- Delete an user. ---
 userController.delete({ path: '/:id' }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  const userRepository = AppDataSource.getRepository(User);
+  const classroomRepository = AppDataSource.getRepository(Classroom);
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const user = await userRepository.findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
-  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+  if (!user || (!isSelfProfile && !isAdmin)) {
     res.status(204).send();
     return;
   }
 
+  const affectedUserIds: number[] = [];
+
+  // Fetch the related classroom and its students
+  const classroom = await classroomRepository.findOne({ where: { user: { id: user.id } }, relations: ['students'] });
+
+  if (classroom) {
+    // Collect the affected user IDs from the classroom's students
+    for (const student of classroom.students) {
+      const studentWithRelations = await AppDataSource.getRepository(Student).findOne({
+        where: { id: student.id },
+        relations: ['userToStudents', 'userToStudents.user'],
+      });
+      if (studentWithRelations) {
+        for (const userToStudent of studentWithRelations.userToStudents) {
+          if (userToStudent && userToStudent.user) {
+            affectedUserIds.push(userToStudent.user.id);
+          }
+        }
+      }
+    }
+  }
+
   await AppDataSource.getRepository(User).delete({ id });
+
+  // Update the hasStudentLinked field for affected users
+  await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
+
   res.status(204).send();
 });
 
