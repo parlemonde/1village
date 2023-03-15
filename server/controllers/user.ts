@@ -251,9 +251,10 @@ type EditUserData = {
   displayName?: string;
   type?: UserType;
   villageId?: number | null;
-  accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
+  isVerified?: boolean;
+  accountRegistration?: number;
   hasAcceptedNewsletter?: boolean;
   language?: string | null;
   hasStudentLinked?: boolean;
@@ -292,6 +293,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
       additionalProperties: false,
     },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
+    isVerified: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
     hasStudentLinked: { type: 'boolean', nullable: true },
   },

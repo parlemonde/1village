@@ -8,7 +8,7 @@ export class AddCascades1678809291061 implements MigrationInterface {
         await dropForeignKeyIfExists(queryRunner, 'classroom', 'userId');
         await dropForeignKeyIfExists(queryRunner, 'user_to_student', 'userId');
         await dropForeignKeyIfExists(queryRunner, 'user_to_student', 'studentId');
-        await dropForeignKeyIfExists(queryRunner, 'student', 'UserStudent_UserFK');
+        await dropForeignKeyIfExists(queryRunner, 'student', 'classroomId');
 
         await queryRunner.createForeignKey(
             'classroom',
@@ -59,7 +59,7 @@ export class AddCascades1678809291061 implements MigrationInterface {
         await dropForeignKeyIfExists(queryRunner, 'classroom', 'userId');
         await dropForeignKeyIfExists(queryRunner, 'user_to_student', 'studentId'); // studentId
         await dropForeignKeyIfExists(queryRunner, 'user_to_student', 'userId'); // userId
-        await dropForeignKeyIfExists(queryRunner, 'student', 'UserStudent_UserFK'); // classroomId
+        await dropForeignKeyIfExists(queryRunner, 'student', 'classroomId'); // classroomId
 
         await queryRunner.createForeignKey(
             'classroom',
