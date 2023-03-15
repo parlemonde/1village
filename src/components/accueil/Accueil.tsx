@@ -94,12 +94,12 @@ export const Accueil = () => {
       </Base>
     );
   }
-  
+
   console.log('USER====', user);
   console.log('VILLAGE====', village);
   console.log('CLASSROOM====', classroom);
   console.log('PARENTCLASSROOM====', parentClassroom);
-  
+
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (
