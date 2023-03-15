@@ -104,7 +104,11 @@ const ClassroomParamStep2 = () => {
 
   const handleSave = async (e, student) => {
     e.preventDefault();
-
+    setEditableStudent({
+      ...editableStudent,
+      firstname: e.target[0].value,
+      lastname: e.target[1].value,
+    });
     const updatedStudent = {
       id: student.id,
       firstname: e.target[0].value,
@@ -148,10 +152,9 @@ const ClassroomParamStep2 = () => {
 
     const updatedStudent = {
       id: editableStudent.id,
-      firstname: firstnameRef.current.value,
-      lastname: lastnameRef.current.value,
+      firstname: editableStudent.firstname,
+      lastname: editableStudent.lastname,
     };
-
     try {
       const updatedData = await editStudent(updatedStudent);
 
@@ -239,7 +242,7 @@ const ClassroomParamStep2 = () => {
               }}
             />
           </label>
-          <Button type="submit" variant="outlined" disabled={isBtndisable}>
+          <Button type="submit" variant="outlined" disabled={isBtndisable} style={{ marginBottom: '20px' }}>
             Ajouter un élève
           </Button>
         </form>
@@ -288,7 +291,7 @@ const ClassroomParamStep2 = () => {
                         placeholder="Prénom"
                         type="firstname"
                         defaultValue={student.firstname}
-                        // style={{ flex: 1, marginRight: '10px' }}
+                        style={{ flex: 1, marginRight: '10px' }}
                         error={inputError}
                         onChange={() => {
                           setInputError(false);
@@ -300,17 +303,17 @@ const ClassroomParamStep2 = () => {
                         placeholder="Nom"
                         type="lastname"
                         defaultValue={student.lastname}
-                        // style={{ flex: 1, marginRight: '10px' }}
+                        style={{ flex: 1, marginRight: '10px' }}
                         error={inputError}
                         onChange={() => {
                           setInputError(false);
                         }}
                       />
-                      <Button type="submit" variant="outlined">
+                      <Button type="submit" variant="outlined" style={{ margin: '5px' }}>
                         Enregistrer
                       </Button>
 
-                      <Button type="button" variant="outlined" onClick={handleCancel}>
+                      <Button type="button" variant="outlined" onClick={handleCancel} style={{ margin: '5px' }}>
                         Annuler
                       </Button>
                     </form>
