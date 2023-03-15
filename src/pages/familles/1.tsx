@@ -18,6 +18,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
+import type { Activity } from 'types/activity.type';
 import type { InitialStateOptionsProps } from 'types/classroom.type';
 
 const content1 = {
@@ -100,6 +101,7 @@ const ClassroomParamStep1Visibility = () => {
   const [state, dispatch] = useReducer(reducer, initialStateOptions);
   const [isDisabled, setIsDisabled] = React.useState({ timeDelay: true, ownClassTimeDelay: true });
   const [radioValue, setRadioValue] = React.useState('default');
+  console.log({ state });
   const { updateClassroomParameters } = React.useContext(ClassroomContext);
 
   const { village } = React.useContext(VillageContext);
@@ -110,14 +112,12 @@ const ClassroomParamStep1Visibility = () => {
     types: 'all',
     status: 0,
     selectedPhase: 0,
-    // phases: 'all',
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
       acc[c] = true;
       return acc;
     }, {}),
     pelico: true,
   });
-  // const [selectedPhase, setSelectedPhase] = React.useState<string>('');
   const { activities, refetch } = useActivities({
     limit: 300,
     page: 0,
@@ -141,7 +141,7 @@ const ClassroomParamStep1Visibility = () => {
       ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
       : dispatch({ type: 'ownClassTimeDelay', data: Number((event.target as HTMLInputElement).value) });
   };
-  const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setRadioValue((event.target as HTMLInputElement).value);
     (event.target as HTMLInputElement).value === 'default' ? dispatch({ type: 'default', data: 0 }) : dispatch({ type: 'ownClass', data: 0 });
   };
@@ -167,6 +167,8 @@ const ClassroomParamStep1Visibility = () => {
         break;
     }
   };
+  // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
+  console.log({ radioValue });
 
   const handleActivityVisibility = (id: number) => {
     axiosLoggedRequest({
@@ -179,10 +181,24 @@ const ClassroomParamStep1Visibility = () => {
   const toggleInput = (key: string, bool: boolean) => {
     setIsDisabled({ ...isDisabled, [key]: bool });
   };
+
+  // React.useEffect(() => {
+  //     if (user && user.type === UserType.TEACHER) {
+  //       updateClassroomValidator());
+  // }
+  //   }, [updateClassroomValidator]);
+
   const onNext = () => {
     router.push('/familles/2');
   };
 
+  const sortedActivities: Activity[] = activities
+    .filter((activity) => activity.createDate !== undefined)
+    .sort((a, b) => {
+      const dateA = new Date(a.createDate as string);
+      const dateB = new Date(b.createDate as string);
+      return dateA.getTime() - dateB.getTime();
+    });
   return (
     <Base>
       <BackButton href="/" />
@@ -203,13 +219,16 @@ const ClassroomParamStep1Visibility = () => {
           <RadioGroup aria-label="visibility" onChange={handleRadioSelect} value={radioValue}>
             <FormControlLabel
               value="default"
+              checked={radioValue === 'default'}
               name="default"
               control={<Radio />}
               label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
               onFocus={() => handleSelectionVisibility('default')}
             />
+
             <FormControlLabel
               value="timeDelay"
+              checked={radioValue === 'timeDelay'}
               name="timeDelay"
               control={<Radio />}
               label={
@@ -226,6 +245,7 @@ const ClassroomParamStep1Visibility = () => {
             />
             <FormControlLabel
               value="ownClass"
+              checked={radioValue === 'ownClass'}
               name="ownClass"
               control={<Radio />}
               label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
@@ -233,6 +253,7 @@ const ClassroomParamStep1Visibility = () => {
             />
             <FormControlLabel
               value="ownClassTimeDelay"
+              checked={radioValue === 'ownClassTimeDelay'}
               name="ownClassTimeDelay"
               control={<Radio />}
               label={
@@ -267,7 +288,7 @@ const ClassroomParamStep1Visibility = () => {
             padding: '1rem 0 1rem .5rem',
           }}
         >
-          {activities.map((activity) => (
+          {sortedActivities.map((activity) => (
             <Button
               key={activity.id}
               sx={{
