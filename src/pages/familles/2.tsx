@@ -42,6 +42,8 @@ const ClassroomParamStep2 = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    window.location.reload();
+
     // === ATTENTION === There is 2 modals in this code, one which is a simple warning (the check under this), which's used for the update
     if (isDuplicateWarningModal) {
       setIsDuplicateWarningModal(false);
