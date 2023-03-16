@@ -3,13 +3,17 @@ import React from 'react';
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
 import { serializeToQueryUrl } from 'src/utils';
-import type { Classroom } from 'types/classroom.type';
+import type { Classroom, ClassroomAsFamilly } from 'types/classroom.type';
+import type { Country } from 'types/country.type';
 import type { Student, StudentForm } from 'types/student.type';
+import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 interface ClassroomContextValue {
   classroom: Classroom | null;
   setClassroom: (value: React.SetStateAction<Classroom | null>) => void;
+  parentClassroom: ClassroomAsFamilly | null;
+  setParentClassroom: (value: React.SetStateAction<ClassroomAsFamilly | null>) => void;
   getClassroom(): Promise<void>;
   updateClassroomParameters(data: ClassroomUpdateData): Promise<void>;
   createStudent({ firstname, lastname }: StudentForm): Promise<void>;
@@ -21,6 +25,8 @@ interface ClassroomContextValue {
 export const ClassroomContext = React.createContext<ClassroomContextValue>({
   classroom: null,
   setClassroom: () => {},
+  parentClassroom: null,
+  setParentClassroom: () => {},
   getClassroom: async () => {},
   updateClassroomParameters: async () => {},
   createStudent: async () => {},
@@ -39,16 +45,29 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   const { village } = React.useContext(VillageContext);
   const [students, setStudents] = React.useState<Student[]>([]);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
+  const [parentClassroom, setParentClassroom] = React.useState<ClassroomAsFamilly | null>(null);
 
   const fetchClassroom = React.useCallback(
-    async (userId: number) => {
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/classrooms/${userId}`,
-      });
-      if (response.error) return null;
-      if (response.data === null) return null;
-      return response.data;
+    async (user: User) => {
+      if (user.type === UserType.TEACHER) {
+        const response = await axiosLoggedRequest({
+          method: 'GET',
+          url: `/classrooms/${user.id}`,
+        });
+        if (response.error) return null;
+        if (response.data === null) return null;
+        return response.data;
+      }
+
+      if (user.type === UserType.FAMILY) {
+        const response = await axiosLoggedRequest({
+          method: 'GET',
+          url: `/users/get-classroom/${user.id}`,
+        });
+        if (response.error) return null;
+        if (response.data === null) return null;
+        return response.data;
+      }
     },
     [axiosLoggedRequest],
   );
@@ -66,6 +85,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       data: {
         userId: user.id,
         villageId: village.id,
+        countryCode: user.country?.isoCode,
       },
     })
       .then((response) => {
@@ -98,23 +118,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [axiosLoggedRequest],
   );
-
-  // * Classroom is create automatically for all teacher if it does not exit already
-  React.useEffect(() => {
-    if (user && user.type === UserType.TEACHER) {
-      fetchClassroom(user.id)
-        .then((classroom) => {
-          setClassroom(classroom);
-          if (students.length === 0) {
-            getStudents(classroom.id);
-          }
-        })
-        .catch(() => {
-          createClassroom();
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createClassroom, fetchClassroom, getStudents, user]);
 
   /**
    * Get teacher's classroom
@@ -244,10 +247,38 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
    */
   // const deleteAccessTorRelatives = React.useCallback(() => {}, []);
 
+  // * Classroom is create automatically for all teacher if it does not exit already
+  React.useEffect(() => {
+    if (user && user.type !== UserType.FAMILY) {
+      fetchClassroom(user)
+        .then((classroom) => {
+          setClassroom(classroom);
+          if (students.length === 0) {
+            getStudents(classroom.id);
+          }
+        })
+        .catch(() => {
+          createClassroom();
+        });
+    } else {
+      if (user) {
+        fetchClassroom(user)
+          .then((classroom) => {
+            setParentClassroom(classroom);
+          })
+          .catch();
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createClassroom, fetchClassroom, getStudents, user]);
+
   const value = React.useMemo(
     () => ({
       classroom,
       setClassroom,
+      parentClassroom,
+      setParentClassroom,
       getClassroom,
       updateClassroomParameters,
       students,
@@ -258,7 +289,19 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       getStudents,
       // deleteAccessTorRelatives,
     }),
-    [classroom, setClassroom, getClassroom, updateClassroomParameters, students, createStudent, deleteStudent, getStudents, setStudents],
+    [
+      classroom,
+      setClassroom,
+      parentClassroom,
+      setParentClassroom,
+      getClassroom,
+      updateClassroomParameters,
+      students,
+      createStudent,
+      deleteStudent,
+      getStudents,
+      setStudents,
+    ],
   );
   return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
 };
@@ -267,5 +310,6 @@ export interface ClassroomUpdateData {
   name?: string;
   avatar?: string;
   delayedDays?: number;
+  country?: Country;
   hasVisibilitySetToClass?: boolean;
 }

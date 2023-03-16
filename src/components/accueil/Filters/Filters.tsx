@@ -4,6 +4,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { FilterSelect } from './FilterSelect';
 import { Flag } from 'src/components/Flag';
+import { primaryColor } from 'src/styles/variables.const';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 
 export const ACTIVITIES_PER_PHASE: { key: number; label: string; value: 'all' | number[] }[][] = [
@@ -54,6 +55,7 @@ export type FilterArgs = {
   status: number;
   countries: { [key: string]: boolean };
   pelico: boolean;
+  searchTerm: string;
 };
 
 interface FiltersProps {
@@ -147,6 +149,20 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
           />
           <PelicoReflechit style={{ position: 'relative', zIndex: 10, height: '28px', width: 'auto', marginTop: '-10px', marginLeft: '-5px' }} />
         </label>
+      </div>
+      <div>
+        <input
+          type="text"
+          value={filters.searchTerm}
+          placeholder=" Rechercher"
+          style={{ margin: '0 0.5rem', border: `1px solid ${primaryColor}`, borderRadius: '5px', height: '26px' }}
+          onChange={(event) => {
+            onChange({
+              ...filters,
+              searchTerm: event.target.value,
+            });
+          }}
+        />
       </div>
     </div>
   );

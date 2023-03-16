@@ -146,6 +146,7 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
       villageId: student.classroom.village.id,
       hasStudentLinked: true,
       firstLogin: student.classroom.village.activePhase,
+      countryCode: student.classroom.country.isoCode as string, // Change this line
     })
     .where('id = :id', { id: req.user.id })
     .execute();
@@ -214,22 +215,18 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
   const id = parseInt(req.params.id, 10) || 0;
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (!student) return res.status(204).send();
-  //check if student has already been associated to a parent or relative
-  const isAssociated = await AppDataSource.getRepository(UserToStudent).find({ where: { student: { id: id } }, relations: { user: true } });
-  if (isAssociated) {
-    await AppDataSource.getRepository(UserToStudent)
-      .createQueryBuilder()
-      .update(UserToStudent)
-      .set({ student: { id: undefined } })
-      .where({ student: { id: id } })
-      .execute();
-    await AppDataSource.getRepository(Student).delete({ id });
-    await AppDataSource.getRepository(User)
-      .createQueryBuilder()
-      .update(User)
-      .set({ villageId: undefined, hasStudentLinked: true })
-      .where('id = :id', { id: req.user.id })
-      .execute();
+
+  // Remove the student, which triggers the @AfterRemove() hook in the Student entity
+  await AppDataSource.getRepository(Student).remove(student);
+
+  // Check if the user still has any linked students
+  const linkedStudents = await AppDataSource.getRepository(UserToStudent).find({ where: { user: { id: req.user.id } } });
+
+  // Update the user's hasStudentLinked property only if there are no more linked students
+  if (linkedStudents.length === 0) {
+    const UserRepo = AppDataSource.getRepository(User);
+
+    await UserRepo.createQueryBuilder().update(User).set({ hasStudentLinked: false }).where('id = :id', { id: req.user.id }).execute();
   }
 
   res.status(204).send();

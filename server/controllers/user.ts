@@ -7,6 +7,8 @@ import { LessThan, IsNull } from 'typeorm';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Classroom } from '../entities/classroom';
+import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -15,6 +17,7 @@ import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
+import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
 import { Controller } from './controller';
 
 const userController = new Controller('/users');
@@ -102,7 +105,7 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
 // --- Create an user. ---
 type CreateUserData = {
   email: string;
-  pseudo?: string;
+  pseudo: string;
   firstname?: string;
   lastname?: string;
   countryCode?: string;
@@ -125,7 +128,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
   properties: {
     email: { type: 'string' },
-    pseudo: { type: 'string', nullable: true },
+    pseudo: { type: 'string' },
     firstname: { type: 'string', nullable: true },
     lastname: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
@@ -148,7 +151,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     language: { type: 'string', nullable: true },
     hasStudentLinked: { type: 'boolean', nullable: true },
   },
-  required: ['email'],
+  required: ['email', 'pseudo'],
   additionalProperties: false,
 };
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -204,15 +207,21 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.hasStudentLinked = data.hasStudentLinked || false;
   user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
+  if (user.type === UserType.TEACHER) {
+    user.isVerified = true;
+    user.accountRegistration = 0;
+  }
 
   // Generate unique pseudo
+
   let pseudo = data.pseudo;
   if (!pseudo) {
     pseudo = await generatePseudo(data);
   } else {
-    const pseudoExists = await checkIfPseudoExists(pseudo);
-    if (pseudoExists) {
-      throw new AppError('Pseudo already exists', ErrorCode.PSEUDO_ALREADY_EXISTS);
+    let pseudoExists = await checkIfPseudoExists(pseudo);
+    while (pseudoExists) {
+      pseudo = await generatePseudo(data);
+      pseudoExists = await checkIfPseudoExists(pseudo);
     }
   }
   user.pseudo = pseudo;
@@ -245,9 +254,10 @@ type EditUserData = {
   displayName?: string;
   type?: UserType;
   villageId?: number | null;
-  accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
+  isVerified?: boolean;
+  accountRegistration?: number;
   hasAcceptedNewsletter?: boolean;
   language?: string | null;
   hasStudentLinked?: boolean;
@@ -286,6 +296,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
       additionalProperties: false,
     },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
+    isVerified: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
     hasStudentLinked: { type: 'boolean', nullable: true },
   },
@@ -293,6 +304,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
+
 userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
@@ -386,16 +398,44 @@ userController.put({ path: '/:id/password' }, async (req: Request, res: Response
 // --- Delete an user. ---
 userController.delete({ path: '/:id' }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  const userRepository = AppDataSource.getRepository(User);
+  const classroomRepository = AppDataSource.getRepository(Classroom);
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const user = await userRepository.findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
-  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+  if (!user || (!isSelfProfile && !isAdmin)) {
     res.status(204).send();
     return;
   }
 
+  const affectedUserIds: number[] = [];
+
+  // Fetch the related classroom and its students
+  const classroom = await classroomRepository.findOne({ where: { user: { id: user.id } }, relations: ['students'] });
+
+  if (classroom) {
+    // Collect the affected user IDs from the classroom's students
+    for (const student of classroom.students) {
+      const studentWithRelations = await AppDataSource.getRepository(Student).findOne({
+        where: { id: student.id },
+        relations: ['userToStudents', 'userToStudents.user'],
+      });
+      if (studentWithRelations) {
+        for (const userToStudent of studentWithRelations.userToStudents) {
+          if (userToStudent && userToStudent.user) {
+            affectedUserIds.push(userToStudent.user.id);
+          }
+        }
+      }
+    }
+  }
+
   await AppDataSource.getRepository(User).delete({ id });
+
+  // Update the hasStudentLinked field for affected users
+  await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
+
   res.status(204).send();
 });
 
@@ -682,6 +722,37 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
   }
 
   res.sendJSON({ success: true });
+});
+
+userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  // Retrieve the user's linked student
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: req.user.id } },
+    relations: ['student', 'student.classroom', 'student.classroom.village', 'student.classroom.user'],
+  });
+
+  if (!userToStudent) {
+    res.status(404).json({ message: 'No linked student found' });
+    return;
+  }
+
+  const { student } = userToStudent;
+  const { classroom } = student;
+
+  res.json({
+    student: {
+      id: student.id,
+      firstname: student.firstname,
+      lastname: student.lastname,
+      classroom: {
+        user: classroom.user.countryCode,
+      },
+    },
+  });
 });
 
 // Get the visibility parameters for Family members
