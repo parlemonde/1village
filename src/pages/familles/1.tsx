@@ -36,25 +36,6 @@ const content2 = {
 //TODO: factoriser le code méthode SOLID
 //TODO: traiter les erreurs de react forward avec les activityCard
 
-const initialStateOptions = {
-  default: {
-    delayedDays: 0,
-    hasVisibilitySetToClass: false,
-  },
-  timeDelay: {
-    delayedDays: 0,
-    hasVisibilitySetToClass: false, // reset to default
-  },
-  ownClassTimeDelay: {
-    delayedDays: 0,
-    hasVisibilitySetToClass: true, //this is always true
-  },
-  ownClass: {
-    delayedDays: 0, // reset to default
-    hasVisibilitySetToClass: true, //this is always true
-  },
-};
-
 function reducer(
   state: InitialStateOptionsProps,
   action: {
