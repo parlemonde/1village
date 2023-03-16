@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import { margin } from '@mui/system';
 
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
@@ -41,6 +42,8 @@ const ClassroomParamStep2 = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    window.location.reload();
+
     // === ATTENTION === There is 2 modals in this code, one which is a simple warning (the check under this), which's used for the update
     if (isDuplicateWarningModal) {
       setIsDuplicateWarningModal(false);
@@ -96,14 +99,18 @@ const ClassroomParamStep2 = () => {
   const handleEdit = (student: Student) => {
     setEditableStudent(student);
     if (firstnameRef.current && lastnameRef.current) {
-      firstnameRef.current.value = student.firstname;
-      lastnameRef.current.value = student.lastname;
+      if (firstnameRef.current === null || lastnameRef.current === null) return;
+      if (firstnameRef.current.value === '' || lastnameRef.current.value === '') return;
     }
   };
 
   const handleSave = async (e, student) => {
     e.preventDefault();
-
+    setEditableStudent({
+      ...editableStudent,
+      firstname: e.target[0].value,
+      lastname: e.target[1].value,
+    });
     const updatedStudent = {
       id: student.id,
       firstname: e.target[0].value,
@@ -147,10 +154,9 @@ const ClassroomParamStep2 = () => {
 
     const updatedStudent = {
       id: editableStudent.id,
-      firstname: firstnameRef.current.value,
-      lastname: lastnameRef.current.value,
+      firstname: editableStudent.firstname,
+      lastname: editableStudent.lastname,
     };
-
     try {
       const updatedData = await editStudent(updatedStudent);
 
@@ -238,7 +244,7 @@ const ClassroomParamStep2 = () => {
               }}
             />
           </label>
-          <Button type="submit" variant="outlined" disabled={isBtndisable}>
+          <Button type="submit" variant="outlined" disabled={isBtndisable} style={{ marginBottom: '20px' }}>
             Ajouter un élève
           </Button>
         </form>
@@ -274,15 +280,18 @@ const ClassroomParamStep2 = () => {
           </Modal>
         )}
 
-        <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '45%', minWidth: '350px' }}>
+        <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '72%', minWidth: '350px' }}>
           {students.length > 0 &&
             students
               .map((student) => (
                 <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
                   {editableStudent === student ? (
                     <form onSubmit={(e) => handleSave(e, student)} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                      <input
-                        type="text"
+                      <TextField
+                        variant="standard"
+                        size="small"
+                        placeholder="Prénom"
+                        type="firstname"
                         defaultValue={student.firstname}
                         style={{ flex: 1, marginRight: '10px' }}
                         error={inputError}
@@ -290,8 +299,11 @@ const ClassroomParamStep2 = () => {
                           setInputError(false);
                         }}
                       />
-                      <input
-                        type="text"
+                      <TextField
+                        variant="standard"
+                        size="small"
+                        placeholder="Nom"
+                        type="lastname"
                         defaultValue={student.lastname}
                         style={{ flex: 1, marginRight: '10px' }}
                         error={inputError}
@@ -299,10 +311,13 @@ const ClassroomParamStep2 = () => {
                           setInputError(false);
                         }}
                       />
-                      <button type="submit">Enregistrer</button>
-                      <button type="button" onClick={handleCancel}>
+                      <Button type="submit" variant="outlined" style={{ margin: '5px' }}>
+                        Enregistrer
+                      </Button>
+
+                      <Button type="button" variant="outlined" onClick={handleCancel} style={{ margin: '5px' }}>
                         Annuler
-                      </button>
+                      </Button>
                     </form>
                   ) : (
                     <>
