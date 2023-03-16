@@ -9,6 +9,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
+import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
@@ -19,6 +20,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 import type { InitialStateOptionsProps } from 'types/classroom.type';
+import { UserType } from 'types/user.type';
 
 const content1 = {
   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
@@ -101,21 +103,34 @@ const ClassroomParamStep1Visibility = () => {
   const [isDisabled, setIsDisabled] = React.useState({ timeDelay: true, ownClassTimeDelay: true });
   const [radioValue, setRadioValue] = React.useState('default');
   const { updateClassroomParameters } = React.useContext(ClassroomContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
+  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { users } = useVillageUsers();
 
-  const { village } = React.useContext(VillageContext);
-  // filters logic
-  const filterCountries = React.useMemo(() => (village ? village.countries.map((c) => c.isoCode) : []), [village]);
+  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
+
+  const filterCountries = React.useMemo(
+    () =>
+      !village || (selectedPhase === 1 && !isMediatorOrFamily)
+        ? user && user.country !== null
+          ? [user.country?.isoCode.toUpperCase()]
+          : []
+        : village.countries.map((c) => c.isoCode),
+    [selectedPhase, village, user, isMediatorOrFamily],
+  );
+
+  //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
+    selectedPhase: 0,
     types: 'all',
     status: 0,
-    selectedPhase: 0,
-    // phases: 'all',
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
       acc[c] = true;
       return acc;
     }, {}),
     pelico: true,
+    searchTerm: '',
   });
 
   const { activities, refetch, isLoading } = useActivities({
@@ -126,8 +141,6 @@ const ClassroomParamStep1Visibility = () => {
     type: filters.types === 'all' ? undefined : filters.types,
   });
 
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
-  const { users } = useVillageUsers();
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -182,6 +195,17 @@ const ClassroomParamStep1Visibility = () => {
   const onNext = () => {
     router.push('/familles/2');
   };
+
+  const activitiesFiltered = React.useMemo(() => {
+    if (activities && activities.length > 0) {
+      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      const activitiesFilterBySearchTerm =
+        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
+      return activitiesFilterBySearchTerm;
+    } else {
+      return [];
+    }
+  }, [activities, filters.searchTerm]);
 
   return (
     <Base>
@@ -259,7 +283,7 @@ const ClassroomParamStep1Visibility = () => {
             Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.
           </p>
           {/* phase is set to 4 to match the array with ALL activities */}
-          <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={4} isMesFamilles={true} />
+          <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} isMesFamilles />
           <OverflowContainer
             style={{
               height: '30vh',
@@ -277,7 +301,7 @@ const ClassroomParamStep1Visibility = () => {
               </div>
             ) : (
               <>
-                {activities.map((activity) => (
+                {activitiesFiltered.map((activity) => (
                   <Button
                     key={activity.id}
                     sx={{
