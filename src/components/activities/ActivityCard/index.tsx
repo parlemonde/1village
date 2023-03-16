@@ -70,7 +70,7 @@ export const ActivityCard = ({
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
-  const UsedCard: (props: ActivityCardProps) => JSX.Element = CardTypeMapper[activity.type];
+  const UsedCard = CardTypeMapper[activity.type];
 
   return (
     <Paper
@@ -146,6 +146,8 @@ export const ActivityCard = ({
       </div>
       <div className="activity-card__content">
         <UsedCard
+          // eslint-disable-next-line
+          // @ts-ignore
           activity={activity}
           user={user}
           isSelf={isSelf}
