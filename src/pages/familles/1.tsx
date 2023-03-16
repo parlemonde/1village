@@ -19,6 +19,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
+import type { Activity } from 'types/activity.type';
 import type { InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
 
@@ -154,7 +155,7 @@ const ClassroomParamStep1Visibility = () => {
       ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
       : dispatch({ type: 'ownClassTimeDelay', data: Number((event.target as HTMLInputElement).value) });
   };
-  const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setRadioValue((event.target as HTMLInputElement).value);
     (event.target as HTMLInputElement).value === 'default' ? dispatch({ type: 'default', data: 0 }) : dispatch({ type: 'ownClass', data: 0 });
   };
@@ -180,6 +181,7 @@ const ClassroomParamStep1Visibility = () => {
         break;
     }
   };
+  // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
 
   const handleActivityVisibility = (id: number) => {
     axiosLoggedRequest({
@@ -192,6 +194,13 @@ const ClassroomParamStep1Visibility = () => {
   const toggleInput = (key: string, bool: boolean) => {
     setIsDisabled({ ...isDisabled, [key]: bool });
   };
+
+  // React.useEffect(() => {
+  //     if (user && user.type === UserType.TEACHER) {
+  //       updateClassroomValidator());
+  // }
+  //   }, [updateClassroomValidator]);
+
   const onNext = () => {
     router.push('/familles/2');
   };
@@ -206,6 +215,14 @@ const ClassroomParamStep1Visibility = () => {
       return [];
     }
   }, [activities, filters.searchTerm]);
+
+  const sortedActivities: Activity[] = activitiesFiltered
+    .filter((activity) => activity.createDate !== undefined)
+    .sort((a, b) => {
+      const dateA = new Date(a.createDate as string);
+      const dateB = new Date(b.createDate as string);
+      return dateA.getTime() - dateB.getTime();
+    });
 
   return (
     <Base>
@@ -301,7 +318,7 @@ const ClassroomParamStep1Visibility = () => {
               </div>
             ) : (
               <>
-                {activitiesFiltered.map((activity) => (
+                {sortedActivities.map((activity) => (
                   <Button
                     key={activity.id}
                     sx={{
