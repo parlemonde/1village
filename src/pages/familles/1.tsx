@@ -101,7 +101,6 @@ const ClassroomParamStep1Visibility = () => {
   const [state, dispatch] = useReducer(reducer, initialStateOptions);
   const [isDisabled, setIsDisabled] = React.useState({ timeDelay: true, ownClassTimeDelay: true });
   const [radioValue, setRadioValue] = React.useState('default');
-  console.log({ state });
   const { updateClassroomParameters } = React.useContext(ClassroomContext);
 
   const { village } = React.useContext(VillageContext);
@@ -168,7 +167,6 @@ const ClassroomParamStep1Visibility = () => {
     }
   };
   // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
-  console.log({ radioValue });
 
   const handleActivityVisibility = (id: number) => {
     axiosLoggedRequest({
