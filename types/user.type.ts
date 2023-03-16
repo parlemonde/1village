@@ -58,6 +58,7 @@ export interface User {
 export type UserForm = {
   firstname: string;
   lastname: string;
+  pseudo: string;
   email: string;
   password: string;
   passwordConfirmation?: string;

@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
-import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
 
 import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
@@ -10,6 +9,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
+import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';

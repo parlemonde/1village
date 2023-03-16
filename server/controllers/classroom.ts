@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
 import { Classroom } from '../entities/classroom';
-import { UserType } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -27,8 +27,15 @@ classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req
     },
     where: { user: { id } },
   });
+
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+
   if (classroom === undefined) return next();
-  res.json(classroom);
+  if (user && user.type === UserType.FAMILY) {
+    res.json();
+  } else {
+    res.json(classroom);
+  }
 });
 
 type CreateClassroomData = {
@@ -36,6 +43,7 @@ type CreateClassroomData = {
   villageId: number;
   name?: string;
   avatar?: string;
+  countryCode?: string;
   delayedDays?: number;
 };
 
@@ -47,6 +55,7 @@ const createClassroomValidator = ajv.compile({
     name: { type: 'string', nullable: true },
     avatar: { type: 'string', nullable: true },
     delayedDays: { type: 'number', nullable: true },
+    countryCode: { type: 'string', nullable: true },
     hasVisibilitySetToClass: { type: 'boolean', nullable: true },
   },
   required: ['userId', 'villageId'],
@@ -79,7 +88,7 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   const classroom = await AppDataSource.createQueryBuilder()
     .insert()
     .into(Classroom)
-    .values([{ user: { id: data.userId }, village: { id: data.villageId } }])
+    .values([{ user: { id: data.userId }, village: { id: data.villageId }, countryCode: data.countryCode }])
     .execute();
 
   res.json(classroom);

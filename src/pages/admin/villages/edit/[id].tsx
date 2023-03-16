@@ -86,7 +86,7 @@ const EditVillage = () => {
             style={{ width: '100%', marginBottom: '1rem' }}
           />
           <CountrySelector
-            value={village.countries[1].isoCode}
+            value={village.countries[1]?.isoCode}
             onChange={(newValue: string) => {
               setVillage((v) => (!v ? null : { ...v, countries: [village.countries[0], { isoCode: newValue, name: '' }] }));
             }}

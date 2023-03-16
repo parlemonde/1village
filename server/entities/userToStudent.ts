@@ -8,11 +8,11 @@ export class UserToStudent {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @ManyToOne(() => User, (user) => user.userToStudents)
+  @ManyToOne(() => User, (user) => user.userToStudents, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   public user: User;
 
-  @ManyToOne(() => Student, (student) => student.userToStudents)
+  @ManyToOne(() => Student, (student) => student.userToStudents, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'studentId' })
   public student: Student;
 }

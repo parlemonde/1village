@@ -188,7 +188,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         {(villages || []).length === 0 ? (
           <>
             <p>Aucun village existe !</p>
-            {user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN) ? (
+            {user !== null && (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN) ? (
               <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}

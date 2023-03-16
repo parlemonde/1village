@@ -102,7 +102,7 @@ export const Header = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={() => goTopage('/mon-compte')}>Mon compte</MenuItem>
-                <MenuItem onClick={() => goTopage('/mes-videos')}>Mes vidéos</MenuItem>
+                {user.type !== UserType.FAMILY && <MenuItem onClick={() => goTopage('/mes-videos')}>Mes vidéos</MenuItem>}
                 {user.type === UserType.TEACHER ? <MenuItem onClick={() => goTopage('/familles/1')}>Mes familles</MenuItem> : null}
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>

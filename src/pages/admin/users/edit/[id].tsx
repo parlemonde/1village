@@ -198,7 +198,7 @@ const EditUser = () => {
                 setUser((u) => (!u ? null : { ...u, type: event.target.value as number }));
               }}
             >
-              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
+              {[UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN].map((type) => (
                 <MenuItem key={type} value={type}>
                   {userTypeNames[type]}
                 </MenuItem>
@@ -226,7 +226,7 @@ const EditUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={user.country?.isoCode}
+            value={user?.country?.isoCode}
             onChange={(countryCode) => {
               setUser((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
             }}
