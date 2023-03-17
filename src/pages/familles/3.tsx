@@ -59,8 +59,18 @@ const Communication = () => {
     const messagesWithId: string[] = [];
     let count = 0;
 
+    type Environment = 'development' | 'production' | 'test' | 'staging';
+
+    let url: string;
+    const env = process.env.NODE_ENV as Environment;
+    if (env === 'production') {
+      url = 'https://1v.parlemonde.org/';
+    } else {
+      url = 'https://1v-staging.parlemonde.org/';
+    }
+
     if (keywordPresence) {
-      const newWin = window.open('http://localhost:5000/familles/3/print.js', 'Print-Window');
+      const newWin = window.open(`${url}/familles/3/print.js`, 'Print-Window');
 
       students.forEach((student) => {
         messagesWithId.push(`<div>Élève : <strong>${student.firstname} ${student.lastname}</strong></div>`);

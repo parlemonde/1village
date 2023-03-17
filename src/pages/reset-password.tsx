@@ -156,7 +156,7 @@ const ResetPassword: React.FunctionComponent = () => {
                   </div>
                   <br />
                   <div style={{ marginBottom: '4rem' }} className="text-center">
-                    <Link href="/sign-in" onClick={handleLinkClick('/sign-in')}>
+                    <Link href="/connexion" onClick={handleLinkClick('/connexion')}>
                       Retourner à la connexion
                     </Link>
                   </div>

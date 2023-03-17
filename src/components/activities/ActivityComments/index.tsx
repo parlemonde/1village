@@ -12,7 +12,6 @@ import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Activity, AnyData } from 'types/activity.type';
 import type { User } from 'types/user.type';
-import { UserType } from 'types/user.type';
 
 interface ActivityCommentsProps {
   activity: Activity<AnyData>;
@@ -80,7 +79,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
           );
         }
       })}
-      {user?.type !== UserType.FAMILY && <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />}
+      <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />
     </div>
   );
 };
