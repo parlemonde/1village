@@ -81,7 +81,7 @@ function reducer(
 
 const ClassroomParamStep1Visibility = () => {
   const router = useRouter();
-  const { classroom } = useContext(ClassroomContext);
+  const { classroom, setClassroom } = useContext(ClassroomContext);
 
   const [state, dispatch] = useReducer(reducer, {
     default: { delayedDays: 0, hasVisibilitySetToClass: false },
@@ -192,26 +192,28 @@ const ClassroomParamStep1Visibility = () => {
   };
 
   const handleSelectionVisibility = (key: string) => {
+    let newState;
     switch (key) {
       case 'default':
-        updateClassroomParameters(state.default);
+        newState = state.default;
         break;
       case 'timeDelay':
-        // state.ownClass.delayedDays !== 0 && updateClassroomParameters(state.timeDelay);
-        updateClassroomParameters(state.timeDelay);
+        newState = state.timeDelay;
         break;
       case 'ownClass':
-        updateClassroomParameters(state.ownClass);
+        newState = state.ownClass;
         break;
       case 'ownClassTimeDelay':
-        // state.ownClassTimeDelay.delayedDays !== 0 && updateClassroomParameters(state.ownClassTimeDelay);
-        updateClassroomParameters(state.ownClassTimeDelay);
+        newState = state.ownClassTimeDelay;
         break;
       default:
-        updateClassroomParameters(state.default);
+        newState = state.default;
         break;
     }
+    updateClassroomParameters(newState);
+    setClassroom((prevState) => ({ ...prevState, ...newState }));
   };
+
   // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
 
   const handleActivityVisibility = (id: number) => {
