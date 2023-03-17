@@ -21,7 +21,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 import type { Activity } from 'types/activity.type';
-import type { InitialStateOptionsProps } from 'types/classroom.type';
+import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
 
 const content1 = {
@@ -31,6 +31,11 @@ const content1 = {
 const content2 = {
   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais seulement celles publiées par notre classe et',
   text2: 'jours après leurs publication',
+};
+
+type StateType = {
+  delayedDays: number;
+  hasVisibilitySetToClass: boolean;
 };
 
 //TODO: ouvrir un nouvel onglet pour les activités
@@ -82,7 +87,7 @@ function reducer(
 
 const ClassroomParamStep1Visibility = () => {
   const router = useRouter();
-  const { classroom } = useContext(ClassroomContext);
+  const { classroom, setClassroom } = useContext(ClassroomContext);
 
   const [state, dispatch] = useReducer(reducer, {
     default: { delayedDays: 0, hasVisibilitySetToClass: false },
@@ -198,26 +203,36 @@ const ClassroomParamStep1Visibility = () => {
   };
 
   const handleSelectionVisibility = (key: string) => {
+    let newState: StateType;
     switch (key) {
       case 'default':
-        updateClassroomParameters(state.default);
+        newState = state.default;
         break;
       case 'timeDelay':
-        // state.ownClass.delayedDays !== 0 && updateClassroomParameters(state.timeDelay);
-        updateClassroomParameters(state.timeDelay);
+        newState = state.timeDelay;
         break;
       case 'ownClass':
-        updateClassroomParameters(state.ownClass);
+        newState = state.ownClass;
         break;
       case 'ownClassTimeDelay':
-        // state.ownClassTimeDelay.delayedDays !== 0 && updateClassroomParameters(state.ownClassTimeDelay);
-        updateClassroomParameters(state.ownClassTimeDelay);
+        newState = state.ownClassTimeDelay;
         break;
       default:
-        updateClassroomParameters(state.default);
+        newState = state.default;
         break;
     }
+    updateClassroomParameters(newState);
+    setClassroom((prevState) => {
+      if (!prevState) {
+        return {
+          delayedDays: newState.delayedDays,
+          hasVisibilitySetToClass: newState.hasVisibilitySetToClass,
+        } as Classroom;
+      }
+      return { ...prevState, ...newState };
+    });
   };
+
   // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
 
   const handleActivityVisibility = (id: number) => {
@@ -298,7 +313,7 @@ const ClassroomParamStep1Visibility = () => {
                     onChange={(event) => handleDaysDelay('timeDelay', event)}
                     onBlur={() => handleSelectionVisibility('timeDelay')}
                     value={state.timeDelay.delayedDays}
-                    disabled={isDisabled?.timeDelay}
+                    disabled={radioValue !== 'timeDelay'}
                   />
                 }
                 onClick={() => toggleInput('timeDelay', false)}
@@ -323,7 +338,7 @@ const ClassroomParamStep1Visibility = () => {
                     onChange={(event) => handleDaysDelay('ownClassTimeDelay', event)}
                     onBlur={() => handleSelectionVisibility('ownClassTimeDelay')}
                     value={state.ownClassTimeDelay.delayedDays}
-                    disabled={isDisabled?.ownClassTimeDelay}
+                    disabled={radioValue !== 'ownClassTimeDelay'}
                   />
                 }
                 onClick={() => toggleInput('ownClassTimeDelay', false)}
