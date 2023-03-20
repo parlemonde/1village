@@ -61,6 +61,7 @@ const Communication = () => {
 
     type Environment = 'development' | 'production' | 'test' | 'staging';
 
+    // TODO window.location
     let url: string;
     const env = process.env.NODE_ENV as Environment;
     if (env === 'production') {

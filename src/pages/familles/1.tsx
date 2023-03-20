@@ -12,7 +12,6 @@ import { Filters } from 'src/components/accueil/Filters';
 import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { BackButton } from 'src/components/buttons/BackButton';
-import SaveButton from 'src/components/buttons/SaveButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -133,11 +132,6 @@ const ClassroomParamStep1Visibility = () => {
         : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isMediatorOrFamily],
   );
-
-  const handleSave = async () => {
-    // Call your API or update the state to save the selected configuration
-    await updateClassroomParameters(state.default);
-  };
 
   //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
@@ -347,7 +341,6 @@ const ClassroomParamStep1Visibility = () => {
               />
             </RadioGroup>
           </FormControl>
-          <SaveButton handleSave={handleSave} />
           <div style={{ margin: '-1rem 0' }}>
             <StepsButton next={onNext} />
           </div>

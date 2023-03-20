@@ -12,7 +12,7 @@ import { Controller } from './controller';
 const commentController = new Controller('/comments');
 
 // --- Get all comments. ---
-commentController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+commentController.get({ path: '' }, async (req: Request, res: Response) => {
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const comments = await AppDataSource.getRepository(Comment).find({ where: { activityId }, order: { createDate: 'ASC' } });
   res.sendJSON(comments);

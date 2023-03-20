@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { ActivityCard } from '../ActivityCard';
 import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
@@ -79,6 +79,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
           );
         }
       })}
+      {/* //TODO ajouter un texte s'il n'y a pas d'activités */}
       <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />
     </div>
   );

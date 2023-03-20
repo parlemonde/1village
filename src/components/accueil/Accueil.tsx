@@ -10,6 +10,7 @@ import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
@@ -19,6 +20,7 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
+  const { classroom } = React.useContext(ClassroomContext);
   const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
   const filterCountries = React.useMemo(
     () =>
@@ -73,6 +75,8 @@ export const Accueil = () => {
       return [];
     }
   }, [activities, filters.searchTerm]);
+
+  console.log('CLASSROOM', classroom);
 
   if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
     return (
