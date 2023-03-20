@@ -119,42 +119,47 @@ const ClassroomParamStep2 = () => {
 
   const handleSave = async (e, student) => {
     e.preventDefault();
+    const newFirstname = e.target[0].value;
+    const newLastname = e.target[1].value;
+    const valuesChanged = newFirstname !== student.firstname || newLastname !== student.lastname;
     setEditableStudent({
       ...editableStudent,
       firstname: e.target[0].value,
       lastname: e.target[1].value,
     });
-    const updatedStudent = {
-      id: student.id,
-      firstname: e.target[0].value,
-      lastname: e.target[1].value,
-    };
+    if (valuesChanged) {
+      const updatedStudent = {
+        id: student.id,
+        firstname: e.target[0].value,
+        lastname: e.target[1].value,
+      };
 
-    for (const existingStudent of students) {
-      if (
-        isNormalizedStringEqual(existingStudent.firstname, updatedStudent.firstname) &&
-        isNormalizedStringEqual(existingStudent.lastname, updatedStudent.lastname)
-      ) {
-        setIsDuplicateWarningModal(true);
-        return;
+      for (const existingStudent of students) {
+        if (
+          isNormalizedStringEqual(existingStudent.firstname, updatedStudent.firstname) &&
+          isNormalizedStringEqual(existingStudent.lastname, updatedStudent.lastname)
+        ) {
+          setIsDuplicateWarningModal(true);
+          return;
+        }
       }
-    }
 
-    if (updatedStudent.firstname === '' || updatedStudent.lastname === '') {
-      setInputError(true);
-    } else {
-      try {
-        const updatedData = await editStudent(updatedStudent);
-        // Update the state with the updated student data
-        setStudents((prevStudents) => {
-          const index = prevStudents.findIndex((s) => s.id === updatedData.id);
-          const updatedStudents = [...prevStudents];
-          updatedStudents[index] = updatedData;
-          setEditableStudent(null); // Change from setEditableStudent(false)
-          return updatedStudents;
-        });
-      } catch (err) {
-        return err;
+      if (updatedStudent.firstname === '' || updatedStudent.lastname === '') {
+        setInputError(true);
+      } else {
+        try {
+          const updatedData = await editStudent(updatedStudent);
+          // Update the state with the updated student data
+          setStudents((prevStudents) => {
+            const index = prevStudents.findIndex((s) => s.id === updatedData.id);
+            const updatedStudents = [...prevStudents];
+            updatedStudents[index] = updatedData;
+            setEditableStudent(null); // Change from setEditableStudent(false)
+            return updatedStudents;
+          });
+        } catch (err) {
+          return err;
+        }
       }
     }
   };
@@ -172,7 +177,6 @@ const ClassroomParamStep2 = () => {
     };
     try {
       const updatedData = await editStudent(updatedStudent);
-
       // Update the state with the updated student data
       setStudents((prevStudents) => {
         const index = prevStudents.findIndex((s) => s.id === updatedData.id);
