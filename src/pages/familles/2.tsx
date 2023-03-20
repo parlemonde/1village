@@ -214,163 +214,165 @@ const ClassroomParamStep2 = () => {
 
   return (
     <Base>
-      <Steps
-        steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-        urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
-        activeStep={1}
-      />
-      <div className="width-900">
-        <h1>Ajouter un identifiant par élève</h1>
-        <p className="text">
-          Pour sécuriser la connexion des familles, nous allons créer{' '}
-          <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque élève de votre classe. </span> <br></br>Ensuite chaque famille pourra
-          créer jusqu&apos;à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou les
-          grandes-soeurs pourront accéder à 1Village. <br></br>
-          <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;élèves dans votre classe. Vous pourrez rajouter des
-          identifiants en cours d&apos;années, lorsqu&apos;un nouvel élève arrive dans votre classe.
-        </p>
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <Steps
+          steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
+          urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
+          activeStep={1}
+        />
+        <div className="width-900">
+          <h1>Ajouter un identifiant par élève</h1>
+          <p className="text">
+            Pour sécuriser la connexion des familles, nous allons créer{' '}
+            <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque élève de votre classe. </span> <br></br>Ensuite chaque famille pourra
+            créer jusqu&apos;à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou les
+            grandes-soeurs pourront accéder à 1Village. <br></br>
+            <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;élèves dans votre classe. Vous pourrez rajouter des
+            identifiants en cours d&apos;années, lorsqu&apos;un nouvel élève arrive dans votre classe.
+          </p>
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            <TextField
-              variant="standard"
-              size="small"
-              placeholder="Prénom"
-              type="firstname"
-              onChange={handleChange}
-              inputRef={firstnameRef}
-              sx={{
-                marginRight: 1,
+          <form onSubmit={handleSubmit}>
+            <label>
+              <TextField
+                variant="standard"
+                size="small"
+                placeholder="Prénom"
+                type="firstname"
+                onChange={handleChange}
+                inputRef={firstnameRef}
+                sx={{
+                  marginRight: 1,
+                }}
+              />
+            </label>
+            <label>
+              <TextField
+                variant="standard"
+                size="small"
+                placeholder="Nom"
+                type="lastname"
+                onChange={handleChange}
+                inputRef={lastnameRef}
+                sx={{
+                  marginRight: 1,
+                }}
+              />
+            </label>
+            <Button type="submit" variant="outlined" disabled={isDisabled} style={{ marginBottom: '20px' }}>
+              Ajouter un élève
+            </Button>
+          </form>
+          {isDuplicateModalOn && (
+            <Modal
+              onClose={() => {
+                setIsDuplicateModalOn(false);
               }}
-            />
-          </label>
-          <label>
-            <TextField
-              variant="standard"
-              size="small"
-              placeholder="Nom"
-              type="lastname"
-              onChange={handleChange}
-              inputRef={lastnameRef}
-              sx={{
-                marginRight: 1,
+              ariaLabelledBy={''}
+              ariaDescribedBy={''}
+              onConfirm={onModalConfirm}
+              confirmLabel="confirmer"
+              title="Elève déjà existant"
+            >
+              Un élève que vous avez ajouté possède déjà ce nom. <br />
+              Souhaitez-vous ajouter un autre élève à ce nom ?
+            </Modal>
+          )}
+          {isDuplicateWarningModal && (
+            <Modal
+              onClose={() => {
+                setIsDuplicateWarningModal(false);
               }}
-            />
-          </label>
-          <Button type="submit" variant="outlined" disabled={isDisabled} style={{ marginBottom: '20px' }}>
-            Ajouter un élève
-          </Button>
-        </form>
-        {isDuplicateModalOn && (
-          <Modal
-            onClose={() => {
-              setIsDuplicateModalOn(false);
-            }}
-            ariaLabelledBy={''}
-            ariaDescribedBy={''}
-            onConfirm={onModalConfirm}
-            confirmLabel="confirmer"
-            title="Elève déjà existant"
-          >
-            Un élève que vous avez ajouté possède déjà ce nom. <br />
-            Souhaitez-vous ajouter un autre élève à ce nom ?
-          </Modal>
-        )}
-        {isDuplicateWarningModal && (
-          <Modal
-            onClose={() => {
-              setIsDuplicateWarningModal(false);
-            }}
-            ariaLabelledBy={''}
-            ariaDescribedBy={''}
-            onConfirm={onEditModalConfirm}
-            confirmLabel="confirmer"
-            title="Elève déjà existant"
-          >
-            Attention !! <br />
-            Un élève de votre classe possède déjà ce nom / prénom <br />
-            S&apos;il s&apos;agit d&apos;une erreur veuillez supprimer le nouvel élève.
-          </Modal>
-        )}
+              ariaLabelledBy={''}
+              ariaDescribedBy={''}
+              onConfirm={onEditModalConfirm}
+              confirmLabel="confirmer"
+              title="Elève déjà existant"
+            >
+              Attention !! <br />
+              Un élève de votre classe possède déjà ce nom / prénom <br />
+              S&apos;il s&apos;agit d&apos;une erreur veuillez supprimer le nouvel élève.
+            </Modal>
+          )}
 
-        <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '72%', minWidth: '350px' }}>
-          {students.length > 0 &&
-            students
-              .map((student) => (
-                <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-                  {editableStudent === student ? (
-                    <form onSubmit={(e) => handleSave(e, student)} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                      <TextField
-                        variant="standard"
-                        size="small"
-                        placeholder="Prénom"
-                        type="firstname"
-                        defaultValue={student.firstname}
-                        style={{ flex: 1, marginRight: '10px' }}
-                        error={inputError}
-                        onChange={() => {
-                          setInputError(false);
-                        }}
-                      />
-                      <TextField
-                        variant="standard"
-                        size="small"
-                        placeholder="Nom"
-                        type="lastname"
-                        defaultValue={student.lastname}
-                        style={{ flex: 1, marginRight: '10px' }}
-                        error={inputError}
-                        onChange={() => {
-                          setInputError(false);
-                        }}
-                      />
-                      <Button type="submit" variant="outlined" style={{ margin: '5px' }}>
-                        Enregistrer
-                      </Button>
-
-                      <Button type="button" variant="outlined" onClick={handleCancel} style={{ margin: '5px' }}>
-                        Annuler
-                      </Button>
-                    </form>
-                  ) : (
-                    <>
-                      <p style={{ flex: 1 }}>
-                        {student.firstname} {student.lastname}
-                      </p>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <button
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '31.6px',
-                            height: '31,6px',
-                            padding: '3px',
-                            border: '1px solid currentColor',
-                            borderRadius: '50%',
-                            borderColor: '#4c3ed9',
+          <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '72%', minWidth: '350px' }}>
+            {students.length > 0 &&
+              students
+                .map((student) => (
+                  <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
+                    {editableStudent === student ? (
+                      <form onSubmit={(e) => handleSave(e, student)} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <TextField
+                          variant="standard"
+                          size="small"
+                          placeholder="Prénom"
+                          type="firstname"
+                          defaultValue={student.firstname}
+                          style={{ flex: 1, marginRight: '10px' }}
+                          error={inputError}
+                          onChange={() => {
+                            setInputError(false);
                           }}
-                        >
-                          <ModeEditOutlineRoundedIcon color="primary" onClick={() => handleEdit(student)} />
-                        </button>
-
-                        <DeleteButton
-                          onDelete={() => {
-                            deleteStudent(student.id);
-                          }}
-                          confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
-                          confirmTitle="Supprimer l'élève"
-                          style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
                         />
-                      </div>
-                    </>
-                  )}
-                </span>
-              ))
-              .reverse()}
-        </div>
+                        <TextField
+                          variant="standard"
+                          size="small"
+                          placeholder="Nom"
+                          type="lastname"
+                          defaultValue={student.lastname}
+                          style={{ flex: 1, marginRight: '10px' }}
+                          error={inputError}
+                          onChange={() => {
+                            setInputError(false);
+                          }}
+                        />
+                        <Button type="submit" variant="outlined" style={{ margin: '5px' }}>
+                          Enregistrer
+                        </Button>
 
-        <StepsButton prev={'/familles/1?edit'} next={onNext} />
+                        <Button type="button" variant="outlined" onClick={handleCancel} style={{ margin: '5px' }}>
+                          Annuler
+                        </Button>
+                      </form>
+                    ) : (
+                      <>
+                        <p style={{ flex: 1 }}>
+                          {student.firstname} {student.lastname}
+                        </p>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <button
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '31.6px',
+                              height: '31,6px',
+                              padding: '3px',
+                              border: '1px solid currentColor',
+                              borderRadius: '50%',
+                              borderColor: '#4c3ed9',
+                            }}
+                          >
+                            <ModeEditOutlineRoundedIcon color="primary" onClick={() => handleEdit(student)} />
+                          </button>
+
+                          <DeleteButton
+                            onDelete={() => {
+                              deleteStudent(student.id);
+                            }}
+                            confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
+                            confirmTitle="Supprimer l'élève"
+                            style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </span>
+                ))
+                .reverse()}
+          </div>
+
+          <StepsButton prev={'/familles/1?edit'} next={onNext} />
+        </div>
       </div>
     </Base>
   );

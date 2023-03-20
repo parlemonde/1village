@@ -31,9 +31,9 @@ const Communication = () => {
     <p>Si vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :</p>
     
     <ol>
-    <li>Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.</li>
+    <li>Créer un compte sur https://1v.parlemonde.org/inscription, en renseignant une adresse email et un mot de passe.</li>
     <li>Confirmez votre adresse mail en cliquant sur le lien envoyé</li>
-    <li>Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong></li>
+    <li>Connectez-vous sur https://1v.parlemonde.org/inscription et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong></li>
     </ol>
     
     <p>Jusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.
@@ -43,7 +43,7 @@ const Communication = () => {
     `,
   );
   const [keywordPresence, setKeywordPresence] = useState(true);
-  const textDefaultValue = `\nBonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/famille, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée\n\n`;
+  const textDefaultValue = `\nBonjour,\n\nNotre classe participe au projet 1Village, de l’association Par Le Monde, agréée par le ministère de l’éducation nationale français. 1Village est un projet de correspondances avec d’autres classes du monde, accessible de façon sécurisée sur un site internet.\n\nSi vous souhaitez accéder à ce site et observer les échanges en famille, il vous faut suivre cette démarche :\n\n\t1. Créer un compte sur https://1v.parlemonde.org/inscription, en renseignant une adresse email et un mot de passe.\n\t2. Confirmez votre adresse mail en cliquant sur le lien envoyé.\n\t3. Connectez-vous sur https://1v.parlemonde.org/famille et rattachez votre compte à l’identifiant unique <strong>%identifiant</strong>\n\nJusqu’à 5 personnes de votre famille peuvent créer un compte et le rattacher à l’identifiant unique de votre enfant.\n\nBonne journée\n\n`;
 
   useEffect(() => {
     const keywordRegex = new RegExp(/%identifiant/gm);
