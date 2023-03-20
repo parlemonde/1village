@@ -3,10 +3,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+import { TextField, Grid, ButtonBase } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
-import { ODD_CHOICE } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { Steps } from 'src/components/Steps';
@@ -17,26 +16,18 @@ import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
-import type { StoriesData } from 'types/story.type';
+import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep3 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const { deleteStoryImage } = useImageStoryRequests();
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
 
   const errorSteps = React.useMemo(() => {
-    const errors = [];
     if (data !== null) {
-      if (getErrorSteps(data.object, 1).length > 0) {
-        errors.push(0);
-      }
-      if (getErrorSteps(data.place, 2).length > 0) {
-        errors.push(1);
-      }
-      return errors;
+      return getErrorSteps(data.object, 1);
     }
     return [];
   }, [data]);
@@ -49,15 +40,30 @@ const StoryStep3 = () => {
     }
   }, [activity, router]);
 
+  const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.slice(0, 400);
+    const { place } = data;
+    const newData = { ...data, place: { ...place, [key]: value } };
+    updateActivity({ data: newData });
+  };
+
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
-    const { odd } = data;
-    updateActivity({ data: { ...data, odd: { ...odd, inspiredStoryId: activity?.id, imageUrl, imageId: 0 } } });
+    const { object, place } = data;
+    // imageId = 0 when we are changing the image of the object step.
+    updateActivity({
+      data: {
+        ...data,
+        object: { ...object, inspiredStoryId: activity?.id },
+        place: { ...place, inspiredStoryId: activity?.id, imageUrl, imageId: 0 },
+        isOriginal: true,
+      },
+    });
   };
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/creer-une-histoire/4');
+    router.push('/creer-une-histoire/3');
   };
 
   if (data === null || activity === null || !isStory(activity)) {
@@ -68,17 +74,17 @@ const StoryStep3 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
+          steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={2}
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>
+          <h1>Inventez et dessinez un lieu extraordinaire</h1>
           <p className="text">
-            Grâce aux pouvoirs magiques de l’objet et du lieu choisis aux étapes précédentes, un des objectifs du développement durable a été atteint.
+            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal a
+            atteint l’objectif du développement durable que vous choisirez en étape 3.
           </p>
-          <p className="text">Choisissez lequel et dessinez-le.</p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
@@ -96,25 +102,19 @@ const StoryStep3 = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        {data.odd?.imageUrl ? (
-                          <Image
-                            layout="fill"
-                            objectFit="cover"
-                            alt="image de l'objectif de développement durable"
-                            src={data.odd?.imageUrl}
-                            unoptimized
-                          />
+                        {data.place?.imageUrl ? (
+                          <Image layout="fill" objectFit="cover" alt="image du lieu" src={data.place?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data.odd?.imageUrl && (
+                  {data.place?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
-                          deleteStoryImage(data.odd.imageId, data, 3);
+                          deleteStoryImage(data.place.imageId, data, 2);
                           setImage('');
                         }}
                         confirmLabel="Êtes-vous sur de vouloir supprimer l'image ?"
@@ -127,36 +127,37 @@ const StoryStep3 = () => {
                     id={0}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={data.odd?.imageUrl || ''}
+                    imageUrl={data.place?.imageUrl || ''}
                     setImageUrl={setImage}
                   />
                 </div>
-                <FormControl variant="outlined" className="full-width" style={{ marginTop: '1rem' }}>
-                  <InputLabel id="select-ODD">ODD</InputLabel>
-                  <Select
-                    labelId="select-ODD"
-                    id="select-ODD-outlined"
-                    value={oDDChoice || data.odd?.description}
-                    onChange={(event) => {
-                      setODDChoice(event.target.value as string);
-                      const { odd } = data;
-                      updateActivity({ data: { ...data, odd: { ...odd, description: event.target.value } } });
-                    }}
-                    label="Village"
-                  >
-                    {(ODD_CHOICE || []).map((v, index) => (
-                      <MenuItem value={v.choice} key={index + 1}>
-                        {v.choice}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>Choisissez votre ODD </FormHelperText>
-                </FormControl>
               </div>
+              <TextField
+                id="standard-multiline-static"
+                label="Décrivez le lieu extraordinaire"
+                value={data.place?.description || ''}
+                onChange={dataChange('description')}
+                variant="outlined"
+                multiline
+                maxRows={4}
+                style={{ width: '100%', marginTop: '25px', color: 'primary' }}
+                inputProps={{
+                  maxLength: 400,
+                }}
+              />
+              {data.place?.description ? (
+                <div style={{ width: '100%', textAlign: 'right' }}>
+                  <span className="text text--small">{data.place.description.length}/400</span>
+                </div>
+              ) : (
+                <div style={{ width: '100%', textAlign: 'right' }}>
+                  <span className="text text--small">0/400</span>
+                </div>
+              )}
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev="/creer-une-histoire/2" next={onNext} />
+        <StepsButton prev={`/creer-une-histoire/1?edit=${activity.id}`} next={onNext} />
       </div>
     </Base>
   );
