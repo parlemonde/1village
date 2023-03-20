@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { ActivityCard } from '../ActivityCard';
 import StoriesDataCardView from '../ActivityView/StoriesDataCardView';
