@@ -19,7 +19,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
 import { primaryColor, bgPage, errorColor } from 'src/styles/variables.const';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { StoriesData, StoryElement } from 'types/story.type';
+import type { StoriesData } from 'types/story.type';
 
 const StoryStep1 = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const StoryStep1 = () => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const [oDDChoice, setODDChoice] = React.useState('');
-  const data = (activity?.data as StoriesData) || null;
+  const data = (activity?.data as StoriesData) || { odd: ODD_CHOICE[0] };
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
   // Create the story activity.
@@ -53,14 +53,14 @@ const StoryStep1 = () => {
     }
   }, [activity, createNewActivity, router.query, selectedPhase]);
 
-  const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.slice(0, 400);
-    const { odd } = data;
-    const newData = { ...data, odd: { ...odd, [key]: value } };
-    updateActivity({ data: newData });
-  };
+  // const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value.slice(0, 400);
+  //   const { odd } = data;
+  //   const newData = { ...data, odd: { ...odd, [key]: value } };
+  //   updateActivity({ data: newData });
+  // };
 
-  // Update the "object step" image url, when upload an image.
+  // Update the "odd step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { odd } = data;
     updateActivity({ data: { ...data, odd: { ...odd, inspiredStoryId: activity?.id, imageUrl, imageId: 0 } } });
@@ -76,7 +76,9 @@ const StoryStep1 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/creer-une-histoire/4');
+    // save in local storage that the user is going to the next step.
+    window.sessionStorage.setItem(`story-step-1-next`, 'true');
+    router.push('/creer-une-histoire/2');
   };
 
   return (
@@ -98,7 +100,7 @@ const StoryStep1 = () => {
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
                 <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
-                  <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${primaryColor}` }}>
+                  <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${isError ? errorColor : primaryColor}` }}>
                     <KeepRatio ratio={2 / 3} width="100%">
                       <div
                         style={{

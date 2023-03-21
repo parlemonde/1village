@@ -28,10 +28,10 @@ const StoryStep3 = () => {
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
-      if (getErrorSteps(data.object, 1).length > 0) {
+      if (getErrorSteps(data.odd, 1).length > 0) {
         errors.push(0);
       }
-      if (getErrorSteps(data.place, 2).length > 0) {
+      if (getErrorSteps(data.object, 2).length > 0) {
         errors.push(1);
       }
       return errors;
@@ -70,7 +70,7 @@ const StoryStep3 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/creer-une-histoire/3');
+    router.push('/creer-une-histoire/4');
   };
 
   if (data === null || activity === null || !isStory(activity)) {

@@ -15,7 +15,7 @@ import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
-import { bgPage, primaryColor } from 'src/styles/variables.const';
+import { bgPage, errorColor, primaryColor } from 'src/styles/variables.const';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep2 = () => {
@@ -27,7 +27,7 @@ const StoryStep2 = () => {
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
-      return getErrorSteps(data.object, 1);
+      return getErrorSteps(data.odd, 1);
     }
     return [];
   }, [data]);
@@ -56,9 +56,7 @@ const StoryStep2 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    // save in local storage that the user is going to the next step.
-    window.sessionStorage.setItem(`story-step-1-next`, 'true');
-    router.push('/creer-une-histoire/2');
+    router.push('/creer-une-histoire/3');
   };
 
   if (data === null || activity === null || !isStory(activity)) {
@@ -83,7 +81,7 @@ const StoryStep2 = () => {
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
                 <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
-                  <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${isError ? errorColor : primaryColor}` }}>
+                  <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${primaryColor}` }}>
                     <KeepRatio ratio={2 / 3} width="100%">
                       <div
                         style={{
