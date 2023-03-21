@@ -53,13 +53,6 @@ const StoryStep1 = () => {
     }
   }, [activity, createNewActivity, router.query, selectedPhase]);
 
-  // const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = event.target.value.slice(0, 400);
-  //   const { odd } = data;
-  //   const newData = { ...data, odd: { ...odd, [key]: value } };
-  //   updateActivity({ data: newData });
-  // };
-
   // Update the "odd step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { odd } = data;
