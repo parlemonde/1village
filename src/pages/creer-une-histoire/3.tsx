@@ -26,8 +26,15 @@ const StoryStep3 = () => {
   const data = (activity?.data as StoriesData) || null;
 
   const errorSteps = React.useMemo(() => {
+    const errors = [];
     if (data !== null) {
-      return getErrorSteps(data.object, 1);
+      if (getErrorSteps(data.object, 1).length > 0) {
+        errors.push(0);
+      }
+      if (getErrorSteps(data.place, 2).length > 0) {
+        errors.push(1);
+      }
+      return errors;
     }
     return [];
   }, [data]);

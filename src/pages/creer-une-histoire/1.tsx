@@ -12,7 +12,6 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
-import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -32,20 +31,6 @@ const StoryStep1 = () => {
   const [oDDChoice, setODDChoice] = React.useState('');
   const data = (activity?.data as StoriesData) || null;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
-
-  const errorSteps = React.useMemo(() => {
-    const errors = [];
-    if (data !== null) {
-      if (getErrorSteps(data.object, 1).length > 0) {
-        errors.push(0);
-      }
-      if (getErrorSteps(data.place, 2).length > 0) {
-        errors.push(1);
-      }
-      return errors;
-    }
-    return [];
-  }, [data]);
 
   // Create the story activity.
   const created = React.useRef(false);
@@ -70,8 +55,8 @@ const StoryStep1 = () => {
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
-    const { object } = data;
-    const newData = { ...data, object: { ...object, [key]: value } };
+    const { odd } = data;
+    const newData = { ...data, odd: { ...odd, [key]: value } };
     updateActivity({ data: newData });
   };
 
@@ -102,7 +87,6 @@ const StoryStep1 = () => {
           steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={0}
-          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>

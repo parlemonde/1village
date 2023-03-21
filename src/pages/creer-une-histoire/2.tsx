@@ -11,6 +11,7 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
+import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
@@ -23,6 +24,13 @@ const StoryStep2 = () => {
   const { deleteStoryImage } = useImageStoryRequests();
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
   const data = (activity?.data as StoriesData) || null;
+
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data.object, 1);
+    }
+    return [];
+  }, [data]);
 
   React.useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
@@ -63,6 +71,7 @@ const StoryStep2 = () => {
           steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={1}
+          errorSteps={errorSteps}
         />
         <div className="width-900">
           <h1>Inventez et dessinez un objet magique</h1>
