@@ -15,7 +15,7 @@ import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useImageStoryRequests } from 'src/services/useImagesStory';
-import { bgPage, errorColor, primaryColor } from 'src/styles/variables.const';
+import { bgPage, primaryColor } from 'src/styles/variables.const';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const StoryStep2 = () => {
