@@ -41,7 +41,7 @@ export const FirstPhase = () => {
     setNewUser(user);
   }, [user]);
 
-  if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
+  if (user === null || newUser === null || village === null || user.type <= UserType.MEDIATOR) {
     return null;
   }
 
@@ -224,8 +224,8 @@ export const FirstPhase = () => {
             <span style={{ fontSize: '1.1rem' }}>Votre pays</span>
             <br />
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
-              <span style={{ marginRight: '0.5rem' }}>{user ? user.country.name : ''}</span>
-              {user && <Flag country={user.country.isoCode}></Flag>}
+              <span style={{ marginRight: '0.5rem' }}>{user ? user.country?.name : ''}</span>
+              {user && <Flag country={user.country?.isoCode}></Flag>}
             </h2>
             <Button
               color="inherit"
@@ -321,13 +321,13 @@ export const FirstPhase = () => {
                     setNewUser((u) => ({ ...u, postalCode }));
                   }}
                 />
-                <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
+                <PanelInput value={user.country?.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
                 <PanelInput
                   style={{ marginTop: '2rem' }}
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
                   label="Nom affiché :"
-                  placeholder={getUserDisplayName({ ...user, ...newUser, type: 0 }, false)}
+                  placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
                   onChange={(displayName) => {
                     setNewUser((u) => ({ ...u, displayName }));
@@ -358,7 +358,7 @@ export const FirstPhase = () => {
                       },
                     ],
                   }}
-                  user={{ ...user, ...newUser, type: 0, id: -1 }}
+                  user={{ ...user, ...newUser, type: user.type, id: -1 }}
                   noButtons
                 />
               </div>

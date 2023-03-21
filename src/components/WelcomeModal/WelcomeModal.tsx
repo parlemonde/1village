@@ -11,11 +11,11 @@ export const WelcomeModal = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
-  if (!user || !village || user.type >= UserType.OBSERVATOR) {
+  if (!user || !village || user.type <= UserType.MEDIATOR) {
     return null;
   }
 
-  if (user.firstLogin === 0) {
+  if (user.firstLogin === 0 && user.type === UserType.TEACHER) {
     return <FirstPhase />;
   }
   if (user.firstLogin === 1 && village.activePhase > 1) {

@@ -33,7 +33,7 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [displayEditor, setDisplayEditor] = React.useState(false);
   const [loading, setIsLoading] = React.useState(false);
-  const isPelico = user && user.type >= UserType.MEDIATOR;
+  const isPelico = user && user.type <= UserType.MEDIATOR;
 
   if (!user) {
     return null;
@@ -103,7 +103,7 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
               {isPelico ? (
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
               ) : (
-                <Flag country={user?.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
               )}
             </p>
           )}

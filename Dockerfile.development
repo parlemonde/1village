@@ -38,5 +38,6 @@ RUN mkdir dist
 ENV DOCKER 1
 
 EXPOSE 5000
+EXPOSE 3000
 
 CMD [ "yarn", "dev" ]

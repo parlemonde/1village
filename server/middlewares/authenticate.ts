@@ -86,14 +86,14 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
         res.status(401).send('invalid access token');
         return;
       } // class: 0 < admin: 1 < superAdmin: 2
-      if (userType !== undefined && user !== null && user.type < userType) {
+      if (userType !== undefined && user !== null && user.type > userType) {
         res.status(403).send('Forbidden');
         return;
       }
       if (user !== null) {
         req.user = user;
       }
-    } catch (_e) {
+    } catch (err) {
       if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
         res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });

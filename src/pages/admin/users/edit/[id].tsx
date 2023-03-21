@@ -226,7 +226,7 @@ const EditUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={user.country.isoCode}
+            value={user?.country?.isoCode}
             onChange={(countryCode) => {
               setUser((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
             }}
