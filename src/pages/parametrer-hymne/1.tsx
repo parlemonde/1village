@@ -93,12 +93,15 @@ const AnthemStep1 = () => {
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     {React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}
-                    <div style={{ width: '200px', marginLeft: '10px' }}>{audio.label} : </div>
+                    <div style={{ width: '200px', marginLeft: '10px' }} title={audio.label}>
+                      {audio.label} :{' '}
+                    </div>
                     <div>
                       {data.verseAudios[idx].display && (
                         <AnthemEditor
                           key={`anthem-edit--${idx}`}
                           value={audio.value}
+                          title={audio.label}
                           onChange={onUpdateVerseAudios(idx)}
                           onDelete={() => {
                             onUpdateVerseAudios(idx)('');
