@@ -137,6 +137,15 @@ const StoryStep5 = () => {
             </>
           )}
 
+          {/* ODD */}
+          <ImageStepContainer
+            urlStep={`/creer-une-histoire/3`}
+            imageUrl={data.odd?.imageUrl}
+            isValid={isValid}
+            error={errorSteps.includes(2)}
+            description={data.odd?.description}
+          />
+
           {/* Object */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/1?edit=${activity.id}`}
@@ -153,15 +162,6 @@ const StoryStep5 = () => {
             isValid={isValid}
             error={errorSteps.includes(1)}
             description={data.place?.description}
-          />
-
-          {/* ODD */}
-          <ImageStepContainer
-            urlStep={`/creer-une-histoire/3`}
-            imageUrl={data.odd?.imageUrl}
-            isValid={isValid}
-            error={errorSteps.includes(2)}
-            description={data.odd?.description}
           />
 
           {/* Tale */}
