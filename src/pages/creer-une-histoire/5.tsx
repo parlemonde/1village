@@ -57,13 +57,13 @@ const StoryStep5 = () => {
 
   // useEffect here to update inspiredStoryId if equal to 0
   React.useEffect(() => {
-    if (data !== null && (data.object.inspiredStoryId === 0 || data.place.inspiredStoryId === 0 || data.odd.inspiredStoryId === 0)) {
+    if (data !== null && (data.odd.inspiredStoryId === 0 || data.object.inspiredStoryId === 0 || data.place.inspiredStoryId === 0)) {
       updateActivity({
         data: {
           ...data,
+          odd: { ...data.odd, inspiredStoryId: activity?.id },
           object: { ...data.object, inspiredStoryId: activity?.id },
           place: { ...data.place, inspiredStoryId: activity?.id },
-          odd: { ...data.odd, inspiredStoryId: activity?.id },
         },
       });
     }
@@ -145,7 +145,6 @@ const StoryStep5 = () => {
             error={errorSteps.includes(0)}
             description={data.odd?.description}
           />
-
           {/* Object */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/2`}
