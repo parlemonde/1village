@@ -63,7 +63,7 @@ const ReInventStoryStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/re-inventer-une-histoire" />}
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
+          steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={[
             '/re-inventer-une-histoire/1?edit',
             '/re-inventer-une-histoire/2',

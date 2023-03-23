@@ -1,7 +1,9 @@
 import React from 'react';
 
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Button } from '@mui/material';
 import Slider from '@mui/material/Slider';
+import Tooltip from '@mui/material/Tooltip';
 
 import type { Sample } from 'src/activity-types/anthem.types';
 import { primaryColor } from 'src/styles/variables.const';
@@ -296,9 +298,24 @@ const AudioMix = ({ audio, idx, solo, off, solos, audioLabels }: AudioMixProps) 
           {isMuted ? 'OFF' : 'ON'}
         </span>
       </div>
-      <span title={audioLabels[idx]}>
-        {React.createElement(musicIcons[idx], { key: `descimg--${idx}`, style: { width: '40px', height: '40px', margin: '5px 0px' } })}
-      </span>
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <Tooltip title={audioLabels[idx]} arrow>
+          <InfoOutlinedIcon
+            fontSize="small"
+            style={{
+              position: 'absolute',
+              top: '-5px',
+              right: '-5px',
+              backgroundColor: 'white',
+              borderRadius: '50%',
+            }}
+          />
+        </Tooltip>
+        {React.createElement(musicIcons[idx], {
+          key: `descimg--${idx}`,
+          style: { width: '40px', height: '40px', margin: '5px 0px' },
+        })}
+      </div>
     </div>
   );
 };
