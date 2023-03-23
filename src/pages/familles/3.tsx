@@ -59,16 +59,7 @@ const Communication = () => {
     const messagesWithId: string[] = [];
     let count = 0;
 
-    type Environment = 'development' | 'production' | 'test' | 'staging';
-
-    // TODO window.location
-    let url: string;
-    const env = process.env.NODE_ENV as Environment;
-    if (env === 'production') {
-      url = 'https://1v.parlemonde.org/';
-    } else {
-      url = 'https://1v-staging.parlemonde.org/';
-    }
+    const url = window.location.protocol + '//' + window.location.host;
 
     if (keywordPresence) {
       const newWin = window.open(`${url}/familles/3/print.js`, 'Print-Window');
