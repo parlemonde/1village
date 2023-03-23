@@ -65,7 +65,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
               )}
               <>
                 <div style={{ margin: '2rem 0', backgroundColor: bgPage, padding: '0.5rem', borderRadius: '5px' }}>
-                  Voilà l’objet, le lieu et l’objectif du développement durable choisis par vos Pélicopains pour écrire leur histoire :{' '}
+                  Voilà l’objectif, l’objet et le lieu du développement durable choisis par vos Pélicopains pour écrire leur histoire{' '}
                 </div>
               </>
               <Grid
@@ -110,15 +110,15 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                             }}
                             variant={'subtitle2'}
                           >
-                            {activity.data.object.description}
+                            {activity.data.odd.description}
                           </Typography>
-                          <LightBox url={activity.data.object.imageUrl}>
+                          <LightBox url={activity.data.odd.imageUrl}>
                             <CardMedia
                               sx={{ borderRadius: '0.5rem', mt: 1 }}
                               component="img"
                               height="150"
-                              image={activity.data.object.imageUrl}
-                              alt="objet de l'histoire"
+                              image={activity.data.odd.imageUrl}
+                              alt="Objectifs de développement durable de l'histoire"
                             />
                           </LightBox>
                         </Card>
@@ -174,15 +174,15 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                             }}
                             variant={'subtitle2'}
                           >
-                            {activity.data.odd.description}
+                            {activity.data.object.description}
                           </Typography>
-                          <LightBox url={activity.data.odd.imageUrl}>
+                          <LightBox url={activity.data.object.imageUrl}>
                             <CardMedia
                               sx={{ borderRadius: '0.5rem', mt: 1 }}
                               component="img"
                               height="150"
-                              image={activity.data.odd.imageUrl}
-                              alt="Objectifs de développement durable de l'histoire"
+                              image={activity.data.object.imageUrl}
+                              alt="objet de l'histoire"
                             />
                           </LightBox>
                         </Card>
