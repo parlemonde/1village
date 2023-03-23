@@ -28,13 +28,13 @@ const StoryStep5 = () => {
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
-      if (getErrorSteps(data.object, 1).length > 0) {
+      if (getErrorSteps(data.odd, 1).length > 0) {
         errors.push(0);
       }
-      if (getErrorSteps(data.place, 2).length > 0) {
+      if (getErrorSteps(data.object, 2).length > 0) {
         errors.push(1);
       }
-      if (getErrorSteps(data.odd, 3).length > 0) {
+      if (getErrorSteps(data.place, 3).length > 0) {
         errors.push(2);
       }
       if (getErrorSteps(data.tale, 4).length > 0) {
@@ -149,15 +149,24 @@ const StoryStep5 = () => {
           {/* Object */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/1?edit=${activity.id}`}
-            imageUrl={data.object?.imageUrl}
+            imageUrl={data.odd?.imageUrl}
             isValid={isValid}
             error={errorSteps.includes(0)}
+            description={data.odd?.description}
+          />
+
+          {/* Object */}
+          <ImageStepContainer
+            urlStep={`/creer-une-histoire/2`}
+            imageUrl={data.object?.imageUrl}
+            isValid={isValid}
+            error={errorSteps.includes(1)}
             description={data.object?.description}
           />
 
           {/* Place */}
           <ImageStepContainer
-            urlStep={`/creer-une-histoire/2`}
+            urlStep={`/creer-une-histoire/3`}
             imageUrl={data.place?.imageUrl}
             isValid={isValid}
             error={errorSteps.includes(1)}
