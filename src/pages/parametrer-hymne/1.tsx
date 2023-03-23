@@ -92,10 +92,8 @@ const AnthemStep1 = () => {
                 <React.Fragment key={idx}>
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                    <span title={audio.label}>{React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}</span>
-                    <div style={{ width: '200px', marginLeft: '10px' }} title={audio.label}>
-                      {audio.label} :{' '}
-                    </div>
+                    {React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}
+                    <div style={{ width: '200px', marginLeft: '10px' }}>{audio.label} : </div>
                     <div>
                       {data.verseAudios[idx].display && (
                         <AnthemEditor
