@@ -58,6 +58,12 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
   const getRandomImages = React.useCallback(async () => {
     const images = await getRandomImagesData();
     setAllImages({
+      odd: images.odds.map((image: BackendImage) => ({
+        imageId: image.id,
+        imageUrl: image.imageUrl,
+        description: '',
+        inspiredStoryId: image.inspiredStoryId,
+      })),
       object: images.objects.map((image: BackendImage) => ({
         imageId: image.id,
         imageUrl: image.imageUrl,
@@ -65,12 +71,6 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
         inspiredStoryId: image.inspiredStoryId,
       })),
       place: images.places.map((image: BackendImage) => ({
-        imageId: image.id,
-        imageUrl: image.imageUrl,
-        description: '',
-        inspiredStoryId: image.inspiredStoryId,
-      })),
-      odd: images.odds.map((image: BackendImage) => ({
         imageId: image.id,
         imageUrl: image.imageUrl,
         description: '',
@@ -201,6 +201,27 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
             <div className="cards">
               <div className="slot">
                 <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                  ODD
+                </Typography>
+                <section>
+                  <div className="container" ref={slotRef3}>
+                    {oddRandomImages &&
+                      oddRandomImages.map((obj, i) => (
+                        <div key={i}>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
+                            component="img"
+                            height="70"
+                            image={obj.imageUrl ? obj.imageUrl : ''}
+                            alt="objet de l'histoire"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </section>
+              </div>
+              <div className="slot">
+                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
                   Objet
                 </Typography>
                 <section>
@@ -228,27 +249,6 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                   <div className="container" ref={slotRef2}>
                     {placeRandomImages &&
                       placeRandomImages.map((obj, i) => (
-                        <div key={i}>
-                          <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
-                            component="img"
-                            height="70"
-                            image={obj.imageUrl ? obj.imageUrl : ''}
-                            alt="objet de l'histoire"
-                          />
-                        </div>
-                      ))}
-                  </div>
-                </section>
-              </div>
-              <div className="slot">
-                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                  ODD
-                </Typography>
-                <section>
-                  <div className="container" ref={slotRef3}>
-                    {oddRandomImages &&
-                      oddRandomImages.map((obj, i) => (
                         <div key={i}>
                           <CardMedia
                             sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}

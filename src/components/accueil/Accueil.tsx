@@ -76,7 +76,9 @@ export const Accueil = () => {
     }
   }, [activities, filters.searchTerm]);
 
-  console.log('CLASSROOM', classroom);
+  console.log('USER IN HOME ===', user);
+  console.log('VILLAGE IN HOME ===', village);
+  console.log('CLASSROOM IN HOME ===', classroom);
 
   if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
     return (
