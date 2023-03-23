@@ -42,7 +42,7 @@ export const MascotteTemplate = ({ user }: { user: User }) => (
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            {user.type < UserType.OBSERVATOR && (
+            {user.type === UserType.TEACHER && (
               <Link href={'/mascotte/1'} passHref>
                 <Button href={'/mascotte/1'} color="primary" variant="outlined">
                   Créer votre mascotte

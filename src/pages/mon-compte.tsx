@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
 
-import { Alert, AlertTitle, TextField } from '@mui/material';
+import { Alert, AlertTitle, Checkbox, Grid, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -9,6 +9,7 @@ import NoSsr from '@mui/material/NoSsr';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -16,21 +17,25 @@ import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
+import { useLanguages } from 'src/services/useLanguages';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 const Presentation = () => {
   const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
+  const { languages } = useLanguages();
   const [pwd, setPwd] = React.useState({
     new: '',
     confirmNew: '',
     current: '',
   });
+  const [language, setLanguage] = React.useState(user?.language || 'francais');
   const [deleteConfirm, setDeleteConfirm] = React.useState('');
   const [editMode, setEditMode] = React.useState(-1);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -41,12 +46,9 @@ const Presentation = () => {
     pwdConfirm: false,
   });
 
-  if (!user || !newUser) {
-    return <div></div>;
-  }
-
-  // checks
   const checkEmailAndPseudo = async () => {
+    if (!newUser) return;
+    if (!user) return;
     const pseudoValid = await isPseudoValid(newUser.pseudo, user.pseudo);
     setErrors((e) => ({
       ...e,
@@ -63,6 +65,8 @@ const Presentation = () => {
   };
 
   const updateUser = async () => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const updatedValues = {
       school: newUser.school,
@@ -73,6 +77,32 @@ const Presentation = () => {
       pseudo: newUser.pseudo,
       email: newUser.email,
       displayName: newUser.displayName,
+      hasAcceptedNewsletter: newUser.hasAcceptedNewsletter,
+      language: language,
+    };
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: updatedValues,
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...user, ...updatedValues });
+      enqueueSnackbar('Compte mis à jour avec succès !', {
+        variant: 'success',
+      });
+    }
+    setIsLoading(false);
+  };
+  const updateLanguage = async () => {
+    if (!user) return;
+    setIsLoading(true);
+    const updatedValues = {
+      language,
     };
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -93,6 +123,8 @@ const Presentation = () => {
     setIsLoading(false);
   };
   const updateAvatar = async (avatar: string) => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -115,6 +147,8 @@ const Presentation = () => {
     setIsLoading(false);
   };
   const updatePwd = async () => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const response = await axiosLoggedRequest({
       method: 'PUT',
@@ -137,7 +171,34 @@ const Presentation = () => {
     setIsLoading(false);
   };
 
+  const updateCheckBox = async (checked: boolean) => {
+    if (!newUser) return;
+    if (!user) return;
+    setIsLoading(true);
+    const response = await axiosLoggedRequest({
+      method: 'PUT',
+      url: `/users/${user.id}`,
+      data: {
+        hasAcceptedNewsletter: checked,
+      },
+    });
+    if (response.error) {
+      setNewUser(user);
+      enqueueSnackbar('Une erreur inconnue est survenue...', {
+        variant: 'error',
+      });
+    } else {
+      setUser({ ...user, hasAcceptedNewsletter: checked });
+      enqueueSnackbar('Choix mis à jour avec succès !', {
+        variant: 'success',
+      });
+    }
+    setIsLoading(false);
+  };
+
   const deleteAccount = async () => {
+    if (!newUser) return;
+    if (!user) return;
     setIsLoading(true);
     const response = await axiosLoggedRequest({
       method: 'DELETE',
@@ -157,7 +218,7 @@ const Presentation = () => {
   };
 
   const updateEditMode =
-    (newEditMode: number, save: 'user' | 'pwd' | 'delete' | null = null) =>
+    (newEditMode: number, save: 'user' | 'pwd' | 'delete' | 'language' | null = null) =>
     async () => {
       if (save === 'user') {
         await checkEmailAndPseudo();
@@ -171,6 +232,8 @@ const Presentation = () => {
           return;
         }
         await updatePwd();
+      } else if (save === 'language') {
+        await updateLanguage();
       } else if (save === 'delete') {
         deleteAccount();
       } else {
@@ -180,105 +243,110 @@ const Presentation = () => {
       setEditMode(newEditMode);
     };
 
+  if (!user || !newUser) {
+    return <div></div>;
+  }
+
   return (
     <Base>
       <h1>Paramètres du compte</h1>
-      <div className="account__panel">
-        <h2>Paramètres du profil</h2>
-        <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
+      {user.type === UserType.TEACHER ? (
+        <div className="account__panel">
+          <h2>Paramètres du profil</h2>
+          <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
 
-        <div style={{ margin: '0.5rem' }}>
-          <label className="text text--bold" style={{ display: 'block' }}>
-            Photo de profil :
-          </label>
-          <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
-            {editMode === 0 ? (
-              <AvatarEditor id={0} value={user.avatar || undefined} onChange={updateAvatar} />
-            ) : (
-              <AvatarImg user={user} size="small" noLink displayAsUser />
-            )}
+          <div style={{ margin: '0.5rem' }}>
+            <label className="text text--bold" style={{ display: 'block' }}>
+              Photo de profil :
+            </label>
+            <div style={{ display: 'flex', alignItems: 'flex-start', marginTop: '0.5rem' }}>
+              {editMode === 0 ? (
+                <AvatarEditor id={0} value={user.avatar || undefined} onChange={updateAvatar} />
+              ) : (
+                <AvatarImg user={user} size="small" noLink displayAsUser />
+              )}
+            </div>
           </div>
+
+          <PanelInput
+            value={newUser.school}
+            defaultValue={'non renseignée'}
+            label="École :"
+            placeholder="Nom de votre école"
+            isEditMode={editMode === 0}
+            onChange={(school) => {
+              setNewUser((u) => (!u ? u : { ...u, school }));
+            }}
+          />
+          <PanelInput
+            value={newUser.level}
+            defaultValue={'non renseigné'}
+            label="Niveau de la classe :"
+            placeholder="Niveau de votre classe"
+            isEditMode={editMode === 0}
+            onChange={(level) => {
+              setNewUser((u) => (!u ? u : { ...u, level }));
+            }}
+          />
+          <PanelInput
+            value={newUser.address}
+            defaultValue={'non renseigné'}
+            label="Adresse de l'école :"
+            placeholder="Adresse"
+            isEditMode={editMode === 0}
+            onChange={(address) => {
+              setNewUser((u) => (!u ? u : { ...u, address }));
+            }}
+          />
+          <PanelInput
+            value={newUser.city}
+            defaultValue={'non renseigné'}
+            label="Ville :"
+            placeholder="Ville"
+            isEditMode={editMode === 0}
+            onChange={(city) => {
+              setNewUser((u) => (!u ? u : { ...u, city }));
+            }}
+          />
+          <PanelInput
+            value={newUser.postalCode}
+            defaultValue={'non renseigné'}
+            label="Code postal :"
+            placeholder="Code postal"
+            isEditMode={editMode === 0}
+            onChange={(postalCode) => {
+              setNewUser((u) => (!u ? u : { ...u, postalCode }));
+            }}
+          />
+          <PanelInput
+            value={newUser.displayName || ''}
+            defaultValue={getUserDisplayName(user, false, true)}
+            label="Nom affiché sur vos publications :"
+            placeholder={getUserDisplayName(user, false, true)}
+            isEditMode={editMode === 0}
+            onChange={(displayName) => {
+              setNewUser((u) => (!u ? u : { ...u, displayName }));
+            }}
+          />
+          {editMode === 0 && (
+            <div className="text-center">
+              <Button
+                color="inherit"
+                size="small"
+                sx={defaultContainedButtonStyle}
+                variant="contained"
+                style={{ margin: '0.5rem' }}
+                onClick={updateEditMode(-1)}
+              >
+                Annuler
+              </Button>
+              <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
+                Enregistrer
+              </Button>
+            </div>
+          )}
         </div>
-
-        <PanelInput
-          value={newUser.school}
-          defaultValue={'non renseignée'}
-          label="École :"
-          placeholder="Nom de votre école"
-          isEditMode={editMode === 0}
-          onChange={(school) => {
-            setNewUser((u) => (!u ? u : { ...u, school }));
-          }}
-        />
-        <PanelInput
-          value={newUser.level}
-          defaultValue={'non renseigné'}
-          label="Niveau de la classe :"
-          placeholder="Niveau de votre classe"
-          isEditMode={editMode === 0}
-          onChange={(level) => {
-            setNewUser((u) => (!u ? u : { ...u, level }));
-          }}
-        />
-        <PanelInput
-          value={newUser.address}
-          defaultValue={'non renseigné'}
-          label="Adresse de l'école :"
-          placeholder="Adresse"
-          isEditMode={editMode === 0}
-          onChange={(address) => {
-            setNewUser((u) => (!u ? u : { ...u, address }));
-          }}
-        />
-        <PanelInput
-          value={newUser.city}
-          defaultValue={'non renseigné'}
-          label="Ville :"
-          placeholder="Ville"
-          isEditMode={editMode === 0}
-          onChange={(city) => {
-            setNewUser((u) => (!u ? u : { ...u, city }));
-          }}
-        />
-        <PanelInput
-          value={newUser.postalCode}
-          defaultValue={'non renseigné'}
-          label="Code postal :"
-          placeholder="Code postal"
-          isEditMode={editMode === 0}
-          onChange={(postalCode) => {
-            setNewUser((u) => (!u ? u : { ...u, postalCode }));
-          }}
-        />
-        <PanelInput
-          value={newUser.displayName || ''}
-          defaultValue={getUserDisplayName(user, false, true)}
-          label="Nom affiché sur vos publications :"
-          placeholder={getUserDisplayName(user, false, true)}
-          isEditMode={editMode === 0}
-          onChange={(displayName) => {
-            setNewUser((u) => (!u ? u : { ...u, displayName }));
-          }}
-        />
-        {editMode === 0 && (
-          <div className="text-center">
-            <Button
-              color="inherit"
-              size="small"
-              sx={defaultContainedButtonStyle}
-              variant="contained"
-              style={{ margin: '0.5rem' }}
-              onClick={updateEditMode(-1)}
-            >
-              Annuler
-            </Button>
-            <Button size="small" variant="contained" color="secondary" style={{ margin: '0.2rem' }} onClick={updateEditMode(-1, 'user')}>
-              Enregistrer
-            </Button>
-          </div>
-        )}
-      </div>
-
+      ) : null}
       <div className="account__panel">
         <h2>Identifiants de connection</h2>
         <div className="account__panel-edit-button">
@@ -294,24 +362,26 @@ const Presentation = () => {
             Votre <strong>pseudo</strong> et votre <strong>email</strong> sont vos identifiants de connection.
           </Alert>
         )}
-        <PanelInput
-          value={newUser.pseudo}
-          defaultValue={''}
-          label="Pseudo de la classe :"
-          placeholder="Pseudo de la classe"
-          isEditMode={editMode === 1}
-          onChange={(pseudo) => {
-            setNewUser((u) => (!u ? u : { ...u, pseudo }));
-          }}
-          errorMsg="Pseudo indisponible"
-          hasError={errors.pseudo}
-          onBlur={checkEmailAndPseudo}
-        />
+        {user.type === UserType.TEACHER ? (
+          <PanelInput
+            value={newUser.pseudo}
+            defaultValue={''}
+            label="Pseudo de la classe :"
+            placeholder="Pseudo de la classe"
+            isEditMode={editMode === 1}
+            onChange={(pseudo) => {
+              setNewUser((u) => (!u ? u : { ...u, pseudo }));
+            }}
+            errorMsg="Pseudo indisponible"
+            hasError={errors.pseudo}
+            onBlur={checkEmailAndPseudo}
+          />
+        ) : null}
         <PanelInput
           value={newUser.email}
           defaultValue={''}
-          label="Email du professeur :"
-          placeholder="Email du professeur"
+          label="Email:"
+          placeholder="Adresse Email"
           isEditMode={editMode === 1}
           onChange={(email) => {
             setNewUser((u) => (!u ? u : { ...u, email }));
@@ -340,7 +410,84 @@ const Presentation = () => {
           </>
         )}
       </div>
+      {user.type === UserType.FAMILY ? (
+        <div className="account__panel">
+          <h2>Préférence de communication</h2>
+          <div className="account__panel-edit-button">{editMode !== 0 && <EditButton onClick={updateEditMode(0)} />}</div>
+          <div style={{ maxWidth: '800px', width: '100%', textAlign: 'left' }}>
+            <label style={{ cursor: 'pointer' }}>
+              <div>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={8}>
+                    <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
+                      Choix de la langue de communication
+                    </p>
 
+                    <div>
+                      {editMode === -1 && (
+                        <span>
+                          <strong>Langue: </strong>
+                          {language}
+                        </span>
+                      )}
+                    </div>
+                    <PanelInput
+                      value={newUser.language}
+                      defaultValue={''}
+                      label="Language :"
+                      placeholder="Langue"
+                      style={{ visibility: 'hidden' }}
+                      isEditMode={editMode === 0}
+                      onChange={() => {
+                        setNewUser((u) => (!u ? u : { ...u, language }));
+                      }}
+                    />
+                    {editMode === 0 && <LanguageFilter language={language} setLanguage={setLanguage} languages={languages} />}
+                    {editMode === 0 && (
+                      <div className="text-center">
+                        <Button
+                          color="inherit"
+                          size="small"
+                          sx={defaultContainedButtonStyle}
+                          variant="contained"
+                          style={{ margin: '0.5rem' }}
+                          onClick={() => {
+                            setLanguage(user?.language || 'francais');
+                            setEditMode(-1);
+                          }}
+                        >
+                          Annuler
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="secondary"
+                          style={{ margin: '0.2rem' }}
+                          onClick={updateEditMode(-1, 'language')}
+                        >
+                          Enregistrer
+                        </Button>
+                      </div>
+                    )}
+                  </Grid>
+                </Grid>
+              </div>
+            </label>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={8}>
+                <Checkbox
+                  value={newUser.hasAcceptedNewsletter}
+                  checked={user !== null && user.hasAcceptedNewsletter}
+                  onChange={(event) => {
+                    updateCheckBox(event.target.checked);
+                  }}
+                />
+                <span>{'Accepter de recevoir des nouvelles du projet 1Village'}</span>
+              </Grid>
+            </Grid>
+          </div>
+        </div>
+      ) : null}
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
         {/* <div style={{ margin: '1rem 0.5rem' }}>

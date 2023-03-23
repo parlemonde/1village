@@ -64,7 +64,7 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   if (plmUser.country) {
     const matchs = village !== null ? village.countries : countries;
     const c = stringSimilarity.findBestMatch(
-      plmUser.country.trim().toLowerCase(),
+      plmUser.country?.trim().toLowerCase(),
       matchs.map((c) => c.name.toLowerCase()),
     );
     if (c.bestMatch.rating > 0.55) {

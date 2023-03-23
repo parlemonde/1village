@@ -3,12 +3,14 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
+import { LinkChild } from './LinkChild';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
@@ -18,14 +20,22 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediator = user !== null && user.type >= UserType.MEDIATOR;
+  const { classroom } = React.useContext(ClassroomContext);
+  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
   const filterCountries = React.useMemo(
     () =>
-      !village || (selectedPhase === 1 && !isMediator) ? (user ? [user.country.isoCode.toUpperCase()] : []) : village.countries.map((c) => c.isoCode),
-    [selectedPhase, village, user, isMediator],
+      !village || (selectedPhase === 1 && !isMediatorOrFamily)
+        ? user && user.country !== null
+          ? [user.country?.isoCode.toUpperCase()]
+          : []
+        : village.countries.map((c) => c.isoCode),
+    [selectedPhase, village, user, isMediatorOrFamily],
   );
+
+  //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
+    selectedPhase: 0,
     types: 'all',
     status: 0,
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
@@ -66,13 +76,18 @@ export const Accueil = () => {
     }
   }, [activities, filters.searchTerm]);
 
-  if (!village) {
-    return <Base showSubHeader></Base>;
-  }
+  console.log('CLASSROOM', classroom);
 
+  if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
+    return (
+      <Base>
+        <LinkChild />
+      </Base>
+    );
+  }
   return (
     <Base showSubHeader>
-      {selectedPhase <= village.activePhase ? (
+      {village && selectedPhase <= village.activePhase ? (
         <>
           <KeepRatio ratio={1 / 3}>
             <WorldMap />
@@ -91,7 +106,7 @@ export const Accueil = () => {
           </h1>
           <PelicoReflechit style={{ width: '50%', height: 'auto', maxWidth: '360px' }} />
           <Button
-            onClick={() => setSelectedPhase(village.activePhase)}
+            onClick={() => village && setSelectedPhase(village.activePhase)}
             color="primary"
             variant="outlined"
             className="navigation__button"

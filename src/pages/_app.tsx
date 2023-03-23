@@ -8,6 +8,7 @@ import 'src/styles/editor.scss';
 import 'src/styles/fonts.scss';
 import 'src/styles/globals.scss';
 import 'src/styles/login.scss';
+import 'src/styles/register.scss';
 import 'src/styles/mon-compte.scss';
 import 'src/styles/se-presenter.scss';
 import 'src/styles/slot-machine.scss';
@@ -31,6 +32,7 @@ import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
+import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
@@ -124,27 +126,36 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken || ''}>
               <VillageContextProvider initialVillage={initialVillage}>
-                <ActivityContextProvider>
-                  {isOnAdmin ? (
-                    <div>
-                      <AdminHeader />
-                      <div style={{ display: 'flex', width: '100%' }}>
-                        <AdminNavigation />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <Component {...pageProps} />
+                <ClassroomContextProvider>
+                  <ActivityContextProvider>
+                    {isOnAdmin ? (
+                      <div>
+                        <AdminHeader />
+                        <div style={{ display: 'flex', width: '100%' }}>
+                          <AdminNavigation />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <Component {...pageProps} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ) : user !== null && router.pathname !== '/login' && router.pathname !== '/404' ? (
-                    <div className="app-container">
-                      <Header />
+                    ) : user !== null &&
+                      router.pathname !== '/inscription' &&
+                      router.pathname !== '/connexion' &&
+                      router.pathname !== '/login' &&
+                      router.pathname !== '/user-verified' &&
+                      router.pathname !== '/reset-password' &&
+                      router.pathname !== '/update-password' &&
+                      router.pathname !== '/404' ? (
+                      <div className="app-container">
+                        <Header />
+                        <Component {...pageProps} />
+                        <WelcomeModal />
+                      </div>
+                    ) : (
                       <Component {...pageProps} />
-                      <WelcomeModal />
-                    </div>
-                  ) : (
-                    <Component {...pageProps} />
-                  )}
-                </ActivityContextProvider>
+                    )}
+                  </ActivityContextProvider>
+                </ClassroomContextProvider>
               </VillageContextProvider>
             </UserContextProvider>
           </QueryClientProvider>
@@ -174,6 +185,7 @@ MyApp.getInitialProps = async (appContext: AppContext): Promise<AppInitialProps>
     initialData.user = ctxRequest.user || null;
     initialData.village = ctxRequest.village || null;
   }
+
   return { ...appProps, ...initialData };
 };
 

@@ -2,23 +2,31 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { MoreThan, IsNull } from 'typeorm';
+import { LessThan, IsNull } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Classroom } from '../entities/classroom';
+import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
+import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
+import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
 import { Controller } from './controller';
 
 const userController = new Controller('/users');
 // --- Get all users. ---
-userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.get({ path: '' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
   let users: User[] = [];
   if (req.query.villageId) {
     users = await AppDataSource.getRepository(User).find({
@@ -27,7 +35,7 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
         // Fix for enums, they are stored as string in mySQL, so the comparison should be done with a string.
         // But Typeorm expect a number...
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { villageId: IsNull(), type: MoreThan(`${UserType.TEACHER}`) as FindOperator<any> },
+        { villageId: IsNull(), type: LessThan(`${UserType.TEACHER}`) as FindOperator<any> },
       ],
     });
     const ids = users.map((u) => u.id);
@@ -55,11 +63,11 @@ userController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
 });
 
 // --- Get one user. ---
-userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -98,7 +106,9 @@ userController.get({ path: '/position' }, async (req: Request, res: Response, ne
 type CreateUserData = {
   email: string;
   pseudo: string;
-  countryCode: string;
+  firstname?: string;
+  lastname?: string;
+  countryCode?: string;
   level?: string;
   school?: string;
   city?: string;
@@ -110,13 +120,18 @@ type CreateUserData = {
   type?: UserType;
   villageId?: number;
   firstLogin?: number;
+  hasAcceptedNewsletter?: boolean;
+  language?: string;
+  hasStudentLinked?: boolean;
 };
 const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
+    email: { type: 'string' },
     pseudo: { type: 'string' },
-    countryCode: { type: 'string' },
+    firstname: { type: 'string', nullable: true },
+    lastname: { type: 'string', nullable: true },
+    countryCode: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
     city: { type: 'string', nullable: true },
@@ -125,15 +140,43 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
     avatar: { type: 'string', nullable: true },
     displayName: { type: 'string', nullable: true },
     password: { type: 'string', nullable: true },
-    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    type: {
+      type: 'number',
+      nullable: true,
+      enum: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR],
+    },
     villageId: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
+    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
+    language: { type: 'string', nullable: true },
+    hasStudentLinked: { type: 'boolean', nullable: true },
   },
   required: ['email', 'pseudo'],
   additionalProperties: false,
 };
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
-userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+userController.post({ path: '' }, async (req: Request, res: Response) => {
+  async function generatePseudo(data: CreateUserData): Promise<string> {
+    const firstName = data.firstname || '';
+    const lastName = data.lastname || '';
+    const randomNum = Math.floor(Math.random() * 10000);
+
+    let pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${randomNum}`;
+
+    while (await checkIfPseudoExists(pseudo)) {
+      pseudo = `${firstName}${lastName.slice(0, 1).toLocaleUpperCase()}${Math.floor(Math.random() * 10000)}`;
+    }
+    return pseudo;
+  }
+
+  async function checkIfPseudoExists(pseudo: string): Promise<boolean> {
+    const userRepo = AppDataSource.getRepository(User);
+    const existingUser = await userRepo.findOne({ where: { pseudo } });
+    return !!existingUser;
+    /* The !! is a double negation operator. It converts the value following it to a boolean, where any truthy value (i.e., any non-null, non-undefined, non-zero value) is converted to true, and any falsy value (i.e., null, undefined, 0, false, '', etc.) is converted to false. */
+  }
   const data = req.body;
   if (!createUserValidator(data)) {
     sendInvalidDataError(createUserValidator);
@@ -143,9 +186,14 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
     throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
   }
 
+  if (!emailRegex.test(data.email)) {
+    throw new AppError('Invalid email', ErrorCode.INVALID_EMAIL);
+  }
+
   const user = new User();
   user.email = data.email;
-  user.pseudo = data.pseudo;
+  user.firstname = data.firstname || '';
+  user.lastname = data.lastname || '';
   user.level = data.level || '';
   user.school = data.school || '';
   user.address = data.address || '';
@@ -154,17 +202,34 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
   user.avatar = data.avatar || null;
   user.displayName = data.displayName || null;
   user.villageId = data.villageId || null;
-  user.countryCode = data.countryCode;
-  if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
-    user.type = valueOrDefault(data.type, UserType.TEACHER);
-  } else {
-    user.type = UserType.TEACHER;
+  user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
+  user.language = data.language || 'français';
+  user.hasStudentLinked = data.hasStudentLinked || false;
+  user.countryCode = data.countryCode || '';
+  user.type = data.type || UserType.TEACHER || UserType.FAMILY;
+  if (user.type === UserType.TEACHER) {
+    user.isVerified = true;
+    user.accountRegistration = 0;
   }
-  user.accountRegistration = data.password === undefined ? 3 : 0;
+
+  // Generate unique pseudo
+
+  let pseudo = data.pseudo;
+  if (!pseudo) {
+    pseudo = await generatePseudo(data);
+  } else {
+    let pseudoExists = await checkIfPseudoExists(pseudo);
+    while (pseudoExists) {
+      pseudo = await generatePseudo(data);
+      pseudoExists = await checkIfPseudoExists(pseudo);
+    }
+  }
+  user.pseudo = pseudo;
+
+  user.accountRegistration = 4; // Block account on inscription and wait for user to verify its email.
   user.passwordHash = data.password ? await argon2.hash(data.password) : '';
   const temporaryPassword = generateTemporaryToken(20);
   user.verificationHash = await argon2.hash(temporaryPassword);
-  // todo: send mail with verification password to validate the email adress.
 
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);
@@ -177,6 +242,8 @@ userController.post({ path: '', userType: UserType.ADMIN }, async (req: Request,
 type EditUserData = {
   email?: string;
   pseudo?: string;
+  firstname?: string;
+  lastname?: string;
   countryCode?: string;
   level?: string;
   school?: string;
@@ -187,15 +254,21 @@ type EditUserData = {
   displayName?: string;
   type?: UserType;
   villageId?: number | null;
-  accountRegistration?: number;
   firstLogin?: number;
   position?: { lat: number; lng: number };
+  isVerified?: boolean;
+  accountRegistration?: number;
+  hasAcceptedNewsletter?: boolean;
+  language?: string | null;
+  hasStudentLinked?: boolean;
 };
 const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
   type: 'object',
   properties: {
     email: { type: 'string', format: 'email', nullable: true },
     pseudo: { type: 'string', nullable: true },
+    firstname: { type: 'string', nullable: true },
+    lastname: { type: 'string', nullable: true },
     countryCode: { type: 'string', nullable: true },
     level: { type: 'string', nullable: true },
     school: { type: 'string', nullable: true },
@@ -204,7 +277,11 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     address: { type: 'string', nullable: true },
     avatar: { type: 'string', nullable: true },
     displayName: { type: 'string', nullable: true },
-    type: { type: 'number', nullable: true, enum: [UserType.TEACHER, UserType.OBSERVATOR, UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN] },
+    type: {
+      type: 'number',
+      nullable: true,
+      enum: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR],
+    },
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
@@ -218,16 +295,22 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
       required: ['lat', 'lng'],
       additionalProperties: false,
     },
+    hasAcceptedNewsletter: { type: 'boolean', nullable: true },
+    isVerified: { type: 'boolean', nullable: true },
+    language: { type: 'string', nullable: true },
+    hasStudentLinked: { type: 'boolean', nullable: true },
   },
   required: [],
   additionalProperties: false,
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
-userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+
+userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -251,13 +334,16 @@ userController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Req
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
-  if (req.user !== undefined && req.user.type >= UserType.ADMIN) {
+  if (req.user !== undefined && req.user.type <= UserType.ADMIN) {
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   }
   if (data.position) {
     user.position = data.position;
   }
+  user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
+  user.language = valueOrDefault(data.language, user.language);
+  user.hasStudentLinked = valueOrDefault(data.hasStudentLinked, user.hasStudentLinked);
   await AppDataSource.getRepository(User).save(user);
   res.sendJSON(user);
 });
@@ -277,7 +363,8 @@ const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
   additionalProperties: false,
 };
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
-userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id/password' }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).createQueryBuilder().addSelect('User.passwordHash').where('User.id = :id', { id }).getOne();
   const isSelfProfile = req.user && req.user.id === id;
@@ -309,36 +396,65 @@ userController.put({ path: '/:id/password', userType: UserType.TEACHER }, async 
 });
 
 // --- Delete an user. ---
-userController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+userController.delete({ path: '/:id' }, async (req: Request, res: Response) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  const userRepository = AppDataSource.getRepository(User);
+  const classroomRepository = AppDataSource.getRepository(Classroom);
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const user = await userRepository.findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
-  const isAdmin = req.user && req.user.type >= UserType.ADMIN;
-  if (user === undefined || (!isSelfProfile && !isAdmin)) {
+  const isAdmin = req.user && req.user.type <= UserType.ADMIN;
+  if (!user || (!isSelfProfile && !isAdmin)) {
     res.status(204).send();
     return;
   }
 
+  const affectedUserIds: number[] = [];
+
+  // Fetch the related classroom and its students
+  const classroom = await classroomRepository.findOne({ where: { user: { id: user.id } }, relations: ['students'] });
+
+  if (classroom) {
+    // Collect the affected user IDs from the classroom's students
+    for (const student of classroom.students) {
+      const studentWithRelations = await AppDataSource.getRepository(Student).findOne({
+        where: { id: student.id },
+        relations: ['userToStudents', 'userToStudents.user'],
+      });
+      if (studentWithRelations) {
+        for (const userToStudent of studentWithRelations.userToStudents) {
+          if (userToStudent && userToStudent.user) {
+            affectedUserIds.push(userToStudent.user.id);
+          }
+        }
+      }
+    }
+  }
+
   await AppDataSource.getRepository(User).delete({ id });
+
+  // Update the hasStudentLinked field for affected users
+  await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
+
   res.status(204).send();
 });
 
 // --- Verify email. ---
 type VerifyData = {
-  email: string;
-  verifyToken: string;
+  email?: string;
+  verificationHash?: string;
 };
 const VERIFY_SCHEMA: JSONSchemaType<VerifyData> = {
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
-    verifyToken: { type: 'string' },
+    email: { type: 'string', format: 'email', nullable: true },
+    verificationHash: { type: 'string', nullable: true },
   },
-  required: ['email', 'verifyToken'],
   additionalProperties: false,
 };
 const verifyUserValidator = ajv.compile(VERIFY_SCHEMA);
-userController.post({ path: '/verify-email' }, async (req: Request, res: Response, next: NextFunction) => {
+
+userController.post({ path: '/verify-email' }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!verifyUserValidator(data)) {
     sendInvalidDataError(verifyUserValidator);
@@ -350,24 +466,27 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
     .addSelect('User.verificationHash')
     .where('User.email = :email', { email: data.email })
     .getOne();
-  if (!user) {
-    next();
-    return;
-  }
 
   let isverifyTokenCorrect: boolean = false;
-  try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
-  } catch (e) {
-    logger.error(JSON.stringify(e));
-  }
-  if (!isverifyTokenCorrect) {
+
+  if (user && user.verificationHash && data.verificationHash && !user.isVerified) {
+    try {
+      /* const cleanedVerificationHash = data.verificationHash.replace(/ /g, '+'); */
+      isverifyTokenCorrect = await argon2.verify(user.verificationHash, data.verificationHash);
+    } catch (e) {
+      logger.error(JSON.stringify(e));
+    }
+    if (!isverifyTokenCorrect) {
+      throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
+    }
+  } else {
     throw new AppError('Invalid verify token', ErrorCode.INVALID_PASSWORD);
   }
 
   // save user
   user.accountRegistration = 0;
   user.verificationHash = '';
+  user.isVerified = true;
   await AppDataSource.getRepository(User).save(user);
 
   // login user
@@ -380,7 +499,64 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
     sameSite: 'strict',
   });
   delete user.verificationHash;
-  res.sendJSON({ user: user, accessToken });
+  res.sendJSON({ user, accessToken });
+});
+
+// ===== RESEND VERIFICATION EMAIL =====
+type ResendEmailData = {
+  email?: string;
+};
+
+const RESEND_EMAIL_SCHEMA: JSONSchemaType<ResendEmailData> = {
+  type: 'object',
+  properties: {
+    email: { type: 'string', format: 'email', nullable: true },
+  },
+  additionalProperties: false,
+};
+const resendEmailValidator = ajv.compile(RESEND_EMAIL_SCHEMA);
+
+userController.post({ path: '/resend-verification-email' }, async (req: Request, res: Response) => {
+  const data = req.body;
+
+  if (!resendEmailValidator(data)) {
+    sendInvalidDataError(resendEmailValidator);
+    return;
+  }
+
+  const user = await AppDataSource.getRepository(User).createQueryBuilder().where('User.email = :email', { email: data.email }).getOne();
+
+  if (!user) {
+    throw new AppError('Invalid data', ErrorCode.INVALID_DATA);
+  }
+  if (user.isVerified) {
+    throw new AppError('User is already verified', ErrorCode.ALREADY_VERIFIED_ACCOUNT);
+  }
+
+  const temporaryVerificationHash = generateTemporaryToken(20);
+
+  user.verificationHash = await argon2.hash(temporaryVerificationHash);
+  await AppDataSource.getRepository(User).save(user);
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+
+  if (data.email) {
+    try {
+      await sendMail(Email.CONFIRMATION_EMAIL, data.email, {
+        url: frontUrl,
+        firstname: user.firstname,
+        email: data.email,
+        verificationHash: temporaryVerificationHash,
+      });
+
+      res.status(200).json({
+        message: 'Verification email sent successfully',
+      });
+    } catch (err) {
+      res.status(400).json({ message: 'Bad request' });
+    }
+  }
+  res.status(400);
+  // Return a success response
 });
 
 // --- Reset pwd. ---
@@ -415,27 +591,34 @@ userController.post({ path: '/reset-password' }, async (req: Request, res: Respo
   // update user
   const temporaryPassword = generateTemporaryToken(12);
   user.verificationHash = await argon2.hash(temporaryPassword);
+  user.accountRegistration = 0;
+
   await AppDataSource.getRepository(User).save(user);
 
-  // send mail with verification password
-  // await sendMail(Email.RESET_PASSWORD, user.email, { resetCode: temporaryPassword }, req.body.languageCode || undefined);
+  const frontUrl = process.env.HOST_URL || 'http://localhost:5000';
+  await sendMail(Email.RESET_PASSWORD_EMAIL, data.email, {
+    url: frontUrl,
+    email: user.email,
+    verificationHash: temporaryPassword,
+  });
+
   res.sendJSON({ success: true });
 });
 
 // --- Update pwd. ---
 type UpdateData = {
   email: string;
-  verifyToken: string;
+  verificationHash: string;
   password: string;
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdateData> = {
   type: 'object',
   properties: {
     email: { type: 'string', format: 'email' },
-    verifyToken: { type: 'string' },
+    verificationHash: { type: 'string' },
     password: { type: 'string' },
   },
-  required: ['email', 'verifyToken', 'password'],
+  required: ['email', 'verificationHash', 'password'],
   additionalProperties: false,
 };
 const updateUserValidator = ajv.compile(UPDATE_SCHEMA);
@@ -462,7 +645,7 @@ userController.post({ path: '/update-password' }, async (req: Request, res: Resp
 
   let isverifyTokenCorrect: boolean = false;
   try {
-    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verifyToken);
+    isverifyTokenCorrect = await argon2.verify(user.verificationHash || '', data.verificationHash);
   } catch (e) {
     logger.error(JSON.stringify(e));
   }
@@ -539,6 +722,51 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
   }
 
   res.sendJSON({ success: true });
+});
+
+userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  // Retrieve the user's linked student
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: req.user.id } },
+    relations: ['student', 'student.classroom', 'student.classroom.village', 'student.classroom.user'],
+  });
+
+  if (!userToStudent) {
+    res.status(404).json({ message: 'No linked student found' });
+    return;
+  }
+
+  const { student } = userToStudent;
+  const { classroom } = student;
+
+  res.json({
+    student: {
+      id: student.id,
+      firstname: student.firstname,
+      lastname: student.lastname,
+      classroom: {
+        user: classroom.user.countryCode,
+      },
+    },
+  });
+});
+
+// Get the visibility parameters for Family members
+userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+  const visibilityParams = await AppDataSource.getRepository(UserToStudent)
+    .createQueryBuilder('userStudent')
+    .innerJoinAndSelect('userStudent.student', 'student')
+    .innerJoinAndSelect('student.classroom', 'classroom')
+    .where('userStudent.user = :familyId', { familyId: req.user.id })
+    .getRawMany(); //* Here it's getRawMany because for some reason we lost 2 attributes otherwise classroom.userId and classroom.villageId
+  res.json(visibilityParams);
 });
 
 export { userController };
