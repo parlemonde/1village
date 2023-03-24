@@ -84,14 +84,46 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                   paddingTop: '8px',
                 }}
               >
-                {activity.data.object.imageUrl &&
+                {activity.data.odd.imageUrl &&
+                  activity.data.object.imageUrl &&
                   activity.data.place.imageUrl &&
-                  activity.data.odd.imageUrl &&
+                  activity.data.odd.description !== null &&
                   activity.data.object.description !== null &&
-                  activity.data.place.description !== null &&
-                  activity.data.odd.description !== null && (
+                  activity.data.place.description !== null && (
                     <>
                       <Grid item xs style={{ paddingTop: '0px', paddingLeft: '0px' }}>
+                        <Card sx={{ mb: 1 }}>
+                          <Typography
+                            sx={{
+                              mb: 1.5,
+                              p: 1,
+                              height: getHeightTypography(
+                                activity.data.odd.description,
+                                activity.data.object.description,
+                                activity.data.place.description,
+                              ),
+                              textAlign: 'center',
+                              borderRadius: '0.5rem',
+                              backgroundColor: '#DEDBDB',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                            variant={'subtitle2'}
+                          >
+                            {activity.data.odd.description}
+                          </Typography>
+                          <LightBox url={activity.data.odd.imageUrl}>
+                            <CardMedia
+                              sx={{ borderRadius: '0.5rem', mt: 1 }}
+                              component="img"
+                              height="150"
+                              image={activity.data.odd.imageUrl}
+                              alt="Objectifs de développement durable de l'histoire"
+                            />
+                          </LightBox>
+                        </Card>
+                      </Grid>
+                      <Grid item xs style={{ paddingTop: '0px' }}>
                         <Card sx={{ mb: 1 }}>
                           <Typography
                             sx={{
