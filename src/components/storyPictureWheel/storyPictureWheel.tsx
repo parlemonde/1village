@@ -16,7 +16,7 @@ interface StoryPictureWheelProps {
   initialObjectImage: StoryElement | null;
   initialPlaceImage: StoryElement | null;
   initialOddImage: StoryElement | null;
-  onImagesChange(objectImage: StoryElement, placeImage: StoryElement, oddImage: StoryElement): void;
+  onImagesChange(oddImage: StoryElement, objectImage: StoryElement, placeImage: StoryElement): void;
   style?: React.CSSProperties;
 }
 
@@ -114,11 +114,11 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
       let selectedIndex;
       if (slot.current) selectedIndex = triggerSlotRotation(slot.current);
       if (i + 1 == 1 && selectedIndex !== undefined) {
-        newValues.push(objectRandomImages[selectedIndex]);
+        newValues.push(oddRandomImages[selectedIndex]);
       } else if (i + 1 == 2 && selectedIndex !== undefined) {
-        newValues.push(placeRandomImages[selectedIndex]);
+        newValues.push(objectRandomImages[selectedIndex]);
       } else {
-        if (selectedIndex !== undefined) newValues.push(oddRandomImages[selectedIndex]);
+        if (selectedIndex !== undefined) newValues.push(placeRandomImages[selectedIndex]);
       }
     });
 
@@ -199,6 +199,27 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
 
           <div className="SlotMachine">
             <div className="cards">
+              <div className="slot">
+                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                  ODD
+                </Typography>
+                <section>
+                  <div className="container" ref={slotRef3}>
+                    {oddRandomImages &&
+                      oddRandomImages.map((obj, i) => (
+                        <div key={i}>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
+                            component="img"
+                            height="70"
+                            image={obj.imageUrl ? obj.imageUrl : ''}
+                            alt="objet de l'histoire"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </section>
+              </div>
               <div className="slot">
                 <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
                   ODD
