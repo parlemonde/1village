@@ -35,6 +35,7 @@ const AnthemStep1 = () => {
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
   const [times, setTimes] = React.useState<Record<number, number>>({});
+  const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
 
   const created = React.useRef(false);
   React.useEffect(() => {
@@ -93,7 +94,34 @@ const AnthemStep1 = () => {
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     {React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}
-                    <div style={{ width: '200px', marginLeft: '10px' }}>{audio.label} : </div>
+                    <div style={{ width: '200px', marginLeft: '10px' }}>
+                      {editingIndex === idx ? (
+                        <input
+                          type="text"
+                          value={audio.label}
+                          onBlur={() => {
+                            if (audio.label.trim() !== '') {
+                              setEditingIndex(null);
+                            }
+                          }}
+                          onChange={(e) => {
+                            data.verseAudios[idx].label = e.target.value;
+                            updateActivity({ data: { ...data } });
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              if (audio.label.trim() !== '') {
+                                setEditingIndex(null);
+                              }
+                            }
+                          }}
+                          autoFocus
+                        />
+                      ) : (
+                        <span onClick={() => setEditingIndex(idx)}>{audio.label}</span>
+                      )}
+                    </div>
                     <div>
                       {data.verseAudios[idx].display && (
                         <AnthemEditor
