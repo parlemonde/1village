@@ -28,13 +28,13 @@ const ReInventStoryStep5 = () => {
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
-      if (getErrorSteps(data.object, 1).length > 0) {
+      if (getErrorSteps(data.odd, 1).length > 0) {
         errors.push(0);
       }
-      if (getErrorSteps(data.place, 2).length > 0) {
+      if (getErrorSteps(data.object, 2).length > 0) {
         errors.push(1);
       }
-      if (getErrorSteps(data.odd, 3).length > 0) {
+      if (getErrorSteps(data.place, 3).length > 0) {
         errors.push(2);
       }
       if (getErrorSteps(data.tale, 4).length > 0) {
@@ -63,17 +63,17 @@ const ReInventStoryStep5 = () => {
 
   // useEffect here to update inspiredStoryId if equal to 0
   React.useEffect(() => {
-    if (data !== null && data.object.inspiredStoryId === 0) {
+    if (data !== null && data.odd.inspiredStoryId === 0) {
+      updateActivity({
+        data: dataStoryToUpdate('odd'),
+      });
+    } else if (data !== null && data.object.inspiredStoryId === 0) {
       updateActivity({
         data: dataStoryToUpdate('object'),
       });
     } else if (data !== null && data.place.inspiredStoryId === 0) {
       updateActivity({
         data: dataStoryToUpdate('place'),
-      });
-    } else if (data !== null && data.odd.inspiredStoryId === 0) {
-      updateActivity({
-        data: dataStoryToUpdate('odd'),
       });
     }
   }, [data, dataStoryToUpdate, updateActivity]);
@@ -104,7 +104,7 @@ const ReInventStoryStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
+          steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={[
             '/re-inventer-une-histoire/1?edit',
             '/re-inventer-une-histoire/2',
@@ -160,6 +160,15 @@ const ReInventStoryStep5 = () => {
             </>
           )}
 
+          {/* ODD */}
+          <ImageStepContainer
+            urlStep={`/re-inventer-une-histoire/3`}
+            imageUrl={data?.odd?.imageUrl}
+            isValid={isValid}
+            error={errorSteps.includes(2)}
+            description={data?.odd?.description}
+          />
+
           {/* Object */}
           <ImageStepContainer
             urlStep={`/re-inventer-une-histoire/1?edit=${activity.id}`}
@@ -176,15 +185,6 @@ const ReInventStoryStep5 = () => {
             isValid={isValid}
             error={errorSteps.includes(1)}
             description={data?.place?.description}
-          />
-
-          {/* ODD */}
-          <ImageStepContainer
-            urlStep={`/re-inventer-une-histoire/3`}
-            imageUrl={data?.odd?.imageUrl}
-            isValid={isValid}
-            error={errorSteps.includes(2)}
-            description={data?.odd?.description}
           />
 
           {/* Tale */}
