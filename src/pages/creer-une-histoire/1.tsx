@@ -165,7 +165,7 @@ const StoryStep1 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev="/creer-une-histoire/2" next={onNext} />
+        <StepsButton next={onNext} />
       </div>
     </Base>
   );
