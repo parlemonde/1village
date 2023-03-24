@@ -31,8 +31,8 @@ const Story = () => {
           (les ODDs) défini par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.
         </p>
         <p className="text">
-          Pendant cette visite, je vous présente <strong>17 ODDs</strong>, puis pour atteindre un de ces objectif du développement durable avec
-          succès, un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong>.<br></br>À présent, à votre tour de{' '}
+          Pendant cette visite, je vous présente <strong>17 ODDs</strong>, et pour atteindre un de ces objectif du développement durable avec succès,
+          un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong>.<br></br>À présent, à votre tour de{' '}
           <strong>raconter cette visite inoubliable à vos Pélicopains !</strong>
         </p>
         <p className="text">
