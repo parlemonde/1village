@@ -204,27 +204,6 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                   ODD
                 </Typography>
                 <section>
-                  <div className="container" ref={slotRef3}>
-                    {oddRandomImages &&
-                      oddRandomImages.map((obj, i) => (
-                        <div key={i}>
-                          <CardMedia
-                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
-                            component="img"
-                            height="70"
-                            image={obj.imageUrl ? obj.imageUrl : ''}
-                            alt="objet de l'histoire"
-                          />
-                        </div>
-                      ))}
-                  </div>
-                </section>
-              </div>
-              <div className="slot">
-                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                  ODD
-                </Typography>
-                <section>
                   <div className="container" ref={slotRef1}>
                     {oddRandomImages &&
                       oddRandomImages.map((obj, i) => (
