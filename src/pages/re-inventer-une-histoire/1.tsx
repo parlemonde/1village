@@ -155,7 +155,7 @@ const ReInventStoryStep1 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev="/re-inventer-une-histoire/2" next={onNext} />
+        <StepsButton next={onNext} />
       </div>
     </Base>
   );
