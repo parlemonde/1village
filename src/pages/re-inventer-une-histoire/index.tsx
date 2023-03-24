@@ -25,9 +25,9 @@ const InspiredStory = () => {
   const onImagesChange = React.useCallback((object: StoryElement, place: StoryElement, odd: StoryElement) => {
     setStoryData((prevStoryData) => ({
       ...prevStoryData,
+      odd: { ...odd, description: prevStoryData.odd.description },
       object: { ...object, description: prevStoryData.object.description },
       place: { ...place, description: prevStoryData.place.description },
-      odd: { ...odd, description: prevStoryData.odd.description },
     }));
   }, []);
 
@@ -100,9 +100,9 @@ const InspiredStory = () => {
         </div>
         {/* Roulette images */}
         <StoryPictureWheel
+          initialOddImage={inspiredImages ? inspiredImages.odd : null}
           initialObjectImage={inspiredImages ? inspiredImages.object : null}
           initialPlaceImage={inspiredImages ? inspiredImages.place : null}
-          initialOddImage={inspiredImages ? inspiredImages.odd : null}
           onImagesChange={onImagesChange}
         />
         <StepsButton next={onNext} />

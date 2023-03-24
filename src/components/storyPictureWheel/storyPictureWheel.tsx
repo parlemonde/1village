@@ -16,7 +16,7 @@ interface StoryPictureWheelProps {
   initialObjectImage: StoryElement | null;
   initialPlaceImage: StoryElement | null;
   initialOddImage: StoryElement | null;
-  onImagesChange(objectImage: StoryElement, placeImage: StoryElement, oddImage: StoryElement): void;
+  onImagesChange(oddImage: StoryElemen, objectImage: StoryElement, placeImage: StoryElementt): void;
   style?: React.CSSProperties;
 }
 
@@ -26,13 +26,13 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
   const [rolling, setRolling] = React.useState(false);
 
   const [allImages, setAllImages] = React.useState<{
+    odd: StoryElement[];
     object: StoryElement[];
     place: StoryElement[];
-    odd: StoryElement[];
   }>({
+    odd: [],
     object: [],
     place: [],
-    odd: [],
   });
 
   const objectRandomImages = React.useMemo(
@@ -85,7 +85,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
 
   React.useEffect(() => {
     if (objectRandomImages.length > 1 && placeRandomImages.length > 1 && oddRandomImages.length > 1) {
-      onImagesChange(objectRandomImages[0], placeRandomImages[0], oddRandomImages[0]);
+      onImagesChange(oddRandomImages[0], objectRandomImages[0], placeRandomImages[0]);
     }
     [slotRef1, slotRef2, slotRef3].forEach((slot) => {
       if (slot.current) {
@@ -114,11 +114,11 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
       let selectedIndex;
       if (slot.current) selectedIndex = triggerSlotRotation(slot.current);
       if (i + 1 == 1 && selectedIndex !== undefined) {
-        newValues.push(objectRandomImages[selectedIndex]);
+        newValues.push(oddRandomImages[selectedIndex]);
       } else if (i + 1 == 2 && selectedIndex !== undefined) {
-        newValues.push(placeRandomImages[selectedIndex]);
+        newValues.push(objectRandomImages[selectedIndex]);
       } else {
-        if (selectedIndex !== undefined) newValues.push(oddRandomImages[selectedIndex]);
+        if (selectedIndex !== undefined) newValues.push(placeRandomImages[selectedIndex]);
       }
     });
 
