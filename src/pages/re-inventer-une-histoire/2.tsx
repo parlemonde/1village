@@ -152,7 +152,7 @@ const ReInventStoryStep2 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton next={onNext} />
+        <StepsButton prev={`/re-inventer-une-histoire/1?edit=${activity.id}`} next={onNext} />
       </div>
     </Base>
   );
