@@ -233,7 +233,7 @@ const AudioMix = ({ audio, idx, solo, off, solos, audioLabels }: AudioMixProps) 
   };
 
   return (
-    <div style={{ width: '100px', padding: '15px' }}>
+    <div style={{ width: '100px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Slider
         aria-label="Mixing Volume"
         defaultValue={0.5}
