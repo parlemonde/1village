@@ -35,6 +35,10 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
     place: [],
   });
 
+  const oddRandomImages = React.useMemo(
+    () => (initialOddImage ? [initialOddImage, ...allImages.odd.filter((i) => i.imageId !== initialOddImage.imageId)] : allImages.odd),
+    [initialOddImage, allImages],
+  );
   const objectRandomImages = React.useMemo(
     () => (initialObjectImage ? [initialObjectImage, ...allImages.object.filter((i) => i.imageId !== initialObjectImage.imageId)] : allImages.object),
     [initialObjectImage, allImages],
@@ -43,16 +47,12 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
     () => (initialPlaceImage ? [initialPlaceImage, ...allImages.place.filter((i) => i.imageId !== initialPlaceImage.imageId)] : allImages.place),
     [initialPlaceImage, allImages],
   );
-  const oddRandomImages = React.useMemo(
-    () => (initialOddImage ? [initialOddImage, ...allImages.odd.filter((i) => i.imageId !== initialOddImage.imageId)] : allImages.odd),
-    [initialOddImage, allImages],
-  );
 
   const slotRef1 = React.useRef<HTMLDivElement | null>(null);
   const slotRef2 = React.useRef<HTMLDivElement | null>(null);
   const slotRef3 = React.useRef<HTMLDivElement | null>(null);
 
-  const ableToRotate = objectRandomImages.length > 1 && placeRandomImages.length > 1 && oddRandomImages.length > 1;
+  const ableToRotate = oddRandomImages.length > 1 && objectRandomImages.length > 1 && placeRandomImages.length > 1;
 
   //Get Random Images from DB
   const getRandomImages = React.useCallback(async () => {
@@ -84,7 +84,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
   }, [getRandomImages]);
 
   React.useEffect(() => {
-    if (objectRandomImages.length > 1 && placeRandomImages.length > 1 && oddRandomImages.length > 1) {
+    if (oddRandomImages.length > 1 && objectRandomImages.length > 1 && placeRandomImages.length > 1) {
       onImagesChange(oddRandomImages[0], objectRandomImages[0], placeRandomImages[0]);
     }
     [slotRef1, slotRef2, slotRef3].forEach((slot) => {
@@ -92,7 +92,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
         slot.current.style.top = '0px';
       }
     });
-  }, [objectRandomImages, placeRandomImages, oddRandomImages, onImagesChange]);
+  }, [oddRandomImages, objectRandomImages, placeRandomImages, onImagesChange]);
 
   // to trigger handle rotate
   const handleRotate = () => {
@@ -222,10 +222,31 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
               </div>
               <div className="slot">
                 <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
-                  Objet
+                  ODD
                 </Typography>
                 <section>
                   <div className="container" ref={slotRef1}>
+                    {oddRandomImages &&
+                      oddRandomImages.map((obj, i) => (
+                        <div key={i}>
+                          <CardMedia
+                            sx={{ borderRadius: '0.5rem', mt: 0.3, mb: 0.3 }}
+                            component="img"
+                            height="70"
+                            image={obj.imageUrl ? obj.imageUrl : ''}
+                            alt="odd de l'histoire"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </section>
+              </div>
+              <div className="slot">
+                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                  Objet
+                </Typography>
+                <section>
+                  <div className="container" ref={slotRef2}>
                     {objectRandomImages &&
                       objectRandomImages.map((obj, i) => (
                         <div className="object" key={i}>
@@ -246,7 +267,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                   Lieu
                 </Typography>
                 <section>
-                  <div className="container" ref={slotRef2}>
+                  <div className="container" ref={slotRef3}>
                     {placeRandomImages &&
                       placeRandomImages.map((obj, i) => (
                         <div key={i}>
@@ -255,7 +276,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                             component="img"
                             height="70"
                             image={obj.imageUrl ? obj.imageUrl : ''}
-                            alt="objet de l'histoire"
+                            alt="lieu de l'histoire"
                           />
                         </div>
                       ))}

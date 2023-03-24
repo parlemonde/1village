@@ -54,7 +54,7 @@ const StoryStep3 = () => {
     updateActivity({ data: newData });
   };
 
-  // Update the "object step" image url, when upload an image.
+  // Update the "place step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { object, place } = data;
     // imageId = 0 when we are changing the image of the object step.

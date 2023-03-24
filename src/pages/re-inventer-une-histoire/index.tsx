@@ -19,10 +19,10 @@ const InspiredStory = () => {
   const { createNewActivity } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
 
-  const [inspiredImages, setInspiredImages] = React.useState<{ object: StoryElement; place: StoryElement; odd: StoryElement } | null>(null);
+  const [inspiredImages, setInspiredImages] = React.useState<{ odd: StoryElement; object: StoryElement; place: StoryElement } | null>(null);
   const [storyData, setStoryData] = React.useState<StoriesData>(DEFAULT_STORY_DATA);
 
-  const onImagesChange = React.useCallback((object: StoryElement, place: StoryElement, odd: StoryElement) => {
+  const onImagesChange = React.useCallback((odd: StoryElement, object: StoryElement, place: StoryElement) => {
     setStoryData((prevStoryData) => ({
       ...prevStoryData,
       odd: { ...odd, description: prevStoryData.odd.description },
@@ -83,13 +83,13 @@ const InspiredStory = () => {
             (les ODDs) défini par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.{' '}
           </p>
           <p className="text">
-            Pendant cette visite, je vous présente notamment un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong> qui nous ont
-            permis d’atteindre <strong>un des 17 ODDs</strong> avec succès !<br></br>À présent, à votre tour de{' '}
+            Pendant cette visite, je vous présente <strong>17 ODDs</strong>, et pour atteindre un de ces objectifs du développement durable avec
+            succès, un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong>.<br></br>À présent, à votre tour de{' '}
             <strong>raconter cette visite inoubliable à vos Pélicopains !</strong>
           </p>
           <p className="text">
-            Pour vous guider, je vous propose de commencer par choisir, décrire et dessiner un objet magique, un lieu extraordinaire et un des 17 ODDs
-            de votre choix. Puisez votre inspiration parmi les éléments déjà imaginés par vos Pélicopains !<br></br>
+            Pour vous guider, je vous propose de commencer par choisir, un des 17 ODDs, décrire et dessiner un objet magique et un lieu
+            extraordinaire. Puisez votre inspiration parmi les éléments déjà imaginés par vos Pélicopains !<br></br>
             Actionnez la manette autant de fois que vous le souhaitez pour choisir différentes sources d’inspirations, tirées de toutes les histoires
             déjà proposées par tes Pélicopains.
           </p>
@@ -100,9 +100,9 @@ const InspiredStory = () => {
         </div>
         {/* Roulette images */}
         <StoryPictureWheel
+          initialOddImage={inspiredImages ? inspiredImages.odd : null}
           initialObjectImage={inspiredImages ? inspiredImages.object : null}
           initialPlaceImage={inspiredImages ? inspiredImages.place : null}
-          initialOddImage={inspiredImages ? inspiredImages.odd : null}
           onImagesChange={onImagesChange}
         />
         <StepsButton next={onNext} />

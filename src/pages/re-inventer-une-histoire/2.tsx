@@ -14,18 +14,18 @@ import { ImageModal } from 'src/components/activities/content/editors/ImageEdito
 import { getErrorSteps } from 'src/components/activities/storyChecks';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { primaryColor, bgPage } from 'src/styles/variables.const';
+import { bgPage, primaryColor } from 'src/styles/variables.const';
 import type { StoriesData, StoryElement } from 'types/story.type';
 
 const ReInventStoryStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  const data = (activity?.data as StoriesData) || null;
+  const data = activity?.data as StoriesData;
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
-      return getErrorSteps(data.object, 1);
+      return getErrorSteps(data.odd, 1);
     }
     return [];
   }, [data]);
@@ -40,15 +40,15 @@ const ReInventStoryStep2 = () => {
 
   const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.slice(0, 400);
-    const { place } = data;
-    const newData = { ...data, place: { ...place, [key]: value } };
+    const { object } = data;
+    const newData = { ...data, object: { ...object, [key]: value } };
     updateActivity({ data: newData });
   };
 
   // Update the "object step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
-    const { place } = data;
-    updateActivity({ data: { ...data, place: { ...place, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
+    const { object } = data;
+    updateActivity({ data: { ...data, object: { ...object, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
   };
 
   const onNext = () => {
@@ -64,7 +64,7 @@ const ReInventStoryStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
+          steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={[
             '/re-inventer-une-histoire/1?edit',
             '/re-inventer-une-histoire/2',
@@ -76,10 +76,10 @@ const ReInventStoryStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un lieu extraordinaire</h1>
+          <h1>Inventez et dessinez un objet magique</h1>
           <p className="text">
-            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal a
-            atteint l’objectif du développement durable que vous choisirez en étape 3.
+            Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à leurs pouvoirs, le village idéal va atteindre
+            l’objectif du développement durable que vous avez choisi à l’étape précédente.
           </p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
@@ -98,15 +98,15 @@ const ReInventStoryStep2 = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        {data?.place?.imageUrl ? (
-                          <Image layout="fill" objectFit="cover" alt="image du lieu" src={data?.place?.imageUrl} unoptimized />
+                        {data?.object?.imageUrl ? (
+                          <Image layout="fill" objectFit="cover" alt="image de l'objet" src={data?.object?.imageUrl} unoptimized />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.place?.imageUrl && (
+                  {data?.object?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
@@ -122,15 +122,15 @@ const ReInventStoryStep2 = () => {
                     id={0}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={data?.place?.imageUrl || ''}
+                    imageUrl={data?.object?.imageUrl || ''}
                     setImageUrl={setImage}
                   />
                 </div>
               </div>
               <TextField
                 id="standard-multiline-static"
-                label="Décrivez le lieu extraordinaire"
-                value={data?.place?.description || ''}
+                label="Décrivez l’objet magique"
+                value={data?.object?.description || ''}
                 onChange={dataChange('description')}
                 variant="outlined"
                 multiline
@@ -140,9 +140,9 @@ const ReInventStoryStep2 = () => {
                   maxLength: 400,
                 }}
               />
-              {data?.place?.description ? (
+              {data?.object?.description ? (
                 <div style={{ width: '100%', textAlign: 'right' }}>
-                  <span className="text text--small">{data.place.description.length}/400</span>
+                  <span className="text text--small">{data.object.description.length}/400</span>
                 </div>
               ) : (
                 <div style={{ width: '100%', textAlign: 'right' }}>
@@ -152,7 +152,7 @@ const ReInventStoryStep2 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev={`/re-inventer-une-histoire/1?edit=${activity.id}`} next={onNext} />
+        <StepsButton next={onNext} />
       </div>
     </Base>
   );
