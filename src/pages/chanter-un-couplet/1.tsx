@@ -56,9 +56,6 @@ const SongStep1 = () => {
       </Base>
     );
   }
-  console.log('USER IN CHANTER COUPLET ===', user);
-  console.log('VILLAGE IN CHANTER COUPLET ===', village);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
