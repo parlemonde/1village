@@ -16,7 +16,7 @@ interface StoryPictureWheelProps {
   initialObjectImage: StoryElement | null;
   initialPlaceImage: StoryElement | null;
   initialOddImage: StoryElement | null;
-  onImagesChange(oddImage: StoryElemen, objectImage: StoryElement, placeImage: StoryElementt): void;
+  onImagesChange(oddImage: StoryElement, objectImage: StoryElement, placeImage: StoryElement): void;
   style?: React.CSSProperties;
 }
 
