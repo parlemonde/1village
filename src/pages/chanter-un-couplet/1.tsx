@@ -10,7 +10,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AudioMixer from 'src/components/audio/Mixer';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { concatAudios, mixAudios } from 'src/utils/audios';
@@ -20,7 +19,6 @@ const SongStep1 = () => {
   const { axiosLoggedRequest } = React.useContext(UserContext);
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const { classroom } = useContext(ClassroomContext);
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
 
@@ -60,7 +58,6 @@ const SongStep1 = () => {
   }
   console.log('USER IN CHANTER COUPLET ===', user);
   console.log('VILLAGE IN CHANTER COUPLET ===', village);
-  console.log('CLASSROOM IN CHANTER COUPLET ===', classroom);
 
   return (
     <Base>
