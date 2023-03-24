@@ -162,28 +162,28 @@ const ReInventStoryStep5 = () => {
 
           {/* ODD */}
           <ImageStepContainer
-            urlStep={`/re-inventer-une-histoire/3`}
+            urlStep={`/re-inventer-une-histoire/1?edit=${activity.id}`}
             imageUrl={data?.odd?.imageUrl}
             isValid={isValid}
-            error={errorSteps.includes(2)}
+            error={errorSteps.includes(0)}
             description={data?.odd?.description}
           />
 
           {/* Object */}
           <ImageStepContainer
-            urlStep={`/re-inventer-une-histoire/1?edit=${activity.id}`}
+            urlStep={`/re-inventer-une-histoire/2`}
             imageUrl={data?.object?.imageUrl}
             isValid={isValid}
-            error={errorSteps.includes(0)}
+            error={errorSteps.includes(1)}
             description={data?.object?.description}
           />
 
           {/* Place */}
           <ImageStepContainer
-            urlStep={`/re-inventer-une-histoire/2`}
+            urlStep={`/re-inventer-une-histoire/3`}
             imageUrl={data?.place?.imageUrl}
             isValid={isValid}
-            error={errorSteps.includes(1)}
+            error={errorSteps.includes(2)}
             description={data?.place?.description}
           />
 
