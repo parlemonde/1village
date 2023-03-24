@@ -16,15 +16,15 @@ import { bgPage } from 'src/styles/variables.const';
 import type { StoryActivity } from 'types/story.type';
 
 export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>) => {
-  const { object, place, odd } = activity.data;
+  const { odd, object, place } = activity.data;
   const inspiredStoriesIds = Array.from(new Set([object.inspiredStoryId, place.inspiredStoryId, odd.inspiredStoryId])).filter(
     (id) => id !== activity.id && id !== undefined && id !== null,
   ) as number[];
 
-  const getHeightTypography = (objectDescription: string, placeDescription: string, oddDescription: string) => {
+  const getHeightTypography = (oddDescription: string, objectDescription: string, placeDescription: string) => {
+    const oddDescriptionLenght = oddDescription.length;
     const objectDescriptionLenght = objectDescription.length;
     const placeDescriptionLenght = placeDescription.length;
-    const oddDescriptionLenght = oddDescription.length;
 
     if (oddDescriptionLenght > placeDescriptionLenght && oddDescriptionLenght > objectDescriptionLenght) {
       return '10rem';

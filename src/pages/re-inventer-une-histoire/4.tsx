@@ -26,13 +26,13 @@ const ReInventStoryStep4 = () => {
   const errorSteps = React.useMemo(() => {
     const errors = [];
     if (data !== null) {
-      if (getErrorSteps(data.object, 1).length > 0) {
+      if (getErrorSteps(data.odd, 1).length > 0) {
         errors.push(0);
       }
-      if (getErrorSteps(data.place, 2).length > 0) {
+      if (getErrorSteps(data.object, 2).length > 0) {
         errors.push(1);
       }
-      if (getErrorSteps(data.odd, 3).length > 0) {
+      if (getErrorSteps(data.place, 3).length > 0) {
         errors.push(2);
       }
       return errors;
