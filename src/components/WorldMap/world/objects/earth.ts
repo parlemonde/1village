@@ -48,7 +48,6 @@ export class Earth extends Group implements HoverableObject {
     // Set data
     this.countryVisibility = true;
     this.userVisibility = true;
-    this.position.x = -2 * GLOBE_RADIUS;
     this.name = 'earth';
     this.userData = {
       isHoverable: true,

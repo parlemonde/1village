@@ -21,9 +21,9 @@ import { GLOBE_RADIUS, MAX_DISTANCE, MIN_DISTANCE, SKY_RADIUS, START_DISTANCE, P
 
 type View = 'earth' | 'global' | 'pelico';
 const CENTERS: Record<View, Vector3> = {
-  earth: new Vector3(-2 * GLOBE_RADIUS, 0, 0),
+  earth: new Vector3(-2 * GLOBE_RADIUS, -1 * GLOBE_RADIUS, 0),
   global: new Vector3(),
-  pelico: new Vector3(1.5 * GLOBE_RADIUS, GLOBE_RADIUS, 0),
+  pelico: new Vector3(1 * GLOBE_RADIUS, 1 * GLOBE_RADIUS, 0),
 };
 
 type MouseStyleSetter = (mouseStyle: React.CSSProperties['cursor']) => void;
@@ -81,12 +81,14 @@ export class World {
 
     // -- Add earth --
     this.earth = new Earth();
+    this.earth.position.copy(CENTERS.earth);
     this.earth.setCountryVisibility(false);
     this.earth.visible = this.view === 'earth';
     this.scene.add(this.earth);
 
     // -- Add pelico globe --
     this.pelico = new Pelico();
+    this.pelico.position.copy(CENTERS.pelico);
     this.pelico.visible = this.view === 'pelico';
     this.scene.add(this.pelico);
 

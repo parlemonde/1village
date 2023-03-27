@@ -33,8 +33,6 @@ export class Pelico extends Group implements HoverableObject {
     this.add(outlineMesh2);
 
     // Set data
-    this.position.x = 1.5 * GLOBE_RADIUS;
-    this.position.y = GLOBE_RADIUS;
     this.name = 'pelico';
     this.userData = {
       isHoverable: true,
