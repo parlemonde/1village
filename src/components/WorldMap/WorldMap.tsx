@@ -1,5 +1,10 @@
+import 'leaflet/dist/leaflet.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import L from 'leaflet';
+import {} from 'leaflet.fullscreen';
 import { useRouter } from 'next/router';
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 import { useQuery } from 'react-query';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -9,6 +14,7 @@ import { Button, ButtonGroup, IconButton, Typography } from '@mui/material';
 
 import type { PopoverData } from './Popover';
 import { isUser, Popover } from './Popover';
+import { UserPopover } from './UserPopover';
 import { useFullScreen } from './use-full-screen';
 import { World } from './world';
 import type { GeoJSONCityData } from './world/objects/capital';
@@ -50,64 +56,110 @@ const WorldMap = () => {
   const router = useRouter();
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { users } = useVillageUsers();
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const [useLeafletFallback] = React.useState(() => !isWebGLAvailable());
 
   // -- 3D world --
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const [world, setWorld] = React.useState<World | null>(null);
   const [mouseStyle, setMouseStyle] = React.useState<React.CSSProperties['cursor']>('default');
   const [popoverPos, setPopoverPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverData, setPopoverData] = React.useState<PopoverData | null>(null);
   const { containerRef, fullScreenButton } = useFullScreen();
   const [showSuccess, setShowSuccess] = React.useState(false);
-
   const { data: countriesAndCapitals } = useQuery(['3d-world-countries-and-capitals'], getCountriesAndCapitals);
-
-  // -- Leaflet(2D) fallback --
-  const [useLeafletFallback] = React.useState(() => !isWebGLAvailable());
-
   const selectedPhaseRef = React.useRef(selectedPhase);
   React.useEffect(() => {
+    if (useLeafletFallback) {
+      return () => {};
+    }
     const canvas = canvasRef.current;
     if (!canvas) {
       return () => {};
-    } else if (useLeafletFallback) {
-      // todo;
-      return () => {};
-    } else {
-      const newWorld = new World(canvas, setMouseStyle, setPopoverData, selectedPhaseRef.current);
-      let animationFrame: number | null = null;
-      const render = (time: number) => {
-        newWorld.render(time);
-        animationFrame = requestAnimationFrame(render);
-      };
-      animationFrame = requestAnimationFrame(render);
-      setWorld(newWorld);
-      return () => {
-        newWorld.dispose();
-        if (animationFrame !== null) {
-          cancelAnimationFrame(animationFrame);
-        }
-      };
     }
+    const newWorld = new World(canvas, setMouseStyle, setPopoverData, selectedPhaseRef.current);
+    let animationFrame: number | null = null;
+    const render = (time: number) => {
+      newWorld.render(time);
+      animationFrame = requestAnimationFrame(render);
+    };
+    animationFrame = requestAnimationFrame(render);
+    setWorld(newWorld);
+    return () => {
+      newWorld.dispose();
+      if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
   }, [useLeafletFallback]);
-
   React.useEffect(() => {
     if (world && countriesAndCapitals) {
       world.addCountriesAndCapitals(countriesAndCapitals);
     }
   }, [world, countriesAndCapitals]);
-
   React.useEffect(() => {
     if (world) {
       world.addUsers(users.filter((u) => u.type === UserType.TEACHER));
     }
   }, [world, users]);
-
   React.useEffect(() => {
     if (world) {
       world.changeView(selectedPhase === 3 ? 'pelico' : 'earth');
     }
   }, [world, selectedPhase]);
+
+  // -- Leaflet(2D) fallback --
+  const leafletRef = React.useRef<HTMLDivElement | null>(null);
+  const leafletMapRef = React.useRef<L.Map | null>(null);
+  React.useEffect(() => {
+    if (!leafletRef.current) {
+      return () => {};
+    }
+    const map = L.map(leafletRef.current, {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      fullscreenControl: true,
+      fullscreenControlOptions: {
+        position: 'topleft',
+      },
+    }).setView([51.505, -0.09], 2);
+    L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=ecMNwc4xNgcrvp2RH6cr', {
+      tileSize: 512,
+      zoomOffset: -1,
+      minZoom: 1,
+      attribution:
+        '\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e',
+      crossOrigin: true,
+    }).addTo(map);
+    leafletMapRef.current = map;
+    return () => {
+      map.remove();
+      leafletMapRef.current = null;
+    };
+  }, [useLeafletFallback]);
+  React.useEffect(() => {
+    const map = leafletMapRef.current;
+    if (!map) {
+      return;
+    }
+    users
+      .filter((u) => u.type === UserType.TEACHER)
+      .forEach((u) => {
+        const marker = L.marker(u.position, {
+          icon: new L.Icon({
+            iconUrl: '/marker.svg',
+            iconSize: [25, 41],
+            iconAnchor: [13.5, 41],
+          }),
+        }).addTo(map);
+        const $div = document.createElement('div');
+        ReactDOM.render(<UserPopover user={u} />, $div, () => {
+          marker.bindPopup($div.innerHTML);
+        });
+      });
+  }, [users]);
+  if (useLeafletFallback) {
+    return <div ref={leafletRef} style={{ position: 'relative', height: '100%', width: '100%', maxHeight: 'calc(100vh - 90px)' }}></div>;
+  }
 
   return (
     <div ref={containerRef} style={{ position: 'relative', height: '100%', width: '100%', maxHeight: 'calc(100vh - 90px)' }}>

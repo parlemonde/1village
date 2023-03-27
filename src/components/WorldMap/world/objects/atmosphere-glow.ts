@@ -35,8 +35,8 @@ export class AtmosphereGlow extends Mesh {
     const glowGeometry = new SphereGeometry(radius, 75, 75);
     const position = new Float32Array(glowGeometry.attributes.position.count * 3);
     for (let idx = 0, len = position.length; idx < len; idx++) {
-      const normal = glowGeometry.attributes.normal.array[idx];
-      const curPos = glowGeometry.attributes.position.array[idx];
+      const normal = (glowGeometry.attributes.normal as BufferAttribute).array[idx];
+      const curPos = (glowGeometry.attributes.position as BufferAttribute).array[idx];
       position[idx] = curPos + normal * radius * 0.15;
     }
     glowGeometry.setAttribute('position', new BufferAttribute(position, 3));
