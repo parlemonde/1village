@@ -76,8 +76,11 @@ export const Accueil = () => {
     }
   }, [activities, filters.searchTerm]);
 
+  // eslint-disable-next-line no-console
   console.log('USER IN HOME ===', user);
+  // eslint-disable-next-line no-console
   console.log('VILLAGE IN HOME ===', village);
+  // eslint-disable-next-line no-console
   console.log('CLASSROOM IN HOME ===', classroom);
 
   if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {

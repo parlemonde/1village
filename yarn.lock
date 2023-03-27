@@ -53,8 +53,8 @@ __metadata:
     "@types/sharp": 0.30.4
     "@types/sortablejs": 1.13.0
     "@types/string-similarity": 4.0.0
-    "@types/supertest": ^2.0.12
-    "@types/three": 0.141.0
+    "@types/supertest": 2.0.12
+    "@types/three": 0.149.0
     "@types/uuid": 8.3.4
     "@types/vimeo": 2.1.4
     "@types/webpack": 5.28.0
@@ -130,9 +130,9 @@ __metadata:
     sqlite3: ^5.1.2
     string-similarity: ^4.0.4
     supertest: ^6.3.3
-    three: 0.141.0
-    three-conic-polygon-geometry: ^1.5.1
-    troika-three-text: ^0.46.4
+    three: 0.150.1
+    three-conic-polygon-geometry: ^1.6.1
+    troika-three-text: ^0.47.1
     ts-node: ^10.9.1
     typeorm: ^0.3.11
     typescript: 4.7.4
@@ -4262,7 +4262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/supertest@npm:^2.0.12":
+"@types/supertest@npm:2.0.12":
   version: 2.0.12
   resolution: "@types/supertest@npm:2.0.12"
   dependencies:
@@ -4271,12 +4271,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/three@npm:0.141.0":
-  version: 0.141.0
-  resolution: "@types/three@npm:0.141.0"
+"@types/three@npm:0.149.0":
+  version: 0.149.0
+  resolution: "@types/three@npm:0.149.0"
   dependencies:
     "@types/webxr": "*"
-  checksum: b4d1fd19eec01a15374a9e0a181207f0b2a27df881f3cfc63ce167b36b214c6926d80ac0eeb80c365832f69e7180db514a859808150ece1c1503a4eb58d4ac1e
+  checksum: 5def82bd5d4fb0eb6046e747eecced06d68fbf1747ab8f3e7657872e42e58ce7a92218d7c5e4ca26204257927638ad14da5d1cce7310aca15eb8a9bd484ea191
   languageName: node
   linkType: hard
 
@@ -15084,9 +15084,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"three-conic-polygon-geometry@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "three-conic-polygon-geometry@npm:1.5.1"
+"three-conic-polygon-geometry@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "three-conic-polygon-geometry@npm:1.6.1"
   dependencies:
     "@turf/boolean-point-in-polygon": ^6.5
     d3-array: 1 - 3
@@ -15097,14 +15097,14 @@ resolve@^2.0.0-next.3:
     earcut: 2
   peerDependencies:
     three: ">=0.72.0"
-  checksum: ddfa1f1db8d87a749c8a1ab22fce01b9597e7f9e676db46dd57a7580038bf9690634ad1ad8ad4b97860aba3a4bc9cc547ed383611f54eebd7839fc4f2413a452
+  checksum: e5bbb3b09f4e4195e611715bc94b52851af1073afdf0a50c660349c26061ac9edb5945b33e7b0e2a4a1373e5b02695ab055c9577dfb73a8982521834507f7aa5
   languageName: node
   linkType: hard
 
-"three@npm:0.141.0":
-  version: 0.141.0
-  resolution: "three@npm:0.141.0"
-  checksum: d161350b5134f2db616c7081d625c84235a1d50658b9f9c6ffe94143ddb77944b1c1b6831ad0be00037f8c744c8c60ee8d740ea4d48844b54f4525ee73a2d44f
+"three@npm:0.150.1":
+  version: 0.150.1
+  resolution: "three@npm:0.150.1"
+  checksum: b12a92a681a30e62640d90bdf074d039c05d8294ad40f437e7e1807ce0e698ad6728878a1e72dad22bf05d7a359843ecea8739d05f2f13143bc3a4ecdfdbdd7b
   languageName: node
   linkType: hard
 
@@ -15272,33 +15272,33 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"troika-three-text@npm:^0.46.4":
-  version: 0.46.4
-  resolution: "troika-three-text@npm:0.46.4"
+"troika-three-text@npm:^0.47.1":
+  version: 0.47.1
+  resolution: "troika-three-text@npm:0.47.1"
   dependencies:
     bidi-js: ^1.0.2
-    troika-three-utils: ^0.46.0
-    troika-worker-utils: ^0.46.0
+    troika-three-utils: ^0.47.0
+    troika-worker-utils: ^0.47.0
     webgl-sdf-generator: 1.1.1
   peerDependencies:
-    three: ">=0.103.0"
-  checksum: d36ca41079cf70804ab325a4f776b51fa917e4efbd80c97061e3d9180a1f8c21b2bf100bd502b6efff4aaafb1b70aef3aa73bdce6e62aabecc9faa7239c1a371
+    three: ">=0.125.0"
+  checksum: 854d74e1f53898a22d34788f29efea59d253037b6dd4c518b46c60ebb42960ce026d8ced5dde8a04143e963afbe92cdd55123fb9d9c2d1e555d1f9c31cdbe21f
   languageName: node
   linkType: hard
 
-"troika-three-utils@npm:^0.46.0":
-  version: 0.46.0
-  resolution: "troika-three-utils@npm:0.46.0"
+"troika-three-utils@npm:^0.47.0":
+  version: 0.47.0
+  resolution: "troika-three-utils@npm:0.47.0"
   peerDependencies:
-    three: ">=0.103.0"
-  checksum: 75e926bf147c902c60fd5f013a6f9f481f67d610f93c4cf25146e56e4bd36a6f8f81b00ae0b1dc2af01f6dc7a9f051a334d415228b8a5a44d423be85f24de337
+    three: ">=0.125.0"
+  checksum: 2541865d957317c9ceaf386025776ad431ad58ad4bea80782a4607f712f1ad13fe727cc83ac0e6063e9dedc2a7c2dfea8ca385fcdd5b8562bf777a6f87ed75f1
   languageName: node
   linkType: hard
 
-"troika-worker-utils@npm:^0.46.0":
-  version: 0.46.0
-  resolution: "troika-worker-utils@npm:0.46.0"
-  checksum: 5fe6c17e34f2b840c83d87e7092891bf62f12cf5804ee4d97a9bbc11e4f1d85f81894a758322187d4fa40c76b359088a1aeb0e69e26b7f391f7d2834ef0fa33f
+"troika-worker-utils@npm:^0.47.0":
+  version: 0.47.0
+  resolution: "troika-worker-utils@npm:0.47.0"
+  checksum: 9fa14a58feba121a80576131eafdfe02c095e2695c071250b6517ea4e40c4f0600be2a9f41da34fb24f6870091f528124d6e47f948c85fdf585dc97f4245d720
   languageName: node
   linkType: hard
 

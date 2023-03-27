@@ -73,7 +73,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/sortablejs", "npm:1.13.0"],\
             ["@types/string-similarity", "npm:4.0.0"],\
             ["@types/supertest", "npm:2.0.12"],\
-            ["@types/three", "npm:0.141.0"],\
+            ["@types/three", "npm:0.149.0"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@types/vimeo", "npm:2.1.4"],\
             ["@types/webpack", "npm:5.28.0"],\
@@ -149,9 +149,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2"],\
             ["string-similarity", "npm:4.0.4"],\
             ["supertest", "npm:6.3.3"],\
-            ["three", "npm:0.141.0"],\
-            ["three-conic-polygon-geometry", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.1"],\
-            ["troika-three-text", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.46.4"],\
+            ["three", "npm:0.150.1"],\
+            ["three-conic-polygon-geometry", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.6.1"],\
+            ["troika-three-text", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.47.1"],\
             ["ts-node", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:10.9.1"],\
             ["typeorm", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.3.11"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
@@ -215,7 +215,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/sortablejs", "npm:1.13.0"],\
             ["@types/string-similarity", "npm:4.0.0"],\
             ["@types/supertest", "npm:2.0.12"],\
-            ["@types/three", "npm:0.141.0"],\
+            ["@types/three", "npm:0.149.0"],\
             ["@types/uuid", "npm:8.3.4"],\
             ["@types/vimeo", "npm:2.1.4"],\
             ["@types/webpack", "npm:5.28.0"],\
@@ -291,9 +291,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.2"],\
             ["string-similarity", "npm:4.0.4"],\
             ["supertest", "npm:6.3.3"],\
-            ["three", "npm:0.141.0"],\
-            ["three-conic-polygon-geometry", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.1"],\
-            ["troika-three-text", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.46.4"],\
+            ["three", "npm:0.150.1"],\
+            ["three-conic-polygon-geometry", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.6.1"],\
+            ["troika-three-text", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.47.1"],\
             ["ts-node", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:10.9.1"],\
             ["typeorm", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.3.11"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
@@ -6357,10 +6357,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/three", [\
-        ["npm:0.141.0", {\
-          "packageLocation": "./.yarn/cache/@types-three-npm-0.141.0-626804a0d0-b4d1fd19ee.zip/node_modules/@types/three/",\
+        ["npm:0.149.0", {\
+          "packageLocation": "./.yarn/cache/@types-three-npm-0.149.0-b06e5f80a4-5def82bd5d.zip/node_modules/@types/three/",\
           "packageDependencies": [\
-            ["@types/three", "npm:0.141.0"],\
+            ["@types/three", "npm:0.149.0"],\
             ["@types/webxr", "npm:0.4.0"]\
           ],\
           "linkType": "HARD"\
@@ -18819,35 +18819,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["three", [\
-        ["npm:0.141.0", {\
-          "packageLocation": "./.yarn/cache/three-npm-0.141.0-0e1b669157-d161350b51.zip/node_modules/three/",\
+        ["npm:0.150.1", {\
+          "packageLocation": "./.yarn/cache/three-npm-0.150.1-6829be68c6-b12a92a681.zip/node_modules/three/",\
           "packageDependencies": [\
-            ["three", "npm:0.141.0"]\
+            ["three", "npm:0.150.1"]\
           ],\
           "linkType": "HARD"\
         }]\
       ]],\
       ["three-conic-polygon-geometry", [\
-        ["npm:1.5.1", {\
-          "packageLocation": "./.yarn/cache/three-conic-polygon-geometry-npm-1.5.1-be7c460055-ddfa1f1db8.zip/node_modules/three-conic-polygon-geometry/",\
+        ["npm:1.6.1", {\
+          "packageLocation": "./.yarn/cache/three-conic-polygon-geometry-npm-1.6.1-665a86c980-e5bbb3b09f.zip/node_modules/three-conic-polygon-geometry/",\
           "packageDependencies": [\
-            ["three-conic-polygon-geometry", "npm:1.5.1"]\
+            ["three-conic-polygon-geometry", "npm:1.6.1"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.1", {\
-          "packageLocation": "./.yarn/__virtual__/three-conic-polygon-geometry-virtual-ff13086991/0/cache/three-conic-polygon-geometry-npm-1.5.1-be7c460055-ddfa1f1db8.zip/node_modules/three-conic-polygon-geometry/",\
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.6.1", {\
+          "packageLocation": "./.yarn/__virtual__/three-conic-polygon-geometry-virtual-dcfba5cb30/0/cache/three-conic-polygon-geometry-npm-1.6.1-665a86c980-e5bbb3b09f.zip/node_modules/three-conic-polygon-geometry/",\
           "packageDependencies": [\
-            ["three-conic-polygon-geometry", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.1"],\
+            ["three-conic-polygon-geometry", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.6.1"],\
             ["@turf/boolean-point-in-polygon", "npm:6.5.0"],\
-            ["@types/three", "npm:0.141.0"],\
+            ["@types/three", "npm:0.149.0"],\
             ["d3-array", "npm:3.1.1"],\
             ["d3-geo", "npm:3.0.1"],\
             ["d3-geo-voronoi", "npm:2.0.1"],\
             ["d3-scale", "npm:4.0.2"],\
             ["delaunator", "npm:5.0.0"],\
             ["earcut", "npm:2.2.3"],\
-            ["three", "npm:0.141.0"]\
+            ["three", "npm:0.150.1"]\
           ],\
           "packagePeers": [\
             "@types/three",\
@@ -19049,22 +19049,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["troika-three-text", [\
-        ["npm:0.46.4", {\
-          "packageLocation": "./.yarn/cache/troika-three-text-npm-0.46.4-03b8d10a6e-d36ca41079.zip/node_modules/troika-three-text/",\
+        ["npm:0.47.1", {\
+          "packageLocation": "./.yarn/cache/troika-three-text-npm-0.47.1-caf8602ddd-854d74e1f5.zip/node_modules/troika-three-text/",\
           "packageDependencies": [\
-            ["troika-three-text", "npm:0.46.4"]\
+            ["troika-three-text", "npm:0.47.1"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.46.4", {\
-          "packageLocation": "./.yarn/__virtual__/troika-three-text-virtual-5f7a3308a4/0/cache/troika-three-text-npm-0.46.4-03b8d10a6e-d36ca41079.zip/node_modules/troika-three-text/",\
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.47.1", {\
+          "packageLocation": "./.yarn/__virtual__/troika-three-text-virtual-b6ca61ca1b/0/cache/troika-three-text-npm-0.47.1-caf8602ddd-854d74e1f5.zip/node_modules/troika-three-text/",\
           "packageDependencies": [\
-            ["troika-three-text", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.46.4"],\
-            ["@types/three", "npm:0.141.0"],\
+            ["troika-three-text", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.47.1"],\
+            ["@types/three", "npm:0.149.0"],\
             ["bidi-js", "npm:1.0.2"],\
-            ["three", "npm:0.141.0"],\
-            ["troika-three-utils", "virtual:5f7a3308a4104e3697405e8ccc1399b2acefbe5124a8890f098ab81790d1accf30f6587f3ccfe305c29d6708505651e0f0420c705c859be315715934777c7505#npm:0.46.0"],\
-            ["troika-worker-utils", "npm:0.46.0"],\
+            ["three", "npm:0.150.1"],\
+            ["troika-three-utils", "virtual:b6ca61ca1bb4124c35e3f77fb1186237cb79a914b35f6f833b6aa8bd1d381fa6d427244f01cf33bda7773fbdd9509cd27dab10625952517bb2eb11a903b39235#npm:0.47.0"],\
+            ["troika-worker-utils", "npm:0.47.0"],\
             ["webgl-sdf-generator", "npm:1.1.1"]\
           ],\
           "packagePeers": [\
@@ -19075,19 +19075,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["troika-three-utils", [\
-        ["npm:0.46.0", {\
-          "packageLocation": "./.yarn/cache/troika-three-utils-npm-0.46.0-ba4d1171a7-75e926bf14.zip/node_modules/troika-three-utils/",\
+        ["npm:0.47.0", {\
+          "packageLocation": "./.yarn/cache/troika-three-utils-npm-0.47.0-4ef0580dcd-2541865d95.zip/node_modules/troika-three-utils/",\
           "packageDependencies": [\
-            ["troika-three-utils", "npm:0.46.0"]\
+            ["troika-three-utils", "npm:0.47.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:5f7a3308a4104e3697405e8ccc1399b2acefbe5124a8890f098ab81790d1accf30f6587f3ccfe305c29d6708505651e0f0420c705c859be315715934777c7505#npm:0.46.0", {\
-          "packageLocation": "./.yarn/__virtual__/troika-three-utils-virtual-345a4b29e2/0/cache/troika-three-utils-npm-0.46.0-ba4d1171a7-75e926bf14.zip/node_modules/troika-three-utils/",\
+        ["virtual:b6ca61ca1bb4124c35e3f77fb1186237cb79a914b35f6f833b6aa8bd1d381fa6d427244f01cf33bda7773fbdd9509cd27dab10625952517bb2eb11a903b39235#npm:0.47.0", {\
+          "packageLocation": "./.yarn/__virtual__/troika-three-utils-virtual-3c5fa48fc0/0/cache/troika-three-utils-npm-0.47.0-4ef0580dcd-2541865d95.zip/node_modules/troika-three-utils/",\
           "packageDependencies": [\
-            ["troika-three-utils", "virtual:5f7a3308a4104e3697405e8ccc1399b2acefbe5124a8890f098ab81790d1accf30f6587f3ccfe305c29d6708505651e0f0420c705c859be315715934777c7505#npm:0.46.0"],\
-            ["@types/three", "npm:0.141.0"],\
-            ["three", "npm:0.141.0"]\
+            ["troika-three-utils", "virtual:b6ca61ca1bb4124c35e3f77fb1186237cb79a914b35f6f833b6aa8bd1d381fa6d427244f01cf33bda7773fbdd9509cd27dab10625952517bb2eb11a903b39235#npm:0.47.0"],\
+            ["@types/three", "npm:0.149.0"],\
+            ["three", "npm:0.150.1"]\
           ],\
           "packagePeers": [\
             "@types/three",\
@@ -19097,10 +19097,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["troika-worker-utils", [\
-        ["npm:0.46.0", {\
-          "packageLocation": "./.yarn/cache/troika-worker-utils-npm-0.46.0-cfca9a1fa5-5fe6c17e34.zip/node_modules/troika-worker-utils/",\
+        ["npm:0.47.0", {\
+          "packageLocation": "./.yarn/cache/troika-worker-utils-npm-0.47.0-ebec5eb76a-9fa14a58fe.zip/node_modules/troika-worker-utils/",\
           "packageDependencies": [\
-            ["troika-worker-utils", "npm:0.46.0"]\
+            ["troika-worker-utils", "npm:0.47.0"]\
           ],\
           "linkType": "HARD"\
         }]\
