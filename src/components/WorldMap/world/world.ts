@@ -116,7 +116,7 @@ export class World {
     this.controls.enableDamping = false;
     this.controls.target = CENTERS[this.view].clone();
     this.controls.rotateSpeed = 0.2;
-    this.controls.zoomSpeed = 0.25;
+    this.controls.zoomSpeed = 0.2;
     this.controls.addEventListener('change', this.onCameraChange.bind(this));
     this.controls.addEventListener('start', this.onUserCameraMove.bind(this));
     this.controls.autoRotate = true;

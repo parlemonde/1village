@@ -76,6 +76,11 @@ const WorldMap = () => {
     if (!canvas) {
       return () => {};
     }
+    const prevent = (event: Event) => {
+      event.preventDefault();
+    };
+    canvas.addEventListener('mousewheel', prevent);
+    canvas.addEventListener('wheel', prevent);
     const newWorld = new World(canvas, setMouseStyle, setPopoverData, selectedPhaseRef.current);
     let animationFrame: number | null = null;
     const render = (time: number) => {
@@ -85,6 +90,8 @@ const WorldMap = () => {
     animationFrame = requestAnimationFrame(render);
     setWorld(newWorld);
     return () => {
+      canvas.removeEventListener('mousewheel', prevent);
+      canvas.removeEventListener('wheel', prevent);
       newWorld.dispose();
       if (animationFrame !== null) {
         cancelAnimationFrame(animationFrame);
@@ -237,8 +244,8 @@ const WorldMap = () => {
               </IconButton>
             </div>
             <div style={{ padding: '2rem' }}>
-              <Typography style={{ marginBottom: '0.2rem' }}>{"Bravo, vous avez résolu l'énigme et trouvé le village idéal."}</Typography>
-              <Typography>{'La suite de l\'aventure se poursuivera dès que la phase 3 - "Imaginer votre village idéal" sera active!'}</Typography>
+              <Typography style={{ marginBottom: '0.2rem' }}>{"Félicitations, tu m'as retrouvé !"}</Typography>
+              <Typography>{'À très vite, pour imaginer ensemble notre village idéal !'}</Typography>
             </div>
           </div>
         </div>
