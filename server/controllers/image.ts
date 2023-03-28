@@ -15,7 +15,11 @@ const imageController = new Controller('/images');
 // get image
 imageController.get({ path: '/:id/:filename', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const key = `images/${req.params.id}/${req.params.filename}`;
-  streamFile(key, req, res, next);
+  try {
+    await streamFile(key, req, res, next);
+  } catch (err) {
+    next();
+  }
 });
 
 // post image
