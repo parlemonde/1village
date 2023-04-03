@@ -9,11 +9,12 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivityRequests } from 'src/services/useActivity';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityStatus } from 'types/activity.type';
 
 const MesActivites = () => {
   const queryClient = useQueryClient();
-  const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   const { setActivity } = React.useContext(ActivityContext);
   const { activities } = useActivities({
     limit: 200,
@@ -42,7 +43,7 @@ const MesActivites = () => {
         avatar: '',
         displayName: '',
       };
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/users/${user?.id}`,
         data: {

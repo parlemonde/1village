@@ -11,9 +11,9 @@ import { ImgCroppie } from 'src/components/ImgCroppie';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { Modal } from 'src/components/Modal';
 import { LightBox } from 'src/components/lightbox/Lightbox';
-import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 interface ImageModalProps {
   id: number;
@@ -34,7 +34,6 @@ export const ImageModal = ({
   useCrop = false,
   onDeleteEditor = () => {},
 }: ImageModalProps) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [tempImageUrl, setTempImageUrl] = React.useState(imageUrl);
   const previewRef = React.useRef<HTMLDivElement>(null);
@@ -76,7 +75,7 @@ export const ImageModal = ({
 
     // delete previous uploaded image, not needed anymore.
     if (prevUpload.current !== null) {
-      await axiosLoggedRequest({
+      await axiosRequest({
         method: 'DELETE',
         url: prevUpload.current.slice(4),
       });
@@ -96,7 +95,7 @@ export const ImageModal = ({
       }
       formData.append('image', file);
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/images',
       data: formData,

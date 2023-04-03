@@ -12,13 +12,13 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { audioBufferSlice, audioBufferToWav, mixAudios } from 'src/utils/audios';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 const SongStep4 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [trackDuration, setTrackDuration] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -58,7 +58,7 @@ const SongStep4 = () => {
       audioBufferSlice(data.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
         const formData = new FormData();
         formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
-        const response = await axiosLoggedRequest({
+        const response = await axiosRequest({
           method: 'POST',
           url: '/audios',
           data: formData,
@@ -66,7 +66,7 @@ const SongStep4 = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosLoggedRequest);
+        const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosRequest);
         updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
       });
     }

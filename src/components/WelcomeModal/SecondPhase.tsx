@@ -6,10 +6,11 @@ import Button from '@mui/material/Button';
 import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export const SecondPhase = () => {
   const { setSelectedPhase } = React.useContext(VillageContext);
-  const { axiosLoggedRequest, user, setUser } = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [isModalOpen, setIsModalOpen] = React.useState(true);
 
@@ -18,7 +19,7 @@ export const SecondPhase = () => {
   }
 
   const updateUser = async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: { firstLogin: 2 },

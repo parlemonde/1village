@@ -21,6 +21,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { useCountries } from 'src/services/useCountries';
 import { useCurrencies } from 'src/services/useCurrencies';
 import { useLanguages } from 'src/services/useLanguages';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityStatus } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -28,7 +29,7 @@ import { UserType } from 'types/user.type';
 const MascotteStep5 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   const { activity, save, updateActivity } = React.useContext(ActivityContext);
   const { countries } = useCountries();
   const { languages } = useLanguages();
@@ -113,7 +114,7 @@ const MascotteStep5 = () => {
         newUser.avatar = (activity.data as MascotteData).mascotteImage;
       }
       newUser.displayName = (activity.data as MascotteData).presentation;
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/users/${user?.id}`,
         data: newUser,

@@ -8,12 +8,11 @@ import Alert from '@mui/material/Alert';
 import type { EditorProps } from '../content.types';
 import { EditorContainer } from './EditorContainer';
 import { Modal } from 'src/components/Modal';
-import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage, primaryColor } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = () => {} }: EditorProps) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const [soundUrl, setSoundUrl] = React.useState(value);
@@ -55,7 +54,7 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
 
     // delete previous uploaded sound, not needed anymore.
     if (prevUpload.current !== null) {
-      await axiosLoggedRequest({
+      await axiosRequest({
         method: 'DELETE',
         url: prevUpload.current.slice(4),
       });
@@ -67,7 +66,7 @@ export const SoundEditor = ({ id, value = '', onChange = () => {}, onDelete = ()
       return;
     }
     formData.append('audio', file);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/audios',
       data: formData,

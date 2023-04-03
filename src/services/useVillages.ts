@@ -3,15 +3,14 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Village } from 'types/village.type';
 
 export const useVillages = (): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
 
   const getVillages: QueryFunction<Village[]> = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/villages',
     });
@@ -19,7 +18,7 @@ export const useVillages = (): { villages: Village[]; setVillages(newVillages: V
       return [];
     }
     return response.data;
-  }, [axiosLoggedRequest]);
+  }, []);
   const { data, isLoading, error } = useQuery<Village[], unknown>(['villages'], getVillages);
 
   const setVillages = React.useCallback(
@@ -37,13 +36,12 @@ export const useVillages = (): { villages: Village[]; setVillages(newVillages: V
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useVillageRequests = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const addVillage = React.useCallback(
     async (newVillage: Pick<Village, 'name' | 'countries'>) => {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'POST',
         url: '/villages',
         data: {
@@ -63,13 +61,13 @@ export const useVillageRequests = () => {
       queryClient.invalidateQueries('villages');
       return response.data as Village;
     },
-    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [queryClient, enqueueSnackbar],
   );
 
   const editVillage = React.useCallback(
     async (updatedVillage: Partial<Village>) => {
       const { id, ...rest } = updatedVillage;
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/villages/${id}`,
         data: {
@@ -91,12 +89,12 @@ export const useVillageRequests = () => {
       queryClient.invalidateQueries('villages');
       return response.data as Village;
     },
-    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [queryClient, enqueueSnackbar],
   );
 
   const deleteVillage = React.useCallback(
     async (id: number) => {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'DELETE',
         url: `/villages/${id}`,
       });
@@ -111,11 +109,11 @@ export const useVillageRequests = () => {
       });
       queryClient.invalidateQueries('villages');
     },
-    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [queryClient, enqueueSnackbar],
   );
 
   const importVillages = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/villages/import/plm',
     });
@@ -136,7 +134,7 @@ export const useVillageRequests = () => {
       },
     );
     queryClient.invalidateQueries('villages');
-  }, [axiosLoggedRequest, queryClient, enqueueSnackbar]);
+  }, [queryClient, enqueueSnackbar]);
 
   return {
     addVillage,

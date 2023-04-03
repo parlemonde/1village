@@ -2,9 +2,9 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 
 export type Args = {
@@ -21,7 +21,6 @@ export type Args = {
 
 export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args): { activities: Activity[] } => {
   const { village } = React.useContext(VillageContext);
-  const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
@@ -41,7 +40,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (userId !== undefined) {
       query.userId = userId;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl(query)}`,
     });
@@ -49,7 +48,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       return [];
     }
     return response.data;
-  }, [args, type, countries, pelico, userId, villageId, axiosLoggedRequest]);
+  }, [args, type, countries, pelico, userId, villageId]);
   const { data, isLoading, error } = useQuery<Activity[], unknown>(
     ['activities', { ...args, type, userId, countries, pelico, villageId }],
     getActivities,
