@@ -21,10 +21,10 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
     (id) => id !== activity.id && id !== undefined && id !== null,
   ) as number[];
 
-  const getHeightTypography = (oddDescription: string, objectDescription: string, placeDescription: string) => {
-    const oddDescriptionLenght = oddDescription.length;
+  const getHeightTypography = (objectDescription: string, placeDescription: string, oddDescription: string) => {
     const objectDescriptionLenght = objectDescription.length;
     const placeDescriptionLenght = placeDescription.length;
+    const oddDescriptionLenght = oddDescription.length;
 
     if (oddDescriptionLenght > placeDescriptionLenght && oddDescriptionLenght > objectDescriptionLenght) {
       return '10rem';
@@ -96,11 +96,11 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           <Typography
                             sx={{
                               mb: 1.5,
-                              p: 1,
+                              p: 2,
                               height: getHeightTypography(
-                                activity.data.odd.description,
                                 activity.data.object.description,
                                 activity.data.place.description,
+                                activity.data.odd.description,
                               ),
                               textAlign: 'center',
                               borderRadius: '0.5rem',
