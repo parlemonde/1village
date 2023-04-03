@@ -38,7 +38,15 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   const timeoutId = React.useRef<number | undefined>(undefined);
   const audioContext = React.useRef<AudioContext | null>(null);
   const recorder = React.useRef<MediaRecorder | null>(null);
-  const audioLabels = React.useMemo(() => verseAudios.map((audio) => audio.label), [verseAudios]);
+  const audioLabels = React.useMemo(() => {
+    return verseAudios.reduce((accumulator, audio, index) => {
+      if (index > 0) {
+        accumulator.push(audio.label);
+      }
+      return accumulator;
+    }, [] as string[]);
+  }, [verseAudios]);
+
   const audiosTracks = React.useMemo(() => verseAudios.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 })), [verseAudios]);
   const audiosEl = React.useMemo(() => {
     const elements = audiosTracks.map((audio: Audio) => new Audio(audio.value));
