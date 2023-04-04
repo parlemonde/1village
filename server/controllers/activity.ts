@@ -507,7 +507,6 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   game.fakeSignification2 = data.fakeSignification2;
   game.origine = data.origine;
   game.video = data.video;
-  //game.content = JSON.stringify(data);
   await AppDataSource.getRepository(Game).save(game);
   return game;
 };

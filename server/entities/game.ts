@@ -53,9 +53,6 @@ export class Game implements GameInterface {
   @Column({ type: 'tinyint', nullable: true })
   public type: number | null;
 
-  // @Column({ type: 'text' })
-  // public content: string;
-
   @Column({ type: 'text' })
   public fakeSignification1: string;
 
