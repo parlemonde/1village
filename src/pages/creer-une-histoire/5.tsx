@@ -57,13 +57,13 @@ const StoryStep5 = () => {
 
   // useEffect here to update inspiredStoryId if equal to 0
   React.useEffect(() => {
-    if (data !== null && (data.object.inspiredStoryId === 0 || data.place.inspiredStoryId === 0 || data.odd.inspiredStoryId === 0)) {
+    if (data !== null && (data.odd.inspiredStoryId === 0 || data.object.inspiredStoryId === 0 || data.place.inspiredStoryId === 0)) {
       updateActivity({
         data: {
           ...data,
+          odd: { ...data.odd, inspiredStoryId: activity?.id },
           object: { ...data.object, inspiredStoryId: activity?.id },
           place: { ...data.place, inspiredStoryId: activity?.id },
-          odd: { ...data.odd, inspiredStoryId: activity?.id },
         },
       });
     }
@@ -87,7 +87,7 @@ const StoryStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
+          steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
           activeStep={4}
           errorSteps={errorSteps}
@@ -145,7 +145,6 @@ const StoryStep5 = () => {
             error={errorSteps.includes(0)}
             description={data.odd?.description}
           />
-
           {/* Object */}
           <ImageStepContainer
             urlStep={`/creer-une-histoire/2`}
@@ -160,7 +159,7 @@ const StoryStep5 = () => {
             urlStep={`/creer-une-histoire/3`}
             imageUrl={data.place?.imageUrl}
             isValid={isValid}
-            error={errorSteps.includes(2)}
+            error={errorSteps.includes(1)}
             description={data.place?.description}
           />
 
