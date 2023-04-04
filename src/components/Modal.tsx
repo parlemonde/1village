@@ -134,6 +134,11 @@ export const Modal = ({
           actions
         ) : (
           <>
+            {noCancelButton === false && (
+              <Button onClick={onClose} color={color} variant="outlined">
+                {cancelLabel || 'Annuler'}
+              </Button>
+            )}
             {onConfirm !== undefined && error && (
               <RedButton onClick={onConfirm} disabled={disabled} variant="contained">
                 {confirmLabel || 'Oui'}
@@ -142,11 +147,6 @@ export const Modal = ({
             {onConfirm !== undefined && !error && (
               <Button onClick={onConfirm} disabled={disabled} color={color} variant="contained">
                 {confirmLabel || 'Non'}
-              </Button>
-            )}
-            {noCancelButton === false && (
-              <Button onClick={onClose} color={color} variant="outlined">
-                {cancelLabel || 'Annuler'}
               </Button>
             )}
           </>
