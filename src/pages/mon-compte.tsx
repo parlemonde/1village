@@ -81,7 +81,7 @@ const Presentation = () => {
       hasAcceptedNewsletter: newUser.hasAcceptedNewsletter,
       language: language,
     };
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: updatedValues,
@@ -176,7 +176,7 @@ const Presentation = () => {
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: {

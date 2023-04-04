@@ -12,12 +12,7 @@ interface UserContextValue {
   isLoggedIn: boolean;
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
-<<<<<<< HEAD
-  axiosLoggedRequest(req: AxiosRequestConfig): Promise<AxiosReturnType>;
   signup(user: UserForm, inviteCode?: string): UserContextFunc;
-=======
-  signup(user: User, inviteCode?: string): UserContextFunc;
->>>>>>> 3b836a6dcf438608244e69e75e31bbf295a83c7f
   updatePassword(user: Partial<User>): UserContextFunc;
   verifyEmail(user: Partial<User>): UserContextFunc;
   logout(): Promise<void>;
@@ -248,29 +243,25 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
    * Function to associate a child for user Parents
    * @param hashedCode string code givent to parent
    */
-  const linkStudent = React.useCallback(
-    async (hashedCode: string) => {
-      const response = await axiosRequest({
-        method: 'POST',
-        headers,
-        url: '/students/link-student',
-        data: {
-          hashedCode,
-        },
-      });
-      if (response.error) {
-        return {
-          success: false,
-          errorCode: response.data?.errorCode || 0,
-        };
-      }
+  const linkStudent = React.useCallback(async (hashedCode: string) => {
+    const response = await axiosRequest({
+      method: 'POST',
+      url: '/students/link-student',
+      data: {
+        hashedCode,
+      },
+    });
+    if (response.error) {
       return {
-        success: true,
-        errorCode: 0,
+        success: false,
+        errorCode: response.data?.errorCode || 0,
       };
-    },
-    [headers],
-  );
+    }
+    return {
+      success: true,
+      errorCode: 0,
+    };
+  }, []);
 
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
@@ -287,7 +278,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     async (userId: number) => {
       if (!user) return;
       if (user.type !== UserType.FAMILY) return;
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/users/get-classroom/${userId}`,
       });
@@ -295,7 +286,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       if (response.data === null) return null;
       return response.data;
     },
-    [axiosLoggedRequest, user],
+    [user],
   );
 
   const value = React.useMemo(
@@ -313,25 +304,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       linkStudent,
       getClassroomAsFamily,
     }),
-<<<<<<< HEAD
-    [
-      user,
-      isLoggedIn,
-      login,
-      loginWithSso,
-      axiosLoggedRequest,
-      signup,
-      updatePassword,
-      verifyEmail,
-      logout,
-      deleteAccount,
-      setUser,
-      linkStudent,
-      getClassroomAsFamily,
-    ],
-=======
-    [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser],
->>>>>>> 3b836a6dcf438608244e69e75e31bbf295a83c7f
+    [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent, getClassroomAsFamily],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

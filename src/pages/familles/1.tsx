@@ -19,6 +19,7 @@ import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
@@ -104,7 +105,7 @@ const ClassroomParamStep1Visibility = () => {
   const [radioValue, setRadioValue] = React.useState('default');
   const { updateClassroomParameters } = React.useContext(ClassroomContext);
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const { users } = useVillageUsers();
 
   useEffect(() => {
@@ -230,7 +231,7 @@ const ClassroomParamStep1Visibility = () => {
   // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
 
   const handleActivityVisibility = (id: number) => {
-    axiosLoggedRequest({
+    axiosRequest({
       method: 'PUT',
       url: `/teachers/set-activity-visibility/${id}`,
     }).then(() => {

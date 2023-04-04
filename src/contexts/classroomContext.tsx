@@ -41,36 +41,33 @@ interface ClassroomContextProviderProps {
 }
 
 export const ClassroomContextProvider = ({ children }: ClassroomContextProviderProps) => {
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [students, setStudents] = React.useState<Student[]>([]);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
   const [parentClassroom, setParentClassroom] = React.useState<ClassroomAsFamilly | null>(null);
 
-  const fetchClassroom = React.useCallback(
-    async (user: User) => {
-      if (user.type === UserType.TEACHER) {
-        const response = await axiosLoggedRequest({
-          method: 'GET',
-          url: `/classrooms/${user.id}`,
-        });
-        if (response.error) return null;
-        if (response.data === null) return null;
-        return response.data;
-      }
+  const fetchClassroom = React.useCallback(async (user: User) => {
+    if (user.type === UserType.TEACHER) {
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/classrooms/${user.id}`,
+      });
+      if (response.error) return null;
+      if (response.data === null) return null;
+      return response.data;
+    }
 
-      if (user.type === UserType.FAMILY) {
-        const response = await axiosLoggedRequest({
-          method: 'GET',
-          url: `/users/get-classroom/${user.id}`,
-        });
-        if (response.error) return null;
-        if (response.data === null) return null;
-        return response.data;
-      }
-    },
-    [axiosLoggedRequest],
-  );
+    if (user.type === UserType.FAMILY) {
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/users/get-classroom/${user.id}`,
+      });
+      if (response.error) return null;
+      if (response.data === null) return null;
+      return response.data;
+    }
+  }, []);
 
   /**
    * Creation of the classroom
@@ -79,7 +76,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     if (!user) return;
     if (user.type !== UserType.TEACHER) return;
     if (!village) return;
-    await axiosLoggedRequest({
+    await axiosRequest({
       method: 'POST',
       url: '/classrooms',
       data: {
@@ -95,29 +92,26 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       .catch((err) => {
         return err.message;
       });
-  }, [axiosLoggedRequest, user, village]);
+  }, [user, village]);
 
   /**
    * Get the list of students in the classroom
    * @param {number} classroomId classroom id
    */
-  const getStudents = React.useCallback(
-    async (classroomId: number) => {
-      await axiosLoggedRequest({
-        method: 'GET',
-        url: `/students${serializeToQueryUrl({
-          classroomId,
-        })}`,
+  const getStudents = React.useCallback(async (classroomId: number) => {
+    await axiosRequest({
+      method: 'GET',
+      url: `/students${serializeToQueryUrl({
+        classroomId,
+      })}`,
+    })
+      .then((response) => {
+        setStudents(response.data as Student[]);
       })
-        .then((response) => {
-          setStudents(response.data as Student[]);
-        })
-        .catch((err) => {
-          return err.message;
-        });
-    },
-    [axiosLoggedRequest],
-  );
+      .catch((err) => {
+        return err.message;
+      });
+  }, []);
 
   /**
    * Get teacher's classroom
@@ -125,7 +119,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   const getClassroom = React.useCallback(async () => {
     if (!user) return;
     if (user.type !== UserType.TEACHER) return;
-    await axiosLoggedRequest({
+    await axiosRequest({
       method: 'GET',
       url: `/classrooms/${user.id}`,
     })
@@ -135,7 +129,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       .catch((err) => {
         return err.message;
       });
-  }, [axiosLoggedRequest, user]);
+  }, [user]);
 
   /**
    * Update teacher's classroom Parameters
@@ -144,7 +138,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     async (data: ClassroomUpdateData) => {
       if (!user) return;
       if (user.type !== UserType.TEACHER) return;
-      await axiosLoggedRequest({
+      await axiosRequest({
         method: 'PUT',
         url: `/classrooms/${user.id}`,
         data: { ...data },
@@ -156,7 +150,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           return err.message;
         });
     },
-    [axiosLoggedRequest, user],
+    [user],
   );
 
   /**
@@ -169,7 +163,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       if (!classroom) return;
       if (!firstname && !lastname) return;
 
-      await axiosLoggedRequest({
+      await axiosRequest({
         method: 'POST',
         url: '/students',
         data: {
@@ -185,7 +179,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           return err.message;
         });
     },
-    [axiosLoggedRequest, classroom, students, user],
+    [classroom, students, user],
   );
 
   /**
@@ -193,7 +187,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
    */
   // const setStudent = React.useCallback(async (data: ClassroomUpdateData) => {
   //   if (user?.type !== UserType.TEACHER) return;
-  //   await axiosLoggedRequest({
+  //   await axiosRequest({
   //     method: 'PUT',
   //     url: `/students/${student.id}`,
   //     data: { ...data },
@@ -208,7 +202,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
 
   // const getOneStudent = React.useCallback(
   //   async (id: number) => {
-  //     await axiosLoggedRequest({
+  //     await axiosRequest({
   //       method: 'GET',
   //       url: `/students/${id}`,
   //     })
@@ -219,7 +213,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   //         return err.message;
   //       });
   //   },
-  //   [axiosLoggedRequest],
+  //   [],
   // );
 
   const deleteStudent = React.useCallback(
@@ -227,7 +221,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       if (!user) return;
       if (user.type !== UserType.TEACHER) return;
       if (!classroom) return;
-      await axiosLoggedRequest({
+      await axiosRequest({
         method: 'DELETE',
         url: `/students/${studentId}`,
       })
@@ -239,7 +233,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           return err.message;
         });
     },
-    [axiosLoggedRequest, classroom, students, user],
+    [classroom, students, user],
   );
 
   /**

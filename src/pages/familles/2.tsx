@@ -13,14 +13,12 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
-import { UserContext } from 'src/contexts/userContext';
 import { bgPage } from 'src/styles/variables.const';
 import { isNormalizedStringEqual } from 'src/utils/isNormalizedStringEqual';
 import type { Student } from 'types/student.type';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const { students, setStudents, createStudent, deleteStudent } = React.useContext(ClassroomContext);
   const [isDisabled, setIsDisabled] = React.useState(true);
@@ -200,7 +198,7 @@ const ClassroomParamStep2 = () => {
   const editStudent = async (updatedStudent: Promise<Partial<Student>>) => {
     const { id, ...rest } = await updatedStudent;
 
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/students/${id}`,
       data: { ...rest },

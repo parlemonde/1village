@@ -44,17 +44,4 @@ const axiosRequest = async (req: AxiosRequestConfig): Promise<AxiosReturnType> =
   }
 };
 
-const axiosLoggedRequest = async (req: AxiosRequestConfig, headers: Record<string, string>): Promise<AxiosReturnType> => {
-  const response = await axiosRequest({
-    ...req,
-    headers: {
-      ...headers,
-      ...(req.headers ?? {}),
-    },
-  });
-  // if (response.error) ...
-  return response;
-};
-
-export { axiosLoggedRequest };
 export { axiosRequest };
