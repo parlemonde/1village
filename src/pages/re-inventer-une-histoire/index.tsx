@@ -6,16 +6,16 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWheel';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityType } from 'types/activity.type';
 import type { StoryElement, StoriesData } from 'types/story.type';
 
 const InspiredStory = () => {
   const router = useRouter();
   const inspiredActivityId = React.useMemo(() => parseInt(getQueryString(router.query.activityId), 10) ?? null, [router]);
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { createNewActivity } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
 
@@ -34,7 +34,7 @@ const InspiredStory = () => {
   // Get data from Inspiring story
   const getInspiringStory = React.useCallback(async () => {
     if (inspiredActivityId) {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/activities/${inspiredActivityId}`,
       });
@@ -42,7 +42,7 @@ const InspiredStory = () => {
         setInspiredImages(response.data.data);
       }
     }
-  }, [inspiredActivityId, axiosLoggedRequest]);
+  }, [inspiredActivityId]);
 
   //Retrieve data from Inspiring story if activityId in url
   React.useEffect(() => {

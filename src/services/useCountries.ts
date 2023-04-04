@@ -2,14 +2,12 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Country } from 'types/country.type';
 
 export const useCountries = (): { countries: Country[] } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-
   const getCountries: QueryFunction<Country[]> = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/countries',
     });
@@ -17,7 +15,7 @@ export const useCountries = (): { countries: Country[] } => {
       return [];
     }
     return response.data;
-  }, [axiosLoggedRequest]);
+  }, []);
   const { data, isLoading, error } = useQuery<Country[], unknown>(['countries'], getCountries);
 
   return {

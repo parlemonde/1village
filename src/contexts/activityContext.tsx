@@ -10,6 +10,7 @@ import { Modal } from 'src/components/Modal';
 import { getActivityPhase } from 'src/components/activities/utils';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity, AnyData, ActivityContentType, ActivityContent } from 'types/activity.type';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 
@@ -64,7 +65,7 @@ const debouncedSaveActivityInSession = debounce(saveActivityInSession, 400, fals
 export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [activity, setActivity] = React.useState<Activity | null>(null);
   const [draft, setDraft] = React.useState<Activity | null>(null);
@@ -83,7 +84,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
 
   const getActivity = React.useCallback(
     async (id: number) => {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/activities/${id}`,
       });
@@ -93,7 +94,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         setActivity(response.data);
       }
     },
-    [router, axiosLoggedRequest],
+    [router],
   );
 
   React.useEffect(() => {
@@ -115,7 +116,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       if (!village) {
         return;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
           villageId: village.id,
@@ -130,7 +131,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         setDraft(response.data.draft);
       }
     },
-    [village, axiosLoggedRequest],
+    [village],
   );
 
   const createNewActivity = React.useCallback(
@@ -177,11 +178,11 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
 
       const userId = isVillageActivity ? undefined : user.id;
       const villageId = village.id;
-      const responsePublished = await axiosLoggedRequest({
+      const responsePublished = await axiosRequest({
         method: 'GET',
         url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId, status: ActivityStatus.PUBLISHED }),
       });
-      const responseDraft = await axiosLoggedRequest({
+      const responseDraft = await axiosRequest({
         method: 'GET',
         url: '/activities' + serializeToQueryUrl({ type, subType, userId, villageId, status: ActivityStatus.DRAFT }),
       });
@@ -195,7 +196,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         createNewActivity(type, selectedPhase, subType, initialData);
       }
     },
-    [user, village, axiosLoggedRequest, createNewActivity],
+    [user, village, createNewActivity],
   );
 
   const addContent = React.useCallback(
@@ -272,7 +273,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
           };
         }
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'POST',
         url: '/activities',
         data,
@@ -289,7 +290,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         };
       }
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   const editActivity = React.useCallback(
@@ -322,7 +323,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
           };
         }
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/activities/${activityRef.current.id}`,
         data,
@@ -338,7 +339,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         activity: response.data as Activity,
       };
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   const save = React.useCallback(
