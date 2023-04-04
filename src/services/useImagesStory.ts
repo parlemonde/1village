@@ -3,15 +3,14 @@ import React from 'react';
 import { useQueryClient } from 'react-query';
 
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import type { StoriesData } from 'types/story.type';
 
 export const useImageStories = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
   // This function is to fetch all RE_INVENT_STORY in activity table page.
@@ -20,7 +19,7 @@ export const useImageStories = () => {
       if (!village) {
         return;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
           villageId: village?.id,
@@ -41,7 +40,7 @@ export const useImageStories = () => {
 
       return stories;
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   // This function is to display story activity cards in activity page.
@@ -50,7 +49,7 @@ export const useImageStories = () => {
       if (!village) {
         return 0;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
           villageId: village?.id,
@@ -73,7 +72,7 @@ export const useImageStories = () => {
       });
       return stories.filter((activity: Activity) => activity.id !== activityStoryId);
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   // Fetch stories by their Id
@@ -83,7 +82,7 @@ export const useImageStories = () => {
         return;
       }
       const getStoryData = async (id: number) =>
-        await axiosLoggedRequest({
+        await axiosRequest({
           method: 'GET',
           url: `/activities/${id}`,
         });
@@ -95,7 +94,7 @@ export const useImageStories = () => {
       );
       return stories;
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   // This is a function that returns random images for slot machine
@@ -103,7 +102,7 @@ export const useImageStories = () => {
     if (!village) {
       return 0;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/stories/all${serializeToQueryUrl({
         villageId: village.id,
@@ -113,13 +112,12 @@ export const useImageStories = () => {
       return 0;
     }
     return response.data;
-  }, [axiosLoggedRequest, village]);
+  }, [village]);
 
   return { getAllStories, getInspiredStories, getStoriesByIds, getRandomImagesData };
 };
 
 export const useImageStoryRequests = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { getAllStories } = useImageStories();
@@ -179,7 +177,7 @@ export const useImageStoryRequests = () => {
         //We exit the function because no delete is expected
         return;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'DELETE',
         url: `/stories/${id}`,
       });
@@ -192,7 +190,7 @@ export const useImageStoryRequests = () => {
       queryClient.invalidateQueries('stories');
       queryClient.invalidateQueries('activities');
     },
-    [activity, axiosLoggedRequest, createNewActivity, enqueueSnackbar, getAllStories, queryClient, selectedPhase],
+    [activity, createNewActivity, enqueueSnackbar, getAllStories, queryClient, selectedPhase],
   );
 
   return {

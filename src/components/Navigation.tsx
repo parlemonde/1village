@@ -27,6 +27,7 @@ import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Country } from 'types/country.type';
@@ -59,7 +60,7 @@ const ANTHEM_PARAM: Tab = {
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
   const isTeacher = user !== null && user.type === UserType.TEACHER;
@@ -74,7 +75,7 @@ export const Navigation = (): JSX.Element => {
       setFirstStoryCreated(false);
       return;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl({
         villageId: village.id,
@@ -82,7 +83,7 @@ export const Navigation = (): JSX.Element => {
       })}`,
     });
     setFirstStoryCreated(response.data.length > 0);
-  }, [axiosLoggedRequest, village]);
+  }, [village]);
 
   React.useEffect(() => {
     getStories().catch(console.error);
@@ -93,7 +94,7 @@ export const Navigation = (): JSX.Element => {
       if (!village) {
         return;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/activities/draft${serializeToQueryUrl({
           villageId: village.id,
@@ -106,7 +107,7 @@ export const Navigation = (): JSX.Element => {
         setMascotteActivity(response.data.draft);
       }
     },
-    [village, axiosLoggedRequest],
+    [village],
   );
 
   // Get mascotte
@@ -237,8 +238,8 @@ export const Navigation = (): JSX.Element => {
                 isMistery={
                   !village ||
                   !user ||
-                  (selectedPhase === 1 && user.country.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator)) ||
-                  (user.firstLogin < 2 && user.country.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator))
+                  (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator)) ||
+                  (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator))
                 }
               ></Flag>
             ))}
