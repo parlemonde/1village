@@ -10,10 +10,6 @@ module.exports = {
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
     });
-    config.watchOptions = {
-      poll: true,
-      aggregateTimeout: 1000,
-    };
     return config;
   },
   experimental: { esmExternals: false },
