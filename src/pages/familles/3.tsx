@@ -54,16 +54,34 @@ const Communication = () => {
     }
   }, [textValue]);
 
+  const printContent = (content: string) => {
+    const printIframe = document.createElement('iframe');
+    printIframe.style.position = 'absolute';
+    printIframe.style.width = '0';
+    printIframe.style.height = '0';
+    printIframe.style.border = '0';
+    document.body.appendChild(printIframe);
+
+    if (printIframe.contentWindow) {
+      printIframe.contentWindow.document.write(content);
+      printIframe.contentWindow.document.close();
+      printIframe.contentWindow.focus();
+
+      setTimeout(() => {
+        printIframe.contentWindow?.print();
+        document.body.removeChild(printIframe);
+      }, 100);
+    } else {
+      console.error('Unable to access the contentWindow of the iframe.');
+    }
+  };
+
   const onPrint = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
     const messagesWithId: string[] = [];
     let count = 0;
 
-    const url = window.location.protocol + '//' + window.location.host;
-
     if (keywordPresence) {
-      const newWin = window.open(`${url}/familles/3/print.js`, 'Print-Window');
-
       students.forEach((student) => {
         messagesWithId.push(`<div>Élève : <strong>${student.firstname} ${student.lastname}</strong></div>`);
         messagesWithId.push(textValue.replaceAll(keywordRegex, '<u>' + student.hashedCode + '</u>'));
@@ -85,17 +103,13 @@ const Communication = () => {
         }
       });
 
-      if (newWin) {
-        newWin.document.write(`<html><body>${messagesWithId.join(' ')}</body></html>`);
-
-        const printScript = newWin.document.createElement('script');
-        printScript.setAttribute('src', '/print.js');
-        newWin.document.getElementsByTagName('head')[0].appendChild(printScript);
-      }
+      const printContentString = `<html><head><meta charset="UTF-8"></head><body>${messagesWithId.join(' ')}</body></html>`;
+      printContent(printContentString);
     } else {
       setIsModalOpen(true);
     }
   };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
