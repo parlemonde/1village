@@ -76,8 +76,6 @@ export const Accueil = () => {
     }
   }, [activities, filters.searchTerm]);
 
-  console.log('CLASSROOM', classroom);
-
   if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
     return (
       <Base>
