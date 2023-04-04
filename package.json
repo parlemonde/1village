@@ -156,7 +156,6 @@
     "jspdf": "^2.5.1",
     "leaflet": "^1.8.0",
     "leaflet.fullscreen": "^2.4.0",
-    "lint": "^0.8.19",
     "maplibre-gl": "2.1.9",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",

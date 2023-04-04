@@ -37,7 +37,7 @@ studentController.get({ path: '', userType: UserType.TEACHER }, async (req: Requ
  * @returns {string} Route API JSON response
  */
 
-studentController.get({ path: '/:id', userType: UserType.TEACHER || UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
+studentController.get({ path: '/:id', userType: UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
   if (student === undefined) return next();
@@ -178,7 +178,7 @@ const updateStudentValidator = ajv.compile({
  * @returns {string} Route API JSON response
  */
 
-studentController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+studentController.put({ path: '/:id', userType: UserType.FAMILY }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const data = req.body;
   if (!updateStudentValidator(data)) {
