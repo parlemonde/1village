@@ -166,7 +166,7 @@ const getActivities = async ({
 };
 
 // --- Get all activities. ---
-activityController.get({ path: '' }, async (req: Request, res: Response) => {
+activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
 
   const activities = await getActivities({
@@ -195,7 +195,7 @@ activityController.get({ path: '' }, async (req: Request, res: Response) => {
 });
 
 // --- Get one activity. ---
-activityController.get({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({
     where: { id },
@@ -214,7 +214,7 @@ activityController.get({ path: '/:id' }, async (req: Request, res: Response, nex
 });
 
 // --- Get draft activity for type and subtype  ---
-activityController.get({ path: '/draft' }, async (req: Request, res: Response, next: NextFunction) => {
+activityController.get({ path: '/draft', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   if (req.query.villageId === undefined || req.query.type === undefined) {
     next();
     return;
@@ -235,7 +235,7 @@ activityController.get({ path: '/draft' }, async (req: Request, res: Response, n
   res.sendJSON({ draft: activity || null });
 });
 
-activityController.get({ path: '/mascotte' }, async (req, res, next) => {
+activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, async (req, res, next) => {
   if (!req.user || req.user.type <= UserType.MEDIATOR) {
     // no mascotte for pelico
     next();

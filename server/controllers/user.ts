@@ -22,7 +22,7 @@ import { Controller } from './controller';
 
 const userController = new Controller('/users');
 // --- Get all users. ---
-userController.get({ path: '' }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
     return;
@@ -305,7 +305,7 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
 };
 const editUserValidator = ajv.compile(EDIT_SCHEMA);
 
-userController.put({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
@@ -363,7 +363,7 @@ const PWD_SCHEMA: JSONSchemaType<UpdatePwdData> = {
   additionalProperties: false,
 };
 const updatePwdValidator = ajv.compile(PWD_SCHEMA);
-userController.put({ path: '/:id/password' }, async (req: Request, res: Response, next: NextFunction) => {
+userController.put({ path: '/:id/password', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const id = parseInt(req.params.id, 10) || 0;
   const user = await AppDataSource.getRepository(User).createQueryBuilder().addSelect('User.passwordHash').where('User.id = :id', { id }).getOne();
@@ -396,7 +396,7 @@ userController.put({ path: '/:id/password' }, async (req: Request, res: Response
 });
 
 // --- Delete an user. ---
-userController.delete({ path: '/:id' }, async (req: Request, res: Response) => {
+userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   const userRepository = AppDataSource.getRepository(User);
   const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -690,7 +690,7 @@ const ERROR_SCHEMA: JSONSchemaType<ErrorData> = {
   additionalProperties: false,
 };
 const errorUserValidator = ajv.compile(ERROR_SCHEMA);
-userController.post({ path: '/ask-update' }, async (req: Request, res: Response, next: NextFunction) => {
+userController.post({ path: '/ask-update', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   if (!errorUserValidator(data)) {
     sendInvalidDataError(errorUserValidator);
@@ -724,7 +724,7 @@ userController.post({ path: '/ask-update' }, async (req: Request, res: Response,
   res.sendJSON({ success: true });
 });
 
-userController.get({ path: '/get-classroom/:id', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+userController.get({ path: '/get-classroom/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
