@@ -10,7 +10,6 @@ import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
-import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
@@ -20,8 +19,11 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const { classroom } = React.useContext(ClassroomContext);
-  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
+  const isMediatorOrFamily =
+    user !== null &&
+    (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
+
+  //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(
     () =>
       !village || (selectedPhase === 1 && !isMediatorOrFamily)
@@ -31,6 +33,8 @@ export const Accueil = () => {
         : village.countries.map((c) => c.isoCode),
     [selectedPhase, village, user, isMediatorOrFamily],
   );
+
+  //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts
 
   //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
