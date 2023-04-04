@@ -15,11 +15,11 @@ import TextField from '@mui/material/TextField';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
-import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { getQueryString } from 'src/utils';
 import { isPseudoValid, isEmailValid } from 'src/utils/accountChecks';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User } from 'types/user.type';
 import { UserType, userTypeNames } from 'types/user.type';
 
@@ -34,7 +34,7 @@ const Required = (label: string) => (
 
 const EditUser = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { villages } = useVillages();
   const { editUser } = useUserRequests();
   const { enqueueSnackbar } = useSnackbar();
@@ -48,7 +48,7 @@ const EditUser = () => {
   });
 
   const getUser = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/users/${userId}`,
     });
@@ -58,7 +58,7 @@ const EditUser = () => {
       setUser(response.data);
       initialPseudo.current = response.data.pseudo || '';
     }
-  }, [axiosLoggedRequest, router, userId]);
+  }, [router, userId]);
 
   React.useEffect(() => {
     getUser().catch((e) => console.error(e));
@@ -226,7 +226,7 @@ const EditUser = () => {
           </FormControl>
           <CountrySelector
             label={Required('Pays')}
-            value={user?.country?.isoCode}
+            value={user.country?.isoCode}
             onChange={(countryCode) => {
               setUser((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
             }}

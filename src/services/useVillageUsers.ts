@@ -5,11 +5,11 @@ import { useQuery } from 'react-query';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const useVillageUsers = (): { users: User[] } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
 
@@ -21,7 +21,7 @@ export const useVillageUsers = (): { users: User[] } => {
     if (villageId === null || userCountryIsoCode === null) {
       return [];
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/users${serializeToQueryUrl({ villageId })}`,
     });
@@ -32,7 +32,7 @@ export const useVillageUsers = (): { users: User[] } => {
       return (response.data as User[]).filter((user) => user.country?.isoCode === userCountryIsoCode || user.type > UserType.TEACHER);
     }
     return response.data as User[];
-  }, [villageId, selectedPhase, userCountryIsoCode, isPelico, axiosLoggedRequest]);
+  }, [villageId, selectedPhase, userCountryIsoCode, isPelico]);
 
   const { data, isLoading, error } = useQuery<User[], unknown>(
     ['village-users', { villageId, selectedPhase, userCountryIsoCode, isPelico }],

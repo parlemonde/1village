@@ -13,11 +13,11 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { capitalize } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const getArticle = (language: string) => {
@@ -32,7 +32,7 @@ const getArticle = (language: string) => {
 
 const DefiStep1 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { selectedPhase } = React.useContext(VillageContext);
   const { activity, save, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { languages } = useLanguages();
@@ -75,14 +75,14 @@ const DefiStep1 = () => {
   }, [activity, createNewActivity, router, selectedPhase]);
 
   const getMascotteId = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/activities/mascotte',
     });
     if (!response.error) {
       setMascotteId(response.data.id === -1 ? 0 : response.data.id);
     }
-  }, [axiosLoggedRequest]);
+  }, []);
 
   React.useEffect(() => {
     getMascotteId().catch(console.error);

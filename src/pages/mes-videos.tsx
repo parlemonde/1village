@@ -15,20 +15,19 @@ import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
-import { UserContext } from 'src/contexts/userContext';
 import { useVideos } from 'src/services/useVideos';
 import { bgPage } from 'src/styles/variables.const';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Video } from 'types/video.type';
 
 const MesVideos = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { videos } = useVideos();
   const [selectedVideo, setSelectedVideo] = React.useState<Video | null>(null);
 
   const deleteVideo = (id: number) => async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'DELETE',
       url: `/videos/${id}`,
     });

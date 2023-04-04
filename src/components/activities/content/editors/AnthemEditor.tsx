@@ -8,9 +8,9 @@ import Alert from '@mui/material/Alert';
 import { Modal } from 'src/components/Modal';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
-import { UserContext } from 'src/contexts/userContext';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 export interface AnthemEditorProps {
   value?: string;
@@ -39,7 +39,6 @@ const AnthemEditorWithRef = (
   }: AnthemEditorProps,
   ref?: React.ForwardedRef<HTMLAudioElement | null>,
 ) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const [soundUrl, setSoundUrl] = React.useState(value);
@@ -84,7 +83,7 @@ const AnthemEditorWithRef = (
 
     // delete previous uploaded sound, not needed anymore.
     if (prevUpload.current !== null) {
-      await axiosLoggedRequest({
+      await axiosRequest({
         method: 'DELETE',
         url: prevUpload.current.slice(4),
       });
@@ -96,7 +95,7 @@ const AnthemEditorWithRef = (
       return;
     }
     formData.append('audio', file);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/audios',
       data: formData,

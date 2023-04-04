@@ -1,8 +1,6 @@
-import type { AxiosRequestConfig } from 'axios';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { AxiosReturnType } from 'src/utils/axiosRequest';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User, UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -14,8 +12,12 @@ interface UserContextValue {
   isLoggedIn: boolean;
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
+<<<<<<< HEAD
   axiosLoggedRequest(req: AxiosRequestConfig): Promise<AxiosReturnType>;
   signup(user: UserForm, inviteCode?: string): UserContextFunc;
+=======
+  signup(user: User, inviteCode?: string): UserContextFunc;
+>>>>>>> 3b836a6dcf438608244e69e75e31bbf295a83c7f
   updatePassword(user: Partial<User>): UserContextFunc;
   verifyEmail(user: Partial<User>): UserContextFunc;
   logout(): Promise<void>;
@@ -30,7 +32,6 @@ export const UserContext = React.createContext<UserContextValue>({
   isLoggedIn: false,
   login: async () => ({ success: false, errorCode: 0 }),
   loginWithSso: async () => ({ success: false, errorCode: 0 }),
-  axiosLoggedRequest: async () => ({ data: null, error: true, status: 500 }),
   signup: async () => ({ success: false, errorCode: 0 }),
   updatePassword: async () => ({ success: false, errorCode: 0 }),
   verifyEmail: async () => ({ success: false, errorCode: 0 }),
@@ -44,17 +45,10 @@ export const UserContext = React.createContext<UserContextValue>({
 interface UserContextProviderProps {
   user: User | null;
   setUser(user: React.SetStateAction<User | null>): void;
-  csrfToken: string;
 }
 
-export const UserContextProvider = ({ user, setUser, csrfToken, children }: React.PropsWithChildren<UserContextProviderProps>) => {
+export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
-  const headers = React.useMemo(
-    () => ({
-      'csrf-token': csrfToken,
-    }),
-    [csrfToken],
-  );
 
   React.useEffect(() => {
     if (
@@ -84,7 +78,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       const response = await axiosRequest({
         method: 'POST',
         url: '/login',
-        headers,
         data: {
           email,
           password,
@@ -105,7 +98,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         errorCode: 0,
       };
     },
-    [headers, setUser],
+    [setUser],
   );
 
   const loginWithSso = React.useCallback(
@@ -113,7 +106,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       const response = await axiosRequest({
         method: 'POST',
         url: '/login-sso-plm',
-        headers,
         data: {
           code,
         },
@@ -131,20 +123,19 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         errorCode: 0,
       };
     },
-    [headers, setUser],
+    [setUser],
   );
 
   const logout = React.useCallback(async (): Promise<void> => {
     // reject access token and server will delete cookies
     await axiosRequest({
       method: 'POST',
-      headers,
       url: '/logout',
       baseURL: '',
     });
     setUser(null);
     router.push('/');
-  }, [headers, router, setUser]);
+  }, [router, setUser]);
 
   const deleteAccount = React.useCallback(async (): Promise<boolean> => {
     if (!user) {
@@ -152,7 +143,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     }
     const response = await axiosRequest({
       method: 'DELETE',
-      headers,
       url: `users/${user.id}`,
     });
     if (response.error) {
@@ -161,7 +151,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     setUser(null);
     router.push('/');
     return true;
-  }, [router, user, headers, setUser]);
+  }, [router, user, setUser]);
 
   /**
    * Signup the user.
@@ -173,7 +163,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     async (user: UserForm, inviteCode?: string): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
         method: 'POST',
-        headers,
         url: '/users',
         data: {
           inviteCode,
@@ -192,7 +181,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         errorCode: 0,
       };
     },
-    [headers, setUser],
+    [setUser],
   );
 
   /**
@@ -205,7 +194,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
         method: 'POST',
-        headers,
         url: '/users/update-password',
         data: {
           ...user,
@@ -223,7 +211,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         errorCode: 0,
       };
     },
-    [headers, setUser],
+    [setUser],
   );
 
   /**
@@ -236,7 +224,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
     async (user: Partial<User>): Promise<{ success: boolean; errorCode: number }> => {
       const response = await axiosRequest({
         method: 'POST',
-        headers,
         url: '/users/verify-email',
         data: {
           ...user,
@@ -254,7 +241,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
         errorCode: 0,
       };
     },
-    [headers, setUser],
+    [setUser],
   );
 
   /**
@@ -292,20 +279,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
    * @param req
    * @returns {Promise<{data, pending, error, complete}>}
    */
-  const axiosLoggedRequest = React.useCallback(
-    async (req: AxiosRequestConfig): Promise<AxiosReturnType> => {
-      const response = await axiosRequest({
-        ...req,
-        headers: {
-          ...headers,
-          ...(req.headers ?? {}),
-        },
-      });
-      // if (response.error) ...
-      return response;
-    },
-    [headers],
-  );
 
   /**
    * Get classroom as familly
@@ -331,7 +304,6 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       isLoggedIn,
       login,
       loginWithSso,
-      axiosLoggedRequest,
       signup,
       updatePassword,
       verifyEmail,
@@ -341,6 +313,7 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       linkStudent,
       getClassroomAsFamily,
     }),
+<<<<<<< HEAD
     [
       user,
       isLoggedIn,
@@ -356,6 +329,9 @@ export const UserContextProvider = ({ user, setUser, csrfToken, children }: Reac
       linkStudent,
       getClassroomAsFamily,
     ],
+=======
+    [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser],
+>>>>>>> 3b836a6dcf438608244e69e75e31bbf295a83c7f
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

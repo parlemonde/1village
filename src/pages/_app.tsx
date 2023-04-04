@@ -15,6 +15,7 @@ import 'src/styles/slot-machine.scss';
 
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
+import axios from 'axios';
 import type { Request } from 'express';
 import App from 'next/app';
 import type { AppProps, AppContext, AppInitialProps } from 'next/app';
@@ -93,6 +94,10 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   // Let all h5p iframe to automatically resize.
   React.useEffect(() => initH5p(csrfToken), [csrfToken]);
 
+  React.useEffect(() => {
+    axios.defaults.headers.common['csrf-token'] = csrfToken || '';
+  }, [csrfToken]);
+
   const isOnAdmin = router.pathname.slice(1, 6) === 'admin';
 
   React.useEffect(() => {
@@ -124,7 +129,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
           }}
         >
           <QueryClientProvider client={queryClient}>
-            <UserContextProvider user={user} setUser={setUser} csrfToken={csrfToken || ''}>
+            <UserContextProvider user={user} setUser={setUser}>
               <VillageContextProvider initialVillage={initialVillage}>
                 <ClassroomContextProvider>
                   <ActivityContextProvider>

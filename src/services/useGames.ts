@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Game, GameType } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 
 export const useGameRequests = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
 
   /**
@@ -25,7 +24,7 @@ export const useGameRequests = () => {
       if (!village) {
         return 0;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/games${serializeToQueryUrl({
           type,
@@ -38,7 +37,7 @@ export const useGameRequests = () => {
       }
       return (response.data as Array<Game>).length;
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   /**
@@ -56,7 +55,7 @@ export const useGameRequests = () => {
       if (!village) {
         return 0;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/games/ableToPlay${serializeToQueryUrl({
           villageId: village.id,
@@ -68,7 +67,7 @@ export const useGameRequests = () => {
       }
       return response.data.count as number;
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   /**
@@ -86,7 +85,7 @@ export const useGameRequests = () => {
       if (!village) {
         return undefined;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'GET',
         url: `/games/play${serializeToQueryUrl({
           villageId: village.id,
@@ -98,7 +97,7 @@ export const useGameRequests = () => {
       }
       return response.data as Game;
     },
-    [axiosLoggedRequest, village],
+    [village],
   );
 
   /**
@@ -111,20 +110,17 @@ export const useGameRequests = () => {
    *
    */
 
-  const sendNewGameResponse = React.useCallback(
-    async (id: number, value: string) => {
-      const response = await axiosLoggedRequest({
-        method: 'PUT',
-        url: `/games/play/${id}`,
-        data: { value },
-      });
-      if (response.error) {
-        return false;
-      }
-      return true;
-    },
-    [axiosLoggedRequest],
-  );
+  const sendNewGameResponse = React.useCallback(async (id: number, value: string) => {
+    const response = await axiosRequest({
+      method: 'PUT',
+      url: `/games/play/${id}`,
+      data: { value },
+    });
+    if (response.error) {
+      return false;
+    }
+    return true;
+  }, []);
 
   /**
    * Return stats game
@@ -134,19 +130,16 @@ export const useGameRequests = () => {
    * @returns GameResponse[]
    *
    */
-  const getGameStats = React.useCallback(
-    async (id: number) => {
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/games/stats/${id}`,
-      });
-      if (response.error) {
-        return [];
-      }
-      return response.data as GameResponse[];
-    },
-    [axiosLoggedRequest],
-  );
+  const getGameStats = React.useCallback(async (id: number) => {
+    const response = await axiosRequest({
+      method: 'GET',
+      url: `/games/stats/${id}`,
+    });
+    if (response.error) {
+      return [];
+    }
+    return response.data as GameResponse[];
+  }, []);
 
   return { getUserCreatedGamesCount, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
 };

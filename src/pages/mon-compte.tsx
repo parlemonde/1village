@@ -21,12 +21,13 @@ import { useLanguages } from 'src/services/useLanguages';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 const Presentation = () => {
-  const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
+  const { user, setUser, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
   const { languages } = useLanguages();
@@ -104,7 +105,7 @@ const Presentation = () => {
     const updatedValues = {
       language,
     };
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: updatedValues,
@@ -126,7 +127,7 @@ const Presentation = () => {
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: {
@@ -150,7 +151,7 @@ const Presentation = () => {
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}/password`,
       data: {
@@ -200,7 +201,7 @@ const Presentation = () => {
     if (!newUser) return;
     if (!user) return;
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'DELETE',
       url: `/users/${user.id}`,
     });
