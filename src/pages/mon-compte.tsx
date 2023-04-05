@@ -25,6 +25,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+import { LinkChild } from 'src/components/accueil/LinkChild';
 
 const Presentation = () => {
   const { user, setUser, logout } = React.useContext(UserContext);
@@ -487,6 +488,11 @@ const Presentation = () => {
               </Grid>
             </Grid>
           </div>
+        </div>
+      ) : null}
+      {user.type === UserType.FAMILY ? (
+        <div className="account__panel">
+          <LinkChild></LinkChild>
         </div>
       ) : null}
       <div className="account__panel">
