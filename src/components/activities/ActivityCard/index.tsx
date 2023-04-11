@@ -19,6 +19,7 @@ import { StoryCard } from './StoryCard';
 import { SymbolCard } from './SymbolCard';
 import { VerseRecordCard } from './VerseRecordCard';
 import type { ActivityCardProps } from './activity-card.types';
+import { isEnigme, isReaction } from 'src/activity-types/anyActivity';
 import { getEnigmeTimeLeft } from 'src/activity-types/enigme.constants';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -31,7 +32,6 @@ import PinIcon from 'src/svg/pin.svg';
 import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
-import { isEnigme, isReaction } from 'src/activity-types/anyActivity';
 
 const CardTypeMapper = {
   [ActivityType.MASCOTTE]: MascotteCard,

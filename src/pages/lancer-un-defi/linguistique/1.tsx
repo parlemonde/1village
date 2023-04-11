@@ -1,7 +1,8 @@
-import type { SelectChangeEvent } from '@mui/material';
-import { ListSubheader, FormControlLabel, Grid, Radio, RadioGroup, Select, MenuItem, InputLabel, FormControl, Divider } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import type { SelectChangeEvent } from '@mui/material';
+import { ListSubheader, FormControlLabel, Grid, Radio, RadioGroup, Select, MenuItem, InputLabel, FormControl, Divider } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
