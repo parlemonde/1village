@@ -61,7 +61,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
             ) : (
-              <Link href="/creer-un-jeu/mimique" passHref>
+              <Link href="/creer-un-jeu/mimique/jouer/" passHref>
                 <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
               </Link>
             )}
@@ -76,7 +76,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href="/creer-un-jeu/mimique" passHref>
+                <Link href="/creer-un-jeu/mimique/jouer" passHref>
                   <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique">
                     Jouer au jeu
                   </Button>
