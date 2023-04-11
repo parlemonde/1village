@@ -11,6 +11,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
+import { LinkChild } from 'src/components/accueil/LinkChild';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
@@ -25,7 +26,6 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
-import { LinkChild } from 'src/components/accueil/LinkChild';
 
 const Presentation = () => {
   const { user, setUser, logout } = React.useContext(UserContext);
@@ -492,7 +492,7 @@ const Presentation = () => {
       ) : null}
       {user.type === UserType.FAMILY ? (
         <div className="account__panel">
-          <LinkChild></LinkChild>
+          <LinkChild />
         </div>
       ) : null}
       <div className="account__panel">

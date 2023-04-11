@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+import type { Student } from 'types/student.type';
 import type { User, UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -19,6 +20,8 @@ interface UserContextValue {
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
+  getLinkedStudents(): Promise<Student[]>;
+  // deleteLinkedStudent(id: number): Promise<void>;
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
@@ -34,6 +37,8 @@ export const UserContext = React.createContext<UserContextValue>({
   deleteAccount: async () => false,
   setUser: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
+  getLinkedStudents: async () => {},
+  // deleteLinkedStudent: async () => {},
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
 
@@ -263,6 +268,44 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     };
   }, []);
 
+  /**
+   * Get the user's linked student
+   */
+  const getLinkedStudents = React.useCallback(async () => {
+    if (!user) return;
+    // if (user.type !== UserType.TEACHER) return;
+    await axiosRequest({
+      method: 'GET',
+      url: `/students/link-student/${user.id}`,
+    })
+      .then((response) => {
+        return response.data as Student[];
+      })
+      .catch((err) => {
+        return err.message;
+      });
+  }, [user]);
+
+  // const deleteLinkedStudent = React.useCallback(
+  //   async (hashedCode: string) => {
+  //   const response = await axiosRequest({
+  //     method: 'DELETE',
+  //     url: '/students/link-student/'${hashedCode},
+  //   });
+  //   if (response.error) {
+  //     return {
+  //       success: false,
+  //       errorCode: response.data?.errorCode || 0,
+  //     };
+  //   }
+  //   return {
+  //     success: true,
+  //     errorCode: 0,
+  //   };
+  // },
+  // [user],
+  // );
+
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
   /**
@@ -302,6 +345,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       deleteAccount,
       setUser,
       linkStudent,
+      // deleteLinkedStudent,
       getClassroomAsFamily,
     }),
     [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent, getClassroomAsFamily],

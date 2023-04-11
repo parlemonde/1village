@@ -32,7 +32,7 @@ export const ClassroomContext = React.createContext<ClassroomContextValue>({
   updateClassroomParameters: async () => {},
   createStudent: async () => {},
   deleteStudent: async () => {},
-  students: [],
+  students: []
   /*   getOneStudent: async () => {}, */
   setStudents: async () => {},
 });
@@ -236,6 +236,23 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [classroom, students, user],
   );
+  /**
+   * Get the user's linked student
+   */
+  // const getUserToStudent = React.useCallback(async () => {
+  //   if (!user) return;
+  //   if (user.type !== UserType.TEACHER) return;
+  //   await axiosRequest({
+  //     method: 'GET',
+  //     url: `/users/${user.id}`,
+  //   })
+  //     .then((response) => {
+  //       return response.data.classroom;
+  //     })
+  //     .catch((err) => {
+  //       return err.message;
+  //     });
+  // }, [user]);
 
   /**
    * Delete an access for a relative's student
