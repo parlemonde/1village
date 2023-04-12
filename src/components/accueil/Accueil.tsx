@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Button } from '@mui/material';
 
@@ -10,6 +10,8 @@ import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
+import { ActivityContext } from 'src/contexts/activityContext';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
@@ -19,6 +21,8 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
+  const { classroom } = useContext(ClassroomContext);
+  const { activity } = useContext(ActivityContext);
   const isMediatorOrFamily =
     user !== null &&
     (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
@@ -87,6 +91,11 @@ export const Accueil = () => {
       </Base>
     );
   }
+  console.log('User ===', user);
+  console.log('Village ===', village);
+  console.log('Activity ===', activity);
+  console.log('Classroom ===', classroom);
+
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (

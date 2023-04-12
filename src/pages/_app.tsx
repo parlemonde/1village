@@ -79,6 +79,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
       NProgress.done();
     }, 200);
   };
+
   React.useEffect(() => {
     // get current route
     router.events.on('routeChangeStart', onRouterChangeStart);
@@ -111,6 +112,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   }, [isOnAdmin]);
 
   useAnalytics();
+  console.log('User ===', user);
+  console.log('Classroom ===', classro);
 
   return (
     <CacheProvider value={emotionCache}>
