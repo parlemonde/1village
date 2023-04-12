@@ -251,7 +251,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           if (students.length === 0) {
             getStudents(classroom.id);
           }
-          console.log('Classroom ===', classroom);
         })
         .catch(() => {
           createClassroom();
@@ -261,7 +260,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
         fetchClassroom(user)
           .then((classroom) => {
             setParentClassroom(classroom);
-            console.log('Classroom ===', classroom);
           })
           .catch();
       }

@@ -112,7 +112,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   }, [isOnAdmin]);
 
   useAnalytics();
-  console.log('User ===', user);
 
   return (
     <CacheProvider value={emotionCache}>
