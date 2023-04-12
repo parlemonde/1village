@@ -34,11 +34,14 @@ const ClassroomParamStep4 = () => {
             Vous pouvez visualiser combien d’accès ont été créés pour chaque élève, et révoquer certains accès s’ils vous semblent suspicieux. Pour
             rajouter un élève en cours d’année, rendez-vous à l’étape “Identifiants”.
           </span>
-          <Box marginTop="10px" textAlign="center">
+
+          <Box marginTop="20px" textAlign="left">
             <Button id="myButton" onClick={onPrint} variant="outlined">
-              Imprimer {numOfPresToPrint <= 1 ? numOfPresToPrint + ' présentation' : numOfPresToPrint + 'présentations'}
+              Télécharger {numOfPresToPrint <= 1 ? numOfPresToPrint + ' présentation' : numOfPresToPrint + 'présentations'}
             </Button>
           </Box>
+          <br />
+
           <CollapsibleTable />
         </div>
         <StepsButton prev="/familles/3" />

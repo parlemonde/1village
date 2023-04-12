@@ -218,6 +218,9 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
   // Remove the student, which triggers the @AfterRemove() hook in the Student entity
   await AppDataSource.getRepository(Student).remove(student);
 
+  // Delete all the UserToStudent entities for the parent user
+  await AppDataSource.getRepository(UserToStudent).delete({ user: { id: req.user.id } });
+
   // Check if the user still has any linked students
   const linkedStudents = await AppDataSource.getRepository(UserToStudent).find({ where: { user: { id: req.user.id } } });
 

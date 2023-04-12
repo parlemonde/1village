@@ -91,9 +91,12 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 export default function CollapsibleTable() {
   const { students } = useContext(ClassroomContext);
   const rows: any[] = [];
+
   for (const student of students) {
-    createData(student.firstname + ' ' + student.lastname, student.numLinkedAccount || 0, student.hashedCode);
+    rows.push(createData(student.firstname + ' ' + student.lastname, student.numLinkedAccount || 0, student.hashedCode));
   }
+  console.log(students);
+  console.log(rows);
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">

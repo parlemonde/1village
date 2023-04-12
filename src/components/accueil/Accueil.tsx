@@ -87,6 +87,10 @@ export const Accueil = () => {
     );
   }
 
+  console.log('user === ', user);
+  console.log('village === ', village);
+  console.log('classroom === ', classroom);
+
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (
