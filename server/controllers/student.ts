@@ -150,7 +150,6 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
     })
     .where('id = :id', { id: req.user.id })
     .execute();
-
   res.status(200).send('Link to child has been completed successfully');
 });
 

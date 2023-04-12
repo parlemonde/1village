@@ -31,13 +31,13 @@ const Story = () => {
           (les ODDs) défini par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.
         </p>
         <p className="text">
-          Pendant cette visite, je vous présente notamment un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong> qui nous ont
-          permis d’atteindre <strong>un des 17 ODDs</strong> avec succès !<br></br>À présent, à votre tour de{' '}
+          Pendant cette visite, je vous présente <strong>17 ODDs</strong>, et pour atteindre un de ces objectifs du développement durable avec succès,
+          un <strong>objet magique</strong> et un <strong>lieu extraodinaire</strong>.<br></br>À présent, à votre tour de{' '}
           <strong>raconter cette visite inoubliable à vos Pélicopains !</strong>
         </p>
         <p className="text">
-          Pour vous guider, je vous propose de commencer par choisir, décrire et dessiner un objet magique, un lieu extraordinaire et un des 17 ODDs
-          de votre choix.
+          Pour vous guider, je vous propose de commencer par choisir, un des 17 ODDs de votre choix, de décrire et dessiner un objet magique, puis un
+          lieu extraordinaire.
         </p>
         <p className="text">
           Laissez libre court à votre imagination ! Souvenez-vous que si l’objectif du développement durable est bien réel, l’objet et lieu que vous
