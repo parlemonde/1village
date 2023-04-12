@@ -19,13 +19,14 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 const Question3 = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -69,7 +70,7 @@ const Question3 = () => {
         },
       ],
     };
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/activities',
       data,

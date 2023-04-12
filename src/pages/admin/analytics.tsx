@@ -8,8 +8,8 @@ import MaterialLink from '@mui/material/Link';
 import { BarWidget } from 'src/components/admin/analytics/BarWidget';
 import { TimePicker, getToday } from 'src/components/admin/analytics/TimePicker';
 import { TimeserieWidget } from 'src/components/admin/analytics/TimeserieWidget';
-import { UserContext } from 'src/contexts/userContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { AnalyticData } from 'types/analytics.type';
 
 const GREEN_COLOR = '#92e892';
@@ -42,12 +42,11 @@ const getValues = (data: Partial<Record<string, number>>): Array<{ key: string; 
   Object.keys(data).map((key) => ({ key, value: data[key] || 0 }));
 
 const Stats = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const [period, setPeriod] = React.useState(getToday());
   const [data, setData] = React.useState<AnalyticData | null>(null);
 
   const getData = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       url: `/analytics${serializeToQueryUrl({
         from: period.startDate.getTime(),
         to: period.endDate.getTime(),
@@ -57,7 +56,7 @@ const Stats = () => {
     if (!response.error) {
       setData(response.data as AnalyticData);
     }
-  }, [period, axiosLoggedRequest]);
+  }, [period]);
   React.useEffect(() => {
     getData().catch(console.error);
   }, [getData]);

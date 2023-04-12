@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import type { UserParamClassroom } from 'types/user.type';
 import { UserType } from 'types/user.type';
@@ -23,23 +24,24 @@ export type Args = {
 
 export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args) => {
   const { village } = React.useContext(VillageContext);
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
 
   const getVisibilityFamilyParams = React.useCallback(async () => {
     if (user && user.type !== UserType.FAMILY) return [];
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/users/visibility-params',
     });
     if (response.error) return null;
     return response.data;
-  }, [axiosLoggedRequest, user]);
+  }, [user]);
 
   const villageId = village ? village.id : null;
   const getActivities: QueryFunction<Activity[]> = React.useCallback(async () => {
     if (!user) {
       return [];
     }
+
     // ! Warning: this is only working if the parent as one child in db
     // ! This code will need to evolve to include use case of multiple children
     // ! For exemple add parameter studentId to getVisibilityParams when student is selected
@@ -61,7 +63,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (userId !== undefined) {
       query.userId = userId;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl(query)}`,
     });
@@ -69,7 +71,8 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       return [];
     }
     return response.data;
-  }, [user, getVisibilityFamilyParams, args, type, villageId, countries, pelico, userId, axiosLoggedRequest]);
+  }, [user, getVisibilityFamilyParams, args, type, villageId, countries, pelico, userId]);
+
   const { data, isLoading, error, refetch } = useQuery<Activity[], unknown>(
     ['activities', { ...args, type, userId, countries, pelico, villageId }],
     getActivities,
@@ -82,8 +85,12 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     }
   }, [data]);
 
+  const activities = error ? [] : isLoading ? prevData.current : data || [];
+
   return {
-    activities: error ? [] : isLoading ? prevData.current : data || [],
-    refetch: refetch,
+    activities,
+    isLoading,
+    error,
+    refetch,
   };
 };

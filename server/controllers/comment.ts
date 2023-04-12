@@ -12,14 +12,14 @@ import { Controller } from './controller';
 const commentController = new Controller('/comments');
 
 // --- Get all comments. ---
-commentController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+commentController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const comments = await AppDataSource.getRepository(Comment).find({ where: { activityId }, order: { createDate: 'ASC' } });
   res.sendJSON(comments);
 });
 
 // --- Get one comment. ---
-commentController.get({ path: '/:commentId', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+commentController.get({ path: '/:commentId', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const id = parseInt(req.params.commentId, 10) ?? 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });

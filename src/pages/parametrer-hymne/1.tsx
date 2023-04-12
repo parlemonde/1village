@@ -13,7 +13,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import DrumIcon from 'src/svg/anthem/drum.svg';
 import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
@@ -24,17 +23,19 @@ import PianoIcon from 'src/svg/anthem/piano.svg';
 import TrumpetIcon from 'src/svg/anthem/trumpet.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { mixAudios } from 'src/utils/audios';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityType } from 'types/activity.type';
 
 const AnthemStep1 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { activity, createActivityIfNotExist, updateActivity, save } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
   const [times, setTimes] = React.useState<Record<number, number>>({});
+  const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
 
   const created = React.useRef(false);
   React.useEffect(() => {
@@ -66,7 +67,7 @@ const AnthemStep1 = () => {
   const onNext = async () => {
     setIsLoading(true);
     if (activity !== null && data.verseAudios.filter((c) => !!c.value).length === 7) {
-      const value = await mixAudios(data.verseAudios, axiosLoggedRequest);
+      const value = await mixAudios(data.verseAudios, axiosRequest);
       updateActivity({ data: { ...data, finalVerse: value, verseTime: Math.max(0, ...Object.values(times)) } });
     }
     save().catch(console.error);
@@ -93,7 +94,34 @@ const AnthemStep1 = () => {
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     {React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}
-                    <div style={{ width: '200px', marginLeft: '10px' }}>{audio.label} : </div>
+                    <div style={{ width: '200px', marginLeft: '10px' }}>
+                      {editingIndex === idx ? (
+                        <input
+                          type="text"
+                          value={audio.label}
+                          onBlur={() => {
+                            if (audio.label.trim() !== '') {
+                              setEditingIndex(null);
+                            }
+                          }}
+                          onChange={(e) => {
+                            data.verseAudios[idx].label = e.target.value;
+                            updateActivity({ data: { ...data } });
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              if (audio.label.trim() !== '') {
+                                setEditingIndex(null);
+                              }
+                            }
+                          }}
+                          autoFocus
+                        />
+                      ) : (
+                        <span onClick={() => setEditingIndex(idx)}>{audio.label}</span>
+                      )}
+                    </div>
                     <div>
                       {data.verseAudios[idx].display && (
                         <AnthemEditor

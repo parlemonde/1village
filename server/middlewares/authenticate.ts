@@ -85,7 +85,7 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       if (user === undefined && userType !== undefined) {
         res.status(401).send('invalid access token');
         return;
-      } // class: 0 < admin: 1 < superAdmin: 2
+      } // class: 2 < admin: 1 < super-admin: 0
       if (userType !== undefined && user !== null && user.type > userType) {
         res.status(403).send('Forbidden');
         return;

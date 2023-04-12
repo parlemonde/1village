@@ -2,14 +2,12 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Currency } from 'types/currency.type';
 
 export const useCurrencies = (): { currencies: Currency[] } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-
   const getCurrencies: QueryFunction<Currency[]> = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/currencies',
     });
@@ -17,7 +15,7 @@ export const useCurrencies = (): { currencies: Currency[] } => {
       return [];
     }
     return response.data;
-  }, [axiosLoggedRequest]);
+  }, []);
   const { data, isLoading, error } = useQuery<Currency[], unknown>(['currencies'], getCurrencies);
 
   return {

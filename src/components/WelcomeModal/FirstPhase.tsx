@@ -18,12 +18,13 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { bgPage, defaultOutlinedButtonStyle, defaultTextButtonStyle } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 import { getUserDisplayName, serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const FirstPhase = () => {
-  const { user, setUser, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user, setUser } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const { village } = React.useContext(VillageContext);
   const [currentStep, setCurrentStep] = React.useState(0);
@@ -46,7 +47,7 @@ export const FirstPhase = () => {
   }
 
   const getNewUserPosition = async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/users/position${serializeToQueryUrl({
         query: `${newUser.address}, ${newUser.city}, ${newUser.postalCode}, ${newUser.country?.name || ''}`,
@@ -80,7 +81,7 @@ export const FirstPhase = () => {
     if (position !== null) {
       updatedValues.position = position;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: updatedValues,
@@ -109,7 +110,7 @@ export const FirstPhase = () => {
       return;
     }
 
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/users/ask-update',
       data: {
@@ -321,13 +322,15 @@ export const FirstPhase = () => {
                     setNewUser((u) => ({ ...u, postalCode }));
                   }}
                 />
-                <PanelInput value={user.country?.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
+                {user.country?.name && (
+                  <PanelInput value={user.country.name} defaultValue={''} label="Pays :" placeholder="Pays" isEditMode={false} />
+                )}
                 <PanelInput
                   style={{ marginTop: '2rem' }}
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
                   label="Nom affiché :"
-                  placeholder={getUserDisplayName({ ...user, ...newUser, type: 0 }, false)}
+                  placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
                   onChange={(displayName) => {
                     setNewUser((u) => ({ ...u, displayName }));
@@ -358,7 +361,7 @@ export const FirstPhase = () => {
                       },
                     ],
                   }}
-                  user={{ ...user, ...newUser, type: 0, id: -1 }}
+                  user={{ ...user, ...newUser, type: user.type, id: -1 }}
                   noButtons
                 />
               </div>

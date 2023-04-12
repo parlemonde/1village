@@ -5,8 +5,8 @@ import type { AnthemData } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 
@@ -23,7 +23,7 @@ const emptyAnthemActivity: AnthemData = {
 const Anthem = () => {
   const router = useRouter();
   const { createNewActivity } = React.useContext(ActivityContext);
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { village, selectedPhase } = React.useContext(VillageContext);
   const [anthemActivityData, setAnthemActivityData] = React.useState<AnthemData>(emptyAnthemActivity);
 
@@ -32,7 +32,7 @@ const Anthem = () => {
       router.push('/');
       return;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities/${village.anthemId}`,
     });
@@ -47,7 +47,7 @@ const Anthem = () => {
     if (!newAnthemActivityData.finalMix) {
       router.push('/');
     }
-  }, [axiosLoggedRequest, router, village]);
+  }, [router, village]);
   React.useEffect(() => {
     getAnthemData().catch(console.error);
   }, [getAnthemData]);

@@ -1,9 +1,9 @@
 import type { Activity } from './activity.type';
 
 export enum ImageType {
-  OBJECT = 0,
-  PLACE = 1,
-  ODD = 2,
+  ODD = 0,
+  OBJECT = 1,
+  PLACE = 2,
 }
 
 // Image is for the DB.
@@ -16,16 +16,16 @@ export interface Image {
 }
 
 export type ImagesRandomData = {
+  odd: StoryElement[];
   object: StoryElement[];
   place: StoryElement[];
-  odd: StoryElement[];
 };
 
 // Starting from here, the types are for Front.
 export type StoriesData = {
+  odd: StoryElement;
   object: StoryElement;
   place: StoryElement;
-  odd: StoryElement;
   tale: TaleElement;
   isOriginal: boolean;
 };

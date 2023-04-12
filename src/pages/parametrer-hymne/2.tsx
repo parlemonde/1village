@@ -11,16 +11,16 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import TrackIcon from 'src/svg/anthem/track.svg';
 import Vocal from 'src/svg/anthem/vocal.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { concatAudios } from 'src/utils/audios';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { toTime } from 'src/utils/toTime';
 
 const AnthemStep2 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
@@ -40,7 +40,7 @@ const AnthemStep2 = () => {
   const onNext = async () => {
     setIsLoading(true);
     if (data.introOutro.filter((c) => !!c.value).length === 2 && errorSteps.length === 0) {
-      const value = await concatAudios([data.introOutro[0], { value: data.finalVerse }, data.introOutro[1]], axiosLoggedRequest);
+      const value = await concatAudios([data.introOutro[0], { value: data.finalVerse }, data.introOutro[1]], axiosRequest);
       updateActivity({ data: { ...data, finalMix: value } });
     }
     save().catch(console.error);

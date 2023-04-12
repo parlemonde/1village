@@ -2,9 +2,8 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
+import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';
-import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
@@ -15,13 +14,16 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
-import type { Activity, AnyData } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
+  const isMediatorOrFamily =
+    user !== null &&
+    (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
+
+  //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(
     () =>
       !village || (selectedPhase === 1 && !isMediatorOrFamily)
@@ -32,9 +34,12 @@ export const Accueil = () => {
     [selectedPhase, village, user, isMediatorOrFamily],
   );
 
+  //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts
+
   //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
+    selectedPhase: 0,
     types: 'all',
     status: 0,
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
@@ -42,6 +47,7 @@ export const Accueil = () => {
       return acc;
     }, {}),
     pelico: true,
+    searchTerm: '',
   });
 
   const { activities } = useActivities({
@@ -52,19 +58,6 @@ export const Accueil = () => {
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
   });
-
-  function filterActivitiesWithLastMimicGame(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-    const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && isMimic(activity)); // Get the index of this last mimic
-    if (indexOfLastMimic === -1) {
-      return activitiesData;
-    }
-    const mostRecentMimic = activitiesData[indexOfLastMimic]; // Get the last mimic created
-    const activitiesWithoutMimic = activitiesData.filter((activity) => !isGame(activity) || !isMimic(activity)); // Remove all mimics in activities
-    const activitiesWithLastMimic = [...activitiesWithoutMimic];
-    activitiesWithLastMimic.splice(indexOfLastMimic, 0, mostRecentMimic); // Put the last mimic created at the same spot in the array
-
-    return activitiesWithLastMimic;
-  }
 
   // on selected phase change, select all activities.
   React.useEffect(() => {
@@ -78,11 +71,14 @@ export const Accueil = () => {
   //Preload of the activities filtered only one mimic
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      return filterActivitiesWithLastMimicGame(activities);
+      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      const activitiesFilterBySearchTerm =
+        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
+      return activitiesFilterBySearchTerm;
     } else {
       return [];
     }
-  }, [activities]);
+  }, [activities, filters.searchTerm]);
 
   if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
     return (
@@ -91,7 +87,6 @@ export const Accueil = () => {
       </Base>
     );
   }
-
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (

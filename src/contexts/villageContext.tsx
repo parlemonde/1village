@@ -13,6 +13,7 @@ import Select from '@mui/material/Select';
 import { UserContext } from './userContext';
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { getCookie, setCookie } from 'src/utils/cookies';
 import { UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
@@ -37,11 +38,13 @@ type VillageContextProviderProps = React.PropsWithChildren<{
 export const VillageContextProvider = ({ initialVillage, children }: VillageContextProviderProps) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);
+  const { user, logout } = React.useContext(UserContext);
   const [village, setVillage] = React.useState<Village | null>(initialVillage);
   const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
-  const [selectedPhase, setSelectedPhase] = React.useState(user !== null ? (user.firstLogin === 0 ? 1 : user.firstLogin) : -1);
+  const [selectedPhase, setSelectedPhase] = React.useState(
+    user !== null ? (user.type >= UserType.MEDIATOR ? village?.activePhase ?? 1 : user.firstLogin === 0 ? 1 : user.firstLogin) : -1,
+  );
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type !== UserType.FAMILY);
 
@@ -53,21 +56,18 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 
-  const getVillage = React.useCallback(
-    async (villageId: number) => {
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/villages/${villageId}`,
-      });
-      if (response.error) {
-        return null;
-      }
-      return response.data as Village;
-    },
-    [axiosLoggedRequest],
-  );
+  const getVillage = React.useCallback(async (villageId: number) => {
+    const response = await axiosRequest({
+      method: 'GET',
+      url: `/villages/${villageId}`,
+    });
+    if (response.error) {
+      return null;
+    }
+    return response.data as Village;
+  }, []);
   const getVillages = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/villages',
     });
@@ -76,7 +76,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
       return;
     }
     setVillages(response.data as Village[]);
-  }, [axiosLoggedRequest]);
+  }, []);
 
   const hasFetchVillages = React.useRef(false);
   const showSelectVillageModal = React.useCallback(() => {
@@ -128,7 +128,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         variant: 'success',
       });
     } else {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'POST',
         url: '/users/ask-update',
         data: {
@@ -188,7 +188,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         {(villages || []).length === 0 ? (
           <>
             <p>Aucun village existe !</p>
-            {user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN) ? (
+            {user !== null && (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN) ? (
               <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}

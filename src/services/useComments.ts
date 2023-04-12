@@ -3,18 +3,17 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Comment } from 'types/comment.type';
 
 export const useComments = (activityId: number | null): { comments: Comment[]; setComments(newComments: Comment[]): void } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
 
   const getComments: QueryFunction<Comment[]> = React.useCallback(async () => {
     if (activityId === null) {
       return [];
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities/${activityId}/comments`,
     });
@@ -22,7 +21,7 @@ export const useComments = (activityId: number | null): { comments: Comment[]; s
       return [];
     }
     return response.data;
-  }, [activityId, axiosLoggedRequest]);
+  }, [activityId]);
   const { data, isLoading, error } = useQuery<Comment[], unknown>(['comments', { activityId }], getComments);
 
   const setComments = React.useCallback(
@@ -40,7 +39,6 @@ export const useComments = (activityId: number | null): { comments: Comment[]; s
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useCommentRequests = (activityId: number | null) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,7 +47,7 @@ export const useCommentRequests = (activityId: number | null) => {
       if (!activityId) {
         return null;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'POST',
         url: `/activities/${activityId}/comments`,
         data: {
@@ -66,7 +64,7 @@ export const useCommentRequests = (activityId: number | null) => {
       queryClient.invalidateQueries('activities');
       return response.data as Comment;
     },
-    [activityId, axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [activityId, queryClient, enqueueSnackbar],
   );
 
   const editComment = React.useCallback(
@@ -74,7 +72,7 @@ export const useCommentRequests = (activityId: number | null) => {
       if (!activityId) {
         return null;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/activities/${activityId}/comments/${id}`,
         data: {
@@ -90,7 +88,7 @@ export const useCommentRequests = (activityId: number | null) => {
       queryClient.invalidateQueries('comments');
       return response.data as Comment;
     },
-    [activityId, axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [activityId, queryClient, enqueueSnackbar],
   );
 
   const deleteComment = React.useCallback(
@@ -98,7 +96,7 @@ export const useCommentRequests = (activityId: number | null) => {
       if (!activityId) {
         return;
       }
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'DELETE',
         url: `/activities/${activityId}/comments/${id}`,
       });
@@ -111,7 +109,7 @@ export const useCommentRequests = (activityId: number | null) => {
       queryClient.invalidateQueries('comments');
       queryClient.invalidateQueries('activities');
     },
-    [activityId, axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [activityId, queryClient, enqueueSnackbar],
   );
 
   return {

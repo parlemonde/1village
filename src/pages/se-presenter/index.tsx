@@ -6,6 +6,7 @@ import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import { UserContext } from 'src/contexts/userContext';
 import MascotteIcon from 'src/svg/presentation/mascotte.svg';
 import ThematiqueIcon from 'src/svg/presentation/thematique.svg';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { UserType } from 'types/user.type';
 
 const suggestions = [
@@ -45,12 +46,12 @@ const activities = [
 ];
 
 const Presentation = () => {
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const [currentSuggestions, setCurrentSuggestions] = React.useState(suggestions);
   const [currentActivities, setCurrentActivities] = React.useState(activities);
 
   const getMascotte = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities/mascotte`,
     });
@@ -58,7 +59,7 @@ const Presentation = () => {
       setCurrentSuggestions([{ ...suggestions[0], disabled: false }, suggestions[1]]);
       setCurrentActivities([{ ...activities[0], disabled: false }, activities[1]]);
     }
-  }, [axiosLoggedRequest]);
+  }, []);
 
   React.useEffect(() => {
     if (user && user.type > UserType.MEDIATOR) {

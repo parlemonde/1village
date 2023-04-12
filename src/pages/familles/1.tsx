@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import React, { useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 
-import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
@@ -9,6 +9,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
+import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
@@ -18,7 +19,10 @@ import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
-import type { InitialStateOptionsProps } from 'types/classroom.type';
+import { axiosRequest } from 'src/utils/axiosRequest';
+import type { Activity } from 'types/activity.type';
+import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
+import { UserType } from 'types/user.type';
 
 const content1 = {
   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
@@ -29,28 +33,14 @@ const content2 = {
   text2: 'jours après leurs publication',
 };
 
+type StateType = {
+  delayedDays: number;
+  hasVisibilitySetToClass: boolean;
+};
+
 //TODO: ouvrir un nouvel onglet pour les activités
 //TODO: factoriser le code méthode SOLID
 //TODO: traiter les erreurs de react forward avec les activityCard
-
-const initialStateOptions = {
-  default: {
-    delayedDays: 0,
-    hasVisibilitySetToClass: false,
-  },
-  timeDelay: {
-    delayedDays: 0,
-    hasVisibilitySetToClass: false, // reset to default
-  },
-  ownClassTimeDelay: {
-    delayedDays: 0,
-    hasVisibilitySetToClass: true, //this is always true
-  },
-  ownClass: {
-    delayedDays: 0, // reset to default
-    hasVisibilitySetToClass: true, //this is always true
-  },
-};
 
 function reducer(
   state: InitialStateOptionsProps,
@@ -97,16 +87,57 @@ function reducer(
 
 const ClassroomParamStep1Visibility = () => {
   const router = useRouter();
-  const [state, dispatch] = useReducer(reducer, initialStateOptions);
-  const [isDisabled, setIsDisabled] = React.useState({ timeDelay: true, ownClassTimeDelay: true });
+  const { classroom, setClassroom } = useContext(ClassroomContext);
+
+  const [state, dispatch] = useReducer(reducer, {
+    default: { delayedDays: 0, hasVisibilitySetToClass: false },
+    timeDelay: { delayedDays: classroom?.delayedDays || 0, hasVisibilitySetToClass: false },
+    ownClass: { delayedDays: 0, hasVisibilitySetToClass: true },
+    ownClassTimeDelay: { delayedDays: classroom?.delayedDays || 0, hasVisibilitySetToClass: true },
+  });
+
+  const [isDisabled, setIsDisabled] = React.useState({
+    default: false,
+    timeDelay: false,
+    ownClass: false,
+    ownClassTimeDelay: false,
+  });
   const [radioValue, setRadioValue] = React.useState('default');
   const { updateClassroomParameters } = React.useContext(ClassroomContext);
+  const { village, selectedPhase } = React.useContext(VillageContext);
+  const { user } = React.useContext(UserContext);
+  const { users } = useVillageUsers();
 
-  const { village } = React.useContext(VillageContext);
-  // filters logic
-  const filterCountries = React.useMemo(() => (village ? village.countries.map((c) => c.isoCode) : []), [village]);
+  useEffect(() => {
+    if (classroom?.delayedDays !== undefined && classroom?.hasVisibilitySetToClass === false) {
+      setRadioValue(classroom.delayedDays > 0 ? 'timeDelay' : 'default');
+      dispatch({ type: 'timeDelay', data: classroom.delayedDays || 0 });
+    } else if (classroom?.hasVisibilitySetToClass === false) {
+      setRadioValue('default');
+    } else if (classroom?.delayedDays !== undefined && classroom?.hasVisibilitySetToClass === true) {
+      setRadioValue(classroom.delayedDays > 0 ? 'ownClassTimeDelay' : 'ownClass');
+      dispatch({ type: 'ownClassTimeDelay', data: classroom.delayedDays || 0 });
+    } else if (classroom?.hasVisibilitySetToClass === true) {
+      setRadioValue('ownClass');
+    }
+  }, [classroom?.delayedDays, classroom?.hasVisibilitySetToClass]);
+
+  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
+
+  const filterCountries = React.useMemo(
+    () =>
+      !village || (selectedPhase === 1 && !isMediatorOrFamily)
+        ? user && user.country !== null
+          ? [user.country?.isoCode.toUpperCase()]
+          : []
+        : village.countries.map((c) => c.isoCode),
+    [selectedPhase, village, user, isMediatorOrFamily],
+  );
+
+  //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
+    selectedPhase: 0,
     types: 'all',
     status: 0,
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
@@ -114,8 +145,10 @@ const ClassroomParamStep1Visibility = () => {
       return acc;
     }, {}),
     pelico: true,
+    searchTerm: '',
   });
-  const { activities, refetch } = useActivities({
+
+  const { activities, refetch, isLoading } = useActivities({
     limit: 300,
     page: 0,
     countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
@@ -123,8 +156,6 @@ const ClassroomParamStep1Visibility = () => {
     type: filters.types === 'all' ? undefined : filters.types,
   });
 
-  const { user, axiosLoggedRequest } = React.useContext(UserContext);
-  const { users } = useVillageUsers();
   const userMap = React.useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
@@ -133,41 +164,74 @@ const ClassroomParamStep1Visibility = () => {
       }, {}),
     [users],
   );
-
   const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
     key === 'timeDelay'
       ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
       : dispatch({ type: 'ownClassTimeDelay', data: Number((event.target as HTMLInputElement).value) });
   };
-  const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRadioValue((event.target as HTMLInputElement).value);
-    (event.target as HTMLInputElement).value === 'default' ? dispatch({ type: 'default', data: 0 }) : dispatch({ type: 'ownClass', data: 0 });
-  };
+  const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = (event.target as HTMLInputElement).value;
+    setRadioValue(value);
 
-  const handleSelectionVisibility = (key: string) => {
-    switch (key) {
+    switch (value) {
       case 'default':
-        updateClassroomParameters(state.default);
+        dispatch({ type: 'default', data: 0 });
+        setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
         break;
       case 'timeDelay':
-        // state.ownClass.delayedDays !== 0 && updateClassroomParameters(state.timeDelay);
-        updateClassroomParameters(state.timeDelay);
+        dispatch({ type: 'timeDelay', data: classroom?.delayedDays || 0 });
+        setIsDisabled({ ...isDisabled, default: true, ownClass: true, ownClassTimeDelay: true });
         break;
       case 'ownClass':
-        updateClassroomParameters(state.ownClass);
+        dispatch({ type: 'ownClass', data: 0 });
+        setIsDisabled({ ...isDisabled, default: true, timeDelay: true, ownClassTimeDelay: true });
         break;
       case 'ownClassTimeDelay':
-        // state.ownClassTimeDelay.delayedDays !== 0 && updateClassroomParameters(state.ownClassTimeDelay);
-        updateClassroomParameters(state.ownClassTimeDelay);
+        dispatch({ type: 'ownClassTimeDelay', data: classroom?.delayedDays || 0 });
+        setIsDisabled({ ...isDisabled, default: true, timeDelay: true, ownClass: true });
         break;
       default:
-        updateClassroomParameters(state.default);
+        dispatch({ type: 'default', data: 0 });
+        setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
         break;
     }
   };
 
+  const handleSelectionVisibility = (key: string) => {
+    let newState: StateType;
+    switch (key) {
+      case 'default':
+        newState = state.default;
+        break;
+      case 'timeDelay':
+        newState = state.timeDelay;
+        break;
+      case 'ownClass':
+        newState = state.ownClass;
+        break;
+      case 'ownClassTimeDelay':
+        newState = state.ownClassTimeDelay;
+        break;
+      default:
+        newState = state.default;
+        break;
+    }
+    updateClassroomParameters(newState);
+    setClassroom((prevState) => {
+      if (!prevState) {
+        return {
+          delayedDays: newState.delayedDays,
+          hasVisibilitySetToClass: newState.hasVisibilitySetToClass,
+        } as Classroom;
+      }
+      return { ...prevState, ...newState };
+    });
+  };
+
+  // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
+
   const handleActivityVisibility = (id: number) => {
-    axiosLoggedRequest({
+    axiosRequest({
       method: 'PUT',
       url: `/teachers/set-activity-visibility/${id}`,
     }).then(() => {
@@ -177,126 +241,169 @@ const ClassroomParamStep1Visibility = () => {
   const toggleInput = (key: string, bool: boolean) => {
     setIsDisabled({ ...isDisabled, [key]: bool });
   };
+
+  // React.useEffect(() => {
+  //     if (user && user.type === UserType.TEACHER) {
+  //       updateClassroomValidator());
+  // }
+  //   }, [updateClassroomValidator]);
+
   const onNext = () => {
     router.push('/familles/2');
   };
 
+  const activitiesFiltered = React.useMemo(() => {
+    if (activities && activities.length > 0) {
+      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      const activitiesFilterBySearchTerm =
+        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
+      return activitiesFilterBySearchTerm;
+    } else {
+      return [];
+    }
+  }, [activities, filters.searchTerm]);
+
+  const sortedActivities: Activity[] = activitiesFiltered
+    .filter((activity) => activity.createDate !== undefined)
+    .sort((a, b) => {
+      const dateA = new Date(a.createDate as string);
+      const dateB = new Date(b.createDate as string);
+      return dateA.getTime() - dateB.getTime();
+    });
+
   return (
     <Base>
-      <BackButton href="/" />
-      <Steps
-        steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-        urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
-        activeStep={0}
-      />
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <BackButton href="/" />
+        <Steps
+          steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
+          urls={['/familles/1?edit', '/familles/2', '/familles/3', '/familles/4']}
+          activeStep={0}
+        />
 
-      {/* Main  */}
-      <div className="width-900">
-        <h1>Choisissez ce que voient les familles</h1>
-        <p className="text">
-          Vous allez inviter les familles de vos élèves à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en ligne.
-          Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 4 options :
-        </p>
-        <FormControl>
-          <RadioGroup aria-label="visibility" onChange={handleRadioSelect} value={radioValue}>
-            <FormControlLabel
-              value="default"
-              name="default"
-              control={<Radio />}
-              label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
-              onFocus={() => handleSelectionVisibility('default')}
-            />
-            <FormControlLabel
-              value="timeDelay"
-              name="timeDelay"
-              control={<Radio />}
-              label={
-                <TextnInputContainer
-                  {...content1}
-                  onChange={(event) => handleDaysDelay('timeDelay', event)}
-                  onBlur={() => handleSelectionVisibility('timeDelay')}
-                  value={state.timeDelay.delayedDays}
-                  disabled={isDisabled.timeDelay}
-                />
-              }
-              onClick={() => toggleInput('timeDelay', false)}
-              disabled={isDisabled.timeDelay}
-            />
-            <FormControlLabel
-              value="ownClass"
-              name="ownClass"
-              control={<Radio />}
-              label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
-              onFocus={() => handleSelectionVisibility('ownClass')}
-            />
-            <FormControlLabel
-              value="ownClassTimeDelay"
-              name="ownClassTimeDelay"
-              control={<Radio />}
-              label={
-                <TextnInputContainer
-                  {...content2}
-                  onChange={(event) => handleDaysDelay('ownClassTimeDelay', event)}
-                  onBlur={() => handleSelectionVisibility('ownClassTimeDelay')}
-                  value={state.ownClassTimeDelay.delayedDays}
-                  disabled={isDisabled.ownClassTimeDelay}
-                />
-              }
-              onClick={() => toggleInput('ownClassTimeDelay', false)}
-              disabled={isDisabled.ownClassTimeDelay}
-            />
-          </RadioGroup>
-        </FormControl>
-        <div style={{ margin: '-1rem 0' }}>
-          <StepsButton next={onNext} />
-        </div>
+        {/* Main  */}
+        <div className="width-900">
+          <h1>Choisissez ce que voient les familles</h1>
+          <p className="text">
+            Vous allez inviter les familles de vos élèves à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en
+            ligne. Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 4 options :
+          </p>
+          <FormControl>
+            <RadioGroup aria-label="visibility" onChange={handleRadioSelect} value={radioValue}>
+              <FormControlLabel
+                value="default"
+                name="default"
+                control={<Radio />}
+                label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication"
+                onFocus={() => handleSelectionVisibility('default')}
+                style={radioValue !== 'default' ? { color: '#CCC' } : {}}
+              />
+              <FormControlLabel
+                value="timeDelay"
+                name="timeDelay"
+                control={<Radio />}
+                label={
+                  <TextnInputContainer
+                    {...content1}
+                    onChange={(event) => handleDaysDelay('timeDelay', event)}
+                    onBlur={() => handleSelectionVisibility('timeDelay')}
+                    value={state.timeDelay.delayedDays}
+                    disabled={radioValue !== 'timeDelay'}
+                  />
+                }
+                onClick={() => toggleInput('timeDelay', false)}
+                disabled={isDisabled?.timeDelay}
+                style={radioValue !== 'timeDelay' ? { color: '#CCC' } : {}}
+              />
+              <FormControlLabel
+                value="ownClass"
+                name="ownClass"
+                control={<Radio />}
+                label="les familles peuvent voir toutes les activités publiées sur 1Village, dès leur publication, mais seulement celles publiées par notre classe"
+                onFocus={() => handleSelectionVisibility('ownClass')}
+                style={radioValue !== 'ownClass' ? { color: '#CCC' } : {}}
+              />
+              <FormControlLabel
+                value="ownClassTimeDelay"
+                name="ownClassTimeDelay"
+                control={<Radio />}
+                label={
+                  <TextnInputContainer
+                    {...content2}
+                    onChange={(event) => handleDaysDelay('ownClassTimeDelay', event)}
+                    onBlur={() => handleSelectionVisibility('ownClassTimeDelay')}
+                    value={state.ownClassTimeDelay.delayedDays}
+                    disabled={radioValue !== 'ownClassTimeDelay'}
+                  />
+                }
+                onClick={() => toggleInput('ownClassTimeDelay', false)}
+                disabled={isDisabled?.ownClassTimeDelay}
+                style={radioValue !== 'ownClassTimeDelay' ? { color: '#CCC' } : {}}
+              />
+            </RadioGroup>
+          </FormControl>
+          <div style={{ margin: '-1rem 0' }}>
+            <StepsButton next={onNext} />
+          </div>
 
-        {/* Activity Container */}
-        <p className="text">Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.</p>
-        {/* phase is set to 4 to match the array with ALL activities */}
-        <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={4} />
-        <OverflowContainer
-          style={{
-            height: '30vh',
-            overflowY: 'scroll',
-            marginBottom: '3rem',
-            border: '1px solid rgba(76, 62, 217, 0.5)',
-            borderRadius: '3px',
-            padding: '1rem 0 1rem .5rem',
-          }}
-        >
-          {activities.map((activity) => (
-            <Button
-              key={activity.id}
-              sx={{
-                display: 'flex',
-                gap: '2rem',
-                justifyContent: 'space-evenly',
-                width: '99%',
-                padding: '0 1rem',
-                marginBottom: '1rem',
-                filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
-                backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
-              }}
-              onClick={() => handleActivityVisibility(activity.id)}
-            >
-              {/* UI logic for activity disable */}
-              {activity.isVisibleToParent ? (
-                <EyeVisibility style={{ width: '8%', height: 'auto' }} />
-              ) : (
-                <EyeClosed style={{ width: '8%', height: 'auto' }} />
-              )}
-              <div style={{ width: '100%' }}>
-                <ActivityCard
-                  activity={activity}
-                  isSelf={user !== null && activity.userId === user.id}
-                  user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
-                  noButtons={true}
-                />
+          {/* Activity Container */}
+          <p className="text">
+            Indépendamment de ce réglage, vous pouvez réglez individuellement la visibilité des activités déjà publiées en ligne.
+          </p>
+          {/* phase is set to 4 to match the array with ALL activities */}
+          <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} isMesFamilles />
+          <OverflowContainer
+            style={{
+              height: '30vh',
+              overflowY: 'scroll',
+              marginBottom: '3rem',
+              border: '1px solid rgba(76, 62, 217, 0.5)',
+              borderRadius: '3px',
+              padding: '1rem 0 1rem .5rem',
+            }}
+          >
+            {isLoading ? (
+              <div className="loading-spinner">
+                <CircularProgress />
+                <p>Loading activities...</p>
               </div>
-            </Button>
-          ))}
-        </OverflowContainer>
+            ) : (
+              <>
+                {sortedActivities.map((activity) => (
+                  <Button
+                    key={activity.id}
+                    sx={{
+                      display: 'flex',
+                      gap: '2rem',
+                      justifyContent: 'space-evenly',
+                      width: '99%',
+                      padding: '0 1rem',
+                      marginBottom: '1rem',
+                      filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
+                      backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
+                    }}
+                    onClick={() => handleActivityVisibility(activity.id)}
+                  >
+                    {/* UI logic for activity disable */}
+                    {activity.isVisibleToParent ? (
+                      <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+                    ) : (
+                      <EyeClosed style={{ width: '8%', height: 'auto' }} />
+                    )}
+                    <div style={{ width: '100%' }}>
+                      <ActivityCard
+                        activity={activity}
+                        isSelf={user !== null && activity.userId === user.id}
+                        user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
+                        noButtons={true}
+                      />
+                    </div>
+                  </Button>
+                ))}
+              </>
+            )}
+          </OverflowContainer>
+        </div>
       </div>
     </Base>
   );

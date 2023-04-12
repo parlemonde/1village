@@ -42,7 +42,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder()
     .addSelect('User.passwordHash')
-    .where('User.email = :email', { email: data.email })
+    .where('User.email = :email OR User.pseudo = :email', { email: data.email })
     .getOne();
 
   if (user === null) {

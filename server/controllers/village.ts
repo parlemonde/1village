@@ -19,7 +19,7 @@ villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: 
 });
 
 //--- Get one village ---
-villageController.get({ path: '/:id' }, async (req: Request, res: Response, next: NextFunction) => {
+villageController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();
     return;
@@ -103,7 +103,7 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
 });
 
 //--- delete a village ---
-villageController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+villageController.delete({ path: '/:id', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id, 10) || 0;
   await AppDataSource.getRepository(Village).delete({ id });
   res.status(204).send();

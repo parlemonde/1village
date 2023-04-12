@@ -46,7 +46,7 @@ const ResetPassword: React.FunctionComponent = () => {
       }, 1000);
 
       setTimeout(() => {
-        router.push('/');
+        router.push('/connexion');
       }, 10000);
     }
   };
@@ -91,7 +91,7 @@ const ResetPassword: React.FunctionComponent = () => {
             component="button"
             variant="h3"
             onClick={() => {
-              router.push('/');
+              router.push('/connexion');
             }}
             sx={{
               marginRight: '1rem',
@@ -115,8 +115,7 @@ const ResetPassword: React.FunctionComponent = () => {
           >
             {!isSuccess ? (
               <>
-                <h2>Réinitialisation du mot de passe</h2>
-                <br />
+                <h2 style={{ paddingBottom: '2rem' }}>Réinitialisation du mot de passe</h2>
 
                 <div className="text-left" style={{ width: '40%' }}>
                   Veuillez renseigner l&apos;email lié à votre compte.
@@ -157,7 +156,7 @@ const ResetPassword: React.FunctionComponent = () => {
                   </div>
                   <br />
                   <div style={{ marginBottom: '4rem' }} className="text-center">
-                    <Link href="/sign-in" onClick={handleLinkClick('/sign-in')}>
+                    <Link href="/connexion" onClick={handleLinkClick('/connexion')}>
                       Retourner à la connexion
                     </Link>
                   </div>
