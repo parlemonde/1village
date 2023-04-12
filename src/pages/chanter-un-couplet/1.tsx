@@ -10,12 +10,12 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AudioMixer from 'src/components/audio/Mixer';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { concatAudios, mixAudios } from 'src/utils/audios';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 const SongStep1 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -31,7 +31,7 @@ const SongStep1 = () => {
     if (newAudioMix.size > 0) {
       const formData = new FormData();
       formData.append('audio', newAudioMix, 'classVerse.webm');
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'POST',
         url: '/audios',
         data: formData,
@@ -39,8 +39,8 @@ const SongStep1 = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      const customizedMixWithVocals = await mixAudios([data?.verseAudios[0], { value: response.data.url }], axiosLoggedRequest);
-      const mixWithoutLyrics = await concatAudios([data.introOutro[0], { value: response.data.url }, data.introOutro[1]], axiosLoggedRequest);
+      const customizedMixWithVocals = await mixAudios([data?.verseAudios[0], { value: response.data.url }], axiosRequest);
+      const mixWithoutLyrics = await concatAudios([data.introOutro[0], { value: response.data.url }, data.introOutro[1]], axiosRequest);
       updateActivity({ data: { ...data, mixWithoutLyrics, customizedMixWithVocals, customizedMix: response.data.url, customizedMixBlob: null } });
     }
     setIsLoading(false);

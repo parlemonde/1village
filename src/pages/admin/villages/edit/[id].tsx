@@ -9,21 +9,21 @@ import MaterialLink from '@mui/material/Link';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
-import { UserContext } from 'src/contexts/userContext';
 import { useVillageRequests } from 'src/services/useVillages';
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { getQueryString } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Village } from 'types/village.type';
 
 const EditVillage = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { editVillage } = useVillageRequests();
   const villageId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) || 0, [router]);
   const [village, setVillage] = React.useState<Village | null>(null);
 
   const getVillage = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/villages/${villageId}`,
     });
@@ -32,7 +32,7 @@ const EditVillage = () => {
     } else {
       setVillage(response.data);
     }
-  }, [axiosLoggedRequest, router, villageId]);
+  }, [router, villageId]);
 
   React.useEffect(() => {
     getVillage().catch((e) => console.error(e));

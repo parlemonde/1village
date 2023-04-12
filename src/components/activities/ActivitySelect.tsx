@@ -5,10 +5,10 @@ import { Button, CircularProgress } from '@mui/material';
 
 import { Activities } from './List';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 
 const ACTIVITIES_PER_PAGE = 10;
@@ -23,7 +23,6 @@ interface ActivitySelectProps {
 }
 
 export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sélectionner une activité', type }: ActivitySelectProps) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { activity: selectedActivity } = useActivity(value ?? -1);
 
@@ -38,7 +37,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sél
       return;
     }
     setLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl({
         limit: ACTIVITIES_PER_PAGE,
@@ -60,7 +59,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sél
       setCanFetchMore(false);
     }
     setLoading(false);
-  }, [axiosLoggedRequest, village, type]);
+  }, [village, type]);
   React.useEffect(() => {
     if (dataPage.current === 0) {
       fetchData().catch();

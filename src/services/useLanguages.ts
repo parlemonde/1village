@@ -2,14 +2,12 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Language } from 'types/language.type';
 
 export const useLanguages = (): { languages: Language[] } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-
   const getLanguages: QueryFunction<Language[]> = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/languages',
     });
@@ -17,7 +15,7 @@ export const useLanguages = (): { languages: Language[] } => {
       return [];
     }
     return response.data;
-  }, [axiosLoggedRequest]);
+  }, []);
   const { data, isLoading, error } = useQuery<Language[], unknown>(['languages'], getLanguages);
 
   return {

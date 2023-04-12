@@ -11,15 +11,15 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { Activities } from 'src/components/activities/List';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getQueryString, serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
 
 const ReportageStep1 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { activity, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const [reportageActivities, setReportageActivities] = React.useState<Activity[]>([]);
@@ -43,7 +43,7 @@ const ReportageStep1 = () => {
 
   React.useEffect(() => {
     if (village) {
-      axiosLoggedRequest({
+      axiosRequest({
         method: 'GET',
         url: `/activities${serializeToQueryUrl({
           villageId: village.id,
@@ -56,7 +56,7 @@ const ReportageStep1 = () => {
         }
       });
     }
-  }, [axiosLoggedRequest, village]);
+  }, [village]);
 
   const onNext = () => {
     if (activity === null || data === null || (activity.subType === -1 && !data.reportage)) {
