@@ -113,7 +113,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
 
   useAnalytics();
   console.log('User ===', user);
-  console.log('Classroom ===', classro);
 
   return (
     <CacheProvider value={emotionCache}>
