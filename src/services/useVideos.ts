@@ -2,14 +2,12 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Video } from 'types/video.type';
 
 export const useVideos = (): { videos: Video[] } => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
-
   const getVideos: QueryFunction<Video[]> = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/videos',
     });
@@ -17,7 +15,7 @@ export const useVideos = (): { videos: Video[] } => {
       return [];
     }
     return response.data;
-  }, [axiosLoggedRequest]);
+  }, []);
   const { data, isLoading, error } = useQuery<Video[], unknown>(['videos'], getVideos);
 
   return {

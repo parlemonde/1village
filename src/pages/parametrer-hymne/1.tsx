@@ -13,7 +13,6 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import DrumIcon from 'src/svg/anthem/drum.svg';
 import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
@@ -24,11 +23,12 @@ import PianoIcon from 'src/svg/anthem/piano.svg';
 import TrumpetIcon from 'src/svg/anthem/trumpet.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { mixAudios } from 'src/utils/audios';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityType } from 'types/activity.type';
 
 const AnthemStep1 = () => {
   const router = useRouter();
-  const { axiosLoggedRequest } = React.useContext(UserContext);
+
   const { activity, createActivityIfNotExist, updateActivity, save } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -67,7 +67,7 @@ const AnthemStep1 = () => {
   const onNext = async () => {
     setIsLoading(true);
     if (activity !== null && data.verseAudios.filter((c) => !!c.value).length === 7) {
-      const value = await mixAudios(data.verseAudios, axiosLoggedRequest);
+      const value = await mixAudios(data.verseAudios, axiosRequest);
       updateActivity({ data: { ...data, finalVerse: value, verseTime: Math.max(0, ...Object.values(times)) } });
     }
     save().catch(console.error);

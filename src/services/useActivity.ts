@@ -3,14 +3,13 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
-import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity, AnyData } from 'types/activity.type';
 
 export const useActivity = (activityId: number): { activity: Activity | null } => {
   const { village } = React.useContext(VillageContext);
-  const { axiosLoggedRequest } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
@@ -21,7 +20,7 @@ export const useActivity = (activityId: number): { activity: Activity | null } =
     if (!villageId) {
       return null;
     }
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/activities/${activityId}${serializeToQueryUrl({ villageId })}`,
     });
@@ -29,7 +28,7 @@ export const useActivity = (activityId: number): { activity: Activity | null } =
       return null;
     }
     return response.data as Activity;
-  }, [villageId, activityId, axiosLoggedRequest]);
+  }, [villageId, activityId]);
   const { data, isLoading, error } = useQuery<Activity | null, unknown>(['activity', { villageId, activityId }], getActivity);
 
   return {
@@ -39,13 +38,12 @@ export const useActivity = (activityId: number): { activity: Activity | null } =
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useActivityRequests = () => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
   const updatedActivityData = React.useCallback(
     async (activity: Activity, data: AnyData) => {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/activities/${activity.id}`,
         data: {
@@ -61,12 +59,12 @@ export const useActivityRequests = () => {
       queryClient.invalidateQueries('activity');
       queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, enqueueSnackbar, queryClient],
+    [enqueueSnackbar, queryClient],
   );
 
   const askSameQuestion = React.useCallback(
     async (activityId: number) => {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'PUT',
         url: `/activities/${activityId}/askSame`,
       });
@@ -79,12 +77,12 @@ export const useActivityRequests = () => {
       queryClient.invalidateQueries('activity');
       queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, enqueueSnackbar, queryClient],
+    [enqueueSnackbar, queryClient],
   );
 
   const deleteActivity = React.useCallback(
     async (id: number, isDraft?: boolean) => {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'DELETE',
         url: `/activities/${id}`,
       });
@@ -100,7 +98,7 @@ export const useActivityRequests = () => {
       queryClient.invalidateQueries('activity');
       queryClient.invalidateQueries('activities');
     },
-    [axiosLoggedRequest, queryClient, enqueueSnackbar],
+    [queryClient, enqueueSnackbar],
   );
 
   return {

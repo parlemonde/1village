@@ -11,10 +11,10 @@ import { Button, Divider, TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
 import { Modal } from 'src/components/Modal';
-import { UserContext } from 'src/contexts/userContext';
 import { useCopy } from 'src/hooks/useCopy';
 import { defaultTextButtonStyle, fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 interface VideoModalsProps {
   id: number;
@@ -26,7 +26,6 @@ interface VideoModalsProps {
 }
 
 export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVideoUrl, onDeleteEditor = () => {} }: VideoModalsProps) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { copyText } = useCopy();
@@ -112,7 +111,7 @@ export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVide
     const formData = new FormData();
     formData.append('video', file);
     formData.append('name', name);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'POST',
       url: '/videos',
       data: formData,
