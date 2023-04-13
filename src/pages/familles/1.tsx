@@ -369,37 +369,39 @@ const ClassroomParamStep1Visibility = () => {
               </div>
             ) : (
               <>
-                {sortedActivities.map((activity) => (
-                  <Button
-                    key={activity.id}
-                    sx={{
-                      display: 'flex',
-                      gap: '2rem',
-                      justifyContent: 'space-evenly',
-                      width: '99%',
-                      padding: '0 1rem',
-                      marginBottom: '1rem',
-                      filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
-                      backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
-                    }}
-                    onClick={() => handleActivityVisibility(activity.id)}
-                  >
-                    {/* UI logic for activity disable */}
-                    {activity.isVisibleToParent ? (
-                      <EyeVisibility style={{ width: '8%', height: 'auto' }} />
-                    ) : (
-                      <EyeClosed style={{ width: '8%', height: 'auto' }} />
-                    )}
-                    <div style={{ width: '100%' }}>
-                      <ActivityCard
-                        activity={activity}
-                        isSelf={user !== null && activity.userId === user.id}
-                        user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
-                        noButtons={true}
-                      />
-                    </div>
-                  </Button>
-                ))}
+                {sortedActivities
+                  .map((activity) => (
+                    <Button
+                      key={activity.id}
+                      sx={{
+                        display: 'flex',
+                        gap: '2rem',
+                        justifyContent: 'space-evenly',
+                        width: '99%',
+                        padding: '0 1rem',
+                        marginBottom: '1rem',
+                        filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
+                        backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
+                      }}
+                      onClick={() => handleActivityVisibility(activity.id)}
+                    >
+                      {/* UI logic for activity disable */}
+                      {activity.isVisibleToParent ? (
+                        <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+                      ) : (
+                        <EyeClosed style={{ width: '8%', height: 'auto' }} />
+                      )}
+                      <div style={{ width: '100%' }}>
+                        <ActivityCard
+                          activity={activity}
+                          isSelf={user !== null && activity.userId === user.id}
+                          user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
+                          noButtons={true}
+                        />
+                      </div>
+                    </Button>
+                  ))
+                  .reverse()}
               </>
             )}
           </OverflowContainer>
