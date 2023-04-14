@@ -39,7 +39,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@svgr/webpack", "npm:6.2.1"],\
             ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.57"],\
             ["@swc/core", "npm:1.2.205"],\
-            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
+            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.26"],\
             ["@types/cookie-parser", "npm:1.4.3"],\
             ["@types/cors", "npm:2.8.12"],\
             ["@types/cpx", "npm:1.5.2"],\
@@ -177,7 +177,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@svgr/webpack", "npm:6.2.1"],\
             ["@swc/cli", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.1.57"],\
             ["@swc/core", "npm:1.2.205"],\
-            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
+            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.26"],\
             ["@types/cookie-parser", "npm:1.4.3"],\
             ["@types/cors", "npm:2.8.12"],\
             ["@types/cpx", "npm:1.5.2"],\
@@ -5384,20 +5384,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@swc/jest", [\
-        ["npm:0.2.21", {\
-          "packageLocation": "./.yarn/cache/@swc-jest-npm-0.2.21-c576292610-8208032fc7.zip/node_modules/@swc/jest/",\
+        ["npm:0.2.26", {\
+          "packageLocation": "./.yarn/cache/@swc-jest-npm-0.2.26-890d01518c-771821ed08.zip/node_modules/@swc/jest/",\
           "packageDependencies": [\
-            ["@swc/jest", "npm:0.2.21"]\
+            ["@swc/jest", "npm:0.2.26"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21", {\
-          "packageLocation": "./.yarn/__virtual__/@swc-jest-virtual-1357f3be82/0/cache/@swc-jest-npm-0.2.21-c576292610-8208032fc7.zip/node_modules/@swc/jest/",\
+        ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.26", {\
+          "packageLocation": "./.yarn/__virtual__/@swc-jest-virtual-1f5e37e08f/0/cache/@swc-jest-npm-0.2.26-890d01518c-771821ed08.zip/node_modules/@swc/jest/",\
           "packageDependencies": [\
-            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
+            ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.26"],\
             ["@jest/create-cache-key-function", "npm:27.5.1"],\
             ["@swc/core", "npm:1.2.205"],\
-            ["@types/swc__core", null]\
+            ["@types/swc__core", null],\
+            ["jsonc-parser", "npm:3.2.0"]\
           ],\
           "packagePeers": [\
             "@swc/core",\
@@ -13462,6 +13463,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/json5-npm-2.2.1-44675c859c-74b8a23b10.zip/node_modules/json5/",\
           "packageDependencies": [\
             ["json5", "npm:2.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["jsonc-parser", [\
+        ["npm:3.2.0", {\
+          "packageLocation": "./.yarn/cache/jsonc-parser-npm-3.2.0-1896ece3b7-946dd9a5f3.zip/node_modules/jsonc-parser/",\
+          "packageDependencies": [\
+            ["jsonc-parser", "npm:3.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
