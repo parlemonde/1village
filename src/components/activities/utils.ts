@@ -123,16 +123,25 @@ export const specificActivityPhase = {
 };
 export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {
   const availablePhases = specificActivityPhase[activityType];
-  //Anthem case
-  if (availablePhases.length === 0) {
-    return activePhase;
-  }
-  //Other cases : verified if selectedPhase is include in ActivityPhase
-  if (availablePhases.includes(selectedPhase) && selectedPhase <= activePhase) {
-    return selectedPhase;
+
+  const hasAvailablePhases = availablePhases.length !== 0;
+  const isSelectedPhaseValid = availablePhases.includes(selectedPhase) && selectedPhase <= activePhase;
+
+  if (hasAvailablePhases && !isSelectedPhaseValid) {
+    const errorMessage = !availablePhases.includes(selectedPhase)
+      ? `Phase ${selectedPhase} is not in availablePhases`
+      : `Phase ${selectedPhase} cannot be superior to activePhase: ${activePhase}`;
+
+    return fail(errorMessage);
   }
 
-  return fail('Not possible!');
+  //Anthem case
+  if (!hasAvailablePhases) {
+    return activePhase;
+  }
+
+  //Other cases : verified if selectedPhase is include in ActivityPhase
+  return selectedPhase;
 };
 
 function fail(message: string): never {
