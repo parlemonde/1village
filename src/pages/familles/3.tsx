@@ -54,6 +54,13 @@ const Communication = () => {
     }
   }, [textValue]);
 
+  // --- PDF Name ---
+  const timestamp = new Date()
+    .toLocaleString()
+    .replace(/[^\w\s]/gi, '')
+    .replace(/ /g, '_');
+  const fileName = `${timestamp}_document.pdf`;
+
   const printContent = (content: string) => {
     const printIframe = document.createElement('iframe');
     printIframe.style.position = 'absolute';
@@ -61,14 +68,16 @@ const Communication = () => {
     printIframe.style.height = '0';
     printIframe.style.border = '0';
     document.body.appendChild(printIframe);
-
     if (printIframe.contentWindow) {
       printIframe.contentWindow.document.write(content);
       printIframe.contentWindow.document.close();
       printIframe.contentWindow.focus();
 
+      // Add custom header to print dialog
+      printIframe.contentWindow.document.title = 'Your default file name';
+      printIframe.contentWindow.print();
+
       setTimeout(() => {
-        printIframe.contentWindow?.print();
         document.body.removeChild(printIframe);
       }, 100);
     } else {
@@ -104,6 +113,7 @@ const Communication = () => {
       });
 
       const printContentString = `<html><head><meta charset="UTF-8"></head><body>${messagesWithId.join(' ')}</body></html>`;
+
       printContent(printContentString);
     } else {
       setIsModalOpen(true);
