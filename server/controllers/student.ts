@@ -212,23 +212,26 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const student = await AppDataSource.getRepository(Student).findOne({ where: { id } });
+  const student = await AppDataSource.getRepository(Student).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.user'] });
   if (!student) return res.status(204).send();
+
+  // Find parents linked to this student
+  const parents = student.userToStudents.map((uts) => uts.user);
 
   // Remove the student, which triggers the @AfterRemove() hook in the Student entity
   await AppDataSource.getRepository(Student).remove(student);
 
-  // Delete all the UserToStudent entities for the parent user
-  await AppDataSource.getRepository(UserToStudent).delete({ user: { id: req.user.id } });
+  // Iterate over parents and set hasStudentLinked to false if no other student is linked
+  for (const parent of parents) {
+    const userToStudentsCount = await AppDataSource.getRepository(UserToStudent)
+      .createQueryBuilder('userToStudent')
+      .where('userToStudent.userId = :userId', { userId: parent.id })
+      .getCount();
 
-  // Check if the user still has any linked students
-  const linkedStudents = await AppDataSource.getRepository(UserToStudent).find({ where: { user: { id: req.user.id } } });
-
-  // Update the user's hasStudentLinked property only if there are no more linked students
-  if (linkedStudents.length === 0) {
-    const UserRepo = AppDataSource.getRepository(User);
-
-    await UserRepo.createQueryBuilder().update(User).set({ hasStudentLinked: false }).where('id = :id', { id: req.user.id }).execute();
+    if (userToStudentsCount === 0) {
+      parent.hasStudentLinked = false;
+      await AppDataSource.getRepository(User).save(parent);
+    }
   }
 
   res.status(204).send();

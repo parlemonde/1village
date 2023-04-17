@@ -10,7 +10,6 @@ import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
-import { ActivityContext } from 'src/contexts/activityContext';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -22,7 +21,6 @@ export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const { classroom } = useContext(ClassroomContext);
-  const { activity } = useContext(ActivityContext);
   const isMediator = user && user.type <= UserType.MEDIATOR;
 
   //TODO: redo conditions and switchs
