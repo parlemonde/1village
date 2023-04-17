@@ -148,9 +148,12 @@ const PlayMimique = () => {
           maxWidth="lg"
           ariaDescribedBy="new-user-desc"
           ariaLabelledBy="new-user-title"
-          onClose={() => router.push('/creer-un-jeu/mimique')}
+          onClose={() => router.push('/')}
         >
           C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
+          <Button color="primary" onClick={() => router.push('/creer-un-jeu/mimique/jouer')}>
+            Rejouer
+          </Button>
         </Modal>
       </Base>
     );
@@ -280,9 +283,12 @@ const PlayMimique = () => {
           maxWidth="lg"
           ariaDescribedBy="new-user-desc"
           ariaLabelledBy="new-user-title"
-          onClose={() => router.push('/creer-un-jeu/mimique')}
+          onClose={() => router.push('/')}
         >
           C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
+          <Button color="primary" onClick={() => router.push('/creer-un-jeu/mimique/jouer')}>
+            Rejouer
+          </Button>
         </Modal>
         {!found && !foundError && (
           <Button
