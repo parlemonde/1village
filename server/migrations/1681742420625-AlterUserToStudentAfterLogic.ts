@@ -7,10 +7,10 @@ export class UserToStudentTriggerExample1681742420626 implements MigrationInterf
         AFTER INSERT ON user_to_student
         FOR EACH ROW
         BEGIN
-            SELECT '******** Row inserted ********';
+            DECLARE msg VARCHAR(255);
+            SET msg = '******** Row inserted ********';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
         END;
-        
-        
         `);
 
         await queryRunner.query(`
@@ -18,7 +18,9 @@ export class UserToStudentTriggerExample1681742420626 implements MigrationInterf
         AFTER DELETE ON user_to_student
         FOR EACH ROW
         BEGIN
-            SELECT '******** Row deleted ********';
+            DECLARE msg VARCHAR(255);
+            SET msg = '******** Row deleted ********';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
         END;
         `);
     }
