@@ -179,6 +179,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         noCloseOutsideModal={village === null}
         noCancelButton={village !== null}
         onClose={() => {
+          document.body.style.paddingRight = '';
+          document.body.style.overflow = '';
           if (village === null) {
             logout();
           } else {
