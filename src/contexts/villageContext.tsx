@@ -189,6 +189,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         }}
         cancelLabel="Se déconnecter"
         onConfirm={() => {
+          document.body.style.paddingRight = '';
+          document.body.style.overflow = '';
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
             setSelectedPhase(villages[selectedVillageIndex].activePhase);
