@@ -86,13 +86,6 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
 
   const studentCreated = await AppDataSource.getRepository(Student).save(student);
 
-  //Insert of new student in table user_to_student
-  await AppDataSource.createQueryBuilder()
-    .insert()
-    .into(UserToStudent)
-    .values([{ student: { id: studentCreated.id } }])
-    .execute();
-
   res.json(studentCreated);
 });
 
@@ -133,12 +126,11 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
   });
   if (!student) return next();
 
-  await AppDataSource.getRepository(UserToStudent)
-    .createQueryBuilder()
-    .update(UserToStudent)
-    .set({ user: { id: req.user.id } })
-    .where({ student: { id: student.id } })
-    .execute();
+  // Create and save a new UserToStudent object
+  const userToStudent = new UserToStudent();
+  userToStudent.student = student;
+  userToStudent.user = req.user;
+  await AppDataSource.getRepository(UserToStudent).save(userToStudent);
 
   await AppDataSource.getRepository(User)
     .createQueryBuilder()
@@ -216,55 +208,14 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
   const student = await AppDataSource.getRepository(Student).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.user'] });
   if (!student) return res.status(204).send();
 
-  // Find parents linked to this student
-  const parents = student.userToStudents.map((uts) => uts.user);
+  // Preloading the userToStudent relation prevents the cascades effects from failing for some reason...
+  const userToStudents = await AppDataSource.getRepository(UserToStudent).find({
+    where: { student: { id: student.id } },
+    relations: ['user', 'student'],
+  });
 
-  // Remove the student, which triggers the @AfterRemove() hook in the Student entity
+  await AppDataSource.getRepository(UserToStudent).remove(userToStudents);
   await AppDataSource.getRepository(Student).remove(student);
-
-  // Iterate over parents and set hasStudentLinked to false if no other student is linked
-  for (const parent of parents) {
-    if (parent) {
-      const userToStudentsCount = await AppDataSource.getRepository(UserToStudent)
-        .createQueryBuilder('userToStudent')
-        .where('userToStudent.userId = :userId', { userId: parent.id })
-        .getCount();
-
-      if (userToStudentsCount === 0) {
-        parent.hasStudentLinked = false;
-        parent.villageId = null;
-      } else {
-        // Find a remaining student linked to the parent
-        const remainingUserToStudent = await AppDataSource.getRepository(UserToStudent)
-          .createQueryBuilder('userToStudent')
-          .leftJoinAndSelect('userToStudent.student', 'student')
-          .leftJoinAndSelect('student.classroom', 'classroom')
-          .where('userToStudent.userId = :userId', { userId: parent.id })
-          .take(1)
-          .getOne();
-
-        if (remainingUserToStudent && remainingUserToStudent.student && remainingUserToStudent.student.classroom) {
-          // Fetch the classroom directly from the repository using the classroomId
-          const classroomId = remainingUserToStudent.student.classroom.id;
-          const classroom = await AppDataSource.getRepository(Classroom)
-            .createQueryBuilder('classroom')
-            .leftJoinAndSelect('classroom.village', 'village')
-            .where('classroom.id = :classroomId', { classroomId })
-            .getOne();
-
-          if (classroom && classroom.village) {
-            parent.villageId = classroom.village.id;
-            parent.countryCode = classroom.countryCode;
-          }
-        }
-      }
-      try {
-        await AppDataSource.getRepository(User).save(parent);
-      } catch (error) {
-        throw new AppError('une erreur est survenue', ErrorCode.UNKNOWN);
-      }
-    }
-  }
 
   res.status(204).send();
 });
