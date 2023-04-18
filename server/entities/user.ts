@@ -119,6 +119,8 @@ export class User implements UserInterface {
   public position: { lat: number; lng: number };
 
   @Column({ type: 'boolean', default: false })
+  //TODO: add trigger to check if hasStudentLink has to be seted whenever a student is deleted.
+  //TODO: add migration to add trigger...
   public hasStudentLinked: boolean;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)

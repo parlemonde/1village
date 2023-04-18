@@ -1,6 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { Classroom } from '../entities/classroom';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
@@ -223,14 +224,45 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
 
   // Iterate over parents and set hasStudentLinked to false if no other student is linked
   for (const parent of parents) {
-    const userToStudentsCount = await AppDataSource.getRepository(UserToStudent)
-      .createQueryBuilder('userToStudent')
-      .where('userToStudent.userId = :userId', { userId: parent.id })
-      .getCount();
+    if (parent) {
+      const userToStudentsCount = await AppDataSource.getRepository(UserToStudent)
+        .createQueryBuilder('userToStudent')
+        .where('userToStudent.userId = :userId', { userId: parent.id })
+        .getCount();
 
-    if (userToStudentsCount === 0) {
-      parent.hasStudentLinked = false;
-      await AppDataSource.getRepository(User).save(parent);
+      if (userToStudentsCount === 0) {
+        parent.hasStudentLinked = false;
+        parent.villageId = null;
+      } else {
+        // Find a remaining student linked to the parent
+        const remainingUserToStudent = await AppDataSource.getRepository(UserToStudent)
+          .createQueryBuilder('userToStudent')
+          .leftJoinAndSelect('userToStudent.student', 'student')
+          .leftJoinAndSelect('student.classroom', 'classroom')
+          .where('userToStudent.userId = :userId', { userId: parent.id })
+          .take(1)
+          .getOne();
+
+        if (remainingUserToStudent && remainingUserToStudent.student && remainingUserToStudent.student.classroom) {
+          // Fetch the classroom directly from the repository using the classroomId
+          const classroomId = remainingUserToStudent.student.classroom.id;
+          const classroom = await AppDataSource.getRepository(Classroom)
+            .createQueryBuilder('classroom')
+            .leftJoinAndSelect('classroom.village', 'village')
+            .where('classroom.id = :classroomId', { classroomId })
+            .getOne();
+
+          if (classroom && classroom.village) {
+            parent.villageId = classroom.village.id;
+            parent.countryCode = classroom.countryCode;
+          }
+        }
+      }
+      try {
+        await AppDataSource.getRepository(User).save(parent);
+      } catch (error) {
+        throw new AppError('une erreur est survenue', ErrorCode.UNKNOWN);
+      }
     }
   }
 
