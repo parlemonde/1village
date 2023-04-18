@@ -8,24 +8,21 @@ import { DeleteButton } from '../buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { bgPage } from 'src/styles/variables.const';
+import type { User } from 'types/user.type';
+
+type UserStudents = User & {
+  firstLetter: string;
+};
 
 export const LinkChild = () => {
   const router = useRouter();
-  const { user, linkStudent, getLinkedStudents} = React.useContext(UserContext);
+  const { linkStudent } = React.useContext(UserContext);
+  const [linkedStudents, setLinkedStudents] = React.useState<UserStudents[]>([]);
+  const { getLinkedStudentsToUser } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const hashedCodeRef = React.useRef<HTMLInputElement>(null);
-  const { students } = React.useContext(ClassroomContext);
+  // const { students } = React.useContext(ClassroomContext);
 
-  // Create a map of linked students to the user
-  const linkedStudentsMap = React.useMemo(() => {
-    const linkedStudents = {};
-    students.forEach((student) => {
-      if (student.linkedUserId === user.id) {
-        linkedStudents[student.id] = student;
-      }
-    });
-    return linkedStudents;
-  }, [students, user.id]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,6 +44,18 @@ export const LinkChild = () => {
       router.reload();
     }, 2 * 1000);
   };
+
+  React.useEffect(() => {
+    const fetchLinkedStudents = async () => {
+      const linkedStudentsData = await getLinkedStudentsToUser(userId);
+      const linkedStudents: UserStudents[] = linkedStudentsData.map((student) => ({
+        ...student,
+        firstLetter: /[0-9]/.test(student.firstname[0]) ? '0-9' : student.firstname[0].toUpperCase(),
+      }));
+      setLinkedStudents(linkedStudents);
+    };
+    fetchLinkedStudents();
+  }, [getLinkedStudentsToUser, userId]);
 
   return (
     <div style={{ padding: '15px' }}>
@@ -71,26 +80,25 @@ export const LinkChild = () => {
         </Button>
       </form>
       <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '72%', minWidth: '350px' }}>
-        {user?.hasStudentLinked === true &&
-          Object.keys(linkedStudentsMap)
-            .map((studentId) => (
-              <span key={studentId} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-                <p style={{ flex: 1 }}>
-                  {linkedStudentsMap[studentId].hashedCode} {linkedStudentsMap[studentId].firstname} {linkedStudentsMap[studentId].lastname}
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <DeleteButton
-                    onDelete={() => {
-                      // deleteLinkedStudent(user.id);
-                    }}
-                    confirmLabel="Êtes-vous sur de vouloir supprimer votre lien avec l'élève ?"
-                    confirmTitle="Supprimer lien élève"
-                    style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
-                  />
-                </div>
-              </span>
-            ))
-            .reverse()}
+      linkedStudents
+            .map((student) => (
+        <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
+          <p style={{ flex: 1 }}>
+            {student.hashedCode} {student.firstname} {student.lastname}
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <DeleteButton
+              onDelete={() => {
+                // deleteLinkedStudent(user.id);
+              }}
+              confirmLabel="Êtes-vous sur de vouloir supprimer votre lien avec l'élève ?"
+              confirmTitle="Supprimer lien élève"
+              style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
+            />
+          </div>
+        </span>
+        ))
+        .reverse()
       </div>
     </div>
   );

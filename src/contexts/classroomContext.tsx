@@ -32,8 +32,8 @@ export const ClassroomContext = React.createContext<ClassroomContextValue>({
   updateClassroomParameters: async () => {},
   createStudent: async () => {},
   deleteStudent: async () => {},
-  students: []
-  /*   getOneStudent: async () => {}, */
+  students: [],
+  // /*   getOneStudent: async () => {}, */
   setStudents: async () => {},
 });
 

@@ -755,6 +755,34 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.OBSERVATOR }
   });
 });
 
+userController.get({ path: '/linked-students' }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  // Retrieve the user's linked student
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: req.user.id } },
+    relations: ['student', 'student.classroom', 'student.classroom.village', 'student.classroom.user'],
+  });
+
+  if (!userToStudent) {
+    res.status(404).json({ message: 'No linked student found' });
+    return;
+  }
+
+  const { student } = userToStudent;
+
+  res.json({
+    student: {
+      id: student.id,
+      hashedCode: student.hashedCode,
+      firstname: student.firstname,
+      lastname: student.lastname,
+    },
+  });
+});
+
 // Get the visibility parameters for Family members
 userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {

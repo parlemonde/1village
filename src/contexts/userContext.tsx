@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
 import type { User, UserForm } from 'types/user.type';
@@ -20,7 +21,7 @@ interface UserContextValue {
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
-  getLinkedStudents(): Promise<Student[]>;
+  getLinkedStudentsToUser(): Promise<Student[]>;
   // deleteLinkedStudent(id: number): Promise<void>;
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
@@ -37,7 +38,7 @@ export const UserContext = React.createContext<UserContextValue>({
   deleteAccount: async () => false,
   setUser: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
-  getLinkedStudents: async () => {},
+  getLinkedStudentsToUser: async () => {},
   // deleteLinkedStudent: async () => {},
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
@@ -271,20 +272,23 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
   /**
    * Get the user's linked student
    */
-  const getLinkedStudents = React.useCallback(async () => {
-    if (!user) return;
-    // if (user.type !== UserType.TEACHER) return;
-    await axiosRequest({
-      method: 'GET',
-      url: `/students/link-student/${user.id}`,
-    })
-      .then((response) => {
-        return response.data as Student[];
+  const getLinkedStudentsToUser = React.useCallback(
+    async (userId: number) => {
+      if (!user) return;
+      // if (user.type !== UserType.TEACHER) return;
+      await axiosRequest({
+        method: 'GET',
+        url: `/users/linked-students${serializeToQueryUrl({ userId })}`,
       })
-      .catch((err) => {
-        return err.message;
-      });
-  }, [user]);
+        .then((response) => {
+          return response.data as Student[];
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    [user],
+  );
 
   // const deleteLinkedStudent = React.useCallback(
   //   async (hashedCode: string) => {
@@ -345,10 +349,25 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       deleteAccount,
       setUser,
       linkStudent,
+      getLinkedStudentsToUser,
       // deleteLinkedStudent,
       getClassroomAsFamily,
     }),
-    [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent, getClassroomAsFamily],
+    [
+      user,
+      isLoggedIn,
+      login,
+      loginWithSso,
+      signup,
+      updatePassword,
+      verifyEmail,
+      logout,
+      deleteAccount,
+      setUser,
+      linkStudent,
+      getLinkedStudentsToUser,
+      getClassroomAsFamily,
+    ],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
