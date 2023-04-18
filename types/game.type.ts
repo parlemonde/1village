@@ -15,7 +15,11 @@ export interface Game {
   userId: number;
   villageId: number;
   activityId: number;
-  content: string;
+  fakeSignification1: string;
+  fakeSignification2: string;
+  origine: string;
+  signification: string;
+  video: string;
 }
 
 export type GamesData = {

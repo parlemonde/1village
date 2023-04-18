@@ -92,7 +92,13 @@ const PlayMimique = () => {
       return undefined;
     }
     try {
-      return JSON.parse(game.content) as MimicData;
+      return {
+        fakeSignification1: game.fakeSignification1,
+        fakeSignification2: game.fakeSignification2,
+        origine: game.origine,
+        signification: game.signification,
+        video: game.video,
+      } as MimicData;
     } catch (e) {
       return undefined;
     }
