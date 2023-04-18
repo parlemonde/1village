@@ -104,36 +104,46 @@ export const labels = {
   [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
 };
 
-const specificActivityPhase = {
-  [ActivityType.MASCOTTE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
+export const specificActivityPhase = {
   [ActivityType.PRESENTATION]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
-  [ActivityType.DEFI]: [PhaseType.TWO],
-  [ActivityType.GAME]: [PhaseType.TWO],
   [ActivityType.ENIGME]: [PhaseType.TWO],
+  [ActivityType.DEFI]: [PhaseType.TWO],
   [ActivityType.QUESTION]: [PhaseType.TWO, PhaseType.THREE],
+  [ActivityType.GAME]: [PhaseType.TWO],
   [ActivityType.CONTENU_LIBRE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.INDICE]: [PhaseType.ONE],
   [ActivityType.SYMBOL]: [PhaseType.ONE],
+  [ActivityType.MASCOTTE]: [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE],
   [ActivityType.REPORTAGE]: [PhaseType.TWO],
   [ActivityType.REACTION]: [PhaseType.TWO],
-  [ActivityType.STORY]: [PhaseType.THREE],
-  [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
   [ActivityType.ANTHEM]: [],
   [ActivityType.VERSE_RECORD]: [PhaseType.THREE],
+  [ActivityType.STORY]: [PhaseType.THREE],
+  [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
 };
 export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {
-  const availablePhases = specificActivityPhase[activityType] || [PhaseType.ONE, PhaseType.TWO, PhaseType.THREE];
+  const availablePhases = specificActivityPhase[activityType];
+
+  const hasAvailablePhases = availablePhases.length !== 0;
+  const isSelectedPhaseValid = availablePhases.includes(selectedPhase) && selectedPhase <= activePhase;
+
+  if (hasAvailablePhases && !isSelectedPhaseValid) {
+    const errorMessage = !availablePhases.includes(selectedPhase)
+      ? `Phase ${selectedPhase} is not in availablePhases`
+      : `Phase ${selectedPhase} cannot be superior to activePhase: ${activePhase}`;
+
+    return fail(errorMessage);
+  }
+
   //Anthem case
-  if (availablePhases.length === 0) {
+  if (!hasAvailablePhases) {
     return activePhase;
   }
+
   //Other cases : verified if selectedPhase is include in ActivityPhase
-  if (availablePhases.includes(selectedPhase) && selectedPhase <= activePhase) {
-    return selectedPhase;
-  }
-  //default value in any other case : old logic keeped here
-  return availablePhases
-    .filter((p) => p <= activePhase)
-    .concat([1])
-    .sort((a, b) => b - a)[0];
+  return selectedPhase;
 };
+
+function fail(message: string): never {
+  throw new Error(message);
+}

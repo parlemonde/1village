@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import React from 'react';
 
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
@@ -34,8 +34,28 @@ function shuffleArray(array: Array<number>) {
   return array;
 }
 
-const PlayMimique = () => {
+type AlreadyPlayerModalProps = {
+  isOpen: boolean;
+};
+
+const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
   const router = useRouter();
+  return (
+    <Modal
+      open={isOpen}
+      title="Oups"
+      cancelLabel="Retourner à l'accueil"
+      maxWidth="lg"
+      ariaDescribedBy="new-user-desc"
+      ariaLabelledBy="new-user-title"
+      onClose={() => router.push('/creer-un-jeu/mimique')}
+    >
+      C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
+    </Modal>
+  );
+};
+
+const PlayMimique = () => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const { users } = useVillageUsers();
@@ -49,7 +69,7 @@ const PlayMimique = () => {
   const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
-  const [lastMimiqueModalOpen, setLastMimiqueModalOpen] = React.useState<boolean>(false);
+  const [isLastMimiqueModalOpen, setIsLastMimiqueModalOpen] = React.useState<boolean>(false);
   const [loadingGame, setLoadingGame] = React.useState<boolean>(true);
   const [gameResponses, setGameResponses] = React.useState<GameResponse[]>([]);
 
@@ -69,7 +89,7 @@ const PlayMimique = () => {
     // [2] Get next game data.
     const newGame = await getRandomGame(GameType.MIMIC);
     setGame(newGame);
-    setLastMimiqueModalOpen(newGame === undefined);
+    setIsLastMimiqueModalOpen(newGame === undefined);
 
     setLoadingGame(false);
   }, [getRandomGame]);
@@ -148,7 +168,7 @@ const PlayMimique = () => {
     return (
       <Base>
         <Modal
-          open={lastMimiqueModalOpen}
+          open={isLastMimiqueModalOpen}
           title="Oups"
           cancelLabel="Retourner à l'accueil"
           maxWidth="lg"
@@ -283,7 +303,7 @@ const PlayMimique = () => {
           )}
         </Modal>
         <Modal
-          open={lastMimiqueModalOpen}
+          open={isLastMimiqueModalOpen}
           title="Oups"
           cancelLabel="Retourner à l'accueil"
           maxWidth="lg"

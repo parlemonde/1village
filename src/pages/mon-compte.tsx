@@ -19,11 +19,12 @@ import { UserContext } from 'src/contexts/userContext';
 import { defaultContainedButtonStyle, helpColor } from 'src/styles/variables.const';
 import { getUserDisplayName } from 'src/utils';
 import { isPseudoValid, isEmailValid, isPasswordValid, isConfirmPasswordValid } from 'src/utils/accountChecks';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 
 const Presentation = () => {
-  const { user, setUser, axiosLoggedRequest, logout } = React.useContext(UserContext);
+  const { user, setUser, logout } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [newUser, setNewUser] = React.useState<User | null>(user);
   const [pwd, setPwd] = React.useState({
@@ -74,7 +75,7 @@ const Presentation = () => {
       email: newUser.email,
       displayName: newUser.displayName,
     };
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: updatedValues,
@@ -94,7 +95,7 @@ const Presentation = () => {
   };
   const updateAvatar = async (avatar: string) => {
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}`,
       data: {
@@ -116,7 +117,7 @@ const Presentation = () => {
   };
   const updatePwd = async () => {
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'PUT',
       url: `/users/${user.id}/password`,
       data: {
@@ -139,7 +140,7 @@ const Presentation = () => {
 
   const deleteAccount = async () => {
     setIsLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'DELETE',
       url: `/users/${user.id}`,
     });

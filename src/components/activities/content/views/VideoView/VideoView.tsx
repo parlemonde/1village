@@ -6,11 +6,10 @@ import { Button, CircularProgress } from '@mui/material';
 
 import type { ViewProps } from '../../content.types';
 import { KeepRatio } from 'src/components/KeepRatio';
-import { UserContext } from 'src/contexts/userContext';
 import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
 
 const VideoView = ({ value }: ViewProps) => {
-  const { axiosLoggedRequest } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
 
@@ -18,7 +17,7 @@ const VideoView = ({ value }: ViewProps) => {
 
   const onDownload = async () => {
     setLoading(true);
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: `/videos/download${serializeToQueryUrl({
         videoUrl: value,

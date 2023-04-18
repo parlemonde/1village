@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -13,6 +13,7 @@ import Select from '@mui/material/Select';
 import { UserContext } from './userContext';
 import { Modal } from 'src/components/Modal';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
+import { axiosRequest } from 'src/utils/axiosRequest';
 import { getCookie, setCookie } from 'src/utils/cookies';
 import { UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
@@ -37,37 +38,36 @@ type VillageContextProviderProps = React.PropsWithChildren<{
 export const VillageContextProvider = ({ initialVillage, children }: VillageContextProviderProps) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, axiosLoggedRequest, logout } = React.useContext(UserContext);
+  const { user, logout } = React.useContext(UserContext);
   const [village, setVillage] = React.useState<Village | null>(initialVillage);
   const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
-  const [selectedPhase, setSelectedPhase] = React.useState(user !== null ? (user.firstLogin === 0 ? 1 : user.firstLogin) : -1);
+  const [selectedPhase, fakeSelectedPhase] = React.useState(
+    user !== null ? (user.type >= UserType.MEDIATOR ? village?.activePhase ?? 1 : user.firstLogin === 0 ? 1 : user.firstLogin) : -1,
+  );
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type <= UserType.MEDIATOR);
+  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type !== UserType.MEDIATOR);
 
   React.useEffect(() => {
-    setShowUnassignedModal(user !== null && user.villageId === null && user.type <= UserType.MEDIATOR);
+    setShowUnassignedModal(user !== null && user.villageId === null && user.type === UserType.MEDIATOR);
   }, [user]);
 
   const currentVillageId = village ? village.id : -1;
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 
-  const getVillage = React.useCallback(
-    async (villageId: number) => {
-      const response = await axiosLoggedRequest({
-        method: 'GET',
-        url: `/villages/${villageId}`,
-      });
-      if (response.error) {
-        return null;
-      }
-      return response.data as Village;
-    },
-    [axiosLoggedRequest],
-  );
+  const getVillage = React.useCallback(async (villageId: number) => {
+    const response = await axiosRequest({
+      method: 'GET',
+      url: `/villages/${villageId}`,
+    });
+    if (response.error) {
+      return null;
+    }
+    return response.data as Village;
+  }, []);
   const getVillages = React.useCallback(async () => {
-    const response = await axiosLoggedRequest({
+    const response = await axiosRequest({
       method: 'GET',
       url: '/villages',
     });
@@ -76,7 +76,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
       return;
     }
     setVillages(response.data as Village[]);
-  }, [axiosLoggedRequest]);
+  }, []);
 
   const hasFetchVillages = React.useRef(false);
   const showSelectVillageModal = React.useCallback(() => {
@@ -88,26 +88,36 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     setIsModalOpen(true);
   }, [getVillages]);
 
+  const setSelectedPhase = useCallback(
+    (currentPhase: number) => {
+      sessionStorage.setItem('selectedPhase', currentPhase.toString());
+      fakeSelectedPhase(currentPhase);
+    },
+    [fakeSelectedPhase],
+  );
+
   const setUserVillage = React.useCallback(async () => {
     if (user === null) {
       // should not happen
       return;
     }
-
     const userVillageId = user.villageId || parseInt(getCookie('village-id'), 10) || -1;
     if (userVillageId !== currentVillageId) {
       const newVillage = userVillageId === -1 ? null : await getVillage(userVillageId);
       setVillage(newVillage);
       setSelectedPhase(newVillage ? newVillage.activePhase : 1);
     }
-    if (userVillageId === -1 && user.type > UserType.TEACHER) {
+    if (userVillageId === -1 && user.type !== UserType.TEACHER) {
       showSelectVillageModal();
     }
     if (userVillageId === -1 && user.type === UserType.TEACHER) {
       setShowUnassignedModal(true);
     }
-  }, [currentVillageId, getVillage, showSelectVillageModal, user]);
+  }, [currentVillageId, getVillage, showSelectVillageModal, user, setSelectedPhase]);
+
   React.useEffect(() => {
+    const storedSelectedPhase = Number(window.sessionStorage.getItem('selectedPhase'));
+    storedSelectedPhase && setSelectedPhase(storedSelectedPhase);
     if (user === null) {
       setIsModalOpen(false);
       setShowUnassignedModal(false);
@@ -119,7 +129,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     } else {
       setUserVillage().catch();
     }
-  }, [user, isOnAdmin, setUserVillage]);
+  }, [user, isOnAdmin, setUserVillage, setSelectedPhase]);
 
   const alreadyAsked = React.useRef(false);
   const onAskVillage = async () => {
@@ -128,7 +138,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         variant: 'success',
       });
     } else {
-      const response = await axiosLoggedRequest({
+      const response = await axiosRequest({
         method: 'POST',
         url: '/users/ask-update',
         data: {
@@ -149,7 +159,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   };
 
   const value = React.useMemo(
-    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase }),
+    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase: setSelectedPhase }),
     [village, selectedPhase, showSelectVillageModal, setSelectedPhase],
   );
 
@@ -169,6 +179,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         noCloseOutsideModal={village === null}
         noCancelButton={village !== null}
         onClose={() => {
+          document.body.style.paddingRight = '';
+          document.body.style.overflow = '';
           if (village === null) {
             logout();
           } else {
@@ -177,6 +189,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         }}
         cancelLabel="Se déconnecter"
         onConfirm={() => {
+          document.body.style.paddingRight = '';
+          document.body.style.overflow = '';
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
             setSelectedPhase(villages[selectedVillageIndex].activePhase);
@@ -188,7 +202,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         {(villages || []).length === 0 ? (
           <>
             <p>Aucun village existe !</p>
-            {user !== null && user.type >= UserType.ADMIN ? (
+            {user !== null && (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN) ? (
               <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small">
                   {"Créer un village sur l'interface admin"}
@@ -218,7 +232,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
                 ))}
               </Select>
             </FormControl>
-            {village === null && user !== null && user.type >= UserType.ADMIN && (
+            {village === null && user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN) && (
               <>
                 <Divider style={{ margin: '1rem 0' }} />
                 <Link href="/admin/villages" passHref>
