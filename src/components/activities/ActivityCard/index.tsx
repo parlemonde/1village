@@ -48,6 +48,7 @@ const CardTypeMapper = {
   [ActivityType.STORY]: StoryCard,
   [ActivityType.ANTHEM]: AnthemCard,
   [ActivityType.VERSE_RECORD]: VerseRecordCard,
+  [ActivityType.RE_INVENT_STORY]: StoryCard,
 };
 
 export const ActivityCard = ({
