@@ -180,11 +180,6 @@ main {
   }
 }
 
-// Scrollbar
-html {
-  overflow-y: scroll;
-}
-
 @include for-laptop-screen-up {
   .app-container {
     width: 96vw;
