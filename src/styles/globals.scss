@@ -5,8 +5,8 @@ body {
   font-size: 1rem !important;
   color: $font-color !important;
   font-weight: 400 !important;
-  overflow-x: auto;
-  overflow-y: auto;
+  padding: 0 !important; 
+  overflow: auto !important;
 }
 
 h1,
