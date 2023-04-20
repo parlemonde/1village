@@ -1,6 +1,11 @@
 import React from 'react';
 
-const ExpendableButton = ({ isOpen, toggle }) => {
+interface ExpendableButtonProps {
+  isOpen: boolean;
+  toggle: () => void;
+}
+
+const ExpendableButton: React.FC<ExpendableButtonProps> = ({ isOpen, toggle }) => {
   return (
     <button onClick={toggle}>
       <span
