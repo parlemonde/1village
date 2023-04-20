@@ -57,7 +57,9 @@ export const LinkChild = () => {
   //   fetchLinkedStudents();
   // }, [getLinkedStudentsToUser, userId]);
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    getLinkedStudentsToUser;
+  }, [getLinkedStudentsToUser]);
 
   return (
     <div style={{ padding: '15px' }}>
@@ -85,8 +87,10 @@ export const LinkChild = () => {
         {linkedStudents.map((student) => (
           <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
             <p style={{ flex: 1 }}>
+              console.log("user.id");
               {student.hashedCode} {student.firstname} {student.lastname}
             </p>
+
             {/* <div style={{ display: 'flex', alignItems: 'center' }}>
             <DeleteButton
               onDelete={() => {
