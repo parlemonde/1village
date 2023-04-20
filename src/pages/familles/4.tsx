@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Button } from '@mui/material';
 
+import { getUsersLinkedToStudent } from 'src/api/student/student.get';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -11,6 +12,7 @@ const ClassroomParamStep4 = () => {
   const [numOfPresToPrint, setNumOfPresToPrint] = useState<number>(0);
 
   const onPrint = () => {};
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

@@ -15,6 +15,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
+import { getUsersLinkedToStudent } from 'src/api/student/student.get';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 
 function createData(name: string, numAccountLinked: number, studentCode: string | undefined) {
@@ -95,8 +96,12 @@ export default function CollapsibleTable() {
   for (const student of students) {
     rows.push(createData(student.firstname + ' ' + student.lastname, student.numLinkedAccount || 0, student.hashedCode));
   }
-  console.log(students);
-  console.log(rows);
+
+  React.useEffect(() => {
+    const result = getUsersLinkedToStudent(students[0]?.id);
+    console.log(result);
+  }, [students]);
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
