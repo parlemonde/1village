@@ -57,6 +57,8 @@ export const LinkChild = () => {
   //   fetchLinkedStudents();
   // }, [getLinkedStudentsToUser, userId]);
 
+  React.useEffect(() => {}, []);
+
   return (
     <div style={{ padding: '15px' }}>
       <h1>Ajouter ou retirer un enfant</h1>
@@ -80,7 +82,6 @@ export const LinkChild = () => {
         </Button>
       </form>
       <div className="students-list" style={{ display: 'flex', flexDirection: 'column', width: '72%', minWidth: '350px' }}>
-        console.log('here I am');
         {linkedStudents.map((student) => (
           <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
             <p style={{ flex: 1 }}>
