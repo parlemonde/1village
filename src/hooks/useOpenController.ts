@@ -1,7 +1,12 @@
 import { useCallback, useState } from 'react';
 
-export default function useOpenController(initialState) {
-  const [isOpen, setOpenState] = useState(initialState);
+interface UseOpenController {
+  isOpen: boolean;
+  toggle: () => void;
+}
+
+export default function useOpenController(initialState: boolean): UseOpenController {
+  const [isOpen, setOpenState] = useState<boolean>(initialState);
 
   const toggle = useCallback(() => {
     setOpenState((state) => !state);
