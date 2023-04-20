@@ -528,7 +528,11 @@ const createGame = async (data: GameData, activity: Activity): Promise<Game> => 
   game.villageId = activity.villageId;
   game.userId = activity.userId;
   game.type = activity.subType;
-  game.content = JSON.stringify(data);
+  game.signification = data.signification;
+  game.fakeSignification1 = data.fakeSignification1;
+  game.fakeSignification2 = data.fakeSignification2;
+  game.origine = data.origine;
+  game.video = data.video;
   await AppDataSource.getRepository(Game).save(game);
   return game;
 };

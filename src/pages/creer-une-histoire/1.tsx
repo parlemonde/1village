@@ -84,7 +84,7 @@ const StoryStep1 = () => {
           activeStep={0}
         />
         <div className="width-900">
-          <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>
+          <h1>Choisissez et dessinez l’objectif du développement durable à atteindre</h1>
           <p className="text">Pour atteindre votre objectif de développement durable, vous choisirez un objet et un lieu aux étapes suivantes.</p>
           <p className="text">Choisissez votre objectif et dessinez-le.</p>
           <Grid container spacing={3}>

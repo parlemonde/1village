@@ -54,27 +54,19 @@ const Communication = () => {
     }
   }, [textValue]);
 
-  const printContent = (content: string) => {
-    const printIframe = document.createElement('iframe');
-    printIframe.style.position = 'absolute';
-    printIframe.style.width = '0';
-    printIframe.style.height = '0';
-    printIframe.style.border = '0';
-    document.body.appendChild(printIframe);
-
-    if (printIframe.contentWindow) {
-      printIframe.contentWindow.document.write(content);
-      printIframe.contentWindow.document.close();
-      printIframe.contentWindow.focus();
-
-      setTimeout(() => {
-        printIframe.contentWindow?.print();
-        document.body.removeChild(printIframe);
-      }, 100);
-    } else {
-      console.error('Unable to access the contentWindow of the iframe.');
-    }
+  // --- PDF Name ---
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}${month}${day}_${hours}${minutes}${seconds}`;
   };
+
+  const timestamp = formatDate(new Date());
+  const fileName = `${timestamp}_codes-enfants.pdf`;
 
   const onPrint = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
@@ -103,8 +95,18 @@ const Communication = () => {
         }
       });
 
-      const printContentString = `<html><head><meta charset="UTF-8"></head><body>${messagesWithId.join(' ')}</body></html>`;
-      printContent(printContentString);
+      const printContentString = `<html><head><title>${fileName}</title><meta charset="UTF-8"></head><body>${messagesWithId.join(' ')}</body></html>`;
+
+      // Open the content in a new window and trigger the print dialog
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(printContentString);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      } else {
+        console.error('Unable to open a new window for printing.');
+      }
     } else {
       setIsModalOpen(true);
     }

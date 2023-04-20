@@ -78,10 +78,6 @@ export class User implements UserInterface {
   })
   type: UserType;
 
-  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
-
   @Column({ nullable: true })
   public villageId: number | null;
 
@@ -118,8 +114,16 @@ export class User implements UserInterface {
 
   public position: { lat: number; lng: number };
 
+  public mascotteId?: number;
+
   @Column({ type: 'boolean', default: false })
+  //TODO: add trigger to check if hasStudentLink has to be seted whenever a student is deleted.
+  //TODO: add migration to add trigger...
   public hasStudentLinked: boolean;
+
+  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'villageId' })
+  public village: Village | null;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
@@ -132,8 +136,6 @@ export class User implements UserInterface {
 
   @OneToMany(() => Image, (image: Image) => image.user)
   public images: Image[];
-
-  public mascotteId?: number;
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
   public userToStudents: UserToStudent[];
