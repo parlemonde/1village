@@ -1,6 +1,6 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class GameAddJsonColumns1622752906572 implements MigrationInterface {
+export class GameAddJsonColumns1675763011163 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // add 5 columns
     await queryRunner.query(`ALTER TABLE game ADD fakeSignification1 TEXT`);
