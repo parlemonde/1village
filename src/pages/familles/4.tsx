@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, Button } from '@mui/material';
 
-import { getUsersLinkedToStudent } from 'src/api/student/student.get';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CollapsibleTable from 'src/components/table/CollapsibleTable';
 
 const ClassroomParamStep4 = () => {
-  const [numOfPresToPrint, setNumOfPresToPrint] = useState<number>(0);
+  const [numOfPresToPrint] = useState<number>(0);
 
   const onPrint = () => {};
 

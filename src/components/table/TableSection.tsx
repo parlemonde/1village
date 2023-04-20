@@ -1,12 +1,28 @@
 import React from 'react';
 
-import { TableRow } from '@mui/material';
-
 import useOpenController from '../../hooks/useOpenController';
 import ExpendableButton from './ExpendableButton';
+import TableRow from './TableRow';
 
-const TableSection = ({ rowData, index }) => {
+interface TableSectionProps {
+  rowData: {
+    firstname: string;
+    lastname: string;
+    numOfAccountLinked: number;
+    code: string;
+  };
+  index: number;
+}
+
+const TableSection: React.FC<TableSectionProps> = ({ rowData, index }) => {
   const { isOpen, toggle } = useOpenController(false);
+
+  const defaultRowData = {
+    firstname: '',
+    lastname: '',
+    numOfAccountLinked: 0,
+    code: '',
+  };
 
   return (
     <tbody>
@@ -20,7 +36,7 @@ const TableSection = ({ rowData, index }) => {
       <td></td>
       <td></td>
       <td></td>
-      {isOpen && <TableRow rowData={rowData} />}
+      {isOpen ? <TableRow rowData={rowData} /> : <TableRow rowData={defaultRowData} />}
     </tbody>
   );
 };

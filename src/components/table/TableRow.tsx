@@ -1,8 +1,15 @@
 import React from 'react';
 
-import { TableSection } from './TableSection.jsx';
+interface TableRowProps {
+  rowData: {
+    firstname: string;
+    lastname: string;
+    numOfAccountLinked: number;
+    code: string;
+  };
+}
 
-const TableRow = ({ rowData }) => {
+const TableRow: React.FC<TableRowProps> = ({ rowData }) => {
   return (
     <tr>
       <td></td>
