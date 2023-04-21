@@ -755,32 +755,27 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.OBSERVATOR }
   });
 });
 
-userController.get({ path: '/linked-students' }, async (req: Request, res: Response) => {
+userController.get({ path: '/:id/linked-students' }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
   // Retrieve the user's linked student
-  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
-    where: { user: { id: req.user.id } },
-    relations: ['student', 'student.classroom', 'student.classroom.village', 'student.classroom.user'],
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const user = await AppDataSource.getRepository(User).findOne({
+    where: { id },
+    relations: ['userToStudents', 'userToStudents.student'],
   });
 
-  if (!userToStudent) {
+  if (!user) {
     res.status(404).json({ message: 'No linked student found' });
     return;
   }
 
-  const { student } = userToStudent;
-
-  res.json({
-    student: {
-      id: student.id,
-      hashedCode: student.hashedCode,
-      firstname: student.firstname,
-      lastname: student.lastname,
-    },
-  });
+  // const { student } = userToStudent;
+  const students = user.userToStudents.map((userToStudent) => userToStudent.student);
+  res.json(students);
 });
 
 // Get the visibility parameters for Family members

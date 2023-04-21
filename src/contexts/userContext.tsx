@@ -21,6 +21,7 @@ interface UserContextValue {
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
+  linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
   getLinkedStudentsToUser(): Promise<void>;
   // deleteLinkedStudent(id: number): Promise<void>;
   students: Student[];
@@ -35,11 +36,12 @@ export const UserContext = React.createContext<UserContextValue>({
   signup: async () => ({ success: false, errorCode: 0 }),
   updatePassword: async () => ({ success: false, errorCode: 0 }),
   verifyEmail: async () => ({ success: false, errorCode: 0 }),
-  logout: async () => {},
+  logout: async () => { },
   deleteAccount: async () => false,
-  setUser: () => {},
+  setUser: () => { },
   linkStudent: async () => ({ success: false, errorCode: 0 }),
-  getLinkedStudentsToUser: async () => {},
+  linkedStudents: async () => ({ success: false, errorCode: 0 }),
+  getLinkedStudentsToUser: async () => { },
   students: [],
   // deleteLinkedStudent: async () => {},
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
@@ -280,7 +282,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       // if (user.type !== UserType.TEACHER) return;
       await axiosRequest({
         method: 'GET',
-        url: `/users/linked-students${serializeToQueryUrl({ userId })}`,
+        url: `/users/:id/linked-students${serializeToQueryUrl({ userId })}`,
       })
         .then((response) => {
           return response.data as Student[];

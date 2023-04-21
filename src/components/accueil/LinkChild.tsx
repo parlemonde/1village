@@ -18,11 +18,12 @@ import type { Student } from 'types/student.type';
 export const LinkChild = () => {
   const router = useRouter();
   const { linkStudent } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
   const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
   const { getLinkedStudentsToUser } = React.useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
   const hashedCodeRef = React.useRef<HTMLInputElement>(null);
-  // const { students } = React.useContext(ClassroomContext);
+  //const { students } = React.useContext(ClassroomContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,7 +61,7 @@ export const LinkChild = () => {
   React.useEffect(() => {
     getLinkedStudentsToUser;
   }, [getLinkedStudentsToUser]);
-
+  console.log(linkedStudents);
   return (
     <div style={{ padding: '15px' }}>
       <h1>Ajouter ou retirer un enfant</h1>
@@ -87,7 +88,6 @@ export const LinkChild = () => {
         {linkedStudents.map((student) => (
           <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
             <p style={{ flex: 1 }}>
-              console.log("user.id");
               {student.hashedCode} {student.firstname} {student.lastname}
             </p>
 
