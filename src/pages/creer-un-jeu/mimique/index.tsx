@@ -5,26 +5,26 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 import { Base } from 'src/components/Base';
-// import { useGameRequests } from 'src/services/useGames';
-// import { GameType } from 'types/game.type';
+import { useGameRequests } from 'src/services/useGames';
+import { GameType } from 'types/game.type';
 
 const Mimique = () => {
   const router = useRouter();
-  // const { getUserCreatedGamesCount, getAvailableGamesCount } = useGameRequests();
-  // const [mimicsCount, setMimicsCount] = React.useState<number>(0);
-  // const [hasUserCreatedMimics, setHasUserCreatedMimics] = React.useState<boolean>(false);
+  const { getUserCreatedGamesCount, getAvailableGamesCount } = useGameRequests();
+  const [mimicsCount, setMimicsCount] = React.useState<number>(0);
+  const [hasUserCreatedMimics, setHasUserCreatedMimics] = React.useState<boolean>(false);
 
-  // React.useEffect(() => {
-  //   getAvailableGamesCount(GameType.MIMIC).then((count) => {
-  //     setMimicsCount(count);
-  //   });
-  // }, [getAvailableGamesCount]);
+  React.useEffect(() => {
+    getAvailableGamesCount(GameType.MIMIC).then((count) => {
+      setMimicsCount(count);
+    });
+  }, [getAvailableGamesCount]);
 
-  // React.useEffect(() => {
-  //   getUserCreatedGamesCount(GameType.MIMIC, 'self').then((game) => {
-  //     setHasUserCreatedMimics(game > 0);
-  //   });
-  // }, [getUserCreatedGamesCount]);
+  React.useEffect(() => {
+    getUserCreatedGamesCount(GameType.MIMIC, 'self').then((game) => {
+      setHasUserCreatedMimics(game > 0);
+    });
+  }, [getUserCreatedGamesCount]);
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginTop: '2rem' }}>
@@ -59,32 +59,6 @@ const Mimique = () => {
             Faire découvrir 3 mimiques
           </Button>
         </Link>
-        {/* <h1 style={{ marginTop: '6rem' }}>Découvrez les mimiques de vos Pélicopains !</h1>
-
-        <p style={{ marginBottom: '3rem' }}>
-          Une fois que vous aurez décrit 3 mimiques, ça sera à vous de deviner ce que veulent dire les mimiques de vos Pélicopains ! Il y a
-          actuellement {mimicsCount === 0 ? `${mimicsCount} nouvelle mimique` : `${mimicsCount} nouvelles mimiques`} à découvrir :
-        </p>
-
-        <Link href="/creer-un-jeu/mimique/jouer" passHref>
-          <Button
-            component="a"
-            onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-              event.preventDefault();
-              router.push('/creer-un-jeu/mimique/jouer');
-            }}
-            href="/creer-un-jeu/mimique/jouer"
-            color="primary"
-            variant="outlined"
-            style={{
-              float: 'right',
-            }}
-            //disableElevation
-            //disabled={hasUserCreatedMimics === false || mimicsCount === 0}
-          >
-            Découvrir des mimiques
-          </Button>
-        </Link> */}
       </div>
     </Base>
   );

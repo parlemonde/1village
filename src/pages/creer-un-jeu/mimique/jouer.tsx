@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
@@ -112,13 +112,9 @@ const PlayMimique = () => {
       return undefined;
     }
     try {
-      return {
-        fakeSignification1: game.fakeSignification1,
-        fakeSignification2: game.fakeSignification2,
-        origine: game.origine,
-        signification: game.signification,
-        video: game.video,
-      } as MimicData;
+      const { id, origine, fakeSignification1, fakeSignification2, signification, video } = game;
+      const content: MimicData = { gameId: id, createDate: new Date(), origine, fakeSignification1, fakeSignification2, signification, video };
+      return content;
     } catch (e) {
       return undefined;
     }
@@ -195,12 +191,18 @@ const PlayMimique = () => {
             <p className="text" style={{ marginTop: '0.7rem' }}>
               {'Une mimique proposée par '}
               <UserDisplayName className="text" user={gameCreator} noLink={false} />
-              {gameCreatorIsPelico ? (
-                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
-              ) : (
-                <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
-              )}
             </p>
+            {mimicContent && mimicContent.createDate && (
+              <p style={{ fontSize: '0.8rem', color: 'gray' }}>
+                {'publié le '}
+                {new Date(mimicContent.createDate).toLocaleDateString()}
+                {gameCreatorIsPelico ? (
+                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+                ) : (
+                  <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                )}
+              </p>
+            )}
           </div>
         </div>
         <Grid container spacing={3}>

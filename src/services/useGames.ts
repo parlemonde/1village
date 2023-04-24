@@ -85,6 +85,7 @@ export const useGameRequests = () => {
       if (!village) {
         return undefined;
       }
+
       const response = await axiosRequest({
         method: 'GET',
         url: `/games/play${serializeToQueryUrl({
@@ -92,6 +93,7 @@ export const useGameRequests = () => {
           type,
         })}`,
       });
+
       if (response.error) {
         return undefined;
       }
