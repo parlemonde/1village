@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { AccessTimeIcon } from '@mui/icons-material';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import { color } from '@mui/system';
 
@@ -180,7 +180,7 @@ const PlayMimique = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
         <div className="activity-card__header">
           <h1>Jouer au jeu des mimiques !</h1>
-          <p>A vous de décider avec quelle mimique vous allez jouer ! test2</p>
+          <p>A vous de décider avec quelle mimique vous allez jouer ! test22585</p>
           <p>Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière mimique publiée.</p>
         </div>
         <div className="activity-card__header">
