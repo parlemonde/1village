@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { ActivityContext } from 'src/Context/ActivityContext';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AppsIcon from '@mui/icons-material/Apps';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import { color } from '@mui/system';
 
@@ -11,6 +14,7 @@ import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
+import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { MimicStats } from 'src/components/activities/MimicStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { CustomRadio as GreenRadio, CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
@@ -24,7 +28,12 @@ import { GameType } from 'types/game.type';
 import type { Game, MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { MimicResponseValue } from 'types/mimicResponse.type';
-import { UserType } from 'types/user.type';
+import { UserType, User } from 'types/user.type';
+
+interface RightNavigationProps {
+  activityUser: User;
+  displayAsUser?: boolean;
+}
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -176,157 +185,194 @@ const PlayMimique = () => {
   }
 
   return (
-    <Base>
+    <Base rightNav={<RightNavigation activityUser={user} displayAsUser={true} />} hideLeftNav showSubHeader>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
-        <div className="activity-card__header">
-          <h1>Jouer au jeu des mimiques !</h1>
-          <p>A vous de décider avec quelle mimique vous allez jouer ! test22585</p>
-          <p>Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière mimique publiée.</p>
-        </div>
-        <div className="activity-card__header">
-          <AvatarImg user={gameCreator} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
-          <div className="activity-card__header_info" style={{ display: 'block,', justifyContent: 'center', alignItems: 'center' }}>
-            <p className="text" style={{ marginTop: '0.7rem' }}>
-              {'Une mimique proposée par '}
-              <UserDisplayName className="text" user={gameCreator} noLink={false} />
+        <Box display="flex" flexDirection="column">
+          <Box alignItems="flex-start">
+            <h1>Jouer au jeu des mimiques !</h1>
+            <p style={{ marginBottom: 0 }}>A vous de décider avec quelle mimique vous allez jouer !</p>
+            <p style={{ marginTop: 0 }}>
+              Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière mimique publiée.
             </p>
-            {mimicContent && mimicContent.createDate && (
-              <p style={{ fontSize: '0.8rem', color: 'gray' }}>
-                {'publié le '}
-                {new Date(mimicContent.createDate).toLocaleDateString()}
-                {gameCreatorIsPelico ? (
-                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
-                ) : (
-                  <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
-                )}
-              </p>
-            )}
+          </Box>
+          <div className="activity-card__header">
+            <AvatarImg user={gameCreator} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
+            <div
+              className="activity-card__header_info"
+              style={{ display: 'block,', justifyContent: 'center', alignItems: 'center', paddingBottom: '1rem' }}
+            >
+              <h3 className="text" style={{ marginTop: '0.7rem' }}>
+                {'Une mimique proposée par '}
+                <UserDisplayName className="text" user={gameCreator} noLink={false} />
+              </h3>
+              {mimicContent && mimicContent.createDate && (
+                <p style={{ fontSize: '0.8rem', color: 'gray' }}>
+                  {'publié le '}
+                  {new Date(mimicContent.createDate).toLocaleDateString()}
+                  {gameCreatorIsPelico ? (
+                    <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+                  ) : (
+                    <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                  )}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ width: '100%' }}>
-          <Grid item xs={3}>
-            <Button
-              style={{
-                float: 'right',
-              }}
-              variant="outlined"
-              color="primary"
-              onClick={onValidate}
-              disabled={!ableToValidate}
-            >
-              mimique précédente
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <RadioGroup row>
-              <FormControlLabel value="nouvelle" control={<Radio />} icon={AccessTimeIcon} label="Nouvelle" labelPlacement="end" />
-              <FormControlLabel value="aleatoire" control={<Radio />} label="Aléatoire" labelPlacement="end" />
-              <FormControlLabel value="mosaique" control={<Radio />} label="Mosaïque" labelPlacement="end" />
-            </RadioGroup>
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              style={{
-                float: 'right',
-              }}
-              variant="outlined"
-              color="primary"
-              onClick={getNextGame}
-            >
-              mimique suivante
-            </Button>
-          </Grid>
-        </Grid>
-        <Box border={1} borderColor={primaryColor} p={1} m={1} boxSizing="border-box">
-          <Grid container spacing={3} alignItems="flex-start" justifyContent="flex-start">
-            <Grid item xs={12} md={12}>
-              {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
+          <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ flex: 1 }}>
+            <Grid item xs={3}>
+              <Button
+                style={{
+                  margin: 'auto',
+                }}
+                variant="outlined"
+                color="primary"
+                onClick={onValidate}
+                disabled={!ableToValidate}
+              >
+                mimique précédente
+              </Button>
             </Grid>
-            <Grid container spacing={0} p={2} m={4}>
-              <h1>Que signifie cette mimique ?</h1>
-            </Grid>
-            <Grid container spacing={0} p={2} m={4}>
-              <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
-                {choices &&
-                  choices.map((val) => {
-                    if (val === 0) {
-                      return (
-                        <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-                          <FormControlLabel
-                            key="1"
-                            value={MimicResponseValue.SIGNIFICATION}
-                            control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
-                            label={mimicContent?.signification || ''}
-                            disabled={found || foundError ? true : false}
-                            style={{ cursor: 'pointer', maxWidth: '100%' }}
-                          />
-                        </Box>
-                      );
-                    } else if (val === 1) {
-                      return (
-                        <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-                          <FormControlLabel
-                            key="2"
-                            value={MimicResponseValue.FAKE_SIGNIFICATION_1}
-                            control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
-                            label={mimicContent?.fakeSignification1 || ''}
-                            disabled={fake1Selected || found || foundError ? true : false}
-                            style={{ cursor: 'pointer', width: '100%' }}
-                          />
-                        </Box>
-                      );
-                    } else {
-                      return (
-                        <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-                          <FormControlLabel
-                            key="3"
-                            value={MimicResponseValue.FAKE_SIGNIFICATION_2}
-                            control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
-                            label={mimicContent?.fakeSignification2 || ''}
-                            disabled={fake2Selected || found || foundError ? true : false}
-                            style={{ cursor: 'pointer', width: '100%' }}
-                          />
-                        </Box>
-                      );
-                    }
-                  })}
+            <Grid item xs={6}>
+              <RadioGroup row>
+                <FormControlLabel
+                  sx={{ ml: 1 }}
+                  value="nouvelle"
+                  control={<Radio sx={{ py: 0 }} />}
+                  label={
+                    <>
+                      <AccessTimeIcon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> Nouvelle
+                    </>
+                  }
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  sx={{ ml: 1 }}
+                  value="aleatoire"
+                  control={<Radio sx={{ py: 0 }} />}
+                  label={
+                    <>
+                      <ShuffleIcon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> Aléatoire
+                    </>
+                  }
+                  labelPlacement="end"
+                />
+                <FormControlLabel
+                  sx={{ ml: 1 }}
+                  value="mosaique"
+                  control={<Radio sx={{ py: 0 }} />}
+                  label={
+                    <>
+                      <AppsIcon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> Mosaïque
+                    </>
+                  }
+                  labelPlacement="end"
+                />
               </RadioGroup>
             </Grid>
-
-            {(found || foundError) && (
-              <>
-                <MimicStats
-                  gameResponses={gameResponses}
-                  choices={choices}
-                  country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
-                  userMap={userMap}
-                  users={users}
-                />
-
-                <MimicStats
-                  gameResponses={gameResponses}
-                  choices={choices}
-                  country={
-                    userIsPelico
-                      ? village.countries[1].isoCode
-                      : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
-                  }
-                  userMap={userMap}
-                  users={users}
-                />
-              </>
-            )}
-            <Grid item xs={12} md={12}>
-              {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-              {/* {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>} */}
-              {(found || foundError) && (
-                <>
-                  <h2>Origine de cette mimique :</h2>
-                  <p>{mimicContent?.origine || ''}</p>
-                </>
-              )}
+            <Grid item xs={3}>
+              <Button
+                style={{
+                  margin: 'auto',
+                }}
+                variant="outlined"
+                color="primary"
+                onClick={getNextGame}
+              >
+                mimique suivante
+              </Button>
             </Grid>
           </Grid>
+          <Box border={1} borderColor={primaryColor} p={1} m={1} boxSizing="border-box" style={{ flex: 1 }}>
+            <Grid container spacing={3} alignItems="flex-start" justifyContent="flex-start">
+              <Grid item xs={12} md={12}>
+                {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
+              </Grid>
+              <Grid container spacing={0} p={2} m={4}>
+                <h1>Que signifie cette mimique ?</h1>
+              </Grid>
+              <Grid container spacing={0} p={2} m={4}>
+                <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
+                  {choices &&
+                    choices.map((val) => {
+                      if (val === 0) {
+                        return (
+                          <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
+                            <FormControlLabel
+                              key="1"
+                              value={MimicResponseValue.SIGNIFICATION}
+                              control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
+                              label={mimicContent?.signification || ''}
+                              disabled={found || foundError ? true : false}
+                              style={{ cursor: 'pointer', maxWidth: '100%' }}
+                            />
+                          </Box>
+                        );
+                      } else if (val === 1) {
+                        return (
+                          <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
+                            <FormControlLabel
+                              key="2"
+                              value={MimicResponseValue.FAKE_SIGNIFICATION_1}
+                              control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
+                              label={mimicContent?.fakeSignification1 || ''}
+                              disabled={fake1Selected || found || foundError ? true : false}
+                              style={{ cursor: 'pointer', width: '100%' }}
+                            />
+                          </Box>
+                        );
+                      } else {
+                        return (
+                          <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
+                            <FormControlLabel
+                              key="3"
+                              value={MimicResponseValue.FAKE_SIGNIFICATION_2}
+                              control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
+                              label={mimicContent?.fakeSignification2 || ''}
+                              disabled={fake2Selected || found || foundError ? true : false}
+                              style={{ cursor: 'pointer', width: '100%' }}
+                            />
+                          </Box>
+                        );
+                      }
+                    })}
+                </RadioGroup>
+              </Grid>
+
+              {(found || foundError) && (
+                <>
+                  <MimicStats
+                    gameResponses={gameResponses}
+                    choices={choices}
+                    country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
+                    userMap={userMap}
+                    users={users}
+                  />
+
+                  <MimicStats
+                    gameResponses={gameResponses}
+                    choices={choices}
+                    country={
+                      userIsPelico
+                        ? village.countries[1].isoCode
+                        : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
+                    }
+                    userMap={userMap}
+                    users={users}
+                  />
+                </>
+              )}
+              <Grid item xs={12} md={12}>
+                {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
+                {/* {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>} */}
+                {(found || foundError) && (
+                  <>
+                    <h2>Origine de cette mimique :</h2>
+                    <p>{mimicContent?.origine || ''}</p>
+                  </>
+                )}
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
         <Modal
           open={errorModalOpen}
