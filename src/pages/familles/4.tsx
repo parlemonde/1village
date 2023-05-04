@@ -5,7 +5,9 @@ import { Box, Button } from '@mui/material';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import WithFeatureFlag from 'src/components/WithFeatureFlag';
 import CollapsibleTable from 'src/components/table/CollapsibleTable';
+import { getFeatureFlags } from 'src/utils/getFeatureFlags';
 
 const ClassroomParamStep4 = () => {
   const [numOfPresToPrint] = useState<number>(0);
@@ -51,4 +53,6 @@ const ClassroomParamStep4 = () => {
   );
 };
 
-export default ClassroomParamStep4;
+const ProtectedClassroomParamStep4Visibility = WithFeatureFlag('id-family', getFeatureFlags)(ClassroomParamStep4);
+
+export default ProtectedClassroomParamStep4Visibility;

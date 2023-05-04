@@ -10,11 +10,23 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import WithFeatureFlag from './WithFeatureFlag';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
+import hasFeatureFlag from 'src/utils/hasFeatureFlag';
 import { UserType } from 'types/user.type';
+
+interface IdFamilyMenuItemProps {
+  goToPage: (page: string) => void;
+  featureName: string;
+}
+
+const IdFamilyMenuItem = WithFeatureFlag(
+  'id-family',
+  hasFeatureFlag,
+)((props: IdFamilyMenuItemProps) => <MenuItem onClick={() => props.goToPage('/familles/1')}>Mes familles</MenuItem>);
 
 export const Header = () => {
   const router = useRouter();
@@ -103,7 +115,7 @@ export const Header = () => {
               >
                 <MenuItem onClick={() => goTopage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goTopage('/mes-videos')}>Mes vidéos</MenuItem>}
-                {user.type === UserType.TEACHER ? <MenuItem onClick={() => goTopage('/familles/1')}>Mes familles</MenuItem> : null}
+                {user.type === UserType.TEACHER ? <IdFamilyMenuItem featureName="id-family" goToPage={goTopage} /> : null}{' '}
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>

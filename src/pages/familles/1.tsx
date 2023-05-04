@@ -7,6 +7,7 @@ import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import WithFeatureFlag from 'src/components/WithFeatureFlag';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
@@ -20,6 +21,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
+import { getFeatureFlags } from 'src/utils/getFeatureFlags';
 import type { Activity } from 'types/activity.type';
 import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
@@ -420,8 +422,6 @@ const ClassroomParamStep1Visibility = () => {
   );
 };
 
-export default ClassroomParamStep1Visibility;
-
 type TextInputContainerProps = {
   text1: string;
   text2?: string;
@@ -462,3 +462,7 @@ const TextnInputContainer = ({ onChange, onBlur, value, disabled, ...props }: Te
     </div>
   );
 };
+
+const ProtectedClassroomParamStep1Visibility = WithFeatureFlag('id-family', getFeatureFlags)(ClassroomParamStep1Visibility);
+
+export default ProtectedClassroomParamStep1Visibility;

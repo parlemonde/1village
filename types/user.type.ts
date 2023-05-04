@@ -1,3 +1,5 @@
+import type { UserToFeatureFlag } from 'server/entities/userToFeatureFlag';
+
 import type { Country } from './country.type';
 import type { Village } from './village.type';
 
@@ -53,6 +55,8 @@ export interface User {
 
   mascotteId?: number;
   hasStudentLinked: boolean;
+
+  userToFeatureFlags: UserToFeatureFlag[];
 }
 
 export type UserForm = {

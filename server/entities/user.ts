@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import { UserType } from '../../types/user.type';
@@ -8,6 +8,7 @@ import { Activity } from './activity';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
+import { UserToFeatureFlag } from './userToFeatureFlag';
 import { UserToStudent } from './userToStudent';
 import { Village } from './village';
 
@@ -139,4 +140,7 @@ export class User implements UserInterface {
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
   public userToStudents: UserToStudent[];
+
+  @OneToMany(() => UserToFeatureFlag, (userToFeatureFlag) => userToFeatureFlag.user)
+  public userToFeatureFlags: UserToFeatureFlag[];
 }

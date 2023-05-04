@@ -12,9 +12,11 @@ import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import WithFeatureFlag from 'src/components/WithFeatureFlag';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { bgPage } from 'src/styles/variables.const';
+import { getFeatureFlags } from 'src/utils/getFeatureFlags';
 import { isNormalizedStringEqual } from 'src/utils/isNormalizedStringEqual';
 import type { Student } from 'types/student.type';
 
@@ -366,4 +368,6 @@ const ClassroomParamStep2 = () => {
   );
 };
 
-export default ClassroomParamStep2;
+const ProtectedClassroomParamStep2Visibility = WithFeatureFlag('id-family', getFeatureFlags)(ClassroomParamStep2);
+
+export default ProtectedClassroomParamStep2Visibility;

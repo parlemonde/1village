@@ -75,6 +75,30 @@ userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (re
   res.sendJSON(user);
 });
 
+// --- Get user's feature flags ---
+userController.get({ path: '/:userId/featureFlags', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
+  const userId = parseInt(req.params.userId, 10);
+  const user = await AppDataSource.getRepository(User).findOne({
+    where: { id: userId },
+    relations: ['userToFeatureFlags', 'userToFeatureFlags.featureFlag'],
+  });
+
+  if (!user) {
+    res.status(404).send();
+    return;
+  }
+
+  const featureFlags = user.userToFeatureFlags.map((userToFeatureFlag) => {
+    return {
+      id: userToFeatureFlag.featureFlag.id,
+      name: userToFeatureFlag.featureFlag.name,
+      isEnabled: userToFeatureFlag.featureFlag.isEnabled,
+    };
+  });
+
+  res.json(featureFlags);
+});
+
 // --- Check user pseudo ---
 userController.get({ path: '/pseudo/:pseudo' }, async (req: Request, res: Response) => {
   const pseudo = req.params.pseudo || '';

@@ -8,7 +8,9 @@ import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import WithFeatureFlag from 'src/components/WithFeatureFlag';
 import { ClassroomContext } from 'src/contexts/classroomContext';
+import { getFeatureFlags } from 'src/utils/getFeatureFlags';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
@@ -166,4 +168,6 @@ const Communication = () => {
   );
 };
 
-export default Communication;
+const ProtectedClassroomParamStep3Visibility = WithFeatureFlag('id-family', getFeatureFlags)(Communication);
+
+export default ProtectedClassroomParamStep3Visibility;
