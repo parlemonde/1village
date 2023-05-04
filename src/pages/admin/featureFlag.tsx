@@ -145,38 +145,41 @@ const FeatureFlagsTest: React.FC = () => {
 
   return (
     <div>
-      <h1>Feature de la mort qui aaaa</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input type="text" name="name" value={newFeatureFlag.name} onChange={handleNewFeatureFlagChange} />
-        </label>
-        <label>
-          Is Enabled:
-          <input type="checkbox" name="isEnabled" checked={newFeatureFlag.isEnabled} onChange={handleCheckboxChange} />
-        </label>
-        <label>
-          Users:
-          <input type="text" placeholder="Filter users" value={userFilter} onChange={handleUserFilterChange} style={{ marginBottom: '1rem' }} />
-          <ul>
-            {filteredUsers.map((user) => (
-              <li key={user.id}>
-                {user.email}{' '}
-                {selectedUsers.includes(user.id) ? (
-                  <button type="button" onClick={() => handleRemoveUser(user.id)}>
-                    -
-                  </button>
-                ) : (
-                  <button type="button" onClick={() => handleAddUser(user.id)}>
-                    +
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </label>
-        <button type="submit">Add Feature Flag</button>
-      </form>
+      <h1> Gestion des feature flags (restrictions d'accès)</h1>
+      <h2> Créer une nouvelle restriction</h2>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Nom:
+            <input type="text" name="name" value={newFeatureFlag.name} onChange={handleNewFeatureFlagChange} />
+          </label>
+          <label>
+            IsEnabled:
+            <input type="checkbox" name="isEnabled" checked={newFeatureFlag.isEnabled} onChange={handleCheckboxChange} />
+          </label>
+          <label>
+            Users:
+            <input type="text" placeholder="Filter users" value={userFilter} onChange={handleUserFilterChange} style={{ marginBottom: '1rem' }} />
+            <ul>
+              {filteredUsers.map((user) => (
+                <li key={user.id}>
+                  {user.email}{' '}
+                  {selectedUsers.includes(user.id) ? (
+                    <button type="button" onClick={() => handleRemoveUser(user.id)}>
+                      -
+                    </button>
+                  ) : (
+                    <button type="button" onClick={() => handleAddUser(user.id)}>
+                      +
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </label>
+          <button type="submit">Add Feature Flag</button>
+        </form>
+      </div>
 
       <table>
         <thead>
