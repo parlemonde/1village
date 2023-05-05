@@ -65,7 +65,7 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
 // --- Get one user. ---
 userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['featureFlags'] });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === null || (!isSelfProfile && !isAdmin)) {
@@ -80,7 +80,7 @@ userController.get({ path: '/:userId/featureFlags', userType: UserType.OBSERVATO
   const userId = parseInt(req.params.userId, 10);
   const user = await AppDataSource.getRepository(User).findOne({
     where: { id: userId },
-    relations: ['userToFeatureFlags', 'userToFeatureFlags.featureFlag'],
+    relations: ['featureFlags'],
   });
 
   if (!user) {
@@ -88,11 +88,11 @@ userController.get({ path: '/:userId/featureFlags', userType: UserType.OBSERVATO
     return;
   }
 
-  const featureFlags = user.userToFeatureFlags.map((userToFeatureFlag) => {
+  const featureFlags = user.featureFlags.map((featureFlag) => {
     return {
-      id: userToFeatureFlag.featureFlag.id,
-      name: userToFeatureFlag.featureFlag.name,
-      isEnabled: userToFeatureFlag.featureFlag.isEnabled,
+      id: featureFlag.id,
+      name: featureFlag.name,
+      isEnabled: featureFlag.isEnabled,
     };
   });
 

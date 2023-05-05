@@ -1,7 +1,30 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Grid,
+  Paper,
+  Box,
+  TableContainer,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+} from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material/Select';
+
 import { getUsers } from 'src/api/user/user.get';
 import { axiosRequest } from 'src/utils/axiosRequest';
+import { FEATURE_FLAGS } from 'types/featureFlag.constant';
 import type { User } from 'types/user.type';
 
 interface FeatureFlag {
@@ -14,23 +37,39 @@ interface FeatureFlag {
 const FeatureFlagsTest: React.FC = () => {
   const [featureFlags, setFeatureFlags] = useState<FeatureFlag[]>([]);
   const [newFeatureFlag, setNewFeatureFlag] = useState({ name: '', isEnabled: false });
-  const [selectedFlag, setSelectedFlag] = useState<FeatureFlag | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [userFilter, setUserFilter] = useState<string>('');
 
+  const [addedUsers, setAddedUsers] = useState<User[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage, setUsersPerPage] = useState(10);
+
+  const filteredUsers = useMemo(() => {
+    const usersWithoutAccess = users.filter((user) => !addedUsers?.find((addedUser) => addedUser.id === user.id));
+
+    if (userFilter) {
+      return usersWithoutAccess.filter((user) => user.email.toLowerCase().includes(userFilter.toLowerCase()));
+    } else {
+      return usersWithoutAccess;
+    }
+  }, [users, userFilter, addedUsers]);
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
   useEffect(() => {
-    fetchFeatureFlags();
-    const fetchUsers = async () => {
-      try {
-        const fetchedUsers = await getUsers();
-        setUsers(fetchedUsers);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
+    const fetchData = async () => {
+      const fetchedFeatureFlags = await fetchFeatureFlags();
+      setFeatureFlags(fetchedFeatureFlags);
+
+      const fetchedUsers = await getUsers();
+      setUsers(fetchedUsers);
     };
 
-    fetchUsers();
+    fetchData();
   }, []);
 
   const fetchFeatureFlags = async () => {
@@ -43,18 +82,26 @@ const FeatureFlagsTest: React.FC = () => {
       return [];
     }
 
-    setFeatureFlags(response.data);
-
     return response.data;
   };
 
-  const handleNewFeatureFlagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewFeatureFlag({ ...newFeatureFlag, [event.target.name]: event.target.value });
-  };
+  const handleNewFeatureFlagChange = async (event: SelectChangeEvent<string>) => {
+    const featureFlagName = event.target.value;
 
-  const handleSelectedFlagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (selectedFlag) {
-      setSelectedFlag({ ...selectedFlag, [event.target.name]: event.target.value });
+    // Find the feature flag object from the featureFlags state using the selected feature flag name
+    const selectedFeatureFlag = featureFlags.find((flag: FeatureFlag) => flag.name === featureFlagName);
+
+    if (selectedFeatureFlag) {
+      // Update the newFeatureFlag and addedUsers states with the selected feature flag data
+      setNewFeatureFlag({
+        name: selectedFeatureFlag.name,
+        isEnabled: selectedFeatureFlag.isEnabled,
+      });
+      setAddedUsers(selectedFeatureFlag.users || []);
+    } else {
+      // Reset the newFeatureFlag and addedUsers states if the selected feature flag is not found
+      setNewFeatureFlag({ name: featureFlagName, isEnabled: false });
+      setAddedUsers([]);
     }
   };
 
@@ -66,73 +113,45 @@ const FeatureFlagsTest: React.FC = () => {
     setUserFilter(event.target.value);
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!newFeatureFlag.name) {
-      alert('Please enter a name for the feature flag.');
+      alert('Please select a feature flag.');
       return;
     }
 
+    const addedUserIds = addedUsers.map((user) => user.id);
+
     const response = await axiosRequest({
       method: 'POST',
-      url: `/featureFlags`,
+      url: '/featureFlags',
       data: {
         name: newFeatureFlag.name,
         isEnabled: newFeatureFlag.isEnabled,
-        users: selectedUsers, // Add the selected user IDs to the request data
+        users: addedUserIds,
       },
     });
 
     if (response.data) {
       fetchFeatureFlags();
-      setNewFeatureFlag({ name: '', isEnabled: false });
-      setSelectedUsers([]); // Reset the selected user IDs
+      setSelectedUsers([]);
     } else {
-      alert('Error creating the feature flag. Please try again.');
+      alert('Error updating the feature flag. Please try again.');
     }
   };
-
-  const handleUpdate = async (id: number) => {
-    if (!selectedFlag) return;
-
-    const response = await axiosRequest({
-      method: 'PUT',
-      url: `/featureFlags/${id}`,
-      data: {
-        ...selectedFlag,
-        userIds: selectedFlag.users?.map((user) => user.id),
-      },
-    });
-
-    if (response.data) {
-      fetchFeatureFlags();
-      setSelectedFlag(null);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    const response = await axiosRequest({
-      method: 'DELETE',
-      url: `/featureFlags/${id}`,
-    });
-
-    if (response.data) {
-      fetchFeatureFlags();
-    }
-  };
-
-  const filteredUsers = useMemo(() => {
-    if (userFilter) {
-      return users.filter((user) => user.email.toLowerCase().includes(userFilter.toLowerCase()));
-    } else {
-      return users;
-    }
-  }, [users, userFilter]);
 
   const handleAddUser = (userId: number) => {
     setSelectedUsers((prevSelectedUsers) => {
       if (!prevSelectedUsers.includes(userId)) {
+        const userToAdd = filteredUsers.find((user) => user.id === userId);
+        if (userToAdd) {
+          setAddedUsers((prevAddedUsers) => [...(prevAddedUsers || []), userToAdd]);
+        }
         return [...prevSelectedUsers, userId];
       }
       return prevSelectedUsers;
@@ -141,115 +160,130 @@ const FeatureFlagsTest: React.FC = () => {
 
   const handleRemoveUser = (userId: number) => {
     setSelectedUsers((prevSelectedUsers) => prevSelectedUsers.filter((id) => id !== userId));
+    setAddedUsers((prevAddedUsers) => prevAddedUsers.filter((user) => user.id !== userId));
   };
 
   return (
-    <div>
-      <h1> Gestion des feature flags (restrictions d'accès)</h1>
-      <h2> Créer une nouvelle restriction</h2>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Nom:
-            <input type="text" name="name" value={newFeatureFlag.name} onChange={handleNewFeatureFlagChange} />
-          </label>
-          <label>
-            IsEnabled:
-            <input type="checkbox" name="isEnabled" checked={newFeatureFlag.isEnabled} onChange={handleCheckboxChange} />
-          </label>
-          <label>
-            Users:
-            <input type="text" placeholder="Filter users" value={userFilter} onChange={handleUserFilterChange} style={{ marginBottom: '1rem' }} />
-            <ul>
-              {filteredUsers.map((user) => (
-                <li key={user.id}>
-                  {user.email}{' '}
-                  {selectedUsers.includes(user.id) ? (
-                    <button type="button" onClick={() => handleRemoveUser(user.id)}>
-                      -
-                    </button>
-                  ) : (
-                    <button type="button" onClick={() => handleAddUser(user.id)}>
-                      +
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </label>
-          <button type="submit">Add Feature Flag</button>
-        </form>
-      </div>
+    <Box p={2}>
+      <Typography variant="h4">Gestion des feature flags (restrictions d&apos;accès)</Typography>
+      <Typography variant="h6" my={2}>
+        Choisir une restriction
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+            <FormControl>
+              <InputLabel>Feature Flag</InputLabel>
+              <Select sx={{ minWidth: '10rem' }} label="Feature Flag" name="name" value={newFeatureFlag.name} onChange={handleNewFeatureFlagChange}>
+                {FEATURE_FLAGS?.map((flag, index) => (
+                  <MenuItem key={index} value={flag}>
+                    {flag}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Is Enabled</th>
-            <th>Users</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {featureFlags?.map((flag) => (
-            <tr key={flag.id}>
-              <td>{flag.id}</td>
-              <td>
-                {selectedFlag && selectedFlag.id === flag.id ? (
-                  <input type="text" name="name" value={selectedFlag.name} onChange={handleSelectedFlagChange} />
-                ) : (
-                  flag.name
-                )}
-              </td>
-              <td>
-                {selectedFlag && selectedFlag.id === flag.id ? (
-                  <input
-                    type="checkbox"
-                    name="isEnabled"
-                    checked={selectedFlag.isEnabled}
-                    onChange={(e) => setSelectedFlag({ ...selectedFlag, isEnabled: e.target.checked })}
-                  />
-                ) : (
-                  flag.isEnabled.toString()
-                )}
-              </td>
-              <td>{flag.users?.length}</td>
-              <td>
-                {selectedFlag && selectedFlag.id === flag.id ? (
-                  <select
-                    multiple
-                    onChange={(e) => {
-                      const selectedOptions = Array.from(e.target.selectedOptions, (option) => parseInt(option.value));
-                      setSelectedFlag({ ...selectedFlag, users: users.filter((user) => selectedOptions.includes(user.id)) });
-                    }}
-                  >
-                    {users?.map((user) => (
-                      <option key={user.id} value={user.id} selected={selectedFlag.users?.some((u) => u.id === user.id)}>
-                        {user.email}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  flag.users?.map((user) => user.email).join(', ')
-                )}
-              </td>
-              <td>
-                {selectedFlag && selectedFlag.id === flag.id ? (
-                  <>
-                    <button onClick={() => handleUpdate(flag.id)}>Update</button>
-                    <button onClick={() => setSelectedFlag(null)}>Cancel</button>
-                  </>
-                ) : (
-                  <button onClick={() => setSelectedFlag(flag)}>Edit</button>
-                )}
-                <button onClick={() => handleDelete(flag.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          <Grid item>
+            <FormControlLabel control={<Checkbox checked={newFeatureFlag.isEnabled} onChange={handleCheckboxChange} />} label="Is Enabled" />
+          </Grid>
+          <Grid item>
+            <TextField label="Filtre utilisateur" placeholder="Filtre utilisateur" value={userFilter} onChange={handleUserFilterChange} />
+          </Grid>
+          <Grid item>
+            <Button type="submit" variant="contained">
+              Appliquer les changements
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Typography variant="h6" my={2}>
+            Utilisateurs sans accès
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Pseudo</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Country Code</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {currentUsers?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.id}</TableCell>
+                    <TableCell>{user.pseudo}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.country?.isoCode}</TableCell>
+                    <TableCell>
+                      {selectedUsers.includes(user.id) ? (
+                        <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
+                          -
+                        </Button>
+                      ) : (
+                        <Button variant="outlined" color="success" onClick={() => handleAddUser(user.id)}>
+                          +
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Box display="flex" justifyContent="space-between" my={2}>
+            <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+              Prev
+            </Button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+              Next
+            </Button>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant="h6" my={2}>
+            Utilisateurs avec accès{' '}
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Pseudo</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Country Code</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {addedUsers?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.id}</TableCell>
+                    <TableCell>{user.pseudo}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.country?.isoCode}</TableCell>
+                    <TableCell>
+                      <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
+                        Remove
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

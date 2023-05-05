@@ -2,13 +2,26 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState, useContext } from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
-import hasFeatureFlag from 'src/utils/hasFeatureFlag';
+import type { FeatureFlags } from 'types/featureFlag.constant';
+import type { User } from 'types/user.type';
 
 interface AccessControlProps {
-  featureName: string;
+  featureName: FeatureFlags;
   children: React.ReactNode;
   redirectToWIP?: boolean;
 }
+
+const hasFeatureFlag = (user: User | null, featureName: string): boolean => {
+  if (!user) return false;
+
+  const featureFlag = user.featureFlags.find((flag) => flag.name === featureName);
+
+  if (featureFlag && featureFlag.isEnabled) {
+    return true;
+  }
+
+  return false;
+};
 
 const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, redirectToWIP = false }) => {
   const { user } = useContext(UserContext);
@@ -17,14 +30,14 @@ const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, re
   const router = useRouter();
 
   useEffect(() => {
-    const checkAccess = async () => {
+    const checkAccess = () => {
       if (!user) {
         setLoading(false);
         return;
       }
 
       try {
-        const hasAccessToFeature = await hasFeatureFlag(user, featureName);
+        const hasAccessToFeature = hasFeatureFlag(user, featureName);
         setHasAccess(hasAccessToFeature);
       } catch (error) {
         console.error('Error checking feature flag access:', error);

@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
-import { UserToFeatureFlag } from './userToFeatureFlag';
+import { User } from './user';
 
 @Entity()
 export class FeatureFlag {
@@ -13,6 +13,6 @@ export class FeatureFlag {
   @Column({ type: 'boolean', default: false })
   public isEnabled: boolean;
 
-  @OneToMany(() => UserToFeatureFlag, (userToFeatureFlag) => userToFeatureFlag.featureFlag)
-  public userToFeatureFlags: UserToFeatureFlag[];
+  @ManyToMany(() => User, (user) => user.featureFlags)
+  public users: User[];
 }

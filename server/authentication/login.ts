@@ -39,11 +39,17 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     sendInvalidDataError(loginValidator);
     return;
   }
-  const user = await AppDataSource.getRepository(User)
-    .createQueryBuilder()
+
+  const query = await AppDataSource.getRepository(User)
+    .createQueryBuilder('User')
     .addSelect('User.passwordHash')
-    .where('User.email = :email OR User.pseudo = :email', { email: data.email })
-    .getOne();
+    .leftJoinAndSelect('User.featureFlags', 'FeatureFlag')
+    .addSelect(['FeatureFlag.id', 'FeatureFlag.name', 'FeatureFlag.isEnabled'])
+    .where('User.email = :email OR User.pseudo = :email', { email: data.email });
+
+  console.log(query.getSql());
+
+  const user = await query.getOne();
 
   if (user === null) {
     throw new AppError('Invalid credentials', ErrorCode.INVALID_USERNAME);
@@ -105,5 +111,5 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     });
   }
   delete user.passwordHash;
-  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken, hasStudentLinked: hasStudentLinked });
+  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken, hasStudentLinked: hasStudentLinked, featureFlags: user.featureFlags });
 }

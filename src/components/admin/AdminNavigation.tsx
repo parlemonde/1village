@@ -5,6 +5,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutlinedOutlined';
 import LanguageIcon from '@mui/icons-material/Language';
 import TimelineIcon from '@mui/icons-material/Timeline';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -14,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 
 const DRAWER_WIDTH = 220;
-const TABS = ['villages', 'users', 'stats', 'analytics'];
+const TABS = ['villages', 'users', 'featureFlag', 'stats', 'analytics'];
 
 export const AdminNavigation = () => {
   const router = useRouter();
@@ -55,16 +56,22 @@ export const AdminNavigation = () => {
             </ListItemIcon>
             <ListItemText primary="Utilisateurs" />
           </ListItem>
+          <ListItem button selected={selectedTab === 2} onClick={goToPath('/admin/featureFlag')}>
+            <ListItemIcon>
+              <VpnKeyIcon />
+            </ListItemIcon>
+            <ListItemText primary="Contrôle d'accès" />
+          </ListItem>
         </List>
         <Divider />
         <List>
-          <ListItem button selected={selectedTab === 2} onClick={goToPath('/admin/stats')}>
+          <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/stats')}>
             <ListItemIcon>
               <InsertChartOutlinedOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="Statistiques" />
           </ListItem>
-          <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/analytics')}>
+          <ListItem button selected={selectedTab === 4} onClick={goToPath('/admin/analytics')}>
             <ListItemIcon>
               <TimelineIcon />
             </ListItemIcon>

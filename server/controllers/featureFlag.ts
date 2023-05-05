@@ -3,7 +3,6 @@ import { In } from 'typeorm';
 
 import { FeatureFlag } from '../entities/featureFlag';
 import { User, UserType } from '../entities/user';
-import { UserToFeatureFlag } from '../entities/userToFeatureFlag';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
@@ -11,35 +10,77 @@ const featureFlagController = new Controller('/featureFlags');
 
 // Get all feature flags
 featureFlagController.get({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
-  const featureFlags = await AppDataSource.getRepository(FeatureFlag).find({ relations: ['userToFeatureFlags', 'userToFeatureFlags.user'] });
+  const featureFlags = await AppDataSource.getRepository(FeatureFlag).find({ relations: ['users'] });
   res.json(featureFlags);
 });
 
-// Create a feature flag
-featureFlagController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
-  const data = req.body;
-  const featureFlag = new FeatureFlag();
-  featureFlag.name = data.name;
-  featureFlag.isEnabled = data.isEnabled || false;
+// Get all users of a feature flag
+featureFlagController.get({ path: '/:featureFlagName/users', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+  const featureFlagName = req.params.featureFlagName;
+  const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: featureFlagName }, relations: ['users'] });
 
-  const newFeatureFlag = await AppDataSource.getRepository(FeatureFlag).save(featureFlag);
-
-  if (data.users && data.users.length > 0) {
-    const users = await AppDataSource.getRepository(User).find({ where: { id: In(data.users) } });
-    const userToFeatureFlags = users.map((user) => {
-      const userToFeatureFlag = new UserToFeatureFlag();
-      userToFeatureFlag.user = user;
-      userToFeatureFlag.featureFlag = newFeatureFlag;
-      return userToFeatureFlag;
-    });
-    await AppDataSource.getRepository(UserToFeatureFlag).save(userToFeatureFlags);
+  if (!featureFlag) {
+    res.status(404).json({ error: 'Feature flag not found.' });
+    return;
   }
 
-  const savedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({
-    where: { id: newFeatureFlag.id },
-    relations: ['userToFeatureFlags', 'userToFeatureFlags.user'],
+  res.json(featureFlag.users);
+});
+
+// Get a feature flag by name
+featureFlagController.get({ path: '/:featureFlagName', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+  const featureFlagName = req.params.featureFlagName;
+  const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: featureFlagName } });
+
+  if (!featureFlag) {
+    res.status(404).json({ error: 'Feature flag not found.' });
+    return;
+  }
+
+  res.json(featureFlag);
+});
+
+// Create or update an existing feature flag
+featureFlagController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+  const data = req.body;
+  let featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: data.name }, relations: ['users'] });
+
+  if (!featureFlag) {
+    featureFlag = new FeatureFlag();
+    featureFlag.name = data.name;
+    featureFlag.isEnabled = data.isEnabled || false;
+  } else {
+    featureFlag.isEnabled = data.isEnabled ?? featureFlag.isEnabled;
+  }
+
+  const savedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).save(featureFlag);
+
+  const usersToAdd = data.users && data.users.length > 0 ? await AppDataSource.getRepository(User).find({ where: { id: In(data.users) } }) : [];
+
+  for (const user of featureFlag.users) {
+    if (!usersToAdd.find((u) => u.id === user.id)) {
+      await AppDataSource.getRepository(FeatureFlag)
+        .createQueryBuilder('featureFlag')
+        .relation(FeatureFlag, 'users')
+        .of(savedFeatureFlag.id)
+        .remove(user.id);
+    }
+  }
+
+  for (const user of usersToAdd) {
+    await AppDataSource.getRepository(FeatureFlag)
+      .createQueryBuilder('featureFlag')
+      .relation(FeatureFlag, 'users')
+      .of(savedFeatureFlag.id)
+      .add(user.id);
+  }
+
+  const updatedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({
+    where: { id: savedFeatureFlag.id },
+    relations: ['users'],
   });
-  res.status(201).json(savedFeatureFlag);
+
+  res.status(201).json(updatedFeatureFlag);
 });
 
 // Update a feature flag
@@ -48,7 +89,7 @@ featureFlagController.put({ path: '/:id', userType: UserType.ADMIN }, async (req
   const data = req.body;
   const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({
     where: { id },
-    relations: ['userToFeatureFlags', 'userToFeatureFlags.user'],
+    relations: ['users'],
   });
 
   if (!featureFlag) return next();
@@ -58,20 +99,13 @@ featureFlagController.put({ path: '/:id', userType: UserType.ADMIN }, async (req
   await AppDataSource.getRepository(FeatureFlag).save(featureFlag);
 
   if (data.userIds !== undefined) {
-    await AppDataSource.getRepository(UserToFeatureFlag).delete({ featureFlag: { id: featureFlag.id } });
-    const users = await AppDataSource.getRepository(User).find({ where: { id: In(data.userIds) } });
-    const userToFeatureFlags = users.map((user) => {
-      const userToFeatureFlag = new UserToFeatureFlag();
-      userToFeatureFlag.user = user;
-      userToFeatureFlag.featureFlag = featureFlag;
-      return userToFeatureFlag;
-    });
-    await AppDataSource.getRepository(UserToFeatureFlag).save(userToFeatureFlags);
+    featureFlag.users = await AppDataSource.getRepository(User).find({ where: { id: In(data.userIds) } });
+    await AppDataSource.getRepository(FeatureFlag).save(featureFlag);
   }
 
   const updatedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({
     where: { id },
-    relations: ['userToFeatureFlags', 'userToFeatureFlags.user'],
+    relations: ['users'],
   });
   res.json(updatedFeatureFlag);
 });
@@ -79,12 +113,9 @@ featureFlagController.put({ path: '/:id', userType: UserType.ADMIN }, async (req
 // Delete a feature flag
 featureFlagController.delete({ path: '/:id', userType: UserType.ADMIN }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { id } });
+  const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { id }, relations: ['users'] });
 
   if (!featureFlag) return next();
-
-  // Delete the related UserToFeatureFlag entities
-  await AppDataSource.getRepository(UserToFeatureFlag).delete({ featureFlag: { id: featureFlag.id } });
 
   await AppDataSource.getRepository(FeatureFlag).remove(featureFlag);
   res.status(204).send();

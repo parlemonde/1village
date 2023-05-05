@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { getUserFeatureFlags } from 'src/api/featureFlag/featureFlag.get';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User, UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';

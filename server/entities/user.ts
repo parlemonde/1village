@@ -5,10 +5,10 @@ import { UserType } from '../../types/user.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { FeatureFlag } from './featureFlag';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
-import { UserToFeatureFlag } from './userToFeatureFlag';
 import { UserToStudent } from './userToStudent';
 import { Village } from './village';
 
@@ -141,6 +141,7 @@ export class User implements UserInterface {
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
   public userToStudents: UserToStudent[];
 
-  @OneToMany(() => UserToFeatureFlag, (userToFeatureFlag) => userToFeatureFlag.user)
-  public userToFeatureFlags: UserToFeatureFlag[];
+  @ManyToMany(() => FeatureFlag, (featureFlag) => featureFlag.users)
+  @JoinTable()
+  public featureFlags: FeatureFlag[];
 }
