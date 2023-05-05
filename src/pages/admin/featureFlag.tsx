@@ -197,92 +197,94 @@ const FeatureFlagsTest: React.FC = () => {
           </Grid>
         </Grid>
       </form>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Typography variant="h6" my={2}>
-            Utilisateurs sans accès
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Pseudo</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Country Code</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {currentUsers?.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.id}</TableCell>
-                    <TableCell>{user.pseudo}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.country?.isoCode}</TableCell>
-                    <TableCell>
-                      {selectedUsers.includes(user.id) ? (
-                        <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
-                          -
-                        </Button>
-                      ) : (
-                        <Button variant="outlined" color="success" onClick={() => handleAddUser(user.id)}>
-                          +
-                        </Button>
-                      )}
-                    </TableCell>
+      {newFeatureFlag.name && (
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Typography variant="h6" my={2}>
+              Utilisateurs sans accès
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Pseudo</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Country Code</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {currentUsers?.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.id}</TableCell>
+                      <TableCell>{user.pseudo}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.country?.isoCode}</TableCell>
+                      <TableCell>
+                        {selectedUsers.includes(user.id) ? (
+                          <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
+                            -
+                          </Button>
+                        ) : (
+                          <Button variant="outlined" color="success" onClick={() => handleAddUser(user.id)}>
+                            +
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-          <Box display="flex" justifyContent="space-between" my={2}>
-            <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-              Prev
-            </Button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-              Next
-            </Button>
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          <Typography variant="h6" my={2}>
-            Utilisateurs avec accès{' '}
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Pseudo</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Country Code</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {addedUsers?.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.id}</TableCell>
-                    <TableCell>{user.pseudo}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.country?.isoCode}</TableCell>
-                    <TableCell>
-                      <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
-                        Remove
-                      </Button>
-                    </TableCell>
+            <Box display="flex" justifyContent="space-between" my={2}>
+              <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                Prev
+              </Button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+              </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="h6" my={2}>
+              Utilisateurs avec accès{' '}
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Pseudo</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Country Code</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {addedUsers?.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.id}</TableCell>
+                      <TableCell>{user.pseudo}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.country?.isoCode}</TableCell>
+                      <TableCell>
+                        <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
+                          Remove
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </Box>
   );
 };

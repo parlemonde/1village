@@ -57,23 +57,29 @@ featureFlagController.post({ path: '', userType: UserType.ADMIN }, async (req: R
 
   const usersToAdd = data.users && data.users.length > 0 ? await AppDataSource.getRepository(User).find({ where: { id: In(data.users) } }) : [];
 
-  for (const user of featureFlag.users) {
-    if (!usersToAdd.find((u) => u.id === user.id)) {
+  // Wait for all remove operations to complete
+  await Promise.all(
+    featureFlag.users.map(async (user) => {
+      if (!usersToAdd.find((u) => u.id === user.id)) {
+        await AppDataSource.getRepository(FeatureFlag)
+          .createQueryBuilder('featureFlag')
+          .relation(FeatureFlag, 'users')
+          .of(savedFeatureFlag.id)
+          .remove(user.id);
+      }
+    }),
+  );
+
+  // Wait for all add operations to complete
+  await Promise.all(
+    usersToAdd.map(async (user) => {
       await AppDataSource.getRepository(FeatureFlag)
         .createQueryBuilder('featureFlag')
         .relation(FeatureFlag, 'users')
         .of(savedFeatureFlag.id)
-        .remove(user.id);
-    }
-  }
-
-  for (const user of usersToAdd) {
-    await AppDataSource.getRepository(FeatureFlag)
-      .createQueryBuilder('featureFlag')
-      .relation(FeatureFlag, 'users')
-      .of(savedFeatureFlag.id)
-      .add(user.id);
-  }
+        .add(user.id);
+    }),
+  );
 
   const updatedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({
     where: { id: savedFeatureFlag.id },
