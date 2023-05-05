@@ -25,7 +25,8 @@ import type { SelectChangeEvent } from '@mui/material/Select';
 import { getUsers } from 'src/api/user/user.get';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { FEATURE_FLAGS } from 'types/featureFlag.constant';
-import type { User } from 'types/user.type';
+import type { User, UserType } from 'types/user.type';
+import { userTypeNames } from 'types/user.type';
 
 interface FeatureFlag {
   id: number;
@@ -44,16 +45,46 @@ const FeatureFlagsTest: React.FC = () => {
   const [addedUsers, setAddedUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
+  const [userTypeFilter, setUserTypeFilter] = useState<UserType | ''>('');
+  const [countryCodeFilter, setCountryCodeFilter] = useState<string>('');
 
   const filteredUsers = useMemo(() => {
     const usersWithoutAccess = users.filter((user) => !addedUsers?.find((addedUser) => addedUser.id === user.id));
 
+    let filtered = usersWithoutAccess;
+
     if (userFilter) {
-      return usersWithoutAccess.filter((user) => user.email.toLowerCase().includes(userFilter.toLowerCase()));
-    } else {
-      return usersWithoutAccess;
+      filtered = filtered.filter((user) => user.email.toLowerCase().includes(userFilter.toLowerCase()));
     }
-  }, [users, userFilter, addedUsers]);
+
+    if (userTypeFilter !== '') {
+      filtered = filtered.filter((user) => user.type === userTypeFilter);
+    }
+
+    if (countryCodeFilter) {
+      filtered = filtered.filter((user) => user.country?.isoCode === countryCodeFilter);
+    }
+
+    return filtered;
+  }, [users, userFilter, addedUsers, userTypeFilter, countryCodeFilter]);
+
+  const filteredAddedUsers = useMemo(() => {
+    let filtered = addedUsers;
+
+    if (userFilter) {
+      filtered = filtered.filter((user) => user.email.toLowerCase().includes(userFilter.toLowerCase()));
+    }
+
+    if (userTypeFilter !== '') {
+      filtered = filtered.filter((user) => user.type === userTypeFilter);
+    }
+
+    if (countryCodeFilter) {
+      filtered = filtered.filter((user) => user.country?.isoCode === countryCodeFilter);
+    }
+
+    return filtered;
+  }, [addedUsers, userFilter, userTypeFilter, countryCodeFilter]);
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -191,6 +222,36 @@ const FeatureFlagsTest: React.FC = () => {
             <TextField label="Filtre utilisateur" placeholder="Filtre utilisateur" value={userFilter} onChange={handleUserFilterChange} />
           </Grid>
           <Grid item>
+            <FormControl>
+              <InputLabel>Type d&apos;utilisateur</InputLabel>
+              <Select
+                sx={{ minWidth: '10rem' }}
+                label="Type d'utilisateur"
+                value={userTypeFilter}
+                onChange={(event: SelectChangeEvent<UserType | ''>) => setUserTypeFilter(event.target.value as UserType | '')}
+              >
+                <MenuItem value="">
+                  <em>Aucun</em>
+                </MenuItem>
+                {Object.entries(userTypeNames).map(([key, value]) => (
+                  <MenuItem key={key} value={parseInt(key, 10)}>
+                    {value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item>
+            <TextField
+              label="Code pays"
+              placeholder="Code pays"
+              value={countryCodeFilter}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCountryCodeFilter(event.target.value)}
+            />
+          </Grid>
+
+          <Grid item>
             <Button type="submit" variant="contained">
               Appliquer les changements
             </Button>
@@ -211,6 +272,7 @@ const FeatureFlagsTest: React.FC = () => {
                     <TableCell>Pseudo</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>Country Code</TableCell>
+                    <TableCell>Type</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -221,6 +283,7 @@ const FeatureFlagsTest: React.FC = () => {
                       <TableCell>{user.pseudo}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>{user.country?.isoCode}</TableCell>
+                      <TableCell>{user.type}</TableCell>
                       <TableCell>
                         {selectedUsers.includes(user.id) ? (
                           <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
@@ -266,7 +329,7 @@ const FeatureFlagsTest: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {addedUsers?.map((user) => (
+                  {filteredAddedUsers?.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell>{user.id}</TableCell>
                       <TableCell>{user.pseudo}</TableCell>
