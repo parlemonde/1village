@@ -47,8 +47,6 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     .addSelect(['FeatureFlag.id', 'FeatureFlag.name', 'FeatureFlag.isEnabled'])
     .where('User.email = :email OR User.pseudo = :email', { email: data.email });
 
-  console.log(query.getSql());
-
   const user = await query.getOne();
 
   if (user === null) {

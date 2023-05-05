@@ -99,7 +99,6 @@ export default function CollapsibleTable() {
 
   React.useEffect(() => {
     const result = getUsersLinkedToStudent(students[0]?.id);
-    console.log(result);
   }, [students]);
 
   return (
