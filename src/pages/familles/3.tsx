@@ -54,16 +54,26 @@ const Communication = () => {
     }
   }, [textValue]);
 
+  // --- PDF Name ---
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}${month}${day}_${hours}${minutes}${seconds}`;
+  };
+
+  const timestamp = formatDate(new Date());
+  const fileName = `${timestamp}_codes-enfants.pdf`;
+
   const onPrint = () => {
     const keywordRegex = new RegExp(/%identifiant/gm);
     const messagesWithId: string[] = [];
     let count = 0;
 
-    const url = window.location.protocol + '//' + window.location.host;
-
     if (keywordPresence) {
-      const newWin = window.open(`${url}/familles/3/print.js`, 'Print-Window');
-
       students.forEach((student) => {
         messagesWithId.push(`<div>Élève : <strong>${student.firstname} ${student.lastname}</strong></div>`);
         messagesWithId.push(textValue.replaceAll(keywordRegex, '<u>' + student.hashedCode + '</u>'));
@@ -85,17 +95,23 @@ const Communication = () => {
         }
       });
 
-      if (newWin) {
-        newWin.document.write(`<html><body>${messagesWithId.join(' ')}</body></html>`);
+      const printContentString = `<html><head><title>${fileName}</title><meta charset="UTF-8"></head><body>${messagesWithId.join(' ')}</body></html>`;
 
-        const printScript = newWin.document.createElement('script');
-        printScript.setAttribute('src', '/print.js');
-        newWin.document.getElementsByTagName('head')[0].appendChild(printScript);
+      // Open the content in a new window and trigger the print dialog
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(printContentString);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      } else {
+        console.error('Unable to open a new window for printing.');
       }
     } else {
       setIsModalOpen(true);
     }
   };
+
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>

@@ -7,6 +7,7 @@ import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRound
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 
+import { editStudent } from 'src/api/classroom/student.put';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
@@ -193,21 +194,6 @@ const ClassroomParamStep2 = () => {
 
   const handleCancel = () => {
     setEditableStudent(false);
-  };
-
-  const editStudent = async (updatedStudent: Promise<Partial<Student>>) => {
-    const { id, ...rest } = await updatedStudent;
-
-    const response = await axiosRequest({
-      method: 'PUT',
-      url: `/students/${id}`,
-      data: { ...rest },
-    });
-
-    if (response.error) {
-      throw response.error;
-    }
-    return response.data;
   };
 
   const onNext = () => {

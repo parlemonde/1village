@@ -87,7 +87,7 @@ const UpdatePassword = () => {
           setIsSubmitSuccessfull(true);
         }, 1000);
         setTimeout(() => {
-          router.push('/');
+          router.push('/connexion');
         }, 10000);
       } catch (err) {
         return err;

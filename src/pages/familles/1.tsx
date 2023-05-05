@@ -91,9 +91,9 @@ const ClassroomParamStep1Visibility = () => {
 
   const [state, dispatch] = useReducer(reducer, {
     default: { delayedDays: 0, hasVisibilitySetToClass: false },
-    timeDelay: { delayedDays: classroom?.delayedDays || 0, hasVisibilitySetToClass: false },
+    timeDelay: { delayedDays: classroom?.delayedDays || 1, hasVisibilitySetToClass: false },
     ownClass: { delayedDays: 0, hasVisibilitySetToClass: true },
-    ownClassTimeDelay: { delayedDays: classroom?.delayedDays || 0, hasVisibilitySetToClass: true },
+    ownClassTimeDelay: { delayedDays: classroom?.delayedDays || 1, hasVisibilitySetToClass: true },
   });
 
   const [isDisabled, setIsDisabled] = React.useState({
@@ -111,12 +111,12 @@ const ClassroomParamStep1Visibility = () => {
   useEffect(() => {
     if (classroom?.delayedDays !== undefined && classroom?.hasVisibilitySetToClass === false) {
       setRadioValue(classroom.delayedDays > 0 ? 'timeDelay' : 'default');
-      dispatch({ type: 'timeDelay', data: classroom.delayedDays || 0 });
+      dispatch({ type: 'timeDelay', data: classroom.delayedDays || 1 });
     } else if (classroom?.hasVisibilitySetToClass === false) {
       setRadioValue('default');
     } else if (classroom?.delayedDays !== undefined && classroom?.hasVisibilitySetToClass === true) {
       setRadioValue(classroom.delayedDays > 0 ? 'ownClassTimeDelay' : 'ownClass');
-      dispatch({ type: 'ownClassTimeDelay', data: classroom.delayedDays || 0 });
+      dispatch({ type: 'ownClassTimeDelay', data: classroom.delayedDays || 1 });
     } else if (classroom?.hasVisibilitySetToClass === true) {
       setRadioValue('ownClass');
     }
@@ -165,10 +165,19 @@ const ClassroomParamStep1Visibility = () => {
     [users],
   );
   const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
-    key === 'timeDelay'
-      ? dispatch({ type: 'timeDelay', data: Number((event.target as HTMLInputElement).value) })
-      : dispatch({ type: 'ownClassTimeDelay', data: Number((event.target as HTMLInputElement).value) });
+    const value = Number(event.target.value);
+    const days = value >= 1 ? value : 1;
+
+    switch (key) {
+      case 'timeDelay':
+        dispatch({ type: 'timeDelay', data: days });
+        break;
+      case 'ownClassTimeDelay':
+        dispatch({ type: 'ownClassTimeDelay', data: days });
+        break;
+    }
   };
+
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = (event.target as HTMLInputElement).value;
     setRadioValue(value);
@@ -179,7 +188,7 @@ const ClassroomParamStep1Visibility = () => {
         setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
         break;
       case 'timeDelay':
-        dispatch({ type: 'timeDelay', data: classroom?.delayedDays || 0 });
+        dispatch({ type: 'timeDelay', data: classroom?.delayedDays || 1 });
         setIsDisabled({ ...isDisabled, default: true, ownClass: true, ownClassTimeDelay: true });
         break;
       case 'ownClass':
@@ -187,7 +196,7 @@ const ClassroomParamStep1Visibility = () => {
         setIsDisabled({ ...isDisabled, default: true, timeDelay: true, ownClassTimeDelay: true });
         break;
       case 'ownClassTimeDelay':
-        dispatch({ type: 'ownClassTimeDelay', data: classroom?.delayedDays || 0 });
+        dispatch({ type: 'ownClassTimeDelay', data: classroom?.delayedDays || 1 });
         setIsDisabled({ ...isDisabled, default: true, timeDelay: true, ownClass: true });
         break;
       default:
@@ -369,37 +378,39 @@ const ClassroomParamStep1Visibility = () => {
               </div>
             ) : (
               <>
-                {sortedActivities.map((activity) => (
-                  <Button
-                    key={activity.id}
-                    sx={{
-                      display: 'flex',
-                      gap: '2rem',
-                      justifyContent: 'space-evenly',
-                      width: '99%',
-                      padding: '0 1rem',
-                      marginBottom: '1rem',
-                      filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
-                      backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
-                    }}
-                    onClick={() => handleActivityVisibility(activity.id)}
-                  >
-                    {/* UI logic for activity disable */}
-                    {activity.isVisibleToParent ? (
-                      <EyeVisibility style={{ width: '8%', height: 'auto' }} />
-                    ) : (
-                      <EyeClosed style={{ width: '8%', height: 'auto' }} />
-                    )}
-                    <div style={{ width: '100%' }}>
-                      <ActivityCard
-                        activity={activity}
-                        isSelf={user !== null && activity.userId === user.id}
-                        user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
-                        noButtons={true}
-                      />
-                    </div>
-                  </Button>
-                ))}
+                {sortedActivities
+                  .map((activity) => (
+                    <Button
+                      key={activity.id}
+                      sx={{
+                        display: 'flex',
+                        gap: '2rem',
+                        justifyContent: 'space-evenly',
+                        width: '99%',
+                        padding: '0 1rem',
+                        marginBottom: '1rem',
+                        filter: activity.isVisibleToParent ? 'grayscale(0)' : 'grayscale(1)',
+                        backgroundColor: activity.isVisibleToParent ? '' : 'rgba(76, 62, 217, 0.37)',
+                      }}
+                      onClick={() => handleActivityVisibility(activity.id)}
+                    >
+                      {/* UI logic for activity disable */}
+                      {activity.isVisibleToParent ? (
+                        <EyeVisibility style={{ width: '8%', height: 'auto' }} />
+                      ) : (
+                        <EyeClosed style={{ width: '8%', height: 'auto' }} />
+                      )}
+                      <div style={{ width: '100%' }}>
+                        <ActivityCard
+                          activity={activity}
+                          isSelf={user !== null && activity.userId === user.id}
+                          user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
+                          noButtons={true}
+                        />
+                      </div>
+                    </Button>
+                  ))
+                  .reverse()}
               </>
             )}
           </OverflowContainer>

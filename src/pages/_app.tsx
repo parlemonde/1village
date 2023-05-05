@@ -79,6 +79,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
       NProgress.done();
     }, 200);
   };
+
   React.useEffect(() => {
     // get current route
     router.events.on('routeChangeStart', onRouterChangeStart);

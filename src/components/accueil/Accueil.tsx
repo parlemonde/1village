@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Button } from '@mui/material';
 
@@ -10,6 +10,7 @@ import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
@@ -19,20 +20,18 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediatorOrFamily =
-    user !== null &&
-    (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
+  const { classroom } = useContext(ClassroomContext);
+  const isMediator = user && user.type <= UserType.MEDIATOR;
 
   //TODO: redo conditions and switchs
-  const filterCountries = React.useMemo(
-    () =>
-      !village || (selectedPhase === 1 && !isMediatorOrFamily)
-        ? user && user.country !== null
-          ? [user.country?.isoCode.toUpperCase()]
-          : []
-        : village.countries.map((c) => c.isoCode),
-    [selectedPhase, village, user, isMediatorOrFamily],
-  );
+  const filterCountries = React.useMemo(() => {
+    //const
+    return !village || (selectedPhase === 1 && !isMediator)
+      ? user && user.country !== null
+        ? [user.country?.isoCode.toUpperCase()]
+        : []
+      : village.countries.map((c) => c.isoCode);
+  }, [selectedPhase, village, user, isMediator]);
 
   //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts
 
@@ -49,7 +48,6 @@ export const Accueil = () => {
     pelico: true,
     searchTerm: '',
   });
-
   const { activities } = useActivities({
     limit: 200,
     page: 0,
@@ -58,7 +56,6 @@ export const Accueil = () => {
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
   });
-
   // on selected phase change, select all activities.
   React.useEffect(() => {
     setFilters((prevFilters) => ({
@@ -87,6 +84,11 @@ export const Accueil = () => {
       </Base>
     );
   }
+
+  console.log('user === ', user);
+  console.log('village === ', village);
+  console.log('classroom === ', classroom);
+
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (

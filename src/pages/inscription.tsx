@@ -176,7 +176,7 @@ const Inscription = () => {
       resendVerificationEmail(newUser.email);
       setIsSubmitSuccessfull(true);
       setTimeout(() => {
-        router.push('/');
+        router.push('/connexion');
       }, 5000);
     }
   };
