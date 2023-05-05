@@ -80,14 +80,6 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
   return (
     <div style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 0', flexWrap: 'wrap' }}>
       <span className="text text--bold">Filtres :</span>
-      <FilterSelect
-        name="Activités"
-        options={ACTIVITIES_PER_PHASE[phase - 1] || []}
-        value={filters.selectedType}
-        onChange={(option) => {
-          onChange({ ...filters, types: option.value, selectedType: option.key });
-        }}
-      />
       {isMesFamilles && (
         <FilterSelect
           name="Phases"
@@ -103,6 +95,15 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
           }}
         />
       )}
+      <FilterSelect
+        name="Activités"
+        options={ACTIVITIES_PER_PHASE[phase - 1] || []}
+        value={filters.selectedType}
+        onChange={(option) => {
+          onChange({ ...filters, types: option.value, selectedType: option.key });
+        }}
+      />
+
       {/* <FilterSelect
         name="Status"
         options={[

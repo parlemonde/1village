@@ -357,26 +357,6 @@ const Inscription = () => {
                     <Checkbox
                       sx={{ margin: '0', padding: '0' }}
                       onChange={() => {
-                        setIsCGUread(!isCGUread);
-                      }}
-                    />
-                    <div
-                      style={{
-                        fontSize: 'small',
-                        margin: '0',
-                        padding: '0',
-                        textAlign: 'left',
-                        maxWidth: '100ch',
-                        flexShrink: 0,
-                      }}
-                    >
-                      Accepter les <u>conditions générales d&apos;utilisation **</u>
-                    </div>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
-                    <Checkbox
-                      sx={{ margin: '0', padding: '0' }}
-                      onChange={() => {
                         setHasAcceptedNewsletter(!hasAcceptedNewsletter);
                       }}
                     />
@@ -391,6 +371,26 @@ const Inscription = () => {
                       }}
                     >
                       Accepter de recevoir des nouvelles du projet 1Village
+                    </div>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
+                    <Checkbox
+                      sx={{ margin: '0', padding: '0' }}
+                      onChange={() => {
+                        setIsCGUread(!isCGUread);
+                      }}
+                    />
+                    <div
+                      style={{
+                        fontSize: 'small',
+                        margin: '0',
+                        padding: '0',
+                        textAlign: 'left',
+                        maxWidth: '100ch',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Accepter les <u>conditions générales d&apos;utilisation **</u>
                     </div>
                   </Box>
                   <div className="register__button">
