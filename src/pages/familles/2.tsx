@@ -288,7 +288,7 @@ const ClassroomParamStep2 = () => {
               {students.length > 0 &&
                 students
                   .map((student) => (
-                    <span key={student.id} style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
+                    <span key={student.id} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: '10px' }}>
                       {editableStudent === student ? (
                         <form onSubmit={(e) => handleSave(e, student)} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                           <TextField
@@ -324,10 +324,10 @@ const ClassroomParamStep2 = () => {
                           </Button>
                         </form>
                       ) : (
-                        <span>
-                          <p style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+                          <div style={{ width: '400px', marginRight: '10px' }}>
                             {student.firstname} {student.lastname}
-                          </p>
+                          </div>
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <button
                               style={{
@@ -354,7 +354,7 @@ const ClassroomParamStep2 = () => {
                               style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
                             />
                           </div>
-                        </span>
+                        </div>
                       )}
                     </span>
                   ))
