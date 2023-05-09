@@ -42,4 +42,5 @@ export const PELICO_USER: User = {
   village: null,
   hasAcceptedNewsletter: false,
   hasStudentLinked: false,
+  featureFlags: [],
 };
