@@ -33,7 +33,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
     userId: activityUser?.id ?? 0,
   });
   const isPelico = activityUser.type > UserType.TEACHER;
-  const isMediator = user !== null && user.type > UserType.TEACHER;
+  const isMediator = user !== null && user.type <= UserType.MEDIATOR;
 
   const onclick = React.useCallback(() => {
     router.push(`/activite/${activityUser.mascotteId}`);

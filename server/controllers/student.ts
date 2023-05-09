@@ -130,10 +130,8 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
   }
 
   const student = await AppDataSource.getRepository(Student).findOne({
-    relations: {
-      classroom: { village: true },
-    },
     where: { hashedCode: data.hashedCode },
+    relations: ['classroom'],
   });
   if (!student) return next();
 
