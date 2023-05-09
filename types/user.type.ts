@@ -1,6 +1,5 @@
-import type { FeatureFlag } from 'server/entities/featureFlag';
-
 import type { Country } from './country.type';
+import type { FeatureFlag } from './featureFlag.type';
 import type { Village } from './village.type';
 
 export enum UserType {

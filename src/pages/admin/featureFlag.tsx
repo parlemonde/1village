@@ -24,7 +24,7 @@ import type { SelectChangeEvent } from '@mui/material/Select';
 
 import { getUsers } from 'src/api/user/user.get';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import { FEATURE_FLAGS } from 'types/featureFlag.constant';
+import { FEATURE_FLAGS_NAMES } from 'types/featureFlag.constant';
 import type { User, UserType } from 'types/user.type';
 import { userTypeNames } from 'types/user.type';
 
@@ -206,7 +206,7 @@ const FeatureFlagsTest: React.FC = () => {
             <FormControl>
               <InputLabel>Feature Flag</InputLabel>
               <Select sx={{ minWidth: '10rem' }} label="Feature Flag" name="name" value={newFeatureFlag.name} onChange={handleNewFeatureFlagChange}>
-                {FEATURE_FLAGS?.map((flag, index) => (
+                {FEATURE_FLAGS_NAMES?.map((flag, index) => (
                   <MenuItem key={index} value={flag}>
                     {flag}
                   </MenuItem>

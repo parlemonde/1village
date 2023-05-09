@@ -1,8 +1,9 @@
+import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
 import { FeatureFlag } from '../entities/featureFlag';
 import type { User } from '../entities/user';
 import { AppDataSource } from './data-source';
 
-const isFeatureEnabledForUser = async (user: User, featureName: string): Promise<boolean> => {
+const isFeatureEnabledForUser = async (user: User, featureName: FeatureFlagsNames): Promise<boolean> => {
   const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: featureName } });
 
   if (!featureFlag) {

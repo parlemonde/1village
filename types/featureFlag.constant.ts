@@ -1,3 +1,3 @@
-export const FEATURE_FLAGS = ['id-family' as const, 'toto' as const];
+export const FEATURE_FLAGS_NAMES = ['id-family' as const, 'toto' as const];
 
-export type FeatureFlags = typeof FEATURE_FLAGS[number];
+export type FeatureFlagsNames = typeof FEATURE_FLAGS_NAMES[number];

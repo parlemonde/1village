@@ -2,16 +2,16 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState, useContext } from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
-import type { FeatureFlags } from 'types/featureFlag.constant';
+import type { FeatureFlagsNames } from 'types/featureFlag.constant';
 import type { User } from 'types/user.type';
 
 interface AccessControlProps {
-  featureName: FeatureFlags;
+  featureName: FeatureFlagsNames;
   children: React.ReactNode;
   redirectToWIP?: boolean;
 }
 
-const hasFeatureFlag = (user: User | null, featureName: string): boolean => {
+const hasFeatureFlag = (user: User | null, featureName: FeatureFlagsNames): boolean => {
   if (!user) return false;
 
   const featureFlag = user.featureFlags.find((flag) => flag.name === featureName);

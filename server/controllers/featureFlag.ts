@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { In } from 'typeorm';
 
+import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
 import { FeatureFlag } from '../entities/featureFlag';
 import { User, UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
@@ -16,7 +17,7 @@ featureFlagController.get({ path: '', userType: UserType.ADMIN }, async (req: Re
 
 // Get all users of a feature flag
 featureFlagController.get({ path: '/:featureFlagName/users', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
-  const featureFlagName = req.params.featureFlagName;
+  const featureFlagName: FeatureFlagsNames = req.params.featureFlagName as FeatureFlagsNames;
   const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: featureFlagName }, relations: ['users'] });
 
   if (!featureFlag) {
@@ -29,7 +30,7 @@ featureFlagController.get({ path: '/:featureFlagName/users', userType: UserType.
 
 // Get a feature flag by name
 featureFlagController.get({ path: '/:featureFlagName', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
-  const featureFlagName = req.params.featureFlagName;
+  const featureFlagName: FeatureFlagsNames = req.params.featureFlagName as FeatureFlagsNames;
   const featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: featureFlagName } });
 
   if (!featureFlag) {
