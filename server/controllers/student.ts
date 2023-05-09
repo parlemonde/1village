@@ -131,7 +131,7 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
 
   const student = await AppDataSource.getRepository(Student).findOne({
     where: { hashedCode: data.hashedCode },
-    relations: ['classroom'],
+    relations: ['classroom', 'classroom.village'],
   });
   if (!student) return next();
 
@@ -148,10 +148,11 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
       villageId: student.classroom.village.id,
       hasStudentLinked: true,
       firstLogin: student.classroom.village.activePhase,
-      countryCode: student.classroom.country.isoCode as string,
+      countryCode: student.classroom.countryCode as string,
     })
     .where('id = :id', { id: req.user.id })
     .execute();
+
   res.status(200).send('Link to child has been completed successfully');
 });
 
