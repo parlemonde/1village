@@ -150,7 +150,7 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
       villageId: student.classroom.village.id,
       hasStudentLinked: true,
       firstLogin: student.classroom.village.activePhase,
-      countryCode: student.classroom.country.isoCode as string, // Change this line
+      countryCode: student.classroom.country.isoCode as string,
     })
     .where('id = :id', { id: req.user.id })
     .execute();
