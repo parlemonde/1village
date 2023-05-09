@@ -30,6 +30,10 @@ const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, re
   const router = useRouter();
 
   useEffect(() => {
+    if (user === undefined) {
+      return;
+    }
+
     const checkAccess = () => {
       if (!user) {
         setLoading(false);
@@ -55,7 +59,7 @@ const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, re
     }
   }, [loading, hasAccess, redirectToWIP, router]);
 
-  if (loading) {
+  if (user === undefined || loading) {
     return <div>Loading...</div>;
   }
 
