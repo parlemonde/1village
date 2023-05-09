@@ -44,7 +44,7 @@ const FeatureFlagsTest: React.FC = () => {
 
   const [addedUsers, setAddedUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage, setUsersPerPage] = useState(10);
+  const [usersPerPage] = useState(10);
   const [userTypeFilter, setUserTypeFilter] = useState<UserType | ''>('');
   const [countryCodeFilter, setCountryCodeFilter] = useState<string>('');
 

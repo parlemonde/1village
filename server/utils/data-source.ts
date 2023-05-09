@@ -26,8 +26,8 @@ function getAppDataSource(): DataSource {
       database: process.env.DB_NAME || DEFAULT_NAME,
       extra: process.env.DB_SSL
         ? {
-          ssl: true,
-        }
+            ssl: true,
+          }
         : { ssl: false },
     };
   }
