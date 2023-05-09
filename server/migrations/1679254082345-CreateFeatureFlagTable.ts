@@ -13,14 +13,14 @@ export class CreateFeatureFlagTable1679254082345 implements MigrationInterface {
     `);
 
     await queryRunner.query(`
-      CREATE TABLE user_feature_flags_feature_flag (
-        userId int NOT NULL,
-        featureFlagId int NOT NULL,
-        PRIMARY KEY (userId, featureFlagId),
-        CONSTRAINT FK_user FOREIGN KEY (userId) REFERENCES user (id),
-        CONSTRAINT FK_featureFlag FOREIGN KEY (featureFlagId) REFERENCES feature_flag (id)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `);
+    CREATE TABLE user_feature_flags_feature_flag (
+      userId int NOT NULL,
+      featureFlagId int NOT NULL,
+      PRIMARY KEY (userId, featureFlagId),
+      CONSTRAINT FK_user FOREIGN KEY (userId) REFERENCES user (id) ON DELETE CASCADE,
+      CONSTRAINT FK_featureFlag FOREIGN KEY (featureFlagId) REFERENCES feature_flag (id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
