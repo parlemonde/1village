@@ -1,9 +1,10 @@
 import type { Request, Response, NextFunction } from 'express';
 
+import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
 import type { User } from '../entities/user';
 import isFeatureEnabledForUser from '../utils/isFeatureEnabledForUser';
 
-export async function featureEnabledMiddleware(featureName: string) {
+export async function featureEnabledMiddleware(featureName: FeatureFlagsNames) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const user: User | undefined = req.user;
 
