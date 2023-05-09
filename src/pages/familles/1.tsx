@@ -123,7 +123,9 @@ const ClassroomParamStep1 = () => {
     }
   }, [classroom?.delayedDays, classroom?.hasVisibilitySetToClass]);
 
-  const isMediatorOrFamily = user !== null && user.type === (UserType.MEDIATOR || UserType.ADMIN || UserType.SUPER_ADMIN || UserType.FAMILY);
+  const isMediatorOrFamily =
+    user !== null &&
+    (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
 
   const filterCountries = React.useMemo(
     () =>

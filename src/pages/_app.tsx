@@ -113,6 +113,8 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
 
   useAnalytics();
 
+  console.log(user);
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
