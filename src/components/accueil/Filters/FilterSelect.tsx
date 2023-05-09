@@ -12,7 +12,7 @@ import { primaryColor } from 'src/styles/variables.const';
 type Option<T> = {
   key: number | string;
   label: string;
-  value: T;
+  value: T | 'all';
 };
 
 interface FilterSelectProps<T> {
@@ -95,7 +95,7 @@ export const FilterSelect = <T,>({ value, onChange, name, options }: FilterSelec
               <ExpandLessIcon />
             </div>
 
-            <div style={{ padding: '0 0.4rem' }}>
+            <div style={{ padding: '0 0.4rem', overflowY: 'auto', height: '125px' }}>
               <FormGroup>
                 {options.map((option) => (
                   <FormControlLabel

@@ -46,10 +46,10 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     user !== null ? (user.type >= UserType.MEDIATOR ? village?.activePhase ?? 1 : user.firstLogin === 0 ? 1 : user.firstLogin) : -1,
   );
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type !== UserType.MEDIATOR);
+  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type !== UserType.FAMILY);
 
   React.useEffect(() => {
-    setShowUnassignedModal(user !== null && user.villageId === null && user.type === UserType.MEDIATOR);
+    setShowUnassignedModal(user !== null && user.villageId === null && user.type === UserType.TEACHER);
   }, [user]);
 
   const currentVillageId = village ? village.id : -1;
@@ -107,7 +107,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
       setVillage(newVillage);
       setSelectedPhase(newVillage ? newVillage.activePhase : 1);
     }
-    if (userVillageId === -1 && user.type !== UserType.TEACHER) {
+    if (userVillageId === -1 && user.type !== UserType.FAMILY) {
       showSelectVillageModal();
     }
     if (userVillageId === -1 && user.type === UserType.TEACHER) {

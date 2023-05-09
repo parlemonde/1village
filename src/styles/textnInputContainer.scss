@@ -1,0 +1,27 @@
+.textnInputContainer .MuiFormControl-root {
+  display: inline-block;
+}
+.textnInputContainer {
+  &__line {
+    margin: 1rem 0;
+    padding: 5px 0;
+  }
+  &__textfield {
+    .MuiInputBase-input {
+      margin: -5px 0;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    &--full-width {
+      .MuiInputBase-input {
+        width: 100%;
+        text-align: left;
+      }
+    }
+
+    .MuiFormHelperText-root {
+      position: absolute;
+      white-space: nowrap;
+    }
+  }
+}

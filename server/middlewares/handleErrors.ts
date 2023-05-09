@@ -11,7 +11,11 @@ export enum ErrorCode {
   PASSWORD_NOT_STRONG = 4,
   USE_SSO = 5,
   DONT_USO_SSO = 6,
+  PSEUDO_ALREADY_EXISTS = 7,
+  INVALID_EMAIL = 8,
   INVALID_DATA = 10,
+  UNVERIFIED_ACCOUNT = 20,
+  ALREADY_VERIFIED_ACCOUNT = 21,
 }
 
 export class AppError extends Error {

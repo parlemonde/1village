@@ -58,6 +58,8 @@ async function createSuperAdminUser(): Promise<void> {
   const user = new User();
   user.email = 'admin.1village@parlemonde.org';
   user.pseudo = adminPseudo;
+  user.firstname = '';
+  user.lastname = '';
   user.level = '';
   user.school = 'Asso Par Le Monde';
   user.type = UserType.SUPER_ADMIN;

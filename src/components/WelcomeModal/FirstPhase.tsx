@@ -42,7 +42,7 @@ export const FirstPhase = () => {
     setNewUser(user);
   }, [user]);
 
-  if (user === null || newUser === null || village === null || user.type >= UserType.OBSERVATOR) {
+  if (user === null || newUser === null || village === null || user.type <= UserType.MEDIATOR) {
     return null;
   }
 
@@ -330,7 +330,7 @@ export const FirstPhase = () => {
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
                   label="Nom affiché :"
-                  placeholder={getUserDisplayName({ ...user, ...newUser, type: 0 }, false)}
+                  placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
                   onChange={(displayName) => {
                     setNewUser((u) => ({ ...u, displayName }));
@@ -361,7 +361,7 @@ export const FirstPhase = () => {
                       },
                     ],
                   }}
-                  user={{ ...user, ...newUser, type: 0, id: -1 }}
+                  user={{ ...user, ...newUser, type: user.type, id: -1 }}
                   noButtons
                 />
               </div>
