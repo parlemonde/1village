@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import AccessControl from './AccessControl';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
@@ -36,7 +37,7 @@ export const Header = () => {
     }
   };
 
-  const goTopage = (page: string) => {
+  const goToPage = (page: string) => {
     setAnchorEl(null);
     router.push(page);
   };
@@ -101,9 +102,11 @@ export const Header = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={() => goTopage('/mon-compte')}>Mon compte</MenuItem>
-                {user.type !== UserType.FAMILY && <MenuItem onClick={() => goTopage('/mes-videos')}>Mes vidéos</MenuItem>}
-                {user.type === UserType.TEACHER ? <MenuItem onClick={() => goTopage('/familles/1')}>Mes familles</MenuItem> : null}
+                <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
+                {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
+                <AccessControl featureName="id-family">
+                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                </AccessControl>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>

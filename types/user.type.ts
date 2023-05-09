@@ -1,4 +1,5 @@
 import type { Country } from './country.type';
+import type { FeatureFlag } from './featureFlag.type';
 import type { Village } from './village.type';
 
 export enum UserType {
@@ -53,6 +54,8 @@ export interface User {
 
   mascotteId?: number;
   hasStudentLinked: boolean;
+
+  featureFlags: FeatureFlag[];
 }
 
 export type UserForm = {
