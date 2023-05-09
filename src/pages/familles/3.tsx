@@ -77,7 +77,7 @@ const ClassroomParamStep3 = () => {
     if (keywordPresence) {
       students.forEach((student) => {
         messagesWithId.push(`<div>Élève : <strong>${student.firstname} ${student.lastname}</strong></div>`);
-        messagesWithId.push(textValue.replaceAll(keywordRegex, '<u>' + student.hashedCode + '</u>'));
+        messagesWithId.push(textValue.replaceAll(keywordRegex, '' + student.hashedCode + ''));
         messagesWithId.push(`<div>--------------------------------------------------------</div>`);
         count += 1;
 
