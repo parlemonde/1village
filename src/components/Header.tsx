@@ -57,66 +57,62 @@ export const Header = () => {
             </h1>
           </a>
         </Link>
-        {user === undefined ? (
-          <div>Loading...</div>
-        ) : (
-          user && (
-            <div className="header__user">
-              {isPelico ? (
-                <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
-                  <span className="text text--small" style={{ margin: '0 0.6rem' }}>
-                    {village ? village.name : 'Village non choisi !'}
-                  </span>
-                  <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectVillageModal}>
-                    {village ? 'Changer' : 'Choisir un village'}
-                  </Button>
-                </div>
-              ) : null}
-              {user.type === UserType.ADMIN ||
-                (user.type === UserType.SUPER_ADMIN ? (
-                  <Link href="/admin/villages" passHref>
-                    <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                      {"Aller à l'interface Admin"}
-                    </Button>
-                  </Link>
-                ) : null)}
-              <div>
-                <IconButton
-                  style={{ width: '40px', height: '40px', margin: '0 0.2rem' }}
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                >
-                  <SettingsIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
-                  {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
-                  <AccessControl featureName="id-family" key={user?.id || 'default'}>
-                    {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
-                  </AccessControl>
-                  <MenuItem onClick={logout}>
-                    <span className="text text--alert">Se déconnecter</span>
-                  </MenuItem>
-                </Menu>
+        {user && (
+          <div className="header__user">
+            {isPelico ? (
+              <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
+                <span className="text text--small" style={{ margin: '0 0.6rem' }}>
+                  {village ? village.name : 'Village non choisi !'}
+                </span>
+                <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectVillageModal}>
+                  {village ? 'Changer' : 'Choisir un village'}
+                </Button>
               </div>
+            ) : null}
+            {user.type === UserType.ADMIN ||
+              (user.type === UserType.SUPER_ADMIN ? (
+                <Link href="/admin/villages" passHref>
+                  <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
+                    {"Aller à l'interface Admin"}
+                  </Button>
+                </Link>
+              ) : null)}
+            <div>
+              <IconButton
+                style={{ width: '40px', height: '40px', margin: '0 0.2rem' }}
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+              >
+                <SettingsIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
+                {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
+                <AccessControl featureName="id-family" key={user?.id || 'default'}>
+                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                </AccessControl>
+                <MenuItem onClick={logout}>
+                  <span className="text text--alert">Se déconnecter</span>
+                </MenuItem>
+              </Menu>
             </div>
-          )
+          </div>
         )}
       </div>
     </header>
