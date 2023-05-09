@@ -20,7 +20,6 @@ export class UserToStudent {
 
   @BeforeRemove()
   public async onBeforeRemove() {
-    console.log('**************************  UserToStudent Relation before deletion  **************************');
     const entityManager: EntityManager = AppDataSource.manager;
 
     // Fetch the UserToStudent object with the User relation

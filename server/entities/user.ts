@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import { UserType } from '../../types/user.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { FeatureFlag } from './featureFlag';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
@@ -139,4 +140,8 @@ export class User implements UserInterface {
 
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
   public userToStudents: UserToStudent[];
+
+  @ManyToMany(() => FeatureFlag, (featureFlag) => featureFlag.users)
+  @JoinTable()
+  public featureFlags: FeatureFlag[];
 }

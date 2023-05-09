@@ -81,7 +81,10 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       } else {
         data = decoded;
       }
-      const user = await AppDataSource.getRepository(User).findOne({ where: { id: data.userId } });
+      const user = await AppDataSource.getRepository(User).findOne({
+        where: { id: data.userId },
+        relations: ['featureFlags'],
+      });
       if (user === undefined && userType !== undefined) {
         res.status(401).send('invalid access token');
         return;

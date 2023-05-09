@@ -65,7 +65,7 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
 // --- Get one user. ---
 userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['featureFlags'] });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === null || (!isSelfProfile && !isAdmin)) {
@@ -73,6 +73,30 @@ userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (re
     return;
   }
   res.sendJSON(user);
+});
+
+// --- Get user's feature flags ---
+userController.get({ path: '/:userId/featureFlags', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
+  const userId = parseInt(req.params.userId, 10);
+  const user = await AppDataSource.getRepository(User).findOne({
+    where: { id: userId },
+    relations: ['featureFlags'],
+  });
+
+  if (!user) {
+    res.status(404).send();
+    return;
+  }
+
+  const featureFlags = user.featureFlags.map((featureFlag) => {
+    return {
+      id: featureFlag.id,
+      name: featureFlag.name,
+      isEnabled: featureFlag.isEnabled,
+    };
+  });
+
+  res.json(featureFlags);
 });
 
 // --- Check user pseudo ---
