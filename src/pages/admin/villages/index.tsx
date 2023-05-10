@@ -30,12 +30,14 @@ const Villages = () => {
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
   const [search, setSearch] = useState('');
 
-  const filteredVillages = useMemo(() => {
-    return villages.filter((v) => {
-      const searchMatch = [v.name, ...v.countries.map((c) => c.name)].some((field) => field.toLowerCase().includes(search.toLowerCase()));
-      return searchMatch;
-    });
-  }, [villages, search]);
+  const filteredVillages = useMemo(
+    () =>
+      villages.filter((v) => {
+        const searchMatch = [v.name, ...v.countries.map((c) => c.name)].some((field) => field.toLowerCase().includes(search.toLowerCase()));
+        return searchMatch;
+      }),
+    [villages, search],
+  );
 
   const countriesToText = (countries: Country[]) => {
     return countries.map((c) => `${countryToFlag(c.isoCode)} ${c.name}`).join(' - ');

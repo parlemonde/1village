@@ -37,18 +37,26 @@ const Users = () => {
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
   const [search, setSearch] = useState('');
   const [userTypeFilter, setUserTypeFilter] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
 
-  const filteredUsers = useMemo(() => {
-    return users.filter((u) => {
-      const searchMatch = [u.pseudo, u.email, u.country?.isoCode].some((field) => field?.toLowerCase().includes(search.toLowerCase()));
-      const userTypeMatch = userTypeFilter ? u.type === parseInt(userTypeFilter) : true;
+  const filteredUsers = useMemo(
+    () =>
+      users.filter((u) => {
+        const searchMatch = [u.pseudo, u.email].some((field) => field?.toLowerCase().includes(search.toLowerCase()));
+        const countryMatch = u.country?.isoCode.toLowerCase().includes(countrySearch.toLowerCase());
+        const userTypeMatch = userTypeFilter ? u.type === parseInt(userTypeFilter) : true;
 
-      return searchMatch && userTypeMatch;
-    });
-  }, [users, search, userTypeFilter]);
+        return searchMatch && userTypeMatch && countryMatch;
+      }),
+    [users, search, userTypeFilter, countrySearch],
+  );
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+  }, []);
+
+  const handleCountryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setCountrySearch(e.target.value);
   }, []);
 
   const actions = (id: number) => (
@@ -108,9 +116,17 @@ const Users = () => {
             Filtres utilisateurs :
           </Typography>
           <TextField
-            label="Rechercher par email, pseudo ou code pays"
+            label="Rechercher par email ou pseudo"
             value={search}
             onChange={handleChange}
+            variant="outlined"
+            size="small"
+            style={{ marginRight: '1rem' }}
+          />
+          <TextField
+            label="Rechercher par code pays"
+            value={countrySearch}
+            onChange={handleCountryChange}
             variant="outlined"
             size="small"
             style={{ marginRight: '1rem' }}
