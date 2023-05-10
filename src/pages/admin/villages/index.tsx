@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import { Button, NoSsr } from '@mui/material';
+import { Button, NoSsr, TextField, Typography } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
@@ -28,6 +28,14 @@ const Villages = () => {
   const { deleteVillage, importVillages } = useVillageRequests();
   const [isLoading, setIsLoading] = React.useState(false);
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
+  const [search, setSearch] = useState('');
+
+  const filteredVillages = useMemo(() => {
+    return villages.filter((v) => {
+      const searchMatch = [v.name, ...v.countries.map((c) => c.name)].some((field) => field.toLowerCase().includes(search.toLowerCase()));
+      return searchMatch;
+    });
+  }, [villages, search]);
 
   const countriesToText = (countries: Country[]) => {
     return countries.map((c) => `${countryToFlag(c.isoCode)} ${c.name}`).join(' - ');
@@ -101,6 +109,19 @@ const Villages = () => {
           </>
         }
       >
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem' }}>
+          <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
+            Filtres villages :
+          </Typography>
+          <TextField
+            label="Rechercher par nom de village ou pays"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            variant="outlined"
+            size="small"
+            style={{ marginRight: '1rem' }}
+          />
+        </div>
         <AdminTable
           emptyPlaceholder={
             <>
@@ -110,7 +131,7 @@ const Villages = () => {
               </Link>
             </>
           }
-          data={villages.map((v) => ({
+          data={filteredVillages.map((v) => ({
             ...v,
             countries: countriesToText(v.countries),
             userCount: 0,

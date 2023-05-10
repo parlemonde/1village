@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
@@ -34,6 +35,17 @@ const Users = () => {
   }, {});
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
+  const [search, setSearch] = useState('');
+  const [userTypeFilter, setUserTypeFilter] = useState('');
+
+  const filteredUsers = useMemo(() => {
+    return users.filter((u) => {
+      const searchMatch = [u.pseudo, u.email, u.country?.isoCode].some((field) => field?.toLowerCase().includes(search.toLowerCase()));
+      const userTypeMatch = userTypeFilter ? u.type === parseInt(userTypeFilter) : true;
+
+      return searchMatch && userTypeMatch;
+    });
+  }, [users, search, userTypeFilter]);
 
   const actions = (id: number) => (
     <>
@@ -87,9 +99,43 @@ const Users = () => {
           </Link>
         }
       >
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem' }}>
+          <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
+            Filtres utilisateurs :
+          </Typography>
+          <TextField
+            label="Rechercher par email, pseudo ou code pays"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            variant="outlined"
+            size="small"
+            style={{ marginRight: '1rem' }}
+          />
+          <FormControl variant="outlined" size="small" sx={{ minWidth: '10rem' }}>
+            <InputLabel htmlFor="user-type-filter">Filtrer par rôle</InputLabel>
+            <Select
+              label="Filtrer par rôle"
+              value={userTypeFilter}
+              onChange={(e) => setUserTypeFilter(e.target.value)}
+              inputProps={{
+                name: 'user-type-filter',
+                id: 'user-type-filter',
+              }}
+            >
+              <MenuItem value="">
+                <em>Tous les rôles</em>
+              </MenuItem>
+              {Object.entries(userTypeNames).map(([value, label]) => (
+                <MenuItem key={value} value={value}>
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
         <AdminTable
           emptyPlaceholder="Vous n'avez pas encore d'utilisateur !"
-          data={users.map((u) =>
+          data={filteredUsers.map((u) =>
             u.country
               ? {
                   id: u.id,
