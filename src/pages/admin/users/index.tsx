@@ -5,6 +5,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -57,6 +58,10 @@ const Users = () => {
 
   const handleCountryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setCountrySearch(e.target.value);
+  }, []);
+
+  const handleSelect = useCallback((e: SelectChangeEvent<string>) => {
+    setUserTypeFilter(e.target.value);
   }, []);
 
   const actions = (id: number) => (
@@ -136,7 +141,7 @@ const Users = () => {
             <Select
               label="Filtrer par rôle"
               value={userTypeFilter}
-              onChange={(e) => setUserTypeFilter(e.target.value)}
+              onChange={handleSelect}
               inputProps={{
                 name: 'user-type-filter',
                 id: 'user-type-filter',
