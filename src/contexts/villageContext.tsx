@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -42,7 +42,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   const [village, setVillage] = React.useState<Village | null>(initialVillage);
   const [villages, setVillages] = React.useState<Village[]>([]);
   const [selectedVillageIndex, setSelectedVillageIndex] = React.useState(-1);
-  const [selectedPhase, setSelectedPhase] = React.useState(
+  const [selectedPhase, fakeSelectedPhase] = React.useState(
     user !== null ? (user.type >= UserType.MEDIATOR ? village?.activePhase ?? 1 : user.firstLogin === 0 ? 1 : user.firstLogin) : -1,
   );
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -88,6 +88,14 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     setIsModalOpen(true);
   }, [getVillages]);
 
+  const setSelectedPhase = useCallback(
+    (currentPhase: number) => {
+      sessionStorage.setItem('selectedPhase', currentPhase.toString());
+      fakeSelectedPhase(currentPhase);
+    },
+    [fakeSelectedPhase],
+  );
+
   const setUserVillage = React.useCallback(async () => {
     if (user === null) {
       // should not happen
@@ -105,9 +113,11 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     if (userVillageId === -1 && user.type === UserType.TEACHER) {
       setShowUnassignedModal(true);
     }
-  }, [currentVillageId, getVillage, showSelectVillageModal, user]);
+  }, [currentVillageId, getVillage, showSelectVillageModal, user, setSelectedPhase]);
 
   React.useEffect(() => {
+    const storedSelectedPhase = Number(window.sessionStorage.getItem('selectedPhase'));
+    storedSelectedPhase && setSelectedPhase(storedSelectedPhase);
     if (user === null) {
       setIsModalOpen(false);
       setShowUnassignedModal(false);
@@ -119,7 +129,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     } else {
       setUserVillage().catch();
     }
-  }, [user, isOnAdmin, setUserVillage]);
+  }, [user, isOnAdmin, setUserVillage, setSelectedPhase]);
 
   const alreadyAsked = React.useRef(false);
   const onAskVillage = async () => {
@@ -149,7 +159,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   };
 
   const value = React.useMemo(
-    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase }),
+    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase: setSelectedPhase }),
     [village, selectedPhase, showSelectVillageModal, setSelectedPhase],
   );
 
@@ -169,6 +179,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         noCloseOutsideModal={village === null}
         noCancelButton={village !== null}
         onClose={() => {
+          document.body.style.paddingRight = '';
+          document.body.style.overflow = '';
           if (village === null) {
             logout();
           } else {
@@ -177,6 +189,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
         }}
         cancelLabel="Se déconnecter"
         onConfirm={() => {
+          document.body.style.paddingRight = '';
+          document.body.style.overflow = '';
           if (selectedVillageIndex !== -1) {
             setVillage(villages[selectedVillageIndex]);
             setSelectedPhase(villages[selectedVillageIndex].activePhase);

@@ -84,11 +84,9 @@ const StoryStep1 = () => {
           activeStep={0}
         />
         <div className="width-900">
-          <h1>Choisissez et dessinez l’objectif du développement durable atteint</h1>
-          <p className="text">
-            Grâce aux pouvoirs magiques de l’objet et du lieu choisis aux étapes précédentes, un des objectifs du développement durable a été atteint.
-          </p>
-          <p className="text">Choisissez lequel et dessinez-le.</p>
+          <h1>Choisissez et dessinez l’objectif du développement durable à atteindre</h1>
+          <p className="text">Pour atteindre votre objectif de développement durable, vous choisirez un objet et un lieu aux étapes suivantes.</p>
+          <p className="text">Choisissez votre objectif et dessinez-le.</p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
@@ -167,7 +165,7 @@ const StoryStep1 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev="/creer-une-histoire/2" next={onNext} />
+        <StepsButton next={onNext} />
       </div>
     </Base>
   );

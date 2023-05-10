@@ -7,6 +7,7 @@ import { audioController } from './audio';
 import { classroomController } from './classroom';
 import { countryController } from './countries';
 import { currencyController } from './currencies';
+import featureFlagController from './featureFlag';
 import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
@@ -39,6 +40,7 @@ const controllers = [
   classroomController,
   teacherController,
   studentController,
+  featureFlagController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {

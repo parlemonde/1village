@@ -13,7 +13,7 @@ import { onLoginSSO, SSO_HOST, CLIENT_ID } from 'src/utils/sso';
 
 const errorMessages = {
   0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
-  1: 'Identifiant invalides',
+  1: 'Identifiants invalides',
   2: 'Compte bloqué, trop de tentatives de connexion. Veuillez réinitialiser votre mot de passe.',
 };
 

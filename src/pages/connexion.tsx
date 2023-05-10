@@ -32,7 +32,7 @@ const SignInParent = () => {
     [key: number]: string;
   } = {
     0: 'Une erreur inconnue est survenue. Veuillez réessayer plus tard...',
-    1: 'Identifiant invalides',
+    1: 'Identifiants invalides',
     3: 'Compte bloqué',
     20: 'Compte non verifié - Veuillez consulter vos emails',
   };

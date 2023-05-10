@@ -19,20 +19,17 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediatorOrFamily =
-    user !== null &&
-    (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
+  const isMediator = user && user.type <= UserType.MEDIATOR;
 
   //TODO: redo conditions and switchs
-  const filterCountries = React.useMemo(
-    () =>
-      !village || (selectedPhase === 1 && !isMediatorOrFamily)
-        ? user && user.country !== null
-          ? [user.country?.isoCode.toUpperCase()]
-          : []
-        : village.countries.map((c) => c.isoCode),
-    [selectedPhase, village, user, isMediatorOrFamily],
-  );
+  const filterCountries = React.useMemo(() => {
+    //const
+    return !village || (selectedPhase === 1 && !isMediator)
+      ? user && user.country !== null
+        ? [user?.country?.isoCode.toUpperCase()]
+        : []
+      : village.countries.map((c) => c.isoCode);
+  }, [selectedPhase, village, user, isMediator]);
 
   //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts
 
@@ -49,7 +46,6 @@ export const Accueil = () => {
     pelico: true,
     searchTerm: '',
   });
-
   const { activities } = useActivities({
     limit: 200,
     page: 0,
@@ -58,7 +54,6 @@ export const Accueil = () => {
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
   });
-
   // on selected phase change, select all activities.
   React.useEffect(() => {
     setFilters((prevFilters) => ({
@@ -87,6 +82,7 @@ export const Accueil = () => {
       </Base>
     );
   }
+
   return (
     <Base showSubHeader>
       {village && selectedPhase <= village.activePhase ? (

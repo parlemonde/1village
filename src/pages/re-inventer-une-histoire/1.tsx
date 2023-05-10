@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import { TextField, Grid, ButtonBase } from '@mui/material';
+import { Grid, ButtonBase, FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
+import { ODD_CHOICE } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { Steps } from 'src/components/Steps';
@@ -16,29 +17,30 @@ import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage, primaryColor, errorColor } from 'src/styles/variables.const';
 import { ActivityStatus } from 'types/activity.type';
-import type { StoriesData, StoryElement } from 'types/story.type';
+import type { StoriesData } from 'types/story.type';
 
 const ReInventStoryStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  const data = activity?.data as StoriesData;
+  const [oDDChoice, setODDChoice] = React.useState('');
+  const data = (activity?.data as StoriesData) || null;
   const isEdit = activity !== null && activity.status !== ActivityStatus.DRAFT;
 
-  const dataChange = (key: keyof StoryElement) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.slice(0, 400);
-    const { object } = data;
-    const newData = { ...data, object: { ...object, [key]: value } };
-    updateActivity({ data: newData });
-  };
+  React.useEffect(() => {
+    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
+      router.push('/re-inventer-une-histoire');
+    } else if (activity && !isStory(activity)) {
+      router.push('/re-inventer-une-histoire');
+    }
+  }, [activity, router]);
 
-  // Update the "object step" image url, when upload an image.
+  // Update the "odd step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
-    const { object } = data;
-    updateActivity({ data: { ...data, object: { ...object, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
+    const { odd } = data;
+    updateActivity({ data: { ...data, odd: { ...odd, imageId: 0, imageUrl, inspiredStoryId: 0 } } });
   };
-
   React.useEffect(() => {
     // if user navigated to the next step already, let's show the errors if there are any.
     if (window.sessionStorage.getItem(`re-invent-a-story-step-1-next`) === 'true') {
@@ -46,7 +48,6 @@ const ReInventStoryStep1 = () => {
       window.sessionStorage.setItem(`re-invent-a-story-step-1-next`, 'false');
     }
   }, []);
-
   const onNext = () => {
     save().catch(console.error);
     // save in local storage that the user is going to the next step.
@@ -63,7 +64,7 @@ const ReInventStoryStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/re-inventer-une-histoire" />}
         <Steps
-          steps={['Objet', 'Lieu', 'ODD', 'Histoire', 'Prévisualisation']}
+          steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={[
             '/re-inventer-une-histoire/1?edit',
             '/re-inventer-une-histoire/2',
@@ -74,11 +75,9 @@ const ReInventStoryStep1 = () => {
           activeStep={0}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un objet magique</h1>
-          <p className="text">
-            Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à leurs pouvoirs, le village idéal a atteint
-            l’objectif du développement durable que vous choisirez en étape 3.
-          </p>
+          <h1>Choisissez et dessinez l’objectif du développement durable à atteindre</h1>
+          <p className="text">Pour atteindre votre objectif de développement durable, vous choisirez un objet et un lieu aux étapes précédentes.</p>
+          <p className="text">Choisissez votre objectif et dessinez-le.</p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
@@ -96,15 +95,21 @@ const ReInventStoryStep1 = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        {data?.object?.imageUrl ? (
-                          <Image layout="fill" objectFit="cover" alt="image de l'objet" src={data?.object?.imageUrl} unoptimized />
+                        {data?.odd?.imageUrl ? (
+                          <Image
+                            layout="fill"
+                            objectFit="cover"
+                            alt="image de l'objectif de développement durable"
+                            src={data?.odd?.imageUrl}
+                            unoptimized
+                          />
                         ) : (
                           <AddIcon style={{ fontSize: '80px' }} />
                         )}
                       </div>
                     </KeepRatio>
                   </ButtonBase>
-                  {data?.object?.imageUrl && (
+                  {data?.odd?.imageUrl && (
                     <div style={{ position: 'absolute', top: '0.25rem', right: '0.25rem' }}>
                       <DeleteButton
                         onDelete={() => {
@@ -120,35 +125,33 @@ const ReInventStoryStep1 = () => {
                     id={0}
                     isModalOpen={isImageModalOpen}
                     setIsModalOpen={setIsImageModalOpen}
-                    imageUrl={data?.object?.imageUrl || ''}
+                    imageUrl={data?.odd?.imageUrl || ''}
                     setImageUrl={setImage}
                   />
                 </div>
+                <FormControl variant="outlined" className="full-width" style={{ marginTop: '1rem' }}>
+                  <InputLabel id="select-ODD">ODD</InputLabel>
+                  <Select
+                    error={isError && data?.odd?.description === ''}
+                    labelId="select-ODD"
+                    id="select-ODD-outlined"
+                    value={oDDChoice || data?.odd?.description}
+                    onChange={(event) => {
+                      setODDChoice(event.target.value as string);
+                      const { odd } = data;
+                      updateActivity({ data: { ...data, odd: { ...odd, description: event.target.value } } });
+                    }}
+                    label="Village"
+                  >
+                    {(ODD_CHOICE || []).map((v, index) => (
+                      <MenuItem value={v.choice} key={index + 1}>
+                        {v.choice}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>Choisissez votre ODD </FormHelperText>
+                </FormControl>
               </div>
-              <TextField
-                error={isError && data?.object?.description === ''}
-                helperText={isError && data?.object?.description === '' && 'Écrivez la description de votre image !'}
-                id="standard-multiline-static"
-                label="Décrivez l’objet magique"
-                value={data?.object?.description || ''}
-                onChange={dataChange('description')}
-                variant="outlined"
-                multiline
-                maxRows={4}
-                style={{ width: '100%', marginTop: '25px', color: 'primary' }}
-                inputProps={{
-                  maxLength: 400,
-                }}
-              />
-              {data?.object?.description ? (
-                <div style={{ width: '100%', textAlign: 'right' }}>
-                  <span className="text text--small">{data.object.description.length}/400</span>
-                </div>
-              ) : (
-                <div style={{ width: '100%', textAlign: 'right' }}>
-                  <span className="text text--small">0/400</span>
-                </div>
-              )}
             </Grid>
           </Grid>
         </div>

@@ -54,7 +54,7 @@ const StoryStep3 = () => {
     updateActivity({ data: newData });
   };
 
-  // Update the "object step" image url, when upload an image.
+  // Update the "place step" image url, when upload an image.
   const setImage = (imageUrl: string) => {
     const { object, place } = data;
     // imageId = 0 when we are changing the image of the object step.
@@ -89,8 +89,8 @@ const StoryStep3 = () => {
         <div className="width-900">
           <h1>Inventez et dessinez un lieu extraordinaire</h1>
           <p className="text">
-            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal a
-            atteint l’objectif du développement durable que vous choisirez en étape 3.
+            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal va
+            atteindre l’objectif de développement durable que vous avez choisi.
           </p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
@@ -164,7 +164,7 @@ const StoryStep3 = () => {
             </Grid>
           </Grid>
         </div>
-        <StepsButton prev={`/creer-une-histoire/1?edit=${activity.id}`} next={onNext} />
+        <StepsButton prev={`/creer-une-histoire/2`} next={onNext} />
       </div>
     </Base>
   );

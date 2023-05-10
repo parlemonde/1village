@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import { UserType } from '../../types/user.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { FeatureFlag } from './featureFlag';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
@@ -78,10 +79,6 @@ export class User implements UserInterface {
   })
   type: UserType;
 
-  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
-
   @Column({ nullable: true })
   public villageId: number | null;
 
@@ -118,8 +115,16 @@ export class User implements UserInterface {
 
   public position: { lat: number; lng: number };
 
+  public mascotteId?: number;
+
   @Column({ type: 'boolean', default: false })
+  //TODO: add trigger to check if hasStudentLink has to be seted whenever a student is deleted.
+  //TODO: add migration to add trigger...
   public hasStudentLinked: boolean;
+
+  @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'villageId' })
+  public village: Village | null;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
@@ -133,8 +138,10 @@ export class User implements UserInterface {
   @OneToMany(() => Image, (image: Image) => image.user)
   public images: Image[];
 
-  public mascotteId?: number;
-
   @OneToMany(() => UserToStudent, (userToStudent) => userToStudent.user)
   public userToStudents: UserToStudent[];
+
+  @ManyToMany(() => FeatureFlag, (featureFlag) => featureFlag.users)
+  @JoinTable()
+  public featureFlags: FeatureFlag[];
 }
