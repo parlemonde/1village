@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -46,6 +46,10 @@ const Users = () => {
       return searchMatch && userTypeMatch;
     });
   }, [users, search, userTypeFilter]);
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  }, []);
 
   const actions = (id: number) => (
     <>
@@ -106,7 +110,7 @@ const Users = () => {
           <TextField
             label="Rechercher par email, pseudo ou code pays"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleChange}
             variant="outlined"
             size="small"
             style={{ marginRight: '1rem' }}
