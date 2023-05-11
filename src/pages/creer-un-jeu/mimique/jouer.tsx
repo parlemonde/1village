@@ -1,13 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { ActivityContext } from 'src/Context/ActivityContext';
+import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
-import { color } from '@mui/system';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -17,7 +15,7 @@ import { UserDisplayName } from 'src/components/UserDisplayName';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { MimicStats } from 'src/components/activities/MimicStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
-import { CustomRadio as GreenRadio, CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
+import { CustomRadio as GreenRadio, CustomRadio as RedRadio, CustomRadioProps } from 'src/components/buttons/CustomRadio';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
@@ -29,11 +27,8 @@ import type { Game, MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { MimicResponseValue } from 'types/mimicResponse.type';
 import { UserType, User } from 'types/user.type';
-
-interface RightNavigationProps {
-  activityUser: User;
-  displayAsUser?: boolean;
-}
+import { ActivityComments } from 'src/components/activities/ActivityComments';
+import { Activity } from 'types/activity.type';
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -48,6 +43,10 @@ function shuffleArray(array: Array<number>) {
 
 type AlreadyPlayerModalProps = {
   isOpen: boolean;
+};
+
+type PlayMimicState = {
+  lastPlayedMimic: MimicData | null;
 };
 
 const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
@@ -70,26 +69,54 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
   );
 };
 
+type ResponseButtonProps = {
+  value: MimicResponseValue;
+  isSuccess?: boolean;
+  isGreenRadio?: boolean;
+  isColoredRadio: boolean;
+  signification?: string | null;
+  onClick: () => void;
+};
+const ResponseButton = ({ value, onClick, isColoredRadio, isGreenRadio = false, isSuccess = false, signification = '' }: ResponseButtonProps) => {
+  const RadioComponent = isGreenRadio ? GreenRadio : RedRadio;
+  return (
+    <Box onClick={onClick} sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
+      <FormControlLabel
+        value={value}
+        control={isColoredRadio ? <RadioComponent isSuccess={isSuccess} isChecked /> : <Radio />}
+        label={signification}
+        disabled={isColoredRadio}
+        style={{ cursor: 'pointer', maxWidth: '100%' }}
+      />
+    </Box>
+  );
+};
 const PlayMimique = () => {
-  const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+  const { user } = useContext(UserContext);
+  const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
   const { getRandomGame, sendNewGameResponse, getGameStats } = useGameRequests();
-  const [previousMimic, setPreviousMimic] = React.useState<MimicData | null>(null);
 
-  const [game, setGame] = React.useState<Game | undefined>(undefined);
-  const [tryCount, setTryCount] = React.useState<number>(0);
-  const [found, setFound] = React.useState<boolean>(false);
-  const [foundError, setFoundError] = React.useState<boolean>(false);
-  const [fake1Selected, setFake1Selected] = React.useState<boolean>(false);
-  const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
-  const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
-  const [isLastMimiqueModalOpen, setIsLastMimiqueModalOpen] = React.useState<boolean>(false);
-  const [loadingGame, setLoadingGame] = React.useState<boolean>(true);
-  const [gameResponses, setGameResponses] = React.useState<GameResponse[]>([]);
+  const [game, setGame] = useState<Game | undefined>(undefined);
+  const [tryCount, setTryCount] = useState<number>(0);
+  const [found, setFound] = useState<boolean>(false);
+  const [foundError, setFoundError] = useState<boolean>(false);
+  const [fake1Selected, setFake1Selected] = useState<boolean>(false);
+  const [fake2Selected, setFake2Selected] = useState<boolean>(false);
+  const [selected, setSelected] = useState<MimicResponseValue | null>(null);
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+  const [isLastMimiqueModalOpen, setIsLastMimiqueModalOpen] = useState<boolean>(false);
+  const [loadingGame, setLoadingGame] = useState<boolean>(true);
+  const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
+  const [previousMimic, setPreviousMimic] = useState<MimicData | null>(null);
+  const [activityComment, setActivityComment] = useState<Activity | null>(null);
 
-  const getNextGame = React.useCallback(async () => {
+  const getLastMimicPlayed = (): PlayMimicState => {
+    console.log('previous mimic : ', previousMimic);
+    const lastPlayedMimic = previousMimic ?? null;
+    return { lastPlayedMimic };
+  };
+  const getNextGame = useCallback(async () => {
     setLoadingGame(true);
 
     // [1] Reset game.
@@ -107,15 +134,18 @@ const PlayMimique = () => {
     setGame(newGame);
     setIsLastMimiqueModalOpen(newGame === undefined);
 
+    if (previousMimic !== null) {
+      setPreviousMimic(previousMimic);
+    }
     setLoadingGame(false);
-  }, [getRandomGame]);
+  }, [getRandomGame, previousMimic]);
 
   // Get next game on start and on village change.
-  React.useEffect(() => {
+  useEffect(() => {
     getNextGame().catch();
   }, [getNextGame]);
 
-  const userMap = React.useMemo(
+  const userMap = useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
         acc[u.id] = index;
@@ -123,7 +153,7 @@ const PlayMimique = () => {
       }, {}),
     [users],
   );
-  const mimicContent = React.useMemo(() => {
+  const mimicContent = useMemo(() => {
     if (game === undefined) {
       return undefined;
     }
@@ -135,16 +165,41 @@ const PlayMimique = () => {
       return undefined;
     }
   }, [game]);
-  const gameCreator = React.useMemo(() => {
+
+  const ResponseButtonDataMapper = useMemo(
+    () => [
+      {
+        value: MimicResponseValue.SIGNIFICATION,
+        signification: mimicContent?.signification,
+        isSuccess: true,
+        isColoredRadio: found || foundError,
+        isGreenRadio: true,
+      },
+      {
+        value: MimicResponseValue.FAKE_SIGNIFICATION_1,
+        signification: mimicContent?.fakeSignification1,
+        isColoredRadio: fake1Selected,
+      },
+      {
+        value: MimicResponseValue.FAKE_SIGNIFICATION_2,
+        signification: mimicContent?.fakeSignification2,
+        isColoredRadio: fake2Selected,
+      },
+    ],
+    [mimicContent, found, foundError, fake1Selected, fake2Selected],
+  );
+
+  const gameCreator = useMemo(() => {
     if (game === undefined) {
       return undefined;
     }
     return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
   }, [game, userMap, users]);
+
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
   const userIsPelico = user !== null && user.type >= UserType.OBSERVATOR;
   const ableToValidate = selected !== null;
-  const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
+  const choices = useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
   const onValidate = async () => {
     if (selected === null || game === undefined) {
@@ -185,7 +240,8 @@ const PlayMimique = () => {
   }
 
   return (
-    <Base rightNav={<RightNavigation activityUser={user} displayAsUser={true} />} hideLeftNav showSubHeader>
+    // TODO : replace true by activity.displayUser when activiy problem is resolve
+    <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
         <Box display="flex" flexDirection="column">
           <Box alignItems="flex-start">
@@ -218,21 +274,14 @@ const PlayMimique = () => {
               )}
             </div>
           </div>
+          {/* <Grid container spacing={1} alignItems="flex-end" justifyItems="flex-end" justifyContent="space-between" style={{ flex: 1 }}> */}
           <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ flex: 1 }}>
-            <Grid item xs={3}>
-              <Button
-                style={{
-                  margin: 'auto',
-                }}
-                variant="outlined"
-                color="primary"
-                onClick={onValidate}
-                disabled={!ableToValidate}
-              >
+            <Grid item xs={3} display="flex" justifyContent="flex-start">
+              <Button variant="outlined" color="primary" onClick={getLastMimicPlayed} disabled={!ableToValidate}>
                 mimique précédente
               </Button>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} display="flex" justifyContent="center">
               <RadioGroup row>
                 <FormControlLabel
                   sx={{ ml: 1 }}
@@ -269,20 +318,13 @@ const PlayMimique = () => {
                 />
               </RadioGroup>
             </Grid>
-            <Grid item xs={3}>
-              <Button
-                style={{
-                  margin: 'auto',
-                }}
-                variant="outlined"
-                color="primary"
-                onClick={getNextGame}
-              >
+            <Grid item xs={3} display="flex" justifyContent="flex-end">
+              <Button variant="outlined" color="primary" onClick={getNextGame}>
                 mimique suivante
               </Button>
             </Grid>
           </Grid>
-          <Box border={1} borderColor={primaryColor} p={1} m={1} boxSizing="border-box" style={{ flex: 1 }}>
+          <Box border={1} borderColor={primaryColor} p={1} my={1} boxSizing="border-box" style={{ flex: 1 }}>
             <Grid container spacing={3} alignItems="flex-start" justifyContent="flex-start">
               <Grid item xs={12} md={12}>
                 {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
@@ -294,46 +336,18 @@ const PlayMimique = () => {
                 <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
                   {choices &&
                     choices.map((val) => {
-                      if (val === 0) {
-                        return (
-                          <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-                            <FormControlLabel
-                              key="1"
-                              value={MimicResponseValue.SIGNIFICATION}
-                              control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
-                              label={mimicContent?.signification || ''}
-                              disabled={found || foundError ? true : false}
-                              style={{ cursor: 'pointer', maxWidth: '100%' }}
-                            />
-                          </Box>
-                        );
-                      } else if (val === 1) {
-                        return (
-                          <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-                            <FormControlLabel
-                              key="2"
-                              value={MimicResponseValue.FAKE_SIGNIFICATION_1}
-                              control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
-                              label={mimicContent?.fakeSignification1 || ''}
-                              disabled={fake1Selected || found || foundError ? true : false}
-                              style={{ cursor: 'pointer', width: '100%' }}
-                            />
-                          </Box>
-                        );
-                      } else {
-                        return (
-                          <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-                            <FormControlLabel
-                              key="3"
-                              value={MimicResponseValue.FAKE_SIGNIFICATION_2}
-                              control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
-                              label={mimicContent?.fakeSignification2 || ''}
-                              disabled={fake2Selected || found || foundError ? true : false}
-                              style={{ cursor: 'pointer', width: '100%' }}
-                            />
-                          </Box>
-                        );
-                      }
+                      const { value, isSuccess, signification, isGreenRadio, isColoredRadio } = ResponseButtonDataMapper[val];
+                      return (
+                        <ResponseButton
+                          key={val}
+                          value={value}
+                          onClick={onValidate}
+                          isSuccess={isSuccess}
+                          isColoredRadio={isColoredRadio}
+                          signification={signification}
+                          isGreenRadio={isGreenRadio}
+                        />
+                      );
                     })}
                 </RadioGroup>
               </Grid>
@@ -363,7 +377,6 @@ const PlayMimique = () => {
               )}
               <Grid item xs={12} md={12}>
                 {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-                {/* {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>} */}
                 {(found || foundError) && (
                   <>
                     <h2>Origine de cette mimique :</h2>
@@ -373,6 +386,7 @@ const PlayMimique = () => {
               </Grid>
             </Grid>
           </Box>
+          <Box>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Box>
         </Box>
         <Modal
           open={errorModalOpen}
@@ -390,19 +404,6 @@ const PlayMimique = () => {
           )}
         </Modal>
         <AlreadyPlayerModal isOpen={isLastMimiqueModalOpen} />
-        {!found && !foundError && (
-          <Button
-            style={{
-              float: 'right',
-            }}
-            variant="outlined"
-            color="primary"
-            onClick={onValidate}
-            disabled={!ableToValidate}
-          >
-            Valider
-          </Button>
-        )}
         <div>
           {(found || foundError) && (
             <div>
