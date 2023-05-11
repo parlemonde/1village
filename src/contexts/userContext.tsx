@@ -23,7 +23,7 @@ interface UserContextValue {
   linkStudent(hashedCode: string): UserContextFunc;
   linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
   getLinkedStudentsToUser(): Promise<void>;
-  // deleteLinkedStudent(id: number): Promise<void>;
+  deleteLinkedStudent(id: number): Promise<void>;
   students: Student[];
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
@@ -43,7 +43,7 @@ export const UserContext = React.createContext<UserContextValue>({
   linkedStudents: async () => ({ success: false, errorCode: 0 }),
   getLinkedStudentsToUser: async () => { },
   students: [],
-  // deleteLinkedStudent: async () => {},
+  deleteLinkedStudent: async () => { },
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
 
@@ -278,41 +278,38 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
    */
   const getLinkedStudentsToUser = React.useCallback(
     async (userId: number) => {
-      if (!user) return;
-      // if (user.type !== UserType.TEACHER) return;
-      await axiosRequest({
-        method: 'GET',
-        url: `/users/:id/linked-students${serializeToQueryUrl({ userId })}`,
-      })
-        .then((response) => {
-          return response.data as Student[];
-        })
-        .catch((err) => {
-          return err.message;
+      try {
+        if (!user) return [];
+        const response = await axiosRequest({
+          method: 'GET',
+          url: `/users/${userId}/linked-students`,
         });
+        return response.data as Student[];
+      } catch (error) {
+        console.error('Error fetching linked students:', error);
+        return [];
+      }
     },
     [user],
   );
 
-  // const deleteLinkedStudent = React.useCallback(
-  //   async (hashedCode: string) => {
-  //   const response = await axiosRequest({
-  //     method: 'DELETE',
-  //     url: '/students/link-student/'${hashedCode},
-  //   });
-  //   if (response.error) {
-  //     return {
-  //       success: false,
-  //       errorCode: response.data?.errorCode || 0,
-  //     };
-  //   }
-  //   return {
-  //     success: true,
-  //     errorCode: 0,
-  //   };
-  // },
-  // [user],
-  // );
+  const deleteLinkedStudent = React.useCallback(async (params) => {
+    const { userId, studentId } = params;
+    const response = await axiosRequest({
+      method: 'DELETE',
+      url: `/users/${userId}/linked-students/${studentId}`,
+    });
+    if (response.error) {
+      return {
+        success: false,
+        errorCode: response.data?.errorCode || 0,
+      };
+    }
+    return {
+      success: true,
+      errorCode: 0,
+    };
+  }, []);
 
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
@@ -354,7 +351,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       setUser,
       linkStudent,
       getLinkedStudentsToUser,
-      // deleteLinkedStudent,
+      deleteLinkedStudent,
       getClassroomAsFamily,
     }),
     [
@@ -370,6 +367,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       setUser,
       linkStudent,
       getLinkedStudentsToUser,
+      deleteLinkedStudent,
       getClassroomAsFamily,
     ],
   );
