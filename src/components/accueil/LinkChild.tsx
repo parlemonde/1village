@@ -16,12 +16,20 @@ export const LinkChild = () => {
   const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const hashedCodeRef = React.useRef<HTMLInputElement>(null);
-  const { students } = React.useContext(ClassroomContext);
+  const [student, setStudent] = React.useState(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (hashedCodeRef.current === null) return;
     if (hashedCodeRef.current.value === '') return;
+    const isAlreadyLinked = linkedStudents.some((student) => student.hashedCode === hashedCodeRef.current?.value);
+    if (isAlreadyLinked) {
+      enqueueSnackbar('Cet identifiant a déjà été rattaché à votre compte!', {
+        variant: 'error',
+      });
+      hashedCodeRef.current.value = '';
+      return;
+    }
     linkStudent(hashedCodeRef.current.value).then((response) => {
       if (response.success === false) {
         enqueueSnackbar("Le rattachement n'a pas fonctionné ! Veuillez renseigner un identifiant valide", {
@@ -39,6 +47,28 @@ export const LinkChild = () => {
     }, 2 * 1000);
   };
 
+  const handleDelete = async (studentId: number) => {
+    if (user) {
+      try {
+        const response = await deleteLinkedStudent(user.id, studentId);
+        if (response.success) {
+          enqueueSnackbar("Lien avec l'élève supprimé avec succès", {
+            variant: 'success',
+          });
+        } else {
+          enqueueSnackbar("Une erreur s'est produite lors de la suppression du lien avec l'élève", {
+            variant: 'error',
+          });
+        }
+      } catch (error) {
+        console.error("Une erreur s'est produite lors de la suppression du lien avec l'élève :", error);
+        enqueueSnackbar("Une erreur s'est produite lors de la suppression du lien avec l'élève", {
+          variant: 'error',
+        });
+      }
+    }
+  };
+
   React.useEffect(() => {
     const fetchLinkedStudents = async () => {
       try {
@@ -53,10 +83,6 @@ export const LinkChild = () => {
     fetchLinkedStudents();
   }, [getLinkedStudentsToUser, user?.id]);
 
-  // React.useEffect(() => {
-  //   getLinkedStudentsToUser;
-  // }, [getLinkedStudentsToUser]);
-  // console.log(linkedStudents);
   return (
     <div style={{ padding: '15px' }}>
       <h1>Enfant(s) rattaché(s) à votre compte</h1>
@@ -92,11 +118,7 @@ export const LinkChild = () => {
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <DeleteButton
-                    onDelete={() => {
-                      if (user) {
-                        deleteLinkedStudent(user.id, student.id);
-                      }
-                    }}
+                    onDelete={handleDelete}
                     confirmLabel="Êtes-vous sur de vouloir supprimer votre lien avec l'élève ?"
                     confirmTitle="Supprimer lien élève"
                     style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
@@ -110,3 +132,4 @@ export const LinkChild = () => {
     </div>
   );
 };
+export default LinkChild;

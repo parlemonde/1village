@@ -22,8 +22,8 @@ interface UserContextValue {
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
   linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
-  getLinkedStudentsToUser(): Promise<void>;
-  deleteLinkedStudent(id: number): Promise<void>;
+  getLinkedStudentsToUser(userId: number): Promise<Student[]>;
+  deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
   students: Student[];
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
@@ -36,14 +36,14 @@ export const UserContext = React.createContext<UserContextValue>({
   signup: async () => ({ success: false, errorCode: 0 }),
   updatePassword: async () => ({ success: false, errorCode: 0 }),
   verifyEmail: async () => ({ success: false, errorCode: 0 }),
-  logout: async () => { },
+  logout: async () => {},
   deleteAccount: async () => false,
-  setUser: () => { },
+  setUser: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
   linkedStudents: async () => ({ success: false, errorCode: 0 }),
-  getLinkedStudentsToUser: async () => { },
+  getLinkedStudentsToUser: async () => [] as Student[],
   students: [],
-  deleteLinkedStudent: async () => { },
+  deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
 
@@ -293,8 +293,8 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     [user],
   );
 
-  const deleteLinkedStudent = React.useCallback(async (params) => {
-    const { userId, studentId } = params;
+  const deleteLinkedStudent = React.useCallback(async (userId: number, studentId: number) => {
+    // const { userId, studentId } = params;
     const response = await axiosRequest({
       method: 'DELETE',
       url: `/users/${userId}/linked-students/${studentId}`,

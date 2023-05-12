@@ -802,6 +802,23 @@ userController.get({ path: '/:id/linked-students' }, async (req: Request, res: R
   res.json(students);
 });
 
+// Delete the link between user and student
+userController.delete({ path: '/:id/linked-students' }, async (req: Request, res: Response) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  // const userRepository = AppDataSource.getRepository(User);
+  const id = parseInt(req.params.id, 10) || 0;
+  // const user = await userRepository.findOne({ where: { id } });
+
+  // Preloading the userToStudent relation prevents the cascades effects from failing for some reason...
+  const userToStudents = await AppDataSource.getRepository(UserToStudent).find({
+    where: { user: { id } },
+    relations: ['userToStudents', 'userToStudents.user'],
+  });
+  await AppDataSource.getRepository(UserToStudent).remove(userToStudents);
+
+  res.status(204).send();
+});
+
 // Get the visibility parameters for Family members
 userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {
