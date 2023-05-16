@@ -118,7 +118,7 @@ export const LinkChild = () => {
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <DeleteButton
-                    onDelete={handleDelete}
+                    onDelete={() => handleDelete(student.id)}
                     confirmLabel="Êtes-vous sur de vouloir supprimer votre lien avec l'élève ?"
                     confirmTitle="Supprimer lien élève"
                     style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
