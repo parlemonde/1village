@@ -5,8 +5,8 @@ import React, { useState, useCallback, useMemo, useContext, useEffect } from 're
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
-
+import { Box, Button, ButtonGroup, FormControlLabel, Grid, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -72,23 +72,36 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
 type ResponseButtonProps = {
   value: MimicResponseValue;
   isSuccess?: boolean;
-  isGreenRadio?: boolean;
-  isColoredRadio: boolean;
   signification?: string | null;
-  onClick: () => void;
+  disabled?: boolean;
+  onClick: (value: MimicResponseValue, isSuccess?: boolean) => Promise<void>;
 };
-const ResponseButton = ({ value, onClick, isColoredRadio, isGreenRadio = false, isSuccess = false, signification = '' }: ResponseButtonProps) => {
-  const RadioComponent = isGreenRadio ? GreenRadio : RedRadio;
+
+const ResponseButton = ({ value, onClick, isSuccess = false, signification = '', disabled = false }: ResponseButtonProps) => {
+  const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
+
+  const handleClick = useCallback(() => {
+    if (hasBeenSelected) return;
+    console.log('isSuccess');
+    console.log(isSuccess);
+    setHasBeenSelected(true);
+    return onClick(value, isSuccess);
+  }, [setHasBeenSelected, onClick]);
+
+  const color = isSuccess ? 'success' : 'error';
+
   return (
-    <Box onClick={onClick} sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '16px' }}>
-      <FormControlLabel
-        value={value}
-        control={isColoredRadio ? <RadioComponent isSuccess={isSuccess} isChecked /> : <Radio />}
-        label={signification}
-        disabled={isColoredRadio}
-        style={{ cursor: 'pointer', maxWidth: '100%' }}
-      />
-    </Box>
+    <Button
+      fullWidth
+      sx= {{ justifyContent:'space-between'}}
+      disabled={!hasBeenSelected && disabled}
+      variant="contained"
+      color={hasBeenSelected ? color : 'primary'}
+      onClick={handleClick}
+      endIcon={hasBeenSelected ? null : <DoubleArrowIcon sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
+    >
+      {signification}
+    </Button>
   );
 };
 const PlayMimique = () => {
@@ -100,10 +113,6 @@ const PlayMimique = () => {
   const [game, setGame] = useState<Game | undefined>(undefined);
   const [tryCount, setTryCount] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
-  const [foundError, setFoundError] = useState<boolean>(false);
-  const [fake1Selected, setFake1Selected] = useState<boolean>(false);
-  const [fake2Selected, setFake2Selected] = useState<boolean>(false);
-  const [selected, setSelected] = useState<MimicResponseValue | null>(null);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [isLastMimiqueModalOpen, setIsLastMimiqueModalOpen] = useState<boolean>(false);
   const [loadingGame, setLoadingGame] = useState<boolean>(true);
@@ -121,11 +130,7 @@ const PlayMimique = () => {
 
     // [1] Reset game.
     setFound(false);
-    setFoundError(false);
-    setFake1Selected(false);
-    setFake2Selected(false);
     setGameResponses([]);
-    setSelected(null);
     setTryCount(0);
     setErrorModalOpen(false);
 
@@ -172,21 +177,18 @@ const PlayMimique = () => {
         value: MimicResponseValue.SIGNIFICATION,
         signification: mimicContent?.signification,
         isSuccess: true,
-        isColoredRadio: found || foundError,
         isGreenRadio: true,
       },
       {
         value: MimicResponseValue.FAKE_SIGNIFICATION_1,
         signification: mimicContent?.fakeSignification1,
-        isColoredRadio: fake1Selected,
       },
       {
         value: MimicResponseValue.FAKE_SIGNIFICATION_2,
         signification: mimicContent?.fakeSignification2,
-        isColoredRadio: fake2Selected,
       },
     ],
-    [mimicContent, found, foundError, fake1Selected, fake2Selected],
+    [mimicContent, found],
   );
 
   const gameCreator = useMemo(() => {
@@ -198,34 +200,31 @@ const PlayMimique = () => {
 
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
   const userIsPelico = user !== null && user.type >= UserType.OBSERVATOR;
-  const ableToValidate = selected !== null;
   const choices = useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
-  const onValidate = async () => {
-    if (selected === null || game === undefined) {
-      return;
-    }
-    const success = await sendNewGameResponse(game.id, selected);
-    if (!success) {
-      // TODO: send notistack that an unknown error happened..
-      return;
-    }
+  const handleClick = useCallback(
+    async (selection: MimicResponseValue, isSuccess: boolean = false) => {
+      console.log('selection');
+      console.log(selection);
+      if (selection === null || game === undefined) {
+        return;
+      }
+      const apiResponse = await sendNewGameResponse(game.id, selection);
+      if (!apiResponse) {
+        console.error('Error reaching server');
+        return;
+      }
 
-    setFound(selected === MimicResponseValue.SIGNIFICATION);
-    setFake1Selected(fake1Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_1);
-    setFake2Selected(fake2Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_2);
-    setSelected(null);
-    setErrorModalOpen(selected !== MimicResponseValue.SIGNIFICATION);
-    setTryCount(tryCount + 1);
-    if (selected === MimicResponseValue.SIGNIFICATION || tryCount === 1) {
-      setFoundError(selected !== MimicResponseValue.SIGNIFICATION);
-      setGameResponses(await getGameStats(game.id));
-    }
-  };
-
-  const onChange = (event: { target: HTMLInputElement }) => {
-    setSelected(event.target.value as MimicResponseValue);
-  };
+      setFound(isSuccess);
+      console.log(`selected : ${selection}, bonne reponse : ${MimicResponseValue.SIGNIFICATION}`);
+      setErrorModalOpen(!isSuccess);
+      if (isSuccess || tryCount === 1) {
+        setGameResponses(await getGameStats(game.id));
+      }
+      setTryCount(tryCount + 1);
+    },
+    [setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game, game?.id],
+  );
 
   if (user === null || village === null || loadingGame) {
     return <Base></Base>;
@@ -277,7 +276,7 @@ const PlayMimique = () => {
           {/* <Grid container spacing={1} alignItems="flex-end" justifyItems="flex-end" justifyContent="space-between" style={{ flex: 1 }}> */}
           <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ flex: 1 }}>
             <Grid item xs={3} display="flex" justifyContent="flex-start">
-              <Button variant="outlined" color="primary" onClick={getLastMimicPlayed} disabled={!ableToValidate}>
+              <Button variant="outlined" color="primary" onClick={getLastMimicPlayed}>
                 mimique précédente
               </Button>
             </Grid>
@@ -332,27 +331,25 @@ const PlayMimique = () => {
               <Grid container spacing={0} p={2} m={4}>
                 <h1>Que signifie cette mimique ?</h1>
               </Grid>
-              <Grid container spacing={0} p={2} m={4}>
-                <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
-                  {choices &&
-                    choices.map((val) => {
-                      const { value, isSuccess, signification, isGreenRadio, isColoredRadio } = ResponseButtonDataMapper[val];
-                      return (
+              <Grid container spacing={1} p={2} m={4} xs={4} direction="column">
+                {choices &&
+                  choices.map((val) => {
+                    const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
+                    return (
+                      <Grid item key={val}>
                         <ResponseButton
-                          key={val}
                           value={value}
-                          onClick={onValidate}
+                          onClick={() => handleClick(value, isSuccess)}
                           isSuccess={isSuccess}
-                          isColoredRadio={isColoredRadio}
                           signification={signification}
-                          isGreenRadio={isGreenRadio}
+                          disabled={(!isSuccess && found) || (isSuccess && tryCount > 1)}
                         />
-                      );
-                    })}
-                </RadioGroup>
+                      </Grid>
+                    );
+                  })}
               </Grid>
 
-              {(found || foundError) && (
+              {(found || tryCount > 1) && (
                 <>
                   <MimicStats
                     gameResponses={gameResponses}
@@ -377,7 +374,7 @@ const PlayMimique = () => {
               )}
               <Grid item xs={12} md={12}>
                 {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-                {(found || foundError) && (
+                {(found || tryCount > 1) && (
                   <>
                     <h2>Origine de cette mimique :</h2>
                     <p>{mimicContent?.origine || ''}</p>
@@ -391,13 +388,13 @@ const PlayMimique = () => {
         <Modal
           open={errorModalOpen}
           title="Oups"
-          cancelLabel={foundError ? 'Fermer' : 'Réessayer'}
+          cancelLabel={tryCount > 1 && !found ? 'Fermer' : 'Réessayer'}
           maxWidth="lg"
           ariaDescribedBy="new-user-desc"
           ariaLabelledBy="new-user-title"
           onClose={() => setErrorModalOpen(false)}
         >
-          {foundError ? (
+          {tryCount > 1 && !found ? (
             <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>
           ) : (
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
@@ -405,7 +402,7 @@ const PlayMimique = () => {
         </Modal>
         <AlreadyPlayerModal isOpen={isLastMimiqueModalOpen} />
         <div>
-          {(found || foundError) && (
+          {(found || tryCount > 1) && (
             <div>
               <p
                 style={{
