@@ -5,8 +5,7 @@ import React, { useState, useCallback, useMemo, useContext, useEffect } from 're
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
-import { Box, Button, ButtonGroup, FormControlLabel, Grid, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -15,12 +14,12 @@ import { UserDisplayName } from 'src/components/UserDisplayName';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { MimicStats } from 'src/components/activities/MimicStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
-import { CustomRadio as GreenRadio, CustomRadio as RedRadio, CustomRadioProps } from 'src/components/buttons/CustomRadio';
+//import { CustomRadio as GreenRadio, CustomRadio as RedRadio, CustomRadioProps } from 'src/components/buttons/CustomRadio';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
-import { primaryColor } from 'src/styles/variables.const';
+import { primaryColor, bgPage } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
 import type { Game, MimicData } from 'types/game.type';
@@ -29,6 +28,8 @@ import { MimicResponseValue } from 'types/mimicResponse.type';
 import { UserType, User } from 'types/user.type';
 import { ActivityComments } from 'src/components/activities/ActivityComments';
 import { Activity } from 'types/activity.type';
+import ArrowRight from 'src/svg/arrow-right.svg';
+import { bgcolor } from '@mui/system';
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -82,8 +83,6 @@ const ResponseButton = ({ value, onClick, isSuccess = false, signification = '',
 
   const handleClick = useCallback(() => {
     if (hasBeenSelected) return;
-    console.log('isSuccess');
-    console.log(isSuccess);
     setHasBeenSelected(true);
     return onClick(value, isSuccess);
   }, [setHasBeenSelected, onClick]);
@@ -92,13 +91,14 @@ const ResponseButton = ({ value, onClick, isSuccess = false, signification = '',
 
   return (
     <Button
+      size="large"
       fullWidth
-      sx= {{ justifyContent:'space-between'}}
+      sx={{ justifyContent: 'space-between', backgroundColor: 'bgPage', height: '60px', boxShadow: 'none' }}
       disabled={!hasBeenSelected && disabled}
       variant="contained"
-      color={hasBeenSelected ? color : 'primary'}
+      color={hasBeenSelected ? color : 'inherit'}
       onClick={handleClick}
-      endIcon={hasBeenSelected ? null : <DoubleArrowIcon sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
+      endIcon={hasBeenSelected ? null : <ArrowRight sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
     >
       {signification}
     </Button>
@@ -120,11 +120,11 @@ const PlayMimique = () => {
   const [previousMimic, setPreviousMimic] = useState<MimicData | null>(null);
   const [activityComment, setActivityComment] = useState<Activity | null>(null);
 
-  const getLastMimicPlayed = (): PlayMimicState => {
-    console.log('previous mimic : ', previousMimic);
-    const lastPlayedMimic = previousMimic ?? null;
-    return { lastPlayedMimic };
-  };
+  // const getLastMimicPlayed = (): PlayMimicState => {
+  //   console.log('previous mimic : ', previousMimic);
+  //   const lastPlayedMimic = previousMimic ?? null;
+  //   return { lastPlayedMimic };
+  // };
   const getNextGame = useCallback(async () => {
     setLoadingGame(true);
 
@@ -230,6 +230,7 @@ const PlayMimique = () => {
     return <Base></Base>;
   }
 
+  // Modal dernière mimique
   if (!game || !gameCreator) {
     return (
       <Base>
@@ -276,7 +277,7 @@ const PlayMimique = () => {
           {/* <Grid container spacing={1} alignItems="flex-end" justifyItems="flex-end" justifyContent="space-between" style={{ flex: 1 }}> */}
           <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ flex: 1 }}>
             <Grid item xs={3} display="flex" justifyContent="flex-start">
-              <Button variant="outlined" color="primary" onClick={getLastMimicPlayed}>
+              <Button variant="outlined" color="primary" onClick={getNextGame}>
                 mimique précédente
               </Button>
             </Grid>
@@ -323,67 +324,76 @@ const PlayMimique = () => {
               </Button>
             </Grid>
           </Grid>
-          <Box border={1} borderColor={primaryColor} p={1} my={1} boxSizing="border-box" style={{ flex: 1 }}>
-            <Grid container spacing={3} alignItems="flex-start" justifyContent="flex-start">
-              <Grid item xs={12} md={12}>
-                {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
-              </Grid>
-              <Grid container spacing={0} p={2} m={4}>
-                <h1>Que signifie cette mimique ?</h1>
-              </Grid>
-              <Grid container spacing={1} p={2} m={4} xs={4} direction="column">
-                {choices &&
-                  choices.map((val) => {
-                    const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
-                    return (
-                      <Grid item key={val}>
-                        <ResponseButton
-                          value={value}
-                          onClick={() => handleClick(value, isSuccess)}
-                          isSuccess={isSuccess}
-                          signification={signification}
-                          disabled={(!isSuccess && found) || (isSuccess && tryCount > 1)}
-                        />
-                      </Grid>
-                    );
-                  })}
-              </Grid>
+          <Grid
+            border={1}
+            borderColor={primaryColor}
+            p={3}
+            my={1}
+            boxSizing="border-box"
+            style={{ flex: 1 }}
+            container
+            spacing={3}
+            alignItems="flex-start"
+            justifyContent="flex-start"
+          >
+            <Grid item xs={12} md={12} justify-content='center' style={{ width: '100%' }}>
+              {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
+            </Grid>
+            <Grid container spacing={0} p={2} pb={1} mx={1}>
+              <h1>Que signifie cette mimique ?</h1>
+            </Grid>
+            <Grid container spacing={1} p={1} mx={2} xs={4} direction="column">
+              {choices &&
+                choices.map((val) => {
+                  const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
+                  return (
+                    <Grid item key={val}>
+                      <ResponseButton
+                        value={value}
+                        onClick={() => handleClick(value, isSuccess)}
+                        isSuccess={isSuccess}
+                        signification={signification}
+                        disabled={(!isSuccess && found) || (isSuccess && tryCount > 1)}
+                      />
+                    </Grid>
+                  );
+                })}
+            </Grid>
 
+            {(found || tryCount > 1) && (
+              <>
+                <MimicStats
+                  gameResponses={gameResponses}
+                  choices={choices}
+                  country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
+                  userMap={userMap}
+                  users={users}
+                />
+
+                <MimicStats
+                  gameResponses={gameResponses}
+                  choices={choices}
+                  country={
+                    userIsPelico
+                      ? village.countries[1].isoCode
+                      : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
+                  }
+                  userMap={userMap}
+                  users={users}
+                />
+              </>
+            )}
+            <Grid item xs={12} md={12}>
+              {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
               {(found || tryCount > 1) && (
                 <>
-                  <MimicStats
-                    gameResponses={gameResponses}
-                    choices={choices}
-                    country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
-                    userMap={userMap}
-                    users={users}
-                  />
-
-                  <MimicStats
-                    gameResponses={gameResponses}
-                    choices={choices}
-                    country={
-                      userIsPelico
-                        ? village.countries[1].isoCode
-                        : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
-                    }
-                    userMap={userMap}
-                    users={users}
-                  />
+                  <h2>Origine de cette mimique :</h2>
+                  <p>{mimicContent?.origine || ''}</p>
                 </>
               )}
-              <Grid item xs={12} md={12}>
-                {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-                {(found || tryCount > 1) && (
-                  <>
-                    <h2>Origine de cette mimique :</h2>
-                    <p>{mimicContent?.origine || ''}</p>
-                  </>
-                )}
-              </Grid>
             </Grid>
-          </Box>
-          <Box>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Box>
+          </Grid>
+          <Grid>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Grid>
         </Box>
         <Modal
           open={errorModalOpen}
