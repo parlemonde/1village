@@ -336,13 +336,13 @@ const PlayMimique = () => {
             alignItems="flex-start"
             justifyContent="flex-start"
           >
-            <Grid item xs={12} md={12} justify-content='center' style={{ width: '100%' }}>
+            <Grid item xs={12} md={12} justifyContent='center'  style={{ width: '100%' }}>
               {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
             </Grid>
-            <Grid container spacing={0} p={2} pb={1} mx={1}>
+            <Grid container spacing={0} p={2} pb={1} mx={1} alignItems='center' justifyContent='center'>
               <h1>Que signifie cette mimique ?</h1>
             </Grid>
-            <Grid container spacing={1} p={1} mx={2} xs={4} direction="column">
+            <Grid container spacing={1} p={1} mt={8} mx={2} xs={3} direction="column">
               {choices &&
                 choices.map((val) => {
                   const { value, isSuccess, signification } = ResponseButtonDataMapper[val];

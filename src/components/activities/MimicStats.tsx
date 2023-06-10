@@ -11,7 +11,7 @@ import type { User } from 'types/user.type';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="flex-end">
       <Box width="100%" mr={1}>
         <LinearProgress variant="determinate" {...props} />
       </Box>
@@ -47,13 +47,15 @@ export const MimicStats = ({ gameResponses, choices, country, userMap, users }: 
   }, [choices]);
 
   return (
-    <Grid item xs={3} md={3}>
-      <span style={{ paddingRight: '0.5rem' }}>{responseCount !== 0 ? 'Réponses de vos Pélicopains' : 'Pas de réponses de vos Pélicopains'}</span>
+    <Grid item xs={4} md={4} pb={4}>
+      <span style={{ paddingRight: '0.5rem', marginBottom: '2rem' }}>
+        {responseCount !== 0 ? 'Réponses de vos Pélicopains' : 'Pas de réponses de vos Pélicopains'}
+      </span>
       <Flag country={country} />
       {responseCount > 0 && responseChoices && (
         <>
           {responseChoices.map((responseChoice, index) => (
-            <LinearProgressWithLabel key={index} value={stats[responseChoice]} style={{ height: '0.5rem', margin: '1.2rem 0' }} />
+            <LinearProgressWithLabel key={index} value={stats[responseChoice]} style={{ height: '0.5rem', margin: '2rem' }} />
           ))}
         </>
       )}
