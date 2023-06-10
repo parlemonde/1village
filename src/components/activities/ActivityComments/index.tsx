@@ -12,6 +12,7 @@ import { useImageStories } from 'src/services/useImagesStory';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import type { Activity, AnyData } from 'types/activity.type';
 import type { User } from 'types/user.type';
+import { UserType } from 'types/user.type';
 
 interface ActivityCommentsProps {
   activity: Activity<AnyData>;
@@ -62,24 +63,28 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
       </div>
       {/* Stories space */}
       {dataStories.length > 0 && user && <StoriesDataCardView dataStories={dataStories} column noTitle />}
-      {data.map((o) => {
-        if (o.type === 'comment') {
-          const comment = o.data;
-          return <CommentCard key={comment.id} activity={activity} comment={comment} user={usersMap[comment.userId] ?? null} />;
-        } else {
-          const activity = o.data;
-          const activityUser = userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined;
-          return (
-            <div key={activity.id} className="activity__comment-container">
-              <AvatarImg user={activityUser} size="small" style={{ margin: '0.25rem' }} />
-              <div className="activity__comment-card activity__comment-card--no-padding">
-                <ActivityCard activity={activity} isSelf={user !== null && activity.userId === user.id} user={activityUser} forComment />
+      {data.length > 0 ? (
+        data.map((o) => {
+          if (o.type === 'comment') {
+            const comment = o.data;
+            return <CommentCard key={comment.id} activity={activity} comment={comment} user={usersMap[comment.userId] ?? null} />;
+          } else {
+            const activity = o.data;
+            const activityUser = userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined;
+            return (
+              <div key={activity.id} className="activity__comment-container">
+                <AvatarImg user={activityUser} size="small" style={{ margin: '0.25rem' }} />
+                <div className="activity__comment-card activity__comment-card--no-padding">
+                  <ActivityCard activity={activity} isSelf={user !== null && activity.userId === user.id} user={activityUser} forComment />
+                </div>
               </div>
-            </div>
-          );
-        }
-      })}
-      <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />
+            );
+          }
+        })
+      ) : (
+        <div>Aucune réaction n&apos;a été plublié pour le moment</div>
+      )}
+      {user?.type !== UserType.FAMILY && <AddComment activityId={activity.id} activityType={activity.type} activityPhase={activity.phase} />}
     </div>
   );
 };

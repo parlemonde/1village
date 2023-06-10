@@ -19,7 +19,7 @@ type UserDisplayNameProps = {
 export const UserDisplayName = ({ user, activity, className, style, noLink = false, displayAsUser = false }: UserDisplayNameProps) => {
   const userId = React.useContext(UserContext)?.user?.id ?? 0;
   const isSelf = userId === user.id;
-  const isPelico = user && user.type >= UserType.MEDIATOR;
+  const isPelico = user && user.type <= UserType.MEDIATOR;
 
   if (isPelico && !displayAsUser) {
     return (

@@ -15,7 +15,7 @@ const ContenuLibre = () => {
   const { user } = React.useContext(UserContext);
   const { selectedPhase } = React.useContext(VillageContext);
 
-  const isModerator = user !== null && user.type >= UserType.MEDIATOR;
+  const isModerator = user !== null && user.type <= UserType.MEDIATOR;
 
   const onNext = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);

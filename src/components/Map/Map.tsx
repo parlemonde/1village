@@ -6,6 +6,7 @@ import maplibregl from 'maplibre-gl';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+// eslint-disable-next-line import/order
 import { Tooltip } from '@mui/material';
 
 import { useActivity } from 'src/services/useActivity';

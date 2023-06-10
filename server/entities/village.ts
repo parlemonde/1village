@@ -5,6 +5,7 @@ import type { Village as VillageInterface } from '../../types/village.type';
 import { VillagePhase } from '../../types/village.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { Classroom } from './classroom';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
@@ -59,4 +60,7 @@ export class Village implements VillageInterface {
 
   @OneToMany(() => Image, (image: Image) => image.village)
   public images: Image[];
+
+  @OneToMany(() => Classroom, (classroom: Classroom) => classroom.village)
+  public classrooms: Classroom[];
 }

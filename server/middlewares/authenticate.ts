@@ -81,19 +81,22 @@ export function authenticate(userType: UserType | undefined = undefined): Reques
       } else {
         data = decoded;
       }
-      const user = await AppDataSource.getRepository(User).findOne({ where: { id: data.userId } });
+      const user = await AppDataSource.getRepository(User).findOne({
+        where: { id: data.userId },
+        relations: ['featureFlags'],
+      });
       if (user === undefined && userType !== undefined) {
         res.status(401).send('invalid access token');
         return;
-      } // class: 0 < admin: 1 < superAdmin: 2
-      if (userType !== undefined && user !== null && user.type < userType) {
+      } // class: 2 < admin: 1 < super-admin: 0
+      if (userType !== undefined && user !== null && user.type > userType) {
         res.status(403).send('Forbidden');
         return;
       }
       if (user !== null) {
         req.user = user;
       }
-    } catch (_e) {
+    } catch (err) {
       if (req.method === 'GET' && userType === undefined) {
         req.user = undefined;
         res.cookie('access-token', '', { maxAge: 0, expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });

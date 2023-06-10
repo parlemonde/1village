@@ -14,7 +14,7 @@ export const useVillageUsers = (): { users: User[] } => {
   const { user } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
-  const isPelico = user !== null && user.type > UserType.TEACHER;
+  const isPelico = user !== null && user.type < UserType.TEACHER;
   const userCountryIsoCode = user ? user.country?.isoCode : null;
 
   const getUsers: QueryFunction<User[]> = React.useCallback(async () => {
@@ -29,7 +29,9 @@ export const useVillageUsers = (): { users: User[] } => {
       return [];
     }
     if (selectedPhase === 1 && !isPelico) {
-      return (response.data as User[]).filter((user) => user.country?.isoCode === userCountryIsoCode || user.type > UserType.TEACHER);
+      return (response.data as User[]).filter(
+        (currentUser) => currentUser.country?.isoCode === userCountryIsoCode || currentUser.type < UserType.TEACHER,
+      );
     }
     return response.data as User[];
   }, [villageId, selectedPhase, userCountryIsoCode, isPelico]);

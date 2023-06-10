@@ -197,10 +197,10 @@ const PlayMimique = () => {
     }
     return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
   }, [game, userMap, users]);
-
-  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type >= UserType.OBSERVATOR;
-  const userIsPelico = user !== null && user.type >= UserType.OBSERVATOR;
-  const choices = useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
+  const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type <= UserType.MEDIATOR;
+  const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
+  //const ableToValidate = selected !== null;
+  const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
   const handleClick = useCallback(
     async (selection: MimicResponseValue, isSuccess: boolean = false) => {
@@ -336,10 +336,10 @@ const PlayMimique = () => {
             alignItems="flex-start"
             justifyContent="flex-start"
           >
-            <Grid item xs={12} md={12} justifyContent='center'  style={{ width: '100%' }}>
+            <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
               {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
             </Grid>
-            <Grid container spacing={0} p={2} pb={1} mx={1} alignItems='center' justifyContent='center'>
+            <Grid container spacing={0} p={2} pb={1} mx={1} alignItems="center" justifyContent="center">
               <h1>Que signifie cette mimique ?</h1>
             </Grid>
             <Grid container spacing={1} p={1} mt={8} mx={2} xs={3} direction="column">
@@ -362,13 +362,15 @@ const PlayMimique = () => {
 
             {(found || tryCount > 1) && (
               <>
-                <MimicStats
-                  gameResponses={gameResponses}
-                  choices={choices}
-                  country={userIsPelico ? village.countries[0].isoCode : user.country.isoCode}
-                  userMap={userMap}
-                  users={users}
-                />
+                {user.country && (
+                  <MimicStats
+                    gameResponses={gameResponses}
+                    choices={choices}
+                    country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
+                    userMap={userMap}
+                    users={users}
+                  />
+                )}
 
                 <MimicStats
                   gameResponses={gameResponses}
@@ -376,7 +378,7 @@ const PlayMimique = () => {
                   country={
                     userIsPelico
                       ? village.countries[1].isoCode
-                      : village.countries.map((c) => c.isoCode).find((i) => i !== user.country.isoCode) || ''
+                      : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
                   }
                   userMap={userMap}
                   users={users}

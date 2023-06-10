@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import type { SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
@@ -34,6 +36,33 @@ const Users = () => {
   }, {});
   const { deleteUser } = useUserRequests();
   const [deleteIndex, setDeleteIndex] = React.useState(-1);
+  const [search, setSearch] = useState('');
+  const [userTypeFilter, setUserTypeFilter] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
+
+  const filteredUsers = useMemo(
+    () =>
+      users.filter((u) => {
+        const searchMatch = [u.pseudo, u.email].some((field) => field?.toLowerCase().includes(search.toLowerCase()));
+        const countryMatch = u.country?.isoCode.toLowerCase().includes(countrySearch.toLowerCase());
+        const userTypeMatch = userTypeFilter ? u.type === parseInt(userTypeFilter) : true;
+
+        return searchMatch && userTypeMatch && countryMatch;
+      }),
+    [users, search, userTypeFilter, countrySearch],
+  );
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  }, []);
+
+  const handleCountryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setCountrySearch(e.target.value);
+  }, []);
+
+  const handleSelect = useCallback((e: SelectChangeEvent<string>) => {
+    setUserTypeFilter(e.target.value);
+  }, []);
 
   const actions = (id: number) => (
     <>
@@ -87,21 +116,78 @@ const Users = () => {
           </Link>
         }
       >
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem', marginTop: '1rem' }}>
+          <Typography variant="subtitle1" style={{ marginRight: '1rem', marginLeft: '1rem' }}>
+            Filtres utilisateurs :
+          </Typography>
+          <TextField
+            label="Rechercher par email ou pseudo"
+            value={search}
+            onChange={handleChange}
+            variant="outlined"
+            size="small"
+            style={{ marginRight: '1rem' }}
+          />
+          <TextField
+            label="Rechercher par code pays"
+            value={countrySearch}
+            onChange={handleCountryChange}
+            variant="outlined"
+            size="small"
+            style={{ marginRight: '1rem' }}
+          />
+          <FormControl variant="outlined" size="small" sx={{ minWidth: '10rem' }}>
+            <InputLabel htmlFor="user-type-filter">Filtrer par rôle</InputLabel>
+            <Select
+              label="Filtrer par rôle"
+              value={userTypeFilter}
+              onChange={handleSelect}
+              inputProps={{
+                name: 'user-type-filter',
+                id: 'user-type-filter',
+              }}
+            >
+              <MenuItem value="">
+                <em>Tous les rôles</em>
+              </MenuItem>
+              {Object.entries(userTypeNames).map(([value, label]) => (
+                <MenuItem key={value} value={value}>
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
         <AdminTable
           emptyPlaceholder="Vous n'avez pas encore d'utilisateur !"
-          data={users.map((u) => ({
-            id: u.id,
-            pseudo: u.pseudo,
-            email: u.email,
-            school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
-            country: `${countryToFlag(u.country.isoCode)} ${u.country.name}`,
-            village: u.villageId ? (
-              villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-            ) : (
-              <span style={{ color: 'grey' }}>Non assigné</span>
-            ),
-            type: <Chip size="small" label={userTypeNames[u.type]} />,
-          }))}
+          data={filteredUsers.map((u) =>
+            u.country
+              ? {
+                  id: u.id,
+                  pseudo: u.pseudo,
+                  email: u.email,
+                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                  country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
+                  village: u.villageId ? (
+                    villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+                  ) : (
+                    <span style={{ color: 'grey' }}>Non assigné</span>
+                  ),
+                  type: <Chip size="small" label={userTypeNames[u.type]} />,
+                }
+              : {
+                  id: u.id,
+                  pseudo: u.pseudo,
+                  email: u.email,
+                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                  village: u.villageId ? (
+                    villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+                  ) : (
+                    <span style={{ color: 'grey' }}>Non assigné</span>
+                  ),
+                  type: <Chip size="small" label={userTypeNames[u.type]} />,
+                },
+          )}
           columns={[
             { key: 'pseudo', label: 'Pseudo', sortable: true },
             { key: 'email', label: 'Email', sortable: true },
