@@ -349,7 +349,7 @@ const ClassroomParamStep2 = () => {
                               onDelete={() => {
                                 deleteStudent(student.id);
                               }}
-                              confirmLabel="Êtes-vous sur de vouloir supprimer l'élève ?"
+                              confirmLabel="Êtes-vous sûre de vouloir supprimer l'élève ?"
                               confirmTitle="Supprimer l'élève"
                               style={{ backgroundColor: bgPage, marginLeft: '0.5rem' }}
                             />

@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv';
-import * as argon2 from "argon2";
+import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
 import { LessThan, IsNull } from 'typeorm';
@@ -803,21 +803,30 @@ userController.get({ path: '/:id/linked-students' }, async (req: Request, res: R
 });
 
 // Delete the link between user and student
-userController.delete({ path: '/:id/linked-students/:studentId}' }, async (req: Request, res: Response) => {
+userController.delete({ path: '/:id/linked-students/:studentId' }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-  // const userRepository = AppDataSource.getRepository(User);
-  const id = parseInt(req.params.id, 10) || 0;
+
+  const userId = parseInt(req.params.id, 10) || 0;
   const studentId = parseInt(req.params.studendId, 10) || 0;
-  // const user = await userRepository.findOne({ where: { id } });
+
+  const userToStudentRepository = AppDataSource.getRepository(UserToStudent);
+  const userToStudent = await userToStudentRepository.findOne({
+    where: { user: { id: userId }, student: { id: studentId } },
+    relations: ['user', 'student'],
+  });
 
   // Preloading the userToStudent relation prevents the cascades effects from failing for some reason...
-  const userToStudents = await AppDataSource.getRepository(UserToStudent).find({
-    where: { user: { id }, student: { id: studentId } },
-    relations: ['userToStudents', 'userToStudents.user'],
-  });
-  await AppDataSource.getRepository(UserToStudent).remove(userToStudents);
+  // const userToStudents = await AppDataSource.getRepository(UserToStudent).find({
+  //   where: { user: { id }, student: { id: studentId } },
+  //   relations: ['userToStudents', 'userToStudents.user'],
+  // });
+  if (!userToStudent) {
+    return res.status(404).json({ message: "Le lien parent-étudiant n'existe pas." });
+  }
+  // const { student } = userToStudent;
+  await userToStudentRepository.remove(userToStudent);
 
-  res.status(204).send();
+  return res.status(200).json({ message: 'Le lien parent-étudiant a été supprimé avec succès.' });
 });
 
 // Get the visibility parameters for Family members

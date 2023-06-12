@@ -294,21 +294,31 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
   );
 
   const deleteLinkedStudent = React.useCallback(async (userId: number, studentId: number) => {
-    // const { userId, studentId } = params;
-    const response = await axiosRequest({
-      method: 'DELETE',
-      url: `/users/${userId}/linked-students/${studentId}`,
-    });
-    if (response.error) {
+    try {
+      const response = await axiosRequest({
+        method: 'DELETE',
+        url: `/users/${userId}/linked-students/${studentId}`,
+      });
+
+      if (response.error) {
+        return {
+          success: false,
+          errorCode: response.data?.errorCode || 0,
+        };
+      }
+
+      return {
+        success: true,
+        errorCode: 0,
+      };
+    } catch (error) {
+      // Gérer l'erreur ici
+      console.error("Une erreur s'est produite lors de la suppression du lien avec l'élève :", error);
       return {
         success: false,
-        errorCode: response.data?.errorCode || 0,
+        errorCode: 0,
       };
     }
-    return {
-      success: true,
-      errorCode: 0,
-    };
   }, []);
 
   const isLoggedIn = React.useMemo(() => user !== null, [user]);

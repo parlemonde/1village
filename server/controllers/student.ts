@@ -155,7 +155,6 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
 
   res.status(200).send('Link to child has been completed successfully');
 });
-
 //--- Update a student ---
 type UpdateStudentData = {
   firstname?: string;
