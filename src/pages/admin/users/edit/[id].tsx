@@ -198,15 +198,7 @@ const EditUser = () => {
                 setUser((u) => (!u ? null : { ...u, type: event.target.value as number }));
               }}
             >
-              {[
-                UserType.SUPER_ADMIN,
-                UserType.ADMIN,
-                UserType.MEDIATOR,
-                UserType.MEDIATOR,
-                UserType.TEACHER,
-                UserType.FAMILY,
-                UserType.OBSERVATOR,
-              ].map((type) => (
+              {[UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR, UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR].map((type) => (
                 <MenuItem key={type} value={type}>
                   {userTypeNames[type]}
                 </MenuItem>
