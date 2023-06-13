@@ -5,26 +5,11 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 import { Base } from 'src/components/Base';
-import { useGameRequests } from 'src/services/useGames';
-import { GameType } from 'types/game.type';
+
 
 const Mimique = () => {
   const router = useRouter();
-  const { getUserCreatedGamesCount, getAvailableGamesCount } = useGameRequests();
-  const [mimicsCount, setMimicsCount] = React.useState<number>(0);
-  const [hasUserCreatedMimics, setHasUserCreatedMimics] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    getAvailableGamesCount(GameType.MIMIC).then((count) => {
-      setMimicsCount(count);
-    });
-  }, [getAvailableGamesCount]);
-
-  React.useEffect(() => {
-    getUserCreatedGamesCount(GameType.MIMIC, 'self').then((game) => {
-      setHasUserCreatedMimics(game > 0);
-    });
-  }, [getUserCreatedGamesCount]);
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginTop: '2rem' }}>

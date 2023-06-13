@@ -229,7 +229,7 @@ const PlayMimique = () => {
       }
       setTryCount(tryCount + 1);
     },
-    [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game, game?.id],
+    [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game],
   );
 
   if (user === null || village === null || loadingGame) {
