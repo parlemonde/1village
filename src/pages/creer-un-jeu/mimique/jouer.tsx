@@ -88,7 +88,7 @@ const ResponseButton = ({
     if (hasBeenSelected) return;
     setHasBeenSelected(true);
     return onClick(value, isSuccess);
-  }, [setHasBeenSelected, onClick]);
+  }, [hasBeenSelected, isSuccess, value, setHasBeenSelected, onClick]);
 
   const color = isSuccess ? 'success' : 'error';
 
@@ -229,7 +229,7 @@ const PlayMimique = () => {
       }
       setTryCount(tryCount + 1);
     },
-    [setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game, game?.id],
+    [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game, game?.id],
   );
 
   if (user === null || village === null || loadingGame) {
