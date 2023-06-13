@@ -395,12 +395,6 @@ const PlayMimique = () => {
             )}
             <Grid item xs={12} md={12}>
               {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-              {/* {(found || tryCount > 1) && (
-                <>
-                  <p>Origine de cette mimique :</p>
-                  <p>{mimicContent?.origine || ''}</p>
-                </>
-              )} */}
             </Grid>
           </Grid>
           <Grid>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Grid>

@@ -59,8 +59,8 @@ export class Game implements GameInterface {
   @Column({ type: 'text' })
   public fakeSignification2: string;
 
-  @Column({ type: 'text' })
-  public origine: string | undefined;
+   @Column({ type: 'text' })
+  public origine?: string;
 
   @Column({ type: 'text' })
   public signification: string;
