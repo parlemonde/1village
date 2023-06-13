@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 
 import { Base } from 'src/components/Base';
 
-
 const Mimique = () => {
   const router = useRouter();
 

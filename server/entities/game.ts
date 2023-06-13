@@ -60,7 +60,7 @@ export class Game implements GameInterface {
   public fakeSignification2: string;
 
   @Column({ type: 'text' })
-  public origine: string;
+  public origine: string | undefined;
 
   @Column({ type: 'text' })
   public signification: string;

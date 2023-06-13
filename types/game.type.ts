@@ -17,7 +17,7 @@ export interface Game {
   activityId: number;
   fakeSignification1: string;
   fakeSignification2: string;
-  origine?: string;
+  origine?: string | undefined;
   signification: string;
   video: string;
 }
@@ -32,7 +32,7 @@ export type GameData = {
   gameId?: number | null;
   type: GameType;
   value: string;
-  origine?: string;
+  origine?: string | undefined;
   signification: string;
   fakeSignification1: string;
   fakeSignification2: string;
@@ -57,7 +57,7 @@ export type MoneysData = {
 export type MimicData = {
   gameId: number | null;
   createDate: string | Date | null;
-  origine?: string | null;
+  origine?: string | undefined;
   signification: string | null;
   fakeSignification1: string | null;
   fakeSignification2: string | null;
