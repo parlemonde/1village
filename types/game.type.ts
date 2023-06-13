@@ -57,7 +57,7 @@ export type MoneysData = {
 export type MimicData = {
   gameId: number | null;
   createDate: string | Date | null;
-  origine?: string;
+  origine?: string | null;
   signification: string | null;
   fakeSignification1: string | null;
   fakeSignification2: string | null;
