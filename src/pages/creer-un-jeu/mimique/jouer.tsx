@@ -273,7 +273,7 @@ const PlayMimique = () => {
                   {gameCreatorIsPelico ? (
                     <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
                   ) : (
-                    <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                    gameCreator && gameCreator.country && <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
                   )}
                 </p>
               )}
