@@ -229,6 +229,14 @@ const ClassroomParamStep1 = () => {
         break;
     }
     updateClassroomParameters(newState);
+    if (activities) {
+      const isVisibleToParent = newState.hasVisibilitySetToClass || key === 'default';
+      activities.forEach((activity) => {
+        if (activity.isVisibleToParent !== isVisibleToParent) {
+          handleActivityVisibility(activity.id);
+        }
+      });
+    }
     setClassroom((prevState) => {
       if (!prevState) {
         return {

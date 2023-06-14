@@ -46,30 +46,30 @@ export const LinkChild = () => {
     }, 2 * 1000);
   };
 
-  // const handleDelete = async (studentId: number) => {
-  //   if (user) {
-  //     try {
-  //       const response = await deleteLinkedStudent(user.id, studentId);
-  //       if (response.success) {
-  //         enqueueSnackbar("Lien avec l'élève supprimé avec succès", {
-  //           variant: 'success',
-  //         });
-  //         // Mettez à jour la liste des étudiants liés après la suppression
-  //         const updatedLinkedStudents = linkedStudents.filter((student) => student.id !== studentId);
-  //         setLinkedStudents(updatedLinkedStudents);
-  //       } else {
-  //         enqueueSnackbar("Une erreur s'est produite lors de la suppression du lien avec l'élève", {
-  //           variant: 'error',
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Une erreur s'est produite lors de la suppression du lien avec l'élève :", error);
-  //       enqueueSnackbar("Une erreur s'est produite lors de la suppression du lien avec l'élève", {
-  //         variant: 'error',
-  //       });
-  //     }
-  //   }
-  // };
+  const handleDelete = async (studentId: number) => {
+    if (user) {
+      try {
+        const response = await deleteLinkedStudent(user.id, studentId);
+        if (response.success) {
+          enqueueSnackbar("Lien avec l'élève supprimé avec succès", {
+            variant: 'success',
+          });
+          // Update the list of student linked
+          const updatedLinkedStudents = linkedStudents.filter((student) => student.id !== studentId);
+          setLinkedStudents(updatedLinkedStudents);
+        } else {
+          enqueueSnackbar("Une erreur s'est produite lors de la suppression du lien avec l'élève", {
+            variant: 'error',
+          });
+        }
+      } catch (error) {
+        console.error("Une erreur s'est produite lors de la suppression du lien avec l'élève :", error);
+        enqueueSnackbar("Une erreur s'est produite lors de la suppression du lien avec l'élève", {
+          variant: 'error',
+        });
+      }
+    }
+  };
 
   React.useEffect(() => {
     const fetchLinkedStudents = async () => {
@@ -122,7 +122,7 @@ export const LinkChild = () => {
                   <DeleteButton
                     onDelete={() => {
                       if (user) {
-                        deleteLinkedStudent(user.id, student.id);
+                        handleDelete(student.id);
                       }
                     }}
                     confirmLabel="Êtes-vous sûre de vouloir supprimer votre lien avec l'élève ?"

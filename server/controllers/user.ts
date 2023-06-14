@@ -803,28 +803,22 @@ userController.get({ path: '/:id/linked-students' }, async (req: Request, res: R
 });
 
 // Delete the link between user and student
-userController.delete({ path: '/:id/linked-students/:studentId' }, async (req: Request, res: Response) => {
+userController.delete({ path: '/:userId/linked-students/:studentId' }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
 
-  const userId = parseInt(req.params.id, 10) || 0;
-  const studentId = parseInt(req.params.studendId, 10) || 0;
+  const userId = parseInt(req.params.userId, 10) || 0;
+  const studentId = parseInt(req.params.studentId, 10) || 0;
 
-  const userToStudentRepository = AppDataSource.getRepository(UserToStudent);
-  const userToStudent = await userToStudentRepository.findOne({
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
     where: { user: { id: userId }, student: { id: studentId } },
     relations: ['user', 'student'],
   });
 
-  // Preloading the userToStudent relation prevents the cascades effects from failing for some reason...
-  // const userToStudents = await AppDataSource.getRepository(UserToStudent).find({
-  //   where: { user: { id }, student: { id: studentId } },
-  //   relations: ['userToStudents', 'userToStudents.user'],
-  // });
   if (!userToStudent) {
-    return res.status(404).json({ message: "Le lien parent-étudiant n'existe pas." });
+    return res.status(404).json({ message: 'Le lien parent-étudiant n a pas été trouvé.' });
   }
   // const { student } = userToStudent;
-  await userToStudentRepository.remove(userToStudent);
+  await AppDataSource.getRepository(UserToStudent).remove(userToStudent);
 
   return res.status(200).json({ message: 'Le lien parent-étudiant a été supprimé avec succès.' });
 });
