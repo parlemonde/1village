@@ -5,7 +5,7 @@ import React, { useState, useCallback, useMemo, useContext, useEffect } from 're
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -20,13 +20,12 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
-import ArrowRight from 'src/svg/arrow-right.svg';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
 import type { Game, MimicData } from 'types/game.type';
-import type { GameResponse } from 'types/gameResponse.type';
-import { MimicResponseValue } from 'types/mimicResponse.type';
+import { GameResponse, GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
+import ResponseButton from 'src/components/buttons/GameResponseButton';
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -63,63 +62,63 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
   );
 };
 
-type ResponseButtonProps = {
-  value: MimicResponseValue;
-  isSuccess?: boolean;
-  signification?: string | null;
-  disabled?: boolean;
-  onClick: (value: MimicResponseValue, isSuccess?: boolean) => Promise<void>;
-  isCorrect?: boolean;
-  mimicOrigine?: string;
-};
+// type ResponseButtonProps = {
+//   value: GameResponseValue;
+//   isSuccess?: boolean;
+//   signification?: string | null;
+//   disabled?: boolean;
+//   onClick: (value: GameResponseValue, isSuccess?: boolean) => Promise<void>;
+//   isCorrect?: boolean;
+//   mimicOrigine?: string;
+// };
 
-const ResponseButton = ({
-  value,
-  onClick,
-  isSuccess = false,
-  signification = '',
-  disabled = false,
-  isCorrect,
-  mimicOrigine,
-}: ResponseButtonProps) => {
-  const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
+// const ResponseButton = ({
+//   value,
+//   onClick,
+//   isSuccess = false,
+//   signification = '',
+//   disabled = false,
+//   isCorrect,
+//   mimicOrigine,
+// }: ResponseButtonProps) => {
+//   const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
 
-  const handleClick = useCallback(() => {
-    if (hasBeenSelected) return;
-    setHasBeenSelected(true);
-    return onClick(value, isSuccess);
-  }, [hasBeenSelected, isSuccess, value, setHasBeenSelected, onClick]);
+//   const handleClick = useCallback(() => {
+//     if (hasBeenSelected) return;
+//     setHasBeenSelected(true);
+//     return onClick(value, isSuccess);
+//   }, [hasBeenSelected, isSuccess, value, setHasBeenSelected, onClick]);
 
-  const color = isSuccess ? 'success' : 'error';
+//   const color = isSuccess ? 'success' : 'error';
 
-  return (
-    <Button
-      size="large"
-      fullWidth
-      sx={{ justifyContent: 'space-between', backgroundColor: 'bgPage', height: '60px', boxShadow: 'none' }}
-      disabled={!hasBeenSelected && disabled}
-      variant="contained"
-      color={hasBeenSelected ? color : 'inherit'}
-      onClick={handleClick}
-      endIcon={hasBeenSelected ? null : <ArrowRight sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
-    >
-      {isCorrect ? (
-        <Grid container direction="column" sx={{ textAlign: 'left' }}>
-          <Grid item>
-            <Typography>{hasBeenSelected ? signification : ''}</Typography>
-          </Grid>
-          {hasBeenSelected && (
-            <Grid item>
-              <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
-            </Grid>
-          )}
-        </Grid>
-      ) : (
-        signification
-      )}
-    </Button>
-  );
-};
+//   return (
+//     <Button
+//       size="large"
+//       fullWidth
+//       sx={{ justifyContent: 'space-between', backgroundColor: 'bgPage', height: '60px', boxShadow: 'none' }}
+//       disabled={!hasBeenSelected && disabled}
+//       variant="contained"
+//       color={hasBeenSelected ? color : 'inherit'}
+//       onClick={handleClick}
+//       endIcon={hasBeenSelected ? null : <ArrowRight sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
+//     >
+//       {isCorrect ? (
+//         <Grid container direction="column" sx={{ textAlign: 'left' }}>
+//           <Grid item>
+//             <Typography>{hasBeenSelected ? signification : ''}</Typography>
+//           </Grid>
+//           {hasBeenSelected && (
+//             <Grid item>
+//               <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
+//             </Grid>
+//           )}
+//         </Grid>
+//       ) : (
+//         signification
+//       )}
+//     </Button>
+//   );
+// };
 const PlayMimique = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
@@ -184,17 +183,17 @@ const PlayMimique = () => {
   const ResponseButtonDataMapper = useMemo(
     () => [
       {
-        value: MimicResponseValue.SIGNIFICATION,
+        value: GameResponseValue.SIGNIFICATION,
         signification: mimicContent?.signification,
         isSuccess: true,
         isGreenRadio: true,
       },
       {
-        value: MimicResponseValue.FAKE_SIGNIFICATION_1,
+        value: GameResponseValue.FAKE_SIGNIFICATION_1,
         signification: mimicContent?.fakeSignification1,
       },
       {
-        value: MimicResponseValue.FAKE_SIGNIFICATION_2,
+        value: GameResponseValue.FAKE_SIGNIFICATION_2,
         signification: mimicContent?.fakeSignification2,
       },
     ],
@@ -212,7 +211,7 @@ const PlayMimique = () => {
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
   const handleClick = useCallback(
-    async (selection: MimicResponseValue, isSuccess: boolean = false) => {
+    async (selection: GameResponseValue, isSuccess: boolean = false) => {
       if (selection === null || game === undefined) {
         return;
       }

@@ -5,8 +5,7 @@ import { LinearProgress, Typography, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { Flag } from '../Flag';
-import type { GameResponse } from 'types/gameResponse.type';
-import { MimicResponseValue } from 'types/mimicResponse.type';
+import { GameResponse, GameResponseValue } from 'types/gameResponse.type';
 import type { User } from 'types/user.type';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
@@ -37,9 +36,9 @@ export const MimicStats = ({ gameResponses, choices, country, userMap, users }: 
   const responseCount = countryResponses.length;
   const stats = React.useMemo(() => {
     return [
-      (countryResponses.filter((response) => response.value === MimicResponseValue.SIGNIFICATION).length * 100) / responseCount,
-      (countryResponses.filter((response) => response.value === MimicResponseValue.FAKE_SIGNIFICATION_1).length * 100) / responseCount,
-      (countryResponses.filter((response) => response.value === MimicResponseValue.FAKE_SIGNIFICATION_2).length * 100) / responseCount,
+      (countryResponses.filter((response) => response.value === GameResponseValue.SIGNIFICATION).length * 100) / responseCount,
+      (countryResponses.filter((response) => response.value === GameResponseValue.FAKE_SIGNIFICATION_1).length * 100) / responseCount,
+      (countryResponses.filter((response) => response.value === GameResponseValue.FAKE_SIGNIFICATION_2).length * 100) / responseCount,
     ];
   }, [countryResponses, responseCount]);
   const responseChoices = React.useMemo(() => {
