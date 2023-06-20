@@ -32,7 +32,14 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
           {countryResponses.map((response) => {
             users[userMap[response.userId]];
             return (
-              <Grid item xs={2} key={response.id} container direction="row" style={{ padding: '0.5rem', paddingBottom: '1rem', marginBottom: '2rem' }}>
+              <Grid
+                item
+                xs={2}
+                key={response.id}
+                container
+                direction="row"
+                style={{ padding: '0.5rem', paddingBottom: '1rem', marginBottom: '2rem' }}
+              >
                 <AvatarImg user={response.user} style={{ width: '24px', height: '24px' }} />
               </Grid>
             );
