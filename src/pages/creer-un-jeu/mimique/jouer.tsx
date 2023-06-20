@@ -322,7 +322,6 @@ const PlayMimique = () => {
                     users={users}
                   />
                 )}
-
                 <GameStats
                   gameResponses={gameResponses}
                   choices={choices}
