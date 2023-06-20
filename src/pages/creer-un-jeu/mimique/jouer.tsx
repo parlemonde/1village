@@ -13,8 +13,9 @@ import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
-import { MimicStats } from 'src/components/activities/MimicStats';
+import GameStats from 'src/components/activities/GameStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
+import ResponseButton from 'src/components/buttons/GameResponseButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
@@ -23,9 +24,9 @@ import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
 import type { Game, MimicData } from 'types/game.type';
-import { GameResponse, GameResponseValue } from 'types/gameResponse.type';
+import type { GameResponse } from 'types/gameResponse.type';
+import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
-import ResponseButton from 'src/components/buttons/GameResponseButton';
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -62,63 +63,6 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
   );
 };
 
-// type ResponseButtonProps = {
-//   value: GameResponseValue;
-//   isSuccess?: boolean;
-//   signification?: string | null;
-//   disabled?: boolean;
-//   onClick: (value: GameResponseValue, isSuccess?: boolean) => Promise<void>;
-//   isCorrect?: boolean;
-//   mimicOrigine?: string;
-// };
-
-// const ResponseButton = ({
-//   value,
-//   onClick,
-//   isSuccess = false,
-//   signification = '',
-//   disabled = false,
-//   isCorrect,
-//   mimicOrigine,
-// }: ResponseButtonProps) => {
-//   const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
-
-//   const handleClick = useCallback(() => {
-//     if (hasBeenSelected) return;
-//     setHasBeenSelected(true);
-//     return onClick(value, isSuccess);
-//   }, [hasBeenSelected, isSuccess, value, setHasBeenSelected, onClick]);
-
-//   const color = isSuccess ? 'success' : 'error';
-
-//   return (
-//     <Button
-//       size="large"
-//       fullWidth
-//       sx={{ justifyContent: 'space-between', backgroundColor: 'bgPage', height: '60px', boxShadow: 'none' }}
-//       disabled={!hasBeenSelected && disabled}
-//       variant="contained"
-//       color={hasBeenSelected ? color : 'inherit'}
-//       onClick={handleClick}
-//       endIcon={hasBeenSelected ? null : <ArrowRight sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
-//     >
-//       {isCorrect ? (
-//         <Grid container direction="column" sx={{ textAlign: 'left' }}>
-//           <Grid item>
-//             <Typography>{hasBeenSelected ? signification : ''}</Typography>
-//           </Grid>
-//           {hasBeenSelected && (
-//             <Grid item>
-//               <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
-//             </Grid>
-//           )}
-//         </Grid>
-//       ) : (
-//         signification
-//       )}
-//     </Button>
-//   );
-// };
 const PlayMimique = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
@@ -370,7 +314,7 @@ const PlayMimique = () => {
             {(found || tryCount > 1) && (
               <>
                 {user.country && (
-                  <MimicStats
+                  <GameStats
                     gameResponses={gameResponses}
                     choices={choices}
                     country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
@@ -379,7 +323,7 @@ const PlayMimique = () => {
                   />
                 )}
 
-                <MimicStats
+                <GameStats
                   gameResponses={gameResponses}
                   choices={choices}
                   country={

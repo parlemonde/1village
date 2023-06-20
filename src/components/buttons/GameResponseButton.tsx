@@ -1,7 +1,9 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+
 import { Button, Grid, Typography } from '@mui/material';
+
 import ArrowRight from 'src/svg/arrow-right.svg';
-import { GameResponseValue } from 'types/gameResponse.type'
+import type { GameResponseValue } from 'types/gameResponse.type';
 
 type ResponseButtonProps = {
   value: GameResponseValue;
