@@ -40,6 +40,33 @@ export const useGameRequests = () => {
     [village],
   );
 
+    /**
+   * Return all games by type
+   *
+   * @param type - type of game
+   *
+   * @returns Array<Game>
+   *
+   */
+
+  const getAllGamesByType = React.useCallback(async (type: GameType) => {
+    if (!village) {
+      return [];
+    }
+    const response = await axiosRequest({
+      method: 'GET',
+      url: `/games${serializeToQueryUrl({
+        type,
+        villageId: village.id,
+      })}`,
+    });
+    if (response.error) {
+      return 0;
+    }
+    return response.data as Array<Game>;
+  }, [village]);
+
+
   /**
    * Return number of games available to play
    *
@@ -143,5 +170,5 @@ export const useGameRequests = () => {
     return response.data as GameResponse[];
   }, []);
 
-  return { getUserCreatedGamesCount, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
+  return { getUserCreatedGamesCount, getAllGamesByType, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
 };

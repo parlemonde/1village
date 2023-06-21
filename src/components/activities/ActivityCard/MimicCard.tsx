@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import router from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 
 import { Button } from '@mui/material';
@@ -17,8 +17,9 @@ import { GameType } from 'types/game.type';
 
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
   const { village } = React.useContext(VillageContext);
-  const { getAvailableGamesCount } = useGameRequests();
-  const [availableMimicsCount, setAvailableMimicsCount] = React.useState<number>(0);
+  const { getAllGamesByType, getAvailableGamesCount } = useGameRequests();
+  const [totalMimicsCount, setTotalMimicsCount] = useState<number>(0);
+  const [availableMimicsCount, setAvailableMimicsCount] = useState<number>(0);
 
   const activityMimic = activity.data as MimicsData;
 
@@ -29,6 +30,18 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
     const rdmMimicPick = values[Math.floor(Math.random() * values.length)]; // random game picked
     return rdmMimicPick.video;
   }, [activityMimic]);
+
+  React.useEffect(() => {
+    if (village) {
+      getAllGamesByType(GameType.MIMIC).then((count) => {
+        if (Array.isArray(count)) {
+          setTotalMimicsCount(count.length);
+        } else {
+          setTotalMimicsCount(0);
+        }
+      });
+    }
+  }, [getAllGamesByType, village]);
 
   React.useEffect(() => {
     if (village) {
@@ -69,8 +82,10 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <p>Il y a actuellement {availableMimicsCount} nouvelles mimiques à découvrir !</p>
-        <p style={{ marginBottom: '4rem' }}>{activity.data.presentation} a relancé le jeu des mimiques</p>
+        <p style={{ marginBottom: '2rem' }}>{activity.data.presentation} a relancé le jeu des mimiques</p>
+        <p>
+          Il y a actuellemment {totalMimicsCount} mimique, dont {availableMimicsCount} nouvelles mimiques à découvrir !{' '}
+        </p>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
             {!showEditButtons && (
