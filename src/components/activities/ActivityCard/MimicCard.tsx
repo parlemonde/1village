@@ -23,12 +23,12 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
 
   const activityMimic = activity.data as MimicsData;
 
-  const randomVideoLink = React.useMemo(() => {
+  const LastVideoLink = React.useMemo(() => {
     const values = Object.values(activityMimic);
     values.shift(); //First element drafturl remove
     values.pop(); // Last element presentation remove
-    const rdmMimicPick = values[Math.floor(Math.random() * values.length)]; // random game picked
-    return rdmMimicPick.video;
+    const lastMimicPick = values[values.length - 1];
+    return lastMimicPick.video;
   }, [activityMimic]);
 
   React.useEffect(() => {
@@ -59,7 +59,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         justifyContent: 'flex-start',
       }}
     >
-      {randomVideoLink && (
+      {LastVideoLink && (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -72,10 +72,10 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
           >
             {/* Link is disabled for reaction activity */}
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
-              <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+              <ReactPlayer width="100%" height="100%" light url={LastVideoLink} style={{ backgroundColor: 'black' }} />
             ) : (
               <Link href="/creer-un-jeu/mimique/jouer/" passHref>
-                <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+                <ReactPlayer width="100%" height="100%" light url={LastVideoLink} style={{ backgroundColor: 'black' }} />
               </Link>
             )}
           </div>

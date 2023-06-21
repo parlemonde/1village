@@ -40,7 +40,7 @@ export const useGameRequests = () => {
     [village],
   );
 
-    /**
+  /**
    * Return all games by type
    *
    * @param type - type of game
@@ -49,23 +49,25 @@ export const useGameRequests = () => {
    *
    */
 
-  const getAllGamesByType = React.useCallback(async (type: GameType) => {
-    if (!village) {
-      return [];
-    }
-    const response = await axiosRequest({
-      method: 'GET',
-      url: `/games${serializeToQueryUrl({
-        type,
-        villageId: village.id,
-      })}`,
-    });
-    if (response.error) {
-      return 0;
-    }
-    return response.data as Array<Game>;
-  }, [village]);
-
+  const getAllGamesByType = React.useCallback(
+    async (type: GameType) => {
+      if (!village) {
+        return [];
+      }
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/games${serializeToQueryUrl({
+          type,
+          villageId: village.id,
+        })}`,
+      });
+      if (response.error) {
+        return 0;
+      }
+      return response.data as Array<Game>;
+    },
+    [village],
+  );
 
   /**
    * Return number of games available to play
@@ -93,6 +95,38 @@ export const useGameRequests = () => {
         return 0;
       }
       return response.data.count as number;
+    },
+    [village],
+  );
+
+  /**
+   * Return of the last added game
+   *
+   * @param type - type of game
+   * @param villageId - id of village
+   *
+   * @returns Game
+   *
+   */
+
+  const getLastGame = React.useCallback(
+    async (type: GameType) => {
+      if (!village) {
+        return undefined;
+      }
+
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/games/lastAdded${serializeToQueryUrl({
+          villageId: village.id,
+          type,
+        })}`,
+      });
+
+      if (response.error) {
+        return undefined;
+      }
+      return response.data as Game;
     },
     [village],
   );
@@ -170,5 +204,5 @@ export const useGameRequests = () => {
     return response.data as GameResponse[];
   }, []);
 
-  return { getUserCreatedGamesCount, getAllGamesByType, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
+  return { getUserCreatedGamesCount, getAllGamesByType, getAvailableGamesCount, getLastGame, getRandomGame, sendNewGameResponse, getGameStats };
 };
