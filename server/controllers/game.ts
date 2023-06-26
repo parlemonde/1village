@@ -94,7 +94,6 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
   const game = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
-    .where('game.userId <> :userId', { userId: userId })
     .andWhere('game.villageId = :villageId', { villageId: villageId })
     .andWhere('game.type = :type', { type: type })
     .andWhere(
@@ -135,7 +134,6 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
   const count = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
-    .where('`game`.`userId` <> :userId', { userId: userId })
     .andWhere('`game`.`villageId` = :villageId', { villageId: villageId })
     .andWhere('`game`.`type` = :type', { type: type })
     .andWhere(

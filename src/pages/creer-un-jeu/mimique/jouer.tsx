@@ -53,10 +53,10 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
       maxWidth="lg"
       ariaDescribedBy="new-user-desc"
       ariaLabelledBy="new-user-title"
-      onClose={() => router.push('/creer-un-jeu/mimique')}
+      onClose={() => router.push('/')}
     >
       C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
-      <Button color="primary" onClick={() => router.push('/creer-un-jeu/mimique/jouer')}>
+      <Button color="primary" onClick={() => router.push('/')}>
         Rejouer
       </Button>
     </Modal>
@@ -156,7 +156,7 @@ const PlayMimique = () => {
 
   const handleClick = useCallback(
     async (selection: GameResponseValue, isSuccess: boolean = false) => {
-      if (selection === null || game === undefined) {
+      if (game === undefined) {
         return;
       }
       const apiResponse = await sendNewGameResponse(game.id, selection);

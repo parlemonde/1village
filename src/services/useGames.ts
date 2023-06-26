@@ -62,7 +62,7 @@ export const useGameRequests = () => {
         })}`,
       });
       if (response.error) {
-        return 0;
+        return [];
       }
       return response.data as Array<Game>;
     },
