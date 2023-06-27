@@ -114,10 +114,9 @@ export const useGameRequests = () => {
       if (!village) {
         return undefined;
       }
-
       const response = await axiosRequest({
         method: 'GET',
-        url: `/games/lastAdded${serializeToQueryUrl({
+        url: `/games/latest${serializeToQueryUrl({
           villageId: village.id,
           type,
         })}`,

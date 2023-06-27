@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import router from 'next/router';
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
 import { Button } from '@mui/material';
@@ -12,7 +12,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
 import { LinkNotAllowedInPath } from 'types/activity.type';
-import type { GameActivity, MimicsData } from 'types/game.type';
+import type { GameActivity } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
@@ -21,17 +21,13 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
   const [totalMimicsCount, setTotalMimicsCount] = useState<number>(0);
   const [availableMimicsCount, setAvailableMimicsCount] = useState<number>(0);
 
-  const activityMimic = activity.data as MimicsData;
+  const latestGameUrl = useMemo(() => {
+    const villageId = activity.villageId;
+    const type = activity.type;
+    return `/creer-un-jeu/mimique/jouer/?villageId=${villageId}&type=${type}`;
+  }, [activity.villageId, activity.type]);
 
-  const LastVideoLink = React.useMemo(() => {
-    const values = Object.values(activityMimic);
-    values.shift(); //First element drafturl remove
-    values.pop(); // Last element presentation remove
-    const lastMimicPick = values[values.length - 1];
-    return lastMimicPick.video;
-  }, [activityMimic]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (village) {
       getAllGamesByType(GameType.MIMIC).then((count) => {
         if (Array.isArray(count)) {
@@ -43,7 +39,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
     }
   }, [getAllGamesByType, village]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (village) {
       getAvailableGamesCount(GameType.MIMIC).then((count) => {
         setAvailableMimicsCount(count);
@@ -59,7 +55,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         justifyContent: 'flex-start',
       }}
     >
-      {LastVideoLink && (
+      {latestGameUrl && (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -72,10 +68,10 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
           >
             {/* Link is disabled for reaction activity */}
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
-              <ReactPlayer width="100%" height="100%" light url={LastVideoLink} style={{ backgroundColor: 'black' }} />
+              <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
             ) : (
               <Link href="/creer-un-jeu/mimique/jouer/" passHref>
-                <ReactPlayer width="100%" height="100%" light url={LastVideoLink} style={{ backgroundColor: 'black' }} />
+                <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
               </Link>
             )}
           </div>
@@ -91,7 +87,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href="/creer-un-jeu/mimique/jouer" passHref>
+                <Link href={latestGameUrl} passHref>
                   <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique/jouer">
                     Jouer au jeu
                   </Button>

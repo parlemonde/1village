@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useContext, useEffect, useRef } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
@@ -67,7 +67,7 @@ const PlayMimique = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  const { getRandomGame, sendNewGameResponse, getGameStats } = useGameRequests();
+  const { getRandomGame, sendNewGameResponse, getGameStats, getLastGame } = useGameRequests();
 
   const [game, setGame] = useState<Game | undefined>(undefined);
   const [tryCount, setTryCount] = useState<number>(0);
@@ -87,16 +87,30 @@ const PlayMimique = () => {
     setTryCount(0);
     setErrorModalOpen(false);
 
-    // [2] Get next game data.
-    const newGame = await getRandomGame(GameType.MIMIC);
-    setGame(newGame);
-    setIsLastMimiqueModalOpen(newGame === undefined);
+    const currentGame = gameRef.current;
+
+    // [2] Get the last created game then Get next game data.
+    if (!currentGame) {
+      const lastGame = await getLastGame(GameType.MIMIC);
+      setGame(lastGame);
+    } else {
+      const newGame = await getRandomGame(GameType.MIMIC);
+      setGame(newGame);
+      setIsLastMimiqueModalOpen(newGame === undefined);
+    }
 
     if (previousMimic !== null) {
       setPreviousMimic(previousMimic);
     }
     setLoadingGame(false);
-  }, [getRandomGame, previousMimic]);
+  }, [getLastGame, getRandomGame, previousMimic]);
+
+  const gameRef = useRef(game);
+
+  // Update gameRef whenever game changes
+  useEffect(() => {
+    gameRef.current = game;
+  }, [game]);
 
   // Get next game on start and on village change.
   useEffect(() => {

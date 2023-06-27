@@ -118,6 +118,30 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
   res.sendJSON(game);
 });
 
+// --- Get the last created game ---
+gameController.get({ path: '/latest', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const villageId = Number(getQueryString(req.query.villageId)) || 0;
+  const type = parseInt(getQueryString(req.query.type) || '0', 10);
+
+  const latestGame = await AppDataSource.getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.villageId = :villageId', { villageId: villageId })
+    .andWhere('game.type = :type', { type: type })
+    .orderBy('game.createDate', 'DESC')
+    .getOne();
+
+  if (!latestGame) {
+    next();
+    return;
+  }
+
+  res.sendJSON(latestGame);
+});
+
 //--- Get number of games available ---
 gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const type = parseInt(getQueryString(req.query.type) || '0', 10);
