@@ -44,6 +44,7 @@ interface ClassroomContextProviderProps {
 export const ClassroomContextProvider = ({ children }: ClassroomContextProviderProps) => {
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
+  const [student, setStudent] = React.useState<Student | null>();
   const [students, setStudents] = React.useState<Student[]>([]);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
   const [parentClassroom, setParentClassroom] = React.useState<ClassroomAsFamilly | null>(null);

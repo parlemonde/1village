@@ -1,27 +1,32 @@
 // import SearchIcon from '@mui/icons-material/Search';
 
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, Select } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 import AccessControl from './AccessControl';
+import { Modal } from 'src/components/Modal';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
+import type { Student } from 'types/student.type';
 import { UserType } from 'types/user.type';
 
 export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
-  const { student, showSelectStudentModal } = React.useContext(VillageContext);
+  // const { students, showSelectStudentModal } = React.useContext(UserContext);
+  const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   //* NOTE: might be interesting to make a hook for this below
@@ -46,7 +51,32 @@ export const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const userContext = React.useContext(UserContext);
+  const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
+  const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
+  React.useEffect(() => {
+    const fetchLinkedStudents = async () => {
+      const students = await userContext.getLinkedStudentsToUser(userContext.user?.id || 0);
+      setLinkedStudents(students);
+      console.log(linkedStudents);
+    };
 
+    fetchLinkedStudents();
+  }, [userContext]);
+
+  React.useEffect(() => {
+    if (linkedStudents.length > 0) {
+      setSelectedStudentIndex(0);
+    }
+  }, [linkedStudents]);
+
+  const onSelectStudent = async () => {
+    setIsModalOpen(false);
+    setSelectedStudent(linkedStudents[selectedStudentIndex]);
+  };
+  const showSelectStudentModal = () => {
+    setIsModalOpen(true);
+  };
   return (
     <header>
       <div className="header__container with-shadow">
@@ -117,16 +147,56 @@ export const Header = () => {
         )}
         {user && (
           <div className="header__user">
-            {user.type === UserType.FAMILY ? (
-              <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
-                <span className="text text--small" style={{ margin: '0 0.6rem' }}>
-                  {student ? student.name : 'Elève non choisi !'}
-                </span>
-                <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectVillageModal}>
-                  {student ? 'Changer' : 'Choisir un élève'}
-                </Button>
-              </div>
-            ) : null}
+            {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (
+              <>
+                <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
+                  <span className="text text--small" style={{ margin: '0 0.6rem' }}>
+                    {selectedStudent ? `${selectedStudent.firstname} ${selectedStudent.lastname}` : ''}
+                  </span>
+                  <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectStudentModal}>
+                    {linkedStudents?.length > 0 ? 'Changer' : 'Choisir un élève'}
+                  </Button>
+                </div>
+                <Modal
+                  open={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  onConfirm={onSelectStudent}
+                  confirmLabel="Confirmer"
+                  title="Sélectionnes un élève"
+                  fullWidth
+                  maxWidth="sm"
+                  ariaLabelledBy={''}
+                  ariaDescribedBy={''}
+                  cancelLabel="Annuler"
+                >
+                  <div className="modal__content">
+                    <h2 className="modal__title">Sélectionnes un élève</h2>
+                    {(linkedStudents || []).length === 0 ? (
+                      <p>Aucun élève n est lié à votre compte !</p>
+                    ) : (
+                      <FormControl variant="outlined" className="full-width">
+                        <InputLabel id="select-student">Elève</InputLabel>
+                        <Select
+                          labelId="select-student"
+                          id="select-student-outlined"
+                          value={selectedStudentIndex === -1 ? linkedStudents[0]?.id || '' : selectedStudentIndex}
+                          onChange={(event) => {
+                            setSelectedStudentIndex(event.target.value as number);
+                          }}
+                          label="StudentLinked"
+                        >
+                          {(linkedStudents || []).map((selectedStudent, index) => (
+                            <MenuItem value={index} key={selectedStudent.id}>
+                              {selectedStudent.firstname} {selectedStudent.lastname}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                  </div>
+                </Modal>
+              </>
+            )}
             {user.type === UserType.ADMIN ||
               (user.type === UserType.SUPER_ADMIN ? (
                 <Link href="/admin/villages" passHref>

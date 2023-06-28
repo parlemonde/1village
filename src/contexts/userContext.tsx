@@ -54,7 +54,8 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
-  const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
+  // const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(-1);
+  // const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
 
   React.useEffect(() => {
     if (
@@ -320,7 +321,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
         };
       });
   }, []);
-
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
   /**
