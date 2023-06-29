@@ -4,7 +4,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 
 interface PanelInputProps {
-  value: string;
+  value: string | undefined;
   defaultValue?: string;
   label: string;
   placeholder?: string;

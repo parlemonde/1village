@@ -8,6 +8,7 @@ import Switch from '@mui/material/Switch';
 import { AvatarImg } from './Avatar';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
@@ -61,9 +62,15 @@ export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isModerateur = user !== null && user.type >= UserType.MEDIATOR;
+  const { parentClassroom } = React.useContext(ClassroomContext);
+  //* NOTE: might be interesting to make a hook for this below
+  const isPelico =
+    (user !== null && user.type === UserType.MEDIATOR) ||
+    (user !== null && user.type === UserType.ADMIN) ||
+    (user !== null && user.type === UserType.SUPER_ADMIN);
   const isObservator = user !== null && user.type === UserType.OBSERVATOR;
   const isTeacher = user !== null && user.type === UserType.TEACHER;
+  const isParent = user !== null && user.type === UserType.FAMILY;
   const { editVillage } = useVillageRequests();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -136,12 +143,14 @@ export const Navigation = (): JSX.Element => {
         path: '/indice-culturel',
         icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
+        disabled: isParent,
       },
       {
         label: 'Présenter un symbole',
         path: '/symbole',
         icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
+        disabled: isParent,
       },
       // ---- PHASE 2 ----
       {
@@ -149,36 +158,42 @@ export const Navigation = (): JSX.Element => {
         path: '/realiser-un-reportage',
         icon: <ReportageIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Lancer un défi',
         path: '/lancer-un-defi',
         icon: <TargetIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Jouer ensemble',
         path: '/creer-un-jeu',
         icon: <GameIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Créer une énigme',
         path: '/creer-une-enigme',
         icon: <KeyIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Poser une question',
         path: '/poser-une-question/1',
         icon: <QuestionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       {
         label: 'Réagir à une activité',
         path: '/reagir-a-une-activite/1',
         icon: <ReactionIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 2,
+        disabled: isParent,
       },
       // ---- PHASE 3 ----
       {
@@ -186,23 +201,24 @@ export const Navigation = (): JSX.Element => {
         path: '/creer-une-histoire',
         icon: <StoryIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
+        disabled: isParent,
       },
       {
         label: 'Ré-inventer une histoire',
         path: '/re-inventer-une-histoire',
         icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
-        disabled: firstStoryCreated === false,
+        disabled: firstStoryCreated === false || isParent,
       },
       {
         label: 'Chanter un couplet',
         path: '/chanter-un-couplet',
         icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
-        disabled: !village?.anthemId,
+        disabled: !village?.anthemId || isParent,
       },
     ],
-    [firstStoryCreated, mascotteActivity, village, isTeacher],
+    [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],
   );
 
   const fixedTabs = React.useMemo<Tab[]>(
@@ -212,14 +228,19 @@ export const Navigation = (): JSX.Element => {
         label: 'Notre classe',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
+        disabled: isParent,
       },
-      ...(isModerateur ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
+      ...(isPelico ? (selectedPhase === 3 ? [FREE_CONTENT, ANTHEM_PARAM] : [FREE_CONTENT]) : []),
     ],
-    [user, isModerateur, selectedPhase],
+    [user, isPelico, selectedPhase, isParent],
   );
   const phaseTabs = React.useMemo<Tab[]>(() => TABS_PER_PHASE.filter((t) => t.phase && t.phase === selectedPhase), [selectedPhase, TABS_PER_PHASE]);
 
   const currentPathName = router.pathname.split('/')[1] || '';
+
+  if (!user) {
+    return <div></div>;
+  }
 
   return (
     <nav className="navigation">
@@ -230,19 +251,37 @@ export const Navigation = (): JSX.Element => {
         >
           <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
           {village &&
-            village.countries.map((country: Country) => (
-              <Flag
-                style={{ margin: '0.25rem' }}
-                key={country.isoCode}
-                country={country.isoCode}
-                isMistery={
-                  !village ||
-                  !user ||
-                  (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator)) ||
-                  (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isModerateur || isObservator))
-                }
-              ></Flag>
-            ))}
+            village.countries.map((country: Country) => {
+              if (user.type === UserType.FAMILY) {
+                return (
+                  <Flag
+                    style={{ margin: '0.25rem' }}
+                    key={country.isoCode}
+                    country={country.isoCode}
+                    isMistery={
+                      !village ||
+                      !user ||
+                      (selectedPhase === 1 && parentClassroom?.student?.classroom.user.toUpperCase() !== country.isoCode) ||
+                      (user.firstLogin < 2 && parentClassroom?.student?.classroom.user.toUpperCase() !== country.isoCode)
+                    }
+                  ></Flag>
+                );
+              } else {
+                return (
+                  <Flag
+                    style={{ margin: '0.25rem' }}
+                    key={country.isoCode}
+                    country={country.isoCode}
+                    isMistery={
+                      !village ||
+                      !user ||
+                      (selectedPhase === 1 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator)) ||
+                      (user.firstLogin < 2 && user.country?.isoCode.toUpperCase() !== country.isoCode && (!isPelico || isObservator))
+                    }
+                  ></Flag>
+                );
+              }
+            })}
         </div>
         {[fixedTabs, phaseTabs].map((tabs, index) => (
           <div key={`tabs_${index}`} className="navigation__content with-shadow" style={{ padding: '1rem 0.5rem 0.2rem 0.5rem' }}>
@@ -274,7 +313,7 @@ export const Navigation = (): JSX.Element => {
             ))}
           </div>
         ))}
-        {village && isModerateur && selectedPhase >= 2 && (
+        {village && isPelico && selectedPhase >= 2 && (
           <div
             className="navigation__content with-shadow"
             style={{ padding: '0 0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}

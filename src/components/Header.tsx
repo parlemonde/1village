@@ -1,8 +1,8 @@
+// import SearchIcon from '@mui/icons-material/Search';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-// import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import AccessControl from './AccessControl';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
@@ -22,6 +23,11 @@ export const Header = () => {
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  //* NOTE: might be interesting to make a hook for this below
+  const isPelico =
+    (user !== null && user.type === UserType.MEDIATOR) ||
+    (user !== null && user.type === UserType.ADMIN) ||
+    (user !== null && user.type === UserType.SUPER_ADMIN);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (open) {
@@ -30,14 +36,12 @@ export const Header = () => {
       setAnchorEl(event.currentTarget);
     }
   };
-  const goToAccount = () => {
+
+  const goToPage = (page: string) => {
     setAnchorEl(null);
-    router.push('/mon-compte');
+    router.push(page);
   };
-  const goToVideos = () => {
-    setAnchorEl(null);
-    router.push('/mes-videos');
-  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -53,15 +57,9 @@ export const Header = () => {
             </h1>
           </a>
         </Link>
-        {/* <div className="header__search">
-          <IconButton aria-label="search" size="small">
-            <SearchIcon />
-          </IconButton>
-          <InputBase placeholder="Rechercher" inputProps={{ 'aria-label': 'search' }} />
-        </div> */}
         {user && (
           <div className="header__user">
-            {user.type > UserType.TEACHER && (
+            {isPelico ? (
               <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
                 <span className="text text--small" style={{ margin: '0 0.6rem' }}>
                   {village ? village.name : 'Village non choisi !'}
@@ -70,14 +68,15 @@ export const Header = () => {
                   {village ? 'Changer' : 'Choisir un village'}
                 </Button>
               </div>
-            )}
-            {user.type >= UserType.ADMIN && (
-              <Link href="/admin/villages" passHref>
-                <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {"Aller à l'interface Admin"}
-                </Button>
-              </Link>
-            )}
+            ) : null}
+            {user.type === UserType.ADMIN ||
+              (user.type === UserType.SUPER_ADMIN ? (
+                <Link href="/admin/villages" passHref>
+                  <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
+                    {"Aller à l'interface Admin"}
+                  </Button>
+                </Link>
+              ) : null)}
             <div>
               <IconButton
                 style={{ width: '40px', height: '40px', margin: '0 0.2rem' }}
@@ -103,8 +102,11 @@ export const Header = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={goToAccount}>Mon compte</MenuItem>
-                <MenuItem onClick={goToVideos}>Mes vidéos</MenuItem>
+                <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
+                {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
+                <AccessControl featureName="id-family" key={user?.id || 'default'}>
+                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                </AccessControl>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>

@@ -11,12 +11,7 @@ import { toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
 
 export const PelicoProfilNavigation = () => {
-  const { activities } = useActivities({
-    limit: 200,
-    page: 0,
-    type: [],
-    userId: 1,
-  });
+  const { activities } = useActivities({ pelico: true, limit: 5 });
 
   return (
     <>

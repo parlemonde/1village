@@ -2,7 +2,8 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
+import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -13,18 +14,18 @@ const secret: string = process.env.APP_SECRET || '';
 
 // --- LOGIN ---
 type LoginData = {
-  username: string;
+  email: string;
   password: string;
   getRefreshToken?: boolean;
 };
 const LOGIN_SCHEMA: JSONSchemaType<LoginData> = {
   type: 'object',
   properties: {
-    username: { type: 'string' },
+    email: { type: 'string' },
     password: { type: 'string' },
     getRefreshToken: { type: 'boolean', nullable: true },
   },
-  required: ['username', 'password'],
+  required: ['email', 'password'],
   additionalProperties: false,
 };
 const loginValidator = ajv.compile(LOGIN_SCHEMA);
@@ -39,16 +40,28 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     return;
   }
 
-  const user = await AppDataSource.getRepository(User)
-    .createQueryBuilder()
+  const query = await AppDataSource.getRepository(User)
+    .createQueryBuilder('User')
     .addSelect('User.passwordHash')
-    .where('User.email = :username OR User.pseudo = :username', { username: data.username })
-    .getOne();
+    .leftJoinAndSelect('User.featureFlags', 'FeatureFlag')
+    .addSelect(['FeatureFlag.id', 'FeatureFlag.name', 'FeatureFlag.isEnabled'])
+    .where('User.email = :email OR User.pseudo = :email', { email: data.email });
+
+  const user = await query.getOne();
 
   if (user === null) {
-    throw new AppError('Invalid username', ErrorCode.INVALID_USERNAME);
+    throw new AppError('Invalid credentials', ErrorCode.INVALID_USERNAME);
   }
-
+  //Here we will change the logic to test if user parent is connected to a student or not during registration
+  let hasStudentLinked: boolean = false;
+  if (user.type === UserType.FAMILY) {
+    hasStudentLinked =
+      (await AppDataSource.getRepository(UserToStudent)
+        .createQueryBuilder('userToStudent')
+        .select('userToStudent.userId')
+        .where('userToStudent.userId = :userId', { userId: user.id })
+        .getCount()) > 0;
+  }
   let isPasswordCorrect: boolean = false;
   try {
     isPasswordCorrect = await argon2.verify(user.passwordHash || '', data.password);
@@ -56,6 +69,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     logger.error(JSON.stringify(e));
   }
 
+  if (user.type === UserType.FAMILY) {
+    if (user.accountRegistration === 4 && user.isVerified === false) {
+      throw new AppError('Unverified account, Please verify your account', ErrorCode.UNVERIFIED_ACCOUNT);
+    }
+  }
   if (user.accountRegistration === 4) {
     throw new AppError('Account blocked. Please reset password', ErrorCode.ACCOUNT_BLOCKED);
   }
@@ -67,7 +85,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   if (!isPasswordCorrect) {
     user.accountRegistration += 1;
     await AppDataSource.getRepository(User).save(user);
-    throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
+    throw new AppError('Invalid credentials', ErrorCode.INVALID_PASSWORD);
   } else if (user.accountRegistration > 0 && user.accountRegistration < 4) {
     user.accountRegistration = 0;
     await AppDataSource.getRepository(User).save(user);
@@ -91,5 +109,5 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     });
   }
   delete user.passwordHash;
-  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken });
+  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken, hasStudentLinked: hasStudentLinked, featureFlags: user.featureFlags });
 }

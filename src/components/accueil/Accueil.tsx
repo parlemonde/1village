@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
+import { LinkChild } from './LinkChild';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
@@ -18,14 +19,24 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const isMediator = user !== null && user.type >= UserType.MEDIATOR;
-  const filterCountries = React.useMemo(
-    () =>
-      !village || (selectedPhase === 1 && !isMediator) ? (user ? [user.country.isoCode.toUpperCase()] : []) : village.countries.map((c) => c.isoCode),
-    [selectedPhase, village, user, isMediator],
-  );
+  const isMediator = user && user.type <= UserType.MEDIATOR;
+
+  //TODO: redo conditions and switchs
+  const filterCountries = React.useMemo(() => {
+    //const
+    return !village || (selectedPhase === 1 && !isMediator)
+      ? user && user.country !== null
+        ? [user?.country?.isoCode.toUpperCase()]
+        : []
+      : village.countries.map((c) => c.isoCode);
+  }, [selectedPhase, village, user, isMediator]);
+
+  //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts
+
+  //TODO: may be filterCountries should be with country form student > teacher
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
+    selectedPhase: 0,
     types: 'all',
     status: 0,
     countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
@@ -35,7 +46,6 @@ export const Accueil = () => {
     pelico: true,
     searchTerm: '',
   });
-
   const { activities } = useActivities({
     limit: 200,
     page: 0,
@@ -44,7 +54,6 @@ export const Accueil = () => {
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
   });
-
   // on selected phase change, select all activities.
   React.useEffect(() => {
     setFilters((prevFilters) => ({
@@ -66,13 +75,17 @@ export const Accueil = () => {
     }
   }, [activities, filters.searchTerm]);
 
-  if (!village) {
-    return <Base showSubHeader></Base>;
+  if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {
+    return (
+      <Base>
+        <LinkChild />
+      </Base>
+    );
   }
 
   return (
     <Base showSubHeader>
-      {selectedPhase <= village.activePhase ? (
+      {village && selectedPhase <= village.activePhase ? (
         <>
           <KeepRatio ratio={1 / 3}>
             <WorldMap />
@@ -91,7 +104,7 @@ export const Accueil = () => {
           </h1>
           <PelicoReflechit style={{ width: '50%', height: 'auto', maxWidth: '360px' }} />
           <Button
-            onClick={() => setSelectedPhase(village.activePhase)}
+            onClick={() => village && setSelectedPhase(village.activePhase)}
             color="primary"
             variant="outlined"
             className="navigation__button"

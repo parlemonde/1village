@@ -15,6 +15,9 @@ export const ZOOM_DELTA = 20;
 
 export const PELICO_USER: User = {
   accountRegistration: 0,
+  firstname: '',
+  lastname: '',
+  language: 'FR',
   address: '',
   avatar: '/static-images/pelico-avatar.jpg',
   city: '',
@@ -37,4 +40,7 @@ export const PELICO_USER: User = {
   type: UserType.ADMIN, // pelico
   villageId: 0,
   village: null,
+  hasAcceptedNewsletter: false,
+  hasStudentLinked: false,
+  featureFlags: [],
 };
