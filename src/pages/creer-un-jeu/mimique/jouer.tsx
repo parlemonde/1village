@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useCallback, useMemo, useContext, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
