@@ -20,9 +20,10 @@ export type Args = {
   status?: number;
   phase?: number;
   responseActivityId?: number;
+  selectedStudent?: Student;
 };
 
-export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args) => {
+export const useActivities = ({ pelico, countries = [], userId, selectedStudent, type, ...args }: Args) => {
   const { village } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
 
@@ -48,6 +49,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     const visibilityFamily = (await getVisibilityFamilyParams()) as [UserParamClassroom];
     const data = visibilityFamily[0];
     const familyConditions = user.type === UserType.FAMILY && visibilityFamily.length > 0;
+    const selectedStudentId = userId !== undefined ? userId : selectedStudent ? selectedStudent.id : undefined;
     const query: {
       [key: string]: string | number | boolean | undefined;
     } = {
@@ -59,10 +61,11 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       delayedDays: familyConditions ? data.classroom_delayedDays : undefined,
       hasVisibilitySetToClass: familyConditions ? (data.classroom_hasVisibilitySetToClass === 1 ? true : false) : undefined,
       teacherId: familyConditions ? data.classroom_userId : undefined,
+      userId: selectedStudentId,
     };
-    if (userId !== undefined) {
-      query.userId = userId;
-    }
+    // if (userId !== undefined) {
+    //   query.userId = userId;
+    // }
     const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl(query)}`,
@@ -70,8 +73,9 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (response.error) {
       return [];
     }
+
     return response.data;
-  }, [user, getVisibilityFamilyParams, args, type, villageId, countries, pelico, userId]);
+  }, [user, getVisibilityFamilyParams, args, type, villageId, countries, pelico, userId, selectedStudent]);
 
   const { data, isLoading, error, refetch } = useQuery<Activity[], unknown>(
     ['activities', { ...args, type, userId, countries, pelico, villageId }],
@@ -86,7 +90,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
   }, [data]);
 
   const activities = error ? [] : isLoading ? prevData.current : data || [];
-
+  // console.log(selectedStudentId);
   return {
     activities,
     isLoading,

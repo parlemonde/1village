@@ -12,12 +12,14 @@ import React, { useState } from 'react';
 
 import AccessControl from './AccessControl';
 import { Modal } from 'src/components/Modal';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import type { Student } from 'types/student.type';
 import { UserType } from 'types/user.type';
+// import { useActivities } from ''
 
 export const Header = () => {
   const router = useRouter();
@@ -58,7 +60,6 @@ export const Header = () => {
     const fetchLinkedStudents = async () => {
       const students = await userContext.getLinkedStudentsToUser(userContext.user?.id || 0);
       setLinkedStudents(students);
-      console.log(linkedStudents);
     };
 
     fetchLinkedStudents();
