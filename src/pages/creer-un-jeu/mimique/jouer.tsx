@@ -39,6 +39,7 @@ function shuffleArray(array: Array<number>) {
   return array;
 }
 
+/* partie à déplacer et à centraliser avec les prochains jeux*/
 type AlreadyPlayerModalProps = {
   isOpen: boolean;
 };
@@ -46,7 +47,37 @@ type AlreadyPlayerModalProps = {
 enum RadioBoxValues {
   NEW = 'Nouvelle',
   RANDOM = 'Aléatoire',
+  MOSAIC = 'Mosaïque',
 }
+
+type RadioNextGameProps = {
+  value: RadioBoxValues;
+  Icon: any;
+  onChange: (event: React.SyntheticEvent) => void;
+  checked: boolean;
+};
+
+const radioListComponentMapper = {
+  [RadioBoxValues.NEW]: AccessTimeIcon,
+  [RadioBoxValues.RANDOM]: ShuffleIcon,
+  [RadioBoxValues.MOSAIC]: AppsIcon,
+};
+
+const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
+  <FormControlLabel
+    sx={{ ml: 1 }}
+    value={value}
+    control={<Radio sx={{ py: 0 }} />}
+    label={
+      <>
+        <Icon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> {value}
+      </>
+    }
+    labelPlacement="end"
+    checked={checked}
+    onChange={onChange}
+  />
+);
 
 const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
   const router = useRouter();
@@ -67,8 +98,10 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
     </Modal>
   );
 };
+/* FIN partie à déplacer et à centraliser avec les prochains jeux*/
 
-const PlayMimique = () => {
+
+const PlayMimic = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
@@ -78,7 +111,7 @@ const PlayMimique = () => {
   const [tryCount, setTryCount] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
-  const [isLastMimiqueModalOpen, setIsLastMimiqueModalOpen] = useState<boolean>(false);
+  const [isLastMimicModalOpen, setIsLastMimicModalOpen] = useState<boolean>(false);
   const [loadingGame, setLoadingGame] = useState<boolean>(true);
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
@@ -101,13 +134,17 @@ const PlayMimique = () => {
       [RadioBoxValues.RANDOM]: async () => {
         return await getRandomGame(GameType.MIMIC);
       },
+      [RadioBoxValues.MOSAIC]: () => {
+        console.error('Not implemented yet');
+        return undefined;
+      },
     };
 
     const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
 
     setGame(nextGame);
     if (isLastGame) {
-      setIsLastMimiqueModalOpen(isLastGame);
+      setIsLastMimicModalOpen(isLastGame);
     }
 
     setLoadingGame(false);
@@ -208,7 +245,7 @@ const PlayMimique = () => {
   if (!game || !gameCreator) {
     return (
       <Base>
-        <AlreadyPlayerModal isOpen={isLastMimiqueModalOpen} />
+        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} />
       </Base>
     );
   }
@@ -255,44 +292,17 @@ const PlayMimique = () => {
             </Grid>
             <Grid item xs={6} display="flex" justifyContent="center">
               <RadioGroup row defaultValue={RadioBoxValues.NEW}>
-                <FormControlLabel
-                  sx={{ ml: 1 }}
-                  value={RadioBoxValues.NEW}
-                  control={<Radio sx={{ py: 0 }} />}
-                  label={
-                    <>
-                      <AccessTimeIcon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> {RadioBoxValues.NEW}
-                    </>
-                  }
-                  labelPlacement="end"
-                  checked={selectedValue === RadioBoxValues.NEW}
-                  onChange={handleRadioButtonChange}
-                />
-                <FormControlLabel
-                  sx={{ ml: 1 }}
-                  value={RadioBoxValues.RANDOM}
-                  control={<Radio sx={{ py: 0 }} />}
-                  label={
-                    <>
-                      <ShuffleIcon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> {RadioBoxValues.RANDOM}
-                    </>
-                  }
-                  labelPlacement="end"
-                  checked={selectedValue === RadioBoxValues.RANDOM}
-                  onChange={handleRadioButtonChange}
-                />
-                <FormControlLabel
-                  sx={{ ml: 1 }}
-                  value="mosaique"
-                  control={<Radio sx={{ py: 0 }} />}
-                  label={
-                    <>
-                      <AppsIcon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> Mosaïque
-                    </>
-                  }
-                  labelPlacement="end"
-                  onChange={handleRadioButtonChange}
-                />
+                {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
+                  return (
+                    <RadioNextGame
+                      key={index}
+                      value={value as RadioBoxValues}
+                      Icon={radioListComponentMapper[value as RadioBoxValues]}
+                      onChange={handleRadioButtonChange}
+                      checked={selectedValue === value}
+                    />
+                  );
+                })}
               </RadioGroup>
             </Grid>
             <Grid item xs={3} display="flex" justifyContent="flex-end">
@@ -386,7 +396,7 @@ const PlayMimique = () => {
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayerModal isOpen={isLastMimiqueModalOpen} />
+        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} />
         <div>
           {(found || tryCount > 1) && (
             <div>
@@ -421,4 +431,4 @@ const PlayMimique = () => {
   );
 };
 
-export default PlayMimique;
+export default PlayMimic;
