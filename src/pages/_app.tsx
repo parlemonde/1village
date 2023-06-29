@@ -22,7 +22,7 @@ import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import CssBaseline from '@mui/material/CssBaseline';

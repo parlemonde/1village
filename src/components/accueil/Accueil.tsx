@@ -10,7 +10,6 @@ import { WorldMap } from 'src/components/WorldMap';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
 import { Activities } from 'src/components/activities/List';
-import { FeatureFlagContext } from 'src/contexts/featureFlagContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
@@ -20,11 +19,8 @@ import { UserType } from 'types/user.type';
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
-  const { featureFlag } = React.useContext(FeatureFlagContext);
   const isMediator = user && user.type <= UserType.MEDIATOR;
 
-  console.log(user);
-  console.log('feature flag : ', featureFlag);
   //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(() => {
     //const
