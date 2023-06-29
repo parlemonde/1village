@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useContext } from 'react';
 
+import { FeatureFlagContext } from 'src/contexts/featureFlagContext';
 import { UserContext } from 'src/contexts/userContext';
 import type { FeatureFlagsNames } from 'types/featureFlag.constant';
-import type { User } from 'types/user.type';
+import type { FeatureFlag } from 'types/featureFlag.type';
 
 interface AccessControlProps {
   featureName: FeatureFlagsNames;
@@ -11,10 +12,10 @@ interface AccessControlProps {
   redirectToWIP?: boolean;
 }
 
-const hasFeatureFlag = (user: User | null, featureName: FeatureFlagsNames): boolean => {
-  if (!user) return false;
+const hasFeatureFlag = (featureFlags: FeatureFlag[] | null, featureName: FeatureFlagsNames): boolean => {
+  if (!featureFlags) return false;
 
-  const featureFlag = user.featureFlags.find((flag) => flag.name === featureName);
+  const featureFlag = featureFlags.find((flag) => flag.name === featureName);
 
   if (featureFlag && featureFlag.isEnabled) {
     return true;
@@ -25,6 +26,7 @@ const hasFeatureFlag = (user: User | null, featureName: FeatureFlagsNames): bool
 
 const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, redirectToWIP = false }) => {
   const { user } = useContext(UserContext);
+  const { featureFlag } = useContext(FeatureFlagContext);
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
   const router = useRouter();
@@ -37,7 +39,7 @@ const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, re
       }
 
       try {
-        const hasAccessToFeature = hasFeatureFlag(user, featureName);
+        const hasAccessToFeature = hasFeatureFlag(featureFlag, featureName);
         setHasAccess(hasAccessToFeature);
       } catch (error) {
         console.error('Error checking feature flag access:', error);
@@ -47,7 +49,7 @@ const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, re
     };
 
     checkAccess();
-  }, [user, featureName]);
+  }, [user, featureName, featureFlag]);
 
   useEffect(() => {
     if (!loading && !hasAccess && redirectToWIP) {

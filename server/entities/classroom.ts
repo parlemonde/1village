@@ -40,10 +40,10 @@ export class Classroom {
   @JoinColumn({ name: 'userId' })
   public user: User;
 
-  @ManyToOne(() => Village, (village: Village) => village.classrooms)
+  @ManyToOne(() => Village, (village: Village) => village.classrooms, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
   public village: Village;
 
-  @OneToMany(() => Student, (student: Student) => student.classroom)
+  @OneToMany(() => Student, (student: Student) => student.classroom, { onDelete: 'CASCADE' })
   public students: Student[];
 }
