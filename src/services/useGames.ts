@@ -52,7 +52,7 @@ export const useGameRequests = () => {
   const getAllGamesByType = React.useCallback(
     async (type: GameType) => {
       if (!village) {
-        return [];
+        return [] as Array<Game>;
       }
       const response = await axiosRequest({
         method: 'GET',
@@ -62,7 +62,7 @@ export const useGameRequests = () => {
         })}`,
       });
       if (response.error) {
-        return [];
+        return [] as Array<Game>;
       }
       return response.data as Array<Game>;
     },
@@ -95,37 +95,6 @@ export const useGameRequests = () => {
         return 0;
       }
       return response.data.count as number;
-    },
-    [village],
-  );
-
-  /**
-   * Return of the last added game
-   *
-   * @param type - type of game
-   * @param villageId - id of village
-   *
-   * @returns Game
-   *
-   */
-
-  const getLastGame = React.useCallback(
-    async (type: GameType) => {
-      if (!village) {
-        return undefined;
-      }
-      const response = await axiosRequest({
-        method: 'GET',
-        url: `/games/latest${serializeToQueryUrl({
-          villageId: village.id,
-          type,
-        })}`,
-      });
-
-      if (response.error) {
-        return undefined;
-      }
-      return response.data as Game;
     },
     [village],
   );
@@ -203,5 +172,5 @@ export const useGameRequests = () => {
     return response.data as GameResponse[];
   }, []);
 
-  return { getUserCreatedGamesCount, getAllGamesByType, getAvailableGamesCount, getLastGame, getRandomGame, sendNewGameResponse, getGameStats };
+  return { getUserCreatedGamesCount, getAllGamesByType, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
 };

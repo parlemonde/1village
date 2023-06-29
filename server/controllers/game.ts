@@ -39,7 +39,7 @@ const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: Game
   }
 
   const games = await subQueryBuilder
-    .orderBy()
+    .orderBy('game.createDate', 'DESC')
     .limit(limit)
     .offset(page * limit)
     .getMany();
@@ -132,7 +132,7 @@ gameController.get({ path: '/latest', userType: UserType.TEACHER }, async (req: 
     .where('game.villageId = :villageId', { villageId: villageId })
     .andWhere('game.type = :type', { type: type })
     .orderBy('game.createDate', 'DESC')
-    .getOne();
+    .getMany();
 
   if (!latestGame) {
     next();
