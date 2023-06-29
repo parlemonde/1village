@@ -83,12 +83,6 @@ const PlayMimique = () => {
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
 
-  // Update gameRef whenever game changes
-  const gameRef = useRef(game);
-  useEffect(() => {
-    gameRef.current = game;
-  }, [game]);
-
   const getNextGame = useCallback(async () => {
     setLoadingGame(true);
 
@@ -112,7 +106,9 @@ const PlayMimique = () => {
     const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
 
     setGame(nextGame);
-    setIsLastMimiqueModalOpen(isLastGame);
+    if (isLastGame) {
+      setIsLastMimiqueModalOpen(isLastGame);
+    }
 
     setLoadingGame(false);
   }, [getRandomGame, selectedValue, game, getAllGamesByType]);
@@ -282,6 +278,7 @@ const PlayMimique = () => {
                     </>
                   }
                   labelPlacement="end"
+                  checked={selectedValue === RadioBoxValues.RANDOM}
                   onChange={handleRadioButtonChange}
                 />
                 <FormControlLabel
