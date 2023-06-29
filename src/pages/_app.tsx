@@ -22,7 +22,7 @@ import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -34,6 +34,7 @@ import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
+import { FeatureFlagProvider } from 'src/contexts/featureFlagContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
@@ -69,8 +70,7 @@ NProgress.configure({ showSpinner: false });
 const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
-  const [user, setUser] = React.useState<User | null>(initialUser || null);
-
+  const [user, setUser] = useState<User | null>(initialUser || null);
   const onRouterChangeStart = (): void => {
     NProgress.start();
   };
@@ -131,38 +131,40 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
         >
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser}>
-              <VillageContextProvider initialVillage={initialVillage}>
-                <ClassroomContextProvider>
-                  <ActivityContextProvider>
-                    {isOnAdmin ? (
-                      <div>
-                        <AdminHeader />
-                        <div style={{ display: 'flex', width: '100%' }}>
-                          <AdminNavigation />
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <Component {...pageProps} />
+              <FeatureFlagProvider>
+                <VillageContextProvider initialVillage={initialVillage}>
+                  <ClassroomContextProvider>
+                    <ActivityContextProvider>
+                      {isOnAdmin ? (
+                        <div>
+                          <AdminHeader />
+                          <div style={{ display: 'flex', width: '100%' }}>
+                            <AdminNavigation />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Component {...pageProps} />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : user !== null &&
-                      router.pathname !== '/inscription' &&
-                      router.pathname !== '/connexion' &&
-                      router.pathname !== '/login' &&
-                      router.pathname !== '/user-verified' &&
-                      router.pathname !== '/reset-password' &&
-                      router.pathname !== '/update-password' &&
-                      router.pathname !== '/404' ? (
-                      <div className="app-container">
-                        <Header />
+                      ) : user !== null &&
+                        router.pathname !== '/inscription' &&
+                        router.pathname !== '/connexion' &&
+                        router.pathname !== '/login' &&
+                        router.pathname !== '/user-verified' &&
+                        router.pathname !== '/reset-password' &&
+                        router.pathname !== '/update-password' &&
+                        router.pathname !== '/404' ? (
+                        <div className="app-container">
+                          <Header />
+                          <Component {...pageProps} />
+                          <WelcomeModal />
+                        </div>
+                      ) : (
                         <Component {...pageProps} />
-                        <WelcomeModal />
-                      </div>
-                    ) : (
-                      <Component {...pageProps} />
-                    )}
-                  </ActivityContextProvider>
-                </ClassroomContextProvider>
-              </VillageContextProvider>
+                      )}
+                    </ActivityContextProvider>
+                  </ClassroomContextProvider>
+                </VillageContextProvider>
+              </FeatureFlagProvider>
             </UserContextProvider>
           </QueryClientProvider>
         </SnackbarProvider>
