@@ -208,7 +208,6 @@ const ClassroomParamStep1 = () => {
         break;
     }
   };
-
   const handleSelectionVisibility = (key: string) => {
     let newState: StateType;
     switch (key) {
@@ -228,6 +227,7 @@ const ClassroomParamStep1 = () => {
         newState = state.default;
         break;
     }
+    console.log('New State:', newState);
     updateClassroomParameters(newState);
     if (activities) {
       const isVisibleToParent = newState.hasVisibilitySetToClass || key === 'default';
@@ -247,7 +247,6 @@ const ClassroomParamStep1 = () => {
       return { ...prevState, ...newState };
     });
   };
-
   // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
 
   const handleActivityVisibility = (id: number) => {

@@ -154,7 +154,11 @@ export const Header = () => {
               <>
                 <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
                   <span className="text text--small" style={{ margin: '0 0.6rem' }}>
-                    {selectedStudent ? `${selectedStudent.firstname} ${selectedStudent.lastname}` : ''}
+                    {selectedStudent
+                      ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
+                      : linkedStudents.length > 0
+                      ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
+                      : 'Eleve non selectionne'}
                   </span>
                   <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectStudentModal}>
                     {linkedStudents?.length > 0 ? 'Changer' : 'Choisir un élève'}
@@ -168,12 +172,11 @@ export const Header = () => {
                   title="Sélectionnes un élève"
                   fullWidth
                   maxWidth="sm"
-                  ariaLabelledBy={''}
-                  ariaDescribedBy={''}
+                  ariaLabelledBy={'select-student'}
+                  ariaDescribedBy={'select-student-desc'}
                   cancelLabel="Annuler"
                 >
                   <div className="modal__content">
-                    <h2 className="modal__title">Sélectionnes un élève</h2>
                     {(linkedStudents || []).length === 0 ? (
                       <p>Aucun élève n est lié à votre compte !</p>
                     ) : (
@@ -182,11 +185,7 @@ export const Header = () => {
                         <Select
                           labelId="select-student"
                           id="select-student-outlined"
-                          value={
-                            selectedStudentIndex === -1 && linkedStudents.length > 1
-                              ? linkedStudents[0]?.id
-                              : linkedStudents[selectedStudentIndex]?.id || ''
-                          }
+                          value={selectedStudentIndex === -1 ? '' : selectedStudentIndex}
                           onChange={(event) => {
                             setSelectedStudentIndex(event.target.value as number);
                           }}

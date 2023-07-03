@@ -154,7 +154,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [user],
   );
-
   /**
    * Add new students in the classrom
    */

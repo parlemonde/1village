@@ -62,11 +62,11 @@ export const useActivities = ({ pelico, countries = [], userId, selectedStudent,
       delayedDays: familyConditions ? data?.classroom_delayedDays : undefined,
       hasVisibilitySetToClass: familyConditions ? (data?.classroom_hasVisibilitySetToClass === 1 ? true : false) : undefined,
       teacherId: familyConditions ? data?.classroom_userId : undefined,
-      userId: selectedStudentId,
     };
-    // if (userId !== undefined) {
-    //   query.userId = userId;
-    // }
+    if (userId !== undefined) {
+      query.userId = userId;
+    }
+    console.log('query', query);
     const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl(query)}`,
@@ -91,7 +91,7 @@ export const useActivities = ({ pelico, countries = [], userId, selectedStudent,
   }, [data]);
 
   const activities = error ? [] : isLoading ? prevData.current : data || [];
-  // console.log('selectedStudent', selectedStudent);
+
   return {
     activities,
     isLoading,
