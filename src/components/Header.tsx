@@ -15,11 +15,11 @@ import { Modal } from 'src/components/Modal';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useActivities } from 'src/services/useActivities';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import type { Student } from 'types/student.type';
 import { UserType } from 'types/user.type';
-// import { useActivities } from ''
 
 export const Header = () => {
   const router = useRouter();
@@ -73,11 +73,13 @@ export const Header = () => {
 
   const onSelectStudent = async () => {
     setIsModalOpen(false);
-    setSelectedStudent(linkedStudents[selectedStudentIndex]);
+    setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
   };
   const showSelectStudentModal = () => {
     setIsModalOpen(true);
   };
+  const { activities } = useActivities({ selectedStudent });
+  // console.log('selectedStudent', selectedStudent);
   return (
     <header>
       <div className="header__container with-shadow">
@@ -180,15 +182,19 @@ export const Header = () => {
                         <Select
                           labelId="select-student"
                           id="select-student-outlined"
-                          value={selectedStudentIndex === -1 ? linkedStudents[0]?.id || '' : selectedStudentIndex}
+                          value={
+                            selectedStudentIndex === -1 && linkedStudents.length > 1
+                              ? linkedStudents[0]?.id
+                              : linkedStudents[selectedStudentIndex]?.id || ''
+                          }
                           onChange={(event) => {
                             setSelectedStudentIndex(event.target.value as number);
                           }}
                           label="StudentLinked"
                         >
-                          {(linkedStudents || []).map((selectedStudent, index) => (
-                            <MenuItem value={index} key={selectedStudent.id}>
-                              {selectedStudent.firstname} {selectedStudent.lastname}
+                          {(linkedStudents || []).map((student, index) => (
+                            <MenuItem value={index} key={student.id}>
+                              {student.firstname} {student.lastname}
                             </MenuItem>
                           ))}
                         </Select>
