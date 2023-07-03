@@ -100,7 +100,6 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
 };
 /* FIN partie à déplacer et à centraliser avec les prochains jeux*/
 
-
 const PlayMimic = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
