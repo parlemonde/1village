@@ -1,21 +1,23 @@
 // import SearchIcon from '@mui/icons-material/Search';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button, FormControl, InputLabel, Select } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
 
 import AccessControl from './AccessControl';
+import { getClassroomOfStudent } from 'src/api/student/student.get';
+import { updateUser } from 'src/api/user/user.put';
 import { Modal } from 'src/components/Modal';
-import { ActivityContext } from 'src/contexts/activityContext';
+import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useActivities } from 'src/services/useActivities';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import type { Student } from 'types/student.type';
@@ -23,10 +25,10 @@ import { UserType } from 'types/user.type';
 
 export const Header = () => {
   const router = useRouter();
-  const { user, logout } = React.useContext(UserContext);
+  const { user, logout, setUser, selectedStudent, setSelectedStudent } = React.useContext(UserContext);
+  const { classroom } = React.useContext(ClassroomContext);
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
   // const { students, showSelectStudentModal } = React.useContext(UserContext);
-  const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -56,6 +58,7 @@ export const Header = () => {
   const userContext = React.useContext(UserContext);
   const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
   const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
+
   React.useEffect(() => {
     const fetchLinkedStudents = async () => {
       const students = await userContext.getLinkedStudentsToUser(userContext.user?.id || 0);
@@ -74,12 +77,27 @@ export const Header = () => {
   const onSelectStudent = async () => {
     setIsModalOpen(false);
     setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
+    if (user) {
+      try {
+        console.log('dans le try');
+        const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
+        console.log('classroomOfStudent', classroomOfStudent);
+        await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
+        console.log(classroom);
+        setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+
+        // updateUser(user?.id, {country:  });
+      } catch (err) {}
+    }
   };
   const showSelectStudentModal = () => {
     setIsModalOpen(true);
   };
-  const { activities } = useActivities({ selectedStudent });
-  // console.log('selectedStudent', selectedStudent);
+
+  React.useEffect(() => {
+    console.log('selectedStudent', selectedStudent);
+  }, [selectedStudent]);
+
   return (
     <header>
       <div className="header__container with-shadow">

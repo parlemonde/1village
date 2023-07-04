@@ -18,7 +18,7 @@ import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
-  const { user } = React.useContext(UserContext);
+  const { user, selectedStudent } = React.useContext(UserContext);
   const isMediator = user && user.type <= UserType.MEDIATOR;
 
   //TODO: redo conditions and switchs
@@ -53,6 +53,7 @@ export const Accueil = () => {
     pelico: filters.pelico,
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
+    selectedStudent: selectedStudent,
   });
   // on selected phase change, select all activities.
   React.useEffect(() => {
@@ -62,6 +63,8 @@ export const Accueil = () => {
       types: 'all',
     }));
   }, [selectedPhase]);
+
+  console.log('ACCUEIL SELECTED STUDENT === ', selectedStudent);
 
   //Preload of the activities filtered only one mimic
   const activitiesFiltered = React.useMemo(() => {

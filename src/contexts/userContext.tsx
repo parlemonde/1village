@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
 import type { User, UserForm } from 'types/user.type';
@@ -59,7 +58,7 @@ interface UserContextProviderProps {
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
   const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(null);
-  console.log('selectedStudent', selectedStudent);
+
   // const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
 
   React.useEffect(() => {

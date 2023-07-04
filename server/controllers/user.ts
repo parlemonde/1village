@@ -837,4 +837,17 @@ userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, as
   res.json(visibilityParams);
 });
 
+userController.get({ path: '/get-student-vp', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+  const visibilityParams = await AppDataSource.getRepository(UserToStudent)
+    .createQueryBuilder('userStudent')
+    .innerJoinAndSelect('userStudent.student', 'student')
+    .innerJoinAndSelect('student.classroom', 'classroom')
+    .where('userStudent.user = :familyId', { familyId: req.user.id })
+    .getRawMany(); //* Here it's getRawMany because for some reason we lost 2 attributes otherwise classroom.userId and classroom.villageId
+  res.json(visibilityParams);
+});
+
 export { userController };
