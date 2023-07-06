@@ -38,7 +38,7 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
                 key={response.id}
                 container
                 direction="row"
-                style={{ padding: '0.5rem', paddingBottom: '1rem', marginBottom: '2rem' }}
+                style={{ padding: '0.5rem', paddingLeft: '0', paddingBottom: '1rem', marginBottom: '2rem', justifyContent: 'center' }}
               >
                 <AvatarImg user={response.user} style={{ width: '24px', height: '24px' }} />
               </Grid>

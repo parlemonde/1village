@@ -52,7 +52,7 @@ const MimiqueStep4 = () => {
     setIsLoading(true);
     const { success } = await save(true);
     if (success) {
-      router.push('/creer-un-jeu/success');
+      router.push('/creer-un-jeu/mimique/success');
     }
     setIsLoading(false);
   };
