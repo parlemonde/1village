@@ -48,15 +48,15 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
 
     const students = await getLinkedStudentsToUser(user?.id || 0);
 
-    console.log('useQuery students', students);
+    // console.log('useQuery students', students);
 
     const visibilityFamily = (await getVisibilityFamilyParams()) as [UserParamClassroom];
 
-    console.log('selectedStudent (useActivity)', selectedStudent);
+    // console.log('selectedStudent (useActivity)', selectedStudent);
 
     const classroomData = visibilityFamily.find((classroom) => classroom.userStudent_studentId === selectedStudent?.id);
 
-    console.log('data', classroomData);
+    // console.log('data', classroomData);
     const familyConditions = user.type === UserType.FAMILY && visibilityFamily.length > 0;
 
     const query: {
@@ -74,11 +74,11 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (userId !== undefined) {
       query.userId = userId;
     }
-    console.log('user', user);
-    console.log('query', query);
-    console.log('visibilityFamily', visibilityFamily);
-    console.log('data1', classroomData);
-    console.log('students', students);
+    // console.log('user', user);
+    // console.log('query', query);
+    // console.log('visibilityFamily', visibilityFamily);
+    // console.log('data1', classroomData);
+    // console.log('students', students);
 
     const response = await axiosRequest({
       method: 'GET',

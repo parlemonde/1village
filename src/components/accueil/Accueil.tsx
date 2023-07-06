@@ -64,7 +64,7 @@ export const Accueil = () => {
     }));
   }, [selectedPhase]);
 
-  console.log('ACCUEIL SELECTED STUDENT === ', selectedStudent);
+  // console.log('ACCUEIL SELECTED STUDENT === ', selectedStudent);
 
   //Preload of the activities filtered only one mimic
   const activitiesFiltered = React.useMemo(() => {

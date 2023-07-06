@@ -1,15 +1,14 @@
 // import SearchIcon from '@mui/icons-material/Search';
 
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button, FormControl, InputLabel, Select } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import AccessControl from './AccessControl';
 import { getClassroomOfStudent } from 'src/api/student/student.get';
@@ -79,15 +78,15 @@ export const Header = () => {
     setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
     if (user) {
       try {
-        console.log('dans le try');
+        // console.log('dans le try');
         const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
-        console.log('classroomOfStudent', classroomOfStudent);
+        // console.log('classroomOfStudent', classroomOfStudent);
         await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
-        console.log(classroom);
+        // console.log(classroom);
         setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
         // updateUser(user?.id, {country:  });
-      } catch (err) {}
+      } catch (err) { }
     }
   };
   const showSelectStudentModal = () => {
@@ -95,9 +94,17 @@ export const Header = () => {
   };
 
   React.useEffect(() => {
-    console.log('selectedStudent', selectedStudent);
-  }, [selectedStudent]);
-
+    if (selectedStudentIndex !== -1) {
+      setSelectedStudent(selectedStudentIndex);
+    }
+    const savedSelectedStudent = localStorage.getItem('selectedStudentIndex');
+    if (savedSelectedStudent) {
+      setSelectedStudentIndex(JSON.parse(savedSelectedStudent));
+    }
+    console.log('selectedStudent setItem', localStorage);
+    localStorage.setItem('selectedStudentItem', JSON.stringify(selectedStudentIndex));
+    console.log('selectedStudent getItem', localStorage);
+  }, []);
   return (
     <header>
       <div className="header__container with-shadow">
@@ -175,8 +182,8 @@ export const Header = () => {
                     {selectedStudent
                       ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
                       : linkedStudents.length > 0
-                      ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
-                      : 'Eleve non selectionne'}
+                        ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
+                        : 'Eleve non selectionne'}
                   </span>
                   <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectStudentModal}>
                     {linkedStudents?.length > 0 ? 'Changer' : 'Choisir un élève'}
