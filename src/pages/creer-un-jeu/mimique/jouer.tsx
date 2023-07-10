@@ -27,6 +27,7 @@ import type { Game, MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -52,7 +53,9 @@ enum RadioBoxValues {
 
 type RadioNextGameProps = {
   value: RadioBoxValues;
-  Icon: any;
+  Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
+    muiName: string;
+  };
   onChange: (event: React.SyntheticEvent) => void;
   checked: boolean;
 };
