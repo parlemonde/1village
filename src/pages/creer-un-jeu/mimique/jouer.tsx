@@ -5,7 +5,9 @@ import React, { useState, useCallback, useMemo, useContext, useEffect } from 're
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
+import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -27,7 +29,6 @@ import type { Game, MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 function shuffleArray(array: Array<number>) {
   let i = array.length - 1;
@@ -53,7 +54,7 @@ enum RadioBoxValues {
 
 type RadioNextGameProps = {
   value: RadioBoxValues;
-  Icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
+  Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
     muiName: string;
   };
   onChange: (event: React.SyntheticEvent) => void;
