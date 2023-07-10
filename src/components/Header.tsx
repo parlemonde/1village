@@ -64,19 +64,69 @@ export const Header = () => {
       setLinkedStudents(students);
     };
 
-    fetchLinkedStudents();
-  }, [userContext]);
+    const fetchClassroomOfStudent = async () => {
+      if (linkedStudents.length > 0 && user) {
+        try {
+          const classroomOfStudent = await getClassroomOfStudent(linkedStudents[0].id);
+          await updateUser(user.id, { countryCode: classroomOfStudent?.country?.isoCode });
+          setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+          setSelectedStudent(linkedStudents[0]);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
 
-  React.useEffect(() => {
-    if (linkedStudents.length > 0) {
-      setSelectedStudentIndex(0);
-    }
-  }, [linkedStudents]);
+    fetchLinkedStudents();
+    fetchClassroomOfStudent();
+    // const onSelectStudent = async () => {
+    //   setIsModalOpen(false);
+    //   setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
+    //   if (user) {
+    //     try {
+    //       // console.log('dans le try');
+    //       const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
+    //       // console.log('classroomOfStudent', classroomOfStudent);
+    //       await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
+    //       // console.log(classroom);
+    //       setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+
+    //       // updateUser(user?.id, {country:  });
+    //     } catch (err) { }
+    //   }
+    // };
+    // if (linkedStudents.length > 0) {
+    //   onSelectStudent();
+    // }
+  }, [userContext, user, linkedStudents, setUser, setSelectedStudent]);
+
+  // const fetchClassroomOfStudent = async () => {
+  //   if (selectedStudentIndex && user) {
+  //     try {
+  //       const classroomOfStudent = await getClassroomOfStudent(selectedStudentIndex.id);
+  //       await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
+  //       setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  // };
+
+  // React.useEffect(() => {
+  //   fetchClassroomOfStudent();
+  // }, []);
+  // React.useEffect(() => {
+  //   if (linkedStudents.length > 0 || selectedStudent === null) {
+  //     setSelectedStudentIndex(0);
+  //   }
+  // }, [linkedStudents, selectedStudent]);
+
+  console.log('selectedStudent:', selectedStudent);
 
   const onSelectStudent = async () => {
     setIsModalOpen(false);
     setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
-    if (user) {
+    if (user && linkedStudents[selectedStudentIndex]) {
       try {
         // console.log('dans le try');
         const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
@@ -86,25 +136,27 @@ export const Header = () => {
         setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
         // updateUser(user?.id, {country:  });
-      } catch (err) { }
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
   const showSelectStudentModal = () => {
     setIsModalOpen(true);
   };
 
-  React.useEffect(() => {
-    if (selectedStudentIndex !== -1) {
-      setSelectedStudent(selectedStudentIndex);
-    }
-    const savedSelectedStudent = localStorage.getItem('selectedStudentIndex');
-    if (savedSelectedStudent) {
-      setSelectedStudentIndex(JSON.parse(savedSelectedStudent));
-    }
-    console.log('selectedStudent setItem', localStorage);
-    localStorage.setItem('selectedStudentItem', JSON.stringify(selectedStudentIndex));
-    console.log('selectedStudent getItem', localStorage);
-  }, []);
+  // React.useEffect(() => {
+  //   if (selectedStudentIndex !== -1) {
+  //     setSelectedStudent(selectedStudentIndex);
+  //   }
+  //   const savedSelectedStudent = localStorage.getItem('selectedStudentIndex');
+  //   if (savedSelectedStudent) {
+  //     setSelectedStudentIndex(JSON.parse(savedSelectedStudent));
+  //   }
+  //   console.log('selectedStudent setItem', localStorage);
+  //   localStorage.setItem('selectedStudentItem', JSON.stringify(selectedStudentIndex));
+  //   console.log('selectedStudent getItem', localStorage);
+  // }, []);
   return (
     <header>
       <div className="header__container with-shadow">
@@ -216,8 +268,8 @@ export const Header = () => {
                           }}
                           label="StudentLinked"
                         >
-                          {(linkedStudents || []).map((student, index) => (
-                            <MenuItem value={index} key={student.id}>
+                          {(linkedStudents || []).map((student) => (
+                            <MenuItem value={student.id} key={student.id}>
                               {student.firstname} {student.lastname}
                             </MenuItem>
                           ))}
