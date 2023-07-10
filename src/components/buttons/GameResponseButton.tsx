@@ -38,7 +38,16 @@ const ResponseButton = ({
     <Button
       size="large"
       fullWidth
-      sx={{ justifyContent: 'space-between', backgroundColor: 'bgPage', height: '60px', boxShadow: 'none' }}
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        backgroundColor: 'bgPage',
+        minHeight: '60px',
+        height: 'auto',
+        boxShadow: 'none',
+        maxWidth: '350px',
+        margin: '0 auto',
+      }}
       disabled={!hasBeenSelected && disabled}
       variant="contained"
       color={hasBeenSelected ? color : 'inherit'}

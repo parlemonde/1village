@@ -410,18 +410,6 @@ const PlayMimic = () => {
                   {"Ou revenir à l'accueil"}
                 </Link>
               </p>
-              <Button
-                style={{
-                  float: 'right',
-                }}
-                variant="outlined"
-                color="primary"
-                onClick={() => {
-                  getNextGame();
-                }}
-              >
-                Rejouer
-              </Button>
             </div>
           )}
         </div>
