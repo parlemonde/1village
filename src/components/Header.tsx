@@ -60,25 +60,13 @@ export const Header = () => {
 
   React.useEffect(() => {
     const fetchLinkedStudents = async () => {
-      const students = await userContext.getLinkedStudentsToUser(userContext.user?.id || 0);
-      setLinkedStudents(students);
-    };
-
-    const fetchClassroomOfStudent = async () => {
-      if (linkedStudents.length > 0 && user) {
-        try {
-          const classroomOfStudent = await getClassroomOfStudent(linkedStudents[0].id);
-          await updateUser(user.id, { countryCode: classroomOfStudent?.country?.isoCode });
-          setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
-          setSelectedStudent(linkedStudents[0]);
-        } catch (err) {
-          console.error(err);
-        }
+      if (user?.id) {
+        const students = await userContext.getLinkedStudentsToUser(userContext.user?.id || 0);
+        setLinkedStudents(students);
       }
     };
 
     fetchLinkedStudents();
-    fetchClassroomOfStudent();
     // const onSelectStudent = async () => {
     //   setIsModalOpen(false);
     //   setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
@@ -98,28 +86,23 @@ export const Header = () => {
     // if (linkedStudents.length > 0) {
     //   onSelectStudent();
     // }
-  }, [userContext, user, linkedStudents, setUser, setSelectedStudent]);
+  }, [userContext, user]);
 
-  // const fetchClassroomOfStudent = async () => {
-  //   if (selectedStudentIndex && user) {
-  //     try {
-  //       const classroomOfStudent = await getClassroomOfStudent(selectedStudentIndex.id);
-  //       await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
-  //       setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   }
-  // };
-
-  // React.useEffect(() => {
-  //   fetchClassroomOfStudent();
-  // }, []);
-  // React.useEffect(() => {
-  //   if (linkedStudents.length > 0 || selectedStudent === null) {
-  //     setSelectedStudentIndex(0);
-  //   }
-  // }, [linkedStudents, selectedStudent]);
+  React.useEffect(() => {
+    const fetchClassroomOfStudent = async () => {
+      if (linkedStudents.length > 0 && user) {
+        try {
+          const classroomOfStudent = await getClassroomOfStudent(linkedStudents[0].id);
+          await updateUser(user.id, { countryCode: classroomOfStudent.country.isoCode });
+          setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+          setSelectedStudent(linkedStudents[0]);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+    fetchClassroomOfStudent();
+  }, [user, linkedStudents, setUser, setSelectedStudent]);
 
   console.log('selectedStudent:', selectedStudent);
 
