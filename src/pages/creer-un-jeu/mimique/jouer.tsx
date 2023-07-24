@@ -288,11 +288,6 @@ const PlayMimic = () => {
             </div>
           </div>
           <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ flex: 1 }}>
-            <Grid item xs={3} display="flex" justifyContent="flex-start">
-              <Button variant="outlined" color="primary" onClick={getNextGame}>
-                mimique précédente
-              </Button>
-            </Grid>
             <Grid item xs={6} display="flex" justifyContent="center">
               <RadioGroup row defaultValue={RadioBoxValues.NEW}>
                 {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
@@ -307,11 +302,6 @@ const PlayMimic = () => {
                   );
                 })}
               </RadioGroup>
-            </Grid>
-            <Grid item xs={3} display="flex" justifyContent="flex-end">
-              <Button variant="outlined" color="primary" onClick={getNextGame}>
-                mimique suivante
-              </Button>
             </Grid>
           </Grid>
           <Grid
@@ -400,23 +390,34 @@ const PlayMimic = () => {
           )}
         </Modal>
         <AlreadyPlayerModal isOpen={isLastMimicModalOpen} />
-        <div>
-          {(found || tryCount > 1) && (
-            <div>
-              <p
-                style={{
-                  float: 'right',
-                  margin: '0.5rem 1rem',
-                  textDecorationLine: 'underline',
-                }}
-              >
-                <Link href="/" passHref>
-                  {"Ou revenir à l'accueil"}
-                </Link>
-              </p>
-            </div>
-          )}
-        </div>
+        <Grid container justifyContent="space-between">
+          <Grid item xs={3} display="flex" justifyContent="flex-start">
+            <Button variant="outlined" color="primary" onClick={getNextGame}>
+              mimique précédente
+            </Button>
+          </Grid>
+          <Grid item xs={6} style={{ textAlign: 'center' }}>
+            {(found || tryCount > 1) && (
+              <div style={{ textAlign: 'center' }}>
+                <p
+                  style={{
+                    margin: '0.5rem 1rem',
+                    textDecorationLine: 'underline',
+                  }}
+                >
+                  <Link href="/" passHref>
+                    {"Ou revenir à l'accueil"}
+                  </Link>
+                </p>
+              </div>
+            )}
+          </Grid>
+          <Grid item xs={3} display="flex" justifyContent="flex-end">
+            <Button variant="outlined" color="primary" onClick={getNextGame}>
+              mimique suivante
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     </Base>
   );
