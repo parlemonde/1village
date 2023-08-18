@@ -35,40 +35,45 @@ const ResponseButton = ({
   const color = isSuccess ? 'success' : 'error';
 
   return (
-    <Button
-      size="large"
-      fullWidth
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        backgroundColor: 'bgPage',
-        minHeight: '60px',
-        height: 'auto',
-        boxShadow: 'none',
-        maxWidth: '350px',
-        margin: '0 auto',
-      }}
-      disabled={!hasBeenSelected && disabled}
-      variant="contained"
-      color={hasBeenSelected ? color : 'inherit'}
-      onClick={handleClick}
-      endIcon={hasBeenSelected ? null : <ArrowRight sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
-    >
-      {isCorrect ? (
-        <Grid container direction="column" sx={{ textAlign: 'left' }}>
-          <Grid item>
-            <Typography>{hasBeenSelected ? signification : ''}</Typography>
-          </Grid>
-          {hasBeenSelected && (
-            <Grid item>
-              <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
+    <Grid container direction="column" spacing={1}>
+      <Grid item xs={12} />
+      <Grid item xs={12}>
+        <Button
+          size="large"
+          fullWidth
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            backgroundColor: 'bgPage',
+            minHeight: '60px',
+            height: 'auto',
+            boxShadow: 'none',
+            maxWidth: '350px',
+            margin: '0 auto',
+          }}
+          disabled={!hasBeenSelected && disabled}
+          variant="contained"
+          color={hasBeenSelected ? color : 'inherit'}
+          onClick={handleClick}
+          endIcon={hasBeenSelected ? null : <ArrowRight sx={{ color: hasBeenSelected ? 'transparent' : 'white' }} />}
+        >
+          {isCorrect ? (
+            <Grid container direction="column" sx={{ textAlign: 'left' }}>
+              <Grid item>
+                <Typography>{hasBeenSelected ? signification : ''}</Typography>
+              </Grid>
+              {hasBeenSelected && (
+                <Grid item>
+                  <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
+                </Grid>
+              )}
             </Grid>
+          ) : (
+            signification
           )}
-        </Grid>
-      ) : (
-        signification
-      )}
-    </Button>
+        </Button>
+      </Grid>
+    </Grid>
   );
 };
 

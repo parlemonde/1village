@@ -21,6 +21,14 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
   }, [country, gameResponses, userMap, users]);
   const responseCount = countryResponses.length;
 
+  const responsesByChoice: { [key: number]: GameResponse[] } = {};
+  countryResponses.forEach((response) => {
+    if (!responsesByChoice[response.value]) {
+      responsesByChoice[response.value] = [];
+    }
+    responsesByChoice[response.value].push(response);
+  });
+
   return (
     <Grid item xs={4} md={4} pb={4} container direction="column" alignItems="center">
       <Grid item xs={4} sm={4} style={{ display: 'inline', marginBottom: '2rem' }}>
@@ -29,21 +37,14 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
       </Grid>
       {responseCount > 0 && choices && (
         <Grid item xs={2} sm={2} container direction="column" alignItems="center" justifyContent="center">
-          {countryResponses.map((response) => {
-            users[userMap[response.userId]];
-            return (
-              <Grid
-                item
-                xs={2}
-                key={response.id}
-                container
-                direction="row"
-                style={{ padding: '0.5rem', paddingLeft: '0', paddingBottom: '1rem', marginBottom: '2rem', justifyContent: 'center' }}
-              >
-                <AvatarImg user={response.user} style={{ width: '24px', height: '24px' }} />
-              </Grid>
-            );
-          })}
+          {choices.map((choice) => (
+            <Grid item key={choice} container direction="row" alignItems="center" justifyContent="center" mb={2}>
+              {responsesByChoice[choice]?.map((response) => {
+                const user = users[userMap[response.userId]];
+                return <AvatarImg key={response.id} user={user} style={{ width: '24px', height: '24px', margin: '10px' }} />;
+              })}
+            </Grid>
+          ))}
         </Grid>
       )}
     </Grid>
