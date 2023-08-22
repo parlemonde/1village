@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
-import { GameResponseValue } from 'types/gameResponse.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import type { User } from 'types/user.type';
 
@@ -24,7 +23,7 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
 
   const responsesByChoice: { [key: number]: GameResponse[] } = {};
   countryResponses.forEach((response) => {
-    const choice = parseInt(response.value, 10); 
+    const choice = parseInt(response.value, 10);
     if (!isNaN(choice)) {
       if (!responsesByChoice[choice]) {
         responsesByChoice[choice] = [];
