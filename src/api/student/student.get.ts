@@ -19,9 +19,9 @@ export const getClassroomOfStudent = async (id: number) => {
     url: `/students/${id}/classroom`,
   });
 
-  // console.log('avant lerror');
+  console.log('avant lerror');
   if (response.error) {
-    // console.log('response.error', response.error);
+    console.log('response.error', response.error);
     throw response.error;
   }
   console.log('classroom query', response.data);

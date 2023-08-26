@@ -20,16 +20,16 @@ export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } 
     }
     return response.data;
   }, []);
-  const getStudentsToUser: QueryFunction<User[]> = React.useCallback(async (type: Student[], studentId?: 'self', userId?: 'self') => {
-    const response = await axiosRequest({
-      method: 'GET',
-      url: `/users/linked-students${serializeToQueryUrl({ type, studentId, userId })}`,
-    });
-    if (response.error) {
-      return [];
-    }
-    return response.data;
-  }, []);
+  // const getStudentsToUser: QueryFunction<User[]> = React.useCallback(async (type: Student[], studentId?: 'self', userId?: 'self') => {
+  //   const response = await axiosRequest({
+  //     method: 'GET',
+  //     url: `/users/linked-students${serializeToQueryUrl({ type, studentId, userId })}`,
+  //   });
+  //   if (response.error) {
+  //     return [];
+  //   }
+  //   return response.data;
+  // }, []);
   const { data, isLoading, error } = useQuery<User[], unknown>(['users'], getUsers);
 
   const setUsers = React.useCallback(

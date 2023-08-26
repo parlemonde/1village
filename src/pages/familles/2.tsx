@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { useRouter } from 'next/router';
-import React, { useState, useEffect } from 'react';
 
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
 
 import { editStudent } from 'src/api/classroom/student.put';
 import AccessControl from 'src/components/AccessControl';
