@@ -94,7 +94,7 @@ export const useGameRequests = () => {
       if (response.error) {
         return 0;
       }
-      return response.data.count as number;
+      return response.data.games.length as number;
     },
     [village],
   );
@@ -123,7 +123,7 @@ export const useGameRequests = () => {
       if (response.error) {
         return [] as Array<Game>;
       }
-      return response.data as Array<Game>;
+      return response.data.games as Array<Game>;
     },
     [village],
   );

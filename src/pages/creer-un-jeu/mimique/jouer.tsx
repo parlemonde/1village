@@ -108,7 +108,7 @@ const PlayMimic = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  const { getRandomGame, sendNewGameResponse, getGameStats, getAllGamesByType } = useGameRequests();
+  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames } = useGameRequests();
 
   const [game, setGame] = useState<Game | undefined>(undefined);
   const [tryCount, setTryCount] = useState<number>(0);
@@ -128,7 +128,7 @@ const PlayMimic = () => {
     setTryCount(0);
     setErrorModalOpen(false);
 
-    const allGamesByDescOrder = await getAllGamesByType(GameType.MIMIC);
+    const allGamesByDescOrder = await getAvailableGames(GameType.MIMIC);
     const currentGameIndex = allGamesByDescOrder.findIndex((g) => g.id === game?.id);
     const isLastGame = currentGameIndex === allGamesByDescOrder.length - 1;
 
@@ -151,17 +151,17 @@ const PlayMimic = () => {
     }
 
     setLoadingGame(false);
-  }, [getRandomGame, selectedValue, game, getAllGamesByType]);
+  }, [getRandomGame, selectedValue, game, getAvailableGames]);
 
   // Get next game on start and on village change.
   useEffect(() => {
     const getFirstGame = async () => {
-      const allGamesByDescOrder = await getAllGamesByType(GameType.MIMIC);
+      const allGamesByDescOrder = await getAvailableGames(GameType.MIMIC);
       setGame(allGamesByDescOrder[0]);
       setLoadingGame(false);
     };
     getFirstGame().catch();
-  }, [getAllGamesByType]);
+  }, [getAvailableGames]);
 
   const userMap = useMemo(
     () =>
