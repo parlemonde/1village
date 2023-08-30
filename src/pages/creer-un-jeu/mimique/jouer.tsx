@@ -119,6 +119,14 @@ const PlayMimic = () => {
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
 
+  const sortGamesByDescOrder = (games: Game[]) => {
+    return games.sort((a, b) => {
+      const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
+      const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
+      return dateB - dateA;
+    });
+  };
+
   const getNextGame = useCallback(async () => {
     setLoadingGame(true);
 
@@ -128,12 +136,16 @@ const PlayMimic = () => {
     setTryCount(0);
     setErrorModalOpen(false);
 
-    const allGamesByDescOrder = await getAvailableGames(GameType.MIMIC);
-    const currentGameIndex = allGamesByDescOrder.findIndex((g) => g.id === game?.id);
-    const isLastGame = currentGameIndex === allGamesByDescOrder.length - 1;
+    const availableGames = await getAvailableGames(GameType.MIMIC);
+    const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+
+    const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
+
+    // *******  ERREUR sur IsLastGame : avec allGamesByOrder comme ça, renvoie la modale de dernière mimique ******
+    const isLastGame = currentGameIndex === availableGamesByDescOrder.length - 1;
 
     const NEXT_GAME_MAPPER = {
-      [RadioBoxValues.NEW]: () => allGamesByDescOrder[currentGameIndex + 1],
+      [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1],
       [RadioBoxValues.RANDOM]: async () => {
         return await getRandomGame(GameType.MIMIC);
       },
@@ -156,12 +168,29 @@ const PlayMimic = () => {
   // Get next game on start and on village change.
   useEffect(() => {
     const getFirstGame = async () => {
-      const allGamesByDescOrder = await getAvailableGames(GameType.MIMIC);
-      setGame(allGamesByDescOrder[0]);
-      setLoadingGame(false);
+      try {
+        const availableGames = await getAvailableGames(GameType.MIMIC);
+        const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+        setGame(availableGamesByDescOrder[0]); // Utiliser le dernier jeu (plus récent)
+        setLoadingGame(false);
+      } catch (error) {
+        console.error('Error fetching or processing available games:', error);
+        setLoadingGame(false); // Assurez-vous de gérer les erreurs correctement
+      }
     };
     getFirstGame().catch();
   }, [getAvailableGames]);
+  // useEffect(() => {
+  //   console.log('Starting useEffect'); // Déclaration ajoutée
+  //   const getFirstGame = async () => {
+  //     const availableGames = await getAvailableGames(GameType.MIMIC);
+  //     console.log('Fetched available games in useEffect:', availableGames); // Déclaration ajoutée
+  //     setGame(availableGames[availableGames.length - 1]);
+  //     setLoadingGame(false);
+  //   };
+  //   getFirstGame().catch();
+  //   console.log('Finishing useEffect'); // Déclaration ajoutée
+  // }, [getAvailableGames]);
 
   const userMap = useMemo(
     () =>
