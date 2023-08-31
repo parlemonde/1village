@@ -42,4 +42,7 @@ export class GameResponse implements GameResponseInterface {
 
   @Column({ type: 'text' })
   public value: string;
+
+  @Column({ default: false })
+  public isOldGame: boolean;
 }

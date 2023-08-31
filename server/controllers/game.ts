@@ -213,6 +213,19 @@ const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
 
 const answerGameValidator = ajv.compile(ANSWER_M_SCHEMA);
 
+// check games played
+const checkAllGamesPlayed = async (userId, villageId, type) => {
+  const games = await getGames({ villageId, type, userId });
+
+  for (const game of games) {
+    const response = await AppDataSource.getRepository(GameResponse).findOne({ where: { userId: userId, gameId: game.id } });
+    if (!response) {
+      return false;
+    }
+  }
+  return true;
+};
+
 //--- Update a game response ---
 gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -247,6 +260,11 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   gameResponse.userId = userId;
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
+
+  const allGamesPlayed = await checkAllGamesPlayed(userId, game.villageId, game.type);
+  if (allGamesPlayed) {
+    await AppDataSource.getRepository(GameResponse).update({ userId: userId }, { isOldGame: true });
+  }
 
   res.sendJSON(GameResponse);
 });
