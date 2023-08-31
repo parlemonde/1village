@@ -214,7 +214,7 @@ const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
 const answerGameValidator = ajv.compile(ANSWER_M_SCHEMA);
 
 // check games played
-const checkAllGamesPlayed = async (userId, villageId, type) => {
+const checkAllGamesPlayed = async (userId: number, villageId: number, type: number) => {
   const games = await getGames({ villageId, type, userId });
 
   for (const game of games) {
@@ -261,7 +261,7 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
 
-  const allGamesPlayed = await checkAllGamesPlayed(userId, game.villageId, game.type);
+  const allGamesPlayed = await checkAllGamesPlayed(userId, game.villageId, game.type ?? 0);
   if (allGamesPlayed) {
     await AppDataSource.getRepository(GameResponse).update({ userId: userId }, { isOldGame: true });
   }
