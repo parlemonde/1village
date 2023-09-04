@@ -141,7 +141,6 @@ const PlayMimic = () => {
 
     const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
 
-    // *******  ERREUR sur IsLastGame : avec allGamesByOrder comme ça, renvoie la modale de dernière mimique ******
     const isLastGame = currentGameIndex === availableGamesByDescOrder.length - 1;
 
     const NEXT_GAME_MAPPER = {
@@ -180,17 +179,6 @@ const PlayMimic = () => {
     };
     getFirstGame().catch();
   }, [getAvailableGames]);
-  // useEffect(() => {
-  //   console.log('Starting useEffect'); // Déclaration ajoutée
-  //   const getFirstGame = async () => {
-  //     const availableGames = await getAvailableGames(GameType.MIMIC);
-  //     console.log('Fetched available games in useEffect:', availableGames); // Déclaration ajoutée
-  //     setGame(availableGames[availableGames.length - 1]);
-  //     setLoadingGame(false);
-  //   };
-  //   getFirstGame().catch();
-  //   console.log('Finishing useEffect'); // Déclaration ajoutée
-  // }, [getAvailableGames]);
 
   const userMap = useMemo(
     () =>

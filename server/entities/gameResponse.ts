@@ -44,5 +44,5 @@ export class GameResponse implements GameResponseInterface {
   public value: string;
 
   @Column({ default: false })
-  public isOldGame: boolean;
+  public isOldResponse: boolean;
 }

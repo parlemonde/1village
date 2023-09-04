@@ -263,7 +263,7 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
 
   const allGamesPlayed = await checkAllGamesPlayed(userId, game.villageId, game.type ?? 0);
   if (allGamesPlayed) {
-    await AppDataSource.getRepository(GameResponse).update({ userId: userId }, { isOldGame: true });
+    await AppDataSource.getRepository(GameResponse).update({ userId: userId }, { isOldResponse: true });
   }
 
   res.sendJSON(GameResponse);
