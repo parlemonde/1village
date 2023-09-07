@@ -8,31 +8,31 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import AccessControl from './AccessControl';
 import { getClassroomOfStudent } from 'src/api/student/student.get';
+import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { updateUser } from 'src/api/user/user.put';
 import { Modal } from 'src/components/Modal';
-import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import type { Student } from 'types/student.type';
-import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const Header = () => {
   const router = useRouter();
   const { user, logout, setUser, selectedStudent, setSelectedStudent } = React.useContext(UserContext);
-  const { classroom } = React.useContext(ClassroomContext);
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
-  // const { students, showSelectStudentModal } = React.useContext(UserContext);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
+  const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
+  const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
+  
   //* NOTE: might be interesting to make a hook for this below
   const isPelico =
     (user !== null && user.type === UserType.MEDIATOR) ||
@@ -55,75 +55,61 @@ export const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const userContext = React.useContext(UserContext);
-  const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
-  const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
-  const [tempUser, setTempUser] = React.useState<User | null>(null);
 
-  const [tempSelectedStudent, setTempSelectedStudent] = React.useState<Student | null>(null);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchLinkedStudents = async () => {
       if (user?.id) {
         try {
-          const students = await userContext.getLinkedStudentsToUser(user.id);
-          if (Array.isArray(students) && JSON.stringify(students) !== JSON.stringify(linkedStudents)) {
-            setLinkedStudents(students);
-          }
+          const students = await getLinkedStudentsToUser(user.id);
+          // if (Array.isArray(students) && JSON.stringify(students) !== JSON.stringify(linkedStudents)) {
+          setLinkedStudents(students);
+          // }
         } catch (err) {
           console.error('Error fetching linked students:', err);
         }
       }
     };
     fetchLinkedStudents();
+    console.log(linkedStudents);
+  }, []);
 
-    const onSelectStudent = async () => {
-      setIsModalOpen(false);
-      setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
-      if (user) {
-        try {
-          // console.log('dans le try');
-          const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
-          // console.log('classroomOfStudent', classroomOfStudent);
-          await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
-          // console.log(classroom);
-          setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+  const onSelectStudent = async () => {
+    setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
+    if (user) {
+      try {
+        // console.log('dans le try');
+        const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
+        // console.log('classroomOfStudent', classroomOfStudent);
+        await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
+        // console.log(classroom);
+        setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
-          // updateUser(user?.id, {country:  });
-        } catch (err) {}
-      }
-    };
-    if (linkedStudents.length > 0) {
-      onSelectStudent();
+        // updateUser(user?.id, {country:  });
+      } catch (err) { }
     }
-  }, [user, userContext, linkedStudents]);
+    setIsModalOpen(false);
+  };
 
-  React.useEffect(() => {
-    if (tempUser) {
-      setUser(tempUser);
-    }
-    if (tempSelectedStudent) {
-      setSelectedStudent(tempSelectedStudent);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tempUser, tempSelectedStudent]);
+  useEffect(()=>{
+    console.log('user ===', user);
+  }, [user]);
 
-  React.useEffect(() => {
-    const fetchClassroomOfStudent = async () => {
-      if (linkedStudents.length > 0 && user) {
-        try {
-          const classroomOfStudent = await getClassroomOfStudent(linkedStudents[0].id);
-          if (classroomOfStudent?.country?.isoCode !== user?.country?.isoCode) {
-            setTempUser({ ...user, country: { isoCode: classroomOfStudent.country.isoCode, name: '' } });
-          }
-          setTempSelectedStudent(linkedStudents[0]);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    };
-    fetchClassroomOfStudent();
-  }, [user, linkedStudents]);
+  // React.useEffect(() => {
+  //   const fetchClassroomOfStudent = async () => {
+  //     if (linkedStudents.length > 0 && user) {
+  //       try {
+  //         const classroomOfStudent = await getClassroomOfStudent(linkedStudents[0].id);
+  //         if (classroomOfStudent?.country?.isoCode !== user?.country?.isoCode) {
+  //           setTempUser({ ...user, country: { isoCode: classroomOfStudent.country.isoCode, name: '' } });
+  //         }
+  //         setTempSelectedStudent(linkedStudents[0]);
+  //       } catch (err) {
+  //         console.error(err);
+  //       }
+  //     }
+  //   };
+  //   fetchClassroomOfStudent();
+  // }, [user, linkedStudents]);
 
   console.log('selectedStudent:', selectedStudent);
 
@@ -131,18 +117,18 @@ export const Header = () => {
     setIsModalOpen(true);
   };
 
-  React.useEffect(() => {
-    if (selectedStudentIndex !== -1) {
-      setSelectedStudent(selectedStudentIndex);
-    }
-    const savedSelectedStudent = localStorage.getItem('selectedStudentIndex');
-    if (savedSelectedStudent) {
-      setSelectedStudentIndex(JSON.parse(savedSelectedStudent));
-    }
-    console.log('selectedStudent setItem', localStorage);
-    localStorage.setItem('selectedStudentItem', JSON.stringify(selectedStudentIndex));
-    console.log('selectedStudent getItem', localStorage);
-  }, []);
+  // React.useEffect(() => {
+  //   if (selectedStudentIndex !== -1) {
+  //     setSelectedStudent(selectedStudentIndex);
+  //   }
+  //   const savedSelectedStudent = localStorage.getItem('selectedStudentIndex');
+  //   if (savedSelectedStudent) {
+  //     setSelectedStudentIndex(JSON.parse(savedSelectedStudent));
+  //   }
+  //   console.log('selectedStudent setItem', localStorage);
+  //   localStorage.setItem('selectedStudentItem', JSON.stringify(selectedStudentIndex));
+  //   console.log('selectedStudent getItem', localStorage);
+  // }, []);
   return (
     <header>
       <div className="header__container with-shadow">

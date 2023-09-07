@@ -24,3 +24,4 @@ export const getLinkedStudentsToUser = async (userId: number) => {
     return [];
   }
 };
+
