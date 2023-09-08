@@ -43,8 +43,6 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   const query = await AppDataSource.getRepository(User)
     .createQueryBuilder('User')
     .addSelect('User.passwordHash')
-    .leftJoinAndSelect('User.featureFlags', 'FeatureFlag')
-    .addSelect(['FeatureFlag.id', 'FeatureFlag.name', 'FeatureFlag.isEnabled'])
     .where('User.email = :email OR User.pseudo = :email', { email: data.email });
 
   const user = await query.getOne();
@@ -109,5 +107,5 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     });
   }
   delete user.passwordHash;
-  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken, hasStudentLinked: hasStudentLinked, featureFlags: user.featureFlags });
+  res.sendJSON({ user: user, accessToken, refreshToken: refreshToken, hasStudentLinked: hasStudentLinked });
 }

@@ -1,10 +1,5 @@
 import { axiosRequest } from 'src/utils/axiosRequest';
-
-interface FeatureFlag {
-  id: number;
-  name: string;
-  isEnabled: boolean;
-}
+import type { FeatureFlag } from 'types/featureFlag.type';
 
 export const fetchFeatureFlags = async () => {
   const response = await axiosRequest({
