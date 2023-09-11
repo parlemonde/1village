@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -283,6 +283,10 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createClassroom, fetchClassroom, getStudents, user]);
+
+  useEffect(() => {
+    console.log('classroom ===', classroom);
+  }, [classroom]);
 
   const value = React.useMemo(
     () => ({

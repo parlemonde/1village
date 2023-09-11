@@ -824,17 +824,36 @@ userController.delete({ path: '/:userId/linked-students/:studentId' }, async (re
 });
 
 // Get the visibility parameters for Family members
-userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
-  const visibilityParams = await AppDataSource.getRepository(UserToStudent)
-    .createQueryBuilder('userStudent')
-    .innerJoinAndSelect('userStudent.student', 'student')
-    .innerJoinAndSelect('student.classroom', 'classroom')
-    .where('userStudent.user = :familyId', { familyId: req.user.id })
-    .getRawMany(); //* Here it's getRawMany because for some reason we lost 2 attributes otherwise classroom.userId and classroom.villageId
-  res.json(visibilityParams);
+  const id = parseInt(req.params.id, 10) || 0;
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student'] });
+
+  if (user && user.type === UserType.TEACHER) {
+    const teacherClassroom = await AppDataSource.getRepository(Classroom).findOne({
+      where: { user: { id: user.id } },
+    });
+    return res.json(teacherClassroom);
+  }
+
+  if (user && user.type === UserType.FAMILY) {
+    const classrooms = [];
+
+    for (const student of user.userToStudents) {
+      const classroom = await AppDataSource.getRepository(Classroom).findOne({
+        where: { students: { id: student.student.id } },
+      });
+      if (classroom) {
+        classrooms.push(classroom);
+      }
+    }
+
+    return res.json(classrooms);
+  }
+
+  return res.json([]);
 });
 
 userController.get({ path: '/get-student-vp', userType: UserType.FAMILY }, async (req: Request, res: Response) => {

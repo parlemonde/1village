@@ -2,13 +2,12 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQuery } from 'react-query';
 
-import { getLinkedStudentsToUser } from 'src/api/user/user.get';
+import { getUserVisibilityFamilyParams } from 'src/api/user/user.get';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
-import type { Student } from 'types/student.type';
 import type { UserParamClassroom } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -22,22 +21,12 @@ export type Args = {
   status?: number;
   phase?: number;
   responseActivityId?: number;
-  selectedStudent?: Student | null;
+  selectedStudent?: number;
 };
 
 export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args) => {
   const { village } = React.useContext(VillageContext);
   const { user, selectedStudent } = React.useContext(UserContext);
-
-  const getVisibilityFamilyParams = React.useCallback(async () => {
-    if (user && user.type !== UserType.FAMILY) return [];
-    const response = await axiosRequest({
-      method: 'GET',
-      url: '/users/visibility-params',
-    });
-    if (response.error) return null;
-    return response.data;
-  }, [user]);
 
   const villageId = village ? village.id : null;
 
@@ -46,18 +35,18 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       return [];
     }
 
-    const students = await getLinkedStudentsToUser(user?.id || 0);
+    const visibilityFamily = (await getUserVisibilityFamilyParams(user)) as [UserParamClassroom];
 
-    // console.log('useQuery students', students);
+    console.log('visibilityFamily ===', visibilityFamily);
 
-    const visibilityFamily = (await getVisibilityFamilyParams()) as [UserParamClassroom];
+    const classroomData = visibilityFamily[selectedStudent || 1];
 
-    // console.log('selectedStudent (useActivity)', selectedStudent);
-
-    const classroomData = visibilityFamily.find((classroom) => classroom.userStudent_studentId === selectedStudent?.id);
+    console.log('classroomData === ', classroomData);
 
     // console.log('data', classroomData);
     const familyConditions = user.type === UserType.FAMILY && visibilityFamily.length > 0;
+
+    console.log('family conditions', familyConditions);
 
     const query: {
       [key: string]: string | number | boolean | undefined;
@@ -89,7 +78,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     }
 
     return response.data;
-  }, [user, getVisibilityFamilyParams, args, type, villageId, countries, pelico, userId, selectedStudent]);
+  }, [user, args, type, villageId, countries, pelico, userId, selectedStudent]);
 
   const { data, isLoading, error, refetch } = useQuery<Activity[], unknown>(
     ['activities', { ...args, type, userId, selectedStudent, countries, pelico, villageId }],

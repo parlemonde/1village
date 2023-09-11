@@ -1,16 +1,16 @@
 // import SearchIcon from '@mui/icons-material/Search';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button, FormControl, InputLabel, Select } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
 
-import AccessControl from './AccessControl';
 import { getClassroomOfStudent } from 'src/api/student/student.get';
 import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { updateUser } from 'src/api/user/user.put';
@@ -32,7 +32,7 @@ export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
-  
+
   //* NOTE: might be interesting to make a hook for this below
   const isPelico =
     (user !== null && user.type === UserType.MEDIATOR) ||
@@ -85,12 +85,12 @@ export const Header = () => {
         setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
         // updateUser(user?.id, {country:  });
-      } catch (err) { }
+      } catch (err) {}
     }
     setIsModalOpen(false);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log('user ===', user);
   }, [user]);
 
@@ -187,9 +187,7 @@ export const Header = () => {
               >
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
-                <AccessControl featureName="id-family" key={user?.id || 'default'}>
-                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
-                </AccessControl>
+                {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>
@@ -206,8 +204,8 @@ export const Header = () => {
                     {selectedStudent
                       ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
                       : linkedStudents.length > 0
-                        ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
-                        : 'Eleve non selectionne'}
+                      ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
+                      : 'Eleve non selectionne'}
                   </span>
                   <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectStudentModal}>
                     {linkedStudents?.length > 0 ? 'Changer' : 'Choisir un élève'}
@@ -288,9 +286,7 @@ export const Header = () => {
               >
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
-                <AccessControl featureName="id-family" key={user?.id || 'default'}>
-                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
-                </AccessControl>
+                {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>

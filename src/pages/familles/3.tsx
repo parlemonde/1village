@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, Button } from '@mui/material';
 
-import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
@@ -115,56 +114,54 @@ const ClassroomParamStep3 = () => {
 
   return (
     <Base>
-      <AccessControl featureName="id-family" redirectToWIP>
-        <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-          <Steps
-            steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
-            urls={['/familles/1', '/familles/2', '/familles/3', '/familles/4']}
-            activeStep={2}
+      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <Steps
+          steps={['Visibilité', 'Identifiants', 'Communication', 'Gestion']}
+          urls={['/familles/1', '/familles/2', '/familles/3', '/familles/4']}
+          activeStep={2}
+        />
+        <div className="width-900">
+          <h1> Communiquer les identifiants aux familles</h1>
+          <p className="text">
+            Pour inviter les familles à se connecter, nous avons préparé un texte de présentation, que vous pouvez modifier, ou traduire dans une
+            autre langue.
+          </p>
+          <p>
+            Comme vous pourrez le constater, ce texte contient le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> : vous devez
+            le laisser sous ce format.{' '}
+          </p>
+          <p>
+            Ainsi, vous pourrez générer autant de textes de présentation que d’élèves dans votre classe : à vous ensuite de les imprimer et les
+            transmettre aux familles. Dans chaque texte, le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> aura été remplacé
+            automatiquement par l’identifiant unique généré à l’étape précédente.
+          </p>
+          <TextEditor
+            inlineToolbar
+            error={false || !keywordPresence}
+            withBorder
+            value={textDefaultValue}
+            onChange={(value) => {
+              setTextValue(value);
+            }}
           />
-          <div className="width-900">
-            <h1> Communiquer les identifiants aux familles</h1>
-            <p className="text">
-              Pour inviter les familles à se connecter, nous avons préparé un texte de présentation, que vous pouvez modifier, ou traduire dans une
-              autre langue.
-            </p>
-            <p>
-              Comme vous pourrez le constater, ce texte contient le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> : vous devez
-              le laisser sous ce format.{' '}
-            </p>
-            <p>
-              Ainsi, vous pourrez générer autant de textes de présentation que d’élèves dans votre classe : à vous ensuite de les imprimer et les
-              transmettre aux familles. Dans chaque texte, le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> aura été remplacé
-              automatiquement par l’identifiant unique généré à l’étape précédente.
-            </p>
-            <TextEditor
-              inlineToolbar
-              error={false || !keywordPresence}
-              withBorder
-              value={textDefaultValue}
-              onChange={(value) => {
-                setTextValue(value);
-              }}
-            />
-            <Box marginTop="10px" textAlign="center">
-              <Button id="myButton" onClick={onPrint} variant="outlined">
-                Imprimer
-              </Button>
-            </Box>
-            <Modal
-              open={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              ariaDescribedBy={'activate-phase-desc'}
-              ariaLabelledBy={'activate-phase'}
-              noTitle
-              confirmLabel="confirmer"
-            >
-              <div>Votre message doit contenir l&apos;identifiant enfant suivant: %identifiant</div>
-            </Modal>
-            <StepsButton prev="/familles/2" next={onNext} />
-          </div>
+          <Box marginTop="10px" textAlign="center">
+            <Button id="myButton" onClick={onPrint} variant="outlined">
+              Imprimer
+            </Button>
+          </Box>
+          <Modal
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            ariaDescribedBy={'activate-phase-desc'}
+            ariaLabelledBy={'activate-phase'}
+            noTitle
+            confirmLabel="confirmer"
+          >
+            <div>Votre message doit contenir l&apos;identifiant enfant suivant: %identifiant</div>
+          </Modal>
+          <StepsButton prev="/familles/2" next={onNext} />
         </div>
-      </AccessControl>
+      </div>
     </Base>
   );
 };

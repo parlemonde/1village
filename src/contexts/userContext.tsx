@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
@@ -10,7 +10,7 @@ type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
 interface UserContextValue {
   user: User | null;
-  selectedStudent: Student | null;
+  selectedStudent: number;
   isLoggedIn: boolean;
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
@@ -31,7 +31,7 @@ interface UserContextValue {
 
 export const UserContext = React.createContext<UserContextValue>({
   user: null,
-  selectedStudent: null,
+  selectedStudent: 1,
   isLoggedIn: false,
   login: async () => ({ success: false, errorCode: 0 }),
   loginWithSso: async () => ({ success: false, errorCode: 0 }),
@@ -57,9 +57,7 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
-  const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(null);
-
-  // const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
+  const [selectedStudent, setSelectedStudent] = React.useState<number>(1);
 
   React.useEffect(() => {
     if (
@@ -350,6 +348,10 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     },
     [user],
   );
+
+  useEffect(() => {
+    console.log('user===', user);
+  }, [user]);
 
   const value = React.useMemo(
     () => ({
