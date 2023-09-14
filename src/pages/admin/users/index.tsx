@@ -81,7 +81,7 @@ const Users = () => {
 
     // Récupérer le nom de l'utilisateur avec le type : const userTypeLabel = userTypeFilter.length > 1 ? userTypeNames[???] : 'Utilisateur';
     const todayDate = new Date().toLocaleDateString('fr-FR').replaceAll('/', '-');
-    const fileName = todayDate;
+    const fileName = 'utilisateurs-' + todayDate;
 
     exportJsonToCsv(fileName, ['Pseudo', 'Email', 'Ecole', 'Village', 'Pays'], datasToExport);
   };
