@@ -79,11 +79,19 @@ const Users = () => {
       };
     });
 
-    // Récupérer le nom de l'utilisateur avec le type : const userTypeLabel = userTypeFilter.length > 1 ? userTypeNames[???] : 'Utilisateur';
-    const todayDate = new Date().toLocaleDateString('fr-FR').replaceAll('/', '-');
-    const fileName = 'utilisateurs-' + todayDate;
+    const headers = ['Pseu,d""o', 'Email', 'Ecole', 'Village', 'Pays'];
 
-    exportJsonToCsv(fileName, ['Pseudo', 'Email', 'Ecole', 'Village', 'Pays'], datasToExport);
+    let userLabel = 'liste-utilisateurs-';
+
+    for (const [key, value] of Object.entries(userTypeNames)) {
+      if (key === userTypeFilter) {
+        userLabel = 'liste-' + value.toLowerCase().replaceAll(' ', '-') + 's-';
+      }
+    }
+    const todayDate = new Date().toLocaleDateString('fr-FR').replaceAll('/', '-');
+    const fileName = userLabel + todayDate;
+
+    exportJsonToCsv(fileName, headers, datasToExport);
   };
 
   const actions = (id: number) => (
