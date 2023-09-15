@@ -79,7 +79,7 @@ const Users = () => {
       };
     });
 
-    const headers = ['Pseu,d""o', 'Email', 'Ecole', 'Village', 'Pays'];
+    const headers = ['Pseudo', 'Email', 'Ecole', 'Village', 'Pays'];
 
     let userLabel = 'liste-utilisateurs-';
 
