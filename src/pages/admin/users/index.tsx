@@ -187,6 +187,7 @@ const Users = () => {
             variant="contained"
             style={{ flexShrink: 0, marginLeft: '1rem' }}
             startIcon={<DownloadIcon />}
+            disabled={filteredUsers.length === 0}
           >
             Exporter en CSV
           </Button>
