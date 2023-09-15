@@ -1,13 +1,13 @@
 export const exportJsonToCsv = (filename: string, headers: string[], datas: Record<string, string | number>[]) => {
   const escapedHeaders = headers.map((header) => {
-    return header.replaceAll(',', '');
+    return `"${header}"`;
   });
 
   const headersToString = escapedHeaders.toString();
 
   const datasToString = datas.map((data) => {
     const escapedData = Object.values(data).map((value) => {
-      return typeof value === 'string' ? value.replaceAll(',', '') : value;
+      return typeof value === 'string' ? `"${value}"` : value;
     });
 
     return escapedData.toString();
