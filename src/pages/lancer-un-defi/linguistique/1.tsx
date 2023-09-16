@@ -154,11 +154,6 @@ const DefiStep1 = () => {
     );
   }
 
-  const LanguagesToRemove = mascotteLanguages.reduce((list, currentValue) => {
-    list.push(currentValue.value);
-    return list;
-  }, new Array<string>());
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
