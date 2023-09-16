@@ -96,6 +96,8 @@ export const FirstPhase = () => {
     setIsLoading(false);
   };
 
+  const label = <span style={{ color: 'red' }}>**</span>;
+
   const sendError = (error: 'village' | 'country') => async () => {
     // do not ask twice
     if (updateAsked[error]) {
@@ -272,9 +274,10 @@ export const FirstPhase = () => {
                 <PanelInput
                   value={newUser.school || ''}
                   defaultValue={'non renseignée'}
-                  label="École :"
-                  placeholder="Nom de votre école"
+                  label="École : "
+                  placeholder="Nom de votre école : "
                   isEditMode
+                  isRequired
                   onChange={(school) => {
                     setNewUser((u) => ({ ...u, school }));
                   }}
@@ -282,9 +285,10 @@ export const FirstPhase = () => {
                 <PanelInput
                   value={newUser.level || ''}
                   defaultValue={'non renseigné'}
-                  label="Niveau de la classe :"
+                  label="Niveau de la classe : "
                   placeholder="Niveau de votre classe"
                   isEditMode
+                  isRequired
                   onChange={(level) => {
                     setNewUser((u) => ({ ...u, level }));
                   }}
@@ -292,10 +296,11 @@ export const FirstPhase = () => {
                 <PanelInput
                   value={newUser.address || ''}
                   defaultValue={'non renseigné'}
-                  label="Adresse de l'école :"
+                  label="Adresse de l'école : "
                   placeholder="Adresse"
                   hasError={!newUser.address}
                   isEditMode
+                  isRequired
                   onChange={(address) => {
                     setNewUser((u) => ({ ...u, address }));
                   }}
@@ -303,10 +308,11 @@ export const FirstPhase = () => {
                 <PanelInput
                   value={newUser.city || ''}
                   defaultValue={'non renseigné'}
-                  label="Ville :"
+                  label="Ville : "
                   placeholder="Ville"
                   hasError={!newUser.city}
                   isEditMode
+                  isRequired
                   onChange={(city) => {
                     setNewUser((u) => ({ ...u, city }));
                   }}
@@ -314,10 +320,11 @@ export const FirstPhase = () => {
                 <PanelInput
                   value={newUser.postalCode || ''}
                   defaultValue={'non renseigné'}
-                  label="Code postal :"
+                  label="Code postal : "
                   placeholder="Code postal"
                   hasError={!newUser.postalCode}
                   isEditMode
+                  isRequired
                   onChange={(postalCode) => {
                     setNewUser((u) => ({ ...u, postalCode }));
                   }}
@@ -329,9 +336,10 @@ export const FirstPhase = () => {
                   style={{ marginTop: '2rem' }}
                   value={newUser.displayName || ''}
                   defaultValue={'non renseigné'}
-                  label="Nom affiché :"
+                  label="Nom affiché : "
                   placeholder={getUserDisplayName({ ...user, ...newUser, type: user?.type }, false)}
                   isEditMode
+                  isRequired
                   onChange={(displayName) => {
                     setNewUser((u) => ({ ...u, displayName }));
                   }}
