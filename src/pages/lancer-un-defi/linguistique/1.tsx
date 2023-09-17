@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import type { SyntheticEvent } from 'react';
 import React from 'react';
 
 import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
@@ -17,6 +18,7 @@ import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { capitalize } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+import { normalizeString } from 'src/utils/isNormalizedStringEqual';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const getArticle = (language: string) => {
@@ -134,7 +136,7 @@ const DefiStep1 = () => {
     router.push('/lancer-un-defi/linguistique/2');
   };
 
-  const handleLanguage = (_event: any, languageCode: string) => {
+  const handleLanguage = (_event: SyntheticEvent, languageCode: string) => {
     const language =
       languageCode.length === 2
         ? languages.find((language) => languageCode === language.alpha2.toLowerCase())?.french
@@ -203,6 +205,11 @@ const DefiStep1 = () => {
 
                       return aFormated.toLowerCase().localeCompare(bFormated.toLowerCase());
                     })}
+                    filterOptions={(options, state) => {
+                      return options.filter((option) =>
+                        normalizeString(option.french).toLowerCase().startsWith(normalizeString(state.inputValue).toLowerCase()),
+                      );
+                    }}
                     groupBy={(option) => {
                       const optionFormated = option.alpha2.length === 2 ? option.alpha2 : option.alpha3_b;
 
