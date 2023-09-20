@@ -6,7 +6,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import type { SvgIconTypeMap } from '@mui/material';
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Stack, Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { AvatarImg } from 'src/components/Avatar';
@@ -44,6 +44,7 @@ function shuffleArray(array: Array<number>) {
 /* partie à déplacer et à centraliser avec les prochains jeux*/
 type AlreadyPlayerModalProps = {
   isOpen: boolean;
+  gameId: number;
 };
 
 enum RadioBoxValues {
@@ -83,8 +84,24 @@ const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, ch
   />
 );
 
-const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
+const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, gameId }) => {
+  console.log('game Id : ', gameId);
   const router = useRouter();
+  const { sendAllGamesPlayed } = useGameRequests();
+
+  const handleReplayClick = async () => {
+    if (isOpen) {
+      console.log("Game id, Avant l'appel à SendAllGamesPlayed", gameId);
+      const success = await sendAllGamesPlayed(gameId);
+      console.log("Après l'appel à sendAllGamesPlayed");
+      if (success) {
+        router.push('/jouer');
+      } else {
+        router.push('/');
+      }
+    }
+  };
+
   return (
     <Modal
       open={isOpen}
@@ -96,7 +113,7 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
       onClose={() => router.push('/')}
     >
       C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
-      <Button color="primary" onClick={() => router.push('/')}>
+      <Button color="primary" onClick={handleReplayClick}>
         Rejouer
       </Button>
     </Modal>
@@ -265,7 +282,7 @@ const PlayMimic = () => {
   if (!game || !gameCreator) {
     return (
       <Base>
-        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} />
+        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
       </Base>
     );
   }
@@ -322,13 +339,13 @@ const PlayMimic = () => {
             </Grid>
           </Grid>
           <Grid
+            container
             border={1}
             borderColor={primaryColor}
             p={3}
             my={1}
             boxSizing="border-box"
             style={{ flex: 1 }}
-            container
             spacing={3}
             alignItems="flex-start"
             justifyContent="flex-start"
@@ -336,18 +353,19 @@ const PlayMimic = () => {
             <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
               {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
             </Grid>
-            <Grid container spacing={0} p={2} pb={1} mx={1} alignItems="center" justifyContent="center">
+            <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>Que signifie cette mimique ?</h1>
             </Grid>
-            <Grid container spacing={1} p={1} mt={8} mx={2} xs={3} direction="column">
-              {choices &&
-                choices.map((val) => {
-                  const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
-                  const isCorrect = isSuccess && found;
-                  const mimicOrigine = mimicContent?.origine || '';
-                  return (
-                    <Grid item key={val}>
+            <Grid container direction="row" spacing={5} pt={1}>
+              <Grid item xs={4}>
+                {choices &&
+                  choices.map((val) => {
+                    const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
+                    const isCorrect = isSuccess && found;
+                    const mimicOrigine = mimicContent?.origine || '';
+                    return (
                       <ResponseButton
+                        key={val}
                         value={value}
                         onClick={() => handleClick(value, isSuccess)}
                         isSuccess={isSuccess}
@@ -356,35 +374,35 @@ const PlayMimic = () => {
                         isCorrect={isCorrect}
                         mimicOrigine={mimicOrigine}
                       />
-                    </Grid>
-                  );
-                })}
-            </Grid>
-
-            {(found || tryCount > 1) && (
-              <>
-                {user.country && (
+                    );
+                  })}
+              </Grid>
+              {(found || tryCount > 1) && (
+                <>
+                  {user.country && (
+                    <GameStats
+                      gameResponses={gameResponses}
+                      choices={choices}
+                      country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
+                      userMap={userMap}
+                      users={users}
+                    />
+                  )}
                   <GameStats
                     gameResponses={gameResponses}
                     choices={choices}
-                    country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
+                    country={
+                      userIsPelico
+                        ? village.countries[1].isoCode
+                        : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
+                    }
                     userMap={userMap}
                     users={users}
                   />
-                )}
-                <GameStats
-                  gameResponses={gameResponses}
-                  choices={choices}
-                  country={
-                    userIsPelico
-                      ? village.countries[1].isoCode
-                      : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
-                  }
-                  userMap={userMap}
-                  users={users}
-                />
-              </>
-            )}
+                </>
+              )}
+            </Grid>
+
             <Grid item xs={12} md={12}>
               {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
             </Grid>
@@ -406,7 +424,7 @@ const PlayMimic = () => {
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} />
+        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
           <Grid item xs={3} display="flex" justifyContent="flex-start">
             <Button variant="outlined" color="primary" onClick={getNextGame}>

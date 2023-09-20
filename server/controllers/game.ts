@@ -213,19 +213,6 @@ const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
 
 const answerGameValidator = ajv.compile(ANSWER_M_SCHEMA);
 
-// check games played
-const checkAllGamesPlayed = async (userId: number, villageId: number, type: number) => {
-  const games = await getGames({ villageId, type, userId });
-
-  for (const game of games) {
-    const response = await AppDataSource.getRepository(GameResponse).findOne({ where: { userId: userId, gameId: game.id } });
-    if (!response) {
-      return false;
-    }
-  }
-  return true;
-};
-
 //--- Update a game response ---
 gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -247,7 +234,7 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
     next();
     return;
   }
-  const responses = await AppDataSource.getRepository(GameResponse).find({ where: { userId: userId, gameId: id } });
+  const responses = await AppDataSource.getRepository(GameResponse).find({ where: { userId: userId, id: id } });
   if (responses.length > 2) {
     next();
     return;
@@ -261,11 +248,12 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
 
-  const allGamesPlayed = await checkAllGamesPlayed(userId, game.villageId, game.type ?? 0);
-  if (allGamesPlayed) {
-    await AppDataSource.getRepository(GameResponse).update({ userId: userId }, { isOldResponse: true });
-  }
+  const totalGames = await AppDataSource.getRepository(Game).count();
+  const userResponses = await AppDataSource.getRepository(GameResponse).count();
 
+  if (userResponses >= totalGames) {
+    await AppDataSource.getRepository(GameResponse).update({}, { isOldResponse: true });
+  }
   res.sendJSON(GameResponse);
 });
 

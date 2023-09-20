@@ -183,6 +183,24 @@ export const useGameRequests = () => {
   }, []);
 
   /**
+   * Update isOldGame column when all games are played
+   *
+   * @param id - id of gam
+   * @returns boolean
+   */
+
+  const sendAllGamesPlayed = async (id: number) => {
+    const response = await axiosRequest({
+      method: 'PUT',
+      url: `/games/play/${id}`,
+    });
+    if (response.error) {
+      return false;
+    }
+    return true;
+  };
+
+  /**
    * Return stats game
    *
    * @param id - id type of game
@@ -201,5 +219,14 @@ export const useGameRequests = () => {
     return response.data as GameResponse[];
   }, []);
 
-  return { getUserCreatedGamesCount, getAllGamesByType, getAvailableGamesCount, getAvailableGames, getRandomGame, sendNewGameResponse, getGameStats };
+  return {
+    getUserCreatedGamesCount,
+    getAllGamesByType,
+    getAvailableGamesCount,
+    getAvailableGames,
+    getRandomGame,
+    sendNewGameResponse,
+    sendAllGamesPlayed,
+    getGameStats,
+  };
 };

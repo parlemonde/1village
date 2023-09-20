@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Grid } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
@@ -33,24 +33,31 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
   });
 
   return (
-    <Grid item xs={4} md={4} pb={4} container direction="column" alignItems="center">
-      <Grid item xs={4} sm={4} style={{ display: 'inline', marginBottom: '2rem' }}>
-        <span style={{ paddingRight: '0.5rem' }}>{`${responseCount} réponse${responseCount > 1 ? 's' : ''}`} </span>
+    <Stack spacing={0} sx={{ width: 300, alignItems: 'center', justifyContent: 'space-between', px: 4 }}>
+      <Stack spacing={1} direction="row" alignItems="center" justifyContent="center" mt={2}>
+        <span>{`${responseCount} réponse${responseCount > 1 ? 's' : ''}`} </span>
         <Flag country={country} size={'small'} />
-      </Grid>
-      {responseCount > 0 && choices && (
-        <Grid item xs={2} sm={2} container direction="column" alignItems="center" justifyContent="center">
-          {choices.map((choice) => (
-            <Grid item key={choice} container direction="row" alignItems="center" justifyContent="center" mb={2}>
-              {responsesByChoice[choice]?.map((response) => {
-                const user = users[userMap[response.userId]];
-                return <AvatarImg key={response.id} user={user} style={{ width: '24px', height: '24px', margin: '10px' }} />;
-              })}
-            </Grid>
+      </Stack>
+
+      <Grid item direction="row" alignItems="center" justifyContent="space-between" xs={4}>
+        {responseCount > 0 &&
+          choices &&
+          choices.map((choice) => (
+            <>
+              {responsesByChoice[choice] ? (
+                <Stack direction="row" pb={1} alignItems="center" justifyContent="center">
+                  {responsesByChoice[choice]?.map((response) => {
+                    const user = users[userMap[response.userId]];
+                    return <AvatarImg key={response.id} user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />;
+                  })}
+                </Stack>
+              ) : (
+                <>TOTO</>
+              )}
+            </>
           ))}
-        </Grid>
-      )}
-    </Grid>
+      </Grid>
+    </Stack>
   );
 };
 export default GameStats;
