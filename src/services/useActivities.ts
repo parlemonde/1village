@@ -59,11 +59,6 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (userId !== undefined) {
       query.userId = userId;
     }
-    // console.log('user', user);
-    // console.log('query', query);
-    // console.log('visibilityFamily', visibilityFamily);
-    // console.log('data1', classroomData);
-    // console.log('students', students);
 
     console.log('query', query);
 
