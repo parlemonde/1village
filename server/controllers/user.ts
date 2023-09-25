@@ -834,6 +834,7 @@ userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY 
   if (user && user.type === UserType.TEACHER) {
     const teacherClassroom = await AppDataSource.getRepository(Classroom).findOne({
       where: { user: { id: user.id } },
+      relations: ['user'],
     });
     return res.json(teacherClassroom);
   }
@@ -844,6 +845,7 @@ userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY 
     for (const student of user.userToStudents) {
       const classroom = await AppDataSource.getRepository(Classroom).findOne({
         where: { students: { id: student.student.id } },
+        relations: ['user'],
       });
       if (classroom) {
         classrooms.push(classroom);

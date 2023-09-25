@@ -8,7 +8,7 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
-import type { UserParamClassroom } from 'types/user.type';
+import type { Classroom } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
 
 export type Args = {
@@ -21,12 +21,11 @@ export type Args = {
   status?: number;
   phase?: number;
   responseActivityId?: number;
-  selectedStudent?: number;
 };
 
 export const useActivities = ({ pelico, countries = [], userId, type, ...args }: Args) => {
   const { village } = React.useContext(VillageContext);
-  const { user, selectedStudent } = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
 
   const villageId = village ? village.id : null;
 
@@ -35,30 +34,27 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       return [];
     }
 
-    const visibilityFamily = (await getUserVisibilityFamilyParams(user)) as [UserParamClassroom];
+    const userClassroomData = (await getUserVisibilityFamilyParams(user)) as Classroom;
 
-    console.log('visibilityFamily ===', visibilityFamily);
+    console.log('userClassroomData ===', userClassroomData);
+    console.log('userClassroomDataUserId===', userClassroomData.user?.id);
+    console.log('userClassroomDataDelayedDats ===', userClassroomData.delayedDays);
 
-    const classroomData = visibilityFamily[selectedStudent || 1];
+    const isFamilyOrTeacher = user.type === UserType.FAMILY || user.type === UserType.TEACHER;
 
-    console.log('classroomData === ', classroomData);
-
-    // console.log('data', classroomData);
-    const familyConditions = user.type === UserType.FAMILY && visibilityFamily.length > 0;
-
-    console.log('family conditions', familyConditions);
+    console.log('family conditions', isFamilyOrTeacher);
 
     const query: {
       [key: string]: string | number | boolean | undefined;
     } = {
       ...args,
       type: Array.isArray(type) ? type.join(',') : type,
-      villageId: villageId !== null ? villageId : classroomData?.classroom_villageId,
+      villageId: villageId !== null ? (user.villageId !== null ? user.villageId : undefined) : undefined,
       countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
-      delayedDays: familyConditions ? classroomData?.classroom_delayedDays : undefined,
-      hasVisibilitySetToClass: familyConditions ? (classroomData?.classroom_hasVisibilitySetToClass === 1 ? true : false) : undefined,
-      teacherId: familyConditions ? classroomData?.classroom_userId : undefined,
+      delayedDays: isFamilyOrTeacher ? userClassroomData?.delayedDays : undefined,
+      hasVisibilitySetToClass: isFamilyOrTeacher ? (userClassroomData?.hasVisibilitySetToClass ? true : false) : undefined,
+      teacherId: isFamilyOrTeacher ? userClassroomData?.user?.id : undefined,
     };
     if (userId !== undefined) {
       query.userId = userId;
@@ -69,6 +65,8 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     // console.log('data1', classroomData);
     // console.log('students', students);
 
+    console.log('query', query);
+
     const response = await axiosRequest({
       method: 'GET',
       url: `/activities${serializeToQueryUrl(query)}`,
@@ -78,10 +76,10 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     }
 
     return response.data;
-  }, [user, args, type, villageId, countries, pelico, userId, selectedStudent]);
+  }, [user, args, type, villageId, countries, pelico, userId]);
 
   const { data, isLoading, error, refetch } = useQuery<Activity[], unknown>(
-    ['activities', { ...args, type, userId, selectedStudent, countries, pelico, villageId }],
+    ['activities', { ...args, type, userId, countries, pelico, villageId }],
     getActivities,
   );
 

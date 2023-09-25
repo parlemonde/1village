@@ -1,3 +1,5 @@
+import type { User } from 'server/entities/user';
+
 import type { Country } from './country.type';
 
 export interface Classroom {
@@ -9,6 +11,7 @@ export interface Classroom {
   country?: Country;
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
+  user?: User;
 }
 
 export interface ClassroomAsFamilly {
