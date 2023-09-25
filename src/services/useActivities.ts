@@ -34,15 +34,15 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       return [];
     }
 
-    const userClassroomData = (await getUserVisibilityFamilyParams(user)) as Classroom;
+    const userClassroomData = (await getUserVisibilityFamilyParams(user)) as [Classroom];
 
     console.log('userClassroomData ===', userClassroomData);
-    console.log('userClassroomDataUserId===', userClassroomData.user?.id);
-    console.log('userClassroomDataDelayedDats ===', userClassroomData.delayedDays);
+    console.log('userClassroomDataUserId===', userClassroomData[0].user?.id);
+    console.log('userClassroomDataDelayedDats ===', userClassroomData[0].delayedDays);
 
-    const isFamilyOrTeacher = user.type === UserType.FAMILY || user.type === UserType.TEACHER;
+    const isFamily = user.type === UserType.FAMILY;
 
-    console.log('family conditions', isFamilyOrTeacher);
+    console.log('family conditions', isFamily);
 
     const query: {
       [key: string]: string | number | boolean | undefined;
@@ -52,9 +52,9 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
       villageId: villageId !== null ? (user.villageId !== null ? user.villageId : undefined) : undefined,
       countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
-      delayedDays: isFamilyOrTeacher ? userClassroomData?.delayedDays : undefined,
-      hasVisibilitySetToClass: isFamilyOrTeacher ? (userClassroomData?.hasVisibilitySetToClass ? true : false) : undefined,
-      teacherId: isFamilyOrTeacher ? userClassroomData?.user?.id : undefined,
+      delayedDays: isFamily ? userClassroomData[0]?.delayedDays : undefined,
+      hasVisibilitySetToClass: isFamily ? (userClassroomData[0]?.hasVisibilitySetToClass ? true : false) : undefined,
+      teacherId: isFamily ? userClassroomData[0]?.user?.id : undefined,
     };
     if (userId !== undefined) {
       query.userId = userId;

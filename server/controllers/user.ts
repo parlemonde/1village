@@ -832,11 +832,15 @@ userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY 
   const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student'] });
 
   if (user && user.type === UserType.TEACHER) {
+    const classroom = [];
     const teacherClassroom = await AppDataSource.getRepository(Classroom).findOne({
       where: { user: { id: user.id } },
       relations: ['user'],
     });
-    return res.json(teacherClassroom);
+    if (teacherClassroom) {
+      classroom.push(teacherClassroom);
+    }
+    return res.json(classroom);
   }
 
   if (user && user.type === UserType.FAMILY) {
