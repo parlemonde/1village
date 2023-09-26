@@ -168,6 +168,7 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
           .from(GameResponse, 'response')
           .where(`response.userId = :userId`, { userId: userId })
           .andWhere(`response.gameId = game.id`)
+          .andWhere(`response.isOldResponse = 0`)
           .getQuery();
         return 'NOT EXISTS ' + subQuery;
       },
@@ -213,6 +214,19 @@ const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
 
 const answerGameValidator = ajv.compile(ANSWER_M_SCHEMA);
 
+// reset games, put all isOldResponse to true to enable replay
+gameController.put({ path: '/resetResponses', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const { id: userId } = req.user;
+  await AppDataSource.createQueryBuilder().update(GameResponse).set({ isOldResponse: true }).where(' userId = :userId', { userId: userId }).execute();
+
+  res.sendJSON(GameResponse);
+});
+
 //--- Update a game response ---
 gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -247,13 +261,6 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   gameResponse.userId = userId;
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
-
-  const totalGames = await AppDataSource.getRepository(Game).count();
-  const userResponses = await AppDataSource.getRepository(GameResponse).count();
-
-  if (userResponses >= totalGames) {
-    await AppDataSource.getRepository(GameResponse).update({}, { isOldResponse: true });
-  }
   res.sendJSON(GameResponse);
 });
 

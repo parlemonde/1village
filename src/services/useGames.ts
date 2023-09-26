@@ -185,14 +185,13 @@ export const useGameRequests = () => {
   /**
    * Update isOldGame column when all games are played
    *
-   * @param id - id of gam
    * @returns boolean
    */
 
-  const sendAllGamesPlayed = async (id: number) => {
+  const resetGamesPlayedForUser = async () => {
     const response = await axiosRequest({
       method: 'PUT',
-      url: `/games/play/${id}`,
+      url: `/games/resetResponses`,
     });
     if (response.error) {
       return false;
@@ -226,7 +225,7 @@ export const useGameRequests = () => {
     getAvailableGames,
     getRandomGame,
     sendNewGameResponse,
-    sendAllGamesPlayed,
+    resetGamesPlayedForUser: resetGamesPlayedForUser,
     getGameStats,
   };
 };

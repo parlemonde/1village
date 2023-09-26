@@ -80,7 +80,8 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p style={{ marginBottom: '2rem' }}>{activity.data.presentation} a relancé le jeu des mimiques</p>
         <p>
-          Il y a actuellemment {totalMimicsCount} mimique, dont {availableMimicsCount} nouvelles mimiques à découvrir !{' '}
+          Il y a actuellemment {totalMimicsCount} mimiques, dont {availableMimicsCount}{' '}
+          {availableMimicsCount > 1 ? 'nouvelles mimiques' : 'nouvelle mimique'} à découvrir !{' '}
         </p>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>

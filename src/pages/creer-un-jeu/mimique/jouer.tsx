@@ -6,7 +6,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import type { SvgIconTypeMap } from '@mui/material';
-import { Stack, Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { AvatarImg } from 'src/components/Avatar';
@@ -45,6 +45,7 @@ function shuffleArray(array: Array<number>) {
 type AlreadyPlayerModalProps = {
   isOpen: boolean;
   gameId: number;
+  handleSuccessClick: () => void;
 };
 
 enum RadioBoxValues {
@@ -84,38 +85,22 @@ const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, ch
   />
 );
 
-const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, gameId }) => {
-  console.log('game Id : ', gameId);
+const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleSuccessClick }) => {
   const router = useRouter();
-  const { sendAllGamesPlayed } = useGameRequests();
-
-  const handleReplayClick = async () => {
-    if (isOpen) {
-      console.log("Game id, Avant l'appel à SendAllGamesPlayed", gameId);
-      const success = await sendAllGamesPlayed(gameId);
-      console.log("Après l'appel à sendAllGamesPlayed");
-      if (success) {
-        router.push('/jouer');
-      } else {
-        router.push('/');
-      }
-    }
-  };
 
   return (
     <Modal
       open={isOpen}
       title="Oups"
       cancelLabel="Retourner à l'accueil"
+      confirmLabel="Rejouer"
       maxWidth="lg"
       ariaDescribedBy="new-user-desc"
       ariaLabelledBy="new-user-title"
       onClose={() => router.push('/')}
+      onConfirm={handleSuccessClick}
     >
       C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
-      <Button color="primary" onClick={handleReplayClick}>
-        Rejouer
-      </Button>
     </Modal>
   );
 };
@@ -125,7 +110,7 @@ const PlayMimic = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames } = useGameRequests();
+  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
 
   const [game, setGame] = useState<Game | undefined>(undefined);
   const [tryCount, setTryCount] = useState<number>(0);
@@ -135,6 +120,18 @@ const PlayMimic = () => {
   const [loadingGame, setLoadingGame] = useState<boolean>(true);
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
+  const router = useRouter();
+
+  const handleConfirmModal = async () => {
+    const success = await resetGamesPlayedForUser();
+    setIsLastMimicModalOpen(false);
+
+    if (success) {
+      router.reload();
+    } else {
+      router.push('/');
+    }
+  };
 
   const sortGamesByDescOrder = (games: Game[]) => {
     return games.sort((a, b) => {
@@ -186,6 +183,9 @@ const PlayMimic = () => {
     const getFirstGame = async () => {
       try {
         const availableGames = await getAvailableGames(GameType.MIMIC);
+        if (availableGames.length === 0) {
+          setIsLastMimicModalOpen(true);
+        }
         const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
         setGame(availableGamesByDescOrder[0]); // Utiliser le dernier jeu (plus récent)
         setLoadingGame(false);
@@ -282,7 +282,7 @@ const PlayMimic = () => {
   if (!game || !gameCreator) {
     return (
       <Base>
-        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
+        <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
       </Base>
     );
   }
@@ -424,7 +424,7 @@ const PlayMimic = () => {
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayerModal isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
+        <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
           <Grid item xs={3} display="flex" justifyContent="flex-start">
             <Button variant="outlined" color="primary" onClick={getNextGame}>
