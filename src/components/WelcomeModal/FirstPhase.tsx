@@ -276,6 +276,7 @@ export const FirstPhase = () => {
                   defaultValue={'non renseignée'}
                   label="École : "
                   placeholder="Nom de votre école : "
+                  hasError={!newUser.school}
                   isEditMode
                   isRequired
                   onChange={(school) => {
@@ -287,6 +288,7 @@ export const FirstPhase = () => {
                   defaultValue={'non renseigné'}
                   label="Niveau de la classe : "
                   placeholder="Niveau de votre classe"
+                  hasError={!newUser.level}
                   isEditMode
                   isRequired
                   onChange={(level) => {
