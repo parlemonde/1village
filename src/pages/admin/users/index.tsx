@@ -206,7 +206,8 @@ const Users = () => {
             u.country
               ? {
                   id: u.id,
-                  pseudo: u.pseudo,
+                  firstname: u.firstname,
+                  lastname: u.lastname,
                   email: u.email,
                   school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
                   country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
@@ -219,7 +220,8 @@ const Users = () => {
                 }
               : {
                   id: u.id,
-                  pseudo: u.pseudo,
+                  firstname: u.firstname,
+                  lastname: u.lastname,
                   email: u.email,
                   school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
                   village: u.villageId ? (
@@ -231,7 +233,8 @@ const Users = () => {
                 },
           )}
           columns={[
-            { key: 'pseudo', label: 'Pseudo', sortable: true },
+            { key: 'firstname', label: 'Prénom', sortable: true },
+            { key: 'lastname', label: 'Nom', sortable: true },
             { key: 'email', label: 'Email', sortable: true },
             { key: 'school', label: 'École', sortable: true },
             { key: 'village', label: 'Village', sortable: true },
