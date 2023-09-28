@@ -321,22 +321,20 @@ const PlayMimic = () => {
               )}
             </div>
           </div>
-          <Grid container spacing={1} alignItems="flex-start" justifyContent="space-between" style={{ flex: 1 }}>
-            <Grid item xs={6} display="flex" justifyContent="center">
-              <RadioGroup row defaultValue={RadioBoxValues.NEW}>
-                {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
-                  return (
-                    <RadioNextGame
-                      key={index}
-                      value={value as RadioBoxValues}
-                      Icon={radioListComponentMapper[value as RadioBoxValues]}
-                      onChange={handleRadioButtonChange}
-                      checked={selectedValue === value}
-                    />
-                  );
-                })}
-              </RadioGroup>
-            </Grid>
+          <Grid container spacing={1} style={{ flex: 1, justifyContent: 'space-around' }}>
+            <RadioGroup row defaultValue={RadioBoxValues.NEW}>
+              {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
+                return (
+                  <RadioNextGame
+                    key={index}
+                    value={value as RadioBoxValues}
+                    Icon={radioListComponentMapper[value as RadioBoxValues]}
+                    onChange={handleRadioButtonChange}
+                    checked={selectedValue === value}
+                  />
+                );
+              })}
+            </RadioGroup>
           </Grid>
           <Grid
             container

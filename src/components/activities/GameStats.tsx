@@ -33,7 +33,7 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
   });
 
   return (
-    <Stack spacing={1} direction="column" alignItems="center" justifyContent="space-between">
+    <Stack spacing={1} direction="column" alignItems="center" justifyContent="flex-start">
       <Stack spacing={1} direction="row" alignItems="center" justifyContent="center" m={2}>
         <span>{`${responseCount} réponse${responseCount > 1 ? 's' : ''}`} </span>
         <Flag country={country} size={'small'} />
@@ -45,14 +45,14 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
             choices.map((choice) => (
               <>
                 {responsesByChoice[choice] ? (
-                  <Stack direction="row" spacing={2} pb={1} alignItems="center" justifyContent="center">
+                  <Stack direction="row" spacing={0} py={1} alignItems="center" justifyContent="center">
                     {responsesByChoice[choice]?.map((response) => {
                       const user = users[userMap[response.userId]];
                       return <AvatarImg key={response.id} user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />;
                     })}
                   </Stack>
                 ) : (
-                  <>TOTO</>
+                  <Stack key={choice} style={{ height: '24px', margin: '10px 5px' }}></Stack>
                 )}
               </>
             ))}
