@@ -26,24 +26,12 @@ export const NewHome = () => {
   return (
     <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
       <>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
-            background: 'white',
-            width: '95%',
-            height: '50px',
-            maxWidth: '1200px',
-            borderRadius: '10px',
-            marginBottom: '2rem',
-          }}
-        >
+        <div className="login__header">
           <Logo style={{ width: '25%', height: 'auto', margin: '0 10px', alignSelf: 'center' }} />
           <h1 style={{ placeSelf: 'center' }}>Vous êtes...</h1>
         </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
-          <div className="text-center" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', placeItems: 'center' }}>
+        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" height="fit-content" minHeight="400px" className="login__container">
+          <div className="flex-responsive text-center">
             {/* Block Teacher */}
             <div style={{ display: 'flex', flexDirection: 'column', height: '300px' }}>
               <h2>Professeur des écoles</h2>

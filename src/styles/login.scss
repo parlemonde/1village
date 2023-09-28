@@ -1,11 +1,33 @@
 @import 'variables';
 
+.login__header{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: white;
+  width: 95%;
+  height: 50px;
+  max-width: 1200px;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
 .login__container {
   background-color: white;
   border-radius: 10px;
-  overflow: hidden;
   display: flex;
+  min-height: 100%;
+
+  .flex-responsive{
+    display: flex; 
+    justify-content: space-around;
+    align-items: center; 
+    gap: 4rem; 
+    padding: 2rem 0;
+  }
 }
+
+
 
 .login__panel {
   display: inline-flex;
