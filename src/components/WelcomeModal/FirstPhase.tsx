@@ -96,7 +96,7 @@ export const FirstPhase = () => {
     setIsLoading(false);
   };
 
-  const label = <span style={{ color: 'red' }}>**</span>;
+  //const label = <span style={{ color: 'red' }}>**</span>;
 
   const sendError = (error: 'village' | 'country') => async () => {
     // do not ask twice
