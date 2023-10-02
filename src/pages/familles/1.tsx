@@ -200,10 +200,10 @@ const ClassroomParamStep1 = () => {
         dispatch({ type: 'ownClassTimeDelay', data: classroom?.delayedDays || 1 });
         setIsDisabled({ ...isDisabled, default: true, timeDelay: true, ownClass: true });
         break;
-      default:
-        dispatch({ type: 'default', data: 0 });
-        setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
-        break;
+      // default:
+      //   dispatch({ type: 'default', data: 0 });
+      //   setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
+      //   break;
     }
   };
   const handleSelectionVisibility = (key: string) => {
