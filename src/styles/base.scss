@@ -135,6 +135,10 @@ main {
   padding-bottom: $verticalSpacing;
 }
 
+.flex-responsive{
+  flex-direction: row;
+}
+
 @include for-small-screen {
   .header__container {
     margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
@@ -177,6 +181,10 @@ main {
 
   .vertical-bottom-margin {
     margin-bottom: math.div($verticalSpacing, 2);
+  }
+
+  .flex-responsive{
+    flex-direction: column;
   }
 }
 

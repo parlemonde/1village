@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
@@ -22,6 +23,7 @@ import { useUsers, useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
+import { exportJsonToCsv } from 'src/utils/csv-export';
 import { userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
@@ -63,6 +65,35 @@ const Users = () => {
   const handleSelect = useCallback((e: SelectChangeEvent<string>) => {
     setUserTypeFilter(e.target.value);
   }, []);
+
+  const handleExportToCSV = () => {
+    if (filteredUsers.length < 1) return;
+
+    const datasToExport = filteredUsers.map((user) => {
+      return {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        school: user.school ? user.school : 'Non renseignee',
+        village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigne',
+        country: user.country ? user.country.name : 'Non renseigne',
+      };
+    });
+
+    const headers = ['Prenom', 'Nom', 'Email', 'Ecole', 'Village', 'Pays'];
+
+    let userLabel = 'liste-utilisateurs-';
+
+    for (const [key, value] of Object.entries(userTypeNames)) {
+      if (key === userTypeFilter) {
+        userLabel = 'liste-' + value.toLowerCase().replaceAll(' ', '-') + 's-';
+      }
+    }
+    const todayDate = new Date().toLocaleDateString('fr-FR').replaceAll('/', '-');
+    const fileName = userLabel + todayDate;
+
+    exportJsonToCsv(fileName, headers, datasToExport);
+  };
 
   const actions = (id: number) => (
     <>
@@ -157,6 +188,18 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
+          <Button
+            color="inherit"
+            sx={defaultContainedButtonStyle}
+            component="a"
+            onClick={handleExportToCSV}
+            variant="contained"
+            style={{ flexShrink: 0, marginLeft: '1rem' }}
+            startIcon={<DownloadIcon />}
+            disabled={filteredUsers.length === 0}
+          >
+            Exporter en CSV
+          </Button>
         </div>
         <AdminTable
           emptyPlaceholder="Vous n'avez pas encore d'utilisateur !"
@@ -164,7 +207,8 @@ const Users = () => {
             u.country
               ? {
                   id: u.id,
-                  pseudo: u.pseudo,
+                  firstname: u.firstname,
+                  lastname: u.lastname,
                   email: u.email,
                   school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
                   country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
@@ -177,7 +221,8 @@ const Users = () => {
                 }
               : {
                   id: u.id,
-                  pseudo: u.pseudo,
+                  firstname: u.firstname,
+                  lastname: u.lastname,
                   email: u.email,
                   school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
                   village: u.villageId ? (
@@ -189,7 +234,8 @@ const Users = () => {
                 },
           )}
           columns={[
-            { key: 'pseudo', label: 'Pseudo', sortable: true },
+            { key: 'firstname', label: 'Prénom', sortable: true },
+            { key: 'lastname', label: 'Nom', sortable: true },
             { key: 'email', label: 'Email', sortable: true },
             { key: 'school', label: 'École', sortable: true },
             { key: 'village', label: 'Village', sortable: true },
