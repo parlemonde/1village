@@ -1,5 +1,3 @@
-import htmlToDraft from 'html-to-draftjs';
-import React from 'react';
 import { Divider } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import classnames from 'classnames';
@@ -18,6 +16,8 @@ import {
   getSelectionCustomInlineStyle,
   toggleCustomInlineStyle,
 } from 'draftjs-utils';
+import htmlToDraft from 'html-to-draftjs';
+import React from 'react';
 
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
