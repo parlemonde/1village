@@ -1,6 +1,6 @@
+import qs from 'query-string';
 import React from 'react';
 import { useRouter } from 'next/router';
-import qs from 'query-string';
 
 import { Backdrop, Button, CircularProgress, Link, Tooltip } from '@mui/material';
 

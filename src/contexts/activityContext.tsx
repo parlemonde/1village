@@ -1,6 +1,6 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
-import { useRouter } from 'next/router';
 
 import { Card, CircularProgress } from '@mui/material';
 

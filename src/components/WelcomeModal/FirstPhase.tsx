@@ -1,5 +1,5 @@
-import React from 'react';
 import { useSnackbar } from 'notistack';
+import React from 'react';
 
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
