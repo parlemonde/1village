@@ -8,8 +8,8 @@ interface PanelInputProps {
   defaultValue?: string;
   label: string;
   placeholder?: string;
-  isEditMode?: boolean;
   isRequired?: boolean;
+  isEditMode?: boolean;
   errorMsg?: string;
   helperText?: string;
   hasError?: boolean;
@@ -24,8 +24,8 @@ export const PanelInput = ({
   defaultValue = '',
   label,
   placeholder = '',
-  isEditMode = true,
   isRequired = false,
+  isEditMode = true,
   errorMsg,
   helperText,
   type = 'text',
