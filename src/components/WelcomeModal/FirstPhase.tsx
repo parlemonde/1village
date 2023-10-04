@@ -1,10 +1,12 @@
+import React from 'react';
+
+import { useSnackbar } from 'notistack';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { Checkbox } from '@mui/material';
 import Button from '@mui/material/Button';
 import MobileStepper from '@mui/material/MobileStepper';
-import { useSnackbar } from 'notistack';
-import React from 'react';
+
 
 import { CGU } from 'src/components/CGU';
 import { Flag } from 'src/components/Flag';
