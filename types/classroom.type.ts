@@ -12,6 +12,7 @@ export interface Classroom {
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
   user?: User;
+  defaultPrintMessage?: string;
 }
 
 export interface ClassroomAsFamilly {

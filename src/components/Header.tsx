@@ -21,6 +21,7 @@ import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import type { Student } from 'types/student.type';
 import { UserType } from 'types/user.type';
+import AccessControl from './AccessControl';
 
 export const Header = () => {
   const router = useRouter();
@@ -85,7 +86,7 @@ export const Header = () => {
         setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
         // updateUser(user?.id, {country:  });
-      } catch (err) {}
+      } catch (err) { }
     }
     setIsModalOpen(false);
   };
@@ -187,7 +188,9 @@ export const Header = () => {
               >
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
-                {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                <AccessControl featureName="id-family" key={user?.id || 'default'}>
+                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                </AccessControl>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>
@@ -204,8 +207,8 @@ export const Header = () => {
                     {selectedStudent
                       ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
                       : linkedStudents.length > 0
-                      ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
-                      : 'Eleve non selectionne'}
+                        ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
+                        : 'Eleve non selectionne'}
                   </span>
                   <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectStudentModal}>
                     {linkedStudents?.length > 0 ? 'Changer' : 'Choisir un élève'}
