@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+import type { Student } from 'types/student.type';
 import type { User, UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -9,6 +10,7 @@ type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
 interface UserContextValue {
   user: User | null;
+  selectedStudent: number;
   isLoggedIn: boolean;
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
@@ -18,12 +20,18 @@ interface UserContextValue {
   logout(): Promise<void>;
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
+  setSelectedStudent(student: Student | null): void;
   linkStudent(hashedCode: string): UserContextFunc;
+  linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
+  getLinkedStudentsToUser(userId: number): Promise<Student[]>;
+  deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
+  students: Student[];
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
 export const UserContext = React.createContext<UserContextValue>({
   user: null,
+  selectedStudent: 1,
   isLoggedIn: false,
   login: async () => ({ success: false, errorCode: 0 }),
   loginWithSso: async () => ({ success: false, errorCode: 0 }),
@@ -33,7 +41,12 @@ export const UserContext = React.createContext<UserContextValue>({
   logout: async () => {},
   deleteAccount: async () => false,
   setUser: () => {},
+  setSelectedStudent: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
+  linkedStudents: async () => ({ success: false, errorCode: 0 }),
+  getLinkedStudentsToUser: async () => [] as Student[],
+  students: [],
+  deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
 
@@ -44,6 +57,7 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
+  const [selectedStudent, setSelectedStudent] = React.useState<number>(1);
 
   React.useEffect(() => {
     if (
@@ -263,6 +277,52 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     };
   }, []);
 
+  /**
+   * Get the user's linked student
+   */
+  const getLinkedStudentsToUser = React.useCallback(
+    async (userId: number) => {
+      try {
+        if (!user) return [];
+        const response = await axiosRequest({
+          method: 'GET',
+          url: `/users/${userId}/linked-students`,
+        });
+        return response.data as Student[];
+      } catch (error) {
+        console.error('Error fetching linked students:', error);
+        return [];
+      }
+    },
+    [user],
+  );
+
+  const deleteLinkedStudent = React.useCallback(async (userId: number, studentId: number) => {
+    return axiosRequest({
+      method: 'DELETE',
+      url: `/users/${userId}/linked-students/${studentId}`,
+    })
+      .then((response) => {
+        if (response.error) {
+          return {
+            success: false,
+            errorCode: response.data?.errorCode || 0,
+          };
+        }
+
+        return {
+          success: true,
+          errorCode: 0,
+        };
+      })
+      .catch((error) => {
+        console.error("Une erreur s'est produite lors de la suppression du lien avec l'élève :", error);
+        return {
+          success: false,
+          errorCode: 0,
+        };
+      });
+  }, []);
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
   /**
@@ -289,9 +349,14 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     [user],
   );
 
+  useEffect(() => {
+    console.log('user===', user);
+  }, [user]);
+
   const value = React.useMemo(
     () => ({
       user,
+      selectedStudent,
       isLoggedIn,
       login,
       loginWithSso,
@@ -301,10 +366,30 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       logout,
       deleteAccount,
       setUser,
+      setSelectedStudent,
       linkStudent,
+      getLinkedStudentsToUser,
+      deleteLinkedStudent,
       getClassroomAsFamily,
     }),
-    [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent, getClassroomAsFamily],
+    [
+      user,
+      selectedStudent,
+      isLoggedIn,
+      login,
+      loginWithSso,
+      signup,
+      updatePassword,
+      verifyEmail,
+      logout,
+      deleteAccount,
+      setUser,
+      setSelectedStudent,
+      linkStudent,
+      getLinkedStudentsToUser,
+      deleteLinkedStudent,
+      getClassroomAsFamily,
+    ],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1,9 +1,9 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
+import React from 'react';
 
 import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';
+import { getUserVisibilityFamilyParams } from 'src/api/user/user.get';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
 import { WorldMap } from 'src/components/WorldMap';
@@ -81,6 +81,10 @@ export const Accueil = () => {
         <LinkChild />
       </Base>
     );
+  }
+
+  if ((user && user.type === UserType.FAMILY) || (user && user.type === UserType.TEACHER)) {
+    getUserVisibilityFamilyParams(user);
   }
 
   return (
