@@ -392,5 +392,5 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     ],
   );
 
-  return <UserContext.Provider value={ value }> { children } < /UserContext.Provider>;
+  return <UserContext.Provider value={value}> {children}</UserContext.Provider>;
 };
