@@ -38,10 +38,10 @@ export const UserContext = React.createContext<UserContextValue>({
   signup: async () => ({ success: false, errorCode: 0 }),
   updatePassword: async () => ({ success: false, errorCode: 0 }),
   verifyEmail: async () => ({ success: false, errorCode: 0 }),
-  logout: async () => {},
+  logout: async () => { },
   deleteAccount: async () => false,
-  setUser: () => {},
-  setSelectedStudent: () => {},
+  setUser: () => { },
+  setSelectedStudent: () => { },
   linkStudent: async () => ({ success: false, errorCode: 0 }),
   linkedStudents: async () => ({ success: false, errorCode: 0 }),
   getLinkedStudentsToUser: async () => [] as Student[],
@@ -57,7 +57,7 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
-  const [selectedStudent, setSelectedStudent] = React.useState<number>(1);
+  const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(null);
 
   React.useEffect(() => {
     if (
@@ -392,5 +392,5 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     ],
   );
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={ value }> { children } < /UserContext.Provider>;
 };
