@@ -1,16 +1,16 @@
 // import SearchIcon from '@mui/icons-material/Search';
 
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button, FormControl, InputLabel, Select } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
+import AccessControl from './AccessControl';
 import { getClassroomOfStudent } from 'src/api/student/student.get';
 import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { updateUser } from 'src/api/user/user.put';
@@ -21,7 +21,6 @@ import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import type { Student } from 'types/student.type';
 import { UserType } from 'types/user.type';
-import AccessControl from './AccessControl';
 
 export const Header = () => {
   const router = useRouter();
@@ -62,74 +61,33 @@ export const Header = () => {
       if (user?.id) {
         try {
           const students = await getLinkedStudentsToUser(user.id);
-          // if (Array.isArray(students) && JSON.stringify(students) !== JSON.stringify(linkedStudents)) {
           setLinkedStudents(students);
-          // }
         } catch (err) {
           console.error('Error fetching linked students:', err);
         }
       }
     };
     fetchLinkedStudents();
-    console.log(linkedStudents);
   }, []);
 
   const onSelectStudent = async () => {
-    setSelectedStudent(linkedStudents[selectedStudentIndex] || null);
     if (user) {
+      setSelectedStudent(linkedStudents.find((linkedStudent) => linkedStudent.id === selectedStudentIndex) || null);
       try {
-        // console.log('dans le try');
         const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
-        // console.log('classroomOfStudent', classroomOfStudent);
         await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
-        // console.log(classroom);
         setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
         // updateUser(user?.id, {country:  });
-      } catch (err) { }
+      } catch (err) {}
     }
     setIsModalOpen(false);
   };
-
-  useEffect(() => {
-    console.log('user ===', user);
-  }, [user]);
-
-  // React.useEffect(() => {
-  //   const fetchClassroomOfStudent = async () => {
-  //     if (linkedStudents.length > 0 && user) {
-  //       try {
-  //         const classroomOfStudent = await getClassroomOfStudent(linkedStudents[0].id);
-  //         if (classroomOfStudent?.country?.isoCode !== user?.country?.isoCode) {
-  //           setTempUser({ ...user, country: { isoCode: classroomOfStudent.country.isoCode, name: '' } });
-  //         }
-  //         setTempSelectedStudent(linkedStudents[0]);
-  //       } catch (err) {
-  //         console.error(err);
-  //       }
-  //     }
-  //   };
-  //   fetchClassroomOfStudent();
-  // }, [user, linkedStudents]);
-
-  console.log('selectedStudent:', selectedStudent);
 
   const showSelectStudentModal = () => {
     setIsModalOpen(true);
   };
 
-  // React.useEffect(() => {
-  //   if (selectedStudentIndex !== -1) {
-  //     setSelectedStudent(selectedStudentIndex);
-  //   }
-  //   const savedSelectedStudent = localStorage.getItem('selectedStudentIndex');
-  //   if (savedSelectedStudent) {
-  //     setSelectedStudentIndex(JSON.parse(savedSelectedStudent));
-  //   }
-  //   console.log('selectedStudent setItem', localStorage);
-  //   localStorage.setItem('selectedStudentItem', JSON.stringify(selectedStudentIndex));
-  //   console.log('selectedStudent getItem', localStorage);
-  // }, []);
   return (
     <header>
       <div className="header__container with-shadow">
@@ -207,8 +165,8 @@ export const Header = () => {
                     {selectedStudent
                       ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
                       : linkedStudents.length > 0
-                        ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
-                        : 'Eleve non selectionne'}
+                      ? `${linkedStudents[0].firstname} ${linkedStudents[0].lastname}`
+                      : 'Eleve non selectionne'}
                   </span>
                   <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectStudentModal}>
                     {linkedStudents?.length > 0 ? 'Changer' : 'Choisir un élève'}
@@ -238,7 +196,6 @@ export const Header = () => {
                           value={selectedStudentIndex === -1 ? '' : selectedStudentIndex}
                           onChange={(event) => {
                             setSelectedStudentIndex(event.target.value as number);
-                            setSelectedStudent(linkedStudents[event.target.value as number]);
                           }}
                           label="StudentLinked"
                         >
