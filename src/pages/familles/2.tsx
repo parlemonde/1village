@@ -18,6 +18,7 @@ import { ClassroomContext } from 'src/contexts/classroomContext';
 import { bgPage } from 'src/styles/variables.const';
 import { isNormalizedStringEqual } from 'src/utils/isNormalizedStringEqual';
 import type { Student } from 'types/student.type';
+import AccessControl from 'src/components/AccessControl';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();
