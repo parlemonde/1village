@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import React from 'react';
 
 import { DeleteButton } from '../buttons/DeleteButton';
-import { ClassroomContext } from 'src/contexts/classroomContext';
+// import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
 import { bgPage } from 'src/styles/variables.const';
 import type { Student } from 'types/student.type';
@@ -15,7 +15,7 @@ export const LinkChild = () => {
   const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const hashedCodeRef = React.useRef<HTMLInputElement>(null);
-  const [student, setStudent] = React.useState(null);
+  // const [student, setStudent] = React.useState(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

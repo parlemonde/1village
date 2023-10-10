@@ -317,7 +317,7 @@ const ClassroomParamStep1 = () => {
                   onFocus={() => handleSelectionVisibility('default')}
                   style={radioValue !== 'default' ? { color: '#CCC' } : {}}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="timeDelay"
                   name="timeDelay"
                   control={<Radio />}
@@ -333,7 +333,7 @@ const ClassroomParamStep1 = () => {
                   onClick={() => toggleInput('timeDelay', false)}
                   disabled={isDisabled?.timeDelay}
                   style={radioValue !== 'timeDelay' ? { color: '#CCC' } : {}}
-                />
+                /> */}
                 <FormControlLabel
                   value="ownClass"
                   name="ownClass"
@@ -342,7 +342,7 @@ const ClassroomParamStep1 = () => {
                   onFocus={() => handleSelectionVisibility('ownClass')}
                   style={radioValue !== 'ownClass' ? { color: '#CCC' } : {}}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="ownClassTimeDelay"
                   name="ownClassTimeDelay"
                   control={<Radio />}
@@ -358,7 +358,7 @@ const ClassroomParamStep1 = () => {
                   onClick={() => toggleInput('ownClassTimeDelay', false)}
                   disabled={isDisabled?.ownClassTimeDelay}
                   style={radioValue !== 'ownClassTimeDelay' ? { color: '#CCC' } : {}}
-                />
+                /> */}
               </RadioGroup>
             </FormControl>
             <div style={{ margin: '-1rem 0' }}>

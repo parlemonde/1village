@@ -3,7 +3,7 @@ import React from 'react';
 import type { QueryFunction } from 'react-query';
 import { useQueryClient, useQuery } from 'react-query';
 
-import { serializeToQueryUrl } from 'src/utils';
+// import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User, UserUpdatePassword } from 'types/user.type';
 
