@@ -160,7 +160,7 @@ export const Header = () => {
           <div className="header__user">
             {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (
               <>
-                <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
+                {/* <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
                   <span className="text text--small" style={{ margin: '0 0.6rem' }}>
                     {selectedStudent
                       ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
@@ -208,7 +208,7 @@ export const Header = () => {
                       </FormControl>
                     )}
                   </div>
-                </Modal>
+                </Modal> */}
               </>
             )}
             {user.type === UserType.ADMIN ||

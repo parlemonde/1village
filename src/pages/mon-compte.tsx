@@ -490,11 +490,11 @@ const Presentation = () => {
           </div>
         </div>
       ) : null}
-      {user.type === UserType.FAMILY ? (
+      {/* {user.type === UserType.FAMILY ? (
         <div className="account__panel">
           <LinkChild />
         </div>
-      ) : null}
+      ) : null} */}
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
         {/* <div style={{ margin: '1rem 0.5rem' }}>
