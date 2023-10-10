@@ -1,7 +1,7 @@
 // import SearchIcon from '@mui/icons-material/Search';
 
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Button, FormControl, InputLabel, Select } from '@mui/material';
+import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 // import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
@@ -11,10 +11,9 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 import AccessControl from './AccessControl';
-import { getClassroomOfStudent } from 'src/api/student/student.get';
+//import { getClassroomOfStudent } from 'src/api/student/student.get';
 import { getLinkedStudentsToUser } from 'src/api/user/user.get';
-import { updateUser } from 'src/api/user/user.put';
-import { Modal } from 'src/components/Modal';
+//import { updateUser } from 'src/api/user/user.put';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
@@ -24,11 +23,15 @@ import { UserType } from 'types/user.type';
 
 export const Header = () => {
   const router = useRouter();
-  const { user, logout, setUser, selectedStudent, setSelectedStudent } = React.useContext(UserContext);
+  const { user, logout } = React.useContext(UserContext);
+  //const { user, logout, setUser, setSelectedStudent } = React.useContext(UserContext);
+  //const { user, logout, setUser, selectedStudent, setSelectedStudent } = React.useContext(UserContext);
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  // const [isModalOpen, setIsModalOpen] = React.useState(false);
+  //const [ setIsModalOpen] = React.useState(false);
   const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
-  const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
+  //const [selectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
+  //const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
@@ -70,23 +73,23 @@ export const Header = () => {
     fetchLinkedStudents();
   }, []);
 
-  const onSelectStudent = async () => {
-    if (user) {
-      setSelectedStudent(linkedStudents.find((linkedStudent) => linkedStudent.id === selectedStudentIndex) || null);
-      try {
-        const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
-        await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
-        setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
+  // const onSelectStudent = async () => {
+  //   if (user) {
+  //     setSelectedStudent(linkedStudents.find((linkedStudent) => linkedStudent.id === selectedStudentIndex) || null);
+  //     try {
+  //       const classroomOfStudent = await getClassroomOfStudent(linkedStudents[selectedStudentIndex].id);
+  //       await updateUser(user?.id, { countryCode: classroomOfStudent?.country?.isoCode });
+  //       setUser({ ...user, country: { isoCode: classroomOfStudent?.country?.isoCode, name: '' } });
 
-        // updateUser(user?.id, {country:  });
-      } catch (err) {}
-    }
-    setIsModalOpen(false);
-  };
+  //       // updateUser(user?.id, {country:  });
+  //     } catch (err) { }
+  //   }
+  //   setIsModalOpen(false);
+  // };
 
-  const showSelectStudentModal = () => {
-    setIsModalOpen(true);
-  };
+  // const showSelectStudentModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
   return (
     <header>
