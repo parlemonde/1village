@@ -361,6 +361,7 @@ const PlayMimic = () => {
                     const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
                     const isCorrect = isSuccess && found;
                     const mimicOrigine = mimicContent?.origine || '';
+                    const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
                     return (
                       <ResponseButton
                         key={val}
@@ -368,8 +369,8 @@ const PlayMimic = () => {
                         onClick={() => handleClick(value, isSuccess)}
                         isSuccess={isSuccess}
                         signification={signification}
-                        disabled={(!isSuccess && found) || (isSuccess && tryCount > 1)}
-                        isCorrect={isCorrect}
+                        disabled={isDisabled}
+                        isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
                         mimicOrigine={mimicOrigine}
                       />
                     );

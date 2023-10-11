@@ -56,8 +56,8 @@ const ResponseButton = ({
     >
       {isCorrect ? (
         <Stack direction="column">
-          <Typography>{hasBeenSelected ? signification : ''}</Typography>
-          {hasBeenSelected && <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>}
+          <Typography>{signification}</Typography>
+          <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
         </Stack>
       ) : (
         signification
