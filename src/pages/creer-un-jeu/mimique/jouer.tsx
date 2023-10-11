@@ -424,11 +424,12 @@ const PlayMimic = () => {
         </Modal>
         <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
-          <Grid item xs={3} display="flex" justifyContent="flex-start">
+          {/* Todo : modifier la logique du bouton pour qu'il récupère la mimique précédente */}
+          {/* <Grid item xs={3} display="flex" justifyContent="flex-start">
             <Button variant="outlined" color="primary" onClick={getNextGame}>
               mimique précédente
             </Button>
-          </Grid>
+          </Grid> */}
           <Grid item xs={6} style={{ textAlign: 'center' }}>
             {(found || tryCount > 1) && (
               <div style={{ textAlign: 'center' }}>
