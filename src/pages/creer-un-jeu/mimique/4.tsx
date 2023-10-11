@@ -76,7 +76,7 @@ const MimiqueStep4 = () => {
         />
 
         <div className="width-900">
-          <h1>Pré-visualisez votre mimiques et publiez les !</h1>
+          <h1>Pré-visualisez vos mimiques et publiez les !</h1>
           <p style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>
             Vous pouvez modifier chaque mimique si vous le souhaitez. Quand vous êtes prêts :
           </p>
@@ -112,7 +112,7 @@ const MimiqueStep4 = () => {
                   controls
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={8}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
                   <FormControlLabel
                     value={1}
@@ -132,7 +132,7 @@ const MimiqueStep4 = () => {
                   />
                 </RadioGroup>
               </Grid>
-              <Grid item xs={12} md={2}>
+              <Grid item xs={12}>
                 <EditButton
                   onClick={() => {
                     router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
@@ -156,7 +156,7 @@ const MimiqueStep4 = () => {
                   controls
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={8}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
                   <FormControlLabel
                     value={1}
@@ -200,7 +200,7 @@ const MimiqueStep4 = () => {
                   controls
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={8}>
                 <RadioGroup aria-label="signification" name="signification1" value={1}>
                   <FormControlLabel
                     value={1}
