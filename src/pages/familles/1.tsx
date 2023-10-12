@@ -2,6 +2,7 @@ import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGr
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
 
+import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
 import OverflowContainer from 'src/components/OverflowContainer';
 import { Steps } from 'src/components/Steps';
@@ -22,7 +23,6 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
-import AccessControl from 'src/components/AccessControl';
 
 const content1 = {
   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
@@ -226,7 +226,6 @@ const ClassroomParamStep1 = () => {
         newState = state.default;
         break;
     }
-    console.log('New State:', newState);
     updateClassroomParameters(newState);
     if (activities) {
       const isVisibleToParent = newState.hasVisibilitySetToClass || key === 'default';

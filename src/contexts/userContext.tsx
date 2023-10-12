@@ -20,10 +20,8 @@ interface UserContextValue {
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
-  linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
   getLinkedStudentsToUser(userId: number): Promise<Student[]>;
   deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
-  students: Student[];
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
@@ -35,13 +33,11 @@ export const UserContext = React.createContext<UserContextValue>({
   signup: async () => ({ success: false, errorCode: 0 }),
   updatePassword: async () => ({ success: false, errorCode: 0 }),
   verifyEmail: async () => ({ success: false, errorCode: 0 }),
-  logout: async () => { },
+  logout: async () => {},
   deleteAccount: async () => false,
-  setUser: () => { },
+  setUser: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
-  linkedStudents: async () => ({ success: false, errorCode: 0 }),
   getLinkedStudentsToUser: async () => [] as Student[],
-  students: [],
   deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
@@ -345,7 +341,7 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
   );
 
   useEffect(() => {
-    console.log('user===', user);
+    // console.log('user===', user);
   }, [user]);
 
   const value = React.useMemo(
