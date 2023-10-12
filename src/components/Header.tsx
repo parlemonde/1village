@@ -12,7 +12,7 @@ import React, { useEffect } from 'react';
 
 import AccessControl from './AccessControl';
 //import { getClassroomOfStudent } from 'src/api/student/student.get';
-import { getLinkedStudentsToUser } from 'src/api/user/user.get';
+// import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 //import { updateUser } from 'src/api/user/user.put';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -59,19 +59,19 @@ export const Header = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    const fetchLinkedStudents = async () => {
-      if (user?.id) {
-        try {
-          const students = await getLinkedStudentsToUser(user.id);
-          setLinkedStudents(students);
-        } catch (err) {
-          console.error('Error fetching linked students:', err);
-        }
-      }
-    };
-    fetchLinkedStudents();
-  }, []);
+  // useEffect(() => {
+  //   const fetchLinkedStudents = async () => {
+  //     if (user?.id) {
+  //       try {
+  //         const students = await getLinkedStudentsToUser(user.id);
+  //         setLinkedStudents(students);
+  //       } catch (err) {
+  //         console.error('Error fetching linked students:', err);
+  //       }
+  //     }
+  //   };
+  //   fetchLinkedStudents();
+  // }, []);
 
   // const onSelectStudent = async () => {
   //   if (user) {
@@ -161,7 +161,8 @@ export const Header = () => {
         )}
         {user && (
           <div className="header__user">
-            {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (
+            {user.type === UserType.FAMILY && (
+            // {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (  
               <>
                 {/* <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
                   <span className="text text--small" style={{ margin: '0 0.6rem' }}>
@@ -211,9 +212,9 @@ export const Header = () => {
                       </FormControl>
                     )}
                   </div>
-                </Modal> */}
-              </>
-            )}
+              //   </Modal> */}
+               {/* </> */}
+             {/* )} */}
             {user.type === UserType.ADMIN ||
               (user.type === UserType.SUPER_ADMIN ? (
                 <Link href="/admin/villages" passHref>

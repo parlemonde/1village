@@ -1,14 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import { useRouter } from 'next/router';
-import React, { useState, useEffect } from 'react';
-
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
 
 import { editStudent } from 'src/api/classroom/student.put';
+import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
@@ -18,7 +18,6 @@ import { ClassroomContext } from 'src/contexts/classroomContext';
 import { bgPage } from 'src/styles/variables.const';
 import { isNormalizedStringEqual } from 'src/utils/isNormalizedStringEqual';
 import type { Student } from 'types/student.type';
-import AccessControl from 'src/components/AccessControl';
 
 const ClassroomParamStep2 = () => {
   const router = useRouter();
@@ -215,9 +214,9 @@ const ClassroomParamStep2 = () => {
             <h1>Ajouter un identifiant par élève</h1>
             <p className="text">
               Pour sécuriser la connexion des familles, nous allons créer{' '}
-              <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque élève de votre classe. </span> <br></br>Ensuite chaque famille pourra
-              créer jusqu&apos;à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou les
-              grandes-soeurs pourront accéder à 1Village. <br></br>
+              <span style={{ fontWeight: 'bold' }}>un identifiant unique à chaque élève de votre classe. </span> <br></br>Ensuite chaque famille
+              pourra créer jusqu&apos;à 5 accès avec ce même identifiant unique: ainsi les parents divorcés, les grands-parents, les grands-frères ou
+              les grandes-soeurs pourront accéder à 1Village. <br></br>
               <br></br>Vous devez donc créer autant d&apos;identifiants qu&apos;il y a d&apos;élèves dans votre classe. Vous pourrez rajouter des
               identifiants en cours d&apos;années, lorsqu&apos;un nouvel élève arrive dans votre classe.
             </p>
