@@ -22,10 +22,10 @@ interface UserContextValue {
   setUser: (value: React.SetStateAction<User | null>) => void;
   setSelectedStudent(student: Student | null): void;
   linkStudent(hashedCode: string): UserContextFunc;
-  linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
+  // linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
   getLinkedStudentsToUser(userId: number): Promise<Student[]>;
   deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
-  students: Student[];
+  // students: Student[];
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
@@ -43,9 +43,9 @@ export const UserContext = React.createContext<UserContextValue>({
   setUser: () => { },
   setSelectedStudent: () => { },
   linkStudent: async () => ({ success: false, errorCode: 0 }),
-  linkedStudents: async () => ({ success: false, errorCode: 0 }),
+  // linkedStudents: async () => ({ success: false, errorCode: 0 }),
   getLinkedStudentsToUser: async () => [] as Student[],
-  students: [],
+  // students: [],
   deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
