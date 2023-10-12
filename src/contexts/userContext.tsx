@@ -10,7 +10,6 @@ type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
 
 interface UserContextValue {
   user: User | null;
-  selectedStudent: number;
   isLoggedIn: boolean;
   login(username: string, password: string, remember: boolean): UserContextFunc;
   loginWithSso(code: string): UserContextFunc;
@@ -20,18 +19,16 @@ interface UserContextValue {
   logout(): Promise<void>;
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
-  setSelectedStudent(student: Student | null): void;
   linkStudent(hashedCode: string): UserContextFunc;
-  // linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
+  linkedStudents(hashedCode: string, firstname: string, lastname: string): UserContextFunc;
   getLinkedStudentsToUser(userId: number): Promise<Student[]>;
   deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
-  // students: Student[];
+  students: Student[];
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
 export const UserContext = React.createContext<UserContextValue>({
   user: null,
-  selectedStudent: 1,
   isLoggedIn: false,
   login: async () => ({ success: false, errorCode: 0 }),
   loginWithSso: async () => ({ success: false, errorCode: 0 }),
@@ -41,11 +38,10 @@ export const UserContext = React.createContext<UserContextValue>({
   logout: async () => { },
   deleteAccount: async () => false,
   setUser: () => { },
-  setSelectedStudent: () => { },
   linkStudent: async () => ({ success: false, errorCode: 0 }),
-  // linkedStudents: async () => ({ success: false, errorCode: 0 }),
+  linkedStudents: async () => ({ success: false, errorCode: 0 }),
   getLinkedStudentsToUser: async () => [] as Student[],
-  // students: [],
+  students: [],
   deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
@@ -57,7 +53,6 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ user, setUser, children }: React.PropsWithChildren<UserContextProviderProps>) => {
   const router = useRouter();
-  const [selectedStudent, setSelectedStudent] = React.useState<Student | null>(null);
 
   React.useEffect(() => {
     if (
@@ -356,7 +351,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
   const value = React.useMemo(
     () => ({
       user,
-      selectedStudent,
       isLoggedIn,
       login,
       loginWithSso,
@@ -366,7 +360,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       logout,
       deleteAccount,
       setUser,
-      setSelectedStudent,
       linkStudent,
       getLinkedStudentsToUser,
       deleteLinkedStudent,
@@ -374,7 +367,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     }),
     [
       user,
-      selectedStudent,
       isLoggedIn,
       login,
       loginWithSso,
@@ -384,7 +376,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       logout,
       deleteAccount,
       setUser,
-      setSelectedStudent,
       linkStudent,
       getLinkedStudentsToUser,
       deleteLinkedStudent,
