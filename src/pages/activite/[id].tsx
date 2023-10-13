@@ -1,8 +1,7 @@
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { isEnigme } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';

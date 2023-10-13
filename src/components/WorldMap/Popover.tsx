@@ -1,6 +1,5 @@
-import * as React from 'react';
-
 import Card from '@mui/material/Card';
+import * as React from 'react';
 
 import { UserPopover } from './UserPopover';
 import type { User } from 'types/user.type';

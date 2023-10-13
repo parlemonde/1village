@@ -1,15 +1,14 @@
+import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { Box, Button } from '@mui/material';
-
+import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ClassroomContext } from 'src/contexts/classroomContext';
-import AccessControl from 'src/components/AccessControl';
 
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 

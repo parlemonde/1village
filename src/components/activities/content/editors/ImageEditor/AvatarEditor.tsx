@@ -1,7 +1,6 @@
-import React from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonBase } from '@mui/material';
+import React from 'react';
 
 import type { EditorProps } from '../../content.types';
 import { ImageModal } from './ImageModal';
