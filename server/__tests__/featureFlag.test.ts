@@ -9,7 +9,7 @@ import { AppDataSource } from '../utils/data-source';
 
 // Mock the AppDataSource and its getRepository method
 
-jest.mock('../../utils/data-source', () => {
+jest.mock('../utils/data-source', () => {
   const mockFeatureFlagFind = jest.fn();
 
   // This is the mock class
