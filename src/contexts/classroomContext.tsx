@@ -284,9 +284,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createClassroom, fetchClassroom, getStudents, user]);
 
-  useEffect(() => {
-    console.log('classroom ===', classroom);
-  }, [classroom]);
+  useEffect(() => {}, [classroom]);
 
   const value = React.useMemo(
     () => ({

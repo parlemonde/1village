@@ -13,18 +13,13 @@ export const getUsersLinkedToStudent = async (id: number) => {
 };
 
 export const getClassroomOfStudent = async (id: number) => {
-  console.log('in the query');
   const response = await axiosRequest({
     method: 'GET',
     url: `/students/${id}/classroom`,
   });
-
-  console.log('avant lerror');
   if (response.error) {
-    console.log('response.error', response.error);
     throw response.error;
   }
-  console.log('classroom query', response.data);
   return response.data;
 };
 
