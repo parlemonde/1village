@@ -2,10 +2,10 @@ import type { Request, Response } from 'express';
 import express from 'express';
 import request from 'supertest';
 
-import { Controller } from '../../controllers/controller';
-import { FeatureFlag } from '../../entities/featureFlag';
-import { UserType } from '../../entities/user';
-import { AppDataSource } from '../../utils/data-source';
+import { Controller } from '../controllers/controller';
+import { FeatureFlag } from '../entities/featureFlag';
+import { UserType } from '../entities/user';
+import { AppDataSource } from '../utils/data-source';
 
 // Mock the AppDataSource and its getRepository method
 
