@@ -33,7 +33,7 @@ jest.mock('../utils/data-source', () => {
 });
 
 const mockFeatureFlagFind = jest.fn();
-jest.mock('../../entities/featureFlag', () => {
+jest.mock('../entities/featureFlag', () => {
   return jest.fn(() => ({
     find: mockFeatureFlagFind,
   }));
