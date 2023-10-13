@@ -36,13 +36,13 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
 
     const userClassroomData = (await getUserVisibilityFamilyParams(user)) as [Classroom];
 
-    console.log('userClassroomData ===', userClassroomData);
-    console.log('userClassroomDataUserId===', userClassroomData[0].user?.id);
-    console.log('userClassroomDataDelayedDats ===', userClassroomData[0].delayedDays);
+    // console.log('userClassroomData ===', userClassroomData);
+    // console.log('userClassroomDataUserId===', userClassroomData[0].user?.id);
+    // console.log('userClassroomDataDelayedDats ===', userClassroomData[0].delayedDays);
 
     const isFamily = user.type === UserType.FAMILY;
 
-    console.log('family conditions', isFamily);
+    // console.log('family conditions', isFamily);
 
     const query: {
       [key: string]: string | number | boolean | undefined;
@@ -59,8 +59,6 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     if (userId !== undefined) {
       query.userId = userId;
     }
-
-    console.log('query', query);
 
     const response = await axiosRequest({
       method: 'GET',

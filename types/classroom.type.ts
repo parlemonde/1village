@@ -1,6 +1,5 @@
-import type { User } from 'server/entities/user';
-
 import type { Country } from './country.type';
+import type { User } from './user.type';
 
 export interface Classroom {
   id: number;
