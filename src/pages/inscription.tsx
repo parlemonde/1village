@@ -25,6 +25,7 @@ const Inscription = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
+  const [isPasswordIdenticalToEmail, setisPasswordIdenticalToEmail] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmationPasswordVisible, setIsConfirmationPasswordVisible] = useState<boolean>(false);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
@@ -65,14 +66,17 @@ const Inscription = () => {
         }
         passwordMessageRef.current += ' une lettre majuscule';
       }
-      if (password.length < 8) {
+      if (password.length <= 11) { // Changement 8 en 11
         if (passwordMessageRef.current) {
           passwordMessageRef.current += ' et ';
         }
-        passwordMessageRef.current += 'faire au moins 8 caractères';
+        passwordMessageRef.current += 'faire au moins 12 caractères';
+      }
+      if(!password.match(/[^a-zA-Z0-9]/)){
+        passwordMessageRef.current += ' et au moins un caractère spécial ';
       }
 
-      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length < 8) {
+      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length <= 11 || !password.match(/[^a-zA-Z0-9]/)) { // Changement 8 en 11 + rajout condition
         setIsPasswordValid(false);
       } else {
         setIsPasswordValid(true);
@@ -86,7 +90,7 @@ const Inscription = () => {
         setIsPasswordMatch(true);
       }
     }
-
+    
     if (email !== '') {
       if (!emailRegex.test(email)) {
         setIsEmailValid(false);
@@ -94,7 +98,7 @@ const Inscription = () => {
         setIsEmailValid(true);
       }
     }
-
+    
     if (lastname !== '') {
       if (lastname.length > 1) {
         setIsLastnameValid(true);
@@ -109,6 +113,16 @@ const Inscription = () => {
       } else {
         setIsFirstnameValid(false);
       }
+    }
+    if (email !== '' && password !== ''){ // Ajout de cette fonctionnalité pour vérifier si l'email est égal au mot de passe
+      if(email === password){
+        setisPasswordIdenticalToEmail(true)
+      }
+      else{
+        setisPasswordIdenticalToEmail(false)
+
+      }
+
     }
 
     setNewUser({
@@ -129,6 +143,7 @@ const Inscription = () => {
       isPasswordMatch &&
       isPasswordValid &&
       isLastnameValid &&
+      !isPasswordIdenticalToEmail &&
       firstname.length !== 0 &&
       lastname.length !== 0
     ) {
@@ -140,6 +155,7 @@ const Inscription = () => {
       !isFirstnameValid ||
       !isPasswordMatch ||
       !isPasswordValid ||
+      isPasswordIdenticalToEmail || // Changement
       !isLastnameValid ||
       firstname.length === 0 ||
       lastname.length === 0
@@ -156,6 +172,7 @@ const Inscription = () => {
     isLastnameValid,
     isPasswordMatch,
     isPasswordValid,
+    isPasswordIdenticalToEmail, // Changement
     isRegisterDataValid,
     lastname,
     password,
@@ -165,7 +182,7 @@ const Inscription = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid && !isPasswordIdenticalToEmail) { // Changement && isPasswordIdenticalToEmail
       try {
         await addUser(newUser);
       } catch (err) {
@@ -312,13 +329,22 @@ const Inscription = () => {
                       ),
                     }}
                     type={isPasswordVisible === false ? 'password' : 'text'}
-                    error={isPasswordValid === false}
-                    helperText={isPasswordValid === true ? '8 lettres minimum, une majuscule et un chiffre' : passwordMessage}
+                    error={isPasswordValid === false || isPasswordIdenticalToEmail === true} //||isPasswordIdenticalToEmail === true
+                    // helperText={isPasswordValid === true ? '12 lettres minimum, une majuscule, un chiffre et un caractère spécial' : passwordMessage } // Changement 8 en 12 rajout caractère spécial
+                    helperText={
+                      isPasswordIdenticalToEmail
+                        ? 'Le mot de passe ne peut pas être identique à l\'email'
+                        : isPasswordValid === true
+                        ? '12 lettres minimum, une majuscule, un chiffre et un caractère spécial'
+                        : passwordMessage
+                    }
                     InputLabelProps={{ shrink: true }}
                     sx={{
                       width: '30ch',
                       mb: '1rem',
                     }}
+
+
                     onChange={(event) => {
                       setPassword(event.target.value);
                     }}
