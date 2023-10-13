@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import AccessControl from './AccessControl';
 //import { getClassroomOfStudent } from 'src/api/student/student.get';
@@ -18,7 +18,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
-import type { Student } from 'types/student.type';
+// import type { Student } from 'types/student.type';
 import { UserType } from 'types/user.type';
 
 export const Header = () => {
@@ -29,7 +29,7 @@ export const Header = () => {
   const { village, showSelectVillageModal } = React.useContext(VillageContext);
   // const [isModalOpen, setIsModalOpen] = React.useState(false);
   //const [ setIsModalOpen] = React.useState(false);
-  const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
+  // const [linkedStudents, setLinkedStudents] = React.useState<Student[]>([]);
   //const [selectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
   //const [selectedStudentIndex, setSelectedStudentIndex] = React.useState(linkedStudents.length > 0 ? 0 : -1);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -161,9 +161,9 @@ export const Header = () => {
         )}
         {user && (
           <div className="header__user">
-            {user.type === UserType.FAMILY && (
-            // {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (  
-              <>
+            {/* {user.type === UserType.FAMILY && (
+             {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (  
+              <> */}
                 {/* <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
                   <span className="text text--small" style={{ margin: '0 0.6rem' }}>
                     {selectedStudent
