@@ -27,7 +27,9 @@ jest.mock('../../utils/data-source', () => {
     static isInitialized = true;
   }
 
-  return MockAppDataSource;
+  return {
+    AppDataSource: MockAppDataSource,
+  };
 });
 
 const mockFeatureFlagFind = jest.fn();
