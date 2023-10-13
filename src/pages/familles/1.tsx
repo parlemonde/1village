@@ -24,14 +24,14 @@ import type { Activity } from 'types/activity.type';
 import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
 
-const content1 = {
-  text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
-  text2: 'jours après leurs publication',
-};
-const content2 = {
-  text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais seulement celles publiées par notre classe et',
-  text2: 'jours après leurs publication',
-};
+// const content1 = {
+//   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
+//   text2: 'jours après leurs publication',
+// };
+// const content2 = {
+//   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais seulement celles publiées par notre classe et',
+//   text2: 'jours après leurs publication',
+// };
 
 type StateType = {
   delayedDays: number;
