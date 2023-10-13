@@ -1,4 +1,4 @@
-import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup} from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
 
@@ -166,19 +166,19 @@ const ClassroomParamStep1 = () => {
       }, {}),
     [users],
   );
-  const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    const days = value >= 1 ? value : 1;
+  // const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = Number(event.target.value);
+  //   const days = value >= 1 ? value : 1;
 
-    switch (key) {
-      case 'timeDelay':
-        dispatch({ type: 'timeDelay', data: days });
-        break;
-      case 'ownClassTimeDelay':
-        dispatch({ type: 'ownClassTimeDelay', data: days });
-        break;
-    }
-  };
+  //   switch (key) {
+  //     case 'timeDelay':
+  //       dispatch({ type: 'timeDelay', data: days });
+  //       break;
+  //     case 'ownClassTimeDelay':
+  //       dispatch({ type: 'ownClassTimeDelay', data: days });
+  //       break;
+  //   }
+  // };
 
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = (event.target as HTMLInputElement).value;
@@ -255,9 +255,9 @@ const ClassroomParamStep1 = () => {
       refetch();
     });
   };
-  const toggleInput = (key: string, bool: boolean) => {
-    setIsDisabled({ ...isDisabled, [key]: bool });
-  };
+  // const toggleInput = (key: string, bool: boolean) => {
+  //   setIsDisabled({ ...isDisabled, [key]: bool });
+  // };
 
   // React.useEffect(() => {
   //     if (user && user.type === UserType.TEACHER) {
@@ -430,14 +430,14 @@ const ClassroomParamStep1 = () => {
   );
 };
 
-type TextInputContainerProps = {
-  text1: string;
-  text2?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: () => void;
-  value: number;
-  disabled?: boolean;
-};
+// type TextInputContainerProps = {
+//   text1: string;
+//   text2?: string;
+//   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+//   onBlur: () => void;
+//   value: number;
+//   disabled?: boolean;
+// };
 
 /**
  * Container to display text and input inline
@@ -445,30 +445,30 @@ type TextInputContainerProps = {
  * @param value value of the input
  * @param object text object containing text to display
  */
-const TextnInputContainer = ({ onChange, onBlur, value, disabled, ...props }: TextInputContainerProps) => {
-  const { text1, text2 } = props;
-  const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
-  return (
-    <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-      <span style={spanStyle}>{text1}</span>
-      <TextField
-        className="textnInputContainer__textfield"
-        variant="standard"
-        type="number"
-        inputProps={{ min: 0 }}
-        size="small"
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        disabled={disabled}
-        sx={{
-          width: '2rem',
-          marginRight: '5px',
-        }}
-      />
-      <span style={spanStyle}>{text2}</span>
-    </div>
-  );
-};
+// const TextnInputContainer = ({ onChange, onBlur, value, disabled, ...props }: TextInputContainerProps) => {
+//   const { text1, text2 } = props;
+//   const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
+//   return (
+//     <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+//       <span style={spanStyle}>{text1}</span>
+//       <TextField
+//         className="textnInputContainer__textfield"
+//         variant="standard"
+//         type="number"
+//         inputProps={{ min: 0 }}
+//         size="small"
+//         value={value}
+//         onChange={onChange}
+//         onBlur={onBlur}
+//         disabled={disabled}
+//         sx={{
+//           width: '2rem',
+//           marginRight: '5px',
+//         }}
+//       />
+//       <span style={spanStyle}>{text2}</span>
+//     </div>
+//   );
+// };
 
 export default ClassroomParamStep1;

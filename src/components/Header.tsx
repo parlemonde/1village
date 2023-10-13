@@ -164,7 +164,7 @@ export const Header = () => {
             {/* {user.type === UserType.FAMILY && (
              {user.type === UserType.FAMILY && linkedStudents?.length > 1 && (  
               <> */}
-                {/* <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
+            {/* <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
                   <span className="text text--small" style={{ margin: '0 0.6rem' }}>
                     {selectedStudent
                       ? `${selectedStudent.firstname} ${selectedStudent.lastname}`
@@ -213,8 +213,8 @@ export const Header = () => {
                     )}
                   </div>
               //   </Modal> */}
-               {/* </> */}
-             {/* )} */}
+            {/* </> */}
+            {/* )} */}
             {user.type === UserType.ADMIN ||
               (user.type === UserType.SUPER_ADMIN ? (
                 <Link href="/admin/villages" passHref>
