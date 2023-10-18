@@ -1,9 +1,8 @@
-import React from 'react';
-
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Button } from '@mui/material';
 import Slider from '@mui/material/Slider';
 import Tooltip from '@mui/material/Tooltip';
+import React from 'react';
 
 import type { Sample } from 'src/activity-types/anthem.types';
 import { primaryColor } from 'src/styles/variables.const';

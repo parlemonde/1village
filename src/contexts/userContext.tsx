@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+import type { Student } from 'types/student.type';
 import type { User, UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
@@ -19,6 +20,8 @@ interface UserContextValue {
   deleteAccount(): Promise<boolean>;
   setUser: (value: React.SetStateAction<User | null>) => void;
   linkStudent(hashedCode: string): UserContextFunc;
+  getLinkedStudentsToUser(userId: number): Promise<Student[]>;
+  deleteLinkedStudent(userId: number, studentId: number): UserContextFunc;
   getClassroomAsFamily(userId: number): UserContextFunc;
 }
 
@@ -34,6 +37,8 @@ export const UserContext = React.createContext<UserContextValue>({
   deleteAccount: async () => false,
   setUser: () => {},
   linkStudent: async () => ({ success: false, errorCode: 0 }),
+  getLinkedStudentsToUser: async () => [] as Student[],
+  deleteLinkedStudent: async () => ({ success: false, errorCode: 0 }),
   getClassroomAsFamily: async () => ({ success: false, errorCode: 0 }),
 });
 
@@ -263,6 +268,52 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     };
   }, []);
 
+  /**
+   * Get the user's linked student
+   */
+  const getLinkedStudentsToUser = React.useCallback(
+    async (userId: number) => {
+      try {
+        if (!user) return [];
+        const response = await axiosRequest({
+          method: 'GET',
+          url: `/users/${userId}/linked-students`,
+        });
+        return response.data as Student[];
+      } catch (error) {
+        console.error('Error fetching linked students:', error);
+        return [];
+      }
+    },
+    [user],
+  );
+
+  const deleteLinkedStudent = React.useCallback(async (userId: number, studentId: number) => {
+    return axiosRequest({
+      method: 'DELETE',
+      url: `/users/${userId}/linked-students/${studentId}`,
+    })
+      .then((response) => {
+        if (response.error) {
+          return {
+            success: false,
+            errorCode: response.data?.errorCode || 0,
+          };
+        }
+
+        return {
+          success: true,
+          errorCode: 0,
+        };
+      })
+      .catch((error) => {
+        console.error("Une erreur s'est produite lors de la suppression du lien avec l'élève :", error);
+        return {
+          success: false,
+          errorCode: 0,
+        };
+      });
+  }, []);
   const isLoggedIn = React.useMemo(() => user !== null, [user]);
 
   /**
@@ -289,6 +340,10 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     [user],
   );
 
+  useEffect(() => {
+    // console.log('user===', user);
+  }, [user]);
+
   const value = React.useMemo(
     () => ({
       user,
@@ -302,10 +357,27 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
       deleteAccount,
       setUser,
       linkStudent,
+      getLinkedStudentsToUser,
+      deleteLinkedStudent,
       getClassroomAsFamily,
     }),
-    [user, isLoggedIn, login, loginWithSso, signup, updatePassword, verifyEmail, logout, deleteAccount, setUser, linkStudent, getClassroomAsFamily],
+    [
+      user,
+      isLoggedIn,
+      login,
+      loginWithSso,
+      signup,
+      updatePassword,
+      verifyEmail,
+      logout,
+      deleteAccount,
+      setUser,
+      linkStudent,
+      getLinkedStudentsToUser,
+      deleteLinkedStudent,
+      getClassroomAsFamily,
+    ],
   );
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={value}> {children}</UserContext.Provider>;
 };

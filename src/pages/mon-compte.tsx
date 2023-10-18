@@ -1,16 +1,16 @@
-import { useSnackbar } from 'notistack';
-import React from 'react';
-
 import { Alert, AlertTitle, Checkbox, Grid, TextField } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import NoSsr from '@mui/material/NoSsr';
+import { useSnackbar } from 'notistack';
+import React from 'react';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import LanguageFilter from 'src/components/LanguageFilter';
 import { Modal } from 'src/components/Modal';
+// import { LinkChild } from 'src/components/accueil/LinkChild';
 import { AvatarEditor } from 'src/components/activities/content/editors/ImageEditor/AvatarEditor';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
@@ -489,6 +489,11 @@ const Presentation = () => {
           </div>
         </div>
       ) : null}
+      {/* {user.type === UserType.FAMILY ? (
+        <div className="account__panel">
+          <LinkChild />
+        </div>
+      ) : null} */}
       <div className="account__panel">
         <h2>Données et confidentialité</h2>
         {/* <div style={{ margin: '1rem 0.5rem' }}>
