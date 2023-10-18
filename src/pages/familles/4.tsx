@@ -20,7 +20,6 @@ const ClassroomParamStep4 = () => {
             <h1> Vous pourrez bientôt visualiser sur cette page les familles qui ont activé leur compte. </h1>
             <PelicoReflechit style={{ marginTop: '50px', width: '50%', height: 'auto', maxWidth: '360px' }} />
             <p className="text"></p>
-            <StepsButton prev="/familles/3" />
           </div>
           {/* <div className="width-900">
             <h1> Gérer les identifiants des familles </h1>
