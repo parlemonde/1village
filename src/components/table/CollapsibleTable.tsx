@@ -64,9 +64,9 @@ function Row(props: {
           {row.name}
         </TableCell>
         <TableCell align="right">
-          {/* <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton> */}
+          </IconButton>
           {row.numLinkedAccount}
         </TableCell>
         <TableCell align="right">{row.studentCode}</TableCell>
@@ -167,7 +167,7 @@ export default function CollapsibleTable() {
 
   useEffect(() => {
     const newRows = students.map((student) => {
-      const users = student.users || [];
+      const users = student.users || ['dada'];
       return createData(
         student.firstname + ' ' + student.lastname,
         student.numLinkedAccount || 0,
