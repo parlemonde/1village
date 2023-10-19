@@ -28,6 +28,7 @@ import type { LinkValue } from './toolbar/Link';
 import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
+import { UserContext } from 'src/contexts/userContext';
 import { errorColor, fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
 function blockStyleFn(block: ContentBlock): string {
@@ -243,6 +244,8 @@ export const SimpleTextEditor = ({
     return !value || value.length === 0 || value === '<p></p>' || value === '<p></p>\n';
   }, [value]);
 
+  const { user } = React.useContext(UserContext);
+
   const toolbar = (
     <Paper
       elevation={0}
@@ -282,7 +285,7 @@ export const SimpleTextEditor = ({
           onChange={onEditorChange}
         />
         <EmojiPicker onChange={addEmoji} />
-        <ChooseButton />
+        {user && user.type === 0 ? <ChooseButton /> : null}
       </>
     </Paper>
   );
