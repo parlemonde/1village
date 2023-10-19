@@ -45,8 +45,6 @@ const ResetPassword: React.FunctionComponent = () => {
     if (response.status === 400) {
       // changement si erreur 404(le mail contient les bon caractère mais n'est pas enregistrer dans la base de donné. faire le même dérouler que si le mail existait dans la bdd)
       setErrorCode(1);
-      console.log('ok');
-      console.log('oi');
     } else {
       setTimeout(() => {
         setIsSuccess(true);
