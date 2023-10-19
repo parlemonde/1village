@@ -10,7 +10,7 @@ import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
 const errorMessages = {
-  0: `Une erreur inconnue s'est produite`,
+  //0: `Une erreur inconnue s'est produite`, pour ne plus afficher d'erreur si l'email rentrer dans l'input est au bon format mais n'est pas répertorié dans la BDD
   1: `L'email renseignée est incorrect`,
 };
 
@@ -38,8 +38,15 @@ const ResetPassword: React.FunctionComponent = () => {
       },
     });
     setLoading(false);
-    if (response.error) {
-      setErrorCode(response.status === 400 ? 1 : 0);
+    // if (response.error) {
+    //   console.log(response)
+    //   setErrorCode(response.status === 400 ? 1 : 0);
+    // }
+    if (response.status === 400) {
+      // changement si erreur 404(le mail contient les bon caractère mais n'est pas enregistrer dans la base de donné. faire le même dérouler que si le mail existait dans la bdd)
+      setErrorCode(1);
+      console.log('ok');
+      console.log('oi');
     } else {
       setTimeout(() => {
         setIsSuccess(true);
@@ -129,11 +136,11 @@ const ResetPassword: React.FunctionComponent = () => {
                   onSubmit={submit}
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '40%' }}
                 >
-                  {errorCode === 0 && (
+                  {/* {errorCode === 0 && ( enlever car il ne reste plus q'un statut d'erreur qui est 1
                     <Typography variant="caption" color="error">
                       {errorMessages[0]}
                     </Typography>
-                  )}
+                  )} */}
                   <br />
                   <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                     <div>Email : </div>
@@ -168,7 +175,11 @@ const ResetPassword: React.FunctionComponent = () => {
             ) : (
               <>
                 <PelicoSouriant style={{ width: '25%', height: '60%', cursor: 'pointer' }} />
-                <div>Un email vient de vous être envoyé à l&apos;adresse donnée</div>
+                {/* <div>Un email vient de vous être envoyé à l&apos;adresse donnée</div> */}
+                <div>
+                  Si le mail renseigné correspond à un compte actif, vous venez de recevoir un email <br /> avec un lien qui vous permettra de
+                  réinitialiser votre mot de passe
+                </div>
                 <br />
                 <div>Vous allez être redirigé(e) vers la page de connexion</div>
               </>
