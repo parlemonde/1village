@@ -20,6 +20,7 @@ import React from 'react';
 import { Divider } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
+import { ChooseButton } from './toolbar/ChooseButton';
 import { ColorPicker } from './toolbar/ColorPicker';
 import { EmojiPicker } from './toolbar/EmojiPicker';
 import { InlineButtons } from './toolbar/InlineButtons';
@@ -281,6 +282,7 @@ export const SimpleTextEditor = ({
           onChange={onEditorChange}
         />
         <EmojiPicker onChange={addEmoji} />
+        <ChooseButton />
       </>
     </Paper>
   );
