@@ -167,7 +167,7 @@ export default function CollapsibleTable() {
 
   useEffect(() => {
     const newRows = students.map((student) => {
-      const users = student.users || ['dada'];
+      const users = student.users || [];
       return createData(
         student.firstname + ' ' + student.lastname,
         student.numLinkedAccount || 0,
