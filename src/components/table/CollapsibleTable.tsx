@@ -20,15 +20,16 @@ import { ClassroomContext } from 'src/contexts/classroomContext';
 
 function createData(
   name: string,
-  numAccountLinked: number,
+  numLinkedAccount: number,
   studentCode: string | undefined,
   users: { id: number; email: string; firstname: string; lastname: string }[],
   studentId: number,
   selected: boolean,
 ) {
+  console.log('USERS IN FAMILY 4', users);
   return {
     name,
-    numAccountLinked,
+    numLinkedAccount,
     studentCode,
     users,
     studentId,
@@ -66,7 +67,7 @@ function Row(props: {
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-          {row.numAccountLinked}
+          {row.numLinkedAccount}
         </TableCell>
         <TableCell align="right">{row.studentCode}</TableCell>
         <TableCell align="right">
@@ -87,6 +88,7 @@ function Row(props: {
                       index, // replace 'users' with 'row.users'
                     ) => (
                       <TableRow key={index}>
+                        <TableCell>{row.users}</TableCell>
                         <TableCell style={{ fontSize: '0.8rem' }}>{user.email}</TableCell>
                         <TableCell style={{ fontSize: '0.8rem' }}>{user.firstname}</TableCell>
                         <TableCell style={{ fontSize: '0.8rem' }}>{user.lastname}</TableCell>
@@ -127,7 +129,7 @@ export default function CollapsibleTable() {
   const [rows, setRows] = useState<
     {
       name: string;
-      numAccountLinked: number;
+      numLinkedAccount: number;
       studentCode: string | undefined;
       users: {
         id: number;
@@ -165,8 +167,15 @@ export default function CollapsibleTable() {
 
   useEffect(() => {
     const newRows = students.map((student) => {
-      const users = student.users || [];
-      return createData(student.firstname + ' ' + student.lastname, users.length, student.hashedCode, users, student.id, isSelected(student.id));
+      const users = student.users || ['dada'];
+      return createData(
+        student.firstname + ' ' + student.lastname,
+        student.numLinkedAccount || 0,
+        student.hashedCode,
+        users,
+        student.id,
+        isSelected(student.id),
+      );
     });
 
     setRows(newRows);
@@ -177,7 +186,7 @@ export default function CollapsibleTable() {
       if (row.studentId === studentId) {
         const newUsers = row.users.filter((user) => user.id !== userId);
         const newNumAccountLinked = newUsers.length;
-        return { ...row, users: newUsers, numAccountLinked: newNumAccountLinked };
+        return { ...row, users: newUsers, numLinkedAccount: newNumAccountLinked };
       }
       return row;
     });
