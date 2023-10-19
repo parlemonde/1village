@@ -64,9 +64,9 @@ function Row(props: {
           {row.name}
         </TableCell>
         <TableCell align="right">
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
+          {/* <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          </IconButton> */}
           {row.numLinkedAccount}
         </TableCell>
         <TableCell align="right">{row.studentCode}</TableCell>
@@ -76,7 +76,7 @@ function Row(props: {
           </Button>
         </TableCell>
       </TableRow>
-      <TableRow>
+      {/* <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, paddingLeft: 0, paddingRight: 0 }} align="right" colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, marginLeft: 0 }}>
@@ -115,7 +115,7 @@ function Row(props: {
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow>
+      </TableRow> */}
     </React.Fragment>
   );
 }

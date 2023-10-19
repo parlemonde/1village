@@ -5,7 +5,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CollapsibleTable from 'src/components/table/CollapsibleTable';
-import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
+// import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
 
 const ClassroomParamStep4 = () => {
   return (
