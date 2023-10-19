@@ -1,9 +1,9 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Button, Checkbox } from '@mui/material';
 import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
+// import Collapse from '@mui/material/Collapse';
+// import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,8 +14,8 @@ import TableRow from '@mui/material/TableRow';
 import { useContext, useEffect, useState } from 'react';
 import * as React from 'react';
 
-import { DeleteButton } from '../buttons/DeleteButton';
-import { deleteUserStudentRelation } from 'src/api/student/student.delete';
+// import { DeleteButton } from '../buttons/DeleteButton';
+// import { deleteUserStudentRelation } from 'src/api/student/student.delete';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 
 function createData(
@@ -45,8 +45,9 @@ function Row(props: {
   isKeywordMissing: boolean;
   handleDeleteUser: (studentId: number, userId: number) => void;
 }) {
-  const { row, isSelected, handleToggle, onPrint, isKeywordMissing, handleDeleteUser } = props;
-  const [open, setOpen] = useState(false);
+  const { row, isSelected, handleToggle, onPrint, isKeywordMissing } = props;
+  // const { row, isSelected, handleToggle, onPrint, isKeywordMissing, handleDeleteUser } = props;
+  // const [open, setOpen] = useState(false);
 
   const createPrintHandler = (studentId?: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
