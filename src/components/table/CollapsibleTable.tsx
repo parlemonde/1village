@@ -26,7 +26,6 @@ function createData(
   studentId: number,
   selected: boolean,
 ) {
-  console.log('USERS IN FAMILY 4', users);
   return {
     name,
     numLinkedAccount,
