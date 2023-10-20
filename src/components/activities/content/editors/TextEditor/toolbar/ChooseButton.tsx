@@ -7,7 +7,11 @@ import Select from '@mui/material/Select';
 
 import { VillageContext } from 'src/contexts/villageContext';
 
-export const ChooseButton = () => {
+interface ChooseButtonProps {
+  handleOptionChange?: (selectedOption: string) => void;
+}
+
+export const ChooseButton = ({ handleOptionChange }: ChooseButtonProps) => {
   // Avec cette const je peux avoir les noms des deux pays
   const { village } = React.useContext(VillageContext);
 
@@ -24,12 +28,16 @@ export const ChooseButton = () => {
   }, [village]);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedOption(event.target.value);
+    const newSelectedOption = event.target.value as string;
+    setSelectedOption(newSelectedOption);
+    if (handleOptionChange) {
+      handleOptionChange(newSelectedOption);
+    }
   };
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select labelId="demo-select-small-label" id="demo-select-small" value={selectedOption} onChange={handleChange}>
+      <Select labelId="visibility-label" id="visibility" value={selectedOption} onChange={handleChange}>
         <MenuItem value={countriesIsocode}>{twoCountriesWithSpace}</MenuItem>
         <MenuItem value={countriesIsocode[0]}>{countriesNames[0]}</MenuItem>
         <MenuItem value={countriesIsocode[1]}>{countriesNames[1]}</MenuItem>
