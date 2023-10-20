@@ -246,6 +246,10 @@ export const SimpleTextEditor = ({
 
   const { user } = React.useContext(UserContext);
 
+  const handleOptionChange = (selectedOption: string) => {
+    // Mettez à jour l'état ou effectuez d'autres actions en fonction de la nouvelle selectedOption.
+  };
+
   const toolbar = (
     <Paper
       elevation={0}
@@ -285,7 +289,7 @@ export const SimpleTextEditor = ({
           onChange={onEditorChange}
         />
         <EmojiPicker onChange={addEmoji} />
-        {user && user.type === 0 ? <ChooseButton /> : null}
+        {user && user.type === 0 ? <ChooseButton handleOptionChange={handleOptionChange} /> : null}
       </>
     </Paper>
   );

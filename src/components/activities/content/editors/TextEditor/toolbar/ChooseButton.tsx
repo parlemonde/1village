@@ -27,6 +27,8 @@ export const ChooseButton = ({ handleOptionChange }: ChooseButtonProps) => {
     return !village ? [] : village.countries.map((c) => c.isoCode);
   }, [village]);
 
+  const twoCountriesIsocode = countriesIsocode.join(' ');
+
   const handleChange = (event: SelectChangeEvent) => {
     const newSelectedOption = event.target.value as string;
     setSelectedOption(newSelectedOption);
@@ -38,7 +40,7 @@ export const ChooseButton = ({ handleOptionChange }: ChooseButtonProps) => {
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <Select labelId="visibility-label" id="visibility" value={selectedOption} onChange={handleChange}>
-        <MenuItem value={countriesIsocode}>{twoCountriesWithSpace}</MenuItem>
+        <MenuItem value={twoCountriesIsocode}>{twoCountriesWithSpace}</MenuItem>
         <MenuItem value={countriesIsocode[0]}>{countriesNames[0]}</MenuItem>
         <MenuItem value={countriesIsocode[1]}>{countriesNames[1]}</MenuItem>
       </Select>
