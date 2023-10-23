@@ -50,8 +50,6 @@ export const AddComment = ({ activityId, activityType, activityPhase, selectedOp
     setNewCommentLength(length);
   };
 
-  console.log(selectedOption);
-
   return (
     <>
       <div className="activity__comment-container">
