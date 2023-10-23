@@ -1,8 +1,9 @@
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Button, Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel, Link, TextField } from '@mui/material';
-import { useRouter } from 'next/router';
-import React from 'react';
 
 import { KeepRatio } from '../components/KeepRatio';
 import { isRedirectValid } from '../components/accueil/NewHome';
@@ -230,18 +231,6 @@ const SignInParent = () => {
             >
               Créer un compte
             </Link>
-            {/*             <div>
-              <Link
-                component="button"
-                variant="h3"
-                sx={{
-                  fontSize: '0.875rem',
-                  mt: 2,
-                }}
-              >
-                Mot de passe oublié
-              </Link>
-            </div> */}
           </div>
         </KeepRatio>
       </div>

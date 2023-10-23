@@ -1,13 +1,14 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React, { useCallback } from 'react';
+
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import React, { useCallback } from 'react';
 
 import { UserContext } from './userContext';
 import { Modal } from 'src/components/Modal';
@@ -45,7 +46,7 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
     user !== null ? (user.type >= UserType.MEDIATOR ? village?.activePhase ?? 1 : user.firstLogin === 0 ? 1 : user.firstLogin) : -1,
   );
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [showUnassignedModal, setShowUnassignedModal] = React.useState(user !== null && user.villageId === null && user.type !== UserType.FAMILY);
+  const [showUnassignedModal, setShowUnassignedModal] = React.useState(false);
 
   React.useEffect(() => {
     setShowUnassignedModal(user !== null && user.villageId === null && user.type === UserType.TEACHER);

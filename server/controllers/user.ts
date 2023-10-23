@@ -8,6 +8,7 @@ import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+import { FeatureFlag } from '../entities/featureFlag';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
@@ -75,28 +76,27 @@ userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (re
   res.sendJSON(user);
 });
 
-// --- Get user's feature flags ---
-userController.get({ path: '/:userId/featureFlags', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
-  const userId = parseInt(req.params.userId, 10);
-  const user = await AppDataSource.getRepository(User).findOne({
-    where: { id: userId },
-    relations: ['featureFlags'],
-  });
-
-  if (!user) {
+// --- Get user feature flags ---
+userController.get({ path: '/featureFlags', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
+  if (!req.user) {
     res.status(404).send();
     return;
   }
 
-  const featureFlags = user.featureFlags.map((featureFlag) => {
-    return {
-      id: featureFlag.id,
-      name: featureFlag.name,
-      isEnabled: featureFlag.isEnabled,
-    };
+  const featureFlags = await AppDataSource.getRepository(FeatureFlag).find({
+    where: [
+      { isEnabled: true },
+      {
+        users: {
+          id: req.user.id,
+        },
+      },
+    ],
+    relations: ['users'],
   });
 
-  res.json(featureFlags);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  res.json(featureFlags.map((flag) => flag.name));
 });
 
 // --- Check user pseudo ---
