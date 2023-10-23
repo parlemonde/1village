@@ -237,21 +237,22 @@ studentController.delete({ path: '/:id(\\d+)', userType: UserType.TEACHER }, asy
   res.status(204).send();
 });
 
-studentController.delete({ path: '/petit-test', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+studentController.delete({ path: '/:studentId(\\d+)/delete-user-link/:userId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const userId = 15;
-  const studentId = 1;
+  const studentId = parseInt(req.params.studentId, 10) || 0;
+  const userId = parseInt(req.params.userId, 10) || 0;
 
-  const student = await AppDataSource.getRepository(Student).findOne({ where: { id: studentId } });
-  const user = await AppDataSource.getRepository(Student).findOne({ where: { id: userId } });
-
-  await AppDataSource.getRepository(UserToStudent).delete({
-    student: { id: studentId },
-    user: { id: userId },
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: userId }, student: { id: studentId } },
+    relations: ['user', 'student'],
   });
+
+  if (userToStudent) {
+    await AppDataSource.getRepository(UserToStudent).remove(userToStudent);
+  }
 
   res.status(204).send();
 });
