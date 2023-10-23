@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, Link, TextField, Typography, Backdrop, CircularProgress } from '@mui/material';
+import { Button, Link, TextField, Backdrop, CircularProgress } from '@mui/material';
 
 import { KeepRatio } from 'src/components/KeepRatio';
 import ArrowBack from 'src/svg/arrow_back.svg';
@@ -38,13 +38,17 @@ const ResetPassword: React.FunctionComponent = () => {
       },
     });
     setLoading(false);
-    // if (response.error) {
-    //   console.log(response)
-    //   setErrorCode(response.status === 400 ? 1 : 0);
-    // }
     if (response.status === 400) {
       // changement si erreur 404(le mail contient les bon caractère mais n'est pas enregistrer dans la base de donné. faire le même dérouler que si le mail existait dans la bdd)
       setErrorCode(1);
+    } else if (response.status === 404) {
+      setLoading(true);
+      setTimeout(() => {
+        setIsSuccess(true);
+      }, 1000);
+      setTimeout(() => {
+        router.push('/connexion');
+      }, 10000);
     } else {
       setTimeout(() => {
         setIsSuccess(true);

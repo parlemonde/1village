@@ -66,17 +66,19 @@ const Inscription = () => {
         }
         passwordMessageRef.current += ' une lettre majuscule';
       }
-      if (password.length <= 11) { // Changement 8 en 11
+      if (password.length <= 11) {
+        // Changement 8 en 11
         if (passwordMessageRef.current) {
           passwordMessageRef.current += ' et ';
         }
         passwordMessageRef.current += 'faire au moins 12 caractères';
       }
-      if(!password.match(/[^a-zA-Z0-9]/)){
+      if (!password.match(/[^a-zA-Z0-9]/)) {
         passwordMessageRef.current += ' et au moins un caractère spécial ';
       }
 
-      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length <= 11 || !password.match(/[^a-zA-Z0-9]/)) { // Changement 8 en 11 + rajout condition
+      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length <= 11 || !password.match(/[^a-zA-Z0-9]/)) {
+        // Changement 8 en 11 + rajout condition
         setIsPasswordValid(false);
       } else {
         setIsPasswordValid(true);
@@ -90,7 +92,7 @@ const Inscription = () => {
         setIsPasswordMatch(true);
       }
     }
-    
+
     if (email !== '') {
       if (!emailRegex.test(email)) {
         setIsEmailValid(false);
@@ -98,7 +100,7 @@ const Inscription = () => {
         setIsEmailValid(true);
       }
     }
-    
+
     if (lastname !== '') {
       if (lastname.length > 1) {
         setIsLastnameValid(true);
@@ -114,15 +116,13 @@ const Inscription = () => {
         setIsFirstnameValid(false);
       }
     }
-    if (email !== '' && password !== ''){ // Ajout de cette fonctionnalité pour vérifier si l'email est égal au mot de passe
-      if(email === password){
-        setisPasswordIdenticalToEmail(true)
+    if (email !== '' && password !== '') {
+      // Ajout de cette fonctionnalité pour vérifier si l'email est égal au mot de passe
+      if (email === password) {
+        setisPasswordIdenticalToEmail(true);
+      } else {
+        setisPasswordIdenticalToEmail(false);
       }
-      else{
-        setisPasswordIdenticalToEmail(false)
-
-      }
-
     }
 
     setNewUser({
@@ -182,7 +182,8 @@ const Inscription = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid && !isPasswordIdenticalToEmail) { // Changement && isPasswordIdenticalToEmail
+    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid && !isPasswordIdenticalToEmail) {
+      // Changement && isPasswordIdenticalToEmail
       try {
         await addUser(newUser);
       } catch (err) {
@@ -333,7 +334,7 @@ const Inscription = () => {
                     // helperText={isPasswordValid === true ? '12 lettres minimum, une majuscule, un chiffre et un caractère spécial' : passwordMessage } // Changement 8 en 12 rajout caractère spécial
                     helperText={
                       isPasswordIdenticalToEmail
-                        ? 'Le mot de passe ne peut pas être identique à l\'email'
+                        ? "Le mot de passe ne peut pas être identique à l'email"
                         : isPasswordValid === true
                         ? '12 lettres minimum, une majuscule, un chiffre et un caractère spécial'
                         : passwordMessage
@@ -343,8 +344,6 @@ const Inscription = () => {
                       width: '30ch',
                       mb: '1rem',
                     }}
-
-
                     onChange={(event) => {
                       setPassword(event.target.value);
                     }}

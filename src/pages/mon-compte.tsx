@@ -539,7 +539,7 @@ const Presentation = () => {
               error={errors.pwd}
               helperText={
                 errors.pwd
-                  ? 'Mot de passe trop faible. Il doit contenir au moins 8 charactères avec des lettres minuscules, majuscules et des chiffres.'
+                  ? 'Mot de passe trop faible. Il doit contenir au moins 12 charactères avec des lettres minuscules, majuscules un chiffres et un caractère spécial.'
                   : null
               }
               onBlur={checkPassword}
