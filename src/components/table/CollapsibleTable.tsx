@@ -167,7 +167,6 @@ export default function CollapsibleTable() {
         students.map(async (student) => {
           const users = await getUsersLinkedToStudent(student.id);
 
-          console.log('USERS LINKED TO STUDENT!!!', users);
           return createData(
             student.firstname + ' ' + student.lastname,
             student.numLinkedAccount || 0,
