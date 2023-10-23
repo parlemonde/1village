@@ -12,7 +12,6 @@ interface ChooseButtonProps {
 }
 
 export const ChooseButton = ({ handleOptionChange }: ChooseButtonProps) => {
-  // Avec cette const je peux avoir les noms des deux pays
   const { village } = React.useContext(VillageContext);
 
   const [selectedOption, setSelectedOption] = useState('');

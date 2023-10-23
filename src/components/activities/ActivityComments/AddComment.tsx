@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 
+import { ChooseButton } from '../content/editors/TextEditor/toolbar/ChooseButton';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
@@ -19,9 +20,10 @@ interface AddCommentProps {
   activityId: number;
   activityType: number;
   activityPhase: number;
+  selectedOption: string;
 }
 
-export const AddComment = ({ activityId, activityType, activityPhase }: AddCommentProps) => {
+export const AddComment = ({ activityId, activityType, activityPhase, selectedOption }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
   const { addComment } = useCommentRequests(activityId);
@@ -48,6 +50,8 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
     setNewCommentLength(length);
   };
 
+  console.log(selectedOption);
+
   return (
     <>
       <div className="activity__comment-container">
@@ -60,6 +64,7 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 maxLen={400}
                 value={newComment}
                 onChange={onCommentChange}
+                selectedOption={selectedOption}
                 placeholder="Écrivez votre réaction ici"
                 inlineToolbar
                 withBorder
@@ -78,9 +83,12 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                     </span>
                   </Tooltip>
                 ) : (
-                  <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
-                    Commenter
-                  </Button>
+                  <span>
+                    <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
+                      Commenter
+                    </Button>
+                    {user && user.type === 0 ? <ChooseButton /> : null}
+                  </span>
                 )}
               </div>
             </div>

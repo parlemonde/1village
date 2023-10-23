@@ -44,6 +44,8 @@ interface SimpleTextEditorProps {
   onChange?(newValue: string, newLength: number): boolean | void;
   onFocus?(): void;
   onBlur?(): void;
+  onSelectedOptionChange?(selectedOption: string): void;
+  selectedOption: string;
   placeholder?: string;
   inlineToolbar?: boolean;
   withBorder?: boolean;
@@ -58,6 +60,7 @@ export const SimpleTextEditor = ({
   onChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
+  onSelectedOptionChange = () => {},
   inlineToolbar = false,
   withBorder = false,
   noBlock = false,
@@ -247,7 +250,7 @@ export const SimpleTextEditor = ({
   const { user } = React.useContext(UserContext);
 
   const handleOptionChange = (selectedOption: string) => {
-    // Mettez à jour l'état ou effectuez d'autres actions en fonction de la nouvelle selectedOption.
+    onSelectedOptionChange(selectedOption);
   };
 
   const toolbar = (
