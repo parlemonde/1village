@@ -1,3 +1,5 @@
+import React from 'react';
+
 import CloseIcon from '@mui/icons-material/Close';
 import { CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -10,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import type { LinearProgressProps } from '@mui/material/LinearProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import React from 'react';
 
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
@@ -81,7 +82,7 @@ interface ModalProps {
 }
 
 export const Modal = ({
-  open = true,
+  open = false,
   onClose = () => {},
   onConfirm,
   ariaLabelledBy,

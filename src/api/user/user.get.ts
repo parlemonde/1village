@@ -1,10 +1,12 @@
+import { useQuery } from 'react-query';
+
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const getUsers = async () => {
-  const response = await axiosRequest({
+  const response = await axiosRequest<User[]>({
     method: 'GET',
     url: '/users',
   });
@@ -38,4 +40,8 @@ export const getUserVisibilityFamilyParams = async (user: User) => {
     return response.data;
   }
   return [];
+};
+
+export const useUsers = () => {
+  return useQuery(['users'], () => getUsers());
 };
