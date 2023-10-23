@@ -42,7 +42,10 @@ export class Classroom {
 
   @ManyToOne(() => Village, (village: Village) => village.classrooms, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'villageId' })
-  public village: Village;
+  public village: Village | null;
+
+  @Column({ nullable: false })
+  public villageId: number;
 
   @OneToMany(() => Student, (student: Student) => student.classroom, { onDelete: 'CASCADE' })
   public students: Student[];
