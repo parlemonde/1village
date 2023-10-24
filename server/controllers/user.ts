@@ -8,6 +8,7 @@ import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+import { FeatureFlag } from '../entities/featureFlag';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
@@ -75,28 +76,27 @@ userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (re
   res.sendJSON(user);
 });
 
-// --- Get user's feature flags ---
-userController.get({ path: '/:userId/featureFlags', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
-  const userId = parseInt(req.params.userId, 10);
-  const user = await AppDataSource.getRepository(User).findOne({
-    where: { id: userId },
-    relations: ['featureFlags'],
-  });
-
-  if (!user) {
+// --- Get user feature flags ---
+userController.get({ path: '/featureFlags', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
+  if (!req.user) {
     res.status(404).send();
     return;
   }
 
-  const featureFlags = user.featureFlags.map((featureFlag) => {
-    return {
-      id: featureFlag.id,
-      name: featureFlag.name,
-      isEnabled: featureFlag.isEnabled,
-    };
+  const featureFlags = await AppDataSource.getRepository(FeatureFlag).find({
+    where: [
+      { isEnabled: true },
+      {
+        users: {
+          id: req.user.id,
+        },
+      },
+    ],
+    relations: ['users'],
   });
 
-  res.json(featureFlags);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  res.json(featureFlags.map((flag) => flag.name));
 });
 
 // --- Check user pseudo ---
@@ -779,8 +779,90 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.OBSERVATOR }
   });
 });
 
+userController.get({ path: '/:id/linked-students' }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  // Retrieve the user's linked student
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const user = await AppDataSource.getRepository(User).findOne({
+    where: { id },
+    relations: ['userToStudents', 'userToStudents.student'],
+  });
+
+  if (!user) {
+    res.status(404).json({ message: 'No linked student found' });
+    return;
+  }
+
+  // const { student } = userToStudent;
+  const students = user.userToStudents.map((userToStudent) => userToStudent.student);
+  res.json(students);
+});
+
+// Delete the link between user and student
+userController.delete({ path: '/:userId/linked-students/:studentId' }, async (req: Request, res: Response) => {
+  if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+
+  const userId = parseInt(req.params.userId, 10) || 0;
+  const studentId = parseInt(req.params.studentId, 10) || 0;
+
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: userId }, student: { id: studentId } },
+    relations: ['user', 'student'],
+  });
+
+  if (!userToStudent) {
+    return res.status(404).json({ message: 'Le lien parent-étudiant n a pas été trouvé.' });
+  }
+  // const { student } = userToStudent;
+  await AppDataSource.getRepository(UserToStudent).remove(userToStudent);
+
+  return res.status(200).json({ message: 'Le lien parent-étudiant a été supprimé avec succès.' });
+});
+
 // Get the visibility parameters for Family members
-userController.get({ path: '/visibility-params', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+  const id = parseInt(req.params.id, 10) || 0;
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student'] });
+
+  if (user && user.type === UserType.TEACHER) {
+    const classroom = [];
+    const teacherClassroom = await AppDataSource.getRepository(Classroom).findOne({
+      where: { user: { id: user.id } },
+      relations: ['user'],
+    });
+    if (teacherClassroom) {
+      classroom.push(teacherClassroom);
+    }
+    return res.json(classroom);
+  }
+
+  if (user && user.type === UserType.FAMILY) {
+    const classrooms = [];
+
+    for (const student of user.userToStudents) {
+      const classroom = await AppDataSource.getRepository(Classroom).findOne({
+        where: { students: { id: student.student.id } },
+        relations: ['user'],
+      });
+      if (classroom) {
+        classrooms.push(classroom);
+      }
+    }
+
+    return res.json(classrooms);
+  }
+
+  return res.json([]);
+});
+
+userController.get({ path: '/get-student-vp', userType: UserType.FAMILY }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }

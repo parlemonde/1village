@@ -19,6 +19,7 @@ import { useFullScreen } from './use-full-screen';
 import { World } from './world';
 import type { GeoJSONCityData } from './world/objects/capital';
 import type { GeoJSONCountriesData } from './world/objects/country';
+import { useIsFeatureFlagEnabled } from 'src/api/featureFlag/featureFlag.get';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import { axiosRequest } from 'src/utils/axiosRequest';
@@ -56,6 +57,7 @@ const WorldMap = () => {
   const router = useRouter();
   const { village, selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const { users } = useVillageUsers();
+  const { isEnabled: isPelicoEnigmeEnabled } = useIsFeatureFlagEnabled('enigme-pelico');
   const [useLeafletFallback] = React.useState(() => !isWebGLAvailable());
 
   // -- 3D world --
@@ -113,6 +115,13 @@ const WorldMap = () => {
       world.changeView(selectedPhase === 3 ? 'pelico' : 'earth');
     }
   }, [world, selectedPhase]);
+  React.useEffect(() => {
+    if ((isPelicoEnigmeEnabled || (village?.activePhase ?? 1) >= 3) && world) {
+      world.addPelicoEnigme();
+    } else if (world) {
+      world.removePelicoEnigme();
+    }
+  }, [world, isPelicoEnigmeEnabled, village?.activePhase]);
 
   // -- Leaflet(2D) fallback --
   const leafletRef = React.useRef<HTMLDivElement | null>(null);

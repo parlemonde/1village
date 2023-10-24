@@ -1,3 +1,5 @@
+import type { User } from './user.type';
+
 // Show only the data visible for the student form
 export interface StudentForm {
   firstname?: string;
@@ -9,4 +11,5 @@ export interface Student extends StudentForm {
   classroomId: number;
   numLinkedAccount?: number;
   hashedCode?: string;
+  users?: User[];
 }

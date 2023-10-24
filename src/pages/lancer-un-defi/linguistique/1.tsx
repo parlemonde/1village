@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
+import type { SyntheticEvent } from 'react';
 import React from 'react';
 
-import type { SelectChangeEvent } from '@mui/material';
-import { ListSubheader, FormControlLabel, Grid, Radio, RadioGroup, Select, MenuItem, InputLabel, FormControl, Divider } from '@mui/material';
+import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
@@ -18,6 +18,7 @@ import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
 import { capitalize } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+import { normalizeString } from 'src/utils/isNormalizedStringEqual';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 
 const getArticle = (language: string) => {
@@ -135,11 +136,14 @@ const DefiStep1 = () => {
     router.push('/lancer-un-defi/linguistique/2');
   };
 
-  const handleLanguage = (event: SelectChangeEvent<string>) => {
-    const languageCode = (event.target as HTMLSelectElement).value;
-    const language = languages.find((l) => l.alpha3_b.toLowerCase() === languageCode.slice(0, 2))?.french ?? '';
+  const handleLanguage = (_event: SyntheticEvent, languageCode: string) => {
+    const language =
+      languageCode.length === 2
+        ? languages.find((language) => languageCode === language.alpha2.toLowerCase())?.french
+        : languages.find((language) => languageCode === language.alpha3_b.toLowerCase())?.french;
     updateActivity({ data: { ...data, languageCode, language } });
   };
+
   const setLanguageIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateActivity({ data: { ...data, languageIndex: parseInt((event.target as HTMLInputElement).value, 10) } });
   };
@@ -151,11 +155,6 @@ const DefiStep1 = () => {
       </Base>
     );
   }
-
-  const LanguagesToRemove = mascotteLanguages.reduce((list, currentValue) => {
-    list.push(currentValue.value);
-    return list;
-  }, new Array<string>());
 
   return (
     <Base>
@@ -182,28 +181,46 @@ const DefiStep1 = () => {
                   Vous pourrez ensuite choisir le thème de votre défi.
                 </p>
                 <FormControl variant="outlined" className="full-width" style={{ width: '100%', marginTop: '3.5rem', marginBottom: '0.5rem' }}>
-                  <InputLabel id="demo-simple-select">Langues</InputLabel>
-                  <Select style={{ width: '100%', marginBottom: '1rem' }} value={data.languageCode} onChange={handleLanguage} label="Langues">
-                    <ListSubheader>
-                      <h1>Langues parlées par votre mascotte</h1>
-                    </ListSubheader>
-                    {mascotteLanguages.map((language) => (
-                      <MenuItem value={language.label.toLowerCase()} key={language.label.toLowerCase()} style={{ cursor: 'pointer' }}>
-                        {language.label.toLowerCase()}
-                      </MenuItem>
-                    ))}
-                    <Divider />
-                    <ListSubheader>
-                      <h1>Autres langues</h1>
-                    </ListSubheader>
-                    {languages
-                      .filter((language) => !LanguagesToRemove.includes(language.alpha3_b))
-                      .map((language) => (
-                        <MenuItem key={language.french} value={language.french} style={{ cursor: 'pointer' }}>
-                          {language.french}
-                        </MenuItem>
-                      ))}
-                  </Select>
+                  <Autocomplete
+                    id="grouped-demo"
+                    onChange={(e, value) => {
+                      if (!value) return;
+                      const formatedValue = value.alpha2.length > 0 ? value.alpha2 : value.alpha3_b;
+                      handleLanguage(e, formatedValue);
+                    }}
+                    options={languages.sort((a, b) => {
+                      const aFormated = a.alpha2.length === 2 ? a.alpha2.toLowerCase() : a.alpha3_b.toLowerCase();
+                      const bFormated = b.alpha2.length === 2 ? b.alpha2.toLowerCase() : b.alpha3_b.toLowerCase();
+
+                      if (
+                        mascotteLanguages.some((language) => aFormated === language.value.toLowerCase()) &&
+                        !mascotteLanguages.some((language) => bFormated === language.value.toLowerCase())
+                      )
+                        return -1;
+                      if (
+                        !mascotteLanguages.some((language) => aFormated === language.value.toLowerCase()) &&
+                        mascotteLanguages.some((language) => bFormated === language.value.toLowerCase())
+                      )
+                        return 1;
+
+                      return aFormated.toLowerCase().localeCompare(bFormated.toLowerCase());
+                    })}
+                    filterOptions={(options, state) => {
+                      return options.filter((option) =>
+                        normalizeString(option.french).toLowerCase().startsWith(normalizeString(state.inputValue).toLowerCase()),
+                      );
+                    }}
+                    groupBy={(option) => {
+                      const optionFormated = option.alpha2.length === 2 ? option.alpha2 : option.alpha3_b;
+
+                      return mascotteLanguages.find((language) => optionFormated === language.value.toLowerCase())
+                        ? 'Langues parlées par votre mascotte'
+                        : 'Autres langues';
+                    }}
+                    getOptionLabel={(option) => option.french}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Langues" />}
+                  />
                 </FormControl>
               </Grid>
             </Grid>

@@ -1,5 +1,5 @@
-import { RichUtils, EditorState, Modifier } from 'draft-js';
 import type { ContentBlock, ContentState } from 'draft-js';
+import { RichUtils, EditorState, Modifier } from 'draft-js';
 import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
 import React from 'react';
 

@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useSnackbar } from 'notistack';
+import React, { useState, useMemo } from 'react';
+import { useQueryClient } from 'react-query';
 
 import {
   Button,
@@ -8,7 +10,8 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Checkbox,
+  Radio,
+  RadioGroup,
   FormControlLabel,
   Typography,
   Grid,
@@ -22,24 +25,19 @@ import {
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 
-import { getUsers } from 'src/api/user/user.get';
+import { useFeatureFlags } from 'src/api/featureFlag/featureFlag.get';
+import { useUsers } from 'src/api/user/user.get';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { FEATURE_FLAGS_NAMES } from 'types/featureFlag.constant';
 import type { User, UserType } from 'types/user.type';
 import { userTypeNames } from 'types/user.type';
 
-interface FeatureFlag {
-  id: number;
-  name: string;
-  isEnabled: boolean;
-  users: User[];
-}
-
 const FeatureFlagsTest: React.FC = () => {
-  const [featureFlags, setFeatureFlags] = useState<FeatureFlag[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
+  const { data: featureFlags } = useFeatureFlags();
+  const { data: users } = useUsers();
   const [newFeatureFlag, setNewFeatureFlag] = useState({ name: '', isEnabled: false });
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [userFilter, setUserFilter] = useState<string>('');
 
   const [addedUsers, setAddedUsers] = useState<User[]>([]);
@@ -49,7 +47,7 @@ const FeatureFlagsTest: React.FC = () => {
   const [countryCodeFilter, setCountryCodeFilter] = useState<string>('');
 
   const filteredUsers = useMemo(() => {
-    const usersWithoutAccess = users.filter((user) => !addedUsers?.find((addedUser) => addedUser.id === user.id));
+    const usersWithoutAccess = (users || []).filter((user) => !addedUsers?.find((addedUser) => addedUser.id === user.id));
 
     let filtered = usersWithoutAccess;
 
@@ -91,36 +89,11 @@ const FeatureFlagsTest: React.FC = () => {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const fetchedFeatureFlags = await fetchFeatureFlags();
-      setFeatureFlags(fetchedFeatureFlags);
-
-      const fetchedUsers = await getUsers();
-      setUsers(fetchedUsers);
-    };
-
-    fetchData();
-  }, []);
-
-  const fetchFeatureFlags = async () => {
-    const response = await axiosRequest({
-      method: 'GET',
-      url: `/featureFlags`,
-    });
-
-    if (response.error) {
-      return [];
-    }
-
-    return response.data;
-  };
-
   const handleNewFeatureFlagChange = async (event: SelectChangeEvent<string>) => {
     const featureFlagName = event.target.value;
 
     // Find the feature flag object from the featureFlags state using the selected feature flag name
-    const selectedFeatureFlag = featureFlags.find((flag: FeatureFlag) => flag.name === featureFlagName);
+    const selectedFeatureFlag = (featureFlags || []).find((flag) => flag.name === featureFlagName);
 
     if (selectedFeatureFlag) {
       // Update the newFeatureFlag and addedUsers states with the selected feature flag data
@@ -131,13 +104,13 @@ const FeatureFlagsTest: React.FC = () => {
       setAddedUsers(selectedFeatureFlag.users || []);
     } else {
       // Reset the newFeatureFlag and addedUsers states if the selected feature flag is not found
-      setNewFeatureFlag({ name: featureFlagName, isEnabled: false });
+      setNewFeatureFlag({ name: '', isEnabled: false });
       setAddedUsers([]);
     }
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewFeatureFlag({ ...newFeatureFlag, isEnabled: event.target.checked });
+    setNewFeatureFlag({ ...newFeatureFlag, isEnabled: event.target.value === 'true' });
   };
 
   const handleUserFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,30 +140,34 @@ const FeatureFlagsTest: React.FC = () => {
         users: addedUserIds,
       },
     });
-
-    if (response.data) {
-      fetchFeatureFlags();
-      setSelectedUsers([]);
+    if (response.error) {
+      enqueueSnackbar('Erreur, impossible de mettre à jour le feature flag...', {
+        variant: 'error',
+      });
+      const selectedFeatureFlag = (featureFlags || []).find((flag) => flag.name === newFeatureFlag.name);
+      if (selectedFeatureFlag) {
+        setNewFeatureFlag({
+          name: selectedFeatureFlag.name,
+          isEnabled: selectedFeatureFlag.isEnabled,
+        });
+        setAddedUsers(selectedFeatureFlag.users || []);
+      }
     } else {
-      alert('Error updating the feature flag. Please try again.');
+      queryClient.invalidateQueries('feature-flags');
+      enqueueSnackbar('Feature flag mis à jour !', {
+        variant: 'success',
+      });
     }
   };
 
   const handleAddUser = (userId: number) => {
-    setSelectedUsers((prevSelectedUsers) => {
-      if (!prevSelectedUsers.includes(userId)) {
-        const userToAdd = filteredUsers.find((user) => user.id === userId);
-        if (userToAdd) {
-          setAddedUsers((prevAddedUsers) => [...(prevAddedUsers || []), userToAdd]);
-        }
-        return [...prevSelectedUsers, userId];
-      }
-      return prevSelectedUsers;
-    });
+    const userToAdd = filteredUsers.find((user) => user.id === userId);
+    if (userToAdd) {
+      setAddedUsers((prevAddedUsers) => [...(prevAddedUsers || []), userToAdd]);
+    }
   };
 
   const handleRemoveUser = (userId: number) => {
-    setSelectedUsers((prevSelectedUsers) => prevSelectedUsers.filter((id) => id !== userId));
     setAddedUsers((prevAddedUsers) => prevAddedUsers.filter((user) => user.id !== userId));
   };
 
@@ -200,68 +177,95 @@ const FeatureFlagsTest: React.FC = () => {
       <Typography variant="h6" my={2}>
         Choisir une restriction
       </Typography>
+
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <FormControl>
-              <InputLabel>Feature Flag</InputLabel>
-              <Select sx={{ minWidth: '10rem' }} label="Feature Flag" name="name" value={newFeatureFlag.name} onChange={handleNewFeatureFlagChange}>
-                {FEATURE_FLAGS_NAMES?.map((flag, index) => (
-                  <MenuItem key={index} value={flag}>
-                    {flag}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item>
-            <FormControlLabel control={<Checkbox checked={newFeatureFlag.isEnabled} onChange={handleCheckboxChange} />} label="Is Enabled" />
-          </Grid>
-          <Grid item>
-            <TextField label="Filtre utilisateur" placeholder="Filtre utilisateur" value={userFilter} onChange={handleUserFilterChange} />
-          </Grid>
-          <Grid item>
-            <FormControl>
-              <InputLabel>Type d&apos;utilisateur</InputLabel>
-              <Select
-                sx={{ minWidth: '10rem' }}
-                label="Type d'utilisateur"
-                value={userTypeFilter}
-                onChange={(event: SelectChangeEvent<UserType | ''>) => setUserTypeFilter(event.target.value as UserType | '')}
-              >
-                <MenuItem value="">
-                  <em>Aucun</em>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FormControl style={{ flex: '1 1 0', marginRight: '2rem' }}>
+            <InputLabel>Feature Flag</InputLabel>
+            <Select
+              sx={{ minWidth: '10rem', width: '100%', backgroundColor: 'white' }}
+              label="Feature Flag"
+              name="name"
+              value={newFeatureFlag.name}
+              onChange={handleNewFeatureFlagChange}
+            >
+              {FEATURE_FLAGS_NAMES?.map((flag, index) => (
+                <MenuItem key={index} value={flag}>
+                  {flag}
                 </MenuItem>
-                {Object.entries(userTypeNames).map(([key, value]) => (
-                  <MenuItem key={key} value={parseInt(key, 10)}>
-                    {value}
+              ))}
+            </Select>
+          </FormControl>
+          <Button type="submit" variant="contained" disabled={!newFeatureFlag.name}>
+            Appliquer les changements
+          </Button>
+        </div>
+
+        {newFeatureFlag.name && (
+          <>
+            <Typography variant="h6" my={2}>
+              État
+            </Typography>
+            <RadioGroup value={newFeatureFlag.isEnabled} onChange={handleCheckboxChange} aria-labelledby="">
+              <FormControlLabel style={{ cursor: 'pointer' }} value={true} control={<Radio />} label="Actif pour tout le monde" />
+              <FormControlLabel style={{ cursor: 'pointer' }} value={false} control={<Radio />} label="Actif pour certains utilisateurs" />
+            </RadioGroup>
+          </>
+        )}
+
+        {newFeatureFlag.name && !newFeatureFlag.isEnabled && (
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={3}>
+              <Typography variant="h6" my={2}>
+                Utilisateurs
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                style={{ width: '100%' }}
+                label="Filtre utilisateur"
+                placeholder="Filtre utilisateur"
+                value={userFilter}
+                onChange={handleUserFilterChange}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <FormControl style={{ width: '100%' }}>
+                <InputLabel>Type d&apos;utilisateur</InputLabel>
+                <Select
+                  sx={{ minWidth: '10rem' }}
+                  label="Type d'utilisateur"
+                  value={userTypeFilter}
+                  onChange={(event: SelectChangeEvent<UserType | ''>) => setUserTypeFilter(event.target.value as UserType | '')}
+                >
+                  <MenuItem value="">
+                    <em>Aucun</em>
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  {Object.entries(userTypeNames).map(([key, value]) => (
+                    <MenuItem key={key} value={parseInt(key, 10)}>
+                      {value}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                style={{ width: '100%' }}
+                label="Code pays"
+                placeholder="Code pays"
+                value={countryCodeFilter}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCountryCodeFilter(event.target.value)}
+              />
+            </Grid>
           </Grid>
-
-          <Grid item>
-            <TextField
-              label="Code pays"
-              placeholder="Code pays"
-              value={countryCodeFilter}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCountryCodeFilter(event.target.value)}
-            />
-          </Grid>
-
-          <Grid item>
-            <Button type="submit" variant="contained">
-              Appliquer les changements
-            </Button>
-          </Grid>
-        </Grid>
+        )}
       </form>
-      {newFeatureFlag.name && (
+
+      {newFeatureFlag.name && !newFeatureFlag.isEnabled && (
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant="h6" my={2}>
+            <Typography variant="body1" my={2}>
               Utilisateurs sans accès
             </Typography>
             <TableContainer component={Paper}>
@@ -285,15 +289,9 @@ const FeatureFlagsTest: React.FC = () => {
                       <TableCell>{user.country?.isoCode}</TableCell>
                       <TableCell>{user.type}</TableCell>
                       <TableCell>
-                        {selectedUsers.includes(user.id) ? (
-                          <Button variant="outlined" color="error" onClick={() => handleRemoveUser(user.id)}>
-                            -
-                          </Button>
-                        ) : (
-                          <Button variant="outlined" color="success" onClick={() => handleAddUser(user.id)}>
-                            +
-                          </Button>
-                        )}
+                        <Button variant="outlined" color="success" onClick={() => handleAddUser(user.id)}>
+                          +
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -314,7 +312,7 @@ const FeatureFlagsTest: React.FC = () => {
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="h6" my={2}>
+            <Typography variant="body1" my={2}>
               Utilisateurs avec accès{' '}
             </Typography>
             <TableContainer component={Paper}>

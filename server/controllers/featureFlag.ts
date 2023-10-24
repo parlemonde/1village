@@ -45,49 +45,54 @@ featureFlagController.get({ path: '/:featureFlagName', userType: UserType.ADMIN 
 featureFlagController.post({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const data = req.body;
   let featureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({ where: { name: data.name }, relations: ['users'] });
-
-  if (!featureFlag) {
-    featureFlag = new FeatureFlag();
-    featureFlag.name = data.name;
-    featureFlag.isEnabled = data.isEnabled || false;
-  } else {
-    featureFlag.isEnabled = data.isEnabled ?? featureFlag.isEnabled;
-  }
-
-  const savedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).save(featureFlag);
-
   const usersToAdd = data.users && data.users.length > 0 ? await AppDataSource.getRepository(User).find({ where: { id: In(data.users) } }) : [];
 
-  // Wait for all remove operations to complete
-  await Promise.all(
-    featureFlag.users.map(async (user) => {
-      if (!usersToAdd.find((u) => u.id === user.id)) {
-        await AppDataSource.getRepository(FeatureFlag)
-          .createQueryBuilder('featureFlag')
-          .relation(FeatureFlag, 'users')
-          .of(savedFeatureFlag.id)
-          .remove(user.id);
-      }
-    }),
-  );
+  await AppDataSource.transaction(async (transactionalEntityManager) => {
+    if (!featureFlag) {
+      featureFlag = new FeatureFlag();
+      featureFlag.name = data.name;
+      featureFlag.isEnabled = data.isEnabled || false;
+      featureFlag.users = [];
+    } else {
+      featureFlag.isEnabled = data.isEnabled ?? featureFlag.isEnabled;
+    }
+    const savedFeatureFlag = await transactionalEntityManager.getRepository(FeatureFlag).save(featureFlag);
 
-  // Wait for all add operations to complete
-  await Promise.all(
-    usersToAdd.map(async (user) => {
-      await AppDataSource.getRepository(FeatureFlag)
-        .createQueryBuilder('featureFlag')
-        .relation(FeatureFlag, 'users')
-        .of(savedFeatureFlag.id)
-        .add(user.id);
-    }),
-  );
+    // Wait for all remove operations to complete
+    await Promise.all(
+      featureFlag.users
+        .filter((user) => usersToAdd.find((u) => u.id === user.id) === undefined)
+        .map((user) =>
+          transactionalEntityManager
+            .getRepository(FeatureFlag)
+            .createQueryBuilder('featureFlag')
+            .relation(FeatureFlag, 'users')
+            .of(savedFeatureFlag.id)
+            .remove(user.id),
+        ),
+    );
+
+    // Wait for all add operations to complete
+    await Promise.all(
+      usersToAdd
+        .filter((user) => (featureFlag?.users || []).find((u) => u.id === user.id) === undefined)
+        .map((user) =>
+          transactionalEntityManager
+            .getRepository(FeatureFlag)
+            .createQueryBuilder('featureFlag')
+            .relation(FeatureFlag, 'users')
+            .of(savedFeatureFlag.id)
+            .add(user.id),
+        ),
+    );
+  });
 
   const updatedFeatureFlag = await AppDataSource.getRepository(FeatureFlag).findOne({
-    where: { id: savedFeatureFlag.id },
+    where: { name: data.name },
     relations: ['users'],
   });
 
-  res.status(201).json(updatedFeatureFlag);
+  res.sendJSON(updatedFeatureFlag);
 });
 
 // Update a feature flag

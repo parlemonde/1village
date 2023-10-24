@@ -1,4 +1,5 @@
 import type { Country } from './country.type';
+import type { User } from './user.type';
 
 export interface Classroom {
   id: number;
@@ -9,6 +10,8 @@ export interface Classroom {
   country?: Country;
   delayedDays?: number;
   hasVisibilitySetToClass?: boolean;
+  user?: User;
+  defaultPrintMessage?: string;
 }
 
 export interface ClassroomAsFamilly {

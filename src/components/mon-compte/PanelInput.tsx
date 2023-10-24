@@ -8,6 +8,7 @@ interface PanelInputProps {
   defaultValue?: string;
   label: string;
   placeholder?: string;
+  isRequired?: boolean;
   isEditMode?: boolean;
   errorMsg?: string;
   helperText?: string;
@@ -23,6 +24,7 @@ export const PanelInput = ({
   defaultValue = '',
   label,
   placeholder = '',
+  isRequired = false,
   isEditMode = true,
   errorMsg,
   helperText,
@@ -36,6 +38,7 @@ export const PanelInput = ({
     <div style={{ margin: '0.5rem', display: 'inline-flex', alignItems: 'flex-start', ...style }}>
       <label className="text text--bold" style={{ flexShrink: 0 }}>
         {label}
+        {isRequired && <span style={{ color: 'red' }}>*</span>}
       </label>
       {isEditMode ? (
         <TextField

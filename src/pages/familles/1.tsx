@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
 
-import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
@@ -25,14 +25,14 @@ import type { Activity } from 'types/activity.type';
 import type { Classroom, InitialStateOptionsProps } from 'types/classroom.type';
 import { UserType } from 'types/user.type';
 
-const content1 = {
-  text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
-  text2: 'jours après leurs publication',
-};
-const content2 = {
-  text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais seulement celles publiées par notre classe et',
-  text2: 'jours après leurs publication',
-};
+// const content1 = {
+//   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais',
+//   text2: 'jours après leurs publication',
+// };
+// const content2 = {
+//   text1: 'les familles peuvent voir toutes les activités publiées sur 1Village, mais seulement celles publiées par notre classe et',
+//   text2: 'jours après leurs publication',
+// };
 
 type StateType = {
   delayedDays: number;
@@ -167,19 +167,19 @@ const ClassroomParamStep1 = () => {
       }, {}),
     [users],
   );
-  const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    const days = value >= 1 ? value : 1;
+  // const handleDaysDelay = (key: string, event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = Number(event.target.value);
+  //   const days = value >= 1 ? value : 1;
 
-    switch (key) {
-      case 'timeDelay':
-        dispatch({ type: 'timeDelay', data: days });
-        break;
-      case 'ownClassTimeDelay':
-        dispatch({ type: 'ownClassTimeDelay', data: days });
-        break;
-    }
-  };
+  //   switch (key) {
+  //     case 'timeDelay':
+  //       dispatch({ type: 'timeDelay', data: days });
+  //       break;
+  //     case 'ownClassTimeDelay':
+  //       dispatch({ type: 'ownClassTimeDelay', data: days });
+  //       break;
+  //   }
+  // };
 
   const handleRadioSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = (event.target as HTMLInputElement).value;
@@ -202,13 +202,12 @@ const ClassroomParamStep1 = () => {
         dispatch({ type: 'ownClassTimeDelay', data: classroom?.delayedDays || 1 });
         setIsDisabled({ ...isDisabled, default: true, timeDelay: true, ownClass: true });
         break;
-      default:
-        dispatch({ type: 'default', data: 0 });
-        setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
-        break;
+      // default:
+      //   dispatch({ type: 'default', data: 0 });
+      //   setIsDisabled({ ...isDisabled, timeDelay: true, ownClass: true, ownClassTimeDelay: true });
+      //   break;
     }
   };
-
   const handleSelectionVisibility = (key: string) => {
     let newState: StateType;
     switch (key) {
@@ -229,6 +228,14 @@ const ClassroomParamStep1 = () => {
         break;
     }
     updateClassroomParameters(newState);
+    if (activities) {
+      const isVisibleToParent = newState.hasVisibilitySetToClass || key === 'default';
+      activities.forEach((activity) => {
+        if (activity.isVisibleToParent !== isVisibleToParent) {
+          handleActivityVisibility(activity.id);
+        }
+      });
+    }
     setClassroom((prevState) => {
       if (!prevState) {
         return {
@@ -239,7 +246,6 @@ const ClassroomParamStep1 = () => {
       return { ...prevState, ...newState };
     });
   };
-
   // const isRadioSelected = (value: string): boolean | undefined => radioValue === value;
 
   const handleActivityVisibility = (id: number) => {
@@ -250,9 +256,9 @@ const ClassroomParamStep1 = () => {
       refetch();
     });
   };
-  const toggleInput = (key: string, bool: boolean) => {
-    setIsDisabled({ ...isDisabled, [key]: bool });
-  };
+  // const toggleInput = (key: string, bool: boolean) => {
+  //   setIsDisabled({ ...isDisabled, [key]: bool });
+  // };
 
   // React.useEffect(() => {
   //     if (user && user.type === UserType.TEACHER) {
@@ -299,7 +305,7 @@ const ClassroomParamStep1 = () => {
             <h1>Choisissez ce que voient les familles</h1>
             <p className="text">
               Vous allez inviter les familles de vos élèves à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en
-              ligne. Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 4 options :
+              ligne. Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 2 options :
             </p>
             <FormControl>
               <RadioGroup aria-label="visibility" onChange={handleRadioSelect} value={radioValue}>
@@ -311,7 +317,7 @@ const ClassroomParamStep1 = () => {
                   onFocus={() => handleSelectionVisibility('default')}
                   style={radioValue !== 'default' ? { color: '#CCC' } : {}}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="timeDelay"
                   name="timeDelay"
                   control={<Radio />}
@@ -327,7 +333,7 @@ const ClassroomParamStep1 = () => {
                   onClick={() => toggleInput('timeDelay', false)}
                   disabled={isDisabled?.timeDelay}
                   style={radioValue !== 'timeDelay' ? { color: '#CCC' } : {}}
-                />
+                /> */}
                 <FormControlLabel
                   value="ownClass"
                   name="ownClass"
@@ -336,7 +342,7 @@ const ClassroomParamStep1 = () => {
                   onFocus={() => handleSelectionVisibility('ownClass')}
                   style={radioValue !== 'ownClass' ? { color: '#CCC' } : {}}
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="ownClassTimeDelay"
                   name="ownClassTimeDelay"
                   control={<Radio />}
@@ -352,7 +358,7 @@ const ClassroomParamStep1 = () => {
                   onClick={() => toggleInput('ownClassTimeDelay', false)}
                   disabled={isDisabled?.ownClassTimeDelay}
                   style={radioValue !== 'ownClassTimeDelay' ? { color: '#CCC' } : {}}
-                />
+                /> */}
               </RadioGroup>
             </FormControl>
             <div style={{ margin: '-1rem 0' }}>
@@ -425,14 +431,14 @@ const ClassroomParamStep1 = () => {
   );
 };
 
-type TextInputContainerProps = {
-  text1: string;
-  text2?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: () => void;
-  value: number;
-  disabled?: boolean;
-};
+// type TextInputContainerProps = {
+//   text1: string;
+//   text2?: string;
+//   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+//   onBlur: () => void;
+//   value: number;
+//   disabled?: boolean;
+// };
 
 /**
  * Container to display text and input inline
@@ -440,30 +446,30 @@ type TextInputContainerProps = {
  * @param value value of the input
  * @param object text object containing text to display
  */
-const TextnInputContainer = ({ onChange, onBlur, value, disabled, ...props }: TextInputContainerProps) => {
-  const { text1, text2 } = props;
-  const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
-  return (
-    <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-      <span style={spanStyle}>{text1}</span>
-      <TextField
-        className="textnInputContainer__textfield"
-        variant="standard"
-        type="number"
-        inputProps={{ min: 0 }}
-        size="small"
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        disabled={disabled}
-        sx={{
-          width: '2rem',
-          marginRight: '5px',
-        }}
-      />
-      <span style={spanStyle}>{text2}</span>
-    </div>
-  );
-};
+// const TextnInputContainer = ({ onChange, onBlur, value, disabled, ...props }: TextInputContainerProps) => {
+//   const { text1, text2 } = props;
+//   const spanStyle = { flexShrink: 0, marginRight: '0.5rem' };
+//   return (
+//     <div className="textnInputContainer__line" style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+//       <span style={spanStyle}>{text1}</span>
+//       <TextField
+//         className="textnInputContainer__textfield"
+//         variant="standard"
+//         type="number"
+//         inputProps={{ min: 0 }}
+//         size="small"
+//         value={value}
+//         onChange={onChange}
+//         onBlur={onBlur}
+//         disabled={disabled}
+//         sx={{
+//           width: '2rem',
+//           marginRight: '5px',
+//         }}
+//       />
+//       <span style={spanStyle}>{text2}</span>
+//     </div>
+//   );
+// };
 
 export default ClassroomParamStep1;
