@@ -3,7 +3,7 @@ import { axiosRequest } from './axiosRequest';
 const emailRegex =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i;
 //const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(.{12,})$/;
+const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{12,})$/; // Changement pour 12 caractère 1 Minuscule, 1 Majuscule, 1 chiffre, 1 Caractère Spécial
 
 export async function isPseudoValid(pseudo: string, userPseudo: string): Promise<boolean> {
   if (pseudo.length === 0) {

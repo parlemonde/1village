@@ -76,7 +76,6 @@ const Inscription = () => {
       if (!password.match(/[^a-zA-Z0-9]/)) {
         passwordMessageRef.current += ' et au moins un caractère spécial ';
       }
-
       if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length <= 11 || !password.match(/[^a-zA-Z0-9]/)) {
         // Changement 8 en 11 + rajout condition
         setIsPasswordValid(false);
@@ -92,7 +91,6 @@ const Inscription = () => {
         setIsPasswordMatch(true);
       }
     }
-
     if (email !== '') {
       if (!emailRegex.test(email)) {
         setIsEmailValid(false);
@@ -100,7 +98,6 @@ const Inscription = () => {
         setIsEmailValid(true);
       }
     }
-
     if (lastname !== '') {
       if (lastname.length > 1) {
         setIsLastnameValid(true);
