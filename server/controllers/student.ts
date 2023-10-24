@@ -1,7 +1,6 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { Classroom } from '../entities/classroom';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
@@ -62,6 +61,20 @@ studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHE
 
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
   res.json(users);
+});
+
+studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const studentRepository = AppDataSource.getRepository(Student);
+  const userRepository = AppDataSource.getRepository(User);
+
+  const student = await studentRepository.findOne({ where: { id }, relations: ['classroom.user'] });
+  const teacher = await userRepository.findOne({ where: { id: student?.classroom.user.id } });
+
+  if (!teacher) return next();
+
+  res.json(teacher);
 });
 
 type CreateStudentData = {
