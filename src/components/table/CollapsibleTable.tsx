@@ -46,7 +46,6 @@ function Row(props: {
   isKeywordMissing: boolean;
   handleDeleteUser: (studentId: number, userId: number) => void;
 }) {
-  // const { row, isSelected, handleToggle, onPrint, isKeywordMissing } = props;
   const { row, isSelected, handleToggle, onPrint, isKeywordMissing, handleDeleteUser } = props;
   const [open, setOpen] = useState(false);
 
@@ -96,14 +95,7 @@ function Row(props: {
                             confirmLabel={`Souhaitez-vous supprimer l’accès de ${user.email} ?`}
                             confirmTitle="Suppression d'accès"
                             color="red"
-                            onDelete={async () => {
-                              try {
-                                await deleteUserStudentRelation(row.studentId, user.id);
-                                handleDeleteUser(row.studentId, user.id);
-                              } catch (error) {
-                                console.error(error);
-                              }
-                            }}
+                            onDelete={async () => handleDeleteUser(row.studentId, user.id)}
                           />
                         </TableCell>
                       </TableRow>
@@ -187,7 +179,9 @@ export default function CollapsibleTable() {
     fetchData();
   }, [isSelected, students]);
 
-  const handleDeleteUser = (studentId: number, userId: number) => {
+  const handleDeleteUser = async (studentId: number, userId: number) => {
+    await deleteUserStudentRelation(studentId, userId);
+
     const newRows = rows.map((row) => {
       if (row.studentId === studentId) {
         const newUsers = row.users.filter((user) => user.id !== userId);
