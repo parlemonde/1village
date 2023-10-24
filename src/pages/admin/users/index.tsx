@@ -14,6 +14,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { getClassroomOfStudent } from 'src/api/student/student.get';
+import { getLinkedStudentsToUser, getUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
@@ -23,7 +25,9 @@ import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-import { userTypeNames } from 'types/user.type';
+import type { Classroom } from 'types/classroom.type';
+import type { User } from 'types/user.type';
+import { UserType, userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
@@ -92,6 +96,28 @@ const Users = () => {
     const fileName = userLabel + todayDate;
 
     exportJsonToCsv(fileName, headers, datasToExport);
+  };
+
+  const getUserSchool = async (user: User) => {
+    if (user && user.type === UserType.FAMILY) {
+      if (user.hasStudentLinked) {
+        const linkedStudents = await getLinkedStudentsToUser(user.id);
+
+        const linkedSchools = await Promise.all(
+          linkedStudents.map(async (linkedUser) => {
+            const studentClassroom: Classroom = await getClassroomOfStudent(linkedUser.id);
+            if (studentClassroom) {
+              console.log('USER CLASSROOM', studentClassroom);
+              const teacher = await getUser(studentClassroom.userId);
+              return teacher.school;
+            }
+          }),
+        );
+        console.log(linkedSchools);
+        return 'AAAAAAAAAA';
+      }
+      return 'HJKHJK';
+    }
   };
 
   const actions = (id: number) => (
@@ -209,7 +235,8 @@ const Users = () => {
                   firstname: u.firstname,
                   lastname: u.lastname,
                   email: u.email,
-                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                  // LOOOOOOOOOOK HEEEEEEEEEERE !
+                  school: getUserSchool(u) || <span style={{ color: 'grey' }}>Non renseignée</span>,
                   country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
                   village: u.villageId ? (
                     villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
