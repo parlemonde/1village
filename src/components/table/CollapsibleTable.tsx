@@ -65,9 +65,11 @@ function Row(props: {
           {row.name}
         </TableCell>
         <TableCell align="right">
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          {row.users.length > 0 && (
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          )}
           {row.numLinkedAccount}
         </TableCell>
         <TableCell align="right">{row.studentCode}</TableCell>
@@ -82,31 +84,32 @@ function Row(props: {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, marginLeft: 0 }}>
               <Table size="small" aria-label="purchases">
-                <TableBody>
-                  {row.users.map((user, index) => (
-                    <TableRow key={index}>
-                      {/* <TableCell>{row.users}</TableCell> */}
-                      <TableCell style={{ fontSize: '0.8rem' }}>{user.email}</TableCell>
-                      <TableCell style={{ fontSize: '0.8rem' }}>{user.firstname}</TableCell>
-                      <TableCell style={{ fontSize: '0.8rem' }}>{user.lastname}</TableCell>
-                      <TableCell sx={{ textAlign: 'center', paddingLeft: 5 }}>
-                        <DeleteButton
-                          confirmLabel={`Souhaitez-vous supprimer l’accès de ${user.email} ?`}
-                          confirmTitle="Suppression d'accès"
-                          color="red"
-                          onDelete={async () => {
-                            try {
-                              await deleteUserStudentRelation(row.studentId, user.id);
-                              handleDeleteUser(row.studentId, user.id);
-                            } catch (error) {
-                              console.error(error);
-                            }
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+                {row.users.length > 0 && (
+                  <TableBody>
+                    {row.users.map((user, index) => (
+                      <TableRow key={index}>
+                        <TableCell style={{ fontSize: '0.8rem' }}>{user.email}</TableCell>
+                        <TableCell style={{ fontSize: '0.8rem' }}>{user.firstname}</TableCell>
+                        <TableCell style={{ fontSize: '0.8rem' }}>{user.lastname}</TableCell>
+                        <TableCell sx={{ textAlign: 'center', paddingLeft: 5 }}>
+                          <DeleteButton
+                            confirmLabel={`Souhaitez-vous supprimer l’accès de ${user.email} ?`}
+                            confirmTitle="Suppression d'accès"
+                            color="red"
+                            onDelete={async () => {
+                              try {
+                                await deleteUserStudentRelation(row.studentId, user.id);
+                                handleDeleteUser(row.studentId, user.id);
+                              } catch (error) {
+                                console.error(error);
+                              }
+                            }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                )}
               </Table>
             </Box>
           </Collapse>
@@ -183,8 +186,6 @@ export default function CollapsibleTable() {
 
     fetchData();
   }, [isSelected, students]);
-
-  // LOOK HEEEEEEEERE !!!!!!!!!!!!!!!!!!
 
   const handleDeleteUser = (studentId: number, userId: number) => {
     const newRows = rows.map((row) => {
