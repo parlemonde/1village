@@ -75,6 +75,7 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   if (!createClassroomValidator(data)) {
     sendInvalidDataError(createClassroomValidator);
   }
+
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }

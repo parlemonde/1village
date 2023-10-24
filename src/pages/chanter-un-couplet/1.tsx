@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';

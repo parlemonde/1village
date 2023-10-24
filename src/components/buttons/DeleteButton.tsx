@@ -1,8 +1,7 @@
-import React from 'react';
-
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import type { Theme } from '@mui/material/styles';
+import React from 'react';
 
 import { Modal } from 'src/components/Modal';
 

@@ -1,14 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
-export interface AxiosReturnType {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-  error: boolean;
-  status: number;
-}
+export type AxiosReturnType<ResponseType = any> =
+  | {
+      data: ResponseType;
+      error: false;
+      status: number;
+    }
+  | {
+      data: any;
+      error: true;
+      status: number;
+    };
 
-const axiosRequest = async (req: AxiosRequestConfig): Promise<AxiosReturnType> => {
+const axiosRequest = async <ResponseType = any>(req: AxiosRequestConfig): Promise<AxiosReturnType<ResponseType>> => {
   try {
     const axiosOptions = {
       baseURL: process.env.NEXT_PUBLIC_BASE_APP,
@@ -31,7 +37,7 @@ const axiosRequest = async (req: AxiosRequestConfig): Promise<AxiosReturnType> =
         console.error(error);
       }
       return {
-        data: error.response ? error.response.data || null : null,
+        data: error.response?.data ?? null,
         error: true,
         status: (error.response || {}).status || 500,
       };

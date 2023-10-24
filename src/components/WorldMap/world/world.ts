@@ -54,6 +54,7 @@ export class World {
   private hoveredObject: HoverableObject | null;
 
   private view: 'earth' | 'global' | 'pelico';
+  private isPelicoEnabled: boolean = false;
 
   constructor(canvas: HTMLCanvasElement, setMouseStyle: MouseStyleSetter, setPopoverData: PopoverDataSetter, selectedPhase: number) {
     const width = canvas.clientWidth;
@@ -197,7 +198,7 @@ export class World {
 
   private onCameraChange() {
     const altitude = this.camera.position.clone().distanceTo(CENTERS[this.view]);
-    if (altitude > MAX_DISTANCE - 10 && this.view !== 'global') {
+    if (altitude > MAX_DISTANCE - 10 && this.view !== 'global' && this.isPelicoEnabled) {
       this.transitionToGlobal();
     }
     const showDecors = altitude < 240;
@@ -446,5 +447,13 @@ export class World {
         child.rotateY(dt / 4000);
       }
     }
+  }
+
+  public addPelicoEnigme() {
+    this.isPelicoEnabled = true;
+  }
+
+  public removePelicoEnigme() {
+    this.isPelicoEnabled = false;
   }
 }

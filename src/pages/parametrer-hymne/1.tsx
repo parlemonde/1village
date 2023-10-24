@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
 import type { AnthemData } from 'src/activity-types/anthem.types';

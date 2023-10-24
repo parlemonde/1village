@@ -1,6 +1,5 @@
-import React from 'react';
-
 import Alert from '@mui/material/Alert';
+import React from 'react';
 
 import type { ViewProps } from '../content.types';
 

@@ -1,7 +1,6 @@
+import { Button } from '@mui/material';
 import Image from 'next/image';
 import React from 'react';
-
-import { Button } from '@mui/material';
 
 import type { EditorProps } from '../../content.types';
 import { EditorContainer } from '../EditorContainer';

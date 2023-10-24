@@ -1,7 +1,6 @@
+import { TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { TextField } from '@mui/material';
 
 import { getSymbol } from 'src/activity-types/symbol.constants';
 import type { SymbolData } from 'src/activity-types/symbol.types';

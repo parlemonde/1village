@@ -1,10 +1,9 @@
+import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress, Tooltip } from '@mui/material';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ReactPlayer from 'react-player';
 import type { SourceProps } from 'react-player/base';
-
-import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress, Tooltip } from '@mui/material';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic, isMimicValid } from 'src/activity-types/game.constants';

@@ -1,7 +1,6 @@
+import { ButtonBase, Card } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { ButtonBase, Card } from '@mui/material';
 
 import type { AnthemData, Syllable } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';

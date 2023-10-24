@@ -12,6 +12,14 @@ module.exports = {
     });
     return config;
   },
+  webpackDevMiddleware: (config) => {
+    // Enable hot reloading
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    };
+    return config;
+  },
   experimental: { esmExternals: false },
   webpackDevMiddleware: (config) => {
     // Enable hot reloading

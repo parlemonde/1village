@@ -1,7 +1,6 @@
-import React from 'react';
-
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import React from 'react';
 
 import type { EditorProps } from '../content.types';
 import { EditorContainer } from './EditorContainer';

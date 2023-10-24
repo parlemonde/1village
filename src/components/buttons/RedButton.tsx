@@ -1,7 +1,6 @@
-import * as React from 'react';
-
 import type { ButtonProps } from '@mui/material/Button';
 import Button from '@mui/material/Button';
+import * as React from 'react';
 
 import { errorColor, errorColorDarker } from 'src/styles/variables.const';
 

@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Grid, Box } from '@mui/material';
+import React from 'react';
 
 import { ImageView } from '../content/views/ImageView';
 import type { ActivityViewProps } from './activity-view.types';

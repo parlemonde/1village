@@ -1,8 +1,7 @@
+import { Tooltip, Button, Backdrop, CircularProgress } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-import { Tooltip, Button, Backdrop, CircularProgress } from '@mui/material';
 
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
