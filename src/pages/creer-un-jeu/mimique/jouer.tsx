@@ -354,7 +354,8 @@ const PlayMimic = () => {
             <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>Que signifie cette mimique ?</h1>
             </Grid>
-            <Grid container direction="row" spacing={5} pt={1}>
+            <div className="grid-container">
+              {/* <Grid container direction="row" spacing={5} pt={1}> */}
               <Grid item xs={4}>
                 {choices &&
                   choices.map((val) => {
@@ -400,7 +401,8 @@ const PlayMimic = () => {
                   />
                 </>
               )}
-            </Grid>
+              {/* </Grid> */}
+            </div>
 
             <Grid item xs={12} md={12}>
               {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
