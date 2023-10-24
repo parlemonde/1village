@@ -5,8 +5,10 @@ import { LinearProgress, Typography, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { Flag } from '../Flag';
-import type { GameResponse } from './types/gameResponse.type';
+// eslint-disable-next-line
+// @ts-ignore
 import type { User } from './types/user.type';
+import type { GameResponse } from 'types/gameResponse.type';
 import { GameResponseValue } from 'types/gameResponse.type';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
