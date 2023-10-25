@@ -104,6 +104,7 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
           .from(GameResponse, 'response')
           .where('response.userId = :userId', { userId: userId })
           .andWhere('response.gameId = game.id')
+          .andWhere('response.isOldResponse = 0')
           .getQuery();
         return 'NOT EXISTS ' + subQuery;
       },
