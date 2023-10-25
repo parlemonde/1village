@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Checkbox, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 
 import { KeepRatio } from '../components/KeepRatio';
+import { isPasswordValid, isEmailValid } from '../utils/accountChecks';
 import LanguageFilter from 'src/components/LanguageFilter';
 import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
@@ -21,14 +22,13 @@ const Inscription = () => {
   const [lastname, setLastname] = useState<string>('');
   const [isLastnameValid, setIsLastnameValid] = useState<boolean>(true);
   const [password, setPassword] = useState<string>('');
-  const passwordMessageRef = useRef<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
+  const [isPasswordValidState, setIsPasswordValidState] = useState<boolean>(true);
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
   const [isPasswordIdenticalToEmail, setisPasswordIdenticalToEmail] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmationPasswordVisible, setIsConfirmationPasswordVisible] = useState<boolean>(false);
-  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [isEmailValidState, setIsEmailValidState] = useState<boolean>(true);
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
   const [isCGUread, setIsCGUread] = useState<boolean>(false);
   const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = useState<boolean>(false);
@@ -50,39 +50,15 @@ const Inscription = () => {
   const { addUser, resendVerificationEmail } = useUserRequests();
   const router = useRouter();
 
+  const ERROR_MSG = {
+    PWD_MATCH_MAIL: "Le mot de passe ne peut pas être identique à l'email",
+    INVALID_PWD:
+      'Votre mot de passe doit contenir faire un minimum de 12 caractères, contenir un chiffre et une lettre majuscules et un caractère spécial',
+    INVALID_EMAIL: "L'email n'est pas au format valide ",
+  };
   useEffect(() => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (password !== '') {
-      passwordMessageRef.current = '';
-      setIsPasswordValid(false);
-
-      if (!password.match(/\d/)) {
-        passwordMessageRef.current = 'Le mot de passe doit contenir un chiffre';
-      }
-      if (!password.match(/[A-Z]/)) {
-        if (passwordMessageRef.current) {
-          passwordMessageRef.current += ' et ';
-        }
-        passwordMessageRef.current += ' une lettre majuscule';
-      }
-      if (password.length <= 11) {
-        // Changement 8 en 11
-        if (passwordMessageRef.current) {
-          passwordMessageRef.current += ' et ';
-        }
-        passwordMessageRef.current += 'faire au moins 12 caractères';
-      }
-      if (!password.match(/[^a-zA-Z0-9]/)) {
-        passwordMessageRef.current += ' et au moins un caractère spécial ';
-      }
-      if (!password.match(/\d/) || !password.match(/[A-Z]/) || password.length <= 11 || !password.match(/[^a-zA-Z0-9]/)) {
-        // Changement 8 en 11 + rajout condition
-        setIsPasswordValid(false);
-      } else {
-        setIsPasswordValid(true);
-      }
-    }
+    //const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (password.length !== 0) setIsPasswordValidState(isPasswordValid(password));
 
     if (confirmPassword !== '') {
       if (password !== confirmPassword) {
@@ -91,12 +67,15 @@ const Inscription = () => {
         setIsPasswordMatch(true);
       }
     }
-    if (email !== '') {
-      if (!emailRegex.test(email)) {
-        setIsEmailValid(false);
-      } else {
-        setIsEmailValid(true);
-      }
+    // if (email !== '') {
+    //   if (!emailRegex.test(email)) {
+    //     setIsEmailValidState(false);
+    //   } else {
+    //     setIsEmailValidState(true);
+    //   }
+    // }
+    if (email.length !== 0) {
+      setIsEmailValidState(isEmailValid(email));
     }
     if (lastname !== '') {
       if (lastname.length > 1) {
@@ -135,23 +114,26 @@ const Inscription = () => {
 
     if (
       isCGUread &&
-      isEmailValid &&
+      isEmailValidState &&
       isFirstnameValid &&
       isPasswordMatch &&
-      isPasswordValid &&
+      isPasswordValidState &&
       isLastnameValid &&
       !isPasswordIdenticalToEmail &&
       firstname.length !== 0 &&
-      lastname.length !== 0
+      lastname.length !== 0 &&
+      isPasswordValid(password) &&
+      isPasswordValid(confirmPassword) &&
+      isEmailValid(email)
     ) {
       setIsRegisterDataValid(true);
     }
     if (
       !isCGUread ||
-      !isEmailValid ||
+      !isEmailValidState ||
       !isFirstnameValid ||
       !isPasswordMatch ||
-      !isPasswordValid ||
+      !isPasswordValidState ||
       isPasswordIdenticalToEmail || // Changement
       !isLastnameValid ||
       firstname.length === 0 ||
@@ -164,11 +146,11 @@ const Inscription = () => {
     email,
     firstname,
     isCGUread,
-    isEmailValid,
+    isEmailValidState,
     isFirstnameValid,
     isLastnameValid,
     isPasswordMatch,
-    isPasswordValid,
+    isPasswordValidState,
     isPasswordIdenticalToEmail, // Changement
     isRegisterDataValid,
     lastname,
@@ -179,7 +161,15 @@ const Inscription = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid && !isPasswordIdenticalToEmail) {
+    if (
+      isCGUread &&
+      isEmailValidState &&
+      isFirstnameValid &&
+      isPasswordMatch &&
+      isPasswordValidState &&
+      isLastnameValid &&
+      !isPasswordIdenticalToEmail
+    ) {
       // Changement && isPasswordIdenticalToEmail
       try {
         await addUser(newUser);
@@ -203,8 +193,6 @@ const Inscription = () => {
   const handleClickShowConfirmationPassword = () => {
     setIsConfirmationPasswordVisible(!isConfirmationPasswordVisible);
   };
-
-  const passwordMessage = passwordMessageRef.current;
 
   return (
     <>
@@ -263,8 +251,8 @@ const Inscription = () => {
                     label="Adresse email"
                     placeholder="Entrez votre adresse email"
                     name="email"
-                    error={!isEmailValid || isEmailUsed}
-                    helperText={isEmailUsed && 'Email déjà utilisé'}
+                    error={!isEmailValidState || isEmailUsed}
+                    helperText={isEmailUsed && isEmailValidState ? 'Email déjà utilisé' : !isEmailValidState ? ERROR_MSG.INVALID_EMAIL : ''}
                     InputLabelProps={{ shrink: true }}
                     sx={{
                       width: '30ch',
@@ -327,15 +315,8 @@ const Inscription = () => {
                       ),
                     }}
                     type={isPasswordVisible === false ? 'password' : 'text'}
-                    error={isPasswordValid === false || isPasswordIdenticalToEmail === true} //||isPasswordIdenticalToEmail === true
-                    // helperText={isPasswordValid === true ? '12 lettres minimum, une majuscule, un chiffre et un caractère spécial' : passwordMessage } // Changement 8 en 12 rajout caractère spécial
-                    helperText={
-                      isPasswordIdenticalToEmail
-                        ? "Le mot de passe ne peut pas être identique à l'email"
-                        : isPasswordValid === true
-                        ? '12 lettres minimum, une majuscule, un chiffre et un caractère spécial'
-                        : passwordMessage
-                    }
+                    error={isPasswordValidState === false || isPasswordIdenticalToEmail === true}
+                    helperText={isPasswordIdenticalToEmail ? ERROR_MSG.PWD_MATCH_MAIL : isPasswordValidState ? '' : ERROR_MSG.INVALID_PWD}
                     InputLabelProps={{ shrink: true }}
                     sx={{
                       width: '30ch',
@@ -417,7 +398,7 @@ const Inscription = () => {
                   </Box>
                   <div className="register__button">
                     <Button sx={{ paddingX: '3rem' }} type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
-                      S&apos;inscrire
+                      {"S'inscrire"}
                     </Button>
                   </div>
                 </form>
