@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
 
-import { Grid, Stack } from '@mui/material';
-
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
 import type { GameResponse } from 'types/gameResponse.type';

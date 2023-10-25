@@ -357,7 +357,7 @@ const PlayMimic = () => {
               <h1>Que signifie cette mimique ?</h1>
             </Grid>
             <div
-              className="grid-container"
+              className="display-ended-game"
               style={{
                 display: 'grid',
                 width: '100%',
@@ -366,9 +366,6 @@ const PlayMimic = () => {
                 gridTemplateAreas: '". a b " "c d e" "w f g" "q h i"',
               }}
             >
-              {/* <Grid container direction="row" spacing={5} pt={1}> */}
-              {/* <Grid item xs={4}> */}
-              {/* <div style={{ display: 'grid', gridArea: 'c' }}> */}
               {choices &&
                 choices.map((val, index) => {
                   const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
@@ -389,8 +386,6 @@ const PlayMimic = () => {
                     </div>
                   );
                 })}
-              {/* </div> */}
-              {/* </Grid> */}
               {(found || tryCount > 1) && (
                 <>
                   {user.country && (
@@ -417,7 +412,6 @@ const PlayMimic = () => {
                   />
                 </>
               )}
-              {/* </Grid> */}
             </div>
 
             <Grid item xs={12} md={12}>
