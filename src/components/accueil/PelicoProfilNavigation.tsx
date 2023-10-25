@@ -1,5 +1,6 @@
-import { Avatar, Button } from '@mui/material';
 import React from 'react';
+
+import { Avatar, Button } from '@mui/material';
 
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 import { icons, DESC } from 'src/components/activities/utils';

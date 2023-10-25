@@ -1,6 +1,7 @@
-import MaterialLink from '@mui/material/Link';
 import Link from 'next/link';
 import React from 'react';
+
+import MaterialLink from '@mui/material/Link';
 
 const Stats = () => {
   return (

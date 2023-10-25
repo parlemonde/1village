@@ -1,6 +1,7 @@
-import { Button } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
+
+import { Button } from '@mui/material';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
