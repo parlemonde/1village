@@ -13,9 +13,15 @@ type GameStatsProps = {
   country: string;
   userMap: { [key: number]: number };
   users: User[];
+  position: number;
 };
 
-const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStatsProps) => {
+const POSITION = [
+  ['d', 'e'],
+  ['f', 'g'],
+  ['h', 'i'],
+];
+const GameStats = ({ gameResponses, choices, country, userMap, users, position }: GameStatsProps) => {
   const countryResponses = useMemo(() => {
     return gameResponses.filter((responseGame) => users[userMap[responseGame.userId]]?.country?.isoCode === country);
   }, [country, gameResponses, userMap, users]);
@@ -33,32 +39,35 @@ const GameStats = ({ gameResponses, choices, country, userMap, users }: GameStat
   });
 
   return (
-    <Stack spacing={1} direction="column" alignItems="center" justifyContent="flex-start">
-      <Stack spacing={1} direction="row" alignItems="center" justifyContent="center" m={2}>
-        <span>{`${responseCount} réponse${responseCount > 1 ? 's' : ''}`} </span>
-        <Flag country={country} size={'small'} />
-      </Stack>
-      <Stack spacing={0} sx={{ width: 300, alignItems: 'center', justifyContent: 'space-between', px: 4 }}>
-        <Grid item direction="row" spacing={0} alignItems="center" justifyContent="space-between" xs={4}>
-          {responseCount > 0 &&
-            choices &&
-            choices.map((choice) => (
+    <>
+      <div style={{ display: 'grid', gridArea: position === 0 ? 'a' : 'b', gap: '1rem', margin: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', alignItems: 'center' }}>
+          <span>{`${responseCount} réponse${responseCount > 1 ? 's' : ''}`} </span>
+          <Flag country={country} size={'small'} />
+        </div>
+      </div>
+
+      {responseCount > 0 &&
+        choices &&
+        choices.map((choice) => (
+          <>
+            {responsesByChoice[choice] ? (
               <>
-                {responsesByChoice[choice] ? (
-                  <Stack direction="row" spacing={0} py={1} alignItems="center" justifyContent="center">
-                    {responsesByChoice[choice]?.map((response) => {
-                      const user = users[userMap[response.userId]];
-                      return <AvatarImg key={response.id} user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />;
-                    })}
-                  </Stack>
-                ) : (
-                  <Stack key={choice} style={{ height: '24px', margin: '10px 5px' }}></Stack>
-                )}
+                {responsesByChoice[choice]?.map((response) => {
+                  const user = users[userMap[response.userId]];
+                  return (
+                    <div key={response.id} style={{ alignContent: 'center', display: 'grid', gridArea: POSITION[choice][position] }}>
+                      <AvatarImg user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />
+                    </div>
+                  );
+                })}
               </>
-            ))}
-        </Grid>
-      </Stack>
-    </Stack>
+            ) : (
+              <div style={{ display: 'grid', gridArea: POSITION[choice][position] }}></div>
+            )}
+          </>
+        ))}
+    </>
   );
 };
 export default GameStats;

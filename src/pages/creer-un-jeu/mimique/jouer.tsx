@@ -106,6 +106,8 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleS
 };
 /* FIN partie à déplacer et à centraliser avec les prochains jeux*/
 
+const POSITION = ['c', 'w', 'q'];
+
 const PlayMimic = () => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
@@ -354,18 +356,28 @@ const PlayMimic = () => {
             <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>Que signifie cette mimique ?</h1>
             </Grid>
-            <div className="grid-container">
+            <div
+              className="grid-container"
+              style={{
+                display: 'grid',
+                width: '100%',
+                gridTemplateColumns: '1fr 2fr 2fr',
+                gridTemplateRows: 'repeat(3,auto)',
+                gridTemplateAreas: '". a b " "c d e" "w f g" "q h i"',
+              }}
+            >
               {/* <Grid container direction="row" spacing={5} pt={1}> */}
-              <Grid item xs={4}>
-                {choices &&
-                  choices.map((val) => {
-                    const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
-                    const isCorrect = isSuccess && found;
-                    const mimicOrigine = mimicContent?.origine || '';
-                    const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
-                    return (
+              {/* <Grid item xs={4}> */}
+              {/* <div style={{ display: 'grid', gridArea: 'c' }}> */}
+              {choices &&
+                choices.map((val, index) => {
+                  const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
+                  const isCorrect = isSuccess && found;
+                  const mimicOrigine = mimicContent?.origine || '';
+                  const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
+                  return (
+                    <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
                       <ResponseButton
-                        key={val}
                         value={value}
                         onClick={() => handleClick(value, isSuccess)}
                         isSuccess={isSuccess}
@@ -374,9 +386,11 @@ const PlayMimic = () => {
                         isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
                         mimicOrigine={mimicOrigine}
                       />
-                    );
-                  })}
-              </Grid>
+                    </div>
+                  );
+                })}
+              {/* </div> */}
+              {/* </Grid> */}
               {(found || tryCount > 1) && (
                 <>
                   {user.country && (
@@ -386,11 +400,13 @@ const PlayMimic = () => {
                       country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
                       userMap={userMap}
                       users={users}
+                      position={0}
                     />
                   )}
                   <GameStats
                     gameResponses={gameResponses}
                     choices={choices}
+                    position={1}
                     country={
                       userIsPelico
                         ? village.countries[1].isoCode
