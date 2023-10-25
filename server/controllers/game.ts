@@ -192,6 +192,7 @@ gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async
     .leftJoinAndSelect('gameResponse.user', 'user')
     .where('`gameResponse`.`gameId` = :gameId', { gameId: gameId })
     .andWhere('user.type <> :userType', { userType: UserType.OBSERVATOR }) //Observator can play but don't affect the stats
+    .andWhere('gameResponse.isOldResponse = 0')
     .getMany();
 
   res.sendJSON(gameResponses || []);
