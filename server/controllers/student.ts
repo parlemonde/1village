@@ -70,8 +70,9 @@ studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, 
   const userRepository = AppDataSource.getRepository(User);
 
   const student = await studentRepository.findOne({ where: { id }, relations: ['classroom.user'] });
-  const teacher = await userRepository.findOne({ where: { id: student?.classroom.user.id } });
+  if (!student) return next();
 
+  const teacher = await userRepository.findOne({ where: { id: student.classroom.user.id } });
   if (!teacher) return next();
 
   res.json(teacher);
