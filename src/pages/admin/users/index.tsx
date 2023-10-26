@@ -58,7 +58,6 @@ const Users = () => {
   );
 
   React.useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchTableData = async () => {
       const data = await Promise.all(
         filteredUsers.map(async (u) => {
@@ -77,6 +76,7 @@ const Users = () => {
       setTableData(data);
     };
     fetchTableData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredUsers]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
