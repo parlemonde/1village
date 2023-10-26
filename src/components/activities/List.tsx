@@ -1,5 +1,6 @@
-import { Button } from '@mui/material';
 import React from 'react';
+
+import { Button } from '@mui/material';
 
 import { ActivityCard } from './ActivityCard';
 import { isAnthem } from 'src/activity-types/anyActivity';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';

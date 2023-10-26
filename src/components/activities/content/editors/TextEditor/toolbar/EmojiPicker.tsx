@@ -1,9 +1,10 @@
+import React from 'react';
+
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import React from 'react';
 
 const emojis = [
   '😀',
