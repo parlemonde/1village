@@ -242,7 +242,7 @@ const Users = () => {
           </Button>
         </div>
         <AdminTable
-          emptyPlaceholder="Vous n'avez pas encore d'utilisateur !"
+          emptyPlaceholder={filteredUsers.length > 0 ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
           data={tableData}
           columns={[
             { key: 'firstname', label: 'Prénom', sortable: true },
