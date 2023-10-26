@@ -58,6 +58,7 @@ const Users = () => {
   );
 
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchTableData = async () => {
       const data = await Promise.all(
         filteredUsers.map(async (u) => {
