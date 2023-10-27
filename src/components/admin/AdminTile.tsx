@@ -1,7 +1,8 @@
+import React from 'react';
+
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import React from 'react';
 
 interface AdminTileProps {
   title: string;

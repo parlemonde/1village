@@ -1,5 +1,6 @@
-import { Grid } from '@mui/material';
 import React from 'react';
+
+import { Grid } from '@mui/material';
 
 import { ActivityCard } from '../ActivityCard';
 import { useImageStories } from 'src/services/useImagesStory';
