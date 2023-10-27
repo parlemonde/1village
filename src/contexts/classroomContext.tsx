@@ -1,7 +1,9 @@
+import { Card, CircularProgress } from '@mui/material';
 import React, { useEffect } from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
+import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Classroom, ClassroomAsFamilly } from 'types/classroom.type';
@@ -45,6 +47,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [students, setStudents] = React.useState<Student[]>([]);
+  const [modaltStep, setModalStep] = React.useState(0);
+  const modalStepTimeout = React.useRef<number | undefined>(undefined);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
   const [parentClassroom, setParentClassroom] = React.useState<ClassroomAsFamilly | null>(null);
 
@@ -145,6 +149,16 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
         data: { ...data },
       })
         .then((response) => {
+          if (response.status === 200) {
+            setModalStep(2);
+            modalStepTimeout.current = window.setTimeout(() => {
+              setModalStep(0);
+            }, 2000);
+            if (response.status !== 200) {
+              clearTimeout(modalStepTimeout.current);
+              setModalStep(1);
+            }
+          }
           return response.data.classroom;
         })
         .catch((err) => {
@@ -316,7 +330,19 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       setStudents,
     ],
   );
-  return <ClassroomContext.Provider value={value}>{children}</ClassroomContext.Provider>;
+  return (
+    <ClassroomContext.Provider value={value}>
+      {children}
+      {modaltStep > 0 && (
+        <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>
+          <Card style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}>
+            {modaltStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
+            {modaltStep === 2 && <span className="text text--small">Paramètres enregistrés</span>}
+          </Card>
+        </div>
+      )}
+    </ClassroomContext.Provider>
+  );
 };
 
 export interface ClassroomUpdateData {
