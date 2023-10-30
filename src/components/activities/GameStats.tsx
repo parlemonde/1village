@@ -50,16 +50,26 @@ const GameStats = ({ gameResponses, choices, country, userMap, users, position }
         choices.map((choice) => (
           <>
             {responsesByChoice[choice] ? (
-              <>
+              <div
+                style={{
+                  alignContent: 'center',
+                  display: 'flex',
+                  width: '100%',
+                  gap: '10px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gridArea: POSITION[choice][position],
+                }}
+              >
                 {responsesByChoice[choice]?.map((response) => {
                   const user = users[userMap[response.userId]];
                   return (
-                    <div key={response.id} style={{ alignContent: 'center', display: 'grid', gridArea: POSITION[choice][position] }}>
+                    <div key={response.id}>
                       <AvatarImg user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />
                     </div>
                   );
                 })}
-              </>
+              </div>
             ) : (
               <div style={{ display: 'grid', gridArea: POSITION[choice][position] }}></div>
             )}
