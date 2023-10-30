@@ -253,6 +253,10 @@ const PlayMimic = () => {
   const handleRadioButtonChange = (event: React.SyntheticEvent) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
     setSelectedValue(selected as RadioBoxValues);
+    if (selected === RadioBoxValues.RANDOM) {
+      setLoadingGame(true);
+      getNextGame();
+    }
   };
 
   const handleClick = useCallback(

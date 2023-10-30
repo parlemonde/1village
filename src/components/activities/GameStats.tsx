@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
 import type { GameResponse } from 'types/gameResponse.type';
+import { UserType } from 'types/user.type';
 import type { User } from 'types/user.type';
 
 type GameStatsProps = {
@@ -63,11 +64,13 @@ const GameStats = ({ gameResponses, choices, country, userMap, users, position }
               >
                 {responsesByChoice[choice]?.map((response) => {
                   const user = users[userMap[response.userId]];
-                  return (
-                    <div key={response.id}>
-                      <AvatarImg user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />
-                    </div>
-                  );
+                  const renderAvatar =
+                    user.type >= UserType.MEDIATOR ? (
+                      <div key={response.id}>
+                        <AvatarImg user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />
+                      </div>
+                    ) : null;
+                  return renderAvatar;
                 })}
               </div>
             ) : (
