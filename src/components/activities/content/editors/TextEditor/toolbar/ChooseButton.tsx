@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import { useTargetMessage } from 'src/contexts/targetMessageContext';
 import { VillageContext } from 'src/contexts/villageContext';
 
 export const ChooseButton = () => {
-  const { village } = React.useContext(VillageContext);
+  const { village } = useContext(VillageContext);
+  const { setTargetMessage } = useTargetMessage();
 
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -27,6 +29,8 @@ export const ChooseButton = () => {
   const handleChange = (event: SelectChangeEvent) => {
     const newSelectedOption = event.target.value as string;
     setSelectedOption(newSelectedOption);
+
+    setTargetMessage(newSelectedOption);
   };
 
   return (

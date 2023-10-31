@@ -35,6 +35,7 @@ import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { FeatureFlagProvider } from 'src/contexts/featureFlagContext';
+import { TargetMessageProvider } from 'src/contexts/targetMessageContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
@@ -135,32 +136,34 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 <VillageContextProvider initialVillage={initialVillage}>
                   <ClassroomContextProvider>
                     <ActivityContextProvider>
-                      {isOnAdmin ? (
-                        <div>
-                          <AdminHeader />
-                          <div style={{ display: 'flex', width: '100%' }}>
-                            <AdminNavigation />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <Component {...pageProps} />
+                      <TargetMessageProvider>
+                        {isOnAdmin ? (
+                          <div>
+                            <AdminHeader />
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              <AdminNavigation />
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <Component {...pageProps} />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ) : user !== null &&
-                        router.pathname !== '/inscription' &&
-                        router.pathname !== '/connexion' &&
-                        router.pathname !== '/login' &&
-                        router.pathname !== '/user-verified' &&
-                        router.pathname !== '/reset-password' &&
-                        router.pathname !== '/update-password' &&
-                        router.pathname !== '/404' ? (
-                        <div className="app-container">
-                          <Header />
+                        ) : user !== null &&
+                          router.pathname !== '/inscription' &&
+                          router.pathname !== '/connexion' &&
+                          router.pathname !== '/login' &&
+                          router.pathname !== '/user-verified' &&
+                          router.pathname !== '/reset-password' &&
+                          router.pathname !== '/update-password' &&
+                          router.pathname !== '/404' ? (
+                          <div className="app-container">
+                            <Header />
+                            <Component {...pageProps} />
+                            <WelcomeModal />
+                          </div>
+                        ) : (
                           <Component {...pageProps} />
-                          <WelcomeModal />
-                        </div>
-                      ) : (
-                        <Component {...pageProps} />
-                      )}
+                        )}
+                      </TargetMessageProvider>
                     </ActivityContextProvider>
                   </ClassroomContextProvider>
                 </VillageContextProvider>
