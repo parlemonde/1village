@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import type { EditorProps } from '../../content.types';
 import { EditorContainer } from '../EditorContainer';
 import { SimpleTextEditor } from './SimpleTextEditor';
 
 export const TextEditor = ({ value = '', onChange = () => {}, onBlur, onFocus, onDelete = () => {} }: EditorProps) => {
-  const [selectedOption, setSelectedOption] = useState('');
-
-  const handleSelectedOptionChange = (selectedOption: string) => {
-    setSelectedOption(selectedOption);
-  };
-
   const confirm = React.useMemo(() => {
     return !value || value.length === 0 || value === '<p></p>' || value === '<p></p>\n';
   }, [value]);
@@ -25,14 +19,7 @@ export const TextEditor = ({ value = '', onChange = () => {}, onBlur, onFocus, o
       noPadding
       noMinHeight
     >
-      <SimpleTextEditor
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        onSelectedOptionChange={handleSelectedOptionChange}
-        selectedOption={selectedOption}
-      />
+      <SimpleTextEditor value={value} onChange={onChange} onBlur={onBlur} onFocus={onFocus} />
     </EditorContainer>
   );
 };
