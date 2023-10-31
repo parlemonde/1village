@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import { useTargetMessage } from 'src/contexts/targetMessageContext';
 import { VillageContext } from 'src/contexts/villageContext';
 
-interface ChooseButtonProps {
-  handleOptionChange?: (selectedOption: string) => void;
-}
-
-export const ChooseButton = ({ handleOptionChange }: ChooseButtonProps) => {
-  const { village } = React.useContext(VillageContext);
+export const ChooseButton = () => {
+  const { village } = useContext(VillageContext);
+  const { setTargetMessage } = useTargetMessage();
 
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -26,20 +24,19 @@ export const ChooseButton = ({ handleOptionChange }: ChooseButtonProps) => {
     return !village ? [] : village.countries.map((c) => c.isoCode);
   }, [village]);
 
-  const twoCountriesIsocode = countriesIsocode.join(' ');
+  const twoCountriesIsoCodeWithSpace = countriesIsocode.join(' ');
 
   const handleChange = (event: SelectChangeEvent) => {
     const newSelectedOption = event.target.value as string;
     setSelectedOption(newSelectedOption);
-    if (handleOptionChange) {
-      handleOptionChange(newSelectedOption);
-    }
+
+    setTargetMessage(newSelectedOption);
   };
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <Select labelId="visibility-label" id="visibility" value={selectedOption} onChange={handleChange}>
-        <MenuItem value={twoCountriesIsocode}>{twoCountriesWithSpace}</MenuItem>
+        <MenuItem value={twoCountriesIsoCodeWithSpace}>{twoCountriesWithSpace}</MenuItem>
         <MenuItem value={countriesIsocode[0]}>{countriesNames[0]}</MenuItem>
         <MenuItem value={countriesIsocode[1]}>{countriesNames[1]}</MenuItem>
       </Select>
