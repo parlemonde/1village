@@ -20,10 +20,9 @@ interface AddCommentProps {
   activityId: number;
   activityType: number;
   activityPhase: number;
-  selectedOption: string;
 }
 
-export const AddComment = ({ activityId, activityType, activityPhase, selectedOption }: AddCommentProps) => {
+export const AddComment = ({ activityId, activityType, activityPhase }: AddCommentProps) => {
   const { user } = React.useContext(UserContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
   const { addComment } = useCommentRequests(activityId);
@@ -62,7 +61,6 @@ export const AddComment = ({ activityId, activityType, activityPhase, selectedOp
                 maxLen={400}
                 value={newComment}
                 onChange={onCommentChange}
-                selectedOption={selectedOption}
                 placeholder="Écrivez votre réaction ici"
                 inlineToolbar
                 withBorder
