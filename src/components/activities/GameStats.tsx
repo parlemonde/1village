@@ -17,8 +17,8 @@ type GameStatsProps = {
 
 const POSITION = [
   ['d', 'e'],
-  ['f', 'g'],
-  ['h', 'i'],
+  ['g', 'h'],
+  ['j', 'k'],
 ];
 const GameStats = ({ gameResponses, choices, country, userMap, users, position }: GameStatsProps) => {
   const countryResponses = useMemo(() => {

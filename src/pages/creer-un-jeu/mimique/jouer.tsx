@@ -106,7 +106,7 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleS
 };
 /* FIN partie à déplacer et à centraliser avec les prochains jeux*/
 
-const POSITION = ['c', 'w', 'q'];
+const POSITION = ['c', 'f', 'i'];
 
 const PlayMimic = () => {
   const { user } = useContext(UserContext);
@@ -248,7 +248,29 @@ const PlayMimic = () => {
   }, [game, userMap, users]);
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type <= UserType.MEDIATOR;
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
+
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
+
+  // tentative d'indexer les réponses, sans succès pour l'insant
+  // const responseMapping: {
+  //   [key: number]: GameResponseValue;
+  // } = {
+  //   0: GameResponseValue.SIGNIFICATION,
+  //   1: GameResponseValue.FAKE_SIGNIFICATION_1,
+  //   2: GameResponseValue.FAKE_SIGNIFICATION_2,
+  // };
+
+  // const choices = useMemo(() => {
+  //   if (game !== undefined) {
+  //     const shuffledIndices = shuffleArray([0, 1, 2]);
+  //     return shuffledIndices.map((index) => responseMapping[index] as unknown as number);
+  //   } else {
+  //     return [0, 1, 2];
+  //   }
+  //   // eslint-disable-next-line
+  // }, [game]);
+
+  // fin de tentative
 
   const handleRadioButtonChange = (event: React.SyntheticEvent) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
@@ -367,7 +389,7 @@ const PlayMimic = () => {
                 width: '100%',
                 gridTemplateColumns: '1fr 2fr 2fr',
                 gridTemplateRows: 'repeat(3,auto)',
-                gridTemplateAreas: '". a b " "c d e" "w f g" "q h i"',
+                gridTemplateAreas: '". a b " "c d e" "f g h" "i j k"',
               }}
             >
               {choices &&
