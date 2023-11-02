@@ -36,20 +36,14 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
 
     const userClassroomData = (await getUserVisibilityFamilyParams(user)) as [Classroom];
 
-    // console.log('userClassroomData ===', userClassroomData);
-    // console.log('userClassroomDataUserId===', userClassroomData[0].user?.id);
-    // console.log('userClassroomDataDelayedDats ===', userClassroomData[0].delayedDays);
-
     const isFamily = user.type === UserType.FAMILY;
-
-    // console.log('family conditions', isFamily);
 
     const query: {
       [key: string]: string | number | boolean | undefined;
     } = {
       ...args,
       type: Array.isArray(type) ? type.join(',') : type,
-      villageId: villageId !== null ? (user.villageId !== null ? user.villageId : undefined) : undefined,
+      villageId: user.villageId !== null ? user.villageId : villageId !== null ? villageId : undefined,
       countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
       delayedDays: isFamily ? userClassroomData[0]?.delayedDays : undefined,
