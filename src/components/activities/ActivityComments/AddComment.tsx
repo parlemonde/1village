@@ -2,9 +2,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, CircularProgress, Tooltip, Button, CircularProgress, Tooltip } from '@mui/material';
+import { Button, CircularProgress, Tooltip } from '@mui/material';
 
-import { ChooseButton } from '../content/editors/TextEditor/toolbar/ChooseButton';
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
@@ -83,7 +82,6 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                     <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
                       Commenter
                     </Button>
-                    {user && user.type === 0 ? <ChooseButton /> : null}
                   </span>
                 )}
               </div>

@@ -1,12 +1,13 @@
+import type { ContentBlock, ContentState } from 'draft-js';
+import { RichUtils, EditorState, Modifier } from 'draft-js';
+import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
+import React from 'react';
+
 import { TextField, Button } from '@mui/material';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Paper from '@mui/material/Paper';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import type { ContentBlock, ContentState } from 'draft-js';
-import { RichUtils, EditorState, Modifier } from 'draft-js';
-import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
-import React from 'react';
 
 import { primaryColor } from 'src/styles/variables.const';
 

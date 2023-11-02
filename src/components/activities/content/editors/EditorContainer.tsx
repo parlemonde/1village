@@ -1,6 +1,7 @@
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import classnames from 'classnames';
 import React from 'react';
+
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 

@@ -1,9 +1,10 @@
-import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
+
+import { Button, Grid, Backdrop, Box, Tooltip } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { getMascotteContent } from 'src/activity-types/mascotte.constants';

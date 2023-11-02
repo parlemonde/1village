@@ -1,6 +1,7 @@
+import * as React from 'react';
+
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { Radio } from '@mui/material';
-import * as React from 'react';
 
 import { errorColor, successColor } from 'src/styles/variables.const';
 

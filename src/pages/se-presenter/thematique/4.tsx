@@ -1,10 +1,11 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
 import { Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
 
 import { isPresentation } from 'src/activity-types/anyActivity';
 import { PRESENTATION_THEMATIQUE } from 'src/activity-types/presentation.constants';

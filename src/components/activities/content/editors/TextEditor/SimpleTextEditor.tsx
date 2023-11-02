@@ -15,9 +15,9 @@ import {
   toggleCustomInlineStyle,
 } from 'draftjs-utils';
 import htmlToDraft from 'html-to-draftjs';
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { Divider, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 import { ChooseButton } from './toolbar/ChooseButton';
@@ -243,6 +243,8 @@ export const SimpleTextEditor = ({
   const displayPlaceholder = React.useMemo(() => {
     return !value || value.length === 0 || value === '<p></p>' || value === '<p></p>\n';
   }, [value]);
+
+  const { user } = useContext(UserContext);
 
   const toolbar = (
     <Paper

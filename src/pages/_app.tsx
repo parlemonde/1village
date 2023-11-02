@@ -24,7 +24,6 @@ import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { FeatureFlagProvider } from 'src/contexts/featureFlagContext';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
@@ -132,42 +131,40 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
         >
           <QueryClientProvider client={queryClient}>
             <UserContextProvider user={user} setUser={setUser}>
-              <FeatureFlagProvider>
-                <VillageContextProvider initialVillage={initialVillage}>
-                  <ClassroomContextProvider>
-                    <ActivityContextProvider>
-                      <TargetMessageProvider>
-                        {isOnAdmin ? (
-                          <div>
-                            <AdminHeader />
-                            <div style={{ display: 'flex', width: '100%' }}>
-                              <AdminNavigation />
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <Component {...pageProps} />
-                              </div>
+              <VillageContextProvider initialVillage={initialVillage}>
+                <ClassroomContextProvider>
+                  <ActivityContextProvider>
+                    <TargetMessageProvider>
+                      {isOnAdmin ? (
+                        <div>
+                          <AdminHeader />
+                          <div style={{ display: 'flex', width: '100%' }}>
+                            <AdminNavigation />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Component {...pageProps} />
                             </div>
                           </div>
-                        ) : user !== null &&
-                          router.pathname !== '/inscription' &&
-                          router.pathname !== '/connexion' &&
-                          router.pathname !== '/login' &&
-                          router.pathname !== '/user-verified' &&
-                          router.pathname !== '/reset-password' &&
-                          router.pathname !== '/update-password' &&
-                          router.pathname !== '/404' ? (
-                          <div className="app-container">
-                            <Header />
-                            <Component {...pageProps} />
-                            <WelcomeModal />
-                          </div>
-                        ) : (
+                        </div>
+                      ) : user !== null &&
+                        router.pathname !== '/inscription' &&
+                        router.pathname !== '/connexion' &&
+                        router.pathname !== '/login' &&
+                        router.pathname !== '/user-verified' &&
+                        router.pathname !== '/reset-password' &&
+                        router.pathname !== '/update-password' &&
+                        router.pathname !== '/404' ? (
+                        <div className="app-container">
+                          <Header />
                           <Component {...pageProps} />
-                        )}
-                      </TargetMessageProvider>
-                    </ActivityContextProvider>
-                  </ClassroomContextProvider>
-                </VillageContextProvider>
-              </FeatureFlagProvider>
+                          <WelcomeModal />
+                        </div>
+                      ) : (
+                        <Component {...pageProps} />
+                      )}
+                    </TargetMessageProvider>
+                  </ActivityContextProvider>
+                </ClassroomContextProvider>
+              </VillageContextProvider>
             </UserContextProvider>
           </QueryClientProvider>
         </SnackbarProvider>

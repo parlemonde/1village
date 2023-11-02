@@ -1,8 +1,9 @@
-import AddIcon from '@mui/icons-material/Add';
-import { ButtonBase, Grid, TextField } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonBase, Grid, TextField } from '@mui/material';
 
 import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isCooking } from 'src/activity-types/defi.constants';

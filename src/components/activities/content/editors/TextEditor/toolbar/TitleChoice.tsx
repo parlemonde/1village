@@ -1,6 +1,7 @@
+import React from 'react';
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import React from 'react';
 
 type TitleChoiceProps = {
   value: 'unstyle' | 'header-one' | 'header-two';
