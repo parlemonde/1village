@@ -17,7 +17,7 @@ import {
 import htmlToDraft from 'html-to-draftjs';
 import React from 'react';
 
-import { Divider } from '@mui/material';
+import { Divider, Divider } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 import { ChooseButton } from './toolbar/ChooseButton';
@@ -44,7 +44,6 @@ interface SimpleTextEditorProps {
   onChange?(newValue: string, newLength: number): boolean | void;
   onFocus?(): void;
   onBlur?(): void;
-  onSelectedOptionChange?(selectedOption: string): void;
   placeholder?: string;
   inlineToolbar?: boolean;
   withBorder?: boolean;
@@ -244,8 +243,6 @@ export const SimpleTextEditor = ({
   const displayPlaceholder = React.useMemo(() => {
     return !value || value.length === 0 || value === '<p></p>' || value === '<p></p>\n';
   }, [value]);
-
-  const { user } = React.useContext(UserContext);
 
   const toolbar = (
     <Paper

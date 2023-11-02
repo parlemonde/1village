@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, CircularProgress, Tooltip } from '@mui/material';
+import { Button, CircularProgress, Tooltip, Button, CircularProgress, Tooltip } from '@mui/material';
 
 import { ChooseButton } from '../content/editors/TextEditor/toolbar/ChooseButton';
 import { AvatarImg } from 'src/components/Avatar';

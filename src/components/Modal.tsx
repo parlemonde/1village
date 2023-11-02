@@ -82,7 +82,7 @@ interface ModalProps {
 }
 
 export const Modal = ({
-  open = true,
+  open = false,
   onClose = () => {},
   onConfirm,
   ariaLabelledBy,

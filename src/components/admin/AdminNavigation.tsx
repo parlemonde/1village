@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-
 import GroupIcon from '@mui/icons-material/Group';
 import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutlinedOutlined';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -13,6 +10,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 const DRAWER_WIDTH = 220;
 const TABS = ['villages', 'users', 'featureFlag', 'stats', 'analytics'];

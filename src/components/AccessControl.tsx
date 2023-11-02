@@ -1,67 +1,29 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState, useContext } from 'react';
+import * as React from 'react';
 
-import { FeatureFlagContext } from 'src/contexts/featureFlagContext';
-import { UserContext } from 'src/contexts/userContext';
+import { useIsFeatureFlagEnabled } from 'src/api/featureFlag/featureFlag.get';
 import type { FeatureFlagsNames } from 'types/featureFlag.constant';
-import type { FeatureFlag } from 'types/featureFlag.type';
 
 interface AccessControlProps {
   featureName: FeatureFlagsNames;
-  children: React.ReactNode;
   redirectToWIP?: boolean;
 }
 
-const hasFeatureFlag = (featureFlags: FeatureFlag[] | null, featureName: FeatureFlagsNames): boolean => {
-  if (!featureFlags) return false;
-
-  const featureFlag = featureFlags.find((flag) => flag.name === featureName);
-
-  if (featureFlag && featureFlag.isEnabled) {
-    return true;
-  }
-
-  return false;
-};
-
-const AccessControl: React.FC<AccessControlProps> = ({ featureName, children, redirectToWIP = false }) => {
-  const { user } = useContext(UserContext);
-  const { featureFlag } = useContext(FeatureFlagContext);
-  const [loading, setLoading] = useState(true);
-  const [hasAccess, setHasAccess] = useState(false);
+const AccessControl = ({ featureName, children, redirectToWIP = false }: React.PropsWithChildren<AccessControlProps>) => {
   const router = useRouter();
+  const { isEnabled, isLoading } = useIsFeatureFlagEnabled(featureName);
 
-  useEffect(() => {
-    const checkAccess = () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const hasAccessToFeature = hasFeatureFlag(featureFlag, featureName);
-        setHasAccess(hasAccessToFeature);
-      } catch (error) {
-        console.error('Error checking feature flag access:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAccess();
-  }, [user, featureName, featureFlag]);
-
-  useEffect(() => {
-    if (!loading && !hasAccess && redirectToWIP) {
+  React.useEffect(() => {
+    if (!isLoading && !isEnabled && redirectToWIP) {
       router.push('/404');
     }
-  }, [loading, hasAccess, redirectToWIP, router]);
+  }, [isLoading, isEnabled, redirectToWIP, router]);
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!hasAccess) {
+  if (!isEnabled) {
     return null;
   }
 

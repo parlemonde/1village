@@ -24,6 +24,7 @@ import { SnackbarProvider } from 'notistack';
 import NProgress from 'nprogress';
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { FeatureFlagProvider } from 'src/contexts/featureFlagContext';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
@@ -34,7 +35,6 @@ import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
-import { FeatureFlagProvider } from 'src/contexts/featureFlagContext';
 import { TargetMessageProvider } from 'src/contexts/targetMessageContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';

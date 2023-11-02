@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Checkbox } from '@mui/material';
+import React from 'react';
 
 import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';

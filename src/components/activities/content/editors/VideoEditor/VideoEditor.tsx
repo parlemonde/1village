@@ -1,7 +1,6 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import ReactPlayer from 'react-player';
-
-import { Button } from '@mui/material';
 
 import type { EditorProps } from '../../content.types';
 import { EditorContainer } from '../EditorContainer';

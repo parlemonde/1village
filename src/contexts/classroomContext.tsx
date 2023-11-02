@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -33,7 +33,7 @@ export const ClassroomContext = React.createContext<ClassroomContextValue>({
   createStudent: async () => {},
   deleteStudent: async () => {},
   students: [],
-  /*   getOneStudent: async () => {}, */
+  // /*   getOneStudent: async () => {}, */
   setStudents: async () => {},
 });
 
@@ -153,7 +153,6 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [user],
   );
-
   /**
    * Add new students in the classrom
    */
@@ -236,6 +235,23 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
     },
     [classroom, students, user],
   );
+  /**
+   * Get the user's linked student
+   */
+  // const getUserToStudent = React.useCallback(async () => {
+  //   if (!user) return;
+  //   if (user.type !== UserType.TEACHER) return;
+  //   await axiosRequest({
+  //     method: 'GET',
+  //     url: `/users/${user.id}`,
+  //   })
+  //     .then((response) => {
+  //       return response.data.classroom;
+  //     })
+  //     .catch((err) => {
+  //       return err.message;
+  //     });
+  // }, [user]);
 
   /**
    * Delete an access for a relative's student
@@ -267,6 +283,8 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createClassroom, fetchClassroom, getStudents, user]);
+
+  useEffect(() => {}, [classroom]);
 
   const value = React.useMemo(
     () => ({

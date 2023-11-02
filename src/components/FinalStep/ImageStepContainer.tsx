@@ -1,9 +1,8 @@
+import { Grid, ButtonBase } from '@mui/material';
 import classNames from 'classnames';
 import Image from 'next/image';
 import router from 'next/router';
 import React from 'react';
-
-import { Grid, ButtonBase } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
 import { EditButton } from '../buttons/EditButton';

@@ -1,6 +1,5 @@
-import React from 'react';
-
 import Checkbox from '@mui/material/Checkbox';
+import React from 'react';
 
 import { FilterSelect } from './FilterSelect';
 import { Flag } from 'src/components/Flag';
