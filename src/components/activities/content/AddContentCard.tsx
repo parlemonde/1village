@@ -1,6 +1,7 @@
+import React from 'react';
+
 import AppsIcon from '@mui/icons-material/Apps';
 import { ButtonBase, Card } from '@mui/material';
-import React from 'react';
 
 import { UserContext } from 'src/contexts/userContext';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
