@@ -285,7 +285,7 @@ export const SimpleTextEditor = ({
           onChange={onEditorChange}
         />
         <EmojiPicker onChange={addEmoji} />
-        {user && user.type === 0 ? <ChooseButton /> : null}
+        {user && user.type <= 2 ? <ChooseButton /> : null}
       </>
     </Paper>
   );

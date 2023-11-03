@@ -43,24 +43,32 @@ export const useCommentRequests = (activityId: number | null) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const addComment = React.useCallback(
-    async (text: string, targetMessage: string) => {
+    async (text: string, targetMessage?: string) => {
       if (!activityId) {
         return null;
       }
+
+      const requestData: { text: string; targetMessage?: string } = {
+        text,
+      };
+
+      if (targetMessage !== undefined) {
+        requestData.targetMessage = targetMessage;
+      }
+
       const response = await axiosRequest({
         method: 'POST',
         url: `/activities/${activityId}/comments`,
-        data: {
-          text,
-          targetMessage,
-        },
+        data: requestData,
       });
+
       if (response.error) {
         enqueueSnackbar('Une erreur est survenue...', {
           variant: 'error',
         });
         return null;
       }
+
       queryClient.invalidateQueries('comments');
       queryClient.invalidateQueries('activities');
       return response.data as Comment;
