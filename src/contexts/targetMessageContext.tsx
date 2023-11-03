@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 import { VillageContext } from 'src/contexts/villageContext';
 
@@ -22,7 +22,7 @@ interface TargetMessageProviderProps {
   children: ReactNode;
 }
 
-export function TargetMessageProvider({ children }: TargetMessageProviderProps) {
+export const DefaultValueIsoCode = () => {
   const { village } = useContext(VillageContext);
 
   const countriesIsocode = React.useMemo(() => {
@@ -31,18 +31,11 @@ export function TargetMessageProvider({ children }: TargetMessageProviderProps) 
 
   const countriesIsocodeDefaultValue = countriesIsocode.join(' ');
 
+  return countriesIsocodeDefaultValue;
+};
+
+export function TargetMessageProvider({ children }: TargetMessageProviderProps, countriesIsocodeDefaultValue: string) {
   const [targetMessage, setTargetMessage] = useState<string>(countriesIsocodeDefaultValue);
-
-  // Permet de remettre la valeur par défaut
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTargetMessage(countriesIsocodeDefaultValue);
-    }, 15000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [countriesIsocodeDefaultValue]);
 
   return <TargetMessageContext.Provider value={{ targetMessage, setTargetMessage }}>{children}</TargetMessageContext.Provider>;
 }

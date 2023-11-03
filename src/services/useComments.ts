@@ -43,7 +43,7 @@ export const useCommentRequests = (activityId: number | null) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const addComment = React.useCallback(
-    async (text: string) => {
+    async (text: string, targetMessage: string) => {
       if (!activityId) {
         return null;
       }
@@ -52,6 +52,7 @@ export const useCommentRequests = (activityId: number | null) => {
         url: `/activities/${activityId}/comments`,
         data: {
           text,
+          targetMessage,
         },
       });
       if (response.error) {

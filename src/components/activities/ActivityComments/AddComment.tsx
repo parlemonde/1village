@@ -5,6 +5,7 @@ import React from 'react';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
+import { useTargetMessage, DefaultValueIsoCode } from 'src/contexts/targetMessageContext';
 import { UserContext } from 'src/contexts/userContext';
 import { useCommentRequests } from 'src/services/useComments';
 import { primaryColor, bgPage } from 'src/styles/variables.const';
@@ -28,6 +29,8 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
   const [newComment, setNewComment] = React.useState('');
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
+  const { targetMessage, setTargetMessage } = useTargetMessage();
+  const countriesIsocodeDefaultValue = DefaultValueIsoCode();
 
   if (!user) {
     return null;
@@ -37,16 +40,31 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
     if (newComment.length <= 8) {
       return;
     }
+    // console.log(newComment.length);*
+    // console.log('dedans avant envoie', targetMessage);
+
     setIsLoading(true);
-    await addComment(newComment);
+    await addComment(newComment, targetMessage);
     setIsLoading(false);
     setNewComment('');
+    setTargetMessage(countriesIsocodeDefaultValue);
   };
 
   const onCommentChange = (value: string, length: number) => {
+    // console.log(value, length);
+
     setNewComment(value);
     setNewCommentLength(length);
   };
+
+  // for (let i = 0; i < newComment.length; i++) {
+  //   console.log('valeur de i', i, '| valeur de newComment', newComment[i], '| valeur de length', newComment.length);
+  // }
+
+  // console.log('dehors', targetMessage);
+  // setTimeout(() => {
+  //   console.log('time out 10 secondes', targetMessage);
+  // }, 10000);
 
   return (
     <>
