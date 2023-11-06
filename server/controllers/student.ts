@@ -259,13 +259,21 @@ studentController.delete({ path: '/:studentId(\\d+)/delete-user-link/:userId', u
   const studentId = parseInt(req.params.studentId, 10) || 0;
   const userId = parseInt(req.params.userId, 10) || 0;
 
-  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+  const userToStudentRepository = AppDataSource.getRepository(UserToStudent);
+
+  const userToStudent = await userToStudentRepository.findOne({
     where: { user: { id: userId }, student: { id: studentId } },
     relations: ['user', 'student'],
   });
 
   if (userToStudent) {
-    await AppDataSource.getRepository(UserToStudent).remove(userToStudent);
+    await userToStudentRepository.remove(userToStudent);
+
+    const numberOfLinkedStudents = await userToStudentRepository.count({ where: { user: { id: userId } } });
+
+    if (numberOfLinkedStudents < 1) {
+      await AppDataSource.getRepository(User).createQueryBuilder().update(User).set({ hasStudentLinked: false }).where(`id = ${userId}`).execute();
+    }
   }
 
   res.status(204).send();
