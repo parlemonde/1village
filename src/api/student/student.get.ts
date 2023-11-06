@@ -23,6 +23,17 @@ export const getClassroomOfStudent = async (id: number) => {
   return response.data;
 };
 
+export const getTeacherOfStudent = async (id: number) => {
+  const response = await axiosRequest({
+    method: 'GET',
+    url: `/students/${id}/get-teacher`,
+  });
+  if (response.error) {
+    throw response.error;
+  }
+  return response.data;
+};
+
 export const getStudentsAndUsers = async (classroomId: number) => {
   const response = await axiosRequest({
     method: 'GET',

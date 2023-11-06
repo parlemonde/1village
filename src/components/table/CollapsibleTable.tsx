@@ -1,9 +1,9 @@
-// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Button, Checkbox } from '@mui/material';
 import Box from '@mui/material/Box';
-// import Collapse from '@mui/material/Collapse';
-// import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,8 +14,9 @@ import TableRow from '@mui/material/TableRow';
 import { useContext, useEffect, useState } from 'react';
 import * as React from 'react';
 
-// import { DeleteButton } from '../buttons/DeleteButton';
-// import { deleteUserStudentRelation } from 'src/api/student/student.delete';
+import { DeleteButton } from '../buttons/DeleteButton';
+import { deleteUserStudentRelation } from 'src/api/student/student.delete';
+import { getUsersLinkedToStudent } from 'src/api/student/student.get';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 
 function createData(
@@ -45,9 +46,8 @@ function Row(props: {
   isKeywordMissing: boolean;
   handleDeleteUser: (studentId: number, userId: number) => void;
 }) {
-  const { row, isSelected, handleToggle, onPrint, isKeywordMissing } = props;
-  // const { row, isSelected, handleToggle, onPrint, isKeywordMissing, handleDeleteUser } = props;
-  // const [open, setOpen] = useState(false);
+  const { row, isSelected, handleToggle, onPrint, isKeywordMissing, handleDeleteUser } = props;
+  const [open, setOpen] = useState(false);
 
   const createPrintHandler = (studentId?: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -64,9 +64,11 @@ function Row(props: {
           {row.name}
         </TableCell>
         <TableCell align="right">
-          {/* <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton> */}
+          {row.users.length > 0 && (
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} disabled={isKeywordMissing}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          )}
           {row.numLinkedAccount}
         </TableCell>
         <TableCell align="right">{row.studentCode}</TableCell>
@@ -76,19 +78,15 @@ function Row(props: {
           </Button>
         </TableCell>
       </TableRow>
-      {/* <TableRow>
+      <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, paddingLeft: 0, paddingRight: 0 }} align="right" colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1, marginLeft: 0 }}>
               <Table size="small" aria-label="purchases">
-                <TableBody>
-                  {row.users.map(
-                    (
-                      user,
-                      index, // replace 'users' with 'row.users'
-                    ) => (
+                {row.users.length > 0 && (
+                  <TableBody>
+                    {row.users.map((user, index) => (
                       <TableRow key={index}>
-                        <TableCell>{row.users}</TableCell>
                         <TableCell style={{ fontSize: '0.8rem' }}>{user.email}</TableCell>
                         <TableCell style={{ fontSize: '0.8rem' }}>{user.firstname}</TableCell>
                         <TableCell style={{ fontSize: '0.8rem' }}>{user.lastname}</TableCell>
@@ -97,25 +95,18 @@ function Row(props: {
                             confirmLabel={`Souhaitez-vous supprimer l’accès de ${user.email} ?`}
                             confirmTitle="Suppression d'accès"
                             color="red"
-                            onDelete={async () => {
-                              try {
-                                await deleteUserStudentRelation(row.studentId, user.id);
-                                handleDeleteUser(row.studentId, user.id);
-                              } catch (error) {
-                                console.error(error);
-                              }
-                            }}
+                            onDelete={async () => handleDeleteUser(row.studentId, user.id)}
                           />
                         </TableCell>
                       </TableRow>
-                    ),
-                  )}
-                </TableBody>
+                    ))}
+                  </TableBody>
+                )}
               </Table>
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow> */}
+      </TableRow>
     </React.Fragment>
   );
 }
@@ -166,22 +157,31 @@ export default function CollapsibleTable() {
   };
 
   useEffect(() => {
-    const newRows = students.map((student) => {
-      const users = student.users || [];
-      return createData(
-        student.firstname + ' ' + student.lastname,
-        student.numLinkedAccount || 0,
-        student.hashedCode,
-        users,
-        student.id,
-        isSelected(student.id),
-      );
-    });
+    const fetchData = async () => {
+      const newRows = await Promise.all(
+        students.map(async (student) => {
+          const users = await getUsersLinkedToStudent(student.id);
 
-    setRows(newRows);
+          return createData(
+            student.firstname + ' ' + student.lastname,
+            student.numLinkedAccount || 0,
+            student.hashedCode,
+            users,
+            student.id,
+            isSelected(student.id),
+          );
+        }),
+      );
+
+      setRows(newRows);
+    };
+
+    fetchData();
   }, [isSelected, students]);
 
-  const handleDeleteUser = (studentId: number, userId: number) => {
+  const handleDeleteUser = async (studentId: number, userId: number) => {
+    await deleteUserStudentRelation(studentId, userId);
+
     const newRows = rows.map((row) => {
       if (row.studentId === studentId) {
         const newUsers = row.users.filter((user) => user.id !== userId);

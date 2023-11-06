@@ -1,7 +1,6 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { Classroom } from '../entities/classroom';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
@@ -62,6 +61,21 @@ studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHE
 
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
   res.json(users);
+});
+
+studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const studentRepository = AppDataSource.getRepository(Student);
+  const userRepository = AppDataSource.getRepository(User);
+
+  const student = await studentRepository.findOne({ where: { id }, relations: ['classroom.user'] });
+  if (!student) return next();
+
+  const teacher = await userRepository.findOne({ where: { id: student.classroom.user.id } });
+  if (!teacher) return next();
+
+  res.json(teacher);
 });
 
 type CreateStudentData = {
@@ -153,9 +167,9 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
     .createQueryBuilder()
     .update(User)
     .set({
-      villageId: student.classroom.village.id,
+      villageId: student.classroom.villageId,
       hasStudentLinked: true,
-      firstLogin: student.classroom.village.activePhase,
+      firstLogin: student.classroom.village ? student.classroom.village.activePhase : undefined, //TEST THIS LINE
       countryCode: student.classroom.countryCode as string,
     })
     .where('id = :id', { id: req.user.id })
@@ -217,7 +231,7 @@ studentController.put({ path: '/:id', userType: UserType.FAMILY }, async (req: R
  * @returns {string} Route API JSON response
  */
 
-studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+studentController.delete({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
@@ -233,6 +247,26 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
 
   await AppDataSource.getRepository(UserToStudent).remove(userToStudents);
   await AppDataSource.getRepository(Student).remove(student);
+
+  res.status(204).send();
+});
+
+studentController.delete({ path: '/:studentId(\\d+)/delete-user-link/:userId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const studentId = parseInt(req.params.studentId, 10) || 0;
+  const userId = parseInt(req.params.userId, 10) || 0;
+
+  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+    where: { user: { id: userId }, student: { id: studentId } },
+    relations: ['user', 'student'],
+  });
+
+  if (userToStudent) {
+    await AppDataSource.getRepository(UserToStudent).remove(userToStudent);
+  }
 
   res.status(204).send();
 });
