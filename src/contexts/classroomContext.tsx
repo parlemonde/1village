@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-
 import { Card, CircularProgress } from '@mui/material';
+import React, { useEffect } from 'react';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -48,7 +47,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const [students, setStudents] = React.useState<Student[]>([]);
-  const [modaltStep, setModalStep] = React.useState(0);
+  const [modalStep, setModalStep] = React.useState(0);
   const modalStepTimeout = React.useRef<number | undefined>(undefined);
   const [classroom, setClassroom] = React.useState<Classroom | null>(null);
   const [parentClassroom, setParentClassroom] = React.useState<ClassroomAsFamilly | null>(null);
@@ -334,11 +333,11 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
   return (
     <ClassroomContext.Provider value={value}>
       {children}
-      {modaltStep > 0 && (
+      {modalStep > 0 && (
         <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>
           <Card style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}>
-            {modaltStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
-            {modaltStep === 2 && <span className="text text--small">Paramètres enregistrés</span>}
+            {modalStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
+            {modalStep === 2 && <span className="text text--small">Paramètres enregistrés</span>}
           </Card>
         </div>
       )}

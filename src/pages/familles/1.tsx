@@ -1,9 +1,8 @@
 // TODO : keep this import for delayed days logic
 // import debounce from 'lodash.debounce';
+import { Button, Card, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useReducer } from 'react';
-
-import { Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
@@ -20,6 +19,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import { useVillageUsers } from 'src/services/useVillageUsers';
+import { primaryColor } from 'src/styles/variables.const';
 import EyeClosed from 'src/svg/eye-closed.svg';
 import EyeVisibility from 'src/svg/eye-visibility.svg';
 import { axiosRequest } from 'src/utils/axiosRequest';
@@ -106,6 +106,8 @@ const ClassroomParamStep1 = () => {
   //   ownClassTimeDelay: false,
   // });
   const [radioValue, setRadioValue] = React.useState('default');
+  const [modalStep, setModalStep] = React.useState(0);
+  const modalStepTimeout = React.useRef<number | undefined>(undefined);
   const { updateClassroomParameters } = React.useContext(ClassroomContext);
   const { village, selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
@@ -249,7 +251,17 @@ const ClassroomParamStep1 = () => {
     axiosRequest({
       method: 'PUT',
       url: `/teachers/set-activity-visibility/${id}`,
-    }).then(() => {
+    }).then((response) => {
+      if (response.status === 204) {
+        setModalStep(2);
+        modalStepTimeout.current = window.setTimeout(() => {
+          setModalStep(0);
+        }, 2000);
+        if (response.status !== 204) {
+          clearTimeout(modalStepTimeout.current);
+          setModalStep(1);
+        }
+      }
       refetch();
     });
   };
@@ -427,6 +439,16 @@ const ClassroomParamStep1 = () => {
                       </Button>
                     ))
                     .reverse()}
+                  {modalStep > 0 && (
+                    <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>
+                      <Card
+                        style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}
+                      >
+                        {modalStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
+                        {modalStep === 2 && <span className="text text--small">Paramètres enregistrés</span>}
+                      </Card>
+                    </div>
+                  )}
                 </>
               )}
             </OverflowContainer>
