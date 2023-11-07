@@ -1,5 +1,6 @@
-import { Card, CircularProgress } from '@mui/material';
 import React, { useEffect } from 'react';
+
+import { Card, CircularProgress } from '@mui/material';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -188,6 +189,16 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
       })
         .then((response) => {
           setStudents([...students, response.data]);
+          if (response.status === 200) {
+            setModalStep(3);
+            modalStepTimeout.current = window.setTimeout(() => {
+              setModalStep(0);
+            }, 2000);
+            if (response.status !== 200) {
+              clearTimeout(modalStepTimeout.current);
+              setModalStep(1);
+            }
+          }
         })
         .catch((err) => {
           return err.message;
@@ -338,6 +349,7 @@ export const ClassroomContextProvider = ({ children }: ClassroomContextProviderP
           <Card style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}>
             {modalStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
             {modalStep === 2 && <span className="text text--small">Paramètres enregistrés</span>}
+            {modalStep === 3 && <span className="text text--small">Liste mise à jour</span>}
           </Card>
         </div>
       )}
