@@ -15,8 +15,8 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
-// import { getTeacherOfStudent } from 'src/api/student/student.get';
-// import { getLinkedStudentsToUser } from 'src/api/user/user.get';
+import { getTeacherOfStudent } from 'src/api/student/student.get';
+import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
@@ -26,8 +26,8 @@ import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-// import type { User } from 'types/user.type';
-import { userTypeNames } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { UserType, userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
@@ -68,7 +68,7 @@ const Users = () => {
                 firstname: u.firstname,
                 lastname: u.lastname,
                 email: u.email,
-                school: <span style={{ color: 'grey' }}>Non renseignée</span>,
+                school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
                 country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
                 village: u.villageId ? (
                   villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
@@ -82,7 +82,7 @@ const Users = () => {
                 firstname: u.firstname,
                 lastname: u.lastname,
                 email: u.email,
-                school: <span style={{ color: 'grey' }}>Non renseignée</span>,
+                school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
                 village: u.villageId ? (
                   villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
                 ) : (
@@ -111,6 +111,7 @@ const Users = () => {
   }, []);
 
   const handleExportToCSV = () => {
+    console.log('TEST');
     if (filteredUsers.length < 1) return;
 
     const datasToExport = filteredUsers.map((user) => {
@@ -139,20 +140,24 @@ const Users = () => {
     exportJsonToCsv(fileName, headers, datasToExport);
   };
 
-  // const getUserSchool = async (user: User) => {
-  //   if (user.type !== UserType.FAMILY) {
-  //     return user.school;
-  //   }
+  const getUserSchool = async (user: User) => {
+    if (user.type !== UserType.FAMILY) {
+      return user.school;
+    }
 
-  //   const linkedStudents = await getLinkedStudentsToUser(user.id);
-  //   const studentsSchool = await Promise.all(
-  //     linkedStudents.map(async (linkedStudent) => {
-  //       const teacher = await getTeacherOfStudent(linkedStudent.id);
-  //       return teacher.school;
-  //     }),
-  //   );
-  //   return studentsSchool.join(', ');
-  // };
+    if (!user) {
+      return;
+    }
+
+    const linkedStudents = await getLinkedStudentsToUser(user.id);
+    const studentsSchool = await Promise.all(
+      linkedStudents.map(async (linkedStudent) => {
+        const teacher = await getTeacherOfStudent(linkedStudent.id);
+        return teacher.school;
+      }),
+    );
+    return studentsSchool.join(', ');
+  };
 
   const actions = (id: number) => (
     <>
