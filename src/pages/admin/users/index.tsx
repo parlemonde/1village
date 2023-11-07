@@ -15,8 +15,8 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
-import { getTeacherOfStudent } from 'src/api/student/student.get';
-import { getLinkedStudentsToUser } from 'src/api/user/user.get';
+// import { getTeacherOfStudent } from 'src/api/student/student.get';
+// import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
@@ -26,8 +26,8 @@ import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-import type { User } from 'types/user.type';
-import { UserType, userTypeNames } from 'types/user.type';
+// import type { User } from 'types/user.type';
+import { userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
