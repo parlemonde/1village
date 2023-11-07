@@ -16,7 +16,7 @@ import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
 // import { getTeacherOfStudent } from 'src/api/student/student.get';
-// import { getLinkedStudentsToUser } from 'src/api/user/user.get';
+import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
@@ -149,9 +149,11 @@ const Users = () => {
     }
 
     if (!user.hasStudentLinked) {
-      return 'NULL (no students linked)';
+      return "Pas d'étudiants liés à ce compte";
     }
 
+    const linkedStudents = await getLinkedStudentsToUser(user.id);
+    console.log(linkedStudents);
     return 'enter in zero condition';
 
     // const linkedStudents = await getLinkedStudentsToUser(user.id);
