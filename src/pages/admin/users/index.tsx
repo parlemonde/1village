@@ -15,7 +15,7 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
-// import { getTeacherOfStudent } from 'src/api/student/student.get';
+import { getTeacherOfStudent } from 'src/api/student/student.get';
 import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
@@ -153,17 +153,18 @@ const Users = () => {
     }
 
     const linkedStudents = await getLinkedStudentsToUser(user.id);
-    console.log(linkedStudents);
-    return 'enter in zero condition';
 
-    // const linkedStudents = await getLinkedStudentsToUser(user.id);
-    // const studentsSchool = await Promise.all(
-    //   linkedStudents.map(async (linkedStudent) => {
-    //     const teacher = await getTeacherOfStudent(linkedStudent.id);
-    //     return teacher.school;
-    //   }),
-    // );
-    // return studentsSchool.join(', ');
+    if (linkedStudents.length > 0) {
+      const studentsSchool = await Promise.all(
+        linkedStudents.map(async (linkedStudent) => {
+          const teacher = await getTeacherOfStudent(linkedStudent.id);
+          return teacher.school;
+        }),
+      );
+      return studentsSchool.join(', ');
+    }
+
+    return 'NULL';
   };
 
   const actions = (id: number) => (
