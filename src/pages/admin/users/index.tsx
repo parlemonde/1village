@@ -27,7 +27,7 @@ import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
 import type { User } from 'types/user.type';
-import { userTypeNames } from 'types/user.type';
+import { userTypeNames, UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
@@ -140,20 +140,19 @@ const Users = () => {
   };
 
   const getUserSchool = async (user: User) => {
-    return user.id.toString();
-    // console.log(user.id);
+    if (!user) {
+      return 'NULL (no user)';
+    }
 
-    // if (!user) {
-    //   return 'NULL';
-    // }
+    if (user.type !== UserType.FAMILY) {
+      return user.school;
+    }
 
-    // if (user.type !== UserType.FAMILY) {
-    //   return user.school;
-    // }
+    if (!user.hasStudentLinked) {
+      return 'NULL (no students linked)';
+    }
 
-    // if (!user.hasStudentLinked) {
-    //   return 'NULL';
-    // }
+    return 'enter in zero condition';
 
     // const linkedStudents = await getLinkedStudentsToUser(user.id);
     // const studentsSchool = await Promise.all(
