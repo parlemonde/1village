@@ -139,30 +139,30 @@ const Users = () => {
     exportJsonToCsv(fileName, headers, datasToExport);
   };
 
-  const getUserSchool = async (user: User) => {
-    console.log(user.id);
+  // const getUserSchool = async (user: User) => {
+  //   console.log(user.id);
 
-    if (!user) {
-      return 'NULL';
-    }
+  //   if (!user) {
+  //     return 'NULL';
+  //   }
 
-    if (user.type !== UserType.FAMILY) {
-      return user.school;
-    }
+  //   if (user.type !== UserType.FAMILY) {
+  //     return user.school;
+  //   }
 
-    if (!user.hasStudentLinked) {
-      return 'NULL';
-    }
+  //   if (!user.hasStudentLinked) {
+  //     return 'NULL';
+  //   }
 
-    const linkedStudents = await getLinkedStudentsToUser(user.id);
-    const studentsSchool = await Promise.all(
-      linkedStudents.map(async (linkedStudent) => {
-        const teacher = await getTeacherOfStudent(linkedStudent.id);
-        return teacher.school;
-      }),
-    );
-    return studentsSchool.join(', ');
-  };
+  //   const linkedStudents = await getLinkedStudentsToUser(user.id);
+  //   const studentsSchool = await Promise.all(
+  //     linkedStudents.map(async (linkedStudent) => {
+  //       const teacher = await getTeacherOfStudent(linkedStudent.id);
+  //       return teacher.school;
+  //     }),
+  //   );
+  //   return studentsSchool.join(', ');
+  // };
 
   const actions = (id: number) => (
     <>
