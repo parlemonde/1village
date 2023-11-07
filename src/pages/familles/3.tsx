@@ -1,7 +1,8 @@
-import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+
+import { Box, Button } from '@mui/material';
 
 import AccessControl from 'src/components/AccessControl';
 import { Base } from 'src/components/Base';
