@@ -26,7 +26,7 @@ import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-// import type { User } from 'types/user.type';
+import type { User } from 'types/user.type';
 import { userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
@@ -68,7 +68,7 @@ const Users = () => {
                 firstname: u.firstname,
                 lastname: u.lastname,
                 email: u.email,
-                school: <span style={{ color: 'grey' }}>Non renseignée</span>,
+                school: (await getUserSchool(user)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
                 country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
                 village: u.villageId ? (
                   villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
@@ -139,30 +139,31 @@ const Users = () => {
     exportJsonToCsv(fileName, headers, datasToExport);
   };
 
-  // const getUserSchool = async (user: User) => {
-  //   console.log(user.id);
+  const getUserSchool = async (user: User) => {
+    return user.id.toString();
+    // console.log(user.id);
 
-  //   if (!user) {
-  //     return 'NULL';
-  //   }
+    // if (!user) {
+    //   return 'NULL';
+    // }
 
-  //   if (user.type !== UserType.FAMILY) {
-  //     return user.school;
-  //   }
+    // if (user.type !== UserType.FAMILY) {
+    //   return user.school;
+    // }
 
-  //   if (!user.hasStudentLinked) {
-  //     return 'NULL';
-  //   }
+    // if (!user.hasStudentLinked) {
+    //   return 'NULL';
+    // }
 
-  //   const linkedStudents = await getLinkedStudentsToUser(user.id);
-  //   const studentsSchool = await Promise.all(
-  //     linkedStudents.map(async (linkedStudent) => {
-  //       const teacher = await getTeacherOfStudent(linkedStudent.id);
-  //       return teacher.school;
-  //     }),
-  //   );
-  //   return studentsSchool.join(', ');
-  // };
+    // const linkedStudents = await getLinkedStudentsToUser(user.id);
+    // const studentsSchool = await Promise.all(
+    //   linkedStudents.map(async (linkedStudent) => {
+    //     const teacher = await getTeacherOfStudent(linkedStudent.id);
+    //     return teacher.school;
+    //   }),
+    // );
+    // return studentsSchool.join(', ');
+  };
 
   const actions = (id: number) => (
     <>
