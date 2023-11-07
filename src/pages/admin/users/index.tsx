@@ -63,7 +63,7 @@ const Users = () => {
       const data = await Promise.all(
         filteredUsers.map(async (u) => {
           return {
-            id: u.id,
+            id: u.id | 0,
             firstname: u.firstname,
             lastname: u.lastname,
             email: u.email,
