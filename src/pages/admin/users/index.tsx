@@ -61,18 +61,36 @@ const Users = () => {
   React.useEffect(() => {
     const fetchTableData = async () => {
       const data = await Promise.all(
-        filteredUsers.map(async (u) => {
-          return {
-            id: u.id | 0,
-            firstname: u.firstname,
-            lastname: u.lastname,
-            email: u.email,
-            school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
-            country: u.country ? `${countryToFlag(u.country.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseigné</span>,
-            village: u.villageId ? villageMap[u.villageId]?.name : <span style={{ color: 'grey' }}>Non assigné</span>,
-            type: <Chip size="small" label={userTypeNames[u.type]} />,
-          };
-        }),
+        filteredUsers.map(async (u) =>
+          u.country
+            ? {
+                id: u.id,
+                firstname: u.firstname,
+                lastname: u.lastname,
+                email: u.email,
+                school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
+                village: u.villageId ? (
+                  villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+                ) : (
+                  <span style={{ color: 'grey' }}>Non assigné</span>
+                ),
+                type: <Chip size="small" label={userTypeNames[u.type]} />,
+              }
+            : {
+                id: u.id,
+                firstname: u.firstname,
+                lastname: u.lastname,
+                email: u.email,
+                school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                village: u.villageId ? (
+                  villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+                ) : (
+                  <span style={{ color: 'grey' }}>Non assigné</span>
+                ),
+                type: <Chip size="small" label={userTypeNames[u.type]} />,
+              },
+        ),
       );
       setTableData(data);
     };
