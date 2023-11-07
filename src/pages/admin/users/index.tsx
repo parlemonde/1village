@@ -68,7 +68,7 @@ const Users = () => {
                 firstname: u.firstname,
                 lastname: u.lastname,
                 email: u.email,
-                school: (await getUserSchool(user)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
+                school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
                 country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
                 village: u.villageId ? (
                   villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
