@@ -111,7 +111,6 @@ const Users = () => {
   }, []);
 
   const handleExportToCSV = () => {
-    console.log('TEST');
     if (filteredUsers.length < 1) return;
 
     const datasToExport = filteredUsers.map((user) => {
@@ -141,12 +140,18 @@ const Users = () => {
   };
 
   const getUserSchool = async (user: User) => {
+    console.log(user.id);
+
+    if (!user) {
+      return 'NULL';
+    }
+
     if (user.type !== UserType.FAMILY) {
       return user.school;
     }
 
-    if (!user) {
-      return;
+    if (!user.hasStudentLinked) {
+      return 'NULL';
     }
 
     const linkedStudents = await getLinkedStudentsToUser(user.id);
