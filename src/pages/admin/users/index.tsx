@@ -156,14 +156,19 @@ const Users = () => {
 
     // LOOK HERE !!!!!
     if (linkedStudents.length > 0) {
+      /* eslint-disable no-console */
+      console.log(linkedStudents);
       const studentsSchool = await Promise.all(
         linkedStudents.map(async (linkedStudent) => {
           /* eslint-disable no-console */
           console.log(linkedStudent);
-          const teacher = await getTeacherOfStudent(linkedStudent.id);
+          if (linkedStudent.id) {
+            const teacher = await getTeacherOfStudent(linkedStudent.id);
+            return teacher.school;
+          }
+          return null;
           /* eslint-disable no-console */
           // console.log(teacher);
-          return teacher ? teacher.school : null;
         }),
       );
       return studentsSchool.join(', ');
