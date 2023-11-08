@@ -64,7 +64,7 @@ studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHE
 });
 
 studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.id, 10) || 0;
+  const id = parseInt(req.params.id, 10) || 1;
 
   const studentRepository = AppDataSource.getRepository(Student);
   const userRepository = AppDataSource.getRepository(User);

@@ -15,7 +15,7 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
-// import { getTeacherOfStudent } from 'src/api/student/student.get';
+import { getTeacherOfStudent } from 'src/api/student/student.get';
 import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
@@ -160,8 +160,10 @@ const Users = () => {
         linkedStudents.map(async (linkedStudent) => {
           /* eslint-disable no-console */
           console.log(linkedStudent);
-          // const teacher = await getTeacherOfStudent(linkedStudent.id);
-          // return teacher.school;
+          const teacher = await getTeacherOfStudent(linkedStudent.id);
+          /* eslint-disable no-console */
+          console.log(teacher);
+          return teacher.school;
         }),
       );
       return studentsSchool.join(', ');
