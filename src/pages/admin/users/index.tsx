@@ -158,6 +158,7 @@ const Users = () => {
     if (linkedStudents.length > 0) {
       const studentsSchool = await Promise.all(
         linkedStudents.map(async (linkedStudent) => {
+          /* eslint-disable no-console */
           console.log(linkedStudent);
           // const teacher = await getTeacherOfStudent(linkedStudent.id);
           // return teacher.school;
