@@ -162,8 +162,8 @@ const Users = () => {
           console.log(linkedStudent);
           const teacher = await getTeacherOfStudent(linkedStudent.id);
           /* eslint-disable no-console */
-          console.log(teacher);
-          return teacher.school;
+          // console.log(teacher);
+          return teacher ? teacher.school : null;
         }),
       );
       return studentsSchool.join(', ');
