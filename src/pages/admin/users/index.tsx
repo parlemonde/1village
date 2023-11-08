@@ -126,13 +126,16 @@ const Users = () => {
   };
 
   const getUserSchool = async (user: User) => {
-    if (user.type !== UserType.FAMILY) return user.school;
-    if (!user.hasStudentLinked) return "Pas d'étudiants liés à ce compte";
+    if (!user) return;
+    else if (user.type !== UserType.FAMILY) return user.school;
 
     const linkedStudents = await getLinkedStudentsToUser(user.id);
 
+    if (linkedStudents.length === 0) return "Pas d'étudiants liés à ce compte";
+
     const studentsSchool = await Promise.all(
       linkedStudents.map(async (linkedStudent) => {
+        if (!linkedStudent) return;
         const teacher = await getTeacherOfStudent(linkedStudent.id);
         return teacher.school;
       }),
