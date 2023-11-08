@@ -61,36 +61,22 @@ const Users = () => {
   React.useEffect(() => {
     const fetchTableData = async () => {
       const data = await Promise.all(
-        filteredUsers.map(async (u) =>
-          u.country
-            ? {
-                id: u.id,
-                firstname: u.firstname,
-                lastname: u.lastname,
-                email: u.email,
-                school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
-                country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
-                village: u.villageId ? (
-                  villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-                ) : (
-                  <span style={{ color: 'grey' }}>Non assigné</span>
-                ),
-                type: <Chip size="small" label={userTypeNames[u.type]} />,
-              }
-            : {
-                id: u.id,
-                firstname: u.firstname,
-                lastname: u.lastname,
-                email: u.email,
-                school: <span style={{ color: 'grey' }}>Non renseignée</span>,
-                village: u.villageId ? (
-                  villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-                ) : (
-                  <span style={{ color: 'grey' }}>Non assigné</span>
-                ),
-                type: <Chip size="small" label={userTypeNames[u.type]} />,
-              },
-        ),
+        filteredUsers.map(async (u) => {
+          return {
+            id: u.id,
+            firstname: u.firstname,
+            lastname: u.lastname,
+            email: u.email,
+            school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
+            country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
+            village: u.villageId ? (
+              villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+            ) : (
+              <span style={{ color: 'grey' }}>Non assigné</span>
+            ),
+            type: <Chip size="small" label={userTypeNames[u.type]} />,
+          };
+        }),
       );
       setTableData(data);
     };
@@ -118,9 +104,9 @@ const Users = () => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
-        school: user.school ? user.school : 'Non renseignee',
-        village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigne',
-        country: user.country ? user.country.name : 'Non renseigne',
+        school: user.school ? user.school : 'Non renseignée',
+        village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigné',
+        country: user.country ? user.country.name : 'Non renseignée',
       };
     });
 
@@ -140,39 +126,18 @@ const Users = () => {
   };
 
   const getUserSchool = async (user: User) => {
-    if (!user) {
-      return 'NULL (no user)';
-    }
-
-    if (user.type !== UserType.FAMILY) {
-      return user.school;
-    }
-
-    if (!user.hasStudentLinked) {
-      return "Pas d'étudiants liés à ce compte";
-    }
+    if (user.type !== UserType.FAMILY) return user.school;
+    if (!user.hasStudentLinked) return "Pas d'étudiants liés à ce compte";
 
     const linkedStudents = await getLinkedStudentsToUser(user.id);
 
-    // LOOK HERE !!!!!
-    if (linkedStudents.length > 0) {
-      /* eslint-disable no-console */
-      console.log(linkedStudents);
-      const studentsSchool = await Promise.all(
-        linkedStudents.map(async (linkedStudent) => {
-          /* eslint-disable no-console */
-          console.log(linkedStudent);
-          if (linkedStudent !== null) {
-            const teacher = await getTeacherOfStudent(linkedStudent.id);
-            return teacher.school;
-          }
-          return;
-        }),
-      );
-      return studentsSchool.join(', ');
-    }
-
-    return 'NULL';
+    const studentsSchool = await Promise.all(
+      linkedStudents.map(async (linkedStudent) => {
+        const teacher = await getTeacherOfStudent(linkedStudent.id);
+        return teacher.school;
+      }),
+    );
+    return studentsSchool.join(', ');
   };
 
   const actions = (id: number) => (

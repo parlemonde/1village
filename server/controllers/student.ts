@@ -54,14 +54,14 @@ studentController.get({ path: '/:id/classroom', userType: UserType.FAMILY }, asy
 studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
 
-  const studentRepository = AppDataSource.getRepository(Student);
-  const student = await studentRepository.findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.user'] });
+  const student = await AppDataSource.getRepository(Student).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.user'] });
 
   if (!student) return next();
 
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
   if (users.length === 0) return next();
 
+  //filtered all null value in userToStudents, to check because no array entries can be null
   const filteredUsers = users.filter((user) => user);
   res.json(filteredUsers);
 });
