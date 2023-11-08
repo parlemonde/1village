@@ -61,7 +61,7 @@ studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHE
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
   if (users.length === 0) return next();
 
-  //filtered all null value in userToStudents, to check because no array entries can be null
+  //filtered all null value in userToStudents, to check because no array entries should be null
   const filteredUsers = users.filter((user) => user);
   res.json(filteredUsers);
 });

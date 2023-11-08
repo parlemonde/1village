@@ -84,6 +84,24 @@ const Users = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredUsers]);
 
+  const getUserSchool = async (user: User) => {
+    if (!user) return;
+    else if (user.type !== UserType.FAMILY) return user.school;
+
+    const linkedStudents = await getLinkedStudentsToUser(user.id);
+
+    if (linkedStudents.length === 0) return <span style={{ color: 'grey' }}>Aucun étudiant lié à ce compte</span>;
+
+    const studentsSchool = await Promise.all(
+      linkedStudents.map(async (linkedStudent) => {
+        if (!linkedStudent) return;
+        const teacher = await getTeacherOfStudent(linkedStudent.id);
+        return teacher.school;
+      }),
+    );
+    return studentsSchool.join(', ');
+  };
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   }, []);
@@ -123,24 +141,6 @@ const Users = () => {
     const fileName = userLabel + todayDate;
 
     exportJsonToCsv(fileName, headers, datasToExport);
-  };
-
-  const getUserSchool = async (user: User) => {
-    if (!user) return;
-    else if (user.type !== UserType.FAMILY) return user.school;
-
-    const linkedStudents = await getLinkedStudentsToUser(user.id);
-
-    if (linkedStudents.length === 0) return "Pas d'étudiants liés à ce compte";
-
-    const studentsSchool = await Promise.all(
-      linkedStudents.map(async (linkedStudent) => {
-        if (!linkedStudent) return;
-        const teacher = await getTeacherOfStudent(linkedStudent.id);
-        return teacher.school;
-      }),
-    );
-    return studentsSchool.join(', ');
   };
 
   const actions = (id: number) => (
