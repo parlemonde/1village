@@ -61,13 +61,14 @@ studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHE
 
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
   if (users.length === 0) return next();
-  res.json(users);
+
+  const filteredUsers = users.filter((user) => user);
+  res.json(filteredUsers);
 });
 
 studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.id, 10) || 1;
-  /* eslint-disable no-console */
-  console.log(id);
+  const id = parseInt(req.params.id, 10) || 0;
+
   const studentRepository = AppDataSource.getRepository(Student);
   const userRepository = AppDataSource.getRepository(User);
 

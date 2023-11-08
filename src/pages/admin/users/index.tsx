@@ -162,13 +162,11 @@ const Users = () => {
         linkedStudents.map(async (linkedStudent) => {
           /* eslint-disable no-console */
           console.log(linkedStudent);
-          if (linkedStudent.id) {
+          if (linkedStudent !== null) {
             const teacher = await getTeacherOfStudent(linkedStudent.id);
             return teacher.school;
           }
-          return null;
-          /* eslint-disable no-console */
-          // console.log(teacher);
+          return;
         }),
       );
       return studentsSchool.join(', ');
