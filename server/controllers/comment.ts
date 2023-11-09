@@ -38,6 +38,7 @@ commentController.get({ path: '/:commentId', userType: UserType.OBSERVATOR }, as
 // --- Add one comment. ---
 type AddCommentData = {
   text: string;
+  targetMessage: string;
 };
 const ADD_DATA_SCHEMA: JSONSchemaType<AddCommentData> = {
   type: 'object',
@@ -46,10 +47,15 @@ const ADD_DATA_SCHEMA: JSONSchemaType<AddCommentData> = {
       type: 'string',
       nullable: false,
     },
+    targetMessage: {
+      type: 'string',
+      nullable: false,
+    },
   },
   required: ['text'],
   additionalProperties: false,
 };
+
 const addCommentDataValidator = ajv.compile(ADD_DATA_SCHEMA);
 commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
@@ -57,6 +63,7 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     sendInvalidDataError(addCommentDataValidator);
     return;
   }
+
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
   if (activity === null || (req.user && req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId)) {
@@ -64,9 +71,13 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   }
 
   const newComment = new Comment();
+  console.log('JE SUIS LA !!!!!!!!!!!', data);
+  console.log('JE SUIS LA !!!!!!!!!!!', data.targetMessage);
+
   newComment.activityId = activityId;
   newComment.userId = req.user?.id ?? 0;
   newComment.text = data.text;
+  newComment.isoCode = data.targetMessage;
   await AppDataSource.getRepository(Comment).save(newComment);
   res.sendJSON(newComment);
 });

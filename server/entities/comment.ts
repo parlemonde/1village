@@ -33,4 +33,7 @@ export class Comment implements CommentInterface {
 
   @Column({ type: 'text' })
   public text: string;
+
+  @Column({ type: 'text' })
+  public isoCode: string;
 }
