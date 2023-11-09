@@ -40,31 +40,21 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
     if (newComment.length <= 8) {
       return;
     }
-    // console.log(newComment.length);*
-    // console.log('dedans avant envoie', targetMessage);
-
     setIsLoading(true);
-    await addComment(newComment, targetMessage);
+    if (user.type > 2) {
+      await addComment(newComment);
+    } else {
+      await addComment(newComment, targetMessage);
+    }
     setIsLoading(false);
     setNewComment('');
     setTargetMessage(countriesIsocodeDefaultValue);
   };
 
   const onCommentChange = (value: string, length: number) => {
-    // console.log(value, length);
-
     setNewComment(value);
     setNewCommentLength(length);
   };
-
-  // for (let i = 0; i < newComment.length; i++) {
-  //   console.log('valeur de i', i, '| valeur de newComment', newComment[i], '| valeur de length', newComment.length);
-  // }
-
-  // console.log('dehors', targetMessage);
-  // setTimeout(() => {
-  //   console.log('time out 10 secondes', targetMessage);
-  // }, 10000);
 
   return (
     <>
