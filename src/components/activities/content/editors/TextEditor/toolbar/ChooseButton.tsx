@@ -5,13 +5,12 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
-import { useTargetMessage, DefaultValueIsoCode } from 'src/contexts/targetMessageContext';
+import { useTargetMessage } from 'src/contexts/targetMessageContext';
 import { VillageContext } from 'src/contexts/villageContext';
 
 export const ChooseButton = () => {
   const { village } = useContext(VillageContext);
   const { setTargetMessage } = useTargetMessage();
-  const countriesIsocodeDefaultValue = DefaultValueIsoCode();
 
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -36,7 +35,7 @@ export const ChooseButton = () => {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select labelId="visibility-label" id="visibility" value={selectedOption} onChange={handleChange} defaultValue={countriesIsocodeDefaultValue}>
+      <Select labelId="visibility-label" id="visibility" value={selectedOption} onChange={handleChange}>
         <MenuItem value={twoCountriesIsoCodeWithSpace}>{twoCountriesWithSpace}</MenuItem>
         <MenuItem value={countriesIsocode[0]}>{countriesNames[0]}</MenuItem>
         <MenuItem value={countriesIsocode[1]}>{countriesNames[1]}</MenuItem>

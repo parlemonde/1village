@@ -34,8 +34,8 @@ export const DefaultValueIsoCode = () => {
   return countriesIsocodeDefaultValue;
 };
 
-export function TargetMessageProvider({ children }: TargetMessageProviderProps, countriesIsocodeDefaultValue: string) {
-  const [targetMessage, setTargetMessage] = useState<string>(countriesIsocodeDefaultValue);
+export const TargetMessageProvider = ({ children }: TargetMessageProviderProps) => {
+  const [targetMessage, setTargetMessage] = useState<string>(DefaultValueIsoCode());
 
   return <TargetMessageContext.Provider value={{ targetMessage, setTargetMessage }}>{children}</TargetMessageContext.Provider>;
-}
+};

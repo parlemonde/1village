@@ -71,8 +71,8 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   }
 
   const newComment = new Comment();
-  console.log('JE SUIS LA !!!!!!!!!!!', data);
-  console.log('JE SUIS LA !!!!!!!!!!!', data.targetMessage);
+  // console.log('JE SUIS LA !!!!!!!!!!!', data);
+  // console.log('JE SUIS LA !!!!!!!!!!!', data.targetMessage);
 
   newComment.activityId = activityId;
   newComment.userId = req.user?.id ?? 0;

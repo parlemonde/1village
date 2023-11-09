@@ -31,6 +31,8 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
   const [loading, setIsLoading] = React.useState(false);
   const { targetMessage, setTargetMessage } = useTargetMessage();
   const countriesIsocodeDefaultValue = DefaultValueIsoCode();
+  // console.log(countriesIsocodeDefaultValue);
+  // console.log(typeof countriesIsocodeDefaultValue);
 
   if (!user) {
     return null;
