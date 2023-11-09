@@ -48,7 +48,7 @@ const GameStats = ({ gameResponses, choices, country, userMap, users, position }
 
       {responseCount > 0 &&
         choices &&
-        choices.map((choice) => (
+        choices.map((choice, index) => (
           <>
             {responsesByChoice[choice] ? (
               <div
@@ -59,7 +59,7 @@ const GameStats = ({ gameResponses, choices, country, userMap, users, position }
                   gap: '10px',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  gridArea: POSITION[choice][position],
+                  gridArea: POSITION[index][position],
                 }}
               >
                 {responsesByChoice[choice]?.map((response) => {
@@ -74,7 +74,7 @@ const GameStats = ({ gameResponses, choices, country, userMap, users, position }
                 })}
               </div>
             ) : (
-              <div style={{ display: 'grid', gridArea: POSITION[choice][position] }}></div>
+              <div style={{ display: 'grid', gridArea: POSITION[index][position] }} />
             )}
           </>
         ))}
