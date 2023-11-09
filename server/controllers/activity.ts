@@ -108,7 +108,7 @@ const getActivities = async ({
   }
   if (delayedDays !== undefined) {
     // * Memo: we only select activity with updateDate + delayedDays lesser than current date
-    subQueryBuilder = subQueryBuilder.andWhere(`DATE_ADD(activity.updateDate, INTERVAL :delayedDays DAY) <= CURDATE()`, { delayedDays: delayedDays });
+    subQueryBuilder = subQueryBuilder.andWhere(`DATE_ADD(activity.createDate, INTERVAL :delayedDays DAY) <= CURDATE()`, { delayedDays: delayedDays });
   }
   if (visibleToParent) {
     // * Here if user is a parent, we only select activities with the attribute is set to true
