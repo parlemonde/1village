@@ -91,8 +91,7 @@ const DefiStep1 = () => {
   const mascotteLanguages = React.useMemo(() => {
     if (!mascotte || !languages) return [];
     const mascotteData = mascotte.data as MascotteData;
-    /* eslint-disable no-console */
-    console.log([...mascotteData.fluentLanguages, ...mascotteData.minorLanguages, ...mascotteData.wantedForeignLanguages]);
+
     return [...mascotteData.fluentLanguages, ...mascotteData.minorLanguages, ...mascotteData.wantedForeignLanguages];
   }, [mascotte, languages]);
 
@@ -158,17 +157,12 @@ const DefiStep1 = () => {
                       handleLanguage(e, formatedValue); //TODO : Need to test this line
                     }}
                     options={languages.sort((a, b) => {
-                      /* eslint-disable no-console */
-                      console.log('MASCOTTE IN AUTOCOMPLETE', mascotteLanguages);
                       if (mascotteLanguages.includes(a.alpha3_b)) {
                         return mascotteLanguages.includes(b.alpha3_b) ? -b.french.localeCompare(a.french) : -1;
                       } else {
                         return mascotteLanguages.includes(b.alpha3_b) ? 1 : -b.french.localeCompare(a.french);
                       }
                     })}
-                    // options={languages.sort((a, b) =>
-                    //   mascotteLanguages.includes(a.alpha3_b) ? -1 : mascotteLanguages.includes(b.alpha3_b) ? 1 : -b.french.localeCompare(a.french),
-                    // )}
                     groupBy={(option) =>
                       mascotteLanguages.find((mascotteLanguage) => mascotteLanguage === option.alpha2 || mascotteLanguage === option.alpha3_b)
                         ? "Langues parlés par l'utilisateur"
