@@ -92,6 +92,7 @@ const DefiStep1 = () => {
     if (!mascotte || !languages) return [];
     const mascotteData = mascotte.data as MascotteData;
 
+    console.log([...mascotteData.fluentLanguages, ...mascotteData.minorLanguages, ...mascotteData.wantedForeignLanguages]);
     return [...mascotteData.fluentLanguages, ...mascotteData.minorLanguages, ...mascotteData.wantedForeignLanguages];
   }, [mascotte, languages]);
 
@@ -157,6 +158,7 @@ const DefiStep1 = () => {
                       handleLanguage(e, formatedValue); //TODO : Need to test this line
                     }}
                     options={languages.sort((a, b) => {
+                      console.log('MASCOTTE IN AUTOCOMPLETE', mascotteLanguages);
                       if (mascotteLanguages.includes(a.alpha3_b)) {
                         return mascotteLanguages.includes(b.alpha3_b) ? -b.french.localeCompare(a.french) : -1;
                       } else {
