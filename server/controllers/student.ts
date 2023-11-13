@@ -59,11 +59,14 @@ studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHE
   if (!student) return next();
 
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
-  if (users.length === 0) return next();
 
-  //filtered all null value in userToStudents, to check because no array entries should be null
-  const filteredUsers = users.filter((user) => user);
-  res.json(filteredUsers);
+  if (users.length > 0) {
+    //filtered all null value in userToStudents, to check because no array entries should be null
+    const filteredUsers = users.filter((user) => user !== null);
+    res.json(filteredUsers);
+  } else {
+    res.json([]);
+  }
 });
 
 studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
