@@ -16,6 +16,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useLanguages } from 'src/services/useLanguages';
+import { capitalize } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { normalizeString } from 'src/utils/isNormalizedStringEqual';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
@@ -129,7 +130,7 @@ const DefiStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
-          steps={[data.languageCode || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
+          steps={[capitalize(data.language) || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -165,7 +166,7 @@ const DefiStep1 = () => {
                     })}
                     groupBy={(option) =>
                       mascotteLanguages.find((mascotteLanguage) => mascotteLanguage === option.alpha2 || mascotteLanguage === option.alpha3_b)
-                        ? "Langues parlés par l'utilisateur"
+                        ? 'Langues parlées par votre mascotte'
                         : 'Autres langues'
                     }
                     getOptionLabel={(option) => option.french}
@@ -183,7 +184,7 @@ const DefiStep1 = () => {
               <div style={{ margin: '1rem 0' }}>
                 <p className="text">
                   Dans votre classe, {getArticle(data.language ?? '')}
-                  {data.languageCode} est une langue :
+                  {data.language} est une langue :
                 </p>
                 <RadioGroup value={data.languageIndex} onChange={setLanguageIndex}>
                   {LANGUAGE_SCHOOL.map((l, index) => (
