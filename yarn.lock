@@ -39,6 +39,7 @@ __metadata:
     "@types/jsonwebtoken": 8.5.8
     "@types/leaflet": 1.7.11
     "@types/leaflet.fullscreen": 1.6.1
+    "@types/lodash.debounce": ^4.0.9
     "@types/md5": 2.3.2
     "@types/mime-types": 2.1.1
     "@types/morgan": 1.9.3
@@ -103,6 +104,7 @@ __metadata:
     jspdf: ^2.5.1
     leaflet: ^1.8.0
     leaflet.fullscreen: ^2.4.0
+    lodash.debounce: ^4.0.8
     maplibre-gl: 2.1.9
     md5: ^2.3.0
     mime-types: ^2.1.35
@@ -3464,6 +3466,22 @@ __metadata:
   dependencies:
     "@types/geojson": "*"
   checksum: 6613dbc91f174545ed39183a8564a344152f1884f02ab4dbc002b6bd4816d8525b5247e62217694763daf727ca5e589f40144dc809edb7194064e6bdc2f4369a
+  languageName: node
+  linkType: hard
+
+"@types/lodash.debounce@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@types/lodash.debounce@npm:4.0.9"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 8183a152e01928e3b97ca773f6ae6038b8695e76493ba8bf6b743ec143948a62294fbc9d49fa4a78b52265b3ba4892ef57534e0c13d04aa0f111671b5a944feb
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.14.201
+  resolution: "@types/lodash@npm:4.14.201"
+  checksum: 484be655298e9b2dc2d218ea934071b2ea31e4a531c561dd220dbda65237e8d08c20dc2d457ac24f29be7fe167415bf7bb9360ea0d80bdb8b0f0ec8d8db92fae
   languageName: node
   linkType: hard
 
