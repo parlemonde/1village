@@ -67,7 +67,13 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
         data.map((o) => {
           if (o.type === 'comment') {
             const comment = o.data;
-            return <CommentCard key={comment.id} activity={activity} comment={comment} user={usersMap[comment.userId] ?? null} />;
+            const isoCodeValueToCompare = comment.isoCode;
+            const isoCodeValueUser = user?.country?.isoCode;
+            const isDisplay = isoCodeValueToCompare.indexOf(isoCodeValueUser);
+            const userType = user?.type || 2;
+            if (isDisplay >= 0 || userType <= 2) {
+              return <CommentCard key={comment.id} activity={activity} comment={comment} user={usersMap[comment.userId] ?? null} />;
+            }
           } else {
             const activity = o.data;
             const activityUser = userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined;

@@ -1,4 +1,5 @@
 export interface Comment {
+  isoCode: string;
   id: number;
   activityId: number;
   userId: number;
