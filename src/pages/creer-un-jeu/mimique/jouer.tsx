@@ -1,26 +1,33 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AppsIcon from '@mui/icons-material/Apps';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
+import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
 import { UserDisplayName } from 'src/components/UserDisplayName';
-import { MimicStats } from 'src/components/activities/MimicStats';
+import { RightNavigation } from 'src/components/accueil/RightNavigation';
+import GameStats from 'src/components/activities/GameStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
-import { CustomRadio as GreenRadio, CustomRadio as RedRadio } from 'src/components/buttons/CustomRadio';
+import ResponseButton from 'src/components/buttons/GameResponseButton';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { useVillageUsers } from 'src/services/useVillageUsers';
+import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
 import type { Game, MimicData } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
-import { MimicResponseValue } from 'types/mimicResponse.type';
+import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
 
 function shuffleArray(array: Array<number>) {
@@ -34,72 +41,165 @@ function shuffleArray(array: Array<number>) {
   return array;
 }
 
+/* partie à déplacer et à centraliser avec les prochains jeux*/
 type AlreadyPlayerModalProps = {
   isOpen: boolean;
+  gameId: number;
+  handleSuccessClick: () => void;
 };
 
-const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen }) => {
+enum RadioBoxValues {
+  NEW = 'Nouvelle',
+  RANDOM = 'Aléatoire',
+  MOSAIC = 'Mosaïque',
+}
+
+type RadioNextGameProps = {
+  value: RadioBoxValues;
+  Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
+    muiName: string;
+  };
+  onChange: (event: React.SyntheticEvent) => void;
+  checked: boolean;
+};
+
+const radioListComponentMapper = {
+  [RadioBoxValues.NEW]: AccessTimeIcon,
+  [RadioBoxValues.RANDOM]: ShuffleIcon,
+  [RadioBoxValues.MOSAIC]: AppsIcon,
+};
+
+const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
+  <FormControlLabel
+    sx={{ ml: 1 }}
+    value={value}
+    control={<Radio sx={{ py: 0 }} />}
+    label={
+      <>
+        <Icon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> {value}
+      </>
+    }
+    labelPlacement="end"
+    checked={checked}
+    onChange={onChange}
+  />
+);
+
+const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleSuccessClick }) => {
   const router = useRouter();
+
   return (
     <Modal
       open={isOpen}
       title="Oups"
       cancelLabel="Retourner à l'accueil"
+      confirmLabel="Rejouer"
       maxWidth="lg"
       ariaDescribedBy="new-user-desc"
       ariaLabelledBy="new-user-title"
-      onClose={() => router.push('/creer-un-jeu/mimique')}
+      onClose={() => router.push('/')}
+      onConfirm={handleSuccessClick}
     >
       C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
     </Modal>
   );
 };
+/* FIN partie à déplacer et à centraliser avec les prochains jeux*/
 
-const PlayMimique = () => {
-  const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
+const POSITION = ['c', 'f', 'i'];
+
+const PlayMimic = () => {
+  const { user } = useContext(UserContext);
+  const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  const { getRandomGame, sendNewGameResponse, getGameStats } = useGameRequests();
+  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
 
-  const [game, setGame] = React.useState<Game | undefined>(undefined);
-  const [tryCount, setTryCount] = React.useState<number>(0);
-  const [found, setFound] = React.useState<boolean>(false);
-  const [foundError, setFoundError] = React.useState<boolean>(false);
-  const [fake1Selected, setFake1Selected] = React.useState<boolean>(false);
-  const [fake2Selected, setFake2Selected] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<MimicResponseValue | null>(null);
-  const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
-  const [isLastMimiqueModalOpen, setIsLastMimiqueModalOpen] = React.useState<boolean>(false);
-  const [loadingGame, setLoadingGame] = React.useState<boolean>(true);
-  const [gameResponses, setGameResponses] = React.useState<GameResponse[]>([]);
+  const [game, setGame] = useState<Game | undefined>(undefined);
+  const [tryCount, setTryCount] = useState<number>(0);
+  const [found, setFound] = useState<boolean>(false);
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
+  const [isLastMimicModalOpen, setIsLastMimicModalOpen] = useState<boolean>(false);
+  const [loadingGame, setLoadingGame] = useState<boolean>(true);
+  const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
+  const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
+  const router = useRouter();
 
-  const getNextGame = React.useCallback(async () => {
+  const handleConfirmModal = async () => {
+    const success = await resetGamesPlayedForUser();
+    setIsLastMimicModalOpen(false);
+
+    if (success) {
+      router.reload();
+    } else {
+      router.push('/');
+    }
+  };
+
+  const sortGamesByDescOrder = (games: Game[]) => {
+    return games.sort((a, b) => {
+      const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
+      const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
+      return dateB - dateA;
+    });
+  };
+
+  const getNextGame = useCallback(async () => {
     setLoadingGame(true);
 
     // [1] Reset game.
     setFound(false);
-    setFoundError(false);
-    setFake1Selected(false);
-    setFake2Selected(false);
     setGameResponses([]);
-    setSelected(null);
     setTryCount(0);
     setErrorModalOpen(false);
 
-    // [2] Get next game data.
-    const newGame = await getRandomGame(GameType.MIMIC);
-    setGame(newGame);
-    setIsLastMimiqueModalOpen(newGame === undefined);
+    const availableGames = await getAvailableGames(GameType.MIMIC);
+    const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+
+    const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
+
+    const isLastGame = currentGameIndex === availableGamesByDescOrder.length - 1;
+
+    const NEXT_GAME_MAPPER = {
+      [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1],
+      [RadioBoxValues.RANDOM]: async () => {
+        return await getRandomGame(GameType.MIMIC);
+      },
+      [RadioBoxValues.MOSAIC]: () => {
+        console.error('Not implemented yet');
+        return undefined;
+      },
+    };
+
+    const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
+
+    setGame(nextGame);
+    if (isLastGame) {
+      setIsLastMimicModalOpen(isLastGame);
+    }
 
     setLoadingGame(false);
-  }, [getRandomGame]);
+  }, [getRandomGame, selectedValue, game, getAvailableGames]);
 
   // Get next game on start and on village change.
-  React.useEffect(() => {
-    getNextGame().catch();
-  }, [getNextGame]);
+  useEffect(() => {
+    const getFirstGame = async () => {
+      try {
+        const availableGames = await getAvailableGames(GameType.MIMIC);
+        if (availableGames.length === 0) {
+          setIsLastMimicModalOpen(true);
+        }
+        const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+        setGame(availableGamesByDescOrder[0]); // Utiliser le dernier jeu (plus récent)
+        setLoadingGame(false);
+      } catch (error) {
+        console.error('Error fetching or processing available games:', error);
+        setLoadingGame(false); // Assurez-vous de gérer les erreurs correctement
+      }
+    };
+    getFirstGame().catch();
+  }, [getAvailableGames]);
 
-  const userMap = React.useMemo(
+  const userMap = useMemo(
     () =>
       users.reduce<{ [key: number]: number }>((acc, u, index) => {
         acc[u.id] = index;
@@ -107,19 +207,40 @@ const PlayMimique = () => {
       }, {}),
     [users],
   );
-  const mimicContent = React.useMemo(() => {
+  const mimicContent = useMemo(() => {
     if (game === undefined) {
       return undefined;
     }
     try {
       const { id, origine, fakeSignification1, fakeSignification2, signification, video } = game;
-      const content: MimicData = { gameId: id, origine, fakeSignification1, fakeSignification2, signification, video };
+      const content: MimicData = { gameId: id, createDate: new Date(), origine, fakeSignification1, fakeSignification2, signification, video };
       return content;
     } catch (e) {
       return undefined;
     }
   }, [game]);
-  const gameCreator = React.useMemo(() => {
+
+  const ResponseButtonDataMapper = useMemo(
+    () => [
+      {
+        value: GameResponseValue.SIGNIFICATION,
+        signification: mimicContent?.signification,
+        isSuccess: true,
+        isGreenRadio: true,
+      },
+      {
+        value: GameResponseValue.FAKE_SIGNIFICATION_1,
+        signification: mimicContent?.fakeSignification1,
+      },
+      {
+        value: GameResponseValue.FAKE_SIGNIFICATION_2,
+        signification: mimicContent?.fakeSignification2,
+      },
+    ],
+    [mimicContent],
+  );
+
+  const gameCreator = useMemo(() => {
     if (game === undefined) {
       return undefined;
     }
@@ -127,212 +248,252 @@ const PlayMimique = () => {
   }, [game, userMap, users]);
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type <= UserType.MEDIATOR;
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
-  const ableToValidate = selected !== null;
+
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
-  const onValidate = async () => {
-    if (selected === null || game === undefined) {
-      return;
-    }
-    const success = await sendNewGameResponse(game.id, selected);
-    if (!success) {
-      // TODO: send notistack that an unknown error happened..
-      return;
-    }
+  // tentative d'indexer les réponses, sans succès pour l'insant
+  // const responseMapping: {
+  //   [key: number]: GameResponseValue;
+  // } = {
+  //   0: GameResponseValue.SIGNIFICATION,
+  //   1: GameResponseValue.FAKE_SIGNIFICATION_1,
+  //   2: GameResponseValue.FAKE_SIGNIFICATION_2,
+  // };
 
-    setFound(selected === MimicResponseValue.SIGNIFICATION);
-    setFake1Selected(fake1Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_1);
-    setFake2Selected(fake2Selected || selected === MimicResponseValue.FAKE_SIGNIFICATION_2);
-    setSelected(null);
-    setErrorModalOpen(selected !== MimicResponseValue.SIGNIFICATION);
-    setTryCount(tryCount + 1);
-    if (selected === MimicResponseValue.SIGNIFICATION || tryCount === 1) {
-      setFoundError(selected !== MimicResponseValue.SIGNIFICATION);
-      setGameResponses(await getGameStats(game.id));
+  // const choices = useMemo(() => {
+  //   if (game !== undefined) {
+  //     const shuffledIndices = shuffleArray([0, 1, 2]);
+  //     return shuffledIndices.map((index) => responseMapping[index] as unknown as number);
+  //   } else {
+  //     return [0, 1, 2];
+  //   }
+  //   // eslint-disable-next-line
+  // }, [game]);
+
+  // fin de tentative
+
+  const handleRadioButtonChange = (event: React.SyntheticEvent) => {
+    const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
+    setSelectedValue(selected as RadioBoxValues);
+    if (selected === RadioBoxValues.RANDOM) {
+      setLoadingGame(true);
+      getNextGame();
     }
   };
 
-  const onChange = (event: { target: HTMLInputElement }) => {
-    setSelected(event.target.value as MimicResponseValue);
-  };
+  const handleClick = useCallback(
+    async (selection: GameResponseValue, isSuccess: boolean = false) => {
+      if (game === undefined) {
+        return;
+      }
+      const apiResponse = await sendNewGameResponse(game.id, selection);
+      if (!apiResponse) {
+        console.error('Error reaching server');
+        return;
+      }
+
+      setFound(isSuccess);
+      setErrorModalOpen(!isSuccess);
+      if (isSuccess || tryCount === 1) {
+        setGameResponses(await getGameStats(game.id));
+      }
+      setTryCount(tryCount + 1);
+    },
+    [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game],
+  );
 
   if (user === null || village === null || loadingGame) {
     return <Base></Base>;
   }
 
+  // Modal dernière mimique
   if (!game || !gameCreator) {
     return (
       <Base>
-        <AlreadyPlayerModal isOpen={isLastMimiqueModalOpen} />
+        <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
       </Base>
     );
   }
 
   return (
-    <Base>
+    <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
-        <h1>Que signifie cette mimique ?</h1>
-        <div className="activity-card__header">
-          <AvatarImg user={gameCreator} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
-          <div className="activity-card__header_info">
-            <p className="text" style={{ marginTop: '0.7rem' }}>
-              {'Une mimique proposée par '}
-              <UserDisplayName className="text" user={gameCreator} noLink={false} />
-              {gameCreatorIsPelico ? (
-                <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
-              ) : (
-                <Flag country={gameCreator.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
-              )}
+        <Box display="flex" flexDirection="column">
+          <Box alignItems="flex-start">
+            <h1>Jouer au jeu des mimiques !</h1>
+            <p style={{ marginBottom: 0 }}>A vous de décider avec quelle mimique vous allez jouer !</p>
+            <p style={{ marginTop: 0 }}>
+              Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière mimique publiée.
             </p>
+          </Box>
+          <div className="activity-card__header">
+            <AvatarImg user={gameCreator} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
+            <div
+              className="activity-card__header_info"
+              style={{ display: 'block,', justifyContent: 'center', alignItems: 'center', paddingBottom: '1rem' }}
+            >
+              <h3 className="text" style={{ marginTop: '0.7rem' }}>
+                {'Une mimique proposée par '}
+                <UserDisplayName className="text" user={gameCreator} noLink={false} />
+              </h3>
+              {mimicContent && mimicContent.createDate && (
+                <p style={{ fontSize: '0.8rem', color: 'gray' }}>
+                  {'publié le '}
+                  {new Date(mimicContent.createDate).toLocaleDateString()}
+                  {gameCreatorIsPelico ? (
+                    <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
+                  ) : (
+                    gameCreator && gameCreator.country && <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                  )}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
-            {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
-          </Grid>
-          <Grid xs={2} md={4}>
-            <RadioGroup value={selected} onChange={onChange} style={{ marginTop: '1.6rem' }}>
-              {choices &&
-                choices.map((val) => {
-                  if (val === 0) {
-                    return (
-                      <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '4px' }}>
-                        <FormControlLabel
-                          key="1"
-                          value={MimicResponseValue.SIGNIFICATION}
-                          control={found || foundError ? <GreenRadio isSuccess isChecked /> : <Radio />}
-                          label={mimicContent?.signification || ''}
-                          disabled={found || foundError ? true : false}
-                          style={{ cursor: 'pointer', width: '100%' }}
-                        />
-                      </Box>
-                    );
-                  } else if (val === 1) {
-                    return (
-                      <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '4px' }}>
-                        <FormControlLabel
-                          key="2"
-                          value={MimicResponseValue.FAKE_SIGNIFICATION_1}
-                          control={fake1Selected ? <RedRadio isChecked /> : <Radio />}
-                          label={mimicContent?.fakeSignification1 || ''}
-                          disabled={fake1Selected || found || foundError ? true : false}
-                          style={{ cursor: 'pointer', width: '100%' }}
-                        />
-                      </Box>
-                    );
-                  } else {
-                    return (
-                      <Box sx={{ p: 2, mb: 2, border: '1px solid #cdcdcd', borderRadius: '4px' }}>
-                        <FormControlLabel
-                          key="3"
-                          value={MimicResponseValue.FAKE_SIGNIFICATION_2}
-                          control={fake2Selected ? <RedRadio isChecked /> : <Radio />}
-                          label={mimicContent?.fakeSignification2 || ''}
-                          disabled={fake2Selected || found || foundError ? true : false}
-                          style={{ cursor: 'pointer', width: '100%' }}
-                        />
-                      </Box>
-                    );
-                  }
-                })}
+          <Grid container spacing={1} style={{ flex: 1, justifyContent: 'space-around' }}>
+            <RadioGroup row defaultValue={RadioBoxValues.NEW}>
+              {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
+                return (
+                  <RadioNextGame
+                    key={index}
+                    value={value as RadioBoxValues}
+                    Icon={radioListComponentMapper[value as RadioBoxValues]}
+                    onChange={handleRadioButtonChange}
+                    checked={selectedValue === value}
+                  />
+                );
+              })}
             </RadioGroup>
           </Grid>
-
-          {(found || foundError) && (
-            <>
-              {user.country && (
-                <MimicStats
-                  gameResponses={gameResponses}
-                  choices={choices}
-                  country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
-                  userMap={userMap}
-                  users={users}
-                />
+          <Grid
+            container
+            border={1}
+            borderColor={primaryColor}
+            p={3}
+            my={1}
+            boxSizing="border-box"
+            style={{ flex: 1 }}
+            spacing={3}
+            alignItems="flex-start"
+            justifyContent="flex-start"
+          >
+            <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
+              {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
+            </Grid>
+            <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
+              <h1>Que signifie cette mimique ?</h1>
+            </Grid>
+            <div
+              className="display-ended-game"
+              style={{
+                display: 'grid',
+                width: '100%',
+                gridTemplateColumns: '1fr 2fr 2fr',
+                gridTemplateRows: 'repeat(3,auto)',
+                gridTemplateAreas: '". a b " "c d e" "f g h" "i j k"',
+              }}
+            >
+              {choices &&
+                choices.map((val, index) => {
+                  const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
+                  const isCorrect = isSuccess && found;
+                  const mimicOrigine = mimicContent?.origine || '';
+                  const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
+                  return (
+                    <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
+                      <ResponseButton
+                        value={value}
+                        onClick={() => handleClick(value, isSuccess)}
+                        isSuccess={isSuccess}
+                        signification={signification}
+                        disabled={isDisabled}
+                        isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
+                        mimicOrigine={mimicOrigine}
+                      />
+                    </div>
+                  );
+                })}
+              {(found || tryCount > 1) && (
+                <>
+                  {user.country && (
+                    <GameStats
+                      gameResponses={gameResponses}
+                      choices={choices}
+                      country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
+                      userMap={userMap}
+                      users={users}
+                      position={0}
+                    />
+                  )}
+                  <GameStats
+                    gameResponses={gameResponses}
+                    choices={choices}
+                    position={1}
+                    country={
+                      userIsPelico
+                        ? village.countries[1].isoCode
+                        : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
+                    }
+                    userMap={userMap}
+                    users={users}
+                  />
+                </>
               )}
+            </div>
 
-              <MimicStats
-                gameResponses={gameResponses}
-                choices={choices}
-                country={
-                  userIsPelico ? village.countries[1].isoCode : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
-                }
-                userMap={userMap}
-                users={users}
-              />
-            </>
-          )}
-          <Grid item xs={12} md={12}>
-            {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
-            {/* {foundError && <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>} */}
-            {(found || foundError) && (
-              <>
-                <h2>Origine de cette mimique :</h2>
-                <p>{mimicContent?.origine || ''}</p>
-              </>
-            )}
+            <Grid item xs={12} md={12}>
+              {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
+            </Grid>
           </Grid>
-        </Grid>
+          <Grid>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Grid>
+        </Box>
         <Modal
           open={errorModalOpen}
           title="Oups"
-          cancelLabel={foundError ? 'Fermer' : 'Réessayer'}
+          cancelLabel={tryCount > 1 && !found ? 'Fermer' : 'Réessayer'}
           maxWidth="lg"
           ariaDescribedBy="new-user-desc"
           ariaLabelledBy="new-user-title"
           onClose={() => setErrorModalOpen(false)}
         >
-          {foundError ? (
+          {tryCount > 1 && !found ? (
             <p>Dommage ! Vous n’avez pas trouvé la bonne réponse cette fois-ci.</p>
           ) : (
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayerModal isOpen={isLastMimiqueModalOpen} />
-        {!found && !foundError && (
-          <Button
-            style={{
-              float: 'right',
-            }}
-            variant="outlined"
-            color="primary"
-            onClick={onValidate}
-            disabled={!ableToValidate}
-          >
-            Valider
-          </Button>
-        )}
-        <div>
-          {(found || foundError) && (
-            <div>
-              <p
-                style={{
-                  float: 'right',
-                  margin: '0.5rem 1rem',
-                  textDecorationLine: 'underline',
-                }}
-              >
-                <Link href="/" passHref>
-                  {"Ou revenir à l'accueil"}
-                </Link>
-              </p>
-              <Button
-                style={{
-                  float: 'right',
-                }}
-                variant="outlined"
-                color="primary"
-                onClick={() => {
-                  getNextGame();
-                }}
-              >
-                Rejouer
-              </Button>
-            </div>
-          )}
-        </div>
+        <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
+        <Grid container justifyContent="space-between">
+          {/* Todo : modifier la logique du bouton pour qu'il récupère la mimique précédente */}
+          {/* <Grid item xs={3} display="flex" justifyContent="flex-start">
+            <Button variant="outlined" color="primary" onClick={getNextGame}>
+              mimique précédente
+            </Button>
+          </Grid> */}
+          <Grid item xs={6} style={{ textAlign: 'center' }}>
+            {(found || tryCount > 1) && (
+              <div style={{ textAlign: 'center' }}>
+                <p
+                  style={{
+                    margin: '0.5rem 1rem',
+                    textDecorationLine: 'underline',
+                  }}
+                >
+                  <Link href="/" passHref>
+                    {"Ou revenir à l'accueil"}
+                  </Link>
+                </p>
+              </div>
+            )}
+          </Grid>
+          <Grid item xs={3} display="flex" justifyContent="flex-end">
+            <Button variant="outlined" color="primary" onClick={getNextGame}>
+              mimique suivante
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     </Base>
   );
 };
 
-export default PlayMimique;
+export default PlayMimic;

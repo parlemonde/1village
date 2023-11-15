@@ -30,6 +30,13 @@ const MimiqueStep1 = () => {
         createNewActivity(ActivityType.GAME, selectedPhase, GameType.MIMIC, {
           ...DEFAULT_MIMIC_DATA,
           presentation: labelPresentation,
+          game1: {
+            video: '',
+            signification: '',
+            origine: '',
+            fakeSignification1: '',
+            fakeSignification2: '',
+          },
         });
       } else if (activity && (!isGame(activity) || !isMimic(activity))) {
         createNewActivity(ActivityType.GAME, selectedPhase, GameType.MIMIC, {

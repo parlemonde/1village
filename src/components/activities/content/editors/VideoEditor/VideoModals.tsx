@@ -189,9 +189,8 @@ export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVide
           <>
             <div style={{ padding: '0.5rem' }}>
               <Alert icon={<ArrowRightAltIcon />} severity="info">
-                Créer une vidéo sur{' '}
                 <a className="text text--bold" href="https://clap.parlemonde.org" target="_blank" rel="noreferrer">
-                  Clap!
+                  Créer une vidéo sur Clap!
                 </a>
               </Alert>
             </div>

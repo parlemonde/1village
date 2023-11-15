@@ -1,0 +1,17 @@
+@import 'variables';
+
+.create-game {
+  width: '100%';
+  padding: '0.5rem 1rem 1rem 1rem';
+  &__textfield {
+    margin: '40px';
+  }
+}
+
+.display-ended-game {
+display: 'grid';
+    width: '100%';
+    grid-Template-Columns: '1fr 2fr 2fr';
+    grid-Template-Rows: 'repeat(3,auto)';
+    grid-Template-Areas: '". a b " "c d e" "w f g" "q h i"';
+}

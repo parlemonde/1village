@@ -39,7 +39,7 @@ const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: Game
   }
 
   const games = await subQueryBuilder
-    .orderBy()
+    .orderBy('game.createDate', 'DESC')
     .limit(limit)
     .offset(page * limit)
     .getMany();
@@ -94,7 +94,6 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
   const game = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
-    .where('game.userId <> :userId', { userId: userId })
     .andWhere('game.villageId = :villageId', { villageId: villageId })
     .andWhere('game.type = :type', { type: type })
     .andWhere(
@@ -105,6 +104,7 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
           .from(GameResponse, 'response')
           .where('response.userId = :userId', { userId: userId })
           .andWhere('response.gameId = game.id')
+          .andWhere('response.isOldResponse = 0')
           .getQuery();
         return 'NOT EXISTS ' + subQuery;
       },
@@ -117,6 +117,30 @@ gameController.get({ path: '/play', userType: UserType.TEACHER }, async (req: Re
     return;
   }
   res.sendJSON(game);
+});
+
+// --- Get the last created game ---
+gameController.get({ path: '/latest', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const villageId = Number(getQueryString(req.query.villageId)) || 0;
+  const type = parseInt(getQueryString(req.query.type) || '0', 10);
+
+  const latestGame = await AppDataSource.getRepository(Game)
+    .createQueryBuilder('game')
+    .where('game.villageId = :villageId', { villageId: villageId })
+    .andWhere('game.type = :type', { type: type })
+    .orderBy('game.createDate', 'DESC')
+    .getMany();
+
+  if (!latestGame) {
+    next();
+    return;
+  }
+
+  res.sendJSON(latestGame);
 });
 
 //--- Get number of games available ---
@@ -132,10 +156,9 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     next();
     return;
   }
-  const count = await AppDataSource.getRepository(Game)
+  const games = await AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.responses', 'responses')
-    .where('`game`.`userId` <> :userId', { userId: userId })
     .andWhere('`game`.`villageId` = :villageId', { villageId: villageId })
     .andWhere('`game`.`type` = :type', { type: type })
     .andWhere(
@@ -146,14 +169,15 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
           .from(GameResponse, 'response')
           .where(`response.userId = :userId`, { userId: userId })
           .andWhere(`response.gameId = game.id`)
+          .andWhere(`response.isOldResponse = 0`)
           .getQuery();
         return 'NOT EXISTS ' + subQuery;
       },
       { userId: req.user.id },
     )
-    .getCount();
+    .getMany();
   res.sendJSON({
-    count: count,
+    games: games,
   });
 });
 
@@ -169,6 +193,7 @@ gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async
     .leftJoinAndSelect('gameResponse.user', 'user')
     .where('`gameResponse`.`gameId` = :gameId', { gameId: gameId })
     .andWhere('user.type <> :userType', { userType: UserType.OBSERVATOR }) //Observator can play but don't affect the stats
+    .andWhere('gameResponse.isOldResponse = 0')
     .getMany();
 
   res.sendJSON(gameResponses || []);
@@ -191,6 +216,19 @@ const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
 
 const answerGameValidator = ajv.compile(ANSWER_M_SCHEMA);
 
+// reset games, put all isOldResponse to true to enable replay
+gameController.put({ path: '/resetResponses', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const { id: userId } = req.user;
+  await AppDataSource.createQueryBuilder().update(GameResponse).set({ isOldResponse: true }).where(' userId = :userId', { userId: userId }).execute();
+
+  res.sendJSON(GameResponse);
+});
+
 //--- Update a game response ---
 gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -212,7 +250,7 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
     next();
     return;
   }
-  const responses = await AppDataSource.getRepository(GameResponse).find({ where: { userId: userId, gameId: id } });
+  const responses = await AppDataSource.getRepository(GameResponse).find({ where: { userId: userId, id: id } });
   if (responses.length > 2) {
     next();
     return;
@@ -225,7 +263,6 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   gameResponse.userId = userId;
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
-
   res.sendJSON(GameResponse);
 });
 

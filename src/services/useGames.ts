@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useContext } from 'react';
 
 import { VillageContext } from 'src/contexts/villageContext';
 import { serializeToQueryUrl } from 'src/utils';
@@ -7,7 +7,7 @@ import type { Game, GameType } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 
 export const useGameRequests = () => {
-  const { village } = React.useContext(VillageContext);
+  const { village } = useContext(VillageContext);
 
   /**
    * Return all games by type or games by type and user id from village
@@ -19,7 +19,7 @@ export const useGameRequests = () => {
    * @returns games
    *
    */
-  const getUserCreatedGamesCount = React.useCallback(
+  const getUserCreatedGamesCount = useCallback(
     async (type: GameType, userId?: 'self') => {
       if (!village) {
         return 0;
@@ -41,6 +41,35 @@ export const useGameRequests = () => {
   );
 
   /**
+   * Return all games by type
+   *
+   * @param type - type of game
+   *
+   * @returns Array<Game>
+   *
+   */
+
+  const getAllGamesByType = useCallback(
+    async (type: GameType) => {
+      if (!village) {
+        return [] as Array<Game>;
+      }
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/games${serializeToQueryUrl({
+          type,
+          villageId: village.id,
+        })}`,
+      });
+      if (response.error) {
+        return [] as Array<Game>;
+      }
+      return response.data as Array<Game>;
+    },
+    [village],
+  );
+
+  /**
    * Return number of games available to play
    *
    * @param type - type of game
@@ -50,7 +79,7 @@ export const useGameRequests = () => {
    *
    */
 
-  const getAvailableGamesCount = React.useCallback(
+  const getAvailableGamesCount = useCallback(
     async (type: GameType) => {
       if (!village) {
         return 0;
@@ -65,7 +94,36 @@ export const useGameRequests = () => {
       if (response.error) {
         return 0;
       }
-      return response.data.count as number;
+      return response.data.games.length as number;
+    },
+    [village],
+  );
+
+  /**
+   * Return number of games available to play
+   *
+   * @param type - type of game
+   * @param villageId - id of village
+   *
+   * @returns response
+   *
+   */
+  const getAvailableGames = useCallback(
+    async (type: GameType) => {
+      if (!village) {
+        return [] as Array<Game>;
+      }
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/games/ableToPlay${serializeToQueryUrl({
+          type,
+          villageId: village.id,
+        })}`,
+      });
+      if (response.error) {
+        return [] as Array<Game>;
+      }
+      return response.data.games as Array<Game>;
     },
     [village],
   );
@@ -80,11 +138,12 @@ export const useGameRequests = () => {
    *
    */
 
-  const getRandomGame = React.useCallback(
+  const getRandomGame = useCallback(
     async (type: GameType) => {
       if (!village) {
         return undefined;
       }
+
       const response = await axiosRequest({
         method: 'GET',
         url: `/games/play${serializeToQueryUrl({
@@ -92,6 +151,7 @@ export const useGameRequests = () => {
           type,
         })}`,
       });
+
       if (response.error) {
         return undefined;
       }
@@ -110,7 +170,7 @@ export const useGameRequests = () => {
    *
    */
 
-  const sendNewGameResponse = React.useCallback(async (id: number, value: string) => {
+  const sendNewGameResponse = useCallback(async (id: number, value: string) => {
     const response = await axiosRequest({
       method: 'PUT',
       url: `/games/play/${id}`,
@@ -123,6 +183,23 @@ export const useGameRequests = () => {
   }, []);
 
   /**
+   * Update isOldGame column when all games are played
+   *
+   * @returns boolean
+   */
+
+  const resetGamesPlayedForUser = async () => {
+    const response = await axiosRequest({
+      method: 'PUT',
+      url: `/games/resetResponses`,
+    });
+    if (response.error) {
+      return false;
+    }
+    return true;
+  };
+
+  /**
    * Return stats game
    *
    * @param id - id type of game
@@ -130,7 +207,7 @@ export const useGameRequests = () => {
    * @returns GameResponse[]
    *
    */
-  const getGameStats = React.useCallback(async (id: number) => {
+  const getGameStats = useCallback(async (id: number) => {
     const response = await axiosRequest({
       method: 'GET',
       url: `/games/stats/${id}`,
@@ -141,5 +218,14 @@ export const useGameRequests = () => {
     return response.data as GameResponse[];
   }, []);
 
-  return { getUserCreatedGamesCount, getAvailableGamesCount, getRandomGame, sendNewGameResponse, getGameStats };
+  return {
+    getUserCreatedGamesCount,
+    getAllGamesByType,
+    getAvailableGamesCount,
+    getAvailableGames,
+    getRandomGame,
+    sendNewGameResponse,
+    resetGamesPlayedForUser: resetGamesPlayedForUser,
+    getGameStats,
+  };
 };
