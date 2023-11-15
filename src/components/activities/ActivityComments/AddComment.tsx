@@ -44,7 +44,8 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
     }
     setIsLoading(true);
     if (user.type > 2) {
-      await addComment(newComment);
+      const userIsocode = user?.country?.isoCode;
+      await addComment(newComment, userIsocode);
     } else {
       await addComment(newComment, targetMessage);
     }

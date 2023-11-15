@@ -69,7 +69,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
             const comment = o.data;
             const isoCodeValueToCompare = comment.isoCode;
             const isoCodeValueUser = user?.country?.isoCode;
-            const isDisplay = isoCodeValueToCompare.indexOf(isoCodeValueUser);
+            const isDisplay = isoCodeValueUser !== undefined ? isoCodeValueToCompare.indexOf(isoCodeValueUser) : -1;
             const userType = user?.type || 2;
             if (isDisplay >= 0 || userType <= 2) {
               return <CommentCard key={comment.id} activity={activity} comment={comment} user={usersMap[comment.userId] ?? null} />;
@@ -86,6 +86,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
               </div>
             );
           }
+          return null;
         })
       ) : (
         <div>Aucune réaction n&apos;a été plublié pour le moment</div>
