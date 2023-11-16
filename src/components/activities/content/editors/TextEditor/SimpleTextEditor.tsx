@@ -29,6 +29,7 @@ import { LinkPicker, LinkDecorator, linkToHTML } from './toolbar/Link';
 import { TextAlignButtons } from './toolbar/TextAlignButtons';
 import { TitleChoice } from './toolbar/TitleChoice';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { errorColor, fontDetailColor, primaryColor } from 'src/styles/variables.const';
 
 function blockStyleFn(block: ContentBlock): string {
@@ -245,6 +246,7 @@ export const SimpleTextEditor = ({
   }, [value]);
 
   const { user } = useContext(UserContext);
+  const { village } = useContext(VillageContext);
 
   const toolbar = (
     <Paper
@@ -285,7 +287,7 @@ export const SimpleTextEditor = ({
           onChange={onEditorChange}
         />
         <EmojiPicker onChange={addEmoji} />
-        {user && user.type <= 2 ? <ChooseButton /> : null}
+        {user && user.type <= 2 && village && village.activePhase == 1 ? <ChooseButton /> : null}
       </>
     </Paper>
   );
