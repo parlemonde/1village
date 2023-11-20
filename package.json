@@ -15,6 +15,7 @@
     "typescript:server": "yarn tsc --project server/tsconfig.json --noEmit",
     "typescript": "yarn tsc -p . && yarn typescript:server",
     "test": "yarn jest --runInBand",
+    "test:cov": "yarn jest --coverage",
     "start-dev": "rm -rf dist && yarn build:server && node dist/server/start.js",
     "start": "yarn migration:run && NODE_ENV=production node dist/server/start.js",
     "dev": "yarn nodemon",
