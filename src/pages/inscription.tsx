@@ -57,7 +57,6 @@ const Inscription = () => {
     INVALID_EMAIL: "L'email n'est pas au format valide ",
   };
   useEffect(() => {
-    //const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (password.length !== 0) setIsPasswordValidState(isPasswordValid(password));
 
     if (confirmPassword !== '') {
@@ -67,13 +66,6 @@ const Inscription = () => {
         setIsPasswordMatch(true);
       }
     }
-    // if (email !== '') {
-    //   if (!emailRegex.test(email)) {
-    //     setIsEmailValidState(false);
-    //   } else {
-    //     setIsEmailValidState(true);
-    //   }
-    // }
     if (email.length !== 0) {
       setIsEmailValidState(isEmailValid(email));
     }
@@ -100,7 +92,6 @@ const Inscription = () => {
         setisPasswordIdenticalToEmail(false);
       }
     }
-
     setNewUser({
       email: email,
       firstname: firstname,
@@ -170,7 +161,6 @@ const Inscription = () => {
       isLastnameValid &&
       !isPasswordIdenticalToEmail
     ) {
-      // Changement && isPasswordIdenticalToEmail
       try {
         await addUser(newUser);
       } catch (err) {

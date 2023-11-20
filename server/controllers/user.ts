@@ -1,6 +1,6 @@
 import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
-import type { NextFunction, Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import type { FindOperator } from 'typeorm';
 import { LessThan, IsNull } from 'typeorm';
 
@@ -13,9 +13,10 @@ import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
-import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
+import { generateTemporaryToken, valueOrDefault, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
+import { isPasswordValid, isPasswordStrong } from '../utils/isPasswordValid';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
@@ -179,8 +180,19 @@ const CREATE_SCHEMA: JSONSchemaType<CreateUserData> = {
   additionalProperties: false,
 };
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+userController.post({ path: '' }, async (req: Request, res: Response) => {
+  const errorMessages = {
+    INVALID_EMAIL: 'Email non valide',
+  }
+  const data = req.body;
+  const { email, firstName, lastName, pseudo, password } = req.body;
+  if (email.length > 1) {
+    console.log(errorMessages.INVALID_EMAIL)
+  }
 
+})
 const createUserValidator = ajv.compile(CREATE_SCHEMA);
+
 userController.post({ path: '' }, async (req: Request, res: Response) => {
   async function generatePseudo(data: CreateUserData): Promise<string> {
     const firstName = data.firstname || '';
@@ -206,10 +218,15 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
     sendInvalidDataError(createUserValidator);
     return;
   }
-  if (data.password !== undefined && !isPasswordValid(data.password)) {
-    throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
-  }
-
+  const errorMessages = {
+    INVALID_EMAIL: 'Email non valide',
+    INVALID_USERNAME: 'Le nom est prénom doit comprendre plus de caractère',
+    INVALID_PASSWORD: "Le mot de passe n'est pas au bon format",
+    PASSWORD_NOT_STRONG: 'Le mot de passe est trop commun',
+  };
+  // if (data.password !== undefined && !isPasswordValid(data.password)) {
+  //   throw new AppError('Invalid password', ErrorCode.INVALID_PASSWORD);
+  // }
   if (!emailRegex.test(data.email)) {
     throw new AppError('Invalid email', ErrorCode.INVALID_EMAIL);
   }

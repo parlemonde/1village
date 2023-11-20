@@ -25,12 +25,6 @@ export function getHeader(req: Request, header: string): string | undefined {
   return undefined;
 }
 
-export function isPasswordValid(password: string): boolean {
-  return (
-    password !== undefined && password !== null && password.length >= 8 && /\d+/.test(password) && /[a-z]+/.test(password) && /[A-Z]+/.test(password)
-  );
-}
-
 export function generateTemporaryToken(length: number): string {
   return base64url(crypto.randomBytes(length)).slice(0, length);
 }

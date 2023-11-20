@@ -80,6 +80,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.29.0"],\
             ["@typescript-eslint/parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.29.0"],\
             ["@yarnpkg/pnpify", "npm:4.0.0-rc.10"],\
+            ["@zxcvbn-ts/core", "npm:3.0.4"],\
+            ["@zxcvbn-ts/language-common", "npm:3.0.4"],\
+            ["@zxcvbn-ts/language-en", "npm:3.0.2"],\
+            ["@zxcvbn-ts/matcher-pwned", "npm:3.0.4"],\
             ["ajv", "npm:8.12.0"],\
             ["ajv-formats", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.1.1"],\
             ["argon2", "npm:0.28.7"],\
@@ -221,6 +225,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.29.0"],\
             ["@typescript-eslint/parser", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.29.0"],\
             ["@yarnpkg/pnpify", "npm:4.0.0-rc.10"],\
+            ["@zxcvbn-ts/core", "npm:3.0.4"],\
+            ["@zxcvbn-ts/language-common", "npm:3.0.4"],\
+            ["@zxcvbn-ts/language-en", "npm:3.0.2"],\
+            ["@zxcvbn-ts/matcher-pwned", "npm:3.0.4"],\
             ["ajv", "npm:8.12.0"],\
             ["ajv-formats", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.1.1"],\
             ["argon2", "npm:0.28.7"],\
@@ -6293,6 +6301,44 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@zxcvbn-ts/core", [\
+        ["npm:3.0.4", {\
+          "packageLocation": "./.yarn/cache/@zxcvbn-ts-core-npm-3.0.4-fa883f4736-b2c4a5d875.zip/node_modules/@zxcvbn-ts/core/",\
+          "packageDependencies": [\
+            ["@zxcvbn-ts/core", "npm:3.0.4"],\
+            ["fastest-levenshtein", "npm:1.0.16"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@zxcvbn-ts/language-common", [\
+        ["npm:3.0.4", {\
+          "packageLocation": "./.yarn/cache/@zxcvbn-ts-language-common-npm-3.0.4-af6ed3a485-c9f80cca02.zip/node_modules/@zxcvbn-ts/language-common/",\
+          "packageDependencies": [\
+            ["@zxcvbn-ts/language-common", "npm:3.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@zxcvbn-ts/language-en", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/@zxcvbn-ts-language-en-npm-3.0.2-6453e05184-e3abc2e689.zip/node_modules/@zxcvbn-ts/language-en/",\
+          "packageDependencies": [\
+            ["@zxcvbn-ts/language-en", "npm:3.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@zxcvbn-ts/matcher-pwned", [\
+        ["npm:3.0.4", {\
+          "packageLocation": "./.yarn/cache/@zxcvbn-ts-matcher-pwned-npm-3.0.4-29219f7f40-ca21c7fe68.zip/node_modules/@zxcvbn-ts/matcher-pwned/",\
+          "packageDependencies": [\
+            ["@zxcvbn-ts/matcher-pwned", "npm:3.0.4"],\
+            ["@zxcvbn-ts/core", "npm:3.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["abbrev", [\
         ["npm:1.1.1", {\
           "packageLocation": "./.yarn/cache/abbrev-npm-1.1.1-3659247eab-a4a97ec07d.zip/node_modules/abbrev/",\
@@ -10163,6 +10209,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/fast-safe-stringify-npm-2.1.1-7ce89033ca-a851cbddc4.zip/node_modules/fast-safe-stringify/",\
           "packageDependencies": [\
             ["fast-safe-stringify", "npm:2.1.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["fastest-levenshtein", [\
+        ["npm:1.0.16", {\
+          "packageLocation": "./.yarn/cache/fastest-levenshtein-npm-1.0.16-192d328856-a78d44285c.zip/node_modules/fastest-levenshtein/",\
+          "packageDependencies": [\
+            ["fastest-levenshtein", "npm:1.0.16"]\
           ],\
           "linkType": "HARD"\
         }]\
