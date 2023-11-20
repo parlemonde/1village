@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import router from 'next/router';
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
 import { Button } from '@mui/material';
@@ -12,25 +12,34 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
 import { LinkNotAllowedInPath } from 'types/activity.type';
-import type { GameActivity, MimicsData } from 'types/game.type';
+import type { GameActivity } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
   const { village } = React.useContext(VillageContext);
-  const { getAvailableGamesCount } = useGameRequests();
-  const [availableMimicsCount, setAvailableMimicsCount] = React.useState<number>(0);
+  const { getAllGamesByType, getAvailableGamesCount } = useGameRequests();
+  const [totalMimicsCount, setTotalMimicsCount] = useState<number>(0);
+  const [availableMimicsCount, setAvailableMimicsCount] = useState<number>(0);
 
-  const activityMimic = activity.data as MimicsData;
+  const latestGameUrl = useMemo(() => {
+    const villageId = activity.villageId;
+    const type = activity.type;
+    return `/creer-un-jeu/mimique/jouer/?villageId=${villageId}&type=${type}`;
+  }, [activity.villageId, activity.type]);
 
-  const randomVideoLink = React.useMemo(() => {
-    const values = Object.values(activityMimic);
-    values.shift(); //First element drafturl remove
-    values.pop(); // Last element presentation remove
-    const rdmMimicPick = values[Math.floor(Math.random() * values.length)]; // random game picked
-    return rdmMimicPick.video;
-  }, [activityMimic]);
+  useEffect(() => {
+    if (village) {
+      getAllGamesByType(GameType.MIMIC).then((count) => {
+        if (Array.isArray(count)) {
+          setTotalMimicsCount(count.length);
+        } else {
+          setTotalMimicsCount(0);
+        }
+      });
+    }
+  }, [getAllGamesByType, village]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (village) {
       getAvailableGamesCount(GameType.MIMIC).then((count) => {
         setAvailableMimicsCount(count);
@@ -46,7 +55,7 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         justifyContent: 'flex-start',
       }}
     >
-      {randomVideoLink && (
+      {latestGameUrl && (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -59,26 +68,29 @@ export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
           >
             {/* Link is disabled for reaction activity */}
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
-              <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+              <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
             ) : (
-              <Link href="/creer-un-jeu/mimique" passHref>
-                <ReactPlayer width="100%" height="100%" light url={randomVideoLink} style={{ backgroundColor: 'black' }} />
+              <Link href="/creer-un-jeu/mimique/jouer/" passHref>
+                <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
               </Link>
             )}
           </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <p>Il y a actuellement {availableMimicsCount} nouvelles mimiques à découvrir !</p>
-        <p style={{ marginBottom: '4rem' }}>{activity.data.presentation} a relancé le jeu des mimiques</p>
+        <p style={{ marginBottom: '2rem' }}>{activity.data.presentation} a relancé le jeu des mimiques</p>
+        <p>
+          Il y a actuellemment {totalMimicsCount} mimiques, dont {availableMimicsCount}{' '}
+          {availableMimicsCount > 1 ? 'nouvelles mimiques' : 'nouvelle mimique'} à découvrir !{' '}
+        </p>
         {noButtons || (
           <div style={{ textAlign: 'right' }}>
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href="/creer-un-jeu/mimique" passHref>
-                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique">
-                    Jouer le jeu
+                <Link href={latestGameUrl} passHref>
+                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique/jouer">
+                    Jouer au jeu
                   </Button>
                 </Link>
               </>
