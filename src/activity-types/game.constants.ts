@@ -4,6 +4,7 @@ import { GameType } from '../../types/game.type';
 export const DEFAULT_MIMIC_DATA: MimicsData = {
   game1: {
     gameId: null,
+    createDate: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
@@ -12,6 +13,7 @@ export const DEFAULT_MIMIC_DATA: MimicsData = {
   },
   game2: {
     gameId: null,
+    createDate: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
@@ -20,6 +22,7 @@ export const DEFAULT_MIMIC_DATA: MimicsData = {
   },
   game3: {
     gameId: null,
+    createDate: null,
     origine: null,
     signification: null,
     fakeSignification1: null,
