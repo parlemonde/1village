@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
+import ExpressionIcon from 'src/svg/jeu/expression.svg';
 import MimiqueIcon from 'src/svg/jeu/mimique.svg';
 import MonnaieIcon from 'src/svg/jeu/monnaie.svg';
 
@@ -18,6 +19,13 @@ const activities = [
     href: '/creer-un-jeu/monnaie',
     icon: MonnaieIcon,
     disabled: true,
+    disabledText: 'Bientôt disponible',
+  },
+  {
+    label: "Jeu de l'expression",
+    href: '/creer-un-jeu/expression',
+    icon: ExpressionIcon,
+    disabled: false,
     disabledText: 'Bientôt disponible',
   },
 ];
