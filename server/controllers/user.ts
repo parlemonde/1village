@@ -367,6 +367,7 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   }
   if (data.villageId) {
     await AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId });
+    await AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId });
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
