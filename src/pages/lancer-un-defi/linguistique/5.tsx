@@ -19,6 +19,7 @@ import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { capitalize } from 'src/utils';
 import { ActivityStatus } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -72,7 +73,7 @@ const DefiStep5 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.languageCode || 'Langue',
+            capitalize(data.language) || 'Langue',
             (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
             'Présentation',
             'Défi',
