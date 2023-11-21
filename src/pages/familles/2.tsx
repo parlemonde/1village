@@ -51,7 +51,6 @@ const ClassroomParamStep2 = () => {
   useEffect(() => {
     setIsDisabled(inputValues.firstname === '' || inputValues.lastname === '');
   }, [inputValues]);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
