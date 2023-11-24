@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { IsNull, LessThan } from 'typeorm';
+import { In, IsNull, LessThan } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
@@ -366,8 +366,31 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.position = data.position;
   }
   if (data.villageId) {
-    await AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId });
-    await AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId });
+    if (user.type === UserType.TEACHER) {
+      const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
+
+      if (!classroom) return;
+
+      const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
+      const studentsId = students.map((student) => student.id);
+
+      const families = await AppDataSource.getRepository(UserToStudent).find({
+        where: { student: { id: In(studentsId) } },
+        relations: ['user', 'student'],
+      });
+
+      const familiesId = families.map((family) => family.user.id);
+
+      const promises = [];
+
+      promises.push(
+        AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
+        AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
+        AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
+      );
+
+      await Promise.all(promises);
+    }
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
