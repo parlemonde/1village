@@ -58,6 +58,7 @@ RUN yarn
 
 # Copy app files
 COPY next.config.js .
+COPY h5p-config.json .
 COPY --from=build-dependencies app/dist dist
 COPY --from=build-dependencies app/public public
 
