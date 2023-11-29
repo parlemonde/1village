@@ -5,15 +5,16 @@ import React from 'react';
 import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
 
 import { isDefi, isGame } from 'src/activity-types/anyActivity';
-import { isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
+import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
-import { isExpression, DEFAULT_EXPRESSION_DATA } from 'src/activity-types/game.constants';
+import { isExpression, DEFAULT_EXPRESSION_DATA, isMimic, DEFAULT_MIMIC_DATA } from 'src/activity-types/game.constants';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import MimicSelector from 'src/components/selectors/MimicSelector';
+import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -38,11 +39,14 @@ const getArticle = (language: string) => {
 
 const ExpressionStep1 = () => {
   const router = useRouter();
+
   const { activity, save, updateActivity, createNewActivity } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { selectedPhase } = React.useContext(VillageContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
 
+  // const { selectedPhase } = React.useContext(VillageContext);
+  // const { activity, save, createNewActivity, updateActivity } = React.useContext(ActivityContext);
   const { languages } = useLanguages();
   const [mascotteId, setMascotteId] = React.useState(0);
   const { activity: mascotte } = useActivity(mascotteId);
@@ -52,27 +56,35 @@ const ExpressionStep1 = () => {
   const created = React.useRef(false);
   React.useEffect(() => {
     if (!created.current) {
-      created.current = true;
-      if (!activity || !('edit' in router.query)) {
-        createNewActivity(ActivityType.GAME, selectedPhase, GameType.EXPRESSION, {
-          ...DEFAULT_EXPRESSION_DATA,
-          presentation: labelPresentation,
-          game1: {
-            video: '',
-            signification: '',
-            origine: '',
-            fakeSignification1: '',
-            fakeSignification2: '',
-          },
+      if (!('edit' in router.query)) {
+        created.current = true;
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.LANGUAGE, {
+          themeName: '',
+          hasSelectedThemeNameOther: false,
+          languageCode: '',
+          language: '',
+          languageIndex: 0,
+          themeIndex: null,
+          defiIndex: null,
+          hasSelectedDefiNameOther: false,
+          explanationContentIndex: 1,
         });
-      } else if (activity && (!isGame(activity) || !isExpression(activity))) {
-        createNewActivity(ActivityType.GAME, selectedPhase, GameType.EXPRESSION, {
-          ...DEFAULT_EXPRESSION_DATA,
-          presentation: labelPresentation,
+      } else if (activity && (!isDefi(activity) || (isDefi(activity) && !isLanguage(activity)))) {
+        created.current = true;
+        createNewActivity(ActivityType.DEFI, selectedPhase, DEFI.LANGUAGE, {
+          themeName: '',
+          hasSelectedThemeNameOther: false,
+          languageCode: '',
+          language: '',
+          languageIndex: 0,
+          themeIndex: null,
+          defiIndex: null,
+          hasSelectedDefiNameOther: false,
+          explanationContentIndex: 1,
         });
       }
     }
-  }, [activity, labelPresentation, createNewActivity, router, selectedPhase]);
+  }, [activity, createNewActivity, router, selectedPhase]);
 
   const getMascotteId = React.useCallback(async () => {
     const response = await axiosRequest({
@@ -132,7 +144,7 @@ const ExpressionStep1 = () => {
 
   const onNext = () => {
     save().catch(console.error);
-    router.push('/lancer-un-defi/expression/2');
+    router.push('/creer-un-defi/expression/2');
   };
 
   const handleLanguage = (_event: SyntheticEvent, languageCode: string) => {
@@ -158,15 +170,15 @@ const ExpressionStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        {!isEdit && <BackButton href="/lancer-un-defi" />}
+        {!isEdit && <BackButton href="/creer-un-defi" />}
         <Steps
-          steps={[data.languageCode || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
+          steps={[data.language || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
-            '/lancer-un-defi/expression/1?edit',
-            '/lancer-un-defi/expression/2',
-            '/lancer-un-defi/expression/3',
-            '/lancer-un-defi/expression/4',
-            '/lancer-un-defi/expression/5',
+            '/creer-un-defi/expression/1?edit',
+            '/creer-un-defi/expression/2',
+            '/creer-un-defi/expression/3',
+            '/creer-un-defi/expression/4',
+            '/creer-un-defi/expression/5',
           ]}
           activeStep={0}
         />
@@ -223,11 +235,11 @@ const ExpressionStep1 = () => {
                 </FormControl>
               </Grid>
             </Grid>
-            {data.languageCode && (
+            {data.language && (
               <div style={{ margin: '1rem 0' }}>
                 <p className="text">
                   Dans votre classe, {getArticle(data.language ?? '')}
-                  {data.languageCode} est une langue :
+                  {data.language} est une langue :
                 </p>
                 <RadioGroup value={data.languageIndex} onChange={setLanguageIndex}>
                   {LANGUAGE_SCHOOL.map((l, index) => (
@@ -243,4 +255,5 @@ const ExpressionStep1 = () => {
     </Base>
   );
 };
+
 export default ExpressionStep1;

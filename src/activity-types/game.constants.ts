@@ -41,6 +41,7 @@ export const DEFAULT_MIMIC_DATA: MimicsData = {
 };
 
 export const DEFAULT_EXPRESSION_DATA: ExpressionsData = {
+  langage: null,
   game1: {
     gameId: null,
     createDate: null,
@@ -48,7 +49,6 @@ export const DEFAULT_EXPRESSION_DATA: ExpressionsData = {
     signification: null,
     fakeSignification1: null,
     fakeSignification2: null,
-    language: null,
     video: null,
   },
   game2: {
@@ -58,7 +58,6 @@ export const DEFAULT_EXPRESSION_DATA: ExpressionsData = {
     signification: null,
     fakeSignification1: null,
     fakeSignification2: null,
-    language: null,
     video: null,
   },
   game3: {
@@ -68,7 +67,6 @@ export const DEFAULT_EXPRESSION_DATA: ExpressionsData = {
     signification: null,
     fakeSignification1: null,
     fakeSignification2: null,
-    language: null,
     video: null,
   },
 };
@@ -94,8 +92,6 @@ export const isExpressionValid = (data: ExpressionData): boolean => {
     data.fakeSignification1.length > 0 &&
     data.fakeSignification2 != null &&
     data.fakeSignification2.length > 0 &&
-    data.language != null &&
-    data.language.length > 0 &&
     data.video != null &&
     data.video.length > 0
   );

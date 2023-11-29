@@ -56,6 +56,7 @@ export type MoneysData = {
 
 // --- three differents expressions ---
 export type ExpressionsData = {
+  langage: string | null;
   game1: ExpressionData;
   game2: ExpressionData;
   game3: ExpressionData;
@@ -89,7 +90,6 @@ export type ExpressionData = {
   signification: string | null;
   fakeSignification1: string | null;
   fakeSignification2: string | null;
-  language: string | null;
   video: string | null;
 };
 
