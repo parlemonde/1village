@@ -15,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 
 const DRAWER_WIDTH = 220;
-const TABS = ['villages', 'users', 'featureFlag', 'stats', 'analytics'];
+const TABS = ['villages', 'users', 'featureFlag', 'h5p', 'stats', 'analytics'];
 
 export const AdminNavigation = () => {
   const router = useRouter();
@@ -62,16 +62,22 @@ export const AdminNavigation = () => {
             </ListItemIcon>
             <ListItemText primary="Contrôle d'accès" />
           </ListItem>
+          <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/h5p')}>
+            <ListItemIcon>
+              <VpnKeyIcon />
+            </ListItemIcon>
+            <ListItemText primary="H5P" />
+          </ListItem>
         </List>
         <Divider />
         <List>
-          <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/stats')}>
+          <ListItem button selected={selectedTab === 4} onClick={goToPath('/admin/stats')}>
             <ListItemIcon>
               <InsertChartOutlinedOutlinedIcon />
             </ListItemIcon>
             <ListItemText primary="Statistiques" />
           </ListItem>
-          <ListItem button selected={selectedTab === 4} onClick={goToPath('/admin/analytics')}>
+          <ListItem button selected={selectedTab === 5} onClick={goToPath('/admin/analytics')}>
             <ListItemIcon>
               <TimelineIcon />
             </ListItemIcon>

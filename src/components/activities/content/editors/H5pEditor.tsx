@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 
 import type { EditorProps } from '../content.types';
 import { EditorContainer } from './EditorContainer';
-import { H5p } from 'src/components/H5p';
+import { H5p } from 'src/components/H5pOLD';
 import { Modal } from 'src/components/Modal';
 
 const IFRAME_REGEX = /<\s*iframe([^>]*)>.*?<\s*\/\s*iframe>/im;

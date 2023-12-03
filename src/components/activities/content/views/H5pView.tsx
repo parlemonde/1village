@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { ViewProps } from '../content.types';
-import { H5p } from 'src/components/H5p';
+import { H5p } from 'src/components/H5pOLD';
 
 export const H5pView = ({ value }: ViewProps) => {
   return (
