@@ -95,7 +95,7 @@ const DefiStep4 = () => {
                   theme: data.hasSelectedThemeNameOther
                     ? data.themeName
                     : (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title.toLowerCase()) || " < thème choisi à l'étape 2 > ",
-                  language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "< langue choisie à l'étape 1 > ",
+                  language: data.languageCode && data.languageCode.length > 0 ? capitalize(data.language) : "< langue choisie à l'étape 1 > ",
                 })}
                 description={t.description}
                 onClick={onClick(index)}

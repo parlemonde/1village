@@ -75,7 +75,7 @@ const DefiStep2 = () => {
                 key={index}
                 label={l.title}
                 description={replaceTokens(l.desc1, {
-                  language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "<langue choisie à l'étape 1>",
+                  language: data.languageCode && data.languageCode.length > 0 ? capitalize(data.language) : "<langue choisie à l'étape 1>",
                 })}
                 onClick={onClick(index)}
               />
