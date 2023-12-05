@@ -3,6 +3,7 @@ import type { Activity } from './activity.type';
 export enum GameType {
   MIMIC = 0,
   MONEY = 1,
+  EXPRESSION = 2,
 }
 
 // export interface Game
@@ -53,6 +54,14 @@ export type MoneysData = {
   game3: MoneyData;
 };
 
+// --- three differents expressions ---
+export type ExpressionsData = {
+  langage: string | null;
+  game1: ExpressionData;
+  game2: ExpressionData;
+  game3: ExpressionData;
+};
+
 // --- structure of each mimique ---
 export type MimicData = {
   gameId: number | null;
@@ -73,8 +82,21 @@ export type MoneyData = {
   image: string | null;
 };
 
+// --- structure of each expression game ---
+export type ExpressionData = {
+  gameId: number | null;
+  createDate: string | Date | null;
+  origine?: string | null;
+  signification: string | null;
+  fakeSignification1: string | null;
+  fakeSignification2: string | null;
+  video: string | null;
+};
+
 export type GameMimicActivity = Activity<MimicsData>;
 
 export type GameMoneyActivity = Activity<MoneysData>;
 
-export type GameActivity = GameMimicActivity | GameMoneyActivity;
+export type GameExpressionActivity = Activity<ExpressionsData>;
+
+export type GameActivity = GameMimicActivity | GameMoneyActivity | GameExpressionActivity;
