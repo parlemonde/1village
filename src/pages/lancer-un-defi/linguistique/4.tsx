@@ -12,7 +12,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { replaceTokens } from 'src/utils';
+import { capitalize, replaceTokens } from 'src/utils';
 
 const DefiStep4 = () => {
   const router = useRouter();
@@ -69,7 +69,7 @@ const DefiStep4 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[
-            data.languageCode || 'Langue',
+            capitalize(data.language) || 'Langue',
             (data.hasSelectedThemeNameOther && data.themeName) || (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title) || 'Thème',
             'Présentation',
             'Défi',
@@ -95,7 +95,7 @@ const DefiStep4 = () => {
                   theme: data.hasSelectedThemeNameOther
                     ? data.themeName
                     : (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title.toLowerCase()) || " < thème choisi à l'étape 2 > ",
-                  language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "< langue choisie à l'étape 1 > ",
+                  language: data.languageCode && data.languageCode.length > 0 ? capitalize(data.language) : "< langue choisie à l'étape 1 > ",
                 })}
                 description={t.description}
                 onClick={onClick(index)}

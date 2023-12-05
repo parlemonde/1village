@@ -54,13 +54,34 @@ studentController.get({ path: '/:id/classroom', userType: UserType.FAMILY }, asy
 studentController.get({ path: '/:id/get-users-linked', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
 
-  const studentRepository = AppDataSource.getRepository(Student);
-  const student = await studentRepository.findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.user'] });
+  const student = await AppDataSource.getRepository(Student).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.user'] });
 
   if (!student) return next();
 
   const users = student.userToStudents.map((userToStudent) => userToStudent.user);
-  res.json(users);
+
+  if (users.length > 0) {
+    //filtered all null value in userToStudents, to check because no array entries should be null
+    const filteredUsers = users.filter((user) => user !== null);
+    res.json(filteredUsers);
+  } else {
+    res.json([]);
+  }
+});
+
+studentController.get({ path: '/:id/get-teacher', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id, 10) || 0;
+
+  const studentRepository = AppDataSource.getRepository(Student);
+  const userRepository = AppDataSource.getRepository(User);
+
+  const student = await studentRepository.findOne({ where: { id }, relations: ['classroom.user'] });
+  if (!student) return next();
+
+  const teacher = await userRepository.findOne({ where: { id: student.classroom.user.id } });
+  if (!teacher) return next();
+
+  res.json(teacher);
 });
 
 type CreateStudentData = {
@@ -152,9 +173,9 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
     .createQueryBuilder()
     .update(User)
     .set({
-      villageId: student.classroom.village.id,
+      villageId: student.classroom.villageId,
       hasStudentLinked: true,
-      firstLogin: student.classroom.village.activePhase,
+      firstLogin: student.classroom.village?.activePhase, //TEST THIS LINE
       countryCode: student.classroom.countryCode as string,
     })
     .where('id = :id', { id: req.user.id })
@@ -216,7 +237,7 @@ studentController.put({ path: '/:id', userType: UserType.FAMILY }, async (req: R
  * @returns {string} Route API JSON response
  */
 
-studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+studentController.delete({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   if (!req.user) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
@@ -232,6 +253,34 @@ studentController.delete({ path: '/:id', userType: UserType.TEACHER }, async (re
 
   await AppDataSource.getRepository(UserToStudent).remove(userToStudents);
   await AppDataSource.getRepository(Student).remove(student);
+
+  res.status(204).send();
+});
+
+studentController.delete({ path: '/:studentId(\\d+)/delete-user-link/:userId', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError('Forbidden', ErrorCode.UNKNOWN);
+  }
+
+  const studentId = parseInt(req.params.studentId, 10) || 0;
+  const userId = parseInt(req.params.userId, 10) || 0;
+
+  const userToStudentRepository = AppDataSource.getRepository(UserToStudent);
+
+  const userToStudent = await userToStudentRepository.findOne({
+    where: { user: { id: userId }, student: { id: studentId } },
+    relations: ['user', 'student'],
+  });
+
+  if (userToStudent) {
+    await userToStudentRepository.remove(userToStudent);
+
+    const numberOfLinkedStudents = await userToStudentRepository.count({ where: { user: { id: userId } } });
+
+    if (numberOfLinkedStudents < 1) {
+      await AppDataSource.getRepository(User).createQueryBuilder().update(User).set({ hasStudentLinked: false }).where(`id = ${userId}`).execute();
+    }
+  }
 
   res.status(204).send();
 });
