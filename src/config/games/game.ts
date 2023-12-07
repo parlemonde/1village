@@ -1,6 +1,7 @@
+import { languages } from './languages';
 import { GameType } from 'types/game.type';
 
-enum InputTypeEnum {
+export enum InputTypeEnum {
   INPUT = 0,
   RADIO = 1,
   SELECT = 2,
@@ -76,7 +77,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Choisissez dans quelle langue vous souhaitez lancer le défi',
-          description: 'Vous pourrez ensuite choisir le thème de votre défi.',
+          description: 'Vous pourrez ensuite commencer votre défi.',
           inputs: [
             {
               type: InputTypeEnum.SELECT,
