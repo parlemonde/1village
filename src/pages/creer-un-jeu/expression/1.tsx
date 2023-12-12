@@ -63,10 +63,7 @@ const ExpressionStep1 = () => {
           activeStep={0}
         />
         <div>
-          <Play gameType={GameType.EXPRESSION} stepNumber={0} bonus={languages} />
-        </div>
-        <div>
-          <Play gameType={GameType.MONEY} stepNumber={0} bonus={currencies} />
+          <Play gameType={GameType.EXPRESSION} stepNumber={0} />
         </div>
         <div className="width-900">{<StepsButton next={onNext} />}</div>
       </div>

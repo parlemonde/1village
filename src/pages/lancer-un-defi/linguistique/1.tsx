@@ -174,9 +174,11 @@ const DefiStep1 = () => {
 
         <div className="width-900">
           <h1>Choisissez dans quelle langue vous souhaitez lancer le défi</h1>
-          <div>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={8}>
+
+
+          <div style={{ border: "1px solid blue" }}>
+            <Grid container spacing={2} style={{ border: "1px solid red" }}>
+              <Grid item xs={12} md={8} style={{ border: "5px solid green" }}>
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }} className="text">
                   Vous pourrez ensuite choisir le thème de votre défi.
                 </p>
@@ -224,6 +226,7 @@ const DefiStep1 = () => {
                 </FormControl>
               </Grid>
             </Grid>
+
             {data.languageCode && (
               <div style={{ margin: '1rem 0' }}>
                 <p className="text">
@@ -238,6 +241,7 @@ const DefiStep1 = () => {
               </div>
             )}
           </div>
+
           {<StepsButton next={onNext} />}
         </div>
       </div>

@@ -10,27 +10,19 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
 import { GAME_FIELDS_CONFIG, InputTypeEnum } from 'src/config/games/game';
-import type { Currency } from 'types/currency.type';
 import type { GameType } from 'types/game.type';
-import type { Language } from 'types/language.type';
 
 interface PlayProps {
   gameType: GameType;
   stepNumber: number;
-  bonus: Language[] | Currency[] | null;
 }
 
-const Play: React.FC<PlayProps> = ({ gameType, stepNumber, bonus }) => {
+const Play: React.FC<PlayProps> = ({ gameType, stepNumber }) => {
   const gameConfig = GAME_FIELDS_CONFIG[gameType];
 
   if (!gameConfig || !gameConfig.steps[stepNumber]) {
     return <div>Configuration introuvable</div>;
   }
-
-  const toto = bonus?.map((i) => i.french);
-  const tata = bonus?.map((i) => i.name);
-  console.log(toto);
-  
 
   return (
     <>
@@ -49,9 +41,9 @@ const Play: React.FC<PlayProps> = ({ gameType, stepNumber, bonus }) => {
                   {input.type === InputTypeEnum.SELECT && (
                     <FormControl>
                       <Select>
-                        {toto.map((toto, valueIndex) => (
-                          <option key={valueIndex} value={toto}>
-                            {toto}
+                        {input?.values?.map((value, valueIndex) => (
+                          <option key={valueIndex} value={value}>
+                            {value}
                           </option>
                         ))}
                       </Select>

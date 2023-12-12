@@ -1,4 +1,5 @@
-import { languages } from './languages';
+import { useCurrencies } from 'src/services/useCurrencies';
+import { useLanguages } from 'src/services/useLanguages';
 import { GameType } from 'types/game.type';
 
 export enum InputTypeEnum {
@@ -6,12 +7,16 @@ export enum InputTypeEnum {
   RADIO = 1,
   SELECT = 2,
 }
-
+enum selectType {
+  LANGUE = 'langue',
+  CURENCRY = 'curency',
+}
 type inputType = {
   type: InputTypeEnum;
   values?: string[];
   label?: string;
   placeHolder?: string;
+  selectType?: selectType;
 };
 
 type StepsType = {
@@ -24,6 +29,11 @@ type GameFieldConfigType = {
   [type in GameType]: {
     steps: Array<StepsType[]>;
   };
+};
+
+export const SelectTypeMappingMethode = {
+  [selectType.CURENCRY]: useCurrencies,
+  [selectType.LANGUE]: useLanguages,
 };
 
 export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
@@ -82,7 +92,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               type: InputTypeEnum.SELECT,
               placeHolder: 'Langues',
-              values: [],
+              selectType: selectType.LANGUE,
             },
           ],
         },
