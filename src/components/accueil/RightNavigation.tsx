@@ -8,12 +8,12 @@ import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
 import { CommentIcon } from '../activities/ActivityCard/CommentIcon';
 import { isMascotte } from 'src/activity-types/anyActivity';
+import { useWeather } from 'src/api/weather/weather.get';
 import { Map } from 'src/components/Map';
 import { icons, DESC } from 'src/components/activities/utils';
 import { UserContext } from 'src/contexts/userContext';
 import { useActivities } from 'src/services/useActivities';
 import { useActivity } from 'src/services/useActivity';
-import { useWeather } from 'src/services/useWeather';
 import { primaryColor } from 'src/styles/variables.const';
 import { getUserDisplayName, toDate } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
@@ -24,7 +24,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
   const router = useRouter();
   const [localTime, setLocalTime] = React.useState<string | null>(null);
   const { user } = React.useContext(UserContext);
-  const weather = useWeather({ activityUser });
+  const { data: weather } = useWeather({ latitude: activityUser.position.lat, longitude: activityUser.position.lng });
   const { activity: userMascotte } = useActivity(activityUser.mascotteId || -1);
   const { activities } = useActivities({
     limit: 200,
@@ -41,7 +41,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
 
   // ---- Get user weather and time ----
   React.useEffect(() => {
-    if (weather !== null) {
+    if (weather) {
       const timezone = weather.timezone;
       const updateLocalTime = () => {
         const time = new Date();
@@ -210,8 +210,12 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
             <Flag country={activityUser.country?.isoCode}></Flag> {activityUser.city}
           </div>
           {localTime}
-          <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />
-          {weather.temperature}°C
+          {weather && (
+            <>
+              <Image layout="fixed" width="100px" height="100px" objectFit="contain" src={weather.iconUrl} unoptimized />
+              {weather.temperature}°C
+            </>
+          )}
         </div>
       )}
       <div
