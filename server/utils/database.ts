@@ -23,6 +23,7 @@ async function createMySQLDB(): Promise<void> {
     const connection = mysql.createConnection({
       charset: 'utf8mb4_unicode_ci',
       host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT) || 3306,
       password: process.env.DB_PASS,
       user: process.env.DB_USER,
     });
