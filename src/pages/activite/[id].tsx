@@ -57,8 +57,13 @@ const Activity = () => {
 
   const title = (titles[activity.type] || (() => ''))(activity);
 
+  const rightNavContent =
+    activity?.type != ActivityType.CONTENU_LIBRE && !activity.displayAsUser ? (
+      <RightNavigation activityUser={activityUser} displayAsUser={activity.displayAsUser} />
+    ) : null;
+
   return (
-    <Base rightNav={<RightNavigation activityUser={activityUser} displayAsUser={activity.displayAsUser} />} hideLeftNav showSubHeader>
+    <Base rightNav={rightNavContent} hideLeftNav showSubHeader>
       <div className="activity__back-container">
         <Link href="/">
           <a className="activity__back-button">
