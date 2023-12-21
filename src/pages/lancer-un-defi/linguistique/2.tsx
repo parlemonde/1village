@@ -11,7 +11,7 @@ import { Steps } from 'src/components/Steps';
 import { getErrorSteps } from 'src/components/activities/defiLanguageChecks';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { replaceTokens } from 'src/utils';
+import { capitalize, replaceTokens } from 'src/utils';
 
 const DefiStep2 = () => {
   const router = useRouter();
@@ -53,7 +53,7 @@ const DefiStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[data.languageCode || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
+          steps={[capitalize(data.language) || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -75,7 +75,7 @@ const DefiStep2 = () => {
                 key={index}
                 label={l.title}
                 description={replaceTokens(l.desc1, {
-                  language: data.languageCode && data.languageCode.length > 0 ? data.languageCode : "<langue choisie à l'étape 1>",
+                  language: data.languageCode && data.languageCode.length > 0 ? capitalize(data.language) : "<langue choisie à l'étape 1>",
                 })}
                 onClick={onClick(index)}
               />

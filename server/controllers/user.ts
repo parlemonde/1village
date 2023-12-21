@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { LessThan, IsNull } from 'typeorm';
+import { In, IsNull, LessThan } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
@@ -365,6 +365,33 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   if (data.position) {
     user.position = data.position;
   }
+  if (data.villageId) {
+    if (user.type === UserType.TEACHER) {
+      const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
+
+      if (!classroom) return;
+
+      const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
+      const studentsId = students.map((student) => student.id);
+
+      const families = await AppDataSource.getRepository(UserToStudent).find({
+        where: { student: { id: In(studentsId) } },
+        relations: ['user', 'student'],
+      });
+
+      const familiesId = families.map((family) => family.user.id);
+
+      const promises = [];
+
+      promises.push(
+        AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
+        AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
+        AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
+      );
+
+      await Promise.all(promises);
+    }
+  }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
   user.hasStudentLinked = valueOrDefault(data.hasStudentLinked, user.hasStudentLinked);
@@ -422,15 +449,29 @@ userController.put({ path: '/:id/password', userType: UserType.OBSERVATOR }, asy
 // --- Delete an user. ---
 userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-  const userRepository = AppDataSource.getRepository(User);
+
   const classroomRepository = AppDataSource.getRepository(Classroom);
+
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await userRepository.findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
+
   if (!user || (!isSelfProfile && !isAdmin)) {
     res.status(204).send();
     return;
+  }
+
+  if (user.type === UserType.FAMILY && user.hasStudentLinked) {
+    const studentRelations = await AppDataSource.getRepository(UserToStudent).find({
+      relations: { student: true },
+      where: { user: { id: user.id } },
+      select: { student: { id: true } },
+    });
+
+    const studentsIds = studentRelations.map((studentRelation) => studentRelation.student.id);
+    await AppDataSource.getRepository(Student).update(studentsIds, { numLinkedAccount: () => 'numLinkedAccount - 1' });
   }
 
   const affectedUserIds: number[] = [];
@@ -806,10 +847,11 @@ userController.get({ path: '/:id/linked-students' }, async (req: Request, res: R
 userController.delete({ path: '/:userId/linked-students/:studentId' }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
 
+  const userToStudentRepository = AppDataSource.getRepository(UserToStudent);
   const userId = parseInt(req.params.userId, 10) || 0;
   const studentId = parseInt(req.params.studentId, 10) || 0;
 
-  const userToStudent = await AppDataSource.getRepository(UserToStudent).findOne({
+  const userToStudent = await userToStudentRepository.findOne({
     where: { user: { id: userId }, student: { id: studentId } },
     relations: ['user', 'student'],
   });
@@ -817,8 +859,8 @@ userController.delete({ path: '/:userId/linked-students/:studentId' }, async (re
   if (!userToStudent) {
     return res.status(404).json({ message: 'Le lien parent-étudiant n a pas été trouvé.' });
   }
-  // const { student } = userToStudent;
-  await AppDataSource.getRepository(UserToStudent).remove(userToStudent);
+
+  await userToStudentRepository.remove(userToStudent);
 
   return res.status(200).json({ message: 'Le lien parent-étudiant a été supprimé avec succès.' });
 });
