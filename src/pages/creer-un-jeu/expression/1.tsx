@@ -2,47 +2,44 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import type { SyntheticEvent } from 'react';
 
-import { TextField, Autocomplete, FormControlLabel, Grid, Radio, RadioGroup, FormControl } from '@mui/material';
-
-import { isDefi, isGame } from 'src/activity-types/anyActivity';
-import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.constants';
-import type { LanguageDefiData } from 'src/activity-types/defi.types';
-import { isExpression, DEFAULT_EXPRESSION_DATA, isMimic, DEFAULT_MIMIC_DATA } from 'src/activity-types/game.constants';
-import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
-import Play from 'src/components/game/Play';
-import MimicSelector from 'src/components/selectors/MimicSelector';
+import CreateGame from 'src/components/game/CreateGame';
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import { ActivityContext } from 'src/contexts/activityContext';
+import { useGame } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
-import { useActivity } from 'src/services/useActivity';
-import { useCurrencies } from 'src/services/useCurrencies';
-import { useLanguages } from 'src/services/useLanguages';
-import { capitalize, getUserDisplayName } from 'src/utils';
-import { axiosRequest } from 'src/utils/axiosRequest';
-import { normalizeString } from 'src/utils/isNormalizedStringEqual';
-import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { MimicData, MimicsData, ExpressionData, ExpressionsData } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
-// const getArticle = (language: string) => {
-//   if (language.length === 0) {
-//     return '';
-//   }
-//   if ('aeiou'.includes(language[0])) {
-//     return "l'";
-//   }
-//   return 'le ';
-// };
+const getArticle = (language: string) => {
+  if (!language) {
+    return '';
+  }
+  if (language.length === 0) {
+    return '';
+  }
+  if ('aeiou'.includes(language[0])) {
+    return "l'";
+  }
+  return 'le ';
+};
 
 const ExpressionStep1 = () => {
   const router = useRouter();
-  const { languages } = useLanguages();
-  const { currencies } = useCurrencies();
+  const { userSelection } = useGame();
+  const originalDescriptionTemplate = 'Dans votre classe, la langue parlée est : ';
+
+  function updateDescriptionWithSelection(userSelection: string) {
+    if (!userSelection) {
+      return originalDescriptionTemplate;
+    }
+
+    return `${originalDescriptionTemplate}${userSelection}`;
+  }
+
+  GAME_FIELDS_CONFIG[GameType.EXPRESSION].steps[0][1].description = updateDescriptionWithSelection(userSelection);
 
   const onNext = () => {
     router.push('/creer-un-jeu/expression/2');
@@ -51,8 +48,9 @@ const ExpressionStep1 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <BackButton href="/creer-un-jeu/expression" />
         <Steps
-          steps={['Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
+          steps={[userSelection || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
           urls={[
             '/creer-un-jeu/expression/1?edit',
             '/creer-un-jeu/expression/2',
@@ -62,9 +60,7 @@ const ExpressionStep1 = () => {
           ]}
           activeStep={0}
         />
-        <div>
-          <Play gameType={GameType.EXPRESSION} stepNumber={0} />
-        </div>
+        <CreateGame gameType={GameType.EXPRESSION} stepNumber={0} />
         <div className="width-900">{<StepsButton next={onNext} />}</div>
       </div>
     </Base>

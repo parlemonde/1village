@@ -1,5 +1,5 @@
-import { useCurrencies } from 'src/services/useCurrencies';
-import { useLanguages } from 'src/services/useLanguages';
+import { getCurrencies } from 'src/api/currencie/currencies.get';
+import { getLanguages } from 'src/api/language/languages.get';
 import { GameType } from 'types/game.type';
 
 export enum InputTypeEnum {
@@ -7,16 +7,19 @@ export enum InputTypeEnum {
   RADIO = 1,
   SELECT = 2,
 }
-enum selectType {
-  LANGUE = 'langue',
-  CURENCRY = 'curency',
-}
-type inputType = {
+
+export type inputType = {
+  id?: number;
   type: InputTypeEnum;
   values?: string[];
   label?: string;
   placeHolder?: string;
-  selectType?: selectType;
+  methodType?: methodType;
+  selectedValue?: string;
+  hidden?: {
+    id: number;
+    value: string;
+  };
 };
 
 type StepsType = {
@@ -31,9 +34,19 @@ type GameFieldConfigType = {
   };
 };
 
+enum methodType {
+  LANGUE = 'langue',
+  CURENCY = 'curency',
+}
+
+export const keyMapping = {
+  [methodType.CURENCY]: 'name',
+  [methodType.LANGUE]: 'french',
+};
+
 export const SelectTypeMappingMethode = {
-  [selectType.CURENCRY]: useCurrencies,
-  [selectType.LANGUE]: useLanguages,
+  [methodType.CURENCY]: getCurrencies,
+  [methodType.LANGUE]: getLanguages,
 };
 
 export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
@@ -90,14 +103,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Vous pourrez ensuite commencer votre défi.',
           inputs: [
             {
+              id: 0,
               type: InputTypeEnum.SELECT,
               placeHolder: 'Langues',
-              selectType: selectType.LANGUE,
+              methodType: methodType.LANGUE,
+              values: [],
             },
           ],
         },
         {
-          description: 'Dans votre classe, le fr est une langue :',
+          description: 'Dans votre classe, la langue parlée est : ',
           inputs: [
             {
               type: InputTypeEnum.RADIO,
@@ -124,6 +139,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               type: InputTypeEnum.INPUT,
               label: 'Écrivez la traduction “mot à mot” en français',
+              hidden: { id: 0, value: 'français' },
             },
             {
               type: InputTypeEnum.INPUT,
