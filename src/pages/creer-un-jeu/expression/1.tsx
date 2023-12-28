@@ -13,19 +13,6 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { GameType } from 'types/game.type';
 
-const getArticle = (language: string) => {
-  if (!language) {
-    return '';
-  }
-  if (language.length === 0) {
-    return '';
-  }
-  if ('aeiou'.includes(language[0])) {
-    return "l'";
-  }
-  return 'le ';
-};
-
 const ExpressionStep1 = () => {
   const router = useRouter();
   const { userSelection } = useGame();

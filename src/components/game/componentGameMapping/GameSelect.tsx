@@ -5,7 +5,6 @@ import { Autocomplete, FormControl, TextField } from '@mui/material';
 import type { inputType } from 'src/config/games/game';
 import { SelectTypeMappingMethode, keyMapping } from 'src/config/games/game';
 import { useGame } from 'src/contexts/gameContext';
-import { useLangageValue } from 'src/contexts/langageContext';
 import type { Currency } from 'types/currency.type';
 import type { Language } from 'types/language.type';
 
