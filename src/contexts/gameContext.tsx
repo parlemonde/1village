@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 interface GameContextType {
   userSelection: string;
-  setUserSelection: (message: string) => void;
+  setUserSelection: (value: string) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);

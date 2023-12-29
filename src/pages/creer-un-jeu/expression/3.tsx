@@ -29,7 +29,7 @@ const ExpressionStep3 = () => {
         <Steps
           steps={[userSelection || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
           urls={[
-            '/creer-un-jeu/expression/1?edit',
+            '/creer-un-jeu/expression/1',
             '/creer-un-jeu/expression/2',
             '/creer-un-jeu/expression/3',
             '/creer-un-jeu/expression/4',

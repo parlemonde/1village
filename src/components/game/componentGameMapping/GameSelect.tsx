@@ -9,15 +9,22 @@ import type { Currency } from 'types/currency.type';
 import type { Language } from 'types/language.type';
 
 const GameSelect = ({ input }: { input: inputType }) => {
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState<string[]>([]);
   const { setUserSelection } = useGame();
+
+  function mapOptionValue(optionValue: Currency | Language, key: string): string {
+    if (key in optionValue) {
+      return (optionValue as any)[key];
+    }
+    throw new Error(`Key '${key}' not found in optionValue`);
+  }
 
   useEffect(() => {
     const getValues = async () => {
       if (!input.methodType) return;
       const res = await SelectTypeMappingMethode[input.methodType]();
       const key = keyMapping[input.methodType];
-      const optionValues = res.map((optionValue: Currency[] | Language[]) => optionValue[key]);
+      const optionValues = res.map((optionValue) => mapOptionValue(optionValue, key));
       setValues(optionValues);
     };
     getValues();
@@ -29,8 +36,8 @@ const GameSelect = ({ input }: { input: inputType }) => {
         options={values}
         getOptionLabel={(option) => option}
         renderInput={(params) => <TextField {...params} label="Langue" variant="outlined" />}
-        onChange={(event, newValue) => {
-          setUserSelection(newValue);
+        onChange={(_event, newValue) => {
+          if (newValue) setUserSelection(newValue);
         }}
       />
     </FormControl>

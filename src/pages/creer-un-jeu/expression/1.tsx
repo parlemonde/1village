@@ -39,7 +39,7 @@ const ExpressionStep1 = () => {
         <Steps
           steps={[userSelection || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
           urls={[
-            '/creer-un-jeu/expression/1?edit',
+            '/creer-un-jeu/expression/1',
             '/creer-un-jeu/expression/2',
             '/creer-un-jeu/expression/3',
             '/creer-un-jeu/expression/4',
@@ -48,6 +48,7 @@ const ExpressionStep1 = () => {
           activeStep={0}
         />
         <CreateGame gameType={GameType.EXPRESSION} stepNumber={0} />
+        {userSelection.length > 0 ? <p>Vous avez choisi de jouer avec la langue : {userSelection}</p> : null}
         <div className="width-900">{<StepsButton next={onNext} />}</div>
       </div>
     </Base>

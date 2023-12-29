@@ -35,17 +35,17 @@ type GameFieldConfigType = {
 };
 
 enum methodType {
-  LANGUE = 'langue',
-  CURENCY = 'curency',
+  LANGUE = 'language',
+  CURRENCY = 'currency',
 }
 
 export const keyMapping = {
-  [methodType.CURENCY]: 'name',
+  [methodType.CURRENCY]: 'name',
   [methodType.LANGUE]: 'french',
 };
 
 export const SelectTypeMappingMethode = {
-  [methodType.CURENCY]: getCurrencies,
+  [methodType.CURRENCY]: getCurrencies,
   [methodType.LANGUE]: getLanguages,
 };
 
