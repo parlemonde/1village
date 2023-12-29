@@ -95,6 +95,24 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
     ],
   },
 
+  [GameType.MONEY]: {
+    steps: [
+      [
+        {
+          title: 'Choisissez votre monnaie',
+          description: 'Choisissez avec quelle monnaie vous allez donner le prix de vos objets : ',
+          inputs: [
+            {
+              type: InputTypeEnum.SELECT,
+              placeHolder: 'Monnaie',
+              values: [],
+            },
+          ],
+        },
+      ],
+    ],
+  },
+
   [GameType.EXPRESSION]: {
     steps: [
       [
@@ -134,12 +152,12 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           inputs: [
             {
               type: InputTypeEnum.INPUT,
-              label: 'Écrivez l’expression en',
+              label: 'Écrivez l’expression dans la langue que vous avez choisie',
             },
             {
               type: InputTypeEnum.INPUT,
               label: 'Écrivez la traduction “mot à mot” en français',
-              hidden: { id: 0, value: 'français' },
+              hidden: { id: 0, value: 'Français' },
             },
             {
               type: InputTypeEnum.INPUT,
@@ -177,6 +195,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               type: InputTypeEnum.INPUT,
               label: 'Écrivez la traduction “mot à mot” en français',
+              hidden: { id: 0, value: 'Français' },
             },
             {
               type: InputTypeEnum.INPUT,
@@ -214,6 +233,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               type: InputTypeEnum.INPUT,
               label: 'Écrivez la traduction “mot à mot” en français',
+              hidden: { id: 0, value: 'Français' },
             },
             {
               type: InputTypeEnum.INPUT,
@@ -248,32 +268,4 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
     ],
   },
-
-  [GameType.MONEY]: {
-    steps: [
-      [
-        {
-          title: 'Choisissez votre monnaie',
-          description: 'Choisissez avec quelle monnaie vous allez donner le prix de vos objets : ',
-          inputs: [
-            {
-              type: InputTypeEnum.SELECT,
-              placeHolder: 'Monnaie',
-              values: [],
-            },
-          ],
-        },
-      ],
-    ],
-  },
 };
-
-// GAME_FIELDS_CONFIG[GameType.MIMIC].steps[0].map(({title, description, inputs}, index) => {
-//  return (<>
-//  <div>{title}</div>
-//  <div>{description}</div>
-//  {inputs.map(input, index) => {
-//   console.log("tg")
-//   return <></>
-//  }})
-//  </>

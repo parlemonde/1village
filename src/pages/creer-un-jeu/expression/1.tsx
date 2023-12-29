@@ -48,7 +48,7 @@ const ExpressionStep1 = () => {
           activeStep={0}
         />
         <CreateGame gameType={GameType.EXPRESSION} stepNumber={0} />
-        {userSelection.length > 0 ? <p>Vous avez choisi de jouer avec la langue : {userSelection}</p> : null}
+        {userSelection.length > 0 ? <p className="width-900">Vous avez choisi de jouer avec la langue : {userSelection}</p> : null}
         <div className="width-900">{<StepsButton next={onNext} />}</div>
       </div>
     </Base>
