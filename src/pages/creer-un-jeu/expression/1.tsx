@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import type { SyntheticEvent } from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -8,7 +7,8 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import CreateGame from 'src/components/game/CreateGame';
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import { useGame } from 'src/contexts/gameContext';
+import { ActivityContext } from 'src/contexts/activityContext';
+import { useGame, gameResponse } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { GameType } from 'types/game.type';
@@ -17,6 +17,14 @@ const ExpressionStep1 = () => {
   const router = useRouter();
   const { userSelection } = useGame();
   const originalDescriptionTemplate = 'Dans votre classe, la langue parlée est : ';
+  const { user } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
+  const { activity } = React.useContext(ActivityContext);
+
+  React.useEffect(() => {
+    gameResponse.userId = user?.id;
+    gameResponse.villageId = village?.id;
+  }, [user, village]);
 
   function updateDescriptionWithSelection(userSelection: string) {
     if (!userSelection) {

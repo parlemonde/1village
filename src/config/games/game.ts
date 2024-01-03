@@ -110,6 +110,72 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           ],
         },
       ],
+      [
+        {
+          title: 'Choisissez un objet',
+          description: 'Choissisez un objet dont le prix moyen est faible',
+          inputs: [
+            { type: InputTypeEnum.INPUT, label: 'Quel est le nom de cet objet ?' },
+            { type: InputTypeEnum.INPUT, label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)' },
+            { type: InputTypeEnum.INPUT, label: 'À quoi sert cet objet ? Quand est-il acheté ?' },
+          ],
+        },
+        {
+          title: 'Inventez deux prix faux à cet objet',
+          description:
+            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
+          inputs: [
+            { type: InputTypeEnum.INPUT, placeHolder: 'Prix inventé 1' },
+            { type: InputTypeEnum.INPUT, placeHolder: 'Prix inventé 2' },
+          ],
+        },
+      ],
+      [
+        {
+          title: 'Choisissez un objet',
+          description: 'Choissisez un objet dont le prix moyen modéré',
+          inputs: [
+            { type: InputTypeEnum.INPUT, label: 'Quel est le nom de cet objet ?' },
+            { type: InputTypeEnum.INPUT, label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)' },
+            { type: InputTypeEnum.INPUT, label: 'À quoi sert cet objet ? Quand est-il acheté ?' },
+          ],
+        },
+        {
+          title: 'Inventez deux prix faux à cet objet',
+          description:
+            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
+          inputs: [
+            { type: InputTypeEnum.INPUT, placeHolder: 'Prix inventé 1' },
+            { type: InputTypeEnum.INPUT, placeHolder: 'Prix inventé 2' },
+          ],
+        },
+      ],
+      [
+        {
+          title: 'Choisissez un objet',
+          description: 'Choissisez un objet dont le prix moyen élevé',
+          inputs: [
+            { type: InputTypeEnum.INPUT, label: 'Quel est le nom de cet objet ?' },
+            { type: InputTypeEnum.INPUT, label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)' },
+            { type: InputTypeEnum.INPUT, label: 'À quoi sert cet objet ? Quand est-il acheté ?' },
+          ],
+        },
+        {
+          title: 'Inventez deux prix faux à cet objet',
+          description:
+            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
+          inputs: [
+            { type: InputTypeEnum.INPUT, placeHolder: 'Prix inventé 1' },
+            { type: InputTypeEnum.INPUT, placeHolder: 'Prix inventé 2' },
+          ],
+        },
+      ],
+      [
+        {
+          title: 'Pré-visualisez vos objets et publiez les !',
+          description: 'Vous pouvez modifier chaque objet si vous le souhaitez. Quand vous êtes prêts : publiez-les dans votre village-monde ! ',
+        },
+      ],
     ],
   },
 
@@ -153,16 +219,19 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               type: InputTypeEnum.INPUT,
               label: 'Écrivez l’expression dans la langue que vous avez choisie',
+              id: 0,
             },
             {
               type: InputTypeEnum.INPUT,
               label: 'Écrivez la traduction “mot à mot” en français',
               hidden: { id: 0, value: 'Français' },
+              id: 1,
             },
             {
               type: InputTypeEnum.INPUT,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
+              id: 2,
             },
           ],
         },
@@ -174,10 +243,12 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Signification inventée 1',
+              id: 3,
             },
             {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Signification inventée 2',
+              id: 4,
             },
           ],
         },

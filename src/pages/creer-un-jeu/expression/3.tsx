@@ -1,14 +1,11 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import type { SyntheticEvent } from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
 import { useGame } from 'src/contexts/gameContext';
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
 import { GameType } from 'types/game.type';
 
 const ExpressionStep3 = () => {
