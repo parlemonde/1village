@@ -4,7 +4,6 @@ import GameField from './componentGameMapping/GameField';
 import GameRadio from './componentGameMapping/GameRadio';
 import GameSelect from './componentGameMapping/GameSelect';
 import { GAME_FIELDS_CONFIG, InputTypeEnum } from 'src/config/games/game';
-import { gameResponse } from 'src/contexts/gameContext';
 import type { GameType } from 'types/game.type';
 
 interface PlayProps {
@@ -20,7 +19,6 @@ const ComponentMapping = {
 
 const CreateGame = ({ gameType, stepNumber }: PlayProps) => {
   const gameConfig = GAME_FIELDS_CONFIG[gameType];
-  console.log('gameResponse', gameResponse);
 
   if (!gameConfig || !gameConfig.steps[stepNumber]) {
     return <div>Oups, votre jeu n&apos;existe pas encore</div>;
