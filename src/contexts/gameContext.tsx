@@ -7,13 +7,13 @@ interface GameContextType {
 }
 
 interface GameResponseDataToSend {
-  gameId: number | string | undefined;
   userId: number | string | undefined;
   villageId: number | string | undefined;
   activityId?: number | string | undefined;
   gameType: string | number;
   data: GameData[];
-  userSelection?: string;
+  userSelection?: string | null;
+  radioSelection?: string | null;
   createDate?: Date | string;
   updateDate?: Date | string;
 }
@@ -32,11 +32,11 @@ interface Response {
 }
 
 export const gameResponse: GameResponseDataToSend = {
-  gameId: '',
   userId: '',
   villageId: '',
   activityId: '',
   gameType: '',
+  radioSelection: '',
   data: [
     {
       gameId: 1,
@@ -44,23 +44,23 @@ export const gameResponse: GameResponseDataToSend = {
       responses: [
         {
           id: 1,
-          value: '',
+          value: 'test',
         },
         {
           id: 2,
-          value: '',
+          value: 'id2',
         },
         {
           id: 3,
-          value: '',
+          value: 'id3',
         },
         {
           id: 4,
-          value: '',
+          value: 'id4',
         },
         {
           id: 5,
-          value: '',
+          value: 'id5',
         },
       ],
     },
