@@ -141,7 +141,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 0,
               type: InputTypeEnum.SELECT,
-              placeHolder: 'Monnaie',
+              placeHolder: 'Money',
+              methodType: methodType.CURRENCY,
               values: [],
             },
           ],

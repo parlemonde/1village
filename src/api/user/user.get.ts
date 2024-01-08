@@ -16,6 +16,17 @@ export const getUsers = async () => {
   return response.data;
 };
 
+export const getUser = async (userId: number) => {
+  const response = await axiosRequest({
+    method: 'GET',
+    url: `/users/${userId}`,
+  });
+  if (response.error) {
+    return [];
+  }
+  return response.data;
+};
+
 export const getLinkedStudentsToUser = async (userId: number) => {
   try {
     const response = await axiosRequest({

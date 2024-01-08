@@ -27,8 +27,8 @@ const PelicoProfil = () => {
                 Bonjour les Pélicopains,
                 <br />
                 <br />
-                Je suis Pélico, un toucan qui adore voyager ! Cette année, nous allons échanger tous ensemble sur 1Village. Avec Cécile, ma grande
-                amie, nous serons là toute l’année pour vous guider dans ce voyage.
+                Je suis Pélico, un toucan qui adore voyager ! Cette année, nous allons échanger tous ensemble sur 1Village. Mes amies et moi serons là
+                toute l’année pour vous guider dans ce voyage.
                 <br />
                 <br />
                 Vous vous demandez certainement pourquoi je m’appelle Pélico… alors que je ne suis pas un pélican ?

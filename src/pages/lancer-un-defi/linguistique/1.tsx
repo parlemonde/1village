@@ -90,41 +90,10 @@ const DefiStep1 = () => {
   }, [getMascotteId]);
 
   const mascotteLanguages = React.useMemo(() => {
-    if (!mascotte || !languages) {
-      return [
-        {
-          label: 'Français',
-          value: 'fr',
-        },
-      ];
-    }
-    const l =
-      [
-        ...(mascotte.data as MascotteData).fluentLanguages,
-        ...(mascotte.data as MascotteData).minorLanguages,
-        ...(mascotte.data as MascotteData).wantedForeignLanguages,
-      ] ?? [];
-    return l.reduce<{ label: string; value: string }[]>(
-      (acc, l) => {
-        if (l === 'fre') {
-          return acc;
-        }
-        const language = languages.find((o) => o.alpha3_b === l);
-        if (language) {
-          acc.push({
-            label: capitalize(language.french),
-            value: language.alpha3_b,
-          });
-        }
-        return acc;
-      },
-      [
-        {
-          label: 'Français',
-          value: 'fr',
-        },
-      ],
-    );
+    if (!mascotte || !languages) return [];
+    const mascotteData = mascotte.data as MascotteData;
+
+    return [...mascotteData.fluentLanguages, ...mascotteData.minorLanguages, ...mascotteData.wantedForeignLanguages];
   }, [mascotte, languages]);
 
   if (data === null || activity === null || !isDefi(activity) || (isDefi(activity) && !isLanguage(activity))) {
@@ -161,7 +130,7 @@ const DefiStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
-          steps={[data.languageCode || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
+          steps={[capitalize(data.language) || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
           urls={[
             '/lancer-un-defi/linguistique/1?edit',
             '/lancer-un-defi/linguistique/2',
@@ -186,39 +155,26 @@ const DefiStep1 = () => {
                     onChange={(e, value) => {
                       if (!value) return;
                       const formatedValue = value.alpha2.length > 0 ? value.alpha2 : value.alpha3_b;
-                      handleLanguage(e, formatedValue);
+                      handleLanguage(e, formatedValue); //TODO : Need to test this line
                     }}
                     options={languages.sort((a, b) => {
-                      const aFormated = a.alpha2.length === 2 ? a.alpha2.toLowerCase() : a.alpha3_b.toLowerCase();
-                      const bFormated = b.alpha2.length === 2 ? b.alpha2.toLowerCase() : b.alpha3_b.toLowerCase();
-
-                      if (
-                        mascotteLanguages.some((language) => aFormated === language.value.toLowerCase()) &&
-                        !mascotteLanguages.some((language) => bFormated === language.value.toLowerCase())
-                      )
-                        return -1;
-                      if (
-                        !mascotteLanguages.some((language) => aFormated === language.value.toLowerCase()) &&
-                        mascotteLanguages.some((language) => bFormated === language.value.toLowerCase())
-                      )
-                        return 1;
-
-                      return aFormated.toLowerCase().localeCompare(bFormated.toLowerCase());
+                      if (mascotteLanguages.includes(a.alpha3_b)) {
+                        return mascotteLanguages.includes(b.alpha3_b) ? -b.french.localeCompare(a.french) : -1;
+                      } else {
+                        return mascotteLanguages.includes(b.alpha3_b) ? 1 : -b.french.localeCompare(a.french);
+                      }
                     })}
+                    groupBy={(option) =>
+                      mascotteLanguages.find((mascotteLanguage) => mascotteLanguage === option.alpha2 || mascotteLanguage === option.alpha3_b)
+                        ? 'Langues parlées par votre mascotte'
+                        : 'Autres langues'
+                    }
+                    getOptionLabel={(option) => option.french}
                     filterOptions={(options, state) => {
                       return options.filter((option) =>
                         normalizeString(option.french).toLowerCase().startsWith(normalizeString(state.inputValue).toLowerCase()),
                       );
                     }}
-                    groupBy={(option) => {
-                      const optionFormated = option.alpha2.length === 2 ? option.alpha2 : option.alpha3_b;
-
-                      return mascotteLanguages.find((language) => optionFormated === language.value.toLowerCase())
-                        ? 'Langues parlées par votre mascotte'
-                        : 'Autres langues';
-                    }}
-                    getOptionLabel={(option) => option.french}
-                    sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Langues" />}
                   />
                 </FormControl>
@@ -229,7 +185,7 @@ const DefiStep1 = () => {
               <div style={{ margin: '1rem 0' }}>
                 <p className="text">
                   Dans votre classe, {getArticle(data.language ?? '')}
-                  {data.languageCode} est une langue :
+                  {data.language} est une langue :
                 </p>
                 <RadioGroup value={data.languageIndex} onChange={setLanguageIndex}>
                   {LANGUAGE_SCHOOL.map((l, index) => (

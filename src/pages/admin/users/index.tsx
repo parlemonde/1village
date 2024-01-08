@@ -15,6 +15,8 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
+import { getTeacherOfStudent } from 'src/api/student/student.get';
+import { getLinkedStudentsToUser } from 'src/api/user/user.get';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
@@ -24,7 +26,8 @@ import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-import { userTypeNames } from 'types/user.type';
+import type { User } from 'types/user.type';
+import { userTypeNames, UserType } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
@@ -41,6 +44,7 @@ const Users = () => {
   const [search, setSearch] = useState('');
   const [userTypeFilter, setUserTypeFilter] = useState('');
   const [countrySearch, setCountrySearch] = useState('');
+  const [tableData, setTableData] = useState<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }[]>([]);
 
   const filteredUsers = useMemo(
     () =>
@@ -53,6 +57,50 @@ const Users = () => {
       }),
     [users, search, userTypeFilter, countrySearch],
   );
+
+  React.useEffect(() => {
+    const fetchTableData = async () => {
+      const data = await Promise.all(
+        filteredUsers.map(async (u) => {
+          return {
+            id: u.id,
+            firstname: u.firstname,
+            lastname: u.lastname,
+            email: u.email,
+            school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
+            country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
+            village: u.villageId ? (
+              villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+            ) : (
+              <span style={{ color: 'grey' }}>Non assigné</span>
+            ),
+            type: <Chip size="small" label={userTypeNames[u.type]} />,
+          };
+        }),
+      );
+      setTableData(data);
+    };
+    fetchTableData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredUsers]);
+
+  const getUserSchool = async (user: User) => {
+    if (!user) return;
+    else if (user.type !== UserType.FAMILY) return user.school;
+
+    const linkedStudents = await getLinkedStudentsToUser(user.id);
+
+    if (linkedStudents.length === 0) return <span style={{ color: 'grey' }}>Aucun étudiant lié à ce compte</span>;
+
+    const studentsSchool = await Promise.all(
+      linkedStudents.map(async (linkedStudent) => {
+        if (!linkedStudent) return;
+        const teacher = await getTeacherOfStudent(linkedStudent.id);
+        return teacher.school;
+      }),
+    );
+    return studentsSchool.join(', ');
+  };
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -74,9 +122,9 @@ const Users = () => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
-        school: user.school ? user.school : 'Non renseignee',
-        village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigne',
-        country: user.country ? user.country.name : 'Non renseigne',
+        school: user.school ? user.school : 'Non renseignée',
+        village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigné',
+        country: user.country ? user.country.name : 'Non renseignée',
       };
     });
 
@@ -202,37 +250,8 @@ const Users = () => {
           </Button>
         </div>
         <AdminTable
-          emptyPlaceholder="Vous n'avez pas encore d'utilisateur !"
-          data={filteredUsers.map((u) =>
-            u.country
-              ? {
-                  id: u.id,
-                  firstname: u.firstname,
-                  lastname: u.lastname,
-                  email: u.email,
-                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
-                  country: `${countryToFlag(u.country?.isoCode)} ${u.country?.name}`,
-                  village: u.villageId ? (
-                    villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-                  ) : (
-                    <span style={{ color: 'grey' }}>Non assigné</span>
-                  ),
-                  type: <Chip size="small" label={userTypeNames[u.type]} />,
-                }
-              : {
-                  id: u.id,
-                  firstname: u.firstname,
-                  lastname: u.lastname,
-                  email: u.email,
-                  school: u.school || <span style={{ color: 'grey' }}>Non renseignée</span>,
-                  village: u.villageId ? (
-                    villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-                  ) : (
-                    <span style={{ color: 'grey' }}>Non assigné</span>
-                  ),
-                  type: <Chip size="small" label={userTypeNames[u.type]} />,
-                },
-          )}
+          emptyPlaceholder={filteredUsers.length > 0 ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
+          data={tableData}
           columns={[
             { key: 'firstname', label: 'Prénom', sortable: true },
             { key: 'lastname', label: 'Nom', sortable: true },
