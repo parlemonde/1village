@@ -18,7 +18,7 @@ const activities = [
     label: 'Jeu de la monnaie',
     href: '/creer-un-jeu/monnaie',
     icon: MonnaieIcon,
-    disabled: true,
+    disabled: false,
     disabledText: 'Bientôt disponible',
   },
   {

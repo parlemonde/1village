@@ -103,8 +103,10 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Choisissez avec quelle monnaie vous allez donner le prix de vos objets : ',
           inputs: [
             {
+              id: 0,
               type: InputTypeEnum.SELECT,
-              placeHolder: 'Monnaie',
+              placeHolder: 'Money',
+              methodType: methodType.CURRENCY,
               values: [],
             },
           ],
