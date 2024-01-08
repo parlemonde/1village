@@ -7,7 +7,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import CreateGame from 'src/components/game/CreateGame';
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import { useGame, gameResponse } from 'src/contexts/gameContext';
+import { useGame, gameResponse, saveGameResponseInSessionStorage } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { GameType } from 'types/game.type';
@@ -22,6 +22,7 @@ const ExpressionStep1 = () => {
   React.useEffect(() => {
     gameResponse.userId = user?.id;
     gameResponse.villageId = village?.id;
+    saveGameResponseInSessionStorage(gameResponse);
   }, [user, village]);
 
   function updateDescriptionWithSelection(userSelection: string) {

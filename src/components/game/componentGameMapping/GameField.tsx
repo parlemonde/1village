@@ -3,7 +3,7 @@ import React from 'react';
 import { TextField } from '@mui/material';
 
 import type { inputType } from 'src/config/games/game';
-import { useGame, gameResponse } from 'src/contexts/gameContext';
+import { useGame, gameResponse, saveGameResponseInSessionStorage } from 'src/contexts/gameContext';
 
 const GameField = ({ input, stepNumber }: { input: inputType; stepNumber: number }) => {
   const { userSelection } = useGame();
@@ -12,10 +12,10 @@ const GameField = ({ input, stepNumber }: { input: inputType; stepNumber: number
 
   const handleChange = (event: React.SyntheticEvent) => {
     const newValue = (event.target as HTMLInputElement).value;
-    // gameResponse.data[stepNumber - 1].responses[input.id].value = newValue;
     const stepResponse = gameResponse.data[stepNumber - 1];
     if (stepResponse && stepResponse.responses && stepResponse.responses[input.id]) {
       stepResponse.responses[input.id].value = newValue;
+      saveGameResponseInSessionStorage(gameResponse);
     }
   };
 

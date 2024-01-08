@@ -4,7 +4,7 @@ import { Autocomplete, FormControl, TextField } from '@mui/material';
 
 import type { inputType } from 'src/config/games/game';
 import { SelectTypeMappingMethode, keyMapping } from 'src/config/games/game';
-import { useGame, gameResponse } from 'src/contexts/gameContext';
+import { useGame, gameResponse, saveGameResponseInSessionStorage } from 'src/contexts/gameContext';
 import type { Currency } from 'types/currency.type';
 import type { Language } from 'types/language.type';
 
@@ -35,10 +35,11 @@ const GameSelect = ({ input }: { input: inputType }) => {
       <Autocomplete
         options={values}
         getOptionLabel={(option) => option}
-        renderInput={(params) => <TextField {...params} label="Langue" variant="outlined" />}
+        renderInput={(params) => <TextField {...params} label={input.placeHolder} variant="outlined" />}
         onChange={(_event, newValue) => {
           if (newValue) setUserSelection(newValue);
           gameResponse.userSelection = newValue;
+          saveGameResponseInSessionStorage(gameResponse);
         }}
       />
     </FormControl>

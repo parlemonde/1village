@@ -5,12 +5,24 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
+// import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
 import { useGame } from 'src/contexts/gameContext';
 import { GameType } from 'types/game.type';
 
 const ExpressionStep2 = () => {
   const router = useRouter();
   const { userSelection } = useGame();
+  // const originalLabelTemplate = 'Écrivez l’expression en ';
+
+  // function updateLabelWithSelection(userSelection: string) {
+  //   if (!userSelection) {
+  //     return originalLabelTemplate;
+  //   }
+
+  //   return `${originalLabelTemplate}${userSelection}`;
+  // }
+
+  // GAME_FIELDS_CONFIG[GameType.EXPRESSION].steps[1][0].inputs![0].label = updateLabelWithSelection(userSelection).toLowerCase();
 
   const onNext = () => {
     router.push('/creer-un-jeu/expression/3');
