@@ -37,6 +37,9 @@ const ExpressionStep5 = () => {
         <div>
           <CreateGame gameType={GameType.EXPRESSION} stepNumber={4} />
         </div>
+        {/* Imaginons qu'à cette page, les 3 jeux sont terminés mais pour une raison quelconque 
+        le prof n'a pas publier ou pu publier, est-ce qu'on peut faire une requete qui detecte
+        que lorsqu'on arrive sur cette page, le jeu est inscrit dans la bdd en draft ? */}
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>
     </Base>

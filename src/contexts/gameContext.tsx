@@ -7,18 +7,18 @@ interface GameContextType {
 }
 
 interface GameResponseDataToSend {
-  gameId: number | string | undefined;
   userId: number | string | undefined;
   villageId: number | string | undefined;
   activityId?: number | string | undefined;
   gameType: string | number;
   data: GameData[];
-  userSelection?: string;
+  userSelection?: string | null;
+  radioSelection?: string | null;
   createDate?: Date | string;
   updateDate?: Date | string;
+  deleteDate?: Date | string;
+  status?: string | number;
 }
-
-// Dans la table activity il y a comme colonne id, type, subtype, phase, status, createDate, updateDate, deleteDate, data, content, userId, villageId, responseActivityId, responseType, isPinned, displayAsUser, isVisibleToParent
 
 interface GameData {
   gameId: number;
@@ -32,11 +32,15 @@ interface Response {
 }
 
 export const gameResponse: GameResponseDataToSend = {
-  gameId: '',
   userId: '',
   villageId: '',
   activityId: '',
   gameType: '',
+  radioSelection: '',
+  status: 1,
+  createDate: '',
+  updateDate: '',
+  deleteDate: '',
   data: [
     {
       gameId: 1,
@@ -44,23 +48,23 @@ export const gameResponse: GameResponseDataToSend = {
       responses: [
         {
           id: 1,
-          value: '',
+          value: 'test',
         },
         {
           id: 2,
-          value: '',
+          value: 'id2',
         },
         {
           id: 3,
-          value: '',
+          value: 'id3',
         },
         {
           id: 4,
-          value: '',
+          value: 'id4',
         },
         {
           id: 5,
-          value: '',
+          value: 'id5',
         },
       ],
     },
@@ -120,7 +124,7 @@ export const gameResponse: GameResponseDataToSend = {
   userSelection: '',
 };
 
-const GameContext = createContext<GameContextType | undefined>(undefined);
+export const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export function useGame() {
   const context = useContext(GameContext);
@@ -128,6 +132,10 @@ export function useGame() {
     throw new Error('useGame must be used within a GameProvider');
   }
   return context;
+}
+
+export function saveGameResponseInSessionStorage(gameResponse: GameResponseDataToSend) {
+  sessionStorage.setItem('gameResponse', JSON.stringify(gameResponse));
 }
 
 interface GameProviderProps {
