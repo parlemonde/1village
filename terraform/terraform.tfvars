@@ -1,0 +1,8 @@
+//aws_region    = "eu-west-3"
+//access_key    = ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
+//secret_key    = ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
+vpc_id                = "vpc-d2d538ba"
+subnet_id             = "subnet-d5a1d598"
+ami_id                = "ami-072056ff9d3689e7b"
+instance_type         = "t2.micro"
+ec2_availability_zone = "eu-west-3c"
