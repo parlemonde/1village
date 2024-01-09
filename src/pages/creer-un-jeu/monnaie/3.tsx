@@ -23,8 +23,8 @@ const MonnaieStep3 = () => {
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-      <Steps
-          steps={[userSelection || 'Langue', 'Objet 1', 'Objet 2', 'Objet 3', 'Prévisualisation']}
+        <Steps
+          steps={[userSelection || 'Monnaie', 'Objet 1', 'Objet 2', 'Objet 3', 'Prévisualisation']}
           urls={[
             '/creer-un-jeu/monnaie/1',
             '/creer-un-jeu/monnaie/2',
