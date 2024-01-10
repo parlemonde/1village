@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Button } from '@mui/material';
+import { Button, Pagination, Stack } from '@mui/material';
 
 import { ActivityCard } from './ActivityCard';
 import { isAnthem } from 'src/activity-types/anyActivity';
@@ -38,11 +38,19 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
       }, {}),
     [users],
   );
+  const [page, setPage] = useState<number>(1);
+  const handlePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+  const activitiesPerPage = 5;
+  const startIdx = (page - 1) * activitiesPerPage;
+  const endIdx = startIdx + activitiesPerPage;
 
   return (
     <div>
       {activities
         .filter((activity) => !isAnthem(activity))
+        .slice(startIdx, endIdx)
         .map((activity, index) => {
           const card = (
             <ActivityCard
@@ -139,6 +147,9 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
           }
           return card;
         })}
+      <Stack spacing={2} alignItems="center">
+        <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
+      </Stack>
     </div>
   );
 };
