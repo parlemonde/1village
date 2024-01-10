@@ -66,5 +66,3 @@ docker-compose.build.yml
 docker-compose.bdd.yml
 
 *.http
-
-docker-compose-windows.yml
