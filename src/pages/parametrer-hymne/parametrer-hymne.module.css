@@ -1,0 +1,17 @@
+.mainContainer{
+    width: 100%;
+    padding: 0.5rem 1rem 1rem 1rem;
+}
+
+.trackSelectionContainer {
+    width: 900px;
+}
+
+.trackSelectionTitle {
+    margin: 25px 0;
+}
+
+.trackSelectionBackdrop {
+    z-index: 2000;
+    color: white;
+}

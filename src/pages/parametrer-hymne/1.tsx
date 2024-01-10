@@ -5,6 +5,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import styles from './parametrer-hymne.module.css';
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
 import type { AnthemData, Track } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
@@ -78,21 +79,21 @@ const AnthemStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <div className={styles.mainContainer}>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           activeStep={0}
           urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
-        <div className="width-900">
+        <div className={styles.trackSelectionContainer}>
           <h1>Mettre en ligne les pistes sonores du couplet</h1>
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <p style={{ margin: '25px 0 25px' }}>La piste vocal du couplet, La La.</p>
+          <div>
+            <p className={styles.trackSelectionTitle}>La piste vocal du couplet, La La.</p>
             {data &&
               (data.tracks || []).map((track, idx) => (
                 <React.Fragment key={idx}>
-                  {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
+                  {idx === 1 && <div className={styles.trackSelectionTitle}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <AnthemTrack id={idx} track={track} updateTrackInActivity={updateTrackInActivity}></AnthemTrack>
                 </React.Fragment>
               ))}
@@ -100,7 +101,7 @@ const AnthemStep1 = () => {
         </div>
       </div>
       <StepsButton next={onNext} />
-      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
+      <Backdrop className={styles.trackSelectionBackdrop} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>
