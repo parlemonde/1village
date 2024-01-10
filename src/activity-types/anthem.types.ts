@@ -1,8 +1,8 @@
 import type { Activity } from 'types/activity.type';
 
 export type AnthemData = {
-  verseAudios: Sample[];
-  introOutro: Sample[];
+  verseAudios: Track[];
+  introOutro: Track[];
   verseLyrics: Syllable[];
   chorus: Syllable[];
   finalVerse: string;
@@ -15,15 +15,15 @@ export type Syllable = {
   back: boolean;
 };
 
-export type Sample = {
+export type Track = {
   value: string;
   display: boolean;
   label: string;
-  type: SampleType;
+  type: TrackType;
   time: number;
 };
 
-export enum SampleType {
+export enum TrackType {
   VOCALS = 0,
   HARMONIC1 = 1,
   HARMONIC2 = 2,

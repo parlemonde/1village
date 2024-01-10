@@ -1,52 +1,52 @@
-import { SampleType } from './anthem.types';
+import { TrackType } from './anthem.types';
 import type { AnthemData } from './anthem.types';
 
 export const DEFAULT_ANTHEM_DATA: AnthemData = {
   verseAudios: [
     {
-      type: SampleType.VOCALS,
+      type: TrackType.VOCALS,
       value: '',
       label: 'Piste vocale La La',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.HARMONIC1,
+      type: TrackType.HARMONIC1,
       value: '',
       label: 'Piste harmonique 1',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.HARMONIC2,
+      type: TrackType.HARMONIC2,
       value: '',
       label: 'Piste harmonique 2',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.MELODIC1,
+      type: TrackType.MELODIC1,
       value: '',
       label: 'Piste mélodique 1',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.MELODIC2,
+      type: TrackType.MELODIC2,
       value: '',
       label: 'Piste mélodique 2',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.RYTHMIC1,
+      type: TrackType.RYTHMIC1,
       value: '',
       label: 'Piste rythmique 1',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.RYTHMIC2,
+      type: TrackType.RYTHMIC2,
       value: '',
       label: 'Piste rythmique 2',
       display: false,
@@ -55,14 +55,14 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
   ],
   introOutro: [
     {
-      type: SampleType.INTRO_CHORUS,
+      type: TrackType.INTRO_CHORUS,
       value: '',
       label: 'Piste intro + refrain chanté',
       display: false,
       time: 0,
     },
     {
-      type: SampleType.OUTRO,
+      type: TrackType.OUTRO,
       value: '',
       label: 'Piste outro',
       display: false,
