@@ -61,15 +61,15 @@ const AnthemStep1 = () => {
 
   const onUpdateVerseAudios = (index: number) => (newValue: string) => {
     const tracks = [...data.tracks];
-    tracks[index] = { ...tracks[index], value: newValue, display: newValue === '' ? false : tracks[index].display };
+    tracks[index] = { ...tracks[index], sampleUrl: newValue };
     updateActivity({ data: { ...data, tracks } });
   };
 
   const onNext = async () => {
     setIsLoading(true);
-    if (activity !== null && data.tracks.filter((c) => !!c.value).length === 7) {
-      const value = await mixAudios(data.tracks, axiosRequest);
-      updateActivity({ data: { ...data, finalVerse: value, verseTime: Math.max(0, ...Object.values(times)) } });
+    if (activity !== null && data.tracks.filter((c) => !!c.sampleUrl).length === 7) {
+      const sampleUrl = await mixAudios(data.tracks, axiosRequest);
+      updateActivity({ data: { ...data, finalVerse: sampleUrl, verseTime: Math.max(0, ...Object.values(times)) } });
     }
     save().catch(console.error);
     setIsLoading(false);
