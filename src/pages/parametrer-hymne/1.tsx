@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { AnthemData, Track } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -59,9 +59,9 @@ const AnthemStep1 = () => {
     );
   }
 
-  const onUpdateVerseAudios = (index: number) => (newValue: string) => {
+  const updateTrackInActivity = (index: number, track: Track) => {
     const tracks = [...data.tracks];
-    tracks[index] = { ...tracks[index], sampleUrl: newValue };
+    tracks[index] = track;
     updateActivity({ data: { ...data, tracks } });
   };
 
@@ -90,10 +90,10 @@ const AnthemStep1 = () => {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p style={{ margin: '25px 0 25px' }}>La piste vocal du couplet, La La.</p>
             {data &&
-              (data.tracks || []).map((audio, idx) => (
+              (data.tracks || []).map((track, idx) => (
                 <React.Fragment key={idx}>
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
-                  <AnthemTrack></AnthemTrack>
+                  <AnthemTrack id={idx} track={track} updateTrackInActivity={updateTrackInActivity}></AnthemTrack>
                 </React.Fragment>
               ))}
           </div>
