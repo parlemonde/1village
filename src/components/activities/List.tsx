@@ -39,7 +39,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
     [users],
   );
   const [page, setPage] = useState<number>(1);
-  const handlePage = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePage = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
