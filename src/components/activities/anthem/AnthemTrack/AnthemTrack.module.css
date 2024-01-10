@@ -1,0 +1,41 @@
+.trackContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 2rem;
+}
+
+.trackContainer > button {
+    justify-content: flex-start;
+    box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.1);
+    color: black;
+    font-weight: bold;
+    font-size: .9rem;
+}
+
+.trackPicture button, .trackPicture > span > span{
+    border: 1px solid gray;
+    border-radius: 1rem;
+    padding: 0; margin: 0;
+    background-color: white;
+    font-size: 10rem;
+}
+
+.trackPicture button {
+    padding: .5rem
+}
+
+.trackPicture > span > span > svg{
+    font-size: 1rem;
+}
+
+.trackLabel input, .trackLabel > span {
+    box-sizing: border-box;
+    width: 180px;
+    padding-left: 10px;
+    display: block;
+}
+
+.trackLabel input {
+    padding: 1rem 0 1rem 10px;
+}
