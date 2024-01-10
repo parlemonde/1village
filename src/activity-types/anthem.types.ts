@@ -12,8 +12,7 @@ export type Syllable = {
 };
 
 export type Track = {
-  value: string;
-  display: boolean;
+  sampleUrl: string;
   label: string;
   type: TrackType;
   time: number;
