@@ -11,6 +11,7 @@ import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -92,74 +93,7 @@ const AnthemStep1 = () => {
               (data.verseAudios || []).map((audio, idx) => (
                 <React.Fragment key={idx}>
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                    {React.createElement(musicIcons[idx], { key: `descimg--${idx}` })}
-                    <div style={{ width: '200px', marginLeft: '10px' }}>
-                      {editingIndex === idx ? (
-                        <input
-                          type="text"
-                          value={audio.label}
-                          onBlur={() => {
-                            if (audio.label.trim() !== '') {
-                              setEditingIndex(null);
-                            }
-                          }}
-                          onChange={(e) => {
-                            data.verseAudios[idx].label = e.target.value;
-                            updateActivity({ data: { ...data } });
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              if (audio.label.trim() !== '') {
-                                setEditingIndex(null);
-                              }
-                            }
-                          }}
-                          autoFocus
-                        />
-                      ) : (
-                        <span onClick={() => setEditingIndex(idx)}>{audio.label}</span>
-                      )}
-                    </div>
-                    <div>
-                      {data.verseAudios[idx].display && (
-                        <AnthemEditor
-                          key={`anthem-edit--${idx}`}
-                          value={audio.value}
-                          onChange={onUpdateVerseAudios(idx)}
-                          onDelete={() => {
-                            onUpdateVerseAudios(idx)('');
-                          }}
-                          setTime={(time) => {
-                            setTimes({ ...times, [idx]: time });
-                          }}
-                          idx={idx}
-                          edit
-                        />
-                      )}
-                      {!audio.value && (
-                        <Button
-                          onClick={() => {
-                            data.verseAudios[idx].display = true;
-                            updateActivity({ data: { ...data } });
-                          }}
-                          variant="text"
-                          className="navigation__button full-width"
-                          style={{
-                            justifyContent: 'flex-start',
-                            width: 'auto',
-                            boxShadow: '0px 4px 7px rgba(0, 0, 0, 0.1)',
-                            color: 'black',
-                            fontWeight: 'bold',
-                          }}
-                          endIcon={<SoundIcon />}
-                        >
-                          Ajouter un son
-                        </Button>
-                      )}
-                    </div>
-                  </div>
+                  <AnthemTrack></AnthemTrack>
                 </React.Fragment>
               ))}
           </div>
