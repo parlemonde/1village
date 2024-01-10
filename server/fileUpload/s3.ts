@@ -72,7 +72,7 @@ export class AwsS3 {
       sslEnabled: process.env.S3_USE_SSL === 'true',
     };
     if (process.env.USE_MINIO) {
-      s3config.endpoint = 'http://minio:9000';
+      s3config.endpoint = 'http://localhost:9000';
     }
     this.s3 = new AWS.S3(s3config);
     this.initialized = true;
