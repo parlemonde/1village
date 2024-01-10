@@ -9,7 +9,7 @@ import type { AnthemData } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
+import { AnthemEditor } from 'src/components/activities/content/editors/AnthemTrackSampleEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import TrackIcon from 'src/svg/anthem/track.svg';
 import Vocal from 'src/svg/anthem/vocal.svg';

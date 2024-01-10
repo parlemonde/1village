@@ -5,6 +5,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Button, Divider, TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
+import type { Track } from 'src/activity-types/anthem.types';
 import { Modal } from 'src/components/Modal';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -12,9 +13,9 @@ import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
-export interface AnthemEditorProps {
+export interface AnthemTrackSampleEditorProps {
   value?: string;
-  onChange?(newValue: string): void;
+  onChange?(id: number, track: Track): void;
   onDelete?(): void;
   onPause?(): void;
   onPlay?(): void;
@@ -25,7 +26,7 @@ export interface AnthemEditorProps {
   audio?: boolean;
 }
 
-const AnthemEditorWithRef = (
+const AnthemTrackSampleEditorWithRef = (
   {
     value = '',
     onChange = () => {},
@@ -36,7 +37,7 @@ const AnthemEditorWithRef = (
     onPause = () => {},
     idx = 0,
     edit = false,
-  }: AnthemEditorProps,
+  }: AnthemTrackSampleEditorProps,
   ref?: React.ForwardedRef<HTMLAudioElement | null>,
 ) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -285,4 +286,4 @@ const AnthemEditorWithRef = (
   );
 };
 
-export const AnthemEditor = React.forwardRef(AnthemEditorWithRef);
+export const AnthemTrackSampleEditor = React.forwardRef(AnthemTrackSampleEditorWithRef);

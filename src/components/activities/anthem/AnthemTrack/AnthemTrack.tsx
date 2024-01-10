@@ -4,9 +4,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import PianoIcon from '@mui/icons-material/Piano';
 import { Badge, Button, ButtonBase, TextField } from '@mui/material';
 
+import { AnthemTrackSampleEditor } from '../../content/editors/AnthemTrackSampleEditor';
 import styles from './AnthemTrack.module.css';
 import type { Track } from 'src/activity-types/anthem.types';
-// import { AnthemSampleEditor } from 'src/components/activities/content/editors/AnthemSampleEditor/AnthemSampleEditor';
 
 interface AnthemTrackProps {
   id: number;
@@ -16,7 +16,7 @@ interface AnthemTrackProps {
 
 const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
-  const [isAnthemSampleEditorModalOpen, setIsAnthemSampleEditorModalOpen] = React.useState(false);
+  const [isAnthemTrackSampleEditorModalOpen, setIsAnthemTrackSampleEditorModalOpen] = React.useState(false);
 
   return (
     <div className={styles.trackContainer}>
@@ -52,7 +52,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
       {!track.sampleUrl && (
         <Button
           onClick={() => {
-            setIsAnthemSampleEditorModalOpen(true);
+            setIsAnthemTrackSampleEditorModalOpen(true);
           }}
           variant="text"
           endIcon={<div></div>}
@@ -60,23 +60,22 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
           Ajouter un son
         </Button>
       )}
-      {/* {isAnthemSampleEditorModalOpen && (
-            <AnthemSampleEditor
-              value={track.sampleUrl}
-              edit
-              setTime={(time) => {
-                setTimes({ ...times, [editingSampleIndex]: time });
-              }}
-              onChange={updateSample}
-              onDelete={() => {
-                onUpdateVerseAudios(editingSampleIndex)('');
-              }}
-              onClose={() => {
-                setEditingSampleIndex(null);
-                setIsAnthemEditorModalOpen(false);
-              }}
-            />
-          )} */}
+      {isAnthemTrackSampleEditorModalOpen && (
+        <AnthemTrackSampleEditor
+          value={track.sampleUrl}
+          edit
+          //   setTime={(time) => {
+          //     setTimes({ ...times, [editingSampleIndex]: time });
+          //   }}
+          onChange={updateTrackInActivity}
+          onDelete={() => {
+            updateTrackInActivity(id, { ...track, sampleUrl: '' });
+          }}
+          onClose={() => {
+            setIsAnthemTrackSampleEditorModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };

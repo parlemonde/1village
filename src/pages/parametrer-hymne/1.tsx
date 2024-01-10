@@ -13,7 +13,6 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
-import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import DrumIcon from 'src/svg/anthem/drum.svg';
@@ -68,9 +67,9 @@ const AnthemStep1 = () => {
 
   const onNext = async () => {
     setIsLoading(true);
-    if (activity !== null && data.tracks.filter((c) => !!c.sampleUrl).length === 7) {
+    if (activity !== null && data.tracks.filter((track) => !!track.sampleUrl).length === 7) {
       const sampleUrl = await mixAudios(data.tracks, axiosRequest);
-      updateActivity({ data: { ...data, finalVerse: sampleUrl, verseTime: Math.max(0, ...Object.values(times)) } });
+      // updateActivity({ data: { ...data, finalVerse: sampleUrl, verseTime: Math.max(0, ...Object.values(times)) } });
     }
     save().catch(console.error);
     setIsLoading(false);
