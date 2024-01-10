@@ -60,15 +60,15 @@ const AnthemStep1 = () => {
   }
 
   const onUpdateVerseAudios = (index: number) => (newValue: string) => {
-    const verseAudios = [...data.verseAudios];
-    verseAudios[index] = { ...verseAudios[index], value: newValue, display: newValue === '' ? false : verseAudios[index].display };
-    updateActivity({ data: { ...data, verseAudios } });
+    const tracks = [...data.tracks];
+    tracks[index] = { ...tracks[index], value: newValue, display: newValue === '' ? false : tracks[index].display };
+    updateActivity({ data: { ...data, tracks } });
   };
 
   const onNext = async () => {
     setIsLoading(true);
-    if (activity !== null && data.verseAudios.filter((c) => !!c.value).length === 7) {
-      const value = await mixAudios(data.verseAudios, axiosRequest);
+    if (activity !== null && data.tracks.filter((c) => !!c.value).length === 7) {
+      const value = await mixAudios(data.tracks, axiosRequest);
       updateActivity({ data: { ...data, finalVerse: value, verseTime: Math.max(0, ...Object.values(times)) } });
     }
     save().catch(console.error);
@@ -90,7 +90,7 @@ const AnthemStep1 = () => {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p style={{ margin: '25px 0 25px' }}>La piste vocal du couplet, La La.</p>
             {data &&
-              (data.verseAudios || []).map((audio, idx) => (
+              (data.tracks || []).map((audio, idx) => (
                 <React.Fragment key={idx}>
                   {idx === 1 && <div style={{ margin: '25px 0 25px' }}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
                   <AnthemTrack></AnthemTrack>
