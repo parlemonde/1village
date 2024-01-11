@@ -55,7 +55,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
         )}
       </div>
 
-      {track.sampleUrl ? (
+      {!track.sampleUrl ? (
         <Button
           onClick={() => {
             setIsAnthemTrackSampleEditorModalOpen(true);
@@ -67,15 +67,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
         </Button>
       ) : (
         <div style={{ display: 'flex' }}>
-          <audio
-            controls
-            src={soundUrl}
-            ref={audioRef}
-            onPlay={onPlay}
-            onPause={onPause}
-            onLoadedMetadata={onLoadedMetadata}
-            style={{ width: '250px', height: '3000px' }}
-          >
+          <audio controls src={track.sampleUrl} style={{ width: '250px', height: '30px' }}>
             <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
           </audio>
           <EditButton //add edit condition ??
@@ -90,7 +82,10 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
             color="red"
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"
-            onDelete={onDelete}
+            onDelete={() => {
+              updateTrackInActivity(id, { ...track, sampleUrl: '' });
+              setIsAnthemTrackSampleEditorModalOpen(false);
+            }}
           />
         </div>
       )}

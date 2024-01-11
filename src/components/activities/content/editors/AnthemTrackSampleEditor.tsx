@@ -159,130 +159,93 @@ const AnthemTrackSampleEditorWithRef = (
   };
 
   return (
-    <>
-      {soundUrl && (
-        <>
-          <div style={{ display: 'flex' }}>
-            <audio
-              controls
-              src={soundUrl}
-              ref={audioRef}
-              onPlay={onPlay}
-              onPause={onPause}
-              onLoadedMetadata={onLoadedMetadata}
-              style={{ width: '250px', height: '3000px' }}
-            >
-              <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
-            </audio>
-            {edit && (
-              <EditButton
-                style={{ marginLeft: '12px' }}
-                size="small"
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
-              />
-            )}
-            {edit && (
-              <DeleteButton
-                style={{ marginLeft: '6px' }}
-                color="red"
-                confirmTitle="Supprimer ce son ?"
-                confirmLabel="Voulez-vous vraiment supprimer ce son ?"
-                onDelete={onDelete}
-              ></DeleteButton>
-            )}
-          </div>
-        </>
-      )}
-      <Modal
-        open={isModalOpen}
-        fullWidth
-        noCloseOutsideModal
-        maxWidth="md"
-        title="Choisir un son"
-        confirmLabel="Choisir"
-        onConfirm={async () => {
-          if (file !== null) {
-            await uploadSound();
-          } else {
-            onChangeSound(tempSoundUrl);
-          }
-          setIsModalOpen(false);
-          resetPreview();
-        }}
-        onClose={() => {
-          onClose(idx);
-          setIsModalOpen(false);
-          resetPreview();
-          if (soundUrl.length === 0) {
-            onDelete();
-          }
-        }}
-        loading={isModalLoading}
-        disabled={preview.mode !== 1}
-        ariaLabelledBy={`sound-edit-${idx}`}
-        ariaDescribedBy={`sound-edit-${idx}-desc`}
-      >
-        <div style={{ display: 'flex', width: '100%' }}>
-          <div style={{ flex: 1, height: '100%', padding: '2rem 0', minWidth: 0 }}>
-            <div id={`sound-edit-${idx}-desc`} style={{ marginTop: '2rem' }}>
-              <TextField
-                label="Entrez l'URL du son"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                value={file === null ? tempSoundUrl : ''}
-                onBlur={() => {
-                  if (isValidHttpUrl(tempSoundUrl)) {
-                    displayPreview();
-                  } else {
-                    resetPreview();
+    <Modal
+      open={isModalOpen}
+      fullWidth
+      noCloseOutsideModal
+      maxWidth="md"
+      title="Choisir un son"
+      confirmLabel="Choisir"
+      onConfirm={async () => {
+        if (file !== null) {
+          await uploadSound();
+        } else {
+          onChangeSound(tempSoundUrl);
+        }
+        setIsModalOpen(false);
+        resetPreview();
+      }}
+      onClose={() => {
+        onClose(idx);
+        setIsModalOpen(false);
+        resetPreview();
+        if (soundUrl.length === 0) {
+          onDelete();
+        }
+      }}
+      loading={isModalLoading}
+      disabled={preview.mode !== 1}
+      ariaLabelledBy={`sound-edit-${idx}`}
+      ariaDescribedBy={`sound-edit-${idx}-desc`}
+    >
+      <div style={{ display: 'flex', width: '100%' }}>
+        <div style={{ flex: 1, height: '100%', padding: '2rem 0', minWidth: 0 }}>
+          <div id={`sound-edit-${idx}-desc`} style={{ marginTop: '2rem' }}>
+            <TextField
+              label="Entrez l'URL du son"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              value={file === null ? tempSoundUrl : ''}
+              onBlur={() => {
+                if (isValidHttpUrl(tempSoundUrl)) {
+                  displayPreview();
+                } else {
+                  resetPreview();
+                }
+              }}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                if (file !== null) {
+                  setFile(null);
+                  resetPreview();
+                  if (inputFile.current) {
+                    inputFile.current.value = '';
                   }
-                }}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (file !== null) {
-                    setFile(null);
-                    resetPreview();
-                    if (inputFile.current) {
-                      inputFile.current.value = '';
-                    }
-                  }
-                  setTempSoundUrl(event.target.value);
-                }}
-              />
-              <Divider style={{ marginTop: '2rem' }} />
-              <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
-                <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
-              </div>
-              <div className="text-center">
-                <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
-                  <>
-                    Importer
-                    <input ref={inputFile} type="file" multiple={false} accept="audio/*" style={{ display: 'none' }} onChange={onFileSelect} />
-                  </>
-                </Button>
-              </div>
+                }
+                setTempSoundUrl(event.target.value);
+              }}
+            />
+            <Divider style={{ marginTop: '2rem' }} />
+            <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
+              <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
             </div>
-          </div>
-          <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
-            <div style={{ width: '100%', minHeight: '15rem', backgroundColor: bgPage, padding: '0.5rem' }}>
-              <div className="text-center text text--bold" style={{ height: '10%' }}>
-                Aperçu
-              </div>
-              {preview.mode === 1 && (
-                <div className="text-center" style={{ margin: '1rem 0' }}>
-                  <audio controls src={preview.url}>
-                    <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
-                  </audio>
-                </div>
-              )}
-              {preview.mode === 2 && <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>}
+            <div className="text-center">
+              <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
+                <>
+                  Importer
+                  <input ref={inputFile} type="file" multiple={false} accept="audio/*" style={{ display: 'none' }} onChange={onFileSelect} />
+                </>
+              </Button>
             </div>
           </div>
         </div>
-      </Modal>
-    </>
+        <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
+          <div style={{ width: '100%', minHeight: '15rem', backgroundColor: bgPage, padding: '0.5rem' }}>
+            <div className="text-center text text--bold" style={{ height: '10%' }}>
+              Aperçu
+            </div>
+            {preview.mode === 1 && (
+              <div className="text-center" style={{ margin: '1rem 0' }}>
+                <audio controls src={preview.url}>
+                  <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
+                </audio>
+              </div>
+            )}
+            {preview.mode === 2 && <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>}
+          </div>
+        </div>
+      </div>
+    </Modal>
   );
 };
 
