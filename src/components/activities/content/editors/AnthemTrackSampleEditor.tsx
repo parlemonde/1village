@@ -15,7 +15,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 
 export interface AnthemTrackSampleEditorProps {
   value?: string;
-  onChange?(id: number, track: Track): void;
+  onChange?(sampleUrl: string): void;
   onDelete?(): void;
   onPause?(): void;
   onPlay?(): void;
@@ -72,9 +72,9 @@ const AnthemTrackSampleEditorWithRef = (
   }, [isModalOpen, value]);
 
   const onChangeSound = React.useCallback(
-    (newValue: string) => {
-      onChange(newValue);
-      setSoundUrl(newValue);
+    (sampleUrl: string) => {
+      onChange(sampleUrl);
+      setSoundUrl(sampleUrl);
     },
     [onChange, setSoundUrl],
   );
@@ -170,7 +170,7 @@ const AnthemTrackSampleEditorWithRef = (
               onPlay={onPlay}
               onPause={onPause}
               onLoadedMetadata={onLoadedMetadata}
-              style={{ width: '250px', height: '30px' }}
+              style={{ width: '250px', height: '3000px' }}
             >
               <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
             </audio>

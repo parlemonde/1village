@@ -2,11 +2,13 @@ import React from 'react';
 
 import EditIcon from '@mui/icons-material/Edit';
 import PianoIcon from '@mui/icons-material/Piano';
-import { Badge, Button, ButtonBase, TextField } from '@mui/material';
+import { Alert, Badge, Button, ButtonBase, TextField } from '@mui/material';
 
 import { AnthemTrackSampleEditor } from '../../content/editors/AnthemTrackSampleEditor';
 import styles from './AnthemTrack.module.css';
 import type { Track } from 'src/activity-types/anthem.types';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 
 interface AnthemTrackProps {
   id: number;
@@ -17,6 +19,10 @@ interface AnthemTrackProps {
 const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAnthemTrackSampleEditorModalOpen, setIsAnthemTrackSampleEditorModalOpen] = React.useState(false);
+
+  const handleAddSampleUrl = (url: string) => {
+    updateTrackInActivity(id, { ...track, sampleUrl: url });
+  };
 
   return (
     <div className={styles.trackContainer}>
@@ -49,7 +55,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
         )}
       </div>
 
-      {!track.sampleUrl && (
+      {track.sampleUrl ? (
         <Button
           onClick={() => {
             setIsAnthemTrackSampleEditorModalOpen(true);
@@ -59,6 +65,34 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
         >
           Ajouter un son
         </Button>
+      ) : (
+        <div style={{ display: 'flex' }}>
+          <audio
+            controls
+            src={soundUrl}
+            ref={audioRef}
+            onPlay={onPlay}
+            onPause={onPause}
+            onLoadedMetadata={onLoadedMetadata}
+            style={{ width: '250px', height: '3000px' }}
+          >
+            <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
+          </audio>
+          <EditButton //add edit condition ??
+            style={{ marginLeft: '12px' }}
+            size="small"
+            onClick={() => {
+              setIsAnthemTrackSampleEditorModalOpen(true);
+            }}
+          />
+          <DeleteButton
+            style={{ marginLeft: '6px' }}
+            color="red"
+            confirmTitle="Supprimer ce son ?"
+            confirmLabel="Voulez-vous vraiment supprimer ce son ?"
+            onDelete={onDelete}
+          />
+        </div>
       )}
       {isAnthemTrackSampleEditorModalOpen && (
         <AnthemTrackSampleEditor
@@ -67,7 +101,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
           //   setTime={(time) => {
           //     setTimes({ ...times, [editingSampleIndex]: time });
           //   }}
-          onChange={updateTrackInActivity}
+          onChange={handleAddSampleUrl}
           onDelete={() => {
             updateTrackInActivity(id, { ...track, sampleUrl: '' });
           }}
