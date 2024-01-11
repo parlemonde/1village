@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import PianoIcon from '@mui/icons-material/Piano';
 import { Alert, Badge, Button, ButtonBase, TextField } from '@mui/material';
 
-import { AnthemTrackSampleEditor } from '../../content/editors/AnthemTrackSampleEditor';
+import { AnthemTrackSampleEditor } from '../../content/editors/AnthemTrackSampleEditor/AnthemTrackSampleEditor';
 import styles from './AnthemTrack.module.css';
 import type { Track } from 'src/activity-types/anthem.types';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
