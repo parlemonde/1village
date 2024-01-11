@@ -32,7 +32,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
     type: [],
     userId: activityUser?.id ?? 0,
   });
-  const isPelico = activityUser.type > UserType.TEACHER;
+  const isPelico = activityUser.type < UserType.TEACHER;
   const isMediator = user !== null && user.type <= UserType.MEDIATOR;
 
   const onclick = React.useCallback(() => {
@@ -129,6 +129,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
   }
   return (
     <>
+      {/* MASCOTTE + drapeau à garder */}
       <div
         className="bg-secondary vertical-bottom-margin with-sub-header-height"
         style={{
@@ -172,6 +173,9 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           <Flag country={activityUser.country?.isoCode}></Flag>
         </span>
       </div>
+      {/* MASCOTTE + drapeau à garder */}
+
+      {/* BOUTON PROF */}
       {isMediator && (
         <Button
           component="a"
@@ -184,6 +188,9 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           Voir la fiche du professeur
         </Button>
       )}
+      {/* BOUTON PROF */}
+
+      {/* MAP / METEO */}
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
         <div style={{ height: '14rem' }}>
           <Map
@@ -214,6 +221,9 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           {weather.temperature}°C
         </div>
       )}
+      {/* MAP / METEO */}
+
+      {/* LAST ACTIVITIES */}
       <div
         className="bg-secondary vertical-bottom-margin"
         style={{ padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
@@ -255,6 +265,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           );
         })}
       </div>
+      {/* LAST ACTIVITIES */}
     </>
   );
 };

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import AppsIcon from '@mui/icons-material/Apps';
+// import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
@@ -51,7 +51,7 @@ type AlreadyPlayerModalProps = {
 enum RadioBoxValues {
   NEW = 'Nouvelle',
   RANDOM = 'Aléatoire',
-  MOSAIC = 'Mosaïque',
+  // MOSAIC = 'Mosaïque',
 }
 
 type RadioNextGameProps = {
@@ -66,7 +66,7 @@ type RadioNextGameProps = {
 const radioListComponentMapper = {
   [RadioBoxValues.NEW]: AccessTimeIcon,
   [RadioBoxValues.RANDOM]: ShuffleIcon,
-  [RadioBoxValues.MOSAIC]: AppsIcon,
+  //[RadioBoxValues.MOSAIC]: AppsIcon,
 };
 
 const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
@@ -164,10 +164,10 @@ const PlayMimic = () => {
       [RadioBoxValues.RANDOM]: async () => {
         return await getRandomGame(GameType.MIMIC);
       },
-      [RadioBoxValues.MOSAIC]: () => {
-        console.error('Not implemented yet');
-        return undefined;
-      },
+      // [RadioBoxValues.MOSAIC]: () => {
+      //   console.error('Not implemented yet');
+      //   return undefined;
+      // },
     };
 
     const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
