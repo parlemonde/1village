@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Backdrop from '@mui/material/Backdrop';
-import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from './parametrer-hymne.module.css';
@@ -22,7 +21,6 @@ import GuitareIcon from 'src/svg/anthem/guitare.svg';
 import MicroIcon from 'src/svg/anthem/micro.svg';
 import PianoIcon from 'src/svg/anthem/piano.svg';
 import TrumpetIcon from 'src/svg/anthem/trumpet.svg';
-import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { mixAudios } from 'src/utils/audios';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityType } from 'types/activity.type';
