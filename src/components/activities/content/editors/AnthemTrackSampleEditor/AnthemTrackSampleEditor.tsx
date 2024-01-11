@@ -5,11 +5,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Button, Divider, TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
-import type { Track } from 'src/activity-types/anthem.types';
+import styles from './AnthemTrackSampleEditor.module.css';
 import { Modal } from 'src/components/Modal';
-import { DeleteButton } from 'src/components/buttons/DeleteButton';
-import { EditButton } from 'src/components/buttons/EditButton';
-import { fontDetailColor, bgPage } from 'src/styles/variables.const';
 import { isValidHttpUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
@@ -188,9 +185,9 @@ const AnthemTrackSampleEditorWithRef = (
       ariaLabelledBy={`sound-edit-${idx}`}
       ariaDescribedBy={`sound-edit-${idx}-desc`}
     >
-      <div style={{ display: 'flex', width: '100%' }}>
-        <div style={{ flex: 1, height: '100%', padding: '2rem 0', minWidth: 0 }}>
-          <div id={`sound-edit-${idx}-desc`} style={{ marginTop: '2rem' }}>
+      <div className={styles.editorContentContainer}>
+        <div className={styles.dataSelectionContainer}>
+          <div id={`sound-edit-${idx}-desc`} className={styles.dataSelectionContent}>
             <TextField
               label="Entrez l'URL du son"
               variant="outlined"
@@ -215,27 +212,25 @@ const AnthemTrackSampleEditorWithRef = (
                 setTempSoundUrl(event.target.value);
               }}
             />
-            <Divider style={{ marginTop: '2rem' }} />
-            <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
-              <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
+            <Divider style={{ marginTop: '2rem' }} /> {/*style from class don't work, write inline-style*/}
+            <div className={styles.dataSelectionContentDivider}>
+              <span>Ou</span>
             </div>
-            <div className="text-center">
-              <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
+            <div className={styles.importButtonWrapper}>
+              <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />}>
                 <>
                   Importer
-                  <input ref={inputFile} type="file" multiple={false} accept="audio/*" style={{ display: 'none' }} onChange={onFileSelect} />
+                  <input ref={inputFile} type="file" multiple={false} accept="audio/*" onChange={onFileSelect} />
                 </>
               </Button>
             </div>
           </div>
         </div>
-        <div style={{ flex: '1', padding: '0.5rem', minWidth: 0 }}>
-          <div style={{ width: '100%', minHeight: '15rem', backgroundColor: bgPage, padding: '0.5rem' }}>
-            <div className="text-center text text--bold" style={{ height: '10%' }}>
-              Aperçu
-            </div>
+        <div className={styles.dataPreviewContainer}>
+          <div className={styles.dataPreviewContent}>
+            <div className={styles.dataPreviewContentTitle}>Aperçu</div>
             {preview.mode === 1 && (
-              <div className="text-center" style={{ margin: '1rem 0' }}>
+              <div className={styles.sampleControlsContainer}>
                 <audio controls src={preview.url}>
                   <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
                 </audio>
