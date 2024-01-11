@@ -66,19 +66,17 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
           Ajouter un son
         </Button>
       ) : (
-        <div style={{ display: 'flex' }}>
-          <audio controls src={track.sampleUrl} style={{ width: '250px', height: '30px' }}>
+        <div className={styles.sampleControlsContainer}>
+          <audio controls src={track.sampleUrl} className={styles.sampleAudioControl}>
             <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
           </audio>
           <EditButton //add edit condition ??
-            style={{ marginLeft: '12px' }}
             size="small"
             onClick={() => {
               setIsAnthemTrackSampleEditorModalOpen(true);
             }}
           />
           <DeleteButton
-            style={{ marginLeft: '6px' }}
             color="red"
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"

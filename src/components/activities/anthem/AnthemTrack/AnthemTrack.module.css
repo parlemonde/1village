@@ -39,3 +39,16 @@
 .trackLabel input {
     padding: 1rem 0 1rem 10px;
 }
+
+.sampleControlsContainer{
+    display: flex;
+}
+
+.sampleAudioControl{
+    width: 250px;
+    height: 30px;
+}
+
+.sampleControlsContainer button{
+    margin-left: 6px
+}
