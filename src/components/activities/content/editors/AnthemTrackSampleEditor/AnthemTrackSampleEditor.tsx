@@ -149,12 +149,6 @@ const AnthemTrackSampleEditorWithRef = (
     }
   };
 
-  const onLoadedMetadata = () => {
-    if (audioRef.current) {
-      setTime(audioRef.current.duration);
-    }
-  };
-
   return (
     <Modal
       open={isModalOpen}
@@ -174,6 +168,7 @@ const AnthemTrackSampleEditorWithRef = (
       }}
       onClose={() => {
         onClose(idx);
+        console.log('GO ON CLOSE');
         setIsModalOpen(false);
         resetPreview();
         if (soundUrl.length === 0) {

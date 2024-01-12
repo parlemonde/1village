@@ -73,7 +73,9 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
           <EditButton //add edit condition ??
             size="small"
             onClick={() => {
+              console.log(isAnthemTrackSampleEditorModalOpen);
               setIsAnthemTrackSampleEditorModalOpen(true);
+              console.log(isAnthemTrackSampleEditorModalOpen);
             }}
           />
           <DeleteButton
