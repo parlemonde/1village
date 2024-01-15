@@ -9,7 +9,7 @@ import type {
   FreeDefiActivity,
   FreeDefiData,
 } from './defi.types';
-import { replaceTokens } from 'src/utils';
+import { capitalize, replaceTokens } from 'src/utils';
 
 export const COOKING_DEFIS = [
   {
@@ -126,7 +126,7 @@ export const getLanguageTheme = (data: LanguageDefiData): string => {
     const theme = 'Voila {{theme}} en {{language}}, une langue {{school}}.';
     return replaceTokens(theme, {
       theme: data.themeIndex === null ? 'un défi' : LANGUAGE_THEMES[data.themeIndex % LANGUAGE_THEMES.length].title.toLowerCase(),
-      language: data.languageCode,
+      language: capitalize(data.language),
       school: LANGUAGE_SCHOOL[(data.languageIndex - 1) % LANGUAGE_SCHOOL.length],
     });
   }
