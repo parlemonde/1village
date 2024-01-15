@@ -53,6 +53,9 @@ export class Activity implements ActivityInterface<AnyData> {
   @UpdateDateColumn()
   public updateDate: Date;
 
+  @Column()
+  public publishDate: Date;
+
   @DeleteDateColumn()
   public deleteDate: Date;
 
