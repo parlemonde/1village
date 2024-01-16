@@ -1,26 +1,16 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import CreateGame from 'src/components/game/CreateGame';
-import { useGame, gameResponse } from 'src/contexts/gameContext';
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { GameType } from 'types/game.type';
+import { GameContext } from 'src/contexts/gameContext';
 
 const MonnaieStep1 = () => {
   const router = useRouter();
-  const { userSelection } = useGame();
-  const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
-
-  React.useEffect(() => {
-    gameResponse.userId = user?.id;
-    gameResponse.villageId = village?.id;
-  }, [user, village]);
+  const { inputSelectedValue } = useContext(GameContext);
 
   const onNext = () => {
     router.push('/creer-un-jeu/monnaie/2');
@@ -31,7 +21,7 @@ const MonnaieStep1 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/creer-un-jeu/monnaie" />
         <Steps
-          steps={[userSelection || 'Monnaie', 'Objet 1', 'Objet 2', 'Objet 3', 'Prévisualisation']}
+          steps={[inputSelectedValue || 'Monnaie', 'Objet 1', 'Objet 2', 'Objet 3', 'Prévisualisation']}
           urls={[
             '/creer-un-jeu/monnaie/1',
             '/creer-un-jeu/monnaie/2',
@@ -41,7 +31,7 @@ const MonnaieStep1 = () => {
           ]}
           activeStep={0}
         />
-        <CreateGame gameType={GameType.MONEY} stepNumber={0} />
+        <CreateGame stepNumber={0} />
         <div className="width-900">{<StepsButton next={onNext} />}</div>
       </div>
     </Base>
