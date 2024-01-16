@@ -13,7 +13,7 @@ interface ActivityChoiceProps {
     icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>> | null;
     disabled: boolean;
     disabledText: string;
-    gameType: GameType;
+    gameType?: GameType;
   }>;
 }
 
@@ -46,7 +46,7 @@ export const ActivityChoice = ({ activities }: ActivityChoiceProps) => {
               href={activity.href}
               icon={activity.icon}
               disabled={activity.disabled}
-              onClick={() => handleChoiceClick(activity.gameType)}
+              onClick={() => activity.gameType && handleChoiceClick(activity.gameType)}
             />
           );
         })}
