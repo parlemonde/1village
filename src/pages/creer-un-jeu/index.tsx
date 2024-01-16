@@ -5,12 +5,14 @@ import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ExpressionIcon from 'src/svg/jeu/expression.svg';
 import MimiqueIcon from 'src/svg/jeu/mimique.svg';
 import MonnaieIcon from 'src/svg/jeu/monnaie.svg';
+import { GameType } from 'types/game.type';
 
 const activities = [
   {
     label: 'Jeu des mimiques',
     href: '/creer-un-jeu/mimique',
     icon: MimiqueIcon,
+    gameType: GameType.MIMIC,
     disabled: false,
     disabledText: '',
   },
@@ -18,6 +20,7 @@ const activities = [
     label: 'Jeu de la monnaie',
     href: '/creer-un-jeu/monnaie',
     icon: MonnaieIcon,
+    gameType: GameType.MONEY,
     disabled: false,
     disabledText: 'Bientôt disponible',
   },
@@ -25,6 +28,7 @@ const activities = [
     label: "Jeu de l'expression",
     href: '/creer-un-jeu/expression',
     icon: ExpressionIcon,
+    gameType: GameType.EXPRESSION,
     disabled: false,
     disabledText: 'Bientôt disponible',
   },

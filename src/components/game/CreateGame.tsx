@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import GameField from './componentGameMapping/GameField';
 import GameRadio from './componentGameMapping/GameRadio';
 import GameSelect from './componentGameMapping/GameSelect';
-import { GAME_FIELDS_CONFIG, InputTypeEnum } from 'src/config/games/game';
-import { gameResponse } from 'src/contexts/gameContext';
-import type { GameType } from 'types/game.type';
+import type { hiddenType, inputType } from 'src/config/games/game';
+import { InputTypeEnum } from 'src/config/games/game';
+import { GameContext } from 'src/contexts/gameContext';
 
 interface PlayProps {
-  gameType: GameType;
   stepNumber: number;
 }
 
@@ -18,18 +17,31 @@ const ComponentMapping = {
   [InputTypeEnum.INPUT]: GameField,
 };
 
-const CreateGame = ({ gameType, stepNumber }: PlayProps) => {
-  const gameConfig = GAME_FIELDS_CONFIG[gameType];
+const CreateGame = ({ stepNumber }: PlayProps) => {
+  const { gameConfig } = useContext(GameContext);
 
-  console.log('gameResponse', gameResponse);
-
-  if (!gameConfig || !gameConfig.steps[stepNumber]) {
+  if (!gameConfig || !gameConfig[stepNumber]) {
     return <div>Oups, votre jeu n&apos;existe pas encore</div>;
   }
 
+  const checkDisPlayCondition = (hidden: hiddenType) => {
+    let inputToCompare: inputType = {} as inputType;
+    gameConfig.map((page) =>
+      page.map((step) =>
+        step.inputs?.map((input) => {
+          if (input.id === hidden.id) {
+            inputToCompare = input;
+          }
+        }),
+      ),
+    );
+    if (inputToCompare?.selectedValue === hidden.value) return false;
+    return true;
+  };
+
   return (
     <>
-      {gameConfig.steps[stepNumber].map((stepItem, index) => (
+      {gameConfig[stepNumber].map((stepItem, index) => (
         <div className="width-900" key={index}>
           <h1>{stepItem.title}</h1>
           <div>
@@ -38,7 +50,8 @@ const CreateGame = ({ gameType, stepNumber }: PlayProps) => {
             </p>
             {stepItem.inputs?.map((input, inputIndex) => {
               const Component = ComponentMapping[input.type];
-              return <Component input={input} stepNumber={stepNumber} key={inputIndex} />;
+              const isDisplayed = !input.hidden || checkDisPlayCondition(input.hidden);
+              return isDisplayed ? <Component input={input} key={inputIndex} /> : null;
             })}
           </div>
         </div>

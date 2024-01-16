@@ -8,6 +8,10 @@ export enum InputTypeEnum {
   SELECT = 2,
 }
 
+export type hiddenType = {
+  id: number;
+  value: string;
+};
 export type inputType = {
   id: number;
   type: InputTypeEnum;
@@ -16,13 +20,10 @@ export type inputType = {
   placeHolder?: string;
   methodType?: methodType;
   selectedValue?: string;
-  hidden?: {
-    id: number;
-    value: string;
-  };
+  hidden?: hiddenType;
 };
 
-type StepsType = {
+export type StepsType = {
   title?: string;
   description?: string;
   inputs?: inputType[];
@@ -144,6 +145,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Money',
               methodType: methodType.CURRENCY,
               values: [],
+              selectedValue: '',
             },
           ],
         },
@@ -154,19 +156,22 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Choissisez un objet dont le prix moyen est faible',
           inputs: [
             {
-              id: 0,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est le nom de cet objet ?',
-            },
-            {
               id: 1,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est le nom de cet objet ?',
+              selectedValue: '',
             },
             {
               id: 2,
               type: InputTypeEnum.INPUT,
+              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              selectedValue: '',
+            },
+            {
+              id: 3,
+              type: InputTypeEnum.INPUT,
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
+              selectedValue: '',
             },
           ],
         },
@@ -176,14 +181,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
           inputs: [
             {
-              id: 3,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 1',
-            },
-            {
               id: 4,
               type: InputTypeEnum.INPUT,
+              placeHolder: 'Prix inventé 1',
+              selectedValue: '',
+            },
+            {
+              id: 5,
+              type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
+              selectedValue: '',
             },
           ],
         },
@@ -194,19 +201,22 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Choissisez un objet dont le prix moyen modéré',
           inputs: [
             {
-              id: 0,
+              id: 6,
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
+              selectedValue: '',
             },
             {
-              id: 1,
+              id: 7,
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              selectedValue: '',
             },
             {
-              id: 2,
+              id: 8,
               type: InputTypeEnum.INPUT,
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
+              selectedValue: '',
             },
           ],
         },
@@ -216,14 +226,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
           inputs: [
             {
-              id: 3,
+              id: 9,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
+              selectedValue: '',
             },
             {
-              id: 4,
+              id: 10,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
+              selectedValue: '',
             },
           ],
         },
@@ -234,19 +246,22 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Choissisez un objet dont le prix moyen élevé',
           inputs: [
             {
-              id: 0,
+              id: 11,
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
+              selectedValue: '',
             },
             {
-              id: 1,
+              id: 12,
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              selectedValue: '',
             },
             {
-              id: 2,
+              id: 13,
               type: InputTypeEnum.INPUT,
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
+              selectedValue: '',
             },
           ],
         },
@@ -256,14 +271,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
           inputs: [
             {
-              id: 3,
+              id: 14,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
+              selectedValue: '',
             },
             {
-              id: 4,
+              id: 15,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
+              selectedValue: '',
             },
           ],
         },
@@ -290,6 +307,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Langues',
               methodType: methodType.LANGUE,
               values: [],
+              selectedValue: '',
             },
           ],
         },
@@ -305,6 +323,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
                 'qu’on utilise pour faire cours',
                 'qu’on apprend comme langue étrangère',
               ],
+              selectedValue: '',
             },
           ],
         },
@@ -316,21 +335,24 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Réalisez votre dessin sur une feuille au format paysage',
           inputs: [
             {
-              id: 0,
+              id: 2,
               label: 'Écrivez l’expression dans la langue que vous avez choisie',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 1,
+              id: 3,
               hidden: { id: 0, value: 'Français' },
               label: 'Écrivez la traduction “mot à mot” en français',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 2,
+              id: 4,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
           ],
         },
@@ -340,14 +362,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 3,
+              id: 5,
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 4,
+              id: 6,
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
           ],
         },
@@ -359,21 +383,24 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Réalisez votre dessin sur une feuille au format paysage',
           inputs: [
             {
-              id: 0,
+              id: 7,
               label: 'Écrivez l’expression en',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 1,
+              id: 8,
               label: 'Écrivez la traduction “mot à mot” en français',
               hidden: { id: 0, value: 'Français' },
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 2,
+              id: 9,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
           ],
         },
@@ -383,14 +410,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 3,
+              id: 10,
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 4,
+              id: 11,
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
           ],
         },
@@ -402,21 +431,24 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Réalisez votre dessin sur une feuille au format paysage',
           inputs: [
             {
-              id: 0,
+              id: 12,
               label: 'Écrivez l’expression en',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 1,
+              id: 13,
               label: 'Écrivez la traduction “mot à mot” en français',
               hidden: { id: 0, value: 'Français' },
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 2,
+              id: 14,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
           ],
         },
@@ -426,14 +458,16 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 3,
+              id: 15,
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
             {
-              id: 4,
+              id: 16,
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
+              selectedValue: '',
             },
           ],
         },

@@ -1,10 +1,19 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
 
-interface GameContextType {
-  userSelection: string;
-  setUserSelection: (value: string) => void;
-}
+import type { inputType, StepsType } from 'src/config/games/game';
+import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
+import { GameType } from 'types/game.type';
+
+type GameContextType = {
+  gameConfig: Array<StepsType[]>;
+  setGameConfig: (gameConfig: Array<StepsType[]>) => void;
+  gameType: GameType;
+  setGameType: (gameType: GameType) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  updateGameConfig: (value: any, input: inputType) => void;
+  inputSelectedValue?: string;
+};
 
 interface GameResponseDataToSend {
   userId: number | string | undefined;
@@ -12,138 +21,107 @@ interface GameResponseDataToSend {
   activityId?: number | string | undefined;
   gameType: string | number;
   data: GameData[];
-  userSelection?: string | null;
-  radioSelection?: string | null;
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
   status?: string | number;
 }
 
-interface GameData {
+type GameData = {
   gameId: number;
   media?: string;
   responses?: Response[];
-}
+};
 
-interface Response {
+type Response = {
   id?: number;
   value?: string;
-}
+};
+
+export const sendGameResponse = async (gameResponse: GameResponseDataToSend) => {
+  const response = await fetch('/games', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(gameResponse),
+  });
+  const data = await response.json();
+  return data;
+};
 
 export const gameResponse: GameResponseDataToSend = {
   userId: '',
   villageId: '',
   activityId: '',
   gameType: '',
-  radioSelection: '',
   status: 1,
   createDate: '',
   updateDate: '',
   deleteDate: '',
-  data: [
-    {
-      gameId: 1,
-      media: '',
-      responses: [
-        {
-          id: 1,
-          value: 'test',
-        },
-        {
-          id: 2,
-          value: 'id2',
-        },
-        {
-          id: 3,
-          value: 'id3',
-        },
-        {
-          id: 4,
-          value: 'id4',
-        },
-        {
-          id: 5,
-          value: 'id5',
-        },
-      ],
-    },
-    {
-      gameId: 2,
-      media: '',
-      responses: [
-        {
-          id: 1,
-          value: '',
-        },
-        {
-          id: 2,
-          value: '',
-        },
-        {
-          id: 3,
-          value: '',
-        },
-        {
-          id: 4,
-          value: '',
-        },
-        {
-          id: 5,
-          value: '',
-        },
-      ],
-    },
-    {
-      gameId: 3,
-      media: '',
-      responses: [
-        {
-          id: 1,
-          value: '',
-        },
-        {
-          id: 2,
-          value: '',
-        },
-        {
-          id: 3,
-          value: '',
-        },
-        {
-          id: 4,
-          value: '',
-        },
-        {
-          id: 5,
-          value: '',
-        },
-      ],
-    },
-  ],
-  userSelection: '',
+  data: [],
 };
 
-export const GameContext = createContext<GameContextType | undefined>(undefined);
+export const GameContext = createContext<GameContextType>({
+  gameConfig: [],
+  setGameConfig: () => {},
+  gameType: GameType.MIMIC,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setGameType: (_gameType: GameType) => {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  updateGameConfig: (_value: any, _input: inputType) => {},
+  inputSelectedValue: '',
+});
 
-export function useGame() {
+export const useGame = () => {
   const context = useContext(GameContext);
   if (!context) {
     throw new Error('useGame must be used within a GameProvider');
   }
   return context;
-}
+};
 
-export function saveGameResponseInSessionStorage(gameResponse: GameResponseDataToSend) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const saveGameResponseInSessionStorage = (gameResponse: any) => {
   sessionStorage.setItem('gameResponse', JSON.stringify(gameResponse));
-}
+};
 
 interface GameProviderProps {
   children: ReactNode;
 }
 
 export const GameProvider = ({ children }: GameProviderProps) => {
-  const [userSelection, setUserSelection] = useState<string>('');
+  const [gameType, setGameType] = useState<GameType>(GameType.MIMIC);
+  const [gameConfig, setGameConfig] = useState<Array<StepsType[]>>(GAME_FIELDS_CONFIG[gameType].steps);
+  const inputSelectedValue = gameConfig[0]?.[0]?.inputs?.[0]?.selectedValue;
 
-  return <GameContext.Provider value={{ userSelection, setUserSelection }}>{children}</GameContext.Provider>;
+  const updateGameType = (type: GameType) => {
+    setGameType(type);
+    setGameConfig(GAME_FIELDS_CONFIG[type].steps);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateGameConfig = (value: any, input: inputType) => {
+    let inputToCompare: inputType = {} as inputType;
+    const configCopy = [...gameConfig];
+
+    configCopy.map((page) =>
+      page.map((step) =>
+        step.inputs?.map((inp) => {
+          if (inp.id === input.id) {
+            inputToCompare = inp;
+            inputToCompare.selectedValue = value;
+          }
+        }),
+      ),
+    );
+    setGameConfig(configCopy);
+    saveGameResponseInSessionStorage(configCopy);
+  };
+
+  return (
+    <GameContext.Provider value={{ updateGameConfig, gameType, setGameType: updateGameType, gameConfig, setGameConfig, inputSelectedValue }}>
+      {children}
+    </GameContext.Provider>
+  );
 };

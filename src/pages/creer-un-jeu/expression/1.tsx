@@ -1,50 +1,30 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import CreateGame from 'src/components/game/CreateGame';
-import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import { useGame, gameResponse, saveGameResponseInSessionStorage } from 'src/contexts/gameContext';
-import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { GameType } from 'types/game.type';
+import { GameContext } from 'src/contexts/gameContext';
+// import { UserContext } from 'src/contexts/userContext';
+// import { VillageContext } from 'src/contexts/villageContext';
 
 const ExpressionStep1 = () => {
   const router = useRouter();
-  const { userSelection } = useGame();
-  const originalDescriptionTemplate = 'Dans votre classe, la langue parlée est : ';
-  const { user } = React.useContext(UserContext);
-  const { village } = React.useContext(VillageContext);
-
-  React.useEffect(() => {
-    gameResponse.userId = user?.id;
-    gameResponse.villageId = village?.id;
-    saveGameResponseInSessionStorage(gameResponse);
-  }, [user, village]);
-
-  function updateDescriptionWithSelection(userSelection: string) {
-    if (!userSelection) {
-      return originalDescriptionTemplate;
-    }
-
-    return `${originalDescriptionTemplate}${userSelection}`;
-  }
-
-  GAME_FIELDS_CONFIG[GameType.EXPRESSION].steps[0][1].description = updateDescriptionWithSelection(userSelection);
+  // const { user } = useContext(UserContext);
+  // const { village } = useContext(VillageContext);
+  const { inputSelectedValue } = useContext(GameContext);
 
   const onNext = () => {
     router.push('/creer-un-jeu/expression/2');
   };
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <BackButton href="/creer-un-jeu/expression" />
         <Steps
-          steps={[userSelection || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
+          steps={[inputSelectedValue || 'Langue', '1ère expression', '2ème expression', '3ème expression', 'Prévisualisation']}
           urls={[
             '/creer-un-jeu/expression/1',
             '/creer-un-jeu/expression/2',
@@ -54,8 +34,7 @@ const ExpressionStep1 = () => {
           ]}
           activeStep={0}
         />
-        <CreateGame gameType={GameType.EXPRESSION} stepNumber={0} />
-        {userSelection.length > 0 ? <p className="width-900">Vous avez choisi de jouer avec la langue : {userSelection}</p> : null}
+        <CreateGame stepNumber={0} />
         <div className="width-900">{<StepsButton next={onNext} />}</div>
       </div>
     </Base>
