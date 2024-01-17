@@ -22,7 +22,6 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
 
   const handleAddSampleUrl = (url: string) => {
     updateTrackInActivity(id, { ...track, sampleUrl: url });
-    setIsAudioEditorOpen(false);
   };
 
   return (
@@ -88,7 +87,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
           />
         </div>
       )}
-      {isAudioEditorOpen && <AudioEditor track={track} handleSampleUrlUpdate={handleAddSampleUrl} />}
+      {isAudioEditorOpen && <AudioEditor track={track} handleSampleUrlUpdate={handleAddSampleUrl} setIsAudioEditorOpen={setIsAudioEditorOpen} />}
     </div>
   );
 };

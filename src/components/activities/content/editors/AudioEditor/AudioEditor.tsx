@@ -14,14 +14,15 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 export interface AudioEditorProps {
   track: Track;
   handleSampleUrlUpdate: (url: string) => void;
+  setIsAudioEditorOpen: (value: boolean) => void;
 }
 
-const AudioEditor = ({ track, handleSampleUrlUpdate }: AudioEditorProps) => {
+const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: AudioEditorProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [isModalLoading, setIsModalLoading] = React.useState(false);
 
-  const [tempSampleUrl, setTempSampleUrl] = React.useState('');
+  const [tempSampleUrl, setTempSampleUrl] = React.useState(track.sampleUrl || '');
   const [tempSampleFile, setTempSampleFile] = React.useState<File | null>(null);
 
   const uploadSound = async () => {
@@ -54,10 +55,8 @@ const AudioEditor = ({ track, handleSampleUrlUpdate }: AudioEditorProps) => {
     const files = event.target.files;
     const filesArr = Array.prototype.slice.call(files) as File[];
     if (filesArr.length > 0) {
-      setTempSampleFile(filesArr[0]);
       setTempSampleUrl(URL.createObjectURL(filesArr[0]));
     } else {
-      setTempSampleFile(null);
       setTempSampleUrl('');
     }
   };
@@ -73,6 +72,11 @@ const AudioEditor = ({ track, handleSampleUrlUpdate }: AudioEditorProps) => {
       onConfirm={async () => {
         if (tempSampleFile) await uploadSound();
         handleSampleUrlUpdate(tempSampleUrl);
+        setIsAudioEditorOpen(false);
+      }}
+      onClose={() => {
+        if (!track.sampleUrl) handleSampleUrlUpdate('');
+        setIsAudioEditorOpen(false);
       }}
       loading={isModalLoading}
       disabled={!tempSampleUrl}
@@ -87,10 +91,12 @@ const AudioEditor = ({ track, handleSampleUrlUpdate }: AudioEditorProps) => {
               variant="outlined"
               color="secondary"
               fullWidth
-              value={tempSampleFile ? '' : tempSampleUrl}
+              defaultValue={track.sampleUrl || ''}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                if (tempSampleFile) setTempSampleFile(null);
-                setTempSampleUrl(event.target.value);
+                if (isValidHttpUrl(event.target.value)) {
+                  if (tempSampleFile) setTempSampleFile(null);
+                  setTempSampleUrl(event.target.value);
+                }
               }}
             />
             <Divider style={{ marginTop: '2rem' }} /> {/*style from class don't work, write inline-style*/}
