@@ -15,8 +15,14 @@ const GameField = ({ input }: { input: inputType }) => {
 
   return (
     <>
-      <p>{input.label}</p>
-      <TextField style={{ width: '100%', margin: '10px' }} type="text" placeholder={input.placeHolder} onChange={handleChange} />
+      <p>
+        <b>{input.label}</b>
+      </p>
+      {input.selectedValue && input.selectedValue.length > 0 ? (
+        <TextField style={{ width: '100%', margin: '10px' }} type="text" value={input.selectedValue} onChange={handleChange} />
+      ) : (
+        <TextField style={{ width: '100%', margin: '10px' }} type="text" placeholder={input.placeHolder} onChange={handleChange} />
+      )}
     </>
   );
 };

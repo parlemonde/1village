@@ -14,11 +14,35 @@ const GameRadio = ({ input }: { input: inputType }) => {
   };
 
   return (
-    <RadioGroup>
-      {input.values?.map((radioValue: string, radioIndex) => (
-        <FormControlLabel key={radioIndex} value={radioValue} control={<Radio />} label={radioValue} onChange={handleChange} />
-      ))}
-    </RadioGroup>
+    <>
+      {input.selectedValue && input.selectedValue.length > 0 ? (
+        <RadioGroup value={input.selectedValue}>
+          {input.values?.map((radioValue: string, radioIndex) => (
+            <FormControlLabel
+              key={radioIndex}
+              value={radioValue}
+              control={<Radio />}
+              label={radioValue}
+              style={{ cursor: 'pointer' }}
+              onChange={handleChange}
+            />
+          ))}
+        </RadioGroup>
+      ) : (
+        <RadioGroup>
+          {input.values?.map((radioValue: string, radioIndex) => (
+            <FormControlLabel
+              key={radioIndex}
+              value={radioValue}
+              control={<Radio />}
+              label={radioValue}
+              style={{ cursor: 'pointer' }}
+              onChange={handleChange}
+            />
+          ))}
+        </RadioGroup>
+      )}
+    </>
   );
 };
 

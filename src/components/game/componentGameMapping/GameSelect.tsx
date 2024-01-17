@@ -32,16 +32,31 @@ const GameSelect = ({ input }: { input: inputType }) => {
   }, [input.methodType]);
 
   return (
-    <FormControl variant="outlined" style={{ width: '23rem', marginTop: '3.5rem', marginBottom: '0.5rem', marginRight: '10rem' }}>
-      <Autocomplete
-        options={values}
-        getOptionLabel={(option) => option}
-        renderInput={(params) => <TextField {...params} label={input.placeHolder} variant="outlined" />}
-        onChange={(_event, newValue) => {
-          updateGameConfig(newValue, input);
-        }}
-      />
-    </FormControl>
+    <>
+      {input.selectedValue && input.selectedValue.length > 0 ? (
+        <FormControl variant="outlined" style={{ width: '23rem', marginTop: '3.5rem', marginBottom: '0.5rem', marginRight: '10rem' }}>
+          <Autocomplete
+            options={values}
+            getOptionLabel={(option) => option}
+            renderInput={(params) => <TextField {...params} label={input.selectedValue} variant="outlined" />}
+            onChange={(_event, newValue) => {
+              updateGameConfig(newValue, input);
+            }}
+          />
+        </FormControl>
+      ) : (
+        <FormControl variant="outlined" style={{ width: '23rem', marginTop: '3.5rem', marginBottom: '0.5rem', marginRight: '10rem' }}>
+          <Autocomplete
+            options={values}
+            getOptionLabel={(option) => option}
+            renderInput={(params) => <TextField {...params} label={input.placeHolder} variant="outlined" />}
+            onChange={(_event, newValue) => {
+              updateGameConfig(newValue, input);
+            }}
+          />
+        </FormControl>
+      )}
+    </>
   );
 };
 

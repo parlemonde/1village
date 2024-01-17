@@ -82,8 +82,8 @@ export const useGame = () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const saveGameResponseInSessionStorage = (gameResponse: any) => {
-  sessionStorage.setItem('gameResponse', JSON.stringify(gameResponse));
+export const saveGameResponseInSessionStorage = (gameConfig: any) => {
+  sessionStorage.setItem('gameConfig', JSON.stringify(gameConfig));
 };
 
 interface GameProviderProps {

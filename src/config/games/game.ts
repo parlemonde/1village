@@ -299,7 +299,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Choisissez dans quelle langue vous souhaitez lancer le défi',
-          description: 'Vous pourrez ensuite commencer votre défi.',
+          description: 'Vous pourrez ensuite commencer votre défi',
           inputs: [
             {
               id: 0,
@@ -312,7 +312,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           ],
         },
         {
-          description: 'Dans votre classe, la langue parlée est : ',
+          description: 'Dans votre classe, cette langue est : ',
           inputs: [
             {
               id: 1,
@@ -320,8 +320,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               values: [
                 'maternelle chez tous les élèves',
                 'maternelle chez certains élèves',
-                'qu’on utilise pour faire cours',
-                'qu’on apprend comme langue étrangère',
+                'utilisée pour faire cours',
+                'apprise comme langue étrangère',
               ],
               selectedValue: '',
             },
@@ -336,7 +336,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           inputs: [
             {
               id: 2,
-              label: 'Écrivez l’expression dans la langue que vous avez choisie',
+              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
@@ -384,7 +384,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           inputs: [
             {
               id: 7,
-              label: 'Écrivez l’expression en',
+              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
@@ -432,7 +432,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           inputs: [
             {
               id: 12,
-              label: 'Écrivez l’expression en',
+              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
