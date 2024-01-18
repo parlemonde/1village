@@ -105,7 +105,7 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
               <span>Ou</span>
             </div>
             <div className={styles.importButtonWrapper}>
-              <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />}>
+              <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
                 <>
                   Importer
                   <input type="file" multiple={false} accept="audio/*" onChange={onFileSelect} />

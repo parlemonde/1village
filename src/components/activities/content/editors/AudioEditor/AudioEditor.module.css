@@ -20,9 +20,10 @@
 
 .importButtonWrapper input{
     display: none;
+    cursor: pointer;
 }
 
-.importButtonWrapper button{
+.importButtonWrapper *{
     cursor: pointer;
 }
 
