@@ -25,7 +25,7 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
   const [tempSampleUrl, setTempSampleUrl] = React.useState(track.sampleUrl || '');
   const [tempSampleFile, setTempSampleFile] = React.useState<File | null>(null);
 
-  const uploadSound = async () => {
+  const uploadSampleFile = async () => {
     setIsModalLoading(true);
 
     const formData = new FormData();
@@ -47,14 +47,16 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
       enqueueSnackbar('Une erreur est survenue...', {
         variant: 'error',
       });
+    } else if (response.data.url) {
+      handleSampleUrlUpdate(response.data.url);
     }
-    setIsModalLoading(false);
   };
 
   const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     const filesArr = Array.prototype.slice.call(files) as File[];
     if (filesArr.length > 0) {
+      setTempSampleFile(filesArr[0]);
       setTempSampleUrl(URL.createObjectURL(filesArr[0]));
     } else {
       setTempSampleUrl('');
@@ -70,8 +72,7 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
       title="Choisir un son"
       confirmLabel="Choisir"
       onConfirm={async () => {
-        if (tempSampleFile) await uploadSound();
-        handleSampleUrlUpdate(tempSampleUrl);
+        tempSampleFile ? await uploadSampleFile() : handleSampleUrlUpdate(tempSampleUrl);
         setIsAudioEditorOpen(false);
       }}
       onClose={() => {
