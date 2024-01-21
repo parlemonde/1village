@@ -34,6 +34,9 @@ export const getH5pEditor = async () => {
     protectSetFinished: true,
   });
 
+  // TODO
+  // const permissionSystem = new ExamplePermissionSystem();
+
   const h5pEditor = H5P.fs(
     config,
     path.join(__dirname, '/libraries'), // the path on the local disc where libraries should be stored
@@ -44,8 +47,19 @@ export const getH5pEditor = async () => {
     undefined,
     urlGenerator,
   );
-
   h5pEditor.setRenderer((model) => model);
 
-  return h5pEditor;
+  const h5pPlayer = new H5P.H5PPlayer(
+    h5pEditor.libraryStorage,
+    h5pEditor.contentStorage,
+    config,
+    undefined,
+    urlGenerator,
+    undefined,
+    undefined,
+    h5pEditor.contentUserDataStorage,
+  );
+  h5pPlayer.setRenderer((model) => model);
+
+  return { h5pPlayer, h5pEditor };
 };

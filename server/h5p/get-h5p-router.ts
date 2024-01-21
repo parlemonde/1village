@@ -14,7 +14,7 @@ import type { H5pAnyParams, H5pExpressRequest, H5pUser } from './h5p.types';
 
 export const getH5pRouter = async () => {
   const h5pRouter = Router();
-  const h5pEditor = await getH5pEditor();
+  const { h5pPlayer, h5pEditor } = await getH5pEditor();
 
   // Add logging.
   h5pRouter.use(morgan('dev') as RequestHandler);
@@ -58,6 +58,21 @@ export const getH5pRouter = async () => {
   h5pRouter.use(jsonify);
 
   // Add REST routes
+  h5pRouter.get(
+    '/data/:contentId/play',
+    handleErrors(async (req, res) => {
+      const content = await h5pPlayer.render(req.params.contentId, req.user as unknown as H5pUser, 'fr', {
+        // We pass through the contextId here to illustrate how
+        // to work with it. Context ids allow you to have
+        // multiple user states per content object. They are
+        // purely optional. You should *NOT* pass the contextId
+        // to the render method if you don't need contextIds!
+        contextId: typeof req.query.contextId === 'string' ? req.query.contextId : undefined,
+      });
+      res.status(200).send(content);
+    }),
+  );
+
   h5pRouter.get(
     '/data/:contentId/edit',
     handleErrors(async (req, res, next) => {

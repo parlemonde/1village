@@ -18,28 +18,26 @@ const H5pEditor = ({ contentId = 'new', onSave, onError }: H5pEditorProps) => {
 
   return (
     <div>
-      <div style={{ height: '600px' }}>
-        <H5PEditorUI
-          ref={(ref) => {
-            h5pEditorRef.current = ref;
-          }}
-          contentId={contentId}
-          loadContentCallback={getH5pContent}
-          saveContentCallback={(cId, body) => {
-            if (!cId || cId === 'new' || cId === 'undefined') {
-              return postH5pContent(body);
-            } else {
-              return patchH5pContent(cId, body);
-            }
-          }}
-          onSaved={(cId) => {
-            onSave?.(cId);
-          }}
-          onSaveError={(error) => {
-            onError?.(error);
-          }}
-        />
-      </div>
+      <H5PEditorUI
+        ref={(ref) => {
+          h5pEditorRef.current = ref;
+        }}
+        contentId={contentId}
+        loadContentCallback={getH5pContent}
+        saveContentCallback={(cId, body) => {
+          if (!cId || cId === 'new' || cId === 'undefined') {
+            return postH5pContent(body);
+          } else {
+            return patchH5pContent(cId, body);
+          }
+        }}
+        onSaved={(cId) => {
+          onSave?.(cId);
+        }}
+        onSaveError={(error) => {
+          onError?.(error);
+        }}
+      />
       <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>
         <Button
           color="primary"
