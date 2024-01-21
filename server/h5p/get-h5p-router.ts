@@ -1,5 +1,6 @@
 import { h5pAjaxExpressRouter } from '@lumieducation/h5p-express';
 import type { IContentMetadata, IEditorModel } from '@lumieducation/h5p-server';
+import { H5pError } from '@lumieducation/h5p-server';
 import type { RequestHandler, NextFunction, Request, Response } from 'express';
 import express, { Router } from 'express';
 import morgan from 'morgan';
@@ -92,6 +93,41 @@ export const getH5pRouter = async () => {
         metadata: content.params.metadata,
         params: content.params.params,
       });
+    }),
+  );
+
+  h5pRouter.get(
+    '/data',
+    handleErrors(async (req, res) => {
+      if (!req.user) {
+        res.status(403).send('Unauthorized');
+        return;
+      }
+
+      let contentObjects;
+      try {
+        const contentIds = await h5pEditor.contentManager.listContent(undefined);
+        contentObjects = await Promise.all(
+          contentIds.map(async (id) => ({
+            content: await h5pEditor.contentManager.getContentMetadata(id, req.user as unknown as H5pUser),
+            id,
+          })),
+        );
+      } catch (error) {
+        if (error instanceof H5pError) {
+          return res.status(error.httpStatusCode).send(`${error.message}`);
+        } else {
+          throw error; // will be caught by handleErrors
+        }
+      }
+
+      res.sendJSON(
+        contentObjects.map((o) => ({
+          contentId: o.id,
+          title: o.content.title,
+          mainLibrary: o.content.mainLibrary,
+        })),
+      );
     }),
   );
 
