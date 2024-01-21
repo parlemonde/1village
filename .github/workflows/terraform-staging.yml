@@ -1,0 +1,67 @@
+# Workflow that do provision of the staging infrastructure and deploy the project.
+name: Terraform Apply
+
+#on:
+#  pull_request:
+#    branches:
+#      - master2-terraform
+
+on: workflow_dispatch
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.6.4
+
+      - name: Terraform Init
+        run: terraform init
+        if: success()
+
+      - name: Terraform Plan
+        run: terraform plan -var-file=../../terraform/terraform.tfvars
+        if: success()
+
+      - name: Terraform Apply
+        run: terraform apply -var-file=../../terraform/terraform.tfvars -auto-approve
+        if: success()
+
+      - name: Extract Public IP
+        id: server_public_ip
+        run: |
+          echo "::set-output name=server_public_ip::$(terraform output server_public_ip)"
+        if: success()
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build -t $ECR_REGISTRY/1village:staging-br-X .
+          docker push $ECR_REGISTRY/1village:staging-br-X
+        if: success()
+
+      - name: Pull and run the docker image on the server
+        run: ssh -i $SSH_KEY_PATH $server "ECR_REGISTRY=$ECR_REGISTRY IMAGE=$ECR_REGISTRY/1village:staging-br-X exec sh" < ./deploy.sh
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          server: ${{steps.server_public_ip.outputs.server_public_ip}}
+          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+        if: success()
