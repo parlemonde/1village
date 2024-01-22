@@ -9,6 +9,7 @@ import {
   JoinColumn,
   OneToMany,
   Index,
+  BeforeInsert,
 } from 'typeorm';
 
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
@@ -121,4 +122,9 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @OneToMany(() => Image, (image: Image) => image.activity)
   public images: Image[];
+
+  @BeforeInsert()
+  updatePublishDate() {
+    this.publishDate = new Date();
+  }
 }
