@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import styles from './parametrer-hymne.module.css';
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
 import type { AnthemData, Track } from 'src/activity-types/anthem.types';
+import { TrackType } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -57,9 +58,8 @@ const AnthemStep1 = () => {
     );
   }
 
-  const updateTrackInActivity = (index: number, track: Track) => {
-    const tracks = [...data.tracks];
-    tracks[index] = track;
+  const updateTrackInActivity = (updatedTrack: Track) => {
+    const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
     updateActivity({ data: { ...data, tracks } });
   };
 
@@ -88,12 +88,14 @@ const AnthemStep1 = () => {
           <div>
             <p className={styles.trackSelectionTitle}>La piste vocal du couplet, La La.</p>
             {data &&
-              (data.tracks || []).map((track, idx) => (
-                <React.Fragment key={idx}>
-                  {idx === 1 && <div className={styles.trackSelectionTitle}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
-                  <AnthemTrack id={idx} track={track} updateTrackInActivity={updateTrackInActivity}></AnthemTrack>
-                </React.Fragment>
-              ))}
+              (data.tracks || [])
+                .filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO)
+                .map((track, idx) => (
+                  <React.Fragment key={idx}>
+                    {idx === 1 && <div className={styles.trackSelectionTitle}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
+                    <AnthemTrack track={track} updateTrackInActivity={updateTrackInActivity}></AnthemTrack>
+                  </React.Fragment>
+                ))}
           </div>
         </div>
       </div>

@@ -11,17 +11,16 @@ import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 
 interface AnthemTrackProps {
-  id: number;
   track: Track;
-  updateTrackInActivity: (id: number, track: Track) => void;
+  updateTrackInActivity: (track: Track) => void;
 }
 
-const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => {
+const AnthemTrack = ({ track, updateTrackInActivity }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
 
   const handleAddSampleUrl = (url: string) => {
-    updateTrackInActivity(id, { ...track, sampleUrl: url });
+    updateTrackInActivity({ ...track, sampleUrl: url });
   };
 
   return (
@@ -46,7 +45,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
             defaultValue={track.label}
             onBlur={(e) => {
               setIsEditingLabel(false);
-              if (e.target.value.length > 0) updateTrackInActivity(id, { ...track, label: e.target.value });
+              if (e.target.value.length > 0) updateTrackInActivity({ ...track, label: e.target.value });
             }}
             autoFocus
           ></TextField>
@@ -81,7 +80,7 @@ const AnthemTrack = ({ id, track, updateTrackInActivity }: AnthemTrackProps) => 
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"
             onDelete={() => {
-              updateTrackInActivity(id, { ...track, sampleUrl: '' });
+              updateTrackInActivity({ ...track, sampleUrl: '' });
               setIsAudioEditorOpen(false);
             }}
           />
