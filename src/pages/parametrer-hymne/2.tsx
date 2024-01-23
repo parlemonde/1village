@@ -87,12 +87,12 @@ const AnthemStep2 = () => {
               <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
               <AnthemTrack
                 track={data.tracks.find((track) => track.type === TrackType.INTRO_CHORUS)}
-                updateTrackInActivity={updateTrackInActivity}
+                handleTrackUpdate={updateTrackInActivity}
               ></AnthemTrack>
               <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de l&apos;outro</p>
               <AnthemTrack
                 track={data.tracks.find((track) => track.type === TrackType.OUTRO)}
-                updateTrackInActivity={updateTrackInActivity}
+                handleTrackUpdate={updateTrackInActivity}
               ></AnthemTrack>
             </div>
           )}
