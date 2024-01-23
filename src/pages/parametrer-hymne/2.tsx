@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router';
 import React from 'react';
+import { AnthemEditor } from 'src/components/activities/content/editors/AnthemTrackSampleEditor';
 
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { AnthemData, Track } from 'src/activity-types/anthem.types';
+import { TrackType } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { AnthemEditor } from 'src/components/activities/content/editors/AnthemTrackSampleEditor';
+import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { ActivityContext } from 'src/contexts/activityContext';
 import TrackIcon from 'src/svg/anthem/track.svg';
 import Vocal from 'src/svg/anthem/vocal.svg';
@@ -48,6 +50,11 @@ const AnthemStep2 = () => {
     router.push('/parametrer-hymne/3');
   };
 
+  const updateTrackInActivity = (updatedTrack: Track) => {
+    const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
+    updateActivity({ data: { ...data, tracks } });
+  };
+
   if (!activity || !data) {
     return (
       <Base>
@@ -83,6 +90,19 @@ const AnthemStep2 = () => {
             <Vocal style={{ height: 'auto', width: '100%' }} />
           </div>
           <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
+          {data.tracks.filter((track) => track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO).length === 2 && (
+            <div className="trackSelectionContainer">
+              <AnthemTrack
+                track={data.tracks.find((track) => track.type === TrackType.INTRO_CHORUS)}
+                updateTrackInActivity={updateTrackInActivity}
+              ></AnthemTrack>
+              <AnthemTrack
+                track={data.tracks.find((track) => track.type === TrackType.OUTRO)}
+                updateTrackInActivity={updateTrackInActivity}
+              ></AnthemTrack>
+            </div>
+          )}
+
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.introOutro.map((audio, idx) => (
               <React.Fragment key={idx}>
