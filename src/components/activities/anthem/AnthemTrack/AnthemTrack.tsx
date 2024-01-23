@@ -19,8 +19,8 @@ const AnthemTrack = ({ track, updateTrackInActivity }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
 
-  const handleAddSampleUrl = (url: string) => {
-    updateTrackInActivity({ ...track, sampleUrl: url });
+  const handleSampleUpdate = (url: string, duration: number) => {
+    updateTrackInActivity({ ...track, sampleUrl: url, sampleDuration: duration });
   };
 
   return (
@@ -86,7 +86,7 @@ const AnthemTrack = ({ track, updateTrackInActivity }: AnthemTrackProps) => {
           />
         </div>
       )}
-      {isAudioEditorOpen && <AudioEditor track={track} handleSampleUrlUpdate={handleAddSampleUrl} setIsAudioEditorOpen={setIsAudioEditorOpen} />}
+      {isAudioEditorOpen && <AudioEditor track={track} handleSampleUpdate={handleSampleUpdate} setIsAudioEditorOpen={setIsAudioEditorOpen} />}
     </div>
   );
 };
