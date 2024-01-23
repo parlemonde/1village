@@ -34,7 +34,7 @@ const AnthemStep2 = () => {
   const onNext = async () => {
     setIsLoading(true);
     if (data.tracks.filter((c) => !!c.sampleUrl).length === 2 && errorSteps.length === 0) {
-      const value = await concatAudios([data.tracks[0], { value: data.finalVerse }, data.tracks[8]], axiosRequest);
+      // const value = await concatAudios([data.tracks[0], { value: data.finalVerse }, data.tracks[8]], axiosRequest);
       updateActivity({ data: { ...data, finalMix: value } });
     }
     save().catch(console.error);
