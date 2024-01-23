@@ -6,6 +6,8 @@ export enum InputTypeEnum {
   INPUT = 0,
   RADIO = 1,
   SELECT = 2,
+  IMAGE = 3,
+  VIDEO = 4,
 }
 
 export type hiddenType = {
@@ -336,19 +338,24 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           inputs: [
             {
               id: 2,
-              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
-              type: InputTypeEnum.INPUT,
+              type: InputTypeEnum.IMAGE,
               selectedValue: '',
             },
             {
               id: 3,
-              hidden: { id: 0, value: 'Français' },
-              label: 'Écrivez la traduction “mot à mot” en français',
+              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
               id: 4,
+              hidden: { id: 0, value: 'Français' },
+              label: 'Écrivez la traduction “mot à mot” en français',
+              type: InputTypeEnum.INPUT,
+              selectedValue: '',
+            },
+            {
+              id: 5,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
@@ -362,13 +369,13 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 5,
+              id: 6,
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
-              id: 6,
+              id: 7,
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
@@ -383,20 +390,20 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Réalisez votre dessin sur une feuille au format paysage',
           inputs: [
             {
-              id: 7,
-              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
-              type: InputTypeEnum.INPUT,
-              selectedValue: '',
-            },
-            {
               id: 8,
-              label: 'Écrivez la traduction “mot à mot” en français',
-              hidden: { id: 0, value: 'Français' },
+              label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
               id: 9,
+              label: 'Écrivez la traduction “mot à mot” en français',
+              hidden: { id: 0, value: 'Français' },
+              type: InputTypeEnum.INPUT,
+              selectedValue: '',
+            },
+            {
+              id: 10,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
@@ -410,13 +417,13 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 10,
+              id: 11,
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
-              id: 11,
+              id: 12,
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
@@ -431,20 +438,20 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           description: 'Réalisez votre dessin sur une feuille au format paysage',
           inputs: [
             {
-              id: 12,
+              id: 13,
               label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
-              id: 13,
+              id: 14,
               label: 'Écrivez la traduction “mot à mot” en français',
               hidden: { id: 0, value: 'Français' },
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
-              id: 14,
+              id: 15,
               label: 'Que signifie cette expression ?',
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
@@ -458,13 +465,13 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront le dessin de votre expression, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 15,
+              id: 16,
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
             },
             {
-              id: 16,
+              id: 17,
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
