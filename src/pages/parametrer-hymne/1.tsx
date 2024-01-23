@@ -27,10 +27,8 @@ const AnthemStep1 = () => {
   const [isEqualDurationTracks, setIsEqualDurationTracks] = React.useState(false);
 
   const data = (activity?.data as AnthemData) || null;
-  const [tempTracks, setTempTracks] = React.useState<Track[]>([]);
 
   const created = React.useRef(false);
-
   React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
@@ -44,33 +42,27 @@ const AnthemStep1 = () => {
   }, [activity, createActivityIfNotExist, router, selectedPhase]);
 
   React.useEffect(() => {
-    if (data && tempTracks.length === 0) {
-      setTempTracks(data.tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO));
-      setIsEqualDurationTracks(true);
-    } else if (tempTracks.length > 1) {
-      const filteredTracksDuration = tempTracks.map((track) => track.sampleDuration).filter((duration) => duration > 1);
-      setIsEqualDurationTracks(() => filteredTracksDuration.every((duration) => duration === filteredTracksDuration[0]));
+    if (data) {
+      const tracksWithSampleDuration = data.tracks
+        .filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO && track.sampleDuration > 1)
+        .map((track) => track.sampleDuration);
+      setIsEqualDurationTracks(
+        tracksWithSampleDuration.length === 0 ? true : () => tracksWithSampleDuration.every((duration) => duration === tracksWithSampleDuration[0]),
+      );
     }
-  }, [data, tempTracks]);
+  }, [data]);
 
   const handleTrackUpdate = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
-    setTempTracks(tracks);
-  };
-
-  const updateTrackInActivity = (updatedTrack: Track) => {
-    const tracks = tempTracks.map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
     updateActivity({ data: { ...data, tracks } });
   };
 
   const onNext = async () => {
     setIsLoading(true);
-
-    if (activity !== null && data.tracks.filter((track) => !!track.sampleUrl).length === 7) {
+    if (isEqualDurationTracks) {
       // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
-      // updateActivity({ data: { ...data, verseTime:  } });
+      save().catch(console.error);
     }
-    save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/2');
   };
@@ -92,8 +84,8 @@ const AnthemStep1 = () => {
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
           <div>
             <p className={styles.trackSelectionTitle}>La piste vocal du couplet, La La.</p>
-            {tempTracks &&
-              tempTracks
+            {data.tracks &&
+              (data.tracks || [])
                 .filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO)
                 .map((track, idx) => (
                   <React.Fragment key={idx}>
