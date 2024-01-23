@@ -12,11 +12,11 @@ export type Syllable = {
 };
 
 export type Track = {
-  iconUrl: string;
-  label: string;
   type: TrackType;
+  label: string;
   sampleUrl: string;
   sampleDuration: number;
+  iconUrl: string;
 };
 
 export enum TrackType {
