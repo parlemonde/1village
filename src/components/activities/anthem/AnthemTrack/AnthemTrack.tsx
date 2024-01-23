@@ -12,15 +12,15 @@ import { EditButton } from 'src/components/buttons/EditButton';
 
 interface AnthemTrackProps {
   track: Track;
-  updateTrackInActivity: (track: Track) => void;
+  handleTrackUpdate: (track: Track) => void;
 }
 
-const AnthemTrack = ({ track, updateTrackInActivity }: AnthemTrackProps) => {
+const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
 
   const handleSampleUpdate = (url: string, duration: number) => {
-    updateTrackInActivity({ ...track, sampleUrl: url, sampleDuration: duration });
+    handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration });
   };
 
   return (
@@ -45,7 +45,7 @@ const AnthemTrack = ({ track, updateTrackInActivity }: AnthemTrackProps) => {
             defaultValue={track.label}
             onBlur={(e) => {
               setIsEditingLabel(false);
-              if (e.target.value.length > 0) updateTrackInActivity({ ...track, label: e.target.value });
+              if (e.target.value.length > 0) handleTrackUpdate({ ...track, label: e.target.value });
             }}
             autoFocus
           ></TextField>
@@ -80,7 +80,7 @@ const AnthemTrack = ({ track, updateTrackInActivity }: AnthemTrackProps) => {
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"
             onDelete={() => {
-              updateTrackInActivity({ ...track, sampleUrl: '' });
+              handleTrackUpdate({ ...track, sampleUrl: '' });
               setIsAudioEditorOpen(false);
             }}
           />
