@@ -13,16 +13,17 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 
 export interface AudioEditorProps {
   track: Track;
-  handleSampleUrlUpdate: (url: string) => void;
+  handleSampleUpdate: (url: string, duration: number) => void;
   setIsAudioEditorOpen: (value: boolean) => void;
 }
 
-const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: AudioEditorProps) => {
+const AudioEditor = ({ track, handleSampleUpdate, setIsAudioEditorOpen }: AudioEditorProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [isModalLoading, setIsModalLoading] = React.useState(false);
 
   const [tempSampleUrl, setTempSampleUrl] = React.useState(track.sampleUrl || '');
+  const [tempSampleDuration, setTempSampleDuration] = React.useState(track.sampleDuration || 0);
   const [tempSampleFile, setTempSampleFile] = React.useState<File | null>(null);
 
   const uploadSampleFile = async () => {
@@ -48,7 +49,7 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
         variant: 'error',
       });
     } else if (response.data.url) {
-      handleSampleUrlUpdate(response.data.url);
+      handleSampleUpdate(response.data.url, tempSampleDuration);
     }
   };
 
@@ -72,11 +73,11 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
       title="Choisir un son"
       confirmLabel="Choisir"
       onConfirm={async () => {
-        tempSampleFile ? await uploadSampleFile() : handleSampleUrlUpdate(tempSampleUrl);
+        tempSampleFile ? await uploadSampleFile() : handleSampleUpdate(tempSampleUrl, tempSampleDuration);
         setIsAudioEditorOpen(false);
       }}
       onClose={() => {
-        if (!track.sampleUrl) handleSampleUrlUpdate('');
+        if (!track.sampleUrl) handleSampleUpdate('', 0);
         setIsAudioEditorOpen(false);
       }}
       loading={isModalLoading}
@@ -119,7 +120,7 @@ const AudioEditor = ({ track, handleSampleUrlUpdate, setIsAudioEditorOpen }: Aud
             <div className={styles.dataPreviewContentTitle}>Aperçu</div>
             {tempSampleUrl && (
               <div className={styles.sampleControlsContainer}>
-                <audio controls src={tempSampleUrl}>
+                <audio controls src={tempSampleUrl} onLoadedMetadata={(e) => setTempSampleDuration(e.currentTarget.duration)}>
                   <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
                 </audio>
               </div>
