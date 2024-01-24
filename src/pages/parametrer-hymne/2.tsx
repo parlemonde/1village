@@ -3,6 +3,7 @@ import React from 'react';
 
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { red } from '@mui/material/colors';
 
 import styles from './parametrer-hymne.module.css';
 import type { AnthemData, Track } from 'src/activity-types/anthem.types';
@@ -64,7 +65,7 @@ const AnthemStep2 = () => {
           activeStep={1}
           urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
-        <div className="width-900">
+        <div className={styles.trackSelectionContainer}>
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>
@@ -83,7 +84,7 @@ const AnthemStep2 = () => {
               )}
               :
             </p>
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <div className={styles.trackVocalContainer}>
               <span>
                 Intro :{' '}
                 {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)})</b>}
@@ -93,13 +94,13 @@ const AnthemStep2 = () => {
               </span>
               <span>Outro : {data.tracks[TrackType.OUTRO].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.OUTRO].sampleDuration)})</b>}</span>
             </div>
-            <Vocal style={{ height: 'auto', width: '100%' }} />
+            <Vocal className={styles.trackVocal} />
           </div>
           {data.tracks.filter((track) => track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO).length === 2 && (
             <div className={styles.trackSelectionContainer}>
-              <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
+              <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
               <AnthemTrack track={data.tracks[TrackType.INTRO_CHORUS]} handleTrackUpdate={updateTrackInActivity}></AnthemTrack>
-              <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de l&apos;outro</p>
+              <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de l&apos;outro</p>
               <AnthemTrack track={data.tracks[TrackType.OUTRO]} handleTrackUpdate={updateTrackInActivity}></AnthemTrack>
             </div>
           )}

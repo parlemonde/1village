@@ -4,7 +4,9 @@
 }
 
 .trackSelectionContainer {
-    width: 900px;
+    margin: 0 auto 1rem auto;
+    width: 100%;
+    max-width: 900px;
 }
 
 .trackSelectionTitle {
@@ -14,4 +16,14 @@
 .trackSelectionBackdrop {
     z-index: 2000;
     color: white;
+}
+
+.trackVocalContainer{
+    display: flex;
+    justify-content: space-around;
+}
+
+.trackVocal{
+    width: 100%;
+    height: auto;
 }
