@@ -35,7 +35,7 @@ const AnthemStep2 = () => {
     setIsLoading(true);
     if (data.tracks.filter((c) => !!c.sampleUrl).length === 2 && errorSteps.length === 0) {
       // const value = await concatAudios([data.tracks[0], { value: data.finalVerse }, data.tracks[8]], axiosRequest);
-      updateActivity({ data: { ...data, finalMix: value } });
+      // updateActivity({ data: { ...data, finalMix: value } });
     }
     save().catch(console.error);
     setIsLoading(false);
@@ -68,32 +68,39 @@ const AnthemStep2 = () => {
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>
-              Pour mémoire voici la structure de l&apos;hymne {/* AFFICHER TEMPS TOTAL DE L'HYMNE */}
-              {/* {data.introOutro[0].time > 0 && data.introOutro[1].time > 0 && data.verseTime > 0 && (
-                <b>({toTime(data.introOutro[0].time + data.introOutro[1].time + data.verseTime)})</b>
-              )} */}
+              Pour mémoire voici la structure de l&apos;hymne
+              {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && data.tracks[TrackType.OUTRO].sampleDuration > 0 && (
+                <b>
+                  {' '}
+                  (
+                  {toTime(
+                    data.tracks[TrackType.INTRO_CHORUS].sampleDuration +
+                      data.tracks[TrackType.OUTRO].sampleDuration +
+                      data.tracks[TrackType.VOCALS].sampleDuration,
+                  )}
+                  )
+                </b>
+              )}
               :
             </p>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-              {/* AFFICHER TEMPS INTRO / COUPLET / OUTRO */}
-              {/* <span>Intro : {data.introOutro[0].time > 0 && <b>({toTime(data.introOutro[0].time)})</b>}</span>
-              <span>Couplet : {data.verseTime > 0 && <b>({toTime(data.verseTime)})</b>} </span>
-              <span>Outro : {data.introOutro[1].time > 0 && <b>({toTime(data.introOutro[1].time)})</b>}</span> */}
+              <span>
+                Intro :{' '}
+                {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)})</b>}
+              </span>
+              <span>
+                Couplet : {data.tracks[TrackType.VOCALS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.VOCALS].sampleDuration)})</b>}{' '}
+              </span>
+              <span>Outro : {data.tracks[TrackType.OUTRO].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.OUTRO].sampleDuration)})</b>}</span>
             </div>
             <Vocal style={{ height: 'auto', width: '100%' }} />
           </div>
           {data.tracks.filter((track) => track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO).length === 2 && (
             <div className={styles.trackSelectionContainer}>
               <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
-              <AnthemTrack
-                track={data.tracks.find((track) => track.type === TrackType.INTRO_CHORUS)}
-                handleTrackUpdate={updateTrackInActivity}
-              ></AnthemTrack>
+              <AnthemTrack track={data.tracks[TrackType.INTRO_CHORUS]} handleTrackUpdate={updateTrackInActivity}></AnthemTrack>
               <p style={{ margin: '25px 0 25px' }}>Mettre en ligne le fichier son de l&apos;outro</p>
-              <AnthemTrack
-                track={data.tracks.find((track) => track.type === TrackType.OUTRO)}
-                handleTrackUpdate={updateTrackInActivity}
-              ></AnthemTrack>
+              <AnthemTrack track={data.tracks[TrackType.OUTRO]} handleTrackUpdate={updateTrackInActivity}></AnthemTrack>
             </div>
           )}
         </div>
