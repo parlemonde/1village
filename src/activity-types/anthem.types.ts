@@ -20,14 +20,14 @@ export type Track = {
 };
 
 export enum TrackType {
-  VOCALS = 0,
-  HARMONIC1 = 1,
-  HARMONIC2 = 2,
-  MELODIC1 = 3,
-  MELODIC2 = 4,
-  RYTHMIC1 = 5,
-  RYTHMIC2 = 6,
-  INTRO_CHORUS = 7,
+  INTRO_CHORUS = 0,
+  VOCALS = 1,
+  HARMONIC1 = 2,
+  HARMONIC2 = 3,
+  MELODIC1 = 4,
+  MELODIC2 = 5,
+  RYTHMIC1 = 6,
+  RYTHMIC2 = 7,
   OUTRO = 8,
 }
 
