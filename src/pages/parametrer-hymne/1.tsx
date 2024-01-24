@@ -60,8 +60,8 @@ const AnthemStep1 = () => {
   const onNext = async () => {
     setIsLoading(true);
     if (isEqualDurationTracks) {
-      // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
       save().catch(console.error);
+      // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
     }
     setIsLoading(false);
     router.push('/parametrer-hymne/2');
@@ -87,12 +87,16 @@ const AnthemStep1 = () => {
             {data.tracks &&
               (data.tracks || [])
                 .filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO)
-                .map((track, idx) => (
-                  <React.Fragment key={idx}>
-                    {idx === 1 && <div className={styles.trackSelectionTitle}>Les différentes pistes sonores du couplet (utiles au mixage)</div>}
+                .map((track) =>
+                  track.type === TrackType.VOCALS ? (
+                    <>
+                      <AnthemTrack track={track} handleTrackUpdate={handleTrackUpdate}></AnthemTrack>
+                      <div className={styles.trackSelectionTitle}>Les différentes pistes sonores du couplet (utiles au mixage)</div>
+                    </>
+                  ) : (
                     <AnthemTrack track={track} handleTrackUpdate={handleTrackUpdate}></AnthemTrack>
-                  </React.Fragment>
-                ))}
+                  ),
+                )}
           </div>
         </div>
       </div>
