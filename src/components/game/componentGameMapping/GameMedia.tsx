@@ -32,10 +32,10 @@ const GameMedia = ({ input }: { input: inputType }) => {
   return (
     <>
       {input.type == 3 && (
-        <div className="width-500">
+        <div className="width-900">
           <div style={{ width: '50%', marginTop: '1rem', position: 'relative' }}>
             <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${isError ? errorColor : primaryColor}` }}>
-              <KeepRatio ratio={2 / 3} width="100%">
+              <KeepRatio ratio={3 / 3} width="100%">
                 <div
                   style={{
                     height: '100%',

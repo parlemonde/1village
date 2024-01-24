@@ -44,8 +44,6 @@ const CreateGame = ({ stepNumber }: PlayProps) => {
     return true;
   };
 
-  console.log('gameConfig', gameConfig);
-
   return (
     <>
       <ImageModal id={0} isModalOpen={false} setIsModalOpen={() => {}} imageUrl="" setImageUrl={() => {}} useCrop={false} onDeleteEditor={() => {}} />
