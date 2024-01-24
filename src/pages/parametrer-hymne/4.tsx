@@ -19,15 +19,15 @@ const AnthemStep4 = () => {
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
-      errors.push(0);
-    }
-    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
-      errors.push(1);
-    }
-    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
-      errors.push(2);
-    }
+    // if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    //   errors.push(0);
+    // }
+    // if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    //   errors.push(1);
+    // }
+    // if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
+    //   errors.push(2);
+    // }
 
     return errors;
   }, [data]);
@@ -44,8 +44,8 @@ const AnthemStep4 = () => {
     return <div></div>;
   }
 
-  const updateChorus = (chorus: Syllable[]) => {
-    updateActivity({ data: { ...data, chorus } });
+  const updateChorus = (chorusLyrics: Syllable[]) => {
+    updateActivity({ data: { ...data, chorusLyrics } });
   };
 
   const onNext = () => {
@@ -73,17 +73,17 @@ const AnthemStep4 = () => {
         </p>
         <div className="width-900">
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data.chorus.map((el, index) => (
+            {data.chorusLyrics.map((el, index) => (
               <SyllableEditor
                 key={`syllableEditor--chorus--${index}`}
                 value={el}
                 onChange={(newValue) => {
-                  const newChorus = [...data.chorus];
+                  const newChorus = [...data.chorusLyrics];
                   newChorus[index] = newValue;
                   updateChorus(newChorus);
                 }}
                 onDelete={() => {
-                  const newChorus = [...data.chorus];
+                  const newChorus = [...data.chorusLyrics];
                   const deleted = newChorus.splice(index, 1);
                   if (deleted.length > 0 && deleted[0].back && newChorus.length > index) {
                     newChorus[index] = { ...newChorus[index], back: true };
@@ -108,7 +108,7 @@ const AnthemStep4 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.chorus.push({ value: 'LA', back: false });
+                  data?.chorusLyrics.push({ value: 'LA', back: false });
                   updateActivity({ data: { ...data } });
                 }}
               >
@@ -127,7 +127,7 @@ const AnthemStep4 = () => {
                   borderRadius: '5px',
                 }}
                 onClick={() => {
-                  data?.chorus.push({ value: 'LA', back: true });
+                  data?.chorusLyrics.push({ value: 'LA', back: true });
                   updateActivity({ data: { ...data } });
                 }}
               >

@@ -19,10 +19,10 @@ const AnthemStep3 = () => {
   const data = (activity?.data as AnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
+    if (data !== null && data.tracks.filter((c) => !!c.sampleUrl).length !== 7) {
       errors.push(0);
     }
-    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
+    if (data !== null && data.tracks.filter((c) => !!c.sampleUrl).length !== 2) {
       errors.push(1);
     }
     return errors;
