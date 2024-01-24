@@ -63,12 +63,17 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
           inputs: [
             {
               id: 0,
+              type: InputTypeEnum.VIDEO,
+              selectedValue: '',
+            },
+            {
+              id: 1,
               type: InputTypeEnum.INPUT,
               label: 'Que signifie cette mimique ?',
               placeHolder: 'Signification réelle',
             },
             {
-              id: 1,
+              id: 2,
               type: InputTypeEnum.INPUT,
               label: 'Quelle est l’origine de cette mimique ?',
               placeHolder: 'Origine',
@@ -81,12 +86,12 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 2,
+              id: 3,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Signification inventée 1',
             },
             {
-              id: 3,
+              id: 4,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Signification inventée 2',
             },
@@ -100,13 +105,18 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise.. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
           inputs: [
             {
-              id: 0,
+              id: 5,
+              type: InputTypeEnum.VIDEO,
+              selectedValue: '',
+            },
+            {
+              id: 6,
               type: InputTypeEnum.INPUT,
               label: 'Que signifie cette mimique ?',
               placeHolder: 'Signification réelle',
             },
             {
-              id: 1,
+              id: 7,
               type: InputTypeEnum.INPUT,
               label: 'Quelle est l’origine de cette mimique ?',
               placeHolder: 'Origine',
@@ -119,16 +129,66 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             'Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
           inputs: [
             {
-              id: 2,
+              id: 8,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Signification inventée 1',
             },
             {
-              id: 3,
+              id: 9,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Signification inventée 2',
             },
           ],
+        },
+      ],
+      [
+        {
+          title: 'Présentez en vidéo une 3ème mimique à vos Pélicopains',
+          description:
+            'Votre vidéo est un plan unique tourné à l’horizontal, qui montre un élève faisant la mimique et la situation dans laquelle on l’utilise.. Gardez le mystère, et ne révélez pas à l’oral sa signification !',
+          inputs: [
+            {
+              id: 10,
+              type: InputTypeEnum.VIDEO,
+              selectedValue: '',
+            },
+            {
+              id: 11,
+              type: InputTypeEnum.INPUT,
+              label: 'Que signifie cette mimique ?',
+              placeHolder: 'Signification réelle',
+            },
+            {
+              id: 12,
+              type: InputTypeEnum.INPUT,
+              label: 'Quelle est l’origine de cette mimique ?',
+              placeHolder: 'Origine',
+            },
+          ],
+        },
+        {
+          title: 'Inventez deux significations fausses à cette mimique',
+          description:
+            'Vos Pélicopains verront la vidéo de votre mimique, et devront trouver sa signification parmi la vraie, et ces deux fausses, qu’il faut inventer :',
+          inputs: [
+            {
+              id: 13,
+              type: InputTypeEnum.INPUT,
+              placeHolder: 'Signification inventée 1',
+            },
+            {
+              id: 14,
+              type: InputTypeEnum.INPUT,
+              placeHolder: 'Signification inventée 2',
+            },
+          ],
+        },
+      ],
+      [
+        {
+          title: 'Pré-visualisez votre activité et publiez-la.',
+          description:
+            'Voici la pré-visualisation de votre activité. Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !',
         },
       ],
     ],
