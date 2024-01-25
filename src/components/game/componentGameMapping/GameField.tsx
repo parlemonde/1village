@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { TextField } from '@mui/material';
 
 import type { inputType } from 'src/config/games/game';
-import { useGame, gameResponse, saveGameResponseInSessionStorage } from 'src/contexts/gameContext';
+import { GameContext } from 'src/contexts/gameContext';
 
-const GameField = ({ input, stepNumber }: { input: inputType; stepNumber: number }) => {
-  const { userSelection } = useGame();
-
-  if (input.hidden && input.hidden.value === userSelection) return null;
+const GameField = ({ input }: { input: inputType }) => {
+  const { updateGameConfig } = useContext(GameContext);
 
   const handleChange = (event: React.SyntheticEvent) => {
-    const newValue = (event.target as HTMLInputElement).value;
-    const stepResponse = gameResponse.data[stepNumber - 1];
-    if (stepResponse && stepResponse.responses && stepResponse.responses[input.id]) {
-      stepResponse.responses[input.id].value = newValue;
-      saveGameResponseInSessionStorage(gameResponse);
-    }
+    const value = (event.target as HTMLInputElement).value;
+    updateGameConfig(value, input);
   };
 
   return (
     <>
-      <p>{input.label}</p>
-      <TextField style={{ width: '100%', margin: '10px' }} type="text" placeholder={input.placeHolder} onChange={handleChange} />
+      <p>
+        <b>{input.label}</b>
+      </p>
+      {input.selectedValue && input.selectedValue.length > 0 ? (
+        <TextField style={{ width: '100%', margin: '10px' }} type="text" value={input.selectedValue} onChange={handleChange} />
+      ) : (
+        <TextField style={{ width: '100%', margin: '10px' }} type="text" placeholder={input.placeHolder} onChange={handleChange} />
+      )}
     </>
   );
 };

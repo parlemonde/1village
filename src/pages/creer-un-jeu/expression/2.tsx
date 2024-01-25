@@ -1,28 +1,15 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
-// import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import { useGame } from 'src/contexts/gameContext';
-import { GameType } from 'types/game.type';
+import { GameContext } from 'src/contexts/gameContext';
 
 const ExpressionStep2 = () => {
   const router = useRouter();
-  const { userSelection } = useGame();
-  // const originalLabelTemplate = 'Écrivez l’expression en ';
-
-  // function updateLabelWithSelection(userSelection: string) {
-  //   if (!userSelection) {
-  //     return originalLabelTemplate;
-  //   }
-
-  //   return `${originalLabelTemplate}${userSelection}`;
-  // }
-
-  // GAME_FIELDS_CONFIG[GameType.EXPRESSION].steps[1][0].inputs![0].label = updateLabelWithSelection(userSelection).toLowerCase();
+  const { inputSelectedValue } = useContext(GameContext);
 
   const onNext = () => {
     router.push('/creer-un-jeu/expression/3');
@@ -36,7 +23,7 @@ const ExpressionStep2 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[userSelection || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
+          steps={[inputSelectedValue || 'Langue', '1ère expression', '2ème expression', '3ème expression', 'Prévisualisation']}
           urls={[
             '/creer-un-jeu/expression/1',
             '/creer-un-jeu/expression/2',
@@ -47,7 +34,7 @@ const ExpressionStep2 = () => {
           activeStep={1}
         />
         <div>
-          <CreateGame gameType={GameType.EXPRESSION} stepNumber={1} />
+          <CreateGame stepNumber={1} />
         </div>
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>

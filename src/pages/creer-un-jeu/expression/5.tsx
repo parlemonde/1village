@@ -1,16 +1,15 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
-import { useGame } from 'src/contexts/gameContext';
-import { GameType } from 'types/game.type';
+import { GameContext } from 'src/contexts/gameContext';
 
 const ExpressionStep5 = () => {
   const router = useRouter();
-  const { userSelection } = useGame();
+  const { inputSelectedValue } = useContext(GameContext);
 
   const onNext = () => {
     router.push('/creer-un-jeu/expression/success');
@@ -24,7 +23,7 @@ const ExpressionStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[userSelection || 'Langue', 'Expression 1', 'Expression 2', 'Expression 3', 'Prévisualisation']}
+          steps={[inputSelectedValue || 'Langue', '1ère expression', '2ème expression', '3ème expression', 'Prévisualisation']}
           urls={[
             '/creer-un-jeu/expression/1',
             '/creer-un-jeu/expression/2',
@@ -35,11 +34,8 @@ const ExpressionStep5 = () => {
           activeStep={4}
         />
         <div>
-          <CreateGame gameType={GameType.EXPRESSION} stepNumber={4} />
+          <CreateGame stepNumber={4} />
         </div>
-        {/* Imaginons qu'à cette page, les 3 jeux sont terminés mais pour une raison quelconque 
-        le prof n'a pas publier ou pu publier, est-ce qu'on peut faire une requete qui detecte
-        que lorsqu'on arrive sur cette page, le jeu est inscrit dans la bdd en draft ? */}
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>
     </Base>
