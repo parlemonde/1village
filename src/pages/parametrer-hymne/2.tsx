@@ -3,7 +3,6 @@ import React from 'react';
 
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { red } from '@mui/material/colors';
 
 import styles from './parametrer-hymne.module.css';
 import type { AnthemData, Track } from 'src/activity-types/anthem.types';
@@ -58,7 +57,7 @@ const AnthemStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <div className={styles.mainContainer}>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
@@ -67,7 +66,7 @@ const AnthemStep2 = () => {
         />
         <div className={styles.trackSelectionContainer}>
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>
-          <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
+          <div className={styles.anthemStructureContainer}>
             <p>
               Pour mémoire voici la structure de l&apos;hymne
               {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && data.tracks[TrackType.OUTRO].sampleDuration > 0 && (
@@ -84,7 +83,7 @@ const AnthemStep2 = () => {
               )}
               :
             </p>
-            <div className={styles.trackVocalContainer}>
+            <div className={styles.anthemStructureVocalContainer}>
               <span>
                 Intro :{' '}
                 {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)})</b>}
@@ -94,7 +93,7 @@ const AnthemStep2 = () => {
               </span>
               <span>Outro : {data.tracks[TrackType.OUTRO].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.OUTRO].sampleDuration)})</b>}</span>
             </div>
-            <Vocal className={styles.trackVocal} />
+            <Vocal className={styles.anthemStructureVocal} />
           </div>
           {data.tracks.filter((track) => track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO).length === 2 && (
             <div className={styles.trackSelectionContainer}>
@@ -107,7 +106,7 @@ const AnthemStep2 = () => {
         </div>
       </div>
       <StepsButton prev="/parametrer-hymne/1?edit" next={onNext} />
-      <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
+      <Backdrop className={styles.trackSelectionBackdrop} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Base>
