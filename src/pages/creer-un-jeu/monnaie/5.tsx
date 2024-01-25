@@ -5,6 +5,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
+import Previsualisation from 'src/components/game/Previsualisation';
 import { useGame } from 'src/contexts/gameContext';
 import { GameType } from 'types/game.type';
 
@@ -37,6 +38,7 @@ const MonnaieStep5 = () => {
         <div>
           <CreateGame gameType={GameType.MONEY} stepNumber={4} />
         </div>
+        <Previsualisation />
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>
     </Base>

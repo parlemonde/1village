@@ -21,7 +21,7 @@ const ComponentMapping = {
 const CreateGame = ({ gameType, stepNumber }: PlayProps) => {
   const gameConfig = GAME_FIELDS_CONFIG[gameType];
 
-  console.log('gameResponse', gameResponse);
+  // console.log('gameResponse', gameResponse);
 
   if (!gameConfig || !gameConfig.steps[stepNumber]) {
     return <div>Oups, votre jeu n&apos;existe pas encore</div>;

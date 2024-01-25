@@ -29,6 +29,7 @@ interface GameData {
 interface Response {
   id?: number;
   value?: string;
+  response?: boolean;
 }
 
 export const gameResponse: GameResponseDataToSend = {
@@ -48,23 +49,26 @@ export const gameResponse: GameResponseDataToSend = {
       responses: [
         {
           id: 1,
-          value: 'test',
+          value: 'Une guitare',
         },
         {
           id: 2,
-          value: 'id2',
+          value: 'Premiers prix : 1',
+          response: true,
         },
         {
           id: 3,
-          value: 'id3',
+          value: 'Sert a rien',
         },
         {
           id: 4,
-          value: 'id4',
+          value: 'Deuxieme prix : 10',
+          response: false,
         },
         {
           id: 5,
-          value: 'id5',
+          value: 'derniers prix : 100',
+          response: false,
         },
       ],
     },
@@ -78,7 +82,7 @@ export const gameResponse: GameResponseDataToSend = {
         },
         {
           id: 2,
-          value: '',
+          value: 'Premiers prix : 2',
         },
         {
           id: 3,
@@ -86,11 +90,11 @@ export const gameResponse: GameResponseDataToSend = {
         },
         {
           id: 4,
-          value: '',
+          value: 'Deuxieme prix : 20',
         },
         {
           id: 5,
-          value: '',
+          value: 'derniers prix : 200',
         },
       ],
     },
@@ -104,7 +108,7 @@ export const gameResponse: GameResponseDataToSend = {
         },
         {
           id: 2,
-          value: '',
+          value: 'Premiers prix : 3',
         },
         {
           id: 3,
@@ -112,11 +116,11 @@ export const gameResponse: GameResponseDataToSend = {
         },
         {
           id: 4,
-          value: '',
+          value: 'Deuxième prix : 30',
         },
         {
           id: 5,
-          value: '',
+          value: 'derniers prix : 300',
         },
       ],
     },

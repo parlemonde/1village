@@ -13,6 +13,7 @@ export type inputType = {
   type: InputTypeEnum;
   values?: string[];
   label?: string;
+  // response?: boolean;
   placeHolder?: string;
   methodType?: methodType;
   selectedValue?: string;
@@ -202,6 +203,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 1,
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              // response: true,
             },
             {
               id: 2,
@@ -219,6 +221,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 3,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
+              // response: false,
             },
             {
               id: 4,
