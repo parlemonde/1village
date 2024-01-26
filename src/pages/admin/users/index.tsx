@@ -119,16 +119,17 @@ const Users = () => {
 
     const datasToExport = filteredUsers.map((user) => {
       return {
-        firstname: user.firstname,
-        lastname: user.lastname,
+        firstname: user.firstname ? user.firstname : 'Non renseigné',
+        lastname: user.lastname ? user.lastname : 'Non renseigné',
         email: user.email,
         school: user.school ? user.school : 'Non renseignée',
         village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigné',
         country: user.country ? user.country.name : 'Non renseignée',
+        type: user.type ? userTypeNames[user.type] : 'Non renseigné',
       };
     });
 
-    const headers = ['Prenom', 'Nom', 'Email', 'Ecole', 'Village', 'Pays'];
+    const headers = ['Prenom', 'Nom', 'Email', 'Ecole', 'Village', 'Pays', 'Rôle'];
 
     let userLabel = 'liste-utilisateurs-';
 
