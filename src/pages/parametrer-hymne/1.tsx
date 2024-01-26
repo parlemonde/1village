@@ -15,6 +15,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { StepsButtonDisablable } from 'src/components/StepsButtonsDisablable';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
@@ -42,6 +43,12 @@ const AnthemStep1 = () => {
       }
     }
   }, [activity, createActivityIfNotExist, router, selectedPhase]);
+
+  React.useEffect(() => {
+    if (data) {
+      setIsValid(getErrorSteps(data, 0).length === 0);
+    }
+  }, [data]);
 
   const handleTrackUpdate = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));

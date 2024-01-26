@@ -10,20 +10,13 @@ const isVersesEqualDuration = (data: AnthemData) => {
 };
 
 export const isFirstStepValid = (data: AnthemData): boolean => {
-  if (!isVersesEqualDuration(data)) return false;
-  return true;
-};
-
-export const isThirdStepValid = (data: AnthemData): boolean => {
-  if (data) return false;
+  if (isVersesEqualDuration(data) === false) return false;
   return true;
 };
 
 export const getErrorSteps = (data: AnthemData, step: number) => {
   const errorSteps = [];
 
-  if (step > 0 && !isFirstStepValid(data)) errorSteps.push(0);
-  if (step > 1 && !isThirdStepValid(data)) errorSteps.push(2);
-
+  if (step === 0 && !isFirstStepValid(data)) errorSteps.push(0);
   return errorSteps;
 };
