@@ -3,6 +3,12 @@
     padding: 0.5rem 1rem 1rem 1rem;
 }
 
+.warningContainer{
+    display: flex;
+    align-items: center;
+    color: red;
+}
+
 .trackSelectionContainer {
     margin: 0 auto 1rem auto;
     width: 100%;

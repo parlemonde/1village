@@ -13,6 +13,7 @@ import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { StepsButtonDisablable } from 'src/components/StepsButtonsDisablable';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -25,7 +26,7 @@ const AnthemStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(true);
 
   const data = (activity?.data as AnthemData) || null;
 
@@ -49,7 +50,7 @@ const AnthemStep1 = () => {
 
   const onNext = async () => {
     setIsLoading(true);
-    if (!isError) {
+    if (isValid) {
       save().catch(console.error);
       // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
     }
@@ -72,12 +73,15 @@ const AnthemStep1 = () => {
         <div className={styles.trackSelectionContainer}>
           <h1>Mettre en ligne les pistes sonores du couplet</h1>
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
-          <div>
-            <b>
+          {!isValid ? (
+            <div className={styles.warningContainer}>
               <WarningAmberRoundedIcon />
-              Toutes les pistes du couplet doivent avoir la même durée
-            </b>
-          </div>
+              <b>Toutes les pistes du couplet doivent avoir la même durée</b>
+            </div>
+          ) : (
+            <b>Toutes les pistes du couplet doivent avoir la même durée</b>
+          )}
+
           <div>
             <p className={styles.trackSelectionTitle}>La piste vocal du couplet, La La.</p>
             {data.tracks &&
@@ -96,7 +100,7 @@ const AnthemStep1 = () => {
           </div>
         </div>
       </div>
-      <StepsButton next={onNext} />
+      <StepsButtonDisablable next={onNext} isDisable={!isValid} />
       <Backdrop className={styles.trackSelectionBackdrop} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
