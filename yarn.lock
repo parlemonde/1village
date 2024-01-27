@@ -55,6 +55,7 @@ __metadata:
     "@types/sass": 1.43.1
     "@types/sharp": 0.30.4
     "@types/sortablejs": 1.13.0
+    "@types/stream-buffers": ^3.0.7
     "@types/string-similarity": 4.0.0
     "@types/supertest": 2.0.12
     "@types/three": 0.149.0
@@ -130,6 +131,7 @@ __metadata:
     sharp: ^0.30.7
     sortablejs: ^1.15.0
     sqlite3: ^5.1.2
+    stream-buffers: ^3.0.2
     string-similarity: ^4.0.4
     supertest: ^6.3.3
     three: 0.150.1
@@ -3778,6 +3780,15 @@ __metadata:
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
   checksum: 205fdbe3326b7046d7eaf5e494d8084f2659086a266f3f9cf00bccc549c8e36e407f88168ad4383c8b07099957ad669f75f2532ed4bc70be2b037330f7bae019
+  languageName: node
+  linkType: hard
+
+"@types/stream-buffers@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "@types/stream-buffers@npm:3.0.7"
+  dependencies:
+    "@types/node": "*"
+  checksum: b5cf12f69ba866035207e2313bd795166c30ca18329b8c07a96ec5e30d702a0c23b12fa789c7ebc3a08091ea01eca8db84203c93b6823e7477df016a49540f84
   languageName: node
   linkType: hard
 

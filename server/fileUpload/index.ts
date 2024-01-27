@@ -3,7 +3,7 @@ import type { Readable } from 'stream';
 import { AwsS3 } from './s3';
 import { VimeoClass } from './vimeo';
 
-const s3 = new AwsS3();
+export const s3 = new AwsS3();
 const vimeo = new VimeoClass();
 
 export function getFile(filename: string, range?: string): Readable {

@@ -74,6 +74,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/sass", "npm:1.43.1"],\
             ["@types/sharp", "npm:0.30.4"],\
             ["@types/sortablejs", "npm:1.13.0"],\
+            ["@types/stream-buffers", "npm:3.0.7"],\
             ["@types/string-similarity", "npm:4.0.0"],\
             ["@types/supertest", "npm:2.0.12"],\
             ["@types/three", "npm:0.149.0"],\
@@ -149,6 +150,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sharp", "npm:0.30.7"],\
             ["sortablejs", "npm:1.15.0"],\
             ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.6"],\
+            ["stream-buffers", "npm:3.0.2"],\
             ["string-similarity", "npm:4.0.4"],\
             ["supertest", "npm:6.3.3"],\
             ["three", "npm:0.150.1"],\
@@ -218,6 +220,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/sass", "npm:1.43.1"],\
             ["@types/sharp", "npm:0.30.4"],\
             ["@types/sortablejs", "npm:1.13.0"],\
+            ["@types/stream-buffers", "npm:3.0.7"],\
             ["@types/string-similarity", "npm:4.0.0"],\
             ["@types/supertest", "npm:2.0.12"],\
             ["@types/three", "npm:0.149.0"],\
@@ -293,6 +296,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sharp", "npm:0.30.7"],\
             ["sortablejs", "npm:1.15.0"],\
             ["sqlite3", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:5.1.6"],\
+            ["stream-buffers", "npm:3.0.2"],\
             ["string-similarity", "npm:4.0.4"],\
             ["supertest", "npm:6.3.3"],\
             ["three", "npm:0.150.1"],\
@@ -5709,6 +5713,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-stack-utils-npm-2.0.1-867718ab70-205fdbe332.zip/node_modules/@types/stack-utils/",\
           "packageDependencies": [\
             ["@types/stack-utils", "npm:2.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/stream-buffers", [\
+        ["npm:3.0.7", {\
+          "packageLocation": "./.yarn/cache/@types-stream-buffers-npm-3.0.7-0759301094-b5cf12f69b.zip/node_modules/@types/stream-buffers/",\
+          "packageDependencies": [\
+            ["@types/stream-buffers", "npm:3.0.7"],\
+            ["@types/node", "npm:16.11.41"]\
           ],\
           "linkType": "HARD"\
         }]\

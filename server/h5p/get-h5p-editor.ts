@@ -1,8 +1,12 @@
 import * as H5P from '@lumieducation/h5p-server';
+import InMemoryStorage from '@lumieducation/h5p-server/build/src/implementation/InMemoryStorage';
+import DirectoryTemporaryFileStorage from '@lumieducation/h5p-server/build/src/implementation/fs/DirectoryTemporaryFileStorage';
+import FileContentStorage from '@lumieducation/h5p-server/build/src/implementation/fs/FileContentStorage';
 import * as fs from 'fs-extra';
 import path from 'path';
 
 import type { H5pUser } from './h5p.types';
+import { AwsLibraryStorage } from './lib/AwsLibraryStorage';
 
 export const getH5pEditor = async () => {
   await fs.ensureDir(path.join(__dirname, '/libraries'));
@@ -34,19 +38,18 @@ export const getH5pEditor = async () => {
     protectSetFinished: true,
   });
 
-  // TODO
-  // const permissionSystem = new ExamplePermissionSystem();
-
-  const h5pEditor = H5P.fs(
+  const libraryStorage = new AwsLibraryStorage();
+  await libraryStorage.init();
+  const h5pEditor = new H5P.H5PEditor(
+    new InMemoryStorage(), // TODO
     config,
-    path.join(__dirname, '/libraries'), // the path on the local disc where libraries should be stored
-    path.join(__dirname, '/temporary-storage'), // the path on the local disc where temporary files (uploads) should be stored
-    path.join(__dirname, '/content'), // the path on the local disc where content is stored,
-    undefined,
-    undefined,
+    libraryStorage,
+    new FileContentStorage(path.join(__dirname, '/content')), // TODO // the path on the local disc where content is stored,
+    new DirectoryTemporaryFileStorage(path.join(__dirname, '/temporary-storage')), // TODO // the path on the local disc where temporary files (uploads) should be stored
     undefined,
     urlGenerator,
   );
+
   h5pEditor.setRenderer((model) => model);
 
   const h5pPlayer = new H5P.H5PPlayer(
