@@ -133,7 +133,7 @@ export class AwsS3 {
     LastModified: Date;
     ContentLength: number;
     ContentType: string;
-  }> {
+  } | null> {
     if (!this.initialized) {
       throw new AppError("Can't get from s3", 0);
     }
@@ -152,6 +152,9 @@ export class AwsS3 {
         },
       );
     });
+    if (data === null) {
+      return null;
+    }
     return {
       AcceptRanges: data?.AcceptRanges || 'bytes',
       LastModified: data?.LastModified || new Date(),

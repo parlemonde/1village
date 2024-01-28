@@ -1,24 +1,45 @@
 import * as H5P from '@lumieducation/h5p-server';
-import InMemoryStorage from '@lumieducation/h5p-server/build/src/implementation/InMemoryStorage';
-import DirectoryTemporaryFileStorage from '@lumieducation/h5p-server/build/src/implementation/fs/DirectoryTemporaryFileStorage';
-import * as fs from 'fs-extra';
-import path from 'path';
+import { v4 } from 'uuid';
 
+import { logger } from '../utils/logger';
 import type { H5pUser } from './h5p.types';
 import { AwsFileContentStorage } from './lib/AwsFileContentStorage';
+import { AwsKeyValueStorage } from './lib/AwsKeyValueStorage';
 import { AwsLibraryStorage } from './lib/AwsLibraryStorage';
+import { AwsTemporaryStorage } from './lib/AwsTemporaryStorage';
+
+const DEFAULT_CONFIG: Partial<H5P.IH5PConfig> = {
+  disableFullscreen: false,
+  fetchingDisabled: 0,
+  uuid: v4(),
+  siteType: 'local',
+  sendUsageStatistics: false,
+  contentHubEnabled: true,
+  hubRegistrationEndpoint: 'https://api.h5p.org/v1/sites',
+  hubContentTypesEndpoint: 'https://api.h5p.org/v1/content-types/',
+  contentUserDataUrl: '/contentUserData',
+  contentTypeCacheRefreshInterval: 86400000,
+  enableLrsContentTypes: true,
+  maxFileSize: 1048576000,
+  contentUserStateSaveInterval: 5000,
+  maxTotalSize: 1048576000,
+  editorAddons: {
+    'H5P.CoursePresentation': ['H5P.MathDisplay'],
+    'H5P.InteractiveVideo': ['H5P.MathDisplay'],
+    'H5P.DragQuestion': ['H5P.MathDisplay'],
+  },
+};
 
 export const getH5pEditor = async () => {
-  await fs.ensureDir(path.join(__dirname, '/libraries'));
-  await fs.ensureDir(path.join(__dirname, '/temporary-storage'));
-  await fs.ensureDir(path.join(__dirname, '/content'));
+  const keyValueStorage = new AwsKeyValueStorage();
+  await keyValueStorage.init();
 
-  const config = await new H5P.H5PConfig(
-    new H5P.fsImplementations.JsonStorage(
-      path.join(__dirname, '../../../h5p-config.json'), // the path on the local disc
-      // where the configuration file is stored
-    ),
-  ).load();
+  const savedConfigId = await keyValueStorage.load('uuid');
+  const config = await new H5P.H5PConfig(keyValueStorage, savedConfigId ? undefined : DEFAULT_CONFIG).load();
+  if (savedConfigId === undefined) {
+    logger.info('Save H5p config');
+    await config.save();
+  }
 
   const urlGenerator = new H5P.UrlGenerator(config, {
     queryParamGenerator: (user: H5pUser) => {
@@ -44,14 +65,18 @@ export const getH5pEditor = async () => {
   const contentStorage = new AwsFileContentStorage();
   await contentStorage.init();
 
+  const temporaryFileStorage = new AwsTemporaryStorage();
+
   const h5pEditor = new H5P.H5PEditor(
-    new InMemoryStorage(), // TODO
+    keyValueStorage,
     config,
     libraryStorage,
     contentStorage,
-    new DirectoryTemporaryFileStorage(path.join(__dirname, '/temporary-storage')), // TODO // the path on the local disc where temporary files (uploads) should be stored
+    temporaryFileStorage,
     undefined,
     urlGenerator,
+    {},
+    undefined, // todo
   );
 
   h5pEditor.setRenderer((model) => model);

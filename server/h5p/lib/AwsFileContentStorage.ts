@@ -117,13 +117,12 @@ export class AwsFileContentStorage implements IContentStorage {
   public async fileExists(contentId: string, filename: string): Promise<boolean> {
     validateFilename(filename);
     try {
-      await s3.getFileData(this.getS3Key(contentId, filename));
+      const result = await s3.getFileData(this.getS3Key(contentId, filename));
+      return result !== null && result.ContentLength > 0;
     } catch (error) {
-      logger.debug(`File ${filename} does not exist in for content ${contentId}.`);
+      console.error(error);
       return false;
     }
-    logger.debug(`File ${filename} does exist in for content ${contentId}.`);
-    return true;
   }
 
   /**
@@ -134,10 +133,13 @@ export class AwsFileContentStorage implements IContentStorage {
     validateFilename(filename);
     try {
       const metadata = await s3.getFileData(this.getS3Key(contentId, filename));
+      if (!metadata) {
+        throw new H5pError('content-file-missing', { contentId, filename }, 404);
+      }
       return { size: metadata.ContentLength, birthtime: metadata.LastModified };
     } catch (error) {
       console.error(error);
-      throw new H5pError('content-file-missing', { contentId, filename }, 404);
+      throw new H5pError('content-file', { contentId, filename }, 500);
     }
   }
 

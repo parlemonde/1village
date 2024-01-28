@@ -159,13 +159,12 @@ export class AwsLibraryStorage implements ILibraryStorage {
   public async fileExists(library: ILibraryName, filename: string): Promise<boolean> {
     validateFilename(filename);
     try {
-      await s3.getFileData(this.getS3Key(library, filename));
+      const result = await s3.getFileData(this.getS3Key(library, filename));
+      return result !== null && result.ContentLength > 0;
     } catch (error) {
-      logger.debug(`File ${filename} does not exist in ${LibraryName.toUberName(library)}.`);
+      console.error(error);
       return false;
     }
-    logger.debug(`File ${filename} does exist in ${LibraryName.toUberName(library)}.`);
-    return true;
   }
 
   /**
@@ -278,10 +277,13 @@ export class AwsLibraryStorage implements ILibraryStorage {
 
     try {
       const metadata = await s3.getFileData(this.getS3Key(library, file));
+      if (!metadata) {
+        throw new H5pError('content-file-missing', { ubername: LibraryName.toUberName(library), filename: file }, 404);
+      }
       return { size: metadata.ContentLength, birthtime: metadata.LastModified };
     } catch (error) {
       console.error(error);
-      throw new H5pError('content-file-missing', { ubername: LibraryName.toUberName(library), filename: file }, 404);
+      throw new H5pError('content-file', { ubername: LibraryName.toUberName(library), filename: file }, 500);
     }
   }
 

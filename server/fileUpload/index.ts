@@ -10,7 +10,9 @@ export function getFile(filename: string, range?: string): Readable {
   return s3.getFile(filename, range);
 }
 
-export function getFileData(filename: string): Promise<{ AcceptRanges: string; LastModified: Date; ContentLength: number; ContentType: string }> {
+export function getFileData(
+  filename: string,
+): Promise<{ AcceptRanges: string; LastModified: Date; ContentLength: number; ContentType: string } | null> {
   return s3.getFileData(filename);
 }
 
