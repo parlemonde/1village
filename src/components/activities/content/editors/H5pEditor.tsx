@@ -36,7 +36,7 @@ export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () =
   const [isValid, setIsValid] = React.useState(false);
   const { data: h5pContent } = useH5pContentList();
 
-  const contentId = value.match(/^\/h5p\/data\/(\w+)\/play$/)?.[1] ?? null;
+  const contentId = value.match(/^\/h5p\/data\/([\w|-]+)\/play$/)?.[1] ?? null;
 
   const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     setIsValid(extractSrcValue(event.target.value) !== null);

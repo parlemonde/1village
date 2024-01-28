@@ -37,7 +37,16 @@ export class AwsLibraryStorage implements ILibraryStorage {
   }
 
   private getS3Key(library: ILibraryName, filename: string): string {
-    return `h5p/libraries/${LibraryName.toUberName(library)}/${filename}`;
+    const key = `h5p/libraries/${LibraryName.toUberName(library)}/${filename}`;
+    if (key.length > 1024) {
+      logger.error(
+        `The S3 key for "${filename}" in library object for library ${LibraryName.toUberName(library)} is ${
+          key.length
+        } bytes long, but only 1024 are allowed.`,
+      );
+      throw new H5pError('content-storage:filename-too-long', { filename }, 400);
+    }
+    return key;
   }
 
   /**
@@ -375,8 +384,13 @@ export class AwsLibraryStorage implements ILibraryStorage {
    * Checks if a library is installed.
    */
   public async isInstalled(library: ILibraryName): Promise<boolean> {
-    const found = await dynamoDb.getValue(LIBRARY_TABLE_NAME, LibraryName.toUberName(library), '#key', { '#key': 'key' });
-    return !!found;
+    try {
+      const found = await dynamoDb.getValue(LIBRARY_TABLE_NAME, LibraryName.toUberName(library), '#key', { '#key': 'key' });
+      return found !== undefined;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
   /**

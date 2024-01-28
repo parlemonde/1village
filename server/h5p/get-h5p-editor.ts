@@ -1,11 +1,11 @@
 import * as H5P from '@lumieducation/h5p-server';
 import InMemoryStorage from '@lumieducation/h5p-server/build/src/implementation/InMemoryStorage';
 import DirectoryTemporaryFileStorage from '@lumieducation/h5p-server/build/src/implementation/fs/DirectoryTemporaryFileStorage';
-import FileContentStorage from '@lumieducation/h5p-server/build/src/implementation/fs/FileContentStorage';
 import * as fs from 'fs-extra';
 import path from 'path';
 
 import type { H5pUser } from './h5p.types';
+import { AwsFileContentStorage } from './lib/AwsFileContentStorage';
 import { AwsLibraryStorage } from './lib/AwsLibraryStorage';
 
 export const getH5pEditor = async () => {
@@ -40,11 +40,15 @@ export const getH5pEditor = async () => {
 
   const libraryStorage = new AwsLibraryStorage();
   await libraryStorage.init();
+
+  const contentStorage = new AwsFileContentStorage();
+  await contentStorage.init();
+
   const h5pEditor = new H5P.H5PEditor(
     new InMemoryStorage(), // TODO
     config,
     libraryStorage,
-    new FileContentStorage(path.join(__dirname, '/content')), // TODO // the path on the local disc where content is stored,
+    contentStorage,
     new DirectoryTemporaryFileStorage(path.join(__dirname, '/temporary-storage')), // TODO // the path on the local disc where temporary files (uploads) should be stored
     undefined,
     urlGenerator,

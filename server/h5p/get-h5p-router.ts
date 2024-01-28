@@ -3,11 +3,14 @@ import type { IContentMetadata, IEditorModel } from '@lumieducation/h5p-server';
 import { H5pError } from '@lumieducation/h5p-server';
 import type { RequestHandler, NextFunction, Request, Response } from 'express';
 import express, { Router } from 'express';
+import fs from 'fs-extra';
 import morgan from 'morgan';
+import multer from 'multer';
 import path from 'path';
+import { v4 } from 'uuid';
 
 import { authenticate } from '../middlewares/authenticate';
-import { handleErrors } from '../middlewares/handleErrors';
+import { AppError, handleErrors } from '../middlewares/handleErrors';
 import { jsonify } from '../middlewares/jsonify';
 import { getH5pEditor } from './get-h5p-editor';
 import type { H5pAnyParams, H5pExpressRequest, H5pUser } from './h5p.types';
@@ -22,6 +25,65 @@ export const getH5pRouter = async () => {
   // Add static routes first. No need for authentication here.
   h5pRouter.use('/core', express.static(path.join(__dirname, '../../../public/h5p/core')));
   h5pRouter.use('/editor', express.static(path.join(__dirname, '../../../public/h5p/editor')));
+
+  // Add file upload middleware.
+  await fs.ensureDir(path.join(__dirname, '../fileUpload/h5p')).catch();
+  const diskStorage = multer.diskStorage({
+    destination: function (_req, _file, cb) {
+      cb(null, path.join(__dirname, '../fileUpload/h5p/'));
+    },
+    filename: function (_req, file, cb) {
+      const uuid = v4();
+      cb(null, `${uuid}${path.extname(file.originalname)}`);
+    },
+  });
+  h5pRouter.use(
+    multer({
+      storage: diskStorage,
+      limits: {
+        fileSize: h5pEditor.config.maxTotalSize,
+      },
+    }).any(),
+  );
+  h5pRouter.use(
+    handleErrors((req, res, next) => {
+      const files = req.files;
+      if (files !== undefined && !Array.isArray(files)) {
+        throw new AppError('Malformed request', 400);
+      }
+
+      const h5pFiles = files?.reduce<
+        Record<
+          string,
+          {
+            name: string;
+            mimetype: string;
+            tempFilePath: string;
+            size: number;
+          }
+        >
+      >((acc, file) => {
+        acc[file.fieldname] = {
+          name: file.filename,
+          mimetype: file.mimetype,
+          tempFilePath: file.path,
+          size: file.size,
+        };
+        return acc;
+      }, {});
+
+      // Needed for h5p-editor to work.
+      (req.files as unknown) = h5pFiles;
+
+      // Cleanup files after request.
+      if (files) {
+        res.on('finish', () => {
+          Promise.all(files.map((file) => fs.remove(file.path))).catch();
+        });
+      }
+      next();
+    }),
+  );
 
   // Add authentication.
   h5pRouter.use(handleErrors(authenticate()), (req: Request, res: Response, next: NextFunction) => {
