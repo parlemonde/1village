@@ -3,7 +3,8 @@ import { v4 } from 'uuid';
 
 import { logger } from '../utils/logger';
 import type { H5pUser } from './h5p.types';
-import { AwsFileContentStorage } from './lib/AwsFileContentStorage';
+import { AwsContentStorage } from './lib/AwsContentStorage';
+import { AwsContentUserDataStorage } from './lib/AwsContentUserDataStorage';
 import { AwsKeyValueStorage } from './lib/AwsKeyValueStorage';
 import { AwsLibraryStorage } from './lib/AwsLibraryStorage';
 import { AwsTemporaryStorage } from './lib/AwsTemporaryStorage';
@@ -62,10 +63,13 @@ export const getH5pEditor = async () => {
   const libraryStorage = new AwsLibraryStorage();
   await libraryStorage.init();
 
-  const contentStorage = new AwsFileContentStorage();
+  const contentStorage = new AwsContentStorage();
   await contentStorage.init();
 
   const temporaryFileStorage = new AwsTemporaryStorage();
+
+  const contentUserDataStorage = new AwsContentUserDataStorage();
+  await contentUserDataStorage.init();
 
   const h5pEditor = new H5P.H5PEditor(
     keyValueStorage,
@@ -76,9 +80,8 @@ export const getH5pEditor = async () => {
     undefined,
     urlGenerator,
     {},
-    undefined, // todo
+    contentUserDataStorage,
   );
-
   h5pEditor.setRenderer((model) => model);
 
   const h5pPlayer = new H5P.H5PPlayer(

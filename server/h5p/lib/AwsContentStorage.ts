@@ -11,7 +11,7 @@ import { dynamoDb } from './dynamoDB';
 
 const CONTENT_TABLE_NAME = 'H5P_Content';
 
-export class AwsFileContentStorage implements IContentStorage {
+export class AwsContentStorage implements IContentStorage {
   constructor() {}
 
   public async init(): Promise<void> {

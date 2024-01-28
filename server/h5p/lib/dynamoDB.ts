@@ -97,6 +97,29 @@ class AwsDynamoDb {
     await this.dynamoDb.deleteItem(params).promise();
   }
 
+  public async deleteValues(tableName: string, keys: string[]): Promise<void> {
+    if (!this.initialized) {
+      throw new Error("Can't delete from DynamoDB");
+    }
+    if (keys.length === 0) {
+      return;
+    }
+    const params: DynamoDB.BatchWriteItemInput = {
+      RequestItems: {
+        [tableName]: keys.map((key) => ({
+          DeleteRequest: {
+            Key: {
+              pk: {
+                S: key,
+              },
+            },
+          },
+        })),
+      },
+    };
+    await this.dynamoDb.batchWriteItem(params).promise();
+  }
+
   public async createTableIfNotExists(tableName: string): Promise<void> {
     if (!this.initialized) {
       throw new Error("Can't create table in DynamoDB");
