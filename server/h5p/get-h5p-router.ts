@@ -17,6 +17,7 @@ import type { H5pAnyParams, H5pExpressRequest, H5pUser } from './h5p.types';
 
 export const getH5pRouter = async () => {
   const h5pRouter = Router();
+
   const { h5pPlayer, h5pEditor } = await getH5pEditor();
 
   // Add logging.
@@ -120,6 +121,10 @@ export const getH5pRouter = async () => {
   h5pRouter.use(jsonify);
 
   // Add REST routes
+  h5pRouter.get('/_healthcheck', (_req, res) => {
+    res.status(200).send('OK');
+  });
+
   h5pRouter.get(
     '/data/:contentId/play',
     handleErrors(async (req, res) => {

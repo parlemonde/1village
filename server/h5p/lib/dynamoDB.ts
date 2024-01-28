@@ -11,8 +11,8 @@ class AwsDynamoDb {
     const dynamoDbConfig: AWS.DynamoDB.ClientConfiguration = {
       accessKeyId: process.env.DYNAMODB_ACCESS_KEY || 'local',
       secretAccessKey: process.env.DYNAMODB_SECRET_KEY || 'local',
-      region: process.env.DYNAMODB_REGION,
-      endpoint: process.env.DYNAMODB_ENDPOINT,
+      region: process.env.DYNAMODB_REGION || 'us-east-1',
+      endpoint: process.env.DYNAMODB_ENDPOINT || 'http://dynamodb:8000',
     };
     this.dynamoDb = new AWS.DynamoDB(dynamoDbConfig);
     this.initialized = true;

@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import type { EditorProps } from '../content.types';
 import { EditorContainer } from './EditorContainer';
 import { useH5pContentList } from 'src/api/h5p/h5p-content.list';
+import { useIsH5pEnabled } from 'src/api/h5p/h5p-enabled';
 import { H5p } from 'src/components/H5pOLD';
 import { Modal } from 'src/components/Modal';
 import H5pPlayer from 'src/components/h5p/H5pPlayer';
@@ -34,6 +35,7 @@ export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () =
   const [isModalOpen, setIsModalOpen] = React.useState(value === '');
   const [inputValue, setInputValue] = React.useState('');
   const [isValid, setIsValid] = React.useState(false);
+  const isH5pEnabled = useIsH5pEnabled();
   const { data: h5pContent } = useH5pContentList();
 
   const contentId = value.match(/^\/h5p\/data\/([\w|-]+)\/play$/)?.[1] ?? null;
@@ -80,55 +82,59 @@ export const H5pEditor = ({ id, value = '', onChange = () => {}, onDelete = () =
         ariaLabelledBy={`h5p-edit-${id}`}
         ariaDescribedBy={`h5p-edit-${id}-desc`}
       >
-        <h3>Choisissez le contenu H5P :</h3>
-        {h5pContent && h5pContent.length > 0 ? (
-          <FormControl fullWidth>
-            <InputLabel id="select-h5p">Contenu H5P</InputLabel>
-            <Select
-              labelId="select-h5p"
-              id="select-h5p"
-              label="Contenu H5P"
-              onChange={(event) => {
-                onChange(`/h5p/data/${event.target.value}/play`);
-                setIsModalOpen(false);
-              }}
-            >
-              {h5pContent.map((h5p) => (
-                <MenuItem key={h5p.contentId} value={h5p.contentId}>
-                  {h5p.title}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        ) : (
+        {isH5pEnabled && (
           <>
-            <p style={{ margin: '0.25rem 0' }}>
-              {"Vous n'avez pas encore de contenu H5P sur 1village. Vous pouvez en créer un sur l'interface admin."}
-            </p>
-            {isAdmin && (
-              <div className="text-center">
-                <Link href="/admin/h5p" passHref>
-                  <Button
-                    component="a"
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {
-                      setIsModalOpen(false);
-                    }}
-                    style={{ marginTop: '0.5rem' }}
-                    size="small"
-                  >
-                    Créer un contenu H5P
-                  </Button>
-                </Link>
-              </div>
+            <h3>Choisissez le contenu H5P :</h3>
+            {h5pContent && h5pContent.length > 0 ? (
+              <FormControl fullWidth>
+                <InputLabel id="select-h5p">Contenu H5P</InputLabel>
+                <Select
+                  labelId="select-h5p"
+                  id="select-h5p"
+                  label="Contenu H5P"
+                  onChange={(event) => {
+                    onChange(`/h5p/data/${event.target.value}/play`);
+                    setIsModalOpen(false);
+                  }}
+                >
+                  {h5pContent.map((h5p) => (
+                    <MenuItem key={h5p.contentId} value={h5p.contentId}>
+                      {h5p.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ) : (
+              <>
+                <p style={{ margin: '0.25rem 0' }}>
+                  {"Vous n'avez pas encore de contenu H5P sur 1village. Vous pouvez en créer un sur l'interface admin."}
+                </p>
+                {isAdmin && (
+                  <div className="text-center">
+                    <Link href="/admin/h5p" passHref>
+                      <Button
+                        component="a"
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          setIsModalOpen(false);
+                        }}
+                        style={{ marginTop: '0.5rem' }}
+                        size="small"
+                      >
+                        Créer un contenu H5P
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </>
             )}
+            <Divider style={{ marginTop: '2rem' }} />
+            <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
+              <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
+            </div>
           </>
         )}
-        <Divider style={{ marginTop: '2rem' }} />
-        <div className="text-center" style={{ margin: '-0.8rem 0 1.5rem 0' }}>
-          <span style={{ backgroundColor: 'white', padding: '0 0.5rem', color: fontDetailColor, fontSize: '1.1rem' }}>Ou</span>
-        </div>
         <h3>Entrez le lien H5P externe :</h3>
         <TextField
           value={inputValue}

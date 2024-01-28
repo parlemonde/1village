@@ -4,6 +4,7 @@ import React from 'react';
 import GroupIcon from '@mui/icons-material/Group';
 import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutlinedOutlined';
 import LanguageIcon from '@mui/icons-material/Language';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Divider from '@mui/material/Divider';
@@ -14,12 +15,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 
+import { useIsH5pEnabled } from 'src/api/h5p/h5p-enabled';
+
 const DRAWER_WIDTH = 220;
 const TABS = ['villages', 'users', 'featureFlag', 'h5p', 'stats', 'analytics'];
 
 export const AdminNavigation = () => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = React.useState(-1);
+  const isH5pEnabled = useIsH5pEnabled();
 
   React.useEffect(() => {
     const index = TABS.findIndex((tab) => tab === router.pathname.split('/')[2]);
@@ -62,12 +66,14 @@ export const AdminNavigation = () => {
             </ListItemIcon>
             <ListItemText primary="Contrôle d'accès" />
           </ListItem>
-          <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/h5p')}>
-            <ListItemIcon>
-              <VpnKeyIcon />
-            </ListItemIcon>
-            <ListItemText primary="H5P" />
-          </ListItem>
+          {isH5pEnabled && (
+            <ListItem button selected={selectedTab === 3} onClick={goToPath('/admin/h5p')}>
+              <ListItemIcon>
+                <LocalActivityIcon />
+              </ListItemIcon>
+              <ListItemText primary="H5P" />
+            </ListItem>
+          )}
         </List>
         <Divider />
         <List>

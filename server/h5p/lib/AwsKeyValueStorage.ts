@@ -21,7 +21,7 @@ export class AwsKeyValueStorage implements IKeyValueStorage {
       throw new H5pError('key-value-storage:load', { key }, 500);
     }
   }
-  public async save(key: string, value: any): Promise<void> {
+  public async save(key: string, value: unknown): Promise<void> {
     try {
       if (value === undefined) {
         await dynamoDb.deleteValue(DATA_TABLE_NAME, key);

@@ -96,8 +96,17 @@ export async function getApp() {
   app.use('/api', backRouter);
 
   // [4-bis] --- Add h5p ---
-  const h5pRouter = await getH5pRouter();
-  app.use('/h5p', h5pRouter);
+  if (process.env.DYNAMODB_ENDPOINT) {
+    try {
+      const h5pRouter = await getH5pRouter();
+      app.use('/h5p', h5pRouter);
+    } catch (e) {
+      logger.error('Could not initialize h5p router');
+      app.use('/h5p', (_, res: Response) => {
+        res.status(404).send('Error 404 - Not found.');
+      });
+    }
+  }
 
   // [5] --- Add frontend ---
   app.get('/country-flags/*', handleErrors(authenticate(UserType.OBSERVATOR)), express.static(path.join(__dirname, '../../public/country-flags')));
