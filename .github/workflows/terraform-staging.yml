@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure AWS credentials
+      - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
@@ -29,39 +29,40 @@ jobs:
           terraform_version: 1.6.4
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          cd terraform
+          terraform init
         if: success()
 
       - name: Terraform Plan
-        run: terraform plan -var-file=../../terraform/terraform.tfvars
+        run: |
+          cd terraform
+          terraform plan -var-file=terraform.tfvars
         if: success()
 
       - name: Terraform Apply
-        run: terraform apply -var-file=../../terraform/terraform.tfvars -auto-approve
+        run: |
+          cd terraform
+          terraform apply -var-file=terraform.tfvars -auto-approve
         if: success()
 
       - name: Extract Public IP
         id: server_public_ip
-        run: |
-          echo "::set-output name=server_public_ip::$(terraform output server_public_ip)"
+        run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output server_public_ip)"
         if: success()
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker build -t $ECR_REGISTRY/1village:staging-br-X .
-          docker push $ECR_REGISTRY/1village:staging-br-X
+      - name: Set up SSH key for EC2
+        uses: webfactory/ssh-agent@v0.5.5
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         if: success()
 
-      - name: Pull and run the docker image on the server
-        run: ssh -i $SSH_KEY_PATH $server "ECR_REGISTRY=$ECR_REGISTRY IMAGE=$ECR_REGISTRY/1village:staging-br-X exec sh" < ./deploy.sh
+      - name: Transfer Docker Image to EC2
+        run: |
+          docker save -o 1village-image.tar 1village
+          scp -o StrictHostKeyChecking=no 1village-image.tar ec2-user@$server:~
+          ssh -o StrictHostKeyChecking=no ec2-user@$server 'cd ~ && docker load -i 1village-image.tar && docker-compose up -d'
+        shell: bash
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           server: ${{steps.server_public_ip.outputs.server_public_ip}}
-          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
         if: success()
