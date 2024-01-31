@@ -39,3 +39,8 @@ variable "ec2_availability_zone" {
   description = "EC2 Availability Zone"
   type        = string
 }
+
+variable "key_pair" {
+  description = "EC2 staging key pair"
+  type        = string
+}

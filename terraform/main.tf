@@ -71,6 +71,7 @@ output "server_public_ip" {
 resource "aws_instance" "ec2-staging" {
   ami               = var.ami_id
   instance_type     = var.instance_type
+  key_name          = var.key_pair
   availability_zone = var.ec2_availability_zone
 
   network_interface {
