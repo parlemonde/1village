@@ -22,6 +22,7 @@ export const ActivityChoice = ({ activities }: ActivityChoiceProps) => {
 
   const handleChoiceClick = useCallback(
     (gameType: GameType) => {
+      localStorage.setItem('gameTypeInLocalStorage', JSON.stringify(gameType));
       setGameType(gameType);
     },
     [setGameType],

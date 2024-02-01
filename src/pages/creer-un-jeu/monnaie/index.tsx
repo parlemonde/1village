@@ -20,7 +20,7 @@ const Monnaie = () => {
           pays. Il s’amuse donc à essayer de deviner combien coûte des pays du quotidien dans chaque pays qu’il visite. C’est le jeu qu’il vous
           propose de faire aujourd’hui !
         </p>
-        <h1>Faites découvrir vos expressions aux Pélicopains !</h1>
+        <h1>Faites découvrir votre monnaie aux Pélicopains !</h1>
         <div style={{ marginBottom: '2rem' }}>
           <strong>À vous de faire découvrir la valeur de 3 objets que vous utilisez à vos Pélicopains ! </strong>
           <p>

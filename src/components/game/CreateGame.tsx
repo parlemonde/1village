@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 
-import { ImageModal } from '../activities/content/editors/ImageEditor/ImageModal';
-import { VideoModals } from '../activities/content/editors/VideoEditor/VideoModals';
 import GameField from './componentGameMapping/GameField';
 import GameMedia from './componentGameMapping/GameMedia';
 import GameRadio from './componentGameMapping/GameRadio';
@@ -46,8 +44,6 @@ const CreateGame = ({ stepNumber }: PlayProps) => {
 
   return (
     <>
-      <ImageModal id={0} isModalOpen={false} setIsModalOpen={() => {}} imageUrl="" setImageUrl={() => {}} useCrop={false} onDeleteEditor={() => {}} />
-      <VideoModals id={0} isModalOpen={false} setIsModalOpen={() => {}} videoUrl="" setVideoUrl={() => {}} />
       {gameConfig[stepNumber].map((stepItem, index) => (
         <div className="width-900" key={index}>
           <h1>{stepItem.title}</h1>

@@ -8,58 +8,11 @@ import { GameType } from 'types/game.type';
 type GameContextType = {
   gameConfig: Array<StepsType[]>;
   setGameConfig: (gameConfig: Array<StepsType[]>) => void;
-  gameType: GameType;
+  gameType?: GameType;
   setGameType: (gameType: GameType) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateGameConfig: (value: any, input: inputType) => void;
   inputSelectedValue?: string;
-};
-
-interface GameResponseDataToSend {
-  userId: number | string | undefined;
-  villageId: number | string | undefined;
-  activityId?: number | string | undefined;
-  gameType: string | number;
-  data: GameData[];
-  createDate?: Date | string;
-  updateDate?: Date | string;
-  deleteDate?: Date | string;
-  status?: string | number;
-}
-
-type GameData = {
-  gameId: number;
-  media?: string;
-  responses?: Response[];
-};
-
-type Response = {
-  id?: number;
-  value?: string;
-};
-
-export const sendGameResponse = async (gameResponse: GameResponseDataToSend) => {
-  const response = await fetch('/games', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(gameResponse),
-  });
-  const data = await response.json();
-  return data;
-};
-
-export const gameResponse: GameResponseDataToSend = {
-  userId: '',
-  villageId: '',
-  activityId: '',
-  gameType: '',
-  status: 1,
-  createDate: '',
-  updateDate: '',
-  deleteDate: '',
-  data: [],
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -83,7 +36,7 @@ export const useGame = () => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const saveGameResponseInSessionStorage = (gameConfig: any) => {
-  sessionStorage.setItem('gameConfig', JSON.stringify(gameConfig));
+  localStorage.setItem('gameConfig', JSON.stringify(gameConfig));
 };
 
 interface GameProviderProps {
