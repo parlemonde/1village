@@ -51,6 +51,11 @@ jobs:
         run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output server_public_ip)"
         if: success()
 
+      - name: Build Docker Image
+        run: |
+          docker build -t 1village .
+        if: success()
+
       - name: Set up SSH key for EC2
         uses: webfactory/ssh-agent@v0.8.0
         with:
