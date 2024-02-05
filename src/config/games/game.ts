@@ -56,204 +56,6 @@ export const SelectTypeMappingMethode = {
 };
 
 export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
-  [GameType.MONEY]: {
-    steps: [
-      [
-        {
-          title: 'Choisissez votre monnaie',
-          description: 'Choisissez avec quelle monnaie vous allez donner le prix de vos objets : ',
-          inputs: [
-            {
-              id: 0,
-              type: InputTypeEnum.SELECT,
-              placeHolder: 'Monnaie',
-              methodType: methodType.CURRENCY,
-              values: [],
-              selectedValue: '',
-            },
-          ],
-        },
-      ],
-      [
-        {
-          title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen est faible',
-          inputs: [
-            {
-              id: 1,
-              type: InputTypeEnum.IMAGE,
-              selectedValue: '',
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 2,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est le nom de cet objet ?',
-              selectedValue: '',
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 3,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
-              selectedValue: '',
-              response: true,
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 4,
-              type: InputTypeEnum.INPUT,
-              label: 'À quoi sert cet objet ? Quand est-il acheté ?',
-              selectedValue: '',
-            },
-          ],
-        },
-        {
-          title: 'Inventez deux prix faux à cet objet',
-          description:
-            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
-          inputs: [
-            {
-              id: 5,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé',
-              selectedValue: '',
-              response: false,
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 6,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé',
-              selectedValue: '',
-              response: false,
-              isDisplayedInRecap: true,
-            },
-          ],
-        },
-      ],
-      [
-        {
-          title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen modéré',
-          inputs: [
-            {
-              id: 7,
-              type: InputTypeEnum.IMAGE,
-              selectedValue: '',
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 8,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est le nom de cet objet ?',
-              selectedValue: '',
-            },
-            {
-              id: 9,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
-              selectedValue: '',
-              response: true,
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 10,
-              type: InputTypeEnum.INPUT,
-              label: 'À quoi sert cet objet ? Quand est-il acheté ?',
-              selectedValue: '',
-            },
-          ],
-        },
-        {
-          title: 'Inventez deux prix faux à cet objet',
-          description:
-            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
-          inputs: [
-            {
-              id: 11,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 1',
-              selectedValue: '',
-              response: false,
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 12,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 2',
-              selectedValue: '',
-              response: false,
-              isDisplayedInRecap: true,
-            },
-          ],
-        },
-      ],
-      [
-        {
-          title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen élevé',
-          inputs: [
-            {
-              id: 13,
-              type: InputTypeEnum.IMAGE,
-              selectedValue: '',
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 14,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est le nom de cet objet ?',
-              selectedValue: '',
-            },
-            {
-              id: 15,
-              type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
-              selectedValue: '',
-              response: true,
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 16,
-              type: InputTypeEnum.INPUT,
-              label: 'À quoi sert cet objet ? Quand est-il acheté ?',
-              selectedValue: '',
-            },
-          ],
-        },
-        {
-          title: 'Inventez deux prix faux à cet objet',
-          description:
-            'Vos Pélicopains verront l’image de votre objet, et devront trouver son prix parmi le vrai, et les deux faux, qu’il faut inventer :',
-          inputs: [
-            {
-              id: 17,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 1',
-              selectedValue: '',
-              response: false,
-              isDisplayedInRecap: true,
-            },
-            {
-              id: 18,
-              type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 2',
-              selectedValue: '',
-              response: false,
-              isDisplayedInRecap: true,
-            },
-          ],
-        },
-      ],
-      [
-        {
-          title: 'Pré-visualisez vos objets et publiez les !',
-          description: 'Vous pouvez modifier chaque objet si vous le souhaitez. Quand vous êtes prêts : publiez-les dans votre village-monde ! ',
-        },
-      ],
-    ],
-  },
   [GameType.MIMIC]: {
     steps: [
       [
@@ -406,7 +208,6 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
     ],
   },
-
   [GameType.MONEY]: {
     steps: [
       [
@@ -421,6 +222,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               methodType: methodType.CURRENCY,
               values: [],
               selectedValue: '',
+              required: true,
             },
           ],
         },
@@ -434,24 +236,32 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 1,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 2,
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
               selectedValue: '',
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 3,
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 4,
               type: InputTypeEnum.INPUT,
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
               selectedValue: '',
+              required: true,
             },
           ],
         },
@@ -463,14 +273,20 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 5,
               type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 1',
+              placeHolder: 'Prix inventé',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 6,
               type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 2',
+              placeHolder: 'Prix inventé',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
+              required: true,
             },
           ],
         },
@@ -484,24 +300,31 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 7,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 8,
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
               selectedValue: '',
+              required: true,
             },
             {
               id: 9,
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 10,
               type: InputTypeEnum.INPUT,
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
               selectedValue: '',
+              required: true,
             },
           ],
         },
@@ -515,12 +338,18 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 12,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
+              required: true,
             },
           ],
         },
@@ -534,24 +363,31 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 13,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 14,
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
               selectedValue: '',
+              required: true,
             },
             {
               id: 15,
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 16,
               type: InputTypeEnum.INPUT,
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
               selectedValue: '',
+              required: true,
             },
           ],
         },
@@ -565,12 +401,18 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
+              required: true,
             },
             {
               id: 18,
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
+              required: true,
             },
           ],
         },
@@ -583,7 +425,6 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
     ],
   },
-
   [GameType.EXPRESSION]: {
     steps: [
       [
@@ -781,7 +622,6 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               hidden: { id: 0, value: 'Français' },
               type: InputTypeEnum.INPUT,
               selectedValue: '',
-              response: true,
               isDisplayedInRecap: true,
             },
             {
@@ -791,6 +631,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              response: true,
               required: true,
             },
           ],

@@ -9,7 +9,7 @@ import { CustomRadio } from '../buttons/CustomRadio';
 import { EditButton } from '../buttons/EditButton';
 import type { inputType } from 'src/config/games/game';
 import { InputTypeEnum } from 'src/config/games/game';
-import { GameContext, gameResponse } from 'src/contexts/gameContext';
+import { GameContext } from 'src/contexts/gameContext';
 
 type PrevisualisationProps = {
   baseUrl: string;
@@ -17,9 +17,6 @@ type PrevisualisationProps = {
 
 const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
   const { gameConfig } = useContext(GameContext);
-  if (!gameResponse) {
-    return <div>Loading...</div>;
-  }
   const result = gameConfig
     .map((step, index) => {
       const reponseInStep: inputType[][] = step.map((responseBlock) => {

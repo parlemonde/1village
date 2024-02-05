@@ -69,7 +69,6 @@ const ExpressionStep5 = () => {
   }
 
   const isValidGame = validateGameConfig(gameConfig);
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -84,7 +83,6 @@ const ExpressionStep5 = () => {
           ]}
           activeStep={4}
         />
-
         <div className="width-900">
           <CreateGame stepNumber={4} />
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
@@ -97,14 +95,16 @@ const ExpressionStep5 = () => {
                 </span>
               </Tooltip>
             ) : (
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValidGame}>
-                Publier
-              </Button>
+              <>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValidGame}>
+                  Publier
+                </Button>
+                {!isValidGame ? <p style={{ color: 'red' }}>Vérifiez tous vos champs s&apos;il vous plaît.</p> : null}
+              </>
             )}
           </div>
         </div>
         <Previsualisation baseUrl={'/creer-un-jeu/expression/'} />
-        <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
