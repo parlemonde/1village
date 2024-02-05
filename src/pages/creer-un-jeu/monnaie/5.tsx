@@ -37,7 +37,7 @@ const MonnaieStep5 = () => {
         <div>
           <CreateGame stepNumber={4} />
         </div>
-        <Previsualisation />
+        <Previsualisation baseUrl={'/creer-un-jeu/monnaie/'} />
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>
     </Base>

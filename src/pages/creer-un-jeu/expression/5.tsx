@@ -5,6 +5,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
+import Previsualisation from 'src/components/game/Previsualisation';
 import { GameContext } from 'src/contexts/gameContext';
 
 const ExpressionStep5 = () => {
@@ -36,6 +37,7 @@ const ExpressionStep5 = () => {
         <div>
           <CreateGame stepNumber={4} />
         </div>
+        <Previsualisation baseUrl={'/creer-un-jeu/expression/'} />
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
       </div>
     </Base>
