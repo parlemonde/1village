@@ -7,13 +7,9 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import CreateGame from 'src/components/game/CreateGame';
 import { GameContext } from 'src/contexts/gameContext';
-// import { UserContext } from 'src/contexts/userContext';
-// import { VillageContext } from 'src/contexts/villageContext';
 
 const ExpressionStep1 = () => {
   const router = useRouter();
-  // const { user } = useContext(UserContext);
-  // const { village } = useContext(VillageContext);
   const { inputSelectedValue } = useContext(GameContext);
 
   const onNext = () => {

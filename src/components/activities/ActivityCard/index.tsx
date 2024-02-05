@@ -152,6 +152,7 @@ export const ActivityCard = ({
           activity={activity}
           user={user}
           isSelf={isSelf}
+          // gameType={activity.subType}
           noButtons={noButtons}
           showEditButtons={showEditButtons}
           isDraft={isDraft}
