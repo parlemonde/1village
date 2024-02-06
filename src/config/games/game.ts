@@ -19,6 +19,8 @@ export type inputType = {
   type: InputTypeEnum;
   values?: string[];
   label?: string;
+  response?: boolean;
+  isDisplayedInRecap?: boolean;
   placeHolder?: string;
   methodType?: methodType;
   selectedValue?: string;
@@ -206,7 +208,6 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
     ],
   },
-
   [GameType.MONEY]: {
     steps: [
       [
@@ -235,6 +236,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 1,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -242,6 +244,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -249,6 +252,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -268,15 +273,19 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 5,
               type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 1',
+              placeHolder: 'Prix inventé',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
               id: 6,
               type: InputTypeEnum.INPUT,
-              placeHolder: 'Prix inventé 2',
+              placeHolder: 'Prix inventé',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -291,6 +300,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 7,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -305,6 +315,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -326,6 +338,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -333,6 +347,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -347,6 +363,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 13,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -361,6 +378,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -382,6 +401,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 1',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -389,6 +410,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               placeHolder: 'Prix inventé 2',
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -402,7 +425,6 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       ],
     ],
   },
-
   [GameType.EXPRESSION]: {
     steps: [
       [
@@ -449,6 +471,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 2,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -456,6 +479,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -464,6 +488,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'Écrivez la traduction “mot à mot” en français',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
             },
             {
               id: 5,
@@ -471,6 +496,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -485,6 +512,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -492,6 +521,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -507,6 +538,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 8,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -514,6 +546,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -522,6 +555,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               hidden: { id: 0, value: 'Français' },
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
             },
             {
               id: 11,
@@ -529,6 +563,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: true,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -543,6 +579,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -550,6 +588,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],
@@ -565,6 +605,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 14,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -572,6 +613,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'Écrivez l’expression dans la langue que vous avez choisie juste avant',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -580,6 +622,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               hidden: { id: 0, value: 'Français' },
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
             },
             {
               id: 17,
@@ -587,6 +630,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification réelle',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              isDisplayedInRecap: true,
+              response: true,
               required: true,
             },
           ],
@@ -601,6 +646,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification inventée 1',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -608,6 +655,8 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               placeHolder: 'Signification inventée 2',
               type: InputTypeEnum.INPUT,
               selectedValue: '',
+              response: false,
+              isDisplayedInRecap: true,
               required: true,
             },
           ],

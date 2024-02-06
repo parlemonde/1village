@@ -50,14 +50,7 @@ const GameMedia = ({ input }: { input: inputType }) => {
                 >
                   {input.selectedValue ? (
                     <>
-                      <Image
-                        layout="fill"
-                        objectFit="cover"
-                        alt="Image qui représente l'expression à deviner"
-                        src={input.selectedValue}
-                        unoptimized
-                        onError={handleImageError}
-                      />
+                      <Image layout="fill" objectFit="cover" alt="Image à deviner" src={input.selectedValue} unoptimized onError={handleImageError} />
                       {isError ? (
                         <p style={{ fontSize: '1rem' }}>Oups un problème est survenue. Veuillez vérifiez votre url ou le format d&apos;image.</p>
                       ) : null}
