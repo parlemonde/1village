@@ -38,11 +38,10 @@ const ExpressionStep5 = () => {
     setIsLoading(true);
     const { success } = await save(true);
     if (success) {
+      localStorage.removeItem('gameConfig');
       router.push('/creer-un-jeu/expression/success');
     }
     setIsLoading(false);
-
-    localStorage.removeItem('gameConfig');
   };
 
   function validateGameConfig(gameConfig: StepsType[][]) {
