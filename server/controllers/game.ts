@@ -1,6 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
@@ -156,29 +157,56 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     next();
     return;
   }
-  const games = await AppDataSource.getRepository(Game)
-    .createQueryBuilder('game')
-    .leftJoinAndSelect('game.responses', 'responses')
-    .andWhere('`game`.`villageId` = :villageId', { villageId: villageId })
-    .andWhere('`game`.`type` = :type', { type: type })
-    .andWhere(
-      (qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select()
-          .from(GameResponse, 'response')
-          .where(`response.userId = :userId`, { userId: userId })
-          .andWhere(`response.gameId = game.id`)
-          .andWhere(`response.isOldResponse = 0`)
-          .getQuery();
-        return 'NOT EXISTS ' + subQuery;
-      },
-      { userId: req.user.id },
-    )
-    .getMany();
-  res.sendJSON({
-    games: games,
-  });
+  if (type === 0) {
+    const games = await AppDataSource.getRepository(Game)
+      .createQueryBuilder('game')
+      .leftJoinAndSelect('game.responses', 'responses')
+      .andWhere('`game`.`villageId` = :villageId', { villageId: villageId })
+      .andWhere('`game`.`type` = :type', { type: type })
+      .andWhere(
+        (qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select()
+            .from(GameResponse, 'response')
+            .where(`response.userId = :userId`, { userId: userId })
+            .andWhere(`response.gameId = game.id`)
+            .andWhere(`response.isOldResponse = 0`)
+            .getQuery();
+          return 'NOT EXISTS ' + subQuery;
+        },
+        { userId: req.user.id },
+      )
+      .getMany();
+    res.sendJSON({
+      games: games,
+    });
+  } else {
+    const games = await AppDataSource.getRepository(Activity)
+      .createQueryBuilder('activity')
+      .leftJoin(GameResponse, 'game.responses', 'responses')
+      .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
+      .andWhere('`activity`.`type` = :type', { type: 4 })
+      .andWhere('`activity`.`subType` = :subType', { subType: 2 })
+      .andWhere(
+        (qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select()
+            .from(GameResponse, 'response')
+            .where(`response.userId = :userId`, { userId: userId })
+            .andWhere(`response.gameId = game.id`)
+            .andWhere(`response.isOldResponse = 0`)
+            .getQuery();
+          return 'NOT EXISTS ' + subQuery;
+        },
+        { userId: req.user.id },
+      )
+      .getMany();
+    res.sendJSON({
+      games: games,
+    });
+  }
 });
 
 //--- retrieve answers to the mimic with this id ---
