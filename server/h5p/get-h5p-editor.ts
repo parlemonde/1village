@@ -35,7 +35,7 @@ export const getH5pEditor = async () => {
   const keyValueStorage = new AwsKeyValueStorage();
   await keyValueStorage.init();
 
-  const savedConfigId = await keyValueStorage.load('uuid');
+  const savedConfigId = (await keyValueStorage.load('uuid').catch(() => undefined)) as string | undefined;
   const config = await new H5P.H5PConfig(keyValueStorage, savedConfigId ? undefined : DEFAULT_CONFIG).load();
   if (savedConfigId === undefined) {
     logger.info('Save H5p config');
