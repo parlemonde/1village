@@ -13,8 +13,6 @@ import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { ActivityContext } from 'src/contexts/activityContext';
 import Vocal from 'src/svg/anthem/vocal.svg';
-import { concatAudios } from 'src/utils/audios';
-import { axiosRequest } from 'src/utils/axiosRequest';
 import { toTime } from 'src/utils/toTime';
 
 const AnthemStep2 = () => {
@@ -23,7 +21,7 @@ const AnthemStep2 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
-  // compare error steps with master and try to understand logic
+
   const errorSteps = React.useMemo(() => {
     if (data && data.tracks.length !== 9) {
       return [0];
@@ -33,10 +31,6 @@ const AnthemStep2 = () => {
 
   const onNext = async () => {
     setIsLoading(true);
-    if (data.tracks.filter((c) => !!c.sampleUrl).length === 2 && errorSteps.length === 0) {
-      // const value = await concatAudios([data.tracks[0], { value: data.finalVerse }, data.tracks[8]], axiosRequest);
-      // updateActivity({ data: { ...data, finalMix: value } });
-    }
     save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/3');
@@ -45,6 +39,11 @@ const AnthemStep2 = () => {
   const updateTrackInActivity = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
     updateActivity({ data: { ...data, tracks } });
+  };
+
+  const getLongestVerseSampleDuration = (tracks: Track[]) => {
+    const verseTracks = tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);
+    return Math.max(...verseTracks.map((track) => track.sampleDuration));
   };
 
   if (!activity || !data) {
@@ -76,7 +75,7 @@ const AnthemStep2 = () => {
                   {toTime(
                     data.tracks[TrackType.INTRO_CHORUS].sampleDuration +
                       data.tracks[TrackType.OUTRO].sampleDuration +
-                      data.tracks[TrackType.VOCALS].sampleDuration,
+                      getLongestVerseSampleDuration(data.tracks),
                   )}
                   )
                 </b>
@@ -88,9 +87,7 @@ const AnthemStep2 = () => {
                 Intro :{' '}
                 {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)})</b>}
               </span>
-              <span>
-                Couplet : {data.tracks[TrackType.VOCALS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.VOCALS].sampleDuration)})</b>}{' '}
-              </span>
+              <span>Couplet : {1 > 0 && <b>({toTime(getLongestVerseSampleDuration(data.tracks))})</b>} </span>
               <span>Outro : {data.tracks[TrackType.OUTRO].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.OUTRO].sampleDuration)})</b>}</span>
             </div>
             <Vocal className={styles.anthemStructureVocal} />

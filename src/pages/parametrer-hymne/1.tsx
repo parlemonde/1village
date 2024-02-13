@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -13,7 +12,6 @@ import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { StepsButtonDisablable } from 'src/components/StepsButtonsDisablable';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -27,8 +25,6 @@ const AnthemStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isValid, setIsValid] = React.useState(true);
-
   const data = (activity?.data as AnthemData) || null;
 
   const created = React.useRef(false);
@@ -44,24 +40,14 @@ const AnthemStep1 = () => {
     }
   }, [activity, createActivityIfNotExist, router, selectedPhase]);
 
-  React.useEffect(() => {
-    if (data) {
-      setIsValid(getErrorSteps(data, 0).length === 0);
-    }
-  }, [data]);
-
   const handleTrackUpdate = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
     updateActivity({ data: { ...data, tracks } });
   };
 
   const onNext = async () => {
-    setIsLoading(true);
-    if (isValid) {
-      save().catch(console.error);
-      // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
-    }
-    setIsLoading(false);
+    // setIsLoading(true);
+    // setIsLoading(false);
     router.push('/parametrer-hymne/2');
   };
 
@@ -75,20 +61,12 @@ const AnthemStep1 = () => {
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           activeStep={0}
+          errorSteps={getErrorSteps(data, 0)}
           urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
         <div className={styles.trackSelectionContainer}>
           <h1>Mettre en ligne les pistes sonores du couplet</h1>
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
-          {!isValid ? (
-            <div className={styles.warningContainer}>
-              <WarningAmberRoundedIcon />
-              <b>Toutes les pistes du couplet doivent avoir la même durée</b>
-            </div>
-          ) : (
-            <b>Toutes les pistes du couplet doivent avoir la même durée</b>
-          )}
-
           <div>
             <p className={styles.trackSelectionTitle}>La piste vocal du couplet, La La.</p>
             {data.tracks &&
@@ -107,7 +85,7 @@ const AnthemStep1 = () => {
           </div>
         </div>
       </div>
-      <StepsButtonDisablable next={onNext} isDisable={!isValid} />
+      <StepsButton next={onNext} />
       <Backdrop className={styles.trackSelectionBackdrop} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
