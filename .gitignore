@@ -53,6 +53,7 @@ mariaDB
 .minio-data
 .postgres-data
 .mysql-data
+.dynamodb
 .env.*
 
 public/sw.js
