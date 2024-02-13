@@ -16,6 +16,7 @@ export type Track = {
   label: string;
   sampleUrl: string;
   sampleDuration: number;
+  sampleStartTime: number;
   iconUrl: string;
 };
 
