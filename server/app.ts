@@ -96,12 +96,13 @@ export async function getApp() {
   app.use('/api', backRouter);
 
   // [4-bis] --- Add h5p ---
-  if (process.env.DYNAMODB_ENDPOINT) {
+  if (process.env.DYNAMODB_REGION) {
     try {
       const h5pRouter = await getH5pRouter();
       app.use('/h5p', h5pRouter);
     } catch (e) {
       logger.error('Could not initialize h5p router');
+      logger.error(e);
       app.use('/h5p', (_, res: Response) => {
         res.status(404).send('Error 404 - Not found.');
       });
