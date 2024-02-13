@@ -9,11 +9,13 @@ class AwsDynamoDb {
 
   constructor() {
     const dynamoDbConfig: AWS.DynamoDB.ClientConfiguration = {
-      accessKeyId: process.env.DYNAMODB_ACCESS_KEY || 'local',
-      secretAccessKey: process.env.DYNAMODB_SECRET_KEY || 'local',
+      accessKeyId: process.env.DYNAMODB_ACCESS_KEY || process.env.S3_ACCESS_KEY || 'local',
+      secretAccessKey: process.env.DYNAMODB_SECRET_KEY || process.env.S3_SECRET_KEY || 'local',
       region: process.env.DYNAMODB_REGION || 'us-east-1',
-      endpoint: process.env.DYNAMODB_ENDPOINT || 'http://dynamodb:8000',
     };
+    if (process.env.DYNAMODB_ENDPOINT) {
+      dynamoDbConfig.endpoint = process.env.DYNAMODB_ENDPOINT;
+    }
     this.dynamoDb = new AWS.DynamoDB(dynamoDbConfig);
     this.initialized = true;
   }
