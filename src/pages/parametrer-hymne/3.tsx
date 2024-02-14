@@ -21,7 +21,7 @@ const AnthemStep3 = () => {
 
   const errorSteps = React.useMemo(() => {
     if (data !== null) {
-      return getErrorSteps(data, 1);
+      return getErrorSteps(data, 2);
     }
     return [];
   }, [data]);

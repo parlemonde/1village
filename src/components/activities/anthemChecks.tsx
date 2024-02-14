@@ -14,7 +14,7 @@ export const isSecondStepValid = (data: AnthemData): boolean => {
 export const getErrorSteps = (data: AnthemData, step: number) => {
   const errorSteps = [];
 
-  if (step === 0 && !isFirstStepValid(data)) errorSteps.push(0);
-  if (step === 1 && !isSecondStepValid(data)) errorSteps.push(1);
+  if (step > 0 && !isFirstStepValid(data)) errorSteps.push(0);
+  if (step > 1 && !isSecondStepValid(data)) errorSteps.push(1);
   return errorSteps;
 };
