@@ -1,7 +1,13 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import type { Track } from 'src/activity-types/anthem.types';
+import { TrackType } from 'src/activity-types/anthem.types';
 import type { AxiosReturnType } from 'src/utils/axiosRequest';
+
+export const getLongestVerseSampleDuration = (tracks: Track[]) => {
+  const verseTracks = tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);
+  return Math.max(...verseTracks.map((track) => track.sampleDuration));
+};
 
 export const mixAudios = async (audios: Partial<Track>[], req: (arg: AxiosRequestConfig) => Promise<AxiosReturnType>) => {
   const sources: string[] = [];
