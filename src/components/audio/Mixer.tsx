@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 
 // import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 // import { Button } from '@mui/material';
@@ -311,3 +311,5 @@ const AudioMixer = () => {
   //     </div>
   //   );
 };
+
+export default AudioMixer;
