@@ -151,10 +151,10 @@ const SongStep4 = () => {
               justifyContent: 'space-between',
             }}
           >
-            {(displayEditor || data?.classRecord) && (
+            {/* {(displayEditor || data?.classRecord) && (
               <AudioEditor
                 value={data?.classRecord}
-                onChange={(value) => {
+                onChange={(value: string) => {
                   audioRef?.current?.pause();
                   customizedMixAudio?.pause();
                   updateActivity({ data: { ...data, classRecord: value } });
@@ -177,7 +177,7 @@ const SongStep4 = () => {
                 }}
                 ref={audioRef}
               />
-            )}
+            )} */}
           </div>
           <StepsButton prev="/chanter-un-couplet/3" next={onNext} />
           <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
