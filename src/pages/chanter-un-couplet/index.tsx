@@ -1,14 +1,14 @@
-import { useRouter } from 'next/router';
-import React from 'react';
+// import { useRouter } from 'next/router';
+// import React from 'react';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
-import { Base } from 'src/components/Base';
-import { StepsButton } from 'src/components/StepsButtons';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { axiosRequest } from 'src/utils/axiosRequest';
-import type { Activity } from 'types/activity.type';
-import { ActivityType } from 'types/activity.type';
+// import type { AnthemData } from 'src/activity-types/anthem.types';
+// import { Base } from 'src/components/Base';
+// import { StepsButton } from 'src/components/StepsButtons';
+// import { ActivityContext } from 'src/contexts/activityContext';
+// import { VillageContext } from 'src/contexts/villageContext';
+// import { axiosRequest } from 'src/utils/axiosRequest';
+// import type { Activity } from 'types/activity.type';
+// import { ActivityType } from 'types/activity.type';
 
 // const emptyAnthemActivity: AnthemData = {
 //   verseAudios: [],
