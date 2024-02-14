@@ -10,7 +10,7 @@ import { Base } from 'src/components/Base';
 import { DraggableTrack } from 'src/components/DraggableTrack';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
+import AudioEditor from 'src/components/activities/content/editors/AudioEditor/AudioEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import { audioBufferSlice, audioBufferToWav, mixAudios } from 'src/utils/audios';
@@ -152,7 +152,7 @@ const SongStep4 = () => {
             }}
           >
             {(displayEditor || data?.classRecord) && (
-              <AnthemEditor
+              <AudioEditor
                 value={data?.classRecord}
                 onChange={(value) => {
                   audioRef?.current?.pause();
