@@ -1,52 +1,53 @@
 import React from 'react';
 
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Button } from '@mui/material';
-import Slider from '@mui/material/Slider';
-import Tooltip from '@mui/material/Tooltip';
+// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+// import { Button } from '@mui/material';
+// import Slider from '@mui/material/Slider';
+// import Tooltip from '@mui/material/Tooltip';
 
-import type { Track } from 'src/activity-types/anthem.types';
-import { primaryColor } from 'src/styles/variables.const';
-import DrumIcon from 'src/svg/anthem/drum.svg';
-import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
-import FluteIcon from 'src/svg/anthem/flute.svg';
-import GuitareIcon from 'src/svg/anthem/guitare.svg';
-import PianoIcon from 'src/svg/anthem/piano.svg';
-import TrumpetIcon from 'src/svg/anthem/trumpet.svg';
-import { toTime } from 'src/utils/toTime';
+// import type { Track } from 'src/activity-types/anthem.types';
+// import { primaryColor } from 'src/styles/variables.const';
+// import DrumIcon from 'src/svg/anthem/drum.svg';
+// import DrumkitIcon from 'src/svg/anthem/drumkit.svg';
+// import FluteIcon from 'src/svg/anthem/flute.svg';
+// import GuitareIcon from 'src/svg/anthem/guitare.svg';
+// import PianoIcon from 'src/svg/anthem/piano.svg';
+// import TrumpetIcon from 'src/svg/anthem/trumpet.svg';
+// import { toTime } from 'src/utils/toTime';
 
-interface Audio {
-  value: string;
-  volume: number;
-}
+// interface Audio {
+//   value: string;
+//   volume: number;
+// }
 
-type AudioMixerProps = {
-  verseTime: number;
-  verseAudios: Track[];
-  audioSource?: string;
-  onUpdateAudioMix: (newAudioMixBlob: Blob) => void;
-};
+// type AudioMixerProps = {
+//   verseTime: number;
+//   verseAudios: Track[];
+//   audioSource?: string;
+//   onUpdateAudioMix: (newAudioMixBlob: Blob) => void;
+// };
 
-const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: AudioMixerProps) => {
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const [source, setSource] = React.useState('');
-  const [isRecording, setIsRecording] = React.useState(false);
-  const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
-  const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
-  const [counter, setCounter] = React.useState(0);
-  const counterIntervalId = React.useRef<number | undefined>(undefined);
-  const timeoutId = React.useRef<number | undefined>(undefined);
-  const audioContext = React.useRef<AudioContext | null>(null);
-  const recorder = React.useRef<MediaRecorder | null>(null);
-  const audioLabels = React.useMemo(() => {
-    return verseAudios.reduce((accumulator, audio, index) => {
-      if (index > 0) {
-        accumulator.push(audio.label);
-      }
-      return accumulator;
-    }, [] as string[]);
-  }, [verseAudios]);
+// mixer props : { verseTime, verseAudios, audioSource, onUpdateAudioMix }: AudioMixerProps
 
+const AudioMixer = () => {
+  // const [isPlaying, setIsPlaying] = React.useState(false);
+  // const [source, setSource] = React.useState('');
+  // const [isRecording, setIsRecording] = React.useState(false);
+  // const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
+  // const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
+  // const [counter, setCounter] = React.useState(0);
+  // const counterIntervalId = React.useRef<number | undefined>(undefined);
+  // const timeoutId = React.useRef<number | undefined>(undefined);
+  // const audioContext = React.useRef<AudioContext | null>(null);
+  // const recorder = React.useRef<MediaRecorder | null>(null);
+  // const audioLabels = React.useMemo(() => {
+  //   return verseAudios.reduce((accumulator, audio, index) => {
+  //     if (index > 0) {
+  //       accumulator.push(audio.label);
+  //     }
+  //     return accumulator;
+  //   }, [] as string[]);
+  // }, [verseAudios]);
   //   const audiosTracks = React.useMemo(() => verseAudios.slice(1).map((audio) => ({ value: audio.value, volume: 0.5 })), [verseAudios]);
   //   const audiosEl = React.useMemo(() => {
   //     const elements = audiosTracks.map((audio: Audio) => new Audio(audio.value));
@@ -55,7 +56,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //     });
   //     return elements;
   //   }, [audiosTracks]);
-
   //   const onPlay = React.useCallback(() => {
   //     if (audiosEl.length === 0) {
   //       return;
@@ -67,7 +67,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //       audio.play();
   //     });
   //   }, [audiosEl]);
-
   //   const onPause = React.useCallback(() => {
   //     setIsPlaying(false);
   //     window.clearInterval(counterIntervalId.current);
@@ -75,24 +74,20 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //       audio.pause();
   //     });
   //   }, [audiosEl]);
-
   //   const onRestart = React.useCallback(() => {
   //     setCounter(0);
   //     audiosEl.forEach((audio) => {
   //       audio.currentTime = 0;
   //     });
   //   }, [audiosEl]);
-
   //   const onStop = React.useCallback(() => {
   //     onPause();
   //     onRestart();
   //   }, [onPause, onRestart]);
-
   //   const onStartRecord = async () => {
   //     if (audioContext.current !== null) {
   //       await audioContext.current.close();
   //     }
-
   //     // create audio context and recorder.
   //     audioContext.current = new AudioContext();
   //     const dest = audioContext.current.createMediaStreamDestination();
@@ -103,7 +98,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //     }
   //     recorder.current = new MediaRecorder(dest.stream);
   //     recorder.current.start();
-
   //     // start recording
   //     setIsRecording(true);
   //     onRestart();
@@ -122,7 +116,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //       }
   //     }, verseTime * 1000);
   //   };
-
   //   const onStopRecord = () => {
   //     if (recorder.current) {
   //       recorder.current.stop();
@@ -131,7 +124,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //     setIsRecording(false);
   //     onStop();
   //   };
-
   //   const solo = (idx: number) => {
   //     const newVolumes = volumes.map((volume, index) => {
   //       const audio = audiosEl[index];
@@ -145,20 +137,17 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //     setVolumes(newVolumes);
   //     setSolos((solos: boolean[]) => solos.map((el, index) => (index === idx ? !el : false)));
   //   };
-
   //   const toggleVolume = (idx: number, isMuted: boolean) => {
   //     audiosEl.forEach((audio, index) => {
   //       audio.volume = idx === index ? (isMuted ? 1 : 0) : audio.volume;
   //     });
   //   };
-
   //   React.useEffect(() => {
   //     if (counter >= Math.floor(verseTime)) {
   //       window.clearInterval(counterIntervalId.current);
   //       onStop();
   //     }
   //   }, [counter, verseTime, onStop]);
-
   //   return (
   //     <div style={{ display: 'flex', flexDirection: 'column' }}>
   //       <div style={{ display: 'flex', height: 'auto' }}>
@@ -211,9 +200,7 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //     </div>
   //   );
   // };
-
   // export default AudioMixer;
-
   // interface AudioMixProps {
   //   audio: HTMLAudioElement;
   //   idx: number;
@@ -227,7 +214,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //   const color = solos[idx] ? 'gold' : 'grey';
   //   const mutedColor = isMuted ? 'grey' : primaryColor;
   //   const musicIcons = [PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
-
   //   const toggleMute = (idx: number) => {
   //     setIsMuted(isMuted ? false : true);
   //     off(idx, isMuted);
@@ -235,11 +221,9 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
   //   const toggleSolo = (idx: number) => {
   //     solo(idx);
   //   };
-
   //   const handleChange = (_event: Event, newValue: number | number[]) => {
   //     audio.volume = newValue as number;
   //   };
-
   //   return (
   //     <div style={{ width: '100px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
   //       <Slider
