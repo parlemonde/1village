@@ -1,11 +1,11 @@
 import type { AxiosRequestConfig } from 'axios';
 
-import type { Sample } from 'src/activity-types/anthem.types';
+import type { Track } from 'src/activity-types/anthem.types';
 import type { AxiosReturnType } from 'src/utils/axiosRequest';
 
-export const mixAudios = async (audios: Partial<Sample>[], req: (arg: AxiosRequestConfig) => Promise<AxiosReturnType>) => {
+export const mixAudios = async (audios: Partial<Track>[], req: (arg: AxiosRequestConfig) => Promise<AxiosReturnType>) => {
   const sources: string[] = [];
-  audios.forEach((audio) => audio.value && sources.push(audio.value));
+  audios.forEach((audio) => audio.sampleUrl && sources.push(audio.sampleUrl));
   const get = (src: string) => fetch(src).then((response) => response.arrayBuffer());
 
   return await Promise.all(sources.map(get))
@@ -43,9 +43,9 @@ export const mixAudios = async (audios: Partial<Sample>[], req: (arg: AxiosReque
     });
 };
 
-export const concatAudios = async (audios: Partial<Sample>[], req: (arg: AxiosRequestConfig) => Promise<AxiosReturnType>) => {
+export const concatAudios = async (audios: Partial<Track>[], req: (arg: AxiosRequestConfig) => Promise<AxiosReturnType>) => {
   const sources: string[] = [];
-  audios.forEach((audio) => audio.value && sources.push(audio.value));
+  audios.forEach((audio) => audio.sampleUrl && sources.push(audio.sampleUrl));
   if (sources.length === 0) return;
   const audioContext = new AudioContext();
   const getDecoded = (src: string) =>
