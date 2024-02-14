@@ -14,6 +14,7 @@ import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrac
 import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import Vocal from 'src/svg/anthem/vocal.svg';
+import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
 
 const AnthemStep2 = () => {
@@ -40,11 +41,6 @@ const AnthemStep2 = () => {
   const updateTrackInActivity = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
     updateActivity({ data: { ...data, tracks } });
-  };
-
-  const getLongestVerseSampleDuration = (tracks: Track[]) => {
-    const verseTracks = tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);
-    return Math.max(...verseTracks.map((track) => track.sampleDuration));
   };
 
   if (!activity || !data) {
@@ -84,12 +80,9 @@ const AnthemStep2 = () => {
               :
             </p>
             <div className={styles.anthemStructureVocalContainer}>
-              <span>
-                Intro :{' '}
-                {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)})</b>}
-              </span>
-              <span>Couplet : {1 > 0 && <b>({toTime(getLongestVerseSampleDuration(data.tracks))})</b>} </span>
-              <span>Outro : {data.tracks[TrackType.OUTRO].sampleDuration > 0 && <b>({toTime(data.tracks[TrackType.OUTRO].sampleDuration)})</b>}</span>
+              <span>Intro : {<b>{toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)}</b>}</span>
+              <span>Couplet : {<b>{toTime(getLongestVerseSampleDuration(data.tracks))}</b>}</span>
+              <span>Outro : {<b>{toTime(data.tracks[TrackType.OUTRO].sampleDuration)}</b>}</span>
             </div>
             <Vocal className={styles.anthemStructureVocal} />
           </div>
