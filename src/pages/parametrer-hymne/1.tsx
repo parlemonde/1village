@@ -13,7 +13,6 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
-import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { ActivityType } from 'types/activity.type';
@@ -46,8 +45,9 @@ const AnthemStep1 = () => {
   };
 
   const onNext = async () => {
-    // setIsLoading(true);
-    // setIsLoading(false);
+    setIsLoading(true);
+    save().catch(console.error);
+    setIsLoading(false);
     router.push('/parametrer-hymne/2');
   };
 
@@ -61,7 +61,6 @@ const AnthemStep1 = () => {
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           activeStep={0}
-          errorSteps={getErrorSteps(data, 0)}
           urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
         <div className={styles.trackSelectionContainer}>

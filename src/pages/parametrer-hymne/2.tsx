@@ -11,6 +11,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { ActivityContext } from 'src/contexts/activityContext';
 import Vocal from 'src/svg/anthem/vocal.svg';
 import { toTime } from 'src/utils/toTime';
@@ -23,8 +24,8 @@ const AnthemStep2 = () => {
   const data = (activity?.data as AnthemData) || null;
 
   const errorSteps = React.useMemo(() => {
-    if (data && data.tracks.length !== 9) {
-      return [0];
+    if (data !== null) {
+      return getErrorSteps(data, 0);
     }
     return [];
   }, [data]);

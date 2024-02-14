@@ -1,24 +1,22 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import type { AnthemData } from 'src/activity-types/anthem.types';
-import { TrackType } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
-import { mixAudios } from 'src/utils/audios';
-import { axiosRequest } from 'src/utils/axiosRequest';
 import { ActivityStatus } from 'types/activity.type';
 
 const AnthemStep5 = () => {
@@ -30,26 +28,10 @@ const AnthemStep5 = () => {
   const data = (activity?.data as AnthemData) || null;
 
   const errorSteps = React.useMemo(() => {
-    const errors: number[] = [];
-    if (
-      data !== null &&
-      data.tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO && !!track.sampleUrl).length !== 7
-    ) {
-      errors.push(0);
+    if (data !== null) {
+      return getErrorSteps(data, 1);
     }
-    if (
-      data !== null &&
-      data.tracks.filter((track) => (track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO) && !!track.sampleUrl).length !== 2
-    ) {
-      errors.push(1);
-    }
-    if (data !== null && data.verseLyrics.filter((lyrics) => !!lyrics.value).length === 0) {
-      errors.push(2);
-    }
-    if (data !== null && data.chorusLyrics.filter((lyrics) => !!lyrics.value).length === 0) {
-      errors.push(3);
-    }
-    return errors;
+    return [];
   }, [data]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
