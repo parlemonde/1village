@@ -1,15 +1,16 @@
-import e from 'express';
 import React, { useState } from 'react';
 
-// import EditIcon from '@mui/icons-material/Edit';
-import Fingerprint from '@mui/icons-material/Fingerprint';
 import PianoIcon from '@mui/icons-material/Piano';
-import { Alert, Badge, Button, TextField, Stack, IconButton, Autocomplete, Popper, Fade, Paper, Typography } from '@mui/material';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { Alert, Button, TextField, Stack, IconButton, Autocomplete, Popper, Fade, Paper, Box, InputAdornment } from '@mui/material';
+import Icon from '@mui/material/Icon';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
+// import accordion from './../../../../svg/anthem/instruments/accordion.svg';
+// import alboka from './../../../../svg/anthem/instruments/alboka.svg';
+// import altoClarinet from './../../../../svg/anthem/instruments/alto_clarinet.svg';
+// import altoSarrusophone from './../../../../svg/anthem/instruments/alto_sarrusophone.svg';
 import styles from './AnthemTrack.module.css';
+// import instruments from './instruments';
 import type { Track } from 'src/activity-types/anthem.types';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -19,46 +20,46 @@ interface AnthemTrackProps {
   handleTrackUpdate: (track: Track) => void;
 }
 
-interface IconType {
-  label: string;
-  icon: React.ReactElement<IconType>;
-}
-
-const instrumentsList: IconType[] = [
-  { label: 'guitar', icon: <PianoIcon /> },
-  { label: 'drum', icon: <PianoIcon /> },
-  { label: 'flute', icon: <PianoIcon /> },
-  { label: 'piano', icon: <PianoIcon /> },
-  { label: 'trumpet', icon: <PianoIcon /> },
+// export type InstrumentsType = {
+//   name: string;
+//   svg?: SVGElement;
+// };
+const allMUIIcons = [
+  {
+    label: '10k',
+    code: '10k e951',
+  },
+  {
+    label: '10mp',
+    code: '10mp e952',
+  },
+  {
+    label: '11mp',
+    code: '11mp e953',
+  },
+  {
+    label: '123',
+    code: '123 eb8d',
+  },
 ];
+
 const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
-  const [autocompleteVisible, setAutocompleteVisible] = React.useState(false);
-  // const [anchorEl, setAnchorElVisible] = React.useState<null | HTMLElement>(null);
-  // const [value, setValue] = React.useState<IconType | null>(null);
-  // const [searchValue, setSearchValue] = React.useState('');
   const [open, setOpen] = useState(false);
   const anchorEl = React.useRef(null);
-  // const open = Boolean(anchorEl);
 
   const handleSampleUpdate = (url: string, duration: number) => {
     handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration });
   };
 
-  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  //   // setAutocompleteVisible(true);
-  // };
-  const handleClose = () => {
-    // setAnchorElVisible(null);
-    setAutocompleteVisible(false);
-  };
-
-  // const handleOptionClick = (option: IconType) => {
-  //   setValue(option);
-  //   handleClose();
-  // };
+  // const instrumentsName = instruments.map((instrument) => {
+  //   return instrument.name;
+  // });
+  // const instrumentIcon = instruments.map((instrument) => {
+  //   return instrument.svg;
+  // });
+  let currentIcon: string | null = null;
 
   return (
     <div className={styles.trackContainer}>
@@ -71,67 +72,97 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={instrumentsList}
+                  {/* <Autocomplete
+                    id="search"
+                    options={instrumentsName}
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Instrument" />}
-                    onClick={() => setOpen(!open)}
+                  /> */}
+                  {/* <Autocomplete
+                    id="instruments-list"
+                    sx={{ width: 300 }}
+                    options={allMUIIcons}
+                    isOptionEqualToValue={(option, value) => option.label === value.label}
+                    autoHighlight
+                    getOptionLabel={(option) => option.label}
+                    defaultValue={{ label: 'instruments', code: '10k e951' }}
+                    renderOption={(props, option) => (
+                      <Box component="li" sx={{ '& > span': { mr: 2, flexShrink: 0 } }} {...props}>
+                        <Icon>{option.code}</Icon>
+                        {option.label}
+                      </Box>
+                    )}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Recherche"
+                          placeholder="Selectionner un instrument"
+                          InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                              <>
+                                <InputAdornment position="start">
+                                  <Icon>{currentIcon}</Icon>
+                                </InputAdornment>
+                                {params.InputProps.startAdornment}
+                              </>
+                            ),
+                          }}
+                        />
+                      );
+                    }}
+                    onInputChange={(_, value) => {
+                      currentIcon = value;
+                    }}
+                  /> */}
+                  <Autocomplete
+                    id="icon-select-demo"
+                    sx={{ width: 300 }}
+                    options={allMUIIcons}
+                    isOptionEqualToValue={(option, value) => option.code === value.code}
+                    autoHighlight
+                    getOptionLabel={(option) => option.label}
+                    defaultValue={{ label: 'sell', code: 'sell f05b' }}
+                    renderOption={(props, option) => (
+                      <Box component="li" sx={{ '& > span': { mr: 2, flexShrink: 0 } }} {...props} key={option.code}>
+                        <Icon>{option.code}</Icon>
+                        {option.label}
+                      </Box>
+                    )}
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Icon Selector"
+                          placeholder="Select an icon..."
+                          InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                              <>
+                                <InputAdornment position="start">
+                                  <Icon>{currentIcon}</Icon>
+                                </InputAdornment>
+                                {params.InputProps.startAdornment}
+                              </>
+                            ),
+                          }}
+                        />
+                      );
+                    }}
+                    onInputChange={(_, value) => {
+                      // Update the icon at the start of the input field
+                      // (currentIcon is used to render the startAdornment)
+                      currentIcon = value;
+                    }}
                   />
                 </Paper>
               </Fade>
             )}
           </Popper>
         </Stack>
-
-        {/* <Badge
-          badgeContent={<EditIcon />}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-        > */}
-        {/* <Button
-          className={styles.instrumentButton}
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
-          <PianoIcon />
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <TextField
-            label="Rechercher"
-            variant="outlined"
-            fullWidth
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              console.log('e.target.value=', e.target.value);
-            }}
-            style={{ display: anchorEl ? 'block' : 'none' }}
-          />
-          {instrumentsList
-            .filter((instr) => instr.label.toLowerCase().includes(searchValue.toLowerCase()))
-            .map((instr) => (
-              <MenuItem key={instr.label} onClick={() => handleOptionClick(instr)}>
-                {instr.icon}
-                {instr.label}
-              </MenuItem>
-            ))}
-        </Menu> */}
-        {/* </Badge> */}
       </div>
 
       <div className={styles.trackLabel}>
