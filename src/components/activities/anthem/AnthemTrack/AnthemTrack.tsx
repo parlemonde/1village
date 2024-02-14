@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Add from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import PianoIcon from '@mui/icons-material/Piano';
 import { Alert, Badge, Button, ButtonBase, TextField } from '@mui/material';
@@ -63,6 +64,7 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
           endIcon={<div></div>}
         >
           Ajouter un son
+          <Add />
         </Button>
       ) : (
         <div className={styles.sampleControlsContainer}>
