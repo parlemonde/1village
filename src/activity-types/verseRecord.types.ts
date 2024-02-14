@@ -1,9 +1,9 @@
-import type { Syllable, Sample } from 'src/activity-types/anthem.types';
+import type { Syllable, Track } from 'src/activity-types/anthem.types';
 import type { Activity } from 'types/activity.type';
 
 export type VerseRecordData = {
-  verseAudios: Sample[];
-  introOutro: Sample[];
+  verseAudios: Track[];
+  introOutro: Track[];
   verseLyrics: Syllable[];
   chorus: Syllable[];
   verse: string;
