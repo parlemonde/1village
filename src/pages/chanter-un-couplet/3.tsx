@@ -64,7 +64,7 @@ const SongStep3 = () => {
               <SyllableEditor key={`syllableEditor--chorus--${index}`} value={el} />
             ))}
           </div>
-          <h2>Votre couplet (démarre à {toTime(data.introOutro[0].time)})</h2>
+          {/* <h2>Votre couplet (démarre à {toTime(data.introOutro[0].time)})</h2> */}
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data.verseLyrics.map((el, index) => (
               <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} value={el} />
