@@ -8,6 +8,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste intro + refrain chanté',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -15,6 +16,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste vocale La La',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -22,6 +24,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste harmonique 1',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -29,6 +32,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste harmonique 2',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -36,6 +40,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste mélodique 1',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -43,6 +48,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste mélodique 2',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -50,6 +56,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste rythmique 1',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -57,6 +64,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste rythmique 2',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
     {
@@ -64,6 +72,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       label: 'Piste outro',
       sampleUrl: '',
       sampleDuration: 0,
+      sampleStartTime: 0,
       iconUrl: '',
     },
   ],
