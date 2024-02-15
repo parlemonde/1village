@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Alert } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -105,7 +106,11 @@ const AnthemStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {/* TODO preview of the verses final mix */}
+            {data.mixUrl && (
+              <audio controls src={data.mixUrl}>
+                <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
+              </audio>
+            )}
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix par défaut du couplet (les 7 pistes mélangées)</p>
           </div>
 
@@ -117,7 +122,11 @@ const AnthemStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {/* TODO preview of the final mix */}
+            {data.fullMixUrl && (
+              <audio controls src={data.fullMixUrl}>
+                <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
+              </audio>
+            )}
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de l&apos;hymne (intro + refrain + couplet mixé + outro)</p>
           </div>
 

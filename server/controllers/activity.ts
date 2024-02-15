@@ -5,6 +5,7 @@ import { IsNull } from 'typeorm';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
+import { buildAudioMix } from '../audioMix/buildAudioMix';
 import type { AnyData, ActivityContent } from '../entities/activity';
 import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Comment } from '../entities/comment';
@@ -451,6 +452,26 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     return;
   }
 
+  // Check if we need to build the audio mix
+  if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areTracksNew(data.data, activity.data)) {
+    const verseTracks = (data.data.tracks as any).filter((t: any) => t.type !== 0 && t.type !== 8);
+    data.data.mixUrl = await buildAudioMix(activity.userId, verseTracks); // without intro and outro
+
+    // const intro = (data.data.tracks as any).find((t: any) => t.type === 0);
+    // const outro = (data.data.tracks as any).find((t: any) => t.type === 8);
+    // const fullTracks = [];
+    // if (intro && intro.sampleUrl) {
+    //   fullTracks.push(intro);
+    //   fullTracks.push(...verseTracks.map((t: any) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
+    // } else {
+    //   fullTracks.push(...verseTracks);
+    // }
+    // if (outro && outro.sampleUrl) {
+    //   fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t: any) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
+    // }
+    // data.data.fullMixUrl = await buildAudioMix(activity.userId, fullTracks); // with intro and outro
+  }
+
   if (activity.status !== ActivityStatus.PUBLISHED) {
     activity.phase = data.phase || activity.phase;
   }
@@ -518,6 +539,32 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
+
+const areTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
+  const oldTracks = oldData.tracks as any[]; // A changer
+  const newTracks = newData.tracks as any[]; // A changer
+
+  const oldTracksMap = oldTracks.reduce((acc, track) => {
+    if (track.sampleUrl) {
+      acc[track.sampleUrl] = {
+        sampleStartTime: track.sampleStartTime,
+        sampleVolume: track.sampleVolume,
+      };
+    }
+    return acc;
+  }, {});
+  const newTracksMap = newTracks.reduce((acc, track) => {
+    if (track.sampleUrl) {
+      acc[track.sampleUrl] = {
+        sampleStartTime: track.sampleStartTime,
+        sampleVolume: track.sampleVolume,
+      };
+    }
+    return acc;
+  }, {});
+
+  return JSON.stringify(oldTracksMap) !== JSON.stringify(newTracksMap);
+};
 
 // --- create a game ---
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {

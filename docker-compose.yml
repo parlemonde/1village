@@ -16,6 +16,7 @@
 #       - ./src:/app/src
 #       - ./server:/app/server
 #       - ./types:/app/types
+#       - ./medias:/app/medias
 #     depends_on:
 #       migration:
 #         condition: service_completed_successfully
@@ -32,13 +33,13 @@
 #     depends_on:
 #       mysql:
 #         condition: service_healthy
-#     command: [ "yarn", "run", "migration:run-dev"]
+#     command: ['yarn', 'run', 'migration:run-dev']
 #   mysql:
 #     image: mysql:8
 #     environment:
 #       - MYSQL_ROOT_PASSWORD=my-secret-pw
 #     healthcheck:
-#       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
 #       timeout: 20s
 #       retries: 10
 #     ports:
@@ -50,6 +51,12 @@
 #     image: minio/minio
 #     ports:
 #       - '9000:9000'
+#       - '9090:9090'
+#     environment:
+#       - MINIO_ROOT_USER=minioadmin
+#       - MINIO_ROOT_PASSWORD=minioadmin
+#       - MINIO_ACCESS_KEY=minio
+#       - MINIO_SECRET_KEY=minio123
 #     volumes:
 #       - ./.minio-data:/data
-#     command: server /data
+#     command: server --console-address ":9090" /data

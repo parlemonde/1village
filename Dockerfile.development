@@ -4,6 +4,7 @@ RUN apt-get update
 
 # Needed for nodemon!
 RUN apt-get install -yq lsof procps
+RUN apt-get update && apt-get install -yq ffmpeg
 
 # Create app directory
 WORKDIR /app

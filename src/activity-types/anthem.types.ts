@@ -4,6 +4,8 @@ export type AnthemData = {
   tracks: Track[];
   verseLyrics: Syllable[];
   chorusLyrics: Syllable[];
+  mixUrl?: string; // mix without intro and outro
+  fullMixUrl?: string; // mix with intro and outro
 };
 
 export type Syllable = {
@@ -17,6 +19,7 @@ export type Track = {
   sampleUrl: string;
   sampleDuration: number;
   sampleStartTime: number;
+  sampleVolume?: number;
   iconUrl: string;
 };
 
