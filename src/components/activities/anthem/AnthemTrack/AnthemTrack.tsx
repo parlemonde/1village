@@ -46,7 +46,6 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                     isOptionEqualToValue={(option, value) => option.name === value.name}
                     autoHighlight
                     getOptionLabel={(option) => option.name}
-                    // defaultValue={{ name: 'instruments' }}
                     renderOption={(props, option) => (
                       <Box component="li" sx={{ '& > span': { mr: 2, flexShrink: 0 } }} {...props}>
                         <Icon>{option.svg}</Icon>
