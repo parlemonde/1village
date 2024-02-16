@@ -31,6 +31,7 @@ const AnthemStep1 = () => {
 
   const created = React.useRef(false);
   React.useEffect(() => {
+    // eslint-disable-next-line no-console
     console.log(data);
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
@@ -44,10 +45,6 @@ const AnthemStep1 = () => {
         created.current = true;
         createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       }
-    } else if (activity && isAnthem(activity) && !Object.prototype.hasOwnProperty.call(data, 'fullMixUrl')) {
-      deleteActivity(activity.id, !!activity.status);
-      created.current = true;
-      createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
     }
   }, [activity, createActivityIfNotExist, data, deleteActivity, router, selectedPhase]);
 
