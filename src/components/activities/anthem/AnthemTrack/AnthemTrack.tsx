@@ -82,7 +82,7 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"
             onDelete={() => {
-              handleTrackUpdate({ ...track, sampleUrl: '', sampleDuration: 0 });
+              handleSampleUpdate('', 0);
               setIsAudioEditorOpen(false);
             }}
           />
