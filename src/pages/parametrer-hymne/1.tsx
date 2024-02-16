@@ -48,6 +48,10 @@ const AnthemStep1 = () => {
         created.current = true;
         createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       }
+    } else if (activity && isAnthem(activity) && !Object.prototype.hasOwnProperty.call(data, 'fullMixUrl')) {
+      deleteActivity(activity.id, !!activity.status);
+      created.current = true;
+      createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
     }
   }, [activity, createActivityIfNotExist, data, deleteActivity, router, selectedPhase]);
 
