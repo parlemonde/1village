@@ -340,10 +340,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     [user],
   );
 
-  useEffect(() => {
-    // console.log('user===', user);
-  }, [user]);
-
   const value = React.useMemo(
     () => ({
       user,

@@ -173,13 +173,8 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   const createActivityIfNotExist = React.useCallback(
     async (type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean) => {
       if (user === null || village === null) {
-        // eslint-disable-next-line no-console
-        console.log('null user or village');
         return;
       }
-
-      // eslint-disable-next-line no-console
-      console.log('user or village');
 
       const userId = isVillageActivity ? undefined : user.id;
       const villageId = village.id;
