@@ -33,6 +33,9 @@ const AnthemStep1 = () => {
   React.useEffect(() => {
     // eslint-disable-next-line no-console
     console.log(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
         created.current = true;
