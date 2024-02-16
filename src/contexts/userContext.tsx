@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
