@@ -455,7 +455,8 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   // Check if we need to build the audio mix
   if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areTracksNew(data.data, activity.data)) {
     const verseTracks = (data.data.tracks as any).filter((t: any) => t.type !== 0 && t.type !== 8);
-    data.data.mixUrl = await buildAudioMix(activity.userId, verseTracks); // without intro and outro
+
+    data.data.mixUrl = verseTracks.some((t: any) => t.sampleUrl !== '') ? await buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
 
     // const intro = (data.data.tracks as any).find((t: any) => t.type === 0);
     // const outro = (data.data.tracks as any).find((t: any) => t.type === 8);
