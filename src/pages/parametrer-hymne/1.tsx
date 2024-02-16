@@ -30,11 +30,7 @@ const AnthemStep1 = () => {
   const data = (activity?.data as AnthemData) || null;
 
   const created = React.useRef(false);
-  React.useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
