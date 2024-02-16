@@ -31,6 +31,7 @@ const AnthemStep1 = () => {
 
   const created = React.useRef(false);
   React.useEffect(() => {
+    console.log(data);
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
         created.current = true;
