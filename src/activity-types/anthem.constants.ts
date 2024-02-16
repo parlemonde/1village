@@ -78,4 +78,6 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
   ],
   verseLyrics: [],
   chorusLyrics: [],
+  mixUrl: '',
+  fullMixUrl: '',
 };

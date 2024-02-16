@@ -15,6 +15,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityType } from 'types/activity.type';
 
 const AnthemStep1 = () => {
@@ -22,6 +23,8 @@ const AnthemStep1 = () => {
 
   const { activity, createActivityIfNotExist, updateActivity, save } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
+
+  const { deleteActivity } = useActivityRequests();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
@@ -34,10 +37,13 @@ const AnthemStep1 = () => {
         createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       } else if (activity && !isAnthem(activity)) {
         created.current = true;
-        createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       }
+    } else if (activity && isAnthem(activity) && !Object.prototype.hasOwnProperty.call(data, 'fullMixUrl')) {
+      deleteActivity(activity.id, !!activity.status);
+      created.current = true;
+      createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
     }
-  }, [activity, createActivityIfNotExist, router, selectedPhase]);
+  }, [activity, createActivityIfNotExist, data, deleteActivity, router, selectedPhase]);
 
   const handleTrackUpdate = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
