@@ -2,15 +2,12 @@ import type { Syllable, Track } from 'src/activity-types/anthem.types';
 import type { Activity } from 'types/activity.type';
 
 export type VerseRecordData = {
-  verseAudios: Track[];
-  introOutro: Track[];
+  tracks: Track[];
   verseLyrics: Syllable[];
-  chorus: Syllable[];
+  chorusLyrics: Syllable[];
   verse: string;
-  verseStart: number;
   customizedMix: string;
   customizedMixBlob?: Blob;
-  verseTime: number;
   mixWithoutLyrics: string;
   classRecord: string;
   slicedRecord: string;
