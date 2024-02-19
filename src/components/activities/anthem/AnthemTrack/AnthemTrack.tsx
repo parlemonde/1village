@@ -25,13 +25,13 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
     handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration });
   };
 
-  const currentIcon: string | null = null;
+  let currentIcon: string | null = null;
 
   return (
     <div className={styles.trackContainer}>
       <div className={styles.trackPicture}>
         <Stack direction="row" spacing={1}>
-          <IconButton aria-label="fingerprint" color="primary" onClick={() => setOpen(!open)} ref={anchorEl}>
+          <IconButton aria-label="fingerprint" color="primary" ref={anchorEl} onClick={() => setOpen(!open)}>
             <PianoIcon />
           </IconButton>
           <Popper open={open} anchorEl={anchorEl.current} transition placement={'bottom-start'}>
@@ -41,13 +41,12 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                   <Autocomplete
                     id="instruments-list"
                     sx={{ width: 300 }}
-                    onClick={() => setOpen(!open)}
                     options={instruments}
                     isOptionEqualToValue={(option, value) => option.name === value.name}
                     autoHighlight
                     getOptionLabel={(option) => option.name}
                     renderOption={(props, option) => (
-                      <Box component="li" sx={{ '& > span': { mr: 2, flexShrink: 0 } }} {...props}>
+                      <Box component="li" sx={{ '& > span': { mr: 2, flexShrink: 0 } }} {...props} onClick={() => setOpen(!open)}>
                         <Icon>{option.svg}</Icon>
                         {option.name}
                       </Box>
@@ -73,9 +72,9 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                         />
                       );
                     }}
-                    // onInputChange={(_, value) => {
-                    //   currentIcon = value;
-                    // }}
+                    onInputChange={(_, value) => {
+                      currentIcon = value;
+                    }}
                   />
                 </Paper>
               </Fade>
