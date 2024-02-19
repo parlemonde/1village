@@ -4,12 +4,14 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { TrackType } from 'src/activity-types/anthem.types';
 import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AudioMixer from 'src/components/audio/Mixer';
 import { ActivityContext } from 'src/contexts/activityContext';
+import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
 const SongStep1 = () => {
@@ -76,8 +78,8 @@ const SongStep1 = () => {
           </p>
           <AudioMixer
             onUpdateAudioMix={onUpdateAudioMix}
-            verseTime={data.verseTime}
-            verseAudios={data.verseAudios}
+            verseTime={getLongestVerseSampleDuration(data.tracks)}
+            verseAudios={data.tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO)}
             audioSource={data.customizedMix}
           />
         </div>
