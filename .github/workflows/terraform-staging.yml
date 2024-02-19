@@ -47,13 +47,13 @@ jobs:
         if: success()
 
       - name: Extract Public IP
-        id: server_public_ip
-        run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output server_public_ip)"
+        id: get_server_ip
+        run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output -raw server_public_ip)"
         if: success()
 
       - name: Create .env file
         env:
-          HOST_URL: ${{ steps.server_public_ip.outputs.server_public_ip }}
+          HOST_URL: ${{ steps.get_server_ip.outputs.server_public_ip }}
           PLM_CLIENT_ID: ${{ secrets.STAGING_CLIENT_ID }}
         run: |
           cat << EOF > .env
@@ -77,9 +77,9 @@ jobs:
       - name: Transfer Docker Image to EC2
         run: |
           docker save -o 1village-image.tar 1village
-          scp -o StrictHostKeyChecking=no 1village-image.tar ec2-user@$server:~
-          ssh -o StrictHostKeyChecking=no ec2-user@$server 'cd ~ && docker load -i 1village-image.tar && docker-compose up -d'
+          scp -o StrictHostKeyChecking=no 1village-image.tar ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }}:~
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }} 'cd ~ && docker load -i 1village-image.tar && docker-compose up -d'
         shell: bash
-        env:
-          server: ${{steps.server_public_ip.outputs.server_public_ip}}
+        #env:
+        #  server: ${{ steps.get_server_ip.outputs.server_public_ip }}
         if: success()
