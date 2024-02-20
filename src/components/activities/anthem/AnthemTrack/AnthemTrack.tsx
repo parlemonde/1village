@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import PianoIcon from '@mui/icons-material/Piano';
-import { Alert, Button, TextField, Stack, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon, InputAdornment } from '@mui/material';
+import { Alert, Button, TextField, Stack, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon, InputAdornment, Accordion } from '@mui/material';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
@@ -19,26 +18,26 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
   const [open, setOpen] = useState(false);
+  const [currentIcon, setCurrentIcon] = useState(instruments[0].svg);
   const anchorEl = React.useRef(null);
 
   const handleSampleUpdate = (url: string, duration: number) => {
     handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration });
   };
 
-  let currentIcon: string | null = null;
-
   return (
     <div className={styles.trackContainer}>
       <div className={styles.trackPicture}>
         <Stack direction="row" spacing={1}>
           <IconButton aria-label="fingerprint" color="primary" ref={anchorEl} onClick={() => setOpen(!open)}>
-            <PianoIcon />
+            {currentIcon}
           </IconButton>
-          <Popper open={open} anchorEl={anchorEl.current} transition placement={'bottom-start'}>
+          <Popper open={open} anchorEl={anchorEl.current} placement={'bottom-start'} transition>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper>
                   <Autocomplete
+                    className={styles.test}
                     id="instruments-list"
                     sx={{ width: 300 }}
                     options={instruments}
@@ -46,7 +45,15 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                     autoHighlight
                     getOptionLabel={(option) => option.name}
                     renderOption={(props, option) => (
-                      <Box component="li" sx={{ '& > span': { mr: 2, flexShrink: 0 } }} {...props} onClick={() => setOpen(!open)}>
+                      <Box
+                        component="li"
+                        sx={{ '& > span': { mr: 2, flexShrink: 0 } }}
+                        {...props}
+                        onClick={() => {
+                          setOpen(!open);
+                          setCurrentIcon(option.svg);
+                        }}
+                      >
                         <Icon>{option.svg}</Icon>
                         {option.name}
                       </Box>
@@ -56,8 +63,8 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                         <TextField
                           {...params}
                           variant="standard"
-                          label="Recherche"
-                          placeholder="Selectionner un instrument"
+                          label="Instruments"
+                          placeholder=""
                           InputProps={{
                             ...params.InputProps,
                             startAdornment: (
@@ -71,9 +78,6 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                           }}
                         />
                       );
-                    }}
-                    onInputChange={(_, value) => {
-                      currentIcon = value;
                     }}
                   />
                 </Paper>
