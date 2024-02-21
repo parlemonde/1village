@@ -18,11 +18,15 @@ const SongStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
+  // try to modify
+  const defaultVerseTracks = activity?.data.tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);
   const data = (activity?.data as VerseRecordData) || null;
   const onNext = async () => {
     save().catch(console.error);
     router.push('/chanter-un-couplet/2');
+    console.log(data);
   };
+
   const onUpdateAudioMix = async (newAudioMix: Blob) => {
     setIsLoading(true);
     if (newAudioMix.size > 0) {
@@ -37,13 +41,7 @@ const SongStep1 = () => {
         },
       });
 
-      //use ffmpeg-audio-mixer package for displaying
-      // const customizedMixWithVocals = await mixAudios([data?.verseAudios[0], { value: response.data.url }], axiosRequest);
-      // const mixWithoutLyrics = await concatAudios([data.introOutro[0], { value: response.data.url }, data.introOutro[1]], axiosRequest);
-      const customizedMixWithVocals = '';
-      const mixWithoutLyrics = '';
-
-      updateActivity({ data: { ...data, mixWithoutLyrics, customizedMixWithVocals, customizedMix: response.data.url, customizedMixBlob: null } });
+      updateActivity({ data: { ...data, customizedMix: response.data.url } });
     }
     setIsLoading(false);
   };
@@ -79,7 +77,7 @@ const SongStep1 = () => {
           <AudioMixer
             onUpdateAudioMix={onUpdateAudioMix}
             verseTime={getLongestVerseSampleDuration(data.tracks)}
-            verseAudios={data.tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO)}
+            verseAudios={defaultVerseTracks}
             audioSource={data.customizedMix}
           />
         </div>
