@@ -94,7 +94,9 @@ export type ExpressionData = {
   video: string | null;
 };
 
-type GameDataStep = {
+// --- structure to send to the server ---
+
+export type GameDataStep = {
   game: StepsType[];
   language?: string;
   monney?: string;
