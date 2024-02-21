@@ -49,7 +49,7 @@ const Anthem = () => {
   }, [getAnthemData]);
   const onNext = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
-    createNewActivity(ActivityType.VERSE_RECORD, selectedPhase, undefined, {
+    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
       verseTracks: tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO),
       verseMixUrl: '',
       verseRecordUrl: '',

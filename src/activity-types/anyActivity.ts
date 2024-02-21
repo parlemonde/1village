@@ -55,5 +55,5 @@ export const isAnthem = (activity: Activity): activity is AnthemActivity => {
   return activity.type === ActivityType.ANTHEM;
 };
 export const isClassAnthem = (activity: Activity): activity is ClassAnthemActivity => {
-  return activity.type === ActivityType.VERSE_RECORD;
+  return activity.type === ActivityType.CLASS_ANTHEM;
 };
