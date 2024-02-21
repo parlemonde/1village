@@ -9,6 +9,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -17,6 +18,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -25,6 +27,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -33,6 +36,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -41,6 +45,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -49,6 +54,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -57,6 +63,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -65,6 +72,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
     {
@@ -73,6 +81,7 @@ export const DEFAULT_ANTHEM_DATA: AnthemData = {
       sampleUrl: '',
       sampleDuration: 0,
       sampleStartTime: 0,
+      sampleVolume: 0.5,
       iconUrl: '',
     },
   ],
