@@ -473,6 +473,11 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     // data.data.fullMixUrl = await buildAudioMix(activity.userId, fullTracks); // with intro and outro
   }
 
+  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
+    console.log('ACTIVITY CHANGED !!!!!!!!!!!!!!!!!!!!!!!!', data.data);
+    data.data.verseMixUrl = await buildAudioMix(activity.userId, data.data.verseTracks as any);
+  }
+
   if (activity.status !== ActivityStatus.PUBLISHED) {
     activity.phase = data.phase || activity.phase;
   }
