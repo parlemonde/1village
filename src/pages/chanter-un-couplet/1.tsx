@@ -4,8 +4,7 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { TrackType } from 'src/activity-types/anthem.types';
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -18,13 +17,10 @@ const SongStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  // try to modify
-  const defaultVerseTracks = activity?.data.tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
   const onNext = async () => {
     save().catch(console.error);
     router.push('/chanter-un-couplet/2');
-    console.log(data);
   };
 
   const onUpdateAudioMix = async (newAudioMix: Blob) => {
@@ -41,7 +37,7 @@ const SongStep1 = () => {
         },
       });
 
-      updateActivity({ data: { ...data, customizedMix: response.data.url } });
+      updateActivity({ data: { ...data, verseMixUrl: response.data.url } });
     }
     setIsLoading(false);
   };
@@ -76,9 +72,9 @@ const SongStep1 = () => {
           </p>
           <AudioMixer
             onUpdateAudioMix={onUpdateAudioMix}
-            verseTime={getLongestVerseSampleDuration(data.tracks)}
-            verseAudios={defaultVerseTracks}
-            audioSource={data.customizedMix}
+            verseTime={getLongestVerseSampleDuration(data.verseTracks)}
+            verseAudios={data.verseTracks}
+            audioSource={data.verseMixUrl}
           />
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { AnthemData } from 'src/activity-types/anthem.types';
+import { TrackType } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -49,14 +50,12 @@ const Anthem = () => {
   const onNext = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
     createNewActivity(ActivityType.VERSE_RECORD, selectedPhase, undefined, {
-      tracks,
-      chorusLyrics,
-      verseLyrics,
-      verse: '',
-      customizedMix: '',
-      customizedMixBlob: null,
-      mixWithoutLyrics: '',
-      classRecord: '',
+      verseTracks: tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO),
+      verseMixUrl: '',
+      verseRecordUrl: '',
+      verseFinalMixUrl: '',
+      verseLyrics: verseLyrics,
+      chorusLyrics: chorusLyrics,
     });
     router.push('/chanter-un-couplet/1');
   };

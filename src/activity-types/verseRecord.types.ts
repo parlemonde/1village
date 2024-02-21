@@ -1,7 +1,8 @@
-import type { Syllable } from 'src/activity-types/anthem.types';
+import type { Syllable, Track } from 'src/activity-types/anthem.types';
 import type { Activity } from 'types/activity.type';
 
-export type VerseRecordData = {
+export type ClassAnthemData = {
+  verseTracks: Track[];
   verseMixUrl: string;
   verseRecordUrl: string;
   verseFinalMixUrl: string;
@@ -9,4 +10,4 @@ export type VerseRecordData = {
   chorusLyrics: Syllable[];
 };
 
-export type VerseRecordActivity = Activity<VerseRecordData>;
+export type ClassAnthemActivity = Activity<ClassAnthemData>;
