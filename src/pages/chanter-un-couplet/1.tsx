@@ -19,28 +19,13 @@ const SongStep1 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
   const onNext = async () => {
+    setIsLoading(true);
+    updateActivity({ data });
     save().catch(console.error);
+    setIsLoading(false);
     router.push('/chanter-un-couplet/2');
   };
 
-  const onUpdateAudioMix = async (newAudioMix: Blob) => {
-    setIsLoading(true);
-    if (newAudioMix.size > 0) {
-      const formData = new FormData();
-      formData.append('audio', newAudioMix, 'classVerse.webm');
-      const response = await axiosRequest({
-        method: 'POST',
-        url: '/audios',
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      updateActivity({ data: { ...data, verseMixUrl: response.data.url } });
-    }
-    setIsLoading(false);
-  };
   if (!activity || !data) {
     return (
       <Base>
@@ -70,12 +55,7 @@ const SongStep1 = () => {
             Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
             votre mix avant de passer à cette étape suivante !
           </p>
-          <AudioMixer
-            onUpdateAudioMix={onUpdateAudioMix}
-            verseTime={getLongestVerseSampleDuration(data.verseTracks)}
-            verseAudios={data.verseTracks}
-            audioSource={data.verseMixUrl}
-          />
+          <AudioMixer verseTime={getLongestVerseSampleDuration(data.verseTracks)} verseTracks={data.verseTracks} audioSource={data.verseMixUrl} />
         </div>
       </div>
       <StepsButton next={onNext} />

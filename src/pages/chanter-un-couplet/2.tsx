@@ -45,8 +45,8 @@ const SongStep2 = () => {
           Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
           N&apos;hésitez pas à ré-écouter le couplet.
         </p>
-        {data?.customizedMixWithVocals ? (
-          <audio controls src={data?.customizedMixWithVocals} />
+        {data?.verseMixUrl ? (
+          <audio controls src={data?.verseMixUrl} />
         ) : (
           <p>
             <b>Il manque votre mix du couplet !</b>
