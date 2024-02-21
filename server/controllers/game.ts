@@ -1,7 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { Activity } from '../entities/activity';
+import type { GameDataMonneyOrExpression } from '../../types/game.type';
+import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
@@ -181,32 +182,33 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     res.sendJSON({
       games: games,
     });
-  } else {
-    const games = await AppDataSource.getRepository(Activity)
-      .createQueryBuilder('activity')
-      .leftJoin(GameResponse, 'game.responses', 'responses')
-      .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
-      .andWhere('`activity`.`type` = :type', { type: 4 })
-      .andWhere('`activity`.`subType` = :subType', { subType: 2 })
-      .andWhere(
-        (qb) => {
-          const subQuery = qb
-            .subQuery()
-            .select()
-            .from(GameResponse, 'response')
-            .where(`response.userId = :userId`, { userId: userId })
-            .andWhere(`response.gameId = game.id`)
-            .andWhere(`response.isOldResponse = 0`)
-            .getQuery();
-          return 'NOT EXISTS ' + subQuery;
-        },
-        { userId: req.user.id },
-      )
-      .getMany();
-    res.sendJSON({
-      games: games,
-    });
   }
+  // } else {
+  //   const games = await AppDataSource.getRepository(Activity)
+  //     .createQueryBuilder('activity')
+  //     .leftJoin(GameResponse, 'activity.responses', 'responses')
+  //     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
+  //     .andWhere('`activity`.`type` = :type', { type: type })
+  //     .andWhere('`activity`.`subType` = :subType', { subType: 2 })
+  //     .andWhere(
+  //       (qb) => {
+  //         const subQuery = qb
+  //           .subQuery()
+  //           .select()
+  //           .from(GameResponse, 'response')
+  //           .where(`response.userId = :userId`, { userId: userId })
+  //           .andWhere(`response.gameId = activity.id`)
+  //           .andWhere(`response.isOldResponse = 0`)
+  //           .getQuery();
+  //         return 'NOT EXISTS ' + subQuery;
+  //       },
+  //       { userId: req.user.id },
+  //     )
+  //     .getMany();
+  //   res.sendJSON({
+  //     activities: games,
+  //   });
+  // }
 });
 
 //--- retrieve answers to the mimic with this id ---
@@ -293,5 +295,54 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
   res.sendJSON(GameResponse);
 });
+
+//--- Create a game for expression or monney ---
+
+gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const data = req.body;
+  const game1 = data.game1;
+  const game2 = data.game2;
+  const game3 = data.game3;
+
+  console.log('////////////////////////////////////////////////');
+  console.log('data', data);
+  console.log('////////////////////////////////////////////////');
+
+  createGame(game1, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  createGame(game2, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  createGame(game3, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+});
+
+function createGame(data: GameDataMonneyOrExpression, userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
+  console.log('////////////////////////////////////////////////');
+  console.log('createGame', data);
+  console.log('////////////////////////////////////////////////');
+  console.log('autre données', userId, villageId, type, subType, selectedPhase);
+  console.log('////////////////////////////////////////////////');
+
+  console.log('data.game1.game', data.game1.game);
+  console.log('data.game', data.game1);
+
+  // const activity = new Activity();
+  // activity.type = data.type;
+  // activity.subType = data.subType ?? null;
+  // activity.status = ActivityStatus.PUBLISHED;
+  // activity.data = data.data;
+  // activity.phase = data.phase || VillagePhase.DISCOVER;
+  // activity.content = data.content;
+  // activity.userId = req.user.id;
+  // activity.villageId = villageId;
+  // activity.responseActivityId = data.responseActivityId ?? null;
+  // activity.responseType = data.responseType ?? null;
+  // activity.isPinned = data.isPinned || false;
+  // activity.displayAsUser = data.displayAsUser || false;
+
+  // await AppDataSource.getRepository(Activity).save(activity);
+}
 
 export { gameController };

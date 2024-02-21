@@ -492,6 +492,24 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   res.sendJSON(activity);
 });
 
+// --- create a game ---
+const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
+  const id = data.gameId;
+  const game = id ? await AppDataSource.getRepository(Game).findOneOrFail({ where: { id: data.gameId || 0 } }) : new Game();
+  delete data['gameId'];
+  game.activityId = activity.id;
+  game.villageId = activity.villageId;
+  game.userId = activity.userId;
+  game.type = activity.subType;
+  game.signification = data.signification;
+  game.fakeSignification1 = data.fakeSignification1;
+  game.fakeSignification2 = data.fakeSignification2;
+  game.origine = data.origine;
+  game.video = data.video;
+  await AppDataSource.getRepository(Game).save(game);
+  return game;
+};
+
 activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
   if (!user) {
@@ -518,24 +536,6 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
-
-// --- create a game ---
-const createGame = async (data: GameData, activity: Activity): Promise<Game> => {
-  const id = data.gameId;
-  const game = id ? await AppDataSource.getRepository(Game).findOneOrFail({ where: { id: data.gameId || 0 } }) : new Game();
-  delete data['gameId'];
-  game.activityId = activity.id;
-  game.villageId = activity.villageId;
-  game.userId = activity.userId;
-  game.type = activity.subType;
-  game.signification = data.signification;
-  game.fakeSignification1 = data.fakeSignification1;
-  game.fakeSignification2 = data.fakeSignification2;
-  game.origine = data.origine;
-  game.video = data.video;
-  await AppDataSource.getRepository(Game).save(game);
-  return game;
-};
 
 // --- create a image ---
 const createStory = async (data: StoryElement, activity: Activity, type: ImageType, inspiredStoryId: number = 0): Promise<Image> => {

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 
 import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
+import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
@@ -14,14 +15,16 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
+import type { GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
 const ExpressionStep5 = () => {
   const router = useRouter();
 
-  const { createNewActivity, save } = React.useContext(ActivityContext);
+  // const { createNewActivity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
   const { selectedPhase } = React.useContext(VillageContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
@@ -31,18 +34,37 @@ const ExpressionStep5 = () => {
   const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
-    await createNewActivity(ActivityType.GAME, selectedPhase, GameType.EXPRESSION, {
-      presentation: labelPresentation,
-      gameConfig: gameConfig,
-    });
+    const data: GameDataMonneyOrExpression = {
+      userId: user?.id || 0,
+      villageId: village?.id || 0,
+      type: ActivityType.GAME,
+      subType: GameType.EXPRESSION,
+      game1: {
+        game: gameConfig[1],
+        language: inputSelectedValue,
+        labelPresentation: labelPresentation,
+        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
+      },
+      game2: {
+        game: gameConfig[2],
+        language: inputSelectedValue,
+        labelPresentation: labelPresentation,
+        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
+      },
+      game3: {
+        game: gameConfig[3],
+        language: inputSelectedValue,
+        labelPresentation: labelPresentation,
+        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
+      },
+      selectedPhase: selectedPhase,
+    };
 
-    setIsLoading(true);
-    const { success } = await save(true);
-    if (success) {
-      localStorage.removeItem('gameConfig');
-      router.push('/creer-un-jeu/expression/success');
-    }
-    setIsLoading(false);
+    // setIsLoading(true);
+    await postGameDataMonneyOrExpression(data);
+    localStorage.removeItem('gameConfig');
+    // router.push('/creer-un-jeu/expression/success');
+    // setIsLoading(false);
   };
 
   function validateGameConfig(gameConfig: StepsType[][]) {

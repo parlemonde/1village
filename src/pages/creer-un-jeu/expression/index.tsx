@@ -43,7 +43,7 @@ const Expression = () => {
             }}
             disableElevation
           >
-            Créer 3 proverbes
+            Créer 3 expressions
           </Button>
         </Link>
       </div>
