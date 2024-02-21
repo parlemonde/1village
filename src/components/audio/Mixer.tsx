@@ -22,33 +22,27 @@ interface Audio {
 
 type AudioMixerProps = {
   verseTime: number;
-  verseAudios: Track[];
+  verseTracks: Track[];
   audioSource?: string;
-  onUpdateAudioMix: (newAudioMixBlob: Blob) => void;
 };
 
-const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: AudioMixerProps) => {
+const AudioMixer = ({ verseTime, verseTracks, audioSource }: AudioMixerProps) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [source, setSource] = React.useState('');
-  const [isRecording, setIsRecording] = React.useState(false);
   const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
   const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
   const [counter, setCounter] = React.useState(0);
   const counterIntervalId = React.useRef<number | undefined>(undefined);
-  const timeoutId = React.useRef<number | undefined>(undefined);
-  const audioContext = React.useRef<AudioContext | null>(null);
-  const recorder = React.useRef<MediaRecorder | null>(null);
 
   const audioLabels = React.useMemo(() => {
-    return verseAudios.reduce((accumulator, audio, index) => {
+    return verseTracks.reduce((accumulator, audio, index) => {
       if (index > 0) {
         accumulator.push(audio.label);
       }
       return accumulator;
     }, [] as string[]);
-  }, [verseAudios]);
+  }, [verseTracks]);
 
-  const audiosTracks = React.useMemo(() => verseAudios.slice(1).map((audio) => ({ value: audio.sampleUrl, volume: 0.5 })), [verseAudios]);
+  const audiosTracks = React.useMemo(() => verseTracks.slice(1).map((audio) => ({ value: audio.sampleUrl, volume: 0.5 })), [verseTracks]);
 
   const audiosEl = React.useMemo(() => {
     const elements = audiosTracks.map((audio: Audio) => new Audio(audio.value));
@@ -89,50 +83,6 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
     onPause();
     onRestart();
   }, [onPause, onRestart]);
-
-  const onStartRecord = async () => {
-    if (audioContext.current !== null) {
-      await audioContext.current.close();
-    }
-
-    // create audio context and recorder.
-    audioContext.current = new AudioContext();
-    const dest = audioContext.current.createMediaStreamDestination();
-    for (const audio of audiosEl) {
-      const source = audioContext.current.createMediaElementSource(audio);
-      source.connect(audioContext.current.destination);
-      source.connect(dest);
-    }
-    recorder.current = new MediaRecorder(dest.stream);
-    recorder.current.start();
-
-    // start recording
-    setIsRecording(true);
-    onRestart();
-    onPlay();
-    timeoutId.current = window.setTimeout(() => {
-      if (recorder.current !== null) {
-        recorder.current.ondataavailable = (ev) => {
-          onUpdateAudioMix(ev.data);
-          setSource(URL.createObjectURL(ev.data));
-        };
-      }
-      onStop();
-      setIsRecording(false);
-      if (recorder.current) {
-        recorder.current.stop();
-      }
-    }, verseTime * 1000);
-  };
-
-  const onStopRecord = () => {
-    if (recorder.current) {
-      recorder.current.stop();
-    }
-    window.clearTimeout(timeoutId.current);
-    setIsRecording(false);
-    onStop();
-  };
 
   const solo = (idx: number) => {
     const newVolumes = volumes.map((volume, index) => {
@@ -178,14 +128,13 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
               onClick={() => {
                 isPlaying ? onPause() : onPlay();
               }}
-              disabled={isRecording}
             >
               {isPlaying ? 'Pause' : 'Jouer'}
             </Button>
             <span style={{ fontSize: '30px' }}>
               {toTime(counter)}/{toTime(verseTime)}
             </span>
-            <Button variant="contained" onClick={onRestart} disabled={isRecording}>
+            <Button variant="contained" onClick={onRestart}>
               Recommencer
             </Button>
           </div>
@@ -194,21 +143,8 @@ const AudioMixer = ({ verseTime, verseAudios, audioSource, onUpdateAudioMix }: A
               <AudioMix key={`mix--${idx}`} idx={idx} audio={audio} solo={solo} off={toggleVolume} solos={solos} audioLabels={audioLabels} />
             ))}
           </div>
-          {audioSource ? (
-            <audio controls={!isRecording} src={audioSource} style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }} />
-          ) : (
-            source && <audio controls={!isRecording} src={source} style={{ width: '95%', height: '40px', marginLeft: '10px' }} />
-          )}
+          <audio src={audioSource} style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }} />
         </div>
-      </div>
-      <div style={{ width: '600px', display: 'flex', justifyContent: 'space-between', flexDirection: 'row-reverse' }}>
-        <Button
-          variant="contained"
-          style={{ width: '200px', marginTop: '10px', height: '35px' }}
-          onClick={isRecording ? onStopRecord : onStartRecord}
-        >
-          {isRecording ? "Arrêter l'enregistrement" : 'Enregistrer'}
-        </Button>
       </div>
     </div>
   );
