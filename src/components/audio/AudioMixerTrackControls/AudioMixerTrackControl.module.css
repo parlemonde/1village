@@ -1,0 +1,15 @@
+.slider{
+    height: 350px;
+    color: gray;
+}
+
+.slider .MuiSlider-thumb{
+    background-image: url("/static-images/mix-button.png");
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: transparent;
+    height: 35;
+    border-radius: 1px;
+  }
