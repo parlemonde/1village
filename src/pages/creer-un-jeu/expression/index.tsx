@@ -20,12 +20,12 @@ const Expression = () => {
           comme vache qui pisse” ... alors qu’en anglais on dit “it’s raining cats and dogs” (il pleut des chats et des chiens)
         </p>
         <h1>Faites découvrir vos expressions aux Pélicopains !</h1>
-        <div style={{ marginBottom: '2rem' }}>
+        <div style={{ marginTop: '1rem' }}>
           <strong>À vous de faire découvrir 3 expressions imagées que vous utilisez à vos Pélicopains !</strong>
           <p>
             Vous pourrez d’abord choisir la langue dans laquelle l’expression existe. À chaque étape, vous pourrez ensuite mettre en ligne un dessin
             illustrant l’expression, et sa signification. Pour pimenter le jeu, à chaque étape vous devrez également inventer deux significations
-            fausses … à vos Pélicopains de deviner ce qui signifie réellement vos expressions !
+            fausses … à vos Pélicopains de deviner ce que signifie réellement vos expressions !
           </p>
         </div>
         <Link href="/creer-un-jeu/expression/1" passHref>
@@ -43,7 +43,7 @@ const Expression = () => {
             }}
             disableElevation
           >
-            Créer 3 proverbes
+            créer 3 expressions
           </Button>
         </Link>
       </div>

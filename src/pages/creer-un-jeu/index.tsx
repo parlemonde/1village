@@ -25,7 +25,7 @@ const activities = [
     disabledText: 'Bientôt disponible',
   },
   {
-    label: "Jeu de l'expression",
+    label: 'Jeu des expressions',
     href: '/creer-un-jeu/expression',
     icon: ExpressionIcon,
     gameType: GameType.EXPRESSION,

@@ -51,7 +51,7 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
                 margin: '10px 0',
               }}
             >
-              <div style={{ gridArea: 'd' }}>
+              <div style={{ gridArea: 'd', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <EditButton
                   onClick={() => {
                     router.push(`${baseUrl}${step.step}`);
@@ -75,8 +75,8 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
                   </div>
                 ))}
               </div>
-              <div style={{ gridArea: 'b' }}>
-                <Grid item xs={12} md={8}>
+              <div style={{ gridArea: 'b', display: 'flex', justifyContent: 'center' }}>
+                <Grid item xs={12} md={8} style={{ padding: '10px' }}>
                   <RadioGroup aria-label="signification" name="signification1" value={1}>
                     {BArea.map((elem, index) => (
                       <FormControlLabel
