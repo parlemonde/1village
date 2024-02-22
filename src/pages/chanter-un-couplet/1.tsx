@@ -8,7 +8,7 @@ import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import AudioMixer from 'src/components/audio/Mixer';
+import AudioMixer from 'src/components/audio/AudioMixer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import { axiosRequest } from 'src/utils/axiosRequest';
@@ -20,7 +20,8 @@ const SongStep1 = () => {
   const data = (activity?.data as ClassAnthemData) || null;
   const onNext = async () => {
     setIsLoading(true);
-    updateActivity({ data });
+    //get mix verse ion updateAcitivty
+    updateActivity({ data: { ...data, verseTracks: [] } });
     save().catch(console.error);
     setIsLoading(false);
     router.push('/chanter-un-couplet/2');
@@ -55,7 +56,7 @@ const SongStep1 = () => {
             Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
             votre mix avant de passer à cette étape suivante !
           </p>
-          <AudioMixer verseTime={getLongestVerseSampleDuration(data.verseTracks)} verseTracks={data.verseTracks} audioSource={data.verseMixUrl} />
+          <AudioMixer tracks={data.verseTracks.slice(1)} audioSource={data.verseMixUrl} />
         </div>
       </div>
       <StepsButton next={onNext} />

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { Syllable } from 'src/activity-types/anthem.types';
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -12,10 +12,10 @@ import { ActivityContext } from 'src/contexts/activityContext';
 const SongStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data.customizedMix) {
+    if (data !== null && !data.verseMixUrl) {
       errors.push(0);
     }
 
