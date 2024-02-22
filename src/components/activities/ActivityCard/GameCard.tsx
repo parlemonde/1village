@@ -27,8 +27,6 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
 
   const [typeOfGame, setTypeOfGame] = useState('');
 
-  console.log('activity from GameCard', activity);
-
   useEffect(() => {
     switch (gameType) {
       case GameType.MIMIC:
