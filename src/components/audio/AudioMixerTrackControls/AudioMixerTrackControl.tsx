@@ -7,17 +7,17 @@ import type { AudioMixerTrack } from '../AudioMixer';
 import { primaryColor } from 'src/styles/variables.const';
 
 interface AudioMixerTrackControlProps {
-  track: AudioMixerTrack;
+  mixTrack: AudioMixerTrack;
   idx: number;
+  solos: boolean[];
   solo: (idx: number) => void;
   off: (idx: number, isMuted: boolean) => void;
-  solos: boolean[];
+  handleVolumeUpdate: (id: number, volume: number) => void;
 }
-const AudioMixerTrackControl = ({ track, idx, solo, off, solos }: AudioMixerTrackControlProps) => {
+const AudioMixerTrackControl = ({ mixTrack, idx, solos, solo, off, handleVolumeUpdate }: AudioMixerTrackControlProps) => {
   const [isMuted, setIsMuted] = React.useState(false);
   const color = solos[idx] ? 'gold' : 'grey';
   const mutedColor = isMuted ? 'grey' : primaryColor;
-  // const musicIcons = [PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
 
   const toggleMute = (idx: number) => {
     setIsMuted(isMuted ? false : true);
@@ -28,8 +28,8 @@ const AudioMixerTrackControl = ({ track, idx, solo, off, solos }: AudioMixerTrac
   };
 
   const handleChange = (_event: Event, newValue: number | number[]) => {
-    track.audioElement.volume = newValue as number;
-    track.sampleVolume = newValue as number;
+    mixTrack.sampleVolume = newValue as number;
+    mixTrack.audioElement.volume = mixTrack.sampleVolume;
   };
 
   return (
@@ -38,6 +38,7 @@ const AudioMixerTrackControl = ({ track, idx, solo, off, solos }: AudioMixerTrac
         aria-label="Mixing Volume"
         defaultValue={0.5}
         onChange={handleChange}
+        onChangeCommitted={() => handleVolumeUpdate(idx, mixTrack.sampleVolume)}
         step={0.1}
         marks
         min={0}
@@ -99,7 +100,7 @@ const AudioMixerTrackControl = ({ track, idx, solo, off, solos }: AudioMixerTrac
         </span>
       </div>
       <div style={{ position: 'relative', display: 'inline-block' }}>
-        <Tooltip title={track.label} arrow>
+        <Tooltip title={mixTrack.label} arrow>
           <InfoOutlinedIcon
             fontSize="small"
             style={{

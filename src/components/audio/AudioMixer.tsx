@@ -16,17 +16,16 @@ export interface AudioMixerTrack {
 
 type AudioMixerProps = {
   tracks: Track[];
+  handleMixVolumesUpdate: (trackId: number, volume: number) => void;
   audioSource?: string;
 };
 
-const AudioMixer = ({ tracks, audioSource }: AudioMixerProps) => {
+const AudioMixer = ({ tracks, handleMixVolumesUpdate, audioSource }: AudioMixerProps) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
   const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
   const [counter, setCounter] = React.useState(0);
   const counterIntervalId = React.useRef<number | undefined>(undefined);
-
-  const verseTime = React.useMemo(() => getLongestVerseSampleDuration(tracks), [tracks]);
 
   const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
     return tracks.map((track) => ({
@@ -36,6 +35,12 @@ const AudioMixer = ({ tracks, audioSource }: AudioMixerProps) => {
       audioElement: new Audio(track.sampleUrl),
     }));
   }, [tracks]);
+
+  const verseTime = React.useMemo(() => getLongestVerseSampleDuration(tracks), [tracks]);
+
+  const handleVolumeUpdate = (idx: number, volume: number) => {
+    handleMixVolumesUpdate(idx, volume);
+  };
 
   const onPlay = React.useCallback(() => {
     if (audioMixerTracks.length === 0) {
@@ -124,11 +129,19 @@ const AudioMixer = ({ tracks, audioSource }: AudioMixerProps) => {
             </Button>
           </div>
           <div style={{ display: 'flex' }}>
-            {audioMixerTracks.map((track, idx) => (
-              <AudioMixerTrackControl key={`mix--${idx}`} track={track} idx={idx} solo={solo} off={toggleVolume} solos={solos} />
+            {audioMixerTracks.map((mixTrack, idx) => (
+              <AudioMixerTrackControl
+                key={`mix--${idx}`}
+                mixTrack={mixTrack}
+                handleVolumeUpdate={handleVolumeUpdate}
+                idx={idx}
+                solo={solo}
+                off={toggleVolume}
+                solos={solos}
+              />
             ))}
           </div>
-          <audio src={audioSource} style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }} />
+          {/* <audio src={audioSource} style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }} /> */}
         </div>
       </div>
     </div>
