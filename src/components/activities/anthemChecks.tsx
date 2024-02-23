@@ -2,7 +2,7 @@ import type { AnthemData } from 'src/activity-types/anthem.types';
 import { TrackType } from 'src/activity-types/anthem.types';
 
 export const isFirstStepValid = (data: AnthemData): boolean => {
-  return data.tracks.some((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO && track.sampleUrl.length > 0);
+  return !data.tracks.some((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO && track.sampleUrl.length === 0);
 };
 
 export const isSecondStepValid = (data: AnthemData): boolean => {
