@@ -16,7 +16,7 @@ export type Track = {
   label: string;
   sampleUrl: string;
   sampleDuration: number;
-  iconUrl: string;
+  iconUrl: React.ReactElement;
 };
 
 export enum TrackType {

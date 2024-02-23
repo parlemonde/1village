@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Alert, Button, TextField, Stack, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon, InputAdornment, Accordion } from '@mui/material';
+import { Alert, Button, TextField, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon } from '@mui/material';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
@@ -27,64 +27,81 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
 
   return (
     <div className={styles.trackContainer}>
-      <div className={styles.trackPicture}>
-        <Stack direction="row" spacing={1}>
+      <div className={styles.trackContainer}>
+        <div className={styles.trackPicture}>
           <IconButton aria-label="fingerprint" color="primary" ref={anchorEl} onClick={() => setOpen(!open)}>
             {currentIcon}
           </IconButton>
+          {/* TODO change scrollbar aspect */}
           <Popper open={open} anchorEl={anchorEl.current} placement={'bottom-start'} transition>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper>
-                  <Autocomplete
-                    className={styles.test}
-                    id="instruments-list"
-                    sx={{ width: 300 }}
-                    options={instruments}
-                    isOptionEqualToValue={(option, value) => option.name === value.name}
-                    autoHighlight
-                    getOptionLabel={(option) => option.name}
-                    renderOption={(props, option) => (
-                      <Box
-                        component="li"
-                        sx={{ '& > span': { mr: 2, flexShrink: 0 } }}
-                        {...props}
-                        onClick={() => {
-                          setOpen(!open);
-                          setCurrentIcon(option.svg);
-                        }}
-                      >
-                        <Icon>{option.svg}</Icon>
-                        {option.name}
-                      </Box>
-                    )}
-                    renderInput={(params) => {
-                      return (
+                  <Box className={styles.autocompleteList}>
+                    <Autocomplete
+                      id="instruments-list"
+                      className={styles.autocompleteBox}
+                      sx={{ width: 300 }}
+                      disablePortal
+                      options={instruments}
+                      isOptionEqualToValue={(option, value) => option.name === value.name}
+                      autoHighlight
+                      getOptionLabel={(option) => option.name}
+                      open={open}
+                      onClose={() => setOpen(false)}
+                      PopperComponent={({ children, ...popperProps }) => (
+                        <div {...popperProps} style={{ position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 1 }}>
+                          {children}
+                        </div>
+                      )}
+                      PaperComponent={({ children, ...paperProps }) => (
+                        <div {...paperProps} className={styles.paperComp}>
+                          {children}
+                        </div>
+                      )}
+                      renderOption={(props, option) => (
+                        <Box
+                          className={styles.instrumentList}
+                          component="li"
+                          sx={{ '& > span': { mr: 2, flexShrink: 0 } }}
+                          {...props}
+                          onClick={() => {
+                            setOpen(false);
+                            setCurrentIcon(option.svg);
+                            handleTrackUpdate({ ...track, iconUrl: option.svg });
+                          }}
+                        >
+                          <div className={styles.iconList}>
+                            <Icon>{option.svg}</Icon>
+                          </div>
+                          {option.name}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
                         <TextField
                           {...params}
                           variant="standard"
                           label="Instruments"
                           placeholder=""
+                          autoFocus
                           InputProps={{
                             ...params.InputProps,
-                            startAdornment: (
-                              <>
-                                <InputAdornment position="start">
-                                  <Icon>{currentIcon}</Icon>
-                                </InputAdornment>
-                                {params.InputProps.startAdornment}
-                              </>
-                            ),
+                            style: {
+                              border: '1px solid #ccc',
+                              padding: '8px',
+                              borderRadius: '4px',
+                            },
+                            startAdornment: <>{params.InputProps.startAdornment}</>,
                           }}
                         />
-                      );
-                    }}
-                  />
+                      )}
+                    />
+                  </Box>
                 </Paper>
               </Fade>
             )}
           </Popper>
-        </Stack>
+        </div>
       </div>
 
       <div className={styles.trackLabel}>
