@@ -474,7 +474,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    console.log('ACTIVITY CHANGED !!!!!!!!!!!!!!!!!!!!!!!!', data.data);
+    console.log('TRACKS CHANGED !!!!!!!!!!!!!!!!!!!!!!!!', data.data.verseTracks);
     data.data.verseMixUrl = await buildAudioMix(activity.userId, data.data.verseTracks as any);
   }
 

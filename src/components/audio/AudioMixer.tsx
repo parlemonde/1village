@@ -3,8 +3,6 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import AudioMixerTrackControl from './AudioMixerTrackControls/AudioMixerTrackControl';
-import type { Track } from 'src/activity-types/anthem.types';
-import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
 
 export interface AudioMixerTrack {
@@ -15,59 +13,58 @@ export interface AudioMixerTrack {
 }
 
 type AudioMixerProps = {
-  tracks: Track[];
-  handleMixVolumesUpdate: (trackId: number, volume: number) => void;
+  tracks: AudioMixerTrack[];
+  verseTime: number;
+  handleMixUpdate: (volumes: number[]) => void;
   audioSource?: string;
 };
 
-const AudioMixer = ({ tracks, handleMixVolumesUpdate, audioSource }: AudioMixerProps) => {
+const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audioSource }: AudioMixerProps, ref) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [volumes, setVolumes] = React.useState([0.5, 0.5, 0.5, 0.5, 0.5, 0.5]);
-  const [solos, setSolos] = React.useState([false, false, false, false, false, false]);
+  const [volumes, setVolumes] = React.useState(tracks.map((track) => track.sampleVolume));
+  const [solos, setSolos] = React.useState(tracks.map(() => false));
   const [counter, setCounter] = React.useState(0);
   const counterIntervalId = React.useRef<number | undefined>(undefined);
 
-  const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
-    return tracks.map((track) => ({
-      sampleVolume: track.sampleVolume || 0.5,
-      label: track.label,
-      iconUrl: track.iconUrl,
-      audioElement: new Audio(track.sampleUrl),
-    }));
-  }, [tracks]);
-
-  const verseTime = React.useMemo(() => getLongestVerseSampleDuration(tracks), [tracks]);
+  React.useImperativeHandle(ref, () => ({
+    stopMixer() {
+      onStop();
+    },
+  }));
 
   const handleVolumeUpdate = (idx: number, volume: number) => {
-    handleMixVolumesUpdate(idx, volume);
+    const newMix = volumes;
+    newMix[idx] = volume;
+    setVolumes(newMix);
+    handleMixUpdate(volumes);
   };
 
   const onPlay = React.useCallback(() => {
-    if (audioMixerTracks.length === 0) {
+    if (tracks.length === 0) {
       return;
     }
     setIsPlaying(true);
     window.clearInterval(counterIntervalId.current);
     counterIntervalId.current = window.setInterval(() => setCounter((counter: number) => counter + 1), 1000);
-    audioMixerTracks.forEach((track) => {
+    tracks.forEach((track) => {
       track.audioElement.play();
     });
-  }, [audioMixerTracks]);
+  }, [tracks]);
 
   const onPause = React.useCallback(() => {
     setIsPlaying(false);
     window.clearInterval(counterIntervalId.current);
-    audioMixerTracks.forEach((track) => {
+    tracks.forEach((track) => {
       track.audioElement.pause();
     });
-  }, [audioMixerTracks]);
+  }, [tracks]);
 
   const onRestart = React.useCallback(() => {
     setCounter(0);
-    audioMixerTracks.forEach((track) => {
+    tracks.forEach((track) => {
       track.audioElement.currentTime = 0;
     });
-  }, [audioMixerTracks]);
+  }, [tracks]);
 
   const onStop = React.useCallback(() => {
     onPause();
@@ -76,7 +73,7 @@ const AudioMixer = ({ tracks, handleMixVolumesUpdate, audioSource }: AudioMixerP
 
   const solo = (idx: number) => {
     const newVolumes = volumes.map((volume, index) => {
-      const track = audioMixerTracks[index];
+      const track = tracks[index];
       if (!track) {
         return 0;
       }
@@ -89,7 +86,7 @@ const AudioMixer = ({ tracks, handleMixVolumesUpdate, audioSource }: AudioMixerP
   };
 
   const toggleVolume = (idx: number, isMuted: boolean) => {
-    audioMixerTracks.forEach((track, index) => {
+    tracks.forEach((track, index) => {
       track.audioElement.volume = idx === index ? (isMuted ? 1 : 0) : track.audioElement.volume;
     });
   };
@@ -129,7 +126,7 @@ const AudioMixer = ({ tracks, handleMixVolumesUpdate, audioSource }: AudioMixerP
             </Button>
           </div>
           <div style={{ display: 'flex' }}>
-            {audioMixerTracks.map((mixTrack, idx) => (
+            {tracks.map((mixTrack, idx) => (
               <AudioMixerTrackControl
                 key={`mix--${idx}`}
                 mixTrack={mixTrack}
@@ -146,6 +143,7 @@ const AudioMixer = ({ tracks, handleMixVolumesUpdate, audioSource }: AudioMixerP
       </div>
     </div>
   );
-};
+});
 
+AudioMixer.displayName = 'AudioMixer';
 export default AudioMixer;

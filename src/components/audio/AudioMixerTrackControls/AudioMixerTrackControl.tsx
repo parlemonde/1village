@@ -29,16 +29,16 @@ const AudioMixerTrackControl = ({ mixTrack, idx, solos, solo, off, handleVolumeU
 
   const handleChange = (_event: Event, newValue: number | number[]) => {
     mixTrack.sampleVolume = newValue as number;
-    mixTrack.audioElement.volume = mixTrack.sampleVolume;
+    mixTrack.audioElement.volume = newValue as number;
   };
 
   return (
     <div style={{ width: '100px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Slider
         aria-label="Mixing Volume"
-        defaultValue={0.5}
+        defaultValue={mixTrack.sampleVolume}
         onChange={handleChange}
-        onChangeCommitted={() => handleVolumeUpdate(idx, mixTrack.sampleVolume)}
+        onChangeCommitted={() => handleVolumeUpdate(idx, mixTrack.audioElement.volume)}
         step={0.1}
         marks
         min={0}

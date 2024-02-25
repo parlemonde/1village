@@ -344,6 +344,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
 
   const save = React.useCallback(
     async (publish: boolean = false): Promise<ActivitySaveResponse> => {
+      console.log('SAVE OK');
       if (activityRef.current === null) {
         return {
           success: false,
