@@ -5,7 +5,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { DraggableTrack } from 'src/components/DraggableTrack';
 import { Steps } from 'src/components/Steps';
@@ -21,23 +21,23 @@ const SongStep4 = () => {
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [trackDuration, setTrackDuration] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as VerseRecordData) || null;
-  const [displayEditor, setDisplayEditor] = React.useState(!!data?.classRecord);
+  const data = (activity?.data as ClassAnthemData) || null;
+  const [displayEditor, setDisplayEditor] = React.useState(!!data?.verseRecordUrl);
   // const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
   const [verseStart, setVerseStart] = React.useState(0);
   const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
-  const customizedMix = data?.customizedMix;
+  const verseMixUrl = data?.verseMixUrl;
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data?.customizedMix) {
+    if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
     return errors;
   }, [data]);
   React.useEffect(() => {
-    setCustomizedMix(new Audio(customizedMix));
-  }, [customizedMix]);
+    setCustomizedMix(new Audio(verseMixUrl));
+  }, [verseMixUrl]);
   if (!activity || !data) {
     return (
       <Base>
@@ -49,11 +49,11 @@ const SongStep4 = () => {
     audioRef.current?.pause();
     customizedMixAudio?.pause();
     setIsLoading(true);
-    if (data.classRecord) {
+    if (data.verseRecordUrl) {
       audioBufferSlice(
-        data.classRecord,
+        data.verseRecordUrl,
         verseStart * 1000,
-        (verseStart + getLongestVerseSampleDuration(data.tracks)) * 1000,
+        (verseStart + getLongestVerseSampleDuration(data.verseTracks)) * 1000,
         async (slicedAudioBuffer: AudioBuffer) => {
           const formData = new FormData();
           formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
@@ -87,13 +87,13 @@ const SongStep4 = () => {
         <h1>Synchronisez votre voix sur l&apos;hymne</h1>
         <p> Avez-vous bien chanter en rythme ?</p>
         <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
-        {!data?.customizedMix && (
+        {!data?.verseMixUrl && (
           <p>
             <b>Il manque votre mix du couplet !</b>
           </p>
         )}
         <div className="width-900">
-          {(!trackDuration || !data.classRecord) && (
+          {(!trackDuration || !data.verseRecordUrl) && (
             <Button
               onClick={() => setDisplayEditor(true)}
               variant="text"
@@ -111,12 +111,12 @@ const SongStep4 = () => {
             </Button>
           )}
           {trackDuration > 0 &&
-            data.classRecord &&
-            (getLongestVerseSampleDuration(data.tracks) < trackDuration ? (
+            data.verseRecordUrl &&
+            (getLongestVerseSampleDuration(data.verseTracks) < trackDuration ? (
               <div style={{ height: '200px' }}>
                 <DraggableTrack
                   trackDuration={trackDuration}
-                  coupletDuration={getLongestVerseSampleDuration(data.tracks)}
+                  coupletDuration={getLongestVerseSampleDuration(data.verseTracks)}
                   initialCoupletStart={verseStart}
                   onCoupletStartChange={(coupletStart) => {
                     if (!audioRef.current) {
@@ -151,33 +151,33 @@ const SongStep4 = () => {
               justifyContent: 'space-between',
             }}
           >
-            {/* {(displayEditor || data?.classRecord) && (
-                <AudioEditor
-                  value={data?.classRecord}
-                  onChange={(value: string) => {
-                    audioRef?.current?.pause();
-                    customizedMixAudio?.pause();
-                    updateActivity({ data: { ...data, classRecord: value } });
-                  }}
-                  setTime={(time) => {
-                    setTrackDuration(time);
-                  }}
-                  edit
-                  onPause={() => {
-                    audioRef?.current?.pause();
-                    customizedMixAudio?.pause();
-                  }}
-                  onPlay={() => {
-                    audioRef?.current?.play();
-                    customizedMixAudio?.play();
-                  }}
-                  onDelete={() => {
-                    updateActivity({ data: { ...data, classRecord: '' } });
-                    setDisplayEditor(false);
-                  }}
-                  ref={audioRef}
-                />
-              )} */}
+            {(displayEditor || data?.verseRecordUrl) && (
+              <AudioEditor
+                s={data?.verseRecordUrl}
+                onChange={(value: string) => {
+                  audioRef?.current?.pause();
+                  customizedMixAudio?.pause();
+                  updateActivity({ data: { ...data, classRecord: value } });
+                }}
+                setTime={(time) => {
+                  setTrackDuration(time);
+                }}
+                edit
+                onPause={() => {
+                  audioRef?.current?.pause();
+                  customizedMixAudio?.pause();
+                }}
+                onPlay={() => {
+                  audioRef?.current?.play();
+                  customizedMixAudio?.play();
+                }}
+                onDelete={() => {
+                  updateActivity({ data: { ...data, classRecord: '' } });
+                  setDisplayEditor(false);
+                }}
+                ref={audioRef}
+              />
+            )}
           </div>
           <StepsButton prev="/chanter-un-couplet/3" next={onNext} />
           <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
