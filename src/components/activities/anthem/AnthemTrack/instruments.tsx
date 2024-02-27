@@ -1,8 +1,4 @@
-import React from 'react';
-
-import styles from './instruments.module.css';
-
-export type InstrumentsType = {
+type InstrumentsType = {
   name: string;
   value: string;
 };

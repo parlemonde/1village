@@ -74,7 +74,8 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                         >
                           <div className={styles.iconList}>
                             <Icon>
-                              <InstrumentSvg instrumentName={option.value} />
+                              {/* <InstrumentSvg instrumentName={option.value} /> */}
+                              {currentIcon}
                             </Icon>
                           </div>
                           {option.name}
