@@ -25,7 +25,7 @@ const SongStep1 = () => {
   const mixerRef = React.useRef<{ stopMixer: () => void }>();
 
   React.useEffect(() => {
-    if (data) {
+    if (data && data.verseTracks.length > 0) {
       setIsVerseTrack(true);
     }
   }, [data]);
@@ -93,12 +93,14 @@ const SongStep1 = () => {
             Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
             votre mix avant de passer à cette étape suivante !
           </p>
-          <AudioMixer
-            ref={mixerRef}
-            tracks={audioMixerTracks}
-            verseTime={getLongestVerseSampleDuration(data.verseTracks)}
-            handleMixUpdate={handleMixUpdate}
-          />
+          {data && data.verseTracks.length > 0 && (
+            <AudioMixer
+              ref={mixerRef}
+              tracks={audioMixerTracks}
+              verseTime={getLongestVerseSampleDuration(data.verseTracks)}
+              handleMixUpdate={handleMixUpdate}
+            />
+          )}
         </div>
       </div>
       <StepsButton next={onNext} />
