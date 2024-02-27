@@ -9,7 +9,7 @@ const PresentationSuccess = () => {
   return (
     <Base>
       <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-        <p className="text">{'Vos expressions ont bien été publiées !'}</p>
+        <p className="text">{'Votre jeu de la monnaie a bien été publié !'}</p>
         <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}>
           <Link href="/" passHref>

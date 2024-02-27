@@ -11,4 +11,5 @@ export interface EditorProps {
 export interface ViewProps {
   id: number;
   value?: string;
+  activityId?: number;
 }

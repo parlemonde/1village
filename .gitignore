@@ -53,6 +53,7 @@ mariaDB
 .minio-data
 .postgres-data
 .mysql-data
+.dynamodb
 .env.*
 
 public/sw.js
@@ -66,5 +67,3 @@ docker-compose.build.yml
 docker-compose.bdd.yml
 
 *.http
-
-docker-compose-windows.yml

@@ -57,6 +57,16 @@ export class Controller {
       this.router.post(
         options.path,
         this.uploadVideoMiddleware.single(options.multerFieldName),
+        handleErrors(async (req, res, next) => {
+          // clean up the file after the request is handled
+          const filePath = req.file?.path;
+          if (filePath) {
+            res.on('finish', () => {
+              fs.remove(filePath).catch();
+            });
+          }
+          next();
+        }),
         handleErrors(authenticate(options.userType)),
         handleErrors(handler),
       );

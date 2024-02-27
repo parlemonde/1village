@@ -8,6 +8,7 @@ import { AnthemCard } from './AnthemCard';
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
 import { FreeContentCard } from './FreeContentCard';
+import { GameCard } from './GameCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
 import { MimicCard } from './MimicCard';
@@ -42,7 +43,8 @@ const CardTypeMapper = {
   [ActivityType.CONTENU_LIBRE]: FreeContentCard,
   [ActivityType.INDICE]: IndiceCard,
   [ActivityType.SYMBOL]: SymbolCard,
-  [ActivityType.GAME]: MimicCard,
+  // [ActivityType.GAME]: MimicCard,
+  [ActivityType.GAME]: GameCard,
   [ActivityType.REPORTAGE]: ReportageCard,
   [ActivityType.REACTION]: ReactionCard,
   [ActivityType.STORY]: StoryCard,
@@ -72,6 +74,11 @@ export const ActivityCard = ({
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
 
   const UsedCard = CardTypeMapper[activity.type];
+
+  // if (activity.type === ActivityType.GAME) {
+  //   console.log('ActivityCard', { activity, user, isSelf, noButtons, showEditButtons, isDraft, forComment, noMargin, onDelete, onSelect });
+  //   console.log('activity', activity);
+  // }
 
   return (
     <Paper
@@ -152,7 +159,7 @@ export const ActivityCard = ({
           activity={activity}
           user={user}
           isSelf={isSelf}
-          // gameType={activity.subType}
+          gameType={activity.subType ?? 0}
           noButtons={noButtons}
           showEditButtons={showEditButtons}
           isDraft={isDraft}

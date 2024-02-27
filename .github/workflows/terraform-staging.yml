@@ -16,52 +16,70 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.6.4
-
-      - name: Terraform Init
-        run: terraform init
-        if: success()
-
-      - name: Terraform Plan
-        run: terraform plan -var-file=variables.tfvars
-        if: success()
-
-      - name: Terraform Apply
-        run: terraform apply -var-file=variables.tfvars -auto-approve
-        if: success()
-
-      - name: Extract Public IP
-        id: server_public_ip
-        run: |
-          echo "::set-output name=server_public_ip::$(terraform output server_public_ip)"
-        if: success()
-
-      - name: Configure AWS credentials
+      - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
           aws-region: eu-west-3
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.6.4
 
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      - name: Terraform Init
         run: |
-          docker build -t $ECR_REGISTRY/1village:staging-br-X .
-          docker push $ECR_REGISTRY/1village:staging-br-X
+          cd terraform
+          terraform init
         if: success()
 
-      - name: Pull and run the docker image on the server
-        run: ssh -i $SSH_KEY_PATH $server "ECR_REGISTRY=$ECR_REGISTRY IMAGE=$ECR_REGISTRY/1village:staging-br-X exec sh" < ./deploy.sh
+      - name: Terraform Plan
+        run: |
+          cd terraform
+          terraform plan -var-file=terraform.tfvars
+        if: success()
+
+      - name: Terraform Apply
+        run: |
+          cd terraform
+          terraform apply -var-file=terraform.tfvars -auto-approve
+        if: success()
+
+      - name: Extract Public IP
+        id: get_server_ip
+        run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output -raw server_public_ip)"
+        if: success()
+
+      - name: Create .env file
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          server: ${{steps.server_public_ip.outputs.server_public_ip}}
-          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+          HOST_URL: ${{ steps.get_server_ip.outputs.server_public_ip }}
+          PLM_CLIENT_ID: ${{ secrets.STAGING_CLIENT_ID }}
+        run: |
+          cat << EOF > .env
+          NEXT_PUBLIC_BASE_APP=/api
+          NEXT_PUBLIC_HOST_URL=$HOST_URL
+          NEXT_PUBLIC_PLM_HOST=https://prof.parlemonde.org
+          NEXT_PUBLIC_CLIENT_ID=$PLM_CLIENT_ID
+          EOF
+
+      - name: Build Docker Image
+        run: |
+          docker build -t 1village .
+        if: success()
+
+      - name: Set up SSH key for EC2
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        if: success()
+
+      - name: Transfer Docker Image to EC2
+        run: |
+          docker save -o 1village-image.tar 1village
+          scp -o StrictHostKeyChecking=no 1village-image.tar ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }}:~
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }} 'cd ~ && docker load -i 1village-image.tar && docker-compose up -d'
+        shell: bash
+        #env:
+        #  server: ${{ steps.get_server_ip.outputs.server_public_ip }}
         if: success()

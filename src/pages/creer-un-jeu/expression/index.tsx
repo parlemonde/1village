@@ -43,7 +43,7 @@ const Expression = () => {
             }}
             disableElevation
           >
-            créer 3 expressions
+            Créer 3 expressions
           </Button>
         </Link>
       </div>
