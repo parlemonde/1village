@@ -20,7 +20,7 @@ const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handl
   const mutedColor = isMuted ? 'grey' : primaryColor;
 
   React.useEffect(() => {
-    if (soloTrackIdx) {
+    if (soloTrackIdx !== null) {
       mixTrack.audioElement.muted = soloTrackIdx !== idx;
     } else {
       mixTrack.audioElement.muted = isMuted;
@@ -104,7 +104,7 @@ const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handl
           margin: '5px 0px',
         }}
       >
-        <span onClick={() => toggleMute(idx)} style={{ color: mutedColor }}>
+        <span onClick={() => toggleMute()} style={{ color: mutedColor }}>
           {isMuted ? 'OFF' : 'ON'}
         </span>
       </div>
