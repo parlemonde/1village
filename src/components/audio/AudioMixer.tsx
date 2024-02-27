@@ -22,22 +22,9 @@ type AudioMixerProps = {
 const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audioSource }: AudioMixerProps, ref) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [volumes, setVolumes] = React.useState(tracks.map((track) => track.sampleVolume));
-  const [solos, setSolos] = React.useState(tracks.map(() => false));
+  const [soloTrackIdx, setSoloTrackIdx] = React.useState<number | null>(null);
   const [counter, setCounter] = React.useState(0);
   const counterIntervalId = React.useRef<number | undefined>(undefined);
-
-  React.useImperativeHandle(ref, () => ({
-    stopMixer() {
-      onStop();
-    },
-  }));
-
-  const handleVolumeUpdate = (idx: number, volume: number) => {
-    const newMix = volumes;
-    newMix[idx] = volume;
-    setVolumes(newMix);
-    handleMixUpdate(volumes);
-  };
 
   const onPlay = React.useCallback(() => {
     if (tracks.length === 0) {
@@ -71,24 +58,16 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
     onRestart();
   }, [onPause, onRestart]);
 
-  const solo = (idx: number) => {
-    const newVolumes = volumes.map((volume, index) => {
-      const track = tracks[index];
-      if (!track) {
-        return 0;
-      }
-      const newVolume = track.audioElement.volume !== 0 ? track.audioElement.volume : volume;
-      track.audioElement.volume = idx !== index ? (solos[idx] ? newVolume : 0) : track.audioElement.volume === 0 ? 1 : track.audioElement.volume;
-      return newVolume;
-    });
-    setVolumes(newVolumes);
-    setSolos((solos: boolean[]) => solos.map((el, index) => (index === idx ? !el : false)));
+  const handleVolumeUpdate = (idx: number, volume: number) => {
+    const newMix = volumes;
+    newMix[idx] = volume;
+    setVolumes(newMix);
+    handleMixUpdate(volumes);
   };
 
-  const toggleVolume = (idx: number, isMuted: boolean) => {
-    tracks.forEach((track, index) => {
-      track.audioElement.volume = idx === index ? (isMuted ? 1 : 0) : track.audioElement.volume;
-    });
+  const handleSolo = (trackIdx: number) => {
+    console.log(trackIdx);
+    setSoloTrackIdx(soloTrackIdx === trackIdx ? null : trackIdx);
   };
 
   React.useEffect(() => {
@@ -97,6 +76,12 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
       onStop();
     }
   }, [counter, verseTime, onStop]);
+
+  React.useImperativeHandle(ref, () => ({
+    stopMixer() {
+      onStop();
+    },
+  }));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -129,12 +114,11 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
             {tracks.map((mixTrack, idx) => (
               <AudioMixerTrackControl
                 key={`mix--${idx}`}
-                mixTrack={mixTrack}
-                handleVolumeUpdate={handleVolumeUpdate}
                 idx={idx}
-                solo={solo}
-                off={toggleVolume}
-                solos={solos}
+                mixTrack={mixTrack}
+                soloTrackIdx={soloTrackIdx}
+                handleSolo={handleSolo}
+                handleVolumeUpdate={handleVolumeUpdate}
               />
             ))}
           </div>

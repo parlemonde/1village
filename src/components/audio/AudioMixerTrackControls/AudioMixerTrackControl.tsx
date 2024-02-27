@@ -7,24 +7,33 @@ import type { AudioMixerTrack } from '../AudioMixer';
 import { primaryColor } from 'src/styles/variables.const';
 
 interface AudioMixerTrackControlProps {
-  mixTrack: AudioMixerTrack;
   idx: number;
-  solos: boolean[];
-  solo: (idx: number) => void;
-  off: (idx: number, isMuted: boolean) => void;
+  mixTrack: AudioMixerTrack;
+  soloTrackIdx: number | null;
+  handleSolo: (trickIdx: number) => void;
   handleVolumeUpdate: (id: number, volume: number) => void;
 }
-const AudioMixerTrackControl = ({ mixTrack, idx, solos, solo, off, handleVolumeUpdate }: AudioMixerTrackControlProps) => {
+
+const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handleVolumeUpdate }: AudioMixerTrackControlProps) => {
   const [isMuted, setIsMuted] = React.useState(false);
-  const color = solos[idx] ? 'gold' : 'grey';
+  const color = idx === soloTrackIdx ? 'gold' : 'grey';
   const mutedColor = isMuted ? 'grey' : primaryColor;
 
-  const toggleMute = (idx: number) => {
-    setIsMuted(isMuted ? false : true);
-    off(idx, isMuted);
+  React.useEffect(() => {
+    if (soloTrackIdx) {
+      mixTrack.audioElement.muted = soloTrackIdx !== idx;
+    } else {
+      mixTrack.audioElement.muted = isMuted;
+    }
+  }, [idx, isMuted, mixTrack.audioElement, soloTrackIdx]);
+
+  const toggleMute = () => {
+    mixTrack.audioElement.muted = !isMuted;
+    setIsMuted(!isMuted);
   };
+
   const toggleSolo = (idx: number) => {
-    solo(idx);
+    handleSolo(idx);
   };
 
   const handleChange = (_event: Event, newValue: number | number[]) => {
