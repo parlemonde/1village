@@ -19,25 +19,34 @@ const SongStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isVerseTracks, setIsVerseTrack] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
 
   const mixerRef = React.useRef<{ stopMixer: () => void }>();
 
+  React.useEffect(() => {
+    if (data) {
+      setIsVerseTrack(true);
+    }
+  }, [data]);
+
   const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
-    return data.verseTracks
-      .filter((track) => track.type !== TrackType.VOCALS)
-      .map((track) => {
-        const audioElement = new Audio(track.sampleUrl);
-        audioElement.volume = track.sampleVolume ?? 0.5;
-        return {
-          sampleVolume: track.sampleVolume ?? 0.5,
-          label: track.label,
-          iconUrl: track.iconUrl,
-          audioElement: audioElement,
-        };
-      });
+    return isVerseTracks
+      ? data.verseTracks
+          .filter((track) => track.type !== TrackType.VOCALS)
+          .map((track) => {
+            const audioElement = new Audio(track.sampleUrl);
+            audioElement.volume = track.sampleVolume ?? 0.5;
+            return {
+              sampleVolume: track.sampleVolume ?? 0.5,
+              label: track.label,
+              iconUrl: track.iconUrl,
+              audioElement: audioElement,
+            };
+          })
+      : [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isVerseTracks]);
 
   const onNext = async () => {
     if (mixerRef.current) mixerRef.current.stopMixer();
@@ -89,7 +98,6 @@ const SongStep1 = () => {
             tracks={audioMixerTracks}
             verseTime={getLongestVerseSampleDuration(data.verseTracks)}
             handleMixUpdate={handleMixUpdate}
-            audioSource={data.verseMixUrl}
           />
         </div>
       </div>
