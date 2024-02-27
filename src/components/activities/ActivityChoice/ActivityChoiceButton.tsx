@@ -10,9 +10,10 @@ interface ActivityChoiceButtonProps {
   href: string;
   icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>> | null;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
-export const ActivityChoiceButton = ({ label, href, icon: Icon = null, disabled = false }: ActivityChoiceButtonProps) => {
+export const ActivityChoiceButton = ({ onClick, label, href, icon: Icon = null, disabled = false }: ActivityChoiceButtonProps) => {
   return (
     <KeepRatio ratio={0.5} maxWidth="14rem">
       {disabled ? (
@@ -35,7 +36,7 @@ export const ActivityChoiceButton = ({ label, href, icon: Icon = null, disabled 
           <span className="text text--bold">{label}</span>
         </div>
       ) : (
-        <ButtonBase style={{ width: '100%', height: '100%' }}>
+        <ButtonBase onClick={onClick} style={{ width: '100%', height: '100%' }}>
           <Link href={href} passHref>
             <a
               href={href}

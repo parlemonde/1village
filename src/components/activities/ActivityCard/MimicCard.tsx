@@ -15,6 +15,8 @@ import { LinkNotAllowedInPath } from 'types/activity.type';
 import type { GameActivity } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
+// todo : add game type in props
+
 export const MimicCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<GameActivity>) => {
   const { village } = React.useContext(VillageContext);
   const { getAllGamesByType, getAvailableGamesCount } = useGameRequests();

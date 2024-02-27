@@ -1,6 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import type { GameDataMonneyOrExpression, GameDataStep } from '../../types/game.type';
+import { Activity, ActivityType, ActivityStatus, ActivityContent } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
@@ -17,6 +19,7 @@ type GameGetter = {
   villageId: number;
   type: number;
   userId?: number;
+  subType?: number;
 };
 
 /**
@@ -29,7 +32,7 @@ type GameGetter = {
  *
  * @returns Game[]
  */
-const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: GameGetter) => {
+const getGames = async ({ limit = 200, page = 0, villageId, type, userId, subType }: GameGetter) => {
   let subQueryBuilder = AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .where('game.villageId = :villageId', { villageId: villageId })
@@ -57,6 +60,7 @@ gameController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
   const userId = getQueryString(req.query.userId) === 'self' ? req.user.id : undefined;
   const type = parseInt(getQueryString(req.query.type) || '0', 10);
   const villageId = Number(getQueryString(req.query.villageId)) || 0;
+  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
   const games = await getGames({ villageId, type, userId });
 
@@ -156,29 +160,57 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
     next();
     return;
   }
-  const games = await AppDataSource.getRepository(Game)
-    .createQueryBuilder('game')
-    .leftJoinAndSelect('game.responses', 'responses')
-    .andWhere('`game`.`villageId` = :villageId', { villageId: villageId })
-    .andWhere('`game`.`type` = :type', { type: type })
-    .andWhere(
-      (qb) => {
-        const subQuery = qb
-          .subQuery()
-          .select()
-          .from(GameResponse, 'response')
-          .where(`response.userId = :userId`, { userId: userId })
-          .andWhere(`response.gameId = game.id`)
-          .andWhere(`response.isOldResponse = 0`)
-          .getQuery();
-        return 'NOT EXISTS ' + subQuery;
-      },
-      { userId: req.user.id },
-    )
-    .getMany();
-  res.sendJSON({
-    games: games,
-  });
+  if (type === 0) {
+    const games = await AppDataSource.getRepository(Game)
+      .createQueryBuilder('game')
+      .leftJoinAndSelect('game.responses', 'responses')
+      .andWhere('`game`.`villageId` = :villageId', { villageId: villageId })
+      .andWhere('`game`.`type` = :type', { type: type })
+      .andWhere(
+        (qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select()
+            .from(GameResponse, 'response')
+            .where(`response.userId = :userId`, { userId: userId })
+            .andWhere(`response.gameId = game.id`)
+            .andWhere(`response.isOldResponse = 0`)
+            .getQuery();
+          return 'NOT EXISTS ' + subQuery;
+        },
+        { userId: req.user.id },
+      )
+      .getMany();
+    res.sendJSON({
+      games: games,
+    });
+  }
+  // } else {
+  //   const games = await AppDataSource.getRepository(Activity)
+  //     .createQueryBuilder('activity')
+  //     .leftJoin(GameResponse, 'activity.responses', 'responses')
+  //     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
+  //     .andWhere('`activity`.`type` = :type', { type: type })
+  //     .andWhere('`activity`.`subType` = :subType', { subType: 2 })
+  //     .andWhere(
+  //       (qb) => {
+  //         const subQuery = qb
+  //           .subQuery()
+  //           .select()
+  //           .from(GameResponse, 'response')
+  //           .where(`response.userId = :userId`, { userId: userId })
+  //           .andWhere(`response.gameId = activity.id`)
+  //           .andWhere(`response.isOldResponse = 0`)
+  //           .getQuery();
+  //         return 'NOT EXISTS ' + subQuery;
+  //       },
+  //       { userId: req.user.id },
+  //     )
+  //     .getMany();
+  //   res.sendJSON({
+  //     activities: games,
+  //   });
+  // }
 });
 
 //--- retrieve answers to the mimic with this id ---
@@ -264,6 +296,179 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);
   res.sendJSON(GameResponse);
+});
+
+//--- Create a standardised game ---
+
+gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  const data = req.body;
+  const game1 = data.game1;
+  const game2 = data.game2;
+  const game3 = data.game3;
+
+  createGame(game1, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  createGame(game2, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  createGame(game3, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+
+  res.sendStatus(200);
+});
+
+async function createGame (data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
+  const activity = new Activity();
+  activity.type = type;
+  activity.subType = subType;
+  activity.status = ActivityStatus.PUBLISHED;
+  // TODO: Travailler sur le type de data
+  activity.data = data;
+  activity.phase = selectedPhase;
+  activity.content = data;
+  activity.userId = userId;
+  activity.villageId = villageId;
+  activity.responseActivityId = null;
+  activity.responseType = null;
+  activity.isPinned = false;
+  activity.displayAsUser = false;
+
+  await AppDataSource.getRepository(Activity).save(activity);
+}
+
+// --- Get all games standardised by subType ---
+
+gameController.get({ path: '/allStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+
+  // const subType = req.subType;
+
+  let subQueryBuilder = AppDataSource.getRepository(Activity)
+    .createQueryBuilder('activity')
+    .where('activity.villageId = :villageId', { villageId: req.user.villageId })
+    .andWhere('activity.type = :type', { type: 4 })
+    .andWhere('activity.subType = :subType', { subType: 1 && 2 });
+
+  const games = await subQueryBuilder
+    .orderBy('activity.createDate', 'DESC')
+    .limit(200)
+    .offset(0 * 200)
+    .getMany();
+
+  res.sendJSON(games);
+
+});
+
+// --- Get one game standardised ---
+
+gameController.get({ path: '/standardGame/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const id = parseInt(req.params.id, 10) || 0;
+  const game = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+  if (!game || (req.user.type === UserType.TEACHER && req.user.villageId !== game.villageId)) {
+    next();
+    return;
+  }
+  res.sendJSON(game);
+});
+
+// --- Get one random game standardised to play ---
+
+gameController.get({ path: '/playStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const villageId = req.user.villageId;
+  const type = 4;
+  // const subType = req.subType;
+  const subType = 2;
+  const game = await AppDataSource.getRepository(Activity)
+    .createQueryBuilder('activity')
+    .andWhere('activity.villageId = :villageId', { villageId: villageId })
+    .andWhere('activity.type = :type', { type: type })
+    .andWhere('activity.subType = :subType', { subType: subType })
+    .orderBy('RAND()')
+    .getOne();
+  if (!game) {
+    next();
+    return;
+  }
+  res.sendJSON(game);
+});
+
+// --- Get the last created game standardised ---
+
+gameController.get({ path: '/latestStandard', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const villageId = req.user.villageId;
+  const type = 4;
+  // const subType = req.subType;
+  const subType = 2;
+  const latestGame = await AppDataSource.getRepository(Activity)
+    .createQueryBuilder('activity')
+    .where('activity.villageId = :villageId', { villageId: villageId })
+    .andWhere('activity.type = :type', { type: type })
+    .andWhere('activity.subType = :subType', { subType: subType })
+    .orderBy('activity.createDate', 'DESC')
+    .getOne();
+
+  if (!latestGame) {
+    next();
+    return;
+  }
+
+  res.sendJSON(latestGame);
+});
+
+// --- Get number of games standardised available ---
+
+gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const userId = req.user.id;
+  const villageId = req.user.villageId;
+  const type = 4;
+  // const subType = req.subType;
+  const subType = 2;
+
+
+  // const games = await AppDataSource.getRepository(Activity)
+  //     .createQueryBuilder('activity')
+  //     .leftJoin(GameResponse, 'activity.responses', 'responses')
+  //     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
+  //     .andWhere('`activity`.`type` = :type', { type: type })
+  //     .andWhere('`activity`.`subType` = :subType', { subType: 2 })
+  //     .andWhere(
+  //       (qb) => {
+  //         const subQuery = qb
+  //           .subQuery()
+  //           .select()
+  //           .from(GameResponse, 'response')
+  //           .where(`response.userId = :userId`, { userId: userId })
+  //           .andWhere(`response.gameId = activity.id`)
+  //           .andWhere(`response.isOldResponse = 0`)
+  //           .getQuery();
+  //         return 'NOT EXISTS ' + subQuery;
+  //       },
+  //       { userId: req.user.id },
+  //     )
+  //     .getMany();
+  //   res.sendJSON({
+  //     activities: games,
+  //   });
 });
 
 export { gameController };
