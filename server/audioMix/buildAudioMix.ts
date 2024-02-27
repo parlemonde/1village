@@ -44,7 +44,7 @@ export async function buildAudioMix(userId: number, tracks: SimpleTrack[]): Prom
   await mixAudio(
     downloadTracks.map((track) => ({
       inputFile: track.filename || '',
-      weight: track.sampleVolume || 1,
+      weight: track.sampleVolume ?? 1,
       delay: Math.floor((track.sampleStartTime || 0) * 1000), // in ms
     })),
   ).toFile(path.join(outputDir, outputFilename));
