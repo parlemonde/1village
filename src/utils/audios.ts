@@ -1,8 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 
-import type { Track } from 'src/activity-types/anthem.types';
-import { TrackType } from 'src/activity-types/anthem.types';
 import type { AxiosReturnType } from 'src/utils/axiosRequest';
+import type { Track } from 'types/anthem.type';
+import { TrackType } from 'types/anthem.type';
 
 export const getLongestVerseSampleDuration = (tracks: Track[]) => {
   const verseTracks = tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);

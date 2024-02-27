@@ -7,9 +7,9 @@ import { Alert, Badge, Button, ButtonBase, TextField } from '@mui/material';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
-import type { Track } from 'src/activity-types/anthem.types';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
+import type { Track } from 'types/anthem.type';
 
 interface AnthemTrackProps {
   track: Track;

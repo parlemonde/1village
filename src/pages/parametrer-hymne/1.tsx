@@ -6,8 +6,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from './parametrer-hymne.module.css';
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
-import type { AnthemData, Track } from 'src/activity-types/anthem.types';
-import { TrackType } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -17,6 +15,8 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityType } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
 
 const AnthemStep1 = () => {
   const router = useRouter();

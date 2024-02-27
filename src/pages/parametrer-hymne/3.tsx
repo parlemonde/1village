@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ButtonBase, Card } from '@mui/material';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { AnthemData } from 'types/anthem.type';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';

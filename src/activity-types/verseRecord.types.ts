@@ -1,5 +1,5 @@
-import type { Syllable, Track } from 'src/activity-types/anthem.types';
 import type { Activity } from 'types/activity.type';
+import type { Syllable, Track } from 'types/anthem.type';
 
 export type ClassAnthemData = {
   verseTracks: Track[];

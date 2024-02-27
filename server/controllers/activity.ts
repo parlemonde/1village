@@ -2,6 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
+import type { Track } from '../../types/anthem.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
@@ -474,8 +475,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    console.log('TRACKS CHANGED !!!!!!!!!!!!!!!!!!!!!!!!', data.data.verseTracks);
-    data.data.verseMixUrl = await buildAudioMix(activity.userId, data.data.verseTracks as any);
+    data.data.verseMixUrl = await buildAudioMix(activity.userId, data.data.verseTracks as Track[]);
   }
 
   if (activity.status !== ActivityStatus.PUBLISHED) {

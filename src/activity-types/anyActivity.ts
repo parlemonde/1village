@@ -1,5 +1,5 @@
+import type { AnthemActivity } from '../../types/anthem.type';
 import type { GameActivity } from '../../types/game.type';
-import type { AnthemActivity } from './anthem.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
 import type { FreeContentActivity } from './freeContent.types';

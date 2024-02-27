@@ -4,7 +4,6 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { Track } from 'src/activity-types/anthem.types';
 import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -13,6 +12,8 @@ import type { AudioMixerTrack } from 'src/components/audio/AudioMixer';
 import AudioMixer from 'src/components/audio/AudioMixer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
+import { TrackType } from 'types/anthem.type';
+import type { Track } from 'types/anthem.type';
 
 const SongStep1 = () => {
   const router = useRouter();
@@ -20,19 +21,21 @@ const SongStep1 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
 
-  const mixerRef = React.useRef();
+  const mixerRef = React.useRef<() => void>();
 
   const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
-    return data.verseTracks.slice(1).map((track) => {
-      const audioElement = new Audio(track.sampleUrl);
-      audioElement.volume = track.sampleVolume || 0;
-      return {
-        sampleVolume: track.sampleVolume || 0,
-        label: track.label,
-        iconUrl: track.iconUrl,
-        audioElement: audioElement,
-      };
-    });
+    return data.verseTracks
+      .filter((track) => track.type !== TrackType.VOCALS)
+      .map((track) => {
+        const audioElement = new Audio(track.sampleUrl);
+        audioElement.volume = track.sampleVolume || 0;
+        return {
+          sampleVolume: track.sampleVolume || 0,
+          label: track.label,
+          iconUrl: track.iconUrl,
+          audioElement: audioElement,
+        };
+      });
   }, []);
 
   const onNext = async () => {
@@ -44,11 +47,9 @@ const SongStep1 = () => {
   };
 
   const handleMixUpdate = async (volumes: number[]) => {
-    setIsLoading(true);
     const tempMixedTrack: Track[] = data.verseTracks.slice(1).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
     tempMixedTrack.unshift(data.verseTracks[0]);
     updateActivity({ data: { ...data, verseTracks: tempMixedTrack } });
-    setIsLoading(false);
   };
 
   if (!activity || !data) {

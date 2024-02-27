@@ -1,5 +1,5 @@
-import type { AnthemData } from 'src/activity-types/anthem.types';
-import { TrackType } from 'src/activity-types/anthem.types';
+import type { AnthemData } from 'types/anthem.type';
+import { TrackType } from 'types/anthem.type';
 
 export const isFirstStepValid = (data: AnthemData): boolean => {
   return !data.tracks.some((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO && track.sampleUrl.length === 0);

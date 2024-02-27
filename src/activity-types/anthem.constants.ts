@@ -1,5 +1,5 @@
-import { TrackType } from './anthem.types';
-import type { AnthemData } from './anthem.types';
+import { TrackType } from '../../types/anthem.type';
+import type { AnthemData } from '../../types/anthem.type';
 
 export const DEFAULT_ANTHEM_DATA: AnthemData = {
   tracks: [

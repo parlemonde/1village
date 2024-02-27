@@ -5,8 +5,6 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from './parametrer-hymne.module.css';
-import type { AnthemData, Track } from 'src/activity-types/anthem.types';
-import { TrackType } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -16,6 +14,8 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import Vocal from 'src/svg/anthem/vocal.svg';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
 
 const AnthemStep2 = () => {
   const router = useRouter();
