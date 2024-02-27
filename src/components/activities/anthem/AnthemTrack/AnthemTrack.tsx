@@ -4,6 +4,7 @@ import { Alert, Button, TextField, IconButton, Autocomplete, Popper, Fade, Paper
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
+import { InstrumentSvg } from './InstrumentSvg';
 import instruments from './instruments';
 import type { Track } from 'src/activity-types/anthem.types';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
@@ -18,7 +19,7 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
   const [open, setOpen] = useState(false);
-  const [currentIcon, setCurrentIcon] = useState(instruments[0].svg);
+  const [currentIcon, setCurrentIcon] = useState(<InstrumentSvg instrumentName={'accordion'} />);
   const anchorEl = React.useRef(null);
 
   const handleSampleUpdate = (url: string, duration: number) => {
@@ -67,12 +68,14 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
                           {...props}
                           onClick={() => {
                             setOpen(false);
-                            setCurrentIcon(option.svg);
-                            handleTrackUpdate({ ...track, iconUrl: option.svg });
+                            setCurrentIcon(<InstrumentSvg instrumentName={option.value} />);
+                            handleTrackUpdate({ ...track, iconUrl: <InstrumentSvg instrumentName={option.value} /> });
                           }}
                         >
                           <div className={styles.iconList}>
-                            <Icon>{option.svg}</Icon>
+                            <Icon>
+                              <InstrumentSvg instrumentName={option.value} />
+                            </Icon>
                           </div>
                           {option.name}
                         </Box>
