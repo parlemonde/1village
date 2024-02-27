@@ -3,7 +3,8 @@ import React from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Slider, Tooltip } from '@mui/material';
 
-import type { AudioMixerTrack } from '../AudioMixer';
+import type { AudioMixerTrack } from '../AudioMixer/AudioMixer';
+import styles from './AudioMixerTrackControl.module.css';
 import { primaryColor } from 'src/styles/variables.const';
 
 interface AudioMixerTrackControlProps {
@@ -16,7 +17,7 @@ interface AudioMixerTrackControlProps {
 
 const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handleVolumeUpdate }: AudioMixerTrackControlProps) => {
   const [isMuted, setIsMuted] = React.useState(false);
-  const color = idx === soloTrackIdx ? 'gold' : 'grey';
+  const soloColor = idx === soloTrackIdx ? 'gold' : 'grey';
   const mutedColor = isMuted ? 'grey' : primaryColor;
 
   React.useEffect(() => {
@@ -42,7 +43,7 @@ const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handl
   };
 
   return (
-    <div style={{ width: '100px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className={styles.sliderContainer}>
       <Slider
         aria-label="Mixing Volume"
         defaultValue={mixTrack.sampleVolume}
@@ -68,51 +69,17 @@ const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handl
           },
         }}
       />
-      <div
-        style={{
-          fontSize: 'smaller',
-          borderColor: color,
-          borderStyle: 'solid',
-          borderWidth: 'thin',
-          width: '40px',
-          height: '20px',
-          borderRadius: '3px',
-          textAlign: 'center',
-          verticalAlign: 'middle',
-          lineHeight: '20px',
-          cursor: 'pointer',
-          margin: '10px 0px',
-        }}
-      >
-        <span onClick={() => toggleSolo(idx)} style={{ color }}>
-          SOLO
-        </span>
+      <div className={styles.soloButton} style={{ borderColor: soloColor }} onClick={() => toggleSolo(idx)}>
+        <span style={{ color: soloColor }}>SOLO</span>
       </div>
-      <div
-        style={{
-          fontSize: 'smaller',
-          borderColor: mutedColor,
-          borderStyle: 'solid',
-          borderWidth: 'thin',
-          width: '40px',
-          height: '20px',
-          borderRadius: '25px',
-          textAlign: 'center',
-          verticalAlign: 'middle',
-          lineHeight: '20px',
-          cursor: 'pointer',
-          margin: '5px 0px',
-        }}
-      >
-        <span onClick={() => toggleMute()} style={{ color: mutedColor }}>
-          {isMuted ? 'OFF' : 'ON'}
-        </span>
+      <div className={styles.muteButton} style={{ borderColor: mutedColor }} onClick={() => toggleMute()}>
+        <span style={{ color: mutedColor }}>{isMuted ? 'OFF' : 'ON'}</span>
       </div>
-      <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div className={styles.iconContainer}>
         <Tooltip title={mixTrack.label} arrow>
           <InfoOutlinedIcon
             fontSize="small"
-            style={{
+            sx={{
               position: 'absolute',
               top: '-5px',
               right: '-5px',

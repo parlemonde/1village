@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import AudioMixerTrackControl from './AudioMixerTrackControls/AudioMixerTrackControl';
+import AudioMixerTrackControl from '../AudioMixerTrackControls/AudioMixerTrackControl';
+import styles from './AudioMixer.module.css';
 import { toTime } from 'src/utils/toTime';
 
 export interface AudioMixerTrack {
@@ -16,10 +17,9 @@ type AudioMixerProps = {
   tracks: AudioMixerTrack[];
   verseTime: number;
   handleMixUpdate: (volumes: number[]) => void;
-  audioSource?: string;
 };
 
-const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audioSource }: AudioMixerProps, ref) => {
+const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate }: AudioMixerProps, ref) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [volumes, setVolumes] = React.useState(tracks.map((track) => track.sampleVolume));
   const [soloTrackIdx, setSoloTrackIdx] = React.useState<number | null>(null);
@@ -83,17 +83,10 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
   }));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', height: 'auto' }}>
-        <div style={{ border: '4px solid #666666', borderRadius: '20px', overflow: 'auto' }}>
-          <div
-            style={{
-              padding: '10px',
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'space-around',
-            }}
-          >
+    <div className={styles.mixerWrapper}>
+      <div className={styles.mixerContainer}>
+        <div className={styles.mixerFrame}>
+          <div className={styles.mixerHeader}>
             <Button
               variant="contained"
               onClick={() => {
@@ -102,14 +95,14 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
             >
               {isPlaying ? 'Pause' : 'Jouer'}
             </Button>
-            <span style={{ fontSize: '30px' }}>
+            <span className={styles.mixerCounter}>
               {toTime(counter)}/{toTime(verseTime)}
             </span>
             <Button variant="contained" onClick={onRestart}>
               Recommencer
             </Button>
           </div>
-          <div style={{ display: 'flex' }}>
+          <div className={styles.mixerTrackControlsContainer}>
             {tracks.map((mixTrack, idx) => (
               <AudioMixerTrackControl
                 key={`mix--${idx}`}
@@ -121,7 +114,6 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
               />
             ))}
           </div>
-          {/* <audio src={audioSource} style={{ width: '95%', height: '40px', marginBottom: '10px', marginLeft: '10px' }} /> */}
         </div>
       </div>
     </div>

@@ -1,15 +1,40 @@
-.slider{
-    height: 350px;
-    color: gray;
+.sliderContainer{
+    width: 100px; 
+    padding: 15px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
 }
 
-.slider .MuiSlider-thumb{
-    background-image: url("/static-images/mix-button.png");
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-    background-position: center;
-    background-attachment: fixed;
-    background-color: transparent;
-    height: 35;
-    border-radius: 1px;
-  }
+.soloButton{
+    border-radius: 3px;
+    margin: 10px 0px;
+}
+
+.muteButton{
+    border-radius: 25px;
+    margin: 5px 0px;
+}
+
+.soloButton, .muteButton{
+    font-size: smaller;
+    border-style: solid;
+    border-width: thin;
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.soloButton > span, .muteButton > span {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+     user-select: none;
+}
+
+.iconContainer{
+    position: relative; 
+    display: inline-block;
+}
