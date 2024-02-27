@@ -21,21 +21,22 @@ const SongStep1 = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
 
-  const mixerRef = React.useRef<() => void>();
+  const mixerRef = React.useRef<{ stopMixer: () => void }>();
 
   const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
     return data.verseTracks
       .filter((track) => track.type !== TrackType.VOCALS)
       .map((track) => {
         const audioElement = new Audio(track.sampleUrl);
-        audioElement.volume = track.sampleVolume || 0;
+        audioElement.volume = track.sampleVolume ?? 0.5;
         return {
-          sampleVolume: track.sampleVolume || 0,
+          sampleVolume: track.sampleVolume ?? 0.5,
           label: track.label,
           iconUrl: track.iconUrl,
           audioElement: audioElement,
         };
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onNext = async () => {
@@ -47,7 +48,9 @@ const SongStep1 = () => {
   };
 
   const handleMixUpdate = async (volumes: number[]) => {
-    const tempMixedTrack: Track[] = data.verseTracks.slice(1).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
+    const tempMixedTrack: Track[] = data.verseTracks
+      .filter((track) => track.type !== TrackType.VOCALS)
+      .map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
     tempMixedTrack.unshift(data.verseTracks[0]);
     updateActivity({ data: { ...data, verseTracks: tempMixedTrack } });
   };

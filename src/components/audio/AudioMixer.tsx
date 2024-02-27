@@ -66,7 +66,6 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate, audio
   };
 
   const handleSolo = (trackIdx: number) => {
-    console.log(trackIdx);
     setSoloTrackIdx(soloTrackIdx === trackIdx ? null : trackIdx);
   };
 
