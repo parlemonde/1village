@@ -2,7 +2,8 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
 import type { GameDataMonneyOrExpression, GameDataStep } from '../../types/game.type';
-import { Activity, ActivityType, ActivityStatus, ActivityContent } from '../entities/activity';
+import type { ActivityContent } from '../entities/activity';
+import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
@@ -318,7 +319,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   res.sendStatus(200);
 });
 
-async function createGame (data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
+async function createGame(data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
   const activity = new Activity();
   activity.type = type;
   activity.subType = subType;
@@ -347,7 +348,7 @@ gameController.get({ path: '/allStandardGame', userType: UserType.TEACHER }, asy
 
   // const subType = req.subType;
 
-  let subQueryBuilder = AppDataSource.getRepository(Activity)
+  const subQueryBuilder = AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .where('activity.villageId = :villageId', { villageId: req.user.villageId })
     .andWhere('activity.type = :type', { type: 4 })
@@ -360,7 +361,6 @@ gameController.get({ path: '/allStandardGame', userType: UserType.TEACHER }, asy
     .getMany();
 
   res.sendJSON(games);
-
 });
 
 // --- Get one game standardised ---
@@ -443,7 +443,6 @@ gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER
   const type = 4;
   // const subType = req.subType;
   const subType = 2;
-
 
   // const games = await AppDataSource.getRepository(Activity)
   //     .createQueryBuilder('activity')
