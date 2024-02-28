@@ -11,7 +11,6 @@ import { FreeContentCard } from './FreeContentCard';
 import { GameCard } from './GameCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
-import { MimicCard } from './MimicCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
@@ -43,7 +42,6 @@ const CardTypeMapper = {
   [ActivityType.CONTENU_LIBRE]: FreeContentCard,
   [ActivityType.INDICE]: IndiceCard,
   [ActivityType.SYMBOL]: SymbolCard,
-  // [ActivityType.GAME]: MimicCard,
   [ActivityType.GAME]: GameCard,
   [ActivityType.REPORTAGE]: ReportageCard,
   [ActivityType.REACTION]: ReactionCard,

@@ -9,7 +9,6 @@ import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
 import type { StepsType } from 'src/config/games/game';
-import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -21,8 +20,6 @@ import { UserType } from 'types/user.type';
 
 const ExpressionStep5 = () => {
   const router = useRouter();
-
-  // const { createNewActivity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
@@ -60,11 +57,11 @@ const ExpressionStep5 = () => {
       selectedPhase: selectedPhase,
     };
 
-    // setIsLoading(true);
+    setIsLoading(true);
     await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
-    // router.push('/creer-un-jeu/expression/success');
-    // setIsLoading(false);
+    router.push('/creer-un-jeu/expression/success');
+    setIsLoading(false);
   };
 
   function validateGameConfig(gameConfig: StepsType[][]) {

@@ -43,6 +43,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
       setTotalGamesCount(countAllStandardGame);
     }
   }, [countAbleToPlay, countAllStandardGame, gameType]);
+  const labelPresentation = activity.data.presentation || activity.data.labelPresentation;
 
   return (
     <div
@@ -76,14 +77,17 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p style={{ marginBottom: '2rem' }}>
-          {activity.data.presentation} a relancé le jeu des {typeOfGame}s
+          {labelPresentation} a relancé le jeu des {typeOfGame}s
         </p>
         <p>
-          Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`},
-          {availableGamesCount > 0
+          Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`}.<br />
+          {/* {availableGamesCount > 0
             ? ` parmi lesquels ${
                 availableGamesCount > 1 ? `${availableGamesCount} viennent d'être ajoutés` : `${availableGamesCount} vient d'être ajouté`
               } et sont à découvrir !`
+            : ` Il n'y a pour l'instant pas de nouvel ajout dans la catégorie des ${typeOfGame}s à découvrir.`} */}
+          {availableGamesCount > 0
+            ? ` Il en reste ${availableGamesCount} à découvrir.`
             : ` Il n'y a pour l'instant pas de nouvel ajout dans la catégorie des ${typeOfGame}s à découvrir.`}
         </p>
 

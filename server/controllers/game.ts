@@ -362,8 +362,7 @@ gameController.get({ path: '/playStandardGame', userType: UserType.TEACHER }, as
   }
   const villageId = req.user.villageId;
   const type = 4;
-  // const subType = req.subType;
-  const subType = 2;
+  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
   const game = await AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .andWhere('activity.villageId = :villageId', { villageId: villageId })
@@ -387,8 +386,7 @@ gameController.get({ path: '/latestStandard', userType: UserType.TEACHER }, asyn
   }
   const villageId = req.user.villageId;
   const type = 4;
-  // const subType = req.subType;
-  const subType = 2;
+  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
   const latestGame = await AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .where('activity.villageId = :villageId', { villageId: villageId })
@@ -415,15 +413,14 @@ gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER
   const userId = req.user.id;
   const villageId = req.user.villageId;
   const type = 4;
-  // const subType = req.subType;
-  const subType = 2;
+  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
   const games = await AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .leftJoin(GameResponse, 'GameResponse')
     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
     .andWhere('`activity`.`type` = :type', { type: type })
-    .andWhere('`activity`.`subType` = :subType', { subType: 2 })
+    .andWhere('`activity`.`subType` = :subType', { subType: subType })
     .andWhere(
       (qb) => {
         const subQuery = qb
