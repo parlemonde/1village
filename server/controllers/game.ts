@@ -1,9 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import type { GameDataMonneyOrExpression, GameDataStep } from '../../types/game.type';
-import type { ActivityContent } from '../entities/activity';
-import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import type { ActivityContent, AnyData } from '../entities/activity';
+import { Activity, ActivityStatus } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
@@ -20,7 +19,6 @@ type GameGetter = {
   villageId: number;
   type: number;
   userId?: number;
-  subType?: number;
 };
 
 /**
@@ -33,7 +31,7 @@ type GameGetter = {
  *
  * @returns Game[]
  */
-const getGames = async ({ limit = 200, page = 0, villageId, type, userId, subType }: GameGetter) => {
+const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: GameGetter) => {
   let subQueryBuilder = AppDataSource.getRepository(Game)
     .createQueryBuilder('game')
     .where('game.villageId = :villageId', { villageId: villageId })
@@ -61,7 +59,6 @@ gameController.get({ path: '', userType: UserType.TEACHER }, async (req: Request
   const userId = getQueryString(req.query.userId) === 'self' ? req.user.id : undefined;
   const type = parseInt(getQueryString(req.query.type) || '0', 10);
   const villageId = Number(getQueryString(req.query.villageId)) || 0;
-  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
   const games = await getGames({ villageId, type, userId });
 
@@ -299,7 +296,7 @@ async function createGame(data: ActivityContent[], userId: number, villageId: nu
   activity.subType = subType;
   activity.status = ActivityStatus.PUBLISHED;
   // TODO: Travailler sur le type de data
-  activity.data = data;
+  activity.data = data as unknown as AnyData;
   activity.phase = selectedPhase;
   activity.content = data;
   activity.userId = userId;
