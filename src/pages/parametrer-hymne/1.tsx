@@ -62,7 +62,6 @@ const AnthemStep1 = () => {
     if (isEqualDurationTracks) {
       save().catch(console.error);
       // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
-      // const svgContent = await fetch(`/src/svg/anthem/instruments/${instrument.toLowerCase()}.svg`).then((response) => response.text());
     }
     setIsLoading(false);
     router.push('/parametrer-hymne/2');

@@ -1,4 +1,4 @@
-type InstrumentsType = {
+export type InstrumentsType = {
   name: string;
   value: string;
 };
@@ -36,7 +36,7 @@ const instruments: InstrumentsType[] = [
   { name: 'Bifora', value: 'bifora' },
   { name: 'Biwa', value: 'biwa' },
   { name: 'Bodhran', value: 'bodhran' },
-  { name: 'Bombarde', value: 'bombard' },
+  { name: 'Bombarde', value: 'bombarde' },
   { name: 'Bongo', value: 'bongo' },
   { name: 'Boomwhackers', value: 'boomwhackers' },
   { name: 'Bouzouki', value: 'bouzouki' },
@@ -55,7 +55,7 @@ const instruments: InstrumentsType[] = [
   { name: 'Cymbalum', value: 'cimbalom' },
   { name: 'Cimbasso', value: 'cimbasso' },
   { name: 'Clarinette', value: 'clarinet' },
-  { name: "Clarinette d'amour", value: 'clarinet_damour' },
+  { name: "Clarinette d'amour", value: 'clarinette_damour' },
   { name: 'Clavicorde électrique', value: 'clavecin_electrique' },
   { name: 'Clavicorde', value: 'clavichord' },
   { name: 'Piano à queue', value: 'concert_grand' },
@@ -121,7 +121,7 @@ const instruments: InstrumentsType[] = [
   { name: 'Guimbarde', value: 'jews_harp' },
   { name: 'Grelots', value: 'jingle_bells' },
   { name: 'Kantele', value: 'kantele' },
-  { name: 'KenBau', value: 'kenbau' },
+  { name: 'Ken bau', value: 'ken_bau' },
   { name: 'Tympan', value: 'kettle_drum' },
   { name: 'Clairon à clés', value: 'keyed_bugle' },
   { name: 'Khene', value: 'khene' },
