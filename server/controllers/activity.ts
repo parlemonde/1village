@@ -455,9 +455,9 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 
   // Check if we need to build the audio mix
   if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areTracksNew(data.data, activity.data)) {
-    const verseTracks = (data.data.tracks as any).filter((t: any) => t.type !== 0 && t.type !== 8);
+    const verseTracks = (data.data.tracks as Track[]).filter((t) => t.type !== 0 && t.type !== 8);
 
-    data.data.mixUrl = verseTracks.some((t: any) => t.sampleUrl !== '') ? await buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
+    data.data.mixUrl = verseTracks.some((t) => t.sampleUrl !== '') ? await buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
 
     // const intro = (data.data.tracks as any).find((t: any) => t.type === 0);
     // const outro = (data.data.tracks as any).find((t: any) => t.type === 8);
@@ -474,7 +474,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     // data.data.fullMixUrl = await buildAudioMix(activity.userId, fullTracks); // with intro and outro
   }
 
-  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
+  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined && areTracksNew(data.data, activity.data)) {
     data.data.verseMixUrl = await buildAudioMix(activity.userId, data.data.verseTracks as Track[]);
   }
 
@@ -547,6 +547,7 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
 });
 
 const areTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
+  console.log(newData);
   const oldTracks = oldData.tracks as any[]; // A changer
   const newTracks = newData.tracks as any[]; // A changer
 
