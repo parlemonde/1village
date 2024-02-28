@@ -4,15 +4,16 @@ import { TextField, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon } f
 
 import styles from './AnthemTrack.module.css';
 import { InstrumentSvg } from './InstrumentSvg';
-import instruments from './instruments';
+import type { DisplayableInstrumentsType } from './instruments';
 import type { Track } from 'src/activity-types/anthem.types';
 
 export interface AnthemTrackProps {
   track: Track;
   handleIconUpdate: (track: Track, iconUrl: string) => void;
+  instruments: DisplayableInstrumentsType[];
 }
 
-export const AnthemTrackIcon = ({ track, handleIconUpdate }: AnthemTrackProps) => {
+const AnthemTrackIcon = ({ track, handleIconUpdate, instruments }: AnthemTrackProps) => {
   const [open, setOpen] = useState(false);
   const anchorel = React.useRef(null);
 
@@ -93,3 +94,6 @@ export const AnthemTrackIcon = ({ track, handleIconUpdate }: AnthemTrackProps) =
     </div>
   );
 };
+
+AnthemTrackIcon.displayName = 'AnthemTrackIcon';
+export default AnthemTrackIcon;

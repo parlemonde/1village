@@ -4,17 +4,19 @@ import { Alert, Button, TextField } from '@mui/material';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
-import { AnthemTrackIcon } from './AnthemTrackIcon';
+import AnthemTrackIcon from './AnthemTrackIcon';
+import type { DisplayableInstrumentsType } from './instruments';
 import type { Track } from 'src/activity-types/anthem.types';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 
 interface AnthemTrackProps {
   track: Track;
+  instruments: DisplayableInstrumentsType[];
   handleTrackUpdate: (track: Track) => void;
 }
 
-const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
+const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
 
@@ -29,7 +31,7 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
   return (
     <div className={styles.trackContainer}>
       <div className={styles.trackContainer}>
-        <AnthemTrackIcon track={track} handleIconUpdate={handleIconUpdate} />
+        <AnthemTrackIcon track={track} handleIconUpdate={handleIconUpdate} instruments={instruments} />
       </div>
 
       <div className={styles.trackLabel}>

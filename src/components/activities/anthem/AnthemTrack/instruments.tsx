@@ -3,6 +3,12 @@ export type InstrumentsType = {
   value: string;
 };
 
+export type DisplayableInstrumentsType = {
+  svg: React.ReactElement | string;
+  name: string;
+  value: string;
+};
+
 const instruments: InstrumentsType[] = [
   { name: 'Accordéon', value: 'accordion' },
   { name: 'Alboka', value: 'alboka' },
