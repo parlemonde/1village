@@ -186,32 +186,6 @@ gameController.get({ path: '/ableToPlay', userType: UserType.TEACHER }, async (r
       games: games,
     });
   }
-  // } else {
-  //   const games = await AppDataSource.getRepository(Activity)
-  //     .createQueryBuilder('activity')
-  //     .leftJoin(GameResponse, 'activity.responses', 'responses')
-  //     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
-  //     .andWhere('`activity`.`type` = :type', { type: type })
-  //     .andWhere('`activity`.`subType` = :subType', { subType: 2 })
-  //     .andWhere(
-  //       (qb) => {
-  //         const subQuery = qb
-  //           .subQuery()
-  //           .select()
-  //           .from(GameResponse, 'response')
-  //           .where(`response.userId = :userId`, { userId: userId })
-  //           .andWhere(`response.gameId = activity.id`)
-  //           .andWhere(`response.isOldResponse = 0`)
-  //           .getQuery();
-  //         return 'NOT EXISTS ' + subQuery;
-  //       },
-  //       { userId: req.user.id },
-  //     )
-  //     .getMany();
-  //   res.sendJSON({
-  //     activities: games,
-  //   });
-  // }
 });
 
 //--- retrieve answers to the mimic with this id ---
@@ -346,13 +320,13 @@ gameController.get({ path: '/allStandardGame', userType: UserType.TEACHER }, asy
     return;
   }
 
-  // const subType = req.subType;
+  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
   const subQueryBuilder = AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
     .where('activity.villageId = :villageId', { villageId: req.user.villageId })
     .andWhere('activity.type = :type', { type: 4 })
-    .andWhere('activity.subType = :subType', { subType: 1 && 2 });
+    .andWhere('activity.subType = :subType', { subType: subType });
 
   const games = await subQueryBuilder
     .orderBy('activity.createDate', 'DESC')
@@ -431,7 +405,7 @@ gameController.get({ path: '/latestStandard', userType: UserType.TEACHER }, asyn
   res.sendJSON(latestGame);
 });
 
-// --- Get number of games standardised available ---
+// --- Get all games standardised available ---
 
 gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
@@ -444,30 +418,68 @@ gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER
   // const subType = req.subType;
   const subType = 2;
 
-  // const games = await AppDataSource.getRepository(Activity)
-  //     .createQueryBuilder('activity')
-  //     .leftJoin(GameResponse, 'activity.responses', 'responses')
-  //     .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
-  //     .andWhere('`activity`.`type` = :type', { type: type })
-  //     .andWhere('`activity`.`subType` = :subType', { subType: 2 })
-  //     .andWhere(
-  //       (qb) => {
-  //         const subQuery = qb
-  //           .subQuery()
-  //           .select()
-  //           .from(GameResponse, 'response')
-  //           .where(`response.userId = :userId`, { userId: userId })
-  //           .andWhere(`response.gameId = activity.id`)
-  //           .andWhere(`response.isOldResponse = 0`)
-  //           .getQuery();
-  //         return 'NOT EXISTS ' + subQuery;
-  //       },
-  //       { userId: req.user.id },
-  //     )
-  //     .getMany();
-  //   res.sendJSON({
-  //     activities: games,
-  //   });
+  const games = await AppDataSource.getRepository(Activity)
+    .createQueryBuilder('activity')
+    .leftJoin(GameResponse, 'GameResponse')
+    .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
+    .andWhere('`activity`.`type` = :type', { type: type })
+    .andWhere('`activity`.`subType` = :subType', { subType: 2 })
+    .andWhere(
+      (qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select()
+          .from(GameResponse, 'response')
+          .where(`response.userId = :userId`, { userId: userId })
+          .andWhere(`response.gameId = activity.id`)
+          .andWhere(`response.isOldResponse = 0`)
+          .getQuery();
+        return 'NOT EXISTS ' + subQuery;
+      },
+      { userId: req.user.id },
+    )
+    .getMany();
+  res.sendJSON({
+    activities: games,
+  });
+});
+
+// --- Get number of games standardised available ---
+
+gameController.get({ path: '/countAbleToPlayStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    next();
+    return;
+  }
+  const userId = req.user.id;
+  const villageId = req.user.villageId;
+  const type = 4;
+  const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
+
+  const gameCount = await AppDataSource.getRepository(Activity)
+    .createQueryBuilder('activity')
+    .leftJoin(GameResponse, 'GameResponse')
+    .andWhere('`activity`.`villageId` = :villageId', { villageId: villageId })
+    .andWhere('`activity`.`type` = :type', { type: type })
+    .andWhere('`activity`.`subType` = :subType', { subType: subType })
+    .andWhere(
+      (qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select()
+          .from(GameResponse, 'response')
+          .where(`response.userId = :userId`, { userId: userId })
+          .andWhere(`response.gameId = activity.id`)
+          .andWhere(`response.isOldResponse = 0`)
+          .getQuery();
+        return 'NOT EXISTS ' + subQuery;
+      },
+      { userId: req.user.id },
+    )
+    .getCount();
+  res.sendJSON({
+    count: gameCount,
+  });
 });
 
 export { gameController };
