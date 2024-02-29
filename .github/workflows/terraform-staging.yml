@@ -16,6 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -26,11 +33,11 @@ jobs:
         if: success()
 
       - name: Terraform Plan
-        run: terraform plan -var-file=variables.tfvars
+        run: terraform plan -var-file=../../terraform/terraform.tfvars
         if: success()
 
       - name: Terraform Apply
-        run: terraform apply -var-file=variables.tfvars -auto-approve
+        run: terraform apply -var-file=../../terraform/terraform.tfvars -auto-approve
         if: success()
 
       - name: Extract Public IP
@@ -38,13 +45,6 @@ jobs:
         run: |
           echo "::set-output name=server_public_ip::$(terraform output server_public_ip)"
         if: success()
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-3
 
       - name: Login to Amazon ECR
         id: login-ecr

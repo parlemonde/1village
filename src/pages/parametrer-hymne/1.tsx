@@ -11,6 +11,8 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
+import { InstrumentSvg } from 'src/components/activities/anthem/AnthemTrack/InstrumentSvg';
+import instruments from 'src/components/activities/anthem/AnthemTrack/instruments';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivityRequests } from 'src/services/useActivity';
@@ -31,6 +33,12 @@ const AnthemStep1 = () => {
 
   const created = React.useRef(false);
 
+  const displayableInstruments = React.useMemo(() => {
+    return instruments.map((instrument) => {
+      return { ...instrument, svg: <InstrumentSvg instrumentName={instrument.value} /> };
+    });
+  }, []);
+    
   React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
@@ -85,11 +93,11 @@ const AnthemStep1 = () => {
                 .map((track) =>
                   track.type === TrackType.VOCALS ? (
                     <>
-                      <AnthemTrack track={track} handleTrackUpdate={handleTrackUpdate}></AnthemTrack>
+                      <AnthemTrack track={track} handleTrackUpdate={handleTrackUpdate} instruments={displayableInstruments}></AnthemTrack>
                       <div className={styles.trackSelectionTitle}>Les différentes pistes sonores du couplet (utiles au mixage)</div>
                     </>
                   ) : (
-                    <AnthemTrack track={track} handleTrackUpdate={handleTrackUpdate}></AnthemTrack>
+                    <AnthemTrack track={track} handleTrackUpdate={handleTrackUpdate} instruments={displayableInstruments}></AnthemTrack>
                   ),
                 )}
           </div>

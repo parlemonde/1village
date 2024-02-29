@@ -1,10 +1,8 @@
 import React from 'react';
 
-import Add from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import PianoIcon from '@mui/icons-material/Piano';
-import { Alert, Badge, Button, ButtonBase, TextField } from '@mui/material';
-
+import { Alert, Button, TextField } from '@mui/material';
+import AnthemTrackIcon from './AnthemTrackIcon';
+import type { DisplayableInstrumentsType } from './instruments';
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
@@ -13,10 +11,11 @@ import type { Track } from 'types/anthem.type';
 
 interface AnthemTrackProps {
   track: Track;
+  instruments: DisplayableInstrumentsType[];
   handleTrackUpdate: (track: Track) => void;
 }
 
-const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
+const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps) => {
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
 
@@ -24,20 +23,14 @@ const AnthemTrack = ({ track, handleTrackUpdate }: AnthemTrackProps) => {
     handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration });
   };
 
+  const handleIconUpdate = (track: Track, iconUrl: string) => {
+    handleTrackUpdate({ ...track, iconUrl });
+  };
+
   return (
     <div className={styles.trackContainer}>
-      <div className={styles.trackPicture}>
-        <Badge
-          badgeContent={<EditIcon />}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-        >
-          <ButtonBase>
-            <PianoIcon /> {/*add choose icon func*/}
-          </ButtonBase>
-        </Badge>
+      <div className={styles.trackContainer}>
+        <AnthemTrackIcon track={track} handleIconUpdate={handleIconUpdate} instruments={instruments} />
       </div>
 
       <div className={styles.trackLabel}>

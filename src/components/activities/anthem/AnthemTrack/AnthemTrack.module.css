@@ -6,6 +6,7 @@
 }
 
 .trackContainer > button {
+/*     justify-content: flex-start; */
     box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.1);
     color: black;
     font-weight: bold;
@@ -19,7 +20,8 @@
 .trackPicture button, .trackPicture > span > span{
     border: 1px solid gray;
     border-radius: 1rem;
-    padding: 0; margin: 0;
+    padding: 0;
+    margin: 0;
     background-color: white;
     font-size: 10rem;
 }
@@ -28,11 +30,12 @@
     padding: .5rem
 }
 
-.trackPicture > span > span > svg{
+.trackPicture>span>span>svg {
     font-size: 1rem;
 }
 
-.trackLabel input, .trackLabel > span {
+.trackLabel input,
+.trackLabel>span {
     box-sizing: border-box;
     width: 180px;
     padding-left: 10px;
@@ -43,15 +46,42 @@
     padding: 1rem 0 1rem 10px;
 }
 
-.sampleControlsContainer{
+.sampleControlsContainer {
     display: flex;
 }
 
-.sampleAudioControl{
+.sampleAudioControl {
     width: 250px;
     height: 30px;
 }
 
-.sampleControlsContainer button{
-    margin-left: 6px
+.sampleControlsContainer button {
+    margin-left: 6px;
+}
+
+.instrumentList {
+    margin: 10px;
+    padding: 50px;
+}
+
+.iconList {
+    border: 1px solid gray;
+    border-radius: 1em;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    margin-right: 0.5rem;
+    background-color: white;
+}
+
+.autocompleteList {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.paperComp {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
