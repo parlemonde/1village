@@ -6,8 +6,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from './parametrer-hymne.module.css';
 import { DEFAULT_ANTHEM_DATA } from 'src/activity-types/anthem.constants';
-import type { AnthemData, Track } from 'src/activity-types/anthem.types';
-import { TrackType } from 'src/activity-types/anthem.types';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -17,7 +15,10 @@ import { InstrumentSvg } from 'src/components/activities/anthem/AnthemTrack/Inst
 import instruments from 'src/components/activities/anthem/AnthemTrack/instruments';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { useActivityRequests } from 'src/services/useActivity';
 import { ActivityType } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
 
 const AnthemStep1 = () => {
   const router = useRouter();
@@ -25,9 +26,9 @@ const AnthemStep1 = () => {
   const { activity, createActivityIfNotExist, updateActivity, save } = React.useContext(ActivityContext);
   const { selectedPhase } = React.useContext(VillageContext);
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isEqualDurationTracks, setIsEqualDurationTracks] = React.useState(false);
+  const { deleteActivity } = useActivityRequests();
 
+  const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as AnthemData) || null;
 
   const created = React.useRef(false);
@@ -37,7 +38,7 @@ const AnthemStep1 = () => {
       return { ...instrument, svg: <InstrumentSvg instrumentName={instrument.value} /> };
     });
   }, []);
-
+    
   React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {
@@ -48,18 +49,14 @@ const AnthemStep1 = () => {
         createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
       }
     }
-  }, [activity, createActivityIfNotExist, router, selectedPhase]);
 
-  React.useEffect(() => {
-    if (data) {
-      const tracksWithSampleDuration = data.tracks
-        .filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO && track.sampleDuration > 1)
-        .map((track) => track.sampleDuration);
-      setIsEqualDurationTracks(
-        tracksWithSampleDuration.length === 0 ? true : () => tracksWithSampleDuration.every((duration) => duration === tracksWithSampleDuration[0]),
-      );
+    // améliorer vérification du type
+    if (activity && isAnthem(activity) && !Object.prototype.hasOwnProperty.call(data, 'fullMixUrl')) {
+      deleteActivity(activity.id, !!activity.status);
+      created.current = true;
+      createActivityIfNotExist(ActivityType.ANTHEM, selectedPhase, undefined, DEFAULT_ANTHEM_DATA, true);
     }
-  }, [data]);
+  }, [activity, createActivityIfNotExist, data, deleteActivity, router, selectedPhase]);
 
   const handleTrackUpdate = (updatedTrack: Track) => {
     const tracks = [...data.tracks].map((track) => (track.type === updatedTrack.type ? updatedTrack : track));
@@ -68,10 +65,7 @@ const AnthemStep1 = () => {
 
   const onNext = async () => {
     setIsLoading(true);
-    if (isEqualDurationTracks) {
-      save().catch(console.error);
-      // const sampleUrl = await mixAudios(data.tracks, axiosRequest);
-    }
+    save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/2');
   };

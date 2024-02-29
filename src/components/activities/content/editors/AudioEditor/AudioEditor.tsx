@@ -6,10 +6,10 @@ import { Button, Divider, TextField } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
 import styles from './AudioEditor.module.css';
-import type { Track } from 'src/activity-types/anthem.types';
 import { Modal } from 'src/components/Modal';
 import { isValidHttpUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
+import type { Track } from 'types/anthem.type';
 
 export interface AudioEditorProps {
   track: Track;

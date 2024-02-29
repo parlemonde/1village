@@ -1,24 +1,25 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { toTime } from 'src/utils/toTime';
+import { TrackType } from 'types/anthem.type';
 
 const SongStep3 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
+
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data.customizedMix) {
+    if (data !== null && !data.verseMixUrl) {
       errors.push(0);
     }
-
     return errors;
   }, [data]);
 
@@ -26,11 +27,9 @@ const SongStep3 = () => {
     save().catch(console.error);
     router.push('/chanter-un-couplet/4');
   };
-
   if (!data) {
     return <Base></Base>;
   }
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -51,8 +50,8 @@ const SongStep3 = () => {
         </p>
         <p>Vous pouvez également chanter a cappella, ou en enregistrant un élève portant un casque.</p>
         <div className="width-900">
-          {data.mixWithoutLyrics ? (
-            <audio controls src={data.mixWithoutLyrics} />
+          {data.verseMixUrl ? (
+            <audio controls src={data.verseMixUrl} />
           ) : (
             <p>
               <b>Il manque votre mix du couplet !</b>
@@ -60,11 +59,11 @@ const SongStep3 = () => {
           )}
           <h2>Le refrain</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data.chorus.map((el, index) => (
+            {data.chorusLyrics.map((el, index) => (
               <SyllableEditor key={`syllableEditor--chorus--${index}`} value={el} />
             ))}
           </div>
-          <h2>Votre couplet (démarre à {toTime(data.introOutro[0].time)})</h2>
+          <h2>Votre couplet (démarre à {toTime(data.verseTracks[TrackType.INTRO_CHORUS].sampleDuration)})</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {data.verseLyrics.map((el, index) => (
               <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} value={el} />
@@ -76,4 +75,5 @@ const SongStep3 = () => {
     </Base>
   );
 };
+
 export default SongStep3;

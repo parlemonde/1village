@@ -1,14 +1,13 @@
 import React from 'react';
 
 import { Alert, Button, TextField } from '@mui/material';
-
-import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
-import styles from './AnthemTrack.module.css';
 import AnthemTrackIcon from './AnthemTrackIcon';
 import type { DisplayableInstrumentsType } from './instruments';
-import type { Track } from 'src/activity-types/anthem.types';
+import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
+import styles from './AnthemTrack.module.css';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
+import type { Track } from 'types/anthem.type';
 
 interface AnthemTrackProps {
   track: Track;
@@ -58,6 +57,7 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
           endIcon={<div></div>}
         >
           Ajouter un son
+          <Add />
         </Button>
       ) : (
         <div className={styles.sampleControlsContainer}>
@@ -75,7 +75,7 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"
             onDelete={() => {
-              handleTrackUpdate({ ...track, sampleUrl: '' });
+              handleSampleUpdate('', 0);
               setIsAudioEditorOpen(false);
             }}
           />

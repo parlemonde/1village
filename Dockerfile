@@ -43,6 +43,9 @@ RUN yarn build
 # STAGE 2 - Docker server
 FROM node:16.15.1-slim as prod
 
+# Add ffmpeg for audio mix
+RUN apt-get update && apt-get install -yq ffmpeg
+
 # Create app directory
 WORKDIR /app
 

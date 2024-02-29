@@ -5,43 +5,39 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { DraggableTrack } from 'src/components/DraggableTrack';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
-import { AnthemEditor } from 'src/components/activities/content/editors/AnthemEditor';
+import AudioEditor from 'src/components/activities/content/editors/AudioEditor/AudioEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
-import { audioBufferSlice, audioBufferToWav, mixAudios } from 'src/utils/audios';
+import { audioBufferSlice, audioBufferToWav, getLongestVerseSampleDuration, mixAudios } from 'src/utils/audios';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
 const SongStep4 = () => {
   const router = useRouter();
-
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [trackDuration, setTrackDuration] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as VerseRecordData) || null;
-  const [displayEditor, setDisplayEditor] = React.useState(!!data?.classRecord);
-  const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
+  const data = (activity?.data as ClassAnthemData) || null;
+  const [displayEditor, setDisplayEditor] = React.useState(!!data?.verseRecordUrl);
+  // const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
+  const [verseStart, setVerseStart] = React.useState(0);
   const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
-  const customizedMix = data?.customizedMix;
+  const verseMixUrl = data?.verseMixUrl;
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
-
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data?.customizedMix) {
+    if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
-
     return errors;
   }, [data]);
-
   React.useEffect(() => {
-    setCustomizedMix(new Audio(customizedMix));
-  }, [customizedMix]);
-
+    setCustomizedMix(new Audio(verseMixUrl));
+  }, [verseMixUrl]);
   if (!activity || !data) {
     return (
       <Base>
@@ -49,32 +45,36 @@ const SongStep4 = () => {
       </Base>
     );
   }
-
   const onNext = () => {
     audioRef.current?.pause();
     customizedMixAudio?.pause();
     setIsLoading(true);
-    if (data.classRecord) {
-      audioBufferSlice(data.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
-        const formData = new FormData();
-        formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
-        const response = await axiosRequest({
-          method: 'POST',
-          url: '/audios',
-          data: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosRequest);
-        updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
-      });
+    if (data.verseRecordUrl) {
+      audioBufferSlice(
+        data.verseRecordUrl,
+        verseStart * 1000,
+        (verseStart + getLongestVerseSampleDuration(data.verseTracks)) * 1000,
+        async (slicedAudioBuffer: AudioBuffer) => {
+          const formData = new FormData();
+          formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
+          const response = await axiosRequest({
+            method: 'POST',
+            url: '/audios',
+            data: formData,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          // const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosRequest);
+          const verse = '';
+          updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
+        },
+      );
     }
     setIsLoading(false);
     save().catch(console.error);
     router.push('/chanter-un-couplet/5');
   };
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -87,13 +87,13 @@ const SongStep4 = () => {
         <h1>Synchronisez votre voix sur l&apos;hymne</h1>
         <p> Avez-vous bien chanter en rythme ?</p>
         <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
-        {!data?.customizedMix && (
+        {!data?.verseMixUrl && (
           <p>
             <b>Il manque votre mix du couplet !</b>
           </p>
         )}
         <div className="width-900">
-          {(!trackDuration || !data.classRecord) && (
+          {(!trackDuration || !data.verseRecordUrl) && (
             <Button
               onClick={() => setDisplayEditor(true)}
               variant="text"
@@ -111,12 +111,12 @@ const SongStep4 = () => {
             </Button>
           )}
           {trackDuration > 0 &&
-            data.classRecord &&
-            (data?.verseTime < trackDuration ? (
+            data.verseRecordUrl &&
+            (getLongestVerseSampleDuration(data.verseTracks) < trackDuration ? (
               <div style={{ height: '200px' }}>
                 <DraggableTrack
                   trackDuration={trackDuration}
-                  coupletDuration={data?.verseTime}
+                  coupletDuration={getLongestVerseSampleDuration(data.verseTracks)}
                   initialCoupletStart={verseStart}
                   onCoupletStartChange={(coupletStart) => {
                     if (!audioRef.current) {
@@ -151,10 +151,10 @@ const SongStep4 = () => {
               justifyContent: 'space-between',
             }}
           >
-            {(displayEditor || data?.classRecord) && (
-              <AnthemEditor
-                value={data?.classRecord}
-                onChange={(value) => {
+            {(displayEditor || data?.verseRecordUrl) && (
+              <AudioEditor
+                s={data?.verseRecordUrl}
+                onChange={(value: string) => {
                   audioRef?.current?.pause();
                   customizedMixAudio?.pause();
                   updateActivity({ data: { ...data, classRecord: value } });

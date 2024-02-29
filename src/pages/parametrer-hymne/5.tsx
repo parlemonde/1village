@@ -3,15 +3,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Alert } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
+import type { AnthemData } from 'types/anthem.type';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -27,20 +29,10 @@ const AnthemStep5 = () => {
   const data = (activity?.data as AnthemData) || null;
 
   const errorSteps = React.useMemo(() => {
-    const errors: number[] = [];
-    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
-      errors.push(0);
+    if (data !== null) {
+      return getErrorSteps(data, 4);
     }
-    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
-      errors.push(1);
-    }
-    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
-      errors.push(2);
-    }
-    if (data !== null && data.chorus.filter((c) => !!c.value).length === 0) {
-      errors.push(3);
-    }
-    return errors;
+    return [];
   }, [data]);
 
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
@@ -114,7 +106,11 @@ const AnthemStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {data.finalVerse && <audio src={data.finalVerse} controls style={{ width: '350px', height: '60px' }} />}
+            {data.mixUrl && (
+              <audio controls src={data.mixUrl}>
+                <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
+              </audio>
+            )}
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix par défaut du couplet (les 7 pistes mélangées)</p>
           </div>
 
@@ -126,7 +122,11 @@ const AnthemStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {data.finalMix && <audio src={data.finalMix} controls style={{ width: '350px', height: '60px' }} />}
+            {data.fullMixUrl && (
+              <audio controls src={data.fullMixUrl}>
+                <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
+              </audio>
+            )}
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de l&apos;hymne (intro + refrain + couplet mixé + outro)</p>
           </div>
 
@@ -162,7 +162,7 @@ const AnthemStep5 = () => {
             />
             <p>Voilà le refrain découpé en syllabes :</p>
             <p>
-              {data.chorus.map((syllable, index) =>
+              {data.chorusLyrics.map((syllable, index) =>
                 syllable.back ? (
                   <React.Fragment key={index}>
                     <br /> {syllable.value}{' '}

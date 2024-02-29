@@ -1,21 +1,21 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { Syllable } from 'src/activity-types/anthem.types';
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { Syllable } from 'types/anthem.type';
 
 const SongStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data.customizedMix) {
+    if (data !== null && !data.verseMixUrl) {
       errors.push(0);
     }
 
@@ -45,8 +45,8 @@ const SongStep2 = () => {
           Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
           N&apos;hésitez pas à ré-écouter le couplet.
         </p>
-        {data?.customizedMixWithVocals ? (
-          <audio controls src={data?.customizedMixWithVocals} />
+        {data?.verseMixUrl ? (
+          <audio controls src={data?.verseMixUrl} />
         ) : (
           <p>
             <b>Il manque votre mix du couplet !</b>

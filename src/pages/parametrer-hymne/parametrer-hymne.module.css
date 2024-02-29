@@ -3,6 +3,12 @@
     padding: 0.5rem 1rem 1rem 1rem;
 }
 
+.warningContainer{
+    display: flex;
+    align-items: center;
+    color: red;
+}
+
 .trackSelectionContainer {
     margin: 0 auto 1rem auto;
     width: 100%;
@@ -18,12 +24,18 @@
     color: white;
 }
 
-.trackVocalContainer{
+.anthemStructureContainer{
+    height: 100%; 
+    width: 100%;
+    object-fit: contain;
+}
+
+.anthemStructureVocalContainer{
     display: flex;
     justify-content: space-around;
 }
 
-.trackVocal{
+.anthemStructureVocal{
     width: 100%;
     height: auto;
 }

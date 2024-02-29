@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -9,24 +8,22 @@ import { VillageContext } from 'src/contexts/villageContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData } from 'types/anthem.type';
 
 const emptyAnthemActivity: AnthemData = {
-  verseAudios: [],
-  introOutro: [],
+  tracks: [],
   verseLyrics: [],
-  chorus: [],
-  finalVerse: '',
-  finalMix: '',
-  verseTime: 0,
+  chorusLyrics: [],
+  mixUrl: '',
+  fullMixUrl: '',
 };
 
 const Anthem = () => {
   const router = useRouter();
   const { createNewActivity } = React.useContext(ActivityContext);
-
   const { village, selectedPhase } = React.useContext(VillageContext);
   const [anthemActivityData, setAnthemActivityData] = React.useState<AnthemData>(emptyAnthemActivity);
-
   const getAnthemData = React.useCallback(async () => {
     if (!village || !village.anthemId) {
       router.push('/');
@@ -40,35 +37,28 @@ const Anthem = () => {
       router.push('/');
       return;
     }
-
     const newAnthemActivityData = (response.data as Activity<AnthemData>).data;
     setAnthemActivityData(newAnthemActivityData);
-
-    if (!newAnthemActivityData.finalMix) {
+    // change mixUrl by finalMixUrl when back is repaired
+    if (!newAnthemActivityData.mixUrl) {
       router.push('/');
     }
   }, [router, village]);
   React.useEffect(() => {
     getAnthemData().catch(console.error);
   }, [getAnthemData]);
-
   const onNext = () => {
-    const { chorus, verseAudios, introOutro, verseLyrics, verseTime } = anthemActivityData;
-    createNewActivity(ActivityType.VERSE_RECORD, selectedPhase, undefined, {
-      verseAudios,
-      introOutro,
-      verseTime,
-      chorus,
-      verseLyrics,
-      verse: '',
-      customizedMix: '',
-      customizedMixBlob: null,
-      mixWithoutLyrics: '',
-      classRecord: '',
+    const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
+    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
+      verseTracks: tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO),
+      verseMixUrl: '',
+      verseRecordUrl: '',
+      verseFinalMixUrl: '',
+      verseLyrics: verseLyrics,
+      chorusLyrics: chorusLyrics,
     });
     router.push('/chanter-un-couplet/1');
   };
-
   if (!anthemActivityData) {
     return (
       <Base>
@@ -76,7 +66,6 @@ const Anthem = () => {
       </Base>
     );
   }
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -85,15 +74,14 @@ const Anthem = () => {
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>Je vous propose de composer et chanter ensemble l&apos;hymne du village idéal !</p>
             <p>Écoutez d&apos;abord la musique et le refrain que j&apos;ai déjà composé pour vous.</p>
-            <audio controls src={anthemActivityData.finalMix} style={{ width: '100%', height: '40px' }} />
+            {/* change mixUrl by finalMixUrl when back is repaired */}
+            <audio controls src={anthemActivityData.mixUrl} style={{ width: '100%', height: '40px' }} />
             <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet, et la conclusion.</p>
-
             <p>
               Avez-vous remarqué ? <b>Je n&apos;ai pas écrit les paroles du couplet !</b> C&apos;est votre misson : chaque classe peut créer son
               propre couplet et le chanter ! À vous de raconter votre expérience d&apos;1Village en chanson.
             </p>
             <p>À la fin de l&apos;année, vous pourrez écouter l&apos;hymne composé tous ensemble.</p>
-
             <h2>À présent, à votre tour de chanter un couplet !</h2>
             <p>
               Je vous propose de commencer par modifier la musique de votre couplet, en modulant le volume sonore de certains instruments. Tendez bien
