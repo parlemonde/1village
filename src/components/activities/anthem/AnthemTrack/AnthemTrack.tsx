@@ -1,10 +1,12 @@
 import React from 'react';
 
+import Add from '@mui/icons-material/Add';
 import { Alert, Button, TextField } from '@mui/material';
-import AnthemTrackIcon from './AnthemTrackIcon';
-import type { DisplayableInstrumentsType } from './instruments';
+
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
+import AnthemTrackIcon from './AnthemTrackIcon';
+import type { DisplayableInstrumentsType } from './instruments';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import type { Track } from 'types/anthem.type';
