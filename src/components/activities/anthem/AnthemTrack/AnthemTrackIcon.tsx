@@ -5,7 +5,7 @@ import { TextField, IconButton, Autocomplete, Popper, Fade, Paper, Box, Icon } f
 import styles from './AnthemTrack.module.css';
 import { InstrumentSvg } from './InstrumentSvg';
 import type { DisplayableInstrumentsType } from './instruments';
-import type { Track } from 'src/activity-types/anthem.types';
+import type { Track } from 'types/anthem.type';
 
 export interface AnthemTrackProps {
   track: Track;

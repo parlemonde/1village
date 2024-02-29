@@ -1,10 +1,11 @@
 import React from 'react';
 
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Slider, Tooltip } from '@mui/material';
+import { IconButton, Slider, Tooltip } from '@mui/material';
 
 import type { AudioMixerTrack } from '../AudioMixer/AudioMixer';
 import styles from './AudioMixerTrackControl.module.css';
+import { InstrumentSvg } from 'src/components/activities/anthem/AnthemTrack/InstrumentSvg';
 import { primaryColor } from 'src/styles/variables.const';
 
 interface AudioMixerTrackControlProps {
@@ -88,10 +89,9 @@ const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handl
             }}
           />
         </Tooltip>
-        {/* {React.createElement(musicIcons[idx], {
-          key: `descimg--${idx}`,
-          style: { width: '40px', height: '40px', margin: '5px 0px' },
-        })} */}
+        <div className={styles.iconFrame}>
+          <InstrumentSvg instrumentName={mixTrack.iconUrl} />
+        </div>
       </div>
     </div>
   );

@@ -38,3 +38,12 @@
     position: relative; 
     display: inline-block;
 }
+
+.iconFrame{
+    border: 1px solid gray;
+    border-radius: 1rem;
+    padding: .5rem;
+    margin: 0;
+    background-color: white;
+    font-size: 10rem;
+}

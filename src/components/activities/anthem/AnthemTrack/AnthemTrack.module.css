@@ -30,12 +30,11 @@
     padding: .5rem
 }
 
-.trackPicture>span>span>svg {
+.trackPicture > span > span > svg {
     font-size: 1rem;
 }
 
-.trackLabel input,
-.trackLabel>span {
+.trackLabel input, .trackLabel > span {
     box-sizing: border-box;
     width: 180px;
     padding-left: 10px;
