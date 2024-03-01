@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
 import type { Track } from '../../types/anthem.type';
+import { TrackType } from '../../types/anthem.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
@@ -454,7 +455,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   // Check if we need to build the audio mix
-  if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areTracksNew(data.data, activity.data)) {
+  if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areAnthemTracksNew(data.data, activity.data)) {
     const verseTracks = (data.data.tracks as Track[]).filter((t) => t.type !== 0 && t.type !== 8);
 
     data.data.mixUrl = verseTracks.some((t) => t.sampleUrl !== '') ? await buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
@@ -474,8 +475,13 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     // data.data.fullMixUrl = await buildAudioMix(activity.userId, fullTracks); // with intro and outro
   }
 
-  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined && areTracksNew(data.data, activity.data)) {
-    data.data.verseMixUrl = await buildAudioMix(activity.userId, data.data.verseTracks as Track[]);
+  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
+    const verseTracks = data.data.verseTracks as Track[];
+    data.data.verseMixWithVocalsUrl = await buildAudioMix(activity.userId, verseTracks);
+    data.data.verseMixUrl = await buildAudioMix(
+      activity.userId,
+      verseTracks.filter((track) => track.type != TrackType.VOCALS),
+    );
   }
 
   if (activity.status !== ActivityStatus.PUBLISHED) {
@@ -546,8 +552,7 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   res.sendJSON(activity);
 });
 
-const areTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
-  console.log(newData);
+const areAnthemTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
   const oldTracks = oldData.tracks as any[]; // A changer
   const newTracks = newData.tracks as any[]; // A changer
 
