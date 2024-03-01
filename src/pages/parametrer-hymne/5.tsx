@@ -8,7 +8,6 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { AnthemData } from 'types/anthem.type';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
@@ -19,6 +18,7 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useVillageRequests } from 'src/services/useVillages';
 import { ActivityStatus } from 'types/activity.type';
+import type { AnthemData } from 'types/anthem.type';
 
 const AnthemStep5 = () => {
   const router = useRouter();

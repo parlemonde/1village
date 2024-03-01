@@ -11,11 +11,11 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
-import { InstrumentSvg } from 'src/components/activities/anthem/AnthemTrack/InstrumentSvg';
-import instruments from 'src/components/activities/anthem/AnthemTrack/instruments';
+import { InstrumentSvg } from 'src/components/activities/anthem/InstrumentSvg/InstrumentSvg';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivityRequests } from 'src/services/useActivity';
+import instruments from 'src/utils/instruments';
 import { ActivityType } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { AnthemData, Track } from 'types/anthem.type';
@@ -82,7 +82,7 @@ const AnthemStep1 = () => {
           activeStep={0}
           urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
-        <div className={styles.trackSelectionContainer}>
+        <div className={styles.contentContainer}>
           <h1>Mettre en ligne les pistes sonores du couplet</h1>
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
           <div>

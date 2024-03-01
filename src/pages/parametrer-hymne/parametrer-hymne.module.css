@@ -3,26 +3,24 @@
     padding: 0.5rem 1rem 1rem 1rem;
 }
 
-.warningContainer{
-    display: flex;
-    align-items: center;
-    color: red;
-}
-
-.trackSelectionContainer {
+.contentContainer {
     margin: 0 auto 1rem auto;
     width: 100%;
     max-width: 900px;
-}
-
-.trackSelectionTitle {
-    margin: 25px 0;
 }
 
 .trackSelectionBackdrop {
     z-index: 2000;
     color: white;
 }
+
+/* step 1 */
+
+.trackSelectionTitle {
+    margin: 25px 0;
+}
+
+/* step 2 */
 
 .anthemStructureContainer{
     height: 100%; 
@@ -38,4 +36,29 @@
 .anthemStructureVocal{
     width: 100%;
     height: auto;
+}
+
+/* step 3 */
+
+.anthemLyricsContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.anthemLyricsControlsContainer{
+    display: inline-block;
+}
+
+.anthemLyricsControls{
+    display: inline-flex;
+    padding: .2rem 1rem;
+    align-items: center;
+}
+
+.anthemLyricsControls span{
+    margin: .1rem;
+}
+
+.anthemLyricsControls span:first-of-type{
+    margin: 0 .5rem;
 }
