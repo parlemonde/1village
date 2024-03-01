@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './instruments.module.css';
+import styles from './InstrumentSvg.module.css';
 
 interface InstrumentsType {
   instrumentName: string;

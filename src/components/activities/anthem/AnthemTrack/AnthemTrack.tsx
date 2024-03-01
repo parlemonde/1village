@@ -5,8 +5,8 @@ import { Alert, Button, TextField } from '@mui/material';
 
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import styles from './AnthemTrack.module.css';
-import AnthemTrackIcon from './AnthemTrackIcon';
-import type { DisplayableInstrumentsType } from './instruments';
+import AnthemTrackIcon from '../AnthemTrackIcon/AnthemTrackIcon';
+import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import type { Track } from 'types/anthem.type';

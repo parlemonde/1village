@@ -5,7 +5,7 @@ import { IconButton, Slider, Tooltip } from '@mui/material';
 
 import type { AudioMixerTrack } from '../AudioMixer/AudioMixer';
 import styles from './AudioMixerTrackControl.module.css';
-import { InstrumentSvg } from 'src/components/activities/anthem/AnthemTrack/InstrumentSvg';
+import { InstrumentSvg } from 'src/components/activities/anthem/InstrumentSvg/InstrumentSvg';
 import { primaryColor } from 'src/styles/variables.const';
 
 interface AudioMixerTrackControlProps {
