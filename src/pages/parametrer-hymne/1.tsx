@@ -38,7 +38,7 @@ const AnthemStep1 = () => {
       return { ...instrument, svg: <InstrumentSvg instrumentName={instrument.value} /> };
     });
   }, []);
-    
+
   React.useEffect(() => {
     if (!created.current) {
       if (!('activity-id' in router.query) && !('edit' in router.query)) {

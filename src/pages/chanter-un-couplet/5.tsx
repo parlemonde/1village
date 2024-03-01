@@ -7,7 +7,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -19,7 +19,7 @@ const SongStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];

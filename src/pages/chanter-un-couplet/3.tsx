@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';

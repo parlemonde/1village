@@ -5,7 +5,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { ClassAnthemData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { DraggableTrack } from 'src/components/DraggableTrack';
 import { Steps } from 'src/components/Steps';
