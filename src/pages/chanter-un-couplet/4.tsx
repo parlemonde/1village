@@ -5,6 +5,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import styles from './chanter-un-couplet.module.css';
 import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { DraggableTrack } from 'src/components/DraggableTrack';
@@ -77,28 +78,28 @@ const SongStep4 = () => {
   };
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <div className={styles.mainContainer}>
         <Steps
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={3}
           errorSteps={errorSteps}
           urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
-        <h1>Synchronisez votre voix sur l&apos;hymne</h1>
-        <p> Avez-vous bien chanter en rythme ?</p>
-        <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
-        {!data?.verseMixUrl && (
-          <p>
-            <b>Il manque votre mix du couplet !</b>
-          </p>
-        )}
-        <div className="width-900">
+        <div className={styles.contentContainer}>
+          <h1>Synchronisez votre voix sur l&apos;hymne</h1>
+          <p> Avez-vous bien chanter en rythme ?</p>
+          <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
+          {!data?.verseMixUrl && (
+            <p>
+              <b>Il manque votre mix du couplet !</b>
+            </p>
+          )}
           {(!trackDuration || !data.verseRecordUrl) && (
             <Button
               onClick={() => setDisplayEditor(true)}
               variant="text"
               className="navigation__button full-width"
-              style={{
+              sx={{
                 justifyContent: 'flex-start',
                 width: 'auto',
                 boxShadow: '0px 4px 7px rgba(0, 0, 0, 0.1)',
@@ -151,7 +152,7 @@ const SongStep4 = () => {
               justifyContent: 'space-between',
             }}
           >
-            {(displayEditor || data?.verseRecordUrl) && (
+            {/* {(displayEditor || data?.verseRecordUrl) && (
               <AudioEditor
                 s={data?.verseRecordUrl}
                 onChange={(value: string) => {
@@ -177,7 +178,7 @@ const SongStep4 = () => {
                 }}
                 ref={audioRef}
               />
-            )}
+            )} */}
           </div>
           <StepsButton prev="/chanter-un-couplet/3" next={onNext} />
           <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>

@@ -1,0 +1,15 @@
+.mainContainer{
+    width: 100%;
+    padding: .5rem 1rem 1rem 1rem;
+}
+
+.contentContainer {
+    margin: 0 auto 1rem auto;
+    width: 100%;
+    max-width: 900px;
+}
+
+.anthemLyricsContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
