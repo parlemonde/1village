@@ -75,11 +75,6 @@ export const ActivityCard = ({
 
   const UsedCard = CardTypeMapper[activity.type];
 
-  // if (activity.type === ActivityType.GAME) {
-  //   console.log('ActivityCard', { activity, user, isSelf, noButtons, showEditButtons, isDraft, forComment, noMargin, onDelete, onSelect });
-  //   console.log('activity', activity);
-  // }
-
   return (
     <Paper
       className={onSelect !== undefined ? 'activity-card--selectable' : ''}

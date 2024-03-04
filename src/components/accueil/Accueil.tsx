@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from './Filters/FilterActivities';
+import { filterActivitiesByTerm, filterActivitiesWithLastGame } from './Filters/FilterActivities';
 import { LinkChild } from './LinkChild';
 import { getUserVisibilityFamilyParams } from 'src/api/user/user.get';
 import { Base } from 'src/components/Base';
@@ -15,6 +15,8 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
+import type { Activity, AnyData } from 'types/activity.type';
+import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
@@ -67,13 +69,20 @@ export const Accueil = () => {
   //Preload of the activities filtered only one mimic
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      let activitiesWithLastMimic: Activity<AnyData>[] = [];
+      Object.values(GameType)
+        .filter((t) => typeof t === 'number')
+        .map((type) => {
+          activitiesWithLastMimic = filterActivitiesWithLastGame(
+            activitiesWithLastMimic.length === 0 ? activities : activitiesWithLastMimic,
+            type as number,
+          );
+        });
       const activitiesFilterBySearchTerm =
         filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
       return activitiesFilterBySearchTerm;
-    } else {
-      return [];
     }
+    return [];
   }, [activities, filters.searchTerm]);
 
   if (user && user.type === UserType.FAMILY && !user.hasStudentLinked) {

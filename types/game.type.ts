@@ -95,7 +95,7 @@ export type MoneyData = {
 };
 
 // --- structure to send to the server ---
-
+// --- On utilise ce type et pas ce au dessus ---
 export type GameDataStep = {
   game: StepsType[];
   language?: string;
@@ -113,6 +113,13 @@ export type GameDataMonneyOrExpression = {
   game2: GameDataStep;
   game3: GameDataStep;
   selectedPhase: number;
+};
+export type DataForPlayed = {
+  game: StepsType;
+  labelPresentation: string;
+  language?: string;
+  monnaie?: string;
+  radio?: string;
 };
 
 export type GameMimicActivity = Activity<MimicsData>;

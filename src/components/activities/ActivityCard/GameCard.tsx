@@ -7,42 +7,30 @@ import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
+import { useCountAllStandardGame } from 'src/api/game/game.getAllGames';
+import { useCountAbleToPlayStandardGame } from 'src/api/game/game.getAvailable';
 import { RedButton } from 'src/components/buttons/RedButton';
-import { VillageContext } from 'src/contexts/villageContext';
-import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
 import { LinkNotAllowedInPath } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 import type { GameActivity } from 'types/game.type';
 
 type GameCardProps = ActivityCardProps<GameActivity> & {
-  gameType: number;
+  gameType: GameType;
+};
+
+const TYPE_OF_GAME = {
+  [GameType.MIMIC]: 'mimique',
+  [GameType.MONEY]: 'objet',
+  [GameType.EXPRESSION]: 'expression',
 };
 
 export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete, gameType }: GameCardProps) => {
-  const { village } = React.useContext(VillageContext);
-  const { getAllGamesByType, getAvailableGamesCount } = useGameRequests();
   const [totalGamesCount, setTotalGamesCount] = useState<number>(0);
   const [availableGamesCount, setAvailableGamesCount] = useState<number>(0);
-
-  const [typeOfGame, setTypeOfGame] = useState('');
-
-  useEffect(() => {
-    switch (gameType) {
-      case GameType.MIMIC:
-        setTypeOfGame('mimique');
-        break;
-      case GameType.MONEY:
-        setTypeOfGame('objet');
-        break;
-      case GameType.EXPRESSION:
-        setTypeOfGame('expression');
-        break;
-      default:
-        setTypeOfGame('');
-    }
-  }, [gameType]);
-
+  const { data: countAbleToPlay } = useCountAbleToPlayStandardGame(gameType, activity.villageId);
+  const { data: countAllStandardGame } = useCountAllStandardGame(gameType, activity.villageId);
+  const typeOfGame = TYPE_OF_GAME[gameType];
   const latestGameUrl = useMemo(() => {
     const villageId = activity.villageId;
     const type = activity.type;
@@ -50,13 +38,11 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
   }, [activity.villageId, activity.type]);
 
   useEffect(() => {
-    if (village) {
-      getAllGamesByType(gameType).then((count) => {
-        setTotalGamesCount(Array.isArray(count) ? count.length : 0);
-      });
-      getAvailableGamesCount(gameType).then(setAvailableGamesCount);
+    if (countAbleToPlay && countAllStandardGame) {
+      setAvailableGamesCount(countAbleToPlay);
+      setTotalGamesCount(countAllStandardGame);
     }
-  }, [gameType, getAllGamesByType, getAvailableGamesCount, village]);
+  }, [countAbleToPlay, countAllStandardGame, gameType]);
 
   return (
     <div
@@ -93,7 +79,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
           {activity.data.presentation} a relancé le jeu des {typeOfGame}s
         </p>
         <p>
-          Il y a actuellement {totalGamesCount > 1 ? `${totalGamesCount} ${typeOfGame}s disponibles` : `${totalGamesCount} ${typeOfGame} disponible`},
+          Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`},
           {availableGamesCount > 0
             ? ` parmi lesquels ${
                 availableGamesCount > 1 ? `${availableGamesCount} viennent d'être ajoutés` : `${availableGamesCount} vient d'être ajouté`
