@@ -18,11 +18,11 @@ const activities = [
   },
   {
     label: 'Jeu de la monnaie',
-    href: '/creer-un-jeu/monnaie',
+    href: '/creer-un-jeu/objet',
     icon: MonnaieIcon,
     gameType: GameType.MONEY,
     disabled: false,
-    disabledText: 'Bientôt disponible',
+    disabledText: '',
   },
   {
     label: 'Jeu des expressions',
@@ -30,7 +30,7 @@ const activities = [
     icon: ExpressionIcon,
     gameType: GameType.EXPRESSION,
     disabled: false,
-    disabledText: 'Bientôt disponible',
+    disabledText: '',
   },
 ];
 

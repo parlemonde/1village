@@ -28,14 +28,14 @@ const Monnaie = () => {
             deviner combien coûte des objets du quotidien dans chaque pays qu’il visite. C’est le jeu qu’il vous propose de faire aujourd’hui !
           </p>
         </div>
-        <Link href="/creer-un-jeu/monnaie/1" passHref>
+        <Link href="/creer-un-jeu/objet/1" passHref>
           <Button
             component="a"
             onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
               event.preventDefault();
-              router.push('/creer-un-jeu/monnaie/1');
+              router.push('/creer-un-jeu/objet/1');
             }}
-            href="/creer-un-jeu/monnaie/1"
+            href="/creer-un-jeu/objet/1"
             color="primary"
             variant="outlined"
             style={{
