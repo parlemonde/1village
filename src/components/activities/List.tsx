@@ -171,7 +171,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
           </Select>
           {activities.length > activitiesPerPage && (
             <Stack spacing={2} alignItems="center">
-              <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
+              <Pagination count={Math.floor(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
             </Stack>
           )}
         </nav>
