@@ -134,38 +134,6 @@ const Jouer = ({ subType }: SubTypeProps) => {
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
   const { data: getLatest } = useType({ subType });
-
-  if (getLatest) {
-    const {
-      id,
-      createDate,
-      content: {
-        labelPresentation,
-        language,
-        radio,
-        game: [{ inputs }],
-        game: [
-          {
-            inputs: [{ selectedValue: media }],
-          },
-          {
-            inputs: [{ selectedValue: fakeSignification1 }, { selectedValue: fakeSignification2 }],
-          },
-        ],
-      },
-    } = getLatest || {};
-    console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
-    const inputsResponse: string | undefined = inputs
-      .map((item: { response: boolean; selectedValue: string }) => {
-        if (item.response === true) {
-          return item.selectedValue;
-        }
-        return undefined; // Retourner undefined si item.response est false
-      })
-      .find((value: string | undefined) => value !== undefined); // Spécifier le type de retour attendu ici
-
-    console.log(inputsResponse);
-  }
   const phrasesForType = phrases[subType];
   // console.log(phrasesForType);
   const handleConfirmModal = async () => {
@@ -248,23 +216,47 @@ const Jouer = ({ subType }: SubTypeProps) => {
     [users],
   );
   const playContent = useMemo(() => {
-    if (game === undefined) {
-      return undefined;
-    }
-    try {
-      const { id, origine, fakeSignification1, fakeSignification2, signification, video } = game;
-      const content: MimicData = { gameId: id, createDate: new Date(), origine, fakeSignification1, fakeSignification2, signification, video };
-      return content;
-    } catch (e) {
-      return undefined;
-    }
-  }, [game]);
+    if (getLatest) {
+      const {
+        id,
+        createDate,
+        content: {
+          labelPresentation,
+          language,
+          radio,
+          game: [{ inputs }],
+          game: [
+            {
+              inputs: [{ selectedValue: media }],
+            },
+            {
+              inputs: [{ selectedValue: fakeSignification1 }, { selectedValue: fakeSignification2 }],
+            },
+          ],
+        },
+      } = getLatest || {};
+      //console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
+      const inputsResponse: string | undefined = inputs
+        .map((item: { response: boolean; selectedValue: string }) => {
+          if (item.response === true) {
+            return item.selectedValue;
+          }
+          return undefined; // Retourner undefined si item.response est false
+        })
+        .find((value: string | undefined) => value !== undefined); // Spécifier le type de retour attendu ici
 
+      //console.log(inputsResponse);
+      const content = { id, createDate, fakeSignification1, fakeSignification2, inputsResponse, media };
+      return content;
+    } else {
+      return undefined;
+    }
+  }, [getLatest]);
   const ResponseButtonDataMapper = useMemo(
     () => [
       {
         value: GameResponseValue.SIGNIFICATION,
-        signification: playContent?.signification,
+        signification: playContent?.inputsResponse,
         isSuccess: true,
         isGreenRadio: true,
       },
