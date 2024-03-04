@@ -5,6 +5,7 @@ import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import { GameCardMaClasse } from 'src/components/activities/ActivityCard/GameCardMaClasse';
 import { MascotteTemplate } from 'src/components/activities/content/MascotteTemplate';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -88,6 +89,7 @@ const MaClasse = () => {
   };
 
   const hasNoPublishedActivities = activities.filter((a) => a.userId === user?.id && !isMascotte(a)).length === 0;
+  const hasGamesInActivities = activities.filter((a) => a.userId === user?.id && a.type === 4).length > 0;
 
   return (
     <Base>
@@ -126,6 +128,27 @@ const MaClasse = () => {
                 />
               ) : null,
             )
+          )}
+          <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes jeux</h1>
+          {hasGamesInActivities ? (
+            activities.map((activity, index) =>
+              user && activity.userId === user.id && activity.type === 4 ? (
+                <GameCardMaClasse
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  activity={activity}
+                  key={index}
+                  user={user}
+                  onDelete={() => {
+                    setDeleteIndex({ index, isDraft: false });
+                  }}
+                  showEditButtons={true}
+                  gameType={activity.subType ?? 0}
+                />
+              ) : null,
+            )
+          ) : (
+            <p>Vous n&apos;avez pas de jeux publiés.</p>
           )}
           <h1 style={{ margin: '2rem 0 1rem 0' }}>Mes activités publiées</h1>
           {hasNoPublishedActivities ? (

@@ -46,6 +46,7 @@ export type MimicsData = {
   game1: MimicData;
   game2: MimicData;
   game3: MimicData;
+  labelPresentation?: string;
 };
 
 // --- three different objects ---
@@ -53,6 +54,7 @@ export type MoneysData = {
   game1: MoneyData;
   game2: MoneyData;
   game3: MoneyData;
+  labelPresentation?: string;
 };
 
 // --- three differents expressions ---
@@ -61,6 +63,7 @@ export type ExpressionsData = {
   game1: ExpressionData;
   game2: ExpressionData;
   game3: ExpressionData;
+  labelPresentation?: string;
 };
 
 // --- structure of each mimique ---

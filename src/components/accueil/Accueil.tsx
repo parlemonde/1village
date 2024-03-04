@@ -66,20 +66,20 @@ export const Accueil = () => {
     }));
   }, [selectedPhase]);
 
-  //Preload of the activities filtered only one mimic
+  //Preload of the activities filtered only one by game
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      let activitiesWithLastMimic: Activity<AnyData>[] = [];
+      let activitiesWithLastGame: Activity<AnyData>[] = [];
       Object.values(GameType)
         .filter((t) => typeof t === 'number')
         .map((type) => {
-          activitiesWithLastMimic = filterActivitiesWithLastGame(
-            activitiesWithLastMimic.length === 0 ? activities : activitiesWithLastMimic,
+          activitiesWithLastGame = filterActivitiesWithLastGame(
+            activitiesWithLastGame.length === 0 ? activities : activitiesWithLastGame,
             type as number,
           );
         });
       const activitiesFilterBySearchTerm =
-        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
+        filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastGame, filters.searchTerm) : activitiesWithLastGame;
       return activitiesFilterBySearchTerm;
     }
     return [];

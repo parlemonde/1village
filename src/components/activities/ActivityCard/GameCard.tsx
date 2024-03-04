@@ -36,6 +36,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
     const type = activity.type;
     return `/creer-un-jeu/mimique/jouer/?villageId=${villageId}&type=${type}`;
   }, [activity.villageId, activity.type]);
+  const path = `/creer-un-jeu/${typeOfGame}/jouer`;
 
   useEffect(() => {
     if (countAbleToPlay && countAllStandardGame) {
@@ -43,6 +44,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
       setTotalGamesCount(countAllStandardGame);
     }
   }, [countAbleToPlay, countAllStandardGame, gameType]);
+  const labelPresentation = activity.data.presentation || activity.data.labelPresentation;
 
   return (
     <div
@@ -67,7 +69,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
             ) : (
-              <Link href="/creer-un-jeu/mimique/jouer/" passHref>
+              <Link href={path} passHref>
                 <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
               </Link>
             )}
@@ -76,14 +78,12 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p style={{ marginBottom: '2rem' }}>
-          {activity.data.presentation} a relancé le jeu des {typeOfGame}s
+          {labelPresentation} a relancé le jeu des {typeOfGame}s
         </p>
         <p>
-          Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`},
+          Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`}.<br />
           {availableGamesCount > 0
-            ? ` parmi lesquels ${
-                availableGamesCount > 1 ? `${availableGamesCount} viennent d'être ajoutés` : `${availableGamesCount} vient d'être ajouté`
-              } et sont à découvrir !`
+            ? ` Il en reste ${availableGamesCount} à découvrir.`
             : ` Il n'y a pour l'instant pas de nouvel ajout dans la catégorie des ${typeOfGame}s à découvrir.`}
         </p>
 
@@ -92,8 +92,8 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
             {!showEditButtons && (
               <>
                 <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                <Link href={latestGameUrl} passHref>
-                  <Button component="a" color="primary" variant="outlined" href="/creer-un-jeu/mimique/jouer">
+                <Link href={path} passHref>
+                  <Button component="a" color="primary" variant="outlined">
                     Jouer au jeu
                   </Button>
                 </Link>
@@ -101,28 +101,32 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
             )}
             {isSelf && showEditButtons && (
               <>
-                <Link
-                  href={
-                    isDraft && activity.data.draftUrl
-                      ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                      : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
-                  }
-                  passHref
-                >
-                  <Button
-                    component="a"
-                    href={
-                      isDraft && activity.data.draftUrl
-                        ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                        : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
-                    }
-                    color="secondary"
-                    variant="contained"
-                    style={{ marginLeft: '0.25rem' }}
-                  >
-                    Modifier
-                  </Button>
-                </Link>
+                {activity.subType !== 1 && activity.subType !== 2 && (
+                  <>
+                    <Link
+                      href={
+                        isDraft && activity.data.draftUrl
+                          ? `${activity.data.draftUrl}?activity-id=${activity.id}`
+                          : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
+                      }
+                      passHref
+                    >
+                      <Button
+                        component="a"
+                        href={
+                          isDraft && activity.data.draftUrl
+                            ? `${activity.data.draftUrl}?activity-id=${activity.id}`
+                            : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
+                        }
+                        color="secondary"
+                        variant="contained"
+                        style={{ marginLeft: '0.25rem' }}
+                      >
+                        Modifier
+                      </Button>
+                    </Link>
+                  </>
+                )}
                 <RedButton style={{ marginLeft: '0.25rem' }} onClick={onDelete}>
                   Supprimer
                 </RedButton>

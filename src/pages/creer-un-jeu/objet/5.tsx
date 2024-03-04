@@ -9,7 +9,6 @@ import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
 import type { StepsType } from 'src/config/games/game';
-import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -21,8 +20,6 @@ import { UserType } from 'types/user.type';
 
 const MonnaieStep5 = () => {
   const router = useRouter();
-
-  // const { createNewActivity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
@@ -60,11 +57,11 @@ const MonnaieStep5 = () => {
       selectedPhase: selectedPhase,
     };
 
-    // setIsLoading(true);
+    setIsLoading(true);
     await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
-    // router.push('/creer-un-jeu/expression/success');
-    // setIsLoading(false);
+    router.push('/creer-un-jeu/objet/success');
+    setIsLoading(false);
   };
 
   function validateGameConfig(gameConfig: StepsType[][]) {
@@ -95,13 +92,7 @@ const MonnaieStep5 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[inputSelectedValue || 'Monnaie', 'Objet 1', 'Objet 2', 'Objet 3', 'Prévisualisation']}
-          urls={[
-            '/creer-un-jeu/monnaie/1',
-            '/creer-un-jeu/monnaie/2',
-            '/creer-un-jeu/monnaie/3',
-            '/creer-un-jeu/monnaie/4',
-            '/creer-un-jeu/monnaie/5',
-          ]}
+          urls={['/creer-un-jeu/objet/1', '/creer-un-jeu/objet/2', '/creer-un-jeu/objet/3', '/creer-un-jeu/objet/4', '/creer-un-jeu/objet/5']}
           activeStep={4}
         />
         <div className="width-900">
@@ -125,7 +116,7 @@ const MonnaieStep5 = () => {
             )}
           </div>
         </div>
-        <Previsualisation baseUrl={'/creer-un-jeu/monnaie/'} />
+        <Previsualisation baseUrl={'/creer-un-jeu/objet/'} />
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />

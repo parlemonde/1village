@@ -14,6 +14,7 @@ export type hiddenType = {
   id: number;
   value: string;
 };
+
 export type inputType = {
   id: number;
   type: InputTypeEnum;

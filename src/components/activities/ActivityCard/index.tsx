@@ -11,7 +11,6 @@ import { FreeContentCard } from './FreeContentCard';
 import { GameCard } from './GameCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
-import { MimicCard } from './MimicCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
@@ -43,7 +42,6 @@ const CardTypeMapper = {
   [ActivityType.CONTENU_LIBRE]: FreeContentCard,
   [ActivityType.INDICE]: IndiceCard,
   [ActivityType.SYMBOL]: SymbolCard,
-  // [ActivityType.GAME]: MimicCard,
   [ActivityType.GAME]: GameCard,
   [ActivityType.REPORTAGE]: ReportageCard,
   [ActivityType.REACTION]: ReactionCard,
@@ -89,7 +87,7 @@ export const ActivityCard = ({
       style={{
         margin: noMargin || forComment ? '0' : '1rem 0',
         cursor: onSelect !== undefined ? 'pointer' : 'unset',
-        border: activity?.isPinned ? `2px solid ${primaryColor}` : undefined,
+        border: activity?.isPinned ? `2px solid ${primaryColor}` : '10px solid red',
       }}
     >
       <div className="activity-card__header">
@@ -103,6 +101,7 @@ export const ActivityCard = ({
             displayAsUser={activity.displayAsUser}
           />
         )}
+
         <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
           <p className="text">
             <UserDisplayName
@@ -132,6 +131,7 @@ export const ActivityCard = ({
             )}
           </div>
         </div>
+
         {!showEditButtons && isEnigme(activity) && (
           <>
             <Timer style={{ alignSelf: 'center', height: '1.2rem', width: 'auto', marginRight: '0.25rem' }} />

@@ -12,11 +12,11 @@ const MonnaieStep4 = () => {
   const { inputSelectedValue } = useContext(GameContext);
 
   const onNext = () => {
-    router.push('/creer-un-jeu/monnaie/5');
+    router.push('/creer-un-jeu/objet/5');
   };
 
   const onPrev = () => {
-    router.push(`/creer-un-jeu/monnaie/3`);
+    router.push(`/creer-un-jeu/objet/3`);
   };
 
   return (
@@ -24,13 +24,7 @@ const MonnaieStep4 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={[inputSelectedValue || 'Monnaie', 'Objet 1', 'Objet 2', 'Objet 3', 'Prévisualisation']}
-          urls={[
-            '/creer-un-jeu/monnaie/1',
-            '/creer-un-jeu/monnaie/2',
-            '/creer-un-jeu/monnaie/3',
-            '/creer-un-jeu/monnaie/4',
-            '/creer-un-jeu/monnaie/5',
-          ]}
+          urls={['/creer-un-jeu/objet/1', '/creer-un-jeu/objet/2', '/creer-un-jeu/objet/3', '/creer-un-jeu/objet/4', '/creer-un-jeu/objet/5']}
           activeStep={3}
         />
         <div>
