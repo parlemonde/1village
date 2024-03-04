@@ -134,9 +134,12 @@ const Jouer = ({ subType }: SubTypeProps) => {
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
   const { data: test } = useType({ subType });
-  const data: DataForPlayed = test;
-  console.log(data);
+  const content: DataForPlayed = test?.content;
+
+  console.log(content);
+
   const phrasesForType = phrases[subType];
+  console.log(phrasesForType);
 
   const handleConfirmModal = async () => {
     const success = await resetGamesPlayedForUser();
