@@ -87,7 +87,7 @@ const ReactionStep1 = () => {
                 value={selectedActivity.type === type ? selectedActivity.id : null}
                 onChange={onChange}
                 onSelect={onNext}
-                style={{ margin: '1rem 0 0 0' }}
+                style={{ margin: '1rem 0 0 0', overflowY: 'hidden' }}
                 label={`Réagir à ${DESC[type]}`}
                 type={type}
               />

@@ -40,11 +40,12 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
     [users],
   );
   const [page, setPage] = useState<number>(1);
+
   const handlePage = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const activitiesPerPage = 5;
+  const activitiesPerPage = 25;
   const startIdx = (page - 1) * activitiesPerPage;
   const endIdx = startIdx + activitiesPerPage;
 
