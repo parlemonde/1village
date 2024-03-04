@@ -50,7 +50,6 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
 
   const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
     setActivitiesPerPage(parseInt(e.target.value));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const startIdx = (page - 1) * activitiesPerPage;
@@ -161,18 +160,20 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
         <nav>
           <Select
             labelId="demo-simple-select-standard-label"
+            size="small"
             id="demo-simple-select-standard"
             value={activitiesPerPage.toString()}
             onChange={handleActivitiesPerPage}
-            label="Age"
           >
             <MenuItem value={5}>5</MenuItem>
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={25}>25</MenuItem>
           </Select>
-          <Stack spacing={2} alignItems="center">
-            <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
-          </Stack>
+          {activities.length > activitiesPerPage && (
+            <Stack spacing={2} alignItems="center">
+              <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
+            </Stack>
+          )}
         </nav>
       )}
     </div>
