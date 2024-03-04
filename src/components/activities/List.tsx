@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { Button, Pagination, Stack } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+import { Button, MenuItem, Pagination, Select, Stack } from '@mui/material';
 
 import { ActivityCard } from './ActivityCard';
 import { isAnthem } from 'src/activity-types/anyActivity';
@@ -40,12 +41,18 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
     [users],
   );
   const [page, setPage] = useState<number>(1);
+  const [activitiesPerPage, setActivitiesPerPage] = React.useState(25);
 
   const handlePage = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const activitiesPerPage = 25;
+
+  const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
+    setActivitiesPerPage(parseInt(e.target.value));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const startIdx = (page - 1) * activitiesPerPage;
   const endIdx = startIdx + activitiesPerPage;
 
@@ -150,10 +157,23 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
           }
           return card;
         })}
-      {withPagination && activities.length > activitiesPerPage && (
-        <Stack spacing={2} alignItems="center">
-          <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
-        </Stack>
+      {withPagination && (
+        <nav>
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={activitiesPerPage.toString()}
+            onChange={handleActivitiesPerPage}
+            label="Age"
+          >
+            <MenuItem value={5}>5</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={25}>25</MenuItem>
+          </Select>
+          <Stack spacing={2} alignItems="center">
+            <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
+          </Stack>
+        </nav>
       )}
     </div>
   );
