@@ -15,11 +15,12 @@ import type { Activity } from 'types/activity.type';
 interface ActivitiesProps {
   activities: Activity[];
   withLinks?: boolean;
+  withPagination?: boolean;
   noButtons?: boolean;
   onSelect?: (index: number) => void;
 }
 
-export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
+export const Activities = ({ activities, noButtons = false, withLinks = false, withPagination = false, onSelect }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState<{
     selectedActivityId: number | null;
     responseActivityId?: number | null;
@@ -148,9 +149,11 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
           }
           return card;
         })}
-      <Stack spacing={2} alignItems="center">
-        <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
-      </Stack>
+      {withPagination && activities.length > activitiesPerPage && (
+        <Stack spacing={2} alignItems="center">
+          <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
+        </Stack>
+      )}
     </div>
   );
 };

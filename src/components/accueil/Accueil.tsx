@@ -97,7 +97,7 @@ export const Accueil = () => {
           </KeepRatio>
           <h1 style={{ marginTop: '1rem' }}>Dernières activités</h1>
           <Filters countries={filterCountries} filters={filters} onChange={setFilters} phase={selectedPhase} />
-          <Activities activities={activitiesFiltered} withLinks />
+          <Activities activities={activitiesFiltered} withLinks withPagination />
         </>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', padding: '0 1rem', alignItems: 'center' }}>
