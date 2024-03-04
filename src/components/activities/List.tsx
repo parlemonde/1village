@@ -44,7 +44,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const activitiesPerPage = 25;
+  const activitiesPerPage = 5;
   const startIdx = (page - 1) * activitiesPerPage;
   const endIdx = startIdx + activitiesPerPage;
 
