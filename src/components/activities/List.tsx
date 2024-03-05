@@ -43,15 +43,17 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
   const [page, setPage] = useState<number>(1);
   const [activitiesPerPage, setActivitiesPerPage] = React.useState(25);
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page, activitiesPerPage]);
+
   const handlePage = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
     setPage(1);
     setActivitiesPerPage(parseInt(e.target.value));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const startIdx = (page - 1) * activitiesPerPage;
