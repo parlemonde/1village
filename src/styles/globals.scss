@@ -5,7 +5,7 @@ body {
   font-size: 1rem !important;
   color: $font-color !important;
   font-weight: 400 !important;
-  padding: 0 !important; 
+  padding: 0 !important;
   overflow: auto !important;
 }
 
@@ -53,6 +53,7 @@ body {
     height: 1px;
   }
   &.admin {
+    background-color: #d9dbfe91;
     #nprogress .bar {
       background-color: white !important;
     }

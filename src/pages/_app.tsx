@@ -32,6 +32,7 @@ import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
+import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { UserContextProvider } from 'src/contexts/userContext';
@@ -134,8 +135,9 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 <ClassroomContextProvider>
                   <ActivityContextProvider>
                     {isOnAdmin ? (
-                      <div>
-                        <AdminHeader />
+                      <div className="container-admin-portal">
+                        {/* <AdminHeader /> */}
+                        <NewAdminHeader />
                         <div style={{ display: 'flex', width: '100%' }}>
                           <AdminNavigation />
                           <div style={{ flex: 1, minWidth: 0 }}>
