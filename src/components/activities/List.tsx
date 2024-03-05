@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { Button, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { InputLabel, Button, MenuItem, Pagination, Select, Stack } from '@mui/material';
 
 import { ActivityCard } from './ActivityCard';
 import { isAnthem } from 'src/activity-types/anyActivity';
@@ -49,7 +49,9 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
   };
 
   const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
+    setPage(1);
     setActivitiesPerPage(parseInt(e.target.value));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const startIdx = (page - 1) * activitiesPerPage;
@@ -158,6 +160,7 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
         })}
       {withPagination && (
         <nav>
+          <InputLabel id="demo-simple-select-helper-label">Activités par page</InputLabel>
           <Select
             labelId="demo-simple-select-standard-label"
             size="small"
@@ -166,12 +169,13 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
             onChange={handleActivitiesPerPage}
           >
             <MenuItem value={5}>5</MenuItem>
+
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={25}>25</MenuItem>
           </Select>
           {activities.length > activitiesPerPage && (
             <Stack spacing={2} alignItems="center">
-              <Pagination count={Math.floor(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
+              <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
             </Stack>
           )}
         </nav>
