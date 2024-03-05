@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { InputLabel, Button, MenuItem, Pagination, Select, Stack } from '@mui/material';
-import { margin } from '@mui/system';
+import { Button } from '@mui/material';
 
 import PaginationNav from '../PaginationNav/PaginationNav';
 import { ActivityCard } from './ActivityCard';
