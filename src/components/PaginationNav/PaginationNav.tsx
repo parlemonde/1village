@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { Fade, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 
 interface PaginationNavProps {
   page: number;
