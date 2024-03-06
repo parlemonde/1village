@@ -4,7 +4,6 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 import { useQueryClient } from 'react-query';
 
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button, Divider, TextField } from '@mui/material';
@@ -187,13 +186,13 @@ export const VideoModals = ({ id, isModalOpen, setIsModalOpen, videoUrl, setVide
       >
         {step === 0 && (
           <>
-            <div style={{ padding: '0.5rem' }}>
+            {/* <div style={{ padding: '0.5rem' }}>
               <Alert icon={<ArrowRightAltIcon />} severity="info">
                 <a className="text text--bold" href="https://clap.parlemonde.org" target="_blank" rel="noreferrer">
                   Créer une vidéo sur Clap!
                 </a>
               </Alert>
-            </div>
+            </div> */}
             <div style={{ display: 'flex', width: '100%', height: '20rem' }}>
               <div style={{ flex: 1, height: '100%', padding: '4rem 0.5rem', minWidth: 0 }}>
                 <div id={`video-edit-${id}-desc`}>

@@ -1,49 +1,9 @@
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import type { QueryFunction } from 'react-query';
-import { useQueryClient, useQuery } from 'react-query';
+import { useQueryClient } from 'react-query';
 
-// import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { User, UserUpdatePassword } from 'types/user.type';
-
-export const useUsers = (): { users: User[]; setUsers(newUsers: User[]): void } => {
-  const queryClient = useQueryClient();
-
-  const getUsers: QueryFunction<User[]> = React.useCallback(async () => {
-    const response = await axiosRequest({
-      method: 'GET',
-      url: '/users',
-    });
-    if (response.error) {
-      return [];
-    }
-    return response.data;
-  }, []);
-  // const getStudentsToUser: QueryFunction<User[]> = React.useCallback(async (type: Student[], studentId?: 'self', userId?: 'self') => {
-  //   const response = await axiosRequest({
-  //     method: 'GET',
-  //     url: `/users/linked-students${serializeToQueryUrl({ type, studentId, userId })}`,
-  //   });
-  //   if (response.error) {
-  //     return [];
-  //   }
-  //   return response.data;
-  // }, []);
-  const { data, isLoading, error } = useQuery<User[], unknown>(['users'], getUsers);
-
-  const setUsers = React.useCallback(
-    (newUsers: User[]) => {
-      queryClient.setQueryData(['users'], newUsers);
-    },
-    [queryClient],
-  );
-
-  return {
-    users: isLoading || error ? [] : data || [],
-    setUsers,
-  };
-};
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useUserRequests = () => {

@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { In, IsNull, LessThan } from 'typeorm';
+import { getRepository, In, IsNull, LessThan } from 'typeorm';
 
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
@@ -58,7 +58,29 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
       user.mascotteId = mascottes[user.id] || undefined;
     }
   } else {
-    users = await AppDataSource.getRepository(User).find();
+    users = await AppDataSource.getRepository(User).find({
+      relations: {
+        userToStudents: true,
+      },
+    });
+    const studentsToSchool = (
+      await AppDataSource.getRepository(Classroom)
+        .createQueryBuilder('classroom')
+        .innerJoin('classroom.user', 'user')
+        .innerJoin(Student, 'student', 'classroom.id = student.classroomId')
+        .select('user.school', 'school')
+        .addSelect('student.id', 'studentId')
+        .getRawMany()
+    ).reduce<Record<number, string>>((acc, row) => {
+      acc[row.studentId] = row.school;
+      return acc;
+    }, {});
+    users.forEach((user) => {
+      if (user.type === UserType.FAMILY && !user.school && user.userToStudents.length > 0) {
+        const schools = [...new Set(user.userToStudents.map((userToStudent) => studentsToSchool[userToStudent.studentId]))];
+        user.school = schools.join(', ');
+      }
+    });
   }
   res.sendJSON(users);
 });

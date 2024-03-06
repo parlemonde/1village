@@ -1,5 +1,11 @@
-.next
+__mocks__
+.dynamodb
+.github
+.minio-data
+.mysql-data
 .vscode
 .yarn
+.next
 dist
+public
 node_modules

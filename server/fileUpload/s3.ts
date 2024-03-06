@@ -1,5 +1,6 @@
 import type { S3 } from 'aws-sdk';
 import AWS from 'aws-sdk';
+import type { ListObjectsV2Output } from 'aws-sdk/clients/s3';
 import fs from 'fs-extra';
 import path from 'path';
 import type { Readable } from 'stream';
@@ -13,7 +14,7 @@ export class AwsS3 {
   private initialized: boolean = false;
   private s3: S3;
 
-  private uploadS3File(filepath: string, file: Buffer | fs.ReadStream, contentType: string): Promise<string> {
+  public uploadS3File(filepath: string, file: Buffer | fs.ReadStream | Readable, contentType?: string): Promise<string> {
     if (!this.initialized) {
       throw new AppError("Can't upload to s3", 0);
     }
@@ -61,6 +62,55 @@ export class AwsS3 {
     });
   }
 
+  public deleteS3Files(keys: string[]): Promise<void> {
+    if (!this.initialized) {
+      throw new AppError("Can't delete from s3", 0);
+    }
+    logger.info(`Deleting multiple files`);
+    return new Promise((resolve, reject) => {
+      this.s3.deleteObjects(
+        {
+          Bucket: S3_BUCKET_NAME,
+          Delete: {
+            Objects: keys.map((key) => ({ Key: key })),
+          },
+        },
+        function (err, data) {
+          if (err) {
+            reject(err);
+          }
+          if (data) {
+            resolve();
+          }
+        },
+      );
+    });
+  }
+
+  public listObjects(prefix: string, continuationToken?: string, maxKeys?: number): Promise<ListObjectsV2Output> {
+    if (!this.initialized) {
+      throw new AppError("Can't list from s3", 0);
+    }
+    return new Promise((resolve, reject) => {
+      this.s3.listObjectsV2(
+        {
+          Bucket: S3_BUCKET_NAME,
+          Prefix: prefix,
+          ContinuationToken: continuationToken,
+          MaxKeys: maxKeys,
+        },
+        function (err, data) {
+          if (err) {
+            reject(err);
+          }
+          if (data) {
+            resolve(data);
+          }
+        },
+      );
+    });
+  }
+
   constructor() {
     if (!S3_BUCKET_NAME) {
       return;
@@ -83,7 +133,7 @@ export class AwsS3 {
     LastModified: Date;
     ContentLength: number;
     ContentType: string;
-  }> {
+  } | null> {
     if (!this.initialized) {
       throw new AppError("Can't get from s3", 0);
     }
@@ -102,6 +152,9 @@ export class AwsS3 {
         },
       );
     });
+    if (data === null) {
+      return null;
+    }
     return {
       AcceptRanges: data?.AcceptRanges || 'bytes',
       LastModified: data?.LastModified || new Date(),
