@@ -236,7 +236,7 @@ const Jouer = ({ subType }: SubTypeProps) => {
           ],
         },
       } = getLatest || {};
-      //console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
+      console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
       const inputsResponse: string | undefined = inputs
         .map((item: { response: boolean; selectedValue: string }) => {
           if (item.response === true) {
