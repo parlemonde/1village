@@ -6,7 +6,7 @@ const MonComposant = () => {
   // Rendu du composant
   return (
     <div>
-      <Jouer subType={2} />
+      <Jouer subType={1} />
     </div>
   );
 };
