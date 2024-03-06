@@ -155,7 +155,10 @@ const MaClasse = () => {
             <p>Vous n&apos;avez pas d&apos;activités publiées.</p>
           ) : (
             activities.map((activity, index) =>
-              user && activity.userId === user.id && !isMascotte(activity) && activity.type !== 4 ? (
+              user &&
+              activity.userId === user.id &&
+              !isMascotte(activity) &&
+              (activity.type !== 4 || (activity.type === 4 && activity.subType !== 1 && activity.subType !== 2)) ? (
                 <ActivityCard
                   activity={activity}
                   isSelf={true}

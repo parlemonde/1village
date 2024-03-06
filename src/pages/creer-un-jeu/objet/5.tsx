@@ -38,19 +38,19 @@ const MonnaieStep5 = () => {
       subType: GameType.MONEY,
       game1: {
         game: gameConfig[1],
-        language: inputSelectedValue,
+        monney: inputSelectedValue,
         labelPresentation: labelPresentation,
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       game2: {
         game: gameConfig[2],
-        language: inputSelectedValue,
+        monney: inputSelectedValue,
         labelPresentation: labelPresentation,
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       game3: {
         game: gameConfig[3],
-        language: inputSelectedValue,
+        monney: inputSelectedValue,
         labelPresentation: labelPresentation,
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
