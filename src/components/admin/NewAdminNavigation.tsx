@@ -1,16 +1,19 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import GroupIcon from '@mui/icons-material/Group';
-import InsertChartOutlinedOutlinedIcon from '@mui/icons-material/InsertChartOutlinedOutlined';
-import LanguageIcon from '@mui/icons-material/Language';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import { Container, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
 import { useIsH5pEnabled } from 'src/api/h5p/h5p-enabled';
+import AnalyserIcon from 'src/svg/analyser.svg';
+import CreerIcon from 'src/svg/creer.svg';
+import GererIcon from 'src/svg/gerer.svg';
+import MediathequeIcon from 'src/svg/mediatheque.svg';
+import PublierIcon from 'src/svg/publier.svg';
 
+interface NewAdminNavigationProps {
+  changeContent?: any;
+}
 interface NavItemProps {
   key?: string;
   selected: boolean;
@@ -25,6 +28,17 @@ interface Tab {
   Icon: React.ElementType;
 }
 
+const containerStyle = {
+  backgroundColor: 'white',
+  borderRadius: '10px',
+  width: '310px',
+  height: '360px',
+  padding: '15px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+};
+
 const NavItem = ({ selected, onClick, Icon, primary }: NavItemProps) => (
   <ListItem className="like-button" button selected={selected} onClick={onClick}>
     <ListItemIcon>
@@ -34,18 +48,19 @@ const NavItem = ({ selected, onClick, Icon, primary }: NavItemProps) => (
   </ListItem>
 );
 
-export const NewAdminNavigation = () => {
-  const router = useRouter();
-  const [selectedTab, setSelectedTab] = React.useState(-1);
+export const NewAdminNavigation = ({ changeContent }: NewAdminNavigationProps) => {
+  // const router = useRouter();
+  const [selectedTab, setSelectedTab] = React.useState('Créer');
+
   const isH5pEnabled = useIsH5pEnabled();
 
   const tabs: Tab[] = React.useMemo(() => {
     const baseTabs: Tab[] = [
-      { path: '/admin/villages', label: 'Villages', Icon: LanguageIcon },
-      { path: '/admin/users', label: 'Utilisateurs', Icon: GroupIcon },
-      { path: '/admin/featureFlag', label: "Contrôle d'accès", Icon: VpnKeyIcon },
-      { path: '/admin/stats', label: 'Statistiques', Icon: InsertChartOutlinedOutlinedIcon },
-      { path: '/admin/analytics', label: 'Web Analytics', Icon: TimelineIcon },
+      { path: '/admin/villages', label: 'Créer', Icon: CreerIcon },
+      { path: '/admin/users', label: 'Publier', Icon: PublierIcon },
+      { path: '/admin/featureFlag', label: 'Gérer', Icon: GererIcon },
+      { path: '/admin/stats', label: 'Analyser', Icon: AnalyserIcon },
+      { path: '/admin/analytics', label: 'Médiathèque', Icon: MediathequeIcon },
     ];
 
     if (isH5pEnabled) {
@@ -55,20 +70,18 @@ export const NewAdminNavigation = () => {
     return baseTabs;
   }, [isH5pEnabled]);
 
-  React.useEffect(() => {
-    const index = tabs.findIndex((tab) => `/admin/${tab.path.split('/')[2]}` === router.pathname);
-    setSelectedTab(index);
-  }, [router.pathname, tabs]);
-
-  const goToPath = (path: string) => () => {
-    router.push(path);
+  const onTabClick = (label: string) => {
+    setSelectedTab(label);
+    if (changeContent) {
+      changeContent(label);
+    }
   };
 
   return (
-    <Container sx={{ backgroundColor: 'white', borderRadius: '10px', width: '310px', height: '360px' }}>
-      <List>
-        {tabs.map((tab, index: number) => (
-          <NavItem key={tab.label} selected={selectedTab === index} onClick={goToPath(tab.path)} Icon={tab.Icon} primary={tab.label} />
+    <Container className="container-admin-nav" sx={containerStyle}>
+      <List sx={{ padding: 0, margin: 0 }}>
+        {tabs.map((tab) => (
+          <NavItem key={tab.label} selected={selectedTab === tab.label} onClick={() => onTabClick(tab.label)} Icon={tab.Icon} primary={tab.label} />
         ))}
       </List>
     </Container>

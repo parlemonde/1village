@@ -72,6 +72,29 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = useState<User | null>(initialUser || null);
+  const [currentContent, setCurrentContent] = useState('Créer');
+
+  const changeContent = (content) => {
+    setCurrentContent(content);
+  };
+
+  const renderContent = () => {
+    switch (currentContent) {
+      case 'Créer':
+        return <p>Contenu pour Créer</p>;
+      case 'Publier':
+        return <p>Contenu pour Publier</p>;
+      case 'Gérer':
+        return <p>Contenu pour Gérer</p>;
+      case 'Analyser':
+        return <p>Contenu pour Analyser</p>;
+      case 'Médiathèque':
+        return <p>Contenu pour Médiathèque</p>;
+      default:
+        return <p>Contenu par défaut</p>;
+    }
+  };
+
   const onRouterChangeStart = (): void => {
     NProgress.start();
   };
@@ -141,9 +164,10 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                         <NewAdminHeader />
                         <div style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
                           {/* <AdminNavigation /> */}
-                          <NewAdminNavigation />
+                          <NewAdminNavigation changeContent={changeContent} />
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <Component {...pageProps} />
+                            {/* <Component {...pageProps} /> */}
+                            {renderContent()}
                           </div>
                         </div>
                       </div>

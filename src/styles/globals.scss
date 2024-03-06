@@ -63,12 +63,21 @@ body {
       height: 50px;
       padding: 0 50px;
     }
-    > div.like-button {
+    .container-admin-nav ul {
+      & div.like-button:not(first-child) {
+        margin-top: 18px;
+      }
+      & div.like-button:not(last-child) {
+        margin-bottom: 18px;
+      }
+    }
+    div.like-button {
       width: 266px;
       height: 45px;
       background: white;
-      border: 1px solid white;
+      border: 1px solid $primary-color;
       color: $primary-color;
+      border-radius: 10px;
       &.Mui-selected {
         color: white;
         background: $primary-color;
