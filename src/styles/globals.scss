@@ -54,8 +54,25 @@ body {
   }
   &.admin {
     background-color: #d9dbfe91;
+    padding: 0 50px !important;
     #nprogress .bar {
       background-color: white !important;
+    }
+    .container-navbar {
+      display: flex;
+      height: 50px;
+      padding: 0 50px;
+    }
+    > div.like-button {
+      width: 266px;
+      height: 45px;
+      background: white;
+      border: 1px solid white;
+      color: $primary-color;
+      &.Mui-selected {
+        color: white;
+        background: $primary-color;
+      }
     }
   }
 }

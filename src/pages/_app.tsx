@@ -33,6 +33,7 @@ import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
+import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { UserContextProvider } from 'src/contexts/userContext';
@@ -138,8 +139,9 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       <div className="container-admin-portal">
                         {/* <AdminHeader /> */}
                         <NewAdminHeader />
-                        <div style={{ display: 'flex', width: '100%' }}>
-                          <AdminNavigation />
+                        <div style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
+                          {/* <AdminNavigation /> */}
+                          <NewAdminNavigation />
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <Component {...pageProps} />
                           </div>
