@@ -9,6 +9,7 @@ import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
+import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -25,7 +26,7 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
-import type { Game, MimicData } from 'types/game.type';
+import type { Game, MimicData, DataForPlayed } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
@@ -108,7 +109,16 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleS
 
 const POSITION = ['c', 'f', 'i'];
 
-const PlayMimic = () => {
+type SubTypeProps = {
+  subType: GameType;
+};
+const phrases = {
+  [GameType.MIMIC]: ['Phrase 1 pour MIMIC.', 'Phrase 2 pour MIMIC.', 'Phrase 3 pour MIMIC.'],
+  [GameType.MONEY]: ['Phrase 1 pour MONEY.', 'Phrase 2 pour MONEY.', 'Phrase 3 pour MONEY.'],
+  [GameType.EXPRESSION]: ['Phrase 1 pour EXPRESSION.', 'Phrase 2 pour EXPRESSION.', 'Phrase 3 pour EXPRESSION.'],
+};
+
+const Jouer = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
@@ -123,7 +133,9 @@ const PlayMimic = () => {
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
-
+  const { data: getLatest } = useType({ subType });
+  const phrasesForType = phrases[subType];
+  // console.log(phrasesForType);
   const handleConfirmModal = async () => {
     const success = await resetGamesPlayedForUser();
     setIsLastMimicModalOpen(false);
@@ -152,7 +164,7 @@ const PlayMimic = () => {
     setTryCount(0);
     setErrorModalOpen(false);
 
-    const availableGames = await getAvailableGames(GameType.MIMIC);
+    const availableGames = await getAvailableGames(subType);
     const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
 
     const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
@@ -162,12 +174,8 @@ const PlayMimic = () => {
     const NEXT_GAME_MAPPER = {
       [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1],
       [RadioBoxValues.RANDOM]: async () => {
-        return await getRandomGame(GameType.MIMIC);
+        return await getRandomGame(subType);
       },
-      // [RadioBoxValues.MOSAIC]: () => {
-      //   console.error('Not implemented yet');
-      //   return undefined;
-      // },
     };
 
     const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
@@ -178,13 +186,13 @@ const PlayMimic = () => {
     }
 
     setLoadingGame(false);
-  }, [getRandomGame, selectedValue, game, getAvailableGames]);
+  }, [getAvailableGames, subType, selectedValue, game?.id, getRandomGame]);
 
   // Get next game on start and on village change.
   useEffect(() => {
     const getFirstGame = async () => {
       try {
-        const availableGames = await getAvailableGames(GameType.MIMIC);
+        const availableGames = await getAvailableGames(subType);
         if (availableGames.length === 0) {
           setIsLastMimicModalOpen(true);
         }
@@ -197,7 +205,7 @@ const PlayMimic = () => {
       }
     };
     getFirstGame().catch();
-  }, [getAvailableGames]);
+  }, [getAvailableGames, subType]);
 
   const userMap = useMemo(
     () =>
@@ -207,37 +215,61 @@ const PlayMimic = () => {
       }, {}),
     [users],
   );
-  const mimicContent = useMemo(() => {
-    if (game === undefined) {
-      return undefined;
-    }
-    try {
-      const { id, origine, fakeSignification1, fakeSignification2, signification, video } = game;
-      const content: MimicData = { gameId: id, createDate: new Date(), origine, fakeSignification1, fakeSignification2, signification, video };
-      return content;
-    } catch (e) {
-      return undefined;
-    }
-  }, [game]);
+  const playContent = useMemo(() => {
+    if (getLatest) {
+      const {
+        id,
+        createDate,
+        content: {
+          labelPresentation,
+          language,
+          radio,
+          game: [{ inputs }],
+          game: [
+            {
+              inputs: [{ selectedValue: media }],
+            },
+            {
+              inputs: [{ selectedValue: fakeSignification1 }, { selectedValue: fakeSignification2 }],
+            },
+          ],
+        },
+      } = getLatest || {};
+      console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
+      const inputsResponse: string | undefined = inputs
+        .map((item: { response: boolean; selectedValue: string }) => {
+          if (item.response === true) {
+            return item.selectedValue;
+          }
+          return undefined; // Retourner undefined si item.response est false
+        })
+        .find((value: string | undefined) => value !== undefined); // Spécifier le type de retour attendu ici
 
+      //console.log(inputsResponse);
+      const content = { id, createDate, fakeSignification1, fakeSignification2, inputsResponse, media };
+      return content;
+    } else {
+      return undefined;
+    }
+  }, [getLatest]);
   const ResponseButtonDataMapper = useMemo(
     () => [
       {
         value: GameResponseValue.SIGNIFICATION,
-        signification: mimicContent?.signification,
+        signification: playContent?.inputsResponse,
         isSuccess: true,
         isGreenRadio: true,
       },
       {
         value: GameResponseValue.FAKE_SIGNIFICATION_1,
-        signification: mimicContent?.fakeSignification1,
+        signification: playContent?.fakeSignification1,
       },
       {
         value: GameResponseValue.FAKE_SIGNIFICATION_2,
-        signification: mimicContent?.fakeSignification2,
+        signification: playContent?.fakeSignification2,
       },
     ],
-    [mimicContent],
+    [playContent],
   );
 
   const gameCreator = useMemo(() => {
@@ -250,27 +282,6 @@ const PlayMimic = () => {
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
-
-  // tentative d'indexer les réponses, sans succès pour l'insant
-  // const responseMapping: {
-  //   [key: number]: GameResponseValue;
-  // } = {
-  //   0: GameResponseValue.SIGNIFICATION,
-  //   1: GameResponseValue.FAKE_SIGNIFICATION_1,
-  //   2: GameResponseValue.FAKE_SIGNIFICATION_2,
-  // };
-
-  // const choices = useMemo(() => {
-  //   if (game !== undefined) {
-  //     const shuffledIndices = shuffleArray([0, 1, 2]);
-  //     return shuffledIndices.map((index) => responseMapping[index] as unknown as number);
-  //   } else {
-  //     return [0, 1, 2];
-  //   }
-  //   // eslint-disable-next-line
-  // }, [game]);
-
-  // fin de tentative
 
   const handleRadioButtonChange = (event: React.SyntheticEvent) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
@@ -336,10 +347,10 @@ const PlayMimic = () => {
                 {'Une mimique proposée par '}
                 <UserDisplayName className="text" user={gameCreator} noLink={false} />
               </h3>
-              {mimicContent && mimicContent.createDate && (
+              {playContent && playContent.createDate && (
                 <p style={{ fontSize: '0.8rem', color: 'gray' }}>
                   {'publié le '}
-                  {new Date(mimicContent.createDate).toLocaleDateString()}
+                  {new Date(playContent.createDate).toLocaleDateString()}
                   {gameCreatorIsPelico ? (
                     <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
                   ) : (
@@ -377,7 +388,7 @@ const PlayMimic = () => {
             justifyContent="flex-start"
           >
             <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
-              {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
+              {playContent !== undefined && playContent.video !== null && <VideoView id={0} value={playContent.video}></VideoView>}
             </Grid>
             <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>Que signifie cette mimique ?</h1>
@@ -396,7 +407,7 @@ const PlayMimic = () => {
                 choices.map((val, index) => {
                   const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
                   const isCorrect = isSuccess && found;
-                  const mimicOrigine = mimicContent?.origine || '';
+                  const mimicOrigine = playContent?.origine || '';
                   const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
                   return (
                     <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
@@ -464,11 +475,16 @@ const PlayMimic = () => {
         <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
           {/* Todo : modifier la logique du bouton pour qu'il récupère la mimique précédente */}
-          {/* <Grid item xs={3} display="flex" justifyContent="flex-start">
-            <Button variant="outlined" color="primary" onClick={getNextGame}>
-              mimique précédente
-            </Button>
-          </Grid> */}
+          {/*   <div>
+      <h1>{`Phrases pour ${subType}`}</h1>
+      <ul>
+        {phrasesForType.map((phrase, index) => (
+          <li key={index}>{phrase}</li>
+        ))}
+      </ul>
+    </div>
+    Le code a implémenter
+     */}
           <Grid item xs={6} style={{ textAlign: 'center' }}>
             {(found || tryCount > 1) && (
               <div style={{ textAlign: 'center' }}>
@@ -496,4 +512,4 @@ const PlayMimic = () => {
   );
 };
 
-export default PlayMimic;
+export default Jouer;

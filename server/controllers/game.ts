@@ -351,7 +351,6 @@ gameController.get({ path: '/standardGame/:id', userType: UserType.TEACHER }, as
 });
 
 // --- Get one random game standardised to play ---
-
 gameController.get({ path: '/playStandardGame', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) {
     next();

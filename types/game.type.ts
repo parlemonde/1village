@@ -77,15 +77,6 @@ export type MimicData = {
   video: string | null;
 };
 
-// --- Money game three objects & money game structure ---
-export type MoneyData = {
-  gameId: number | null;
-  name: string | null;
-  price: string | null;
-  description: string | null;
-  image: string | null;
-};
-
 // --- structure of each expression game ---
 export type ExpressionData = {
   gameId: number | null;
@@ -96,9 +87,18 @@ export type ExpressionData = {
   fakeSignification2: string | null;
   video: string | null;
 };
+export type MoneyData = {
+  gameId: number | null;
+  createDate: string | Date | null;
+  origine?: string | null;
+  signification: string | null;
+  fakeSignification1: string | null;
+  fakeSignification2: string | null;
+  video: string | null;
+};
 
 // --- structure to send to the server ---
-
+// --- On utilise ce type et pas ce au dessus ---
 export type GameDataStep = {
   game: StepsType[];
   language?: string;
@@ -116,6 +116,13 @@ export type GameDataMonneyOrExpression = {
   game2: GameDataStep;
   game3: GameDataStep;
   selectedPhase: number;
+};
+export type DataForPlayed = {
+  game: StepsType;
+  labelPresentation: string;
+  language?: string;
+  monnaie?: string;
+  radio?: string;
 };
 
 export type GameMimicActivity = Activity<MimicsData>;
