@@ -2,24 +2,17 @@ import { useQuery } from 'react-query';
 
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import { GameType } from 'types/game.type';
 
 type GetAllStandardGameByTypeProps = {
   subType: number;
-  villageId: number;
+  villageId: number | undefined;
 };
 
-// TODO : remove specific mimic management after mimic is standard
 export async function getAllStandardGameByType({ subType, villageId }: GetAllStandardGameByTypeProps) {
-  const path =
-    subType === GameType.MIMIC
-      ? `${serializeToQueryUrl({
-          type: subType,
-          villageId,
-        })}`
-      : `/allStandardGame${serializeToQueryUrl({
-          subType,
-        })}`;
+  const path = `/allStandardGame${serializeToQueryUrl({
+    subType,
+    villageId,
+  })}`;
   const response = await axiosRequest({
     method: 'GET',
     url: `/games${path}`,

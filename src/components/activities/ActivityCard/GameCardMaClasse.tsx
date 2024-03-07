@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
-// import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player';
 
 import { Button, Paper } from '@mui/material';
 
@@ -57,7 +57,7 @@ export const GameCardMaClasse = ({
 
   return (
     <>
-      {activity.subType === 1 || activity.subType === 2 ? (
+      {activity.subType === 1 || activity.subType === 2 || activity.subType === 0 ? (
         <div>
           <Paper
             className={onSelect !== undefined ? 'activity-card--selectable' : ''}
@@ -136,7 +136,16 @@ export const GameCardMaClasse = ({
                   {/* Link is disabled for reaction activity */}
                   {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
                     <>
-                      {/* {activity.subType === 0 && <ReactPlayer width="100%" height="100%" light url={path} style={{ backgroundColor: 'black' }} />} */}
+                      {' '}
+                      {activity.subType === 0 && (
+                        <ReactPlayer
+                          width="100%"
+                          height="100%"
+                          light
+                          url={activity.content.game[0].inputs[0].selectedValue}
+                          style={{ backgroundColor: 'black' }}
+                        />
+                      )}
                       {activity.subType === 1 && (
                         // eslint-disable-next-line
                         // @ts-ignore
@@ -150,11 +159,11 @@ export const GameCardMaClasse = ({
                     </>
                   ) : (
                     <>
-                      {/* {activity.subType === 0 && (
+                      {activity.subType === 0 && (
                         <Link href={path} passHref>
-                          <ReactPlayer width="100%" height="100%" light url={path} style={{ backgroundColor: 'black' }} />
+                          <ReactPlayer width="100%" height="100%" light url={activity.content.game[0].inputs[0].selectedValue} />
                         </Link>
-                      )} */}
+                      )}
                       {activity.subType === 1 && (
                         <Link href={path} passHref>
                           {/* eslint-disable-next-line */}
@@ -176,7 +185,15 @@ export const GameCardMaClasse = ({
 
               <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
                 <p style={{ marginBottom: '2rem' }}>Vous avez créé un jeu des {typeOfGame}s</p>
-                {/* {activity.subType === 0 && <p></p>} */}
+                {activity.subType === 0 && (
+                  <p>
+                    Vous avez choisi de faire deviner la mimique suivante : {activity.content.game[0].inputs[1].selectedValue}
+                    <br />
+                    {activity.content.game[0].inputs[2].selectedValue && (
+                      <span>Et voici son origine : {activity.content.game[0].inputs[2].selectedValue}</span>
+                    )}
+                  </p>
+                )}
                 {activity.subType === 1 && (
                   <p>
                     {/* eslint-disable-next-line */}
@@ -184,8 +201,7 @@ export const GameCardMaClasse = ({
                     Votre jeu a été crée en utilisant la monnaie : {activity.content.monney} et vous avez choisi de faire deviner combien coute cet
                     objet
                     {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    : {activity.content.game[0].inputs[1].selectedValue}
+                    {/* @ts-ignore */}: {activity.content.game[0].inputs[1].selectedValue}
                   </p>
                 )}
                 {activity.subType === 2 && (
@@ -219,7 +235,7 @@ export const GameCardMaClasse = ({
                     )}
                     {isSelf && showEditButtons && (
                       <>
-                        {activity.subType !== 1 && activity.subType !== 2 && (
+                        {activity.subType !== 1 && activity.subType !== 2 && activity.subType !== 0 && (
                           <>
                             <Link
                               href={

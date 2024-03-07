@@ -23,7 +23,7 @@ type GameCardProps = ActivityCardProps<GameActivity> & {
 };
 
 const TYPE_OF_GAME = {
-  [GameType.MIMIC]: 'mimique',
+  [GameType.MIMIC]: 'mimiques',
   [GameType.MONEY]: 'objet',
   [GameType.EXPRESSION]: 'expression',
 };
@@ -66,7 +66,15 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
             {/* Link is disabled for reaction activity */}
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
               <>
-                {activity.subType === 0 && <ReactPlayer width="100%" height="100%" light url={path} style={{ backgroundColor: 'black' }} />}
+                {activity.subType === 0 && (
+                  <ReactPlayer
+                    width="100%"
+                    height="100%"
+                    light
+                    url={activity.content.game[0].inputs[0].selectedValue}
+                    style={{ backgroundColor: 'black' }}
+                  />
+                )}
                 {activity.subType === 1 && (
                   <>
                     {/* eslint-disable-next-line */}
@@ -86,7 +94,13 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
               <>
                 {activity.subType === 0 && (
                   <Link href={path} passHref>
-                    <ReactPlayer width="100%" height="100%" light url={path} style={{ backgroundColor: 'black' }} />
+                    <ReactPlayer
+                      width="75%"
+                      height="100%"
+                      light
+                      url={activity.content.game[0].inputs[0].selectedValue}
+                      style={{ backgroundColor: 'black', margin: 'auto' }}
+                    />
                   </Link>
                 )}
                 {activity.subType === 1 && (

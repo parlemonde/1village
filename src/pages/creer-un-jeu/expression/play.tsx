@@ -2,8 +2,7 @@ import React from 'react';
 
 import Jouer from 'src/components/game/Jouer';
 
-const MonComposant = () => {
-  // Rendu du composant
+const Play = () => {
   return (
     <div>
       <Jouer subType={2} />
@@ -11,4 +10,4 @@ const MonComposant = () => {
   );
 };
 
-export default MonComposant;
+export default Play;

@@ -32,6 +32,14 @@ const activities = [
     disabled: false,
     disabledText: '',
   },
+  {
+    label: 'Jeu des mimiques V2',
+    href: '/creer-un-jeu/mimiques',
+    icon: MimiqueIcon,
+    gameType: GameType.MIMIC,
+    disabled: false,
+    disabledText: '',
+  },
 ];
 
 const Jeu = () => {

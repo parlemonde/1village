@@ -70,7 +70,6 @@ export const ActivityCard = ({
   const userIsPelico = user.type <= UserType.MEDIATOR;
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
-
   const UsedCard = CardTypeMapper[activity.type];
 
   return (
