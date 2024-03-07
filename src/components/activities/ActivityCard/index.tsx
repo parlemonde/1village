@@ -121,6 +121,10 @@ export const ActivityCard = ({
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <p className="text text--small">Publié le {toDate(activity.publishDate as string)} </p>
+            {
+              // eslint-disable-next-line no-console
+              console.log(activity)
+            }
             {userIsPelico ? (
               <Link href={`/pelico-profil`}>
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
