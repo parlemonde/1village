@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Jouer from 'src/components/game/Jouer';
+import Jouer from 'src/components/game/DiplayGameById';
 
 const MonComposant = () => {
   // Rendu du composant

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { Grid, Link } from '@mui/material';
 // import Button from '@mui/material/Button';
@@ -9,7 +9,6 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 import { useAllStandardGameByType } from 'src/api/game/game.getAllBySubtype';
-import { UserContext } from 'src/contexts/userContext';
 import theme from 'src/styles/theme';
 import { GameType } from 'types/game.type';
 
@@ -22,18 +21,17 @@ const TYPE_OF_GAME = {
 
 type SubTypeProps = {
   subType: GameType;
+  villageId: number | undefined;
 };
-const List = ({ subType }: SubTypeProps) => {
-  const { user } = useContext(UserContext);
+
+const List = ({ subType, villageId }: SubTypeProps) => {
   const typeOfGame = TYPE_OF_GAME[subType];
 
-  const villageId = user?.villageId;
-  const { data: allStandardGameByType } = useAllStandardGameByType(subType, villageId as number);
-  console.log(allStandardGameByType);
+  const { data: allStandardGameByType } = useAllStandardGameByType(subType, villageId !== undefined ? villageId : 0);
 
   return (
     <>
-      <Grid container spacing={2} style={{ overflowY: 'auto', maxHeight: '625px', padding: 5 }}>
+      <Grid container spacing={2} style={{ overflowY: 'auto', maxHeight: '650px', padding: 5 }}>
         {allStandardGameByType &&
           allStandardGameByType.map(
             (
