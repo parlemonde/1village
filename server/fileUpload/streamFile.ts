@@ -7,6 +7,11 @@ const getContentTypeFromFileName = (filename: string): string | null => mime.loo
 
 export async function streamFile(file: string, req: Request, res: Response, next: NextFunction): Promise<void> {
   const data = await getFileData(file);
+  if (data === null) {
+    next();
+    return;
+  }
+
   const size = data.ContentLength;
   const range = req.headers.range;
   const contentType =

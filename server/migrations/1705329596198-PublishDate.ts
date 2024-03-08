@@ -7,13 +7,15 @@ export class PublishDate1705329596198 implements MigrationInterface {
       'activity',
       new TableColumn({
         name: 'publishDate',
-        type: 'date',
+        type: 'datetime',
         isNullable: true,
       }),
     );
+    await queryRunner.query('UPDATE activity SET publishDate = createDate WHERE publishDate IS NULL');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropColumn('activity', 'publishDate');
+    await queryRunner.query('ALTER TABLE "activity" DROP COLUMN "publishDate"');
   }
 }

@@ -50,7 +50,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
                 <UserDisplayName user={user} activity={activity} displayAsUser={activity.displayAsUser} />
               </h2>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+                <p className="text text--small">Publié le {toDate(activity.publishDate as string)} </p>
                 {isPelico ? (
                   <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
                 ) : (
@@ -69,16 +69,16 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
           </div>
         )}
 
-        {isPresentation(activity) && <ContentView content={activity.content} />}
+        {isPresentation(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isMascotte(activity) && <MascotteActivityView activity={activity} user={user} />}
         {isQuestion(activity) && <p>{activity.content[0]?.value}</p>}
         {isEnigme(activity) && <EnigmeActivityView activity={activity} user={user} isAnswer={isAnswer} />}
         {isDefi(activity) && <DefiActivityView activity={activity} user={user} />}
         {isFreeContent(activity) && <FreeContentView activity={activity} user={user} />}
-        {isIndice(activity) && <ContentView content={activity.content} />}
-        {isSymbol(activity) && <ContentView content={activity.content} />}
-        {isReportage(activity) && <ContentView content={activity.content} />}
-        {isReaction(activity) && <ContentView content={activity.content} />}
+        {isIndice(activity) && <ContentView content={activity.content} activityId={activity.id} />}
+        {isSymbol(activity) && <ContentView content={activity.content} activityId={activity.id} />}
+        {isReportage(activity) && <ContentView content={activity.content} activityId={activity.id} />}
+        {isReaction(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isStory(activity) && <StoryActivityView activity={activity} user={user} />}
         {isVerseRecord(activity) && <VerseActivityView activity={activity} user={user} />}
       </div>

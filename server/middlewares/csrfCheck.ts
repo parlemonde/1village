@@ -1,7 +1,7 @@
 import Tokens from 'csrf';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
-import { getHeader } from '../utils';
+import { getHeader, getQueryString } from '../utils';
 
 export function crsfProtection(): RequestHandler {
   // token repo
@@ -17,7 +17,7 @@ export function crsfProtection(): RequestHandler {
     }
 
     // get token from header ['csrf-token'] or set it to null;
-    const token: string | null = getHeader(req, 'csrf-token') || null;
+    const token: string | null = getHeader(req, 'csrf-token') || getQueryString(req.query['_csrf']) || null;
 
     // return either the not null token or a new token based on the secret.
     req.getCsrfToken = () => {

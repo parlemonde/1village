@@ -26,6 +26,7 @@ export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
   const firstText = firstTextContent ? htmlToText(firstTextContent.value) : '';
 
   const enigmeType = ENIGME_TYPES[activity.subType ?? 0] ?? ENIGME_TYPES[0];
+  const enigmeTitle = activity.subType === -1 ? activity.data.themeName : enigmeType.title;
 
   return (
     <div
@@ -58,7 +59,7 @@ export const EnigmeCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{enigmeType.title}</h3>
+        <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{enigmeTitle}</h3>
         <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}

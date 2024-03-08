@@ -147,7 +147,7 @@ const getActivities = async ({
 
   const activities = await subQueryBuilder
     .orderBy('activity.isPinned', 'DESC')
-    .addOrderBy('activity.createDate', 'DESC')
+    .addOrderBy('activity.publishDate', 'DESC')
     .limit(limit)
     .offset(page * limit)
     .getMany();

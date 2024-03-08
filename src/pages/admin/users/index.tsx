@@ -15,25 +15,24 @@ import MaterialLink from '@mui/material/Link';
 import NoSsr from '@mui/material/NoSsr';
 import Tooltip from '@mui/material/Tooltip';
 
-import { getTeacherOfStudent } from 'src/api/student/student.get';
-import { getLinkedStudentsToUser } from 'src/api/user/user.get';
+import { useUsers } from 'src/api/user/user.list';
 import { Modal } from 'src/components/Modal';
 import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { UserContext } from 'src/contexts/userContext';
-import { useUsers, useUserRequests } from 'src/services/useUsers';
+import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import { countryToFlag } from 'src/utils';
 import { exportJsonToCsv } from 'src/utils/csv-export';
-import type { User } from 'types/user.type';
-import { userTypeNames, UserType } from 'types/user.type';
+import { userTypeNames } from 'types/user.type';
 import type { Village } from 'types/village.type';
 
 const Users = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
-  const { users } = useUsers();
+  const { data, isLoading } = useUsers();
+  const users = React.useMemo(() => data || [], [data]);
   const { villages } = useVillages();
   const villageMap = villages.reduce<{ [key: number]: Village }>((acc, village) => {
     acc[village.id] = village;
@@ -44,7 +43,6 @@ const Users = () => {
   const [search, setSearch] = useState('');
   const [userTypeFilter, setUserTypeFilter] = useState('');
   const [countrySearch, setCountrySearch] = useState('');
-  const [tableData, setTableData] = useState<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }[]>([]);
 
   const filteredUsers = useMemo(
     () =>
@@ -57,50 +55,20 @@ const Users = () => {
       }),
     [users, search, userTypeFilter, countrySearch],
   );
-
-  React.useEffect(() => {
-    const fetchTableData = async () => {
-      const data = await Promise.all(
-        filteredUsers.map(async (u) => {
-          return {
-            id: u.id,
-            firstname: u.firstname,
-            lastname: u.lastname,
-            email: u.email,
-            school: (await getUserSchool(u)) || <span style={{ color: 'grey' }}>Non renseignée</span>,
-            country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
-            village: u.villageId ? (
-              villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
-            ) : (
-              <span style={{ color: 'grey' }}>Non assigné</span>
-            ),
-            type: <Chip size="small" label={userTypeNames[u.type]} />,
-          };
-        }),
-      );
-      setTableData(data);
-    };
-    fetchTableData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredUsers]);
-
-  const getUserSchool = async (user: User) => {
-    if (!user) return;
-    else if (user.type !== UserType.FAMILY) return user.school;
-
-    const linkedStudents = await getLinkedStudentsToUser(user.id);
-
-    if (linkedStudents.length === 0) return <span style={{ color: 'grey' }}>Aucun étudiant lié à ce compte</span>;
-
-    const studentsSchool = await Promise.all(
-      linkedStudents.map(async (linkedStudent) => {
-        if (!linkedStudent) return;
-        const teacher = await getTeacherOfStudent(linkedStudent.id);
-        return teacher.school;
-      }),
-    );
-    return studentsSchool.join(', ');
-  };
+  const tableData = useMemo(
+    () =>
+      filteredUsers.map((u) => ({
+        ...u,
+        country: u.country ? `${countryToFlag(u.country?.isoCode)} ${u.country?.name}` : <span style={{ color: 'grey' }}>Non renseignée</span>,
+        village: u.villageId ? (
+          villageMap[u.villageId]?.name || <span style={{ color: 'grey' }}>Non assigné</span>
+        ) : (
+          <span style={{ color: 'grey' }}>Non assigné</span>
+        ),
+        type: <Chip size="small" label={userTypeNames[u.type]} />,
+      })),
+    [filteredUsers, villageMap],
+  );
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -115,20 +83,23 @@ const Users = () => {
   }, []);
 
   const handleExportToCSV = () => {
-    if (filteredUsers.length < 1) return;
+    if (filteredUsers.length === 0) {
+      return;
+    }
 
     const datasToExport = filteredUsers.map((user) => {
       return {
-        firstname: user.firstname,
-        lastname: user.lastname,
+        firstname: user.firstname ? user.firstname : 'Non renseigné',
+        lastname: user.lastname ? user.lastname : 'Non renseigné',
         email: user.email,
         school: user.school ? user.school : 'Non renseignée',
         village: user.villageId ? villageMap[user.villageId]?.name : 'Non renseigné',
         country: user.country ? user.country.name : 'Non renseignée',
+        type: user.type ? userTypeNames[user.type] : 'Non renseigné',
       };
     });
 
-    const headers = ['Prenom', 'Nom', 'Email', 'Ecole', 'Village', 'Pays'];
+    const headers = ['Prenom', 'Nom', 'Email', 'Ecole', 'Village', 'Pays', 'Rôle'];
 
     let userLabel = 'liste-utilisateurs-';
 
@@ -250,7 +221,7 @@ const Users = () => {
           </Button>
         </div>
         <AdminTable
-          emptyPlaceholder={filteredUsers.length > 0 ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
+          emptyPlaceholder={isLoading ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
           data={tableData}
           columns={[
             { key: 'firstname', label: 'Prénom', sortable: true },
