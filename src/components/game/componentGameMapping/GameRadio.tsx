@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { RadioGroup, Radio, FormControlLabel } from '@mui/material';
 
-import type { inputType } from 'src/config/games/games';
+import type { inputType } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
 
 const GameRadio = ({ input }: { input: inputType }) => {

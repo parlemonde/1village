@@ -4,8 +4,8 @@ import GameField from './componentGameMapping/GameField';
 import GameMedia from './componentGameMapping/GameMedia';
 import GameRadio from './componentGameMapping/GameRadio';
 import GameSelect from './componentGameMapping/GameSelect';
-import type { hiddenType, inputType } from 'src/config/games/games';
-import { InputTypeEnum } from 'src/config/games/games';
+import type { hiddenType, inputType } from 'src/config/games/game';
+import { InputTypeEnum } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
 
 interface PlayProps {

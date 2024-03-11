@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import { TextField } from '@mui/material';
 
-import type { inputType } from 'src/config/games/games';
+import type { inputType } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
 
 const GameField = ({ input }: { input: inputType }) => {
