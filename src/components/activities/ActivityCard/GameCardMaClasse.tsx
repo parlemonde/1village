@@ -55,6 +55,22 @@ export const GameCardMaClasse = ({
   const typeOfGame = TYPE_OF_GAME[gameType];
   const path = `/creer-un-jeu/${typeOfGame}/jouer/${activity.id}`;
 
+  // eslint-disable-next-line
+  // @ts-ignore
+  const media = activity.content.game[0].inputs[0].selectedValue || '';
+  // eslint-disable-next-line
+  // @ts-ignore
+  const responseToDisplay = activity.content.game[0].inputs[1].selectedValue.toLowerCase() || '';
+  // eslint-disable-next-line
+  // @ts-ignore
+  const origine = activity.content.game[0].inputs[2].selectedValue || '';
+  // eslint-disable-next-line
+  // @ts-ignore
+  const language = activity.content.language || '';
+  // eslint-disable-next-line
+  // @ts-ignore
+  const monney = activity.content.monney || '';
+
   return (
     <>
       {activity.subType === 1 || activity.subType === 2 || activity.subType === 0 ? (
@@ -121,7 +137,6 @@ export const GameCardMaClasse = ({
                 />
               )}
             </div>
-
             <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'flex-start' }}>
               <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
                 <div
@@ -137,99 +152,51 @@ export const GameCardMaClasse = ({
                   {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
                     <>
                       {' '}
-                      {activity.subType === 0 && (
-                        <ReactPlayer
-                          width="100%"
-                          height="100%"
-                          light
-                          // eslint-disable-next-line
-                          // @ts-ignore
-                          url={activity.content.game[0].inputs[0].selectedValue}
-                          style={{ backgroundColor: 'black' }}
-                        />
-                      )}
-                      {activity.subType === 1 && (
-                        // eslint-disable-next-line
-                        // @ts-ignore
-                        <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
-                      )}
-                      {activity.subType === 2 && (
-                        // eslint-disable-next-line
-                        // @ts-ignore
-                        <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
-                      )}
+                      {activity.subType === 0 && <ReactPlayer width="100%" height="100%" light url={media} style={{ backgroundColor: 'black' }} />}
+                      {activity.subType === 1 && <Image layout="fill" objectFit="contain" src={media} unoptimized />}
+                      {activity.subType === 2 && <Image layout="fill" objectFit="contain" src={media} unoptimized />}
                     </>
                   ) : (
                     <>
                       {activity.subType === 0 && (
                         <Link href={path} passHref>
-                          {/* eslint-disable-next-line */}
-                          {/* @ts-ignore */}
-                          <ReactPlayer width="100%" height="100%" light url={activity.content.game[0].inputs[0].selectedValue} />
+                          <ReactPlayer width="100%" height="100%" light url={media} />
                         </Link>
                       )}
                       {activity.subType === 1 && (
                         <Link href={path} passHref>
-                          {/* eslint-disable-next-line */}
-                          {/* @ts-ignore */}
-                          <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                          <Image layout="fill" objectFit="contain" src={media} unoptimized />
                         </Link>
                       )}
                       {activity.subType === 2 && (
                         <Link href={path} passHref>
-                          {/* eslint-disable-next-line */}
-                          {/* @ts-ignore */}
-                          <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                          <Image layout="fill" objectFit="contain" src={media} unoptimized />
                         </Link>
                       )}
                     </>
                   )}
                 </div>
               </div>
-
               <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
                 <p style={{ marginBottom: '2rem' }}>Vous avez créé un jeu des {typeOfGame}s</p>
                 {activity.subType === 0 && (
                   <p>
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    Vous avez choisi de faire deviner la mimique suivante : {activity.content.game[0].inputs[1].selectedValue}
+                    Vous avez choisi de faire deviner la mimique suivante : {responseToDisplay}
                     <br />
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    {activity.content.game[0].inputs[2].selectedValue && (
-                      // eslint-disable-next-line
-                      // @ts-ignore
-                      <span>Et voici son origine : {activity.content.game[0].inputs[2].selectedValue}</span>
-                    )}
+                    {origine.lenght > 1 && <span>Et voici son origine : {origine}</span>}
                   </p>
                 )}
                 {activity.subType === 1 && (
                   <p>
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    Votre jeu a été crée en utilisant la monnaie : {activity.content.monney} et vous avez choisi de faire deviner combien coute cet
-                    objet
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    : {activity.content.game[0].inputs[1].selectedValue}
+                    Votre jeu a été crée en utilisant la monnaie : {monney} et vous avez choisi de faire deviner combien coute cet objet :{' '}
+                    {responseToDisplay}
                   </p>
                 )}
                 {activity.subType === 2 && (
                   <p>
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    Votre jeu a été crée en utilisant la langue : {activity.content.language} et vous avez choisi de faire deviner cette expression :{' '}
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    {activity.content.game[0].inputs[1].selectedValue} <br />
-                    {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}
-                    {activity.content.game[0].inputs[2].selectedValue && (
-                      // eslint-disable-next-line
-                      // @ts-ignore
-                      <span>Et voici la traduction : {activity.content.game[0].inputs[2].selectedValue}</span>
-                    )}{' '}
+                    Votre jeu a été crée en utilisant la langue : {language} et vous avez choisi de faire deviner cette expression :{' '}
+                    {responseToDisplay} <br />
+                    {origine.lenght > 1 && <span>Et voici la traduction : {origine}</span>}
                   </p>
                 )}
                 {noButtons || (
