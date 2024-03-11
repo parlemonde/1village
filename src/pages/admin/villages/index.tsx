@@ -86,7 +86,7 @@ const Villages = () => {
         </MaterialLink>
       </Link>
       <AdminTile
-        title="Liste des villages FRA"
+        title="Liste des villages"
         toolbarButton={
           <>
             <Button
