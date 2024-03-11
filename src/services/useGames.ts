@@ -227,6 +227,5 @@ export const useGameRequests = () => {
     sendNewGameResponse,
     resetGamesPlayedForUser: resetGamesPlayedForUser,
     getGameStats,
-    newSendNewGameResponse,
   };
 };

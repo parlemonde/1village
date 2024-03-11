@@ -138,7 +138,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
   const gameId = typeof id === 'string' ? parseInt(id, 10) : undefined;
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
-  // console.log(getOneGameById);
   const displayPhrasesByType = phrase[subType];
   // console.log(displayPhrasesByTypeForType);
   const handleConfirmModal = async () => {
@@ -226,7 +225,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       const {
         id,
         createDate,
-        content: {
+        data: {
           labelPresentation,
           language,
           radio,
