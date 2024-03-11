@@ -9,7 +9,7 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
-import type { inputType } from 'src/config/games/game';
+import type { inputType } from 'src/config/games/games';
 import { GameContext } from 'src/contexts/gameContext';
 import { errorColor, primaryColor, bgPage } from 'src/styles/variables.const';
 
