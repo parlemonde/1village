@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import { GameType } from 'types/game.type';
+// import { GameType } from 'types/game.type';
 
 type GetOneGameByIdProps = {
   subType: number;

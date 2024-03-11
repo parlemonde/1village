@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useContext } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 // import AppsIcon from '@mui/icons-material/Apps';
@@ -10,13 +10,13 @@ import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/mat
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
-import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
+// import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
-import { UserDisplayName } from 'src/components/UserDisplayName';
-import { RightNavigation } from 'src/components/accueil/RightNavigation';
+// import { UserDisplayName } from 'src/components/UserDisplayName';
+// import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import GameStats from 'src/components/activities/GameStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import ResponseButton from 'src/components/buttons/GameResponseButton';
@@ -27,7 +27,8 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
-import type { Game, MimicData, DataForPlayed } from 'types/game.type';
+// import type { Game, MimicData, DataForPlayed } from 'types/game.type';
+import type { Game } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
@@ -123,14 +124,17 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
+  // const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
+  const { sendNewGameResponse, getGameStats, resetGamesPlayedForUser } = useGameRequests();
 
-  const [game, setGame] = useState<Game | undefined>(undefined);
+  // const [game, setGame] = useState<Game | undefined>(undefined);
+  const [game] = useState<Game | undefined>(undefined);
   const [tryCount, setTryCount] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [isLastMimicModalOpen, setIsLastMimicModalOpen] = useState<boolean>(false);
-  const [loadingGame, setLoadingGame] = useState<boolean>(true);
+  // const [loadingGame, setLoadingGame] = useState<boolean>(true);
+  // const [loadingGame, setLoadingGame] = useState<boolean>(true);
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
@@ -227,9 +231,9 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
         id,
         createDate,
         content: {
-          labelPresentation,
-          language,
-          radio,
+          // labelPresentation,
+          // language,
+          // radio,
           game: [{ inputs }],
           game: [
             {
@@ -294,7 +298,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
     setSelectedValue(selected as RadioBoxValues);
     if (selected === RadioBoxValues.RANDOM) {
-      setLoadingGame(true);
+      // setLoadingGame(true);
       //getNextGame();
     }
   };
