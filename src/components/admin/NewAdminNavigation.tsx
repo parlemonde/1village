@@ -14,7 +14,7 @@ interface NewAdminNavigationProps {
 interface NavItemProps {
   key?: number;
   selected: boolean;
-  onClick: (ev: Event) => void;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
   Icon: React.ElementType;
   primary: string;
 }

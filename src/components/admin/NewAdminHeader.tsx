@@ -3,11 +3,11 @@ import React from 'react';
 
 import { Button, AppBar, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 
-import { primaryColor, defaultContainedButtonStyle } from 'src/styles/variables.const';
+import { primaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 
 interface ElevationScrollProps {
-  children: React.ReactElement;
+  children?: React.ReactElement;
 }
 
 function ElevationScroll({ children }: ElevationScrollProps) {
@@ -15,6 +15,7 @@ function ElevationScroll({ children }: ElevationScrollProps) {
     disableHysteresis: true,
     threshold: 0,
   });
+  if (!children) return null;
   return React.cloneElement(children, {
     elevation: trigger ? 4 : 0,
   });

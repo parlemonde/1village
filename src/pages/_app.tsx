@@ -78,7 +78,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   const [user, setUser] = useState<User | null>(initialUser || null);
   const [currentContent, setCurrentContent] = useState('Créer');
 
-  const changeContent = (content: unknown) => {
+  const changeContent = (content: string) => {
     setCurrentContent(content);
   };
 

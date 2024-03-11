@@ -23,7 +23,7 @@ export const Creer = () => {
   ];
 
   const NavItem = ({ link, primary }: NavItemProps) => (
-    <ListItem className="like-button grey" component="a" button link={link}>
+    <ListItem className="like-button grey" component="a" button href={link}>
       <ListItemText primary={primary} />
       <ListItemIcon>
         <DoubleChevronRightIcon />
