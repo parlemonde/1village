@@ -1,5 +1,5 @@
 import type { Activity } from './activity.type';
-import type { StepsType } from 'src/config/games/game';
+import type { StepsType } from 'src/config/games/games';
 
 export enum GameType {
   MIMIC = 0,

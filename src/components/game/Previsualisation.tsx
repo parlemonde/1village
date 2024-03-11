@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import router from 'next/router';
 import React, { useContext } from 'react';
-// import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player';
 
 import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { CustomRadio } from '../buttons/CustomRadio';
 import { EditButton } from '../buttons/EditButton';
-import type { inputType } from 'src/config/games/game';
-import { InputTypeEnum } from 'src/config/games/game';
+import type { inputType } from 'src/config/games/games';
+import { InputTypeEnum } from 'src/config/games/games';
 import { GameContext } from 'src/contexts/gameContext';
 
 type PrevisualisationProps = {
@@ -25,9 +25,13 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
         });
         return filteredItems || [];
       });
-      return { step: index + 1, responses: ([] as inputType[]).concat(...reponseInStep) };
+      return {
+        step: gameConfig.length === 4 ? index : index + 1,
+        responses: ([] as inputType[]).concat(...reponseInStep),
+      };
     })
     .filter((elem) => elem.responses.length > 0);
+
   return (
     <div>
       <>
@@ -37,7 +41,7 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
           const CArea = step.responses.filter(
             (res) => res?.type !== InputTypeEnum.IMAGE && res?.type !== InputTypeEnum.VIDEO && res?.response !== true && res?.response !== false,
           );
-          const hasCArea = CArea.length > 1;
+          const hasCArea = CArea.length >= 1;
           return (
             <div
               key={stepIndex}
@@ -49,6 +53,7 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
                 border: '1px dotted #ccc',
                 borderRadius: '8px',
                 margin: '10px 0',
+                padding: '10px',
               }}
             >
               <div style={{ gridArea: 'd', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -64,13 +69,9 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
                   <div key={index} style={{ position: 'relative', width: '100%', height: '100%' }}>
                     {/* Taille Image a régler  + Liens en fonction de la steps incrémentation + Boutton */}
                     {elem.selectedValue && elem.type === 3 ? (
-                      <Image
-                        layout="fill"
-                        objectFit="contain" // Utilisez "contain" pour ajuster l'image à la largeur de la div tout en conservant le rapport hauteur/largeur
-                        alt="Image à deviner"
-                        src={elem.selectedValue}
-                        unoptimized
-                      />
+                      <Image layout="fill" objectFit="contain" alt="Image à deviner" src={elem.selectedValue} unoptimized />
+                    ) : elem.selectedValue && elem.type === 4 ? (
+                      <ReactPlayer url={elem.selectedValue} width={'100%'} height={'100%'} controls={true} light />
                     ) : null}
                   </div>
                 ))}
@@ -92,7 +93,9 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
               {hasCArea && (
                 <div style={{ gridArea: 'c' }}>
                   {CArea.map((elem, index) => (
-                    <div key={index}>{elem?.selectedValue}</div>
+                    <div style={{ paddingLeft: 20, paddingTop: 20 }} key={index}>
+                      {elem?.selectedValue}
+                    </div>
                   ))}
                 </div>
               )}

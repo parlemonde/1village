@@ -70,7 +70,6 @@ export const ActivityCard = ({
   const userIsPelico = user.type <= UserType.MEDIATOR;
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
-
   const UsedCard = CardTypeMapper[activity.type];
 
   return (
@@ -87,7 +86,7 @@ export const ActivityCard = ({
       style={{
         margin: noMargin || forComment ? '0' : '1rem 0',
         cursor: onSelect !== undefined ? 'pointer' : 'unset',
-        border: activity?.isPinned ? `2px solid ${primaryColor}` : '10px solid red',
+        border: activity?.isPinned ? `2px solid ${primaryColor}` : undefined,
       }}
     >
       <div className="activity-card__header">

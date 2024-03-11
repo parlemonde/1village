@@ -18,7 +18,7 @@ import type { GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
-const ExpressionStep5 = () => {
+const MimiqueStep4 = () => {
   const router = useRouter();
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
@@ -27,7 +27,6 @@ const ExpressionStep5 = () => {
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const { inputSelectedValue } = useContext(GameContext);
   const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
@@ -35,24 +34,18 @@ const ExpressionStep5 = () => {
       userId: user?.id || 0,
       villageId: village?.id || 0,
       type: ActivityType.GAME,
-      subType: GameType.EXPRESSION,
+      subType: GameType.MIMIC,
       game1: {
-        game: gameConfig[1],
-        language: inputSelectedValue,
+        game: gameConfig[0],
         labelPresentation: labelPresentation,
-        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       game2: {
-        game: gameConfig[2],
-        language: inputSelectedValue,
+        game: gameConfig[1],
         labelPresentation: labelPresentation,
-        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       game3: {
-        game: gameConfig[3],
-        language: inputSelectedValue,
+        game: gameConfig[2],
         labelPresentation: labelPresentation,
-        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       selectedPhase: selectedPhase,
     };
@@ -60,7 +53,7 @@ const ExpressionStep5 = () => {
     setIsLoading(true);
     await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
-    router.push('/creer-un-jeu/expression/success');
+    router.push('/creer-un-jeu/mimiques/success');
     setIsLoading(false);
   };
 
@@ -91,18 +84,12 @@ const ExpressionStep5 = () => {
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
-          steps={[inputSelectedValue || 'Langue', '1ère expression', '2ème expression', '3ème expression', 'Prévisualisation']}
-          urls={[
-            '/creer-un-jeu/expression/1',
-            '/creer-un-jeu/expression/2',
-            '/creer-un-jeu/expression/3',
-            '/creer-un-jeu/expression/4',
-            '/creer-un-jeu/expression/5',
-          ]}
+          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualisation']}
+          urls={['/creer-un-jeu/mimiques/1', '/creer-un-jeu/mimiques/2', '/creer-un-jeu/mimiques/3', '/creer-un-jeu/mimiques/4']}
           activeStep={4}
         />
         <div className="width-900">
-          <CreateGame stepNumber={4} />
+          <CreateGame stepNumber={3} />
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             {isObservator ? (
               <Tooltip title="Action non autorisée" arrow>
@@ -122,7 +109,7 @@ const ExpressionStep5 = () => {
             )}
           </div>
         </div>
-        <Previsualisation baseUrl={'/creer-un-jeu/expression/'} />
+        <Previsualisation baseUrl={'/creer-un-jeu/mimiques/'} />
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
@@ -131,4 +118,4 @@ const ExpressionStep5 = () => {
   );
 };
 
-export default ExpressionStep5;
+export default MimiqueStep4;

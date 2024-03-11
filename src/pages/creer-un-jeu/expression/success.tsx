@@ -17,6 +17,11 @@ const PresentationSuccess = () => {
           </Link>
         </p>
       </div>
+      <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}>
+        <Link href="/creer-un-jeu/expression/displayList" passHref>
+          {'Ou découvrez les jeux des autres Pélicopains !'}
+        </Link>
+      </p>
     </Base>
   );
 };

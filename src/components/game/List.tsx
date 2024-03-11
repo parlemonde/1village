@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 
 import { Grid, Link } from '@mui/material';
 // import Button from '@mui/material/Button';
@@ -14,7 +15,7 @@ import { GameType } from 'types/game.type';
 
 // This mapping is used to create routes dynamically
 const TYPE_OF_GAME = {
-  [GameType.MIMIC]: 'mimique',
+  [GameType.MIMIC]: 'mimiques',
   [GameType.MONEY]: 'objet',
   [GameType.EXPRESSION]: 'expression',
 };
@@ -32,7 +33,7 @@ const List = ({ subType, villageId }: SubTypeProps) => {
   return (
     <>
       <Grid container spacing={2} style={{ overflowY: 'auto', maxHeight: '650px', padding: 5 }}>
-        {allStandardGameByType &&
+        {allStandardGameByType && allStandardGameByType.length > 0 ? (
           allStandardGameByType.map(
             (
               item: {
@@ -48,25 +49,40 @@ const List = ({ subType, villageId }: SubTypeProps) => {
                 <Card sx={{ maxWidth: 250 }}>
                   <ImageListItem>
                     <Link href={`/creer-un-jeu/${typeOfGame}/jouer/${item.id}`}>
-                      <CardMedia
-                        component="img"
-                        alt="Game Image"
-                        image={item.content.game[0].inputs[0].selectedValue}
-                        sx={{ width: theme.breakpoints.down('md') ? '100%' : '250px' }}
-                      />
+                      {subType === 0 ? (
+                        <div style={{ height: '250px', width: 'auto' }}>
+                          <ReactPlayer
+                            width="100%"
+                            height="100%"
+                            light
+                            url={item.content.game[0].inputs[0].selectedValue}
+                            style={{ backgroundColor: 'black' }}
+                          />
+                        </div>
+                      ) : (
+                        <CardMedia
+                          component="img"
+                          alt="Game Image"
+                          image={item.content.game[0].inputs[0].selectedValue}
+                          sx={{ width: theme.breakpoints.down('md') ? '100%' : '250px' }}
+                        />
+                      )}
                     </Link>
                   </ImageListItem>
                   <div className="test" style={{ display: 'flex', justifyItems: 'center', flexDirection: 'column', alignItems: 'center' }}>
                     <ImageListItemBar title={item.content.labelPresentation} position="below" />
                     {/* Pour l'instant le bouton Jouer ne doit pas être utilisé */}
                     {/* <CardActions>
-                    <Button size="small">Jouer</Button>
-                    </CardActions> */}
+                  <Button size="small">Jouer</Button>
+                </CardActions> */}
                   </div>
                 </Card>
               </Grid>
             ),
-          )}
+          )
+        ) : (
+          <div style={{ margin: 'auto' }}>Oups, on dirait qu&apos;il n&apos;y a aucun jeu pour le moment.</div>
+        )}
       </Grid>
     </>
   );

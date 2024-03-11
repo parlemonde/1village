@@ -1,6 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
-import React, { useState, useMemo, useEffect } from 'react';
+import React from 'react';
 import ReactPlayer from 'react-player';
 
 import { Button, Paper } from '@mui/material';
@@ -9,8 +10,6 @@ import { titles, REACTIONS, icons } from '../utils';
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 import { isReaction } from 'src/activity-types/anyActivity';
-import { useCountAllStandardGame } from 'src/api/game/game.getAllGames';
-import { useCountAbleToPlayStandardGame } from 'src/api/game/game.getAvailable';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -23,6 +22,8 @@ import { LinkNotAllowedInPath } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 import type { GameActivity } from 'types/game.type';
 import { UserType } from 'types/user.type';
+
+// TODO : Remove all ts-ignore when mimic is standardized
 
 type GameCardProps = ActivityCardProps<GameActivity> & {
   gameType: GameType;
@@ -51,172 +52,238 @@ export const GameCardMaClasse = ({
   const { activity: responseActivity } = useActivity(activity.responseActivityId ?? -1);
   const ActivityIcon = icons[activity.type] || null;
 
-  const [totalGamesCount, setTotalGamesCount] = useState<number>(0);
-  const [availableGamesCount, setAvailableGamesCount] = useState<number>(0);
-  const { data: countAbleToPlay } = useCountAbleToPlayStandardGame(gameType, activity.villageId);
-  const { data: countAllStandardGame } = useCountAllStandardGame(gameType, activity.villageId);
   const typeOfGame = TYPE_OF_GAME[gameType];
-  const latestGameUrl = useMemo(() => {
-    const villageId = activity.villageId;
-    const type = activity.type;
-    return `/creer-un-jeu/mimique/jouer/?villageId=${villageId}&type=${type}`;
-  }, [activity.villageId, activity.type]);
-  const path = `/creer-un-jeu/${typeOfGame}/jouer`;
-
-  useEffect(() => {
-    if (countAbleToPlay && countAllStandardGame) {
-      setAvailableGamesCount(countAbleToPlay);
-      setTotalGamesCount(countAllStandardGame);
-    }
-  }, [countAbleToPlay, countAllStandardGame, gameType]);
-  const labelPresentation = activity.data.presentation || activity.data.labelPresentation;
-
-  console.log('activity', activity);
+  const path = `/creer-un-jeu/${typeOfGame}/jouer/${activity.id}`;
 
   return (
     <>
-      <Paper
-        className={onSelect !== undefined ? 'activity-card--selectable' : ''}
-        variant={forComment ? 'elevation' : 'outlined'}
-        square={!forComment}
-        elevation={forComment ? 2 : 0}
-        onClick={() => {
-          if (onSelect !== undefined) {
-            onSelect();
-          }
-        }}
-        style={{
-          margin: noMargin || forComment ? '0' : '1rem 0',
-          cursor: onSelect !== undefined ? 'pointer' : 'unset',
-          border: activity?.isPinned ? `2px solid ${primaryColor}` : '10px solid red',
-        }}
-      >
-        <div className="activity-card__header">
-          <AvatarImg
-            user={user}
-            size="small"
-            src={userIsPelico ? '/pelico-profil' : ''}
-            style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }}
-            noLink={noButtons}
-            displayAsUser={activity.displayAsUser}
-          />
-          <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
-            <p className="text">
-              <UserDisplayName
-                className="text"
+      {activity.subType === 1 || activity.subType === 2 || activity.subType === 0 ? (
+        <div>
+          <Paper
+            className={onSelect !== undefined ? 'activity-card--selectable' : ''}
+            variant={forComment ? 'elevation' : 'outlined'}
+            square={!forComment}
+            elevation={forComment ? 2 : 0}
+            onClick={() => {
+              if (onSelect !== undefined) {
+                onSelect();
+              }
+            }}
+            style={{
+              margin: noMargin || forComment ? '0' : '1rem 0',
+              cursor: onSelect !== undefined ? 'pointer' : 'unset',
+              border: activity?.isPinned ? `2px solid ${primaryColor}` : undefined,
+            }}
+          >
+            <div className="activity-card__header">
+              <AvatarImg
                 user={user}
+                size="small"
+                src={userIsPelico ? '/pelico-profil' : ''}
+                style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }}
                 noLink={noButtons}
                 displayAsUser={activity.displayAsUser}
-                style={userIsPelico ? { cursor: 'pointer' } : {}}
               />
-              {' a '}
-              {responseActivity && isReaction(activity) ? (
-                <strong>
-                  {titles[activity.type]} {REACTIONS[responseActivity?.type]}
-                </strong>
-              ) : (
-                <strong>{titles[activity.type]}</strong>
-              )}
-            </p>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
-              {userIsPelico ? (
-                <Link href={`/pelico-profil`}>
-                  <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
-                </Link>
-              ) : (
-                <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
-              )}
-            </div>
-          </div>
-          {ActivityIcon && !isReaction(activity) && (
-            <ActivityIcon
-              style={{ fill: primaryColor, color: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
-            />
-          )}
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'flex-start' }}>
-          <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
-            <div
-              style={{
-                height: '100%',
-                width: '100%',
-                backgroundColor: bgPage,
-                position: 'relative',
-                cursor: 'pointer',
-              }}
-            >
-              {/* Link is disabled for reaction activity */}
-              {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
-                <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
-              ) : (
-                <Link href={path} passHref>
-                  <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
-                </Link>
-              )}
-            </div>
-          </div>
-
-          <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-            <p style={{ marginBottom: '2rem' }}>Vous avez créé un jeu des {typeOfGame}s</p>
-            <p>
-              Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`}.
-              <br />
-              {availableGamesCount > 0
-                ? ` Il en reste ${availableGamesCount} à découvrir.`
-                : ` Il n'y a pour l'instant pas de nouvel ajout dans la catégorie des ${typeOfGame}s à découvrir.`}
-            </p>
-            {noButtons || (
-              <div style={{ textAlign: 'right' }}>
-                {!showEditButtons && (
-                  <>
-                    <CommentIcon count={activity.commentCount} activityId={activity.id} />
-                    <Link href={path} passHref>
-                      <Button component="a" color="primary" variant="outlined">
-                        Jouer au jeu
-                      </Button>
+              <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
+                <p className="text">
+                  <UserDisplayName
+                    className="text"
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    user={user}
+                    noLink={noButtons}
+                    displayAsUser={activity.displayAsUser}
+                    style={userIsPelico ? { cursor: 'pointer' } : {}}
+                  />
+                  {' a '}
+                  {responseActivity && isReaction(activity) ? (
+                    <strong>
+                      {titles[activity.type]} {REACTIONS[responseActivity?.type]}
+                    </strong>
+                  ) : (
+                    <strong>{titles[activity.type]}</strong>
+                  )}
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+                  {userIsPelico ? (
+                    <Link href={`/pelico-profil`}>
+                      <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
                     </Link>
-                  </>
+                  ) : (
+                    <Flag country={user?.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+                  )}
+                </div>
+              </div>
+              {ActivityIcon && !isReaction(activity) && (
+                <ActivityIcon
+                  style={{ fill: primaryColor, color: primaryColor, margin: '0 0.65rem', width: '2rem', height: 'auto', alignSelf: 'center' }}
+                />
+              )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'flex-start' }}>
+              <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
+                <div
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: bgPage,
+                    position: 'relative',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {/* Link is disabled for reaction activity */}
+                  {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
+                    <>
+                      {' '}
+                      {activity.subType === 0 && (
+                        <ReactPlayer
+                          width="100%"
+                          height="100%"
+                          light
+                          // eslint-disable-next-line
+                          // @ts-ignore
+                          url={activity.content.game[0].inputs[0].selectedValue}
+                          style={{ backgroundColor: 'black' }}
+                        />
+                      )}
+                      {activity.subType === 1 && (
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                      )}
+                      {activity.subType === 2 && (
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {activity.subType === 0 && (
+                        <Link href={path} passHref>
+                          {/* eslint-disable-next-line */}
+                          {/* @ts-ignore */}
+                          <ReactPlayer width="100%" height="100%" light url={activity.content.game[0].inputs[0].selectedValue} />
+                        </Link>
+                      )}
+                      {activity.subType === 1 && (
+                        <Link href={path} passHref>
+                          {/* eslint-disable-next-line */}
+                          {/* @ts-ignore */}
+                          <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                        </Link>
+                      )}
+                      {activity.subType === 2 && (
+                        <Link href={path} passHref>
+                          {/* eslint-disable-next-line */}
+                          {/* @ts-ignore */}
+                          <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                        </Link>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
+                <p style={{ marginBottom: '2rem' }}>Vous avez créé un jeu des {typeOfGame}s</p>
+                {activity.subType === 0 && (
+                  <p>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    Vous avez choisi de faire deviner la mimique suivante : {activity.content.game[0].inputs[1].selectedValue}
+                    <br />
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    {activity.content.game[0].inputs[2].selectedValue && (
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      <span>Et voici son origine : {activity.content.game[0].inputs[2].selectedValue}</span>
+                    )}
+                  </p>
                 )}
-                {isSelf && showEditButtons && (
-                  <>
-                    {activity.subType !== 1 && activity.subType !== 2 && (
+                {activity.subType === 1 && (
+                  <p>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    Votre jeu a été crée en utilisant la monnaie : {activity.content.monney} et vous avez choisi de faire deviner combien coute cet
+                    objet
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    : {activity.content.game[0].inputs[1].selectedValue}
+                  </p>
+                )}
+                {activity.subType === 2 && (
+                  <p>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    Votre jeu a été crée en utilisant la langue : {activity.content.language} et vous avez choisi de faire deviner cette expression :{' '}
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    {activity.content.game[0].inputs[1].selectedValue} <br />
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    {activity.content.game[0].inputs[2].selectedValue && (
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      <span>Et voici la traduction : {activity.content.game[0].inputs[2].selectedValue}</span>
+                    )}{' '}
+                  </p>
+                )}
+                {noButtons || (
+                  <div style={{ textAlign: 'right' }}>
+                    {!showEditButtons && (
                       <>
-                        <Link
-                          href={
-                            isDraft && activity.data.draftUrl
-                              ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                              : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
-                          }
-                          passHref
-                        >
-                          <Button
-                            component="a"
-                            href={
-                              isDraft && activity.data.draftUrl
-                                ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                                : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
-                            }
-                            color="secondary"
-                            variant="contained"
-                            style={{ marginLeft: '0.25rem' }}
-                          >
-                            Modifier
+                        <CommentIcon count={activity.commentCount} activityId={activity.id} />
+                        <Link href={path} passHref>
+                          <Button component="a" color="primary" variant="outlined">
+                            Jouer au jeu
                           </Button>
                         </Link>
                       </>
                     )}
-                    <RedButton style={{ marginLeft: '0.25rem' }} onClick={onDelete}>
-                      Supprimer
-                    </RedButton>
-                  </>
+                    {isSelf && showEditButtons && (
+                      <>
+                        {activity.subType !== 1 && activity.subType !== 2 && activity.subType !== 0 && (
+                          <>
+                            <Link
+                              href={
+                                isDraft && activity.data.draftUrl
+                                  ? `${activity.data.draftUrl}?activity-id=${activity.id}`
+                                  : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
+                              }
+                              passHref
+                            >
+                              <Button
+                                component="a"
+                                href={
+                                  isDraft && activity.data.draftUrl
+                                    ? `${activity.data.draftUrl}?activity-id=${activity.id}`
+                                    : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
+                                }
+                                color="secondary"
+                                variant="contained"
+                                style={{ marginLeft: '0.25rem' }}
+                              >
+                                Modifier
+                              </Button>
+                            </Link>
+                          </>
+                        )}
+                        <RedButton style={{ marginLeft: '0.25rem' }} onClick={onDelete}>
+                          Supprimer
+                        </RedButton>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          </Paper>
         </div>
-      </Paper>
+      ) : null}
     </>
   );
 };

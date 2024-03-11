@@ -1,6 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 
 import { Button } from '@mui/material';
@@ -15,12 +16,14 @@ import { LinkNotAllowedInPath } from 'types/activity.type';
 import { GameType } from 'types/game.type';
 import type { GameActivity } from 'types/game.type';
 
+// TODO : Remove all ts-ignore when mimic is standardized
+
 type GameCardProps = ActivityCardProps<GameActivity> & {
   gameType: GameType;
 };
 
 const TYPE_OF_GAME = {
-  [GameType.MIMIC]: 'mimique',
+  [GameType.MIMIC]: 'mimiques',
   [GameType.MONEY]: 'objet',
   [GameType.EXPRESSION]: 'expression',
 };
@@ -31,12 +34,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
   const { data: countAbleToPlay } = useCountAbleToPlayStandardGame(gameType, activity.villageId);
   const { data: countAllStandardGame } = useCountAllStandardGame(gameType, activity.villageId);
   const typeOfGame = TYPE_OF_GAME[gameType];
-  const latestGameUrl = useMemo(() => {
-    const villageId = activity.villageId;
-    const type = activity.type;
-    return `/creer-un-jeu/mimique/jouer/?villageId=${villageId}&type=${type}`;
-  }, [activity.villageId, activity.type]);
-  const path = `/creer-un-jeu/${typeOfGame}/jouer`;
+  const path = `/creer-un-jeu/${typeOfGame}/displayList`;
 
   useEffect(() => {
     if (countAbleToPlay && countAllStandardGame) {
@@ -54,7 +52,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
         justifyContent: 'flex-start',
       }}
     >
-      {latestGameUrl && (
+      {path && (
         <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
           <div
             style={{
@@ -67,18 +65,70 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
           >
             {/* Link is disabled for reaction activity */}
             {router.pathname.includes(LinkNotAllowedInPath.REACTION) ? (
-              <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
+              <>
+                {activity.subType === 0 && (
+                  <ReactPlayer
+                    width="100%"
+                    height="100%"
+                    light
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    url={activity.content.game[0].inputs[0].selectedValue}
+                    style={{ backgroundColor: 'black' }}
+                  />
+                )}
+                {activity.subType === 1 && (
+                  <>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                  </>
+                )}
+                {activity.subType === 2 && (
+                  <>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                  </>
+                )}
+              </>
             ) : (
-              <Link href={path} passHref>
-                <ReactPlayer width="100%" height="100%" light url={latestGameUrl} style={{ backgroundColor: 'black' }} />
-              </Link>
+              <>
+                {activity.subType === 0 && (
+                  <Link href={path} passHref>
+                    <ReactPlayer
+                      width="75%"
+                      height="100%"
+                      light
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      url={activity.content.game[0].inputs[0].selectedValue}
+                      style={{ backgroundColor: 'black', margin: 'auto' }}
+                    />
+                  </Link>
+                )}
+                {activity.subType === 1 && (
+                  <Link href={path} passHref>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                  </Link>
+                )}
+                {activity.subType === 2 && (
+                  <Link href={path} passHref>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
+                    <Image layout="fill" objectFit="contain" src={activity.content.game[0].inputs[0].selectedValue} unoptimized />
+                  </Link>
+                )}
+              </>
             )}
           </div>
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p style={{ marginBottom: '2rem' }}>
-          {labelPresentation} a relancé le jeu des {typeOfGame}s
+          {labelPresentation} a relancé le jeu des {typeOfGame}s.
         </p>
         <p>
           Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`}.<br />
