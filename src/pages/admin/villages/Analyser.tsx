@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Analyser = () => {
+const Analyser = () => {
   const renderTitle = () => {
     return (
       <div>
@@ -11,3 +11,5 @@ export const Analyser = () => {
 
   return <>{renderTitle()}</>;
 };
+
+export default Analyser;

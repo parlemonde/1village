@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Mediatheque = () => {
+const Mediatheque = () => {
   const renderTitle = () => {
     return (
       <div>
@@ -11,3 +11,5 @@ export const Mediatheque = () => {
 
   return <>{renderTitle()}</>;
 };
+
+export default Mediatheque;

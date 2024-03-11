@@ -14,7 +14,7 @@ interface NavItemProps {
   primary: string;
 }
 
-export const Creer = () => {
+const Creer = () => {
   const links: Link[] = [
     { name: 'Créer du contenu libre', link: 'https://' },
     { name: 'Créer une activité H5P', link: 'https://' },
@@ -61,3 +61,5 @@ export const Creer = () => {
     </>
   );
 };
+
+export default Creer;

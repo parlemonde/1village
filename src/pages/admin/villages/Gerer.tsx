@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Gerer = () => {
+const Gerer = () => {
   const renderTitle = () => {
     return (
       <div>
@@ -11,3 +11,5 @@ export const Gerer = () => {
 
   return <>{renderTitle()}</>;
 };
+
+export default Gerer;

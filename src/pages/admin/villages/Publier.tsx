@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Publier = () => {
+const Publier = () => {
   const renderTitle = () => {
     return (
       <div>
@@ -11,3 +11,5 @@ export const Publier = () => {
 
   return <>{renderTitle()}</>;
 };
+
+export default Publier;
