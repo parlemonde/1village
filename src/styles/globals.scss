@@ -75,6 +75,9 @@ body {
     }
     .container-admin-portal {
       .container-admin-nav {
+        .MuiListItemText-root span {
+          font-weight: bold;
+        }
         @media screen and (max-width: 792px) {
           width: 100%;
           height: auto;
