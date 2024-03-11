@@ -5,6 +5,7 @@ import List from 'src/components/game/List';
 import { VillageContext } from 'src/contexts/villageContext';
 
 const DisplayList = () => {
+  // Rendu du composant
   const village = useContext(VillageContext);
   return (
     <Base>

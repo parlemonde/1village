@@ -9,6 +9,7 @@ import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
+import { useOneGameById } from 'src/api/game/game.getOneGameById';
 import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -112,13 +113,13 @@ const POSITION = ['c', 'f', 'i'];
 type SubTypeProps = {
   subType: GameType;
 };
-const phrases = {
-  [GameType.MIMIC]: ['Phrase 1 pour MIMIC.', 'Phrase 2 pour MIMIC.', 'Phrase 3 pour MIMIC.'],
-  [GameType.MONEY]: ['Phrase 1 pour MONEY.', 'Phrase 2 pour MONEY.', 'Phrase 3 pour MONEY.'],
-  [GameType.EXPRESSION]: ['Phrase 1 pour EXPRESSION.', 'Phrase 2 pour EXPRESSION.', 'Phrase 3 pour EXPRESSION.'],
+const phrase = {
+  [GameType.MIMIC]: ['mimiques', 'mimique', 'mimique', 'mimique'],
+  [GameType.MONEY]: ['objets', 'objet', 'objet', 'objet'],
+  [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
 };
 
-const Jouer = ({ subType }: SubTypeProps) => {
+const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
@@ -133,9 +134,13 @@ const Jouer = ({ subType }: SubTypeProps) => {
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
-  const { data: getLatest } = useType({ subType });
-  const phrasesForType = phrases[subType];
-  // console.log(phrasesForType);
+  const { id } = router.query;
+
+  const gameId = typeof id === 'string' ? parseInt(id, 10) : undefined;
+  const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
+  // console.log(getOneGameById);
+  const displayPhrasesByType = phrase[subType];
+  // console.log(displayPhrasesByTypeForType);
   const handleConfirmModal = async () => {
     const success = await resetGamesPlayedForUser();
     setIsLastMimicModalOpen(false);
@@ -147,65 +152,66 @@ const Jouer = ({ subType }: SubTypeProps) => {
     }
   };
 
-  const sortGamesByDescOrder = (games: Game[]) => {
-    return games.sort((a, b) => {
-      const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
-      const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
-      return dateB - dateA;
-    });
-  };
+  // const sortGamesByDescOrder = (games: Game[]) => {
+  //   return games.sort((a, b) => {
+  //     const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
+  //     const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
+  //     return dateB - dateA;
+  //   });
+  // };
 
-  const getNextGame = useCallback(async () => {
-    setLoadingGame(true);
+  // const getNextGame = useCallback(async () => {
+  //   setLoadingGame(true);
 
-    // [1] Reset game.
-    setFound(false);
-    setGameResponses([]);
-    setTryCount(0);
-    setErrorModalOpen(false);
+  //   // [1] Reset game.
+  //   setFound(false);
+  //   setGameResponses([]);
+  //   setTryCount(0);
+  //   setErrorModalOpen(false);
 
-    const availableGames = await getAvailableGames(subType);
-    const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+  //   const availableGames = await getAvailableGames(subType);
 
-    const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
+  //   const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
 
-    const isLastGame = currentGameIndex === availableGamesByDescOrder.length - 1;
+  //   const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
 
-    const NEXT_GAME_MAPPER = {
-      [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1],
-      [RadioBoxValues.RANDOM]: async () => {
-        return await getRandomGame(subType);
-      },
-    };
+  //   const isLastGame = currentGameIndex === availableGamesByDescOrder.length - 1;
 
-    const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
+  //   const NEXT_GAME_MAPPER = {
+  //     [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1],
+  //     [RadioBoxValues.RANDOM]: async () => {
+  //       return await getRandomGame(subType);
+  //     },
+  //   };
 
-    setGame(nextGame);
-    if (isLastGame) {
-      setIsLastMimicModalOpen(isLastGame);
-    }
+  //   const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
 
-    setLoadingGame(false);
-  }, [getAvailableGames, subType, selectedValue, game?.id, getRandomGame]);
+  //   setGame(nextGame);
+  //   if (isLastGame) {
+  //     setIsLastMimicModalOpen(isLastGame);
+  //   }
+
+  //   setLoadingGame(false);
+  // }, [getAvailableGames, subType, selectedValue, game?.id, getRandomGame]);
 
   // Get next game on start and on village change.
-  useEffect(() => {
-    const getFirstGame = async () => {
-      try {
-        const availableGames = await getAvailableGames(subType);
-        if (availableGames.length === 0) {
-          setIsLastMimicModalOpen(true);
-        }
-        const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
-        setGame(availableGamesByDescOrder[0]); // Utiliser le dernier jeu (plus récent)
-        setLoadingGame(false);
-      } catch (error) {
-        console.error('Error fetching or processing available games:', error);
-        setLoadingGame(false); // Assurez-vous de gérer les erreurs correctement
-      }
-    };
-    getFirstGame().catch();
-  }, [getAvailableGames, subType]);
+  // useEffect(() => {
+  //   const getFirstGame = async () => {
+  //     try {
+  //       const availableGames = useOneGameById(subType, gameId || 0);
+  //       if (availableGames.length === 0) {
+  //         setIsLastMimicModalOpen(true);
+  //       }
+  //       const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+  //       setGame(availableGamesByDescOrder[0]); // Utiliser le dernier jeu (plus récent)
+  //       setLoadingGame(false);
+  //     } catch (error) {
+  //       console.error('Error fetching or processing available games:', error);
+  //       setLoadingGame(false); // Assurez-vous de gérer les erreurs correctement
+  //     }
+  //   };
+  //   getFirstGame().catch();
+  // }, [getAvailableGames, subType]);
 
   const userMap = useMemo(
     () =>
@@ -216,7 +222,7 @@ const Jouer = ({ subType }: SubTypeProps) => {
     [users],
   );
   const playContent = useMemo(() => {
-    if (getLatest) {
+    if (getOneGameById) {
       const {
         id,
         createDate,
@@ -234,8 +240,8 @@ const Jouer = ({ subType }: SubTypeProps) => {
             },
           ],
         },
-      } = getLatest || {};
-      console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
+      } = getOneGameById || {};
+      // console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
       const inputsResponse: string | undefined = inputs
         .map((item: { response: boolean; selectedValue: string }) => {
           if (item.response === true) {
@@ -251,7 +257,8 @@ const Jouer = ({ subType }: SubTypeProps) => {
     } else {
       return undefined;
     }
-  }, [getLatest]);
+  }, [getOneGameById]);
+  //Pour afficher les bouton
   const ResponseButtonDataMapper = useMemo(
     () => [
       {
@@ -288,7 +295,7 @@ const Jouer = ({ subType }: SubTypeProps) => {
     setSelectedValue(selected as RadioBoxValues);
     if (selected === RadioBoxValues.RANDOM) {
       setLoadingGame(true);
-      getNextGame();
+      //getNextGame();
     }
   };
 
@@ -312,30 +319,42 @@ const Jouer = ({ subType }: SubTypeProps) => {
     },
     [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game],
   );
-
-  if (user === null || village === null || loadingGame) {
+  // Quand je n'enlève pas loadingGame de la condition rien ne s'affiche sur la page
+  // if (user == null || village == null || loadingGame) {
+  //   return <Base></Base>;
+  // }
+  if (user == null || village == null) {
     return <Base></Base>;
   }
 
   // Modal dernière mimique
-  if (!game || !gameCreator) {
-    return (
-      <Base>
-        <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
-      </Base>
-    );
-  }
+  // if (!game || !gameCreator) {
+  //   console.log(game);
+  //   return (
+  //     <Base>
+  //       <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
+  //     </Base>
+  //   );
+  // }
 
   return (
-    <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
+    // <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
+    <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
         <Box display="flex" flexDirection="column">
           <Box alignItems="flex-start">
-            <h1>Jouer au jeu des mimiques !</h1>
-            <p style={{ marginBottom: 0 }}>A vous de décider avec quelle mimique vous allez jouer !</p>
-            <p style={{ marginTop: 0 }}>
-              Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière mimique publiée.
-            </p>
+            <div>
+              {displayPhrasesByType && (
+                <div>
+                  <h1>Jouer au jeu des {displayPhrasesByType[0]} !</h1>
+                  <p style={{ marginBottom: 0 }}>A vous de décider avec quelle {displayPhrasesByType[1]} vous allez jouer !</p>
+                  <p style={{ marginTop: 0 }}>
+                    Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière {displayPhrasesByType[2]}{' '}
+                    publiée.
+                  </p>
+                </div>
+              )}
+            </div>
           </Box>
           <div className="activity-card__header">
             <AvatarImg user={gameCreator} size="small" style={{ margin: '0.25rem 0rem 0.25rem 0.25rem' }} noLink={false} />
@@ -345,7 +364,7 @@ const Jouer = ({ subType }: SubTypeProps) => {
             >
               <h3 className="text" style={{ marginTop: '0.7rem' }}>
                 {'Une mimique proposée par '}
-                <UserDisplayName className="text" user={gameCreator} noLink={false} />
+                {/* <UserDisplayName className="text" user={gameCreator} noLink={false} /> */}
               </h3>
               {playContent && playContent.createDate && (
                 <p style={{ fontSize: '0.8rem', color: 'gray' }}>
@@ -388,10 +407,10 @@ const Jouer = ({ subType }: SubTypeProps) => {
             justifyContent="flex-start"
           >
             <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
-              {playContent !== undefined && playContent.video !== null && <VideoView id={0} value={playContent.video}></VideoView>}
+              {playContent !== undefined && playContent.media !== null && <VideoView id={0} value={playContent.media}></VideoView>}
             </Grid>
             <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
-              <h1>Que signifie cette mimique ?</h1>
+              <h1>Que signifie cette {displayPhrasesByType[3]} ?</h1>
             </Grid>
             <div
               className="display-ended-game"
@@ -407,7 +426,7 @@ const Jouer = ({ subType }: SubTypeProps) => {
                 choices.map((val, index) => {
                   const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
                   const isCorrect = isSuccess && found;
-                  const mimicOrigine = playContent?.origine || '';
+                  //const mimicOrigine = playContent?.origine || ''; Nous n'avons plus origine
                   const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
                   return (
                     <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
@@ -418,7 +437,7 @@ const Jouer = ({ subType }: SubTypeProps) => {
                         signification={signification}
                         disabled={isDisabled}
                         isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
-                        mimicOrigine={mimicOrigine}
+                        // mimicOrigine={mimicOrigine}
                       />
                     </div>
                   );
@@ -474,17 +493,6 @@ const Jouer = ({ subType }: SubTypeProps) => {
         </Modal>
         <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
-          {/* Todo : modifier la logique du bouton pour qu'il récupère la mimique précédente */}
-          {/*   <div>
-      <h1>{`Phrases pour ${subType}`}</h1>
-      <ul>
-        {phrasesForType.map((phrase, index) => (
-          <li key={index}>{phrase}</li>
-        ))}
-      </ul>
-    </div>
-    Le code a implémenter
-     */}
           <Grid item xs={6} style={{ textAlign: 'center' }}>
             {(found || tryCount > 1) && (
               <div style={{ textAlign: 'center' }}>
@@ -502,8 +510,9 @@ const Jouer = ({ subType }: SubTypeProps) => {
             )}
           </Grid>
           <Grid item xs={3} display="flex" justifyContent="flex-end">
-            <Button variant="outlined" color="primary" onClick={getNextGame}>
-              mimique suivante
+            {/* <Button variant="outlined" color="primary" onClick={getNextGame}> */}
+            <Button variant="outlined" color="primary">
+              Jeu suivant
             </Button>
           </Grid>
         </Grid>
@@ -512,4 +521,4 @@ const Jouer = ({ subType }: SubTypeProps) => {
   );
 };
 
-export default Jouer;
+export default DisplayGameById;

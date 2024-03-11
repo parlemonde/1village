@@ -142,6 +142,8 @@ export const GameCardMaClasse = ({
                           width="100%"
                           height="100%"
                           light
+                          // eslint-disable-next-line
+                          // @ts-ignore
                           url={activity.content.game[0].inputs[0].selectedValue}
                           style={{ backgroundColor: 'black' }}
                         />
@@ -161,6 +163,8 @@ export const GameCardMaClasse = ({
                     <>
                       {activity.subType === 0 && (
                         <Link href={path} passHref>
+                          {/* eslint-disable-next-line */}
+                          {/* @ts-ignore */}
                           <ReactPlayer width="100%" height="100%" light url={activity.content.game[0].inputs[0].selectedValue} />
                         </Link>
                       )}
@@ -187,9 +191,15 @@ export const GameCardMaClasse = ({
                 <p style={{ marginBottom: '2rem' }}>Vous avez créé un jeu des {typeOfGame}s</p>
                 {activity.subType === 0 && (
                   <p>
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
                     Vous avez choisi de faire deviner la mimique suivante : {activity.content.game[0].inputs[1].selectedValue}
                     <br />
+                    {/* eslint-disable-next-line */}
+                    {/* @ts-ignore */}
                     {activity.content.game[0].inputs[2].selectedValue && (
+                      // eslint-disable-next-line
+                      // @ts-ignore
                       <span>Et voici son origine : {activity.content.game[0].inputs[2].selectedValue}</span>
                     )}
                   </p>
@@ -201,7 +211,8 @@ export const GameCardMaClasse = ({
                     Votre jeu a été crée en utilisant la monnaie : {activity.content.monney} et vous avez choisi de faire deviner combien coute cet
                     objet
                     {/* eslint-disable-next-line */}
-                    {/* @ts-ignore */}: {activity.content.game[0].inputs[1].selectedValue}
+                    {/* @ts-ignore */}
+                    : {activity.content.game[0].inputs[1].selectedValue}
                   </p>
                 )}
                 {activity.subType === 2 && (

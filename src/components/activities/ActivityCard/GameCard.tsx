@@ -71,6 +71,8 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
                     width="100%"
                     height="100%"
                     light
+                    // eslint-disable-next-line
+                    // @ts-ignore
                     url={activity.content.game[0].inputs[0].selectedValue}
                     style={{ backgroundColor: 'black' }}
                   />
@@ -98,6 +100,8 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
                       width="75%"
                       height="100%"
                       light
+                      // eslint-disable-next-line
+                      // @ts-ignore
                       url={activity.content.game[0].inputs[0].selectedValue}
                       style={{ backgroundColor: 'black', margin: 'auto' }}
                     />
