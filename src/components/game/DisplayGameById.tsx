@@ -1,7 +1,7 @@
 import { is } from 'immutable';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useCallback, useMemo, useContext } from 'react';
+import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 // import AppsIcon from '@mui/icons-material/Apps';
@@ -17,8 +17,8 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
-// import { UserDisplayName } from 'src/components/UserDisplayName';
-// import { RightNavigation } from 'src/components/accueil/RightNavigation';
+import { UserDisplayName } from 'src/components/UserDisplayName';
+import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import GameStats from 'src/components/activities/GameStats';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import ResponseButton from 'src/components/buttons/GameResponseButton';
@@ -35,9 +35,9 @@ import type { GameResponse } from 'types/gameResponse.type';
 import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
 
-function shuffleArray(array: Array<number>) {
-  let i = array.length - 1;
-  for (; i > 0; i--) {
+function shuffleArray(size: number) {
+  const array = Array.from(Array(size)).map((a, i) => (a = i));
+  for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
     array[i] = array[j];
@@ -47,7 +47,7 @@ function shuffleArray(array: Array<number>) {
 }
 
 /* partie à déplacer et à centraliser avec les prochains jeux*/
-type AlreadyPlayerModalProps = {
+type AlreadyPlayedModalProps = {
   isOpen: boolean;
   gameId: number;
   handleSuccessClick: () => void;
@@ -90,7 +90,7 @@ const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, ch
   />
 );
 
-const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleSuccessClick }) => {
+const AlreadyPlayedModal: React.FC<AlreadyPlayedModalProps> = ({ isOpen, handleSuccessClick }) => {
   const router = useRouter();
 
   return (
@@ -116,8 +116,13 @@ const POSITION = ['c', 'f', 'i'];
 type SubTypeProps = {
   subType: GameType;
 };
+// const phrase = {
+//   [GameType.MIMIC]: ['mimiques', 'mimique', 'mimique', 'mimique'],
+//   [GameType.MONEY]: ['objets', 'objet', 'objet', 'objet'],
+//   [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
+// };
 const phrase = {
-  [GameType.MIMIC]: ['mimiques', 'mimique', 'mimique', 'mimique'],
+  [GameType.MIMIC]: { phraseDelamodal: 'modal' },
   [GameType.MONEY]: ['objets', 'objet', 'objet', 'objet'],
   [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
 };
@@ -126,29 +131,22 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
   const { village } = useContext(VillageContext);
   const { users } = useVillageUsers();
-  // const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
-  const { sendNewGameResponse, getGameStats, resetGamesPlayedForUser } = useGameRequests();
-
-  // const [game, setGame] = useState<Game | undefined>(undefined);
-  const [game] = useState<Game | undefined>(undefined);
+  const { getRandomGame, sendNewGameResponse, getGameStats, getAvailableGames, resetGamesPlayedForUser } = useGameRequests();
   const [tryCount, setTryCount] = useState<number>(0);
   const [found, setFound] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
-  const [isLastMimicModalOpen, setIsLastMimicModalOpen] = useState<boolean>(false);
-  // const [loadingGame, setLoadingGame] = useState<boolean>(true);
-  // const [loadingGame, setLoadingGame] = useState<boolean>(true);
+  const [isGameModalOpen, setIsLastGameModalOpen] = useState<boolean>(false);
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
   const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
   const { id } = router.query;
 
-  const gameId = typeof id === 'string' ? parseInt(id, 10) : undefined;
+  const gameId = parseInt(String(id));
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
   const displayPhrasesByType = phrase[subType];
-  // console.log(displayPhrasesByTypeForType);
   const handleConfirmModal = async () => {
     const success = await resetGamesPlayedForUser();
-    setIsLastMimicModalOpen(false);
+    setIsLastGameModalOpen(false);
 
     if (success) {
       router.reload();
@@ -156,67 +154,43 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       router.push('/');
     }
   };
+  const sortGamesByDescOrder = (games: Game[]) => {
+    return games.sort((a, b) => {
+      const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
+      const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
+      return dateB - dateA;
+    });
+  };
 
-  // const sortGamesByDescOrder = (games: Game[]) => {
-  //   return games.sort((a, b) => {
-  //     const dateA = a.createDate ? new Date(a.createDate).getTime() : 0;
-  //     const dateB = b.createDate ? new Date(b.createDate).getTime() : 0;
-  //     return dateB - dateA;
-  //   });
-  // };
+  const getNextGame = useCallback(async () => {
+    // [1] Reset game.
+    setFound(false);
+    setGameResponses([]);
+    setTryCount(0);
+    setErrorModalOpen(false);
 
-  // const getNextGame = useCallback(async () => {
-  //   setLoadingGame(true);
+    const allGames = await getAvailableGames(subType);
+    const availableGamesByDescOrder = sortGamesByDescOrder(allGames);
+    const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === gameId);
+    const availableGames = allGames.filter((g) => g.id !== gameId);
 
-  //   // [1] Reset game.
-  //   setFound(false);
-  //   setGameResponses([]);
-  //   setTryCount(0);
-  //   setErrorModalOpen(false);
+    const isLastGame = availableGames.length === 0;
 
-  //   const availableGames = await getAvailableGames(subType);
+    const NEXT_GAME_MAPPER = {
+      [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1 < availableGamesByDescOrder.length ? currentGameIndex + 1 : 0],
+      [RadioBoxValues.RANDOM]: async () => {
+        return await getRandomGame(subType);
+      },
+    };
 
-  //   const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
+    const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
 
-  //   const currentGameIndex = availableGamesByDescOrder.findIndex((g) => g.id === game?.id);
-
-  //   const isLastGame = currentGameIndex === availableGamesByDescOrder.length - 1;
-
-  //   const NEXT_GAME_MAPPER = {
-  //     [RadioBoxValues.NEW]: () => availableGamesByDescOrder[currentGameIndex + 1],
-  //     [RadioBoxValues.RANDOM]: async () => {
-  //       return await getRandomGame(subType);
-  //     },
-  //   };
-
-  //   const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
-
-  //   setGame(nextGame);
-  //   if (isLastGame) {
-  //     setIsLastMimicModalOpen(isLastGame);
-  //   }
-
-  //   setLoadingGame(false);
-  // }, [getAvailableGames, subType, selectedValue, game?.id, getRandomGame]);
-
-  // Get next game on start and on village change.
-  // useEffect(() => {
-  //   const getFirstGame = async () => {
-  //     try {
-  //       const availableGames = useOneGameById(subType, gameId || 0);
-  //       if (availableGames.length === 0) {
-  //         setIsLastMimicModalOpen(true);
-  //       }
-  //       const availableGamesByDescOrder = sortGamesByDescOrder(availableGames);
-  //       setGame(availableGamesByDescOrder[0]); // Utiliser le dernier jeu (plus récent)
-  //       setLoadingGame(false);
-  //     } catch (error) {
-  //       console.error('Error fetching or processing available games:', error);
-  //       setLoadingGame(false); // Assurez-vous de gérer les erreurs correctement
-  //     }
-  //   };
-  //   getFirstGame().catch();
-  // }, [getAvailableGames, subType]);
+    if (isLastGame || !nextGame) {
+      setIsLastGameModalOpen(true);
+      return;
+    }
+    router.push(`./${nextGame?.id}`);
+  }, [getAvailableGames, subType, selectedValue, router, gameId, getRandomGame]);
 
   const userMap = useMemo(
     () =>
@@ -226,130 +200,93 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       }, {}),
     [users],
   );
-  const playContent = useMemo(() => {
-    if (getOneGameById) {
-      const {
-        id,
-        createDate,
-        content: {
-          // labelPresentation,
-          // language,
-          // radio,
-          game: [{ inputs }],
-          game: [
-            {
-              inputs: [{ selectedValue: media }],
-            },
-            {
-              inputs: [{ selectedValue: fakeSignification1 }, { selectedValue: fakeSignification2 }],
-            },
-          ],
-        },
-      } = getOneGameById || {};
-      // console.log(id, createDate, labelPresentation, language, radio, inputs, media, fakeSignification1, fakeSignification2);
-      const inputsResponse: string | undefined = inputs
-        .map((item: { response: boolean; selectedValue: string }) => {
-          if (item.response === true) {
-            return item.selectedValue;
-          }
-          return undefined; // Retourner undefined si item.response est false
-        })
-        .find((value: string | undefined) => value !== undefined); // Spécifier le type de retour attendu ici
 
-      //console.log(inputsResponse);
-      const content = { id, createDate, fakeSignification1, fakeSignification2, inputsResponse, media };
-      return content;
-    } else {
-      return undefined;
+  const playContent = useMemo(() => {
+    if (!getOneGameById) {
+      return { responses: [] };
     }
+
+    const {
+      id,
+      content: { game: steps, labelPresentation },
+      createDate,
+    } = getOneGameById || {};
+
+    const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
+    let fakeSignificationIndex = 1;
+    steps.map(({ inputs }) => {
+      inputs.map((input) => {
+        if (input.response || input.response === false) {
+          responses.push({ isSuccess: input.response, signification: input.selectedValue, value: input.response ? 0 : fakeSignificationIndex });
+          if (input.response === false) {
+            ++fakeSignificationIndex;
+          }
+        }
+      });
+    });
+    return {
+      responses,
+      labelPresentation,
+      createDate,
+      id,
+    };
   }, [getOneGameById]);
-  //Pour afficher les bouton
-  const ResponseButtonDataMapper = useMemo(
-    () => [
-      {
-        value: GameResponseValue.SIGNIFICATION,
-        signification: playContent?.inputsResponse,
-        isSuccess: true,
-        isGreenRadio: true,
-      },
-      {
-        value: GameResponseValue.FAKE_SIGNIFICATION_1,
-        signification: playContent?.fakeSignification1,
-      },
-      {
-        value: GameResponseValue.FAKE_SIGNIFICATION_2,
-        signification: playContent?.fakeSignification2,
-      },
-    ],
-    [playContent],
-  );
 
   const gameCreator = useMemo(() => {
-    if (game === undefined) {
+    if (getOneGameById === undefined) {
       return undefined;
     }
-    return userMap[game.userId] !== undefined ? users[userMap[game.userId]] : undefined;
-  }, [game, userMap, users]);
+    return userMap[getOneGameById.userId] !== undefined ? users[userMap[getOneGameById.userId]] : undefined;
+  }, [getOneGameById, userMap, users]);
   const gameCreatorIsPelico = gameCreator !== undefined && gameCreator.type <= UserType.MEDIATOR;
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
 
-  const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
+  const choices = React.useMemo(() => (playContent.responses.length > 0 ? shuffleArray(playContent.responses.length) : []), [playContent.responses]);
 
   const handleRadioButtonChange = (event: React.SyntheticEvent) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
     setSelectedValue(selected as RadioBoxValues);
     if (selected === RadioBoxValues.RANDOM) {
-      // setLoadingGame(true);
-      //getNextGame();
+      getNextGame();
     }
   };
 
-  // const handleClick = useCallback(
-  //   async (selection: GameResponseValue, isSuccess: boolean = false) => {
-  //     if (game === undefined) {
-  //       return;
-  //     }
-  //     const apiResponse = await sendNewGameResponse(game.id, selection);
-  //     if (!apiResponse) {
-  //       console.error('Error reaching server');
-  //       return;
-  //     }
+  const handleClick = useCallback(
+    async (selection: string, isSuccess: boolean = false) => {
+      if (playContent.responses.length === 0) {
+        return;
+      }
+      const apiResponse = await sendNewGameResponse(playContent.id || 0, selection);
+      if (!apiResponse) {
+        console.error('Error reaching server');
+        return;
+      }
 
-  //     setFound(isSuccess);
-  //     setErrorModalOpen(!isSuccess);
-  //     if (isSuccess || tryCount === 1) {
-  //       setGameResponses(await getGameStats(game.id));
-  //     }
-  //     setTryCount(tryCount + 1);
-  //   },
-  //   [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game],
-  // );
+      setFound(isSuccess);
+      setErrorModalOpen(!isSuccess);
+      if (isSuccess || tryCount === 1) {
+        setGameResponses(await getGameStats(playContent.id || 0));
+      }
+      setTryCount(tryCount + 1);
+    },
+    [getGameStats, sendNewGameResponse, setFound, playContent.responses, setErrorModalOpen, setGameResponses, setTryCount, tryCount, playContent?.id],
+  );
 
-  const handleClick = (value: GameResponseValue, val: number) => {
-    console.log('click');
-    putUpdateGameResponse({ value: value, id: val });
-  };
-  // Quand je n'enlève pas loadingGame de la condition rien ne s'affiche sur la page
-  // if (user == null || village == null || loadingGame) {
-  //   return <Base></Base>;
-  // }
   if (user == null || village == null) {
     return <Base></Base>;
   }
 
-  // Modal dernière mimique
-  // if (!game || !gameCreator) {
-  //   console.log(game);
-  //   return (
-  //     <Base>
-  //       <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
-  //     </Base>
-  //   );
-  // }
+  // Modal dernier jeux
+  if (playContent.responses.length === 0 || !gameCreator) {
+    return (
+      <Base>
+        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={playContent.id || 0} />
+      </Base>
+    );
+  }
 
   return (
-    // <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
-    <Base>
+    <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
         <Box display="flex" flexDirection="column">
           <Box alignItems="flex-start">
@@ -419,7 +356,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
               {playContent !== undefined && playContent.media !== null && <VideoView id={0} value={playContent.media}></VideoView>}
             </Grid>
-            <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
+            <Grid container spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>Que signifie cette {displayPhrasesByType[3]} ?</h1>
             </Grid>
             <div
@@ -434,7 +371,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             >
               {choices &&
                 choices.map((val, index) => {
-                  const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
+                  const { value, isSuccess, signification } = playContent.responses[val];
                   const isCorrect = isSuccess && found;
                   //const mimicOrigine = playContent?.origine || ''; Nous n'avons plus origine
                   const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
@@ -442,7 +379,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                     <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
                       <ResponseButton
                         value={value}
-                        onClick={() => handleClick(value, playContent?.id)}
+                        onClick={() => handleClick(value.toString(), isSuccess)}
                         isSuccess={isSuccess}
                         signification={signification}
                         disabled={isDisabled}
@@ -501,7 +438,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             <p>Dommage ! Ce n’est pas cette réponse. Essayez encore !</p>
           )}
         </Modal>
-        <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
+        <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={gameId} />
         <Grid container justifyContent="space-between">
           <Grid item xs={6} style={{ textAlign: 'center' }}>
             {(found || tryCount > 1) && (
@@ -520,8 +457,8 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             )}
           </Grid>
           <Grid item xs={3} display="flex" justifyContent="flex-end">
-            {/* <Button variant="outlined" color="primary" onClick={getNextGame}> */}
-            <Button variant="outlined" color="primary">
+            <Button variant="outlined" color="primary" onClick={getNextGame}>
+              {/* <Button variant="outlined" color="primary"> */}
               Jeu suivant
             </Button>
           </Grid>

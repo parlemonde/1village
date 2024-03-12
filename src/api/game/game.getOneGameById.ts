@@ -4,17 +4,15 @@ import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 // import { GameType } from 'types/game.type';
 
-type GetOneGameByIdProps = {
-  subType: number;
-  id: number;
+type Input = {
+  selectedValue: string;
+  response: boolean;
 };
-type DataUse = {
-  data: Data;
-  createDate: string;
-  id: number;
-  userId: number;
-  villageId: number;
+
+type GameItem = {
+  inputs: Input[];
 };
+
 type Data = {
   game: GameItem[];
   labelPresentation: string;
@@ -22,14 +20,19 @@ type Data = {
   monney?: string;
   radio: string;
 };
-type GameItem = {
-  inputs: Input[];
-};
-type Input = {
-  selectedValue: string;
-  response: boolean;
+
+type DataUse = {
+  content: Data;
+  createDate: string;
+  id: number;
+  userId: number;
+  villageId: number;
 };
 
+type GetOneGameByIdProps = {
+  subType: number;
+  id: number;
+};
 // TODO : remove specific mimic management after mimic is standard
 export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
   const path = `/standardGame/${id}${serializeToQueryUrl({
@@ -39,7 +42,7 @@ export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
     method: 'GET',
     url: `/games${path}`,
   });
-  console.log(response.data)
+  console.log(response.data);
   return response.error ? undefined : (response.data as DataUse);
 }
 
