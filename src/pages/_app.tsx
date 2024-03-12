@@ -36,6 +36,8 @@ import Mediatheque from './admin/villages/Mediatheque';
 import Publier from './admin/villages/Publier';
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
+import { AdminHeader } from 'src/components/admin/AdminHeader';
+import { AdminNavigation } from 'src/components/admin/AdminNavigation';
 import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
@@ -163,18 +165,30 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 <ClassroomContextProvider>
                   <ActivityContextProvider>
                     {isOnAdmin ? (
-                      <div className="container-admin-portal">
-                        <NewAdminHeader />
-                        <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
-                          <NewAdminNavigation changeContent={changeContent} />
-                          <Container
-                            className="container-admin-nav child-container"
-                            sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
-                          >
-                            {renderContent()}
-                          </Container>
+                      router.pathname.startsWith('/admin/villages/new') ? (
+                        <div className="container-admin-portal">
+                          <NewAdminHeader />
+                          <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
+                            <NewAdminNavigation changeContent={changeContent} />
+                            <Container
+                              className="container-admin-nav child-container"
+                              sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
+                            >
+                              {renderContent()}
+                            </Container>
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div>
+                          <AdminHeader />
+                          <div style={{ display: 'flex', width: '100%' }}>
+                            <AdminNavigation />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Component {...pageProps} />
+                            </div>
+                          </div>
+                        </div>
+                      )
                     ) : user !== null &&
                       router.pathname !== '/inscription' &&
                       router.pathname !== '/connexion' &&

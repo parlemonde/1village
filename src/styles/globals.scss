@@ -53,11 +53,6 @@ body {
     height: 1px;
   }
   &.admin {
-    background-color: #d9dbfe91;
-    padding: 0 50px !important;
-    @media screen and (min-width: 1600px) {
-      padding: 0 15% !important;
-    }
     #nprogress .bar {
       background-color: white !important;
     }
@@ -77,6 +72,12 @@ body {
       }
     }
     .container-admin-portal {
+      background-color: #d9dbfe91;
+      padding: 0 50px !important;
+      height: 100vh;
+      @media screen and (min-width: 1600px) {
+        padding: 0 15% !important;
+      }
       .container-admin-nav {
         .MuiListItemText-root span {
           font-weight: bold;
