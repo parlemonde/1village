@@ -39,7 +39,7 @@ export const NewAdminHeader = () => {
                 alignSelf: 'center',
               }}
             >
-              1Village
+              1Village - admin
             </Typography>
 
             <Link href="/" passHref>

@@ -55,6 +55,9 @@ body {
   &.admin {
     background-color: #d9dbfe91;
     padding: 0 50px !important;
+    @media screen and (min-width: 1600px) {
+      padding: 0 15% !important;
+    }
     #nprogress .bar {
       background-color: white !important;
     }
@@ -121,6 +124,7 @@ body {
         &.Mui-selected {
           color: white;
           background: $primary-color;
+          width: 300px;
           svg,
           path {
             fill: white;
