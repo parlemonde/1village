@@ -282,7 +282,6 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               label: 'Quel est le nom de cet objet ?',
               selectedValue: '',
-              isDisplayedInRecap: true,
               required: true,
             },
             {

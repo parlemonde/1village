@@ -12,5 +12,6 @@ export async function postGameDataMonneyOrExpression(data: GameDataMonneyOrExpre
   if (response.error) {
     throw new Error('Erreur lors de la création du jeu. Veuillez réessayer.');
   }
+  // inviladate le cache de la liste des jeux
   return response.data;
 }

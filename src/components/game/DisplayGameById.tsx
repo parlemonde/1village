@@ -1,3 +1,4 @@
+import { is } from 'immutable';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext } from 'react';
@@ -10,7 +11,8 @@ import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/mat
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
-// import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
+import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
+import { putUpdateGameResponse } from 'src/api/game/game.updateGameResponse';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -302,26 +304,31 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     }
   };
 
-  const handleClick = useCallback(
-    async (selection: GameResponseValue, isSuccess: boolean = false) => {
-      if (game === undefined) {
-        return;
-      }
-      const apiResponse = await sendNewGameResponse(game.id, selection);
-      if (!apiResponse) {
-        console.error('Error reaching server');
-        return;
-      }
+  // const handleClick = useCallback(
+  //   async (selection: GameResponseValue, isSuccess: boolean = false) => {
+  //     if (game === undefined) {
+  //       return;
+  //     }
+  //     const apiResponse = await sendNewGameResponse(game.id, selection);
+  //     if (!apiResponse) {
+  //       console.error('Error reaching server');
+  //       return;
+  //     }
 
-      setFound(isSuccess);
-      setErrorModalOpen(!isSuccess);
-      if (isSuccess || tryCount === 1) {
-        setGameResponses(await getGameStats(game.id));
-      }
-      setTryCount(tryCount + 1);
-    },
-    [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game],
-  );
+  //     setFound(isSuccess);
+  //     setErrorModalOpen(!isSuccess);
+  //     if (isSuccess || tryCount === 1) {
+  //       setGameResponses(await getGameStats(game.id));
+  //     }
+  //     setTryCount(tryCount + 1);
+  //   },
+  //   [getGameStats, sendNewGameResponse, setFound, setErrorModalOpen, setGameResponses, setTryCount, tryCount, game],
+  // );
+
+  const handleClick = (value: GameResponseValue, val: number) => {
+    console.log('click');
+    putUpdateGameResponse({ value: value, id: val });
+  };
   // Quand je n'enlève pas loadingGame de la condition rien ne s'affiche sur la page
   // if (user == null || village == null || loadingGame) {
   //   return <Base></Base>;
@@ -435,7 +442,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                     <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
                       <ResponseButton
                         value={value}
-                        onClick={() => handleClick(value, isSuccess)}
+                        onClick={() => handleClick(value, playContent?.id)}
                         isSuccess={isSuccess}
                         signification={signification}
                         disabled={isDisabled}
