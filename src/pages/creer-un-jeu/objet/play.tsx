@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Jouer from 'src/components/game/DiplayGameById';
+import Jouer from 'src/components/game/DisplayGameById';
 
 const Play = () => {
   return (
