@@ -25,13 +25,21 @@ import NProgress from 'nprogress';
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import { Container } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 
+import Analyser from './admin/villages/Analyser';
+import Creer from './admin/villages/Creer';
+import Gerer from './admin/villages/Gerer';
+import Mediatheque from './admin/villages/Mediatheque';
+import Publier from './admin/villages/Publier';
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
 import { AdminNavigation } from 'src/components/admin/AdminNavigation';
+import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
+import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { UserContextProvider } from 'src/contexts/userContext';
@@ -70,6 +78,29 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = useState<User | null>(initialUser || null);
+  const [currentContent, setCurrentContent] = useState('Créer');
+
+  const changeContent = (content: string) => {
+    setCurrentContent(content);
+  };
+
+  const renderContent = () => {
+    switch (currentContent) {
+      case 'Créer':
+        return <Creer />;
+      case 'Publier':
+        return <Publier />;
+      case 'Gérer':
+        return <Gerer />;
+      case 'Analyser':
+        return <Analyser />;
+      case 'Médiathèque':
+        return <Mediatheque />;
+      default:
+        return <Creer />;
+    }
+  };
+
   const onRouterChangeStart = (): void => {
     NProgress.start();
   };
@@ -134,15 +165,30 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 <ClassroomContextProvider>
                   <ActivityContextProvider>
                     {isOnAdmin ? (
-                      <div>
-                        <AdminHeader />
-                        <div style={{ display: 'flex', width: '100%' }}>
-                          <AdminNavigation />
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <Component {...pageProps} />
+                      router.pathname.startsWith('/admin/villages/new') ? (
+                        <div className="container-admin-portal">
+                          <NewAdminHeader />
+                          <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
+                            <NewAdminNavigation changeContent={changeContent} />
+                            <Container
+                              className="container-admin-nav child-container"
+                              sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
+                            >
+                              {renderContent()}
+                            </Container>
                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div>
+                          <AdminHeader />
+                          <div style={{ display: 'flex', width: '100%' }}>
+                            <AdminNavigation />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Component {...pageProps} />
+                            </div>
+                          </div>
+                        </div>
+                      )
                     ) : user !== null &&
                       router.pathname !== '/inscription' &&
                       router.pathname !== '/connexion' &&
