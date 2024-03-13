@@ -9,7 +9,7 @@ import { Button } from '@mui/material';
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
 import { useCountAllStandardGame } from 'src/api/game/game.getAllGames';
-import { useCountAbleToPlayStandardGame } from 'src/api/game/game.getAvailable';
+import { useCountAbleToPlayStandardGame } from 'src/api/game/game.getCountAvailable';
 import { RedButton } from 'src/components/buttons/RedButton';
 import { bgPage } from 'src/styles/variables.const';
 import { LinkNotAllowedInPath } from 'types/activity.type';

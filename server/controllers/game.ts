@@ -475,36 +475,4 @@ gameController.get({ path: '/countAbleToPlayStandardGame', userType: UserType.TE
   });
 });
 
-// --- update a game response by id ---
-
-gameController.put({ path: '/standardPlay/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    next();
-    return;
-  }
-
-  const id = parseInt(req.params.id, 10) || 0;
-  const userId = req.user.id;
-  const villageId = req.user.villageId || 0;
-  const data = req.body;
-  console.log('======================================');
-  console.log(data);
-  console.log(id);
-  console.log(data.value);
-
-  const updateResponse = await AppDataSource.getRepository(GameResponse)
-    .createQueryBuilder('activity')
-    .insert()
-    .into(GameResponse)
-    .values({
-      userId: userId,
-      villageId: villageId,
-      gameId: id,
-      value: data.value,
-    })
-    .execute();
-  console.log(updateResponse);
-  console.log('======================================');
-});
-
 export { gameController };

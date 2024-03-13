@@ -3,13 +3,13 @@ import { useQuery } from 'react-query';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
-type GetCountAbleToPlayStandardGameProps = {
+type GetAbleToPlayStandardGameProps = {
   subType: number;
   villageId: number;
 };
 
-export async function getCountAbleToPlayStandardGame({ subType, villageId }: GetCountAbleToPlayStandardGameProps) {
-  const path = `countAbleToPlayStandardGame${serializeToQueryUrl({
+export async function getAbleToPlayStandardGame({ subType, villageId }: GetAbleToPlayStandardGameProps) {
+  const path = `AbleToPlayStandardGame${serializeToQueryUrl({
     subType,
     villageId,
   })}`;
@@ -17,9 +17,9 @@ export async function getCountAbleToPlayStandardGame({ subType, villageId }: Get
     method: 'GET',
     url: `/games/${path}`,
   });
-  return response.error ? undefined : response.data.count;
+  return response.error ? undefined : response.data.activities;
 }
 
-export function useCountAbleToPlayStandardGame(subType: number, villageId: number) {
-  return useQuery(['countAbleToPlay', { subType, villageId }], () => getCountAbleToPlayStandardGame({ subType, villageId }));
+export function useAbleToPlayStandardGame(subType: number, villageId: number) {
+  return useQuery(['AbleToPlay', { subType, villageId }], () => getAbleToPlayStandardGame({ subType, villageId }));
 }

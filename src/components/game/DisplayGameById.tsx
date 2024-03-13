@@ -1,18 +1,14 @@
-import { is } from 'immutable';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useContext } from 'react';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-// import AppsIcon from '@mui/icons-material/Apps';
-import ShuffleIcon from '@mui/icons-material/Shuffle';
-import type { SvgIconTypeMap } from '@mui/material';
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
-import type { OverridableComponent } from '@mui/material/OverridableComponent';
+// import AccessTimeIcon from '@mui/icons-material/AccessTime';
+// import ShuffleIcon from '@mui/icons-material/Shuffle';
+import { Box, Button, Grid } from '@mui/material';
 
+import { KeepRatio } from '../KeepRatio';
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
-import { useLatestStandard, useType } from 'src/api/game/game.latestStandard';
-import { putUpdateGameResponse } from 'src/api/game/game.updateGameResponse';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
@@ -29,14 +25,12 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { primaryColor } from 'src/styles/variables.const';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
-// import type { Game, MimicData, DataForPlayed } from 'types/game.type';
 import type { Game } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
-import { GameResponseValue } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
 
 function shuffleArray(size: number) {
-  const array = Array.from(Array(size)).map((a, i) => (a = i));
+  const array = Array.from(Array(size)).map((_, i) => i);
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
@@ -59,36 +53,36 @@ enum RadioBoxValues {
   // MOSAIC = 'Mosaïque',
 }
 
-type RadioNextGameProps = {
-  value: RadioBoxValues;
-  Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
-    muiName: string;
-  };
-  onChange: (event: React.SyntheticEvent) => void;
-  checked: boolean;
-};
+// type RadioNextGameProps = {
+//   value: RadioBoxValues;
+//   Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
+//     muiName: string;
+//   };
+//   onChange: (event: React.SyntheticEvent) => void;
+//   checked: boolean;
+// };
 
-const radioListComponentMapper = {
-  [RadioBoxValues.NEW]: AccessTimeIcon,
-  [RadioBoxValues.RANDOM]: ShuffleIcon,
-  //[RadioBoxValues.MOSAIC]: AppsIcon,
-};
+// const radioListComponentMapper = {
+//   [RadioBoxValues.NEW]: AccessTimeIcon,
+//   [RadioBoxValues.RANDOM]: ShuffleIcon,
+//   //[RadioBoxValues.MOSAIC]: AppsIcon,
+// };
 
-const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
-  <FormControlLabel
-    sx={{ ml: 1 }}
-    value={value}
-    control={<Radio sx={{ py: 0 }} />}
-    label={
-      <>
-        <Icon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> {value}
-      </>
-    }
-    labelPlacement="end"
-    checked={checked}
-    onChange={onChange}
-  />
-);
+// const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
+//   <FormControlLabel
+//     sx={{ ml: 1 }}
+//     value={value}
+//     control={<Radio sx={{ py: 0 }} />}
+//     label={
+//       <>
+//         <Icon sx={{ fontSize: 16, verticalAlign: 'middle', ml: 0.5 }} /> {value}
+//       </>
+//     }
+//     labelPlacement="end"
+//     checked={checked}
+//     onChange={onChange}
+//   />
+// );
 
 const AlreadyPlayedModal: React.FC<AlreadyPlayedModalProps> = ({ isOpen, handleSuccessClick }) => {
   const router = useRouter();
@@ -105,7 +99,7 @@ const AlreadyPlayedModal: React.FC<AlreadyPlayedModalProps> = ({ isOpen, handleS
       onClose={() => router.push('/')}
       onConfirm={handleSuccessClick}
     >
-      C’était la dernière mimique disponible ! Dès que de nouvelles mimiques sont ajoutées, cela apparaîtra dans le fil d’activité.
+      C’était le dernier jeu disponible ! Dès que de nouveaux seront ajoutées, cela apparaîtra dans le fil d’activité.
     </Modal>
   );
 };
@@ -122,9 +116,24 @@ type SubTypeProps = {
 //   [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
 // };
 const phrase = {
-  [GameType.MIMIC]: { phraseDelamodal: 'modal' },
-  [GameType.MONEY]: ['objets', 'objet', 'objet', 'objet'],
-  [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
+  [GameType.MIMIC]: {
+    title: 'des mimiques',
+    phraseDelamodal: 'la signification de cette mimique',
+    question: 'Que signifie cette mimique ?',
+    presentation: 'Une mimique proposé par ',
+  },
+  [GameType.MONEY]: {
+    title: 'de la monnaie',
+    phraseDelamodal: 'combien vaut cet objet',
+    question: 'Combien vaut cet objet ?',
+    presentation: 'Un objet proposé par ',
+  },
+  [GameType.EXPRESSION]: {
+    title: 'des expressions',
+    phraseDelamodal: 'la signification de cette expression',
+    question: 'Que signifie cette expression ?',
+    presentation: 'Une expression proposé par ',
+  },
 };
 
 const DisplayGameById = ({ subType }: SubTypeProps) => {
@@ -137,7 +146,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [isGameModalOpen, setIsLastGameModalOpen] = useState<boolean>(false);
   const [gameResponses, setGameResponses] = useState<GameResponse[]>([]);
-  const [selectedValue, setSelectedValue] = useState(RadioBoxValues.NEW);
+  const [selectedValue] = useState(RadioBoxValues.NEW);
   const router = useRouter();
   const { id } = router.query;
 
@@ -208,16 +217,39 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
     const {
       id,
-      content: { game: steps, labelPresentation },
+      content,
+      content: {
+        game: steps,
+        labelPresentation,
+        radio,
+        language,
+        monney,
+        game: [
+          {
+            inputs: [{ selectedValue: media, type }],
+          },
+        ],
+      },
       createDate,
     } = getOneGameById || {};
 
     const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
+    // if (monney) {
+    //   responses.push(monney)
+    // }
+
     let fakeSignificationIndex = 1;
+    const euro = content.monney;
     steps.map(({ inputs }) => {
       inputs.map((input) => {
         if (input.response || input.response === false) {
-          responses.push({ isSuccess: input.response, signification: input.selectedValue, value: input.response ? 0 : fakeSignificationIndex });
+          if (getOneGameById.subType === GameType.MONEY) {
+            // Utilisation des templates de chaînes de caractères
+            const significationWithEuro = `${input.selectedValue} ${euro}`;
+            responses.push({ isSuccess: input.response, signification: significationWithEuro, value: input.response ? 0 : fakeSignificationIndex });
+          } else {
+            responses.push({ isSuccess: input.response, signification: input.selectedValue, value: input.response ? 0 : fakeSignificationIndex });
+          }
           if (input.response === false) {
             ++fakeSignificationIndex;
           }
@@ -227,8 +259,13 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     return {
       responses,
       labelPresentation,
+      radio,
+      monney,
+      language,
       createDate,
       id,
+      media,
+      type,
     };
   }, [getOneGameById]);
 
@@ -243,13 +280,13 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
   const choices = React.useMemo(() => (playContent.responses.length > 0 ? shuffleArray(playContent.responses.length) : []), [playContent.responses]);
 
-  const handleRadioButtonChange = (event: React.SyntheticEvent) => {
-    const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
-    setSelectedValue(selected as RadioBoxValues);
-    if (selected === RadioBoxValues.RANDOM) {
-      getNextGame();
-    }
-  };
+  // const handleRadioButtonChange = (event: React.SyntheticEvent) => {
+  //   const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
+  //   setSelectedValue(selected as RadioBoxValues);
+  //   if (selected === RadioBoxValues.RANDOM) {
+  //     getNextGame();
+  //   }
+  // };
 
   const handleClick = useCallback(
     async (selection: string, isSuccess: boolean = false) => {
@@ -293,12 +330,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             <div>
               {displayPhrasesByType && (
                 <div>
-                  <h1>Jouer au jeu des {displayPhrasesByType[0]} !</h1>
-                  <p style={{ marginBottom: 0 }}>A vous de décider avec quelle {displayPhrasesByType[1]} vous allez jouer !</p>
-                  <p style={{ marginTop: 0 }}>
-                    Vous pouvez choisir comment les faire défiler ou les afficher, par défaut vous visualisez la dernière {displayPhrasesByType[2]}{' '}
-                    publiée.
-                  </p>
+                  <h1>Jouer au jeu {displayPhrasesByType.title} !</h1>
                 </div>
               )}
             </div>
@@ -310,12 +342,12 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               style={{ display: 'block,', justifyContent: 'center', alignItems: 'center', paddingBottom: '1rem' }}
             >
               <h3 className="text" style={{ marginTop: '0.7rem' }}>
-                {'Une mimique proposée par '}
-                {/* <UserDisplayName className="text" user={gameCreator} noLink={false} /> */}
+                {displayPhrasesByType.presentation}
+                <UserDisplayName className="text" user={gameCreator} noLink={false} />
               </h3>
               {playContent && playContent.createDate && (
                 <p style={{ fontSize: '0.8rem', color: 'gray' }}>
-                  {'publié le '}
+                  {'Publié le '}
                   {new Date(playContent.createDate).toLocaleDateString()}
                   {gameCreatorIsPelico ? (
                     <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
@@ -327,7 +359,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             </div>
           </div>
           <Grid container spacing={1} style={{ flex: 1, justifyContent: 'space-around' }}>
-            <RadioGroup row defaultValue={RadioBoxValues.NEW}>
+            {/* <RadioGroup row defaultValue={RadioBoxValues.NEW}>
               {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
                 return (
                   <RadioNextGame
@@ -339,7 +371,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                   />
                 );
               })}
-            </RadioGroup>
+            </RadioGroup> */}
           </Grid>
           <Grid
             container
@@ -354,10 +386,19 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             justifyContent="flex-start"
           >
             <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
-              {playContent !== undefined && playContent.media !== null && <VideoView id={0} value={playContent.media}></VideoView>}
+              {playContent !== undefined && playContent.media !== null && playContent.type === 4 && (
+                <VideoView id={0} value={playContent.media}></VideoView>
+              )}
+              {playContent !== undefined && playContent.media !== null && playContent.type === 3 && (
+                <div className="text-center activity-data">
+                  <KeepRatio ratio={9 / 16} maxWidth="600px">
+                    <Image src={playContent.media} layout="fill" objectFit="contain" unoptimized />
+                  </KeepRatio>
+                </div>
+              )}
             </Grid>
             <Grid container spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
-              <h1>Que signifie cette {displayPhrasesByType[3]} ?</h1>
+              <h1>{displayPhrasesByType.question}</h1>
             </Grid>
             <div
               className="display-ended-game"
@@ -373,7 +414,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                 choices.map((val, index) => {
                   const { value, isSuccess, signification } = playContent.responses[val];
                   const isCorrect = isSuccess && found;
-                  //const mimicOrigine = playContent?.origine || ''; Nous n'avons plus origine
                   const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
                   return (
                     <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
@@ -418,7 +458,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             </div>
 
             <Grid item xs={12} md={12}>
-              {found && <p>C’est exact ! Vous avez trouvé la signification de cette mimique.</p>}
+              {found && <p>C’est exact ! Vous avez trouvé {displayPhrasesByType.phraseDelamodal}.</p>}
             </Grid>
           </Grid>
           <Grid>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Grid>

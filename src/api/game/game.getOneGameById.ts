@@ -7,6 +7,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 type Input = {
   selectedValue: string;
   response: boolean;
+  type: number;
 };
 
 type GameItem = {
@@ -27,6 +28,7 @@ type DataUse = {
   id: number;
   userId: number;
   villageId: number;
+  subType: number;
 };
 
 type GetOneGameByIdProps = {
@@ -42,7 +44,6 @@ export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
     method: 'GET',
     url: `/games${path}`,
   });
-  console.log(response.data);
   return response.error ? undefined : (response.data as DataUse);
 }
 

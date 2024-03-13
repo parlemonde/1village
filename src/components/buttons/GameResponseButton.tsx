@@ -21,8 +21,8 @@ const ResponseButton = ({
   signification = '',
   disabled = false,
   isCorrect,
-  mimicOrigine,
-}: ResponseButtonProps) => {
+}: // mimicOrigine,
+ResponseButtonProps) => {
   const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
 
   const handleClick = useCallback(() => {
@@ -56,7 +56,7 @@ const ResponseButton = ({
       {isCorrect ? (
         <Stack direction="column">
           <Typography>{signification}</Typography>
-          <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
+          {/* <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography> */}
         </Stack>
       ) : (
         signification
