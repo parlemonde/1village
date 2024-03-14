@@ -5,6 +5,7 @@ import React, { useState, useCallback, useMemo, useContext } from 'react';
 
 // import AccessTimeIcon from '@mui/icons-material/AccessTime';
 // import ShuffleIcon from '@mui/icons-material/Shuffle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
@@ -115,26 +116,6 @@ type SubTypeProps = {
 //   [GameType.MONEY]: ['objets', 'objet', 'objet', 'objet'],
 //   [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
 // };
-const phrase = {
-  [GameType.MIMIC]: {
-    title: 'des mimiques',
-    phraseDelamodal: 'la signification de cette mimique',
-    question: 'Que signifie cette mimique ?',
-    presentation: 'Une mimique proposé par ',
-  },
-  [GameType.MONEY]: {
-    title: 'de la monnaie',
-    phraseDelamodal: 'combien vaut cet objet',
-    question: 'Combien vaut cet objet ?',
-    presentation: 'Un objet proposé par ',
-  },
-  [GameType.EXPRESSION]: {
-    title: 'des expressions',
-    phraseDelamodal: 'la signification de cette expression',
-    question: 'Que signifie cette expression ?',
-    presentation: 'Une expression proposé par ',
-  },
-};
 
 const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
@@ -152,6 +133,38 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
   const gameId = parseInt(String(id));
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
+
+  const TYPE_OF_GAME = {
+    [GameType.MIMIC]: 'mimiques',
+    [GameType.MONEY]: 'objet',
+    [GameType.EXPRESSION]: 'expression',
+  };
+
+  const phrase = {
+    [GameType.MIMIC]: {
+      title: 'des mimiques',
+      phraseDelamodal: 'la signification de cette mimique',
+      question: 'Que signifie cette mimique ?',
+      presentation: 'Une mimique proposé par ',
+      moreInfos: '',
+    },
+    [GameType.MONEY]: {
+      title: 'de la monnaie',
+      phraseDelamodal: 'combien vaut cet objet',
+      question: 'Combien vaut cet objet ?',
+      presentation: 'Un objet proposé par ',
+      moreInfos: '',
+    },
+    [GameType.EXPRESSION]: {
+      title: 'des expressions',
+      phraseDelamodal: 'la signification de cette expression',
+      question: 'Que signifie cette expression ?',
+      presentation: 'Une expression proposé par ',
+      moreInfos: ` en ${getOneGameById?.content.language?.toLowerCase()}, ${getOneGameById?.content.radio}`,
+    },
+  };
+
+  const typeOfGame = TYPE_OF_GAME[subType];
   const displayPhrasesByType = phrase[subType];
   const handleConfirmModal = async () => {
     const success = await resetGamesPlayedForUser();
@@ -344,6 +357,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               <h3 className="text" style={{ marginTop: '0.7rem' }}>
                 {displayPhrasesByType.presentation}
                 <UserDisplayName className="text" user={gameCreator} noLink={false} />
+                {displayPhrasesByType.moreInfos}
               </h3>
               {playContent && playContent.createDate && (
                 <p style={{ fontSize: '0.8rem', color: 'gray' }}>
@@ -385,6 +399,10 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             alignItems="flex-start"
             justifyContent="flex-start"
           >
+            <Link href={`/creer-un-jeu/${typeOfGame}/displayList`}>
+              <ArrowBackIcon />
+            </Link>
+
             <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
               {playContent !== undefined && playContent.media !== null && playContent.type === 4 && (
                 <VideoView id={0} value={playContent.media}></VideoView>
