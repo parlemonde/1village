@@ -1,4 +1,4 @@
-import Link from 'next/link';
+/* eslint-disable @next/next/no-html-link-for-pages */
 import React from 'react';
 
 import { Base } from 'src/components/Base';
@@ -12,15 +12,11 @@ const PresentationSuccess = () => {
         <p className="text">{'Vos objets ont bien été publiés !'}</p>
         <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
         <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}>
-          <Link href="/" passHref>
-            {"Revenir à l'accueil"}
-          </Link>
+          <a href="/">{"Revenir à l'accueil"}</a>
         </p>
       </div>
       <p className="text" style={{ display: 'flex', justifyContent: 'center', textDecorationLine: 'underline' }}>
-        <Link href="/creer-un-jeu/objet/displayList" passHref>
-          {'Ou découvrez les jeux des autres Pélicopains !'}
-        </Link>
+        <a href="/creer-un-jeu/objet/displayList">{'Ou découvrez les jeux des autres Pélicopains !'}</a>
       </p>
     </Base>
   );

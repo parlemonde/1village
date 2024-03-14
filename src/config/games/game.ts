@@ -331,7 +331,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen modéré',
+          description: 'Choissisez un objet dont le prix moyen est modéré',
           inputs: [
             {
               id: 7,
@@ -394,7 +394,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
       [
         {
           title: 'Choisissez un objet',
-          description: 'Choissisez un objet dont le prix moyen élevé',
+          description: 'Choissisez un objet dont le prix moyen est élevé',
           inputs: [
             {
               id: 13,
@@ -576,6 +576,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 8,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {
@@ -642,6 +643,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               id: 14,
               type: InputTypeEnum.IMAGE,
               selectedValue: '',
+              isDisplayedInRecap: true,
               required: true,
             },
             {

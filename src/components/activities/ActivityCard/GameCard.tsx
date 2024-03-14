@@ -28,6 +28,18 @@ const TYPE_OF_GAME = {
   [GameType.EXPRESSION]: 'expression',
 };
 
+const phrase = {
+  [GameType.MIMIC]: {
+    phrase: 'a relancé le jeu des mimiques',
+  },
+  [GameType.MONEY]: {
+    phrase: 'a relancé le jeu de la monnaie',
+  },
+  [GameType.EXPRESSION]: {
+    phrase: 'a relancé le jeu des expressions',
+  },
+};
+
 export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete, gameType }: GameCardProps) => {
   const [totalGamesCount, setTotalGamesCount] = useState<number>(0);
   const [availableGamesCount, setAvailableGamesCount] = useState<number>(0);
@@ -35,6 +47,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
   const { data: countAllStandardGame } = useCountAllStandardGame(gameType, activity.villageId);
   const typeOfGame = TYPE_OF_GAME[gameType];
   const path = `/creer-un-jeu/${typeOfGame}/displayList`;
+  const displayPhrasesByType = phrase[gameType];
 
   useEffect(() => {
     if (countAbleToPlay && countAllStandardGame) {
@@ -128,7 +141,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p style={{ marginBottom: '2rem' }}>
-          {labelPresentation} a relancé le jeu des {typeOfGame}s.
+          {labelPresentation} {displayPhrasesByType.phrase}.
         </p>
         <p>
           Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`}.<br />

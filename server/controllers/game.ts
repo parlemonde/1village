@@ -318,10 +318,11 @@ gameController.get({ path: '/allStandardGame', userType: UserType.TEACHER }, asy
   }
 
   const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
 
   const subQueryBuilder = AppDataSource.getRepository(Activity)
     .createQueryBuilder('activity')
-    .where('activity.villageId = :villageId', { villageId: req.user.villageId })
+    .where('activity.villageId = :villageId', { villageId: villageId })
     .andWhere('activity.type = :type', { type: 4 })
     .andWhere('activity.subType = :subType', { subType: subType });
 
@@ -356,7 +357,7 @@ gameController.get({ path: '/playStandardGame', userType: UserType.TEACHER }, as
     next();
     return;
   }
-  const villageId = req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
   const type = 4;
   const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
   const game = await AppDataSource.getRepository(Activity)
@@ -380,7 +381,7 @@ gameController.get({ path: '/latestStandard', userType: UserType.TEACHER }, asyn
     next();
     return;
   }
-  const villageId = req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
   const type = 4;
   const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
   const latestGame = await AppDataSource.getRepository(Activity)
@@ -407,7 +408,7 @@ gameController.get({ path: '/ableToPlayStandardGame', userType: UserType.TEACHER
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
   const type = 4;
   const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
@@ -445,7 +446,7 @@ gameController.get({ path: '/countAbleToPlayStandardGame', userType: UserType.TE
     return;
   }
   const userId = req.user.id;
-  const villageId = req.user.villageId;
+  const villageId = req.user.type <= UserType.TEACHER ? parseInt(getQueryString(req.query.villageId) || '0', 10) || null : req.user.villageId;
   const type = 4;
   const subType = parseInt(getQueryString(req.query.subType) || '0', 10);
 
