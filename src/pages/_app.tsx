@@ -30,10 +30,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 
 import Analyser from './admin/villages/Analyser';
-import Creer from './admin/villages/Creer';
 import Gerer from './admin/villages/Gerer';
 import Mediatheque from './admin/villages/Mediatheque';
 import Publier from './admin/villages/Publier';
+import Creer from './admin/villages/create/Creer';
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
