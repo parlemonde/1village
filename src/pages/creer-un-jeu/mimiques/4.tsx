@@ -8,7 +8,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
-import type { StepsType } from 'src/config/games/game';
+import type { StepsTypes } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -57,7 +57,7 @@ const MimiqueStep4 = () => {
     setIsLoading(false);
   };
 
-  function validateGameConfig(gameConfig: StepsType[][]) {
+  function validateGameConfig(gameConfig: StepsTypes[][]) {
     let isValidGame = true;
 
     function isEmptyOrSpaces(str: string | undefined) {

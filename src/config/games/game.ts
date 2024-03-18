@@ -30,7 +30,7 @@ export type inputType = {
   isIndice?: boolean;
 };
 
-export type StepsType = {
+export type StepsTypes = {
   title?: string;
   description?: string;
   inputs?: inputType[];
@@ -38,7 +38,7 @@ export type StepsType = {
 
 type GameFieldConfigType = {
   [type in GameType]: {
-    steps: Array<StepsType[]>;
+    steps: Array<StepsTypes[]>;
   };
 };
 

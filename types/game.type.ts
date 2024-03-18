@@ -1,5 +1,5 @@
 import type { Activity } from './activity.type';
-import type { StepsType } from 'src/config/games/game';
+import type { StepsTypes } from 'src/config/games/game';
 
 export enum GameType {
   MIMIC = 0,
@@ -100,7 +100,7 @@ export type MoneyData = {
 // --- structure to send to the server ---
 // --- On utilise ce type et pas ce au dessus ---
 export type GameDataStep = {
-  game: StepsType[];
+  game: StepsTypes[];
   language?: string;
   monney?: string;
   labelPresentation: string;
@@ -118,7 +118,7 @@ export type GameDataMonneyOrExpression = {
   selectedPhase: number;
 };
 export type DataForPlayed = {
-  game: StepsType;
+  game: StepsTypes;
   labelPresentation: string;
   language?: string;
   monnaie?: string;
