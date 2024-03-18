@@ -7,7 +7,7 @@ export class PublishDate1705329596198 implements MigrationInterface {
       'activity',
       new TableColumn({
         name: 'publishDate',
-        type: 'datetime',
+        type: 'DATETIME',
         isNullable: true,
       }),
     );
