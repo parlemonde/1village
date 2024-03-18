@@ -53,6 +53,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   }, [user]);
 
   const currentVillageId = village ? village.id : -1;
+  // eslint-disable-next-line no-console
+  console.log('Current Village', currentVillageId);
 
   const isOnAdmin = React.useMemo(() => router.pathname.slice(1, 6) === 'admin' && user !== null, [router.pathname, user]);
 

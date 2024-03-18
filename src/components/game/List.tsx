@@ -36,6 +36,9 @@ const List = ({ subType, villageId }: SubTypeProps) => {
     idFromAbleToPlay.push(el.id);
   });
 
+  // eslint-disable-next-line no-console
+  console.log('allGames', allGames);
+
   return (
     <>
       <Grid container spacing={2} style={{ padding: 5 }}>
