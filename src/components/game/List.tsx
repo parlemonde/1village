@@ -56,7 +56,7 @@ const List = ({ subType, villageId }: SubTypeProps) => {
                   <ImageListItem>
                     <Link href={`/creer-un-jeu/${typeOfGame}/jouer/${item.id}`}>
                       {subType === 0 ? (
-                        <div style={{ height: '250px', width: 'auto' }}>
+                        <div style={{ height: '250px', width: '250px' }}>
                           <ReactPlayer
                             width="100%"
                             height="100%"
