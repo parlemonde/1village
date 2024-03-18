@@ -52,7 +52,7 @@ const List = ({ subType, villageId }: SubTypeProps) => {
               index: number,
             ) => (
               <Grid item xs={12} sm={6} md={4} key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Card sx={{ maxWidth: 250 }}>
+                <Card sx={{ maxWidth: 250, borderRadius: '20px' }}>
                   <ImageListItem>
                     <Link href={`/creer-un-jeu/${typeOfGame}/jouer/${item.id}`}>
                       {subType === 0 ? (

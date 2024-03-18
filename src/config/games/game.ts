@@ -27,6 +27,7 @@ export type inputType = {
   selectedValue?: string;
   hidden?: hiddenType;
   required?: boolean;
+  isIndice?: boolean;
 };
 
 export type StepsType = {
@@ -299,6 +300,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
               selectedValue: '',
               required: true,
+              isIndice: true,
             },
           ],
         },
@@ -362,6 +364,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
               selectedValue: '',
               required: true,
+              isIndice: true,
             },
           ],
         },
@@ -425,6 +428,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               label: 'À quoi sert cet objet ? Quand est-il acheté ?',
               selectedValue: '',
               required: true,
+              isIndice: true,
             },
           ],
         },
@@ -518,6 +522,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              isIndice: true,
               required: true,
             },
             {
@@ -527,6 +532,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              isIndice: true,
             },
             {
               id: 5,
@@ -585,6 +591,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              isIndice: true,
               required: true,
             },
             {
@@ -594,6 +601,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              isIndice: true,
             },
             {
               id: 11,
@@ -652,6 +660,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              isIndice: true,
               required: true,
             },
             {
@@ -661,6 +670,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
               type: InputTypeEnum.INPUT,
               selectedValue: '',
               isDisplayedInRecap: true,
+              isIndice: true,
             },
             {
               id: 17,

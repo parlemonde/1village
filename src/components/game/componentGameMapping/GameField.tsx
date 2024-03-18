@@ -21,7 +21,7 @@ const GameField = ({ input }: { input: inputType }) => {
         <b>{input.label}</b>
       </p>
       <TextField
-        style={{ width: '100%', margin: '10px' }}
+        style={{ width: '100%', marginTop: '10px' }}
         type="text"
         value={input?.selectedValue?.length !== undefined && input.selectedValue.length > 0 ? input.selectedValue : value}
         placeholder={value.length > 0 ? '' : input.placeHolder}

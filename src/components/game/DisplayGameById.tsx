@@ -111,11 +111,6 @@ const POSITION = ['c', 'f', 'i'];
 type SubTypeProps = {
   subType: GameType;
 };
-// const phrase = {
-//   [GameType.MIMIC]: ['mimiques', 'mimique', 'mimique', 'mimique'],
-//   [GameType.MONEY]: ['objets', 'objet', 'objet', 'objet'],
-//   [GameType.EXPRESSION]: ['expression ', 'expression', 'expression', 'expression'],
-// };
 
 const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { user } = useContext(UserContext);
@@ -247,9 +242,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
     } = getOneGameById || {};
 
     const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
-    // if (monney) {
-    //   responses.push(monney)
-    // }
 
     let fakeSignificationIndex = 1;
     const euro = content.monney;
@@ -417,6 +409,9 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             </Grid>
             <Grid container spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>{displayPhrasesByType.question}</h1>
+              <div>
+                <button>Indice</button>
+              </div>
             </Grid>
             <div
               className="display-ended-game"
