@@ -9,7 +9,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
-import { GAME_FIELDS_CONFIG, InputTypeEnum } from 'types/game.type';
+import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
+import { InputTypeEnum } from 'types/game.type';
 import type { GameType } from 'types/game.type';
 
 interface PlayProps {
