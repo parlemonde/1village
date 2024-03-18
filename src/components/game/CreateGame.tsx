@@ -4,9 +4,9 @@ import GameField from './componentGameMapping/GameField';
 import GameMedia from './componentGameMapping/GameMedia';
 import GameRadio from './componentGameMapping/GameRadio';
 import GameSelect from './componentGameMapping/GameSelect';
-import type { hiddenType, inputType } from 'src/config/games/game';
-import { InputTypeEnum } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
+import type { hiddenType, inputType } from 'types/game.type';
+import { InputTypeEnum } from 'types/game.type';
 
 interface PlayProps {
   stepNumber: number;

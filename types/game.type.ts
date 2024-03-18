@@ -1,10 +1,54 @@
 import type { Activity } from './activity.type';
-import type { StepsTypes } from 'src/config/games/game';
 
 export enum GameType {
   MIMIC = 0,
   MONEY = 1,
   EXPRESSION = 2,
+}
+
+export enum InputTypeEnum {
+  INPUT = 0,
+  RADIO = 1,
+  SELECT = 2,
+  IMAGE = 3,
+  VIDEO = 4,
+}
+
+export type hiddenType = {
+  id: number;
+  value: string;
+};
+
+export type inputType = {
+  id: number;
+  type: InputTypeEnum;
+  values?: string[];
+  label?: string;
+  response?: boolean;
+  isDisplayedInRecap?: boolean;
+  placeHolder?: string;
+  methodType?: methodType;
+  selectedValue?: string;
+  hidden?: hiddenType;
+  required?: boolean;
+  isIndice?: boolean;
+};
+
+export type StepsTypes = {
+  title?: string;
+  description?: string;
+  inputs?: inputType[];
+};
+
+export type GameFieldConfigType = {
+  [type in GameType]: {
+    steps: Array<StepsTypes[]>;
+  };
+};
+
+export enum methodType {
+  LANGUE = 'language',
+  CURRENCY = 'currency',
 }
 
 // export interface Game

@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
 
-import type { inputType, StepsTypes } from 'src/config/games/game';
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
+import type { inputType, StepsTypes } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 type GameContextType = {

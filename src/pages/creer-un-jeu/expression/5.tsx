@@ -8,13 +8,12 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
-import type { StepsTypes } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityType } from 'types/activity.type';
-import type { GameDataMonneyOrExpression } from 'types/game.type';
+import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 

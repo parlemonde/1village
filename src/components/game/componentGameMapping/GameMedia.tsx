@@ -9,9 +9,9 @@ import { KeepRatio } from 'src/components/KeepRatio';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { VideoModals } from 'src/components/activities/content/editors/VideoEditor/VideoModals';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
-import type { inputType } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
 import { errorColor, primaryColor, bgPage } from 'src/styles/variables.const';
+import type { inputType } from 'types/game.type';
 
 const GameMedia = ({ input }: { input: inputType }) => {
   const { updateGameConfig } = useContext(GameContext);

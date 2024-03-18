@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react';
 
 import { TextField } from '@mui/material';
 
-import type { inputType } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
+import type { inputType } from 'types/game.type';
 
 const GameField = ({ input }: { input: inputType }) => {
   const { updateGameConfig } = useContext(GameContext);

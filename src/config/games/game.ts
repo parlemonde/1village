@@ -1,51 +1,7 @@
 import { getCurrencies } from 'src/api/currencie/currencies.get';
 import { getLanguages } from 'src/api/language/languages.get';
-import { GameType } from 'types/game.type';
-
-export enum InputTypeEnum {
-  INPUT = 0,
-  RADIO = 1,
-  SELECT = 2,
-  IMAGE = 3,
-  VIDEO = 4,
-}
-
-export type hiddenType = {
-  id: number;
-  value: string;
-};
-
-export type inputType = {
-  id: number;
-  type: InputTypeEnum;
-  values?: string[];
-  label?: string;
-  response?: boolean;
-  isDisplayedInRecap?: boolean;
-  placeHolder?: string;
-  methodType?: methodType;
-  selectedValue?: string;
-  hidden?: hiddenType;
-  required?: boolean;
-  isIndice?: boolean;
-};
-
-export type StepsTypes = {
-  title?: string;
-  description?: string;
-  inputs?: inputType[];
-};
-
-type GameFieldConfigType = {
-  [type in GameType]: {
-    steps: Array<StepsTypes[]>;
-  };
-};
-
-enum methodType {
-  LANGUE = 'language',
-  CURRENCY = 'currency',
-}
+import type { GameFieldConfigType } from 'types/game.type';
+import { GameType, InputTypeEnum, methodType } from 'types/game.type';
 
 export const keyMapping = {
   [methodType.CURRENCY]: 'name',

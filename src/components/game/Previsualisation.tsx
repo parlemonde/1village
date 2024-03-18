@@ -7,9 +7,9 @@ import { FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 
 import { CustomRadio } from '../buttons/CustomRadio';
 import { EditButton } from '../buttons/EditButton';
-import type { inputType } from 'src/config/games/game';
-import { InputTypeEnum } from 'src/config/games/game';
 import { GameContext } from 'src/contexts/gameContext';
+import type { inputType } from 'types/game.type';
+import { InputTypeEnum } from 'types/game.type';
 
 type PrevisualisationProps = {
   baseUrl: string;
