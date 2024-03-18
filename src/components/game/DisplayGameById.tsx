@@ -409,9 +409,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
             </Grid>
             <Grid container spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
               <h1>{displayPhrasesByType.question}</h1>
-              <div>
-                <button>Indice</button>
-              </div>
             </Grid>
             <div
               className="display-ended-game"
