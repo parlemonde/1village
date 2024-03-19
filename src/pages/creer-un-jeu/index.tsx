@@ -10,7 +10,7 @@ import { GameType } from 'types/game.type';
 const activities = [
   {
     label: 'Jeu des mimiques',
-    href: '/creer-un-jeu/mimiques',
+    href: '/creer-un-jeu/mimique',
     icon: MimiqueIcon,
     gameType: GameType.MIMIC,
     disabled: false,

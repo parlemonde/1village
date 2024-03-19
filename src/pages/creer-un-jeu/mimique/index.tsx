@@ -25,14 +25,14 @@ const Mimique = () => {
           illustrant la mimique, une explication de sa signification et de son origine. Pour pimenter le jeu, à chaque étape vous devrez également
           inventer deux significations fausses … à vos Pélicopains de deviner ce qui signifie réellement vos mimiques !
         </p>
-        <Link href="/creer-un-jeu/mimiques/1" passHref>
+        <Link href="/creer-un-jeu/mimique/1" passHref>
           <Button
             component="a"
             onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
               event.preventDefault();
-              router.push('/creer-un-jeu/mimiques/1');
+              router.push('/creer-un-jeu/mimique/1');
             }}
-            href="/creer-un-jeu/mimiques/1"
+            href="/creer-un-jeu/mimique/1"
             color="primary"
             variant="outlined"
             style={{

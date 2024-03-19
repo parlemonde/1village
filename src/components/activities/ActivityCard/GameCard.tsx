@@ -23,7 +23,7 @@ type GameCardProps = ActivityCardProps<GameActivity> & {
 };
 
 const TYPE_OF_GAME = {
-  [GameType.MIMIC]: 'mimiques',
+  [GameType.MIMIC]: 'mimique',
   [GameType.MONEY]: 'objet',
   [GameType.EXPRESSION]: 'expression',
 };

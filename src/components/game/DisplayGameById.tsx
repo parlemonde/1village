@@ -130,7 +130,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
 
   const TYPE_OF_GAME = {
-    [GameType.MIMIC]: 'mimiques',
+    [GameType.MIMIC]: 'mimique',
     [GameType.MONEY]: 'objet',
     [GameType.EXPRESSION]: 'expression',
   };

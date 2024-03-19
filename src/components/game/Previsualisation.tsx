@@ -26,7 +26,7 @@ const Previsualisation = ({ baseUrl }: PrevisualisationProps) => {
         return filteredItems || [];
       });
       return {
-        step: gameConfig.length === 4 ? index : index + 1,
+        step: index + 1,
         responses: ([] as inputType[]).concat(...reponseInStep),
       };
     })

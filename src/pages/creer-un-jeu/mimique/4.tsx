@@ -52,7 +52,7 @@ const MimiqueStep4 = () => {
     setIsLoading(true);
     await postGameDataMonneyOrExpression(data);
     localStorage.removeItem('gameConfig');
-    router.push('/creer-un-jeu/mimiques/success');
+    router.push('/creer-un-jeu/mimique/success');
     setIsLoading(false);
   };
 
@@ -84,7 +84,7 @@ const MimiqueStep4 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualisation']}
-          urls={['/creer-un-jeu/mimiques/1', '/creer-un-jeu/mimiques/2', '/creer-un-jeu/mimiques/3', '/creer-un-jeu/mimiques/4']}
+          urls={['/creer-un-jeu/mimique/1', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
           activeStep={4}
         />
         <div className="width-900">
@@ -108,7 +108,7 @@ const MimiqueStep4 = () => {
             )}
           </div>
         </div>
-        <Previsualisation baseUrl={'/creer-un-jeu/mimiques/'} />
+        <Previsualisation baseUrl={'/creer-un-jeu/mimique/'} />
       </div>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />

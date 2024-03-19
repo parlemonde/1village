@@ -15,7 +15,7 @@ import { GameType } from 'types/game.type';
 
 // This mapping is used to create routes dynamically
 const TYPE_OF_GAME = {
-  [GameType.MIMIC]: 'mimiques',
+  [GameType.MIMIC]: 'mimique',
   [GameType.MONEY]: 'objet',
   [GameType.EXPRESSION]: 'expression',
 };

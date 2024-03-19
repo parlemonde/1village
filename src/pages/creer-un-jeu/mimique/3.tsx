@@ -10,11 +10,11 @@ const MimiqueStep3 = () => {
   const router = useRouter();
 
   const onNext = () => {
-    router.push('/creer-un-jeu/mimiques/4');
+    router.push('/creer-un-jeu/mimique/4');
   };
 
   const onPrev = () => {
-    router.push(`/creer-un-jeu/mimiques/2`);
+    router.push(`/creer-un-jeu/mimique/2`);
   };
 
   return (
@@ -22,7 +22,7 @@ const MimiqueStep3 = () => {
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <Steps
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualisation']}
-          urls={['/creer-un-jeu/mimiques/1', '/creer-un-jeu/mimiques/2', '/creer-un-jeu/mimiques/3', '/creer-un-jeu/mimiques/4']}
+          urls={['/creer-un-jeu/mimique/1', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
           activeStep={2}
         />
         <div>
