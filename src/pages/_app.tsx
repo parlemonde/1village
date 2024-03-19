@@ -29,11 +29,6 @@ import { Container } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 
-import Analyser from './admin/villages/Analyser';
-import Gerer from './admin/villages/Gerer';
-import Mediatheque from './admin/villages/Mediatheque';
-import Publier from './admin/villages/Publier';
-import Creer from './admin/villages/create/Creer';
 import { Header } from 'src/components/Header';
 import { WelcomeModal } from 'src/components/WelcomeModal';
 import { AdminHeader } from 'src/components/admin/AdminHeader';
@@ -78,28 +73,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
   getInitialProps(appContext: AppContext): Promise<AppInitialProps>;
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = useState<User | null>(initialUser || null);
-  const [currentContent, setCurrentContent] = useState('Créer');
-
-  const changeContent = (content: string) => {
-    setCurrentContent(content);
-  };
-
-  const renderContent = () => {
-    switch (currentContent) {
-      case 'Créer':
-        return <Creer />;
-      case 'Publier':
-        return <Publier />;
-      case 'Gérer':
-        return <Gerer />;
-      case 'Analyser':
-        return <Analyser />;
-      case 'Médiathèque':
-        return <Mediatheque />;
-      default:
-        return <Creer />;
-    }
-  };
 
   const onRouterChangeStart = (): void => {
     NProgress.start();
@@ -165,16 +138,16 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                 <ClassroomContextProvider>
                   <ActivityContextProvider>
                     {isOnAdmin ? (
-                      router.pathname.startsWith('/admin/villages/new') ? (
+                      router.pathname.startsWith('/admin/newportal') ? (
                         <div className="container-admin-portal">
                           <NewAdminHeader />
                           <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
-                            <NewAdminNavigation changeContent={changeContent} />
+                            <NewAdminNavigation />
                             <Container
                               className="container-admin-nav child-container"
                               sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
                             >
-                              {renderContent()}
+                              <Component {...pageProps} />
                             </Container>
                           </div>
                         </div>

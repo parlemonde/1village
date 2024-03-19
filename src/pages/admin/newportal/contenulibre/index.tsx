@@ -20,7 +20,7 @@ const ContenuLibre = () => {
   const onNext = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
     if (success) {
-      router.push('/contenu-libre/1');
+      router.push('/admin/newportal/contenulibre/1');
     }
   };
 
@@ -29,7 +29,7 @@ const ContenuLibre = () => {
   }
 
   return (
-    <Base>
+    <Base hideLeftNav>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Publication de contenu libre</h1>
