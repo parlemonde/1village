@@ -6,6 +6,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import BackArrow from 'src/svg/back-arrow.svg';
 import { ActivityType } from 'types/activity.type';
 import { UserType } from 'types/user.type';
 
@@ -16,6 +17,15 @@ const ContenuLibre = () => {
   const { selectedPhase } = React.useContext(VillageContext);
 
   const isModerator = user !== null && user.type <= UserType.MEDIATOR;
+
+  const backButton = () => {
+    return (
+      <a href="/admin/newportal/create" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+        <BackArrow />
+        <h1 style={{ marginLeft: '10px' }}>Créer du contenu libre</h1>
+      </a>
+    );
+  };
 
   const onNext = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
@@ -32,7 +42,7 @@ const ContenuLibre = () => {
     <Base hideLeftNav>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <div className="width-900">
-          <h1 style={{ marginTop: '0.5rem' }}>Publication de contenu libre</h1>
+          {backButton()}
           <p className="text">
             Dans cette activité, nous vous proposons de créer une publication libre. Vous pourrez ensuite partager cette publication et décider de
             l&apos;épingler dans le fil d&apos;actualité.
