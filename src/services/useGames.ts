@@ -170,11 +170,11 @@ export const useGameRequests = () => {
    *
    */
 
-  const sendNewGameResponse = useCallback(async (id: number, value: string) => {
+  const sendNewGameResponse = useCallback(async (id: number, value: string, villageId: number) => {
     const response = await axiosRequest({
       method: 'PUT',
       url: `/games/play/${id}`,
-      data: { value },
+      data: { value, villageId },
     });
     if (response.error) {
       return false;

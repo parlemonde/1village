@@ -72,7 +72,6 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
 } = ({ Component, pageProps, router, user: initialUser, csrfToken, village: initialVillage, emotionCache = clientSideEmotionCache }: MyAppProps) => {
   const [user, setUser] = useState<User | null>(initialUser || null);
   // eslint-disable-next-line no-console
-  console.log('user', user);
   const onRouterChangeStart = (): void => {
     NProgress.start();
   };

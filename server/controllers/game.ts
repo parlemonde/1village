@@ -205,6 +205,7 @@ gameController.get({ path: '/stats/:gameId', userType: UserType.TEACHER }, async
 
 type UpdateActivity = {
   value: string;
+  villageId: number;
 };
 
 const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
@@ -213,9 +214,12 @@ const ANSWER_M_SCHEMA: JSONSchemaType<UpdateActivity> = {
     value: {
       type: 'string',
     },
+    villageId: {
+      type: 'number',
+    },
   },
   required: [],
-  additionalProperties: false,
+  additionalProperties: true,
 };
 
 const answerGameValidator = ajv.compile(ANSWER_M_SCHEMA);
@@ -249,11 +253,6 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
     return;
   }
 
-  // const game = await AppDataSource.getRepository(Game).findOne({ where: { id: id } });
-  // if (!game) {
-  //   next();
-  //   return;
-  // }
   const responses = await AppDataSource.getRepository(GameResponse).find({ where: { userId: userId, id: id } });
   if (responses.length > 2) {
     next();
@@ -263,7 +262,7 @@ gameController.put({ path: '/play/:id', userType: UserType.TEACHER }, async (req
   const gameResponse = new GameResponse();
   gameResponse.value = data.value;
   gameResponse.gameId = id;
-  gameResponse.villageId = req.user.villageId || 0;
+  gameResponse.villageId = data.villageId;
   gameResponse.userId = userId;
 
   await AppDataSource.getRepository(GameResponse).save(gameResponse);

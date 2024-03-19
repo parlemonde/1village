@@ -239,6 +239,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
         ],
       },
       createDate,
+      villageId,
     } = getOneGameById || {};
 
     const responses: { signification: string; isSuccess: boolean; value: number }[] = [];
@@ -271,6 +272,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       id,
       media,
       type,
+      villageId,
     };
   }, [getOneGameById]);
 
@@ -298,7 +300,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       if (playContent.responses.length === 0) {
         return;
       }
-      const apiResponse = await sendNewGameResponse(playContent.id || 0, selection);
+      const apiResponse = await sendNewGameResponse(playContent.id || 0, selection, playContent.villageId || 0);
       if (!apiResponse) {
         console.error('Error reaching server');
         return;
@@ -311,7 +313,18 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       }
       setTryCount(tryCount + 1);
     },
-    [getGameStats, sendNewGameResponse, setFound, playContent.responses, setErrorModalOpen, setGameResponses, setTryCount, tryCount, playContent?.id],
+    [
+      getGameStats,
+      sendNewGameResponse,
+      setFound,
+      playContent.responses,
+      setErrorModalOpen,
+      setGameResponses,
+      setTryCount,
+      tryCount,
+      playContent?.id,
+      playContent.villageId,
+    ],
   );
 
   if (user == null || village == null) {
