@@ -94,26 +94,24 @@ const MonnaieStep5 = () => {
           urls={['/creer-un-jeu/objet/1', '/creer-un-jeu/objet/2', '/creer-un-jeu/objet/3', '/creer-un-jeu/objet/4', '/creer-un-jeu/objet/5']}
           activeStep={4}
         />
-        <div className="width-900">
-          <CreateGame stepNumber={4} />
-          <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-            {isObservator ? (
-              <Tooltip title="Action non autorisée" arrow>
-                <span>
-                  <Button variant="outlined" color="primary" disabled>
-                    Publier
-                  </Button>
-                </span>
-              </Tooltip>
-            ) : (
-              <>
-                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValidGame}>
+        <CreateGame stepNumber={4} />
+        <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
+          {isObservator ? (
+            <Tooltip title="Action non autorisée" arrow>
+              <span>
+                <Button variant="outlined" color="primary" disabled>
                   Publier
                 </Button>
-                {!isValidGame ? <p style={{ color: 'red' }}>Vérifiez tous vos champs s&apos;il vous plaît.</p> : null}
-              </>
-            )}
-          </div>
+              </span>
+            </Tooltip>
+          ) : (
+            <>
+              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValidGame}>
+                Publier
+              </Button>
+              {!isValidGame ? <p style={{ color: 'red' }}>Vérifiez tous vos champs s&apos;il vous plaît.</p> : null}
+            </>
+          )}
         </div>
         <Previsualisation baseUrl={'/creer-un-jeu/objet/'} />
       </div>

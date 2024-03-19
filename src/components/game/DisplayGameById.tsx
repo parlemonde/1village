@@ -503,9 +503,9 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
         </Modal>
         <AlreadyPlayedModal handleSuccessClick={handleConfirmModal} isOpen={isGameModalOpen} gameId={gameId} />
         <Grid container justifyContent="space-between">
-          <Grid item xs={6} style={{ textAlign: 'center' }}>
+          <Grid item xs={6}>
             {(found || tryCount > 1) && (
-              <div style={{ textAlign: 'center' }}>
+              <div style={{ textAlign: 'left' }}>
                 <p
                   style={{
                     margin: '0.5rem 1rem',
@@ -513,7 +513,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                   }}
                 >
                   <Link href="/" passHref>
-                    {"Ou revenir à l'accueil"}
+                    {"Revenir à l'accueil"}
                   </Link>
                 </p>
               </div>
