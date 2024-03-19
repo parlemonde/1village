@@ -9,9 +9,6 @@ import GererIcon from 'src/svg/gerer.svg';
 import MediathequeIcon from 'src/svg/mediatheque.svg';
 import PublierIcon from 'src/svg/publier.svg';
 
-// interface NewAdminNavigationProps {
-//   changeContent?: (label: string) => void;
-// }
 interface NavItemProps {
   key?: number;
 
