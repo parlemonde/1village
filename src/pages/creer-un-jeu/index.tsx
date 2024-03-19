@@ -10,7 +10,7 @@ import { GameType } from 'types/game.type';
 const activities = [
   {
     label: 'Jeu des mimiques',
-    href: '/creer-un-jeu/mimique',
+    href: '/creer-un-jeu/mimiques',
     icon: MimiqueIcon,
     gameType: GameType.MIMIC,
     disabled: false,
@@ -29,14 +29,6 @@ const activities = [
     href: '/creer-un-jeu/expression',
     icon: ExpressionIcon,
     gameType: GameType.EXPRESSION,
-    disabled: false,
-    disabledText: '',
-  },
-  {
-    label: 'Jeu des mimiques V2',
-    href: '/creer-un-jeu/mimiques',
-    icon: MimiqueIcon,
-    gameType: GameType.MIMIC,
     disabled: false,
     disabledText: '',
   },
