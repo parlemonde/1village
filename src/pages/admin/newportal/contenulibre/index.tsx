@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -20,10 +21,23 @@ const ContenuLibre = () => {
 
   const backButton = () => {
     return (
-      <a href="/admin/newportal/create" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-        <BackArrow />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          <Link href="/admin/newportal/create">
+            <BackArrow />
+          </Link>
+        </div>
         <h1 style={{ marginLeft: '10px' }}>Créer du contenu libre</h1>
-      </a>
+      </div>
     );
   };
 
