@@ -20,6 +20,7 @@ import type { Village } from 'types/village.type';
 
 interface VillageContextValue {
   village: Village | null;
+  villages: Village[];
   selectedPhase: number;
   showSelectVillageModal(): void;
   setSelectedPhase: (phase: number) => void;
@@ -28,6 +29,7 @@ interface VillageContextValue {
 export const VillageContext = React.createContext<VillageContextValue>({
   village: null,
   selectedPhase: -1,
+  villages: [],
   showSelectVillageModal: () => {},
   setSelectedPhase: () => {},
 });
@@ -159,8 +161,8 @@ export const VillageContextProvider = ({ initialVillage, children }: VillageCont
   };
 
   const value = React.useMemo(
-    () => ({ village, selectedPhase, showSelectVillageModal, setSelectedPhase: setSelectedPhase }),
-    [village, selectedPhase, showSelectVillageModal, setSelectedPhase],
+    () => ({ village, villages, selectedPhase, showSelectVillageModal, setSelectedPhase: setSelectedPhase }),
+    [village, villages, selectedPhase, showSelectVillageModal, setSelectedPhase],
   );
 
   return (

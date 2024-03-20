@@ -19,6 +19,12 @@ export const classroomController = new Controller('/classrooms');
  * @return {object} Route API JSON response
  */
 
+//--- Get all villages ---
+classroomController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
+  const villages = await AppDataSource.getRepository(Classroom).find();
+  res.sendJSON(villages);
+});
+
 classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
   const classroom = await AppDataSource.getRepository(Classroom).findOne({
