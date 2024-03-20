@@ -3,8 +3,10 @@ import React from 'react';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 
-import ActivityCardAdminList from '../../../components/activities/ActivityCard/activity_admin-components/ActivityCardAdminList';
+import ActivityCardAdminList from '../../../components/activities/ActivityCard/activity-admin/ActivityCardAdminList';
+import PelicoStar from 'src/svg/pelico/pelico_star.svg';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
+import { phasesObject } from 'src/utils/phases';
 
 const rows: GridRowsProp = [
   // { id: 1, col1: 'Hello', col2: 'World' },
@@ -12,17 +14,14 @@ const rows: GridRowsProp = [
   // { id: 3, col1: 'MUI', col2: 'is Amazing' },
 ];
 
-const columns: GridColDef[] = [
-  { field: 'col1', headerName: '', width: 150 },
-  { field: 'col2', headerName: 'Message de lancement phase 1', width: 150 },
-  { field: 'col3', headerName: 'Relance phase 1', width: 150 },
-  { field: 'col4', headerName: 'Énigme pays 1', width: 150 },
-  { field: 'col2', headerName: 'Énigme pays 2', width: 150 },
-  { field: 'col2', headerName: 'Message de lancement phase 2', width: 150 },
-  { field: 'col2', headerName: 'Relance phase 2', width: 150 },
-  { field: 'col2', headerName: 'Activité 8 mars', width: 150 },
-  { field: 'col2', headerName: 'Activité EMI', width: 150 },
-];
+// phasesObject.reduce<GridColDef[]>((acc, curr) => {
+//   acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name })));
+//   return acc;
+// }, []);
+const columns: GridColDef[] = phasesObject.reduce<GridColDef[]>((acc, curr) => {
+  acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name })));
+  return acc;
+}, []);
 
 const Publier = () => {
   return (
@@ -34,7 +33,7 @@ const Publier = () => {
         title="Activités récentes non publiées"
         activities={[]}
         noDataText="Il n'y a aucune activitées non publiée"
-        svgNoData={<PelicoVacances style={{ height: '6rem', width: '6rem' }} />}
+        svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
       />
       <ActivityCardAdminList
         title="Activités publiées"
@@ -50,7 +49,7 @@ const Publier = () => {
         Dashboard des activités
       </h1>
       <div style={{ overflowX: 'auto' }}>
-        <DataGrid rows={rows} columns={columns} />
+        <DataGrid rows={rows} columns={columns} hideFooter />
       </div>
     </div>
   );

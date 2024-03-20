@@ -7,7 +7,7 @@ import ActivityCardAdmin from './ActivityCardAdmin';
 type Props = {
   title: string;
   activities: Array<Record<string, unknown>>;
-  svgNoData: any;
+  svgNoData: unknown;
   noDataText: string;
 };
 
