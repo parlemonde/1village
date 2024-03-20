@@ -14,10 +14,6 @@ const rows: GridRowsProp = [
   // { id: 3, col1: 'MUI', col2: 'is Amazing' },
 ];
 
-// phasesObject.reduce<GridColDef[]>((acc, curr) => {
-//   acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name })));
-//   return acc;
-// }, []);
 const columns: GridColDef[] = phasesObject.reduce<GridColDef[]>((acc, curr) => {
   acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name })));
   return acc;

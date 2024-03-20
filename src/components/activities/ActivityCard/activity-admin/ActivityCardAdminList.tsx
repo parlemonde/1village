@@ -22,7 +22,7 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
       >
         <h2>{title}</h2>
         {activities.length ? (
-          activities.map((e, i) => (
+          activities.map((_e, i) => (
             <div key={i}>
               <ActivityCardAdmin />
             </div>
