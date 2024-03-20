@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
@@ -16,19 +17,21 @@ interface NavItemProps {
 
 const Creer = () => {
   const links: Link[] = [
-    { name: 'Créer du contenu libre', link: 'https://' },
+    { name: 'Créer du contenu libre', link: '/admin/newportal/contenulibre' },
     { name: 'Créer une activité H5P', link: 'https://' },
     { name: 'Paramétrer l’hymne', link: 'https://' },
     { name: 'Mixer l’hymne', link: 'https://' },
   ];
 
   const NavItem = ({ link, primary }: NavItemProps) => (
-    <ListItem className="like-button grey" component="a" button href={link}>
-      <ListItemText primary={primary} />
-      <ListItemIcon>
-        <DoubleChevronRightIcon />
-      </ListItemIcon>
-    </ListItem>
+    <Link href={link} passHref>
+      <ListItem className="like-button grey" button component="a">
+        <ListItemText primary={primary} />
+        <ListItemIcon>
+          <DoubleChevronRightIcon />
+        </ListItemIcon>
+      </ListItem>
+    </Link>
   );
 
   const renderTitle = () => {

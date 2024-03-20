@@ -99,12 +99,12 @@ const Villages = () => {
             >
               Importer depuis {SSO_HOSTNAME}
             </Button>
-            <Link href="/admin/villages/new" passHref>
+            <Link href="/admin/newportal">
               <Button
                 color="inherit"
                 sx={defaultContainedButtonStyle}
                 component="a"
-                href="/admin/villages/new"
+                href="/admin/newportal"
                 variant="contained"
                 style={{ flexShrink: 0 }}
                 startIcon={<AddCircleIcon />}
