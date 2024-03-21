@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
 
-import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress, Menu, MenuItem } from '@mui/material';
 
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
@@ -11,7 +12,6 @@ import { htmlToText } from 'src/utils';
 export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();
-
   const title: string = activity?.data?.name ? (activity.data.name as string) : '';
   const imageUrl: string =
     activity?.images?.length && activity.images[0].imageUrl ? activity.images[0].imageUrl : 'https://placehold.co/600x400?text=No Picture';
@@ -21,6 +21,15 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
     }
     return acc;
   }, '');
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     if (publishActivity.isSuccess) {
@@ -34,6 +43,31 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
           <Avatar sx={{ backgroundColor: 'transparent' }}>
             <PelicoSouriant />
           </Avatar>
+        }
+        action={
+          <>
+            <Button
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              <MoreVertIcon color="inherit" />
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Modifier</MenuItem>
+              <MenuItem onClick={handleClose}>Supprimer</MenuItem>
+            </Menu>
+          </>
         }
         title={title}
         titleTypographyProps={{ variant: 'h6' }}

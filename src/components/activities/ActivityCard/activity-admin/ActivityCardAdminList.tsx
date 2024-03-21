@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Activity } from 'server/entities/activity';
 
+import { Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 import ActivityCardAdmin from './ActivityCardAdmin';
@@ -21,7 +22,18 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
           margin: 10,
         }}
       >
-        <h2>{title}</h2>
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+          }}
+        >
+          <h2>{title}</h2>
+          <Button size="small" sx={{ border: 1, margin: 1 }}>
+            Afficher plus
+          </Button>
+        </div>
         {activities.length ? (
           <div style={{ display: 'flex' }}>
             {activities.map((activity) => (
