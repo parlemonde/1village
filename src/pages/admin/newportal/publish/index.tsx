@@ -25,7 +25,6 @@ const columns: GridColDef[] = firstEmptyCol.concat(
 const Publier = () => {
   const draftActivities = useGetActivities({ limit: 2, isDraft: true, isPelico: true });
   const publishedActivities = useGetActivities({ limit: 2, isDraft: false, isPelico: true });
-
   if (draftActivities.isError) return <p>Error!</p>;
   if (draftActivities.isLoading || draftActivities.isIdle) return <p>Loading...</p>;
   return (

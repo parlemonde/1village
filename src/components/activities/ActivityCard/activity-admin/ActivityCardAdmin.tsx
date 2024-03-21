@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
 
-import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions } from '@mui/material';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress } from '@mui/material';
 
+import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
 
-export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data'>) {
+export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id'>) {
+  const publishActivity = usePublishActivity({ activityId: activity.id });
+  const queryClient = useQueryClient();
+
   const title: string = activity?.data?.name ? (activity.data.name as string) : '';
   const imageUrl: string =
     activity?.images?.length && activity.images[0].imageUrl ? activity.images[0].imageUrl : 'https://placehold.co/600x400?text=No Picture';
@@ -16,6 +21,12 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
     }
     return acc;
   }, '');
+
+  useEffect(() => {
+    if (publishActivity.isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['activities'] });
+    }
+  }, [publishActivity.isSuccess, queryClient]);
   return (
     <Card variant="outlined" sx={{ padding: 1, margin: 2 }}>
       <CardHeader
@@ -40,8 +51,8 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
         </Typography>
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button size="small" sx={{ border: 1 }}>
-          Publier
+        <Button size="small" sx={{ border: 1 }} onClick={() => publishActivity.mutate()} disabled={publishActivity.isLoading}>
+          {publishActivity.isLoading ? <CircularProgress /> : 'Publier'}
         </Button>
       </CardActions>
     </Card>
