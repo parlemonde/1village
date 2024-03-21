@@ -11,6 +11,7 @@ import featureFlagController from './featureFlag';
 import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
+import { statisticsController } from './statistics';
 import { storyController } from './story';
 import { studentController } from './student';
 import { teacherController } from './teacher';
@@ -23,6 +24,7 @@ import { xapiController } from './xapi';
 const controllerRouter = Router();
 const controllers = [
   languageController,
+  statisticsController,
   currencyController,
   userController,
   villageController,
