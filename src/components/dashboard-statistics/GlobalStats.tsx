@@ -1,20 +1,15 @@
 import React from 'react';
 
-import { getGlobalContribution } from 'src/api/statistics/statistics.get';
+import { useGetContributions } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
-  const [data, setData] = React.useState(null);
+  const contributions = useGetContributions();
+  if (contributions.isError) return <p>Error!</p>;
+  if (contributions.isLoading || contributions.isIdle) return <p>Loading...</p>;
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const data = await getGlobalContribution();
-      setData(data);
-    };
-    fetchData();
-    console.log(data);
-  }, []);
-
-  return <h1>1Village</h1>;
+  return contributions.data.map((contribution) => (
+    <div key={contribution.phase}>{`Phase: ${contribution.phase}, nombre de classes ayant contribué : ${contribution.userCount}`}</div>
+  ));
 };
 
 export default GlobalStats;

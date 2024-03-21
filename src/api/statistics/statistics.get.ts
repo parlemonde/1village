@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
-import type { Activity } from 'server/entities/activity';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
+import type { ContributionStats } from 'types/statistics.type';
 
-async function getContributions(): Promise<Activity[]> {
+async function getContributions(): Promise<ContributionStats[]> {
   return (
     await axiosRequest({
       method: 'GET',
