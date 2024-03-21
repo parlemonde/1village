@@ -8,7 +8,7 @@ import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
 
-export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id'>) {
+export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();
 
@@ -50,11 +50,14 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
           {htmlToText(content)}
         </Typography>
       </CardContent>
-      <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button size="small" sx={{ border: 1 }} onClick={() => publishActivity.mutate()} disabled={publishActivity.isLoading}>
-          {publishActivity.isLoading ? <CircularProgress /> : 'Publier'}
-        </Button>
-      </CardActions>
+      {/* display publish button only if activity is not published yet (status = 1) */}
+      {activity.status !== 0 && (
+        <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button size="small" sx={{ border: 1 }} onClick={() => publishActivity.mutate()} disabled={publishActivity.isLoading}>
+            {publishActivity.isLoading ? <CircularProgress /> : 'Publier'}
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 }
