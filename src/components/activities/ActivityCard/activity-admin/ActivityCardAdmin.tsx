@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Activity } from 'server/entities/activity';
 
-import { Card, CardHeader, Avatar, IconButton, CardMedia, CardContent, Typography, CardActions } from '@mui/material';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography } from '@mui/material';
 
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
