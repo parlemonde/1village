@@ -29,24 +29,35 @@ const Publier = () => {
   if (draftActivities.isError) return <p>Error!</p>;
   if (draftActivities.isLoading || draftActivities.isIdle) return <p>Loading...</p>;
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '60vw',
+      }}
+    >
       <h1>Publier</h1>
       <p>C’est dans cet espace, que les administrateurs et administratrices du site vont pouvoir gérer les publications sur 1VIllage.</p>
-      <ActivityCardAdminList
-        title="Activités récentes non publiées"
-        activities={draftActivities.data}
-        noDataText="Il n'y a aucune activitées non publiée"
-        svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
-      />
-      <ActivityCardAdminList
-        title="Activités publiées"
-        activities={publishedActivities.data ?? []}
-        noDataText="Aucune activitées n'a été publiée pour le moment"
-        svgNoData={<PelicoVacances style={{ height: '6rem', width: '6rem' }} />}
-      />
+      <div style={{ margin: 10 }}>
+        <ActivityCardAdminList
+          title="Activités récentes non publiées"
+          activities={draftActivities.data}
+          noDataText="Il n'y a aucune activitées non publiée"
+          svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
+        />
+      </div>
+      <div style={{ margin: 10 }}>
+        <ActivityCardAdminList
+          title="Activités publiées"
+          activities={publishedActivities.data ?? []}
+          noDataText="Aucune activitées n'a été publiée pour le moment"
+          svgNoData={<PelicoVacances style={{ height: '6rem', width: '6rem' }} />}
+        />
+      </div>
       <h1
         style={{
           marginTop: 30,
+          marginBottom: 30,
         }}
       >
         Dashboard des activités

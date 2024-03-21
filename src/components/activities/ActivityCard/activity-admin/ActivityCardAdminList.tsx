@@ -23,7 +23,11 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
       >
         <h2>{title}</h2>
         {activities.length ? (
-          activities.map((e) => <ActivityCardAdmin key={e.id} {...e} />)
+          <div style={{ display: 'flex' }}>
+            {activities.map((activity) => (
+              <ActivityCardAdmin key={activity.id} {...activity} />
+            ))}
+          </div>
         ) : (
           <div
             style={{
