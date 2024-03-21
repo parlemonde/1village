@@ -1,18 +1,23 @@
 import React from 'react';
 import type { Activity } from 'server/entities/activity';
 
-import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography } from '@mui/material';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions } from '@mui/material';
 
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
+import { htmlToText } from 'src/utils';
 
 export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data'>) {
   const title: string = activity?.data?.name ? (activity.data.name as string) : '';
   const imageUrl: string =
     activity?.images?.length && activity.images[0].imageUrl ? activity.images[0].imageUrl : 'https://placehold.co/600x400?text=No Picture';
+  const content: string = activity.content.reduce((acc, curr) => {
+    if (curr.type === 'text') {
+      acc += curr.value;
+    }
+    return acc;
+  }, '');
   return (
     <Card variant="outlined" sx={{ padding: 1, margin: 2 }}>
-      {/* <p>image: {activity.images ? activity.images[0].imageUrl : 'none'}</p>
-      <p>content: {activity.content.map((e) => e.value)}</p> */}
       <CardHeader
         avatar={
           <Avatar sx={{ backgroundColor: 'transparent' }}>
@@ -22,7 +27,6 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
         title={title}
         titleTypographyProps={{ variant: 'h6' }}
       />
-      {/* <div style={{ display: 'flex' }}> */}
       <CardMedia
         sx={{ padding: '1em 1em 0 1em', objectFit: 'cover', objectPosition: 'center' }}
         component="img"
@@ -32,11 +36,14 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {htmlToText(content)}
         </Typography>
       </CardContent>
-      {/* </div> */}
+      <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button size="small" sx={{ border: 1 }}>
+          Publier
+        </Button>
+      </CardActions>
     </Card>
   );
 }
