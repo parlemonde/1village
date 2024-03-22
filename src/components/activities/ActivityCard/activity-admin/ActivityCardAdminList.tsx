@@ -15,7 +15,11 @@ type Props = {
 
 export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText }: Props) {
   return (
-    <Paper>
+    <Paper
+      sx={{
+        borderRadius: 4,
+      }}
+    >
       <div
         style={{
           padding: 10,
