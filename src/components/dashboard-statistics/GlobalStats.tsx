@@ -8,7 +8,7 @@ const GlobalStats = () => {
   if (contributions.isLoading || contributions.isIdle) return <p>Loading...</p>;
 
   return contributions.data.map((contribution) => (
-    <div key={contribution.phase}>{`Phase: ${contribution.phase}, nombre de classes ayant contribué : ${contribution.userCount}`}</div>
+    <div key={contribution.phase}>{`Phase: ${contribution.phase}, nombre de classes ayant contribué : ${contribution.activeClassrooms}`}</div>
   ));
 };
 

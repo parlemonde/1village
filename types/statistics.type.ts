@@ -1,4 +1,4 @@
 export interface ContributionStats {
   phase: number;
-  userCount: string;
+  activeClassrooms: string;
 }
