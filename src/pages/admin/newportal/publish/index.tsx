@@ -10,14 +10,13 @@ import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 import { phasesObject } from 'src/utils/phases';
 
 const rows: GridRowsProp = [
-  { id: 1, 'village-name': 'Test', 'message-lancement-phase-1': 'Hello', 'relance-phase-1': 'World' },
-  { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
-  { id: 3, col1: 'MUI', col2: 'is Amazing' },
+  // A row example of how it should look
+  // { id: 1, 'village-name': 'Test', 'message-lancement-phase-1': 'Hello', 'relance-phase-1': 'World' },
 ];
 const firstEmptyCol: GridColDef[] = [{ field: 'village-name', headerName: '', width: 200 }];
 const columns: GridColDef[] = firstEmptyCol.concat(
   ...phasesObject.reduce<GridColDef[]>((acc, curr) => {
-    acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name, width: 250 })));
+    acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name, width: 150 })));
     return acc;
   }, []),
 );
@@ -39,7 +38,7 @@ const Publier = () => {
       <p>C’est dans cet espace, que les administrateurs et administratrices du site vont pouvoir gérer les publications sur 1VIllage.</p>
       <div style={{ margin: 10 }}>
         <ActivityCardAdminList
-          title="Activités récentes non publiées"
+          title="Activités non publiées"
           activities={draftActivities.data}
           noDataText="Il n'y a aucune activitées non publiée"
           svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}

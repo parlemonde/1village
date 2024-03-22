@@ -37,7 +37,7 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
     }
   }, [publishActivity.isSuccess, queryClient]);
   return (
-    <Card variant="outlined" sx={{ padding: 1, margin: 2 }}>
+    <Card variant="outlined" sx={{ padding: 1, margin: 2, borderRadius: '10px' }}>
       <CardHeader
         avatar={
           <Avatar sx={{ backgroundColor: 'transparent' }}>
