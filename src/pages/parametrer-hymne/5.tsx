@@ -13,6 +13,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/anthemChecks';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -106,11 +107,7 @@ const AnthemStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {data.mixUrl && (
-              <audio controls src={data.mixUrl}>
-                <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
-              </audio>
-            )}
+            <AudioPlayer src={data.mixUrl} isBuildingAudio />
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix par défaut du couplet (les 7 pistes mélangées)</p>
           </div>
 
@@ -122,11 +119,7 @@ const AnthemStep5 = () => {
               status={errorSteps.includes(1) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {data.fullMixUrl && (
-              <audio controls src={data.fullMixUrl}>
-                <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
-              </audio>
-            )}
+            <AudioPlayer src={data.fullMixUrl} isBuildingAudio />
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de l&apos;hymne (intro + refrain + couplet mixé + outro)</p>
           </div>
 

@@ -12,7 +12,22 @@ export type SimpleTrack = {
   sampleVolume?: number;
 };
 
-export async function buildAudioMix(userId: number, tracks: SimpleTrack[]): Promise<string> {
+type JobData = {
+  userId: number;
+  mixUrlId: string;
+  tracks: SimpleTrack[];
+};
+const JOBS_QUEUE: JobData[] = [];
+let isRunning = false;
+const startJob = () => {
+  const job = JOBS_QUEUE.shift();
+  if (job) {
+    buildMix(job.userId, job.mixUrlId, job.tracks).catch(console.error);
+  }
+};
+
+async function buildMix(userId: number, mixUrlId: string, tracks: SimpleTrack[]): Promise<void> {
+  isRunning = true;
   const dir = path.join(__dirname, '..', '..', '..', '/medias');
   await fs.ensureDir(dir);
 
@@ -38,7 +53,7 @@ export async function buildAudioMix(userId: number, tracks: SimpleTrack[]): Prom
 
   const outputDir = path.join(__dirname, '..', 'fileUpload', 'audios', `${userId}`);
   await fs.ensureDir(outputDir);
-  const outputFilename = `${v4()}.mp3`;
+  const outputFilename = `${mixUrlId}.mp3`;
 
   // [2] mix the tracks
   await mixAudio(
@@ -50,11 +65,30 @@ export async function buildAudioMix(userId: number, tracks: SimpleTrack[]): Prom
   ).toFile(path.join(outputDir, outputFilename));
 
   // [3] send the mix to the storage server
-  const mixUrl = await uploadFile(`audios/${userId}/${outputFilename}`, 'audio/mpeg');
+  await uploadFile(`audios/${userId}/${outputFilename}`, 'audio/mpeg');
 
   // [4] clean up
-  // await fs.remove(dir);
-  // await fs.remove(outputDir);
+  for (const track of downloadTracks) {
+    if (track.filename) {
+      await fs.remove(track.filename);
+    }
+  }
+  fs.remove(path.join(outputDir, outputFilename));
 
-  return mixUrl || '';
+  startJob(); // start the next job
+  isRunning = false;
+}
+
+export function buildAudioMix(userId: number, tracks: SimpleTrack[]): string {
+  // Generate a unique id for the mix
+  const mixUrlId = v4();
+
+  // Build the mix in the background
+  JOBS_QUEUE.push({ userId, mixUrlId, tracks });
+  if (!isRunning) {
+    startJob();
+  }
+
+  // Return the url to the mix (will be available once the mix is built)
+  return `/api/audios/${userId}/${mixUrlId}.mp3`;
 }

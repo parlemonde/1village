@@ -18,6 +18,11 @@ audioController.get({ path: '/:id/:filename', userType: UserType.TEACHER }, asyn
   streamFile(key, req, res, next);
 });
 
+audioController.head({ path: '/:id/:filename', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  const key = `audios/${req.params.id}/${req.params.filename}`;
+  streamFile(key, req, res, next);
+});
+
 // post audio
 audioController.upload(
   {

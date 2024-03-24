@@ -16,7 +16,6 @@ services:
       - ./src:/app/src
       - ./server:/app/server
       - ./types:/app/types
-      - ./medias:/app/medias
     depends_on:
       migration:
         condition: service_completed_successfully

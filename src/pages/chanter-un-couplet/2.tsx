@@ -7,6 +7,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { Syllable } from 'types/anthem.type';
 
@@ -47,7 +48,7 @@ const SongStep2 = () => {
             Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
             N&apos;hésitez pas à ré-écouter le couplet.
           </p>
-          {data && data.verseMixWithVocalsUrl && <audio controls src={data.verseMixWithVocalsUrl} />}
+          <AudioPlayer src={data.verseMixWithVocalsUrl} isBuildingAudio />
           <div className={styles.contentContainer}>
             <div className={styles.anthemLyricsContainer}>
               {data?.verseLyrics.map((el, index) => (

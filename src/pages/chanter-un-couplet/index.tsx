@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
@@ -74,8 +75,7 @@ const Anthem = () => {
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
             <p>Je vous propose de composer et chanter ensemble l&apos;hymne du village idéal !</p>
             <p>Écoutez d&apos;abord la musique et le refrain que j&apos;ai déjà composé pour vous.</p>
-            {/* change mixUrl by finalMixUrl when back is repaired */}
-            <audio controls src={anthemActivityData.mixUrl} style={{ width: '100%', height: '40px' }} />
+            <AudioPlayer src={anthemActivityData.fullMixUrl} style={{ width: '100%', height: '40px' }} />
             <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet, et la conclusion.</p>
             <p>
               Avez-vous remarqué ? <b>Je n&apos;ai pas écrit les paroles du couplet !</b> C&apos;est votre misson : chaque classe peut créer son

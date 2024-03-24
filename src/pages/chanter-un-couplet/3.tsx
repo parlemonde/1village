@@ -7,6 +7,7 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { toTime } from 'src/utils/toTime';
 import { TrackType } from 'types/anthem.type';
@@ -53,7 +54,7 @@ const SongStep3 = () => {
           <p>Vous pouvez également chanter a cappella, ou en enregistrant un élève portant un casque.</p>
 
           {data.verseMixUrl ? (
-            <audio controls src={data.verseMixUrl} />
+            <AudioPlayer src={data.verseMixUrl} isBuildingAudio />
           ) : (
             <p>
               <b>Il manque votre mix du couplet !</b>

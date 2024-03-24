@@ -454,33 +454,35 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     return;
   }
 
-  // Check if we need to build the audio mix
+  // Check if we need to build the audio mix for the anthem
   if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areAnthemTracksNew(data.data, activity.data)) {
-    const verseTracks = (data.data.tracks as Track[]).filter((t) => t.type !== 0 && t.type !== 8);
+    const verseTracks = (data.data.tracks as Track[]).filter(
+      (t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO && t.sampleUrl !== '',
+    );
+    data.data.mixUrl = verseTracks.length > 0 ? buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
 
-    data.data.mixUrl = verseTracks.some((t) => t.sampleUrl !== '') ? await buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
-
-    // const intro = (data.data.tracks as any).find((t: any) => t.type === 0);
-    // const outro = (data.data.tracks as any).find((t: any) => t.type === 8);
-    // const fullTracks = [];
-    // if (intro && intro.sampleUrl) {
-    //   fullTracks.push(intro);
-    //   fullTracks.push(...verseTracks.map((t: any) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
-    // } else {
-    //   fullTracks.push(...verseTracks);
-    // }
-    // if (outro && outro.sampleUrl) {
-    //   fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t: any) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
-    // }
-    // data.data.fullMixUrl = await buildAudioMix(activity.userId, fullTracks); // with intro and outro
+    const intro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
+    const outro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
+    const fullTracks = [];
+    if (intro && intro.sampleUrl) {
+      fullTracks.push(intro);
+      fullTracks.push(...verseTracks.map((t) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
+    } else {
+      fullTracks.push(...verseTracks);
+    }
+    if (outro && outro.sampleUrl) {
+      fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
+    }
+    data.data.fullMixUrl = fullTracks.length > 0 ? buildAudioMix(activity.userId, fullTracks) : ''; // with intro and outro
   }
 
+  // Check if we need to build the audio mix for the class verse
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const verseTracks = data.data.verseTracks as Track[];
-    data.data.verseMixWithVocalsUrl = await buildAudioMix(activity.userId, verseTracks);
-    data.data.verseMixUrl = await buildAudioMix(
+    const verseTracks = (data.data.tracks as Track[]).filter((t) => t.sampleUrl !== '');
+    data.data.verseMixWithVocalsUrl = buildAudioMix(activity.userId, verseTracks);
+    data.data.verseMixUrl = buildAudioMix(
       activity.userId,
-      verseTracks.filter((track) => track.type != TrackType.VOCALS),
+      verseTracks.filter((track) => track.type !== TrackType.VOCALS),
     );
   }
 
@@ -553,10 +555,10 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
 });
 
 const areAnthemTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
-  const oldTracks = oldData.tracks as any[]; // A changer
-  const newTracks = newData.tracks as any[]; // A changer
+  const oldTracks = oldData.tracks as Track[]; // A changer
+  const newTracks = newData.tracks as Track[]; // A changer
 
-  const oldTracksMap = oldTracks.reduce((acc, track) => {
+  const oldTracksMap = oldTracks.reduce<Record<string, { sampleStartTime?: number; sampleVolume?: number }>>((acc, track) => {
     if (track.sampleUrl) {
       acc[track.sampleUrl] = {
         sampleStartTime: track.sampleStartTime,
@@ -565,7 +567,7 @@ const areAnthemTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
     }
     return acc;
   }, {});
-  const newTracksMap = newTracks.reduce((acc, track) => {
+  const newTracksMap = newTracks.reduce<Record<string, { sampleStartTime?: number; sampleVolume?: number }>>((acc, track) => {
     if (track.sampleUrl) {
       acc[track.sampleUrl] = {
         sampleStartTime: track.sampleStartTime,
