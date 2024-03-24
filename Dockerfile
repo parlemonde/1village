@@ -1,5 +1,5 @@
 # STAGE 1 - Typescript to Javascript
-FROM node:16.15.1-slim as build-dependencies
+FROM node:20.11.1-slim as build-dependencies
 
 ARG BUILD_VERSION
 
@@ -41,7 +41,7 @@ ENV NODE_ENV production
 RUN yarn build
 
 # STAGE 2 - Docker server
-FROM node:16.15.1-slim as prod
+FROM node:20.11.1-slim as prod
 
 # Add ffmpeg for audio mix
 RUN apt-get update && apt-get install -yq ffmpeg
