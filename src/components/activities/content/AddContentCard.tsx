@@ -21,7 +21,7 @@ export const AddContentCard = ({ addContent = () => {} }: AddContentCardProps) =
 
   return (
     <Card style={{ display: 'inline-block' }}>
-      <div style={{ display: 'inline-flex', padding: '0.2rem 1rem', alignItems: 'center' }}>
+      <div style={{ display: 'inline-flex', padding: '0.2rem 1rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <span className="text text--bold" style={{ margin: '0 0.5rem' }}>
           Ajouter à votre description :
         </span>

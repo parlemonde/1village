@@ -86,7 +86,7 @@ body {
           width: 100%;
           height: auto;
           margin-bottom: 20px;
-          padding: 0;
+          padding: 15px !important;
           .like-button.blue {
             margin-left: auto;
             margin-right: auto;
@@ -98,7 +98,7 @@ body {
             margin: 0 !important;
           }
           ul {
-            padding: 0 25px;
+            padding: 0;
           }
         }
       }
@@ -342,6 +342,10 @@ a.text--success:hover {
   .MuiStepLabel-label.Mui-completed.Mui-error {
     color: $warning-color !important;
     font-weight: 500;
+  }
+  & div:first-child {
+    left: 0 !important;
+    right: 0 !important;
   }
 }
 
