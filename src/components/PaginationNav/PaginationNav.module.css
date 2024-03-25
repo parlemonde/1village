@@ -1,0 +1,7 @@
+.paginationContainer{
+    position: relative;
+}
+
+.itemsPerPageContainer{
+    display: inline;
+}
