@@ -9,43 +9,36 @@ import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
-import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
 import { LightBox } from 'src/components/lightbox/Lightbox';
-import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { useActivity } from 'src/hooks/useActivity';
 import { primaryColor } from 'src/styles/variables.const';
 
 const ContenuLibre = () => {
   const router = useRouter();
-  const { activity, updateActivity, save } = React.useContext(ActivityContext);
+  const { activity, updateActivity, save } = useActivity();
   const { user } = React.useContext(UserContext);
   const [selectedImageUrl, setSelectedImageUrl] = React.useState<string | undefined>(undefined);
   const [isAllImagesModalOpen, setIsAllImagesModalOpen] = React.useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
 
   const data = (activity?.data as FreeContentData) || null;
-  const errorSteps = React.useMemo(() => {
-    if (activity !== null && activity.content.filter((c) => c.value.length > 0 && c.value !== '<p></p>\n').length === 0) {
-      return [0];
-    }
-    return [];
-  }, [activity]);
+
   const hasContentImages = React.useMemo(() => activity !== null && activity.content.some((c) => c.type === 'image'), [activity]);
   const imageUrl = React.useMemo(() => getImage(activity?.content ?? [], data), [activity, data]);
 
   React.useEffect(() => {
-    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/admin/newportal/contenulibre/1');
-    } else if (activity && !isFreeContent(activity)) {
+    if (!activity || !isFreeContent(activity)) {
       router.push('/admin/newportal/contenulibre/1');
     }
   }, [activity, router]);
 
   if (!activity || !user) {
-    return <Base></Base>;
+    return <Base />;
   }
 
   const handlePinnedChange = () => {
@@ -68,14 +61,9 @@ const ContenuLibre = () => {
   };
 
   return (
-    <Base hideLeftNav>
+    <div>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Contenu', 'Forme', 'Pré-visualiser']}
-          urls={['/admin/newportal/contenulibre/1?edit', '/admin/newportal/contenulibre/2', '/admin/newportal/contenulibre/3']}
-          activeStep={1}
-          errorSteps={errorSteps}
-        />
+        <StepsNavigation currentStep={1} />
         <div className="width-900">
           <h1>Ajustez l&apos;apparence de votre publication</h1>
           <p className="text">
@@ -233,7 +221,7 @@ const ContenuLibre = () => {
           setSelectedImageUrl(undefined);
         }}
       />
-    </Base>
+    </div>
   );
 };
 
