@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
+import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import StepsNavigation from 'src/components/activities/StepsNavigation';
 import ContentEditor from 'src/components/activities/content/ContentEditor';
@@ -33,7 +34,7 @@ const ContenuLibreStep1: React.FC = () => {
   };
 
   if (!activity) {
-    return <div>Loading...</div>;
+    return <Base />;
   }
 
   return (
