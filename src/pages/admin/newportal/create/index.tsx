@@ -29,7 +29,7 @@ const Creer = () => {
   const handleNewActivity = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
     if (success) {
-      router.push('/admin/newportal/contenulibre/1');
+      router.push('/admin/newportal/contenulibre');
     }
   };
 
