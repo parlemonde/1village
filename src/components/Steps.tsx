@@ -11,12 +11,9 @@ import Stepper from '@mui/material/Stepper';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
 
-const StepIcon = React.forwardRef<HTMLDivElement, StepIconProps>((props, ref) => {
-  const { icon, active, completed, error } = props;
-
+const StepIcon = ({ icon, active, completed, error, onClick }: StepIconProps) => {
   return (
     <div
-      ref={ref}
       style={{
         backgroundColor: active ? primaryColor : error ? warningColor : 'white',
         color: completed ? (error ? 'white' : successColor) : active ? 'white' : primaryColor,
@@ -28,17 +25,13 @@ const StepIcon = React.forwardRef<HTMLDivElement, StepIconProps>((props, ref) =>
         borderRadius: '50%',
         border: completed ? (error ? `1px solid ${warningColor}` : `1px solid ${successColor}`) : `1px solid ${primaryColor}`,
       }}
-      className={props.onClick ? 'background-hover' : ''}
-      onClick={props.onClick}
+      className={onClick !== undefined ? 'background-hover' : ''}
+      onClick={onClick}
     >
       {completed && !error ? <CheckIcon /> : icon}
     </div>
   );
-});
-
-StepIcon.displayName = 'StepIcon';
-
-export default StepIcon;
+};
 
 interface StepsProps {
   steps: string[];
