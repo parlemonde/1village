@@ -57,9 +57,6 @@ export class Activity implements ActivityInterface<AnyData> {
   @Column({ type: 'datetime' })
   public publishDate: Date;
 
-  // @Column({ type: 'timestamp', nullable: true, name: 'publishDate' })
-  // timestamp: Date;
-
   @DeleteDateColumn()
   public deleteDate: Date;
 
