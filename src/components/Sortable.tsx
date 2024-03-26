@@ -31,32 +31,31 @@ export const Sortable = <T extends SortableItem>({ list, setList = () => {}, han
 
   // On component mount, init sortableJs.
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && elRef.current) {
-      if (elRef.current) {
-        const sort = SortableJS.create(elRef.current, {
-          handle,
-          draggable: '>*',
-          chosenClass: 'sortable-chosen',
-          ghostClass: 'sortable-ghost',
-          onUpdate: (event) => {
-            if (!event || event.oldIndex === undefined || event.newIndex === undefined) {
-              return;
-            }
-            const newList = [...listRef.current];
-            const newIndex = event.newIndex;
-            const oldIndex = event.oldIndex;
-            if (oldIndex >= newList.length || newIndex >= newList.length) {
-              return;
-            }
-            newList.splice(newIndex, 0, newList.splice(oldIndex, 1)[0]);
-            setListRef.current(newList);
-          },
-        });
-        return () => {
-          sort.destroy();
-        };
-      }
+    if (elRef.current) {
+      const sort = SortableJS.create(elRef.current, {
+        handle,
+        draggable: '>*',
+        chosenClass: 'sortable-chosen',
+        ghostClass: 'sortable-ghost',
+        onUpdate: (event) => {
+          if (!event || event.oldIndex === undefined || event.newIndex === undefined) {
+            return;
+          }
+          const newList = [...listRef.current];
+          const newIndex = event.newIndex;
+          const oldIndex = event.oldIndex;
+          if (oldIndex >= newList.length || newIndex >= newList.length) {
+            return;
+          }
+          newList.splice(newIndex, 0, newList.splice(oldIndex, 1)[0]);
+          setListRef.current(newList);
+        },
+      });
+      return () => {
+        sort.destroy();
+      };
     }
+
     return () => {};
   }, [handle]);
 

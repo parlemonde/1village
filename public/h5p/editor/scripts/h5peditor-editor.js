@@ -15,24 +15,24 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
-  if (typeof window !== 'undefined') {
-    // Define iframe DOM Element through jQuery
-    var $iframe = ns.$('<iframe/>', {
-      css: {
-        display: 'block',
-        width: '100%',
-        height: '3em',
-        border: 'none',
-        zIndex: 101,
-        top: 0,
-        left: 0,
-      },
-      class: 'h5p-editor-iframe',
-      frameBorder: '0',
-      allowfullscreen: 'allowfullscreen',
-      allow: 'fullscreen',
-    });
-  }
+
+  // Define iframe DOM Element through jQuery
+  var $iframe = ns.$('<iframe/>', {
+    css: {
+      display: 'block',
+      width: '100%',
+      height: '3em',
+      border: 'none',
+      zIndex: 101,
+      top: 0,
+      left: 0,
+    },
+    class: 'h5p-editor-iframe',
+    frameBorder: '0',
+    allowfullscreen: 'allowfullscreen',
+    allow: 'fullscreen',
+  });
+
   // The DOM element is often used directly
   var iframe = $iframe.get(0);
 
