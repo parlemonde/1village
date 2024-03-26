@@ -38,7 +38,7 @@ const ContenuLibre = () => {
   }, [activity, router]);
 
   if (!activity || !user) {
-    return <Base />;
+    return <Base hideLeftNav />;
   }
 
   const handlePinnedChange = () => {

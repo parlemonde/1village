@@ -62,7 +62,7 @@ const ContenuLibre = () => {
   };
 
   if (!activity || !user) {
-    return <Base />;
+    return <Base hideLeftNav />;
   }
 
   return (
