@@ -218,8 +218,15 @@ export const Header = () => {
             {/* )} */}
             {user.type === UserType.ADMIN ||
               (user.type === UserType.SUPER_ADMIN ? (
-                <Link href="/admin/newportal" passHref>
-                  <Button component="a" href="/admin/newportal" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
+                <Link href="/admin/newportal/create" passHref>
+                  <Button
+                    component="a"
+                    href="/admin/newportal/create"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={{ marginLeft: '1rem' }}
+                  >
                     {'Aller à la nouvelle interface admin'}
                   </Button>
                 </Link>
