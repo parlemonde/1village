@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
@@ -24,6 +25,8 @@ const columns: GridColDef[] = firstEmptyCol.concat(
 const Publier = () => {
   const draftActivities = useGetActivities({ limit: 2, isDraft: true, isPelico: true });
   const publishedActivities = useGetActivities({ limit: 2, isDraft: false, isPelico: true });
+  const router = useRouter();
+
   if (draftActivities.isError) return <p>Error!</p>;
   if (draftActivities.isLoading || draftActivities.isIdle) return <p>Loading...</p>;
   return (
@@ -42,6 +45,7 @@ const Publier = () => {
           activities={draftActivities.data}
           noDataText="Il n'y a aucune activitées non publiée"
           svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
+          buttonAction={() => router.push('/admin/newportal/publish/draft')}
         />
       </div>
       <div style={{ margin: 10 }}>
@@ -50,6 +54,7 @@ const Publier = () => {
           activities={publishedActivities.data ?? []}
           noDataText="Aucune activitées n'a été publiée pour le moment"
           svgNoData={<PelicoVacances style={{ height: '6rem', width: '6rem' }} />}
+          buttonAction={() => console.log('coucou')}
         />
       </div>
       <h1

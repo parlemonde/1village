@@ -26,3 +26,9 @@
   left: 0;
   position: absolute;
 }
+
+.admin-activity-card-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+}
