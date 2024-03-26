@@ -40,6 +40,7 @@ export interface Activity<T extends AnyData = AnyData> {
   createDate?: Date | string;
   updateDate?: Date | string;
   deleteDate?: Date | string;
+  publishDate?: Date | string;
 
   // activity data
   data: T & { draftUrl?: string; presentation?: string };
