@@ -15,24 +15,24 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
-
-  // Define iframe DOM Element through jQuery
-  var $iframe = ns.$('<iframe/>', {
-    'css': {
-      display: 'block',
-      width: '100%',
-      height: '3em',
-      border: 'none',
-      zIndex: 101,
-      top: 0,
-      left: 0
-    },
-    'class': 'h5p-editor-iframe',
-    'frameBorder': '0',
-    'allowfullscreen': 'allowfullscreen',
-    'allow': "fullscreen"
-  });
-
+  if (typeof window !== 'undefined') {
+    // Define iframe DOM Element through jQuery
+    var $iframe = ns.$('<iframe/>', {
+      css: {
+        display: 'block',
+        width: '100%',
+        height: '3em',
+        border: 'none',
+        zIndex: 101,
+        top: 0,
+        left: 0,
+      },
+      class: 'h5p-editor-iframe',
+      frameBorder: '0',
+      allowfullscreen: 'allowfullscreen',
+      allow: 'fullscreen',
+    });
+  }
   // The DOM element is often used directly
   var iframe = $iframe.get(0);
 
@@ -48,12 +48,15 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     iframe.contentDocument.open();
     iframe.contentDocument.write(
       '<!doctype html><html>' +
-      '<head>' +
-      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
-      ns.wrap('<script src="', ns.assets.js, '"></script>') +
-      '</head><body>' +
-      '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
-      '</body></html>');
+        '<head>' +
+        ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+        ns.wrap('<script src="', ns.assets.js, '"></script>') +
+        '</head><body>' +
+        '<div class="h5p-editor h5peditor">' +
+        ns.t('core', 'loading') +
+        '</div>' +
+        '</body></html>',
+    );
     iframe.contentDocument.close();
     iframe.contentDocument.documentElement.style.overflow = 'hidden';
   };
@@ -83,10 +86,12 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (!iframe.contentDocument.body || self.preventResize) {
       return; // Prevent crashing when iframe is unloaded
     }
-    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
+    if (
+      iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
       (iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight ||
-       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight ||
-       iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight - 1)) {
+        iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight ||
+        iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight - 1)
+    ) {
       return; // Do not resize unless page and scrolling differs
       // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
@@ -146,39 +151,41 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     // Load libraries data
     $.ajax({
-      url: this.contentWindow.H5PEditor.getAjaxUrl(H5PIntegration.hubIsEnabled ? 'content-type-cache' : 'libraries')
-    }).fail(function () {
-      $container.html('Error, unable to load libraries.');
-    }).done(function (data) {
-      if (data.success === false) {
-        $container.html(data.message + ' (' + data.errorCode  + ')');
-        return;
-      }
+      url: this.contentWindow.H5PEditor.getAjaxUrl(H5PIntegration.hubIsEnabled ? 'content-type-cache' : 'libraries'),
+    })
+      .fail(function () {
+        $container.html('Error, unable to load libraries.');
+      })
+      .done(function (data) {
+        if (data.success === false) {
+          $container.html(data.message + ' (' + data.errorCode + ')');
+          return;
+        }
 
-      // Create library selector
-      self.selector = new LibrarySelector(data, library, defaultParams);
-      self.selector.appendTo($container.html(''));
+        // Create library selector
+        self.selector = new LibrarySelector(data, library, defaultParams);
+        self.selector.appendTo($container.html(''));
 
-      // Resize iframe when selector resizes
-      self.selector.on('resize', resize);
+        // Resize iframe when selector resizes
+        self.selector.on('resize', resize);
 
-      /**
-       * Event handler for exposing events
-       *
-       * @private
-       * @param {H5P.Event} event
-       */
-      var relayEvent = function (event) {
-        H5P.externalDispatcher.trigger(event);
-      };
-      self.selector.on('editorload', relayEvent);
-      self.selector.on('editorloaded', relayEvent);
+        /**
+         * Event handler for exposing events
+         *
+         * @private
+         * @param {H5P.Event} event
+         */
+        var relayEvent = function (event) {
+          H5P.externalDispatcher.trigger(event);
+        };
+        self.selector.on('editorload', relayEvent);
+        self.selector.on('editorloaded', relayEvent);
 
-      // Set library if editing
-      if (library) {
-        self.selector.setLibrary(library);
-      }
-    });
+        // Set library if editing
+        if (library) {
+          self.selector.setLibrary(library);
+        }
+      });
 
     // Start resizing the iframe
     if (iframe.contentWindow.MutationObserver !== undefined) {
@@ -199,13 +206,12 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
         characterData: true,
         subtree: true,
         attributeOldValue: false,
-        characterDataOldValue: false
+        characterDataOldValue: false,
       });
 
       H5P.$window.resize(limitedResize);
       resize();
-    }
-    else {
+    } else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
         resize();
@@ -246,11 +252,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
     return this.selector.getCurrentLibrary();
-  }
-  else if (this.selectedContentTypeId) {
+  } else if (this.selectedContentTypeId) {
     return this.selectedContentTypeId;
-  }
-  else {
+  } else {
     console.warn('no selector defined for "getLibrary"');
   }
 };
@@ -268,10 +272,9 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
   if (this.selector !== undefined) {
     return {
       params: this.selector.getParams(),
-      metadata: this.selector.getMetadata()
+      metadata: this.selector.getMetadata(),
     };
-  }
-  else {
+  } else {
     console.warn('no selector defined for "getParams"');
   }
 };
@@ -296,7 +299,7 @@ ns.Editor.prototype.getContent = function (submit, error) {
   const content = {
     title: this.isMainTitleSet(),
     library: this.getLibrary(),
-    params: this.getParams()
+    params: this.getParams(),
   };
 
   if (!content.title) {
@@ -330,7 +333,10 @@ ns.Editor.prototype.getContent = function (submit, error) {
   content.title = tmp.textContent; // WARNING: This is text, do NOT insert as HTML.
 
   library = new iframeEditor.ContentType(content.library);
-  const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(library, this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries);
+  const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(
+    library,
+    this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries,
+  );
   if (upgradeLibrary) {
     // We need to run content upgrade before saving
     iframeEditor.upgradeContent(library, upgradeLibrary, content.params, function (err, result) {
@@ -338,15 +344,13 @@ ns.Editor.prototype.getContent = function (submit, error) {
         if (error) {
           error(err);
         }
-      }
-      else {
+      } else {
         content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
         content.params = result;
         submit(content);
       }
-    })
-  }
-  else {
+    });
+  } else {
     // All OK, store the data
     content.params = JSON.stringify(content.params);
     submit(content);
@@ -380,8 +384,7 @@ ns.Editor.prototype.getMaxScore = function (content) {
   try {
     var value = this.selector.presave(content, this.getLibrary());
     return value.maxScore;
-  }
-  catch (e) {
+  } catch (e) {
     // Deliberatly catching error
     return 0;
   }
@@ -417,7 +420,7 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
     height: '',
     zIndex: '',
     top: '',
-    left: ''
+    left: '',
   });
   // NOTE: Style attribute has been used here since June 2014 since there are
   // no CSS files in H5PEditor loaded outside the iframe.
@@ -438,7 +441,7 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
     if (e.which === 27) {
       restore();
     }
-  }
+  };
   iframeWindow.document.body.addEventListener('keyup', handleKeyup);
 
   /**
@@ -462,7 +465,7 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
       height: '3em',
       zIndex: 101,
       top: 0,
-      left: 0
+      left: 0,
     });
 
     // Return all of the elements hidden back to their original state
@@ -471,7 +474,7 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
 
     iframeWindow.document.body.removeEventListener('keyup', handleKeyup);
     done(); // Callback for UI
-  }
+  };
 
   return restore;
 };
@@ -499,12 +502,11 @@ ns.hideAllButOne = function (element, win) {
       if (win.getComputedStyle(element).display !== 'none') {
         return true;
       }
-    }
-    else {
+    } else {
       return true;
     }
     return false;
-  }
+  };
 
   /**
    * Recusive function going up the DOM tree.
@@ -527,7 +529,7 @@ ns.hideAllButOne = function (element, win) {
         restore.push({
           element: sibling,
           display: sibling.style.getPropertyValue('display'),
-          priority: sibling.style.getPropertyPriority('display')
+          priority: sibling.style.getPropertyPriority('display'),
         });
         sibling.style.setProperty('display', 'none', 'important');
       }
@@ -537,7 +539,7 @@ ns.hideAllButOne = function (element, win) {
     if (element.parentElement.tagName !== 'BODY') {
       recurse(element.parentElement);
     }
-  }
+  };
   recurse(element); // Start
 
   /**
@@ -546,11 +548,12 @@ ns.hideAllButOne = function (element, win) {
    * @private
    */
   return function () {
-    for (let i = restore.length - 1; i > -1; i--) { // In opposite order
+    for (let i = restore.length - 1; i > -1; i--) {
+      // In opposite order
       restore[i].element.style.setProperty('display', restore[i].display, restore[i].priority);
     }
   };
-}
+};
 
 /**
  * Editor translations index by library name or "core".
@@ -579,10 +582,9 @@ ns.t = function (library, key, vars) {
       return 'Missing translation for ' + key;
     }
     translation = ns.language[library][key];
-  }
-  else {
+  } else {
     if (ns.language[library].libraryStrings === undefined || ns.language[library].libraryStrings[key] === undefined) {
-      return ns.t('core', 'missingTranslation', {':key': key});
+      return ns.t('core', 'missingTranslation', { ':key': key });
     }
     translation = ns.language[library].libraryStrings[key];
   }

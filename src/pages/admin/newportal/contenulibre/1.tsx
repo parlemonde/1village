@@ -34,7 +34,7 @@ const ContenuLibreStep1: React.FC = () => {
   };
 
   if (!activity) {
-    return <Base />;
+    return <Base hideLeftNav />;
   }
 
   return (
