@@ -1,6 +1,7 @@
 import React from 'react';
 
 import PieCharts from './charts/PieCharts';
+import BarCharts from './charts/barCharts';
 
 const pieChartData = {
   data: [
@@ -10,13 +11,16 @@ const pieChartData = {
   ],
 };
 
-const CountryStats = () => {
+const barChartData = {
+  dt: [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }],
+};
+const Connexion = () => {
   return (
     <>
-      <h1>Pays</h1>
       <PieCharts pieChartData={pieChartData} />
+      <BarCharts barChartData={barChartData} />
     </>
   );
 };
 
-export default CountryStats;
+export default Connexion;
