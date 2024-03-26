@@ -46,7 +46,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core", "npm:1.2.205"],\
             ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
             ["@types/cookie-parser", "npm:1.4.3"],\
-            ["@types/cors", "npm:2.8.12"],\
+            ["@types/cors", "npm:2.8.17"],\
             ["@types/cpx", "npm:1.5.2"],\
             ["@types/croppie", "npm:2.6.1"],\
             ["@types/d3-geo", "npm:3.0.2"],\
@@ -193,7 +193,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core", "npm:1.2.205"],\
             ["@swc/jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:0.2.21"],\
             ["@types/cookie-parser", "npm:1.4.3"],\
-            ["@types/cors", "npm:2.8.12"],\
+            ["@types/cors", "npm:2.8.17"],\
             ["@types/cpx", "npm:1.5.2"],\
             ["@types/croppie", "npm:2.6.1"],\
             ["@types/d3-geo", "npm:3.0.2"],\
@@ -5383,10 +5383,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/cors", [\
-        ["npm:2.8.12", {\
-          "packageLocation": "./.yarn/cache/@types-cors-npm-2.8.12-ff52e8e514-8c45f112c7.zip/node_modules/@types/cors/",\
+        ["npm:2.8.17", {\
+          "packageLocation": "./.yarn/cache/@types-cors-npm-2.8.17-2556d16051-469bd85e29.zip/node_modules/@types/cors/",\
           "packageDependencies": [\
-            ["@types/cors", "npm:2.8.12"]\
+            ["@types/cors", "npm:2.8.17"],\
+            ["@types/node", "npm:16.11.41"]\
           ],\
           "linkType": "HARD"\
         }]\
