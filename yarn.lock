@@ -29,7 +29,7 @@ __metadata:
     "@types/cookie-parser": 1.4.3
     "@types/cors": 2.8.12
     "@types/cpx": 1.5.2
-    "@types/croppie": 2.6.1
+    "@types/croppie": 2.6.4
     "@types/d3-geo": 3.0.2
     "@types/draft-js": 0.11.9
     "@types/draftjs-to-html": 0.8.1
@@ -3475,10 +3475,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/croppie@npm:2.6.1":
-  version: 2.6.1
-  resolution: "@types/croppie@npm:2.6.1"
-  checksum: 1552d73a1d6c9f97592b4709f78dc70f2d44465c25e9aabbf0cee509602812f4a581cc12d5512eed0539320018036a332d310b91abdeed4867b58f83429050ca
+"@types/croppie@npm:2.6.4":
+  version: 2.6.4
+  resolution: "@types/croppie@npm:2.6.4"
+  checksum: 2b1250b35f6d5b8da74365c524888ac5316a3846520df3cc69542cba88b8ecf1e27e11db53b0e0c1f51fc6e401bec6eebd460141600ed8cbbce09d1b80a87bfb
   languageName: node
   linkType: hard
 
