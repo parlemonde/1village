@@ -47,12 +47,17 @@ label:hover {
 
 // NProgress bar
 body {
+  height: 100%;
+  #__next {
+    height: 100%;
+  }
   #nprogress .bar {
     z-index: 2000 !important;
     background-color: $primary-color !important;
     height: 1px;
   }
   &.admin {
+    background-color: #d9dbfe91;
     #nprogress .bar {
       background-color: white !important;
     }
@@ -72,9 +77,12 @@ body {
       }
     }
     .container-admin-portal {
-      background-color: #d9dbfe91;
       padding: 0 50px !important;
+<<<<<<< HEAD
       min-height: 100vh;
+=======
+      height: 100%;
+>>>>>>> e94d2bec (fix errors)
       @media screen and (min-width: 1600px) {
         padding: 0 15% !important;
       }
