@@ -88,8 +88,8 @@ const ReInventStoryStep4 = () => {
         <div className="width-900">
           <h1>Illustrez et écrivez l’histoire de votre visite dans le village idéal</h1>
           <p className="text">
-            Racontez à vos Pélicopains, comment Pelico est parvenu à atteindre l’ODD choisi grâce à l’objet et au lieu magiques. Illustrez votre
-            histoire avec un dessin de votre visite dans le village idéal.
+            Racontez à vos pélicopains comment le village-idéal et l’objet magique nous permettent d’atteindre l’objectif du développement durable que
+            vous avez choisi ! Illustrez votre histoire avec un dessin de votre visite dans le village-idéal.
           </p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
