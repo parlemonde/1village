@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import type { Activity } from 'server/entities/activity';
 
+import type { SelectChangeEvent } from '@mui/material';
+
+import PaginationNav from 'src/components/PaginationNav/PaginationNav';
 import SearchField from 'src/components/SearchField';
 import ActivityCardAdmin from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdmin';
 
@@ -10,6 +13,12 @@ type Props = {
 
 const AllActivitiesAdmin = ({ activities }: Props) => {
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [activitiesPerPage, setActivitiesPerPage] = useState(25);
+  const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
+    setPage(1);
+    setActivitiesPerPage(parseInt(e.target.value));
+  };
   return (
     <div>
       <div style={{ width: '40%' }}>
@@ -17,6 +26,7 @@ const AllActivitiesAdmin = ({ activities }: Props) => {
       </div>
       <div className="admin-activity-card-list">
         {activities
+          //filter on search
           .filter((activity) => {
             if (search.length) {
               // content filter
@@ -35,10 +45,25 @@ const AllActivitiesAdmin = ({ activities }: Props) => {
               return true;
             }
           })
-          .map((activity) => (
-            <ActivityCardAdmin key={activity.id} {...activity} />
-          ))}
+          // map array + filter by pages
+          .map((activity, i, arr) => {
+            if (arr.length > activitiesPerPage) {
+              if (i >= page * activitiesPerPage - activitiesPerPage && i + 1 <= page * activitiesPerPage) {
+                return <ActivityCardAdmin key={activity.id} {...activity} />;
+              }
+              return;
+            } else {
+              return <ActivityCardAdmin key={activity.id} {...activity} />;
+            }
+          })}
       </div>
+      <PaginationNav
+        page={page}
+        itemsPerPage={activitiesPerPage}
+        totalItems={activities.length}
+        handlePage={(_, pageNum) => setPage(pageNum)}
+        handleItemsPerPage={handleActivitiesPerPage}
+      />
     </div>
   );
 };
