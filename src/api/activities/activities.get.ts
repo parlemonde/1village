@@ -19,7 +19,7 @@ async function getActivities(params: { limit: number | null; isPelico: boolean; 
   ).data;
 }
 
-export const useGetActivities = (args: { limit: number; isPelico: boolean; isDraft: boolean }) => {
+export const useGetActivities = (args: { limit: number | null; isPelico: boolean; isDraft: boolean }) => {
   const { isDraft, isPelico, limit } = args;
   return useQuery(['activities', limit, isPelico, isDraft], () => getActivities({ limit, isDraft, isPelico }));
 };

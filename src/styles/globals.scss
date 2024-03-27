@@ -74,7 +74,7 @@ body {
     .container-admin-portal {
       background-color: #d9dbfe91;
       padding: 0 50px !important;
-      height: 100vh;
+      min-height: 100vh;
       @media screen and (min-width: 1600px) {
         padding: 0 15% !important;
       }

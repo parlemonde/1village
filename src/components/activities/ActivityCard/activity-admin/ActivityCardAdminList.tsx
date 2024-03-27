@@ -11,9 +11,10 @@ type Props = {
   activities: Activity[];
   svgNoData: unknown;
   noDataText: string;
+  buttonAction: () => void;
 };
 
-export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText }: Props) {
+export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction }: Props) {
   return (
     <Paper
       sx={{
@@ -34,14 +35,16 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
           }}
         >
           <h2>{title}</h2>
-          <Button size="small" sx={{ border: 1, margin: 1 }}>
+          <Button onClick={buttonAction} size="small" sx={{ border: 1, margin: 1 }}>
             Afficher plus
           </Button>
         </div>
         {activities.length ? (
           <div style={{ display: 'flex' }}>
             {activities.map((activity) => (
-              <ActivityCardAdmin key={activity.id} {...activity} />
+              <div key={activity.id} style={{ width: '50%' }}>
+                <ActivityCardAdmin {...activity} />
+              </div>
             ))}
           </div>
         ) : (
