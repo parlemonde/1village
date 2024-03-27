@@ -13,12 +13,12 @@ const AllDaft = () => {
   if (isLoading || isIdle) return <p>Loading...</p>;
   return (
     <div>
-      <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
-        <Link href="/admin/newportal/publish">
+      <Link href="/admin/newportal/publish">
+        <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
           <BackArrow />
-        </Link>
-        <p style={{ marginLeft: 10 }}>Activités non publiées</p>
-      </div>
+          <p style={{ marginLeft: 10 }}>Activités non publiées</p>
+        </div>
+      </Link>
       <div style={{ width: '40%' }}>
         <SearchField setter={(e) => setSearch(e.currentTarget.value)} />
       </div>

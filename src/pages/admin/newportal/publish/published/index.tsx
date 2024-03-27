@@ -26,12 +26,12 @@ const Published = () => {
   if (isLoading || isIdle || villages.isLoading || villages.isIdle) return <p>Loading...</p>;
   return (
     <div>
-      <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
-        <Link href="/admin/newportal/publish">
+      <Link href="/admin/newportal/publish">
+        <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
           <BackArrow />
-        </Link>
-        <p style={{ marginLeft: 10 }}>Activités publiées</p>
-      </div>
+          <p style={{ marginLeft: 10 }}>Activités publiées</p>
+        </div>
+      </Link>
       <div
         style={{
           display: 'flex',
