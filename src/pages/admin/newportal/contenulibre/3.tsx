@@ -100,7 +100,7 @@ const ContenuLibre = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push('/admin/newportal/contenulibre/1');
+                router.push('/admin/newportal/contenulibre');
               }}
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
