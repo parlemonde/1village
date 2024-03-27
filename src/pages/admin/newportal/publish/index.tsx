@@ -54,7 +54,7 @@ const Publier = () => {
           activities={publishedActivities.data ?? []}
           noDataText="Aucune activitées n'a été publiée pour le moment"
           svgNoData={<PelicoVacances style={{ height: '6rem', width: '6rem' }} />}
-          buttonAction={() => console.log('coucou')}
+          buttonAction={() => router.push('/admin/newportal/publish/published')}
         />
       </div>
       <h1

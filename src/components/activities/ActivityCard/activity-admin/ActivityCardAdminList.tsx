@@ -42,7 +42,9 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
         {activities.length ? (
           <div style={{ display: 'flex' }}>
             {activities.map((activity) => (
-              <ActivityCardAdmin key={activity.id} {...activity} />
+              <div key={activity.id} style={{ width: '50%' }}>
+                <ActivityCardAdmin {...activity} />
+              </div>
             ))}
           </div>
         ) : (
