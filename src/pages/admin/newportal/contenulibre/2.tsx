@@ -33,7 +33,7 @@ const ContenuLibre = () => {
 
   React.useEffect(() => {
     if (!activity || !isFreeContent(activity)) {
-      router.push('/admin/newportal/contenulibre/1');
+      router.push('/admin/newportal/contenulibre');
     }
   }, [activity, router]);
 
@@ -152,7 +152,7 @@ const ContenuLibre = () => {
           <h2 style={{ margin: '1rem 0 0.5rem 0' }}>Aperçu de votre publication</h2>
           <p className="text">Voilà à quoi ressemblera votre publication dans le fil d&apos;activité</p>
           <ActivityCard activity={activity} user={user} noButtons />
-          <StepsButton prev="/admin/newportal/contenulibre/1" next={onNext} />
+          <StepsButton prev="/admin/newportal/contenulibre" next={onNext} />
         </div>
       </div>
 
