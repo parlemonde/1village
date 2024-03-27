@@ -15,9 +15,9 @@ const ContenuLibreStep1: React.FC = () => {
 
   useEffect(() => {
     if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/admin/newportal/contenulibre');
+      router.push('/admin/newportal/contenulibre/1');
     } else if (activity && !isFreeContent(activity)) {
-      router.push('/admin/newportal/contenulibre');
+      router.push('/admin/newportal/contenulibre/1');
     }
   }, [activity, router]);
 

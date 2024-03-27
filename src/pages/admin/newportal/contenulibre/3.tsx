@@ -41,11 +41,11 @@ const ContenuLibre = () => {
 
   React.useEffect(() => {
     if (!activity) {
-      router.push('/admin/newportal/contenulibre');
+      router.push('/admin/newportal/contenulibre/1');
       return;
     }
     if (!isFreeContent(activity)) {
-      router.push('/admin/newportal/contenulibre');
+      router.push('/admin/newportal/contenulibre/1');
     }
   }, [activity, router]);
 
@@ -100,7 +100,7 @@ const ContenuLibre = () => {
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(0) })}>
             <EditButton
               onClick={() => {
-                router.push('/admin/newportal/contenulibre');
+                router.push('/admin/newportal/contenulibre/1');
               }}
               status={errorSteps.includes(0) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
