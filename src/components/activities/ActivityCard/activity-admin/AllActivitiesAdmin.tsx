@@ -4,26 +4,27 @@ import type { Activity } from 'server/entities/activity';
 import type { SelectChangeEvent } from '@mui/material';
 
 import PaginationNav from 'src/components/PaginationNav/PaginationNav';
-import SearchField from 'src/components/SearchField';
+// import SearchField from 'src/components/SearchField';
 import ActivityCardAdmin from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdmin';
 
 type Props = {
   activities: Activity[];
+  search: string;
 };
 
-const AllActivitiesAdmin = ({ activities }: Props) => {
-  const [search, setSearch] = useState('');
+const AllActivitiesAdmin = ({ activities, search }: Props) => {
+  // const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [activitiesPerPage, setActivitiesPerPage] = useState(25);
+  const [activitiesPerPage, setActivitiesPerPage] = useState(10);
   const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
     setPage(1);
     setActivitiesPerPage(parseInt(e.target.value));
   };
   return (
     <div>
-      <div style={{ width: '40%' }}>
+      {/* <div style={{ width: '40%' }}>
         <SearchField setter={(e) => setSearch(e.currentTarget.value)} />
-      </div>
+      </div> */}
       <div className="admin-activity-card-list">
         {activities
           //filter on search

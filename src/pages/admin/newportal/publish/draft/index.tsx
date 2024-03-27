@@ -1,11 +1,13 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useGetActivities } from 'src/api/activities/activities.get';
+import SearchField from 'src/components/SearchField';
 import AllActivitiesAdmin from 'src/components/activities/ActivityCard/activity-admin/AllActivitiesAdmin';
 import BackArrow from 'src/svg/back-arrow.svg';
 
 const AllDaft = () => {
+  const [search, setSearch] = useState('');
   const { data, isError, isIdle, isLoading } = useGetActivities({ limit: null, isDraft: true, isPelico: true });
   if (isError) return <p>Error!</p>;
   if (isLoading || isIdle) return <p>Loading...</p>;
@@ -17,7 +19,10 @@ const AllDaft = () => {
         </Link>
         <p style={{ marginLeft: 10 }}>Activités non publiées</p>
       </div>
-      <AllActivitiesAdmin activities={data} />
+      <div style={{ width: '40%' }}>
+        <SearchField setter={(e) => setSearch(e.currentTarget.value)} />
+      </div>
+      <AllActivitiesAdmin activities={data} search={search} />
     </div>
   );
 };
