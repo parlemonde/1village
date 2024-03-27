@@ -141,7 +141,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                       router.pathname.startsWith('/admin/newportal') ? (
                         <div className="container-admin-portal">
                           <NewAdminHeader />
-                          <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
+                          <div className="content" style={{ display: 'flex', width: '100%', margin: '70px 0 70px 0' }}>
                             <NewAdminNavigation />
                             <Container
                               className="container-admin-nav child-container"
