@@ -10,7 +10,7 @@ interface StepsNavigationProps {
 const StepsNavigation: React.FC<StepsNavigationProps> = ({ currentStep, errorSteps }) => (
   <Steps
     steps={['Contenu', 'Forme', 'Prévisualiser']}
-    urls={['/admin/newportal/contenulibre', '/admin/newportal/contenulibre/2', '/admin/newportal/contenulibre/3']}
+    urls={['/admin/newportal/contenulibre/1?edit', '/admin/newportal/contenulibre/2', '/admin/newportal/contenulibre/3']}
     activeStep={currentStep}
     errorSteps={errorSteps}
   />

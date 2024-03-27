@@ -29,12 +29,12 @@ const Creer = () => {
   const handleNewActivity = () => {
     const success = createNewActivity(ActivityType.CONTENU_LIBRE, selectedPhase);
     if (success) {
-      router.push('/admin/newportal/contenulibre');
+      router.push('/admin/newportal/contenulibre/1');
     }
   };
 
   const links: Link[] = [
-    { name: 'Créer du contenu libre', link: '/admin/newportal/contenulibre', action: handleNewActivity },
+    { name: 'Créer du contenu libre', link: '/admin/newportal/contenulibre/1', action: handleNewActivity },
     { name: 'Créer une activité H5P', link: 'https://' },
     { name: 'Paramétrer l’hymne', link: 'https://' },
     { name: 'Mixer l’hymne', link: 'https://' },
