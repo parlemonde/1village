@@ -7,14 +7,12 @@ const Activities = () => {
   const renderTitle = () => {
     return (
       <div>
-        <div style={{display: 'flex',alignItems: 'center'}}>
-            <div style={{cursor: 'pointer', display: 'flex',alignItems: 'center'}}>
-                <Link href="/admin/newportal/manage">
-                    <BackArrow />
-                </Link>
-            </div>
+        <Link href="/admin/newportal/manage">
+          <div style={{cursor: 'pointer', display: 'flex',alignItems: 'center'}}>
+            <BackArrow />
             <h1 style={{ marginLeft: '10px' }}>Consignes d'activité</h1>
-        </div>
+          </div>
+        </Link>
         <p>
             Il y a ici la liste complète des villages-mondes.
         </p>
