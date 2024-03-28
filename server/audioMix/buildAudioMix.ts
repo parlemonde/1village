@@ -3,14 +3,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import { v4 } from 'uuid';
 
+import type { SimpleTrack } from '../../types/anthem.type';
 import { getFile, uploadFile } from '../fileUpload';
-
-export type SimpleTrack = {
-  filename?: string;
-  sampleUrl: string;
-  sampleStartTime: number;
-  sampleVolume?: number;
-};
 
 type JobData = {
   userId: number;
