@@ -2,6 +2,7 @@ import type { Activity } from 'types/activity.type';
 import type { Syllable, Track } from 'types/anthem.type';
 
 export type ClassAnthemData = {
+  verseStartTime: number;
   verseTracks: Track[];
   verseMixUrl: string; //mixed verse instrumental tracks
   verseRecordUrl: string; //class voices record
