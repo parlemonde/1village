@@ -21,8 +21,8 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
   const [isEditingLabel, setIsEditingLabel] = React.useState(false);
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
 
-  const handleSampleUpdate = (url: string, duration: number) => {
-    handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration });
+  const handleSampleUpdate = (url: string, duration?: number) => {
+    handleTrackUpdate({ ...track, sampleUrl: url, sampleDuration: duration || 0 });
   };
 
   const handleIconUpdate = (track: Track, iconUrl: string) => {
