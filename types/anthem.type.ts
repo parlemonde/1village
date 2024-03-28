@@ -23,6 +23,13 @@ export type Track = {
   iconUrl: string;
 };
 
+export type SimpleTrack = {
+  filename?: string;
+  sampleUrl: string;
+  sampleStartTime: number;
+  sampleVolume?: number;
+};
+
 export enum TrackType {
   INTRO_CHORUS = 0,
   VOCALS = 1,
