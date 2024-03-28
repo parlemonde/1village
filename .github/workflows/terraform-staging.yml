@@ -56,6 +56,9 @@ jobs:
           #echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
         if: success()
 
+      - name: Show IP
+        run: echo "Public IP ${{steps.get_server_ip}}"
+
       - name: Create .env file
         env:
           HOST_URL: ${{ steps.get_server_ip.outputs.server_public_ip }}
