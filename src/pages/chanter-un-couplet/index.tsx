@@ -25,6 +25,7 @@ const Anthem = () => {
   const { createNewActivity } = React.useContext(ActivityContext);
   const { village, selectedPhase } = React.useContext(VillageContext);
   const [anthemActivityData, setAnthemActivityData] = React.useState<AnthemData>(emptyAnthemActivity);
+
   const getAnthemData = React.useCallback(async () => {
     if (!village || !village.anthemId) {
       router.push('/');
@@ -40,14 +41,15 @@ const Anthem = () => {
     }
     const newAnthemActivityData = (response.data as Activity<AnthemData>).data;
     setAnthemActivityData(newAnthemActivityData);
-    // change mixUrl by finalMixUrl when back is repaired
-    if (!newAnthemActivityData.mixUrl) {
+    if (!newAnthemActivityData.fullMixUrl) {
       router.push('/');
     }
   }, [router, village]);
+
   React.useEffect(() => {
     getAnthemData().catch(console.error);
   }, [getAnthemData]);
+
   const onNext = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
     createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
