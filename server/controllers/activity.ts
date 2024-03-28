@@ -2,11 +2,12 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
+import type { ActivityContent, AnyData } from '../../types/activity.type';
+import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
-import type { AnyData, ActivityContent } from '../entities/activity';
-import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
