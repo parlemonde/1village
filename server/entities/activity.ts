@@ -11,7 +11,7 @@ import {
   Index,
 } from 'typeorm';
 
-import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
+import type { Activity as ActivityInterface, AnyData, ActivityContent, ActivityPhaseStep } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
 import { Game } from './game';
@@ -37,8 +37,8 @@ export class Activity implements ActivityInterface<AnyData> {
   @Column({ type: 'tinyint', nullable: false, default: VillagePhase.DISCOVER })
   public phase: number;
 
-  @Column({ type: 'string', nullable: true })
-  public phaseStep: string | null;
+  @Column({ type: 'text', nullable: true })
+  public phaseStep: ActivityPhaseStep | null;
 
   @Column({
     type: 'tinyint',

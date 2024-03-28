@@ -67,3 +67,20 @@ export interface Activity<T extends AnyData = AnyData> {
 export const LinkNotAllowedInPath = {
   REACTION: '/reagir-a-une-activite/',
 };
+
+export enum ActivityPhaseStep {
+  MESSAGE_LANCEMENT_PHASE_1 = 'Message de lancement phase 1',
+  RELANCE_PHASE_1 = 'Relance phase 1',
+  ENIGME_PAYS_1 = 'Enigme pays 1',
+  ENIGME_PAYS_2 = 'Enigme pays 2',
+  MESSAGE_LANCEMENT_PHASE_2 = 'Message de lancement phase 2',
+  RELANCE_PHASE_2 = 'Relance phase 2',
+  ACTIVITE_8_MARS = 'Activité 8 mars',
+  ACTIVITE_EMI = 'activité EMI',
+  MESSAGE_CLOTURE_PHASE_2 = 'Message de clôture phase 2',
+  MESSAGE_LANCEMENT_PHASE_3 = 'Message de lancement phase 3',
+  RELANCE_PHASE_3 = 'Relance phase 3',
+  PARAMETRAGE_DE_L_HYMNE = "Paramétrage de l'hymne",
+  MIXAGE_DE_L_HYMNE = "Mixage de l'hymne",
+  MESSAGE_CLOTURE_PHASE_3 = 'Message de clôture phase 3',
+}

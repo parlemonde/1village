@@ -23,6 +23,7 @@
     "migration:create": "cd server && mkdir -p migrations && cd migrations && yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
     "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
+    "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "jest": {

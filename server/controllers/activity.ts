@@ -22,24 +22,6 @@ import { Controller } from './controller';
 
 const activityController = new Controller('/activities');
 
-type ActivityGetter = {
-  limit?: number;
-  page?: number;
-  phase?: number | null;
-  villageId?: number;
-  type?: string[];
-  subType?: number | null;
-  countries?: string[];
-  pelico?: boolean;
-  userId?: number;
-  status?: number;
-  responseActivityId?: number;
-  delayedDays?: number;
-  hasVisibilitySetToClass?: boolean;
-  teacherId?: number;
-  visibleToParent: boolean;
-};
-
 const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
   if (ids.length === 0) {
     return {};
@@ -74,6 +56,24 @@ const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]
     acc[row.activity_id] = parseInt(row.comments, 10) || 0;
     return acc;
   }, {});
+};
+
+type ActivityGetter = {
+  limit?: number;
+  page?: number;
+  phase?: number | null;
+  villageId?: number;
+  type?: string[];
+  subType?: number | null;
+  countries?: string[];
+  pelico?: boolean;
+  userId?: number;
+  status?: number;
+  responseActivityId?: number;
+  delayedDays?: number;
+  hasVisibilitySetToClass?: boolean;
+  teacherId?: number;
+  visibleToParent: boolean;
 };
 
 const getActivities = async ({
