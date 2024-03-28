@@ -16,7 +16,7 @@ const AllDaft = () => {
       <Link href="/admin/newportal/publish">
         <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
           <BackArrow />
-          <p style={{ marginLeft: 10 }}>Activités non publiées</p>
+          <h1 style={{ marginLeft: 10 }}>Activités non publiées</h1>
         </div>
       </Link>
       <div style={{ width: '40%' }}>

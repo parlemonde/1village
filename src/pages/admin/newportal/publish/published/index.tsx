@@ -29,7 +29,7 @@ const Published = () => {
       <Link href="/admin/newportal/publish">
         <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
           <BackArrow />
-          <p style={{ marginLeft: 10 }}>Activités publiées</p>
+          <h1 style={{ marginLeft: 10 }}>Activités publiées</h1>
         </div>
       </Link>
       <div
