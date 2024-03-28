@@ -13,7 +13,6 @@ type Props = {
 };
 
 const AllActivitiesAdmin = ({ activities, search }: Props) => {
-  // const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [activitiesPerPage, setActivitiesPerPage] = useState(10);
   const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
