@@ -478,7 +478,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 
   // Check if we need to build the audio mix for the class verse
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const verseTracks = (data.data.tracks as Track[]).filter((t) => t.sampleUrl !== '');
+    const verseTracks = (data.data.verseTracks as Track[]).filter((t) => t.sampleUrl !== '');
     data.data.verseMixWithVocalsUrl = buildAudioMix(activity.userId, verseTracks);
     data.data.verseMixUrl = buildAudioMix(
       activity.userId,
