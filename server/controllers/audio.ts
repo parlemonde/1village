@@ -13,21 +13,27 @@ import { Controller } from './controller';
 const audioController = new Controller('/audios');
 
 // get audio
-audioController.get({ path: '/:id/:filename', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const key = `audios/${req.params.id}/${req.params.filename}`;
-  streamFile(key, req, res, next);
-});
+audioController.get(
+  { path: '/:id/:filename', userType: UserType.SUPER_ADMIN || UserType.TEACHER },
+  async (req: Request, res: Response, next: NextFunction) => {
+    const key = `audios/${req.params.id}/${req.params.filename}`;
+    streamFile(key, req, res, next);
+  },
+);
 
-audioController.head({ path: '/:id/:filename', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
-  const key = `audios/${req.params.id}/${req.params.filename}`;
-  streamFile(key, req, res, next);
-});
+audioController.head(
+  { path: '/:id/:filename', userType: UserType.SUPER_ADMIN || UserType.TEACHER },
+  async (req: Request, res: Response, next: NextFunction) => {
+    const key = `audios/${req.params.id}/${req.params.filename}`;
+    streamFile(key, req, res, next);
+  },
+);
 
 // post audio
 audioController.upload(
   {
     path: '',
-    userType: UserType.TEACHER,
+    userType: UserType.SUPER_ADMIN || UserType.TEACHER,
     multerFieldName: 'audio',
   },
   async (req: Request, res: Response) => {
@@ -59,7 +65,7 @@ audioController.upload(
 );
 
 // delete audio
-audioController.delete({ path: '/:id/:filename', userType: UserType.TEACHER }, async (req, res) => {
+audioController.delete({ path: '/:id/:filename', userType: UserType.SUPER_ADMIN || UserType.TEACHER }, async (req, res) => {
   if (req.user?.id !== parseInt(req.params.id, 10)) {
     res.status(204).send();
     return;
