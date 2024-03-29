@@ -2,6 +2,8 @@ import React from 'react';
 
 import { useDragHandler } from 'src/hooks/useDragHandler';
 import { clamp } from 'src/utils';
+import MicNoneIcon from '@mui/icons-material/MicNone';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 const SVG_WIDTH = 762;
 
@@ -12,6 +14,7 @@ type DraggableTrackProps = {
   onCoupletStartChange: (newStart: number) => void;
   onChangeEnd: (newStart: number) => void;
 };
+
 export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletStart, onCoupletStartChange, onChangeEnd }: DraggableTrackProps) => {
   const SVGRef = React.useRef<SVGSVGElement | null>(null);
   const [coupletStart, setCoupletStart] = React.useState(
@@ -53,15 +56,20 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
   });
 
   return (
+    
     <svg
       ref={SVGRef}
       width="766"
       height="120"
-      viewBox="0 0 766 120"
+      viewBox="0 0 800 120"
       style={{ width: '100%', height: '100%' }}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <svg x="-10" y="-10" width="32px">
+        <MicNoneIcon/>
+      </svg>
+      
       <rect x="0" y="14" width="766" height="94" rx="10" fill="#666666" />
       <rect x="2" y="16" width="762" height="90" rx="8" fill="#e6e6e6" />
       <g>
@@ -110,26 +118,11 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
           style={{ cursor: 'grab' }}
         />
 
-        <svg x={leftCut - 23} y="-30" width={leftCut} fill="#666666" opacity="1">
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M14.8519 20.0374C12.142 21.6828 8.5109 19.934 8.1358 16.6337C7.44326 10.7397 16.405 9.58703 17.1735 15.5614C17.2362 16.1114 17.218 16.7374 17.048 17.2026L20.4953 19.8861L31.2688 12.9114L36.1742 13.9136L23.4869 22.0866L35.3675 31.1211L30.4172 31.6841L20.2941 24.1883L16.864 26.3612C17.4002 29.5096 14.5782 32.3262 11.466 31.6103C5.62587 30.4247 7.37116 21.468 13.2871 22.7341C13.8326 22.8282 14.3737 23.0786 14.8342 23.4052L17.3073 21.8314L14.8525 20.0379L14.8519 20.0374ZM14.5559 27.6261C15.1107 24.6657 10.751 23.7575 10.1201 26.6372C9.48483 29.6735 13.925 30.5058 14.5559 27.6261ZM14.973 15.8118C14.5889 12.8245 10.0276 13.4769 10.3358 16.3837C10.8005 19.2949 15.2812 18.7187 14.973 15.8118Z"
-            fill="#666666"
-          />
+        <svg x={leftCut} width="32px" fill="#666666" opacity="1">
+          <MusicNoteIcon sx={{ color: '#666666' }}/>
         </svg>
 
         <rect x="2" y="16" width={leftCut} height="90" rx="8" fill="#666666" opacity="0.5" />
-
-        <svg x={rightCut - 19} y="-30" width={764 - rightCut} fill="#666666" opacity="1">
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M14.8519 20.0374C12.142 21.6828 8.5109 19.934 8.1358 16.6337C7.44326 10.7397 16.405 9.58703 17.1735 15.5614C17.2362 16.1114 17.218 16.7374 17.048 17.2026L20.4953 19.8861L31.2688 12.9114L36.1742 13.9136L23.4869 22.0866L35.3675 31.1211L30.4172 31.6841L20.2941 24.1883L16.864 26.3612C17.4002 29.5096 14.5782 32.3262 11.466 31.6103C5.62587 30.4247 7.37116 21.468 13.2871 22.7341C13.8326 22.8282 14.3737 23.0786 14.8342 23.4052L17.3073 21.8314L14.8525 20.0379L14.8519 20.0374ZM14.5559 27.6261C15.1107 24.6657 10.751 23.7575 10.1201 26.6372C9.48483 29.6735 13.925 30.5058 14.5559 27.6261ZM14.973 15.8118C14.5889 12.8245 10.0276 13.4769 10.3358 16.3837C10.8005 19.2949 15.2812 18.7187 14.973 15.8118Z"
-            fill="#666666"
-          />
-        </svg>
-
         <rect x={rightCut} y="16" width={764 - rightCut} height="90" rx="8" fill="#666666" opacity="0.5" />
       </g>
 
