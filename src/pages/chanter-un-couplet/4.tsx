@@ -14,7 +14,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import AudioEditor from 'src/components/activities/content/editors/AudioEditor/AudioEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
-import { audioBufferSlice, audioBufferToWav, getLongestVerseSampleDuration, mixAudios } from 'src/utils/audios';
+import { audioBufferSlice, audioBufferToWav, getLongestVerseSampleDuration } from 'src/utils/audios';
 import { axiosRequest } from 'src/utils/axiosRequest';
 
 const SongStep4 = () => {
@@ -23,9 +23,8 @@ const SongStep4 = () => {
   const [trackDuration, setTrackDuration] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
-  const [displayEditor, setDisplayEditor] = React.useState(!!data?.verseRecordUrl);
-  // const [verseStart, setVerseStart] = React.useState(data?.verseStart ? data?.verseStart : 0);
-  const [verseStart, setVerseStart] = React.useState(0);
+  const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(!!data?.verseRecordUrl);
+  const [verseStart, setVerseStart] = React.useState(data?.verseStartTime ? data?.verseStartTime : 0);
   const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
   const verseMixUrl = data?.verseMixUrl;
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
@@ -76,6 +75,13 @@ const SongStep4 = () => {
     save().catch(console.error);
     router.push('/chanter-un-couplet/5');
   };
+
+  const handleSampleUpdate = (url: string, duration: number) => {
+    data.verseRecordUrl = url;
+    setTrackDuration(duration);
+    console.log(data);
+  };
+
   return (
     <Base>
       <div className={styles.mainContainer}>
@@ -96,7 +102,7 @@ const SongStep4 = () => {
           )}
           {(!trackDuration || !data.verseRecordUrl) && (
             <Button
-              onClick={() => setDisplayEditor(true)}
+              onClick={() => setIsAudioEditorOpen(true)}
               variant="text"
               className="navigation__button full-width"
               sx={{
@@ -152,33 +158,14 @@ const SongStep4 = () => {
               justifyContent: 'space-between',
             }}
           >
-            {/* {(displayEditor || data?.verseRecordUrl) && (
+            {isAudioEditorOpen && (
               <AudioEditor
-                s={data?.verseRecordUrl}
-                onChange={(value: string) => {
-                  audioRef?.current?.pause();
-                  customizedMixAudio?.pause();
-                  updateActivity({ data: { ...data, classRecord: value } });
-                }}
-                setTime={(time) => {
-                  setTrackDuration(time);
-                }}
-                edit
-                onPause={() => {
-                  audioRef?.current?.pause();
-                  customizedMixAudio?.pause();
-                }}
-                onPlay={() => {
-                  audioRef?.current?.play();
-                  customizedMixAudio?.play();
-                }}
-                onDelete={() => {
-                  updateActivity({ data: { ...data, classRecord: '' } });
-                  setDisplayEditor(false);
-                }}
-                ref={audioRef}
+                sampleUrl={data.verseRecordUrl}
+                sampleDuration={trackDuration}
+                handleSampleUpdate={handleSampleUpdate}
+                setIsAudioEditorOpen={setIsAudioEditorOpen}
               />
-            )} */}
+            )}
           </div>
           <StepsButton prev="/chanter-un-couplet/3" next={onNext} />
           <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
