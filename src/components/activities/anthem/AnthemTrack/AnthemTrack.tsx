@@ -83,7 +83,14 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
           />
         </div>
       )}
-      {isAudioEditorOpen && <AudioEditor track={track} handleSampleUpdate={handleSampleUpdate} setIsAudioEditorOpen={setIsAudioEditorOpen} />}
+      {isAudioEditorOpen && (
+        <AudioEditor
+          sampleUrl={track.sampleUrl}
+          sampleDuration={track.sampleDuration}
+          handleSampleUpdate={handleSampleUpdate}
+          setIsAudioEditorOpen={setIsAudioEditorOpen}
+        />
+      )}
     </div>
   );
 };

@@ -9,21 +9,21 @@ import styles from './AudioEditor.module.css';
 import { Modal } from 'src/components/Modal';
 import { isValidHttpUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { Track } from 'types/anthem.type';
 
 export interface AudioEditorProps {
-  track?: Track;
-  handleSampleUpdate: (url: string, duration?: number) => void;
+  sampleUrl: string;
+  sampleDuration: number;
+  handleSampleUpdate: (url: string, duration: number) => void;
   setIsAudioEditorOpen: (value: boolean) => void;
 }
 
-const AudioEditor = ({ track, handleSampleUpdate, setIsAudioEditorOpen }: AudioEditorProps) => {
+const AudioEditor = ({ sampleUrl, sampleDuration, handleSampleUpdate, setIsAudioEditorOpen }: AudioEditorProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [isModalLoading, setIsModalLoading] = React.useState(false);
 
-  const [tempSampleUrl, setTempSampleUrl] = React.useState(track?.sampleUrl || '');
-  const [tempSampleDuration, setTempSampleDuration] = React.useState(track?.sampleDuration || 0);
+  const [tempSampleUrl, setTempSampleUrl] = React.useState(sampleUrl || '');
+  const [tempSampleDuration, setTempSampleDuration] = React.useState(sampleDuration || 0);
   const [tempSampleFile, setTempSampleFile] = React.useState<File | null>(null);
 
   const uploadSampleFile = async () => {
@@ -77,8 +77,7 @@ const AudioEditor = ({ track, handleSampleUpdate, setIsAudioEditorOpen }: AudioE
         setIsAudioEditorOpen(false);
       }}
       onClose={() => {
-        if (track && !track.sampleUrl) handleSampleUpdate('', 0);
-        if (!track) handleSampleUpdate('');
+        if (!sampleUrl) handleSampleUpdate('', 0);
         setIsAudioEditorOpen(false);
       }}
       loading={isModalLoading}
@@ -94,7 +93,7 @@ const AudioEditor = ({ track, handleSampleUpdate, setIsAudioEditorOpen }: AudioE
               variant="outlined"
               color="secondary"
               fullWidth
-              defaultValue={track?.sampleUrl || ''}
+              defaultValue={sampleUrl || ''}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 if (isValidHttpUrl(event.target.value)) {
                   if (tempSampleFile) setTempSampleFile(null);
