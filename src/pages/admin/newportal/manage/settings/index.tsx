@@ -3,40 +3,33 @@ import React from 'react';
 
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
+import { UserContext } from 'src/contexts/userContext';
 import BackArrow from 'src/svg/back-arrow.svg';
 import DoubleChevronRightIcon from 'src/svg/mdi-light_chevron-double-right.svg';
+import { UserType } from 'types/user.type';
 
 type Link = {
   name: string;
   link: string;
 };
-interface NavItemProps {
-  key?: number;
-  link: string;
-  primary: string;
-}
 
 const Gerer = () => {
+  const { user } = React.useContext(UserContext);
+  const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
+
+  if (!hasAccess) {
+    return <h1>Vous n&apos;avez pas accès à cette page, vous devez être médiateur, modérateur ou super admin.</h1>;
+  }
+
   const links: Link[] = [
-    { name: 'Archiver', link: 'https://' },
-    { name: 'Présenatation de Pélico', link: 'https://' },
-    { name: 'Paramétrer la home', link: 'https://' },
-    { name: 'Paramétrer les phases', link: 'https://' },
+    { name: 'Archiver', link: '/admin/newportal/manage/settings/archive' },
+    { name: 'Présenatation de Pélico', link: '/admin/newportal/manage/settings/pelico' },
+    { name: 'Paramétrer la home', link: '/admin/newportal/manage/settings/home' },
+    { name: 'Paramétrer les phases', link: '/admin/newportal/manage/settings/phases' },
   ];
 
-  const NavItem = ({ link, primary }: NavItemProps) => (
-    <Link href={link} passHref>
-      <ListItem className="like-button grey" button component="a">
-        <ListItemText primary={primary} />
-        <ListItemIcon>
-          <DoubleChevronRightIcon />
-        </ListItemIcon>
-      </ListItem>
-    </Link>
-  );
-
-  const renderTitle = () => {
-    return (
+  return (
+    <>
       <div>
         <Link href="/admin/newportal/manage">
           <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
@@ -44,25 +37,22 @@ const Gerer = () => {
             <h1 style={{ marginLeft: '10px' }}>Paramétrage</h1>
           </div>
         </Link>
-        <p>C’est ici que l’on peut activer les phases d’1Village, créer les devinettes de lancement d’année et archiver 1Village.</p>
+        <p>
+          C&apos;est ici que l&apos;on peut activer les phases d&apos;1Village, créer les devinettes de lancement d&apos;année et archiver 1Village.
+        </p>
       </div>
-    );
-  };
-
-  const renderLinks = () => {
-    return (
       <List sx={{ padding: 0, margin: 0 }}>
         {links?.map((item, id) => (
-          <NavItem key={id} link={item.link} primary={item.name} />
+          <Link href={item.link} passHref key={id}>
+            <ListItem className="like-button grey" button component="a">
+              <ListItemText primary={item.name} />
+              <ListItemIcon>
+                <DoubleChevronRightIcon />
+              </ListItemIcon>
+            </ListItem>
+          </Link>
         ))}
       </List>
-    );
-  };
-
-  return (
-    <>
-      {renderTitle()}
-      {renderLinks()}
     </>
   );
 };

@@ -3,18 +3,17 @@ import React from 'react';
 
 import BackArrow from 'src/svg/back-arrow.svg';
 
-const Users = () => {
+const Home = () => {
   return (
     <div>
-      <Link href="/admin/newportal/manage">
+      <Link href="/admin/newportal/manage/settings">
         <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
           <BackArrow />
-          <h1 style={{ marginLeft: '10px' }}>Utilisateurs</h1>
+          <h1 style={{ marginLeft: '10px' }}>Paramétrer la home</h1>
         </div>
       </Link>
-      <p>Il y a ici la liste complète des utilisateurs sur 1Village.</p>
     </div>
   );
 };
 
-export default Users;
+export default Home;
