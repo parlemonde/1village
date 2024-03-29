@@ -1,9 +1,11 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
+
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+
+import { UserContext } from 'src/contexts/userContext';
 import DoubleChevronRightIcon from 'src/svg/mdi-light_chevron-double-right.svg';
 import { UserType } from 'types/user.type';
-import { UserContext } from 'src/contexts/userContext';
 
 type Link = {
   name: string;
@@ -28,7 +30,7 @@ const Gerer = () => {
     { name: 'Les utilisateurs', link: '/admin/newportal/manage/users' },
     { name: 'Les consignes des activités', link: '/admin/newportal/manage/activities' },
     { name: 'Paramétrer 1Village', link: '/admin/newportal/manage/settings' },
-    { name: 'Les droits d\'accès', link: '/admin/newportal/manage/access' }
+    { name: "Les droits d'accès", link: '/admin/newportal/manage/access' },
   ];
 
   const NavItem = ({ link, primary }: NavItemProps) => (
@@ -45,9 +47,7 @@ const Gerer = () => {
   const renderTitle = () => {
     return (
       <div>
-        <h1>
-          Gérer
-        </h1>
+        <h1>Gérer</h1>
         <p>
           C’est dans cet espace, que les administrateurs et administratrices du site vont pouvoir gérer les droits d’accès, la composition des
           villages-mondes et accéder à la liste complète des utilisateurs.
@@ -62,8 +62,9 @@ const Gerer = () => {
         {links?.map((item, id) => (
           <NavItem key={id} link={item.link} primary={item.name} />
         ))}
-      </List>)
-  }
+      </List>
+    );
+  };
 
   return (
     <>
@@ -71,7 +72,6 @@ const Gerer = () => {
       {renderLinks()}
     </>
   );
-
 };
 
 export default Gerer;

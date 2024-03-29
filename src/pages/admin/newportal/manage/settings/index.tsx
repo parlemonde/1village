@@ -1,8 +1,10 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
+
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import DoubleChevronRightIcon from 'src/svg/mdi-light_chevron-double-right.svg';
+
 import BackArrow from 'src/svg/back-arrow.svg';
+import DoubleChevronRightIcon from 'src/svg/mdi-light_chevron-double-right.svg';
 
 type Link = {
   name: string;
@@ -19,7 +21,7 @@ const Gerer = () => {
     { name: 'Archiver', link: 'https://' },
     { name: 'Présenatation de Pélico', link: 'https://' },
     { name: 'Paramétrer la home', link: 'https://' },
-    { name: 'Paramétrer les phases', link: 'https://' }
+    { name: 'Paramétrer les phases', link: 'https://' },
   ];
 
   const NavItem = ({ link, primary }: NavItemProps) => (
@@ -33,19 +35,16 @@ const Gerer = () => {
     </Link>
   );
 
-
   const renderTitle = () => {
     return (
       <div>
         <Link href="/admin/newportal/manage">
-          <div style={{cursor: 'pointer', display: 'flex',alignItems: 'center'}}>
+          <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <BackArrow />
             <h1 style={{ marginLeft: '10px' }}>Paramétrage</h1>
           </div>
         </Link>
-        <p>
-            C’est ici que l’on peut activer les phases d’1Village, créer les devinettes de lancement d’année et archiver 1Village.
-        </p>
+        <p>C’est ici que l’on peut activer les phases d’1Village, créer les devinettes de lancement d’année et archiver 1Village.</p>
       </div>
     );
   };
@@ -56,8 +55,9 @@ const Gerer = () => {
         {links?.map((item, id) => (
           <NavItem key={id} link={item.link} primary={item.name} />
         ))}
-      </List>)
-  }
+      </List>
+    );
+  };
 
   return (
     <>
@@ -65,7 +65,6 @@ const Gerer = () => {
       {renderLinks()}
     </>
   );
-
 };
 
 export default Gerer;
