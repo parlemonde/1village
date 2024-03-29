@@ -11,18 +11,13 @@ type Link = {
   name: string;
   link: string;
 };
-interface NavItemProps {
-  key?: number;
-  link: string;
-  primary: string;
-}
 
 const Gerer = () => {
   const { user } = React.useContext(UserContext);
   const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
 
   if (!hasAccess) {
-    return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>;
+    return <h1>Vous n&apos;avez pas accès à cette page, vous devez être médiateur, modérateur ou super admin.</h1>;
   }
 
   const links: Link[] = [
@@ -33,19 +28,8 @@ const Gerer = () => {
     { name: "Les droits d'accès", link: '/admin/newportal/manage/access' },
   ];
 
-  const NavItem = ({ link, primary }: NavItemProps) => (
-    <Link href={link} passHref>
-      <ListItem className="like-button grey" button component="a">
-        <ListItemText primary={primary} />
-        <ListItemIcon>
-          <DoubleChevronRightIcon />
-        </ListItemIcon>
-      </ListItem>
-    </Link>
-  );
-
-  const renderTitle = () => {
-    return (
+  return (
+    <>
       <div>
         <h1>Gérer</h1>
         <p>
@@ -53,23 +37,18 @@ const Gerer = () => {
           villages-mondes et accéder à la liste complète des utilisateurs.
         </p>
       </div>
-    );
-  };
-
-  const renderLinks = () => {
-    return (
       <List sx={{ padding: 0, margin: 0 }}>
         {links?.map((item, id) => (
-          <NavItem key={id} link={item.link} primary={item.name} />
+          <Link href={item.link} passHref key={id}>
+            <ListItem className="like-button grey" button component="a">
+              <ListItemText primary={item.name} />
+              <ListItemIcon>
+                <DoubleChevronRightIcon />
+              </ListItemIcon>
+            </ListItem>
+          </Link>
         ))}
       </List>
-    );
-  };
-
-  return (
-    <>
-      {renderTitle()}
-      {renderLinks()}
     </>
   );
 };
