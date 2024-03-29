@@ -4,9 +4,10 @@ import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
 import { In, IsNull, LessThan } from 'typeorm';
 
+import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
-import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
 import { FeatureFlag } from '../entities/featureFlag';
 import { Student } from '../entities/student';
