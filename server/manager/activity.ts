@@ -1,6 +1,6 @@
 import { In } from 'typeorm';
 
-import type { ActivityPhaseStep } from '../../types/activity.type';
+import type { EActivityPhaseStep } from '../../types/activity.type';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -10,7 +10,7 @@ type ActivityGetter = {
   limit?: number;
   page?: number;
   phase?: number | null;
-  phaseStep?: ActivityPhaseStep;
+  phaseStep?: EActivityPhaseStep;
   villageId?: number;
   type?: string[];
   subType?: number | null;

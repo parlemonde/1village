@@ -68,19 +68,26 @@ export const LinkNotAllowedInPath = {
   REACTION: '/reagir-a-une-activite/',
 };
 
-export enum ActivityPhaseStep {
+enum EPhase1Steps {
   MESSAGE_LANCEMENT_PHASE_1 = 'message-de-lancement-phase-1',
   RELANCE_PHASE_1 = 'relance-phase-1',
   ENIGME_PAYS_1 = 'enigme-pays-1',
+}
+enum EPhase2Steps {
   ENIGME_PAYS_2 = 'enigme-pays-2',
   MESSAGE_LANCEMENT_PHASE_2 = 'message-de-lancement-phase-2',
   RELANCE_PHASE_2 = 'relance-phase-2',
   ACTIVITE_8_MARS = 'activité-8-mars',
   ACTIVITE_EMI = 'activite-EMI',
   MESSAGE_CLOTURE_PHASE_2 = 'message-de-cloture-phase-2',
+}
+enum EPhase3Steps {
   MESSAGE_LANCEMENT_PHASE_3 = 'message-de-lancement-phase-3',
   RELANCE_PHASE_3 = 'relance-phase-3',
   PARAMETRAGE_DE_L_HYMNE = 'parametrage-de-lhymne',
   MIXAGE_DE_L_HYMNE = 'mixage-de-lhymne',
   MESSAGE_CLOTURE_PHASE_3 = 'message-de-clôture-phase-3',
 }
+
+export type EActivityPhaseStep = EPhase1Steps | EPhase2Steps | EPhase3Steps;
+export type Phase<T extends EPhase1Steps | EPhase2Steps | EPhase3Steps> = T extends EPhase1Steps ? 1 : T extends EPhase2Steps ? 2 : 3;

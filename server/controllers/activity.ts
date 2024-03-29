@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
-import type { ActivityContent, ActivityPhaseStep, AnyData } from '../../types/activity.type';
+import type { ActivityContent, EActivityPhaseStep, AnyData } from '../../types/activity.type';
 import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
@@ -40,7 +40,7 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
     phase: req.query.phase ? Number(getQueryString(req.query.phase)) || 0 : undefined,
-    phaseStep: req.query.phaseStep as ActivityPhaseStep | undefined,
+    phaseStep: req.query.phaseStep as EActivityPhaseStep | undefined,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
     responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
@@ -239,6 +239,7 @@ type UpdateActivity = {
   displayAsUser?: boolean;
   data?: AnyData;
   content?: ActivityContent[];
+  phaseStep?: EActivityPhaseStep;
 };
 
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
@@ -250,6 +251,10 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     },
     phase: {
       type: 'number',
+      nullable: true,
+    },
+    phaseStep: {
+      type: 'string',
       nullable: true,
     },
     responseActivityId: { type: 'number', nullable: true },
