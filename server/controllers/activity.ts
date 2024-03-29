@@ -2,8 +2,8 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
-import type { ActivityContent, EActivityPhaseStep, AnyData } from '../../types/activity.type';
-import { ActivityStatus, ActivityType } from '../../types/activity.type';
+import type { ActivityContent, AnyData } from '../../types/activity.type';
+import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
@@ -40,7 +40,7 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
     phase: req.query.phase ? Number(getQueryString(req.query.phase)) || 0 : undefined,
-    phaseStep: req.query.phaseStep as EActivityPhaseStep | undefined,
+    phaseStep: req.query.phaseStep,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
     responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
@@ -232,14 +232,14 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 // --- Update activity ---
 type UpdateActivity = {
   status?: number;
-  phase?: number;
+  phase?: 1 | 2 | 3;
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
   displayAsUser?: boolean;
   data?: AnyData;
   content?: ActivityContent[];
-  phaseStep?: EActivityPhaseStep;
+  phaseStep?: string;
 };
 
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
@@ -310,10 +310,31 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     next();
     return;
   }
-
   if (activity.status !== ActivityStatus.PUBLISHED) {
-    activity.phase = data.phase || activity.phase;
+    if (data.phase) activity.phase = data.phase;
+    if (data.phaseStep) {
+      switch (activity.phase) {
+        case 1: {
+          if (Object.values(EPhase1Steps).includes(data.phaseStep as EPhase1Steps)) activity.phaseStep = data.phaseStep;
+          else throw new AppError(`Phase step: ${data.phaseStep} isn't part of phase 1`, ErrorCode.INVALID_DATA);
+          break;
+        }
+        case 2: {
+          if (Object.values(EPhase2Steps).includes(data.phaseStep as EPhase2Steps)) activity.phaseStep = data.phaseStep;
+          else throw new AppError(`Phase step: ${data.phaseStep} isn't part of phase 2`, ErrorCode.INVALID_DATA);
+          break;
+        }
+        case 3: {
+          if (Object.values(EPhase3Steps).includes(data.phaseStep as EPhase3Steps)) activity.phaseStep = data.phaseStep;
+          else throw new AppError(`Phase step: ${data.phaseStep} isn't part of phase 3`, ErrorCode.INVALID_DATA);
+          break;
+        }
+        default:
+          break;
+      }
+    }
   }
+
   activity.status = data.status ?? activity.status;
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
