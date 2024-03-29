@@ -40,7 +40,7 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
     phase: req.query.phase ? Number(getQueryString(req.query.phase)) || 0 : undefined,
-    phaseStep: req.query.phaseStep,
+    phaseStep: req.query.phaseStep ? String(req.query.phaseStep) : undefined,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
     responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
