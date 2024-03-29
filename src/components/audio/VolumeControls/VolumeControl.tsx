@@ -9,7 +9,7 @@ interface VolumeControlProps{
 }
 
 const VolumeControl = ({icon, handleVolumeChange}: VolumeControlProps) => {
-    const [value, setValue] = React.useState<number>(30);
+    const [value, setValue] = React.useState<number>(5);
 
     const handleChange = (_event: Event, value: number | number[]) => {
         const formatedValue = value as number;
@@ -20,7 +20,7 @@ const VolumeControl = ({icon, handleVolumeChange}: VolumeControlProps) => {
     return (
     <Stack spacing={2} direction="row" sx={{ mb: 1, width: '240px' }} alignItems="center">
         {icon && icon}
-        <Slider aria-label="Volume" onChange={handleChange} sx={{color: '#666666'}} min={0} max={10}/>
+        <Slider aria-label="Volume" value={value} onChange={handleChange} sx={{color: '#666666'}} min={0} max={10}/>
         <VolumeUp sx={{color: '#666666'}}/>
     </Stack>
   )
