@@ -478,12 +478,25 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
 
   // Check if we need to build the audio mix for the class verse
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const verseTracks = (data.data.verseTracks as Track[]).filter((t) => t.sampleUrl !== '');
-    data.data.verseMixWithVocalsUrl = buildAudioMix(activity.userId, verseTracks);
+    const tracks = (data.data.tracks as Track[]).filter((t) => t.sampleUrl !== '');
+    const intro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
+    const outro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
+
     data.data.verseMixUrl = buildAudioMix(
       activity.userId,
-      verseTracks.filter((track) => track.type !== TrackType.VOCALS),
+      tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO),
     );
+    data.data.verseMixWithVocalsUrl = buildAudioMix(
+      activity.userId,
+      tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO),
+    );
+    data.data.verseMixWithIntroUrl = buildAudioMix(
+      activity.userId,
+      tracks
+        .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
+        .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
+    );
+    console.log('TRACKS!!!!!!!!', tracks);
   }
 
   if (activity.status !== ActivityStatus.PUBLISHED) {
