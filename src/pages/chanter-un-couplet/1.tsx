@@ -12,7 +12,7 @@ import { StepsButton } from 'src/components/StepsButtons';
 import type { AudioMixerTrack } from 'src/components/audio/AudioMixer/AudioMixer';
 import AudioMixer from 'src/components/audio/AudioMixer/AudioMixer';
 import { ActivityContext } from 'src/contexts/activityContext';
-import { getLongestVerseSampleDuration } from 'src/utils/audios';
+import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
 import { TrackType } from 'types/anthem.type';
 import type { Track } from 'types/anthem.type';
 
@@ -20,34 +20,32 @@ const SongStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isVerseTracks, setIsVerseTrack] = React.useState(false);
+  const [isTracks, setIsTracks] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
 
   const mixerRef = React.useRef<{ stopMixer: () => void }>();
 
   React.useEffect(() => {
-    if (data && data.verseTracks.length > 0) {
-      setIsVerseTrack(true);
+    if (data && data.tracks.length > 0) {
+      setIsTracks(true);
     }
   }, [data]);
 
   const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
-    return isVerseTracks
-      ? data.verseTracks
-          .filter((track) => track.type !== TrackType.VOCALS)
-          .map((track) => {
-            const audioElement = new Audio(track.sampleUrl);
-            audioElement.volume = track.sampleVolume ?? 0.5;
-            return {
-              sampleVolume: track.sampleVolume ?? 0.5,
-              label: track.label,
-              iconUrl: track.iconUrl,
-              audioElement: audioElement,
-            };
-          })
+    return isTracks
+      ? getVerseTracks(data.tracks).map((track) => {
+          const audioElement = new Audio(track.sampleUrl);
+          audioElement.volume = track.sampleVolume ?? 0.5;
+          return {
+            sampleVolume: track.sampleVolume ?? 0.5,
+            label: track.label,
+            iconUrl: track.iconUrl,
+            audioElement: audioElement,
+          };
+        })
       : [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVerseTracks]);
+  }, [isTracks]);
 
   const onNext = async () => {
     if (mixerRef.current) mixerRef.current.stopMixer();
@@ -58,11 +56,9 @@ const SongStep1 = () => {
   };
 
   const handleMixUpdate = async (volumes: number[]) => {
-    const tempMixedTrack: Track[] = data.verseTracks
-      .filter((track) => track.type !== TrackType.VOCALS)
-      .map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
-    tempMixedTrack.unshift(data.verseTracks[0]);
-    updateActivity({ data: { ...data, verseTracks: tempMixedTrack } });
+    const tempMixedTrack: Track[] = getVerseTracks(data.tracks).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
+    tempMixedTrack.unshift(data.tracks[0]);
+    updateActivity({ data: { ...data, tracks: tempMixedTrack } });
   };
 
   if (!activity || !data) {
@@ -94,11 +90,11 @@ const SongStep1 = () => {
             Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
             votre mix avant de passer à cette étape suivante !
           </p>
-          {data && data.verseTracks.length > 0 && (
+          {audioMixerTracks.length > 0 && (
             <AudioMixer
               ref={mixerRef}
               tracks={audioMixerTracks}
-              verseTime={getLongestVerseSampleDuration(data.verseTracks)}
+              verseTime={getLongestVerseSampleDuration(getVerseTracks(data.tracks))}
               handleMixUpdate={handleMixUpdate}
             />
           )}

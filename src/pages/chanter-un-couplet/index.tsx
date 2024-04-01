@@ -53,10 +53,12 @@ const Anthem = () => {
   const onNext = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
     createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
-      verseTracks: tracks.filter((track) => track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO),
+      tracks: tracks,
       verseMixUrl: '',
       verseRecordUrl: '',
-      verseFinalMixUrl: '',
+      verseMixWithIntroUrl: '',
+      verseMixWithVocalsUrl: '',
+      verseMixWithLyricsUrl: '',
       verseLyrics: verseLyrics,
       chorusLyrics: chorusLyrics,
     });

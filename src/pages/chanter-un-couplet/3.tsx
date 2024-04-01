@@ -54,7 +54,7 @@ const SongStep3 = () => {
           <p>Vous pouvez également chanter a cappella, ou en enregistrant un élève portant un casque.</p>
 
           {data.verseMixUrl ? (
-            <AudioPlayer src={data.verseMixUrl} isBuildingAudio />
+            <AudioPlayer src={data.verseMixWithIntroUrl} isBuildingAudio />
           ) : (
             <p>
               <b>Il manque votre mix du couplet !</b>
@@ -66,7 +66,7 @@ const SongStep3 = () => {
               <SyllableEditor key={`syllableEditor--chorus--${index}`} value={el} />
             ))}
           </div>
-          <h2>Votre couplet (démarre à {toTime(data.verseTracks[TrackType.INTRO_CHORUS].sampleDuration)})</h2>
+          <h2>Votre couplet (démarre à {toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)})</h2>
           <div className={styles.anthemLyricsContainer}>
             {data.verseLyrics.map((el, index) => (
               <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} value={el} />
