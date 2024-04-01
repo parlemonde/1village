@@ -48,7 +48,7 @@ const SongStep2 = () => {
             Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
             N&apos;hésitez pas à ré-écouter le couplet.
           </p>
-          <AudioPlayer src={data.verseMixUrl} isBuildingAudio />
+          <AudioPlayer src={data.verseMixWithVocalsUrl} isBuildingAudio />
           <div className={styles.contentContainer}>
             <div className={styles.anthemLyricsContainer}>
               {data?.verseLyrics.map((el, index) => (
