@@ -9,6 +9,10 @@ export const getLongestVerseSampleDuration = (tracks: Track[]) => {
   return Math.max(...verseTracks.map((track) => track.sampleDuration));
 };
 
+export const getVerseTracks = (tracks: Track[]) => {
+  return tracks.filter((track) => track.type !== TrackType.VOCALS && track.type !== TrackType.INTRO_CHORUS && track.type !== TrackType.OUTRO);
+};
+
 export const mixAudios = async (audios: Partial<Track>[], req: (arg: AxiosRequestConfig) => Promise<AxiosReturnType>) => {
   const sources: string[] = [];
   audios.forEach((audio) => audio.sampleUrl && sources.push(audio.sampleUrl));
