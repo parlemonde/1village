@@ -1,9 +1,11 @@
+import { RGBAImage } from 'maplibre-gl';
 import React from 'react';
+
+import MicNoneIcon from '@mui/icons-material/MicNone';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 import { useDragHandler } from 'src/hooks/useDragHandler';
 import { clamp } from 'src/utils';
-import MicNoneIcon from '@mui/icons-material/MicNone';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 const SVG_WIDTH = 762;
 
@@ -56,7 +58,6 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
   });
 
   return (
-    
     <svg
       ref={SVGRef}
       width="766"
@@ -66,10 +67,6 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <svg x="-10" y="-10" width="32px">
-        <MicNoneIcon/>
-      </svg>
-      
       <rect x="0" y="14" width="766" height="94" rx="10" fill="#666666" />
       <rect x="2" y="16" width="762" height="90" rx="8" fill="#e6e6e6" />
       <g>
@@ -118,8 +115,12 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
           style={{ cursor: 'grab' }}
         />
 
-        <svg x={leftCut} width="32px" fill="#666666" opacity="1">
-          <MusicNoteIcon sx={{ color: '#666666' }}/>
+        <svg x={0} y="70" width="32px" fill="#666666" opacity="1">
+          <MicNoneIcon sx={{ color: '#666666' }} />
+        </svg>
+
+        <svg x={leftCut + (rightCut - leftCut - 32) / 2} y="70" width="32px" fill="#666666" opacity="1">
+          <MusicNoteIcon sx={{ color: '#666666' }} />
         </svg>
 
         <rect x="2" y="16" width={leftCut} height="90" rx="8" fill="#666666" opacity="0.5" />
