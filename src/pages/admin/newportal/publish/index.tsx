@@ -8,19 +8,12 @@ import { useGetActivities } from 'src/api/activities/activities.get';
 import ActivityCardAdminList from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdminList';
 import PelicoStar from 'src/svg/pelico/pelico_star.svg';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
-import { phasesObject } from 'src/utils/phases';
 
 const rows: GridRowsProp = [
   // A row example of how it should look
   // { id: 1, 'village-name': 'Test', 'message-lancement-phase-1': 'Hello', 'relance-phase-1': 'World' },
 ];
-const firstEmptyCol: GridColDef[] = [{ field: 'village-name', headerName: '', width: 200 }];
-const columns: GridColDef[] = firstEmptyCol.concat(
-  ...phasesObject.reduce<GridColDef[]>((acc, curr) => {
-    acc.push(...curr.steps.map((e) => ({ field: e.id, headerName: e.name, width: 150 })));
-    return acc;
-  }, []),
-);
+const columns: GridColDef[] = [];
 
 const Publier = () => {
   const draftActivities = useGetActivities({ limit: 2, isDraft: true, isPelico: true });

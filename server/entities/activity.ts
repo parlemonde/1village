@@ -19,9 +19,6 @@ import { Image } from './image';
 import { User } from './user';
 import { Village } from './village';
 
-export type { AnyData, ActivityContent };
-export { ActivityType, ActivityStatus };
-
 @Entity()
 export class Activity implements ActivityInterface<AnyData> {
   @PrimaryGeneratedColumn()
@@ -39,6 +36,9 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @Column({ type: 'tinyint', nullable: false, default: VillagePhase.DISCOVER })
   public phase: number;
+
+  @Column({ type: 'text', nullable: true })
+  public phaseStep: string | null;
 
   @Column({
     type: 'tinyint',
