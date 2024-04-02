@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
-import { usePostMediatheque } from 'src/api/mediatheque/mediatheque.post';
-
 import type { Filter } from 'types/mediatheque.type';
+
 // Tout doit être responsive
 
 // STEP 1: les filtres (proposition modal sur les filtre)
@@ -19,16 +18,15 @@ import type { Filter } from 'types/mediatheque.type';
 // STEP 4.1: comment on dl une vidéo youtube ? Souvent des vidéos Viméo (bah on dl pas)
 
 const Mediatheque = () => {
-  const offset = 0;
-  const filters: Filter = [];
+  const offset = 12;
+  const filters: Filter[] = [{ table: 'activity', column: 'type', value: 1 }];
   const { data: get } = useGetMediatheque(offset, filters);
-
   console.log('get', get);
 
   return (
     <>
       <div>
-        <h1>Médiatheque</h1>
+        <h1>Médiathèque</h1>
       </div>
     </>
   );

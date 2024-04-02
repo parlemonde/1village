@@ -1,18 +1,17 @@
 import { useQuery } from 'react-query';
-import type { Activity } from 'server/entities/activity';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Filter } from 'types/mediatheque.type';
 
-async function getMediatheque(params: { offset: number | null; filters: Filter[] }): Promise<Activity[]> {
+async function getMediatheque(params: { offset: number | null; filters: Filter[] }) {
   const { offset, filters } = params;
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: '/mediatheque/get',
+      url: '/mediatheque',
       params: {
-        offset,
+        offset: offset,
         filters,
       },
     })
