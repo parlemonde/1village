@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useQueryClient, useMutation } from 'react-query';
 
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { useGetActivityById } from 'src/api/activities/activities.get';
 import { publishActivity } from 'src/api/activities/activities.put';
 import BackArrow from 'src/svg/back-arrow.svg';
 
 export default function ActivityTopublish() {
+  const [phase, setPhase] = useState(0);
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -38,6 +39,18 @@ export default function ActivityTopublish() {
         <Button size="small" sx={{ border: 1 }} onClick={() => mutation.mutate(data.id)} disabled={mutation.isLoading}>
           {mutation.isLoading ? <CircularProgress size={20} /> : 'Publier'}
         </Button>
+      </div>
+      <div>
+        <h3>Sélectionner la phase:</h3>
+        <div style={{ display: 'flex', height: 20, width: 180, justifyContent: 'space-around' }}>
+          <InputLabel id="phase-selecto">Phase</InputLabel>
+          <Select sx={{ width: 120 }} labelId="phase-selecto" value={phase} label="Phase" onChange={(e) => setPhase(Number(e.target.value))}>
+            <MenuItem value={0}>All</MenuItem>
+            <MenuItem value={1}>Phase 1</MenuItem>
+            <MenuItem value={2}>Phase 2</MenuItem>
+            <MenuItem value={3}>Phase 3</MenuItem>
+          </Select>
+        </div>
       </div>
     </div>
   );
