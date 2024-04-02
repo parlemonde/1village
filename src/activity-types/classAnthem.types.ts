@@ -4,8 +4,9 @@ import type { Syllable, Track } from 'types/anthem.type';
 export type ClassAnthemData = {
   tracks: Track[];
   verseStartTime: number;
-  verseMixUrl: string; //mixed verse instrumental tracks
+  verseRecordDuration: number;
   verseRecordUrl: string; //class voices record
+  verseMixUrl: string; //mixed verse instrumental tracks
   verseMixWithIntroUrl: string; //verseMixUrl + INTRO_CHORUS track
   verseMixWithVocalsUrl: string; //verseMixUrl + VOCALS track
   verseMixWithLyricsUrl: string; //verseMixUrl + verseRecordUrl
