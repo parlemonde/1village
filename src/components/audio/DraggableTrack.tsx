@@ -10,8 +10,8 @@ import { clamp } from 'src/utils';
 const SVG_WIDTH = 762;
 
 type DraggableTrackProps = {
-  trackDuration: number;
-  coupletDuration: number;
+  verseRecordDuration: number;
+  verseMixDuration: number;
   initialCoupletStart?: number;
   onCoupletStartChange: (newStart: number) => void;
   onChangeEnd: (newStart: number) => void;
@@ -19,8 +19,8 @@ type DraggableTrackProps = {
 };
 
 export const DraggableTrack = ({
-  trackDuration,
-  coupletDuration,
+  verseRecordDuration,
+  verseMixDuration,
   initialCoupletStart,
   onCoupletStartChange,
   onChangeEnd,
@@ -28,11 +28,11 @@ export const DraggableTrack = ({
 }: DraggableTrackProps) => {
   const SVGRef = React.useRef<SVGSVGElement | null>(null);
   const [coupletStart, setCoupletStart] = React.useState(
-    initialCoupletStart || initialCoupletStart === 0 ? initialCoupletStart : (trackDuration - coupletDuration) / 2,
+    initialCoupletStart || initialCoupletStart === 0 ? initialCoupletStart : (verseRecordDuration - verseMixDuration) / 2,
   );
 
-  const leftCut = (coupletStart / trackDuration) * SVG_WIDTH;
-  const rightCut = ((coupletStart + coupletDuration) / trackDuration) * SVG_WIDTH;
+  const leftCut = (coupletStart / verseRecordDuration) * SVG_WIDTH;
+  const rightCut = ((coupletStart + verseMixDuration) / verseRecordDuration) * SVG_WIDTH;
 
   const SvgWidthRef = React.useRef(0);
   const initialClientXRef = React.useRef(0);
@@ -51,13 +51,17 @@ export const DraggableTrack = ({
 
   const onDrag = (event: MouseEvent) => {
     const deltaX = ((event.clientX - initialClientXRef.current) * SVG_WIDTH) / SvgWidthRef.current;
-    setCoupletStart(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * trackDuration, 0, trackDuration - coupletDuration));
-    onCoupletStartChange(Math.round(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * trackDuration, 0, trackDuration - coupletDuration)));
+    setCoupletStart(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration));
+    onCoupletStartChange(
+      Math.round(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration)),
+    );
   };
 
   const onDragEnd = (event: MouseEvent) => {
     const deltaX = ((event.clientX - initialClientXRef.current) * SVG_WIDTH) / SvgWidthRef.current;
-    const newCoupletStart = Math.round(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * trackDuration, 0, trackDuration - coupletDuration));
+    const newCoupletStart = Math.round(
+      clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration),
+    );
     onChangeEnd(newCoupletStart);
   };
 
