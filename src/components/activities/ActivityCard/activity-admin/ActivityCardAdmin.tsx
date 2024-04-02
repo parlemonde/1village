@@ -94,7 +94,7 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
       {/* display publish button only if activity is not published yet (status = 1) */}
       {activity.status !== 0 && (
         <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button size="small" sx={{ border: 1 }} onClick={() => router.push(`/admin/newportal/publish/settings-interface/${activity.id}`)}>
+          <Button size="small" sx={{ border: 1 }} onClick={() => router.push(`/admin/newportal/publish/${activity.id}`)}>
             Publier
           </Button>
         </CardActions>
