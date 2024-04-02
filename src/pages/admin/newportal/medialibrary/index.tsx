@@ -21,11 +21,9 @@ import type { Filter } from 'types/mediatheque.type';
 const Mediatheque = () => {
   const offset = 0;
   const filters: Filter = [];
-  // const { data: post } = usePostMediatheque(limit, offset, filters);
   const { data: get } = useGetMediatheque(offset, filters);
 
   console.log('get', get);
-  // console.log('post', post);
 
   return (
     <>
