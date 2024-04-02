@@ -4,19 +4,6 @@
     margin-bottom: 10px;
     gap: 2rem;
 }
-
-.trackContainer > button {
-/*     justify-content: flex-start; */
-    box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.1);
-    color: black;
-    font-weight: bold;
-    font-size: .9rem;
-}
-
-.trackContainer > button > svg {
-    margin-left: 6px;
-}
-
 .trackLabel input, .trackLabel > span {
     box-sizing: border-box;
     width: 180px;

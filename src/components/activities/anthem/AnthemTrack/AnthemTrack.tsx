@@ -7,6 +7,7 @@ import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import AnthemTrackIcon from '../AnthemTrackIcon/AnthemTrackIcon';
 import styles from './AnthemTrack.module.css';
+import AddAudioButton from 'src/components/buttons/AddAudioButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
 import type { Track } from 'types/anthem.type';
@@ -51,16 +52,7 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
       </div>
 
       {!track.sampleUrl ? (
-        <Button
-          onClick={() => {
-            setIsAudioEditorOpen(true);
-          }}
-          variant="text"
-          endIcon={<div></div>}
-        >
-          Ajouter un son
-          <Add />
-        </Button>
+        <AddAudioButton onClick={() => setIsAudioEditorOpen(true)} />
       ) : (
         <div className={styles.sampleControlsContainer}>
           <audio controls src={track.sampleUrl} className={styles.sampleAudioControl}>
