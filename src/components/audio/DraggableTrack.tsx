@@ -15,9 +15,17 @@ type DraggableTrackProps = {
   initialCoupletStart?: number;
   onCoupletStartChange: (newStart: number) => void;
   onChangeEnd: (newStart: number) => void;
+  pauseAudios: () => void;
 };
 
-export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletStart, onCoupletStartChange, onChangeEnd }: DraggableTrackProps) => {
+export const DraggableTrack = ({
+  trackDuration,
+  coupletDuration,
+  initialCoupletStart,
+  onCoupletStartChange,
+  onChangeEnd,
+  pauseAudios,
+}: DraggableTrackProps) => {
   const SVGRef = React.useRef<SVGSVGElement | null>(null);
   const [coupletStart, setCoupletStart] = React.useState(
     initialCoupletStart || initialCoupletStart === 0 ? initialCoupletStart : (trackDuration - coupletDuration) / 2,
@@ -29,6 +37,7 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
   const SvgWidthRef = React.useRef(0);
   const initialClientXRef = React.useRef(0);
   const initialLeftCutRef = React.useRef(leftCut);
+
   const onDragStart = (event: MouseEvent) => {
     if (!SVGRef.current) {
       return false;
@@ -36,6 +45,7 @@ export const DraggableTrack = ({ trackDuration, coupletDuration, initialCoupletS
     SvgWidthRef.current = SVGRef.current.getBoundingClientRect().width;
     initialClientXRef.current = event.clientX;
     initialLeftCutRef.current = leftCut;
+    pauseAudios();
     return true;
   };
 

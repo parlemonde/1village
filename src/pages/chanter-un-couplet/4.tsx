@@ -27,8 +27,6 @@ const SongStep4 = () => {
   const data = (activity?.data as ClassAnthemData) || null;
   const [isAudioEditorOpen, setIsAudioEditorOpen] = React.useState(false);
   const [verseStart, setVerseStart] = React.useState(data?.verseStartTime ? data?.verseStartTime : 0);
-  const [customizedMixAudio, setCustomizedMix] = React.useState<HTMLAudioElement>();
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = React.useState(false);
 
   const [verseRecordAudio, setVerseRecordAudio] = React.useState<HTMLAudioElement | null>(null);
@@ -46,10 +44,10 @@ const SongStep4 = () => {
   }, [data]);
 
   React.useEffect(() => {
-    if (data && data.verseMixUrl) {
+    if (data && data.verseMixUrl && !verseMixAudio) {
       setVerseMixAudio(new Audio(data.verseMixUrl));
     }
-  }, [data]);
+  }, [data, verseMixAudio]);
 
   if (!activity || !data) {
     return (
@@ -136,34 +134,44 @@ const SongStep4 = () => {
                     coupletDuration={getLongestVerseSampleDuration(getVerseTracks(data.tracks))}
                     initialCoupletStart={verseStart}
                     onCoupletStartChange={(coupletStart) => {
-                      if (!audioRef.current) {
-                        return;
-                      }
-                      audioRef.current.currentTime = coupletStart;
-                      audioRef.current.pause();
-                      customizedMixAudio?.pause();
+                      verseRecordAudio.currentTime = coupletStart;
                       setVerseStart(coupletStart);
                     }}
                     onChangeEnd={(coupletStart) => {
-                      if (!audioRef.current || !customizedMixAudio) {
-                        return;
-                      }
-                      audioRef.current.currentTime = coupletStart;
-                      customizedMixAudio.currentTime = 0;
-                      audioRef.current.play();
-                      customizedMixAudio.play();
+                      verseRecordAudio.currentTime = coupletStart;
+                      verseMixAudio.currentTime = 0;
+                      verseRecordAudio.play();
+                      verseMixAudio.play();
+                      setIsPlaying(true);
                       updateActivity({ data: { ...data, verseStart: coupletStart } });
                     }}
+                    pauseAudios={onPause}
                   />
                 </div>
-                <div style={{ display: 'flex', width: '766px', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '860px',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                    margin: '1rem 0',
+                  }}
+                >
                   <div>
+                    <p>régler le volume de l&apos;instrumental</p>
                     <VolumeControl icon={musicIcon} handleVolumeChange={(value) => (verseMixAudio.volume = value / 10)} />
+                  </div>
+                  <div>
+                    <p>régler le volume des voix</p>
                     <VolumeControl icon={microIcon} handleVolumeChange={(value) => (verseRecordAudio.volume = value / 10)} />
                   </div>
                   <div>
                     <Button
                       variant="contained"
+                      sx={{
+                        minWidth: '100px',
+                      }}
                       onClick={() => {
                         isPlaying ? onPause() : onPlay();
                       }}
