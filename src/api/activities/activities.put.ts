@@ -1,8 +1,8 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 
-async function publishActivity(params: { activityId: number }) {
+export async function publishActivity(params: { activityId: number }) {
   const { activityId } = params;
   return await axiosRequest({
     method: 'PUT',
@@ -13,12 +13,3 @@ async function publishActivity(params: { activityId: number }) {
     },
   });
 }
-
-export const usePublishActivity = (args: { activityId: number }) => {
-  const { activityId } = args;
-  return useMutation({
-    mutationFn: () => {
-      return publishActivity({ activityId });
-    },
-  });
-};

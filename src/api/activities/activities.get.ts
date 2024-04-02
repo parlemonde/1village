@@ -19,7 +19,23 @@ async function getActivities(params: { limit: number | null; isPelico: boolean; 
   ).data;
 }
 
+async function getActivityById(params: { id: number }): Promise<Activity> {
+  const { id } = params;
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/activities/${id}`,
+    })
+  ).data;
+}
+
 export const useGetActivities = (args: { limit: number | null; isPelico: boolean; isDraft: boolean }) => {
   const { isDraft, isPelico, limit } = args;
   return useQuery(['activities', limit, isPelico, isDraft], () => getActivities({ limit, isDraft, isPelico }));
+};
+
+export const useGetActivityById = (args: { id: number }) => {
+  const { id } = args;
+  return useQuery(['activity', id], () => getActivityById({ id }));
 };
