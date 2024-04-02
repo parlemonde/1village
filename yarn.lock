@@ -17,9 +17,9 @@ __metadata:
     "@lumieducation/h5p-express": ^9.3.2
     "@lumieducation/h5p-react": ^9.3.2
     "@lumieducation/h5p-server": ^9.3.2
-    "@mui/icons-material": ^5.8.4
+    "@mui/icons-material": ^5.15.14
     "@mui/material": ^5.15.14
-    "@mui/system": ^5.8.5
+    "@mui/system": ^5.15.14
     "@mui/x-charts": ^7.0.0
     "@next/eslint-plugin-next": ^12.1.6
     "@svgr/webpack": 6.2.1
@@ -2464,7 +2464,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^5.8.4":
+"@mui/icons-material@npm:^5.15.14":
   version: 5.15.14
   resolution: "@mui/icons-material@npm:5.15.14"
   dependencies:
@@ -2551,7 +2551,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.15.14, @mui/system@npm:^5.8.5":
+"@mui/system@npm:^5.15.14":
   version: 5.15.14
   resolution: "@mui/system@npm:5.15.14"
   dependencies:
