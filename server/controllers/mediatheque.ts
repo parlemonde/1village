@@ -1,44 +1,36 @@
-import type { NextFunction, Request, Response } from 'express';
-import { In } from 'typeorm';
-
-import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
+import type { Filter } from '../../types/mediatheque.type';
 import { Activity } from '../entities/activity';
-import { FeatureFlag } from '../entities/featureFlag';
-import { User, UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
-type filter = {
-  table: string;
-  column: string;
-  value: number;
-};
+const mediathequeController = new Controller('/mediatheque');
 
-const mediatheque = new Controller('/mediatheque');
+mediathequeController.get({ path: '/get' }, async (req, res) => {
+  const filters: Filter[] = req?.body?.filters || [];
+  const offset = req?.body?.offset || 0;
 
-// Get all feature flags
-mediatheque.get({ path: '/tests' }, async (req: Request, res: Response) => {
-  const filters: filter[] = req.body.filters || [];
-  const offset = req.body.offset || 0;
-  const subQueryBuilder = await AppDataSource.getRepository(User).createQueryBuilder('user').select('user.id').where('1=1');
-  filters
-    .filter((f) => f.table === 'user')
-    .map(({ table, column, value }) => {
-      subQueryBuilder.andWhere(`user.${column} = :value`, { table, column, value });
-    });
-  subQueryBuilder
-    .leftJoin((qb) => {
-      qb.select('*').from(Activity, 'activity').where('activity.userId = user.id');
-      filters
-        .filter((f) => f.table === 'activity')
-        .map(({ table, column, value }) => {
-          subQueryBuilder.andWhere(`activity.${column} = :value`, { value });
-        });
-    }, 'toto')
-    .limit(6)
-    .offset(offset)
-    .getMany();
-  res.json(subQueryBuilder);
+  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user').where('1=1');
+
+  filters.map(({ table, column, value }) => {
+    subQueryBuilder = subQueryBuilder.andWhere(`${table}.${column} = :value`, { value });
+  });
+
+  const activities = await subQueryBuilder.limit(6).offset(offset).getMany();
+  res.send(activities);
 });
 
-export default mediatheque;
+mediathequeController.post({ path: '/post' }, async (req, res) => {
+  const filters: Filter[] = req?.body?.filters || [];
+  const offset = req?.body?.offset || 0;
+
+  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user').where('1=1');
+
+  filters.map(({ table, column, value }) => {
+    subQueryBuilder = subQueryBuilder.andWhere(`${table}.${column} = :value`, { value });
+  });
+
+  const activities = await subQueryBuilder.limit(6).offset(offset).getMany();
+  res.send(activities);
+});
+
+export { mediathequeController };
