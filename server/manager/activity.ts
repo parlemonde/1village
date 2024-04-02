@@ -122,12 +122,21 @@ export const getActivities = async ({
 };
 
 export const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
-  if (ids.length === 0) {
+  const publishedActivityies = await AppDataSource.getRepository(Activity).find({
+    where: {
+      id: In(ids),
+      status: 0,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (publishedActivityies.length === 0) {
     return {};
   }
   const comments = await AppDataSource.getRepository(Comment).find({
     where: {
-      activityId: In(ids),
+      activityId: In(publishedActivityies.map((a) => a.id)),
     },
   });
   return comments.reduce<{ [key: number]: number }>((acc, comment) => {
