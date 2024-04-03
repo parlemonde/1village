@@ -18,10 +18,17 @@ import type { Filter } from 'types/mediatheque.type';
 // STEP 4.1: comment on dl une vidéo youtube ? Souvent des vidéos Viméo (bah on dl pas)
 
 const Mediatheque = () => {
-  const offset = 12;
-  const filters: Filter[] = [{ table: 'activity', column: 'type', value: 1 }];
-  const { data: get } = useGetMediatheque(offset, filters);
-  console.log('get', get);
+  const offset = 0;
+  const filters: Filter[] = [
+    { table: 'activity', column: 'type', value: 2 },
+    { table: 'activity', column: 'subType', value: 2 },
+  ];
+  const { data: filtered } = useGetMediatheque(offset, filters);
+  console.log('filtered', filtered);
+  console.log('filters', filters);
+  console.log('filters[0]', filters[0]);
+  console.log('typeof filters', typeof filters);
+  console.log('typeof filters[0]', typeof filters[0]);
 
   return (
     <>

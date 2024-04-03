@@ -5,24 +5,24 @@ import { Controller } from './controller';
 
 const mediathequeController = new Controller('/mediatheque');
 
-mediathequeController.get({ path: '' }, async (req, res) => {
-  console.log('===========================');
-  console.log('req.body');
-  console.log(req.body);
-  console.log('req.query');
-  console.log(req.query);
-  console.log('===========================');
-
+mediathequeController.post({ path: '' }, async (req, res) => {
   const filters: Filter[] = req?.body?.filters || [];
   const offset = req?.query?.offset || 0;
+
+  console.log('===========================');
+  console.log('filters :', filters);
+  console.log('offset :', offset);
+  console.log('===========================');
 
   let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user').where('1=1');
 
   filters.map(({ table, column, value }) => {
     subQueryBuilder = subQueryBuilder.andWhere(`${table}.${column} = :value`, { value });
   });
-  console.log('offset', offset);
-  const activities = await subQueryBuilder.limit(6).offset(offset).getMany();
+  const activities = await subQueryBuilder
+    .limit(6)
+    .offset(offset as number)
+    .getMany();
   res.send(activities);
 });
 

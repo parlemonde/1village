@@ -5,14 +5,17 @@ import type { Filter } from 'types/mediatheque.type';
 
 async function getMediatheque(params: { offset: number | null; filters: Filter[] }) {
   const { offset, filters } = params;
+
   return (
     await axiosRequest({
-      method: 'GET',
+      method: 'POST',
       baseURL: '/api',
       url: '/mediatheque',
       params: {
         offset: offset,
-        filters,
+      },
+      data: {
+        filters: filters,
       },
     })
   ).data;
