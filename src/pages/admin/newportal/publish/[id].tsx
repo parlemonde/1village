@@ -9,19 +9,19 @@ import { useGetActivityById } from 'src/api/activities/activities.get';
 import { publishActivity } from 'src/api/activities/activities.put';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import BackArrow from 'src/svg/back-arrow.svg';
+import type { Country } from 'types/country.type';
+
+type VillageState = { id: number; name: string; selected: boolean };
+type CountryState = Country & { villageId: number[]; selected: boolean; disabled: boolean };
 
 export default function ActivityTopublish() {
+  const ALL_VILLAGES = 'all-villages';
+  const ALL_COUNTRIES = 'all-countries';
   const [phase, setPhase] = useState(1);
-  const [villagesSelected, setVillagesSelected] = useState<{ [villageName: string]: boolean }>({});
-  const [countries, setCountries] = useState<Array<{ isoCode: string; name: string }>>([]);
+  const [villagesSelected, setVillagesSelected] = useState<VillageState[]>([{ id: 0, name: ALL_VILLAGES, selected: false }]);
+  const [countries, setCountries] = useState<CountryState[]>([]);
   const router = useRouter();
   const queryClient = useQueryClient();
-
-  const checkSelectVillages = useCallback(() => {
-    return !Object.keys(villagesSelected).some((key) => {
-      return villagesSelected[key] === true;
-    });
-  }, [villagesSelected]);
 
   const mutation = useMutation({
     mutationFn: (activityId: number) => {
@@ -34,16 +34,58 @@ export default function ActivityTopublish() {
 
   const villages = useGetVillages();
   const activity = useGetActivityById({ id: Number(router.query.id) });
+
+  const checkSelectedVillages = useCallback(() => {
+    if (villagesSelected.length) {
+      return !villagesSelected.some((village) => village.selected);
+    }
+    return;
+  }, [villagesSelected]);
+
+  const checkSelectedCountries = useCallback(() => {
+    if (countries.length) {
+      return !countries.some((country) => country.selected && !country.disabled);
+    }
+    return;
+  }, [countries]);
+
+  const getVillageValues = useCallback(
+    (villageName: string) => {
+      if (villagesSelected.length) {
+        return villagesSelected.find((village) => village.name === villageName);
+      }
+      return;
+    },
+    [villagesSelected],
+  );
+
+  const getcountryValues = useCallback(
+    (countryIsoCode: string) => {
+      if (countries.length) {
+        return countries.find((country) => country.isoCode === countryIsoCode);
+      }
+      return;
+    },
+    [countries],
+  );
   useEffect(() => {
     if (activity.data) {
       setPhase(activity.data.phase);
     }
     if (villages.data) {
-      villages.data.forEach((v) => {
-        setVillagesSelected((state) => ({ ...state, [v.name]: false }));
-        setCountries((state) => [...new Set([...state, ...v.countries])]);
+      const countriesToSet: CountryState[] = [];
+      villages.data.forEach((village) => {
+        setVillagesSelected((state) => [...state, { id: village.id, name: village.name, selected: false }]);
+        village.countries.forEach((country) => {
+          const foundIso = countriesToSet.find((c) => c.isoCode === country.isoCode);
+          if (foundIso) {
+            foundIso.villageId.push(village.id);
+          } else {
+            countriesToSet.push({ ...country, villageId: [village.id], selected: false, disabled: true });
+          }
+        });
+        setCountries([{ isoCode: ALL_COUNTRIES, name: ALL_COUNTRIES, selected: false, disabled: false, villageId: [] }, ...countriesToSet]);
       });
-      setVillagesSelected((state) => ({ ...state, all: false }));
     }
   }, [activity.data, villages.data]);
 
@@ -51,25 +93,62 @@ export default function ActivityTopublish() {
   if (activity.isLoading || activity.isIdle || villages.isLoading || villages.isIdle) return <p>loading...</p>;
 
   const title: string = activity.data.data?.title ? (activity.data.data.title as string) : '[No title]';
-  const handleVillageChange = (villageName: string) => {
-    const newValue = !villagesSelected[villageName];
-    if (villageName === 'all') {
-      setVillagesSelected((state) => ({
-        ...state,
-        all: newValue,
-      }));
 
-      Object.keys(villagesSelected).forEach((key) => {
-        setVillagesSelected((state) => ({
-          ...state,
-          [key]: newValue,
-        }));
+  const handleVillageChange = (villageId: number, villageName: string) => {
+    const newValueSelected = !villagesSelected.find((village) => village.name === villageName)?.selected;
+    if (villageName === ALL_VILLAGES) {
+      setVillagesSelected((state) => state.map((e) => ({ ...e, selected: newValueSelected })));
+      setCountries((state) => state.map((country) => ({ ...country, disabled: !newValueSelected })));
+    } else {
+      setVillagesSelected((state) =>
+        state.reduce<VillageState[]>((acc, village) => {
+          if (village.name === villageName) {
+            acc.push({ ...village, selected: newValueSelected });
+          } else {
+            acc.push(village);
+          }
+          return acc;
+        }, []),
+      );
+      setCountries((state) =>
+        state.reduce<CountryState[]>((acc, country) => {
+          if (country.villageId.includes(villageId)) {
+            acc.push({ ...country, disabled: !newValueSelected });
+          } else {
+            acc.push(country);
+          }
+          return acc;
+        }, []),
+      );
+    }
+  };
+  const handleCountryChange = (countryIsoCode: string) => {
+    if (countryIsoCode === ALL_COUNTRIES) {
+      const foundCoutry = countries.find((e) => e.isoCode === ALL_COUNTRIES);
+
+      const newValue = !foundCoutry?.selected;
+
+      setCountries((state) => {
+        return state.reduce<CountryState[]>((acc, country) => {
+          if (!country.disabled) {
+            acc.push({ ...country, selected: newValue });
+          } else {
+            acc.push(country);
+          }
+          return acc;
+        }, []);
       });
     } else {
-      setVillagesSelected((state) => ({
-        ...state,
-        [villageName]: !villagesSelected[villageName],
-      }));
+      setCountries((state) => {
+        return state.reduce<CountryState[]>((acc, country) => {
+          if (country.isoCode === countryIsoCode) {
+            acc.push({ ...country, selected: !country.selected });
+          } else {
+            acc.push(country);
+          }
+          return acc;
+        }, []);
+      });
     }
   };
 
@@ -86,7 +165,7 @@ export default function ActivityTopublish() {
           size="small"
           sx={{ border: 1 }}
           onClick={() => mutation.mutate(activity.data.id)}
-          disabled={mutation.isLoading || checkSelectVillages()}
+          disabled={mutation.isLoading || checkSelectedVillages() || checkSelectedCountries()}
         >
           {mutation.isLoading ? <CircularProgress size={20} /> : 'Publier'}
         </Button>
@@ -102,6 +181,7 @@ export default function ActivityTopublish() {
           </Select>
         </div>
       </div>
+      {/* Villages monde */}
       <div style={{ margin: '20px 0' }}>
         <h3 style={{ margin: '5px 0' }}>Sélectionner le/les villages concerné.s par la publication:</h3>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -111,20 +191,23 @@ export default function ActivityTopublish() {
               marginBottom: 2,
               fontWeight: 900,
             }}
-            key={'all'}
-            control={<Checkbox checked={villagesSelected['all']} onChange={() => handleVillageChange('all')} />}
+            key={ALL_VILLAGES}
+            control={<Checkbox checked={getVillageValues(ALL_VILLAGES)?.selected} onChange={() => handleVillageChange(0, ALL_VILLAGES)} />}
             label={'Villages - mondes'}
           />
           {villages.data.map((village) => (
             <FormControlLabel
               key={`${village.id}-${village.name}`}
-              control={<Checkbox checked={villagesSelected[village.name]} onChange={() => handleVillageChange(village.name)} />}
+              control={<Checkbox checked={getVillageValues(village.name)?.selected} onChange={() => handleVillageChange(village.id, village.name)} />}
               label={village.name}
             />
           ))}
-          {checkSelectVillages() && <FormHelperText error={checkSelectVillages()}>Au moins un village doit etre selectionné</FormHelperText>}
+          <div style={{ height: 10 }}>
+            {checkSelectedVillages() && <FormHelperText error={checkSelectedVillages()}>Au moins un village doit etre selectionné</FormHelperText>}
+          </div>
         </div>
       </div>
+      {/* Pays */}
       <div style={{ margin: '20px 0' }}>
         <h3 style={{ margin: '5px 0' }}>Sélectionner le/les pays concerné.s par la publication:</h3>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -134,14 +217,24 @@ export default function ActivityTopublish() {
               marginBottom: 2,
               fontWeight: 900,
             }}
-            key={'all'}
-            control={<Checkbox checked={villagesSelected['all']} onChange={() => handleVillageChange('all')} />}
+            key={ALL_COUNTRIES}
+            control={<Checkbox checked={getcountryValues(ALL_COUNTRIES)?.selected} onChange={() => handleCountryChange(ALL_COUNTRIES)} />}
             label={'Pays'}
           />
-          {countries.map((country) => (
-            <FormControlLabel key={country.isoCode} control={<Checkbox onChange={() => handleVillageChange(country.name)} />} label={country.name} />
-          ))}
-          {checkSelectVillages() && <FormHelperText error={checkSelectVillages()}>Au moins un village doit etre selectionné</FormHelperText>}
+          {countries
+            .filter((e) => e.isoCode !== ALL_COUNTRIES)
+            .map((country) => (
+              <FormControlLabel
+                key={country.isoCode}
+                disabled={country.disabled}
+                checked={country.selected}
+                control={<Checkbox onChange={() => handleCountryChange(country.isoCode)} />}
+                label={country.name}
+              />
+            ))}
+        </div>
+        <div style={{ height: 10 }}>
+          {checkSelectedCountries() && <FormHelperText error={checkSelectedCountries()}>Au moins un pays doit etre selectionné</FormHelperText>}
         </div>
       </div>
     </div>
