@@ -54,8 +54,10 @@ const Anthem = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
     createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
       tracks: tracks,
-      verseMixUrl: '',
+      verseStartTime: 0,
+      verseRecordDuration: 0,
       verseRecordUrl: '',
+      verseMixUrl: '',
       verseMixWithIntroUrl: '',
       verseMixWithVocalsUrl: '',
       verseMixWithLyricsUrl: '',
