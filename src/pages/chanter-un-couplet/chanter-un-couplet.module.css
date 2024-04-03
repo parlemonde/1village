@@ -13,3 +13,20 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.verseRecordTrack{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #666;
+}
+
+.verseRecordTrackInfos{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.verseRecordTrackControls > button {
+    margin-right: 6px;
+}

@@ -15,9 +15,12 @@ import { StepsButton } from 'src/components/StepsButtons';
 import AudioEditor from 'src/components/activities/content/editors/AudioEditor/AudioEditor';
 import { DraggableTrack } from 'src/components/audio/DraggableTrack';
 import VolumeControl from 'src/components/audio/VolumeControls/VolumeControl';
+import AddAudioButton from 'src/components/buttons/AddAudioButton';
+import { DeleteButton } from 'src/components/buttons/DeleteButton';
+import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
-import AddAudioButton from 'src/components/buttons/AddAudioButton';
+import { toTime } from 'src/utils/toTime';
 
 const SongStep4 = () => {
   const router = useRouter();
@@ -35,8 +38,8 @@ const SongStep4 = () => {
   const [verseRecordDuration, setVerseRecordDuration] = React.useState(0);
   const [verseRecordAudio, setVerseRecordAudio] = React.useState<HTMLAudioElement | null>(null);
   const [verseMixAudio, setVerseMixAudio] = React.useState<HTMLAudioElement | null>(null);
-  const musicIcon = <MusicNote sx={{ color: '#666666' }} />;
-  const microIcon = <MicNoneIcon sx={{ color: '#666666' }} />;
+  const musicIcon = <MusicNote sx={{ color: '#666' }} />;
+  const microIcon = <MicNoneIcon sx={{ color: '#666' }} />;
 
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
@@ -102,7 +105,15 @@ const SongStep4 = () => {
       setVerseRecordDuration(duration);
     } else {
       setIsRecordInvalidDuration(true);
+      console.log('hihui');
     }
+  };
+
+  const handleSampleDelete = () => {
+    updateActivity({ data: { ...data, verseRecordUrl: '', verseRecordDuration: 0 } });
+    setVerseRecordAudio(null);
+    setVerseRecordDuration(0);
+    onPause();
   };
 
   const handleClassAnthemUpdate = () => {
@@ -127,70 +138,95 @@ const SongStep4 = () => {
               <b>Il manque votre mix du couplet !</b>
             </p>
           )}
-          {true && (
-            <AddAudioButton onClick={() => setIsAudioEditorOpen(true)}/>
+          {!verseRecordAudio ? (
+            <AddAudioButton onClick={() => setIsAudioEditorOpen(true)} />
+          ) : (
+            <div className={styles.verseRecordTrack}>
+              <div className={styles.verseRecordTrackInfos}>
+                {microIcon}
+                <p>Piste vocale</p>
+                <p>{toTime(verseRecordDuration)}</p>
+              </div>
+              <div className={styles.verseRecordTrackControls}>
+                <EditButton //add edit condition ??
+                  size="small"
+                  onClick={() => {
+                    setIsAudioEditorOpen(true);
+                  }}
+                />
+                <DeleteButton
+                  color="red"
+                  confirmTitle="Supprimer ce son ?"
+                  confirmLabel="Voulez-vous vraiment supprimer ce son ?"
+                  onDelete={() => {
+                    handleSampleDelete();
+                    setIsAudioEditorOpen(false);
+                  }}
+                />
+              </div>
+            </div>
           )}
+
+          {isRecordInvalidDuration && <b>Votre enregistrement ne dure pas assez longtemps !</b>}
+
           {verseMixAudio && verseRecordAudio && (
-              !isRecordInvalidDuration ? (
-                <>
-                  <div style={{ height: '200px' }}>
-                    <DraggableTrack
-                      verseRecordDuration={verseRecordDuration}
-                      verseMixDuration={verseMixDuration}
-                      initialCoupletStart={verseStart}
-                      onCoupletStartChange={(coupletStart) => {
-                        verseRecordAudio.currentTime = coupletStart;
-                        setVerseStart(coupletStart);
-                      }}
-                      onChangeEnd={(coupletStart) => {
-                        verseRecordAudio.currentTime = coupletStart;
-                        verseMixAudio.currentTime = 0;
-                        verseRecordAudio.play();
-                        verseMixAudio.play();
-                        setIsPlaying(true);
-                        setVerseStart(coupletStart);
-                        updateActivity({ data: { ...data, verseStart: coupletStart } });
-                      }}
-                      pauseAudios={onPause}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      width: '860px',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-end',
-                      margin: '1rem 0',
+            <>
+              <div style={{ height: '200px' }}>
+                <DraggableTrack
+                  verseRecordDuration={verseRecordDuration}
+                  verseMixDuration={verseMixDuration}
+                  initialCoupletStart={verseStart}
+                  onCoupletStartChange={(coupletStart) => {
+                    verseRecordAudio.currentTime = coupletStart;
+                    setVerseStart(coupletStart);
+                  }}
+                  onChangeEnd={(coupletStart) => {
+                    verseRecordAudio.currentTime = coupletStart;
+                    verseMixAudio.currentTime = 0;
+                    verseRecordAudio.play();
+                    verseMixAudio.play();
+                    setIsPlaying(true);
+                    setVerseStart(coupletStart);
+                    updateActivity({ data: { ...data, verseStart: coupletStart } });
+                  }}
+                  pauseAudios={onPause}
+                />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '860px',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                  margin: '1rem 0',
+                }}
+              >
+                <div>
+                  <p>régler le volume de l&apos;instrumental</p>
+                  <VolumeControl icon={musicIcon} handleVolumeChange={(value) => (verseMixAudio.volume = value / 10)} />
+                </div>
+                <div>
+                  <p>régler le volume des voix</p>
+                  <VolumeControl icon={microIcon} handleVolumeChange={(value) => (verseRecordAudio.volume = value / 10)} />
+                </div>
+                <div>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      minWidth: '100px',
+                    }}
+                    onClick={() => {
+                      isPlaying ? onPause() : onPlay();
                     }}
                   >
-                    <div>
-                      <p>régler le volume de l&apos;instrumental</p>
-                      <VolumeControl icon={musicIcon} handleVolumeChange={(value) => (verseMixAudio.volume = value / 10)} />
-                    </div>
-                    <div>
-                      <p>régler le volume des voix</p>
-                      <VolumeControl icon={microIcon} handleVolumeChange={(value) => (verseRecordAudio.volume = value / 10)} />
-                    </div>
-                    <div>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          minWidth: '100px',
-                        }}
-                        onClick={() => {
-                          isPlaying ? onPause() : onPlay();
-                        }}
-                      >
-                        {isPlaying ? 'Pause' : 'Jouer'}
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <p>Votre enregistrement ne dure pas assez longtemps !</p>
-              ),
-            )}
+                    {isPlaying ? 'Pause' : 'Jouer'}
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+
           {isAudioEditorOpen && (
             <AudioEditor
               sampleUrl={data.verseRecordUrl}
