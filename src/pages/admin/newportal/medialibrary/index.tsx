@@ -23,12 +23,8 @@ const Mediatheque = () => {
     { table: 'activity', column: 'type', value: 2 },
     { table: 'activity', column: 'subType', value: 2 },
   ];
+
   const { data: filtered } = useGetMediatheque(offset, filters);
-  console.log('filtered', filtered);
-  console.log('filters', filters);
-  console.log('filters[0]', filters[0]);
-  console.log('typeof filters', typeof filters);
-  console.log('typeof filters[0]', typeof filters[0]);
 
   return (
     <>

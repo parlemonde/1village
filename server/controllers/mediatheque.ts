@@ -9,11 +9,6 @@ mediathequeController.post({ path: '' }, async (req, res) => {
   const filters: Filter[] = req?.body?.filters || [];
   const offset = req?.query?.offset || 0;
 
-  console.log('===========================');
-  console.log('filters :', filters);
-  console.log('offset :', offset);
-  console.log('===========================');
-
   let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user').where('1=1');
 
   filters.map(({ table, column, value }) => {
