@@ -48,16 +48,18 @@ const SongStep1 = () => {
   }, [isTracks]);
 
   const onNext = async () => {
-    if (mixerRef.current) mixerRef.current.stopMixer();
-    setIsLoading(true);
     save().catch(console.error);
-    setIsLoading(false);
+    if (mixerRef.current) mixerRef.current.stopMixer();
     router.push('/chanter-un-couplet/2');
   };
 
-  const handleMixUpdate = async (volumes: number[]) => {
+  const handleMixUpdate = (volumes: number[]) => {
     const tempMixedTrack: Track[] = getVerseTracks(data.tracks).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
-    tempMixedTrack.unshift(data.tracks[0]);
+    tempMixedTrack.unshift(data.tracks[TrackType.VOCALS]);
+    tempMixedTrack.unshift(data.tracks[TrackType.INTRO_CHORUS]);
+    tempMixedTrack.push(data.tracks[TrackType.OUTRO]);
+    console.log('temp', tempMixedTrack);
+    console.log(data.tracks);
     updateActivity({ data: { ...data, tracks: tempMixedTrack } });
   };
 
