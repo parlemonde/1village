@@ -40,6 +40,7 @@ export enum TrackType {
   RYTHMIC1 = 6,
   RYTHMIC2 = 7,
   OUTRO = 8,
+  CLASS_RECORD = 9,
 }
 
 export type AnthemActivity = Activity<AnthemData>;

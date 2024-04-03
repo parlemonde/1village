@@ -10,7 +10,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
-import type { AnthemData } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
 
 const emptyAnthemActivity: AnthemData = {
   tracks: [],
@@ -52,10 +52,21 @@ const Anthem = () => {
 
   const onNext = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
+    const verseRecordTrack = {
+      type: TrackType.CLASS_RECORD,
+      label: 'Piste vocale de la classe',
+      sampleUrl: '',
+      sampleDuration: 0,
+      iconUrl: '',
+      sampleStartTime: 0,
+      sampleVolume: 0.5,
+    } as Track;
+
     createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
       tracks: tracks,
       verseStartTime: 0,
       verseRecordDuration: 0,
+      slicedRecordUrl: '',
       verseRecordUrl: '',
       verseMixUrl: '',
       verseMixWithIntroUrl: '',

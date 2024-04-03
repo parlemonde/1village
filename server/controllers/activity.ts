@@ -480,7 +480,24 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
     const tracks = (data.data.tracks as Track[]).filter((t) => t.sampleUrl !== '');
     const intro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
-    const outro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
+
+    if (data.data.verseRecordUrl) {
+      const verseRecordTrack = {
+        type: TrackType.CLASS_RECORD,
+        label: 'Piste vocale de la classe',
+        sampleUrl: data.data.verseRecordUrl,
+        sampleDuration: 0,
+        iconUrl: 'accordion',
+        sampleStartTime: 50,
+        sampleVolume: 0.5,
+      } as Track;
+
+      const fullTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
+      fullTracks.push(verseRecordTrack);
+
+      data.data.verseFinalMixUrl = buildAudioMix(activity.userId, fullTracks);
+      data.data.slicedRecordUrl = buildAudioMix(activity.userId, [verseRecordTrack, { ...verseRecordTrack, sampleStartTime: 3 }]);
+    }
 
     data.data.verseMixUrl = buildAudioMix(
       activity.userId,

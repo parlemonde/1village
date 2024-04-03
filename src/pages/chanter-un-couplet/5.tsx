@@ -28,7 +28,7 @@ const SongStep5 = () => {
     if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
-    if (data !== null && (!data.verseRecordUrl || !data.slicedRecord)) {
+    if (data !== null && (!data.verseRecordUrl || !data.slicedRecordUrl)) {
       errors.push(3);
     }
 
@@ -127,7 +127,7 @@ const SongStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <AudioPlayer src={data.tracks.find((t) => t.type === TrackType.VOCALS)?.sampleUrl} style={{ width: '350px', height: '60px' }} />
+            <AudioPlayer src={data.slicedRecordUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet (seulement votre voix)</p>
           </div>
 
@@ -140,7 +140,7 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            <AudioPlayer src={data.verseMixWithVocalsUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
+            <AudioPlayer src={data.verseFinalMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé à la mélodie</p>
           </div>
 

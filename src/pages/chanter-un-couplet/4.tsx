@@ -178,6 +178,7 @@ const SongStep4 = () => {
                   initialCoupletStart={verseStart}
                   onCoupletStartChange={(coupletStart) => {
                     verseRecordAudio.currentTime = coupletStart;
+                    updateActivity({ data: { ...data, slicedVerseStartTime: coupletStart } });
                     setVerseStart(coupletStart);
                   }}
                   onChangeEnd={(coupletStart) => {
@@ -247,3 +248,28 @@ const SongStep4 = () => {
 };
 
 export default SongStep4;
+
+// const onNext = () => {
+//     audioRef.current?.pause();
+//     customizedMixAudio?.pause();
+//     setIsLoading(true);
+//     if (data.classRecord) {
+//       audioBufferSlice(data.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
+//         const formData = new FormData();
+//         formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
+//         const response = await axiosRequest({
+//           method: 'POST',
+//           url: '/audios',
+//           data: formData,
+//           headers: {
+//             'Content-Type': 'multipart/form-data',
+//           },
+//         });
+//         const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosRequest);
+//         updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
+//       });
+//     }
+//     setIsLoading(false);
+//     save().catch(console.error);
+//     router.push('/chanter-un-couplet/5');
+//   };
