@@ -72,9 +72,9 @@ export enum EPhase1Steps {
   MESSAGE_LANCEMENT_PHASE_1 = 'message-de-lancement-phase-1',
   RELANCE_PHASE_1 = 'relance-phase-1',
   ENIGME_PAYS_1 = 'enigme-pays-1',
+  ENIGME_PAYS_2 = 'enigme-pays-2',
 }
 export enum EPhase2Steps {
-  ENIGME_PAYS_2 = 'enigme-pays-2',
   MESSAGE_LANCEMENT_PHASE_2 = 'message-de-lancement-phase-2',
   RELANCE_PHASE_2 = 'relance-phase-2',
   ACTIVITE_8_MARS = 'activité-8-mars',
