@@ -48,7 +48,9 @@ const SongStep1 = () => {
   }, [isTracks]);
 
   const onNext = async () => {
+    setIsLoading(true);
     save().catch(console.error);
+    setIsLoading(false);
     if (mixerRef.current) mixerRef.current.stopMixer();
     router.push('/chanter-un-couplet/2');
   };

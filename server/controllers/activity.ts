@@ -481,15 +481,31 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     const tracks = (data.data.tracks as Track[]).filter((t) => t.sampleUrl !== '');
     const intro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
 
+    if (!data.data.verseMixUrl) {
+      const verseTracks = tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
+
+      data.data.verseMixWithVocalsUrl = buildAudioMix(activity.userId, verseTracks);
+      data.data.verseMixUrl = buildAudioMix(
+        activity.userId,
+        verseTracks.filter((t) => t.type !== TrackType.VOCALS),
+      );
+      data.data.verseMixWithIntroUrl = buildAudioMix(
+        activity.userId,
+        tracks
+          .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
+          .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
+      );
+    }
+
     if (data.data.verseRecordUrl) {
       const verseRecordTrack = {
         type: TrackType.CLASS_RECORD,
         label: 'Piste vocale de la classe',
         sampleUrl: data.data.verseRecordUrl,
-        sampleDuration: 0,
+        sampleDuration: 23,
         iconUrl: 'accordion',
-        sampleStartTime: 50,
-        sampleVolume: 0.5,
+        sampleStartTime: -5,
+        sampleVolume: 1,
       } as Track;
 
       const fullTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
@@ -499,20 +515,6 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       data.data.slicedRecordUrl = buildAudioMix(activity.userId, [verseRecordTrack, { ...verseRecordTrack, sampleStartTime: 3 }]);
     }
 
-    data.data.verseMixUrl = buildAudioMix(
-      activity.userId,
-      tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO),
-    );
-    data.data.verseMixWithVocalsUrl = buildAudioMix(
-      activity.userId,
-      tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO),
-    );
-    data.data.verseMixWithIntroUrl = buildAudioMix(
-      activity.userId,
-      tracks
-        .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
-        .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
-    );
     console.log('TRACKS!!!!!!!!', tracks);
   }
 
