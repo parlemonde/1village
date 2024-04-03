@@ -29,7 +29,7 @@ const Mediatheque = () => {
   return (
     <>
       <div>
-        <h1>Médiathèque</h1>
+        <h1>Médiatheque</h1>
       </div>
     </>
   );
