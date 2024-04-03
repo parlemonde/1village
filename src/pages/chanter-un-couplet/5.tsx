@@ -25,10 +25,10 @@ const SongStep5 = () => {
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data?.customizedMix) {
+    if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
-    if (data !== null && (!data.verse || !data.slicedRecord)) {
+    if (data !== null && (!data.verseRecordUrl || !data.slicedRecord)) {
       errors.push(3);
     }
 
@@ -127,7 +127,7 @@ const SongStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <AudioPlayer src={data.verseTracks.find((t) => t.type === TrackType.VOCALS)?.sampleUrl} style={{ width: '350px', height: '60px' }} />
+            <AudioPlayer src={data.tracks.find((t) => t.type === TrackType.VOCALS)?.sampleUrl} style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet (seulement votre voix)</p>
           </div>
 
