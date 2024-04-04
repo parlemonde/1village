@@ -26,14 +26,14 @@ const SongStep1 = () => {
   const mixerRef = React.useRef<{ stopMixer: () => void }>();
 
   React.useEffect(() => {
-    if (data && data.tracks.length > 0) {
+    if (data && data.anthemTracks.length > 0) {
       setIsTracks(true);
     }
   }, [data]);
 
   const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
     return isTracks
-      ? getVerseTracks(data.tracks).map((track) => {
+      ? getVerseTracks(data.anthemTracks).map((track) => {
           const audioElement = new Audio(track.sampleUrl);
           audioElement.volume = track.sampleVolume ?? 0.5;
           return {
@@ -47,22 +47,22 @@ const SongStep1 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTracks]);
 
-  const onNext = async () => {
+  const onNext = () => {
+    if (mixerRef.current) mixerRef.current.stopMixer();
     setIsLoading(true);
     save().catch(console.error);
     setIsLoading(false);
-    if (mixerRef.current) mixerRef.current.stopMixer();
     router.push('/chanter-un-couplet/2');
   };
 
   const handleMixUpdate = (volumes: number[]) => {
-    const tempMixedTrack: Track[] = getVerseTracks(data.tracks).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
-    tempMixedTrack.unshift(data.tracks[TrackType.VOCALS]);
-    tempMixedTrack.unshift(data.tracks[TrackType.INTRO_CHORUS]);
-    tempMixedTrack.push(data.tracks[TrackType.OUTRO]);
+    const tempMixedTrack: Track[] = getVerseTracks(data.anthemTracks).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
+    tempMixedTrack.unshift(data.anthemTracks[TrackType.VOCALS]);
+    tempMixedTrack.unshift(data.anthemTracks[TrackType.INTRO_CHORUS]);
+    tempMixedTrack.push(data.anthemTracks[TrackType.OUTRO]);
     console.log('temp', tempMixedTrack);
-    console.log(data.tracks);
-    updateActivity({ data: { ...data, tracks: tempMixedTrack } });
+    console.log(data.anthemTracks);
+    updateActivity({ data: { ...data, anthemTracks: tempMixedTrack } });
   };
 
   if (!activity || !data) {
@@ -98,7 +98,7 @@ const SongStep1 = () => {
             <AudioMixer
               ref={mixerRef}
               tracks={audioMixerTracks}
-              verseTime={getLongestVerseSampleDuration(getVerseTracks(data.tracks))}
+              verseTime={getLongestVerseSampleDuration(getVerseTracks(data.anthemTracks))}
               handleMixUpdate={handleMixUpdate}
             />
           )}

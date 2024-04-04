@@ -33,7 +33,7 @@ const SongStep4 = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isRecordInvalidDuration, setIsRecordInvalidDuration] = React.useState(false);
 
-  const [verseStart, setVerseStart] = React.useState(data?.verseStartTime ? data?.verseStartTime : 0);
+  const [verseStart, setVerseStart] = React.useState(data?.classRecordTrack.sampleStartTime ? data?.classRecordTrack.sampleStartTime : 0);
   const [verseMixDuration, setVerseMixDuration] = React.useState(0);
   const [verseRecordDuration, setVerseRecordDuration] = React.useState(0);
   const [verseRecordAudio, setVerseRecordAudio] = React.useState<HTMLAudioElement | null>(null);
@@ -53,20 +53,12 @@ const SongStep4 = () => {
     if (data) {
       if (data.verseMixUrl && !verseMixAudio) {
         setVerseMixAudio(new Audio(data.verseMixUrl));
-        setVerseMixDuration(getLongestVerseSampleDuration(getVerseTracks(data.tracks)));
       }
-      if (data.verseRecordUrl && !verseRecordAudio) {
-        setVerseRecordAudio(new Audio(data.verseRecordUrl));
-        setVerseRecordDuration(data.verseRecordDuration);
+      if (data.classRecordTrack.sampleUrl && !verseRecordAudio) {
+        setVerseRecordAudio(new Audio(data.classRecordTrack.sampleUrl));
       }
-      console.log('MIX', data.verseMixUrl, verseMixAudio, verseMixDuration);
-      console.log('RECORD', data.verseRecordUrl, verseRecordAudio, verseRecordDuration);
     }
   }, [data, verseMixAudio, verseMixDuration, verseRecordAudio, verseRecordDuration]);
-
-  React.useEffect(() => {
-    console.log('verseStarrt', verseStart);
-  }, [verseStart]);
 
   if (!activity || !data) {
     return (
@@ -98,26 +90,29 @@ const SongStep4 = () => {
   };
 
   const handleSampleUpdate = (url: string, duration: number) => {
-    if (duration > verseMixDuration) {
+    if (duration > data.classRecordTrack.sampleDuration) {
       setIsRecordInvalidDuration(false);
-      updateActivity({ data: { ...data, verseRecordUrl: url, verseRecordDuration: duration } });
+      const tempClassRecordTrack = { ...data.classRecordTrack, sampleUrl: url, sampleDuration: duration };
+      updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
       setVerseRecordAudio(new Audio(url));
       setVerseRecordDuration(duration);
     } else {
       setIsRecordInvalidDuration(true);
-      console.log('hihui');
     }
   };
 
+  const handleSampleStart = (startTime: number) => {
+    const tempClassRecordTrack = { ...data.classRecordTrack, sampleStartTime: startTime };
+    updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
+    console.log(data.classRecordTrack);
+  };
+
   const handleSampleDelete = () => {
-    updateActivity({ data: { ...data, verseRecordUrl: '', verseRecordDuration: 0 } });
+    const tempClassRecordTrack = { ...data.classRecordTrack, sampleUrl: '', sampleDuration: 0, sampleStartTime: 0 };
+    updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
     setVerseRecordAudio(null);
     setVerseRecordDuration(0);
     onPause();
-  };
-
-  const handleClassAnthemUpdate = () => {
-    // updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
   };
 
   return (
@@ -145,7 +140,7 @@ const SongStep4 = () => {
               <div className={styles.verseRecordTrackInfos}>
                 {microIcon}
                 <p>Piste vocale</p>
-                <p>{toTime(verseRecordDuration)}</p>
+                <p>{toTime(data.classRecordTrack.sampleDuration)}</p>
               </div>
               <div className={styles.verseRecordTrackControls}>
                 <EditButton //add edit condition ??
@@ -174,21 +169,21 @@ const SongStep4 = () => {
               <div style={{ height: '200px' }}>
                 <DraggableTrack
                   verseRecordDuration={verseRecordDuration}
-                  verseMixDuration={verseMixDuration}
+                  verseMixDuration={getLongestVerseSampleDuration(getVerseTracks(data.anthemTracks))}
                   initialCoupletStart={verseStart}
-                  onCoupletStartChange={(coupletStart) => {
-                    verseRecordAudio.currentTime = coupletStart;
-                    updateActivity({ data: { ...data, slicedVerseStartTime: coupletStart } });
-                    setVerseStart(coupletStart);
+                  onCoupletStartChange={(startTime) => {
+                    verseRecordAudio.currentTime = startTime;
+                    setVerseStart(startTime);
+                    handleSampleStart(startTime);
                   }}
-                  onChangeEnd={(coupletStart) => {
-                    verseRecordAudio.currentTime = coupletStart;
+                  onChangeEnd={(startTime) => {
+                    verseRecordAudio.currentTime = startTime;
                     verseMixAudio.currentTime = 0;
                     verseRecordAudio.play();
                     verseMixAudio.play();
                     setIsPlaying(true);
-                    setVerseStart(coupletStart);
-                    updateActivity({ data: { ...data, verseStart: coupletStart } });
+                    setVerseStart(startTime);
+                    handleSampleStart(startTime);
                   }}
                   pauseAudios={onPause}
                 />
@@ -230,7 +225,7 @@ const SongStep4 = () => {
 
           {isAudioEditorOpen && (
             <AudioEditor
-              sampleUrl={data.verseRecordUrl}
+              sampleUrl={data.classRecordTrack.sampleUrl}
               sampleDuration={verseRecordDuration}
               handleSampleUpdate={handleSampleUpdate}
               setIsAudioEditorOpen={setIsAudioEditorOpen}

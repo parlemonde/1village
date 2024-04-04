@@ -52,7 +52,7 @@ const Anthem = () => {
 
   const onNext = () => {
     const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
-    const verseRecordTrack = {
+    const classRecordTrack = {
       type: TrackType.CLASS_RECORD,
       label: 'Piste vocale de la classe',
       sampleUrl: '',
@@ -63,11 +63,9 @@ const Anthem = () => {
     } as Track;
 
     createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
-      tracks: tracks,
-      verseStartTime: 0,
-      verseRecordDuration: 0,
+      anthemTracks: tracks,
+      classRecordTrack: classRecordTrack,
       slicedRecordUrl: '',
-      verseRecordUrl: '',
       verseMixUrl: '',
       verseMixWithIntroUrl: '',
       verseMixWithVocalsUrl: '',
