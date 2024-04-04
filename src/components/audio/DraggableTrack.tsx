@@ -12,8 +12,8 @@ const SVG_WIDTH = 762;
 type DraggableTrackProps = {
   verseRecordDuration: number;
   verseMixDuration: number;
-  initialCoupletStart?: number;
-  onCoupletStartChange: (newStart: number) => void;
+  initialVerseStart?: number;
+  onVerseStartChange: (newStart: number) => void;
   onChangeEnd: (newStart: number) => void;
   pauseAudios: () => void;
 };
@@ -21,18 +21,18 @@ type DraggableTrackProps = {
 export const DraggableTrack = ({
   verseRecordDuration,
   verseMixDuration,
-  initialCoupletStart,
-  onCoupletStartChange,
+  initialVerseStart,
+  onVerseStartChange,
   onChangeEnd,
   pauseAudios,
 }: DraggableTrackProps) => {
   const SVGRef = React.useRef<SVGSVGElement | null>(null);
-  const [coupletStart, setCoupletStart] = React.useState(
-    initialCoupletStart || initialCoupletStart === 0 ? initialCoupletStart : (verseRecordDuration - verseMixDuration) / 2,
+  const [VerseStart, setVerseStart] = React.useState(
+    initialVerseStart || initialVerseStart === 0 ? initialVerseStart : (verseRecordDuration - verseMixDuration) / 2,
   );
 
-  const leftCut = (coupletStart / verseRecordDuration) * SVG_WIDTH;
-  const rightCut = ((coupletStart + verseMixDuration) / verseRecordDuration) * SVG_WIDTH;
+  const leftCut = (VerseStart / verseRecordDuration) * SVG_WIDTH;
+  const rightCut = ((VerseStart + verseMixDuration) / verseRecordDuration) * SVG_WIDTH;
 
   const SvgWidthRef = React.useRef(0);
   const initialClientXRef = React.useRef(0);
@@ -51,18 +51,18 @@ export const DraggableTrack = ({
 
   const onDrag = (event: MouseEvent) => {
     const deltaX = ((event.clientX - initialClientXRef.current) * SVG_WIDTH) / SvgWidthRef.current;
-    setCoupletStart(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration));
-    onCoupletStartChange(
+    setVerseStart(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration));
+    onVerseStartChange(
       Math.round(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration)),
     );
   };
 
   const onDragEnd = (event: MouseEvent) => {
     const deltaX = ((event.clientX - initialClientXRef.current) * SVG_WIDTH) / SvgWidthRef.current;
-    const newCoupletStart = Math.round(
+    const newVerseStart = Math.round(
       clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration),
     );
-    onChangeEnd(newCoupletStart);
+    onChangeEnd(newVerseStart);
   };
 
   const { onMouseDown } = useDragHandler({
