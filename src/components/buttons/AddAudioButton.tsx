@@ -18,6 +18,7 @@ const AddAudioButton = ({ onClick }: AddAudioButtonProps) => {
         color: 'black',
         fontWeight: 'bold',
         fontSize: '.9rem',
+        margin: '1rem 0',
       }}
     >
       Ajouter un son

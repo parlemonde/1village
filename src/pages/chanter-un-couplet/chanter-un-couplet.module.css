@@ -30,3 +30,27 @@
 .verseRecordTrackControls > button {
     margin-right: 6px;
 }
+
+.errorContainer{
+    color: #CA8621; 
+    font-weight: 500;
+}
+
+.draggableTrackContainer{
+    height: 200px;
+}
+
+.draggableTrackControls{
+    display: flex;
+    flex-direction: row;
+    width: 860px;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 1rem 0;
+}
+
+.draggableTrackControls button{
+    width: 160px;
+    margin-top: 1rem
+    
+}

@@ -33,9 +33,7 @@ const SongStep4 = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isRecordInvalidDuration, setIsRecordInvalidDuration] = React.useState(false);
 
-  const [verseStart, setVerseStart] = React.useState(data?.classRecordTrack.sampleStartTime ? data?.classRecordTrack.sampleStartTime : 0);
   const [verseMixDuration, setVerseMixDuration] = React.useState(0);
-  const [verseRecordDuration, setVerseRecordDuration] = React.useState(0);
   const [verseRecordAudio, setVerseRecordAudio] = React.useState<HTMLAudioElement | null>(null);
   const [verseMixAudio, setVerseMixAudio] = React.useState<HTMLAudioElement | null>(null);
   const musicIcon = <MusicNote sx={{ color: '#666' }} />;
@@ -57,8 +55,11 @@ const SongStep4 = () => {
       if (data.classRecordTrack.sampleUrl && !verseRecordAudio) {
         setVerseRecordAudio(new Audio(data.classRecordTrack.sampleUrl));
       }
+      if (verseMixDuration === 0) {
+        setVerseMixDuration(getLongestVerseSampleDuration(getVerseTracks(data.anthemTracks)));
+      }
     }
-  }, [data, verseMixAudio, verseMixDuration, verseRecordAudio, verseRecordDuration]);
+  }, [data, verseMixAudio, verseMixDuration, verseRecordAudio]);
 
   if (!activity || !data) {
     return (
@@ -72,30 +73,42 @@ const SongStep4 = () => {
     verseMixAudio?.pause();
     verseRecordAudio?.pause();
     setIsLoading(true);
-    setIsLoading(false);
     save().catch(console.error);
+    setIsLoading(false);
     router.push('/chanter-un-couplet/5');
   };
 
   const onPlay = () => {
-    verseMixAudio?.play();
-    verseRecordAudio?.play();
+    if (verseMixAudio && verseRecordAudio) {
+      verseMixAudio.play();
+      verseRecordAudio.play();
+    }
     setIsPlaying(true);
   };
 
   const onPause = () => {
-    verseMixAudio?.pause();
-    verseRecordAudio?.pause();
+    if (verseMixAudio && verseRecordAudio) {
+      verseMixAudio.pause();
+      verseRecordAudio.pause();
+    }
     setIsPlaying(false);
   };
 
+  const onRestart = () => {
+    if (verseMixAudio && verseRecordAudio) {
+      verseMixAudio.currentTime = 0;
+      verseRecordAudio.currentTime = data.classRecordTrack.sampleStartTime;
+    }
+    onPlay();
+  };
+
   const handleSampleUpdate = (url: string, duration: number) => {
-    if (duration > data.classRecordTrack.sampleDuration) {
+    if (!url) return;
+    if (duration > verseMixDuration) {
       setIsRecordInvalidDuration(false);
       const tempClassRecordTrack = { ...data.classRecordTrack, sampleUrl: url, sampleDuration: duration };
       updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
       setVerseRecordAudio(new Audio(url));
-      setVerseRecordDuration(duration);
     } else {
       setIsRecordInvalidDuration(true);
     }
@@ -111,7 +124,6 @@ const SongStep4 = () => {
     const tempClassRecordTrack = { ...data.classRecordTrack, sampleUrl: '', sampleDuration: 0, sampleStartTime: 0 };
     updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
     setVerseRecordAudio(null);
-    setVerseRecordDuration(0);
     onPause();
   };
 
@@ -128,13 +140,13 @@ const SongStep4 = () => {
           <h1>Synchronisez votre voix sur l&apos;hymne</h1>
           <p> Avez-vous bien chanter en rythme ?</p>
           <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
-          {!data?.verseMixUrl && (
-            <p>
-              <b>Il manque votre mix du couplet !</b>
-            </p>
-          )}
           {!verseRecordAudio ? (
-            <AddAudioButton onClick={() => setIsAudioEditorOpen(true)} />
+            <AddAudioButton
+              onClick={() => {
+                setIsAudioEditorOpen(true);
+                setIsRecordInvalidDuration(false);
+              }}
+            />
           ) : (
             <div className={styles.verseRecordTrack}>
               <div className={styles.verseRecordTrackInfos}>
@@ -143,10 +155,11 @@ const SongStep4 = () => {
                 <p>{toTime(data.classRecordTrack.sampleDuration)}</p>
               </div>
               <div className={styles.verseRecordTrackControls}>
-                <EditButton //add edit condition ??
+                <EditButton
                   size="small"
                   onClick={() => {
                     setIsAudioEditorOpen(true);
+                    setIsRecordInvalidDuration(false);
                   }}
                 />
                 <DeleteButton
@@ -156,24 +169,32 @@ const SongStep4 = () => {
                   onDelete={() => {
                     handleSampleDelete();
                     setIsAudioEditorOpen(false);
+                    setIsRecordInvalidDuration(false);
                   }}
                 />
               </div>
             </div>
           )}
 
-          {isRecordInvalidDuration && <b>Votre enregistrement ne dure pas assez longtemps !</b>}
+          <div className={styles.errorContainer}>
+            {!data?.verseMixUrl && <p>Il manque votre mix du couplet !</p>}
+            {isRecordInvalidDuration &&
+              (!verseRecordAudio ? (
+                <p>Vous devez choisir un enregistrement d&apos;au moins {Math.ceil(verseMixDuration)} secondes !</p>
+              ) : (
+                <p>Pour modifier l&apos;enregistrement, merci d&apos;en choisir un supérieur à {Math.ceil(verseMixDuration)} secondes !</p>
+              ))}
+          </div>
 
           {verseMixAudio && verseRecordAudio && (
             <>
-              <div style={{ height: '200px' }}>
+              <div className={styles.draggableTrackContainer}>
                 <DraggableTrack
-                  verseRecordDuration={verseRecordDuration}
-                  verseMixDuration={getLongestVerseSampleDuration(getVerseTracks(data.anthemTracks))}
-                  initialCoupletStart={verseStart}
-                  onCoupletStartChange={(startTime) => {
+                  verseRecordDuration={data.classRecordTrack.sampleDuration}
+                  verseMixDuration={verseMixDuration}
+                  initialVerseStart={data.classRecordTrack.sampleStartTime}
+                  onVerseStartChange={(startTime) => {
                     verseRecordAudio.currentTime = startTime;
-                    setVerseStart(startTime);
                     handleSampleStart(startTime);
                   }}
                   onChangeEnd={(startTime) => {
@@ -182,42 +203,47 @@ const SongStep4 = () => {
                     verseRecordAudio.play();
                     verseMixAudio.play();
                     setIsPlaying(true);
-                    setVerseStart(startTime);
                     handleSampleStart(startTime);
                   }}
                   pauseAudios={onPause}
                 />
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '860px',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                  margin: '1rem 0',
-                }}
-              >
+              <div className={styles.draggableTrackControls}>
                 <div>
-                  <p>régler le volume de l&apos;instrumental</p>
-                  <VolumeControl icon={musicIcon} handleVolumeChange={(value) => (verseMixAudio.volume = value / 10)} />
+                  <p>Régler le volume de l&apos;instrumental</p>
+                  <VolumeControl
+                    icon={musicIcon}
+                    handleVolumeChange={(volume) => {
+                      verseMixAudio.volume = volume / 10;
+                      const tempClassRecordTrack = { ...data.classRecordTrack, sampleVolume: volume };
+                      updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
+                    }}
+                  />
                 </div>
                 <div>
-                  <p>régler le volume des voix</p>
+                  <p>Régler le volume des voix</p>
                   <VolumeControl icon={microIcon} handleVolumeChange={(value) => (verseRecordAudio.volume = value / 10)} />
                 </div>
+
                 <div>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      minWidth: '100px',
-                    }}
-                    onClick={() => {
-                      isPlaying ? onPause() : onPlay();
-                    }}
-                  >
-                    {isPlaying ? 'Pause' : 'Jouer'}
-                  </Button>
+                  <div>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        minWidth: '100px',
+                      }}
+                      onClick={() => {
+                        isPlaying ? onPause() : onPlay();
+                      }}
+                    >
+                      {isPlaying ? 'Pause' : 'Jouer'}
+                    </Button>
+                  </div>
+                  <div>
+                    <Button variant="contained" onClick={onRestart}>
+                      Recommencer
+                    </Button>
+                  </div>
                 </div>
               </div>
             </>
@@ -226,7 +252,7 @@ const SongStep4 = () => {
           {isAudioEditorOpen && (
             <AudioEditor
               sampleUrl={data.classRecordTrack.sampleUrl}
-              sampleDuration={verseRecordDuration}
+              sampleDuration={data.classRecordTrack.sampleDuration}
               handleSampleUpdate={handleSampleUpdate}
               setIsAudioEditorOpen={setIsAudioEditorOpen}
             />
@@ -243,28 +269,3 @@ const SongStep4 = () => {
 };
 
 export default SongStep4;
-
-// const onNext = () => {
-//     audioRef.current?.pause();
-//     customizedMixAudio?.pause();
-//     setIsLoading(true);
-//     if (data.classRecord) {
-//       audioBufferSlice(data.classRecord, verseStart * 1000, (verseStart + data?.verseTime) * 1000, async (slicedAudioBuffer: AudioBuffer) => {
-//         const formData = new FormData();
-//         formData.append('audio', new Blob([audioBufferToWav(slicedAudioBuffer)], { type: 'audio/vnd.wav' }), 'classRecordAcapella.wav');
-//         const response = await axiosRequest({
-//           method: 'POST',
-//           url: '/audios',
-//           data: formData,
-//           headers: {
-//             'Content-Type': 'multipart/form-data',
-//           },
-//         });
-//         const verse = await mixAudios([{ value: data.customizedMix }, { value: response.data.url }], axiosRequest);
-//         updateActivity({ data: { ...data, verse, slicedRecord: response.data.url } });
-//       });
-//     }
-//     setIsLoading(false);
-//     save().catch(console.error);
-//     router.push('/chanter-un-couplet/5');
-//   };

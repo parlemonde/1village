@@ -28,7 +28,7 @@ const SongStep5 = () => {
     if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
-    if (data !== null && (!data.verseRecordUrl || !data.slicedRecordUrl)) {
+    if (data !== null && (!data.classRecordTrack.sampleUrl || !data.slicedRecordUrl)) {
       errors.push(3);
     }
 
