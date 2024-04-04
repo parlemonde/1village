@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Box, Modal, Typography } from '@mui/material';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useGetActivities } from 'src/api/activities/activities.get';
 import ActivityCardAdminList from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdminList';
+import ModalDeleteActivity from 'src/components/activities/ModalDeleteActivity';
 import PelicoStar from 'src/svg/pelico/pelico_star.svg';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
 
@@ -50,6 +52,7 @@ const Publier = () => {
           buttonAction={() => router.push('/admin/newportal/publish/published')}
         />
       </div>
+
       <h1
         style={{
           marginTop: 30,

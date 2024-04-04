@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress, Menu, MenuItem } from '@mui/material';
 
+import ModalDeleteActivity from '../../ModalDeleteActivity';
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
 
 export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>) {
+  const [openModal, setOpenModal] = useState(false);
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
@@ -74,11 +76,12 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
               }}
             >
               <MenuItem onClick={handleClose}>Modifier</MenuItem>
-              <MenuItem onClick={handleClose}>Supprimer</MenuItem>
+              <MenuItem onClick={() => setOpenModal(true)}>Supprimer</MenuItem>
             </Menu>
           </>
         }
       />
+
       <CardMedia
         sx={{ padding: '1em 1em 0 1em', objectFit: 'cover', objectPosition: 'center' }}
         component="img"
@@ -107,6 +110,7 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
           </Button>
         </CardActions>
       )}
+      <ModalDeleteActivity isModalOpen={openModal} closeModal={() => setOpenModal(false)} />
     </Card>
   );
 }
