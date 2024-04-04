@@ -36,16 +36,26 @@ export function turnPhaseStepEnumIntoLitteral(step: EPhase1Steps | EPhase2Steps 
       case EPhase3Steps.MESSAGE_CLOTURE_PHASE_3:
         return 'Message de clôture phase 3';
       case EPhase3Steps.MESSAGE_LANCEMENT_PHASE_3:
-        break;
+        return 'Message de lancement phase 3';
       case EPhase3Steps.MIXAGE_DE_L_HYMNE:
-        break;
+        return "Mixage de l'hymne";
       case EPhase3Steps.PARAMETRAGE_DE_L_HYMNE:
-        break;
+        return "Paramétrage de l'hymne";
       case EPhase3Steps.RELANCE_PHASE_3:
-        break;
+        return 'Relance phase 3';
       default:
         return '';
     }
   }
   return '';
+}
+
+export function mapPhaseStepEnum(phase: number): string[] {
+  if (phase === 1) {
+    return Object.values(EPhase1Steps);
+  } else if (phase === 2) {
+    return Object.values(EPhase2Steps);
+  } else {
+    return Object.values(EPhase3Steps);
+  }
 }

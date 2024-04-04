@@ -9,10 +9,13 @@ import { useGetActivityById } from 'src/api/activities/activities.get';
 import { publishActivity } from 'src/api/activities/activities.put';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import BackArrow from 'src/svg/back-arrow.svg';
+import { turnPhaseStepEnumIntoLitteral, mapPhaseStepEnum } from 'src/utils/activity';
+import type { EPhase1Steps, EPhase2Steps, EPhase3Steps } from 'types/activity.type';
 import type { Country } from 'types/country.type';
 
 type VillageState = { id: number; name: string; selected: boolean };
 type CountryState = Country & { villageId: number[]; selected: boolean; disabled: boolean };
+type PhaseStep = { checked: boolean; key: string; name: string };
 
 export default function ActivityTopublish() {
   const ALL_VILLAGES = 'all-villages';
@@ -20,6 +23,13 @@ export default function ActivityTopublish() {
   const [phase, setPhase] = useState(1);
   const [villagesSelected, setVillagesSelected] = useState<VillageState[]>([{ id: 0, name: ALL_VILLAGES, selected: false }]);
   const [countries, setCountries] = useState<CountryState[]>([]);
+  const [phaseSteps, setPhaseSteps] = useState<PhaseStep[]>(
+    mapPhaseStepEnum(phase).map((e) => ({
+      checked: false,
+      key: e,
+      name: turnPhaseStepEnumIntoLitteral(e as EPhase1Steps | EPhase2Steps | EPhase3Steps),
+    })),
+  );
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -59,15 +69,16 @@ export default function ActivityTopublish() {
     [villagesSelected],
   );
 
-  const getcountryValues = useCallback(
-    (countryIsoCode: string) => {
-      if (countries.length) {
-        return countries.find((country) => country.isoCode === countryIsoCode);
-      }
-      return;
-    },
-    [countries],
-  );
+  // const getcountryValues = useCallback(
+  //   (countryIsoCode: string) => {
+  //     if (countries.length) {
+  //       return countries.find((country) => country.isoCode === countryIsoCode);
+  //     }
+  //     return;
+  //   },
+  //   [countries],
+  // );
+
   useEffect(() => {
     if (activity.data) {
       setPhase(activity.data.phase);
@@ -122,35 +133,56 @@ export default function ActivityTopublish() {
       );
     }
   };
-  const handleCountryChange = (countryIsoCode: string) => {
-    if (countryIsoCode === ALL_COUNTRIES) {
-      const foundCoutry = countries.find((e) => e.isoCode === ALL_COUNTRIES);
-
-      const newValue = !foundCoutry?.selected;
-
-      setCountries((state) => {
-        return state.reduce<CountryState[]>((acc, country) => {
-          if (!country.disabled) {
-            acc.push({ ...country, selected: newValue });
-          } else {
-            acc.push(country);
-          }
-          return acc;
-        }, []);
-      });
-    } else {
-      setCountries((state) => {
-        return state.reduce<CountryState[]>((acc, country) => {
-          if (country.isoCode === countryIsoCode) {
-            acc.push({ ...country, selected: !country.selected });
-          } else {
-            acc.push(country);
-          }
-          return acc;
-        }, []);
-      });
-    }
+  const handleStepPhase = (phase: number) => {
+    setPhaseSteps(
+      mapPhaseStepEnum(phase).map((e) => ({
+        checked: false,
+        key: e,
+        name: turnPhaseStepEnumIntoLitteral(e as EPhase1Steps | EPhase2Steps | EPhase3Steps),
+      })),
+    );
   };
+  const handleStepPhaseCheck = (phaseKey: string) => {
+    setPhaseSteps((state) =>
+      state.reduce<PhaseStep[]>((acc, currStep) => {
+        if (currStep.key === phaseKey) {
+          acc.push({ ...currStep, checked: !currStep.checked });
+        } else {
+          acc.push({ ...currStep, checked: false });
+        }
+        return acc;
+      }, []),
+    );
+  };
+  // const handleCountryChange = (countryIsoCode: string) => {
+  //   if (countryIsoCode === ALL_COUNTRIES) {
+  //     const foundCoutry = countries.find((e) => e.isoCode === ALL_COUNTRIES);
+
+  //     const newValue = !foundCoutry?.selected;
+
+  //     setCountries((state) => {
+  //       return state.reduce<CountryState[]>((acc, country) => {
+  //         if (!country.disabled) {
+  //           acc.push({ ...country, selected: newValue });
+  //         } else {
+  //           acc.push(country);
+  //         }
+  //         return acc;
+  //       }, []);
+  //     });
+  //   } else {
+  //     setCountries((state) => {
+  //       return state.reduce<CountryState[]>((acc, country) => {
+  //         if (country.isoCode === countryIsoCode) {
+  //           acc.push({ ...country, selected: !country.selected });
+  //         } else {
+  //           acc.push(country);
+  //         }
+  //         return acc;
+  //       }, []);
+  //     });
+  //   }
+  // };
 
   return (
     <div>
@@ -174,7 +206,17 @@ export default function ActivityTopublish() {
         <h3 style={{ margin: '5px 0' }}>Sélectionner la phase:</h3>
         <div style={{ display: 'flex', height: 20, width: 180, justifyContent: 'space-around' }}>
           <InputLabel id="phase-selecto">Phase</InputLabel>
-          <Select sx={{ width: 120 }} labelId="phase-selecto" value={phase} label="Phase" onChange={(e) => setPhase(Number(e.target.value))}>
+          <Select
+            sx={{ width: 120 }}
+            labelId="phase-selecto"
+            value={phase}
+            label="Phase"
+            onChange={(e) => {
+              const phaseNumber = Number(e.target.value);
+              setPhase(phaseNumber);
+              handleStepPhase(phaseNumber);
+            }}
+          >
             <MenuItem value={1}>Phase 1</MenuItem>
             <MenuItem value={2}>Phase 2</MenuItem>
             <MenuItem value={3}>Phase 3</MenuItem>
@@ -208,7 +250,7 @@ export default function ActivityTopublish() {
         </div>
       </div>
       {/* Pays */}
-      <div style={{ margin: '20px 0' }}>
+      {/* <div style={{ margin: '20px 0' }}>
         <h3 style={{ margin: '5px 0' }}>Sélectionner le/les pays concerné.s par la publication:</h3>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <FormControlLabel
@@ -222,7 +264,7 @@ export default function ActivityTopublish() {
             label={'Pays'}
           />
           {countries
-            .filter((e) => e.isoCode !== ALL_COUNTRIES)
+            .filter((e) => e.isoCode !== ALL_COUNTRIES && !e.disabled)
             .map((country) => (
               <FormControlLabel
                 key={country.isoCode}
@@ -235,6 +277,21 @@ export default function ActivityTopublish() {
         </div>
         <div style={{ height: 10 }}>
           {checkSelectedCountries() && <FormHelperText error={checkSelectedCountries()}>Au moins un pays doit etre selectionné</FormHelperText>}
+        </div>
+      </div> */}
+      <div style={{ margin: '20px 0' }}>
+        <h3 style={{ margin: '5px 0' }}>Sélectionner le/les pays concerné.s par la publication:</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          {phaseSteps.map((ph) => {
+            return (
+              <FormControlLabel
+                key={ph.key}
+                checked={ph.checked}
+                control={<Checkbox onChange={() => handleStepPhaseCheck(ph.key)} />}
+                label={ph.name}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
