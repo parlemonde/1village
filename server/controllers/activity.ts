@@ -497,22 +497,12 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       );
     }
 
-    if (data.data.verseRecordUrl) {
-      const verseRecordTrack = {
-        type: TrackType.CLASS_RECORD,
-        label: 'Piste vocale de la classe',
-        sampleUrl: data.data.verseRecordUrl,
-        sampleDuration: 14,
-        iconUrl: '',
-        sampleStartTime: 3,
-        sampleVolume: 1,
-      } as Track;
-
+    if ((data.data.classRecordTrack as Track).sampleUrl) {
       const fullTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
-      fullTracks.push(verseRecordTrack);
+      fullTracks.push(data.data.classRecordTrack as Track);
 
       data.data.verseFinalMixUrl = buildAudioMix(activity.userId, fullTracks);
-      data.data.slicedRecordUrl = buildAudioMix(activity.userId, [verseRecordTrack, verseRecordTrack]);
+      data.data.slicedRecordUrl = buildAudioMix(activity.userId, [data.data.classRecordTrack as Track, data.data.classRecordTrack as Track]);
     }
 
     console.log('TRACKS!!!!!!!!', tracks);
