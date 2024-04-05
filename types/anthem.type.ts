@@ -1,4 +1,4 @@
-import type { Activity } from 'types/activity.type';
+import type { Activity } from './activity.type';
 
 export type AnthemData = {
   tracks: Track[];
