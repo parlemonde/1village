@@ -1,3 +1,5 @@
+import type { Village } from 'server/entities/village';
+
 export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound';
 export interface ActivityContent {
   id: number; // needed to sort content.
@@ -54,7 +56,7 @@ export interface Activity<T extends AnyData = AnyData> {
   displayAsUser?: boolean; // For admins who wants to publish as their own, not Pelico.
 
   // village relation
-  villageId: number;
+  villages?: Village[];
 
   // Answer other activity
   responseActivityId?: number | null;

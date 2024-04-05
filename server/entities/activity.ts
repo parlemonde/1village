@@ -9,9 +9,10 @@ import {
   JoinColumn,
   OneToMany,
   Index,
+  ManyToMany,
 } from 'typeorm';
 
-import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
+import type { AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
 import { Game } from './game';
@@ -20,7 +21,7 @@ import { User } from './user';
 import { Village } from './village';
 
 @Entity()
-export class Activity implements ActivityInterface<AnyData> {
+export class Activity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -71,13 +72,8 @@ export class Activity implements ActivityInterface<AnyData> {
   @Column({ nullable: false })
   public userId: number;
 
-  // village relation
-  @ManyToOne(() => Village, (village: Village) => village.activities, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'villageId' })
-  public village: Village | null;
-
-  @Column({ nullable: false })
-  public villageId: number;
+  @ManyToMany(() => Village, (villages) => villages)
+  public villages: Village[];
 
   // Answer other activity
   @ManyToOne(() => Activity, { onDelete: 'SET NULL' })

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToMany, JoinTable } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
@@ -49,7 +49,10 @@ export class Village implements VillageInterface {
   @OneToMany(() => User, (user: User) => user.village)
   public users: User[];
 
-  @OneToMany(() => Activity, (activity: Activity) => activity.village)
+  // @OneToMany(() => Activity, (activity: Activity) => activity.village)
+  // public activities: Activity[];
+  @ManyToMany(() => Activity)
+  @JoinTable()
   public activities: Activity[];
 
   @OneToMany(() => Game, (game: Game) => game.village)

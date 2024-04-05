@@ -62,7 +62,7 @@ activityController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (r
     next();
     return;
   }
-  if (req.user && req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId) {
+  if (req.user && req.user.type === UserType.TEACHER && req.user.villageId && !activity.villages.map((v) => v.id).includes(req.user.villageId)) {
     next();
     return;
   }
@@ -200,15 +200,15 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   }
 
   // Delete old draft if needed.
-  if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
-    await AppDataSource.getRepository(Activity).delete({
-      userId: req.user.id,
-      villageId,
-      type: data.type,
-      subType: data.subType ?? IsNull(),
-      status: ActivityStatus.DRAFT,
-    });
-  }
+  // if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
+  //   await AppDataSource.getRepository(Activity).delete({
+  //     userId: req.user.id,
+  //     villageId,
+  //     type: data.type,
+  //     subType: data.subType ?? IsNull(),
+  //     status: ActivityStatus.DRAFT,
+  //   });
+  // }
 
   const activity = new Activity();
   activity.type = data.type;
