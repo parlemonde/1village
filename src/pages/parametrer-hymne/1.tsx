@@ -36,6 +36,7 @@ const AnthemStep1 = () => {
   const musicIcons = [MicroIcon, PianoIcon, GuitareIcon, TrumpetIcon, FluteIcon, DrumIcon, DrumkitIcon];
   const [times, setTimes] = React.useState<Record<number, number>>({});
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
+  const [previousValue, setPreviousValue] = React.useState('');
 
   const created = React.useRef(false);
   React.useEffect(() => {
@@ -100,26 +101,33 @@ const AnthemStep1 = () => {
                           type="text"
                           value={audio.label}
                           onBlur={() => {
-                            if (audio.label.trim() !== '') {
-                              setEditingIndex(null);
+                            if (audio.label.trim() === '') {
+                              data.verseAudios[idx].label = previousValue || 'Valeur par défaut';
+                              updateActivity({ data: { ...data } });
                             }
+                            setEditingIndex(null);
                           }}
                           onChange={(e) => {
                             data.verseAudios[idx].label = e.target.value;
                             updateActivity({ data: { ...data } });
                           }}
+                          onFocus={() => {
+                            setPreviousValue(audio.label);
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault();
-                              if (audio.label.trim() !== '') {
-                                setEditingIndex(null);
+                              if (audio.label.trim() === '') {
+                                data.verseAudios[idx].label = previousValue || 'Valeur par défaut';
+                                updateActivity({ data: { ...data } });
                               }
+                              setEditingIndex(null);
                             }
                           }}
                           autoFocus
                         />
                       ) : (
-                        <span onClick={() => setEditingIndex(idx)}>{audio.label}</span>
+                        <span onClick={() => setEditingIndex(idx)}>{audio.label === '' ? 'Valeur par défaut' : audio.label}</span>
                       )}
                     </div>
                     <div>
