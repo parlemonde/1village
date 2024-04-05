@@ -504,8 +504,6 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       data.data.verseFinalMixUrl = buildAudioMix(activity.userId, fullTracks);
       data.data.slicedRecordUrl = buildAudioMix(activity.userId, [data.data.classRecordTrack as Track, data.data.classRecordTrack as Track]);
     }
-
-    console.log('TRACKS!!!!!!!!', tracks);
   }
 
   if (activity.status !== ActivityStatus.PUBLISHED) {

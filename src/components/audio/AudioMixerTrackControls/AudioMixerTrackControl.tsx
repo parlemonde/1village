@@ -1,7 +1,7 @@
 import React from 'react';
 
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { IconButton, Slider, Tooltip } from '@mui/material';
+import { Slider, Tooltip } from '@mui/material';
 
 import type { AudioMixerTrack } from '../AudioMixer/AudioMixer';
 import styles from './AudioMixerTrackControl.module.css';

@@ -1,4 +1,3 @@
-import { RGBAImage } from 'maplibre-gl';
 import React from 'react';
 
 import MicNoneIcon from '@mui/icons-material/MicNone';
