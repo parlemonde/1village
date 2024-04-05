@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Add from '@mui/icons-material/Add';
-import { Alert, Button, TextField } from '@mui/material';
+import { Alert, TextField } from '@mui/material';
 
 import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
