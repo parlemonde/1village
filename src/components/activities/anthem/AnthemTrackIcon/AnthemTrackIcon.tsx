@@ -95,5 +95,4 @@ const AnthemTrackIcon = ({ track, handleIconUpdate, instruments }: AnthemTrackPr
   );
 };
 
-AnthemTrackIcon.displayName = 'AnthemTrackIcon';
 export default AnthemTrackIcon;
