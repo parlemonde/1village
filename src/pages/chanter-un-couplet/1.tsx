@@ -60,8 +60,6 @@ const SongStep1 = () => {
     tempMixedTrack.unshift(data.anthemTracks[TrackType.VOCALS]);
     tempMixedTrack.unshift(data.anthemTracks[TrackType.INTRO_CHORUS]);
     tempMixedTrack.push(data.anthemTracks[TrackType.OUTRO]);
-    console.log('temp', tempMixedTrack);
-    console.log(data.anthemTracks);
     updateActivity({ data: { ...data, anthemTracks: tempMixedTrack } });
   };
 

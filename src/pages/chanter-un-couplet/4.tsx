@@ -70,8 +70,10 @@ const SongStep4 = () => {
   }
 
   const onNext = () => {
-    verseMixAudio?.pause();
-    verseRecordAudio?.pause();
+    if (verseMixAudio && verseRecordAudio) {
+      verseMixAudio.pause();
+      verseRecordAudio.pause();
+    }
     setIsLoading(true);
     save().catch(console.error);
     setIsLoading(false);
@@ -117,7 +119,6 @@ const SongStep4 = () => {
   const handleSampleStart = (startTime: number) => {
     const tempClassRecordTrack = { ...data.classRecordTrack, sampleStartTime: startTime };
     updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
-    console.log(data.classRecordTrack);
   };
 
   const handleSampleDelete = () => {
