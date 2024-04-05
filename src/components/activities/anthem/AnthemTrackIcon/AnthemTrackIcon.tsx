@@ -22,7 +22,7 @@ const AnthemTrackIcon = ({ track, handleIconUpdate, instruments }: AnthemTrackPr
       <IconButton aria-label="fingerprint" color="primary" ref={anchorel} onClick={() => setOpen(!open)}>
         <InstrumentSvg instrumentName={track.iconUrl} />
       </IconButton>
-      {/* TODO change scrollbar style */}
+      {/* TODO change scrollbar aspect */}
       <Popper open={open} anchorEl={anchorel.current} placement={'bottom-start'} transition>
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
