@@ -15,7 +15,6 @@ import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
-import { TrackType } from 'types/anthem.type';
 
 const SongStep5 = () => {
   const router = useRouter();

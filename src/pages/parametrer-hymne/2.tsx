@@ -4,7 +4,7 @@ import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import styles from './parametrer-hymne.module.css';
+import styles from '../../styles/parametrer-hymne.module.css';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
