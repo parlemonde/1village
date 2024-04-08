@@ -1,6 +1,5 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { IsNull } from 'typeorm';
 
 import type { ActivityContent, AnyData } from '../../types/activity.type';
 import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
@@ -17,6 +16,7 @@ import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
+import { createActivityValidator } from '../validator/validateActivities';
 import { commentController } from './comment';
 import { Controller } from './controller';
 
@@ -115,74 +115,6 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
   }
 });
 
-// --- Create an activity ---
-type CreateActivityData = {
-  type: number;
-  subType?: number | null;
-  status?: number;
-  data: AnyData;
-  phase?: number;
-  content: ActivityContent[];
-  villageId?: number;
-  responseActivityId?: number;
-  responseType?: number;
-  isPinned?: boolean;
-  displayAsUser?: boolean;
-};
-
-// --- create activity's schema ---
-const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
-  type: 'object',
-  properties: {
-    type: {
-      type: 'number',
-    },
-    subType: {
-      type: 'number',
-      nullable: true,
-    },
-    status: {
-      type: 'number',
-      nullable: true,
-    },
-    phase: {
-      type: 'number',
-      nullable: true,
-    },
-    data: {
-      type: 'object',
-      additionalProperties: true,
-      nullable: false,
-    },
-    content: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
-          value: { type: 'string', nullable: false },
-        },
-        required: ['type', 'value'],
-      },
-      nullable: false,
-    },
-    villageId: { type: 'number', nullable: true },
-    responseActivityId: { type: 'number', nullable: true },
-    responseType: {
-      type: 'number',
-      nullable: true,
-    },
-    isPinned: { type: 'boolean', nullable: true },
-    displayAsUser: { type: 'boolean', nullable: true },
-  },
-  required: ['type', 'data', 'content'],
-  additionalProperties: false,
-};
-
-// --- validate activity's schema ---
-const createActivityValidator = ajv.compile(CREATE_SCHEMA);
-
 activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!createActivityValidator(data)) {
@@ -194,11 +126,13 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
 
-  const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
+  //TODO: What check is necessary here?
+  const villageId = req.user.type <= UserType.MEDIATOR ? data.villagesId || req.user.villageId || null : req.user.villageId || null;
   if (villageId === null) {
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
 
+  // TODO: what use is this?
   // Delete old draft if needed.
   // if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
   //   await AppDataSource.getRepository(Activity).delete({
@@ -218,7 +152,7 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   activity.phase = data.phase || VillagePhase.DISCOVER;
   activity.content = data.content;
   activity.userId = req.user.id;
-  activity.villageId = villageId;
+  activity.villages = villageId;
   activity.responseActivityId = data.responseActivityId ?? null;
   activity.responseType = data.responseType ?? null;
   activity.isPinned = data.isPinned || false;
