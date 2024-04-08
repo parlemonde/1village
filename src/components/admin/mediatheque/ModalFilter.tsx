@@ -1,0 +1,53 @@
+import React from 'react';
+
+import RefreshIcon from '@mui/icons-material/Refresh';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
+
+import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
+import FilterMultipleChoice from 'src/components/admin/mediatheque/Filter';
+import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
+
+const styleModal = {
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 250,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  borderRadius: '10px',
+  boxShadow: 24,
+  p: 4,
+};
+
+const ModalFilter = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <Button onClick={handleOpen}>Filtres</Button>
+      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+        <Box sx={styleModal}>
+          <FilterMultipleChoice labels={activitiesLabel} placeholder="Activités" />
+          <FilterMultipleChoice labels={activitiesLabel} placeholder="Thèmes" />
+          <FilterMultipleChoice labels={activitiesLabel} placeholder="VM" />
+          <FilterMultipleChoice labels={activitiesLabel} placeholder="Pays" />
+          <FilterMultipleChoice labels={activitiesLabel} placeholder="Classes" />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <CheckboxAdmin />
+            <IconButton aria-label="delete" color="primary">
+              <RefreshIcon />
+            </IconButton>
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+
+export default ModalFilter;

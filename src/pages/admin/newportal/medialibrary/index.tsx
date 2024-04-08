@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
-import type { Filter } from 'types/mediatheque.type';
-
 // Tout doit être responsive
 
 // STEP 1: les filtres (proposition modal sur les filtre)
@@ -17,6 +14,16 @@ import type { Filter } from 'types/mediatheque.type';
 // STEP 4: le bouton télécharger (image, vidéo, son) (lib jszip par exemple)
 // STEP 4.1: comment on dl une vidéo youtube ? Souvent des vidéos Viméo (bah on dl pas)
 
+import RefreshIcon from '@mui/icons-material/Refresh';
+import IconButton from '@mui/material/IconButton';
+
+import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
+import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
+import FilterMultipleChoice from 'src/components/admin/mediatheque/Filter';
+import ModalFilter from 'src/components/admin/mediatheque/ModalFilter';
+import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
+import type { Filter } from 'types/mediatheque.type';
+
 const Mediatheque = () => {
   const offset = 0;
   const filters: Filter[] = [
@@ -29,7 +36,23 @@ const Mediatheque = () => {
   return (
     <>
       <div>
-        <h1>Médiatheque</h1>
+        <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
+        <div className="desktop-view">
+          <div style={{ display: 'flex' }}>
+            <FilterMultipleChoice labels={activitiesLabel} placeholder="Activités" />
+            <FilterMultipleChoice labels={activitiesLabel} placeholder="Thèmes" />
+            <FilterMultipleChoice labels={activitiesLabel} placeholder="VM" />
+            <FilterMultipleChoice labels={activitiesLabel} placeholder="Pays" />
+            <FilterMultipleChoice labels={activitiesLabel} placeholder="Classes" />
+            <CheckboxAdmin />
+            <IconButton aria-label="delete" color="primary">
+              <RefreshIcon />
+            </IconButton>
+          </div>
+        </div>
+        <div className="modal-view">
+          <ModalFilter />
+        </div>
       </div>
     </>
   );

@@ -1,0 +1,17 @@
+export const activitiesLabel = [
+  'Présentation',
+  'Enigme',
+  'Défi',
+  'Question',
+  'Jeux',
+  'Contenu libre',
+  'Indice',
+  'Symbole',
+  'Mascotte',
+  'Reportage',
+  'Reaction',
+  'Hymne',
+  'Couplet ?',
+  'Histoire',
+  'Réinventer une histoire',
+];
