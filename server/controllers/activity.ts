@@ -347,6 +347,26 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
 
+  if (data.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
+    const tracks = (data.data.anthemTracks as Track[]).filter((t) => t.sampleUrl !== '');
+    const verseTracks = tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
+    const intro = (data.data.anthemTracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
+
+    data.data.verseMixWithVocalsUrl = buildAudioMix(req.user.id, verseTracks);
+
+    data.data.verseMixUrl = buildAudioMix(
+      req.user.id,
+      verseTracks.filter((t) => t.type !== TrackType.VOCALS),
+    );
+
+    data.data.verseMixWithIntroUrl = buildAudioMix(
+      req.user.id,
+      tracks
+        .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
+        .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
+    );
+  }
+
   // Delete old draft if needed.
   if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
     await AppDataSource.getRepository(Activity).delete({
@@ -479,23 +499,6 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   // Check if we need to build the audio mix for the class verse
   if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
     const tracks = (data.data.anthemTracks as Track[]).filter((t) => t.sampleUrl !== '');
-    const intro = (data.data.anthemTracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
-
-    if (!data.data.verseMixUrl) {
-      const verseTracks = tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
-
-      data.data.verseMixWithVocalsUrl = buildAudioMix(activity.userId, verseTracks);
-      data.data.verseMixUrl = buildAudioMix(
-        activity.userId,
-        verseTracks.filter((t) => t.type !== TrackType.VOCALS),
-      );
-      data.data.verseMixWithIntroUrl = buildAudioMix(
-        activity.userId,
-        tracks
-          .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
-          .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
-      );
-    }
 
     if ((data.data.classRecordTrack as Track).sampleUrl) {
       const fullTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);

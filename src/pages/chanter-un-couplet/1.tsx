@@ -47,10 +47,10 @@ const SongStep1 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTracks]);
 
-  const onNext = () => {
+  const onNext = async () => {
     if (mixerRef.current) mixerRef.current.stopMixer();
     setIsLoading(true);
-    save().catch(console.error);
+    await save();
     setIsLoading(false);
     router.push('/chanter-un-couplet/2');
   };
