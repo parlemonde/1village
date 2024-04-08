@@ -1,15 +1,13 @@
 import React from 'react';
 
-const Analyser = () => {
-  const renderTitle = () => {
-    return (
-      <div>
-        <h1>Analyser</h1>
-      </div>
-    );
-  };
+import DashboardStatsNav from 'src/components/dashboard-statistics/DashboardStatsNav';
 
-  return <>{renderTitle()}</>;
+const Analyser = () => {
+  return (
+    <>
+      <DashboardStatsNav />;
+    </>
+  );
 };
 
 export default Analyser;
