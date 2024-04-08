@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
-import { Button, Pagination, Stack } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+import { Button } from '@mui/material';
 
+import PaginationNav from '../PaginationNav/PaginationNav';
 import { ActivityCard } from './ActivityCard';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { UserContext } from 'src/contexts/userContext';
@@ -15,11 +17,12 @@ import type { Activity } from 'types/activity.type';
 interface ActivitiesProps {
   activities: Activity[];
   withLinks?: boolean;
+  withPagination?: boolean;
   noButtons?: boolean;
   onSelect?: (index: number) => void;
 }
 
-export const Activities = ({ activities, noButtons = false, withLinks = false, onSelect }: ActivitiesProps) => {
+export const Activities = ({ activities, noButtons = false, withLinks = false, withPagination = false, onSelect }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState<{
     selectedActivityId: number | null;
     responseActivityId?: number | null;
@@ -39,11 +42,21 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
     [users],
   );
   const [page, setPage] = useState<number>(1);
+  const [activitiesPerPage, setActivitiesPerPage] = React.useState(25);
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page, activitiesPerPage]);
+
   const handlePage = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const activitiesPerPage = 10;
+
+  const handleActivitiesPerPage = (e: SelectChangeEvent<string>) => {
+    setPage(1);
+    setActivitiesPerPage(parseInt(e.target.value));
+  };
+
   const startIdx = (page - 1) * activitiesPerPage;
   const endIdx = startIdx + activitiesPerPage;
 
@@ -148,9 +161,15 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, o
           }
           return card;
         })}
-      <Stack spacing={2} alignItems="center">
-        <Pagination count={Math.ceil(activities.length / activitiesPerPage)} page={page} onChange={handlePage} variant="outlined" />
-      </Stack>
+      {withPagination && (
+        <PaginationNav
+          page={page}
+          itemsPerPage={activitiesPerPage}
+          totalItems={activities.length}
+          handlePage={handlePage}
+          handleItemsPerPage={handleActivitiesPerPage}
+        />
+      )}
     </div>
   );
 };

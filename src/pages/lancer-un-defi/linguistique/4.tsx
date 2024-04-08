@@ -94,8 +94,8 @@ const DefiStep4 = () => {
                 label={replaceTokens(t.title, {
                   theme: data.hasSelectedThemeNameOther
                     ? data.themeName
-                    : (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title.toLowerCase()) || " < thème choisi à l'étape 2 > ",
-                  language: data.languageCode && data.languageCode.length > 0 ? capitalize(data.language) : "< langue choisie à l'étape 1 > ",
+                    : (data.themeIndex !== null && LANGUAGE_THEMES[data.themeIndex].title.toLowerCase()) || data.themeName,
+                  language: data.languageCode && data.languageCode.length > 0 ? capitalize(data.language) : "(langue non choisie à l'étape 1)",
                 })}
                 description={t.description}
                 onClick={onClick(index)}

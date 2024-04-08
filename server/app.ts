@@ -11,6 +11,7 @@ import path from 'path';
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';
 import { UserType } from './entities/user';
+import { getH5pRouter } from './h5p';
 import { authenticate } from './middlewares/authenticate';
 import { crsfProtection } from './middlewares/csrfCheck';
 import { handleErrors } from './middlewares/handleErrors';
@@ -93,6 +94,20 @@ export async function getApp() {
     res.status(404).send('Error 404 - Not found.');
   });
   app.use('/api', backRouter);
+
+  // [4-bis] --- Add h5p ---
+  if (process.env.DYNAMODB_REGION) {
+    try {
+      const h5pRouter = await getH5pRouter();
+      app.use('/h5p', h5pRouter);
+    } catch (e) {
+      logger.error('Could not initialize h5p router');
+      logger.error(e);
+      app.use('/h5p', (_, res: Response) => {
+        res.status(404).send('Error 404 - Not found.');
+      });
+    }
+  }
 
   // [5] --- Add frontend ---
   app.get('/country-flags/*', handleErrors(authenticate(UserType.OBSERVATOR)), express.static(path.join(__dirname, '../../public/country-flags')));

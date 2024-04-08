@@ -95,8 +95,11 @@ const Anthem = () => {
             <AudioPlayer src={anthemActivityData.fullMixUrl} style={{ width: '100%', height: '40px' }} />
             <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet, et la conclusion.</p>
             <p>
-              Avez-vous remarqué ? <b>Je n&apos;ai pas écrit les paroles du couplet !</b> C&apos;est votre misson : chaque classe peut créer son
-              propre couplet et le chanter ! À vous de raconter votre expérience d&apos;1Village en chanson.
+              Avez-vous remarqué qu’il manque quelque chose ? <b>Je n&apos;ai pas écrit les paroles du couplet ! </b> Et oui car c’est votre mission !{' '}
+              <strong>
+                Chaque classe de votre village-monde ainsi que la vôtre allez pouvoir écrire, chanter et enregistrer son propre couplet.
+              </strong>{' '}
+              À vous de raconter votre expérience d&apos;1Village et des OP en chanson 🎵
             </p>
             <p>À la fin de l&apos;année, vous pourrez écouter l&apos;hymne composé tous ensemble.</p>
             <h2>À présent, à votre tour de chanter un couplet !</h2>

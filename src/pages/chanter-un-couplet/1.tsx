@@ -84,15 +84,11 @@ const SongStep1 = () => {
           <h1>Mixez votre couplet</h1>
           <p>
             Avant de composer votre couplet et de l&apos;enregistrer, je vous propose de moduler la musique de notre hymne, en jouant avec cette table
-            de montage simplifiée.{' '}
+            de montage simplifiée.
           </p>
           <p>
-            Lancez l&apos;enregistrement de votre couplet en appuyant sur le bouton bleu &quot;Enregistrer&quot; sous la table de mixage. Une fois
-            l&apos;enregistrement lancé, il vous faut enregistrer toute la durée du couplet indiqué par le minuteur.
-          </p>
-          <p>
-            Vous pourrez alors écouter votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet. Libre à vous de recommencer
-            votre mix avant de passer à cette étape suivante !
+            Placez les curseurs là où vous le souhaitez, puis écoutez votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet.
+            Libre à vous de recommencer votre mix avant de passer à cette étape suivante !
           </p>
           {audioMixerTracks.length > 0 && (
             <AudioMixer

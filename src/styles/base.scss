@@ -35,10 +35,13 @@ header {
   align-items: center;
   padding: 0 1rem;
   position: relative;
+  justify-content: space-between;
+  & a:first-child {
+    flex-grow: 1;
+  }
 }
 .header__user {
   margin: auto 0;
-  position: absolute;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -135,7 +138,7 @@ main {
   padding-bottom: $verticalSpacing;
 }
 
-.flex-responsive{
+.flex-responsive {
   flex-direction: row;
 }
 
@@ -183,7 +186,7 @@ main {
     margin-bottom: math.div($verticalSpacing, 2);
   }
 
-  .flex-responsive{
+  .flex-responsive {
     flex-direction: column;
   }
 }

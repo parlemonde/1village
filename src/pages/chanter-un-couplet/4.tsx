@@ -129,42 +129,31 @@ const SongStep4 = () => {
           errorSteps={errorSteps}
           urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
-        <div className={styles.contentContainer}>
-          <h1>Synchronisez votre voix sur l&apos;hymne</h1>
-          <p> Avez-vous bien chanter en rythme ?</p>
-          <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
-          {!data?.verseMixUrl && (
-            <p>
-              <b>Il manque votre mix du couplet !</b>
-            </p>
-          )}
-          {!verseRecordAudio ? (
-            <AddAudioButton onClick={() => setIsAudioEditorOpen(true)} />
-          ) : (
-            <div className={styles.verseRecordTrack}>
-              <div className={styles.verseRecordTrackInfos}>
-                {microIcon}
-                <p>Piste vocale</p>
-                <p>{toTime(verseRecordDuration)}</p>
-              </div>
-              <div className={styles.verseRecordTrackControls}>
-                <EditButton //add edit condition ??
-                  size="small"
-                  onClick={() => {
-                    setIsAudioEditorOpen(true);
-                  }}
-                />
-                <DeleteButton
-                  color="red"
-                  confirmTitle="Supprimer ce son ?"
-                  confirmLabel="Voulez-vous vraiment supprimer ce son ?"
-                  onDelete={() => {
-                    handleSampleDelete();
-                    setIsAudioEditorOpen(false);
-                  }}
-                />
-              </div>
-            </div>
+        <h1>Synchronisez votre voix sur l&apos;hymne</h1>
+        <p> Avez-vous bien chanter en rythme ? 😀</p>
+        <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
+        {!data?.customizedMix && (
+          <p>
+            <b>Il manque votre mix du couplet !</b>
+          </p>
+        )}
+        <div className="width-900">
+          {(!trackDuration || !data.classRecord) && (
+            <Button
+              onClick={() => setDisplayEditor(true)}
+              variant="text"
+              className="navigation__button full-width"
+              style={{
+                justifyContent: 'flex-start',
+                width: 'auto',
+                boxShadow: '0px 4px 7px rgba(0, 0, 0, 0.1)',
+                color: 'black',
+                fontWeight: 'bold',
+              }}
+              endIcon={<SoundIcon />}
+            >
+              Ajouter un son
+            </Button>
           )}
 
           {isRecordInvalidDuration && <b>Votre enregistrement ne dure pas assez longtemps !</b>}
