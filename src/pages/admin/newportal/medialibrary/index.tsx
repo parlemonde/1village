@@ -31,6 +31,7 @@ const Mediatheque = () => {
     { table: 'activity', column: 'subType', value: 2 },
   ];
 
+  // to use
   const { data: filtered } = useGetMediatheque(offset, filters);
 
   return (

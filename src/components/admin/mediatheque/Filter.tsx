@@ -38,10 +38,7 @@ const FilterMultipleChoice = ({ labels, placeholder }: FilterProps) => {
     const {
       target: { value },
     } = event;
-    setLabelName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setLabelName(typeof value === 'string' ? value.split(',') : value);
   };
 
   return (
