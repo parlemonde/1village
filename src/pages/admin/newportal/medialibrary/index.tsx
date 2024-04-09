@@ -19,7 +19,8 @@ import IconButton from '@mui/material/IconButton';
 
 import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
-import FilterMultipleChoice from 'src/components/admin/mediatheque/Filter';
+import Filters from 'src/components/admin/mediatheque/Filter';
+import FiltersActivities from 'src/components/admin/mediatheque/FiltersActivities';
 import ModalFilter from 'src/components/admin/mediatheque/ModalFilter';
 import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import type { Filter } from 'types/mediatheque.type';
@@ -40,11 +41,26 @@ const Mediatheque = () => {
         <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
         <div className="desktop-view">
           <div style={{ display: 'flex' }}>
-            <FilterMultipleChoice labels={activitiesLabel} placeholder="Activités" />
-            <FilterMultipleChoice labels={activitiesLabel} placeholder="Thèmes" />
-            <FilterMultipleChoice labels={activitiesLabel} placeholder="VM" />
-            <FilterMultipleChoice labels={activitiesLabel} placeholder="Pays" />
-            <FilterMultipleChoice labels={activitiesLabel} placeholder="Classes" />
+            {/* Ici je me dis que je peux gérer un composant
+            filtre qui s'appellerait FiltersActivities */}
+            <>
+              {/* Ce filtre gère les activités principales */}
+              {/* <Filters labels={activitiesLabel} placeholder="Activités" /> */}
+              {/* Ce filtre dépend de l'acitivité principales choisies */}
+              {/* <Filters labels={activitiesLabel} placeholder="Thèmes" /> */}
+            </>
+            <FiltersActivities />
+            {/* Et ici un second composant qui s'appellerait 
+            FiltersUsers */}
+            <>
+              {/* Ce filtre gère les différents village monde */}
+              <Filters labels={activitiesLabel} placeholder="VM" />
+              {/* Ce filtre dépend du village monde choisi */}
+              <Filters labels={activitiesLabel} placeholder="Pays" />
+              {/* Ce filtre dépend du pays choisi et du village monde */}
+              <Filters labels={activitiesLabel} placeholder="Classes" />
+            </>
+
             <CheckboxAdmin />
             <IconButton aria-label="delete" color="primary">
               <RefreshIcon />

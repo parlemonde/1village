@@ -6,8 +6,9 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 
+import FiltersActivities from './FiltersActivities';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
-import FilterMultipleChoice from 'src/components/admin/mediatheque/Filter';
+import Filters from 'src/components/admin/mediatheque/Filter';
 import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 
 const styleModal = {
@@ -33,11 +34,10 @@ const ModalFilter = () => {
       <Button onClick={handleOpen}>Filtres</Button>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={styleModal}>
-          <FilterMultipleChoice labels={activitiesLabel} placeholder="Activités" />
-          <FilterMultipleChoice labels={activitiesLabel} placeholder="Thèmes" />
-          <FilterMultipleChoice labels={activitiesLabel} placeholder="VM" />
-          <FilterMultipleChoice labels={activitiesLabel} placeholder="Pays" />
-          <FilterMultipleChoice labels={activitiesLabel} placeholder="Classes" />
+          <FiltersActivities />
+          <Filters labels={activitiesLabel} placeholder="VM" />
+          <Filters labels={activitiesLabel} placeholder="Pays" />
+          <Filters labels={activitiesLabel} placeholder="Classes" />
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CheckboxAdmin />
             <IconButton aria-label="delete" color="primary">

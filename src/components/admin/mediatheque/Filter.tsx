@@ -30,7 +30,7 @@ type FilterProps = {
   placeholder: string;
 };
 
-const FilterMultipleChoice = ({ labels, placeholder }: FilterProps) => {
+const Filters = ({ labels, placeholder }: FilterProps) => {
   const theme = useTheme();
   const [labelName, setLabelName] = React.useState<string[]>([]);
 
@@ -74,4 +74,4 @@ const FilterMultipleChoice = ({ labels, placeholder }: FilterProps) => {
   );
 };
 
-export default FilterMultipleChoice;
+export default Filters;
