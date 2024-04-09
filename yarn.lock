@@ -3896,11 +3896,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 20.12.5
-  resolution: "@types/node@npm:20.12.5"
+  version: 20.12.6
+  resolution: "@types/node@npm:20.12.6"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/2da65516fba98f0417620e42bddbe53e144d4782d69cd37f99df2537c6850b9cfbdb8a017f02c61e9a074bcac84f9f3f221b250474ac8c6b95d507a47e8d53f9
+  checksum: 10c0/48ce732162cd6c02656aa5f996f0e695b57fdeb1ae762fbaa966afac2dcdcf52cb56be5ce1efb4babf8f97c2de545889aebc7f43c2e86f033487245c41fa1e6b
   languageName: node
   linkType: hard
 
@@ -3912,11 +3912,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:^18.17.15":
-  version: 18.19.30
-  resolution: "@types/node@npm:18.19.30"
+  version: 18.19.31
+  resolution: "@types/node@npm:18.19.31"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/a4416fd6f3e93989ac8aa7e19bb1a199266285945ba6925c3b8d3fa8c1d9448ce979f773bde65463335a78c393cd7dafc0d53101ab24c97cee425fb71cff3589
+  checksum: 10c0/bfebae8389220c0188492c82eaf328f4ba15e6e9b4abee33d6bf36d3b13f188c2f53eb695d427feb882fff09834f467405e2ed9be6aeb6ad4705509822d2ea08
   languageName: node
   linkType: hard
 
@@ -4011,12 +4011,12 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*":
-  version: 18.2.74
-  resolution: "@types/react@npm:18.2.74"
+  version: 18.2.75
+  resolution: "@types/react@npm:18.2.75"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/347e38b4c5dc20d50ff71bf04b7caaef490e5ff695e74a0088a13fbb2a0c5d125a5ecfd142adfa30f0176da0e2734942c91ba61d95ce269c43b3265bd7379361
+  checksum: 10c0/3c0d035d64007d38cf1b682108de8c5f042452025899280c5d2c040b9f53b1f81482d0d57fd93e6687c2c619f3b605d33a01569b1fbbbdeec7fb3a56c7a72af8
   languageName: node
   linkType: hard
 
@@ -5317,8 +5317,8 @@ __metadata:
   linkType: hard
 
 "aws-sdk@npm:^2.1162.0":
-  version: 2.1594.0
-  resolution: "aws-sdk@npm:2.1594.0"
+  version: 2.1595.0
+  resolution: "aws-sdk@npm:2.1595.0"
   dependencies:
     buffer: "npm:4.9.2"
     events: "npm:1.1.1"
@@ -5330,7 +5330,7 @@ __metadata:
     util: "npm:^0.12.4"
     uuid: "npm:8.0.0"
     xml2js: "npm:0.6.2"
-  checksum: 10c0/934d50b860932a4e92aa9141465aec3f54dd92e062315a6fe36b562332025a23478f55d627670c8890f87371078e4172119b89fe1f9e90d19fdaaad3f60db1d0
+  checksum: 10c0/5c978f9ad11627f7ddbc555a0b2e7699c7713508628fad3dde4df1c13d3cc09decb8b1cb619be334cdd96ee9595f0355ca48659312587cc3eb540986ffb6ec84
   languageName: node
   linkType: hard
 
@@ -7396,9 +7396,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.668":
-  version: 1.4.729
-  resolution: "electron-to-chromium@npm:1.4.729"
-  checksum: 10c0/9f093b873a5e02da5fd5db5a1038c3a3f84bd43ff6d0e894280848717e5892953cc814a4ddf1de2acbfa9af4fe356c714f036f39b82d52bc6c8c3aed6e97fbde
+  version: 1.4.730
+  resolution: "electron-to-chromium@npm:1.4.730"
+  checksum: 10c0/c524b8d61797de6c597ce3adf069bbde7f2c68d25d1c83a8ab28ff5d977f4520f60e9f33ea05fcd6efca222ecc05933e395258641a833c3585d76a6bbb0b4990
   languageName: node
   linkType: hard
 
