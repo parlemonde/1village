@@ -21,7 +21,7 @@ import { ActivityStatus } from 'types/activity.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
-  const { activity, save } = useActivity();
+  const { activity, save, setDraft } = useActivity();
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -56,6 +56,7 @@ const ContenuLibre = () => {
     setIsLoading(true);
     const { success } = await save(false);
     if (success) {
+      setDraft(null);
       router.push('/admin/newportal/contenulibre/success');
     }
     setIsLoading(false);

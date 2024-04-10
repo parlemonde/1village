@@ -11,7 +11,7 @@ import { getActivityPhase } from 'src/components/activities/utils';
 import { primaryColor } from 'src/styles/variables.const';
 import { serializeToQueryUrl, debounce, getQueryString } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { Activity, AnyData, ActivityContentType, ActivityContent } from 'types/activity.type';
+import type { ActivityContentType, ActivityContent, Activity, AnyData } from 'types/activity.type';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
 
 type ActivitySaveResponse = { success: false } | { success: true; activity: Activity };
@@ -33,6 +33,7 @@ interface ActivityContextValue {
   deleteContent(index: number): void;
   save(publish?: boolean): Promise<ActivitySaveResponse>;
   createActivityIfNotExist(type: number, selectedPhase: number, subType?: number, initialData?: AnyData, isVillageActivity?: boolean): Promise<void>;
+  setDraft(draft: Activity | null): void;
 }
 
 export const ActivityContext = React.createContext<ActivityContextValue>({
@@ -44,6 +45,7 @@ export const ActivityContext = React.createContext<ActivityContextValue>({
   deleteContent: () => {},
   save: async () => ({ success: false }),
   createActivityIfNotExist: async () => {},
+  setDraft: () => {},
 });
 
 function getInitialActivity(): Activity | null {
@@ -387,6 +389,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       deleteContent,
       createActivityIfNotExist,
       save,
+      setDraft,
     }),
     [activity, setActivity, updateActivity, createNewActivity, addContent, deleteContent, createActivityIfNotExist, save],
   );
@@ -398,7 +401,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
         <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>
           <Card style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}>
             {draftStep === 1 && <CircularProgress color="inherit" size="1.25rem" />}
-            {draftStep === 2 && <span className="text text--small">Brouillon enregistré</span>}
+            {draftStep === 2 && <p className="text text--small">Brouillon enregistré</p>}
           </Card>
         </div>
       )}
