@@ -126,7 +126,7 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.5",
     "@mui/system": "^5.8.5",
-    "@mui/x-charts": "^7.0.0",
+    "@mui/x-charts": "^7.1.1",
     "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",
     "argon2": "^0.28.7",

@@ -17,7 +17,7 @@ __metadata:
     "@mui/icons-material": "npm:^5.8.4"
     "@mui/material": "npm:^5.8.5"
     "@mui/system": "npm:^5.8.5"
-    "@mui/x-charts": "npm:^7.0.0"
+    "@mui/x-charts": "npm:^7.1.1"
     "@next/eslint-plugin-next": "npm:^12.1.6"
     "@svgr/webpack": "npm:6.2.1"
     "@swc/cli": "npm:^0.1.57"
@@ -2619,9 +2619,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-charts@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@mui/x-charts@npm:7.0.0"
+"@mui/x-charts@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "@mui/x-charts@npm:7.1.1"
   dependencies:
     "@babel/runtime": "npm:^7.24.0"
     "@mui/base": "npm:^5.0.0-beta.40"
@@ -2647,7 +2647,7 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 10/b82398105f3c80d1cf168fefc05fd6327545e52e7618ae35e26d18e1f78ff443852028710fae88fca5d458f00818441b758dcb5a24b482e852cecf3ddac3288d
+  checksum: 10/b9b69e9dd86ef2738d5937288420fc29d7cd17b5f8d16c1808b49245a387fdb59cd60a5867cc940083d8d16723517248f9ea4aecad70254517e4c9d98df1cac3
   languageName: node
   linkType: hard
 
