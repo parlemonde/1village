@@ -6,7 +6,7 @@ export class Country {
   public id: number;
 
   @Column({ type: 'text', nullable: false })
-  public code: string;
+  public isoCode: string;
 
   @Column({ type: 'text', nullable: false })
   public name: string;
