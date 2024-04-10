@@ -139,8 +139,11 @@ const SongStep4 = () => {
         />
         <div className={styles.contentContainer}>
           <h1>Synchronisez votre voix sur l&apos;hymne</h1>
-          <p> Avez-vous bien chanter en rythme ?</p>
-          <p>Pour le savoir, mettez en ligne le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne !</p>
+          <p>Avez-vous bien chanté en rythme ? 😀</p>
+          <p>
+            Pour le savoir, importez le fichier son contenant vos voix, et déplacez-le avec votre souris pour le caler sur l&apos;hymne ! Vous pouvez
+            changer réduire ou augmenter le volume du son pour que vos voix s’entendent suffisamment.
+          </p>
           {!verseRecordAudio ? (
             <AddAudioButton
               onClick={() => {
