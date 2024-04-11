@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
+import Layout from '../layout';
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -38,7 +39,7 @@ const ContenuLibreStep1: React.FC = () => {
   }
 
   return (
-    <div>
+    <Layout>
       <StepsNavigation currentStep={0} />
       <h1>Ecrivez le contenu de votre publication</h1>
       <p>
@@ -48,7 +49,7 @@ const ContenuLibreStep1: React.FC = () => {
       <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
 
       <StepsButton next={onNext} />
-    </div>
+    </Layout>
   );
 };
 

@@ -4,6 +4,7 @@ import React from 'react';
 
 import { TextField, Switch, Button } from '@mui/material';
 
+import Layout from '../layout';
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
@@ -61,7 +62,7 @@ const ContenuLibre = () => {
   };
 
   return (
-    <div>
+    <Layout>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <StepsNavigation currentStep={1} />
         <div className="width-900">
@@ -221,7 +222,7 @@ const ContenuLibre = () => {
           setSelectedImageUrl(undefined);
         }}
       />
-    </div>
+    </Layout>
   );
 };
 

@@ -7,6 +7,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import Layout from '../layout';
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
@@ -67,7 +68,7 @@ const ContenuLibre = () => {
   }
 
   return (
-    <div>
+    <Layout>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
         <StepsNavigation currentStep={2} />
         <div className="width-900">
@@ -127,7 +128,7 @@ const ContenuLibre = () => {
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </div>
+    </Layout>
   );
 };
 
