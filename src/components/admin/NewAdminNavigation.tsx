@@ -11,7 +11,6 @@ import PublierIcon from 'src/svg/publier.svg';
 
 interface NavItemProps {
   key?: number;
-
   path: string;
   selected: boolean;
   onClick: React.MouseEventHandler<HTMLDivElement>;

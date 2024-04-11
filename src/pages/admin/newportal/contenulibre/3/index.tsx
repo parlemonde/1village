@@ -7,21 +7,22 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import Layout from '../layout';
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
-import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
+import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { ContentView } from 'src/components/activities/content/ContentView';
 import { EditButton } from 'src/components/buttons/EditButton';
-import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
+import { useActivity } from 'src/hooks/useActivity';
 import { ActivityStatus } from 'types/activity.type';
 
 const ContenuLibre = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
+  const { activity, save, setDraft } = useActivity();
   const { user } = React.useContext(UserContext);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -40,38 +41,36 @@ const ContenuLibre = () => {
   const isValid = errorSteps.length === 0;
 
   React.useEffect(() => {
-    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/admin/newportal/contenulibre');
-    } else if (activity && !isFreeContent(activity)) {
-      router.push('/admin/newportal/contenulibre');
+    if (!activity) {
+      router.push('/admin/newportal/contenulibre/1');
+      return;
+    }
+    if (!isFreeContent(activity)) {
+      router.push('/admin/newportal/contenulibre/1');
     }
   }, [activity, router]);
 
-  const onPublish = async () => {
+  const onCreate = async () => {
     if (!isValid) {
       return;
     }
     setIsLoading(true);
-    const { success } = await save(true);
+    const { success } = await save(false);
     if (success) {
+      setDraft(null);
       router.push('/admin/newportal/contenulibre/success');
     }
     setIsLoading(false);
   };
 
   if (!activity || !user) {
-    return <Base />;
+    return <Base hideLeftNav />;
   }
 
   return (
-    <Base hideLeftNav>
+    <Layout>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <Steps
-          steps={['Contenu', 'Forme', 'Prévisualiser']}
-          urls={['/admin/newportal/contenulibre/1?edit', '/admin/newportal/contenulibre/2', '/admin/newportal/contenulibre/3']}
-          activeStep={2}
-          errorSteps={errorSteps}
-        />
+        <StepsNavigation currentStep={2} />
         <div className="width-900">
           <h1>Pré-visualisez votre publication</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
@@ -87,14 +86,14 @@ const ContenuLibre = () => {
                   {"Modifier à l'étape précédente"}
                 </Button>
               </Link>
-              <Button variant="outlined" color="primary" onClick={onPublish}>
+              <Button variant="outlined" color="primary" onClick={onCreate}>
                 Enregistrer les changements
               </Button>
             </div>
           ) : (
             <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={errorSteps.length > 0}>
-                Publier
+              <Button variant="outlined" color="primary" onClick={onCreate} disabled={errorSteps.length > 0}>
+                Créer
               </Button>
             </div>
           )}
@@ -129,7 +128,7 @@ const ContenuLibre = () => {
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Base>
+    </Layout>
   );
 };
 

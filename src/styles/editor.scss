@@ -85,6 +85,9 @@
 
     &--without-min-height {
       min-height: unset;
+      @media screen and (max-width: 1200px) {
+        min-height: 6rem;
+      }
     }
   }
 
