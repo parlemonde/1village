@@ -1,0 +1,22 @@
+.title {
+    text-align: left;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    text-align: left;
+}
+
+.pieContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #F3F3F3;
+    margin-bottom: 20px;
+    max-width: 285.61px;
+    max-height: 282.81px;
+    top: 3.09px;
+    gap: 0px;
+    border-radius: 20px 20px 20px 20px;
+    opacity: 0px;
+}

@@ -5,8 +5,8 @@ import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
-import type { AnthemActivity } from 'src/activity-types/anthem.types';
 import { RedButton } from 'src/components/buttons/RedButton';
+import type { AnthemActivity } from 'types/anthem.type';
 
 export const AnthemCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<AnthemActivity>) => (
   <div
@@ -21,7 +21,7 @@ export const AnthemCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
       <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
         <div className="text multine-with-ellipsis" style={{ maxHeight: `4rem` }}>
           <p>
-            {activity.data.chorus.map((syllable) =>
+            {activity.data.chorusLyrics.map((syllable) =>
               syllable.back ? (
                 <>
                   <br />

@@ -1,29 +1,28 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { AnthemData } from 'src/activity-types/anthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
+import type { AnthemData, Track } from 'types/anthem.type';
 
 const emptyAnthemActivity: AnthemData = {
-  verseAudios: [],
-  introOutro: [],
+  tracks: [],
   verseLyrics: [],
-  chorus: [],
-  finalVerse: '',
-  finalMix: '',
-  verseTime: 0,
+  chorusLyrics: [],
+  mixUrl: '',
+  fullMixUrl: '',
 };
 
 const Anthem = () => {
   const router = useRouter();
   const { createNewActivity } = React.useContext(ActivityContext);
-
   const { village, selectedPhase } = React.useContext(VillageContext);
   const [anthemActivityData, setAnthemActivityData] = React.useState<AnthemData>(emptyAnthemActivity);
 
@@ -40,35 +39,42 @@ const Anthem = () => {
       router.push('/');
       return;
     }
-
     const newAnthemActivityData = (response.data as Activity<AnthemData>).data;
     setAnthemActivityData(newAnthemActivityData);
-
-    if (!newAnthemActivityData.finalMix) {
+    if (!newAnthemActivityData.fullMixUrl) {
       router.push('/');
     }
   }, [router, village]);
+
   React.useEffect(() => {
     getAnthemData().catch(console.error);
   }, [getAnthemData]);
 
   const onNext = () => {
-    const { chorus, verseAudios, introOutro, verseLyrics, verseTime } = anthemActivityData;
-    createNewActivity(ActivityType.VERSE_RECORD, selectedPhase, undefined, {
-      verseAudios,
-      introOutro,
-      verseTime,
-      chorus,
-      verseLyrics,
-      verse: '',
-      customizedMix: '',
-      customizedMixBlob: null,
-      mixWithoutLyrics: '',
-      classRecord: '',
+    const { tracks, verseLyrics, chorusLyrics } = anthemActivityData;
+    const classRecordTrack = {
+      type: TrackType.CLASS_RECORD,
+      label: 'Piste vocale de la classe',
+      sampleUrl: '',
+      sampleDuration: 0,
+      iconUrl: '',
+      sampleStartTime: 0,
+      sampleVolume: 0.5,
+    } as Track;
+
+    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
+      anthemTracks: tracks,
+      classRecordTrack: classRecordTrack,
+      slicedRecordUrl: '',
+      verseMixUrl: '',
+      verseMixWithIntroUrl: '',
+      verseMixWithVocalsUrl: '',
+      verseMixWithLyricsUrl: '',
+      verseLyrics: verseLyrics,
+      chorusLyrics: chorusLyrics,
     });
     router.push('/chanter-un-couplet/1');
   };
-
   if (!anthemActivityData) {
     return (
       <Base>
@@ -76,7 +82,6 @@ const Anthem = () => {
       </Base>
     );
   }
-
   return (
     <Base>
       <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
@@ -87,9 +92,8 @@ const Anthem = () => {
               Que pensez-vous d’accompagner nos Olympiades de Pélico par un hymne ? Avec plusieurs de mes amies, nous avons imaginé un hymne pour le
               village-idéal et pour les OP. Je vous laisse le découvrir…{' '}
             </p>
-            <audio controls src={anthemActivityData.finalMix} style={{ width: '100%', height: '40px' }} />
+            <AudioPlayer src={anthemActivityData.fullMixUrl} style={{ width: '100%', height: '40px' }} />
             <p>Notre hymne commence par une introduction, puis vient le refrain, un couplet, et la conclusion.</p>
-
             <p>
               Avez-vous remarqué qu’il manque quelque chose ? <b>Je n&apos;ai pas écrit les paroles du couplet ! </b> Et oui car c’est votre mission !{' '}
               <strong>

@@ -45,7 +45,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -63,7 +63,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
@@ -89,7 +89,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.MASCOTTE:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -117,7 +117,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.MASCOTTE:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -171,7 +171,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -189,7 +189,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
@@ -227,7 +227,7 @@ describe('Test function getActivityPhase', () => {
           switch (Number(type)) {
             case ActivityType.INDICE:
             case ActivityType.SYMBOL:
-            case ActivityType.VERSE_RECORD:
+            case ActivityType.CLASS_ANTHEM:
             case ActivityType.STORY:
             case ActivityType.RE_INVENT_STORY:
               expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
@@ -239,7 +239,7 @@ describe('Test function getActivityPhase', () => {
         switch (Number(type)) {
           case ActivityType.INDICE:
           case ActivityType.SYMBOL:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -268,7 +268,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.MASCOTTE:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -322,7 +322,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -340,7 +340,7 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.GAME:
           case ActivityType.REPORTAGE:
           case ActivityType.REACTION:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
@@ -378,7 +378,7 @@ describe('Test function getActivityPhase', () => {
           switch (Number(type)) {
             case ActivityType.INDICE:
             case ActivityType.SYMBOL:
-            case ActivityType.VERSE_RECORD:
+            case ActivityType.CLASS_ANTHEM:
             case ActivityType.STORY:
             case ActivityType.RE_INVENT_STORY:
               expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
@@ -390,7 +390,7 @@ describe('Test function getActivityPhase', () => {
         switch (Number(type)) {
           case ActivityType.INDICE:
           case ActivityType.SYMBOL:
-          case ActivityType.VERSE_RECORD:
+          case ActivityType.CLASS_ANTHEM:
           case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
@@ -415,7 +415,7 @@ describe('Test function getActivityPhase', () => {
             case ActivityType.MASCOTTE:
             case ActivityType.STORY:
             case ActivityType.RE_INVENT_STORY:
-            case ActivityType.VERSE_RECORD:
+            case ActivityType.CLASS_ANTHEM:
               expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
               break;
           }

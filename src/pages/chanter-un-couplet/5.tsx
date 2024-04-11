@@ -7,10 +7,11 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
@@ -19,14 +20,14 @@ const SongStep5 = () => {
   const router = useRouter();
   const { activity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
   const isEdit = activity !== null && activity.id !== 0 && activity.status !== ActivityStatus.DRAFT;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data?.customizedMix) {
+    if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
-    if (data !== null && (!data.verse || !data.slicedRecord)) {
+    if (data !== null && (!data.classRecordTrack.sampleUrl || !data.slicedRecordUrl)) {
       errors.push(3);
     }
 
@@ -91,7 +92,7 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {data?.customizedMix && <audio src={data?.customizedMix} controls style={{ width: '350px', height: '60px' }} />}
+            <AudioPlayer src={data.verseMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de votre couplet</p>
           </div>
 
@@ -125,7 +126,7 @@ const SongStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            {data.slicedRecord && <audio src={data.slicedRecord} controls style={{ width: '350px', height: '60px' }} />}
+            <AudioPlayer src={data.slicedRecordUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet (seulement votre voix)</p>
           </div>
 
@@ -138,7 +139,7 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            {data.verse && <audio src={data.verse} controls style={{ width: '350px', height: '60px' }} />}
+            <AudioPlayer src={data.verseFinalMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé à la mélodie</p>
           </div>
 

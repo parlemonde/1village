@@ -1,0 +1,56 @@
+.mainContainer{
+    width: 100%;
+    padding: .5rem 1rem 1rem 1rem;
+}
+
+.contentContainer {
+    margin: 0 auto 1rem auto;
+    width: 100%;
+    max-width: 900px;
+}
+
+.anthemLyricsContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.verseRecordTrack{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #666;
+}
+
+.verseRecordTrackInfos{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.verseRecordTrackControls > button {
+    margin-right: 6px;
+}
+
+.errorContainer{
+    color: #CA8621; 
+    font-weight: 500;
+}
+
+.draggableTrackContainer{
+    height: 200px;
+}
+
+.draggableTrackControls{
+    display: flex;
+    flex-direction: row;
+    width: 860px;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 1rem 0;
+}
+
+.draggableTrackControls button{
+    width: 160px;
+    margin-top: 1rem
+    
+}
