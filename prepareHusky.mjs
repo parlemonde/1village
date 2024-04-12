@@ -17,7 +17,7 @@ function checkHuskyFolder() {
     fs.writeFile(`${pathHuskyDir}/pre-push`, 'yarn pre-push', { ovewrite: true }, function (err) {
       if (err) throw err;
       // eslint-disable-next-line no-undef
-      console.log('Husky setup done!!');
+      console.log('Husky setup Ok!');
     });
   }
 }
