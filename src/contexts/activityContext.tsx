@@ -349,6 +349,10 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
           success: false,
         };
       }
+      if (activityRef.current.status === ActivityStatus.DRAFT && !publish) {
+        activityRef.current.publishDate = activityRef.current.updateDate;
+        return { success: true, activity: activityRef.current  };
+      }
       if (activityRef.current.status !== ActivityStatus.DRAFT && !publish) {
         return {
           success: false,
