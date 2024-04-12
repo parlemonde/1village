@@ -27,7 +27,7 @@
     "typeorm": "typeorm-ts-node-commonjs",
     "prepare": "husky",
     "pre-push": "yarn lint && yarn build",
-    "pre-commit": "echo 'Atomic commits are greats!'"
+    "pre-commit": "echo Atomic commits are greats!"
   },
   "husky": {
     "hooks": {
