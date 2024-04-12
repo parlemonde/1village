@@ -120,6 +120,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["geojson", "npm:0.5.0"],\
             ["helmet", "npm:5.1.1"],\
             ["html-to-draftjs", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.0"],\
+            ["husky", "npm:9.0.11"],\
             ["immutable", "npm:4.3.0"],\
             ["jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:28.1.1"],\
             ["json-stable-stringify", "npm:1.0.2"],\
@@ -267,6 +268,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["geojson", "npm:0.5.0"],\
             ["helmet", "npm:5.1.1"],\
             ["html-to-draftjs", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:1.5.0"],\
+            ["husky", "npm:9.0.11"],\
             ["immutable", "npm:4.3.0"],\
             ["jest", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:28.1.1"],\
             ["json-stable-stringify", "npm:1.0.2"],\
@@ -11943,6 +11945,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["humanize-ms", "npm:1.2.1"],\
             ["ms", "npm:2.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["husky", [\
+        ["npm:9.0.11", {\
+          "packageLocation": "./.yarn/cache/husky-npm-9.0.11-227bb1e4e4-1aebc3334d.zip/node_modules/husky/",\
+          "packageDependencies": [\
+            ["husky", "npm:9.0.11"]\
           ],\
           "linkType": "HARD"\
         }]\

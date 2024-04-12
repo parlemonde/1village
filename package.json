@@ -24,7 +24,16 @@
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
     "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
     "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "prepare": "husky",
+    "pre-push": "yarn lint && yarn build",
+    "pre-commit": "echo 'Atomic commits are greats!'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn pre-push", 
+      "pre-commit": "yarn pre-commit" 
+    }
   },
   "jest": {
     "testEnvironment": "node",
@@ -109,6 +118,7 @@
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "geojson": "0.5.0",
+    "husky": "^9.0.11",
     "jest": "28.1.1",
     "nodemon": "2.0.18",
     "prettier": "2.7.1",
