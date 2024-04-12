@@ -1,8 +1,7 @@
+import { Card, CircularProgress } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useQueryClient } from 'react-query';
-
-import { Card, CircularProgress } from '@mui/material';
 
 import { UserContext } from './userContext';
 import { VillageContext } from './villageContext';
@@ -351,7 +350,7 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
       }
       if (activityRef.current.status === ActivityStatus.DRAFT && !publish) {
         activityRef.current.publishDate = activityRef.current.updateDate;
-        return { success: true, activity: activityRef.current  };
+        return { success: true, activity: activityRef.current };
       }
       if (activityRef.current.status !== ActivityStatus.DRAFT && !publish) {
         return {
