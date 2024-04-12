@@ -31,8 +31,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn pre-push", 
-      "pre-commit": "yarn pre-commit" 
+      "pre-push": "yarn pre-push",
+      "pre-commit": "yarn pre-commit"
     }
   },
   "jest": {
