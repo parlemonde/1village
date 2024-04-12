@@ -26,14 +26,7 @@
     "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
     "typeorm": "typeorm-ts-node-commonjs",
     "prepare": "husky",
-    "pre-push": "yarn lint && yarn build",
-    "pre-commit": "echo Atomic commits are greats!"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn pre-push",
-      "pre-commit": "yarn pre-commit"
-    }
+    "pre-push": "yarn lint && yarn build"
   },
   "jest": {
     "testEnvironment": "node",
