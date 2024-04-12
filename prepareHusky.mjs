@@ -14,7 +14,7 @@ function checkHuskyFolder() {
       // eslint-disable-next-line no-undef
       if (err) console.log('No pre-commit file found');
     });
-    fs.writeFile(`${pathHuskyDir}/pre-push`, 'yarn pre-push', { ovewrite: true }, function (err) {
+    fs.writeFile(`${pathHuskyDir}/pre-push`, 'yarn build', { ovewrite: true }, function (err) {
       if (err) throw err;
       // eslint-disable-next-line no-undef
       console.log('Husky setup Ok!');

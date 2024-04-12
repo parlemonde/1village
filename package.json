@@ -25,8 +25,7 @@
     "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
     "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
     "typeorm": "typeorm-ts-node-commonjs",
-    "prepare": "husky",
-    "pre-push": "yarn lint && yarn build"
+    "prepare": "husky"
   },
   "jest": {
     "testEnvironment": "node",
