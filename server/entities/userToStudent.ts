@@ -1,5 +1,5 @@
 import type { EntityManager } from 'typeorm';
-import { BeforeInsert, Not, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn, BeforeRemove } from 'typeorm';
+import { Column, BeforeInsert, Not, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn, BeforeRemove } from 'typeorm';
 
 import { AppDataSource } from '../utils/data-source';
 import { Student } from './student';
@@ -14,9 +14,15 @@ export class UserToStudent {
   @JoinColumn({ name: 'userId' })
   public user: User;
 
+  @Column()
+  public userId: number;
+
   @ManyToOne(() => Student, (student) => student.userToStudents, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'studentId' })
   public student: Student;
+
+  @Column()
+  public studentId: number;
 
   @BeforeRemove()
   public async onBeforeRemove() {

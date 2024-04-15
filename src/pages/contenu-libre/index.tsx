@@ -43,5 +43,4 @@ const ContenuLibre = () => {
     </Base>
   );
 };
-
 export default ContenuLibre;

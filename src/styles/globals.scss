@@ -5,7 +5,7 @@ body {
   font-size: 1rem !important;
   color: $font-color !important;
   font-weight: 400 !important;
-  padding: 0 !important; 
+  padding: 0 !important;
   overflow: auto !important;
 }
 
@@ -47,14 +47,104 @@ label:hover {
 
 // NProgress bar
 body {
+  height: 100%;
+  #__next {
+    height: 100%;
+  }
   #nprogress .bar {
     z-index: 2000 !important;
     background-color: $primary-color !important;
     height: 1px;
   }
   &.admin {
+    background-color: #d9dbfe91;
     #nprogress .bar {
       background-color: white !important;
+    }
+    .container-navbar {
+      display: flex;
+      height: 50px;
+      padding: 0 50px;
+    }
+    .container-admin-nav ul {
+      & div.like-button:not(first-child),
+      a.like-button:not(first-child) {
+        margin-top: 18px;
+      }
+      & div.like-button:not(last-child),
+      a.like-button:not(last-child) {
+        margin-bottom: 18px;
+      }
+    }
+    .container-admin-portal {
+      padding: 0 50px !important;
+      min-height: 100vh;
+      @media screen and (min-width: 1600px) {
+        padding: 0 15% !important;
+      }
+      .container-admin-nav {
+        .MuiListItemText-root span {
+          font-weight: bold;
+        }
+        @media screen and (max-width: 792px) {
+          width: 100%;
+          height: auto;
+          margin-bottom: 20px;
+          padding: 15px !important;
+          .like-button.blue {
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .MuiListItemText-root {
+            text-align: left;
+          }
+          &.child-container {
+            margin: 0 !important;
+          }
+          ul {
+            padding: 0;
+          }
+        }
+      }
+
+      .content {
+        @media screen and (max-width: 792px) {
+          flex-direction: column;
+          margin-top: 20px !important;
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+    div.like-button,
+    a.like-button {
+      border-radius: 10px;
+      &.blue {
+        width: 266px;
+        height: 45px;
+        background: white;
+        border: 1px solid $primary-color;
+        color: $primary-color;
+
+        &.Mui-selected {
+          color: white;
+          background: $primary-color;
+          width: 300px;
+          svg,
+          path {
+            fill: white;
+          }
+        }
+      }
+      &.grey {
+        background: #f5f5f5;
+        span {
+          font-weight: bold;
+        }
+      }
+      @media screen and (max-width: 460px) {
+        width: 100% !important;
+      }
     }
   }
 }
@@ -256,6 +346,10 @@ a.text--success:hover {
   .MuiStepLabel-label.Mui-completed.Mui-error {
     color: $warning-color !important;
     font-weight: 500;
+  }
+  & div:first-child {
+    left: 0 !important;
+    right: 0 !important;
   }
 }
 

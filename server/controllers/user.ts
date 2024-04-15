@@ -4,9 +4,10 @@ import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
 import { In, IsNull, LessThan } from 'typeorm';
 
+import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
-import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
 import { FeatureFlag } from '../entities/featureFlag';
 import { Student } from '../entities/student';
@@ -58,7 +59,29 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
       user.mascotteId = mascottes[user.id] || undefined;
     }
   } else {
-    users = await AppDataSource.getRepository(User).find();
+    users = await AppDataSource.getRepository(User).find({
+      relations: {
+        userToStudents: true,
+      },
+    });
+    const studentsToSchool = (
+      await AppDataSource.getRepository(Classroom)
+        .createQueryBuilder('classroom')
+        .innerJoin('classroom.user', 'user')
+        .innerJoin(Student, 'student', 'classroom.id = student.classroomId')
+        .select('user.school', 'school')
+        .addSelect('student.id', 'studentId')
+        .getRawMany()
+    ).reduce<Record<number, string>>((acc, row) => {
+      acc[row.studentId] = row.school;
+      return acc;
+    }, {});
+    users.forEach((user) => {
+      if (user.type === UserType.FAMILY && !user.school && user.userToStudents.length > 0) {
+        const schools = [...new Set(user.userToStudents.map((userToStudent) => studentsToSchool[userToStudent.studentId]))];
+        user.school = schools.join(', ');
+      }
+    });
   }
   res.sendJSON(users);
 });

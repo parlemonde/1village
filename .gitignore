@@ -53,8 +53,7 @@ mariaDB
 .minio-data
 .postgres-data
 .mysql-data
-.env.*
-
+.dynamodb
 public/sw.js
 public/workbox-*.js
 
@@ -68,3 +67,5 @@ medias
 server/ffmpeg-audio-mixer
 
 *.http
+
+.husky/

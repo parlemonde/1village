@@ -9,7 +9,7 @@ import FormGroup from '@mui/material/FormGroup';
 
 import { primaryColor } from 'src/styles/variables.const';
 
-type Option<T> = {
+export type Option<T> = {
   key: number | string;
   label: string;
   value: T | 'all';

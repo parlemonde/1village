@@ -26,7 +26,7 @@ import {
 import type { SelectChangeEvent } from '@mui/material/Select';
 
 import { useFeatureFlags } from 'src/api/featureFlag/featureFlag.get';
-import { useUsers } from 'src/api/user/user.get';
+import { useUsers } from 'src/api/user/user.list';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import { FEATURE_FLAGS_NAMES } from 'types/featureFlag.constant';
 import type { User, UserType } from 'types/user.type';

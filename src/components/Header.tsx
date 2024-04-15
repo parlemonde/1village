@@ -218,13 +218,20 @@ export const Header = () => {
             {/* )} */}
             {user.type === UserType.ADMIN ||
               (user.type === UserType.SUPER_ADMIN ? (
-                <Link href="/admin/villages" passHref>
-                  <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                    {"Aller à l'interface Admin"}
+                <Link href="/admin/newportal/create" passHref>
+                  <Button
+                    component="a"
+                    href="/admin/newportal/create"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={{ marginLeft: '1rem' }}
+                  >
+                    {'Aller à la nouvelle interface admin'}
                   </Button>
                 </Link>
               ) : null)}
-            <div>
+            {/* <div>
               <IconButton
                 style={{ width: '40px', height: '40px', margin: '0 0.2rem' }}
                 aria-label="account of current user"
@@ -256,7 +263,7 @@ export const Header = () => {
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>
               </Menu>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
