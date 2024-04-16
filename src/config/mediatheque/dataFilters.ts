@@ -40,6 +40,6 @@ export const themeOfIndiceSymbolique = [
 
 export const themeOfDefi = ['Culinaire', 'Linguistique', 'Ecologique', 'Autre'];
 
-export const themeOfJeux = ['Jeu des expressions', 'Jeu de la monnaie', 'Jeu des expressions'];
+export const themeOfJeux = ['Jeu des mimiques', 'Jeu de la monnaie', 'Jeu des expressions'];
 
-export const themeOfEnigme = ['Evement mystère', 'Lieu mystère', 'Objet mystère', 'Personnalité mystère', 'autre'];
+export const themeOfEnigme = ['Evenement mystère', 'Lieu mystère', 'Objet mystère', 'Personnalité mystère', 'autre'];

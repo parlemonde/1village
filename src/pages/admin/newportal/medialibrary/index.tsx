@@ -41,17 +41,7 @@ const Mediatheque = () => {
         <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
         <div className="desktop-view">
           <div style={{ display: 'flex' }}>
-            {/* Ici je me dis que je peux gérer un composant
-            filtre qui s'appellerait FiltersActivities */}
-            <>
-              {/* Ce filtre gère les activités principales */}
-              {/* <Filters labels={activitiesLabel} placeholder="Activités" /> */}
-              {/* Ce filtre dépend de l'acitivité principales choisies */}
-              {/* <Filters labels={activitiesLabel} placeholder="Thèmes" /> */}
-            </>
             <FiltersActivities />
-            {/* Et ici un second composant qui s'appellerait 
-            FiltersUsers */}
             <>
               {/* Ce filtre gère les différents village monde */}
               <Filters labels={activitiesLabel} placeholder="VM" />
