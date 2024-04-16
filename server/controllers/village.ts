@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { UserType } from '../entities/user';
+import { UserType } from '../../types/user.type';
 import { Village } from '../entities/village';
 import { createVillagesFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';

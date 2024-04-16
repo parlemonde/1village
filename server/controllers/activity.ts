@@ -7,11 +7,11 @@ import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps 
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
+import { UserType } from '../../types/user.type';
+import { VillagePhase } from '../../types/village.type';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
-import { UserType } from '../entities/user';
-import { VillagePhase } from '../entities/village';
 import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';

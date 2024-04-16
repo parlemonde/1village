@@ -5,13 +5,15 @@ import type { FindOperator } from 'typeorm';
 import { In, IsNull, LessThan } from 'typeorm';
 
 import { ActivityStatus, ActivityType } from '../../types/activity.type';
+import { UserType } from '../../types/user.type';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+import { Country } from '../entities/country';
 import { FeatureFlag } from '../entities/featureFlag';
 import { Student } from '../entities/student';
-import { User, UserType } from '../entities/user';
+import { User } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
@@ -252,7 +254,10 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
   user.language = data.language || 'français';
   user.hasStudentLinked = data.hasStudentLinked || false;
-  user.countryCode = data.countryCode || '';
+  const countryFound = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: data.countryCode } });
+  if (countryFound) {
+    user.country = countryFound;
+  }
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
   if (user.type === UserType.TEACHER) {
     user.isVerified = true;
@@ -377,7 +382,10 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   user.postalCode = valueOrDefault(data.postalCode, user.postalCode);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
-  user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
+  const countryFound = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: data.countryCode } });
+  if (countryFound) {
+    user.country = countryFound;
+  }
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);

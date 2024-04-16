@@ -1,9 +1,9 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
-import { UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
