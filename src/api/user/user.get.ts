@@ -1,6 +1,7 @@
+import type { User } from 'server/entities/user';
+
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
-import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 export const getUser = async (userId: number) => {
@@ -34,7 +35,6 @@ export const getUserVisibilityFamilyParams = async (user: User) => {
       url: `/users/${user.id}/visibility-params`,
     });
     if (response.error) return null;
-    // console.log('User visibility params: ', response.data);
     return response.data;
   }
   return [];

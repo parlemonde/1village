@@ -61,6 +61,8 @@ const ANTHEM_PARAM: Tab = {
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
+  console.log('VILLAGE: ', village);
+
   const { user } = React.useContext(UserContext);
   const { parentClassroom } = React.useContext(ClassroomContext);
   //* NOTE: might be interesting to make a hook for this below
@@ -251,7 +253,8 @@ export const Navigation = (): JSX.Element => {
         >
           <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
           {village &&
-            village.countries.map((country: Country) => {
+            // village.countries.map((country: Country) => {
+            [].map((country: Country) => {
               if (user.type === UserType.FAMILY) {
                 return (
                   <Flag

@@ -16,7 +16,7 @@ const villageController = new Controller('/villages');
 
 //--- Get all villages ---
 villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
-  const villages = await AppDataSource.getRepository(Village).find();
+  const villages = await AppDataSource.getRepository(Village).find({ relations: { countries: true } });
   res.sendJSON(villages);
 });
 
@@ -27,7 +27,8 @@ villageController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (re
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const village = await AppDataSource.getRepository(Village).findOne({ where: { id } });
+  const village = await AppDataSource.getRepository(Village).findOne({ where: { id }, relations: { countries: true } });
+
   if (!village || (req.user.type === UserType.TEACHER && req.user.villageId !== village.id)) {
     next();
     return;
@@ -94,12 +95,16 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const village = await AppDataSource.getRepository(Village).findOne({ where: { id } });
+  const village = await AppDataSource.getRepository(Village).findOne({
+    where: { id },
+    relations: {
+      countries: true,
+    },
+  });
   if (!village) {
     next();
     return;
   }
-
   village.name = valueOrDefault(data.name, village.name);
   village.activePhase = valueOrDefault(data.activePhase, village.activePhase);
   village.anthemId = valueOrDefault(data.anthemId, village.anthemId);

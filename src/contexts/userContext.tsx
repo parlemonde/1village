@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
+import type { User } from 'server/entities/user';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Student } from 'types/student.type';
-import type { User, UserForm } from 'types/user.type';
+import type { UserForm } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 type UserContextFunc = Promise<{ success: boolean; errorCode: number }>;
@@ -339,10 +340,6 @@ export const UserContextProvider = ({ user, setUser, children }: React.PropsWith
     },
     [user],
   );
-
-  useEffect(() => {
-    // console.log('user===', user);
-  }, [user]);
 
   const value = React.useMemo(
     () => ({
