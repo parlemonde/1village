@@ -58,6 +58,20 @@ const activityNumberMapper = {
   'Réinventer une histoire': 14,
 };
 
+// const Subtypemapper = {
+//   0 : {
+//     [activityNumberMapper.Couplet]: 'toto',
+//     [activityNumberMapper.Hymne]: 'tata',
+//   },
+//   2:{
+//     [activityNumberMapper.Mascotte]:'Lieux de vies',
+//     [activityNumberMapper.Couplet]:'Fleur nationale',
+//   }
+// }
+
+// sekectionné couplet et mascotte activité
+// Fleur Nationnale en subtype[]
+
 const subThemeNumberMapper = {
   Paysages: 0,
   Arts: 1,
@@ -87,6 +101,21 @@ const subThemeNumberMapper = {
   'Objet mystère': 2,
   'Personnalité mystère': 3,
 };
+// ceci est un exemple
+// const labelValueMapper = {
+//   'Lieu mystère': {
+//     type: 2,
+//     subType: 2,
+//   },
+//   'Personnalité mystère': {
+//     type: 2,
+//     subType: 3,
+//   },
+//   'Objet mystère': {
+//     type: 3,
+//     subType: 1,
+//   },
+// };
 
 export default function FiltersActivities() {
   const theme = useTheme();

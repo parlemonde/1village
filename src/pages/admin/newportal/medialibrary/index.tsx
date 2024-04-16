@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 // Tout doit être responsive
 
@@ -27,13 +27,49 @@ import type { Filter } from 'types/mediatheque.type';
 
 const Mediatheque = () => {
   const offset = 0;
-  const filters: Filter[] = [
-    { table: 'activity', column: 'type', value: 2 },
-    { table: 'activity', column: 'subType', value: 2 },
+  const filters: Array<Filter[]> = [
+    [
+      { table: 'activity', column: 'type', values: [2] },
+      { table: 'activity', column: 'subType', values: [2,3] },
+    ],
+    [
+      { table: 'activity', column: 'type', values: [3] },
+      { table: 'activity', column: 'subType', values: [1, 2] },
+    ],
   ];
 
   // to use
   const { data: filtered } = useGetMediatheque(offset, filters);
+
+ /* const [currentVillage, setCurrentVillage] = useState(null)
+  const [currentCountry, setCurrentCountry] = useState(null)
+  const [currentClass, setCurrentClass] = useState(null)
+
+  const [VMList, setVMList] = useState([]);
+  const [countrylist, setCountrylist] = useState([]);
+  const [classList, classList] = useState([]);
+
+  const updateCountryList = useCallBack(async () => {
+    // chercher la liste des pays en fonctions de VMList
+    const res = []; // resultat
+    setCountrylist(res)
+  }, [currentVillage, VMList]);
+
+  const updateClassList = useCallback(async () => {
+    // chercher la liste des class en fonctions de countryList
+    const res = []; // resultat
+    setClassList(res);
+  }, [currentCountry, countryList, setClassList])
+
+  useEffect(() => {
+    updateCountryList();
+  },[currentVillage, updateCountryList, VMlist])
+
+  useEffect(() => {
+    updateClassList();
+  },[currentCountry, updateClassList, countrylist]) */
+
+  
 
   return (
     <>
@@ -43,11 +79,11 @@ const Mediatheque = () => {
           <div style={{ display: 'flex' }}>
             <FiltersActivities />
             <>
-              {/* Ce filtre gère les différents village monde */}
+              {/* Ce filtre gère les différents village monde VMList */}
               <Filters labels={activitiesLabel} placeholder="VM" />
-              {/* Ce filtre dépend du village monde choisi */}
+              {/* Ce filtre dépend du village monde choisi countryList */}
               <Filters labels={activitiesLabel} placeholder="Pays" />
-              {/* Ce filtre dépend du pays choisi et du village monde */}
+              {/* Ce filtre dépend du pays choisi et du village monde classList */}
               <Filters labels={activitiesLabel} placeholder="Classes" />
             </>
 
