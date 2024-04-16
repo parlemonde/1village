@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 
-import { UserType } from '../entities/user';
+import { UserType } from '../../types/user.type';
 import { streamFile } from '../fileUpload/streamFile';
 import { Controller } from './controller';
 

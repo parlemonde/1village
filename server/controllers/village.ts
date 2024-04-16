@@ -1,7 +1,9 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
+import { In } from 'typeorm';
 
 import { UserType } from '../../types/user.type';
+import { Country } from '../entities/country';
 import { Village } from '../entities/village';
 import { createVillagesFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -56,7 +58,12 @@ villageController.post({ path: '', userType: UserType.ADMIN }, async (req: Reque
   }
   const village = new Village();
   village.name = data.name;
-  village.countryCodes = data.countries;
+  const countries = await AppDataSource.getRepository(Country).find({
+    where: { isoCode: In(data.countries) },
+  });
+  if (countries.length) {
+    village.countries = countries;
+  }
   await AppDataSource.getRepository(Village).save(village);
   res.sendJSON(village);
 });
@@ -94,10 +101,15 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
   }
 
   village.name = valueOrDefault(data.name, village.name);
-  village.countryCodes = valueOrDefault(data.countries, village.countryCodes);
   village.activePhase = valueOrDefault(data.activePhase, village.activePhase);
   village.anthemId = valueOrDefault(data.anthemId, village.anthemId);
 
+  const countries = await AppDataSource.getRepository(Country).find({
+    where: { isoCode: In(data.countries ?? village.countries.map((country) => country.isoCode)) },
+  });
+  if (countries.length) {
+    village.countries = countries;
+  }
   await AppDataSource.getRepository(Village).save(village);
   res.sendJSON(village);
 });

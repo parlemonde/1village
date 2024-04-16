@@ -1,4 +1,4 @@
-import { UserType } from '../entities/user';
+import { UserType } from '../../types/user.type';
 import { countries } from '../utils/iso-3166-countries-french';
 import { Controller } from './controller';
 

@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 
+import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
-import { UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';

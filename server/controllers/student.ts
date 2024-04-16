@@ -1,8 +1,9 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { UserType } from '../../types/user.type';
 import { Student } from '../entities/student';
-import { User, UserType } from '../entities/user';
+import { User } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
