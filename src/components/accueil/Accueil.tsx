@@ -24,7 +24,6 @@ export const Accueil = () => {
 
   //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(() => {
-    //const
     return !village || (selectedPhase === 1 && !isMediator)
       ? user && user.country !== null
         ? [user?.country?.isoCode.toUpperCase()]

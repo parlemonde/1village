@@ -1,8 +1,8 @@
 import { In } from 'typeorm';
 
+import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
-import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 
 type ActivityGetter = {

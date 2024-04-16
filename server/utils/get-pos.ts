@@ -38,8 +38,8 @@ export async function setUserPosition(user: User): Promise<void> {
 
   const pos =
     (await getPosition({ q: query })) ||
-    (await getPosition({ city: user.city, country: user.country?.name })) ||
-    (await getPosition({ country: user.country?.name }));
+    (await getPosition({ city: user.city, country: user.country?.name ?? 'France' })) ||
+    (await getPosition({ country: user.country?.name ?? 'France' }));
   if (pos !== null) {
     user.position = pos;
     return;

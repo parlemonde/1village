@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { UserType } from '../entities/user';
+import { UserType } from '../../types/user.type';
 import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 
