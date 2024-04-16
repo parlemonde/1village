@@ -1,10 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
-import type { Country } from '../../types/country.type';
 import { UserType } from '../../types/user.type';
-import type { User as UserInterface } from '../../types/user.type';
-import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { Country } from './country';
 import { FeatureFlag } from './featureFlag';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
@@ -12,10 +10,8 @@ import { Image } from './image';
 import { UserToStudent } from './userToStudent';
 import { Village } from './village';
 
-export { UserType };
-
 @Entity()
-export class User implements UserInterface {
+export class User {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -82,14 +78,11 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   public villageId: number | null;
 
-  @Column({ type: 'varchar', length: 2, nullable: true })
-  set countryCode(newCountryCode: string) {
-    this.country = countriesMap[newCountryCode] || countriesMap['FR'];
-  }
+  @OneToMany(() => Country, (country: Country) => country)
   get countryCode() {
     return this.country?.isoCode;
   }
-  public country: Country;
+  public country: Country | null;
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
   set positionLat(newLat: string) {
