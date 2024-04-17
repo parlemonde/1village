@@ -35,9 +35,10 @@ interface StepsProps {
   urls?: string[];
   activeStep?: number;
   errorSteps?: number[];
+  onBeforeLeavePage?: () => Promise<void>;
 }
 
-export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsProps) => {
+export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [], onBeforeLeavePage }: StepsProps) => {
   const router = useRouter();
   const { save } = React.useContext(ActivityContext);
 
@@ -66,7 +67,10 @@ export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsPro
               StepIconProps={{
                 onClick:
                   urls !== undefined && urls.length > index
-                    ? () => {
+                    ? async () => {
+                        if (onBeforeLeavePage !== undefined) {
+                          await onBeforeLeavePage();
+                        }
                         save().catch(console.error);
                         router.push(urls[index]);
                       }

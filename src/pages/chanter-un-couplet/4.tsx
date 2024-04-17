@@ -9,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
 import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
+import { postMixAudio } from 'src/api/audio/audio-mix.post';
+import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -21,6 +23,8 @@ import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
 import { toTime } from 'src/utils/toTime';
+import { ActivityStatus } from 'types/activity.type';
+import { TrackType } from 'types/anthem.type';
 
 const SongStep4 = () => {
   const router = useRouter();
@@ -69,12 +73,30 @@ const SongStep4 = () => {
     );
   }
 
-  const onNext = () => {
+  const buildFinalMix = async () => {
+    // -- clean previous mix
+    if (data.verseFinalMixUrl && activity?.status === ActivityStatus.DRAFT) {
+      await deleteAudio(data.verseFinalMixUrl).catch(console.error);
+    }
+
+    const tracks = data.anthemTracks.filter((t) => t.sampleUrl !== '');
+
+    if (data.classRecordTrack.sampleUrl) {
+      const verseTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
+      const verseFinalMixUrl = await postMixAudio([...verseTracks, data.classRecordTrack]);
+      updateActivity({ data: { ...data, verseFinalMixUrl } });
+    } else {
+      updateActivity({ data: { ...data, verseFinalMixUrl: '' } });
+    }
+  };
+
+  const onNext = async () => {
     if (verseMixAudio && verseRecordAudio) {
       verseMixAudio.pause();
       verseRecordAudio.pause();
     }
     setIsLoading(true);
+    await buildFinalMix();
     save().catch(console.error);
     setIsLoading(false);
     router.push('/chanter-un-couplet/5');
@@ -135,7 +157,8 @@ const SongStep4 = () => {
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={3}
           errorSteps={errorSteps}
-          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          onBeforeLeavePage={buildFinalMix}
         />
         <div className={styles.contentContainer}>
           <h1>Synchronisez votre voix sur l&apos;hymne</h1>
@@ -219,14 +242,21 @@ const SongStep4 = () => {
                     icon={musicIcon}
                     handleVolumeChange={(volume) => {
                       verseMixAudio.volume = volume / 10;
-                      const tempClassRecordTrack = { ...data.classRecordTrack, sampleVolume: volume };
-                      updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
+                      // TODO
+                      // const tempClassRecordTrack = { ...data.classRecordTrack, sampleVolume: volume };
+                      // updateActivity({ data: { ...data, classRecordTrack: tempClassRecordTrack } });
                     }}
                   />
                 </div>
                 <div>
                   <p>Régler le volume des voix</p>
-                  <VolumeControl icon={microIcon} handleVolumeChange={(value) => (verseRecordAudio.volume = value / 10)} />
+                  <VolumeControl
+                    icon={microIcon}
+                    handleVolumeChange={(value) => {
+                      verseRecordAudio.volume = value / 10;
+                      // TODO
+                    }}
+                  />
                 </div>
 
                 <div>

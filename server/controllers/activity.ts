@@ -4,13 +4,10 @@ import { IsNull } from 'typeorm';
 
 import type { ActivityContent, AnyData } from '../../types/activity.type';
 import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
-import type { Track } from '../../types/anthem.type';
-import { TrackType } from '../../types/anthem.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
-import { buildAudioMix } from '../audioMix/buildAudioMix';
-import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
+import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
@@ -202,26 +199,6 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
   }
 
-  if (data.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const tracks = (data.data.anthemTracks as Track[]).filter((t) => t.sampleUrl !== '');
-    const verseTracks = tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
-    const intro = (data.data.anthemTracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
-
-    data.data.verseMixWithVocalsUrl = buildAudioMix(req.user.id, verseTracks);
-
-    data.data.verseMixUrl = buildAudioMix(
-      req.user.id,
-      verseTracks.filter((t) => t.type !== TrackType.VOCALS),
-    );
-
-    data.data.verseMixWithIntroUrl = buildAudioMix(
-      req.user.id,
-      tracks
-        .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
-        .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
-    );
-  }
-
   // Delete old draft if needed.
   if (data.status === ActivityStatus.PUBLISHED || data.status === ActivityStatus.DRAFT) {
     await AppDataSource.getRepository(Activity).delete({
@@ -334,41 +311,6 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     return;
   }
 
-  // Check if we need to build the audio mix for the anthem
-  if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areAnthemTracksNew(data.data, activity.data)) {
-    const verseTracks = (data.data.tracks as Track[]).filter(
-      (t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO && t.sampleUrl !== '',
-    );
-    data.data.mixUrl = verseTracks.length > 0 ? buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
-
-    const intro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
-    const outro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
-    const fullTracks = [];
-    if (intro && intro.sampleUrl) {
-      fullTracks.push(intro);
-      fullTracks.push(...verseTracks.map((t) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
-    } else {
-      fullTracks.push(...verseTracks);
-    }
-    if (outro && outro.sampleUrl) {
-      fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
-    }
-    data.data.fullMixUrl = fullTracks.length > 0 ? buildAudioMix(activity.userId, fullTracks) : ''; // with intro and outro
-  }
-
-  // Check if we need to build the audio mix for the class verse
-  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const tracks = (data.data.anthemTracks as Track[]).filter((t) => t.sampleUrl !== '');
-
-    if ((data.data.classRecordTrack as Track).sampleUrl) {
-      const fullTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
-      fullTracks.push(data.data.classRecordTrack as Track);
-
-      data.data.verseFinalMixUrl = buildAudioMix(activity.userId, fullTracks);
-      data.data.slicedRecordUrl = buildAudioMix(activity.userId, [data.data.classRecordTrack as Track, data.data.classRecordTrack as Track]);
-    }
-  }
-
   if (activity.status !== ActivityStatus.PUBLISHED) {
     if (data.phase) activity.phase = data.phase;
     if (data.phaseStep) {
@@ -458,32 +400,6 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
-
-const areAnthemTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
-  const oldTracks = oldData.tracks as Track[]; // A changer
-  const newTracks = newData.tracks as Track[]; // A changer
-
-  const oldTracksMap = oldTracks.reduce<Record<string, { sampleStartTime?: number; sampleVolume?: number }>>((acc, track) => {
-    if (track.sampleUrl) {
-      acc[track.sampleUrl] = {
-        sampleStartTime: track.sampleStartTime,
-        sampleVolume: track.sampleVolume,
-      };
-    }
-    return acc;
-  }, {});
-  const newTracksMap = newTracks.reduce<Record<string, { sampleStartTime?: number; sampleVolume?: number }>>((acc, track) => {
-    if (track.sampleUrl) {
-      acc[track.sampleUrl] = {
-        sampleStartTime: track.sampleStartTime,
-        sampleVolume: track.sampleVolume,
-      };
-    }
-    return acc;
-  }, {});
-
-  return JSON.stringify(oldTracksMap) !== JSON.stringify(newTracksMap);
-};
 
 // --- create a game ---
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {

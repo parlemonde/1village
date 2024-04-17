@@ -5,6 +5,8 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from '../../styles/parametrer-hymne.module.css';
+import { postMixAudio } from 'src/api/audio/audio-mix.post';
+import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -16,6 +18,7 @@ import Vocal from 'src/svg/anthem/vocal.svg';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import instruments from 'src/utils/instruments';
 import { toTime } from 'src/utils/toTime';
+import { ActivityStatus } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { AnthemData, Track } from 'types/anthem.type';
 
@@ -33,8 +36,35 @@ const AnthemStep2 = () => {
     return [];
   }, [data]);
 
+  const buildFullMixUrl = async () => {
+    // -- clean previous mix
+    if (data.fullMixUrl && activity?.status === ActivityStatus.DRAFT) {
+      await deleteAudio(data.fullMixUrl).catch(console.error);
+    }
+
+    const verseTracks = data.tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO && t.sampleUrl !== '');
+    const intro = data.tracks.find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
+    const outro = data.tracks.find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
+    const fullTracks = [];
+    if (intro && intro.sampleUrl) {
+      fullTracks.push(intro);
+      fullTracks.push(...verseTracks.map((t) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
+    } else {
+      fullTracks.push(...verseTracks);
+    }
+    if (outro && outro.sampleUrl) {
+      fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
+    }
+    const fullMixUrl = fullTracks.length > 0 ? await postMixAudio(fullTracks) : '';
+    updateActivity({ data: { ...data, fullMixUrl } });
+  };
+
   const onNext = async () => {
     setIsLoading(true);
+    // [1] Build the full url
+    await buildFullMixUrl();
+
+    // [2] Update the activity
     save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/3');
@@ -67,6 +97,7 @@ const AnthemStep2 = () => {
           errorSteps={errorSteps}
           activeStep={1}
           urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+          onBeforeLeavePage={buildFullMixUrl}
         />
         <div className={styles.contentContainer}>
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>

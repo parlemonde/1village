@@ -6,6 +6,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
 import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
+import { postMixAudio } from 'src/api/audio/audio-mix.post';
+import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -13,6 +15,7 @@ import type { AudioMixerTrack } from 'src/components/audio/AudioMixer/AudioMixer
 import AudioMixer from 'src/components/audio/AudioMixer/AudioMixer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
+import { ActivityStatus } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { Track } from 'types/anthem.type';
 
@@ -47,10 +50,71 @@ const SongStep1 = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTracks]);
 
+  const buildVerseUrl = async () => {
+    // -- clean previous mix if draft
+    if (activity?.status === ActivityStatus.DRAFT) {
+      if (data.verseMixUrl) {
+        await deleteAudio(data.verseMixUrl).catch(console.error);
+      }
+      if (data.verseMixWithVocalsUrl) {
+        await deleteAudio(data.verseMixWithVocalsUrl).catch(console.error);
+      }
+      if (data.verseMixWithIntroUrl) {
+        await deleteAudio(data.verseMixWithIntroUrl).catch(console.error);
+      }
+      if (data.verseFinalMixUrl) {
+        await deleteAudio(data.verseFinalMixUrl).catch(console.error);
+      }
+    }
+
+    const tracks = data.anthemTracks.filter((t) => t.sampleUrl !== '');
+
+    // [1] Mix the verse
+    const verseTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
+    const verseMixUrl = verseTracks.length > 0 ? await postMixAudio(verseTracks) : '';
+
+    // [2] Mix the verse with vocals
+    const vocals = tracks.find((t) => t.type === TrackType.VOCALS);
+    let verseMixWithVocalsUrl: string;
+    if (vocals) {
+      const verseWithVocalsTracks = [vocals, ...verseTracks];
+      verseMixWithVocalsUrl = await postMixAudio(verseWithVocalsTracks);
+    } else {
+      verseMixWithVocalsUrl = verseMixUrl;
+    }
+
+    // [3] Mix the verse with intro
+    const intro = tracks.find((t) => t.type === TrackType.INTRO_CHORUS);
+    let verseMixWithIntroUrl: string;
+    if (intro) {
+      const verseWithIntroTracks = [
+        intro,
+        ...verseTracks.map((t) => ({
+          ...t,
+          sampleStartTime: intro.sampleDuration,
+        })),
+      ];
+      verseMixWithIntroUrl = await postMixAudio(verseWithIntroTracks);
+    } else {
+      verseMixWithIntroUrl = verseMixUrl;
+    }
+
+    // [4] Mix the final verse if the class already recorded it
+    let verseFinalMixUrl;
+    if (data.classRecordTrack.sampleUrl) {
+      verseFinalMixUrl = await postMixAudio([...verseTracks, data.classRecordTrack]);
+    } else {
+      verseFinalMixUrl = '';
+    }
+
+    updateActivity({ data: { ...data, verseMixUrl, verseMixWithVocalsUrl, verseMixWithIntroUrl, verseFinalMixUrl } });
+  };
+
   const onNext = async () => {
     if (mixerRef.current) mixerRef.current.stopMixer();
     setIsLoading(true);
-    await save();
+    await buildVerseUrl();
+    save().catch(console.error);
     setIsLoading(false);
     router.push('/chanter-un-couplet/2');
   };
@@ -77,6 +141,7 @@ const SongStep1 = () => {
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={0}
           urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          onBeforeLeavePage={buildVerseUrl}
         />
         <div className={styles.contentContainer}>
           <h1>Mixez votre couplet</h1>

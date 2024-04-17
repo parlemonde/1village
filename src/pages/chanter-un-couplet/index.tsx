@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AudioPlayer } from 'src/components/audio/AudioPlayer';
@@ -62,17 +63,17 @@ const Anthem = () => {
       sampleVolume: 0.5,
     } as Track;
 
-    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
+    const newData: ClassAnthemData = {
       anthemTracks: tracks,
       classRecordTrack: classRecordTrack,
-      slicedRecordUrl: '',
       verseMixUrl: '',
       verseMixWithIntroUrl: '',
       verseMixWithVocalsUrl: '',
-      verseMixWithLyricsUrl: '',
+      verseFinalMixUrl: '',
       verseLyrics: verseLyrics,
       chorusLyrics: chorusLyrics,
-    });
+    };
+    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, newData);
     router.push('/chanter-un-couplet/1');
   };
   if (!anthemActivityData) {
