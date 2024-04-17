@@ -4,7 +4,7 @@ export enum VillagePhase {
   DISCOVER = 1,
   EXCHANGE = 2,
   IMAGINE = 3,
-};
+}
 
 export interface Village {
   id: number;

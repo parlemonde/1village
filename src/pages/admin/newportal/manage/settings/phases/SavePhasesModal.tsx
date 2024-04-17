@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
 import { Modal } from 'src/components/Modal';
-import { VillagePhase, Village } from 'types/village.type';
+import type { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
   villagePhases: [{ [villageId: number]: VillagePhase }];
@@ -8,25 +9,37 @@ interface SavePhasesModalProps {
   setIsModalOpen: (val: boolean) => void;
 }
 
-export const SavePhasesModal = ({ villagePhases, isModalOpen, setIsModalOpen}: SavePhasesModalProps) => {
-  
+export const SavePhasesModal = ({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) => {
   const [isModalLoading, setIsModalLoading] = useState(false);
-  
+
   return (
     <Modal
       open={isModalOpen}
-      fullWidth
-      noCloseOutsideModal
-      maxWidth="md"
+      noCloseButton={true}
+      maxWidth="sm"
       title="Es-tu sûr ?"
-      onConfirm={async () => {console.log('États des checkboxes :', villagePhases)}}
-      onClose={() => { setIsModalOpen(false); } }
+      onConfirm={async () => {
+        setIsModalLoading(true);
+        // Code pour passer le linter
+        for (const key in villagePhases) {
+          if (key == '1') {
+            villagePhases[key] = 1;
+          }
+        }
+        // Await -> appel API Put Villages
+        setIsModalLoading(false);
+        setIsModalOpen(false);
+      }}
+      onClose={() => {
+        setIsModalOpen(false);
+      }}
       loading={isModalLoading}
       cancelLabel="Annuler"
       confirmLabel="Enregistrer"
+      color="primary"
     >
       <div id="brouillon-desc" style={{ padding: '0.5rem' }}>
-        <p>Les modifications que tu souhaites apporter vont modifier les phases actives</p>
+        <p>Les modifications que tu souhaites apporter vont modifier les phases actives.</p>
       </div>
     </Modal>
   );
