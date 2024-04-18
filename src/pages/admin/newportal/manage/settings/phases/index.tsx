@@ -13,7 +13,7 @@ import TableRow from '@mui/material/TableRow';
 
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { UserContext } from 'src/contexts/userContext';
-import { SavePhasesModal } from 'src/pages/admin/newportal/manage/settings/phases/SavePhasesModal.tsx';
+import { SavePhasesModal } from './SavePhasesModal';
 import { primaryColor } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { UserType } from 'types/user.type';
