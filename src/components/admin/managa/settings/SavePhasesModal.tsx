@@ -9,7 +9,7 @@ interface SavePhasesModalProps {
   setIsModalOpen: (val: boolean) => void;
 }
 
-export const SavePhasesModal = ({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) => {
+export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
   const [isModalLoading, setIsModalLoading] = useState(false);
 
   return (

@@ -1,19 +1,11 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import { Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import { useGetVillages } from 'src/api/villages/villages.get';
 import { UserContext } from 'src/contexts/userContext';
-import { SavePhasesModal } from './SavePhasesModal';
+import { SavePhasesModal } from 'src/components/admin/managa/settings/SavePhasesModal';
 import { primaryColor } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { UserType } from 'types/user.type';
