@@ -23,7 +23,7 @@ import { VillagePhase } from 'types/village.type';
 const Phases = () => {
   const { user } = React.useContext(UserContext);
   const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
-  const [villagePhases, setVillagePhases] = useState<[{ [villageId: number]: VillagePhase }]>([]);
+  const [villagePhases, setVillagePhases] = useState<{ [villageId: number]: VillagePhase }>({});
   const villages = useGetVillages();
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
 

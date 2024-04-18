@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 import { Modal } from 'src/components/Modal';
-import type { VillagePhase } from 'types/village.type';
+import { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
-  villagePhases: [{ [villageId: number]: VillagePhase }];
+  villagePhases: { [villageId: number]: VillagePhase };
   isModalOpen: boolean;
   setIsModalOpen: (val: boolean) => void;
 }
@@ -23,7 +23,7 @@ export const SavePhasesModal = ({ villagePhases, isModalOpen, setIsModalOpen }: 
         // Code pour passer le linter
         for (const key in villagePhases) {
           if (key == '1') {
-            villagePhases[key] = 1;
+            villagePhases[key] = VillagePhase.DISCOVER;
           }
         }
         // Await -> appel API Put Villages
