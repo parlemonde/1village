@@ -36,11 +36,18 @@ const Phases = () => {
   if (villages.isLoading || villages.isIdle) return <p>Loading...</p>;
 
   // Fonction pour gérer le changement d'état de la case à cocher
-  const handleCheckboxChange = (villageId: number, phase: VillagePhase) => {
-    setVillagePhases((prevState) => ({
-      ...prevState,
-      [villageId]: phase,
-    }));
+  const handleCheckboxChange = (villageId: number, phase: VillagePhase, checked: boolean) => {
+    if (phase === VillagePhase.EXCHANGE || phase === VillagePhase.IMAGINE) {
+      setVillagePhases((prevState) => ({
+        ...prevState,
+        [villageId]: checked ? phase : phase - 1,
+      }));
+    } else {
+      setVillagePhases((prevState) => ({
+        ...prevState,
+        [villageId]: 1,
+      }));
+    }
   };
 
   const handleHeaderCheckboxChange = (phase: VillagePhase) => {
@@ -99,13 +106,7 @@ const Phases = () => {
               >
                 <TableRow>
                   <TableCell align="center">Village-Monde</TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.DISCOVER)}
-                      onChange={() => handleHeaderCheckboxChange(VillagePhase.DISCOVER)}
-                    />
-                    Phase 1
-                  </TableCell>
+                  <TableCell align="left">Phase 1</TableCell>
                   <TableCell align="left">
                     <Checkbox
                       checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.EXCHANGE)}
@@ -129,8 +130,8 @@ const Phases = () => {
                     {[1, 2, 3].map((phase) => (
                       <TableCell align="left" key={phase}>
                         <Checkbox
-                          checked={villagePhases[village.id] === phase ? true : false}
-                          onChange={() => handleCheckboxChange(village.id, phase)}
+                          checked={villagePhases[village.id] >= phase ? true : false}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(village.id, phase, event.target.checked)}
                         />
                       </TableCell>
                     ))}
