@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import { useGetVillages } from 'src/api/villages/villages.get';
-import { UserContext } from 'src/contexts/userContext';
 import { SavePhasesModal } from 'src/components/admin/managa/settings/SavePhasesModal';
+import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
 import { UserType } from 'types/user.type';

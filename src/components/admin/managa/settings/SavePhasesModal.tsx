@@ -45,4 +45,4 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       </div>
     </Modal>
   );
-};
+}
