@@ -37,6 +37,8 @@ export const SavePhasesModal = ({ villagePhases, isModalOpen, setIsModalOpen }: 
       cancelLabel="Annuler"
       confirmLabel="Enregistrer"
       color="primary"
+      ariaLabelledBy="phaseModal"
+      ariaDescribedBy="Modal de validation des phases"
     >
       <div id="brouillon-desc" style={{ padding: '0.5rem' }}>
         <p>Les modifications que tu souhaites apporter vont modifier les phases actives.</p>
