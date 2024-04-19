@@ -394,7 +394,8 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   }
   if (data.position) {
-    user.position = data.position;
+    user.positionLat = data.position.lat;
+    user.positionLon = data.position.lng;
   }
   if (data.villageId) {
     if (user.type === UserType.TEACHER) {

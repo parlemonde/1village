@@ -70,8 +70,8 @@ async function createSuperAdminUser(): Promise<void> {
   user.accountRegistration = 0;
   const frCountry = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: 'FR' } });
   if (frCountry) user.country = frCountry;
-  user.positionLat = '0';
-  user.positionLon = '0';
+  user.positionLat = 0;
+  user.positionLon = 0;
   await AppDataSource.getRepository(User).save(user);
   logger.info('Super user Admin created!');
 }

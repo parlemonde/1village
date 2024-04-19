@@ -24,14 +24,11 @@ export const Accueil = () => {
 
   //TODO: redo conditions and switchs
   const filterCountries = React.useMemo(() => {
-    console.log(selectedPhase, village, user, isMediator);
-
-    return [];
-    // return !village || (selectedPhase === 1 && !isMediator)
-    //   ? user && user.country !== null
-    //     ? [user?.country?.isoCode.toUpperCase()]
-    //     : []
-    //   : village.countries.map((c) => c.isoCode);
+    return !village || (selectedPhase === 1 && !isMediator)
+      ? user && user.country !== null
+        ? [user?.country?.isoCode.toUpperCase()]
+        : []
+      : village.countries.map((c) => c.isoCode);
   }, [selectedPhase, village, user, isMediator]);
 
   //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts

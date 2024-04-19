@@ -93,7 +93,8 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.passwordHash = '';
   user.verificationHash = '';
   user.accountRegistration = 10;
-  user.position = { lat: 0, lng: 0 };
+  user.positionLat = 0;
+  user.positionLon = 0;
 
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);

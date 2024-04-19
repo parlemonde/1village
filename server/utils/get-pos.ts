@@ -41,7 +41,8 @@ export async function setUserPosition(user: User): Promise<void> {
     (await getPosition({ city: user.city, country: user.country?.name ?? 'France' })) ||
     (await getPosition({ country: user.country?.name ?? 'France' }));
   if (pos !== null) {
-    user.position = pos;
+    user.positionLat = pos.lat;
+    user.positionLon = pos.lng;
     return;
   }
 }
