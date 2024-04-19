@@ -79,9 +79,6 @@ export class User {
   public villageId: number | null;
 
   @OneToMany(() => Country, (country: Country) => country)
-  get countryCode() {
-    return this.country?.isoCode;
-  }
   public country: Country | null;
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })

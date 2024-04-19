@@ -41,6 +41,7 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         { villageId: IsNull(), type: LessThan(`${UserType.TEACHER}`) as FindOperator<any> },
       ],
+      relations: { country: true },
     });
     const ids = users.map((u) => u.id);
     const mascottes = (
@@ -64,6 +65,7 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
     users = await AppDataSource.getRepository(User).find({
       relations: {
         userToStudents: true,
+        country: true,
       },
     });
     const studentsToSchool = (
@@ -89,8 +91,9 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
 });
 
 // --- Get one user. ---
-userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
+
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
@@ -131,7 +134,8 @@ userController.get({ path: '/pseudo/:pseudo' }, async (req: Request, res: Respon
     res.sendJSON({ available: true });
   }
   res.sendJSON({
-    available: (await AppDataSource.getRepository(User).count({ where: { pseudo } })) === 0,
+    relations: { country: true },
+    available: (await AppDataSource.getRepository(User).count({ where: { pseudo }, relations: { country: true } })) === 0,
   });
 });
 
@@ -846,7 +850,7 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.OBSERVATOR }
       firstname: student.firstname,
       lastname: student.lastname,
       classroom: {
-        user: classroom.user.countryCode,
+        user: classroom.user.country?.isoCode,
       },
     },
   });
@@ -903,7 +907,7 @@ userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY 
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student'] });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student', 'country'] });
 
   if (user && user.type === UserType.TEACHER) {
     const classroom = [];
