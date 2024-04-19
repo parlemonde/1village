@@ -61,8 +61,6 @@ const ANTHEM_PARAM: Tab = {
 export const Navigation = (): JSX.Element => {
   const router = useRouter();
   const { village, selectedPhase } = React.useContext(VillageContext);
-  console.log('VILLAGE: ', village);
-
   const { user } = React.useContext(UserContext);
   const { parentClassroom } = React.useContext(ClassroomContext);
   //* NOTE: might be interesting to make a hook for this below
