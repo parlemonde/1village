@@ -35,7 +35,6 @@ const Phases = () => {
   if (villages.isError) return <p>Error!</p>;
   if (villages.isLoading || villages.isIdle) return <p>Loading...</p>;
 
-  // Fonction pour gérer le changement d'état de la case à cocher
   const handleCheckboxChange = (villageId: number, phase: VillagePhase, checked: boolean) => {
     if (phase === VillagePhase.EXCHANGE || phase === VillagePhase.IMAGINE) {
       setVillagePhases((prevState) => ({
@@ -50,12 +49,16 @@ const Phases = () => {
     }
   };
 
-  const handleHeaderCheckboxChange = (phase: VillagePhase) => {
-    const newVillagePhases: { [villageId: number]: VillagePhase } = {};
-    villages.data.forEach((village: Village) => {
-      newVillagePhases[village.id] = phase;
-    });
-    setVillagePhases(newVillagePhases);
+  const handleHeaderCheckboxChange = (phase: VillagePhase, checked: boolean) => {
+    for (const key in villagePhases) {
+      if (villagePhases[key] <= phase) {
+        villagePhases[key] = VillagePhase.DISCOVER;
+        setVillagePhases((prevState) => ({
+          ...prevState,
+          [key]: checked ? phase : phase - 1,
+        }));
+      }
+    }
   };
 
   const handleLogCheckboxStates = () => {
@@ -109,15 +112,19 @@ const Phases = () => {
                   <TableCell align="left">Phase 1</TableCell>
                   <TableCell align="left">
                     <Checkbox
-                      checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.EXCHANGE)}
-                      onChange={() => handleHeaderCheckboxChange(VillagePhase.EXCHANGE)}
+                      checked={Object.values(villagePhases).every((phase) => phase >= VillagePhase.EXCHANGE)}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleHeaderCheckboxChange(VillagePhase.EXCHANGE, event.target.checked)
+                      }
                     />
                     Phase 2
                   </TableCell>
                   <TableCell align="left">
                     <Checkbox
                       checked={Object.values(villagePhases).every((phase) => phase === VillagePhase.IMAGINE)}
-                      onChange={() => handleHeaderCheckboxChange(VillagePhase.IMAGINE)}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleHeaderCheckboxChange(VillagePhase.IMAGINE, event.target.checked)
+                      }
                     />
                     Phase 3
                   </TableCell>
