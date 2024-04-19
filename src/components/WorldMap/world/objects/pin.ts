@@ -16,7 +16,7 @@ export class Pin
       user: User;
     }>
 {
-  private coords: {
+  public coords: {
     lat: number;
     lng: number;
   };
@@ -27,10 +27,8 @@ export class Pin
 
   constructor(user: User, cameraPos: Vector3, isOnPelicoGlobe = false, radius = GLOBE_RADIUS, isPelico = false) {
     super();
-
     // place
-    this.coords.lat = user.positionLat;
-    this.coords.lng = user.positionLon;
+    this.coords = { lat: user.positionLat, lng: user.positionLon };
     const pos = polar2Cartesian(this.coords.lat, this.coords.lng, 2, radius);
     this.position.x = pos.x;
     this.position.y = pos.y;
