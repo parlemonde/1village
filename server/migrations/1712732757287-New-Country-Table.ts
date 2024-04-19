@@ -13,7 +13,7 @@ export class NewCountryTable1712732757287 implements MigrationInterface {
     for (const country of countries) {
       // try catch here to prevent if country is already set in db for some reason
       try {
-        await queryRunner.query(`INSERT INTO country (isoCode, name) VALUES ("${country.isoCode}", "${country.name}");`);
+        await queryRunner.query(`INSERT INTO country (isoCode, name) VALUES ('${country.isoCode}', "${country.name}");`);
       } catch (error) {
         console.error(error);
       }
