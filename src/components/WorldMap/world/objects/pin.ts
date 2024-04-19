@@ -29,7 +29,8 @@ export class Pin
     super();
 
     // place
-    this.coords = user.position;
+    this.coords.lat = user.positionLat;
+    this.coords.lng = user.positionLon;
     const pos = polar2Cartesian(this.coords.lat, this.coords.lng, 2, radius);
     this.position.x = pos.x;
     this.position.y = pos.y;

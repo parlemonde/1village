@@ -160,13 +160,16 @@ const WorldMap = () => {
     users
       .filter((u) => u.type === UserType.TEACHER)
       .forEach((u) => {
-        const marker = L.marker(u.position, {
-          icon: new L.Icon({
-            iconUrl: '/marker.svg',
-            iconSize: [25, 41],
-            iconAnchor: [13.5, 41],
-          }),
-        }).addTo(map);
+        const marker = L.marker(
+          { lat: u.positionLat, lng: u.positionLon },
+          {
+            icon: new L.Icon({
+              iconUrl: '/marker.svg',
+              iconSize: [25, 41],
+              iconAnchor: [13.5, 41],
+            }),
+          },
+        ).addTo(map);
         const $div = document.createElement('div');
         ReactDOM.render(<UserPopover user={u} />, $div, () => {
           marker.bindPopup($div.innerHTML);

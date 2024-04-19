@@ -85,28 +85,10 @@ export class User {
   public country: Country | null;
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
-  set positionLat(newLat: string) {
-    if (!this.position) {
-      this.position = { lat: 0, lng: 0 };
-    }
-    this.position.lat = parseFloat(newLat) || 0;
-  }
-  get positionLat() {
-    return `${this.position?.lat || 0}`;
-  }
+  public positionLat: number;
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
-  set positionLon(newLon: string) {
-    if (!this.position) {
-      this.position = { lat: 0, lng: 0 };
-    }
-    this.position.lng = parseFloat(newLon) || 0;
-  }
-  get positionLon() {
-    return `${this.position?.lng || 0}`;
-  }
-
-  public position: { lat: number; lng: number };
+  public positionLon: number;
 
   public mascotteId?: number;
 

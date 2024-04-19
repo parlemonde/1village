@@ -102,7 +102,7 @@ const EditUser = () => {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { position: _ignore, ...updatedValues } = user;
+    const { positionLat: _ignore, positionLon: _ignoreToo, ...updatedValues } = user;
     const result = await editUser({ ...updatedValues, villageId: user.villageId || null });
     if (result !== null) {
       router.push('/admin/users');

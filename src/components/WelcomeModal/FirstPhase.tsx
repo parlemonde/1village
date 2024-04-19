@@ -79,7 +79,8 @@ export const FirstPhase = () => {
       displayName: newUser.displayName || '',
     };
     if (position !== null) {
-      updatedValues.position = position;
+      updatedValues.positionLat = position.lat;
+      updatedValues.positionLon = position.lng;
     }
     const response = await axiosRequest({
       method: 'PUT',
