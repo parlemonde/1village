@@ -25,8 +25,6 @@ const activityController = new Controller('/activities');
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-  console.log(req.query);
-
   const activities = await getActivities({
     limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
     page: req.query.page ? Number(getQueryString(req.query.page)) || 0 : undefined,

@@ -60,7 +60,7 @@ export const Accueil = () => {
   const { activities } = useActivities({
     limit: 200,
     page: 0,
-    countries: filterCountries.map((c) => c.id),
+    countries: filterCountries.map((c) => c.isoCode),
     pelico: filters.pelico,
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,
