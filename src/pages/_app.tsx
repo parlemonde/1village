@@ -37,6 +37,7 @@ import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
+import { CountryContextProvider } from 'src/contexts/countryContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
@@ -136,49 +137,51 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
             <UserContextProvider user={user} setUser={setUser}>
               <VillageContextProvider initialVillage={initialVillage}>
                 <ClassroomContextProvider>
-                  <ActivityContextProvider>
-                    {isOnAdmin ? (
-                      router.pathname.startsWith('/admin/newportal') ? (
-                        <div className="container-admin-portal">
-                          <NewAdminHeader />
-                          <div className="content" style={{ display: 'flex', width: '100%', margin: '70px 0 70px 0' }}>
-                            <NewAdminNavigation />
-                            <Container
-                              className="container-admin-nav child-container"
-                              sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
-                            >
-                              <Component {...pageProps} />
-                            </Container>
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          <AdminHeader />
-                          <div style={{ display: 'flex', width: '100%' }}>
-                            <AdminNavigation />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <Component {...pageProps} />
+                  <CountryContextProvider>
+                    <ActivityContextProvider>
+                      {isOnAdmin ? (
+                        router.pathname.startsWith('/admin/newportal') ? (
+                          <div className="container-admin-portal">
+                            <NewAdminHeader />
+                            <div className="content" style={{ display: 'flex', width: '100%', margin: '70px 0 70px 0' }}>
+                              <NewAdminNavigation />
+                              <Container
+                                className="container-admin-nav child-container"
+                                sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
+                              >
+                                <Component {...pageProps} />
+                              </Container>
                             </div>
                           </div>
+                        ) : (
+                          <div>
+                            <AdminHeader />
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              <AdminNavigation />
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <Component {...pageProps} />
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      ) : user !== null &&
+                        router.pathname !== '/inscription' &&
+                        router.pathname !== '/connexion' &&
+                        router.pathname !== '/login' &&
+                        router.pathname !== '/user-verified' &&
+                        router.pathname !== '/reset-password' &&
+                        router.pathname !== '/update-password' &&
+                        router.pathname !== '/404' ? (
+                        <div className="app-container">
+                          <Header />
+                          <Component {...pageProps} />
+                          <WelcomeModal />
                         </div>
-                      )
-                    ) : user !== null &&
-                      router.pathname !== '/inscription' &&
-                      router.pathname !== '/connexion' &&
-                      router.pathname !== '/login' &&
-                      router.pathname !== '/user-verified' &&
-                      router.pathname !== '/reset-password' &&
-                      router.pathname !== '/update-password' &&
-                      router.pathname !== '/404' ? (
-                      <div className="app-container">
-                        <Header />
+                      ) : (
                         <Component {...pageProps} />
-                        <WelcomeModal />
-                      </div>
-                    ) : (
-                      <Component {...pageProps} />
-                    )}
-                  </ActivityContextProvider>
+                      )}
+                    </ActivityContextProvider>
+                  </CountryContextProvider>
                 </ClassroomContextProvider>
               </VillageContextProvider>
             </UserContextProvider>

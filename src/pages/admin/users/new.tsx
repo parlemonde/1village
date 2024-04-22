@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
+import { CountryContext } from 'src/contexts/countryContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
@@ -32,6 +33,7 @@ const Required = (label: string) => (
 );
 
 const NewUser = () => {
+  const { countries } = useContext(CountryContext);
   const router = useRouter();
   const { villages } = useVillages();
   const { addUser } = useUserRequests();
@@ -47,6 +49,7 @@ const NewUser = () => {
     type: UserType.TEACHER,
     villageId: 0,
     country: {
+      id: -1,
       isoCode: '',
       name: '',
     },
@@ -211,7 +214,8 @@ const NewUser = () => {
             label={Required('Pays')}
             value={newUser.country?.isoCode || ''}
             onChange={(countryCode) => {
-              setNewUser((u) => ({ ...u, country: { isoCode: countryCode, name: '' } }));
+              const countryFound = countries.find((c) => c.isoCode === countryCode);
+              if (countryFound) setNewUser((u) => ({ ...u, country: countryFound }));
             }}
             filterCountries={
               newUser.villageId ? villages.find((v) => v.id === newUser.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined

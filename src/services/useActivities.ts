@@ -14,7 +14,7 @@ import { UserType } from 'types/user.type';
 export type Args = {
   limit?: number;
   page?: number;
-  countries?: string[];
+  countries?: number[];
   pelico?: boolean;
   type?: number | number[];
   userId?: number;

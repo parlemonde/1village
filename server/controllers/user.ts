@@ -94,7 +94,7 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
 userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
 
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: { country: true } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === null || (!isSelfProfile && !isAdmin)) {

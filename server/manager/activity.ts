@@ -13,7 +13,7 @@ type ActivityGetter = {
   villageId?: number;
   type?: string[];
   subType?: number | null;
-  countries?: string[];
+  countries?: number[];
   pelico?: boolean;
   userId?: number;
   status?: number;
@@ -80,7 +80,7 @@ export const getActivities = async ({
   } else if (pelico && countries !== undefined && countries.length > 0) {
     subQueryBuilder = subQueryBuilder
       .innerJoin('activity.user', 'user')
-      .andWhere('((user.countryCode IN (:countries) AND user.type >= :userType) OR user.type <= :userType2)', {
+      .andWhere('((user.countryId IN (:countries) AND user.type >= :userType) OR user.type <= :userType2)', {
         countries,
         userType: UserType.TEACHER,
         userType2: UserType.MEDIATOR,

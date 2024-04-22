@@ -227,7 +227,7 @@ export const FirstPhase = () => {
             <br />
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
               <span style={{ marginRight: '0.5rem' }}>{user ? user.country?.name : ''}</span>
-              {user && <Flag country={user.country?.isoCode}></Flag>}
+              {user && <Flag country={user.country ?? undefined}></Flag>}
             </h2>
             <Button
               color="inherit"

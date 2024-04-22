@@ -258,7 +258,7 @@ export const Navigation = (): JSX.Element => {
                   <Flag
                     style={{ margin: '0.25rem' }}
                     key={country.isoCode}
-                    country={country.isoCode}
+                    country={country}
                     isMistery={
                       !village ||
                       !user ||
@@ -272,7 +272,7 @@ export const Navigation = (): JSX.Element => {
                   <Flag
                     style={{ margin: '0.25rem' }}
                     key={country.isoCode}
-                    country={country.isoCode}
+                    country={country}
                     isMistery={
                       !village ||
                       !user ||

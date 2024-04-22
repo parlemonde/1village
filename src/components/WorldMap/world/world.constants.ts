@@ -22,6 +22,7 @@ export const PELICO_USER: User = {
   avatar: '/static-images/pelico-avatar.jpg',
   city: '',
   country: {
+    id: -1,
     isoCode: 'FR',
     name: 'France',
   },

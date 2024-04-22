@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import { AvatarImg } from '../Avatar';
 import { Flag } from '../Flag';
+import type { Country } from 'types/country.type';
 import type { GameResponse } from 'types/gameResponse.type';
 import { UserType } from 'types/user.type';
 import type { User } from 'types/user.type';
@@ -9,7 +10,7 @@ import type { User } from 'types/user.type';
 type GameStatsProps = {
   gameResponses: GameResponse[];
   choices: number[];
-  country: string;
+  country?: Country;
   userMap: { [key: number]: number };
   users: User[];
   position: number;
@@ -22,7 +23,7 @@ const POSITION = [
 ];
 const GameStats = ({ gameResponses, choices, country, userMap, users, position }: GameStatsProps) => {
   const countryResponses = useMemo(() => {
-    return gameResponses.filter((responseGame) => users[userMap[responseGame.userId]]?.country?.isoCode === country);
+    return gameResponses.filter((responseGame) => users[userMap[responseGame.userId]]?.country?.isoCode === country?.isoCode);
   }, [country, gameResponses, userMap, users]);
   const responseCount = countryResponses.length;
 
