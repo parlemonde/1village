@@ -29,7 +29,7 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
     limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
     page: req.query.page ? Number(getQueryString(req.query.page)) || 0 : undefined,
     villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : undefined,
-    countries: req.query.countries && req.query.countries.length ? (req.query.countries as string[]).map((e) => Number(e)) : [],
+    countries: req.query.countries as string[] | undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : undefined,
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,

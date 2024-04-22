@@ -3,6 +3,7 @@ import { In } from 'typeorm';
 import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
+import { Country } from '../entities/country';
 import { AppDataSource } from '../utils/data-source';
 
 type ActivityGetter = {
@@ -13,7 +14,7 @@ type ActivityGetter = {
   villageId?: number;
   type?: string[];
   subType?: number | null;
-  countries?: number[];
+  countries?: string[];
   pelico?: boolean;
   userId?: number;
   status?: number;
@@ -78,10 +79,15 @@ export const getActivities = async ({
       userId,
     });
   } else if (pelico && countries !== undefined && countries.length > 0) {
+    const countriesId = await AppDataSource.getRepository(Country).find({
+      where: {
+        isoCode: In(countries),
+      },
+    });
     subQueryBuilder = subQueryBuilder
       .innerJoin('activity.user', 'user')
-      .andWhere('((user.countryId IN (:countries) AND user.type >= :userType) OR user.type <= :userType2)', {
-        countries,
+      .andWhere('((user.countryId IN (:countriesId) AND user.type >= :userType) OR user.type <= :userType2)', {
+        countriesId,
         userType: UserType.TEACHER,
         userType2: UserType.MEDIATOR,
       });
@@ -90,8 +96,13 @@ export const getActivities = async ({
       userType2: UserType.MEDIATOR,
     });
   } else if (!pelico && countries !== undefined && countries.length > 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type >= :userType', {
-      countries,
+    const countriesId = await AppDataSource.getRepository(Country).find({
+      where: {
+        isoCode: In(countries),
+      },
+    });
+    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countriesId) AND user.type >= :userType', {
+      countriesId,
       userType: UserType.TEACHER,
     });
   } else if (!pelico && countries !== undefined) {
