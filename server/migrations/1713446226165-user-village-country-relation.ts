@@ -32,11 +32,10 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
       }
     }
     // user country relation
-    const usersCountry: { id: number; countryCode: string }[] = await queryRunner.query(`SELECT id, countryCode FROM user;`);
-
-    await queryRunner.query(`ALTER TABLE user 
+    await queryRunner.query(`ALTER TABLE user
         ADD COLUMN countryId int,
-        ADD CONSTRAINT FK_6f937fd92e219e3e5fa70aea9c7 FOREIGN KEY (countryId) REFERENCES country(id) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        ADD CONSTRAINT FK_4aaf6d02199282eb8d3931bff31 FOREIGN KEY (countryId) REFERENCES country(id) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+    const usersCountry: { id: number; countryCode: string }[] = await queryRunner.query(`SELECT id, countryCode FROM user;`);
     // save data stored
     for (const userCountry of usersCountry) {
       const countryId: { id: number }[] = await queryRunner.query(`SELECT id FROM country WHERE isoCode='${userCountry.countryCode}';`);

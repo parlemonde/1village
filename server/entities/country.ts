@@ -1,6 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-
-import { User } from './user';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Country {
@@ -12,7 +10,4 @@ export class Country {
 
   @Column({ type: 'text', nullable: false })
   public name: string;
-
-  @ManyToOne(() => User, (user: User) => user)
-  users: User[];
 }

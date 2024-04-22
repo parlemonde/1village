@@ -78,7 +78,7 @@ export class User {
   @Column({ nullable: true })
   public villageId: number | null;
 
-  @OneToMany(() => Country, (country: Country) => country)
+  @ManyToOne(() => Country, (country: Country) => country)
   public country: Country | null;
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: false, default: 0 })
