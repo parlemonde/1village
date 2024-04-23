@@ -28,7 +28,7 @@ export const Accueil = () => {
     if (!village || (selectedPhase === 1 && !isMediator)) {
       return user?.country ? [user?.country] : [];
     } else {
-      return village.countries;
+      return village.countries ?? [];
     }
   }, [selectedPhase, village, user, isMediator]);
 
@@ -40,7 +40,7 @@ export const Accueil = () => {
     selectedPhase: 0,
     types: 'all',
     status: 0,
-    countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
+    countries: filterCountries?.reduce<{ [key: string]: boolean }>((acc, c) => {
       acc[c.isoCode] = true;
       return acc;
     }, {}),

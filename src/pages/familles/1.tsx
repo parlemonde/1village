@@ -114,10 +114,13 @@ const ClassroomParamStep1 = () => {
     user !== null &&
     (user.type === UserType.MEDIATOR || user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.FAMILY);
 
-  const filterCountries: Country[] = React.useMemo(
-    () => (!village || (selectedPhase === 1 && !isMediatorOrFamily) ? (user && user.country !== null ? [user.country] : []) : village.countries),
-    [selectedPhase, village, user, isMediatorOrFamily],
-  );
+  const filterCountries: Country[] = React.useMemo(() => {
+    if (!village || (selectedPhase === 1 && !isMediatorOrFamily)) {
+      return user && user.country && user.country !== null ? [user.country] : [];
+    } else {
+      return village.countries;
+    }
+  }, [selectedPhase, village, user, isMediatorOrFamily]);
 
   const [filters, setFilters] = React.useState<FilterArgs>({
     selectedType: 0,
