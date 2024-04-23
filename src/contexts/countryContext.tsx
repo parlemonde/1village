@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import React, { useCallback, createContext, useState } from 'react';
+import React, { useEffect, createContext, useState } from 'react';
 import type { Country } from 'server/entities/country';
 
 import { CircularProgress } from '@mui/material';
@@ -19,7 +19,7 @@ interface Props {
 export function CountryContextProvider({ children }: Props) {
   const [countries, setCountries] = useState<Country[]>([]);
   const countriesFetch = useGetCountries();
-  useCallback(() => {
+  useEffect(() => {
     if (countriesFetch.data) setCountries(countriesFetch.data);
   }, [countriesFetch.data]);
   if (countriesFetch.isLoading || countriesFetch.isIdle) {

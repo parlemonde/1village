@@ -251,8 +251,7 @@ export const Navigation = (): JSX.Element => {
         >
           <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
           {village &&
-            // village.countries.map((country: Country) => {
-            [].map((country: Country) => {
+            village.countries.map((country: Country) => {
               if (user.type === UserType.FAMILY) {
                 return (
                   <Flag

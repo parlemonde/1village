@@ -93,11 +93,7 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
   classroom.country = countryFound;
   classroom.id = data.villageId;
 
-  // .createQueryBuilder()
-  //   .insert()
-  //   .into(Classroom)
-  //   .values([{ user: { id: data.userId }, village: { id: data.villageId }, country: data.countryCode }])
-  //   .execute();
+  await AppDataSource.getRepository(Classroom).save(classroom);
 
   res.json(classroom);
 });

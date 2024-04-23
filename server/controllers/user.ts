@@ -311,7 +311,8 @@ type EditUserData = {
   type?: UserType;
   villageId?: number | null;
   firstLogin?: number;
-  position?: { lat: number; lng: number };
+  positionLat?: number;
+  positionLon?: number;
   isVerified?: boolean;
   accountRegistration?: number;
   hasAcceptedNewsletter?: boolean;
@@ -341,16 +342,8 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
-    position: {
-      type: 'object',
-      nullable: true,
-      properties: {
-        lat: { type: 'number', nullable: false },
-        lng: { type: 'number', nullable: false },
-      },
-      required: ['lat', 'lng'],
-      additionalProperties: false,
-    },
+    positionLat: { type: 'number', nullable: true },
+    positionLon: { type: 'number', nullable: true },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     isVerified: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
@@ -397,35 +390,35 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   }
-  if (data.position) {
-    user.positionLat = data.position.lat;
-    user.positionLon = data.position.lng;
+  if (data.positionLat && data.positionLon) {
+    user.positionLat = data.positionLat;
+    user.positionLon = data.positionLon;
   }
   if (data.villageId) {
     if (user.type === UserType.TEACHER) {
       const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
+      if (classroom) {
+        const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
 
-      if (!classroom) return;
+        const studentsId = students.map((student) => student.id);
 
-      const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
-      const studentsId = students.map((student) => student.id);
+        const families = await AppDataSource.getRepository(UserToStudent).find({
+          where: { student: { id: In(studentsId) } },
+          relations: ['user', 'student'],
+        });
 
-      const families = await AppDataSource.getRepository(UserToStudent).find({
-        where: { student: { id: In(studentsId) } },
-        relations: ['user', 'student'],
-      });
+        const familiesId = families.map((family) => family.user.id);
 
-      const familiesId = families.map((family) => family.user.id);
+        const promises = [];
 
-      const promises = [];
+        promises.push(
+          AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
+          AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
+          AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
+        );
 
-      promises.push(
-        AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
-        AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
-        AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
-      );
-
-      await Promise.all(promises);
+        await Promise.all(promises);
+      }
     }
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
