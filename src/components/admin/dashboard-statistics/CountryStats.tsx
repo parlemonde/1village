@@ -1,6 +1,10 @@
 import React from 'react';
 
+import HorizontalBars from './charts/HorizontalCharts';
 import PieCharts from './charts/PieCharts';
+import BarCharts from './charts/BarCharts';
+
+import styles from './styles/charts.module.css';
 
 const pieChartData = {
   data: [
@@ -10,11 +14,17 @@ const pieChartData = {
   ],
 };
 
+const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
+
 const CountryStats = () => {
   return (
     <>
-      <h1>Pays</h1>
-      <PieCharts pieChartData={pieChartData} />
+      <h1>Statut: Observateur</h1>
+      <HorizontalBars />
+      <div className={styles.engamentContainer}>
+        <PieCharts pieChartData={pieChartData} />
+        <BarCharts barChartData={barChartData} />
+      </div>
     </>
   );
 };
