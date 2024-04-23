@@ -20,9 +20,6 @@ export class Classroom {
   public delayedDays: number;
 
   @OneToMany(() => Country, (country: Country) => country)
-  get countryCode() {
-    return this.country?.isoCode;
-  }
   public country: Country | null;
 
   @Column({
