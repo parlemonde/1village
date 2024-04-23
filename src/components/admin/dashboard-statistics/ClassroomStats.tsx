@@ -1,4 +1,5 @@
 import React from 'react';
+
 import BarCharts from './charts/BarCharts';
 
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
