@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
+import type { ContributionStats, StudentAccountsStats } from 'types/statistics.type';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ContributionStats, StudentAccountsStats } from 'types/statistics.type';
 
 async function getContributions(): Promise<ContributionStats[]> {
   return (
