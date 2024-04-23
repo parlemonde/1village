@@ -22,6 +22,10 @@ statisticsController.get({ path: '/contributions' }, async (_req, res) => {
   );
 });
 
+statisticsController.get({ path: '/publications' }, async (_req, res) => {
+  res.sendJSON(await activityRepository.count({ where: { user: { type: UserType.TEACHER } } }));
+});
+
 statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
   res.sendJSON(
     await studentRepository
