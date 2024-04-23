@@ -177,7 +177,7 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
       villageId: student.classroom.villageId,
       hasStudentLinked: true,
       firstLogin: student.classroom.village?.activePhase, //TEST THIS LINE
-      countryCode: student.classroom.countryCode as string,
+      country: student.classroom.country,
     })
     .where('id = :id', { id: req.user.id })
     .execute();
