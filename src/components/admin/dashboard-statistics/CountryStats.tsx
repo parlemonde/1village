@@ -1,8 +1,8 @@
 import React from 'react';
 
+import BarCharts from './charts/BarCharts';
 import HorizontalBars from './charts/HorizontalCharts';
 import PieCharts from './charts/PieCharts';
-import BarCharts from './charts/BarCharts';
 
 import styles from './styles/charts.module.css';
 

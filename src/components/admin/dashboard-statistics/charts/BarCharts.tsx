@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
