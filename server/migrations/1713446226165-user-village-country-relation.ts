@@ -44,13 +44,25 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
       }
     }
 
+    // //classroom relation
+    const classroomCountryCodes: { id: number; countryCode: string }[] = await queryRunner.query(`SELECT id, countryCode FROM classroom`);
+    await queryRunner.query(
+      `ALTER TABLE classroom
+      ADD countryId int NULL,
+      ADD CONSTRAINT FK_650c574da06eaf08695ed7a7bcd FOREIGN KEY (countryId) REFERENCES country(id) ON DELETE NO ACTION ON UPDATE NO ACTION;`,
+    );
+    for (const classroom of classroomCountryCodes) {
+      const country: { id: number }[] = await queryRunner.query(`SELECT id FROM country WHERE isoCode='${classroom.countryCode}';`);
+      await queryRunner.query(`UPDATE classroom SET countryId=${country[0].id} WHERE id=${classroom.id};`);
+    }
     // // cleaning
     await queryRunner.query(`ALTER TABLE village DROP COLUMN countryCodes;`);
     await queryRunner.query(`ALTER TABLE user DROP COLUMN countryCode;`);
+    await queryRunner.query(`ALTER TABLE classroom DROP COLUMN countryCode`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // recreate village data
+    // recreate VILLAGE data
     await queryRunner.query(`ALTER TABLE village ADD COLUMN countryCodes TINYTEXT;`);
     const villageCountryRelation: { villageId: number; countryId: number }[] = await queryRunner.query(`SELECT * FROM village_countries_country;`);
     // create countryCodes column
@@ -78,7 +90,11 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
       await queryRunner.query(`UPDATE village SET countryCodes = '${countryCodes}' WHERE id = ${village.id};`);
     }
 
-    // recreate user data
+    // removing relation village countries table
+    await queryRunner.query(`ALTER TABLE village_countries_country DROP FOREIGN KEY FK_870cdc22399cffb6327c914b790`);
+    await queryRunner.dropTable('village_countries_country');
+
+    // recreate USER data
     const usersCountryId: { id: number; countryId: number }[] = await queryRunner.query(`SELECT id, countryId FROM user;`);
     await queryRunner.query(`ALTER TABLE user ADD COLUMN countryCode TINYTEXT;`);
     for (const userData of usersCountryId) {
@@ -87,10 +103,21 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
         await queryRunner.query(`UPDATE user SET countryCode = '${isoCode[0].isoCode}' WHERE id = ${userData.id};`);
       }
     }
-    // drop key contraint and relation table
+    // drop key constraint + column
     await queryRunner.query(`ALTER TABLE user DROP FOREIGN KEY FK_4aaf6d02199282eb8d3931bff31`);
     await queryRunner.query(`ALTER TABLE user DROP COLUMN countryId`);
-    await queryRunner.query(`ALTER TABLE village_countries_country DROP FOREIGN KEY FK_870cdc22399cffb6327c914b790`);
-    await queryRunner.dropTable('village_countries_country');
+
+    // recreate CLASSROOM data
+    const classroomsCountryId: { id: number; countryId: number }[] = await queryRunner.query(`SELECT id, countryId FROM classroom;`);
+    await queryRunner.query(`ALTER TABLE classroom ADD COLUMN countryCode TINYTEXT;`);
+    for (const classroom of classroomsCountryId) {
+      const isoCode: [{ isoCode: string }] = await queryRunner.query(`SELECT isoCode FROM country WHERE id=${classroom.countryId}`);
+      if (isoCode.length) {
+        await queryRunner.query(`UPDATE classroom SET countryCode = '${isoCode[0].isoCode}' WHERE id = ${classroom.id};`);
+      }
+    }
+    // drop key contraint and relation table
+    await queryRunner.query(`ALTER TABLE classroom DROP FOREIGN KEY FK_650c574da06eaf08695ed7a7bcd`);
+    await queryRunner.query(`ALTER TABLE classroom DROP COLUMN countryId`);
   }
 }
