@@ -7,13 +7,13 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
     // village county relation
     await queryRunner.query(
       `CREATE TABLE village_countries_country (
-            villageId int NOT NULL, 
-            countryId int NOT NULL, 
-            INDEX IDX_df9756b7b0058adb584d3a8c75 (villageId), 
+            villageId int NOT NULL,
+            countryId int NOT NULL,
+            INDEX IDX_df9756b7b0058adb584d3a8c75 (villageId),
             INDEX IDX_870cdc22399cffb6327c914b79 (countryId),
             CONSTRAINT FK_df9756b7b0058adb584d3a8c75e FOREIGN KEY (villageId) REFERENCES village(id) ON DELETE CASCADE ON UPDATE CASCADE,
             CONSTRAINT FK_870cdc22399cffb6327c914b790 FOREIGN KEY (countryId) REFERENCES country(id) ON DELETE CASCADE ON UPDATE CASCADE,
-            PRIMARY KEY (villageId, countryId)) 
+            PRIMARY KEY (villageId, countryId))
             ENGINE=InnoDB;`,
     );
 
@@ -43,6 +43,7 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
         await queryRunner.query(`UPDATE user SET countryId=${countryId[0].id} WHERE id=${userCountry.id};`);
       }
     }
+
     // // cleaning
     await queryRunner.query(`ALTER TABLE village DROP COLUMN countryCodes;`);
     await queryRunner.query(`ALTER TABLE user DROP COLUMN countryCode;`);
@@ -87,7 +88,7 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
       }
     }
     // drop key contraint and relation table
-    await queryRunner.query(`ALTER TABLE user DROP FOREIGN KEY FK_6f937fd92e219e3e5fa70aea9c7`);
+    await queryRunner.query(`ALTER TABLE user DROP FOREIGN KEY FK_4aaf6d02199282eb8d3931bff31`);
     await queryRunner.query(`ALTER TABLE user DROP COLUMN countryId`);
     await queryRunner.query(`ALTER TABLE village_countries_country DROP FOREIGN KEY FK_870cdc22399cffb6327c914b790`);
     await queryRunner.dropTable('village_countries_country');

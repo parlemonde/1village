@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
-import { Country } from './country';
+import type { Country } from '../../types/country.type';
+import { countries } from '../utils/iso-3166-countries-french';
 import { Student } from './student';
 import { User } from './user';
 import { Village } from './village';
@@ -19,8 +20,14 @@ export class Classroom {
   @Column({ nullable: true, default: 0 })
   public delayedDays: number;
 
-  @OneToMany(() => Country, (country: Country) => country)
-  public country: Country | null;
+  @Column({ type: 'varchar', length: 2, nullable: true })
+  set countryCode(newCountryCode: string) {
+    this.country = countries.find((c) => c.isoCode === newCountryCode) || countries[66];
+  }
+  get countryCode() {
+    return this.country?.isoCode;
+  }
+  public country: Omit<Country, 'id'>;
 
   @Column({
     type: 'boolean',
