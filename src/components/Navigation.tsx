@@ -261,8 +261,8 @@ export const Navigation = (): JSX.Element => {
                     isMistery={
                       !village ||
                       !user ||
-                      (selectedPhase === 1 && parentClassroom?.student?.classroom.user.toUpperCase() !== country.isoCode) ||
-                      (user.firstLogin < 2 && parentClassroom?.student?.classroom.user.toUpperCase() !== country.isoCode)
+                      (selectedPhase === 1 && parentClassroom?.student?.classroom?.user?.toUpperCase() !== country.isoCode) ||
+                      (user.firstLogin < 2 && parentClassroom?.student?.classroom?.user?.toUpperCase() !== country.isoCode)
                     }
                   ></Flag>
                 );

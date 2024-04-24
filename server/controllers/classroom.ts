@@ -26,6 +26,7 @@ classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req
   const classroom = await AppDataSource.getRepository(Classroom).findOne({
     relations: {
       user: true,
+      country: true,
     },
     where: { user: { id } },
   });
