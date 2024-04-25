@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useContext } from 'react';
 
 // Tout doit être responsive
 
@@ -25,7 +25,7 @@ import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 
 const Mediatheque = () => {
-  const { setFilters, filtered } = useContext(MediathequeContext);
+  const { setFilters } = useContext(MediathequeContext);
 
   /* const [currentVillage, setCurrentVillage] = useState(null)
   const [currentCountry, setCurrentCountry] = useState(null)
