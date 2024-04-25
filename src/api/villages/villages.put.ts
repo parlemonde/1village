@@ -24,8 +24,8 @@ export const useUpdateVillage = (args: { id: number; villageData: Partial<Villag
 
 export const useUpdateVillages = () => {
   return useMutation({
-    mutationFn: (village: { id: number; villageData: Partial<Village> }) => {
-      return updateVillage(village.id, village.villageData);
+    mutationFn: async (village: { id: number; villageData: Partial<Village> }) => {
+      return await updateVillage(village.id, village.villageData);
     },
   });
 };

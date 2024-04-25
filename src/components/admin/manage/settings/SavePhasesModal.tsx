@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useUpdateVillages } from 'src/api/villages/villages.put';
 import { Modal } from 'src/components/Modal';
@@ -16,25 +16,34 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
   const updateVillages = useUpdateVillages();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleConfirm = (villagePhases: { [villageId: number]: VillagePhase }) => {
-    setIsModalLoading(true);
+  const handleConfirm = async (villagePhases: { [villageId: number]: VillagePhase }) => {
+    const promises = [];
     for (const key in villagePhases) {
       const villageId: number = +key;
-      updateVillages.mutate({ id: villageId, villageData: { activePhase: villagePhases[villageId] } });
+      promises.push(updateVillages.mutateAsync({ id: villageId, villageData: { activePhase: villagePhases[villageId] } }));
+    }
+    await Promise.allSettled(promises);
+  };
+
+  useEffect(() => {
+    if (updateVillages.isLoading) {
+      setIsModalLoading(true);
     }
     if (updateVillages.isSuccess) {
       enqueueSnackbar('Modifications enregistrées !', {
         variant: 'success',
       });
+      setIsModalOpen(false);
+      setIsModalLoading(false);
     }
     if (updateVillages.isError) {
       enqueueSnackbar("Une erreur s'est produite lors de la modifications !", {
         variant: 'error',
       });
+      setIsModalOpen(false);
+      setIsModalLoading(false);
     }
-    setIsModalOpen(false);
-    setIsModalLoading(false);
-  };
+  }, [updateVillages.isLoading, updateVillages.isSuccess, updateVillages.isError, setIsModalOpen, enqueueSnackbar]);
 
   return (
     <Modal
