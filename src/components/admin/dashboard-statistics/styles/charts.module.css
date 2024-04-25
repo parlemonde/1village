@@ -7,6 +7,11 @@
     text-align: left;
 }
 
+.chartsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
 .pieContainer {
     display: flex;
     flex-direction: column;
@@ -20,11 +25,11 @@
 
 .legend {
     display: flex;
-    justify-content: center; /* Pour centrer les éléments horizontalement */
+    justify-content: center;
 }
 
 .legendItem {
-    margin: 5px; /* Espacement entre les éléments de la légende */
+    margin: 5px;
     font-size: 14px;
 }
 

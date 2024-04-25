@@ -3,6 +3,7 @@ import React from 'react';
 import BarCharts from './charts/BarCharts';
 import HorizontalBars from './charts/HorizontalCharts';
 import PieCharts from './charts/PieCharts';
+import DashboardTable from './charts/DashboardTable';
 
 import styles from './styles/charts.module.css';
 
@@ -20,10 +21,13 @@ const CountryStats = () => {
   return (
     <>
       <h1>Statut: Observateur</h1>
-      <HorizontalBars />
-      <div className={styles.engamentContainer}>
-        <PieCharts pieChartData={pieChartData} />
-        <BarCharts barChartData={barChartData} />
+      <div className={styles.chartsContainer}>
+        <HorizontalBars />
+        <DashboardTable />
+        <div className={styles.engamentContainer}>
+          <PieCharts pieChartData={pieChartData} />
+          <BarCharts barChartData={barChartData} />
+        </div>
       </div>
     </>
   );
