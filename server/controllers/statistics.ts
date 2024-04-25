@@ -1,4 +1,5 @@
 import { Activity } from '../entities/activity';
+import { Comment } from '../entities/comment';
 import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
@@ -7,6 +8,7 @@ import { Controller } from './controller';
 export const statisticsController = new Controller('/statistics');
 
 const activityRepository = AppDataSource.getRepository(Activity);
+const commentRepository = AppDataSource.getRepository(Comment);
 const studentRepository = AppDataSource.getRepository(Student);
 
 statisticsController.get({ path: '/contributions' }, async (_req, res) => {
@@ -22,8 +24,13 @@ statisticsController.get({ path: '/contributions' }, async (_req, res) => {
   );
 });
 
-statisticsController.get({ path: '/publications' }, async (_req, res) => {
-  res.sendJSON(await activityRepository.count({ where: { user: { type: UserType.TEACHER } } }));
+statisticsController.get({ path: '/classes-exchanges' }, async (_req, res) => {
+  const activitiesCount = await activityRepository.count({ where: { user: { type: UserType.TEACHER } } });
+  const commentsCount = await commentRepository.count({ where: { user: { type: UserType.TEACHER } } });
+  res.sendJSON({
+    totalActivities: activitiesCount,
+    totalComments: commentsCount,
+  })
 });
 
 statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
