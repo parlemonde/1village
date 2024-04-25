@@ -37,6 +37,7 @@ import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
+import { MediathequeProvider } from 'src/contexts/mediathequeContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
@@ -139,18 +140,20 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                   <ActivityContextProvider>
                     {isOnAdmin ? (
                       router.pathname.startsWith('/admin/newportal') ? (
-                        <div className="container-admin-portal">
-                          <NewAdminHeader />
-                          <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
-                            <NewAdminNavigation />
-                            <Container
-                              className="container-admin-nav child-container"
-                              sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
-                            >
-                              <Component {...pageProps} />
-                            </Container>
+                        <MediathequeProvider>
+                          <div className="container-admin-portal">
+                            <NewAdminHeader />
+                            <div className="content" style={{ display: 'flex', width: '100%', marginTop: '70px' }}>
+                              <NewAdminNavigation />
+                              <Container
+                                className="container-admin-nav child-container"
+                                sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
+                              >
+                                <Component {...pageProps} />
+                              </Container>
+                            </div>
                           </div>
-                        </div>
+                        </MediathequeProvider>
                       ) : (
                         <div>
                           <AdminHeader />

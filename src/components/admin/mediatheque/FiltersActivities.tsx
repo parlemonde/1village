@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,14 +8,8 @@ import Select from '@mui/material/Select';
 import { useTheme } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 
-import {
-  activitiesLabel,
-  themeOfDefi,
-  themeOfEnigme,
-  themeOfIndiceCulturel,
-  themeOfIndiceSymbolique,
-  themeOfJeux,
-} from 'src/config/mediatheque/dataFilters';
+import { activitiesLabel, activityNumberMapper, subThemesMap, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
+import MediathequeContext from 'src/contexts/mediathequeContext';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -34,99 +28,13 @@ function getStyles(label: string, labelName: readonly string[], theme: Theme) {
   };
 }
 
-const subThemesMap: { [key: string]: string[] } = {
-  'Indice culturel': themeOfIndiceCulturel,
-  'Indice symbolique': themeOfIndiceSymbolique,
-  Défis: themeOfDefi,
-  Jeux: themeOfJeux,
-  Enigme: themeOfEnigme,
-};
-
-const activityNumberMapper = {
-  'Indice culturel': 0,
-  'Indice symbolique': 1,
-  Mascotte: 2,
-  Reportage: 3,
-  Défis: 4,
-  Jeux: 5,
-  Symbole: 6,
-  Réaction: 7,
-  Enigme: 8,
-  Hymne: 9,
-  Couplet: 11,
-  'Inventer une histoire': 13,
-  'Réinventer une histoire': 14,
-};
-
-// const Subtypemapper = {
-//   0 : {
-//     [activityNumberMapper.Couplet]: 'toto',
-//     [activityNumberMapper.Hymne]: 'tata',
-//   },
-//   2:{
-//     [activityNumberMapper.Mascotte]:'Lieux de vies',
-//     [activityNumberMapper.Couplet]:'Fleur nationale',
-//   }
-// }
-
-// sekectionné couplet et mascotte activité
-// Fleur Nationnale en subtype[]
-
-const subThemeNumberMapper = {
-  Paysages: 0,
-  Arts: 1,
-  'Lieux de vies': 2,
-  Langues: 3,
-  'Flore et faune': 4,
-  'Loisirs et jeux': 5,
-  Cuisines: 6,
-  Traditions: 7,
-  Autre: -1,
-  Drapeau: 0,
-  Emblème: 1,
-  'Fleur nationale': 2,
-  Devise: 3,
-  Hymne: 4,
-  'Animal national': 5,
-  'Figure symbolique': 6,
-  Monnaie: 7,
-  Culinaire: 0,
-  Linguistique: 1,
-  Ecologique: 2,
-  'Jeu des mimiques': 0,
-  'Jeu de la monnaie': 1,
-  'Jeu des expressions': 2,
-  'Evenement mystère': 0,
-  'Lieu mystère': 1,
-  'Objet mystère': 2,
-  'Personnalité mystère': 3,
-};
-// ceci est un exemple
-// const labelValueMapper = {
-//   'Lieu mystère': {
-//     type: 2,
-//     subType: 2,
-//   },
-//   'Personnalité mystère': {
-//     type: 2,
-//     subType: 3,
-//   },
-//   'Objet mystère': {
-//     type: 3,
-//     subType: 1,
-//   },
-// };
-
 export default function FiltersActivities() {
   const theme = useTheme();
   const [labelNameActivity, setLabelNameActivity] = useState<string[]>([]);
   const [labelNameSubTheme, setLabelNameSubTheme] = useState<string[]>([]);
-  const [activityNumber, setActivityNumber] = useState<number[]>([]);
-  const [subThemeNumber, setSubThemeNumber] = useState<number[]>([]);
-  console.log('label Activity', labelNameActivity);
-  console.log('label subTheme', labelNameSubTheme);
-  console.log('activityNumber', activityNumber);
-  console.log('subThmeNumber', subThemeNumber);
+  const [, setActivityNumber] = useState<number[]>([]);
+  const [, setSubThemeNumber] = useState<number[]>([]);
+  const { setFilters } = useContext(MediathequeContext);
 
   useEffect(() => {
     const updatedActivityNumbers: number[] = [];
@@ -148,7 +56,25 @@ export default function FiltersActivities() {
 
     setActivityNumber(updatedActivityNumbers);
     setSubThemeNumber(updatedSubThemeNumbers);
-  }, [labelNameActivity, labelNameSubTheme]);
+
+    if (updatedActivityNumbers.length > 0) {
+      const result: { table: string; column: string; values: number[] }[][] = [[{ table: 'activity', column: 'type', values: [] }]];
+      result[0][0].values = updatedActivityNumbers;
+      setFilters(result);
+      if (updatedSubThemeNumbers.length > 0) {
+        const result = [
+          [
+            { table: 'activity', column: 'type', values: updatedSubThemeNumbers },
+            { table: 'activity', column: 'subType', values: [] },
+          ],
+        ];
+        updatedSubThemeNumbers.forEach((number) => {
+          result[0][1].values.push(number);
+        });
+        setFilters(result);
+      }
+    }
+  }, [labelNameActivity, labelNameSubTheme, setFilters]);
 
   const handleChangeLabelActivity = (event: SelectChangeEvent<typeof labelNameActivity>) => {
     const {
@@ -164,9 +90,8 @@ export default function FiltersActivities() {
     <>
       <div>
         {/* Filtre pour activités */}
-        <FormControl sx={{ m: 1, width: 140 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <Select
-            multiple
             displayEmpty
             value={labelNameActivity}
             onChange={handleChangeLabelActivity}

@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Filter } from 'types/mediatheque.type';
 
-async function getMediatheque(params: { offset: number | null; filters: Filter[] }) {
+async function getMediatheque(params: { offset: number | null; filters: Array<Filter[]> }) {
   const { offset, filters } = params;
 
   return (
@@ -21,6 +21,6 @@ async function getMediatheque(params: { offset: number | null; filters: Filter[]
   ).data;
 }
 
-export const useGetMediatheque = (offset: number | null, filters: Filter[]) => {
+export const useGetMediatheque = (offset: number | null, filters: Array<Filter[]>) => {
   return useQuery(['Mediatheque', offset, filters], () => getMediatheque({ filters, offset }));
 };
