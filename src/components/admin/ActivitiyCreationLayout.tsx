@@ -1,15 +1,18 @@
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import React from 'react';
 
-import ActivitiyCreationLayout from 'src/components/admin/ActivitiyCreationLayout';
 import { UserContext } from 'src/contexts/userContext';
+import BackArrow from 'src/svg/back-arrow.svg';
 import { UserType } from 'types/user.type';
 
 type Props = {
+  title: string;
+  linkTo: string;
   children: ReactNode;
 };
 
-export default function Layout({ children }: Props) {
+export default function Layout({ children, linkTo, title }: Props) {
   const { user } = React.useContext(UserContext);
   const isModerator = user !== null && user.type <= UserType.MEDIATOR;
 
@@ -17,8 +20,14 @@ export default function Layout({ children }: Props) {
     return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>;
   }
   return (
-    <ActivitiyCreationLayout title={'Créer du contenu libre'} linkTo={'/admin/newportal/create'}>
+    <div>
+      <Link href={linkTo}>
+        <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+          <BackArrow />
+          <h1 style={{ marginLeft: '10px' }}>{title}</h1>
+        </div>
+      </Link>
       {children}
-    </ActivitiyCreationLayout>
+    </div>
   );
 }

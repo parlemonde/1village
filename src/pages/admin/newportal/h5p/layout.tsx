@@ -17,7 +17,7 @@ export default function Layout({ children }: Props) {
     return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>;
   }
   return (
-    <ActivitiyCreationLayout title={'Créer du contenu libre'} linkTo={'/admin/newportal/create'}>
+    <ActivitiyCreationLayout title={'Créer Une activité h5p'} linkTo={'/admin/newportal/create'}>
       {children}
     </ActivitiyCreationLayout>
   );

@@ -1,4 +1,5 @@
 import type { IContentMetadata, IEditorModel } from '@lumieducation/h5p-server';
+import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 
@@ -19,3 +20,8 @@ export async function getH5pContent(contentId: string = 'new'): Promise<GetH5pCo
   }
   return response.data;
 }
+
+export const useGetH5pContent = (args: { contentId: string }) => {
+  const { contentId } = args;
+  return useQuery(['h5p', contentId], () => getH5pContent(contentId));
+};
