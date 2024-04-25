@@ -17,18 +17,18 @@ export const useGetContributions = () => {
   return useQuery(['activities'], () => getContributions());
 };
 
-async function getPublications(): Promise<number> {
+async function getClassesExchanges(): Promise<number> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: '/statistics/publications',
+      url: '/statistics/classes-exchanges',
     })
   ).data;
 }
 
-export const useGetPublications = () => {
-  return useQuery(['activities'], () => getPublications());
+export const useGetClassesExchanges = () => {
+  return useQuery(['activities', 'comments'], () => getClassesExchanges());
 };
 
 async function getStudentAccounts(): Promise<StudentAccountsStats> {
