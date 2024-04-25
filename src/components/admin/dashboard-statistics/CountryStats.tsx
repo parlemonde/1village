@@ -1,10 +1,9 @@
 import React from 'react';
 
 import BarCharts from './charts/BarCharts';
+import DashboardTable from './charts/DashboardTable';
 import HorizontalBars from './charts/HorizontalCharts';
 import PieCharts from './charts/PieCharts';
-import DashboardTable from './charts/DashboardTable';
-
 import styles from './styles/charts.module.css';
 
 const pieChartData = {
