@@ -1,7 +1,9 @@
+import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
 
+import { useUpdateVillages } from 'src/api/villages/villages.put';
 import { Modal } from 'src/components/Modal';
-import { VillagePhase } from 'types/village.type';
+import type { VillagePhase } from 'types/village.type';
 
 interface SavePhasesModalProps {
   villagePhases: { [villageId: number]: VillagePhase };
@@ -11,6 +13,28 @@ interface SavePhasesModalProps {
 
 export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: SavePhasesModalProps) {
   const [isModalLoading, setIsModalLoading] = useState(false);
+  const updateVillages = useUpdateVillages();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleConfirm = (villagePhases: { [villageId: number]: VillagePhase }) => {
+    setIsModalLoading(true);
+    for (const key in villagePhases) {
+      const villageId: number = +key;
+      updateVillages.mutate({ id: villageId, villageData: { activePhase: villagePhases[villageId] } });
+    }
+    if (updateVillages.isSuccess) {
+      enqueueSnackbar('Modifications enregistrées !', {
+        variant: 'success',
+      });
+    }
+    if (updateVillages.isError) {
+      enqueueSnackbar("Une erreur s'est produite lors de la modifications !", {
+        variant: 'error',
+      });
+    }
+    setIsModalOpen(false);
+    setIsModalLoading(false);
+  };
 
   return (
     <Modal
@@ -18,18 +42,7 @@ export function SavePhasesModal({ villagePhases, isModalOpen, setIsModalOpen }: 
       noCloseButton={true}
       maxWidth="sm"
       title="Es-tu sûr ?"
-      onConfirm={async () => {
-        setIsModalLoading(true);
-        // Code pour passer le linter
-        for (const key in villagePhases) {
-          if (key == '1') {
-            villagePhases[key] = VillagePhase.DISCOVER;
-          }
-        }
-        // Await -> appel API Put Villages
-        setIsModalLoading(false);
-        setIsModalOpen(false);
-      }}
+      onConfirm={async () => handleConfirm(villagePhases)}
       onClose={() => {
         setIsModalOpen(false);
       }}
