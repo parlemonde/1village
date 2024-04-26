@@ -1,4 +1,5 @@
 import { Activity } from '../entities/activity';
+import { AnalyticSession } from '../entities/analytic';
 import { Comment } from '../entities/comment';
 import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
@@ -10,6 +11,7 @@ export const statisticsController = new Controller('/statistics');
 const activityRepository = AppDataSource.getRepository(Activity);
 const commentRepository = AppDataSource.getRepository(Comment);
 const studentRepository = AppDataSource.getRepository(Student);
+const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
 
 statisticsController.get({ path: '/contributions' }, async (_req, res) => {
   res.sendJSON(
@@ -48,6 +50,17 @@ statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
       .addSelect('COUNT(DISTINCT student.classroomId)', 'classWithStudentAccounts')
       .addSelect('COUNT(DISTINCT userToStudent.userId)', 'connectedFamilies')
       .leftJoin('user_to_student', 'userToStudent', 'userToStudent.studentId = student.id')
+      .getRawOne(),
+  );
+});
+
+statisticsController.get({ path: '/connexion-times' }, async (_req, res) => {
+  res.sendJSON(
+    await analyticSessionRepository
+      .createQueryBuilder('analytic_session')
+      .select('MIN(duration) AS minDuration')
+      .addSelect('MAX(duration) AS maxDuration')
+      .addSelect('AVG(duration) AS averageDuration')
       .getRawOne(),
   );
 });
