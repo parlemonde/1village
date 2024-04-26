@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Button } from '@mui/material';
 
 import Layout from '../layout';
 import { useH5pContentList } from 'src/api/h5p/h5p-content.list';
-import H5pBanner from 'src/components/admin/H5pBanner';
+// import H5pBanner from 'src/components/admin/H5pBanner';
 import { UserContext } from 'src/contexts/userContext';
 import { UserType } from 'types/user.type';
 
@@ -13,9 +13,6 @@ export default function H5pList() {
   const h5pList = useH5pContentList();
   const isModerator = user !== null && user.type <= UserType.MEDIATOR;
 
-  useEffect(() => {
-    console.log(h5pList.data);
-  }, [h5pList.data]);
   if (!isModerator) {
     return <h1>Vous n&apos;avez pas accès à cette page, vous devez être modérateur.</h1>;
   }
@@ -36,13 +33,13 @@ export default function H5pList() {
         <Button variant="contained">Contained</Button>
       </div>
       <div style={{ display: 'flex' }}>
-        <H5pBanner
+        {/* <H5pBanner
           lastUpdatedAt={new Date()}
-          onDelete={() => console.log('delete')}
-          onUpdate={() => console.log('update')}
+          onDelete={() => console.info('delete')}
+          onUpdate={() => console.info('update')}
           title={'toto'}
           type={'toto type'}
-        />
+        /> */}
       </div>
     </Layout>
   );
