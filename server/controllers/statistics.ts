@@ -1,5 +1,3 @@
-import { Raw } from 'typeorm';
-
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { Student } from '../entities/student';
