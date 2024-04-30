@@ -8,3 +8,10 @@ export interface StudentAccountsStats {
   classWithStudentAccounts: number;
   connectedFamilies: number;
 }
+
+export interface ConnectionTimesStats {
+  minDuration: number;
+  maxDuration: number;
+  averageDuration: number;
+  medianDuration: number;
+}
