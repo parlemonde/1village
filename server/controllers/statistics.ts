@@ -26,7 +26,7 @@ statisticsController.get({ path: '/contributions' }, async (_req, res) => {
   );
 });
 
-statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => {
+statisticsController.get({ path: '/classes-exchanges' }, async (_req, res) => {
   const activitiesCount = await activityRepository.count({ where: { user: { type: UserType.TEACHER } } });
   const commentsCount = await commentRepository.count({ where: { user: { type: UserType.TEACHER } } });
   const videosCount = await AppDataSource.createQueryRunner().manager.query(
