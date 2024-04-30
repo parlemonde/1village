@@ -21,3 +21,10 @@ export interface ConnectionTimesStats {
   averageDuration: number;
   medianDuration: number;
 }
+
+export interface ConnectionCountsStats {
+  minConnections: number;
+  maxConnections: number;
+  averageConnections: number;
+  medianConnections: number;
+}
