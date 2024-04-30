@@ -1,16 +1,12 @@
 import { Router } from 'express';
+import multer from 'multer';
 
 import { UserType } from '../../types/user.type';
 import { uploadFiles } from '../controllers/filesController';
-import { upload } from '../controllers/multer';
+import { diskStorageToImages } from '../controllers/multer';
 import { authenticate } from '../middlewares/authenticate';
 import { handleErrors } from '../middlewares/handleErrors';
 
 export const filesRouter = Router();
 
-filesRouter.post(
-  '/',
-  upload.array('files'),
-  // handleErrors(authenticate(UserType.ADMIN)),
-  uploadFiles,
-);
+filesRouter.post('/', multer({ storage: diskStorageToImages }).array('files'), handleErrors(authenticate(UserType.ADMIN)), uploadFiles);
