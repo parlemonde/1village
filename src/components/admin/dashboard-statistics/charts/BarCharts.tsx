@@ -17,7 +17,15 @@ const BarCharts: React.FC<Props> = ({ barChartData }) => {
   return (
     <div className={styles.barContainer}>
       <div className={styles.title}>Evolution des connexions</div>
-      <BarChart xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]} series={seriesData} />
+      <BarChart 
+        xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]} 
+        series={seriesData}
+        slotProps={{
+          bar: {
+            clipPath: `inset(0px round 40px)`,
+          },
+        }} 
+      />
     </div>
   );
 };
