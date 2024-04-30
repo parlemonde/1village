@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ConnectionTimesStats, ContributionStats, StudentAccountsStats } from 'types/statistics.type';
+import type { ClassroomExchangesStats, ConnectionTimesStats, ContributionStats, StudentAccountsStats } from 'types/statistics.type';
 
 async function getContributions(): Promise<ContributionStats[]> {
   return (
@@ -17,18 +17,18 @@ export const useGetContributions = () => {
   return useQuery(['activities'], () => getContributions());
 };
 
-async function getClassesExchanges(): Promise<number> {
+async function getClassroomExchanges(): Promise<ClassroomExchangesStats> {
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: '/statistics/classes-exchanges',
+      url: '/statistics/classroom-exchanges',
     })
   ).data;
 }
 
-export const useGetClassesExchanges = () => {
-  return useQuery(['activities', 'comments'], () => getClassesExchanges());
+export const useGetClassroomExchanges = () => {
+  return useQuery(['activities', 'comments'], () => getClassroomExchanges());
 };
 
 async function getStudentAccounts(): Promise<StudentAccountsStats> {
