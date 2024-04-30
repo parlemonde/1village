@@ -12,7 +12,6 @@ export const diskStorage = multer.diskStorage({
     cb(null, `${uuid}${path.extname(file.originalname)}`);
   },
 });
-
 export const upload = multer({ storage: diskStorage });
 
 export const diskStorageToImages = multer.diskStorage({
@@ -26,5 +25,22 @@ export const diskStorageToImages = multer.diskStorage({
   filename: function (_req, file, cb) {
     const uuid = v4();
     cb(null, `${uuid}${path.extname(file.originalname)}`);
+  },
+});
+
+const whitelist = [
+  'application/pdf',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+];
+export const fileUplad = multer({
+  storage: diskStorageToImages,
+  fileFilter: (_req, file, cb) => {
+    if (!whitelist.includes(file.mimetype)) {
+      return cb(new Error('file is not allowed'));
+    }
+    cb(null, true);
   },
 });
