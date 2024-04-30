@@ -3,6 +3,12 @@ export interface ContributionStats {
   activeClassrooms: string;
 }
 
+export interface ClassroomExchangesStats {
+  totalActivities: number;
+  totalVideos: number;
+  totalComments: number;
+}
+
 export interface StudentAccountsStats {
   totalStudentAccounts: number;
   classWithStudentAccounts: number;
