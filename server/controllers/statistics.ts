@@ -54,7 +54,6 @@ statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
   );
 });
 
-//penser à ajouter une condition pour ne sélectionner que les durées supérieur à 60s pour le AVG
 statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
   const durationThreshold = 60;
 
@@ -76,5 +75,19 @@ statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
     maxDuration: baseConnectionTimesStats.maxDuration,
     averageDuration: parseInt(baseConnectionTimesStats.averageDuration),
     medianDuration: parseInt(medianConnectionTimesStats[0].duration),
+  });
+});
+
+statisticsController.get({ path: '/connection-counts' }, async (_req, res) => {
+  const baseConnectionCountsStats = await analyticSessionRepository
+    .createQueryBuilder('analytic_session')
+
+  const medianConnectionCountsStats = await AppDataSource.createQueryRunner().manager.query();
+
+  res.sendJSON({
+    minConnections: 0,
+    maxConnections: 0,
+    averageConnections: 0,
+    medianConnections: 0,
   });
 });
