@@ -4,6 +4,7 @@ import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
 import HorizontalBars from './charts/HorizontalCharts';
 import PieCharts from './charts/PieCharts';
+import PhaseDropdown from './filters/PhaseDropdown'
 import styles from './styles/charts.module.css';
 
 const pieChartData = {
@@ -19,6 +20,7 @@ const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6
 const CountryStats = () => {
   return (
     <>
+      <PhaseDropdown />
       <h1>Statut: Observateur</h1>
       <div className={styles.chartsContainer}>
         <HorizontalBars />
