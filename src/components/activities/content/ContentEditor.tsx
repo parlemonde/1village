@@ -3,6 +3,7 @@ import React from 'react';
 
 import { AddContentCard } from './AddContentCard';
 import { H5pEditor } from './editors/H5pEditor';
+import { DocumentEditor } from './editors/ImageEditor/DocumentEditor';
 import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { SoundEditor } from './editors/SoundEditor';
 import { TextEditor } from './editors/TextEditor/TextEditor';
@@ -70,6 +71,19 @@ const ContentEditor = ({ content, updateContent, addContent, deleteContent }: Co
           if (p.type === 'video') {
             return (
               <VideoEditor
+                key={p.id}
+                id={p.id}
+                value={p.value}
+                onChange={onChangeContent(index)}
+                onDelete={() => {
+                  deleteContent(index);
+                }}
+              />
+            );
+          }
+          if (p.type === 'document') {
+            return (
+              <DocumentEditor
                 key={p.id}
                 id={p.id}
                 value={p.value}
