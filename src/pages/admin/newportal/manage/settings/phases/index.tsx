@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import { useGetVillages } from 'src/api/villages/villages.get';
-import { SavePhasesModal } from 'src/components/admin/managa/settings/SavePhasesModal';
+import { SavePhasesModal } from 'src/components/admin/manage/settings/SavePhasesModal';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
@@ -17,7 +17,7 @@ const Phases = () => {
   const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
   const [villagePhases, setVillagePhases] = useState<{ [villageId: number]: VillagePhase }>({});
   const villages = useGetVillages();
-  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (villages.data) {
