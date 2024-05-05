@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
-import type { ClassAnthemActivity } from 'src/activity-types/classAnthem.types';
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
 import { RedButton } from 'src/components/buttons/RedButton';
 
 export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ClassAnthemActivity>) => (

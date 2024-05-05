@@ -5,7 +5,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
-import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';

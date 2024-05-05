@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
-import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';

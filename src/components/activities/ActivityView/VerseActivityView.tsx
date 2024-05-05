@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { ActivityViewProps } from './activity-view.types';
-import type { ClassAnthemActivity } from 'src/activity-types/classAnthem.types';
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { bgPage } from 'src/styles/variables.const';
 
