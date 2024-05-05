@@ -98,7 +98,7 @@ __metadata:
     express: "npm:^4.18.1"
     express-rate-limit: "npm:^6.4.0"
     express-useragent: "npm:^1.0.15"
-    ffmpeg-audio-mixer: "npm:^1.3.0"
+    ffmpeg-audio-mixer: "npm:^1.4.0"
     fs-extra: "npm:^10.1.0"
     geojson: "npm:0.5.0"
     helmet: "npm:^5.1.0"
@@ -8013,10 +8013,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ffmpeg-audio-mixer@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "ffmpeg-audio-mixer@npm:1.3.0"
-  checksum: 10/a43b60fb1e8af4bbf49370069f97dc4765566707e644f4d2e9323f2df2fdeea0823a651c751c78b831ca3ab294a053cc31e2e811eca46500072fb436e71a8cd3
+"ffmpeg-audio-mixer@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "ffmpeg-audio-mixer@npm:1.4.0"
+  checksum: 10/67e20eb2af4bfed532ba74adecca972e5ad0de16044a87bf93e94b6d6dd8477c811973041be4671a1af4b5f73e0042379cf951948d2debd343a1d09845ec6827
   languageName: node
   linkType: hard
 

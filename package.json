@@ -157,7 +157,7 @@
     "express": "^4.18.1",
     "express-rate-limit": "^6.4.0",
     "express-useragent": "^1.0.15",
-    "ffmpeg-audio-mixer": "^1.3.0",
+    "ffmpeg-audio-mixer": "^1.4.0",
     "fs-extra": "^10.1.0",
     "helmet": "^5.1.0",
     "html-to-draftjs": "^1.5.0",
