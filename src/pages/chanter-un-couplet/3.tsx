@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
-import type { ClassAnthemData } from 'types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -11,6 +10,7 @@ import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { toTime } from 'src/utils/toTime';
 import { TrackType } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep3 = () => {
   const router = useRouter();

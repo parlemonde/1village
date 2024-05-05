@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { ClassAnthemData } from 'types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AudioPlayer } from 'src/components/audio/AudioPlayer';
@@ -12,6 +11,7 @@ import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { AnthemData, Track } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const emptyAnthemActivity: AnthemData = {
   tracks: [],

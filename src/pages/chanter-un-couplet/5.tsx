@@ -7,7 +7,6 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { ClassAnthemData } from 'types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -15,6 +14,7 @@ import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep5 = () => {
   const router = useRouter();
