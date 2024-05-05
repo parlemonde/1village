@@ -3,13 +3,14 @@ import fs from 'fs-extra';
 import path from 'path';
 import { v4 } from 'uuid';
 
-import type { SimpleTrack } from '../../types/anthem.type';
+import type { Track } from '../../types/anthem.type';
 import { getFile, uploadFile } from '../fileUpload';
 
+type TrackWithFilename = Track & { filename: string };
 type JobData = {
   userId: number;
   mixUrlId: string;
-  tracks: SimpleTrack[];
+  tracks: Track[];
 };
 const JOBS_QUEUE: JobData[] = [];
 let isRunning = false;
@@ -20,12 +21,12 @@ const startJob = () => {
   }
 };
 
-async function buildMix(userId: number, mixUrlId: string, tracks: SimpleTrack[]): Promise<void> {
+async function buildMix(userId: number, mixUrlId: string, tracks: Track[]): Promise<void> {
   isRunning = true;
   const dir = path.join(__dirname, '..', '..', '..', '/medias');
   await fs.ensureDir(dir);
 
-  const downloadTracks: SimpleTrack[] = [];
+  const downloadTracks: TrackWithFilename[] = [];
 
   // [1] download all tracks
   for (const track of tracks) {
@@ -55,6 +56,7 @@ async function buildMix(userId: number, mixUrlId: string, tracks: SimpleTrack[])
       inputFile: track.filename || '',
       weight: track.sampleVolume ?? 1,
       delay: Math.floor((track.sampleStartTime || 0) * 1000), // in ms
+      trim: track.sampleTrim,
     })),
   ).toFile(path.join(outputDir, outputFilename));
 
@@ -73,7 +75,7 @@ async function buildMix(userId: number, mixUrlId: string, tracks: SimpleTrack[])
   isRunning = false;
 }
 
-export function buildAudioMix(userId: number, tracks: SimpleTrack[]): string {
+export function buildAudioMix(userId: number, tracks: Track[]): string {
   // Generate a unique id for the mix
   const mixUrlId = v4();
 

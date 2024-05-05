@@ -20,14 +20,11 @@ export type Track = {
   sampleDuration: number;
   sampleStartTime: number;
   sampleVolume?: number;
+  sampleTrim?: {
+    start?: number;
+    end?: number;
+  };
   iconUrl: string;
-};
-
-export type SimpleTrack = {
-  filename?: string;
-  sampleUrl: string;
-  sampleStartTime: number;
-  sampleVolume?: number;
 };
 
 export enum TrackType {

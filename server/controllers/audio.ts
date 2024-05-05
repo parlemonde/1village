@@ -92,6 +92,14 @@ const NEW_AUDIO_SCHEMA: JSONSchemaType<NewAudioMix> = {
           sampleDuration: { type: 'number' },
           sampleStartTime: { type: 'number' },
           sampleVolume: { type: 'number', nullable: true },
+          sampleTrim: {
+            type: 'object',
+            properties: {
+              start: { type: 'number', nullable: true },
+              end: { type: 'number', nullable: true },
+            },
+            nullable: true,
+          },
           iconUrl: { type: 'string' },
         },
         required: ['type', 'label', 'sampleUrl', 'sampleDuration', 'sampleStartTime', 'iconUrl'],
