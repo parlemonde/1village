@@ -57,7 +57,6 @@ jobs:
 
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "server_public_ip<<$EOF" >> $GITHUB_OUTPUT
-          echo "$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
           echo "$(terraform output server_public_ip)" >> $GITHUB_OUTPUT
           echo "$EOF" >> $GITHUB_OUTPUT
         if: success()
@@ -65,7 +64,6 @@ jobs:
       - name: Show IP
         run: |
           echo "Public IP ${{steps.get_server_ip.outputs.server_public_ip}}"
-          echo "Public IP ${{steps.get_server_ip.outputs}}"
 
       - name: Create .env file
         env:
@@ -98,7 +96,7 @@ jobs:
         shell: bash
         #env:
         #  server: ${{ steps.get_server_ip.outputs.server_public_ip }}
-        #if: success()
+        if: failure()
 
       - name: Terraform Destroy
         run: |
