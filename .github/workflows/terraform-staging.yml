@@ -52,12 +52,14 @@ jobs:
         #run: echo "server_public_ip={$(cd terraform; terraform output -raw server_public_ip)}" >> $GITHUB_OUTPUT
         run: |
           cd terraform
-          echo "::set-output name=server_public_ip::$(terraform output -raw server_public_ip)"
-          #echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
+          #echo "::set-output name=server_public_ip::$(terraform output -raw server_public_ip)"
+          echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
         if: success()
 
       - name: Show IP
-        run: echo "Public IP ${{steps.get_server_ip.outputs.server_public_ip}}"
+        run: |
+          echo "Public IP ${{steps.get_server_ip.outputs.server_public_ip}}"
+          echo "Public IP ${{steps.get_server_ip.outputs}}"
 
       - name: Create .env file
         env:
@@ -90,7 +92,7 @@ jobs:
         shell: bash
         #env:
         #  server: ${{ steps.get_server_ip.outputs.server_public_ip }}
-        if: success()
+        #if: success()
 
       - name: Terraform Destroy
         run: |
