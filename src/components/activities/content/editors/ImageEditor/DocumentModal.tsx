@@ -1,19 +1,13 @@
 import Image from 'next/image';
-import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Button, Divider, TextField } from '@mui/material';
-import Alert from '@mui/material/Alert';
+import { Button } from '@mui/material';
 
-import type { ImgCroppieRef } from 'src/components/ImgCroppie';
-import { ImgCroppie } from 'src/components/ImgCroppie';
-import { KeepRatio } from 'src/components/KeepRatio';
+import { useUploadFiles } from 'src/api/files/uploadFiles.post';
 import { Modal } from 'src/components/Modal';
-import { LightBox } from 'src/components/lightbox/Lightbox';
 import { fontDetailColor, bgPage } from 'src/styles/variables.const';
-import { isValidHttpUrl } from 'src/utils';
-import { axiosRequest } from 'src/utils/axiosRequest';
 
 interface DocumentEditorProps {
   id: number;
@@ -21,10 +15,16 @@ interface DocumentEditorProps {
   setIsModalOpen: (val: boolean) => void;
   onDeleteEditor: () => void;
 }
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDeleteEditor }: DocumentEditorProps) {
-  // const [files, setFiles] = useState<File[] | null>(null);
-  const [files, setFiles] = useState<string[] | null>(null);
+  // const [file, setFile] = useState<{ path: string; extention: string; file: File } | null>(null);
+  const [urls, setUrls] = useState<string[]>([]);
+  const [numPages, setNumPages] = useState<number>(1);
+  const uploadFiles = useUploadFiles();
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+  }
   return (
     <Modal
       open={isModalOpen}
@@ -63,26 +63,26 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
             </div>
             <div className="text-center">
               <Button component="label" variant="outlined" color="secondary" startIcon={<CloudUploadIcon />} style={{ cursor: 'pointer' }}>
-                <>
-                  Importer
-                  <input
-                    type="file"
-                    multiple
-                    accept="application/pdf,
-  application/vnd.ms-powerpoint,
-  application/vnd.openxmlformats-officedocument.presentationml.presentation,
-  application/msword,
-  application/vnd.openxmlformats-officedocument.wordprocessingml.document,"
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                      if (e.target.files) {
-                        // setFiles(Array.from(e.target.files));
-                        setFiles(Array.from(e.target.value));
-                      }
-                      console.log(e.target.files);
-                    }}
-                  />
-                </>
+                Importer
+                <input
+                  type="file"
+                  multiple
+                  accept="application/pdf"
+                  //to accept futur docx and pptx
+                  //                   accept="application/pdf,
+                  //                   application/vnd.ms-powerpoint,
+                  // -  application/vnd.openxmlformats-officedocument.presentationml.presentation,
+                  // -  application/msword,
+                  // -  application/vnd.openxmlformats-officedocument.wordprocessingml.document,"
+                  style={{ display: 'none' }}
+                  onChange={async (e) => {
+                    if (e.target.files) {
+                      const files = Array.from(e.target.files);
+                      const urls = await uploadFiles.mutateAsync(files);
+                      setUrls(urls);
+                    }
+                  }}
+                />
               </Button>
             </div>
           </div>
@@ -92,7 +92,17 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
             <div className="text-center text text--bold" style={{ height: '10%' }}>
               Aperçu
             </div>
-            {/* {files && <DocViewer documents={[{ uri: files[0], fileType: 'application/pdf' }]} style={{ width: 'auto', height: 500 }} />} */}
+
+            {urls.length
+              ? urls.map((url) => (
+                  <div key={url}>
+                    <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
+                      <Page width={380} renderTextLayer={false} renderAnnotationLayer={false} pageNumber={1} pageIndex={0} />
+                    </Document>
+                    <hr />
+                  </div>
+                ))
+              : ''}
           </div>
         </div>
       </div>

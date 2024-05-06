@@ -35,8 +35,8 @@ const whitelist = [
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ];
-export const fileUplad = multer({
-  storage: diskStorageToImages,
+export const fileUpladInMemory = multer({
+  storage: multer.memoryStorage(),
   fileFilter: (_req, file, cb) => {
     if (!whitelist.includes(file.mimetype)) {
       return cb(new Error('file is not allowed'));
