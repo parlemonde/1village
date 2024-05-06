@@ -57,6 +57,7 @@ resource "aws_eip" "elastic-ip" {
   domain                    = "vpc"
   network_interface         = aws_network_interface.web-server-nic.id
   associate_with_private_ip = aws_network_interface.web-server-nic.private_ip
+  depends_on = [ aws_instance.ec2-staging ]
   tags = {
     Name = "plm-staging-eip-br-X"
   }
