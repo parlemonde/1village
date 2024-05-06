@@ -48,13 +48,9 @@ jobs:
 
       - name: Extract Public IP
         id: get_server_ip
-        #run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output -raw server_public_ip)"
-        #run: echo "server_public_ip={$(cd terraform; terraform output -raw server_public_ip)}" >> $GITHUB_OUTPUT
         run: |
           cd terraform
           #echo "::set-output name=server_public_ip::$(terraform output -raw server_public_ip)"
-          #echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
-
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "server_public_ip<<$EOF" >> $GITHUB_OUTPUT
           echo "$(terraform output server_public_ip)" >> $GITHUB_OUTPUT
@@ -92,13 +88,13 @@ jobs:
         run: |
           docker save -o 1village-image.tar 1village
           scp -o StrictHostKeyChecking=no 1village-image.tar ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }}:/home/ec2-user
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }} 'cd ~ && docker load -i 1village-image.tar && docker-compose up -d'
+          #ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.get_server_ip.outputs.server_public_ip }} 'cd ~ && docker load -i 1village-image.tar && docker-compose up -d'
         shell: bash
         #env:
         #  server: ${{ steps.get_server_ip.outputs.server_public_ip }}
-        if: failure()
+        #if: success()
 
       - name: Terraform Destroy
         run: |
           cd terraform
-          terraform destroy
+          terraform destroy -auto-approve
