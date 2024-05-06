@@ -53,7 +53,13 @@ jobs:
         run: |
           cd terraform
           #echo "::set-output name=server_public_ip::$(terraform output -raw server_public_ip)"
-          echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
+          #echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "server_public_ip<<$EOF" >> $GITHUB_OUTPUT
+          echo "$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
+          echo "$(terraform output server_public_ip)" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
         if: success()
 
       - name: Show IP
