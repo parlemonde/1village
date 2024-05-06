@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
@@ -18,10 +17,10 @@ interface DocumentEditorProps {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDeleteEditor }: DocumentEditorProps) {
-  // const [file, setFile] = useState<{ path: string; extention: string; file: File } | null>(null);
-  const [urls, setUrls] = useState<string[]>([]);
-  const [numPages, setNumPages] = useState<number>(1);
   const uploadFiles = useUploadFiles();
+  const [urls, setUrls] = useState<string[]>([]);
+  const [numPages, setNumPages] = useState<number>();
+
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
     setNumPages(numPages);
   }
@@ -97,7 +96,7 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
               ? urls.map((url) => (
                   <div key={url}>
                     <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
-                      <Page width={380} renderTextLayer={false} renderAnnotationLayer={false} pageNumber={1} pageIndex={0} />
+                      <Page width={380} renderTextLayer={false} renderAnnotationLayer={false} pageNumber={numPages} pageIndex={0} />
                     </Document>
                     <hr />
                   </div>
