@@ -43,8 +43,6 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
         setIsModalOpen(false);
         onDeleteEditor();
       }}
-      //   loading={isModalLoading}
-      //   disabled={preview.mode !== 1}
       ariaLabelledBy={`document-edit-${id}`}
       ariaDescribedBy={`document-edit-${id}-desc`}
     >
@@ -80,7 +78,6 @@ export default function DocumentModal({ id, isModalOpen, setIsModalOpen, onDelet
             {urls.length ? (
               <div key={urls[0]}>
                 <PdfDisplay url={urls[0]} />
-                <hr />
               </div>
             ) : (
               ''
