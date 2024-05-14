@@ -27,7 +27,7 @@ describe('Upload files', () => {
     });
 
     const mockRequest: Partial<Request> = {
-      user: fakeUser as User,
+      user: fakeUser,
       files: [
         {
           buffer: dummyPdf,
@@ -52,7 +52,7 @@ describe('Upload files', () => {
   });
   test('Should throw - files are missing -', async () => {
     const mockRequest: Partial<Request> = {
-      user: fakeUser as User,
+      user: fakeUser,
       files: [],
     };
 
@@ -83,7 +83,7 @@ describe('Upload files', () => {
     });
 
     const mockRequest: Partial<Request> = {
-      user: fakeUser as User,
+      user: fakeUser,
       files: [
         {
           buffer: dummyPdf,
@@ -112,7 +112,7 @@ describe('Upload files', () => {
     });
 
     const mockRequest: Partial<Request> = {
-      user: fakeUser as User,
+      user: fakeUser,
       files: [
         {
           buffer: dummyPdf,
