@@ -160,7 +160,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -275,7 +275,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],

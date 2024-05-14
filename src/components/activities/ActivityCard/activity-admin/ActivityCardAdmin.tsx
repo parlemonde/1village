@@ -13,8 +13,8 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
-  const imageUrl: string =
-    activity?.images?.length && activity.images[0].imageUrl ? activity.images[0].imageUrl : 'https://placehold.co/600x400?text=No Picture';
+  const isImageUrl = activity.content.find((e) => e.type === 'image')?.value;
+  const imageUrl: string = isImageUrl ? isImageUrl : 'https://placehold.co/600x400?text=No Picture';
   const content: string = activity.content.reduce((acc, curr) => {
     if (curr.type === 'text') {
       acc += curr.value;

@@ -7,11 +7,11 @@ import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import StepsNavigation from 'src/components/activities/StepsNavigation';
 import { ContentEditor } from 'src/components/activities/content';
-import { useActivity } from 'src/hooks/useActivity';
+import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';
 
 const ContenuLibreStep1: React.FC = () => {
-  const { activity, updateActivity, addContent, deleteContent, save } = useActivity();
+  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
   const router = useRouter();
 
   useEffect(() => {
