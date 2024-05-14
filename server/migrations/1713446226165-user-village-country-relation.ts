@@ -55,7 +55,7 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
       // save data stored
       for (const userCountry of usersCountry) {
         const countryId: { id: number }[] = await queryRunner.query(`SELECT id FROM country WHERE isoCode='${userCountry.countryCode}';`);
-        if (countryId.length) {
+        if (countryId.length && countryId[0].id) {
           await queryRunner.query(`UPDATE user SET countryId=${countryId[0].id} WHERE id=${userCountry.id};`);
         }
       }

@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'path';
 
 import { uploadFiles } from '../controllers/filesController';
-import type { User } from '../entities/user';
 import { AwsS3 } from '../fileUpload/s3';
 import { AppError } from '../middlewares/handleErrors';
 import { appDataSource, fakeUser } from './mock';
@@ -13,6 +12,9 @@ beforeAll(() => {
 });
 beforeEach(() => {});
 afterAll(() => {
+  const directory = path.join(__dirname, '../fileUpload/images/1/');
+  // cleqning dev images files
+  fs.rmSync(directory, { recursive: true, force: true });
   return appDataSource.destroy();
 });
 
