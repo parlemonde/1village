@@ -51,7 +51,7 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
     }
     const userCountryCode = userTable?.columns.find((c) => c.name === 'countryCode');
     if (userCountryCode) {
-      const usersCountry: { id: number; countryCode: string }[] = await queryRunner.query(`SELECT id, countryCode FROM user;`);
+      const usersCountry: { id: number; countryCode: string | null }[] = await queryRunner.query(`SELECT id, countryCode FROM user;`);
       // save data stored
       for (const userCountry of usersCountry) {
         const countryId: { id: number }[] = await queryRunner.query(`SELECT id FROM country WHERE isoCode='${userCountry.countryCode}';`);
@@ -75,10 +75,12 @@ export class UserVillageCountryRelation1713446226165 implements MigrationInterfa
     }
     const classroomCountryCode = classroomTable?.columns.find((c) => c.name === 'countryCode');
     if (classroomCountryCode) {
-      const classroomCountryCodes: { id: number; countryCode: string }[] = await queryRunner.query(`SELECT id, countryCode FROM classroom`);
+      const classroomCountryCodes: { id: number; countryCode: string | null }[] = await queryRunner.query(`SELECT id, countryCode FROM classroom`);
       for (const classroom of classroomCountryCodes) {
-        const country: { id: number }[] = await queryRunner.query(`SELECT id FROM country WHERE isoCode='${classroom.countryCode}';`);
-        await queryRunner.query(`UPDATE classroom SET countryId=${country[0].id} WHERE id=${classroom.id};`);
+        if (classroom.countryCode) {
+          const country: { id: number }[] = await queryRunner.query(`SELECT id FROM country WHERE isoCode='${classroom.countryCode}';`);
+          await queryRunner.query(`UPDATE classroom SET countryId=${country[0].id} WHERE id=${classroom.id};`);
+        }
       }
       await queryRunner.query(`ALTER TABLE classroom DROP COLUMN countryCode`);
     }
