@@ -15,6 +15,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { useActivities } from 'src/services/useActivities';
 import PelicoReflechit from 'src/svg/pelico/pelico_reflechit.svg';
+import type { Country } from 'types/country.type';
 import { UserType } from 'types/user.type';
 
 export const Accueil = () => {
@@ -23,13 +24,12 @@ export const Accueil = () => {
   const isMediator = user && user.type <= UserType.MEDIATOR;
 
   //TODO: redo conditions and switchs
-  const filterCountries = React.useMemo(() => {
-    //const
-    return !village || (selectedPhase === 1 && !isMediator)
-      ? user && user.country !== null
-        ? [user?.country?.isoCode.toUpperCase()]
-        : []
-      : village.countries.map((c) => c.isoCode);
+  const filterCountries: Country[] = React.useMemo(() => {
+    if (!village || (selectedPhase === 1 && !isMediator)) {
+      return user?.country ? [user?.country] : [];
+    } else {
+      return village.countries ?? [];
+    }
   }, [selectedPhase, village, user, isMediator]);
 
   //TODO: create a function() that test if you get filteredCountries. create a file with the function .test.ts
@@ -40,8 +40,8 @@ export const Accueil = () => {
     selectedPhase: 0,
     types: 'all',
     status: 0,
-    countries: filterCountries.reduce<{ [key: string]: boolean }>((acc, c) => {
-      acc[c] = true;
+    countries: filterCountries?.reduce<{ [key: string]: boolean }>((acc, c) => {
+      acc[c.isoCode] = true;
       return acc;
     }, {}),
     pelico: true,
@@ -50,7 +50,7 @@ export const Accueil = () => {
   const { activities } = useActivities({
     limit: 200,
     page: 0,
-    countries: Object.keys(filters.countries).filter((key) => filters.countries[key]),
+    countries: filterCountries.map((c) => c.isoCode),
     pelico: filters.pelico,
     type: filters.types === 'all' ? undefined : filters.types,
     phase: selectedPhase,

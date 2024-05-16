@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import stringSimilarity from 'string-similarity';
 
+import { Country } from '../entities/country';
 import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
-import { countries } from '../utils/iso-3166-countries-french';
 import { logger } from '../utils/logger';
 
 export type PLM_Village = {
@@ -38,6 +38,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
 
   // get countries and create village
   logger.info(`Try to create village with slug: ${slug}`);
+  const countries = await AppDataSource.getRepository(Country).find();
   const villageCountries = (slug.startsWith('village-monde-') ? slug.slice(14) : slug).split(/[-–]/).filter((s) => s.length > 0);
   if (villageCountries.length === 2) {
     const c1 = stringSimilarity.findBestMatch(
@@ -52,7 +53,7 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
     logger.info(`c2: ${JSON.stringify(c2.bestMatch)}`);
     if (c1.bestMatch.rating > 0.88 && c2.bestMatch.rating > 0.88) {
       const newVillage = new Village();
-      newVillage.countryCodes = [countries[c1.bestMatchIndex].isoCode, countries[c2.bestMatchIndex].isoCode];
+      newVillage.countries = [countries[c1.bestMatchIndex], countries[c2.bestMatchIndex]];
       newVillage.name = name;
       newVillage.plmId = plmId;
       await AppDataSource.getRepository(Village).save(newVillage);
@@ -61,7 +62,8 @@ async function createVillage(plmVillage: PLM_Village): Promise<boolean> {
   }
 
   const newVillage = new Village();
-  newVillage.countryCodes = ['FR', 'FR'];
+  const frCountry = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: 'FR' } });
+  if (frCountry) newVillage.countries = [frCountry, frCountry];
   newVillage.name = name;
   newVillage.plmId = plmId;
   await AppDataSource.getRepository(Village).save(newVillage);

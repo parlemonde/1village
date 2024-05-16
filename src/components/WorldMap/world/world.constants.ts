@@ -22,6 +22,7 @@ export const PELICO_USER: User = {
   avatar: '/static-images/pelico-avatar.jpg',
   city: '',
   country: {
+    id: -1,
     isoCode: 'FR',
     name: 'France',
   },
@@ -30,10 +31,8 @@ export const PELICO_USER: User = {
   firstLogin: 0,
   id: 0,
   level: '',
-  position: {
-    lat: 46.603354, // todo
-    lng: 1.8883335, // todo
-  },
+  positionLat: 46.603354, // todo
+  positionLon: 1.8883335, // todo
   postalCode: '',
   pseudo: 'Pelico',
   school: '',

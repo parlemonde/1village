@@ -7,11 +7,11 @@ import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps 
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
+import { UserType } from '../../types/user.type';
+import { VillagePhase } from '../../types/village.type';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
-import { UserType } from '../entities/user';
-import { VillagePhase } from '../entities/village';
 import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
@@ -25,17 +25,11 @@ const activityController = new Controller('/activities');
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
-
   const activities = await getActivities({
     limit: req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined,
     page: req.query.page ? Number(getQueryString(req.query.page)) || 0 : undefined,
     villageId: req.query.villageId ? Number(getQueryString(req.query.villageId)) || 0 : undefined,
-    countries:
-      req.query.countries !== undefined
-        ? req.query.countries.length === 0
-          ? []
-          : (getQueryString(req.query.countries) || '').split(',')
-        : undefined,
+    countries: req.query.countries as string[] | undefined,
     pelico: req.query.pelico ? req.query.pelico !== 'false' : undefined,
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,

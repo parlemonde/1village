@@ -21,7 +21,7 @@ export const UserPopover = ({ user }: { user: User }) => {
             <p style={{ margin: '0 0 0.25rem 0', padding: 0 }} className="text text--small">
               {[user.address, user.city, user.country?.name].filter((d) => d && d.length > 0).join(', ')}
             </p>
-            <Flag country={user.country?.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
+            <Flag country={user.country ?? undefined} size="small" style={{ marginLeft: '0.6rem' }} />
           </div>
         )}
       </div>

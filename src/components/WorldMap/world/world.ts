@@ -428,7 +428,7 @@ export class World {
     }
     if (this.hoveredObject !== null && this.hoveredObject.name === 'pin' && this.view !== 'global') {
       const altitude = this.camera.position.clone().distanceTo(CENTERS[this.view]);
-      const coords = (this.hoveredObject as Pin).userData.user.position;
+      const coords = { lat: (this.hoveredObject as Pin).userData.user.positionLat, lng: (this.hoveredObject as Pin).userData.user.positionLon };
       const center = CENTERS[this.view].clone();
       const { x, y, z } = polar2Cartesian(coords.lat, coords.lng, 100);
       this.camera.position.x = x + center.x;

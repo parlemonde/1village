@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
+import { CountryContext } from 'src/contexts/countryContext';
 import { useUserRequests } from 'src/services/useUsers';
 import { useVillages } from 'src/services/useVillages';
 import { getQueryString } from 'src/utils';
@@ -34,6 +35,7 @@ const Required = (label: string) => (
 
 const EditUser = () => {
   const router = useRouter();
+  const { countries } = useContext(CountryContext);
 
   const { villages } = useVillages();
   const { editUser } = useUserRequests();
@@ -102,7 +104,7 @@ const EditUser = () => {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { position: _ignore, ...updatedValues } = user;
+    const { positionLat: _ignore, positionLon: _ignoreToo, ...updatedValues } = user;
     const result = await editUser({ ...updatedValues, villageId: user.villageId || null });
     if (result !== null) {
       router.push('/admin/users');
@@ -228,7 +230,10 @@ const EditUser = () => {
             label={Required('Pays')}
             value={user.country?.isoCode}
             onChange={(countryCode) => {
-              setUser((u) => (!u ? null : { ...u, country: { isoCode: countryCode, name: '' } }));
+              const foundCoundry = countries.find((c) => c.isoCode === countryCode);
+              if (foundCoundry) {
+                setUser((u) => (!u ? null : { ...u, country: foundCoundry }));
+              }
             }}
             filterCountries={
               user.villageId ? villages.find((v) => v.id === user.villageId)?.countries?.map((c) => c.isoCode) || undefined : undefined

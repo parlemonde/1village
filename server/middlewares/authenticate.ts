@@ -1,8 +1,8 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
+import type { UserType } from '../../types/user.type';
 import { getNewAccessToken } from '../authentication/lib/tokens';
-import type { UserType } from '../entities/user';
 import { User } from '../entities/user';
 import { getHeader } from '../utils';
 import { AppDataSource } from '../utils/data-source';

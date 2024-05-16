@@ -3,8 +3,8 @@ import useragent from 'express-useragent';
 import { Between } from 'typeorm';
 
 import type { AnalyticData, NavigationPerf, BrowserPerf } from '../../types/analytics.type';
+import { UserType } from '../../types/user.type';
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
-import { UserType } from '../entities/user';
 import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
 import { generateTemporaryToken, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';

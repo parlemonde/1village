@@ -1,4 +1,4 @@
-import { UserType } from '../entities/user';
+import { UserType } from '../../types/user.type';
 import { currencies } from '../utils/iso-4217-currencies-french';
 import { Controller } from './controller';
 

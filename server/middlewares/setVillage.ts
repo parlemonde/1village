@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { UserType } from '../entities/user';
+import { UserType } from '../../types/user.type';
 import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 
@@ -13,7 +13,9 @@ export async function setVillage(req: Request, res: Response, next: NextFunction
     villageId = req.cookies?.['village-id'] || -1;
   }
   if (villageId !== -1 || (user && user.type !== UserType.TEACHER)) {
-    const villages = await AppDataSource.getRepository(Village).find(villageId !== -1 ? { where: { id: villageId } } : { order: { id: 'ASC' } });
+    const villages = await AppDataSource.getRepository(Village).find(
+      villageId !== -1 ? { where: { id: villageId }, relations: { countries: true } } : { order: { id: 'ASC' } },
+    );
     req.village = villages[0];
   }
   if (villageId === -1 && req.village !== undefined) {
