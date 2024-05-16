@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React from 'react';
 
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Button, TextField } from '@mui/material';
@@ -9,7 +9,6 @@ import MaterialLink from '@mui/material/Link';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
-import { CountryContext } from 'src/contexts/countryContext';
 import { useVillageRequests } from 'src/services/useVillages';
 import { defaultOutlinedButtonStyle } from 'src/styles/variables.const';
 import { getQueryString } from 'src/utils';
@@ -18,7 +17,6 @@ import type { Village } from 'types/village.type';
 
 const EditVillage = () => {
   const router = useRouter();
-  const { countries } = useContext(CountryContext);
 
   const { editVillage } = useVillageRequests();
   const villageId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) || 0, [router]);
@@ -82,8 +80,7 @@ const EditVillage = () => {
           <CountrySelector
             value={village.countries[0].isoCode}
             onChange={(newValue: string) => {
-              const foundCountry = countries.find((c) => c.isoCode === newValue);
-              if (foundCountry) setVillage((v) => (!v ? null : { ...v, countries: [foundCountry, village.countries[1]] }));
+              setVillage((v) => (!v ? null : { ...v, countries: [{ isoCode: newValue, name: '' }, village.countries[1]] }));
             }}
             label="Pays 1"
             style={{ width: '100%', marginBottom: '1rem' }}
@@ -91,8 +88,7 @@ const EditVillage = () => {
           <CountrySelector
             value={village.countries[1]?.isoCode}
             onChange={(newValue: string) => {
-              const foundCountry = countries.find((c) => c.isoCode === newValue);
-              if (foundCountry) setVillage((v) => (!v ? null : { ...v, countries: [village.countries[0], foundCountry] }));
+              setVillage((v) => (!v ? null : { ...v, countries: [village.countries[0], { isoCode: newValue, name: '' }] }));
             }}
             label="Pays 2"
             style={{ width: '100%', marginBottom: '1rem' }}

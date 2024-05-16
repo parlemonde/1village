@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { getUserVisibilityFamilyParams } from 'src/api/user/user.get';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
+import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 import type { Classroom } from 'types/classroom.type';
@@ -38,12 +39,12 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
     const isFamily = user.type === UserType.FAMILY;
 
     const query: {
-      [key: string]: string | string[] | number | boolean | undefined;
+      [key: string]: string | number | boolean | undefined;
     } = {
       ...args,
       type: Array.isArray(type) ? type.join(',') : type,
       villageId: user.villageId !== null ? user.villageId : villageId !== null ? villageId : undefined,
-      countries: countries,
+      countries: countries.join(','),
       pelico: pelico ? 'true' : 'false',
       delayedDays: isFamily ? userClassroomData[0]?.delayedDays : undefined,
       hasVisibilitySetToClass: isFamily ? (userClassroomData[0]?.hasVisibilitySetToClass ? true : false) : undefined,
@@ -55,10 +56,7 @@ export const useActivities = ({ pelico, countries = [], userId, type, ...args }:
 
     const response = await axiosRequest({
       method: 'GET',
-      url: `/activities`,
-      params: {
-        ...query,
-      },
+      url: `/activities${serializeToQueryUrl(query)}`,
     });
     if (response.error) {
       return [];

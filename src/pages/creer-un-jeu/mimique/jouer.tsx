@@ -343,8 +343,7 @@ const PlayMimic = () => {
                   {gameCreatorIsPelico ? (
                     <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto' }} />
                   ) : (
-                    gameCreator &&
-                    gameCreator.country && <Flag country={gameCreator.country ?? undefined} size="small" style={{ marginLeft: '0.6rem' }} />
+                    gameCreator && gameCreator.country && <Flag country={gameCreator.country.isoCode} size="small" style={{ marginLeft: '0.6rem' }} />
                   )}
                 </p>
               )}
@@ -419,7 +418,7 @@ const PlayMimic = () => {
                     <GameStats
                       gameResponses={gameResponses}
                       choices={choices}
-                      country={userIsPelico ? village.countries[0] : user.country ?? undefined}
+                      country={userIsPelico ? village.countries[0].isoCode : user.country?.isoCode}
                       userMap={userMap}
                       users={users}
                       position={0}
@@ -429,7 +428,11 @@ const PlayMimic = () => {
                     gameResponses={gameResponses}
                     choices={choices}
                     position={1}
-                    country={userIsPelico ? village.countries[1] : village.countries.find((c) => c.id !== user.country?.id)}
+                    country={
+                      userIsPelico
+                        ? village.countries[1].isoCode
+                        : village.countries.map((c) => c.isoCode).find((i) => i !== user.country?.isoCode) || ''
+                    }
                     userMap={userMap}
                     users={users}
                   />

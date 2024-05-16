@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 
 import { ImageType } from '../../types/story.type';
-import { UserType } from '../../types/user.type';
 import { Image } from '../entities/image';
+import { UserType } from '../entities/user';
 import { getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';

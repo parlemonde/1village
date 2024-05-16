@@ -50,8 +50,7 @@ export class Pelico extends Group implements HoverableObject {
 
     // Add all users
     for (const user of users) {
-      const { lat, lng } = getRandomPos();
-      const userPin = new Pin({ ...user, positionLat: lat, positionLon: lng }, cameraPos, true, GLOBE_RADIUS * 0.75);
+      const userPin = new Pin({ ...user, position: getRandomPos() }, cameraPos, true, GLOBE_RADIUS * 0.75);
       userPin.visible = this.userVisibility;
       this.add(userPin);
     }

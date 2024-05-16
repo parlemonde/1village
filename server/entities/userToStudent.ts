@@ -53,7 +53,7 @@ export class UserToStudent {
           remainingUserToStudent.student.classroom.village
         ) {
           userToStudent.user.villageId = remainingUserToStudent.student.classroom.village.id;
-          userToStudent.user.country = remainingUserToStudent.student.classroom.country;
+          userToStudent.user.countryCode = remainingUserToStudent.student.classroom.countryCode;
           await entityManager.save(userToStudent.user);
         }
       }

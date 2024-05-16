@@ -1,6 +1,6 @@
 import type { Country } from '../../types/country.type';
 
-export const countries: Omit<Country, 'id'>[] = [
+export const countries: Country[] = [
   {
     isoCode: 'AF',
     name: 'Afghanistan',

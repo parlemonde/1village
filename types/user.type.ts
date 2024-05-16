@@ -29,8 +29,10 @@ export interface User {
   city: string;
   postalCode: string;
   address: string;
-  positionLat: number;
-  positionLon: number;
+  position: {
+    lat: number;
+    lng: number;
+  };
   hasAcceptedNewsletter: boolean;
   language: string;
 

@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import multer from 'multer';
 import path from 'path';
 
-import type { UserType } from '../../types/user.type';
+import type { UserType } from '../entities/user';
 import { authenticate } from '../middlewares/authenticate';
 import { handleErrors } from '../middlewares/handleErrors';
 import { diskStorage } from '../middlewares/multer';

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
-import type { Country } from 'server/entities/country';
+import React from 'react';
 
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Button, TextField } from '@mui/material';
@@ -10,17 +9,15 @@ import MaterialLink from '@mui/material/Link';
 
 import { AdminTile } from 'src/components/admin/AdminTile';
 import { CountrySelector } from 'src/components/selectors/CountrySelector';
-import { CountryContext } from 'src/contexts/countryContext';
 import { useVillageRequests } from 'src/services/useVillages';
 
 const NewVillage = () => {
   const router = useRouter();
-  const { countries } = useContext(CountryContext);
   const { addVillage } = useVillageRequests();
 
-  const [village, setVillage] = React.useState<{ name: string; countries: Country[] }>({
+  const [village, setVillage] = React.useState<{ name: string; countries: string[] }>({
     name: '',
-    countries: [],
+    countries: ['', ''],
   });
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +25,7 @@ const NewVillage = () => {
     if (!village.name || !village.countries[0] || !village.countries[1]) {
       return;
     }
-    const result = await addVillage({ name: village.name, countries: village.countries });
+    const result = await addVillage({ name: village.name, countries: village.countries.map((c) => ({ isoCode: c, name: c })) });
     if (result !== null) {
       router.push('/admin/villages');
     }
@@ -59,19 +56,17 @@ const NewVillage = () => {
             style={{ marginBottom: '1rem' }}
           />
           <CountrySelector
-            value={village.countries[0].isoCode}
+            value={village.countries[0]}
             onChange={(newValue: string) => {
-              const foundCountry = countries.find((c) => c.isoCode === newValue);
-              if (foundCountry) setVillage((v) => ({ ...v, countries: [foundCountry, village.countries[1]] }));
+              setVillage((v) => ({ ...v, countries: [newValue, village.countries[1]] }));
             }}
             label="Pays 1"
             style={{ width: '100%', marginBottom: '1rem' }}
           />
           <CountrySelector
-            value={village.countries[1].isoCode}
+            value={village.countries[1]}
             onChange={(newValue: string) => {
-              const foundCountry = countries.find((c) => c.isoCode === newValue);
-              if (foundCountry) setVillage((v) => ({ ...v, countries: [village.countries[0], foundCountry] }));
+              setVillage((v) => ({ ...v, countries: [village.countries[0], newValue] }));
             }}
             label="Pays 1"
             style={{ width: '100%', marginBottom: '1rem' }}

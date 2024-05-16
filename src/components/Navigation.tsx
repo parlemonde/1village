@@ -257,12 +257,12 @@ export const Navigation = (): JSX.Element => {
                   <Flag
                     style={{ margin: '0.25rem' }}
                     key={country.isoCode}
-                    country={country}
+                    country={country.isoCode}
                     isMistery={
                       !village ||
                       !user ||
-                      (selectedPhase === 1 && parentClassroom?.student?.classroom?.user?.toUpperCase() !== country.isoCode) ||
-                      (user.firstLogin < 2 && parentClassroom?.student?.classroom?.user?.toUpperCase() !== country.isoCode)
+                      (selectedPhase === 1 && parentClassroom?.student?.classroom.user.toUpperCase() !== country.isoCode) ||
+                      (user.firstLogin < 2 && parentClassroom?.student?.classroom.user.toUpperCase() !== country.isoCode)
                     }
                   ></Flag>
                 );
@@ -271,7 +271,7 @@ export const Navigation = (): JSX.Element => {
                   <Flag
                     style={{ margin: '0.25rem' }}
                     key={country.isoCode}
-                    country={country}
+                    country={country.isoCode}
                     isMistery={
                       !village ||
                       !user ||

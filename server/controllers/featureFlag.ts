@@ -2,9 +2,8 @@ import type { NextFunction, Request, Response } from 'express';
 import { In } from 'typeorm';
 
 import type { FeatureFlagsNames } from '../../types/featureFlag.constant';
-import { UserType } from '../../types/user.type';
 import { FeatureFlag } from '../entities/featureFlag';
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 

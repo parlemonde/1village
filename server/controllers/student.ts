@@ -1,10 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { UserType } from '../../types/user.type';
-import { Classroom } from '../entities/classroom';
 import { Student } from '../entities/student';
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
@@ -120,10 +118,7 @@ studentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const student = new Student();
-  const classroomFound = await AppDataSource.getRepository(Classroom).findOne({ where: { id: data.classroomId } });
-  if (classroomFound) {
-    student.classroom = classroomFound;
-  }
+  student.classroom = data.classroomId;
   student.firstname = data.firstname ?? null;
   student.lastname = data.lastname ?? null;
   student.hashedCode = inviteCodeGenerator(10);
@@ -181,7 +176,7 @@ studentController.post({ path: '/link-student', userType: UserType.FAMILY }, asy
       villageId: student.classroom.villageId,
       hasStudentLinked: true,
       firstLogin: student.classroom.village?.activePhase, //TEST THIS LINE
-      country: student.classroom.country,
+      countryCode: student.classroom.countryCode as string,
     })
     .where('id = :id', { id: req.user.id })
     .execute();
