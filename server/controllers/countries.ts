@@ -1,13 +1,11 @@
-import { UserType } from '../../types/user.type';
-import { Country } from '../entities/country';
-import { AppDataSource } from '../utils/data-source';
+import { UserType } from '../entities/user';
+import { countries } from '../utils/iso-3166-countries-french';
 import { Controller } from './controller';
 
 const countryController = new Controller('/countries');
 
 //--- Get all countries ---
 countryController.get({ path: '', userType: UserType.TEACHER }, async (_req, res) => {
-  const countries = await AppDataSource.getRepository(Country).find();
   res.sendJSON(countries);
 });
 

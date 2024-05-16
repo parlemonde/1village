@@ -1,5 +1,4 @@
 import React from 'react';
-import type { Country } from 'server/entities/country';
 
 import Checkbox from '@mui/material/Checkbox';
 
@@ -60,7 +59,7 @@ export type FilterArgs = {
 };
 
 interface FiltersProps {
-  countries?: Country[];
+  countries?: string[];
   filters: FilterArgs;
   onChange: React.Dispatch<React.SetStateAction<FilterArgs>>;
   phase: number;
@@ -72,7 +71,7 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
     onChange((f) => ({
       ...f,
       countries: countries.reduce<{ [key: string]: boolean }>((acc, c) => {
-        acc[c.isoCode] = true;
+        acc[c] = true;
         return acc;
       }, {}),
     }));
@@ -119,17 +118,17 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
       /> */}
       <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
         {countries.map((c) => (
-          <label key={c.isoCode} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
+          <label key={c} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
             <Checkbox
               color="success"
               style={{ padding: '0' }}
-              checked={filters.countries[c.isoCode] || false}
+              checked={filters.countries[c] || false}
               onChange={(event) => {
                 onChange({
                   ...filters,
                   countries: {
                     ...filters.countries,
-                    [c.isoCode]: event.target.checked,
+                    [c]: event.target.checked,
                   },
                 });
               }}

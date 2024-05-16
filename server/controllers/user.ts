@@ -5,15 +5,13 @@ import type { FindOperator } from 'typeorm';
 import { In, IsNull, LessThan } from 'typeorm';
 
 import { ActivityStatus, ActivityType } from '../../types/activity.type';
-import { UserType } from '../../types/user.type';
 import { getAccessToken } from '../authentication/lib/tokens';
 import { Email, sendMail } from '../emails';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
-import { Country } from '../entities/country';
 import { FeatureFlag } from '../entities/featureFlag';
 import { Student } from '../entities/student';
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
@@ -41,7 +39,6 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         { villageId: IsNull(), type: LessThan(`${UserType.TEACHER}`) as FindOperator<any> },
       ],
-      relations: { country: true },
     });
     const ids = users.map((u) => u.id);
     const mascottes = (
@@ -65,7 +62,6 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
     users = await AppDataSource.getRepository(User).find({
       relations: {
         userToStudents: true,
-        country: true,
       },
     });
     const studentsToSchool = (
@@ -91,10 +87,9 @@ userController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Requ
 });
 
 // --- Get one user. ---
-userController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+userController.get({ path: '/:id(\\d+)', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
-
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: { country: true } });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
   if (user === null || (!isSelfProfile && !isAdmin)) {
@@ -134,8 +129,7 @@ userController.get({ path: '/pseudo/:pseudo' }, async (req: Request, res: Respon
     res.sendJSON({ available: true });
   }
   res.sendJSON({
-    relations: { country: true },
-    available: (await AppDataSource.getRepository(User).count({ where: { pseudo }, relations: { country: true } })) === 0,
+    available: (await AppDataSource.getRepository(User).count({ where: { pseudo } })) === 0,
   });
 });
 
@@ -258,10 +252,7 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   user.hasAcceptedNewsletter = data.hasAcceptedNewsletter || false;
   user.language = data.language || 'français';
   user.hasStudentLinked = data.hasStudentLinked || false;
-  const countryFound = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: data.countryCode } });
-  if (countryFound) {
-    user.country = countryFound;
-  }
+  user.countryCode = data.countryCode || '';
   user.type = data.type || UserType.TEACHER || UserType.FAMILY;
   if (user.type === UserType.TEACHER) {
     user.isVerified = true;
@@ -311,8 +302,7 @@ type EditUserData = {
   type?: UserType;
   villageId?: number | null;
   firstLogin?: number;
-  positionLat?: number;
-  positionLon?: number;
+  position?: { lat: number; lng: number };
   isVerified?: boolean;
   accountRegistration?: number;
   hasAcceptedNewsletter?: boolean;
@@ -342,8 +332,16 @@ const EDIT_SCHEMA: JSONSchemaType<EditUserData> = {
     villageId: { type: 'number', nullable: true },
     accountRegistration: { type: 'number', nullable: true },
     firstLogin: { type: 'number', nullable: true },
-    positionLat: { type: 'number', nullable: true },
-    positionLon: { type: 'number', nullable: true },
+    position: {
+      type: 'object',
+      nullable: true,
+      properties: {
+        lat: { type: 'number', nullable: false },
+        lng: { type: 'number', nullable: false },
+      },
+      required: ['lat', 'lng'],
+      additionalProperties: false,
+    },
     hasAcceptedNewsletter: { type: 'boolean', nullable: true },
     isVerified: { type: 'boolean', nullable: true },
     language: { type: 'string', nullable: true },
@@ -379,10 +377,7 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   user.postalCode = valueOrDefault(data.postalCode, user.postalCode);
   user.level = valueOrDefault(data.level, user.level);
   user.school = valueOrDefault(data.school, user.school);
-  const countryFound = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: data.countryCode } });
-  if (countryFound) {
-    user.country = countryFound;
-  }
+  user.countryCode = valueOrDefault(data.countryCode, user.countryCode);
   user.avatar = valueOrDefault(data.avatar, user.avatar) || null;
   user.displayName = valueOrDefault(data.displayName, user.displayName) || null;
   user.firstLogin = valueOrDefault(data.firstLogin, user.firstLogin);
@@ -390,35 +385,34 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.type = valueOrDefault(data.type, user.type);
     user.villageId = valueOrDefault(data.villageId, user.villageId, true);
   }
-  if (data.positionLat && data.positionLon) {
-    user.positionLat = data.positionLat;
-    user.positionLon = data.positionLon;
+  if (data.position) {
+    user.position = data.position;
   }
   if (data.villageId) {
     if (user.type === UserType.TEACHER) {
       const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
-      if (classroom) {
-        const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
 
-        const studentsId = students.map((student) => student.id);
+      if (!classroom) return;
 
-        const families = await AppDataSource.getRepository(UserToStudent).find({
-          where: { student: { id: In(studentsId) } },
-          relations: ['user', 'student'],
-        });
+      const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
+      const studentsId = students.map((student) => student.id);
 
-        const familiesId = families.map((family) => family.user.id);
+      const families = await AppDataSource.getRepository(UserToStudent).find({
+        where: { student: { id: In(studentsId) } },
+        relations: ['user', 'student'],
+      });
 
-        const promises = [];
+      const familiesId = families.map((family) => family.user.id);
 
-        promises.push(
-          AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
-          AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
-          AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
-        );
+      const promises = [];
 
-        await Promise.all(promises);
-      }
+      promises.push(
+        AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
+        AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
+        AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
+      );
+
+      await Promise.all(promises);
     }
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
@@ -843,7 +837,7 @@ userController.get({ path: '/get-classroom/:id', userType: UserType.OBSERVATOR }
       firstname: student.firstname,
       lastname: student.lastname,
       classroom: {
-        user: classroom.user.country?.isoCode,
+        user: classroom.user.countryCode,
       },
     },
   });
@@ -900,7 +894,7 @@ userController.get({ path: '/:id/visibility-params/', userType: UserType.FAMILY 
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student', 'country'] });
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id }, relations: ['userToStudents', 'userToStudents.student'] });
 
   if (user && user.type === UserType.TEACHER) {
     const classroom = [];

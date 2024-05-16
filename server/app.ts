@@ -8,9 +8,9 @@ import morgan from 'morgan';
 import next from 'next';
 import path from 'path';
 
-import { UserType } from '../types/user.type';
 import { authRouter } from './authentication';
 import { controllerRouter } from './controllers';
+import { UserType } from './entities/user';
 import { getH5pRouter } from './h5p';
 import { authenticate } from './middlewares/authenticate';
 import { crsfProtection } from './middlewares/csrfCheck';

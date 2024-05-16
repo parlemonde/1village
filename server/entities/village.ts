@@ -1,10 +1,11 @@
-import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 
+import type { Country } from '../../types/country.type';
 import type { Village as VillageInterface } from '../../types/village.type';
 import { VillagePhase } from '../../types/village.type';
+import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
 import { Classroom } from './classroom';
-import { Country } from './country';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
 import { Image } from './image';
@@ -23,8 +24,13 @@ export class Village implements VillageInterface {
   @Column({ type: 'varchar', length: 80, nullable: false })
   public name: string;
 
-  @ManyToMany(() => Country)
-  @JoinTable()
+  @Column('simple-array')
+  set countryCodes(newCountryCodes: string[]) {
+    this.countries = newCountryCodes.map((isoCode) => countriesMap[isoCode]).filter((c) => c !== undefined);
+  }
+  get countryCodes() {
+    return this.countries.map((c) => c.isoCode);
+  }
   public countries: Country[];
 
   @Column({

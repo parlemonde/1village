@@ -1,4 +1,4 @@
-import { UserType } from '../../types/user.type';
+import { UserType } from '../entities/user';
 import { Video } from '../entities/video';
 import { deleteVideo, getVideoLink, uploadVideo, getPictureForVideo } from '../fileUpload';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';

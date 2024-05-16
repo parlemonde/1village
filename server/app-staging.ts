@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import next from 'next';
 import path from 'path';
 
-import { UserType } from '../types/user.type';
+import { UserType } from './entities/user';
 import { handleErrors } from './middlewares/handleErrors';
 import { removeTrailingSlash } from './middlewares/trailingSlash';
 

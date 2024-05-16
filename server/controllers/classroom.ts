@@ -1,10 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { UserType } from '../../types/user.type';
 import { Classroom } from '../entities/classroom';
-import { Country } from '../entities/country';
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { AppDataSource } from '../utils/data-source';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -26,7 +24,6 @@ classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req
   const classroom = await AppDataSource.getRepository(Classroom).findOne({
     relations: {
       user: true,
-      country: true,
     },
     where: { user: { id } },
   });
@@ -88,13 +85,12 @@ classroomController.post({ path: '', userType: UserType.TEACHER }, async (req: R
     where: { user: { id: req.user.id } },
   });
   if (verification.length !== 0) return res.status(303).send('Classroom already exit');
-  const countryFound = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: data.countryCode } });
-  const classroom = new Classroom();
-  classroom.user.id = data.userId;
-  classroom.country = countryFound;
-  classroom.id = data.villageId;
 
-  await AppDataSource.getRepository(Classroom).save(classroom);
+  const classroom = await AppDataSource.createQueryBuilder()
+    .insert()
+    .into(Classroom)
+    .values([{ user: { id: data.userId }, village: { id: data.villageId }, countryCode: data.countryCode }])
+    .execute();
 
   res.json(classroom);
 });

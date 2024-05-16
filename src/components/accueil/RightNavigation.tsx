@@ -24,7 +24,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
   const router = useRouter();
   const [localTime, setLocalTime] = React.useState<string | null>(null);
   const { user } = React.useContext(UserContext);
-  const { data: weather } = useWeather({ latitude: activityUser.positionLat, longitude: activityUser.positionLon });
+  const { data: weather } = useWeather({ latitude: activityUser.position.lat, longitude: activityUser.position.lng });
   const { activity: userMascotte } = useActivity(activityUser.mascotteId || -1);
   const { activities } = useActivities({
     limit: 200,
@@ -170,7 +170,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           )}
         </div>
         <span style={{ marginLeft: '0.25rem', display: 'flex' }}>
-          <Flag country={activityUser.country ?? undefined}></Flag>
+          <Flag country={activityUser.country?.isoCode}></Flag>
         </span>
       </div>
       {/* MASCOTTE + drapeau à garder */}
@@ -194,15 +194,9 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       <div className="bg-secondary vertical-bottom-margin" style={{ borderRadius: '10px', overflow: 'hidden' }}>
         <div style={{ height: '14rem' }}>
           <Map
-            position={{ lat: activityUser.positionLat, lng: activityUser.positionLon }}
+            position={activityUser.position}
             zoom={3}
-            markers={[
-              {
-                position: { lat: activityUser.positionLat, lng: activityUser.positionLon },
-                label: activityUser.address,
-                activityCreatorMascotte: activityUser.mascotteId,
-              },
-            ]}
+            markers={[{ position: activityUser.position, label: activityUser.address, activityCreatorMascotte: activityUser.mascotteId }]}
           />
         </div>
       </div>
@@ -220,7 +214,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
           }}
         >
           <div style={{ marginBottom: '1rem' }}>
-            <Flag country={activityUser.country ?? undefined}></Flag> {activityUser.city}
+            <Flag country={activityUser.country?.isoCode}></Flag> {activityUser.city}
           </div>
           {localTime}
           {weather && (

@@ -2,9 +2,7 @@
 import stringSimilarity from 'string-similarity';
 import { In } from 'typeorm';
 
-import { UserType } from '../../types/user.type';
-import { Country } from '../entities/country';
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { Village } from '../entities/village';
 import { AppDataSource } from '../utils/data-source';
 import { setUserPosition } from '../utils/get-pos';
@@ -73,8 +71,8 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
       countryCode = matchs[c.bestMatchIndex].isoCode;
     }
   }
-  if (village !== null && !village.countries.map((e) => e.isoCode).includes(countryCode)) {
-    countryCode = village.countries[0].isoCode;
+  if (village !== null && !village.countryCodes.includes(countryCode)) {
+    countryCode = village.countryCodes[0];
   }
 
   // 3- Add user
@@ -87,14 +85,12 @@ export async function createPLMUserToDB(plmUser: PLM_User): Promise<User> {
   user.postalCode = plmUser.postalCode || '';
   user.address = plmUser.address || '';
   user.villageId = village?.id || null;
-  const countryFound = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: countryCode } });
-  user.country = countryFound ?? null;
+  user.countryCode = countryCode;
   user.type = userType;
   user.passwordHash = '';
   user.verificationHash = '';
   user.accountRegistration = 10;
-  user.positionLat = 0;
-  user.positionLon = 0;
+  user.position = { lat: 0, lng: 0 };
 
   await setUserPosition(user);
   await AppDataSource.getRepository(User).save(user);

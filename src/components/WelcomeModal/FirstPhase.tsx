@@ -79,8 +79,7 @@ export const FirstPhase = () => {
       displayName: newUser.displayName || '',
     };
     if (position !== null) {
-      updatedValues.positionLat = position.lat;
-      updatedValues.positionLon = position.lng;
+      updatedValues.position = position;
     }
     const response = await axiosRequest({
       method: 'PUT',
@@ -227,7 +226,7 @@ export const FirstPhase = () => {
             <br />
             <h2 style={{ fontSize: '1.2rem', margin: '1rem 0' }} className="text--primary">
               <span style={{ marginRight: '0.5rem' }}>{user ? user.country?.name : ''}</span>
-              {user && <Flag country={user.country ?? undefined}></Flag>}
+              {user && <Flag country={user.country?.isoCode}></Flag>}
             </h2>
             <Button
               color="inherit"

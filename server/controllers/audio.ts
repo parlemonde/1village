@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserType } from '../../types/user.type';
+import { UserType } from '../entities/user';
 import { deleteFile, uploadFile } from '../fileUpload';
 import { streamFile } from '../fileUpload/streamFile';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';

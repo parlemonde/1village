@@ -1,9 +1,7 @@
 import * as argon2 from 'argon2';
 import mysql from 'mysql2';
 
-import { UserType } from '../../types/user.type';
-import { Country } from '../entities/country';
-import { User } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppDataSource, DEFAULT_NAME } from './data-source';
 import { sleep } from './index';
 import { logger } from './logger';
@@ -68,10 +66,9 @@ async function createSuperAdminUser(): Promise<void> {
   user.type = UserType.SUPER_ADMIN;
   user.passwordHash = await argon2.hash(adminPassword);
   user.accountRegistration = 0;
-  const frCountry = await AppDataSource.getRepository(Country).findOne({ where: { isoCode: 'FR' } });
-  if (frCountry) user.country = frCountry;
-  user.positionLat = 0;
-  user.positionLon = 0;
+  user.countryCode = 'fr';
+  user.positionLat = '0';
+  user.positionLon = '0';
   await AppDataSource.getRepository(User).save(user);
   logger.info('Super user Admin created!');
 }

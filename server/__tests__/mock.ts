@@ -3,7 +3,6 @@ import supertest from 'supertest';
 import { DataSource } from 'typeorm';
 
 import { getApp } from '../app';
-import type { User } from '../entities/user';
 
 export const appDataSource = new DataSource({
   type: 'sqlite',
@@ -54,6 +53,6 @@ export const fakeUser = {
   firstLogin: 3,
   type: 0,
   villageId: 1,
-  country: { id: 0, isoCode: 'FR', name: 'France' },
+  country: { isoCode: 'FR', name: 'France' },
   position: { lat: 48.8863442, lng: 2.380321 },
-} as unknown as User;
+};

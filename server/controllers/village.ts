@@ -1,9 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
-import { In } from 'typeorm';
 
-import { UserType } from '../../types/user.type';
-import { Country } from '../entities/country';
+import { UserType } from '../entities/user';
 import { Village } from '../entities/village';
 import { createVillagesFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -16,7 +14,7 @@ const villageController = new Controller('/villages');
 
 //--- Get all villages ---
 villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
-  const villages = await AppDataSource.getRepository(Village).find({ relations: { countries: true } });
+  const villages = await AppDataSource.getRepository(Village).find();
   res.sendJSON(villages);
 });
 
@@ -27,8 +25,7 @@ villageController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (re
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const village = await AppDataSource.getRepository(Village).findOne({ where: { id }, relations: { countries: true } });
-
+  const village = await AppDataSource.getRepository(Village).findOne({ where: { id } });
   if (!village || (req.user.type === UserType.TEACHER && req.user.villageId !== village.id)) {
     next();
     return;
@@ -59,12 +56,7 @@ villageController.post({ path: '', userType: UserType.ADMIN }, async (req: Reque
   }
   const village = new Village();
   village.name = data.name;
-  const countries = await AppDataSource.getRepository(Country).find({
-    where: { isoCode: In(data.countries) },
-  });
-  if (countries.length) {
-    village.countries = countries;
-  }
+  village.countryCodes = data.countries;
   await AppDataSource.getRepository(Village).save(village);
   res.sendJSON(village);
 });
@@ -95,26 +87,17 @@ villageController.put({ path: '/:id', userType: UserType.ADMIN }, async (req: Re
     return;
   }
   const id = parseInt(req.params.id, 10) || 0;
-  const village = await AppDataSource.getRepository(Village).findOne({
-    where: { id },
-    relations: {
-      countries: true,
-    },
-  });
+  const village = await AppDataSource.getRepository(Village).findOne({ where: { id } });
   if (!village) {
     next();
     return;
   }
+
   village.name = valueOrDefault(data.name, village.name);
+  village.countryCodes = valueOrDefault(data.countries, village.countryCodes);
   village.activePhase = valueOrDefault(data.activePhase, village.activePhase);
   village.anthemId = valueOrDefault(data.anthemId, village.anthemId);
 
-  const countries = await AppDataSource.getRepository(Country).find({
-    where: { isoCode: In(data.countries ?? village.countries.map((country) => country.isoCode)) },
-  });
-  if (countries.length) {
-    village.countries = countries;
-  }
   await AppDataSource.getRepository(Village).save(village);
   res.sendJSON(village);
 });
