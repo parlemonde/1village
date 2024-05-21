@@ -18,7 +18,7 @@ mediathequeController.post({ path: '' }, async (req, res) => {
       new Brackets((qb) => {
         filter.map(({ table, column, values }, subQueryIndex) => {
           let condition = '';
-          values.map((value, valueIndex) => {
+          values.map((_value, valueIndex) => {
             condition += valueIndex > 0 ? ' or ' : '(';
             condition += `${table}.${column} = ${values[valueIndex]}`;
           });
@@ -33,6 +33,35 @@ mediathequeController.post({ path: '' }, async (req, res) => {
     .offset(offset as number)
     .getMany();
   res.send(activities);
+});
+
+mediathequeController.post({ path: '/count' }, async (req, res) => {
+  try {
+    const filters: Array<Filter[]> = req?.body?.filters || [];
+
+    let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
+
+    filters.map((filter, index) => {
+      subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
+        new Brackets((qb) => {
+          filter.map(({ table, column, values }, subQueryIndex) => {
+            let condition = '';
+            values.map((_value, valueIndex) => {
+              condition += valueIndex > 0 ? ' or ' : '(';
+              condition += `${table}.${column} = ${values[valueIndex]}`;
+            });
+            condition += ')';
+            qb[subQueryIndex === 0 ? 'where' : 'andWhere'](condition);
+          });
+        }),
+      );
+    });
+    const count = await subQueryBuilder.getMany();
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error('Error fetching count:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 export { mediathequeController };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Box from '@mui/material/Box';
@@ -10,6 +10,7 @@ import FiltersActivities from './FiltersActivities';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import Filters from 'src/components/admin/mediatheque/Filter';
 import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
+import MediathequeContext from 'src/contexts/mediathequeContext';
 
 const styleModal = {
   position: 'absolute' as const,
@@ -29,6 +30,13 @@ const ModalFilter = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const { setFilters, setOffset } = useContext(MediathequeContext);
+
+  const handleResetFilters = () => {
+    setFilters([[]]);
+    setOffset(0);
+  };
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <Button onClick={handleOpen}>Filtres</Button>
@@ -40,7 +48,7 @@ const ModalFilter = () => {
           <Filters labels={activitiesLabel} placeholder="Classes" />
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CheckboxAdmin />
-            <IconButton aria-label="delete" color="primary">
+            <IconButton aria-label="delete" color="primary" onClick={handleResetFilters}>
               <RefreshIcon />
             </IconButton>
           </div>

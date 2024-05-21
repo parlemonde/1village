@@ -16,6 +16,8 @@ import React, { useContext } from 'react';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import IconButton from '@mui/material/IconButton';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import Filters from 'src/components/admin/mediatheque/Filter';
@@ -25,7 +27,8 @@ import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 
 const Mediatheque = () => {
-  const { setFilters } = useContext(MediathequeContext);
+  const { setFilters, filtered, setOffset, count } = useContext(MediathequeContext);
+  console.log('filtered', filtered);
 
   /* const [currentVillage, setCurrentVillage] = useState(null)
   const [currentCountry, setCurrentCountry] = useState(null)
@@ -57,7 +60,14 @@ const Mediatheque = () => {
 
   const handleResetFilters = () => {
     setFilters([[]]);
+    setOffset(0);
   };
+
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setOffset((value - 1) * 6);
+  };
+
+  const howManyPages = Math.ceil(count / 6);
 
   return (
     <>
@@ -83,6 +93,11 @@ const Mediatheque = () => {
         </div>
         <div className="modal-view">
           <ModalFilter />
+        </div>
+        <div>
+          <Stack spacing={2}>
+            <Pagination size="small" siblingCount={0} count={howManyPages} variant="outlined" onChange={handleChangePage} />
+          </Stack>
         </div>
       </div>
     </>

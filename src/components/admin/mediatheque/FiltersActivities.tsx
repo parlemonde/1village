@@ -64,7 +64,7 @@ export default function FiltersActivities() {
       if (updatedSubThemeNumbers.length > 0) {
         const result = [
           [
-            { table: 'activity', column: 'type', values: updatedSubThemeNumbers },
+            { table: 'activity', column: 'type', values: updatedActivityNumbers },
             { table: 'activity', column: 'subType', values: [] },
           ],
         ];
@@ -90,7 +90,7 @@ export default function FiltersActivities() {
     <>
       <div>
         {/* Filtre pour activités */}
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 140 }} size="small">
           <Select
             displayEmpty
             value={labelNameActivity}
