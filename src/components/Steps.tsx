@@ -2,11 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
-import Step from '@mui/material/Step';
-import StepConnector from '@mui/material/StepConnector';
+import { Step, StepConnector, StepLabel, Stepper } from '@mui/material/';
 import type { StepIconProps } from '@mui/material/StepIcon';
-import StepLabel from '@mui/material/StepLabel';
-import Stepper from '@mui/material/Stepper';
 
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
