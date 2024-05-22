@@ -1,6 +1,13 @@
 import React from 'react';
 
+import BarCharts from './charts/BarCharts';
+import DashboardTable from './charts/DashboardTable';
+import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
+import PhaseDropdown from './filters/PhaseDropdown';
+import styles from './styles/charts.module.css';
+import PhaseDropdown from './filters/PhaseDropdown';
+import styles from './styles/charts.module.css';
 
 const pieChartData = {
   data: [
@@ -10,11 +17,23 @@ const pieChartData = {
   ],
 };
 
+const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
+
+const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
+
 const CountryStats = () => {
   return (
     <>
-      <h1>Pays</h1>
-      <PieCharts pieChartData={pieChartData} />
+      <PhaseDropdown />
+      <h1>Statut: Observateur</h1>
+      <div className={styles.chartsContainer}>
+        <HorizontalChart />
+        <DashboardTable />
+        <div className={styles.engamentContainer}>
+          <PieCharts pieChartData={pieChartData} />
+          <BarCharts barChartData={barChartData} />
+        </div>
+      </div>
     </>
   );
 };

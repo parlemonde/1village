@@ -2,8 +2,8 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
-import type { Track } from '../../types/anthem.type';
 import { TrackType } from '../../types/anthem.type';
+import type { Track } from '../../types/anthem.type';
 import type { ActivityContent, AnyData } from '../../types/activity.type';
 import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
 import type { GameData, GamesData } from '../../types/game.type';
@@ -368,7 +368,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       data.data.slicedRecordUrl = buildAudioMix(activity.userId, [data.data.classRecordTrack as Track, data.data.classRecordTrack as Track]);
     }
   }
-  
+
   if (activity.status !== ActivityStatus.PUBLISHED) {
     if (data.phase) activity.phase = data.phase;
     if (data.phaseStep) {
