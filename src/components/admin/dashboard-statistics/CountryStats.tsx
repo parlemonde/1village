@@ -2,7 +2,7 @@ import React from 'react';
 
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
-import HorizontalBars from './charts/HorizontalCharts';
+import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import PhaseDropdown from './filters/PhaseDropdown'
 import styles from './styles/charts.module.css';
@@ -23,7 +23,7 @@ const CountryStats = () => {
       <PhaseDropdown />
       <h1>Statut: Observateur</h1>
       <div className={styles.chartsContainer}>
-        <HorizontalBars />
+        <HorizontalChart />
         <DashboardTable />
         <div className={styles.engamentContainer}>
           <PieCharts pieChartData={pieChartData} />
