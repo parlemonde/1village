@@ -93,7 +93,7 @@ export default function FiltersActivities() {
         <FormControl sx={{ m: 1, minWidth: 140 }} size="small">
           <Select
             displayEmpty
-            value={labelNameActivity}
+            value={labelNameActivity.length > 0 ? labelNameActivity : ''}
             onChange={handleChangeLabelActivity}
             input={<OutlinedInput />}
             renderValue={(selected) => {

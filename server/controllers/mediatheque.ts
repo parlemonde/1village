@@ -64,4 +64,28 @@ mediathequeController.post({ path: '/count' }, async (req, res) => {
   }
 });
 
+mediathequeController.post({ path: '/all' }, async (req, res) => {
+  const filters: Array<Filter[]> = req?.body?.filters || [];
+
+  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
+
+  filters.map((filter, index) => {
+    subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
+      new Brackets((qb) => {
+        filter.map(({ table, column, values }, subQueryIndex) => {
+          let condition = '';
+          values.map((_value, valueIndex) => {
+            condition += valueIndex > 0 ? ' or ' : '(';
+            condition += `${table}.${column} = ${values[valueIndex]}`;
+          });
+          condition += ')';
+          qb[subQueryIndex === 0 ? 'where' : 'andWhere'](condition);
+        });
+      }),
+    );
+  });
+  const activities = await subQueryBuilder.getMany();
+  res.send(activities);
+});
+
 export { mediathequeController };

@@ -15,20 +15,23 @@ import React, { useContext } from 'react';
 // STEP 4.1: comment on dl une vidéo youtube ? Souvent des vidéos Viméo (bah on dl pas)
 
 import RefreshIcon from '@mui/icons-material/Refresh';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
+import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
 import Filters from 'src/components/admin/mediatheque/Filter';
 import FiltersActivities from 'src/components/admin/mediatheque/FiltersActivities';
 import ModalFilter from 'src/components/admin/mediatheque/ModalFilter';
 import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
+import { bgPage } from 'src/styles/variables.const';
+import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
 const Mediatheque = () => {
   const { setFilters, filtered, setOffset, count } = useContext(MediathequeContext);
-  console.log('filtered', filtered);
 
   /* const [currentVillage, setCurrentVillage] = useState(null)
   const [currentCountry, setCurrentCountry] = useState(null)
@@ -71,34 +74,55 @@ const Mediatheque = () => {
 
   return (
     <>
-      <div>
+      <div className="container-mediatheque">
         <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
-        <div className="desktop-view">
-          <div style={{ display: 'flex' }}>
-            <FiltersActivities />
-            <>
-              {/* Ce filtre gère les différents village monde VMList */}
-              <Filters labels={activitiesLabel} placeholder="VM" />
-              {/* Ce filtre dépend du village monde choisi countryList */}
-              <Filters labels={activitiesLabel} placeholder="Pays" />
-              {/* Ce filtre dépend du pays choisi et du village monde classList */}
-              <Filters labels={activitiesLabel} placeholder="Classes" />
-            </>
+        <DownloadButton />
+      </div>
+      <div className="desktop-view">
+        <div style={{ display: 'flex' }}>
+          <FiltersActivities />
+          <>
+            {/* Ce filtre gère les différents village monde VMList */}
+            <Filters labels={activitiesLabel} placeholder="VM" />
+            {/* Ce filtre dépend du village monde choisi countryList */}
+            <Filters labels={activitiesLabel} placeholder="Pays" />
+            {/* Ce filtre dépend du pays choisi et du village monde classList */}
+            <Filters labels={activitiesLabel} placeholder="Classes" />
+          </>
 
-            <CheckboxAdmin />
-            <IconButton aria-label="delete" color="primary" onClick={handleResetFilters}>
-              <RefreshIcon />
-            </IconButton>
-          </div>
+          <CheckboxAdmin />
+          <IconButton aria-label="delete" color="primary" onClick={handleResetFilters}>
+            <RefreshIcon />
+          </IconButton>
         </div>
-        <div className="modal-view">
-          <ModalFilter />
-        </div>
-        <div>
-          <Stack spacing={2}>
-            <Pagination size="small" siblingCount={0} count={howManyPages} variant="outlined" onChange={handleChangePage} />
-          </Stack>
-        </div>
+      </div>
+      <div className="modal-view">
+        <ModalFilter />
+      </div>
+      <div>
+        {filtered && filtered.length === 0 ? (
+          <>
+            <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
+              <p style={{ textAlign: 'center' }} className="text">
+                {'Oups ! Aucun contenu ne correspond à ta recherche'}
+              </p>
+              <PelicoSearch style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
+              <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}></p>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button variant="outlined" onClick={handleResetFilters}>
+                Réinitialiser les filtres
+              </Button>
+            </div>
+          </>
+        ) : (
+          <div>Il y a des médias</div>
+        )}
+      </div>
+      <div className="pagination">
+        <Stack spacing={2}>
+          <Pagination size="small" siblingCount={0} count={howManyPages} variant="outlined" onChange={handleChangePage} />
+        </Stack>
       </div>
     </>
   );

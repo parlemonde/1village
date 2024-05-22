@@ -38,10 +38,29 @@ const ModalFilter = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <Button onClick={handleOpen}>Filtres</Button>
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '5px' }}>
+      <Button variant="outlined" onClick={handleOpen}>
+        Filtres
+      </Button>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={styleModal}>
+          <button
+            style={{
+              position: 'absolute',
+              top: '3px',
+              right: '3px',
+              padding: '10px',
+              backgroundColor: '#4c3ed9',
+              fontSize: '1rem',
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              cursor: 'pointer',
+            }}
+            onClick={handleClose}
+          >
+            X
+          </button>
           <FiltersActivities />
           <Filters labels={activitiesLabel} placeholder="VM" />
           <Filters labels={activitiesLabel} placeholder="Pays" />
