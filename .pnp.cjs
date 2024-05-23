@@ -56,6 +56,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/earcut", "npm:2.1.1"],\
             ["@types/express", "npm:4.17.13"],\
             ["@types/express-useragent", "npm:1.0.2"],\
+            ["@types/file-saver", "npm:2.0.7"],\
             ["@types/fs-extra", "npm:9.0.13"],\
             ["@types/geojson", "npm:7946.0.8"],\
             ["@types/jest", "npm:28.1.3"],\
@@ -117,6 +118,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.18.2"],\
             ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.7.0"],\
             ["express-useragent", "npm:1.0.15"],\
+            ["file-saver", "npm:2.0.5"],\
             ["fs-extra", "npm:10.1.0"],\
             ["geojson", "npm:0.5.0"],\
             ["helmet", "npm:5.1.1"],\
@@ -127,6 +129,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["json-stable-stringify", "npm:1.0.2"],\
             ["jsonwebtoken", "npm:8.5.1"],\
             ["jspdf", "npm:2.5.1"],\
+            ["jszip", "npm:3.10.1"],\
             ["leaflet", "npm:1.9.3"],\
             ["leaflet.fullscreen", "npm:2.4.0"],\
             ["maplibre-gl", "npm:2.1.9"],\
@@ -206,6 +209,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/earcut", "npm:2.1.1"],\
             ["@types/express", "npm:4.17.13"],\
             ["@types/express-useragent", "npm:1.0.2"],\
+            ["@types/file-saver", "npm:2.0.7"],\
             ["@types/fs-extra", "npm:9.0.13"],\
             ["@types/geojson", "npm:7946.0.8"],\
             ["@types/jest", "npm:28.1.3"],\
@@ -267,6 +271,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.18.2"],\
             ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.7.0"],\
             ["express-useragent", "npm:1.0.15"],\
+            ["file-saver", "npm:2.0.5"],\
             ["fs-extra", "npm:10.1.0"],\
             ["geojson", "npm:0.5.0"],\
             ["helmet", "npm:5.1.1"],\
@@ -277,6 +282,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["json-stable-stringify", "npm:1.0.2"],\
             ["jsonwebtoken", "npm:8.5.1"],\
             ["jspdf", "npm:2.5.1"],\
+            ["jszip", "npm:3.10.1"],\
             ["leaflet", "npm:1.9.3"],\
             ["leaflet.fullscreen", "npm:2.4.0"],\
             ["maplibre-gl", "npm:2.1.9"],\
@@ -5541,6 +5547,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/file-saver", [\
+        ["npm:2.0.7", {\
+          "packageLocation": "./.yarn/cache/@types-file-saver-npm-2.0.7-39f33a4b39-c3d1cd80ea.zip/node_modules/@types/file-saver/",\
+          "packageDependencies": [\
+            ["@types/file-saver", "npm:2.0.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/fs-extra", [\
         ["npm:9.0.13", {\
           "packageLocation": "./.yarn/cache/@types-fs-extra-npm-9.0.13-12fb7badd7-add79e212a.zip/node_modules/@types/fs-extra/",\
@@ -10799,6 +10814,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["file-saver", [\
+        ["npm:2.0.5", {\
+          "packageLocation": "./.yarn/cache/file-saver-npm-2.0.5-2c3bc40d53-c62d96e5ce.zip/node_modules/file-saver/",\
+          "packageDependencies": [\
+            ["file-saver", "npm:2.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["file-type", [\
         ["npm:17.1.6", {\
           "packageLocation": "./.yarn/cache/file-type-npm-17.1.6-5b81491f99-797e0d155e.zip/node_modules/file-type/",\
@@ -12059,6 +12083,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["image-size", "npm:1.0.2"],\
             ["queue", "npm:6.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["immediate", [\
+        ["npm:3.0.6", {\
+          "packageLocation": "./.yarn/cache/immediate-npm-3.0.6-c27588a2d3-f9b3486477.zip/node_modules/immediate/",\
+          "packageDependencies": [\
+            ["immediate", "npm:3.0.6"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13630,6 +13663,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["jszip", [\
+        ["npm:3.10.1", {\
+          "packageLocation": "./.yarn/cache/jszip-npm-3.10.1-2862546cfb-abc77bfbe3.zip/node_modules/jszip/",\
+          "packageDependencies": [\
+            ["jszip", "npm:3.10.1"],\
+            ["lie", "npm:3.3.0"],\
+            ["pako", "npm:1.0.11"],\
+            ["readable-stream", "npm:2.3.8"],\
+            ["setimmediate", "npm:1.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["jwa", [\
         ["npm:1.4.1", {\
           "packageLocation": "./.yarn/cache/jwa-npm-1.4.1-4f19d6572c-ff30ea7c2d.zip/node_modules/jwa/",\
@@ -13783,6 +13829,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["levn", "npm:0.4.1"],\
             ["prelude-ls", "npm:1.2.1"],\
             ["type-check", "npm:0.4.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["lie", [\
+        ["npm:3.3.0", {\
+          "packageLocation": "./.yarn/cache/lie-npm-3.3.0-35ddd11a4d-33102302cf.zip/node_modules/lie/",\
+          "packageDependencies": [\
+            ["lie", "npm:3.3.0"],\
+            ["immediate", "npm:3.0.6"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -15597,6 +15653,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["registry-auth-token", "npm:4.2.2"],\
             ["registry-url", "npm:5.1.0"],\
             ["semver", "npm:6.3.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["pako", [\
+        ["npm:1.0.11", {\
+          "packageLocation": "./.yarn/cache/pako-npm-1.0.11-b8f1b69d3e-1be2bfa1f8.zip/node_modules/pako/",\
+          "packageDependencies": [\
+            ["pako", "npm:1.0.11"]\
           ],\
           "linkType": "HARD"\
         }]\
