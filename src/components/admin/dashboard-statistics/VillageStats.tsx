@@ -1,7 +1,8 @@
 import React from 'react';
+import LogRequests from './logRequests';
 
 const VillageStats = () => {
-  return <h1>Village-monde</h1>;
+  return <LogRequests />;
 };
 
 export default VillageStats;

@@ -6,8 +6,6 @@ import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import PhaseDropdown from './filters/PhaseDropdown';
 import styles from './styles/charts.module.css';
-import PhaseDropdown from './filters/PhaseDropdown';
-import styles from './styles/charts.module.css';
 
 const pieChartData = {
   data: [
@@ -16,8 +14,6 @@ const pieChartData = {
     { id: 2, value: 20, label: 'series C' },
   ],
 };
-
-const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 

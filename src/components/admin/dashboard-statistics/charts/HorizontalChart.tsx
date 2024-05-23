@@ -1,5 +1,6 @@
-import { BarChart } from '@mui/x-charts/BarChart';
 import * as React from 'react';
+
+import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
 import { useGetClassroomExchanges, ClassroomExchangesStats } from 'src/api/statistics/statistics.get.ts';
@@ -16,9 +17,6 @@ const chartSetting = {
 const dataset = [];
 
 const valueFormatter = (value: number | null) => `${value}mm`;
-
-// eslint-disable-next-line no-console
-console.log('Data:', data);
 
 // handle loading & errors
 // if (isLoading) return <div>Loading...</div>;
