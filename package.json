@@ -52,7 +52,7 @@
     }
   },
   "resolutions": {
-    "react-is": "^17.0.1"
+    "react-is": "^18.0.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.6",
@@ -86,8 +86,8 @@
     "@types/nodemailer": "6.4.4",
     "@types/nprogress": "0.2.0",
     "@types/prettier": "2.6.3",
-    "@types/react": "17.0.47",
-    "@types/react-dom": "17.0.17",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
     "@types/sass": "1.43.1",
     "@types/sharp": "0.30.4",
     "@types/sortablejs": "1.13.0",
@@ -178,8 +178,8 @@
     "notistack": "^2.0.5",
     "nprogress": "^0.2.0",
     "query-string": "^7.1.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-pdf": "^8.0.0",
     "react-player": "^2.10.1",
     "react-query": "^3.39.2",
