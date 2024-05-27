@@ -1,8 +1,9 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import type { ActivityContent, AnyData } from '../entities/activity';
-import { Activity, ActivityStatus } from '../entities/activity';
+import type { ActivityContent, AnyData } from '../../types/activity.type';
+import { ActivityStatus } from '../../types/activity.type';
+import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { GameResponse } from '../entities/gameResponse';
 import { UserType } from '../entities/user';
