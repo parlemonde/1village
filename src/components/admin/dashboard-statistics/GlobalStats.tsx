@@ -6,8 +6,6 @@ const GlobalStats = () => {
   return (
     <div>
       <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
-      <StatsCard data={20}>Nombre de classes connectées</StatsCard>
-      <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
     </div>
   );
 };
