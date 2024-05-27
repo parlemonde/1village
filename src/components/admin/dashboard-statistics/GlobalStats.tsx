@@ -18,6 +18,9 @@ const GlobalStats = () => {
           Temps de connexion moyen par classe
         </AverageStatsCard>
       </div>
+      <div>
+        <ClassesExchangesCard totalPublications={68} totalComments={42} totalVideos={56} />
+      </div>
     </>
   );
 };
