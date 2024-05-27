@@ -1,6 +1,6 @@
 import React from 'react';
 
-import StatsCard from './cards/StatsCard';
+import StatsCard from './cards/StatsCard/StatsCard';
 
 const GlobalStats = () => {
   return (
