@@ -6,8 +6,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
+import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
+  const classroomExchanges = useGetClassroomExchanges();
+
+  if (classroomExchanges.isError) return <p>Error!</p>;
+  if (classroomExchanges.isLoading || classroomExchanges.isIdle) return <p>Loading...</p>;
+
   return (
     <>
       <div>
@@ -24,7 +30,11 @@ const GlobalStats = () => {
         </AverageStatsCard>
       </div>
       <div>
-        <ClassesExchangesCard totalPublications={68} totalComments={42} totalVideos={56} />
+        <ClassesExchangesCard
+          totalPublications={classroomExchanges.data.totalActivities}
+          totalComments={classroomExchanges.data.totalComments}
+          totalVideos={classroomExchanges.data.totalVideos}
+        />
       </div>
     </>
   );
