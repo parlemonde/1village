@@ -3,6 +3,7 @@ import React from 'react';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 
 const GlobalStats = () => {
