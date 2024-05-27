@@ -1,62 +1,66 @@
 .title {
-    text-align: left;
-    margin-bottom: 20px;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 27px;
-    text-align: left;
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+  text-align: left;
+}
+
+.filtersContainer {
+  display: flex;
 }
 
 .horizontalBars {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background-color: #F3F3F3;
-    margin-bottom: 20px;
-    max-width: auto;
-    border-radius: 20px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f3f3f3;
+  margin-bottom: 20px;
+  max-width: auto;
+  border-radius: 20px;
+  position: relative;
 }
 
 .chartsContainer {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .pieContainer {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background-color: #F3F3F3;
-    margin-bottom: 20px;
-    max-width: 400px;
-    border-radius: 20px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f3f3f3;
+  margin-bottom: 20px;
+  max-width: 400px;
+  border-radius: 20px;
+  position: relative;
 }
 
 .legend {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .legendItem {
-    margin: 5px;
-    font-size: 14px;
+  margin: 5px;
+  font-size: 14px;
 }
 
 .barContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 20px;
-    background-color: #F3F3F3;
-    margin-left: 20px;
-    max-width: 648px;
-    max-height: 289px;
-    border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 20px;
+  background-color: #f3f3f3;
+  margin-left: 20px;
+  max-width: 648px;
+  max-height: 289px;
+  border-radius: 20px;
 }
 
 .engamentContainer {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
