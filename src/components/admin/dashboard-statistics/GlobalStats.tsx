@@ -1,7 +1,13 @@
 import React from 'react';
 
+import StatsCard from './cards/StatsCard';
+
 const GlobalStats = () => {
-  return <h1>1Village</h1>;
+  return (
+    <div>
+      <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
+    </div>
+  );
 };
 
 export default GlobalStats;
