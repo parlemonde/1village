@@ -14,15 +14,9 @@ export default function PhaseDropdown() {
 
   return (
     <Box sx={{ maxWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth size="small">
         <InputLabel id="phase-menu-select">Phase</InputLabel>
-        <Select
-          labelId="phase-menu-select"
-          id="phase-menu"
-          value={phase}
-          label="Phase"
-          onChange={handleChange}
-        >
+        <Select labelId="phase-menu-select" id="phase-menu" value={phase} label="Phase" onChange={handleChange}>
           <MenuItem value={3}>Toutes les phases</MenuItem>
           <MenuItem value={0}>Phase 1</MenuItem>
           <MenuItem value={1}>Phase 2</MenuItem>

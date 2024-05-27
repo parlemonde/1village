@@ -6,7 +6,10 @@ import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import PhaseDropdown from './filters/PhaseDropdown';
 import CountriesDropdown from './filters/CountriesDropdown';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import styles from './styles/charts.module.css';
+
+import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
 const pieChartData = {
   data: [
@@ -19,6 +22,11 @@ const pieChartData = {
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 
 const CountryStats = () => {
+  const classroomExchanges = useGetClassroomExchanges();
+
+  if (classroomExchanges.isError) return <p>Error!</p>;
+  if (classroomExchanges.isLoading || classroomExchanges.isIdle) return <p>Loading...</p>;
+
   return (
     <>
       <div className={styles.filtersContainer}>
@@ -37,6 +45,15 @@ const CountryStats = () => {
           <PieCharts pieChartData={pieChartData} />
           <BarCharts barChartData={barChartData} />
         </div>
+      </div>
+      <div className={styles.exchangesConnections}>
+        <ClassesExchangesCard
+          totalPublications={classroomExchanges.data.totalActivities}
+          totalComments={classroomExchanges.data.totalComments}
+          totalVideos={classroomExchanges.data.totalVideos}
+          className={styles.exchangesCard}
+        />
+        <BarCharts barChartData={barChartData} />
       </div>
     </>
   );
