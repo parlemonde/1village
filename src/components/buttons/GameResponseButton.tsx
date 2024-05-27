@@ -3,14 +3,13 @@ import React, { useState, useCallback } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
 
 import ArrowRight from 'src/svg/arrow-right.svg';
-import type { GameResponseValue } from 'types/gameResponse.type';
 
 type ResponseButtonProps = {
-  value: GameResponseValue;
+  value: number;
   isSuccess?: boolean;
   signification?: string | null;
   disabled?: boolean;
-  onClick: (value: GameResponseValue, isSuccess?: boolean) => Promise<void>;
+  onClick: (value: number, isSuccess?: boolean) => Promise<void>;
   isCorrect?: boolean;
   mimicOrigine?: string;
 };
@@ -22,8 +21,8 @@ const ResponseButton = ({
   signification = '',
   disabled = false,
   isCorrect,
-  mimicOrigine,
-}: ResponseButtonProps) => {
+}: // mimicOrigine,
+ResponseButtonProps) => {
   const [hasBeenSelected, setHasBeenSelected] = useState<boolean>(false);
 
   const handleClick = useCallback(() => {
@@ -57,7 +56,7 @@ const ResponseButton = ({
       {isCorrect ? (
         <Stack direction="column">
           <Typography>{signification}</Typography>
-          <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography>
+          {/* <Typography variant="caption">Origine : {mimicOrigine || ''}</Typography> */}
         </Stack>
       ) : (
         signification

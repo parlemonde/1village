@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import type { Language } from '../../types/language.type';
 
-export const languages: Language[] = [
+const language: Language[] = [
   {
     english: 'Afar',
     french: 'afar',
@@ -2852,3 +2852,12 @@ export const languages: Language[] = [
     alpha3_t: '',
   },
 ];
+
+const toCapitalized = language.map((language) => {
+  return {
+    ...language,
+    french: language.french.charAt(0).toUpperCase() + language.french.slice(1),
+  };
+});
+
+export const languages: Language[] = toCapitalized;

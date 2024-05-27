@@ -86,7 +86,7 @@ export const useGameRequests = () => {
       }
       const response = await axiosRequest({
         method: 'GET',
-        url: `/games/ableToPlay${serializeToQueryUrl({
+        url: `/games/ableToPlayStandardGame${serializeToQueryUrl({
           villageId: village.id,
           type,
         })}`,
@@ -115,15 +115,15 @@ export const useGameRequests = () => {
       }
       const response = await axiosRequest({
         method: 'GET',
-        url: `/games/ableToPlay${serializeToQueryUrl({
-          type,
+        url: `/games/ableToPlayStandardGame${serializeToQueryUrl({
+          subType: type,
           villageId: village.id,
         })}`,
       });
       if (response.error) {
         return [] as Array<Game>;
       }
-      return response.data.games as Array<Game>;
+      return response.data.activities as Array<Game>;
     },
     [village],
   );
@@ -146,7 +146,7 @@ export const useGameRequests = () => {
 
       const response = await axiosRequest({
         method: 'GET',
-        url: `/games/play${serializeToQueryUrl({
+        url: `/games/playStandard${serializeToQueryUrl({
           villageId: village.id,
           type,
         })}`,
@@ -170,11 +170,11 @@ export const useGameRequests = () => {
    *
    */
 
-  const sendNewGameResponse = useCallback(async (id: number, value: string) => {
+  const sendNewGameResponse = useCallback(async (id: number, value: string, villageId: number) => {
     const response = await axiosRequest({
       method: 'PUT',
       url: `/games/play/${id}`,
-      data: { value },
+      data: { value, villageId },
     });
     if (response.error) {
       return false;
