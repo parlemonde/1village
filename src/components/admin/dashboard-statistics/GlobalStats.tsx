@@ -1,6 +1,7 @@
 import React from 'react';
 
 import StatsCard from './cards/StatsCard/StatsCard';
+import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 
 const GlobalStats = () => {
   return (
@@ -8,6 +9,11 @@ const GlobalStats = () => {
       <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
       <StatsCard data={20}>Nombre de classes connectées</StatsCard>
       <StatsCard data={24}>Nombre de classes contributrices</StatsCard>
+    </div>
+    <div>
+      <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} unit="min" icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}>
+          Temps de connexion moyen par classe
+      </AverageStatsCard>
     </div>
   );
 };
