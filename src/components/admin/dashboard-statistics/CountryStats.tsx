@@ -22,8 +22,12 @@ const CountryStats = () => {
   return (
     <>
       <div className={styles.filtersContainer}>
-        <PhaseDropdown />
-        <CountriesDropdown />
+        <div className={styles.phaseFilter}>
+          <PhaseDropdown />
+        </div>
+        <div className={styles.countryFilter}>
+          <CountriesDropdown />
+        </div>
       </div>
       <h1>Statut: Observateur</h1>
       <div className={styles.chartsContainer}>
