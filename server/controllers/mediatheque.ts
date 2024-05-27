@@ -85,6 +85,10 @@ mediathequeController.post({ path: '/all' }, async (req, res) => {
     );
   });
   const activities = await subQueryBuilder.getMany();
+
+  const filterActivities = activities.map((activities) => activities);
+  console.log(filterActivities);
+
   res.send(activities);
 });
 

@@ -34,6 +34,7 @@ export const MediathequeProvider: FC<MediathequeProviderProps> = ({ children }) 
   const { data: filtered } = useGetMediatheque(offset, filters);
   const { data: count } = useGetMediathequeCount(filters);
   const { data: allFiltered } = useGetMediathequeAll(filters);
+  console.log(allFiltered);
 
   return (
     <MediathequeContext.Provider value={{ filters, setFilters, filtered, setOffset, count, allFiltered }}>{children}</MediathequeContext.Provider>
