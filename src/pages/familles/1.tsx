@@ -12,7 +12,7 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import type { FilterArgs } from 'src/components/accueil/Filters';
 import { Filters } from 'src/components/accueil/Filters';
-import { filterActivitiesByTerm, filterActivitiesWithLastMimicGame } from 'src/components/accueil/Filters/FilterActivities';
+import { filterActivitiesByTerm, filterActivitiesWithLastGame } from 'src/components/accueil/Filters/FilterActivities';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ClassroomContext } from 'src/contexts/classroomContext';
@@ -276,7 +276,7 @@ const ClassroomParamStep1 = () => {
 
   const activitiesFiltered = React.useMemo(() => {
     if (activities && activities.length > 0) {
-      const activitiesWithLastMimic = filterActivitiesWithLastMimicGame(activities);
+      const activitiesWithLastMimic = filterActivitiesWithLastGame(activities);
       const activitiesFilterBySearchTerm =
         filters.searchTerm.length > 0 ? filterActivitiesByTerm(activitiesWithLastMimic, filters.searchTerm) : activitiesWithLastMimic;
       return activitiesFilterBySearchTerm;

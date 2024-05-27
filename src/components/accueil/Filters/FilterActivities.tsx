@@ -1,15 +1,15 @@
 import { getSubtype, getType } from 'src/activity-types/activity.constants';
 import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic } from 'src/activity-types/game.constants';
 import type { Activity, AnyData } from 'types/activity.type';
+import { GameType } from 'types/game.type';
 
-export function filterActivitiesWithLastMimicGame(activitiesData: Activity<AnyData>[]): Activity<AnyData>[] {
-  const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && isMimic(activity)); // Get the index of this last mimic
+export function filterActivitiesWithLastGame(activitiesData: Activity<AnyData>[], subType: number = GameType.MIMIC): Activity<AnyData>[] {
+  const indexOfLastMimic = activitiesData.findIndex((activity) => isGame(activity) && activity.subType === subType); // Get the index of this last mimic
   if (indexOfLastMimic === -1) {
     return activitiesData;
   }
   const mostRecentMimic = activitiesData[indexOfLastMimic]; // Get the last mimic created
-  const activitiesWithoutMimic = activitiesData.filter((activity) => !isGame(activity) || !isMimic(activity)); // Remove all mimics in activities
+  const activitiesWithoutMimic = activitiesData.filter((activity) => !isGame(activity) || activity.subType !== subType); // Remove all mimics in activities
   const activitiesWithLastMimic = [...activitiesWithoutMimic];
   activitiesWithLastMimic.splice(indexOfLastMimic, 0, mostRecentMimic); // Put the last mimic created at the same spot in the array
 

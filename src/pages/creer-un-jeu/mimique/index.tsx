@@ -1,13 +1,20 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 
 import { Base } from 'src/components/Base';
+import { GameContext } from 'src/contexts/gameContext';
+import { GameType } from 'types/game.type';
 
 const Mimique = () => {
   const router = useRouter();
+  const { setGameType } = useContext(GameContext);
+
+  useEffect(() => {
+    setGameType(GameType.MIMIC);
+  }, [setGameType]);
 
   return (
     <Base>

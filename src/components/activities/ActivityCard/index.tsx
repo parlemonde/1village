@@ -8,9 +8,9 @@ import { AnthemCard } from './AnthemCard';
 import { DefiCard } from './DefiCard';
 import { EnigmeCard } from './EnigmeCard';
 import { FreeContentCard } from './FreeContentCard';
+import { GameCard } from './GameCard';
 import { IndiceCard } from './IndiceCard';
 import { MascotteCard } from './MascotteCard';
-import { MimicCard } from './MimicCard';
 import { PresentationCard } from './PresentationCard';
 import { QuestionCard } from './QuestionCard';
 import { ReactionCard } from './ReactionCard';
@@ -42,7 +42,7 @@ const CardTypeMapper = {
   [ActivityType.CONTENU_LIBRE]: FreeContentCard,
   [ActivityType.INDICE]: IndiceCard,
   [ActivityType.SYMBOL]: SymbolCard,
-  [ActivityType.GAME]: MimicCard,
+  [ActivityType.GAME]: GameCard,
   [ActivityType.REPORTAGE]: ReportageCard,
   [ActivityType.REACTION]: ReactionCard,
   [ActivityType.STORY]: StoryCard,
@@ -70,7 +70,6 @@ export const ActivityCard = ({
   const userIsPelico = user.type <= UserType.MEDIATOR;
   const ActivityIcon = icons[activity.type] || null;
   const timeLeft = isEnigme(activity) ? getEnigmeTimeLeft(activity) : 0;
-
   const UsedCard = CardTypeMapper[activity.type];
 
   return (
@@ -101,6 +100,7 @@ export const ActivityCard = ({
             displayAsUser={activity.displayAsUser}
           />
         )}
+
         <div className="activity-card__header_info" style={forComment ? { marginLeft: '0.5rem' } : {}}>
           <p className="text">
             <UserDisplayName
@@ -130,6 +130,7 @@ export const ActivityCard = ({
             )}
           </div>
         </div>
+
         {!showEditButtons && isEnigme(activity) && (
           <>
             <Timer style={{ alignSelf: 'center', height: '1.2rem', width: 'auto', marginRight: '0.25rem' }} />
@@ -152,6 +153,7 @@ export const ActivityCard = ({
           activity={activity}
           user={user}
           isSelf={isSelf}
+          gameType={activity.subType ?? 0}
           noButtons={noButtons}
           showEditButtons={showEditButtons}
           isDraft={isDraft}
