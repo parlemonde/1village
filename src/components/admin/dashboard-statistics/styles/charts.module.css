@@ -73,3 +73,12 @@
   display: flex;
   flex-direction: row;
 }
+
+.exchangesConnections {
+  display: flex;
+  flex-direction: row;
+}
+
+.exchangesCard {
+  min-width: 30%;
+}
