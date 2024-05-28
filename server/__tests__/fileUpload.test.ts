@@ -13,6 +13,27 @@ beforeAll(() => {
 });
 beforeEach(() => {});
 afterAll(() => {
+  const pathToFiles = 'server/fileUpload/images/1/';
+  fs.readdir(pathToFiles, (err, files) => {
+    if (err) {
+      console.error(err);
+    }
+    if (files) {
+      for (const file of files) {
+        fs.unlink(path.join(pathToFiles, file), (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+    }
+    fs.rmdir(pathToFiles, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  });
+
   return appDataSource.destroy();
 });
 
