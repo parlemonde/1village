@@ -81,13 +81,19 @@ statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
 statisticsController.get({ path: '/connection-counts' }, async (_req, res) => {
   const baseConnectionCountsStats = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
+    .select('MIN(DISTINCT(duration)) AS minConnections')
+    .addSelect('MAX(DISTINCT(duration)) AS maxConnections')
+    .addSelect('ROUND(AVG(duration), 0) AS averageConnections')
+    .getRawOne();
 
-  const medianConnectionCountsStats = await AppDataSource.createQueryRunner().manager.query();
+  const medianConnectionCountsStats = await AppDataSource.createQueryRunner().manager.query(
+    'SELECT connection_count AS connectionCount FROM (SELECT connection_count, ROW_NUMBER() OVER (ORDER BY connection_count) AS medianIdx FROM (SELECT COUNT(*) AS connection_count FROM analytic_session GROUP BY uniqueId) AS sub) AS d, (SELECT COUNT(*) AS cnt FROM (SELECT COUNT(*) AS connection_count FROM analytic_session GROUP BY uniqueId) AS sub_count) AS total_count WHERE d.medianIdx = (total_count.cnt DIV 2);',
+  );
 
   res.sendJSON({
-    minConnections: 0,
-    maxConnections: 0,
-    averageConnections: 0,
-    medianConnections: 0,
+    minConnections: baseConnectionCountsStats.minConnections,
+    maxConnections: baseConnectionCountsStats.maxConnections,
+    averageConnections: parseInt(baseConnectionCountsStats.averageConnections),
+    medianConnections: parseInt(medianConnectionCountsStats[0].connectionCount),
   });
 });
