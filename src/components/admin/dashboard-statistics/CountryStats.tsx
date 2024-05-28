@@ -39,27 +39,29 @@ const CountryStats = () => {
         </div>
       </div>
       <h1>Statut: Observateur</h1>
-      <div className={styles.chartsContainer}>
+      <div className={styles.monitorTable}>
         <HorizontalChart />
-        <DashboardTable />
-        <div className={styles.classroomStats}>
-          <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
-          <StatsCard data={10}>Nombre de classes connectées</StatsCard>
-          <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
-        </div>
-        <div className={styles.engagementContainer}>
-          <PieCharts pieChartData={pieChartData} />
-          <BarCharts barChartData={barChartData} />
-        </div>
       </div>
-      <div className={styles.exchangesConnections}>
+      <div className={styles.monitorTable}>
+        <DashboardTable />
+      </div>
+      <div className={styles.classroomStats}>
+        <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
+        <StatsCard data={10}>Nombre de classes connectées</StatsCard>
+        <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
+      </div>
+      <div className={styles.engagementContainer}>
+        <PieCharts pieChartData={pieChartData} />
+        <BarCharts barChartData={barChartData} />
+      </div>
+      <div className={styles.exchangesConnectionsContainer}>
         <ClassesExchangesCard
           totalPublications={classroomExchanges.data.totalActivities}
           totalComments={classroomExchanges.data.totalComments}
           totalVideos={classroomExchanges.data.totalVideos}
           className={styles.exchangesCard}
         />
-        <BarCharts barChartData={barChartData} className={styles.connections} />
+        <BarCharts barChartData={barChartData} className={styles.connectionsChart} />
       </div>
     </>
   );
