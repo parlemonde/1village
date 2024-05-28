@@ -7,6 +7,7 @@ import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
+import StatsCard from './cards/StatsCard/StatsCard';
 import styles from './styles/charts.module.css';
 
 import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
@@ -41,6 +42,11 @@ const CountryStats = () => {
       <div className={styles.chartsContainer}>
         <HorizontalChart />
         <DashboardTable />
+        <div className={styles.classroomStats}>
+          <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
+          <StatsCard data={10}>Nombre de classes connectées</StatsCard>
+          <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
+        </div>
         <div className={styles.engagementContainer}>
           <PieCharts pieChartData={pieChartData} />
           <BarCharts barChartData={barChartData} />
