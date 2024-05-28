@@ -31,15 +31,15 @@
   position: relative;
 }
 
-.chartsContainer {
-  display: flex;
-  flex-direction: column;
+.monitorTable {
   padding-top: 5%;
 }
 
 .classroomStats {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  padding-top: 5%;
 }
 
 .pieContainer {
@@ -78,17 +78,20 @@
 .engagementContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  padding-top: 5%;
 }
 
-.exchangesConnections {
+.exchangesConnectionsContainer {
   display: flex;
   flex-direction: row;
+  padding-top: 5%;
 }
 
 .exchangesCard {
   min-width: 30%;
 }
 
-.connections {
+.connectionsChart {
   max-width: 20%;
 }
