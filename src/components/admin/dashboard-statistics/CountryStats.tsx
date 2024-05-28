@@ -4,8 +4,8 @@ import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
 import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
-import PhaseDropdown from './filters/PhaseDropdown';
 import CountriesDropdown from './filters/CountriesDropdown';
+import PhaseDropdown from './filters/PhaseDropdown';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import styles from './styles/charts.module.css';
 
@@ -41,7 +41,7 @@ const CountryStats = () => {
       <div className={styles.chartsContainer}>
         <HorizontalChart />
         <DashboardTable />
-        <div className={styles.engamentContainer}>
+        <div className={styles.engagementContainer}>
           <PieCharts pieChartData={pieChartData} />
           <BarCharts barChartData={barChartData} />
         </div>
@@ -53,7 +53,7 @@ const CountryStats = () => {
           totalVideos={classroomExchanges.data.totalVideos}
           className={styles.exchangesCard}
         />
-        <BarCharts barChartData={barChartData} />
+        <BarCharts barChartData={barChartData} className={styles.connections} />
       </div>
     </>
   );
