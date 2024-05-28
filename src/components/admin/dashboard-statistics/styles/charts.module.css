@@ -34,6 +34,12 @@
 .chartsContainer {
   display: flex;
   flex-direction: column;
+  padding-top: 5%;
+}
+
+.classroomStats {
+  display: flex;
+  flex-direction: row;
 }
 
 .pieContainer {
