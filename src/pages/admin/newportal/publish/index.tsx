@@ -1,13 +1,15 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useGetActivities } from 'src/api/activities/activities.get';
 import ActivityCardAdminList from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdminList';
+import { UserContext } from 'src/contexts/userContext';
 import PelicoStar from 'src/svg/pelico/pelico_star.svg';
 import PelicoVacances from 'src/svg/pelico/pelico_vacances.svg';
+import { UserType } from 'types/user.type';
 
 const rows: GridRowsProp = [
   // A row example of how it should look
@@ -16,12 +18,19 @@ const rows: GridRowsProp = [
 const columns: GridColDef[] = [];
 
 const Publier = () => {
+  const { user } = React.useContext(UserContext);
   const draftActivities = useGetActivities({ limit: 2, isDraft: true, isPelico: true });
   const publishedActivities = useGetActivities({ limit: 2, isDraft: false, isPelico: true });
   const router = useRouter();
 
+  useEffect(() => {
+    if (user?.type === UserType.OBSERVATOR) {
+      router.push('/admin/newportal/analyze');
+    }
+  }, [router, user]);
   if (draftActivities.isError) return <p>Error!</p>;
   if (draftActivities.isLoading || draftActivities.isIdle) return <p>Loading...</p>;
+
   return (
     <div
       style={{
