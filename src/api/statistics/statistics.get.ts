@@ -20,7 +20,7 @@ async function getContributions(): Promise<ContributionStats[]> {
 }
 
 export const useGetContributions = () => {
-  return useQuery(['activities'], () => getContributions());
+  return useQuery(['contributions'], () => getContributions());
 };
 
 async function getClassroomExchanges(): Promise<ClassroomExchangesStats> {
@@ -34,7 +34,7 @@ async function getClassroomExchanges(): Promise<ClassroomExchangesStats> {
 }
 
 export const useGetClassroomExchanges = () => {
-  return useQuery(['activities', 'comments'], () => getClassroomExchanges());
+  return useQuery(['classroom_exchanges'], () => getClassroomExchanges());
 };
 
 async function getStudentAccounts(): Promise<StudentAccountsStats> {
@@ -48,7 +48,7 @@ async function getStudentAccounts(): Promise<StudentAccountsStats> {
 }
 
 export const useGetStudentAccounts = () => {
-  return useQuery(['student'], () => getStudentAccounts());
+  return useQuery(['student_accounts'], () => getStudentAccounts());
 };
 
 async function getConnectionTimes(): Promise<ConnectionTimesStats> {
@@ -62,7 +62,7 @@ async function getConnectionTimes(): Promise<ConnectionTimesStats> {
 }
 
 export const useGetConnectionTimes = () => {
-  return useQuery(['analytic_sesssion'], () => getConnectionTimes());
+  return useQuery(['connection_times'], () => getConnectionTimes());
 };
 
 async function getConnectionCounts(): Promise<ConnectionCountsStats> {
@@ -76,5 +76,5 @@ async function getConnectionCounts(): Promise<ConnectionCountsStats> {
 }
 
 export const useGetConnectionCounts = () => {
-  return useQuery(['analytic_sesssion'], () => getConnectionCounts());
+  return useQuery(['connection_counts'], () => getConnectionCounts());
 };
