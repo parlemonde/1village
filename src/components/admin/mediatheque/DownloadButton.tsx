@@ -1,59 +1,93 @@
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
-import React, { useContext } from 'react';
+import { useSnackbar } from 'notistack';
+import React, { useContext, useState } from 'react';
 
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import { activitiesLabel, subThemesMap, activityNumberMapper, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
+import { subThemesMap, activityNumberMapper, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
+import { serializeToQueryUrl } from 'src/utils';
+import { axiosRequest } from 'src/utils/axiosRequest';
+import type { Activity } from 'types/activity.type';
 
 export default function DownloadButton() {
-  const { allFiltered } = useContext(MediathequeContext);
-  console.log(allFiltered);
+  const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
-  const getActivityLabel = (type) => {
-    const activityEntry = Object.entries(activityNumberMapper).find(([label, number]) => number === type);
+  const onDownload = async (videoUrl: string) => {
+    try {
+      const response = await axiosRequest({
+        method: 'GET',
+        url: `/videos/download${serializeToQueryUrl({
+          videoUrl: videoUrl,
+          quality: 'hd',
+        })}`,
+      });
+      if (response.data && response.data.link) {
+        return response.data.link;
+      } else {
+        enqueueSnackbar("Une erreur est survenue lors de l'obtention du lien de téléchargement...", {
+          variant: 'error',
+        });
+        throw new Error('Failed to get download link');
+      }
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Une erreur est survenue...', {
+        variant: 'error',
+      });
+      throw error;
+    }
+  };
+
+  const { allFiltered } = useContext(MediathequeContext);
+
+  const getActivityLabel = (type: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const activityEntry = Object.entries(activityNumberMapper).find(([_label, number]) => number === type);
     return activityEntry ? activityEntry[0] : `UnknownType${type}`;
   };
 
-  const getSubThemeLabel = (type, subType) => {
+  const getSubThemeLabel = (type: number, subType: number | null | undefined) => {
     const activityLabel = getActivityLabel(type);
     const subThemes = subThemesMap[activityLabel] || [];
     const subThemeEntry = Object.entries(subThemeNumberMapper).find(([label, number]) => number === subType && subThemes.includes(label));
     return subThemeEntry ? subThemeEntry[0] : `UnknownSubType${subType}`;
   };
 
-  const getFileExtension = (url) => {
-    const match = url.match(/\.(jpeg|jpg|png)$/i);
+  const getFileExtension = (url: string) => {
+    const match = url.match(/\.(jpeg|jpg|png|mp4)$/i);
     return match ? match[1] : 'png';
   };
 
-  const createJsonFiles = async (data) => {
-    const zip = new JSZip();
-    const imagePromises = [];
-    const videoLinks = [];
+  const createZipFile = async (data: Activity[]) => {
+    setLoading(true);
 
-    data.forEach((item) => {
+    const zip = new JSZip();
+    const imagePromises: Promise<void>[] = [];
+    const videoPromises: Promise<void>[] = [];
+
+    data.forEach((item: Activity) => {
       const activityLabel = getActivityLabel(item.type);
       const subThemeLabel = getSubThemeLabel(item.type, item.subType);
 
-      // Process images and videos
-      item.content.forEach((contentItem, contentIndex) => {
+      item.content.forEach((contentItem: { type: string; value: string }, contentIndex: number) => {
         if (contentItem.type === 'image') {
           const imageUrl = contentItem.value;
           const imageExtension = getFileExtension(imageUrl);
-          const imageFileName = `media-${activityLabel}-${subThemeLabel}-image-activity_id_${item.id}-${contentIndex + 1}.${imageExtension}`;
-          console.log(contentIndex);
+          const imageFileName = `${activityLabel} ${subThemeLabel} image activité id n°${item.id} ${contentIndex + 1}.${imageExtension}`;
 
-          // Fetch the image and add it to the zip
           const imagePromise = fetch(imageUrl)
             .then((response) => response.blob())
             .then((blob) => {
-              return new Promise((resolve, reject) => {
+              return new Promise<void>((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                  const base64data = reader.result.split(',')[1];
+                  const base64data = (reader?.result as string)?.split(',')[1];
                   zip.file(imageFileName, base64data, { base64: true });
                   resolve();
                 };
@@ -68,32 +102,54 @@ export default function DownloadButton() {
           imagePromises.push(imagePromise);
         } else if (contentItem.type === 'video') {
           const videoUrl = contentItem.value;
-          videoLinks.push(`Video ${item.id}-${contentIndex + 1}: ${videoUrl}`);
+          const videoFileName = `${activityLabel} ${subThemeLabel} video activité id n°${item.id} ${contentIndex + 1}.mp4`;
+
+          const videoPromise = onDownload(videoUrl)
+            .then((downloadLink) => fetch(downloadLink))
+            .then((response) => response.blob())
+            .then((blob) => {
+              zip.file(videoFileName, blob);
+            })
+            .catch((err) => {
+              console.error(`Failed to fetch video from ${videoUrl}:`, err);
+            });
+
+          videoPromises.push(videoPromise);
         }
       });
     });
 
-    // Wait for all images to be fetched and added to the zip
-    await Promise.all(imagePromises);
-
-    // Add video links file
-    if (videoLinks.length > 0) {
-      const videoLinksFileContent = videoLinks.join('\n');
-      zip.file('video-links.txt', videoLinksFileContent);
-    }
+    await Promise.all([...imagePromises, ...videoPromises]);
 
     const content = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, 'media-library.zip');
+
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    const dateDownload = new Date().toLocaleDateString('fr-FR', options);
+    saveAs(content, `export mediathèque ${dateDownload}.zip`);
+    setLoading(false);
   };
 
   const handleDownload = () => {
-    createJsonFiles(allFiltered);
+    createZipFile(allFiltered);
   };
 
   return (
-    <Button size="small" className="download-button" variant="outlined" onClick={handleDownload}>
-      <SaveAltIcon fontSize="small" />
-      Télécharger
-    </Button>
+    <>
+      <Button size="small" className="download-button" variant="outlined" onClick={handleDownload} disabled={loading}>
+        <SaveAltIcon fontSize="small" />
+        Télécharger
+        {loading && (
+          <Box sx={{ display: 'flex', paddingLeft: '1rem' }}>
+            <CircularProgress size="1rem" />
+          </Box>
+        )}
+      </Button>
+    </>
   );
 }
