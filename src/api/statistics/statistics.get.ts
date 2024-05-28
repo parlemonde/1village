@@ -1,7 +1,13 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ClassroomExchangesStats, ConnectionTimesStats, ContributionStats, StudentAccountsStats } from 'types/statistics.type';
+import type {
+  ClassroomExchangesStats,
+  ConnectionCountsStats,
+  ConnectionTimesStats,
+  ContributionStats,
+  StudentAccountsStats,
+} from 'types/statistics.type';
 
 async function getContributions(): Promise<ContributionStats[]> {
   return (
@@ -57,4 +63,18 @@ async function getConnectionTimes(): Promise<ConnectionTimesStats> {
 
 export const useGetConnectionTimes = () => {
   return useQuery(['analytic_sesssion'], () => getConnectionTimes());
+};
+
+async function getConnectionCounts(): Promise<ConnectionCountsStats> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: '/statistics/connection-counts',
+    })
+  ).data;
+}
+
+export const useGetConnectionCounts = () => {
+  return useQuery(['analytic_sesssion'], () => getConnectionCounts());
 };

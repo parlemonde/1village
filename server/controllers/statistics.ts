@@ -54,7 +54,6 @@ statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
   );
 });
 
-//penser à ajouter une condition pour ne sélectionner que les durées supérieur à 60s pour le AVG
 statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
   const durationThreshold = 60;
 
@@ -76,5 +75,25 @@ statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
     maxDuration: baseConnectionTimesStats.maxDuration,
     averageDuration: parseInt(baseConnectionTimesStats.averageDuration),
     medianDuration: parseInt(medianConnectionTimesStats[0].duration),
+  });
+});
+
+statisticsController.get({ path: '/connection-counts' }, async (_req, res) => {
+  const baseConnectionCountsStats = await analyticSessionRepository
+    .createQueryBuilder('analytic_session')
+    .select('MIN(DISTINCT(duration)) AS minConnections')
+    .addSelect('MAX(DISTINCT(duration)) AS maxConnections')
+    .addSelect('ROUND(AVG(duration), 0) AS averageConnections')
+    .getRawOne();
+
+  const medianConnectionCountsStats = await AppDataSource.createQueryRunner().manager.query(
+    'SELECT connection_count AS connectionCount FROM (SELECT connection_count, ROW_NUMBER() OVER (ORDER BY connection_count) AS medianIdx FROM (SELECT COUNT(*) AS connection_count FROM analytic_session GROUP BY uniqueId) AS sub) AS d, (SELECT COUNT(*) AS cnt FROM (SELECT COUNT(*) AS connection_count FROM analytic_session GROUP BY uniqueId) AS sub_count) AS total_count WHERE d.medianIdx = (total_count.cnt DIV 2);',
+  );
+
+  res.sendJSON({
+    minConnections: baseConnectionCountsStats.minConnections,
+    maxConnections: baseConnectionCountsStats.maxConnections,
+    averageConnections: parseInt(baseConnectionCountsStats.averageConnections),
+    medianConnections: parseInt(medianConnectionCountsStats[0].connectionCount),
   });
 });
