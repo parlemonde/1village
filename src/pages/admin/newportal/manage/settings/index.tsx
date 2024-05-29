@@ -24,7 +24,7 @@ const Gerer = () => {
 
   const links: Link[] = [
     { name: 'Archiver', link: '/admin/newportal/manage/settings/archive', rights: [UserType.SUPER_ADMIN] },
-    { name: 'Présenatation de Pélico', link: '/admin/newportal/manage/settings/pelico', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    { name: 'Présentation de Pélico', link: '/admin/newportal/manage/settings/pelico', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { name: 'Paramétrer la home', link: '/admin/newportal/manage/settings/home', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { name: 'Paramétrer les phases', link: '/admin/newportal/manage/settings/phases', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
   ];

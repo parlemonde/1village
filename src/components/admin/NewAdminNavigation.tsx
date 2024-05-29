@@ -57,7 +57,7 @@ export const NewAdminNavigation = () => {
   const [selectedTab, setSelectedTab] = React.useState('Créer');
 
   const tabs: Tab[] = [
-    { path: '/admin/newportal/create', label: 'Créer', Icon: CreerIcon, rights: [UserType.ADMIN] },
+    { path: '/admin/newportal/create', label: 'Créer', Icon: CreerIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
     { path: '/admin/newportal/publish', label: 'Publier', Icon: PublierIcon, rights: [UserType.ADMIN] },
     { path: '/admin/newportal/manage', label: 'Gérer', Icon: GererIcon, rights: [UserType.ADMIN] },
     { path: '/admin/newportal/analyze', label: 'Analyser', Icon: AnalyserIcon, rights: [UserType.ADMIN, UserType.OBSERVATOR, UserType.MEDIATOR] },
