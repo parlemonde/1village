@@ -1,0 +1,89 @@
+import * as React from 'react';
+import { useState } from 'react';
+
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@mui/material';
+
+import ArrowRight from 'src/svg/arrow-right.svg';
+
+interface PhaseDetailsProps {
+  phase: number;
+  data: Record<string, string | number>[];
+}
+
+const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+  const [orderBy, setOrderBy] = useState<string>('name');
+
+  const handleRequestSort = (property: React.SetStateAction<string>) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const sortedData = data.slice().sort((a, b) => {
+    if (orderBy) {
+      if (order === 'asc') {
+        return a[orderBy] > b[orderBy] ? 1 : -1;
+      }
+      return a[orderBy] < b[orderBy] ? 1 : -1;
+    }
+    return 0;
+  });
+
+  return (
+    <Accordion sx={{ boxShadow: 'none' }}>
+      <AccordionSummary
+        expandIcon={<ArrowRight style={{ transform: 'rotate(90deg)' }} />}
+        sx={{
+          backgroundColor: '#F5F5F5',
+          padding: '0.8rem 1.4rem',
+          borderRadius: '10px',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <h2>Phase {phase}</h2>
+      </AccordionSummary>
+      <AccordionDetails>
+        <TableContainer>
+          <Table sx={{ minWidth: 650, boxShadow: 'none', border: 'none' }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {Object.keys(data[0]).map((key) => (
+                  <TableCell key={key} sortDirection={orderBy === key ? order : undefined}>
+                    <TableSortLabel active={orderBy === key} direction={orderBy === key ? order : 'asc'} onClick={() => handleRequestSort(key)}>
+                      {key}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedData.map((item, rowIndex) => (
+                <TableRow key={rowIndex} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  {Object.keys(data[0]).map((key, colIndex) => (
+                    <TableCell key={colIndex}>{item[key]}</TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </AccordionDetails>
+    </Accordion>
+  );
+};
+
+export default PhaseDetails;
