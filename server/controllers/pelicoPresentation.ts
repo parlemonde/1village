@@ -25,7 +25,7 @@ pelicoController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (req
 
 // --- Créer une présentation Pelico ---
 type CreatePelicoData = {
-  content: ActivityContent;
+  content: ActivityContent[];
 };
 const CREATE_SCHEMA: JSONSchemaType<CreatePelicoData> = {
   type: 'object',
@@ -62,7 +62,7 @@ pelicoController.post({ path: '', userType: UserType.ADMIN }, async (req: Reques
 
 // --- Mettre à jour une présentation Pelico ---
 type UpdatePelicoData = {
-  content?: ActivityContent;
+  content?: ActivityContent[];
 };
 const UPDATE_SCHEMA: JSONSchemaType<UpdatePelicoData> = {
   type: 'object',
