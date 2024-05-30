@@ -23,10 +23,17 @@ const Gerer = () => {
   }
 
   const links: Link[] = [
+<<<<<<< HEAD
     { name: 'Archiver', link: '/admin/newportal/manage/settings/archive', rights: [UserType.SUPER_ADMIN] },
     { name: 'Présentation de Pélico', link: '/admin/newportal/manage/settings/pelico', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { name: 'Paramétrer la home', link: '/admin/newportal/manage/settings/home', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { name: 'Paramétrer les phases', link: '/admin/newportal/manage/settings/phases', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+=======
+    { name: 'Archiver', link: '/admin/newportal/manage/settings/archive' },
+    { name: 'Présentation de Pélico', link: '/admin/newportal/manage/settings/pelico' },
+    { name: 'Paramétrer la home', link: '/admin/newportal/manage/settings/home' },
+    { name: 'Paramétrer les phases', link: '/admin/newportal/manage/settings/phases' },
+>>>>>>> e0f71c63 (VIL-320 to staging)
   ];
 
   return (
