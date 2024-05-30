@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 
-import type { ActivityContent } from '../../types/activity.type';
+import type { PelicoPresentationContent } from 'types/pelicoPresentation.type';
 
 const BASE_URL = '/api/pelico-presentation';
 
@@ -10,7 +10,7 @@ export const useCreatePelicoPresentation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    async (content: ActivityContent) => {
+    async (content: PelicoPresentationContent[]) => {
       const { data } = await axios.post(BASE_URL, { content });
       return data;
     },
