@@ -1,6 +1,10 @@
 import React from 'react';
 
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 import BarCharts from './charts/BarCharts';
+import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import DashboardTable from './charts/DashboardTable';
 import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
@@ -49,6 +53,14 @@ const CountryStats = () => {
         <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
         <StatsCard data={10}>Nombre de classes connectées</StatsCard>
         <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
+      </div>
+      <div className={styles.averageStatsContainer}>
+        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} unit="min" icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}>
+          Temps de connexion moyen par classe
+        </AverageStatsCard>
+        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}>
+          Nombre de connexions moyen par classe
+        </AverageStatsCard>
       </div>
       <div className={styles.engagementContainer}>
         <PieCharts pieChartData={pieChartData} />
