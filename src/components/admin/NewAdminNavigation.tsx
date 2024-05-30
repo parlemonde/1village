@@ -58,10 +58,20 @@ export const NewAdminNavigation = () => {
 
   const tabs: Tab[] = [
     { path: '/admin/newportal/create', label: 'Créer', Icon: CreerIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
-    { path: '/admin/newportal/publish', label: 'Publier', Icon: PublierIcon, rights: [UserType.ADMIN] },
-    { path: '/admin/newportal/manage', label: 'Gérer', Icon: GererIcon, rights: [UserType.ADMIN] },
-    { path: '/admin/newportal/analyze', label: 'Analyser', Icon: AnalyserIcon, rights: [UserType.ADMIN, UserType.OBSERVATOR, UserType.MEDIATOR] },
-    { path: '/admin/newportal/medialibrary', label: 'Médiathèque', Icon: MediathequeIcon, rights: [UserType.ADMIN, UserType.MEDIATOR] },
+    { path: '/admin/newportal/publish', label: 'Publier', Icon: PublierIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    { path: '/admin/newportal/manage', label: 'Gérer', Icon: GererIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    {
+      path: '/admin/newportal/analyze',
+      label: 'Analyser',
+      Icon: AnalyserIcon,
+      rights: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.OBSERVATOR, UserType.MEDIATOR],
+    },
+    {
+      path: '/admin/newportal/medialibrary',
+      label: 'Médiathèque',
+      Icon: MediathequeIcon,
+      rights: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR],
+    },
   ];
 
   const onTabClick = (label: string) => {

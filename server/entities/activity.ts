@@ -50,6 +50,9 @@ export class Activity implements ActivityInterface<AnyData> {
   @CreateDateColumn()
   public createDate: Date;
 
+  @CreateDateColumn()
+  public publishDate: Date;
+
   @UpdateDateColumn()
   public updateDate: Date;
 
