@@ -78,7 +78,7 @@ const UPDATE_SCHEMA: JSONSchemaType<UpdatePelicoData> = {
         },
         required: ['type', 'value'],
       },
-      nullable: false,
+      nullable: true,
     },
   },
   required: [],
