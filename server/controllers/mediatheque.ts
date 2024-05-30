@@ -7,66 +7,66 @@ import { Controller } from './controller';
 
 const mediathequeController = new Controller('/mediatheque');
 
-mediathequeController.post({ path: '' }, async (req, res) => {
-  const filters: Array<Filter[]> = req?.body?.filters || [];
-  const offset = req?.query?.offset || 0;
-
-  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
-
-  filters.map((filter, index) => {
-    subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
-      new Brackets((qb) => {
-        filter.map(({ table, column, values }, subQueryIndex) => {
-          let condition = '';
-          values.map((_value, valueIndex) => {
-            condition += valueIndex > 0 ? ' or ' : '(';
-            condition += `${table}.${column} = ${values[valueIndex]}`;
-          });
-          condition += ')';
-          qb[subQueryIndex === 0 ? 'where' : 'andWhere'](condition);
-        });
-      }),
-    );
-  });
-  const activities = await subQueryBuilder
-    .limit(6)
-    .offset(offset as number)
+const getMedias = async (result: any[], queryBuilder, offset, limit) => {
+  const activities: Array<any> = await queryBuilder
+    .limit(limit ? parseInt(limit) : undefined)
+    .offset(offset ? parseInt(offset) : undefined)
     .getMany();
-  res.send(activities);
-});
-
-mediathequeController.post({ path: '/count' }, async (req, res) => {
-  try {
-    const filters: Array<Filter[]> = req?.body?.filters || [];
-
-    let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
-
-    filters.map((filter, index) => {
-      subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
-        new Brackets((qb) => {
-          filter.map(({ table, column, values }, subQueryIndex) => {
-            let condition = '';
-            values.map((_value, valueIndex) => {
-              condition += valueIndex > 0 ? ' or ' : '(';
-              condition += `${table}.${column} = ${values[valueIndex]}`;
-            });
-            condition += ')';
-            qb[subQueryIndex === 0 ? 'where' : 'andWhere'](condition);
-          });
+  console.log('offset');
+  console.log(offset);
+  console.log('limit');
+  console.log(limit);
+  console.log('activities');
+  console.log(activities);
+  const activitiesMediaFinder = activities.map(({ id, content, subType, type, villageId, userId }) => {
+    const result = { id, subType, type, villageId, userId, medias: [] };
+    if (content.game) {
+      content.game.map(({ inputs }) =>
+        inputs.map((input) => {
+          if (input.type === 3 || input.type === 4) {
+            result.medias.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+          }
         }),
       );
-    });
-    const count = await subQueryBuilder.getMany();
-    res.status(200).json({ count });
-  } catch (error) {
-    console.error('Error fetching count:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      content.map(({ type, value }) => {
+        const wantedTypes = ['image', 'video', 'sound'];
+        if (wantedTypes.includes(type)) {
+          result.medias.push({ type, value });
+        }
+      });
+    }
+    return result;
+  });
+
+  const activitiesWithMediaOnly = activitiesMediaFinder.filter((a) => a.medias.length > 0);
+  result = [...result, ...activitiesWithMediaOnly];
+
+  if (!limit) {
+    return { activities: result, offset: offset + limit };
   }
-});
+  const oldLength = result.length;
+  result = result.slice(0, limit);
+  console.log('resultPOPOPO');
+  console.log(result);
+  const newLength = result.length;
+  const hasReduced = oldLength !== newLength;
 
-mediathequeController.post({ path: '/all' }, async (req, res) => {
+  if (result.length < limit) {
+    if (activities.length < limit) {
+      return { activities: result, offset: offset + limit };
+    }
+    const lastActivityInResultIndex = activities.findIndex((a) => a.id === result[result.length - 1]);
+    const newOffset = hasReduced ? offset + lastActivityInResultIndex + 1 : offset + limit;
+    return await getMedias(result, queryBuilder, newOffset, limit);
+  }
+  return { activities: result, offset: offset + limit };
+};
+
+mediathequeController.post({ path: '' }, async (req, res) => {
   const filters: Array<Filter[]> = req?.body?.filters || [];
-
+  const offset: string | undefined = req?.query?.offset as string;
+  const limit: string | undefined = req?.query?.limit as string;
   let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
 
   filters.map((filter, index) => {
@@ -84,8 +84,12 @@ mediathequeController.post({ path: '/all' }, async (req, res) => {
       }),
     );
   });
-  const activities = await subQueryBuilder.getMany();
-  res.send(activities);
+
+  const activitiesWithMediaOnly = await getMedias([], subQueryBuilder, offset ? parseInt(offset) : undefined, limit ? parseInt(limit) : undefined);
+  console.log('activitiesWithMediaOnly');
+  console.log(activitiesWithMediaOnly);
+
+  res.send(activitiesWithMediaOnly);
 });
 
 export { mediathequeController };
