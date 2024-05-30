@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
   Accordion,
   AccordionDetails,
@@ -25,20 +26,17 @@ const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = useState<string>('name');
 
-  const handleRequestSort = (property: React.SetStateAction<string>) => {
+  const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const sortedData = data.slice().sort((a, b) => {
-    if (orderBy) {
-      if (order === 'asc') {
-        return a[orderBy] > b[orderBy] ? 1 : -1;
-      }
-      return a[orderBy] < b[orderBy] ? 1 : -1;
+  const sortedData = [...data].sort((a, b) => {
+    if (order === 'asc') {
+      return a[orderBy] > b[orderBy] ? 1 : -1;
     }
-    return 0;
+    return a[orderBy] < b[orderBy] ? 1 : -1;
   });
 
   return (
@@ -58,12 +56,17 @@ const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
       </AccordionSummary>
       <AccordionDetails>
         <TableContainer>
-          <Table sx={{ minWidth: 650, boxShadow: 'none', border: 'none' }} aria-label="simple table">
+          <Table sx={{ boxShadow: 'none', border: 'none' }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 {Object.keys(data[0]).map((key) => (
                   <TableCell key={key} sortDirection={orderBy === key ? order : undefined}>
-                    <TableSortLabel active={orderBy === key} direction={orderBy === key ? order : 'asc'} onClick={() => handleRequestSort(key)}>
+                    <TableSortLabel
+                      active={orderBy === key}
+                      direction={orderBy === key ? order : 'asc'}
+                      IconComponent={KeyboardArrowUpIcon}
+                      onClick={() => handleRequestSort(key)}
+                    >
                       {key}
                     </TableSortLabel>
                   </TableCell>
@@ -72,7 +75,7 @@ const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
             </TableHead>
             <TableBody>
               {sortedData.map((item, rowIndex) => (
-                <TableRow key={rowIndex} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow key={rowIndex}>
                   {Object.keys(data[0]).map((key, colIndex) => (
                     <TableCell key={colIndex}>{item[key]}</TableCell>
                   ))}
