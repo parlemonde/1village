@@ -19,27 +19,96 @@ statisticsController.get({ path: '/contributions' }, async (_req, res) => {
       .createQueryBuilder('activity')
       .select('activity.phase', 'phase')
       .addSelect('COUNT(DISTINCT activity.userId)', 'activeClassrooms')
+      .addSelect('user.countryCode', 'countryCode')
       .innerJoin('activity.user', 'user')
       .where('user.type = :userType', { userType: UserType.TEACHER })
-      .groupBy('activity.phase')
+      .groupBy('activity.phase, user.countryCode')
       .getRawMany(),
   );
 });
 
 statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => {
-  const activitiesCount = await activityRepository.count({ where: { user: { type: UserType.TEACHER } } });
-  const commentsCount = await commentRepository.count({ where: { user: { type: UserType.TEACHER } } });
+  const activitiesCount = await activityRepository
+    .createQueryBuilder('activity')
+    .select('user.countryCode', 'countryCode')
+    .addSelect('activity.phase', 'phase')
+    .addSelect('COUNT(activity.id)', 'totalActivities')
+    .innerJoin('activity.user', 'user')
+    .where('user.type = :userType', { userType: UserType.TEACHER })
+    .groupBy('user.countryCode, activity.phase')
+    .getRawMany();
+
+  const commentsCount = await commentRepository
+    .createQueryBuilder('comment')
+    .select('user.countryCode', 'countryCode')
+    .addSelect('activity.phase', 'phase')
+    .addSelect('COUNT(comment.id)', 'totalComments')
+    .innerJoin('comment.activity', 'activity')
+    .innerJoin('comment.user', 'user')
+    .where('user.type = :userType', { userType: UserType.TEACHER })
+    .groupBy('user.countryCode, activity.phase')
+    .getRawMany();
+
   const videosCount = await AppDataSource.createQueryRunner().manager.query(
-    `SELECT COUNT(*) AS total_videos FROM activity, 
-  JSON_TABLE(activity.content, "$[*]" COLUMNS (type VARCHAR(255) PATH "$.type")) AS content_types 
-  WHERE content_types.type = 'video';`,
+    `SELECT user.countryCode, activity.phase, COUNT(*) AS total_videos 
+     FROM activity
+     INNER JOIN user ON activity.userId = user.id
+     WHERE JSON_EXTRACT(activity.content, '$[0].type') = 'video' AND user.type = ?
+     GROUP BY user.countryCode, activity.phase;`,
+    [UserType.TEACHER],
   );
 
-  res.sendJSON({
-    totalActivities: activitiesCount,
-    totalVideos: parseInt(videosCount[0].total_videos),
-    totalComments: commentsCount,
+  const response = {};
+
+  // res.sendJSON({
+  //   totalActivities: activitiesCount,
+  //   totalVideos: parseInt(videosCount[0].total_videos),
+  //   totalComments: commentsCount,
+  // });
+
+  activitiesCount.forEach((activity) => {
+    const key = `${activity.countryCode}-${activity.phase}`;
+    if (!response[key]) {
+      response[key] = {
+        countryCode: activity.countryCode,
+        phase: activity.phase,
+        totalActivities: 0,
+        totalComments: 0,
+        totalVideos: 0,
+      };
+    }
+    response[key].totalActivities = parseInt(activity.totalActivities);
   });
+
+  commentsCount.forEach((comment) => {
+    const key = `${comment.countryCode}-${comment.phase}`;
+    if (!response[key]) {
+      response[key] = {
+        countryCode: comment.countryCode,
+        phase: comment.phase,
+        totalActivities: 0,
+        totalComments: 0,
+        totalVideos: 0,
+      };
+    }
+    response[key].totalComments = parseInt(comment.totalComments);
+  });
+
+  videosCount.forEach((video) => {
+    const key = `${video.countryCode}-${video.phase}`;
+    if (!response[key]) {
+      response[key] = {
+        countryCode: video.countryCode,
+        phase: video.phase,
+        totalActivities: 0,
+        totalComments: 0,
+        totalVideos: 0,
+      };
+    }
+    response[key].totalVideos = parseInt(video.total_videos);
+  });
+
+  res.sendJSON(Object.values(response));
 });
 
 statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
