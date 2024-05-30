@@ -75,7 +75,7 @@ export default function DownloadButton() {
       const activityLabel = getActivityLabel(item.type);
       const subThemeLabel = getSubThemeLabel(item.type, item.subType);
 
-      item.content.forEach((contentItem: { type: string; value: string }, contentIndex: number) => {
+      item.medias.forEach((contentItem: { type: string; value: string }, contentIndex: number) => {
         if (contentItem.type === 'image') {
           const imageUrl = contentItem.value;
           const imageExtension = getFileExtension(imageUrl);
