@@ -6,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
+import PhaseDetails from './menu/PhaseDetails';
 import { useGetClassroomExchanges, useGetConnectionTimes, useGetConnectionCounts } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
@@ -59,6 +60,33 @@ const GlobalStats = () => {
           totalPublications={classroomExchanges.data.totalActivities}
           totalComments={classroomExchanges.data.totalComments}
           totalVideos={classroomExchanges.data.totalVideos}
+        />
+      </div>
+      <div>
+        <PhaseDetails
+          phase={1}
+          data={[
+            { name: 'test', connections: 2 },
+            { name: 'test 2', connections: 12 },
+          ]}
+        />
+      </div>
+      <div>
+        <PhaseDetails
+          phase={2}
+          data={[
+            { name: 'test', connections: 2, allo: 'fds' },
+            { name: 'dest 2', connections: 12, allo: 'ads' },
+          ]}
+        />
+      </div>
+      <div>
+        <PhaseDetails
+          phase={3}
+          data={[
+            { name: 'test ff', connections: 15, allo: 'fdjjjjjjjs' },
+            { name: 'dest 2', connections: 1, allo: 'fdsfsqds' },
+          ]}
         />
       </div>
     </>
