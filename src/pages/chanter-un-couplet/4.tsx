@@ -99,7 +99,7 @@ const SongStep4 = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [data?.verseMixUrl, data?.classRecordTrack?.sampleUrl, data?.classRecordTrack?.sampleTrim?.start]);
+  }, [data?.verseMixUrl, data?.classRecordTrack?.sampleUrl]);
 
   if (!activity || !data) {
     return (
