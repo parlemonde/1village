@@ -4,6 +4,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import { ButtonBase, Card } from '@mui/material';
 
 import { UserContext } from 'src/contexts/userContext';
+import DocumentIcon from 'src/svg/editor/document_icon.svg';
 import ImageIcon from 'src/svg/editor/image_icon.svg';
 import SoundIcon from 'src/svg/editor/sound_icon.svg';
 import TextIcon from 'src/svg/editor/text_icon.svg';
@@ -25,7 +26,6 @@ export const AddContentCard = ({ addContent = () => {} }: AddContentCardProps) =
         <span className="text text--bold" style={{ margin: '0 0.5rem' }}>
           Ajouter à votre description :
         </span>
-        {/* <Divider flexItem orientation="vertical" style={{ margin: "0 1rem", backgroundColor: primaryColor }} /> */}
         <ButtonBase
           style={{
             display: 'flex',
@@ -60,6 +60,24 @@ export const AddContentCard = ({ addContent = () => {} }: AddContentCardProps) =
           <ImageIcon height="1.25rem" />
           <span className="text text--small" style={{ marginTop: '0.1rem' }}>
             Image
+          </span>
+        </ButtonBase>
+        <ButtonBase
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            margin: '0 0.5rem',
+            padding: '0.2rem',
+            borderRadius: '5px',
+          }}
+          onClick={() => {
+            addContent('document');
+          }}
+        >
+          <DocumentIcon height="1.25rem" />
+          <span className="text text--small" style={{ marginTop: '0.1rem' }}>
+            Document
           </span>
         </ButtonBase>
         <ButtonBase

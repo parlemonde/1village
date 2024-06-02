@@ -7,7 +7,7 @@ import path from 'path';
 import type { UserType } from '../entities/user';
 import { authenticate } from '../middlewares/authenticate';
 import { handleErrors } from '../middlewares/handleErrors';
-import { diskStorage } from './multer';
+import { diskStorage } from '../middlewares/multer';
 
 type RouteOptions = {
   path: string;

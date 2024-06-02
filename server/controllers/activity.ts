@@ -160,7 +160,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -275,7 +275,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -291,6 +291,7 @@ const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
 
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
+
   if (!updateActivityValidator(data)) {
     sendInvalidDataError(updateActivityValidator);
     return;
@@ -335,8 +336,10 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       }
     }
   }
-
-  activity.status = data.status ?? activity.status;
+  if (data.status === 0 && activity.status !== 0) {
+    activity.status = data.status;
+    activity.publishDate = new Date();
+  }
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;

@@ -180,7 +180,6 @@ export class AwsS3 {
     // local dir
     const fileStream = fs.createReadStream(path.join(__dirname, filename));
     let key = '';
-
     // upload image on stockage server
     try {
       key = await this.uploadS3File(filename, fileStream, contentType);
