@@ -21,7 +21,7 @@ import {
   isReportage,
   isStory,
   isSymbol,
-  isVerseRecord,
+  isClassAnthem,
 } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -80,7 +80,7 @@ export const ActivityView = ({ activity, user }: ActivityViewProps) => {
         {isReportage(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isReaction(activity) && <ContentView content={activity.content} activityId={activity.id} />}
         {isStory(activity) && <StoryActivityView activity={activity} user={user} />}
-        {isVerseRecord(activity) && <VerseActivityView activity={activity} user={user} />}
+        {isClassAnthem(activity) && <VerseActivityView activity={activity} user={user} />}
       </div>
     )
   );

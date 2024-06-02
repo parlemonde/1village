@@ -1,21 +1,23 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import type { Syllable } from 'src/activity-types/anthem.types';
-import type { VerseRecordData } from 'src/activity-types/verseRecord.types';
+import styles from '../../styles/chanter-un-couplet.module.css';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
+import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
+import type { Syllable } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep2 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
-  const data = (activity?.data as VerseRecordData) || null;
+  const data = (activity?.data as ClassAnthemData) || null;
   const errorSteps = React.useMemo(() => {
     const errors: number[] = [];
-    if (data !== null && !data.customizedMix) {
+    if (data !== null && !data.verseMixUrl) {
       errors.push(0);
     }
 
@@ -33,40 +35,36 @@ const SongStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <div className={styles.mainContainer}>
         <Steps
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={1}
           errorSteps={errorSteps}
-          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
-        <h1>À vous d&apos;écrire le couplet !</h1>
-        <p>
-          Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
-          N&apos;hésitez pas à ré-écouter le couplet.
-        </p>
-        {data?.customizedMixWithVocals ? (
-          <audio controls src={data?.customizedMixWithVocals} />
-        ) : (
+        <div className={styles.contentContainer}>
+          <h1>À vous d&apos;écrire le couplet !</h1>
           <p>
-            <b>Il manque votre mix du couplet !</b>
+            Pour vous aider, je vous propose de remplir cette grille, puis de remplacer chaque &quot;La&quot; par une syllabe de votre couplet.
+            N&apos;hésitez pas à ré-écouter le couplet.
           </p>
-        )}
-        <div className="width-900">
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data?.verseLyrics.map((el, index) => (
-              <SyllableEditor
-                key={`syllableEditor--verseLyrics--${index}`}
-                value={el}
-                onChange={(newValue) => {
-                  const newVerseLyrics = [...data.verseLyrics];
-                  newVerseLyrics[index] = newValue;
-                  updateVerse(newVerseLyrics);
-                }}
-              />
-            ))}
+          <AudioPlayer src={data.verseMixWithVocalsUrl} isBuildingAudio />
+          <div className={styles.contentContainer}>
+            <div className={styles.anthemLyricsContainer}>
+              {data?.verseLyrics.map((el, index) => (
+                <SyllableEditor
+                  key={`syllableEditor--verseLyrics--${index}`}
+                  value={el}
+                  onChange={(newValue) => {
+                    const newVerseLyrics = [...data.verseLyrics];
+                    newVerseLyrics[index] = newValue;
+                    updateVerse(newVerseLyrics);
+                  }}
+                />
+              ))}
+            </div>
+            <StepsButton prev="/chanter-un-couplet/1" next={onNext} />
           </div>
-          <StepsButton prev="/chanter-un-couplet/1" next={onNext} />
         </div>
       </div>
     </Base>

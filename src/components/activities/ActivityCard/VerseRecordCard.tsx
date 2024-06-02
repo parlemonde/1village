@@ -5,10 +5,10 @@ import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
-import type { VerseRecordActivity } from 'src/activity-types/verseRecord.types';
 import { RedButton } from 'src/components/buttons/RedButton';
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
 
-export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<VerseRecordActivity>) => (
+export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons, onDelete }: ActivityCardProps<ClassAnthemActivity>) => (
   <div
     style={{
       display: 'flex',
@@ -17,7 +17,7 @@ export const VerseRecordCard = ({ activity, isSelf, noButtons, isDraft, showEdit
     }}
   >
     <div style={{ width: '40%', flexShrink: 0, padding: '0.25rem' }}>
-      <audio controls src={activity.data.verse} />
+      <audio controls src={activity.data.verseFinalMixUrl} />
     </div>
     <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
       <h3>Un couplet de l&apos;hymne du village idéal</h3>

@@ -30,6 +30,10 @@ export class Controller {
     this.router.get(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
 
+  public head(options: RouteOptions, handler: RequestHandler): void {
+    this.router.head(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
+  }
+
   public post(options: RouteOptions, handler: RequestHandler): void {
     this.router.post(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
