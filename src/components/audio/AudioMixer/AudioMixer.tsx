@@ -21,7 +21,6 @@ type AudioMixerProps = {
 
 const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate }: AudioMixerProps, ref) => {
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [volumes, setVolumes] = React.useState(tracks.map((track) => track.sampleVolume));
   const [soloTrackIdx, setSoloTrackIdx] = React.useState<number | null>(null);
   const [counter, setCounter] = React.useState(0);
   const counterIntervalId = React.useRef<number | undefined>(undefined);
@@ -59,10 +58,7 @@ const AudioMixer = React.forwardRef(({ tracks, verseTime, handleMixUpdate }: Aud
   }, [onPause, onRestart]);
 
   const handleVolumeUpdate = (idx: number, volume: number) => {
-    const newMix = volumes;
-    newMix[idx] = volume;
-    setVolumes(newMix);
-    handleMixUpdate(volumes);
+    handleMixUpdate(tracks.map((track, i) => (i === idx ? volume : track.sampleVolume)));
   };
 
   const handleSolo = (trackIdx: number) => {

@@ -89,6 +89,11 @@ const AnthemStep2 = () => {
     );
   }
 
+  const introChorus = data.tracks.find((t) => t.type === TrackType.INTRO_CHORUS);
+  const introChorusDuration = introChorus?.sampleDuration || 0;
+  const outro = data.tracks.find((t) => t.type === TrackType.OUTRO);
+  const outroDuration = outro?.sampleDuration || 0;
+
   return (
     <Base>
       <div className={styles.mainContainer}>
@@ -104,43 +109,53 @@ const AnthemStep2 = () => {
           <div className={styles.anthemStructureContainer}>
             <p>
               Pour mémoire voici la structure de l&apos;hymne
-              {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && data.tracks[TrackType.OUTRO].sampleDuration > 0 && (
-                <b>
-                  {' '}
-                  (
-                  {toTime(
-                    data.tracks[TrackType.INTRO_CHORUS].sampleDuration +
-                      data.tracks[TrackType.OUTRO].sampleDuration +
-                      getLongestVerseSampleDuration(data.tracks),
-                  )}
-                  )
-                </b>
+              {introChorusDuration > 0 && outroDuration > 0 && (
+                <b> ({toTime(introChorusDuration + outroDuration + getLongestVerseSampleDuration(data.tracks))})</b>
               )}
               :
             </p>
             <div className={styles.anthemStructureVocalContainer}>
-              <span>Intro : {<b>{toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)}</b>}</span>
+              <span>Intro : {<b>{toTime(introChorusDuration)}</b>}</span>
               <span>Couplet : {<b>{toTime(getLongestVerseSampleDuration(data.tracks))}</b>}</span>
-              <span>Outro : {<b>{toTime(data.tracks[TrackType.OUTRO].sampleDuration)}</b>}</span>
+              <span>Outro : {<b>{toTime(outroDuration)}</b>}</span>
             </div>
             <Vocal className={styles.anthemStructureVocal} />
           </div>
-          {data.tracks.filter((track) => track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO).length === 2 && (
-            <div className={styles.trackSelectionContainer}>
-              <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
-              <AnthemTrack
-                track={data.tracks[TrackType.INTRO_CHORUS]}
-                handleTrackUpdate={updateTrackInActivity}
-                instruments={displayableInstruments}
-              ></AnthemTrack>
-              <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de l&apos;outro</p>
-              <AnthemTrack
-                track={data.tracks[TrackType.OUTRO]}
-                handleTrackUpdate={updateTrackInActivity}
-                instruments={displayableInstruments}
-              ></AnthemTrack>
-            </div>
-          )}
+
+          <div className={styles.trackSelectionContainer}>
+            <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
+            <AnthemTrack
+              track={
+                introChorus || {
+                  type: TrackType.INTRO_CHORUS,
+                  label: 'Piste intro + refrain chanté',
+                  sampleUrl: '',
+                  sampleDuration: 0,
+                  iconUrl: 'accordion',
+                  sampleStartTime: 0,
+                  sampleVolume: 0.5,
+                }
+              }
+              handleTrackUpdate={updateTrackInActivity}
+              instruments={displayableInstruments}
+            ></AnthemTrack>
+            <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de l&apos;outro</p>
+            <AnthemTrack
+              track={
+                outro || {
+                  type: TrackType.OUTRO,
+                  label: 'Piste outro',
+                  sampleUrl: '',
+                  sampleDuration: 0,
+                  iconUrl: 'accordion',
+                  sampleStartTime: 0,
+                  sampleVolume: 0.5,
+                }
+              }
+              handleTrackUpdate={updateTrackInActivity}
+              instruments={displayableInstruments}
+            ></AnthemTrack>
+          </div>
         </div>
       </div>
       <StepsButton prev="/parametrer-hymne/1?edit" next={onNext} />

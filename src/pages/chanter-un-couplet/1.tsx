@@ -16,39 +16,40 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import { getLongestVerseSampleDuration, getVerseTracks } from 'src/utils/audios';
 import { ActivityStatus } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
-import type { Track } from 'types/anthem.type';
 import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep1 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isTracks, setIsTracks] = React.useState(false);
   const data = (activity?.data as ClassAnthemData) || null;
 
   const mixerRef = React.useRef<{ stopMixer: () => void }>();
 
-  React.useEffect(() => {
-    if (data && data.anthemTracks.length > 0) {
-      setIsTracks(true);
-    }
-  }, [data]);
+  const verseTracks = data ? getVerseTracks(data.anthemTracks) : [];
 
-  const audioMixerTracks: AudioMixerTrack[] = React.useMemo(() => {
-    return isTracks
-      ? getVerseTracks(data.anthemTracks).map((track) => {
-          const audioElement = new Audio(track.sampleUrl);
-          audioElement.volume = track.sampleVolume ?? 0.5;
-          return {
-            sampleVolume: track.sampleVolume ?? 0.5,
-            label: track.label,
-            iconUrl: track.iconUrl,
-            audioElement: audioElement,
-          };
-        })
-      : [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTracks]);
+  // Use a state variable to store the current verse tracks URLs in a changing array to trigger a re-render
+  const [verseTracksUrls, setVerseTracksUrls] = React.useState(verseTracks.map((track) => track.sampleUrl));
+  const verseTracksVolumeRef = React.useRef(verseTracks.map((track) => track.sampleVolume));
+  if (verseTracksUrls.join(', ') !== verseTracks.map((track) => track.sampleUrl).join(', ')) {
+    setVerseTracksUrls(verseTracks.map((track) => track.sampleUrl));
+    verseTracksVolumeRef.current = verseTracks.map((track) => track.sampleVolume);
+  }
+  const audioElements: HTMLAudioElement[] = React.useMemo(() => {
+    return verseTracksUrls.map((sampleUrl, idx) => {
+      const audioElement = new Audio(sampleUrl);
+      audioElement.volume = (verseTracksVolumeRef.current[idx] ?? 1) / 2;
+      return audioElement;
+    });
+  }, [verseTracksUrls]);
+  const audioMixerTracks: AudioMixerTrack[] = verseTracks.map((track, idx) => {
+    return {
+      sampleVolume: track.sampleVolume ?? 1,
+      label: track.label,
+      iconUrl: track.iconUrl,
+      audioElement: audioElements[idx],
+    };
+  });
 
   const buildVerseUrl = async () => {
     // -- clean previous mix if draft
@@ -120,11 +121,17 @@ const SongStep1 = () => {
   };
 
   const handleMixUpdate = (volumes: number[]) => {
-    const tempMixedTrack: Track[] = getVerseTracks(data.anthemTracks).map((track, idx) => ({ ...track, sampleVolume: volumes[idx] }));
-    tempMixedTrack.unshift(data.anthemTracks[TrackType.VOCALS]);
-    tempMixedTrack.unshift(data.anthemTracks[TrackType.INTRO_CHORUS]);
-    tempMixedTrack.push(data.anthemTracks[TrackType.OUTRO]);
-    updateActivity({ data: { ...data, anthemTracks: tempMixedTrack } });
+    const newVerseTracks = [...verseTracks];
+    newVerseTracks.forEach((track, idx) => {
+      track.sampleVolume = volumes[idx];
+    });
+
+    const newTracks = data.anthemTracks.map((track) => {
+      const newTrack = newVerseTracks.find((t) => t.type === track.type);
+      return newTrack || track;
+    });
+
+    updateActivity({ data: { ...data, anthemTracks: newTracks } });
   };
 
   if (!activity || !data) {
@@ -157,7 +164,7 @@ const SongStep1 = () => {
             <AudioMixer
               ref={mixerRef}
               tracks={audioMixerTracks}
-              verseTime={getLongestVerseSampleDuration(getVerseTracks(data.anthemTracks))}
+              verseTime={getLongestVerseSampleDuration(verseTracks)}
               handleMixUpdate={handleMixUpdate}
             />
           )}

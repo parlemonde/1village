@@ -29,31 +29,36 @@ const AudioMixerTrackControl = ({ mixTrack, idx, soloTrackIdx, handleSolo, handl
     }
   }, [idx, isMuted, mixTrack.audioElement, soloTrackIdx]);
 
+  const lastVolumeRef = React.useRef<number>(1);
   const toggleMute = () => {
-    mixTrack.audioElement.muted = !isMuted;
     setIsMuted(!isMuted);
+    if (!isMuted) {
+      lastVolumeRef.current = mixTrack.sampleVolume || 1;
+      mixTrack.audioElement.volume = 0;
+      handleVolumeUpdate(idx, 0);
+    } else {
+      mixTrack.audioElement.volume = lastVolumeRef.current / 2;
+      handleVolumeUpdate(idx, lastVolumeRef.current);
+    }
   };
 
   const toggleSolo = (idx: number) => {
     handleSolo(idx);
   };
 
-  const handleChange = (_event: Event, newValue: number | number[]) => {
-    mixTrack.sampleVolume = newValue as number;
-    mixTrack.audioElement.volume = newValue as number;
-  };
-
   return (
     <div className={styles.sliderContainer}>
       <Slider
         aria-label="Mixing Volume"
-        defaultValue={mixTrack.sampleVolume}
-        onChange={handleChange}
-        onChangeCommitted={() => handleVolumeUpdate(idx, mixTrack.audioElement.volume)}
-        step={0.1}
+        value={mixTrack.sampleVolume ?? 1}
+        onChange={(_event: Event, value: number | number[]) => {
+          handleVolumeUpdate(idx, Array.isArray(value) ? value[0] : value);
+          mixTrack.audioElement.volume = (Array.isArray(value) ? value[0] : value) / 2;
+        }}
+        step={0.2}
         marks
         min={0}
-        max={1}
+        max={2}
         orientation="vertical"
         sx={{
           height: '350px',

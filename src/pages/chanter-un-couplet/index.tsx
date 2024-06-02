@@ -60,7 +60,7 @@ const Anthem = () => {
       sampleDuration: 0,
       iconUrl: '',
       sampleStartTime: 0,
-      sampleVolume: 0.5,
+      sampleVolume: 1,
     } as Track;
 
     const newData: ClassAnthemData = {
