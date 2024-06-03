@@ -19,12 +19,12 @@ const getMedias = async (result: any[], queryBuilder, offset, limit) => {
   console.log('activities');
   console.log(activities);
   const activitiesMediaFinder = activities.map(({ id, content, subType, type, villageId, userId }) => {
-    const result = { id, subType, type, villageId, userId, medias: [] };
+    const result = { id, subType, type, villageId, userId, content: [] };
     if (content.game) {
       content.game.map(({ inputs }) =>
         inputs.map((input) => {
           if (input.type === 3 || input.type === 4) {
-            result.medias.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+            result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
           }
         }),
       );
@@ -32,14 +32,14 @@ const getMedias = async (result: any[], queryBuilder, offset, limit) => {
       content.map(({ type, value }) => {
         const wantedTypes = ['image', 'video', 'sound'];
         if (wantedTypes.includes(type)) {
-          result.medias.push({ type, value });
+          result.content.push({ type, value });
         }
       });
     }
     return result;
   });
 
-  const activitiesWithMediaOnly = activitiesMediaFinder.filter((a) => a.medias.length > 0);
+  const activitiesWithMediaOnly = activitiesMediaFinder.filter((a) => a.content.length > 0);
   result = [...result, ...activitiesWithMediaOnly];
 
   if (!limit) {

@@ -31,23 +31,14 @@ const MediathequeContext: React.Context<MediathequeContextType> = createContext<
 export const MediathequeProvider: FC<MediathequeProviderProps> = ({ children }) => {
   const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
   const [offset, setOffset] = useState<number>(0);
-  // const r = useGetMediatheque(filters, offset, 2);
-  // console.log(r);
   const { data } = useGetMediatheque(filters, offset, 6);
   console.log(data);
+  const { data: allData } = useGetMediatheque(filters);
+  console.log(allData);
 
   if (!data) {
     return null;
   }
-  // const {
-  //  data: { activities: filtered, offset: newOffset },
-  // } = useGetMediatheque(filters, offset, 6);
-  // const { data: count } = useGetMediathequeCount(filters);
-
-  // const {
-  //   data: { activities: allFiltered },
-  // } = useGetMediatheque(filters);
-
   return (
     <MediathequeContext.Provider
       value={{
@@ -56,11 +47,10 @@ export const MediathequeProvider: FC<MediathequeProviderProps> = ({ children }) 
         setFilters,
         filtered: data?.activities,
         setOffset,
-        count: data?.activities?.length,
-        allFiltered: data?.activities,
+        count: allData?.activities?.length,
+        allFiltered: allData?.activities,
       }}
     >
-      {/* <MediathequeContext.Provider value={{ filters, offset: 0, setFilters, filtered: [], setOffset, count: 12, allFiltered: [] }}> */}
       {children}
     </MediathequeContext.Provider>
   );
