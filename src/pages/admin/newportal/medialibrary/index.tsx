@@ -20,6 +20,7 @@ import IconButton from '@mui/material/IconButton';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import MediaCard from 'src/components/admin/mediatheque/CardMediatheque';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
 import Filters from 'src/components/admin/mediatheque/Filter';
@@ -30,10 +31,7 @@ import MediathequeContext from 'src/contexts/mediathequeContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
-const Mediatheque = () => {
-  const { setFilters, filtered, setOffset, count } = useContext(MediathequeContext);
-
-  /* const [currentVillage, setCurrentVillage] = useState(null)
+/* const [currentVillage, setCurrentVillage] = useState(null)
   const [currentCountry, setCurrentCountry] = useState(null)
   const [currentClass, setCurrentClass] = useState(null)
 
@@ -60,6 +58,9 @@ const Mediatheque = () => {
   useEffect(() => {
     updateClassList();
   },[currentCountry, updateClassList, countrylist]) */
+
+const Mediatheque = () => {
+  const { setFilters, filtered, setOffset, count } = useContext(MediathequeContext);
 
   const handleResetFilters = () => {
     setFilters([[]]);
@@ -118,6 +119,9 @@ const Mediatheque = () => {
         ) : (
           <div>Il y a des médias</div>
         )}
+      </div>
+      <div>
+        <MediaCard />
       </div>
       <div className="pagination">
         <Stack spacing={2}>

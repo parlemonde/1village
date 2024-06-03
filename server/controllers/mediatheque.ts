@@ -12,19 +12,22 @@ const getMedias = async (result: any[], queryBuilder, offset, limit) => {
     .limit(limit ? parseInt(limit) : undefined)
     .offset(offset ? parseInt(offset) : undefined)
     .getMany();
-  console.log('offset');
-  console.log(offset);
-  console.log('limit');
-  console.log(limit);
-  console.log('activities');
-  console.log(activities);
-  const activitiesMediaFinder = activities.map(({ id, content, subType, type, villageId, userId }) => {
-    const result = { id, subType, type, villageId, userId, content: [] };
+  // console.log('offset');
+  // console.log(offset);
+  // console.log('limit');
+  // console.log(limit);
+  // console.log('activities');
+  // console.log(activities);
+  const activitiesMediaFinder = activities.map(({ id, content, subType, type, villageId, userId, user }) => {
+    // let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoinAndSelect('activity.user', 'user');
+    // subQueryBuilder = subQueryBuilder.addSelect(['user.countrycode']);
+    // const activitiesWithUserData = await subQueryBuilder.getMany();
+    const result = { id, subType, type, villageId, userId, medias: [], user };
     if (content.game) {
       content.game.map(({ inputs }) =>
-        inputs.map((input) => {
+        inputs.map((input: { type: number; selectedValue: string }) => {
           if (input.type === 3 || input.type === 4) {
-            result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+            result.medias.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
           }
         }),
       );
@@ -32,14 +35,14 @@ const getMedias = async (result: any[], queryBuilder, offset, limit) => {
       content.map(({ type, value }) => {
         const wantedTypes = ['image', 'video', 'sound'];
         if (wantedTypes.includes(type)) {
-          result.content.push({ type, value });
+          result.medias.push({ type, value });
         }
       });
     }
     return result;
   });
 
-  const activitiesWithMediaOnly = activitiesMediaFinder.filter((a) => a.content.length > 0);
+  const activitiesWithMediaOnly = activitiesMediaFinder.filter((a) => a.medias.length > 0);
   result = [...result, ...activitiesWithMediaOnly];
 
   if (!limit) {
@@ -47,8 +50,8 @@ const getMedias = async (result: any[], queryBuilder, offset, limit) => {
   }
   const oldLength = result.length;
   result = result.slice(0, limit);
-  console.log('resultPOPOPO');
-  console.log(result);
+  // console.log('resultPOPOPO');
+  // console.log(result);
   const newLength = result.length;
   const hasReduced = oldLength !== newLength;
 
@@ -67,7 +70,10 @@ mediathequeController.post({ path: '' }, async (req, res) => {
   const filters: Array<Filter[]> = req?.body?.filters || [];
   const offset: string | undefined = req?.query?.offset as string;
   const limit: string | undefined = req?.query?.limit as string;
-  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
+  let subQueryBuilder = AppDataSource.getRepository(Activity)
+    .createQueryBuilder('activity')
+    .innerJoinAndSelect('activity.user', 'user') // Join and select the user
+    .addSelect(['user.countrycode']); // Select the countrycode
 
   filters.map((filter, index) => {
     subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
@@ -84,10 +90,9 @@ mediathequeController.post({ path: '' }, async (req, res) => {
       }),
     );
   });
-
   const activitiesWithMediaOnly = await getMedias([], subQueryBuilder, offset ? parseInt(offset) : undefined, limit ? parseInt(limit) : undefined);
-  console.log('activitiesWithMediaOnly');
-  console.log(activitiesWithMediaOnly);
+  // console.log('activitiesWithMediaOnly');
+  // console.log(activitiesWithMediaOnly);
 
   res.send(activitiesWithMediaOnly);
 });
