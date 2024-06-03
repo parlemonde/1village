@@ -1,8 +1,6 @@
 import type { FC, Dispatch, SetStateAction } from 'react';
 import React, { createContext, useState } from 'react';
 
-import { useGetMediathequeAll } from 'src/api/mediatheque/mediatheque.all';
-import { useGetMediathequeCount } from 'src/api/mediatheque/mediatheque.count';
 import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import type { Filter } from 'types/mediatheque.type';
 
@@ -33,23 +31,12 @@ const MediathequeContext: React.Context<MediathequeContextType> = createContext<
 export const MediathequeProvider: FC<MediathequeProviderProps> = ({ children }) => {
   const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
   const [offset, setOffset] = useState<number>(0);
-  // const r = useGetMediatheque(filters, offset, 2);
-  // console.log(r);
   const { data } = useGetMediatheque(filters, offset, 6);
-  console.log(data);
-  const { data: allData } = useGetMediatheque(filters);
+  const { data: allData } = useGetMediatheque(filters); // for Download
 
   if (!data) {
     return null;
   }
-  // const {
-  //  data: { activities: filtered, offset: newOffset },
-  // } = useGetMediatheque(filters, offset, 6);
-  // const { data: count } = useGetMediathequeCount(filters);
-
-  // const {
-  //   data: { activities: allFiltered },
-  // } = useGetMediatheque(filters);
 
   return (
     <MediathequeContext.Provider
