@@ -1,4 +1,5 @@
 import React from 'react';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -25,6 +26,43 @@ const GlobalStats = () => {
 
   return (
     <>
+      <ComposableMap style={{ height: '90vh' }}>
+        <ZoomableGroup center={[0, 0]} zoom={1}>
+          <Geographies geography="/simpleWorldMap.json">
+            {({ geographies }) =>
+              geographies.map((geo) => (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  style={{
+                    default: {
+                      fill: '#FFF',
+                      stroke: '#000',
+                      strokeWidth: '.2',
+                      outline: 'none',
+                      transition: 'ease .2s',
+                    },
+                    hover: {
+                      fill: '#edf2fb',
+                      stroke: '#000',
+                      strokeWidth: '.25',
+                      outline: 'none',
+                      cursor: 'pointer',
+                    },
+                    pressed: {
+                      fill: 'white',
+                      stroke: '#000',
+                      strokeWidth: '.25',
+                      outline: 'none',
+                    },
+                  }}
+                />
+              ))
+            }
+          </Geographies>
+        </ZoomableGroup>
+      </ComposableMap>
+
       <div>
         <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
         <StatsCard data={20}>Nombre de classes connectées</StatsCard>
