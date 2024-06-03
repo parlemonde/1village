@@ -20,7 +20,7 @@ export const ActivityType = {
   REPORTAGE: 9,
   REACTION: 10,
   ANTHEM: 11,
-  VERSE_RECORD: 12,
+  CLASS_ANTHEM: 12,
   STORY: 13,
   RE_INVENT_STORY: 14,
 };
@@ -39,6 +39,7 @@ export interface Activity<T extends AnyData = AnyData> {
 
   createDate?: Date | string;
   updateDate?: Date | string;
+  publishDate?: Date | string;
   deleteDate?: Date | string;
 
   // activity data

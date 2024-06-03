@@ -291,6 +291,7 @@ const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
 
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
+
   if (!updateActivityValidator(data)) {
     sendInvalidDataError(updateActivityValidator);
     return;
@@ -310,6 +311,7 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
     next();
     return;
   }
+
   if (activity.status !== ActivityStatus.PUBLISHED) {
     if (data.phase) activity.phase = data.phase;
     if (data.phaseStep) {
@@ -334,8 +336,10 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       }
     }
   }
-
-  activity.status = data.status ?? activity.status;
+  if (data.status === 0 && activity.status !== 0) {
+    activity.status = data.status;
+    activity.publishDate = new Date();
+  }
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;

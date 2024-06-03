@@ -10,22 +10,26 @@ import { UserType } from 'types/user.type';
 type Link = {
   name: string;
   link: string;
+  rights: number[];
 };
 
 const Gerer = () => {
   const { user } = React.useContext(UserContext);
-  const hasAccess = user !== null && user.type in [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN];
+  const hasAccess = user !== null && user.type in [UserType.ADMIN, UserType.SUPER_ADMIN];
 
   if (!hasAccess) {
-    return <h1>Vous n&apos;avez pas accès à cette page, vous devez être médiateur, modérateur ou super admin.</h1>;
+    return <h1>Vous n&apos;avez pas accès à cette page, vous devez être super admin.</h1>;
   }
-
   const links: Link[] = [
-    { name: 'Les villages-mondes', link: '/admin/newportal/manage/villages' },
-    { name: 'Les utilisateurs', link: '/admin/newportal/manage/users' },
-    { name: 'Les consignes des activités', link: '/admin/newportal/manage/activities' },
-    { name: 'Paramétrer 1Village', link: '/admin/newportal/manage/settings' },
-    { name: "Les droits d'accès", link: '/admin/newportal/manage/access' },
+    { name: 'Les villages-mondes', link: '/admin/newportal/manage/villages', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    { name: 'Les utilisateurs', link: '/admin/newportal/manage/users', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    {
+      name: 'Les consignes des activités',
+      link: '/admin/newportal/manage/activities',
+      rights: [UserType.SUPER_ADMIN],
+    },
+    { name: 'Paramétrer 1Village', link: '/admin/newportal/manage/settings', rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    { name: "Les droits d'accès", link: '/admin/newportal/manage/access', rights: [UserType.SUPER_ADMIN] },
   ];
 
   return (
@@ -38,16 +42,18 @@ const Gerer = () => {
         </p>
       </div>
       <List sx={{ padding: 0, margin: 0 }}>
-        {links?.map((item, id) => (
-          <Link href={item.link} passHref key={id}>
-            <ListItem className="like-button grey" button component="a">
-              <ListItemText primary={item.name} />
-              <ListItemIcon>
-                <DoubleChevronRightIcon />
-              </ListItemIcon>
-            </ListItem>
-          </Link>
-        ))}
+        {links
+          ?.filter((link) => link.rights.includes(user.type))
+          .map((item, id) => (
+            <Link href={item.link} passHref key={id}>
+              <ListItem className="like-button grey" button component="a">
+                <ListItemText primary={item.name} />
+                <ListItemIcon>
+                  <DoubleChevronRightIcon />
+                </ListItemIcon>
+              </ListItem>
+            </Link>
+          ))}
       </List>
     </>
   );

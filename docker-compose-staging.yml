@@ -20,4 +20,5 @@ services:
       - ./src:/app/src
       - ./server:/app/server
       - ./types:/app/types
-    command: [ "yarn", "dev-staging" ]
+      - ./medias:/app/medias
+    command: ['yarn', 'dev-staging']

@@ -1,9 +1,10 @@
-FROM node:16.15.1-slim
+FROM node:20.11.1-slim
 
 RUN apt-get update
 
 # Needed for nodemon!
 RUN apt-get install -yq lsof procps
+RUN apt-get update && apt-get install -yq ffmpeg
 
 # Create app directory
 WORKDIR /app
@@ -12,7 +13,7 @@ WORKDIR /app
 COPY .yarn/releases ./.yarn/releases
 COPY .yarn/sdks ./.yarn/sdks
 COPY .yarn/cache ./.yarn/cache
-COPY .yarn/plugins ./.yarn/plugins
+# COPY .yarn/plugins ./.yarn/plugins
 COPY .yarnrc.yml ./
 COPY package.json ./
 COPY yarn.lock ./

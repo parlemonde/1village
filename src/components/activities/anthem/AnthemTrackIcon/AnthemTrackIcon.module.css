@@ -1,0 +1,43 @@
+.trackPicture button, .trackPicture > span > span{
+    border: 1px solid gray;
+    border-radius: 1rem;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    font-size: 10rem;
+}
+
+.trackPicture button {
+    padding: .5rem
+}
+
+.trackPicture > span > span > svg {
+    font-size: 1rem;
+}
+
+.instrumentList {
+    margin: 10px;
+    padding: 50px;
+}
+
+.iconList {
+    border: 1px solid gray;
+    border-radius: 1em;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    margin-right: 0.5rem;
+    background-color: white;
+}
+
+.autocompleteList {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.paperComp {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}

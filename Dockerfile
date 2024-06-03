@@ -1,5 +1,5 @@
 # STAGE 1 - Typescript to Javascript
-FROM node:16.15.1-slim as build-dependencies
+FROM node:20.11.1-slim as build-dependencies
 
 ARG BUILD_VERSION
 
@@ -12,7 +12,7 @@ WORKDIR /app
 COPY .yarn/releases .yarn/releases
 COPY .yarn/sdks .yarn/sdks
 COPY .yarn/cache .yarn/cache
-COPY .yarn/plugins ./.yarn/plugins
+# COPY .yarn/plugins ./.yarn/plugins
 COPY .yarnrc.yml .
 COPY package.json .
 COPY yarn.lock .
@@ -41,7 +41,10 @@ ENV NODE_ENV production
 RUN yarn build
 
 # STAGE 2 - Docker server
-FROM node:16.15.1-slim as prod
+FROM node:20.11.1-slim as prod
+
+# Add ffmpeg for audio mix
+RUN apt-get update && apt-get install -yq ffmpeg
 
 # Create app directory
 WORKDIR /app
@@ -50,7 +53,7 @@ WORKDIR /app
 COPY .yarn/releases .yarn/releases
 COPY .yarn/sdks .yarn/sdks
 COPY .yarn/cache .yarn/cache
-COPY .yarn/plugins ./.yarn/plugins
+# COPY .yarn/plugins ./.yarn/plugins
 COPY .yarnrc.yml .
 COPY package.json .
 COPY yarn.lock .

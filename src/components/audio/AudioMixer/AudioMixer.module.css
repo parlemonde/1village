@@ -1,0 +1,30 @@
+.mixerWrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.mixerContainer{
+    display: flex;
+    height: auto;
+}
+
+.mixerFrame{
+    border: 4px solid #666666;
+    border-radius: 20px;
+    overflow: auto;
+}
+
+.mixerHeader{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.mixerCounter{
+    font-size: 30px;
+}
+
+.mixerTrackControlsContainer{
+    display: flex;
+}
