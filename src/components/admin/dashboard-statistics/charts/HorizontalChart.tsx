@@ -14,7 +14,10 @@ const chartSetting = {
   width: 500,
   height: 400,
 };
-const dataset = [];
+const dataset = [
+  { londres: 45, paris: 45, month: 'April' },
+  { londres: 45, paris: 45, month: 'April' },
+];
 
 const valueFormatter = (value: number | null) => `${value}mm`;
 
