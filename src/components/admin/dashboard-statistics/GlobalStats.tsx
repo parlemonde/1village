@@ -1,5 +1,4 @@
 import React from 'react';
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -7,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
+import DashboardStatsMap from './dashboardStatisticsMap/DashboardStatsMap';
 import PhaseDetails from './menu/PhaseDetails';
 import { useGetClassroomExchanges, useGetConnectionTimes, useGetConnectionCounts } from 'src/api/statistics/statistics.get';
 
@@ -26,48 +26,13 @@ const GlobalStats = () => {
 
   return (
     <>
-      <ComposableMap style={{ height: '90vh' }}>
-        <ZoomableGroup center={[0, 0]} zoom={1}>
-          <Geographies geography="/simpleWorldMap.json">
-            {({ geographies }) =>
-              geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  style={{
-                    default: {
-                      fill: '#FFF',
-                      stroke: '#000',
-                      strokeWidth: '.2',
-                      outline: 'none',
-                      transition: 'ease .2s',
-                    },
-                    hover: {
-                      fill: '#edf2fb',
-                      stroke: '#000',
-                      strokeWidth: '.25',
-                      outline: 'none',
-                      cursor: 'pointer',
-                    },
-                    pressed: {
-                      fill: 'white',
-                      stroke: '#000',
-                      strokeWidth: '.25',
-                      outline: 'none',
-                    },
-                  }}
-                />
-              ))
-            }
-          </Geographies>
-        </ZoomableGroup>
-      </ComposableMap>
-
+      <DashboardStatsMap />
       <div>
         <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
         <StatsCard data={20}>Nombre de classes connectées</StatsCard>
         <StatsCard data={24}>Nombre de classes contributrices</StatsCard>
       </div>
+
       <div>
         <AverageStatsCard
           data={{
@@ -81,6 +46,7 @@ const GlobalStats = () => {
         >
           Temps de connexion moyen par classe
         </AverageStatsCard>
+
         <AverageStatsCard
           data={{
             min: connectionCounts.data.minConnections,
@@ -93,6 +59,7 @@ const GlobalStats = () => {
           Nombre de connexions moyen par classe
         </AverageStatsCard>
       </div>
+
       <div>
         <ClassesExchangesCard
           totalPublications={classroomExchanges.data.totalActivities}
@@ -100,6 +67,7 @@ const GlobalStats = () => {
           totalVideos={classroomExchanges.data.totalVideos}
         />
       </div>
+
       <div>
         <PhaseDetails
           phase={1}
@@ -109,6 +77,7 @@ const GlobalStats = () => {
           ]}
         />
       </div>
+
       <div>
         <PhaseDetails
           phase={2}
@@ -118,6 +87,7 @@ const GlobalStats = () => {
           ]}
         />
       </div>
+
       <div>
         <PhaseDetails
           phase={3}
