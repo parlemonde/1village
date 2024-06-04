@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
-import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -10,6 +9,7 @@ import { SyllableEditor } from 'src/components/activities/content/editors/Syllab
 import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import type { Syllable } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep2 = () => {
   const router = useRouter();
@@ -40,7 +40,7 @@ const SongStep2 = () => {
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={1}
           errorSteps={errorSteps}
-          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className={styles.contentContainer}>
           <h1>À vous d&apos;écrire le couplet !</h1>

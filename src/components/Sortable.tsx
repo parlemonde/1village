@@ -55,6 +55,7 @@ export const Sortable = <T extends SortableItem>({ list, setList = () => {}, han
         sort.destroy();
       };
     }
+
     return () => {};
   }, [handle]);
 

@@ -38,7 +38,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
   const onclick = React.useCallback(() => {
     router.push(`/activite/${activityUser.mascotteId}`);
   }, [activityUser.mascotteId, router]);
-
+  const formatPseudo = activityUser.pseudo.replace(' ', '-');
   // ---- Get user weather and time ----
   React.useEffect(() => {
     if (weather) {
@@ -179,7 +179,7 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
       {isMediator && (
         <Button
           component="a"
-          href={`https://prof.parlemonde.org/les-professeurs-partenaires/${activityUser.pseudo}/profile`}
+          href={`https://prof.parlemonde.org/les-professeurs-partenaires/${formatPseudo}/profile`}
           target="_blank"
           rel="noopener noreferrer"
           style={{ overflow: 'hidden', margin: '2rem 2rem 2.5rem 2rem', textAlign: 'center' }}

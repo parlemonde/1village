@@ -4,7 +4,7 @@
 #     environment:
 #       - MYSQL_ROOT_PASSWORD=my-secret-pw
 #     healthcheck:
-#       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+#       test: [ 'CMD', 'mysqladmin', 'ping', '-h', 'localhost' ]
 #       timeout: 20s
 #       retries: 10
 #     ports:
@@ -25,3 +25,5 @@
 #     volumes:
 #       - ./.minio-data:/data
 #     command: server --console-address ":9090" /data
+
+

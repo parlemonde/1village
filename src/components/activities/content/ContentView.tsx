@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { DocumentView } from './views/DocumentView';
 import { H5pView } from './views/H5pView';
 import { ImageView } from './views/ImageView';
 import { SoundView } from './views/SoundView';
@@ -18,6 +19,9 @@ export const ContentView = ({ content, activityId }: ContentViewProps) => {
         }
         if (p.type === 'image') {
           return <ImageView id={p.id} value={p.value} key={p.id} />;
+        }
+        if (p.type === 'document') {
+          return <DocumentView id={p.id} value={p.value} key={p.id} />;
         }
         if (p.type === 'video') {
           return <VideoView id={p.id} value={p.value} key={p.id} />;

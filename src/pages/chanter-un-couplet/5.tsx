@@ -7,7 +7,6 @@ import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -15,6 +14,7 @@ import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { EditButton } from 'src/components/buttons/EditButton';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { ActivityStatus } from 'types/activity.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep5 = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const SongStep5 = () => {
     if (data !== null && !data?.verseMixUrl) {
       errors.push(0);
     }
-    if (data !== null && (!data.classRecordTrack.sampleUrl || !data.slicedRecordUrl)) {
+    if (data !== null && !data.classRecordTrack.sampleUrl) {
       errors.push(3);
     }
 
@@ -54,7 +54,7 @@ const SongStep5 = () => {
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={4}
           errorSteps={errorSteps}
-          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className="width-900">
           <h1>Pré-visualisez votre paramétrage et activez l&apos;hymne</h1>
@@ -92,8 +92,8 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            <AudioPlayer src={data.verseMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez le mix de votre couplet</p>
+            <AudioPlayer src={data.verseMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
           </div>
 
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(1) })}>
@@ -126,8 +126,8 @@ const SongStep5 = () => {
               status={errorSteps.includes(3) ? 'warning' : 'success'}
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
-            <AudioPlayer src={data.slicedRecordUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet (seulement votre voix)</p>
+            <AudioPlayer src={data.classRecordTrack?.sampleUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
           </div>
 
           <div className={classNames('preview-block', { 'preview-block--warning': errorSteps.includes(3) })}>
@@ -139,8 +139,8 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            <AudioPlayer src={data.verseFinalMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
             <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé à la mélodie</p>
+            <AudioPlayer src={data.verseFinalMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
           </div>
 
           <StepsButton prev="/chanter-un-couplet/4" />

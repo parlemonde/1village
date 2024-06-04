@@ -5,6 +5,8 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import styles from '../../styles/parametrer-hymne.module.css';
+import { postMixAudio } from 'src/api/audio/audio-mix.post';
+import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -16,6 +18,7 @@ import Vocal from 'src/svg/anthem/vocal.svg';
 import { getLongestVerseSampleDuration } from 'src/utils/audios';
 import instruments from 'src/utils/instruments';
 import { toTime } from 'src/utils/toTime';
+import { ActivityStatus } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { AnthemData, Track } from 'types/anthem.type';
 
@@ -33,8 +36,35 @@ const AnthemStep2 = () => {
     return [];
   }, [data]);
 
+  const buildFullMixUrl = async () => {
+    // -- clean previous mix
+    if (data.fullMixUrl && activity?.status === ActivityStatus.DRAFT) {
+      await deleteAudio(data.fullMixUrl).catch(console.error);
+    }
+
+    const verseTracks = data.tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO && t.sampleUrl !== '');
+    const intro = data.tracks.find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
+    const outro = data.tracks.find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
+    const fullTracks = [];
+    if (intro && intro.sampleUrl) {
+      fullTracks.push(intro);
+      fullTracks.push(...verseTracks.map((t) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
+    } else {
+      fullTracks.push(...verseTracks);
+    }
+    if (outro && outro.sampleUrl) {
+      fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
+    }
+    const fullMixUrl = fullTracks.length > 0 ? await postMixAudio(fullTracks) : '';
+    updateActivity({ data: { ...data, fullMixUrl } });
+  };
+
   const onNext = async () => {
     setIsLoading(true);
+    // [1] Build the full url
+    await buildFullMixUrl();
+
+    // [2] Update the activity
     save().catch(console.error);
     setIsLoading(false);
     router.push('/parametrer-hymne/3');
@@ -59,6 +89,11 @@ const AnthemStep2 = () => {
     );
   }
 
+  const introChorus = data.tracks.find((t) => t.type === TrackType.INTRO_CHORUS);
+  const introChorusDuration = introChorus?.sampleDuration || 0;
+  const outro = data.tracks.find((t) => t.type === TrackType.OUTRO);
+  const outroDuration = outro?.sampleDuration || 0;
+
   return (
     <Base>
       <div className={styles.mainContainer}>
@@ -67,49 +102,60 @@ const AnthemStep2 = () => {
           errorSteps={errorSteps}
           activeStep={1}
           urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+          onBeforeLeavePage={buildFullMixUrl}
         />
         <div className={styles.contentContainer}>
           <h1>Mettre en ligne les pistes sonores de l&apos;hymne</h1>
           <div className={styles.anthemStructureContainer}>
             <p>
               Pour mémoire voici la structure de l&apos;hymne
-              {data.tracks[TrackType.INTRO_CHORUS].sampleDuration > 0 && data.tracks[TrackType.OUTRO].sampleDuration > 0 && (
-                <b>
-                  {' '}
-                  (
-                  {toTime(
-                    data.tracks[TrackType.INTRO_CHORUS].sampleDuration +
-                      data.tracks[TrackType.OUTRO].sampleDuration +
-                      getLongestVerseSampleDuration(data.tracks),
-                  )}
-                  )
-                </b>
+              {introChorusDuration > 0 && outroDuration > 0 && (
+                <b> ({toTime(introChorusDuration + outroDuration + getLongestVerseSampleDuration(data.tracks))})</b>
               )}
               :
             </p>
             <div className={styles.anthemStructureVocalContainer}>
-              <span>Intro : {<b>{toTime(data.tracks[TrackType.INTRO_CHORUS].sampleDuration)}</b>}</span>
+              <span>Intro : {<b>{toTime(introChorusDuration)}</b>}</span>
               <span>Couplet : {<b>{toTime(getLongestVerseSampleDuration(data.tracks))}</b>}</span>
-              <span>Outro : {<b>{toTime(data.tracks[TrackType.OUTRO].sampleDuration)}</b>}</span>
+              <span>Outro : {<b>{toTime(outroDuration)}</b>}</span>
             </div>
             <Vocal className={styles.anthemStructureVocal} />
           </div>
-          {data.tracks.filter((track) => track.type === TrackType.INTRO_CHORUS || track.type === TrackType.OUTRO).length === 2 && (
-            <div className={styles.trackSelectionContainer}>
-              <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
-              <AnthemTrack
-                track={data.tracks[TrackType.INTRO_CHORUS]}
-                handleTrackUpdate={updateTrackInActivity}
-                instruments={displayableInstruments}
-              ></AnthemTrack>
-              <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de l&apos;outro</p>
-              <AnthemTrack
-                track={data.tracks[TrackType.OUTRO]}
-                handleTrackUpdate={updateTrackInActivity}
-                instruments={displayableInstruments}
-              ></AnthemTrack>
-            </div>
-          )}
+
+          <div className={styles.trackSelectionContainer}>
+            <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de (intro + refrain chanté)</p>
+            <AnthemTrack
+              track={
+                introChorus || {
+                  type: TrackType.INTRO_CHORUS,
+                  label: 'Piste intro + refrain chanté',
+                  sampleUrl: '',
+                  sampleDuration: 0,
+                  iconUrl: 'accordion',
+                  sampleStartTime: 0,
+                  sampleVolume: 0.5,
+                }
+              }
+              handleTrackUpdate={updateTrackInActivity}
+              instruments={displayableInstruments}
+            ></AnthemTrack>
+            <p className={styles.trackSelectionTitle}>Mettre en ligne le fichier son de l&apos;outro</p>
+            <AnthemTrack
+              track={
+                outro || {
+                  type: TrackType.OUTRO,
+                  label: 'Piste outro',
+                  sampleUrl: '',
+                  sampleDuration: 0,
+                  iconUrl: 'accordion',
+                  sampleStartTime: 0,
+                  sampleVolume: 0.5,
+                }
+              }
+              handleTrackUpdate={updateTrackInActivity}
+              instruments={displayableInstruments}
+            ></AnthemTrack>
+          </div>
         </div>
       </div>
       <StepsButton prev="/parametrer-hymne/1?edit" next={onNext} />

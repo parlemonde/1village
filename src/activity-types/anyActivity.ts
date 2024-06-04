@@ -1,6 +1,5 @@
 import type { AnthemActivity } from '../../types/anthem.type';
 import type { GameActivity } from '../../types/game.type';
-import type { ClassAnthemActivity } from './classAnthem.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
 import type { FreeContentActivity } from './freeContent.types';
@@ -13,6 +12,7 @@ import type { ReportageActivity } from './reportage.types';
 import type { SymbolActivity } from './symbol.types';
 import { ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
 import type { StoryActivity } from 'types/story.type';
 
 export const isPresentation = (activity: Activity): activity is PresentationActivity => {

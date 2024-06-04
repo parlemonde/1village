@@ -34,17 +34,17 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    command: ['yarn', 'run', 'migration:run-dev']
+    command: [ 'yarn', 'run', 'migration:run-dev' ]
   mysql:
     image: mysql:8
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
     healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      test: [ 'CMD', 'mysqladmin', 'ping', '-h', 'localhost' ]
       timeout: 20s
       retries: 10
     ports:
-      - '3306:3306'
+      - '3307:3306'
       - '33060:33060'
     volumes:
       - ./.mysql-data:/var/lib/mysql

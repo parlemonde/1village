@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
-import type { ClassAnthemData } from 'src/activity-types/classAnthem.types';
 import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
@@ -11,6 +10,7 @@ import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { toTime } from 'src/utils/toTime';
 import { TrackType } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const SongStep3 = () => {
   const router = useRouter();
@@ -32,6 +32,7 @@ const SongStep3 = () => {
   if (!data) {
     return <Base></Base>;
   }
+  const introChorus = data?.anthemTracks?.find((track) => track.type === TrackType.INTRO_CHORUS);
   return (
     <Base>
       <div className={styles.mainContainer}>
@@ -39,7 +40,7 @@ const SongStep3 = () => {
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={2}
           errorSteps={errorSteps}
-          urls={['/chanter-un-couplet/1', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
+          urls={['/chanter-un-couplet/1?edit', '/chanter-un-couplet/2', '/chanter-un-couplet/3', '/chanter-un-couplet/4', '/chanter-un-couplet/5']}
         />
         <div className={styles.contentContainer}>
           <h1>Enregistrez votre voix</h1>
@@ -66,7 +67,7 @@ const SongStep3 = () => {
               <SyllableEditor key={`syllableEditor--chorus--${index}`} value={el} />
             ))}
           </div>
-          <h2>Votre couplet (démarre à {toTime(data.anthemTracks[TrackType.INTRO_CHORUS].sampleDuration)})</h2>
+          <h2>Votre couplet {introChorus && <>(démarre à {toTime(introChorus.sampleDuration)})</>}</h2>
           <div className={styles.anthemLyricsContainer}>
             {data.verseLyrics.map((el, index) => (
               <SyllableEditor key={`syllableEditor--verseLyrics--${index}`} value={el} />

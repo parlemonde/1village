@@ -9,29 +9,29 @@ import { clamp } from 'src/utils';
 const SVG_WIDTH = 762;
 
 type DraggableTrackProps = {
+  currentTime?: number;
   verseRecordDuration: number;
   verseMixDuration: number;
-  initialVerseStart?: number;
-  onVerseStartChange: (newStart: number) => void;
+  initialRecordStart?: number;
+  onRecordStartChange: (newStart: number) => void;
   onChangeEnd: (newStart: number) => void;
   pauseAudios: () => void;
 };
 
 export const DraggableTrack = ({
+  currentTime,
   verseRecordDuration,
   verseMixDuration,
-  initialVerseStart,
-  onVerseStartChange,
+  initialRecordStart: initialRecordStart,
+  onRecordStartChange,
   onChangeEnd,
   pauseAudios,
 }: DraggableTrackProps) => {
   const SVGRef = React.useRef<SVGSVGElement | null>(null);
-  const [VerseStart, setVerseStart] = React.useState(
-    initialVerseStart || initialVerseStart === 0 ? initialVerseStart : (verseRecordDuration - verseMixDuration) / 2,
-  );
+  const [recordStart, setRecordStart] = React.useState(initialRecordStart ?? 0);
 
-  const leftCut = (VerseStart / verseRecordDuration) * SVG_WIDTH;
-  const rightCut = ((VerseStart + verseMixDuration) / verseRecordDuration) * SVG_WIDTH;
+  const leftCut = (recordStart / verseMixDuration) * SVG_WIDTH;
+  const rightCut = ((recordStart + verseRecordDuration) / verseMixDuration) * SVG_WIDTH;
 
   const SvgWidthRef = React.useRef(0);
   const initialClientXRef = React.useRef(0);
@@ -50,18 +50,15 @@ export const DraggableTrack = ({
 
   const onDrag = (event: MouseEvent) => {
     const deltaX = ((event.clientX - initialClientXRef.current) * SVG_WIDTH) / SvgWidthRef.current;
-    setVerseStart(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration));
-    onVerseStartChange(
-      Math.round(clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration)),
-    );
+    const newRecordStart = clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseMixDuration, -verseRecordDuration, verseMixDuration);
+    setRecordStart(newRecordStart);
+    onRecordStartChange(newRecordStart);
   };
 
   const onDragEnd = (event: MouseEvent) => {
     const deltaX = ((event.clientX - initialClientXRef.current) * SVG_WIDTH) / SvgWidthRef.current;
-    const newVerseStart = Math.round(
-      clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseRecordDuration, 0, verseRecordDuration - verseMixDuration),
-    );
-    onChangeEnd(newVerseStart);
+    const newRecordStart = clamp(((initialLeftCutRef.current + deltaX) / SVG_WIDTH) * verseMixDuration, -verseRecordDuration, verseMixDuration);
+    onChangeEnd(newRecordStart);
   };
 
   const { onMouseDown } = useDragHandler({
@@ -120,7 +117,7 @@ export const DraggableTrack = ({
           onMouseDown={onMouseDown}
           x={leftCut}
           y="16"
-          width={rightCut - leftCut}
+          width={Math.max(0, rightCut - leftCut)}
           height="90"
           rx="8"
           fill="#666666"
@@ -129,19 +126,25 @@ export const DraggableTrack = ({
         />
 
         <svg x={0} y="70" width="32px" fill="#666666" opacity="1">
-          <MicNoneIcon sx={{ color: '#666666' }} />
-        </svg>
-
-        <svg x={leftCut + (rightCut - leftCut - 32) / 2} y="70" width="32px" fill="#666666" opacity="1">
           <MusicNoteIcon sx={{ color: '#666666' }} />
         </svg>
 
-        <rect x="2" y="16" width={leftCut} height="90" rx="8" fill="#666666" opacity="0.5" />
-        <rect x={rightCut} y="16" width={764 - rightCut} height="90" rx="8" fill="#666666" opacity="0.5" />
+        <svg x={leftCut + (rightCut - leftCut - 32) / 2} y="70" width="32px" fill="#666666" opacity="1">
+          <MicNoneIcon sx={{ color: '#666666' }} />
+        </svg>
+
+        <rect x="2" y="16" width={Math.max(0, leftCut)} height="90" rx="8" fill="#666666" opacity="0.5" />
+        <rect x={rightCut} y="16" width={Math.max(0, 764 - rightCut)} height="90" rx="8" fill="#666666" opacity="0.5" />
       </g>
 
-      <rect x={leftCut - 6} width="8" height="120" rx="4" fill="#666666" />
+      <rect x={Math.max(0, leftCut - 6)} width="8" height="120" rx="4" fill="#666666" />
+      <text x={Math.max(11, leftCut + 5)} y={10} fill="#666666">
+        {recordStart.toFixed(2)}s (début de vos voix)
+      </text>
+
       <rect x={rightCut - 2} width="8" height="120" rx="4" fill="#666666" />
+
+      {currentTime !== undefined && <rect x={(SVG_WIDTH * currentTime) / verseMixDuration} y="0" width="2" height="120" fill="red" />}
     </svg>
   );
 };
