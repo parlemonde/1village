@@ -14,6 +14,8 @@ const chartSetting = {
   width: 500,
   height: 400,
 };
+//map classroomExchanges
+// const dataset = [{classroomExchanges}];
 const dataset = [];
 
 const valueFormatter = (value: number | null) => `${value}mm`;
@@ -23,6 +25,8 @@ const valueFormatter = (value: number | null) => `${value}mm`;
 // if (isError) return <div>Error...</div>;
 
 export default function HorizontalBars() {
+  const { data: classroomExchanges, error: classroomExchangesError, isLoading: classroomExchangesLoading } = useGetClassroomExchanges();
+
   return (
     <div className={styles.horizontalBars}>
       <BarChart
