@@ -72,6 +72,7 @@ const RAW_RUNTIME_STATE =
           ["@types/prettier", "npm:2.6.3"],\
           ["@types/react", "npm:17.0.47"],\
           ["@types/react-dom", "npm:17.0.17"],\
+          ["@types/react-simple-maps", "npm:3.0.4"],\
           ["@types/sass", "npm:1.43.1"],\
           ["@types/sharp", "npm:0.30.4"],\
           ["@types/sortablejs", "npm:1.13.0"],\
@@ -148,6 +149,7 @@ const RAW_RUNTIME_STATE =
           ["react-pdf", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.0.0"],\
           ["react-player", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.16.0"],\
           ["react-query", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.39.3"],\
+          ["react-simple-maps", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.0.0"],\
           ["resize-observer-polyfill", "npm:1.5.1"],\
           ["safe-buffer", "npm:5.2.1"],\
           ["sass", "npm:1.74.1"],\
@@ -224,6 +226,7 @@ const RAW_RUNTIME_STATE =
           ["@types/prettier", "npm:2.6.3"],\
           ["@types/react", "npm:17.0.47"],\
           ["@types/react-dom", "npm:17.0.17"],\
+          ["@types/react-simple-maps", "npm:3.0.4"],\
           ["@types/sass", "npm:1.43.1"],\
           ["@types/sharp", "npm:0.30.4"],\
           ["@types/sortablejs", "npm:1.13.0"],\
@@ -300,6 +303,7 @@ const RAW_RUNTIME_STATE =
           ["react-pdf", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.0.0"],\
           ["react-player", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.16.0"],\
           ["react-query", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.39.3"],\
+          ["react-simple-maps", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.0.0"],\
           ["resize-observer-polyfill", "npm:1.5.1"],\
           ["safe-buffer", "npm:5.2.1"],\
           ["sass", "npm:1.74.1"],\
@@ -5829,12 +5833,59 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/d3-color", [\
+      ["npm:2.0.6", {\
+        "packageLocation": "./.yarn/cache/@types-d3-color-npm-2.0.6-847fc62de5-dd4cdb6157.zip/node_modules/@types/d3-color/",\
+        "packageDependencies": [\
+          ["@types/d3-color", "npm:2.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/d3-geo", [\
+      ["npm:2.0.7", {\
+        "packageLocation": "./.yarn/cache/@types-d3-geo-npm-2.0.7-17a4edf606-70430cb1f1.zip/node_modules/@types/d3-geo/",\
+        "packageDependencies": [\
+          ["@types/d3-geo", "npm:2.0.7"],\
+          ["@types/geojson", "npm:7946.0.14"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:3.0.2", {\
         "packageLocation": "./.yarn/cache/@types-d3-geo-npm-3.0.2-08a756e2a7-2a86072661.zip/node_modules/@types/d3-geo/",\
         "packageDependencies": [\
           ["@types/d3-geo", "npm:3.0.2"],\
           ["@types/geojson", "npm:7946.0.14"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/d3-interpolate", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/@types-d3-interpolate-npm-2.0.5-f6b4b4dddd-bdf174e0b3.zip/node_modules/@types/d3-interpolate/",\
+        "packageDependencies": [\
+          ["@types/d3-interpolate", "npm:2.0.5"],\
+          ["@types/d3-color", "npm:2.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/d3-selection", [\
+      ["npm:2.0.4", {\
+        "packageLocation": "./.yarn/cache/@types-d3-selection-npm-2.0.4-f21ffb1541-4ba124c848.zip/node_modules/@types/d3-selection/",\
+        "packageDependencies": [\
+          ["@types/d3-selection", "npm:2.0.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/d3-zoom", [\
+      ["npm:2.0.7", {\
+        "packageLocation": "./.yarn/cache/@types-d3-zoom-npm-2.0.7-ce21478f4d-bb5a70d5a1.zip/node_modules/@types/d3-zoom/",\
+        "packageDependencies": [\
+          ["@types/d3-zoom", "npm:2.0.7"],\
+          ["@types/d3-interpolate", "npm:2.0.5"],\
+          ["@types/d3-selection", "npm:2.0.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6341,6 +6392,19 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/react-is", "npm:17.0.4"],\
           ["@types/react", "npm:17.0.80"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/react-simple-maps", [\
+      ["npm:3.0.4", {\
+        "packageLocation": "./.yarn/cache/@types-react-simple-maps-npm-3.0.4-6d97cac1b0-aa0995fbe7.zip/node_modules/@types/react-simple-maps/",\
+        "packageDependencies": [\
+          ["@types/react-simple-maps", "npm:3.0.4"],\
+          ["@types/d3-geo", "npm:2.0.7"],\
+          ["@types/d3-zoom", "npm:2.0.7"],\
+          ["@types/geojson", "npm:7946.0.14"],\
+          ["@types/react", "npm:17.0.47"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9630,6 +9694,14 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["d3-array", [\
+      ["npm:2.12.1", {\
+        "packageLocation": "./.yarn/cache/d3-array-npm-2.12.1-104e51ecda-9fdfb91f42.zip/node_modules/d3-array/",\
+        "packageDependencies": [\
+          ["d3-array", "npm:2.12.1"],\
+          ["internmap", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:3.2.4", {\
         "packageLocation": "./.yarn/cache/d3-array-npm-3.2.4-b427632bcc-5800c467f8.zip/node_modules/d3-array/",\
         "packageDependencies": [\
@@ -9640,6 +9712,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["d3-color", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-color-npm-2.0.0-e7f04a5d87-f8902fa788.zip/node_modules/d3-color/",\
+        "packageDependencies": [\
+          ["d3-color", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:3.1.0", {\
         "packageLocation": "./.yarn/cache/d3-color-npm-3.1.0-fc73fe3b15-536ba05bfd.zip/node_modules/d3-color/",\
         "packageDependencies": [\
@@ -9658,6 +9737,35 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["d3-dispatch", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-dispatch-npm-2.0.0-1417ab6cc8-6118a34527.zip/node_modules/d3-dispatch/",\
+        "packageDependencies": [\
+          ["d3-dispatch", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["d3-drag", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-drag-npm-2.0.0-0dcad4151e-b2d982834b.zip/node_modules/d3-drag/",\
+        "packageDependencies": [\
+          ["d3-drag", "npm:2.0.0"],\
+          ["d3-dispatch", "npm:2.0.0"],\
+          ["d3-selection", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["d3-ease", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-ease-npm-2.0.0-b648d66f09-34c5bdf220.zip/node_modules/d3-ease/",\
+        "packageDependencies": [\
+          ["d3-ease", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["d3-format", [\
       ["npm:3.1.0", {\
         "packageLocation": "./.yarn/cache/d3-format-npm-3.1.0-dfc19924ca-a0fe23d257.zip/node_modules/d3-format/",\
@@ -9668,6 +9776,14 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["d3-geo", [\
+      ["npm:2.0.2", {\
+        "packageLocation": "./.yarn/cache/d3-geo-npm-2.0.2-29465e11d0-41d4947332.zip/node_modules/d3-geo/",\
+        "packageDependencies": [\
+          ["d3-geo", "npm:2.0.2"],\
+          ["d3-array", "npm:2.12.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:3.1.1", {\
         "packageLocation": "./.yarn/cache/d3-geo-npm-3.1.1-6af0bd847d-dc5e980330.zip/node_modules/d3-geo/",\
         "packageDependencies": [\
@@ -9691,6 +9807,14 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["d3-interpolate", [\
+      ["npm:2.0.1", {\
+        "packageLocation": "./.yarn/cache/d3-interpolate-npm-2.0.1-7e198300b3-2f59f311ea.zip/node_modules/d3-interpolate/",\
+        "packageDependencies": [\
+          ["d3-interpolate", "npm:2.0.1"],\
+          ["d3-color", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:3.0.1", {\
         "packageLocation": "./.yarn/cache/d3-interpolate-npm-3.0.1-77ddca7977-988d66497e.zip/node_modules/d3-interpolate/",\
         "packageDependencies": [\
@@ -9719,6 +9843,15 @@ const RAW_RUNTIME_STATE =
           ["d3-interpolate", "npm:3.0.1"],\
           ["d3-time", "npm:3.1.0"],\
           ["d3-time-format", "npm:4.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["d3-selection", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-selection-npm-2.0.0-b10bfedd78-b818b74e2c.zip/node_modules/d3-selection/",\
+        "packageDependencies": [\
+          ["d3-selection", "npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9753,6 +9886,42 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["d3-timer", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-timer-npm-2.0.0-590adf27a0-9fb62ea758.zip/node_modules/d3-timer/",\
+        "packageDependencies": [\
+          ["d3-timer", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["d3-transition", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-transition-npm-2.0.0-580e508660-9a315648f7.zip/node_modules/d3-transition/",\
+        "packageDependencies": [\
+          ["d3-transition", "npm:2.0.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:643f83d80dfc4827a7f96ca24ed355e9067344ff365daa9fb1b43b43e0d65a29e4b1080b9df788f1966ef03320200944fea5a8d33501f1580cc18608635089e3#npm:2.0.0", {\
+        "packageLocation": "./.yarn/__virtual__/d3-transition-virtual-021b784c8d/0/cache/d3-transition-npm-2.0.0-580e508660-9a315648f7.zip/node_modules/d3-transition/",\
+        "packageDependencies": [\
+          ["d3-transition", "virtual:643f83d80dfc4827a7f96ca24ed355e9067344ff365daa9fb1b43b43e0d65a29e4b1080b9df788f1966ef03320200944fea5a8d33501f1580cc18608635089e3#npm:2.0.0"],\
+          ["@types/d3-selection", null],\
+          ["d3-color", "npm:2.0.0"],\
+          ["d3-dispatch", "npm:2.0.0"],\
+          ["d3-ease", "npm:2.0.0"],\
+          ["d3-interpolate", "npm:2.0.1"],\
+          ["d3-selection", "npm:2.0.0"],\
+          ["d3-timer", "npm:2.0.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/d3-selection",\
+          "d3-selection"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["d3-tricontour", [\
       ["npm:1.0.2", {\
         "packageLocation": "./.yarn/cache/d3-tricontour-npm-1.0.2-fabff86cd3-5e321483e8.zip/node_modules/d3-tricontour/",\
@@ -9760,6 +9929,20 @@ const RAW_RUNTIME_STATE =
           ["d3-tricontour", "npm:1.0.2"],\
           ["d3-delaunay", "npm:6.0.4"],\
           ["d3-scale", "npm:4.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["d3-zoom", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/d3-zoom-npm-2.0.0-643f83d80d-b897d5d528.zip/node_modules/d3-zoom/",\
+        "packageDependencies": [\
+          ["d3-zoom", "npm:2.0.0"],\
+          ["d3-dispatch", "npm:2.0.0"],\
+          ["d3-drag", "npm:2.0.0"],\
+          ["d3-interpolate", "npm:2.0.1"],\
+          ["d3-selection", "npm:2.0.0"],\
+          ["d3-transition", "virtual:643f83d80dfc4827a7f96ca24ed355e9067344ff365daa9fb1b43b43e0d65a29e4b1080b9df788f1966ef03320200944fea5a8d33501f1580cc18608635089e3#npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13079,6 +13262,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["internmap", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "./.yarn/cache/internmap-npm-1.0.1-658c30de3f-429cb9e28f.zip/node_modules/internmap/",\
+        "packageDependencies": [\
+          ["internmap", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:2.0.3", {\
         "packageLocation": "./.yarn/cache/internmap-npm-2.0.3-d74f5c9998-873e0e7fcf.zip/node_modules/internmap/",\
         "packageDependencies": [\
@@ -17453,6 +17643,40 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-simple-maps", [\
+      ["npm:3.0.0", {\
+        "packageLocation": "./.yarn/cache/react-simple-maps-npm-3.0.0-9ddf74e9b2-6fa72d4377.zip/node_modules/react-simple-maps/",\
+        "packageDependencies": [\
+          ["react-simple-maps", "npm:3.0.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.0.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-simple-maps-virtual-44063eb2b9/0/cache/react-simple-maps-npm-3.0.0-9ddf74e9b2-6fa72d4377.zip/node_modules/react-simple-maps/",\
+        "packageDependencies": [\
+          ["react-simple-maps", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.0.0"],\
+          ["@types/prop-types", null],\
+          ["@types/react", "npm:17.0.47"],\
+          ["@types/react-dom", "npm:17.0.17"],\
+          ["d3-geo", "npm:2.0.2"],\
+          ["d3-selection", "npm:2.0.0"],\
+          ["d3-zoom", "npm:2.0.0"],\
+          ["prop-types", null],\
+          ["react", "npm:17.0.2"],\
+          ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],\
+          ["topojson-client", "npm:3.1.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/prop-types",\
+          "@types/react-dom",\
+          "@types/react",\
+          "prop-types",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-transition-group", [\
       ["npm:4.4.5", {\
         "packageLocation": "./.yarn/cache/react-transition-group-npm-4.4.5-98ea4ef96e-ca32d3fd21.zip/node_modules/react-transition-group/",\
@@ -19587,6 +19811,16 @@ const RAW_RUNTIME_STATE =
           ["token-types", "npm:5.0.1"],\
           ["@tokenizer/token", "npm:0.3.0"],\
           ["ieee754", "npm:1.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["topojson-client", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "./.yarn/cache/topojson-client-npm-3.1.0-70e59c7f28-a0bd2f313d.zip/node_modules/topojson-client/",\
+        "packageDependencies": [\
+          ["topojson-client", "npm:3.1.0"],\
+          ["commander", "npm:2.20.3"]\
         ],\
         "linkType": "HARD"\
       }]\
