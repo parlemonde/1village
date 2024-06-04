@@ -7,7 +7,6 @@ import styles from './DashboardStatsMap.module.css';
 import TooltipMouseTracker from 'src/components/TooltipMouseTracker/TooltipMouseTracker';
 
 const DashboardStatsMap = () => {
-  const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
   const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
   const [tooltipData, setTooltipData] = React.useState('');
 
@@ -19,10 +18,9 @@ const DashboardStatsMap = () => {
             {({ geographies }) =>
               geographies.map((geo) => (
                 <Geography
-                  onMouseEnter={(e) => {
-                    setTooltipPosition({ x: e.clientX, y: e.clientY });
-                    setIsTooltipVisible(true);
+                  onMouseOver={() => {
                     setTooltipData(geo.rsmKey);
+                    setIsTooltipVisible(true);
                   }}
                   onMouseLeave={() => setIsTooltipVisible(false)}
                   key={geo.rsmKey}
@@ -38,14 +36,14 @@ const DashboardStatsMap = () => {
                     hover: {
                       fill: '#edf2fb',
                       stroke: '#000',
-                      strokeWidth: '.25',
+                      strokeWidth: '.2',
                       outline: 'none',
                       cursor: 'pointer',
                     },
                     pressed: {
                       fill: 'white',
                       stroke: '#000',
-                      strokeWidth: '.25',
+                      strokeWidth: '.2',
                       outline: 'none',
                     },
                   }}
@@ -55,7 +53,7 @@ const DashboardStatsMap = () => {
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
-      {isTooltipVisible && <TooltipMouseTracker>{tooltipData}</TooltipMouseTracker>}
+      <TooltipMouseTracker isVisible={isTooltipVisible}>{tooltipData}</TooltipMouseTracker>
       <div className={styles.legendContainer}>
         <h2>Légende:</h2>
         <ul>

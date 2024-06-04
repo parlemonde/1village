@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 interface MouseTrackerProps {
   children: React.ReactNode;
   offset?: { x: number; y: number };
+  isVisible: boolean;
 }
 
-const MouseTracker = ({ children, offset = { x: -750, y: -250 } }: MouseTrackerProps) => {
+const MouseTracker = ({ children, offset = { x: 0, y: 0 }, isVisible }: MouseTrackerProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -24,13 +25,16 @@ const MouseTracker = ({ children, offset = { x: -750, y: -250 } }: MouseTrackerP
 
   return (
     <div
-      className="mouse-tracker"
       style={{
         position: 'absolute',
-        padding: '2rem',
+        top: 0,
+        left: 0,
+        padding: '1rem 2rem',
+        display: isVisible ? 'block' : 'none',
         background: 'white',
+        boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
         transform: `translate(${position.x}px, ${position.y}px)`,
-        pointerEvents: 'none', // This ensures the div does not interfere with mouse events
+        pointerEvents: 'none',
       }}
     >
       {children}
