@@ -7,22 +7,19 @@ import Stack from '@mui/material/Stack';
 
 interface VolumeControlProps {
   icon?: ReactElement;
+  volume: number;
   handleVolumeChange: (value: number) => void;
 }
 
-const VolumeControl = ({ icon, handleVolumeChange }: VolumeControlProps) => {
-  const [value, setValue] = React.useState<number>(5);
-
+const VolumeControl = ({ icon, volume, handleVolumeChange }: VolumeControlProps) => {
   const handleChange = (_event: Event, value: number | number[]) => {
-    const formatedValue = value as number;
-    setValue(formatedValue);
-    handleVolumeChange(formatedValue);
+    handleVolumeChange(Array.isArray(value) ? value[0] : value);
   };
 
   return (
     <Stack spacing={2} direction="row" sx={{ mb: 1, width: '240px' }} alignItems="center">
       {icon && icon}
-      <Slider aria-label="Volume" value={value} onChange={handleChange} sx={{ color: '#666666' }} min={0} max={10} />
+      <Slider aria-label="Volume" value={volume} onChange={handleChange} sx={{ color: '#666666' }} min={0} max={1} step={0.1} />
       <VolumeUp sx={{ color: '#666666' }} />
     </Stack>
   );

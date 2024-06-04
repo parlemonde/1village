@@ -163,7 +163,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -200,26 +200,6 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
   const villageId = req.user.type <= UserType.MEDIATOR ? data.villageId || req.user.villageId || null : req.user.villageId || null;
   if (villageId === null) {
     throw new AppError('Invalid data, missing village Id', ErrorCode.INVALID_DATA);
-  }
-
-  if (data.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const tracks = (data.data.anthemTracks as Track[]).filter((t) => t.sampleUrl !== '');
-    const verseTracks = tracks.filter((t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
-    const intro = (data.data.anthemTracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
-
-    data.data.verseMixWithVocalsUrl = buildAudioMix(req.user.id, verseTracks);
-
-    data.data.verseMixUrl = buildAudioMix(
-      req.user.id,
-      verseTracks.filter((t) => t.type !== TrackType.VOCALS),
-    );
-
-    data.data.verseMixWithIntroUrl = buildAudioMix(
-      req.user.id,
-      tracks
-        .filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.OUTRO)
-        .map((t) => ({ ...t, sampleStartTime: t.type !== TrackType.INTRO_CHORUS && intro ? intro.sampleDuration : 0 })),
-    );
   }
 
   // Delete old draft if needed.
@@ -298,7 +278,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -314,6 +294,7 @@ const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
 
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
+
   if (!updateActivityValidator(data)) {
     sendInvalidDataError(updateActivityValidator);
     return;
@@ -393,8 +374,10 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
       }
     }
   }
-
-  activity.status = data.status ?? activity.status;
+  if (data.status === 0 && activity.status !== 0) {
+    activity.status = data.status;
+    activity.publishDate = new Date();
+  }
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;
@@ -458,32 +441,6 @@ activityController.put({ path: '/:id/askSame', userType: UserType.TEACHER }, asy
   await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);
 });
-
-const areAnthemTracksNew = (oldData: AnyData, newData: AnyData): boolean => {
-  const oldTracks = oldData.tracks as Track[]; // A changer
-  const newTracks = newData.tracks as Track[]; // A changer
-
-  const oldTracksMap = oldTracks.reduce<Record<string, { sampleStartTime?: number; sampleVolume?: number }>>((acc, track) => {
-    if (track.sampleUrl) {
-      acc[track.sampleUrl] = {
-        sampleStartTime: track.sampleStartTime,
-        sampleVolume: track.sampleVolume,
-      };
-    }
-    return acc;
-  }, {});
-  const newTracksMap = newTracks.reduce<Record<string, { sampleStartTime?: number; sampleVolume?: number }>>((acc, track) => {
-    if (track.sampleUrl) {
-      acc[track.sampleUrl] = {
-        sampleStartTime: track.sampleStartTime,
-        sampleVolume: track.sampleVolume,
-      };
-    }
-    return acc;
-  }, {});
-
-  return JSON.stringify(oldTracksMap) !== JSON.stringify(newTracksMap);
-};
 
 // --- create a game ---
 const createGame = async (data: GameData, activity: Activity): Promise<Game> => {

@@ -1,4 +1,4 @@
-export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound';
+export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound' | 'document';
 export interface ActivityContent {
   id: number; // needed to sort content.
   type: ActivityContentType;
@@ -39,6 +39,7 @@ export interface Activity<T extends AnyData = AnyData> {
 
   createDate?: Date | string;
   updateDate?: Date | string;
+  publishDate?: Date | string;
   deleteDate?: Date | string;
 
   // activity data

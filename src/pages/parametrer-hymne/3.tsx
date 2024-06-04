@@ -51,7 +51,7 @@ const AnthemStep3 = () => {
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
           activeStep={2}
-          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+          urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
         <div className={styles.contentContainer}>
           <h1>Paramétrer le couplet</h1>

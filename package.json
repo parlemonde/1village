@@ -24,7 +24,8 @@
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
     "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
     "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "prepare": "husky"
   },
   "jest": {
     "testEnvironment": "node",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.6",
+    "@react-pdf/types": "^2.5.0",
     "@svgr/webpack": "6.2.1",
     "@swc/cli": "^0.1.57",
     "@swc/core": "1.2.205",
@@ -109,6 +111,7 @@
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "geojson": "0.5.0",
+    "husky": "^9.0.11",
     "jest": "28.1.1",
     "nodemon": "2.0.18",
     "prettier": "2.7.1",
@@ -155,7 +158,7 @@
     "express": "^4.18.1",
     "express-rate-limit": "^6.4.0",
     "express-useragent": "^1.0.15",
-    "ffmpeg-audio-mixer": "^1.3.0",
+    "ffmpeg-audio-mixer": "^1.5.0",
     "fs-extra": "^10.1.0",
     "helmet": "^5.1.0",
     "html-to-draftjs": "^1.5.0",
@@ -179,6 +182,7 @@
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-pdf": "^8.0.0",
     "react-player": "^2.10.1",
     "react-query": "^3.39.2",
     "resize-observer-polyfill": "^1.5.1",

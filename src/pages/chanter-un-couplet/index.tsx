@@ -11,6 +11,7 @@ import type { Activity } from 'types/activity.type';
 import { ActivityType } from 'types/activity.type';
 import { TrackType } from 'types/anthem.type';
 import type { AnthemData, Track } from 'types/anthem.type';
+import type { ClassAnthemData } from 'types/classAnthem.types';
 
 const emptyAnthemActivity: AnthemData = {
   tracks: [],
@@ -59,20 +60,20 @@ const Anthem = () => {
       sampleDuration: 0,
       iconUrl: '',
       sampleStartTime: 0,
-      sampleVolume: 0.5,
+      sampleVolume: 1,
     } as Track;
 
-    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, {
+    const newData: ClassAnthemData = {
       anthemTracks: tracks,
       classRecordTrack: classRecordTrack,
-      slicedRecordUrl: '',
       verseMixUrl: '',
       verseMixWithIntroUrl: '',
       verseMixWithVocalsUrl: '',
-      verseMixWithLyricsUrl: '',
+      verseFinalMixUrl: '',
       verseLyrics: verseLyrics,
       chorusLyrics: chorusLyrics,
-    });
+    };
+    createNewActivity(ActivityType.CLASS_ANTHEM, selectedPhase, undefined, newData);
     router.push('/chanter-un-couplet/1');
   };
   if (!anthemActivityData) {

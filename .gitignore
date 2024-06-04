@@ -67,3 +67,5 @@ medias
 server/ffmpeg-audio-mixer
 
 *.http
+
+.husky/

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -10,6 +10,7 @@ import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import { ActivityComments } from 'src/components/activities/ActivityComments';
 import { ActivityView } from 'src/components/activities/ActivityView';
 import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
 import { useActivity } from 'src/services/useActivity';
 import { useVillageUsers } from 'src/services/useVillageUsers';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
@@ -35,12 +36,19 @@ const titles: Record<number, (activity: ActivityInterface<AnyData>) => string> =
 };
 
 const Activity = () => {
+  const { village } = useContext(VillageContext);
   const router = useRouter();
   const activityId = React.useMemo(() => parseInt(getQueryString(router.query.id), 10) ?? null, [router]);
   const { user } = React.useContext(UserContext);
   const { activity } = useActivity(activityId);
   const { users } = useVillageUsers();
   const isAnswer = activity && isEnigme(activity) && 'reponse' in router.query;
+
+  React.useEffect(() => {
+    if (activity && village && activity?.villageId !== village?.id) {
+      router.push('/');
+    }
+  }, [village, activity, router]);
 
   const usersMap = React.useMemo(() => {
     return users.reduce<{ [key: number]: User }>((acc, user) => {
