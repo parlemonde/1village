@@ -60,13 +60,11 @@ import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
   },[currentCountry, updateClassList, countrylist]) */
 
 const Mediatheque = () => {
-  const { setFilters, setOffset, offset, allFiltered } = useContext(MediathequeContext);
+  const { setFilters, allFiltered } = useContext(MediathequeContext);
   const [page, setPage] = useState<number>(0); // Current page (starts at 0)
 
-  console.log('offset', offset);
   const handleResetFilters = () => {
     setFilters([[]]);
-    setOffset(0);
   };
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {

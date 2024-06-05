@@ -10,9 +10,29 @@ import MediathequeContext from 'src/contexts/mediathequeContext';
 export default function MediaCard({ page }) {
   const { allFiltered } = useContext(MediathequeContext);
 
-  console.log('page depuis media', page);
 
-  const slicedData = allFiltered?.slice(page, page + 6); // Slice data based on current page and page size
+  const activitiesMediaFinder = allFiltered?.map(({ id, content, subType, type, villageId, userId, user }) => {
+    const result = { id, subType, type, villageId, userId, content: [], user };
+    if (content.game) {
+      content.game.map(({ inputs }) =>
+        inputs.map((input: { type: number; selectedValue: string }) => {
+          if (input.type === 3 || input.type === 4) {
+            result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+          }
+        }),
+      );
+    } else {
+      content.map(({ type, value }) => {
+        const wantedTypes = ['image', 'video', 'sound'];
+        if (wantedTypes.includes(type)) {
+          result.content.push({ type, value });
+        }
+      });
+    }
+    return result;
+  });
+
+  const slicedData = activitiesMediaFinder?.slice(page, page + 6);
 
   return (
     <div style={{ display: 'flex' }}>
@@ -20,8 +40,7 @@ export default function MediaCard({ page }) {
         {allFiltered && allFiltered.length > 0
           ? slicedData.map((item, index) => (
               <Card key={index} sx={{ width: '30%', marginBottom: '20px' }}>
-                {/* Utilisation de la première image du tableau medias */}
-                <CardMedia sx={{ height: 140 }} image={item.medias[0].value} title="Media" />
+                <CardMedia sx={{ height: 140 }} image={item.content[0].value} title="Media" />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     Media {item.id}
