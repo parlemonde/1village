@@ -53,6 +53,7 @@ __metadata:
     "@types/nodemailer": "npm:6.4.4"
     "@types/nprogress": "npm:0.2.0"
     "@types/prettier": "npm:2.6.3"
+    "@types/prop-types": "npm:^15"
     "@types/react": "npm:17.0.47"
     "@types/react-dom": "npm:17.0.17"
     "@types/react-simple-maps": "npm:^3"
@@ -126,9 +127,11 @@ __metadata:
     notistack: "npm:^2.0.5"
     nprogress: "npm:^0.2.0"
     prettier: "npm:2.7.1"
+    prop-types: "npm:^15.8.1"
     query-string: "npm:^7.1.1"
     react: "npm:^17.0.2"
     react-dom: "npm:^17.0.2"
+    react-hook-form: "npm:^7.51.5"
     react-pdf: "npm:^8.0.0"
     react-player: "npm:^2.10.1"
     react-query: "npm:^3.39.2"
@@ -4146,7 +4149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:^15.7.11, @types/prop-types@npm:^15.7.12":
+"@types/prop-types@npm:^15, @types/prop-types@npm:^15.7.11, @types/prop-types@npm:^15.7.12":
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
   checksum: 10/ac16cc3d0a84431ffa5cfdf89579ad1e2269549f32ce0c769321fdd078f84db4fbe1b461ed5a1a496caf09e637c0e367d600c541435716a55b1d9713f5035dfe
@@ -13832,6 +13835,15 @@ __metadata:
   version: 3.2.2
   resolution: "react-fast-compare@npm:3.2.2"
   checksum: 10/a6826180ba75cefba1c8d3ac539735f9b627ca05d3d307fe155487f5d0228d376dac6c9708d04a283a7b9f9aee599b637446635b79c8c8753d0b4eece56c125c
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.51.5":
+  version: 7.51.5
+  resolution: "react-hook-form@npm:7.51.5"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 10/f4ff77989202b1faf2dede7a7730210635a6225189dcaeaeb191cea12422bcb97d2adfef0712c50d13bf5c5e14b8debc00fbba16491f86a6d24945a52cacfa59
   languageName: node
   linkType: hard
 

@@ -70,6 +70,7 @@ const RAW_RUNTIME_STATE =
           ["@types/nodemailer", "npm:6.4.4"],\
           ["@types/nprogress", "npm:0.2.0"],\
           ["@types/prettier", "npm:2.6.3"],\
+          ["@types/prop-types", "npm:15.7.12"],\
           ["@types/react", "npm:17.0.47"],\
           ["@types/react-dom", "npm:17.0.17"],\
           ["@types/react-simple-maps", "npm:3.0.4"],\
@@ -143,9 +144,11 @@ const RAW_RUNTIME_STATE =
           ["notistack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.0.8"],\
           ["nprogress", "npm:0.2.0"],\
           ["prettier", "npm:2.7.1"],\
+          ["prop-types", "npm:15.8.1"],\
           ["query-string", "npm:7.1.3"],\
           ["react", "npm:17.0.2"],\
           ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],\
+          ["react-hook-form", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.51.5"],\
           ["react-pdf", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.0.0"],\
           ["react-player", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.16.0"],\
           ["react-query", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.39.3"],\
@@ -224,6 +227,7 @@ const RAW_RUNTIME_STATE =
           ["@types/nodemailer", "npm:6.4.4"],\
           ["@types/nprogress", "npm:0.2.0"],\
           ["@types/prettier", "npm:2.6.3"],\
+          ["@types/prop-types", "npm:15.7.12"],\
           ["@types/react", "npm:17.0.47"],\
           ["@types/react-dom", "npm:17.0.17"],\
           ["@types/react-simple-maps", "npm:3.0.4"],\
@@ -297,9 +301,11 @@ const RAW_RUNTIME_STATE =
           ["notistack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.0.8"],\
           ["nprogress", "npm:0.2.0"],\
           ["prettier", "npm:2.7.1"],\
+          ["prop-types", "npm:15.8.1"],\
           ["query-string", "npm:7.1.3"],\
           ["react", "npm:17.0.2"],\
           ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],\
+          ["react-hook-form", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.51.5"],\
           ["react-pdf", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:8.0.0"],\
           ["react-player", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.16.0"],\
           ["react-query", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.39.3"],\
@@ -3503,7 +3509,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@hookform/resolvers", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.9.11"],\
           ["@types/react-hook-form", null],\
-          ["react-hook-form", null]\
+          ["react-hook-form", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.51.5"]\
         ],\
         "packagePeers": [\
           "@types/react-hook-form",\
@@ -17540,6 +17546,28 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-hook-form", [\
+      ["npm:7.51.5", {\
+        "packageLocation": "./.yarn/cache/react-hook-form-npm-7.51.5-1449dfc378-f4ff779892.zip/node_modules/react-hook-form/",\
+        "packageDependencies": [\
+          ["react-hook-form", "npm:7.51.5"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.51.5", {\
+        "packageLocation": "./.yarn/__virtual__/react-hook-form-virtual-3f95cb9d09/0/cache/react-hook-form-npm-7.51.5-1449dfc378-f4ff779892.zip/node_modules/react-hook-form/",\
+        "packageDependencies": [\
+          ["react-hook-form", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:7.51.5"],\
+          ["@types/react", "npm:17.0.47"],\
+          ["react", "npm:17.0.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-is", [\
       ["npm:17.0.2", {\
         "packageLocation": "./.yarn/cache/react-is-npm-17.0.2-091bbb8db6-73b36281e5.zip/node_modules/react-is/",\
@@ -17655,13 +17683,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/react-simple-maps-virtual-44063eb2b9/0/cache/react-simple-maps-npm-3.0.0-9ddf74e9b2-6fa72d4377.zip/node_modules/react-simple-maps/",\
         "packageDependencies": [\
           ["react-simple-maps", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:3.0.0"],\
-          ["@types/prop-types", null],\
+          ["@types/prop-types", "npm:15.7.12"],\
           ["@types/react", "npm:17.0.47"],\
           ["@types/react-dom", "npm:17.0.17"],\
           ["d3-geo", "npm:2.0.2"],\
           ["d3-selection", "npm:2.0.0"],\
           ["d3-zoom", "npm:2.0.0"],\
-          ["prop-types", null],\
+          ["prop-types", "npm:15.8.1"],\
           ["react", "npm:17.0.2"],\
           ["react-dom", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:17.0.2"],\
           ["topojson-client", "npm:3.1.0"]\
