@@ -1,42 +1,43 @@
-import React, { useEffect } from 'react';
-import {
-  useGetContributions,
-  useGetClassroomExchanges,
-  useGetStudentAccounts,
-  useGetConnectionTimes,
-} from './../../../api/statistics/statistics.get.ts';
+// import React, { useEffect } from 'react';
 
-const LogRequests = () => {
-  const { data: contributions, error: contributionsError, isLoading: contributionsLoading } = useGetContributions();
-  const { data: classroomExchanges, error: classroomExchangesError, isLoading: classroomExchangesLoading } = useGetClassroomExchanges();
-  const { data: studentAccounts, error: studentAccountsError, isLoading: studentAccountsLoading } = useGetStudentAccounts();
-  const { data: connectionTimes, error: connectionTimesError, isLoading: connectionTimesLoading } = useGetConnectionTimes();
+// import {
+//   useGetContributions,
+//   useGetClassroomExchanges,
+//   useGetStudentAccounts,
+//   useGetConnectionTimes,
+// } from './../../../api/statistics/statistics.get.ts';
 
-  useEffect(() => {
-    if (!contributionsLoading && !contributionsError) {
-      console.log('Contributions:', contributions);
-    }
-  }, [contributions, contributionsLoading, contributionsError]);
+// const LogRequests = () => {
+//   const { data: contributions, error: contributionsError, isLoading: contributionsLoading } = useGetContributions();
+//   const { data: classroomExchanges, error: classroomExchangesError, isLoading: classroomExchangesLoading } = useGetClassroomExchanges();
+//   const { data: studentAccounts, error: studentAccountsError, isLoading: studentAccountsLoading } = useGetStudentAccounts();
+//   const { data: connectionTimes, error: connectionTimesError, isLoading: connectionTimesLoading } = useGetConnectionTimes();
 
-  useEffect(() => {
-    if (!classroomExchangesLoading & !classroomExchangesError) {
-      console.log('Exchanges:', classroomExchanges);
-    }
-  }, [classroomExchanges, classroomExchangesLoading, classroomExchangesError]);
+//   useEffect(() => {
+//     if (!contributionsLoading && !contributionsError) {
+//       console.log('Contributions:', contributions);
+//     }
+//   }, [contributions, contributionsLoading, contributionsError]);
 
-  useEffect(() => {
-    if (!studentAccountsLoading & !studentAccountsError) {
-      console.log('student accounts:', studentAccounts);
-    }
-  }, [studentAccounts, studentAccountsLoading, studentAccountsError]);
+//   useEffect(() => {
+//     if (!classroomExchangesLoading & !classroomExchangesError) {
+//       console.log('Exchanges:', classroomExchanges);
+//     }
+//   }, [classroomExchanges, classroomExchangesLoading, classroomExchangesError]);
 
-  useEffect(() => {
-    if (!connectionTimesLoading & !connectionTimesError) {
-      console.log('connection times:', connectionTimes);
-    }
-  }, [connectionTimes, connectionTimesLoading, connectionTimesError]);
+//   useEffect(() => {
+//     if (!studentAccountsLoading & !studentAccountsError) {
+//       console.log('student accounts:', studentAccounts);
+//     }
+//   }, [studentAccounts, studentAccountsLoading, studentAccountsError]);
 
-  return <h1>Requêtes</h1>;
-};
+//   useEffect(() => {
+//     if (!connectionTimesLoading & !connectionTimesError) {
+//       console.log('connection times:', connectionTimes);
+//     }
+//   }, [connectionTimes, connectionTimesLoading, connectionTimesError]);
 
-export default LogRequests;
+//   return <h1>Requêtes</h1>;
+// };
+
+// export default LogRequests;

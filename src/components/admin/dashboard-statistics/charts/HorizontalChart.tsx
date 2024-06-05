@@ -3,7 +3,7 @@ import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
-import { useGetClassroomExchanges, ClassroomExchangesStats } from 'src/api/statistics/statistics.get.ts';
+// import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get.ts';
 
 const chartSetting = {
   xAxis: [
@@ -25,7 +25,7 @@ const valueFormatter = (value: number | null) => `${value}mm`;
 // if (isError) return <div>Error...</div>;
 
 export default function HorizontalBars() {
-  const { data: classroomExchanges, error: classroomExchangesError, isLoading: classroomExchangesLoading } = useGetClassroomExchanges();
+  // const { data: classroomExchanges, error: classroomExchangesError, isLoading: classroomExchangesLoading } = useGetClassroomExchanges();
 
   return (
     <div className={styles.horizontalBars}>

@@ -3,17 +3,16 @@ import React from 'react';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import BarCharts from './charts/BarCharts';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
+import StatsCard from './cards/StatsCard/StatsCard';
+import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
 import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
-import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
-import StatsCard from './cards/StatsCard/StatsCard';
 import styles from './styles/charts.module.css';
-
 import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
 const pieChartData = {
