@@ -1,6 +1,7 @@
- 
+// eslint-disable-next-line no-undef
 const BUILD_VERSION = process.env.BUILD_VERSION;
 
+// eslint-disable-next-line no-undef
 module.exports = {
   distDir: './dist/next',
   poweredByHeader: false,
