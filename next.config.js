@@ -1,4 +1,4 @@
-/* eslint-disable */
+ 
 const BUILD_VERSION = process.env.BUILD_VERSION;
 
 module.exports = {
