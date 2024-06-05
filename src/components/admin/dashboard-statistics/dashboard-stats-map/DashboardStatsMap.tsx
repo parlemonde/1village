@@ -14,7 +14,7 @@ const DashboardStatsMap = () => {
     <div className={styles.mapContainer}>
       <ComposableMap style={{ flex: '3', border: '1px solid #000', height: 'fit-content' }}>
         <ZoomableGroup center={[0, 0]} zoom={0.9}>
-          <Geographies geography="/simpleWorldMap.json">
+          <Geographies geography="/simple-world-map/simpleWorldMap.json">
             {({ geographies }) =>
               geographies.map((geo) => (
                 <Geography
