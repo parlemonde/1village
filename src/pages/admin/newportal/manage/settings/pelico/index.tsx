@@ -95,9 +95,7 @@ const Pelico = () => {
   };
 
   const updateActivity = (updatedContent: { content: PelicoPresentationContent[] }) => {
-    setPresentation((prevState: PelicoPresentation) =>
-      prevState === null ? prevState : { ...prevState, content: [...prevState.content, ...updatedContent.content] },
-    );
+    setPresentation((prevState: PelicoPresentation) => (prevState === null ? prevState : { ...prevState, ...updatedContent }));
   };
 
   const onSave = () => {
