@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
@@ -32,49 +32,28 @@ export default function FiltersActivities() {
   const theme = useTheme();
   const [labelNameActivity, setLabelNameActivity] = useState<string[]>([]);
   const [labelNameSubTheme, setLabelNameSubTheme] = useState<string[]>([]);
-  const [, setActivityNumber] = useState<number[]>([]);
-  const [, setSubThemeNumber] = useState<number[]>([]);
   const { setFilters } = useContext(MediathequeContext);
 
-  useEffect(() => {
-    const updatedActivityNumbers: number[] = [];
-    const updatedSubThemeNumbers: number[] = [];
+  const updateFilters = useCallback(() => {
+    const updatedActivityNumbers = labelNameActivity.map((activity) => activityNumberMapper[activity]).filter(Boolean);
+    const updatedSubThemeNumbers = labelNameSubTheme.map((subTheme) => subThemeNumberMapper[subTheme]).filter(Boolean);
 
-    labelNameActivity.forEach((activity) => {
-      const number = activityNumberMapper[activity];
-      if (number !== undefined && !updatedActivityNumbers.includes(number)) {
-        updatedActivityNumbers.push(number);
-      }
-    });
-
-    labelNameSubTheme.forEach((subTheme) => {
-      const number = subThemeNumberMapper[subTheme];
-      if (number !== undefined && !updatedSubThemeNumbers.includes(number)) {
-        updatedSubThemeNumbers.push(number);
-      }
-    });
-
-    setActivityNumber(updatedActivityNumbers);
-    setSubThemeNumber(updatedSubThemeNumbers);
-
+    const newFilters = [];
     if (updatedActivityNumbers.length > 0) {
-      const result: { table: string; column: string; values: number[] }[][] = [[{ table: 'activity', column: 'type', values: [] }]];
-      result[0][0].values = updatedActivityNumbers;
-      setFilters(result);
+      const activityFilter = { table: 'activity', column: 'type', values: updatedActivityNumbers };
+      newFilters.push([activityFilter]);
+
       if (updatedSubThemeNumbers.length > 0) {
-        const result = [
-          [
-            { table: 'activity', column: 'type', values: updatedActivityNumbers },
-            { table: 'activity', column: 'subType', values: [] },
-          ],
-        ];
-        updatedSubThemeNumbers.forEach((number) => {
-          result[0][1].values.push(number);
-        });
-        setFilters(result);
+        const subThemeFilter = { table: 'activity', column: 'subType', values: updatedSubThemeNumbers };
+        newFilters[0].push(subThemeFilter);
       }
     }
+    setFilters(newFilters);
   }, [labelNameActivity, labelNameSubTheme, setFilters]);
+
+  useEffect(() => {
+    updateFilters();
+  }, [labelNameActivity, labelNameSubTheme, updateFilters]);
 
   const handleChangeLabelActivity = (event: SelectChangeEvent<typeof labelNameActivity>) => {
     const {
@@ -84,12 +63,11 @@ export default function FiltersActivities() {
     setLabelNameSubTheme([]);
   };
 
-  const subThemes = labelNameActivity.map((activity) => subThemesMap[activity] || []).flat();
+  const subThemes = labelNameActivity.flatMap((activity) => subThemesMap[activity] || []);
 
   return (
     <>
       <div>
-        {/* Filtre pour activités */}
         <FormControl sx={{ m: 1, minWidth: 140 }} size="small">
           <Select
             displayEmpty
@@ -105,7 +83,7 @@ export default function FiltersActivities() {
             MenuProps={MenuProps}
             inputProps={{ 'aria-label': 'Label' }}
           >
-            {activitiesLabel.map((label: string, index: number) => (
+            {activitiesLabel.map((label, index) => (
               <MenuItem key={index} value={label} style={getStyles(label, labelNameActivity, theme)}>
                 {label}
               </MenuItem>
@@ -113,7 +91,6 @@ export default function FiltersActivities() {
           </Select>
         </FormControl>
       </div>
-      {/* Filtres pour sous thème d'une activité */}
       <div>
         <FormControl sx={{ m: 1, width: 140 }} size="small">
           <Select
@@ -134,7 +111,7 @@ export default function FiltersActivities() {
             <MenuItem disabled value="">
               <em>{subThemes.length ? 'Thèmes' : 'Pas de thématiques'}</em>
             </MenuItem>
-            {subThemes.map((label: string, index: number) => (
+            {subThemes.map((label, index) => (
               <MenuItem key={index} value={label} style={getStyles(label, labelNameSubTheme, theme)}>
                 {label}
               </MenuItem>

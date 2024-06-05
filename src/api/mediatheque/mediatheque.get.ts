@@ -11,10 +11,6 @@ async function getMediatheque(params: { filters: Array<Filter[]> }) {
       method: 'POST',
       baseURL: '/api',
       url: '/mediatheque',
-      // params: {
-      //   offset: offset,
-      //   limit: limit,
-      // },
       data: {
         filters: filters,
       },

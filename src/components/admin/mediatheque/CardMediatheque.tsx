@@ -7,9 +7,8 @@ import Typography from '@mui/material/Typography';
 
 import MediathequeContext from 'src/contexts/mediathequeContext';
 
-export default function MediaCard({ page }) {
+export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
-
 
   const activitiesMediaFinder = allFiltered?.map(({ id, content, subType, type, villageId, userId, user }) => {
     const result = { id, subType, type, villageId, userId, content: [], user };

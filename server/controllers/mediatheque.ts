@@ -1,3 +1,4 @@
+import type { Request, Response } from 'express';
 import { Brackets } from 'typeorm';
 
 import type { Filter } from '../../types/mediatheque.type';
@@ -7,30 +8,37 @@ import { Controller } from './controller';
 
 const mediathequeController = new Controller('/mediatheque');
 
-mediathequeController.post({ path: '' }, async (req, res) => {
-  const filters: Array<Filter[]> = req?.body?.filters || [];
-  const offset = req?.query?.offset || 0;
+mediathequeController.post({ path: '' }, async (req: Request, res: Response) => {
+  try {
+    const filters: Array<Filter[]> = req.body.filters || [];
 
-  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
+    if (!Array.isArray(filters)) {
+      return res.status(400).send({ error: 'Invalid filters format' });
+    }
 
-  filters.map((filter, index) => {
-    subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
-      new Brackets((qb) => {
-        filter.map(({ table, column, values }, subQueryIndex) => {
-          let condition = '';
-          values.map((value, valueIndex) => {
-            condition += valueIndex > 0 ? ' or ' : '(';
-            condition += `${table}.${column} = ${values[valueIndex]}`;
+    let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
+
+    filters.map((filter, index) => {
+      subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
+        new Brackets((qb) => {
+          filter.map(({ table, column, values }, subQueryIndex) => {
+            let condition = '';
+            values.map((value, valueIndex) => {
+              condition += valueIndex > 0 ? ' or ' : '(';
+              condition += `${table}.${column} = ${values[valueIndex]}`;
+            });
+            condition += ')';
+            qb[subQueryIndex === 0 ? 'where' : 'andWhere'](condition);
           });
-          condition += ')';
-          qb[subQueryIndex === 0 ? 'where' : 'andWhere'](condition);
-        });
-      }),
-    );
-  });
-  const activities = await subQueryBuilder
-    .getMany();
-  res.send(activities);
+        }),
+      );
+    });
+    const activities = await subQueryBuilder.getMany();
+    res.send(activities);
+  } catch (error) {
+    console.error('Error fetching media data:', error);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
 });
 
 export { mediathequeController };
