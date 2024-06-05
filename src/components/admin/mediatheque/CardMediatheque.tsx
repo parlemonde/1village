@@ -10,28 +10,7 @@ import MediathequeContext from 'src/contexts/mediathequeContext';
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
 
-  const activitiesMediaFinder = allFiltered?.map(({ id, content, subType, type, villageId, userId, user }) => {
-    const result = { id, subType, type, villageId, userId, content: [], user };
-    if (content.game) {
-      content.game.map(({ inputs }) =>
-        inputs.map((input: { type: number; selectedValue: string }) => {
-          if (input.type === 3 || input.type === 4) {
-            result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
-          }
-        }),
-      );
-    } else {
-      content.map(({ type, value }) => {
-        const wantedTypes = ['image', 'video', 'sound'];
-        if (wantedTypes.includes(type)) {
-          result.content.push({ type, value });
-        }
-      });
-    }
-    return result;
-  });
-
-  const slicedData = activitiesMediaFinder?.slice(page, page + 6);
+  const slicedData = allFiltered?.slice(page, page + 6);
 
   return (
     <div style={{ display: 'flex' }}>

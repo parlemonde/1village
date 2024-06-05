@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Checkbox from '@mui/material/Checkbox';
 
+import MediathequeContext from 'src/contexts/mediathequeContext';
 import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 
 const CheckboxAdmin = () => {
   const label = { inputProps: { 'aria-label': 'Pelico' } };
+  const { setFilters } = useContext(MediathequeContext);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.checked);
+    if (event.target.checked === false) {
+      setFilters([[]]);
+      console.log("c'est faux");
+    }
+    if (event.target.checked === true) {
+      setFilters([
+        [
+          { table: 'activity', column: 'type', values: [6] },
+          { table: 'activity', column: 'subType', values: [2] },
+        ],
+      ]);
+      console.log("c'est vrai");
+    }
+  };
 
   return (
     <div style={{ display: 'flex', width: '80px' }}>
-      <Checkbox {...label} />
+      <Checkbox {...label} onChange={handleCheckboxChange} />
       <PelicoNeutre style={{ margin: 'auto', height: '16px', width: 'auto', cursor: 'pointer' }} />
     </div>
   );

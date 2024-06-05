@@ -61,14 +61,14 @@ import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
 const Mediatheque = () => {
   const { setFilters, allFiltered } = useContext(MediathequeContext);
-  const [page, setPage] = useState<number>(0); // Current page (starts at 0)
+  const [page, setPage] = useState<number>(0);
 
   const handleResetFilters = () => {
     setFilters([[]]);
   };
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage((value - 1) * 6); // Update page state based on selected page number
+    setPage((value - 1) * 6);
   };
 
   const howManyPages = Math.ceil(allFiltered?.length / 6);
