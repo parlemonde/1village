@@ -9,24 +9,17 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import AccessControl from './AccessControl';
+import { VillageSelect } from './VillageSelect';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import { UserType } from 'types/user.type';
 
 export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
-
-  const { village, showSelectVillageModal } = React.useContext(VillageContext);
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const open = Boolean(anchorEl);
-
-  //* NOTE: might be interesting to make a hook for this below
-  const isPelico = user?.type === UserType.MEDIATOR || user?.type === UserType.ADMIN || user?.type === UserType.SUPER_ADMIN;
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (open) {
@@ -58,26 +51,10 @@ export const Header = () => {
         </Link>
         {user && (
           <div className="header__user">
-            {isPelico ? (
-              <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
-                <span className="text text--small" style={{ margin: '0 0.6rem' }}>
-                  {village ? village.name : 'Village non choisi !'}
-                </span>
-                <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectVillageModal}>
-                  {village ? 'Changer' : 'Choisir un village'}
-                </Button>
-              </div>
-            ) : null}
-            {user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.MEDIATOR ? (
-              <Link href="/admin/villages" passHref>
-                <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {"Aller à l'interface Admin"}
-                </Button>
-              </Link>
-            ) : null}
+            <VillageSelect />
             <div>
               <IconButton
-                style={{ width: '40px', height: '40px', margin: '0 0.2rem' }}
+                style={{ width: '40px', height: '40px', margin: '0 1rem' }}
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -120,7 +97,7 @@ export const Header = () => {
             user.type === UserType.OBSERVATOR ? (
               <Link href="/admin/newportal/create" passHref>
                 <Button component="a" href="/admin/newportal/create" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {'Aller à la nouvelle interface admin'}
+                  {'Portail admin'}
                 </Button>
               </Link>
             ) : null}
