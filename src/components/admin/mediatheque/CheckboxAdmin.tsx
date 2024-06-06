@@ -7,22 +7,18 @@ import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 
 const CheckboxAdmin = () => {
   const label = { inputProps: { 'aria-label': 'Pelico' } };
-  const { setFilters } = useContext(MediathequeContext);
+  const { setFilters, setUseAdminData } = useContext(MediathequeContext);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.checked);
     if (event.target.checked === false) {
       setFilters([[]]);
       console.log("c'est faux");
+      setUseAdminData(false);
     }
     if (event.target.checked === true) {
-      setFilters([
-        [
-          { table: 'activity', column: 'type', values: [6] },
-          { table: 'activity', column: 'subType', values: [2] },
-        ],
-      ]);
       console.log("c'est vrai");
+      setUseAdminData(true);
     }
   };
 
