@@ -60,10 +60,11 @@ import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
   },[currentCountry, updateClassList, countrylist]) */
 
 const Mediatheque = () => {
-  const { setFilters, allFiltered } = useContext(MediathequeContext);
+  const { setFilters, allFiltered, setUseAdminData } = useContext(MediathequeContext);
   const [page, setPage] = useState<number>(0);
 
   const handleResetFilters = () => {
+    setUseAdminData(false);
     setFilters([[]]);
   };
 

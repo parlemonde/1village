@@ -5,12 +5,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
+import { activityNameMapper } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
 
   const slicedData = allFiltered?.slice(page, page + 6);
+
 
   return (
     <div style={{ display: 'flex' }}>
@@ -21,13 +23,13 @@ export default function MediaCard({ page }: { page: number }) {
                 <CardMedia sx={{ height: 140 }} image={item.content[0].value} title="Media" />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Media {item.id}
+                    {item.user.school}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Type: {item.type}, Subtype: {item.subType}
+                    {item.village.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    User ID: {item.userId}, Village ID: {item.villageId}
+                    {activityNameMapper[item.type]}
                   </Typography>
                 </CardContent>
               </Card>

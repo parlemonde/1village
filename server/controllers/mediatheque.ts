@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { map } from 'leaflet';
 import { Brackets } from 'typeorm';
 
 import type { Filter } from '../../types/mediatheque.type';
@@ -18,7 +17,13 @@ mediathequeController.post({ path: '' }, async (req: Request, res: Response) => 
       return res.status(400).send({ error: 'Invalid filters format' });
     }
 
-    let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').innerJoin('activity.user', 'user');
+    let subQueryBuilder = AppDataSource.getRepository(Activity)
+      .createQueryBuilder('activity')
+      .leftJoin('activity.user', 'user')
+      .addSelect('user.school')
+      .addSelect('user.type')
+      .leftJoin('activity.village', 'village')
+      .addSelect('village.name');
 
     filters.map((filter, index) => {
       subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](
