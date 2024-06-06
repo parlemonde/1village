@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 // Tout doit être responsive
 
@@ -60,18 +60,18 @@ import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
   },[currentCountry, updateClassList, countrylist]) */
 
 const Mediatheque = () => {
-  const { setFilters, filtered, setOffset, count } = useContext(MediathequeContext);
+  const { setFilters, allFiltered } = useContext(MediathequeContext);
+  const [page, setPage] = useState<number>(0);
 
   const handleResetFilters = () => {
     setFilters([[]]);
-    setOffset(0);
   };
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setOffset((value - 1) * 6);
+    setPage((value - 1) * 6);
   };
 
-  const howManyPages = Math.ceil(count / 6);
+  const howManyPages = Math.ceil(allFiltered?.length / 6);
 
   return (
     <>
@@ -101,7 +101,7 @@ const Mediatheque = () => {
         <ModalFilter />
       </div>
       <div>
-        {filtered && filtered.length === 0 ? (
+        {allFiltered && allFiltered.length === 0 ? (
           <>
             <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
               <p style={{ textAlign: 'center' }} className="text">
@@ -117,15 +117,14 @@ const Mediatheque = () => {
             </div>
           </>
         ) : (
-          <div>Il y a des médias</div>
+          <div style={{ paddingTop: '10px' }}>
+            <MediaCard page={page} />
+          </div>
         )}
-      </div>
-      <div>
-        <MediaCard />
       </div>
       <div className="pagination">
         <Stack spacing={2}>
-          <Pagination size="small" siblingCount={0} count={howManyPages} variant="outlined" onChange={handleChangePage} />
+          <Pagination size="small" siblingCount={1} count={howManyPages} variant="outlined" onChange={handleChangePage} />
         </Stack>
       </div>
     </>

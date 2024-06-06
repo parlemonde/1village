@@ -1,7 +1,7 @@
-import type { FC, Dispatch, SetStateAction } from 'react';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useMemo, useEffect } from 'react';
 
 import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
+import { useGetOnlyPelicoMediatheque } from 'src/api/mediatheque/mediatheque.get-only-pelico';
 import type { Filter } from 'types/mediatheque.type';
 
 type MediathequeProviderProps = {
@@ -10,50 +10,96 @@ type MediathequeProviderProps = {
 
 type MediathequeContextType = {
   filters: Array<Filter[]>;
-  setFilters: Dispatch<SetStateAction<Array<Filter[]>>>;
-  offset: number;
-  filtered: [];
-  setOffset: Dispatch<SetStateAction<number>>;
-  count: number;
+  setFilters: React.Dispatch<React.SetStateAction<Array<Filter[]>>>;
   allFiltered: [];
+  useAdminData: boolean;
+  setUseAdminData: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const MediathequeContext: React.Context<MediathequeContextType> = createContext<MediathequeContextType>({
+const MediathequeContext = createContext<MediathequeContextType>({
   filters: [],
   setFilters: () => {},
-  filtered: [],
-  offset: 0,
-  setOffset: () => {},
-  count: 0,
   allFiltered: [],
+  useAdminData: false,
+  setUseAdminData: () => {},
 });
 
-export const MediathequeProvider: FC<MediathequeProviderProps> = ({ children }) => {
+export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ children }) => {
   const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
-  const [offset, setOffset] = useState<number>(0);
-  const { data } = useGetMediatheque(filters, offset, 6);
-  console.log(data);
-  const { data: allData } = useGetMediatheque(filters);
-  console.log(allData);
+  console.log('filters :', filters);
+  const [useAdminData, setUseAdminData] = useState(false);
 
-  if (!data) {
-    return null;
-  }
-  return (
-    <MediathequeContext.Provider
-      value={{
-        filters,
-        offset: data?.newOffset,
-        setFilters,
-        filtered: data?.activities,
-        setOffset,
-        count: allData?.activities?.length,
-        allFiltered: allData?.activities,
-      }}
-    >
-      {children}
-    </MediathequeContext.Provider>
+  const { data: usersData } = useGetMediatheque(filters);
+  const { data: pelicoData } = useGetOnlyPelicoMediatheque(filters);
+  console.log('usersData', usersData);
+  console.log('pelicoData', pelicoData);
+  const [dataToUse, setDataToUse] = useState([]);
+  const [dataToDisplay, setDataToDisplay] = useState([]);
+
+  useEffect(() => {
+    if (useAdminData === true) {
+      setDataToUse(pelicoData);
+    } else {
+      setDataToUse(usersData);
+    }
+  }, [pelicoData, useAdminData, usersData]);
+
+  console.log('dataToUse = ', dataToUse);
+
+  const activitiesMediaFinder = Array.isArray(dataToUse)
+    ? dataToUse.map(
+        ({
+          id,
+          content,
+          subType,
+          type,
+          villageId,
+          userId,
+        }: {
+          id: number;
+          content: object;
+          subType: number;
+          type: number;
+          villageId: number;
+          userId: number;
+        }) => {
+          const result = { id, subType, type, villageId, userId, content: [] };
+          if (content.game) {
+            content.game.map(({ inputs }) =>
+              inputs.map((input: { type: number; selectedValue: string }) => {
+                if (input.type === 3 || input.type === 4) {
+                  result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+                }
+              }),
+            );
+          } else {
+            content.map(({ type, value }) => {
+              const wantedTypes = ['image', 'video', 'sound'];
+              if (wantedTypes.includes(type)) {
+                result.content.push({ type, value });
+              }
+            });
+          }
+          return result;
+        },
+      )
+    : [];
+
+  const dataFiltered = activitiesMediaFinder;
+  console.log("Les datas filtrées ======== ", dataFiltered)
+
+  const value = useMemo(
+    () => ({
+      filters,
+      setFilters,
+      allFiltered: dataFiltered || [],
+      useAdminData,
+      setUseAdminData,
+    }),
+    [filters, dataFiltered, useAdminData],
   );
+
+  return <MediathequeContext.Provider value={value}>{children}</MediathequeContext.Provider>;
 };
 
 export default MediathequeContext;

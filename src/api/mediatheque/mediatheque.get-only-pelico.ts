@@ -3,14 +3,14 @@ import { useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Filter } from 'types/mediatheque.type';
 
-async function getMediatheque(params: { filters: Array<Filter[]> }) {
+async function getOnlyPelicoMediatheque(params: { filters: Array<Filter[]> }) {
   const { filters } = params;
 
   return (
     await axiosRequest({
       method: 'POST',
       baseURL: '/api',
-      url: '/mediatheque',
+      url: '/mediatheque/pelico',
       data: {
         filters: filters,
       },
@@ -18,6 +18,6 @@ async function getMediatheque(params: { filters: Array<Filter[]> }) {
   ).data;
 }
 
-export const useGetMediatheque = (filters: Array<Filter[]>) => {
-  return useQuery(['Mediatheque', filters], () => getMediatheque({ filters }));
+export const useGetOnlyPelicoMediatheque = (filters: Array<Filter[]>) => {
+  return useQuery(['OnlyPelicoMediatheque', filters], () => getOnlyPelicoMediatheque({ filters }));
 };
