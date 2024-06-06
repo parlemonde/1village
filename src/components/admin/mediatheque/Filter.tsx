@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
 import { useTheme } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 
@@ -43,33 +44,35 @@ const Filters = ({ labels, placeholder }: FilterProps) => {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 140 }} size="small">
-        <Select
-          multiple
-          displayEmpty
-          value={labelName}
-          onChange={handleChange}
-          input={<OutlinedInput />}
-          renderValue={(selected) => {
-            if (selected.length === 0) {
-              return <em>{placeholder}</em>;
-            }
+      <Tooltip title="Bientot disponible" placement="top-start" arrow>
+        <FormControl sx={{ m: 1, width: 140 }} size="small" disabled>
+          <Select
+            multiple
+            displayEmpty
+            value={labelName}
+            onChange={handleChange}
+            input={<OutlinedInput />}
+            renderValue={(selected) => {
+              if (selected.length === 0) {
+                return <em>{placeholder}</em>;
+              }
 
-            return selected.join(', ');
-          }}
-          MenuProps={MenuProps}
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          <MenuItem disabled value="">
-            <em>Placeholder</em>
-          </MenuItem>
-          {labels.map((label: string, index: number) => (
-            <MenuItem key={index} value={label} style={getStyles(label, labelName, theme)}>
-              {label}
+              return selected.join(', ');
+            }}
+            MenuProps={MenuProps}
+            inputProps={{ 'aria-label': 'Without label' }}
+          >
+            <MenuItem disabled value="">
+              <em>Placeholder</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            {labels.map((label: string, index: number) => (
+              <MenuItem key={index} value={label} style={getStyles(label, labelName, theme)}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Tooltip>
     </div>
   );
 };

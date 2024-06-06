@@ -71,6 +71,20 @@ export const activityNumberMapper: { [key: string]: number } = {
   'Réinventer une histoire': 14,
 };
 
+export const activityNameMapper: { [key: number]: string } = {
+  6: 'Indice culturel',
+  7: 'Indice symbolique',
+  8: 'Mascotte',
+  9: 'Reportage',
+  2: 'Défis',
+  4: 'Jeux',
+  10: 'Réaction',
+  1: 'Enigme',
+  12: 'Couplet',
+  13: 'Inventer une histoire',
+  14: 'Réinventer une histoire',
+};
+
 export const subThemeNumberMapper: { [key: string]: number } = {
   Paysages: 0,
   Arts: 1,
