@@ -1,0 +1,32 @@
+.mainContainer {
+    display: flex;
+    gap: 10px;
+    background-color: #F5F5F5;
+    border-radius: 20px;
+    padding: 1rem;
+}
+
+.mainContainer:first-child {
+    flex: 1;
+}
+
+.infoContainer {
+    flex: 3;
+    border: 2px solid #DAD7FE;
+    border-radius: 20px;
+    padding: 0 1rem;
+}
+
+.infoContainer a {
+    font-weight: 600;
+}
+
+.infoContainer>ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.infoContainer>ul>li {
+    margin-bottom: .5rem;
+}
