@@ -52,6 +52,13 @@ export const Header = () => {
         {user && (
           <div className="header__user">
             <VillageSelect />
+            {user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.MEDIATOR ? (
+              <Link href="/admin/villages" passHref>
+                <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
+                  {"Aller à l'interface Admin"}
+                </Button>
+              </Link>
+            ) : null}
             <div>
               <IconButton
                 style={{ width: '40px', height: '40px', margin: '0 1rem' }}
@@ -96,8 +103,8 @@ export const Header = () => {
             user.type === UserType.MEDIATOR ||
             user.type === UserType.OBSERVATOR ? (
               <Link href="/admin/newportal/create" passHref>
-                <Button component="a" href="/admin/newportal/create" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {'Portail admin'}
+                <Button component="a" href="/admin/newportal/create" variant="contained" color="primary" size="small">
+                  {'Aller à la nouvelle interface admin'}
                 </Button>
               </Link>
             ) : null}
