@@ -1,12 +1,19 @@
 import React from 'react';
 
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
+import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
 import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
-import PhaseDropdown from './filters/PhaseDropdown';
 import CountriesDropdown from './filters/CountriesDropdown';
+import PhaseDropdown from './filters/PhaseDropdown';
 import styles from './styles/charts.module.css';
+import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
 const pieChartData = {
   data: [
@@ -19,6 +26,11 @@ const pieChartData = {
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
 
 const CountryStats = () => {
+  const classroomExchanges = useGetClassroomExchanges();
+
+  if (classroomExchanges.isError) return <p>Error!</p>;
+  if (classroomExchanges.isLoading || classroomExchanges.isIdle) return <p>Loading...</p>;
+
   return (
     <>
       <div className={styles.filtersContainer}>
@@ -30,13 +42,37 @@ const CountryStats = () => {
         </div>
       </div>
       <h1>Statut: Observateur</h1>
-      <div className={styles.chartsContainer}>
+      <div className={styles.monitorTable}>
         <HorizontalChart />
+      </div>
+      <div className={styles.monitorTable}>
         <DashboardTable />
-        <div className={styles.engamentContainer}>
-          <PieCharts pieChartData={pieChartData} />
-          <BarCharts barChartData={barChartData} />
-        </div>
+      </div>
+      <div className={styles.classroomStats}>
+        <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
+        <StatsCard data={10}>Nombre de classes connectées</StatsCard>
+        <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
+      </div>
+      <div className={styles.averageStatsContainer}>
+        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} unit="min" icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}>
+          Temps de connexion moyen par classe
+        </AverageStatsCard>
+        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}>
+          Nombre de connexions moyen par classe
+        </AverageStatsCard>
+      </div>
+      <div className={styles.engagementContainer}>
+        <PieCharts pieChartData={pieChartData} />
+        <BarCharts barChartData={barChartData} />
+      </div>
+      <div className={styles.exchangesConnectionsContainer}>
+        <ClassesExchangesCard
+          totalPublications={classroomExchanges.data.totalActivities}
+          totalComments={classroomExchanges.data.totalComments}
+          totalVideos={classroomExchanges.data.totalVideos}
+          className={styles.exchangesCard}
+        />
+        <BarCharts barChartData={barChartData} className={styles.connectionsChart} />
       </div>
     </>
   );

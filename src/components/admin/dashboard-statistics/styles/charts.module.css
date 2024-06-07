@@ -31,9 +31,23 @@
   position: relative;
 }
 
-.chartsContainer {
+.monitorTable {
+  padding-top: 5%;
+}
+
+.classroomStats {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 5%;
+}
+
+.averageStatsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 5%;
+  gap: 20px;
 }
 
 .pieContainer {
@@ -69,7 +83,23 @@
   border-radius: 20px;
 }
 
-.engamentContainer {
+.engagementContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  padding-top: 5%;
+}
+
+.exchangesConnectionsContainer {
+  display: flex;
+  flex-direction: row;
+  padding-top: 5%;
+}
+
+.exchangesCard {
+  width: 70%;
+}
+
+.connectionsChart {
+  width: 30%;
 }

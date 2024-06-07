@@ -1,9 +1,10 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import type { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import * as React from 'react';
 
 export default function CountriesDropdown() {
   const [country, setCountry] = React.useState('');
@@ -16,9 +17,9 @@ export default function CountriesDropdown() {
 
   return (
     <Box sx={{ maxWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth size="small">
         <InputLabel id="country-menu-select">Pays</InputLabel>
-        <Select labelId="country-menu-select" id="country-menu" value={country} label="Pays" onChange={handleChange}>
+        <Select labelId="demo-simple-select-label" id="demo-simple-select" value={country} label="Pays" onChange={handleChange}>
           <MenuItem value={0}>Tous les pays</MenuItem>
         </Select>
       </FormControl>
