@@ -243,11 +243,20 @@ export const Navigation = (): JSX.Element => {
   }
 
   return (
-    <nav className="navigation">
-      <div style={{ position: 'relative' }}>
+    <nav>
+      <div style={{ width: 'inherit', marginRight: '1.5rem' }}>
         <div
-          className="navigation__content navigation__content--is-header with-shadow"
-          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+          className="with-shadow"
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '1rem',
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            padding: '6px',
+          }}
         >
           <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
           {village &&
@@ -284,7 +293,11 @@ export const Navigation = (): JSX.Element => {
             })}
         </div>
         {[fixedTabs, phaseTabs].map((tabs, index) => (
-          <div key={`tabs_${index}`} className="navigation__content with-shadow" style={{ padding: '1rem 0.5rem 0.2rem 0.5rem' }}>
+          <div
+            key={`tabs_${index}`}
+            className="with-shadow"
+            style={{ backgroundColor: 'white', borderRadius: '10px', marginBottom: '10px', padding: '1rem 0.5rem 0.2rem 0.5rem' }}
+          >
             {tabs.map((tab) => (
               <Link key={tab.path} href={tab.path} passHref>
                 <Button
@@ -297,7 +310,6 @@ export const Navigation = (): JSX.Element => {
                   color="primary"
                   startIcon={tab.icon}
                   variant={tab.path.split('/')[1] === currentPathName ? 'contained' : 'outlined'}
-                  className="navigation__button full-width"
                   style={{
                     justifyContent: 'flex-start',
                     paddingRight: '0.1rem',
@@ -314,18 +326,22 @@ export const Navigation = (): JSX.Element => {
           </div>
         ))}
         {village && isPelico && selectedPhase >= 2 && (
-          <div
-            className="navigation__content with-shadow"
-            style={{ padding: '0 0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}
-          >
+          <div className="with-shadow" style={{ padding: '0 0.6rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             {village.activePhase >= selectedPhase ? 'Désactiver' : 'Activer'} la phase{' '}
             <strong style={{ marginLeft: '0.25rem' }}>{selectedPhase}</strong>
             <Switch checked={village.activePhase >= selectedPhase} onChange={() => setIsModalOpen(true)} color="primary" />
           </div>
         )}
-        <Link href="/cgu">
-          <a className="navigation__cgu-link text text--small">{"Conditions générales d'utilisation"}</a>
-        </Link>
+        <div
+          style={{
+            textAlign: 'center',
+            paddingTop: '10px',
+          }}
+        >
+          <Link href="/cgu">
+            <a className="text text--small">{"Conditions générales d'utilisation"}</a>
+          </Link>
+        </div>
       </div>
       <Modal
         open={isModalOpen}

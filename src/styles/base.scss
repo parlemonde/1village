@@ -54,8 +54,8 @@ header {
 
 // ---- LEFT NAVIGATION ----
 .navigation {
-  position: fixed;
-  top: $headerHeight + 2 * $verticalSpacing;
+  //position: fixed;
+  //top: $headerHeight + 2 * $verticalSpacing;
   left: 0;
   padding-bottom: 4px;
   height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
@@ -63,7 +63,7 @@ header {
 }
 .navigation__content {
   background-color: white;
-  width: $menuWidth;
+  //width: $menuWidth;
   margin: 0 $horizontalSpacing $verticalSpacing $horizontalSpacing;
   border-radius: 10px;
 }
@@ -220,4 +220,9 @@ main {
 
 .linkAnnotation {
   opacity: 0;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
 }

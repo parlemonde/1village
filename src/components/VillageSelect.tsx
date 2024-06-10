@@ -16,7 +16,7 @@ export const VillageSelect = () => {
     <Grid
       sx={{
         display: {
-          xs: 'block', //TODO: change to 'none' for small devices when implemented in the navbar.
+          xs: 'block',
           sm: 'block',
         },
       }}
