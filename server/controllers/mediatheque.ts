@@ -40,38 +40,7 @@ mediathequeController.post({ path: '' }, async (req: Request, res: Response) => 
         }),
       );
     });
-    const activities = await subQueryBuilder.getMany();
-    res.send(activities);
-  } catch (error) {
-    console.error('Error fetching media data:', error);
-    res.status(500).send({ error: 'Internal Server Error' });
-  }
-});
-
-mediathequeController.post({ path: '/pelico' }, async (req: Request, res: Response) => {
-  try {
-    const filters: Array<Filter[]> = req.body.filters || [];
-
-    if (!Array.isArray(filters)) {
-      return res.status(400).send({ error: 'Invalid filters format' });
-    }
-
-    const subQueryBuilderUser = AppDataSource.getRepository(User)
-      .createQueryBuilder('user')
-      .where('user.type = :superAdmin', { superAdmin: 0 })
-      .orWhere('user.type = :admin', { admin: 1 })
-      .orWhere('user.type = :mediator', { mediator: 2 });
-
-    const users = await subQueryBuilderUser.getMany();
-
-    const usersId: number[] = users.map((user) => user.id);
-
-    const subQueryBuilderActivity = AppDataSource.getRepository(Activity)
-      .createQueryBuilder('activity')
-      .where('activity.userId IN (:...usersId)', { usersId });
-
-    const activities = await subQueryBuilderActivity.getMany();
-
+    const activities = await subQueryBuilder.andWhere('activity.status = :status', { status: 0 }).getMany();
     res.send(activities);
   } catch (error) {
     console.error('Error fetching media data:', error);
