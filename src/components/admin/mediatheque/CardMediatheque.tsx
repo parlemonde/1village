@@ -12,7 +12,7 @@ export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
 
   const slicedData = allFiltered?.slice(page, page + 6);
-
+console.log(slicedData)
 
   return (
     <div style={{ display: 'flex' }}>

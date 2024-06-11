@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 
 // Tout doit être responsive
 
@@ -31,41 +31,19 @@ import MediathequeContext from 'src/contexts/mediathequeContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
-/* const [currentVillage, setCurrentVillage] = useState(null)
-  const [currentCountry, setCurrentCountry] = useState(null)
-  const [currentClass, setCurrentClass] = useState(null)
-
-  const [VMList, setVMList] = useState([]);
-  const [countrylist, setCountrylist] = useState([]);
-  const [classList, classList] = useState([]);
-
-  const updateCountryList = useCallBack(async () => {
-    // chercher la liste des pays en fonctions de VMList
-    const res = []; // resultat
-    setCountrylist(res)
-  }, [currentVillage, VMList]);
-
-  const updateClassList = useCallback(async () => {
-    // chercher la liste des class en fonctions de countryList
-    const res = []; // resultat
-    setClassList(res);
-  }, [currentCountry, countryList, setClassList])
-
-  useEffect(() => {
-    updateCountryList();
-  },[currentVillage, updateCountryList, VMlist])
-
-  useEffect(() => {
-    updateClassList();
-  },[currentCountry, updateClassList, countrylist]) */
-
 const Mediatheque = () => {
   const { setFilters, allFiltered, setUseAdminData } = useContext(MediathequeContext);
   const [page, setPage] = useState<number>(0);
+  const [updateFiltersKey, setUpdateFiltersKey] = useState(0);
+  const [isChecked, setIsChecked] = useState(false); // État de la case à cocher
+
+  // Explication : Dans React, lorsque la valeur de la clé (key) d'un composant change, React considère que ce composant est un composant différent de celui qui était rendu précédemment avec la même clé. En conséquence, React déclenche un rechargement complet du composant avec la nouvelle clé.
 
   const handleResetFilters = () => {
     setUseAdminData(false);
     setFilters([[]]);
+    setUpdateFiltersKey((prevKey) => prevKey + 1);
+    setIsChecked(false);
   };
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
@@ -82,7 +60,7 @@ const Mediatheque = () => {
       </div>
       <div className="desktop-view">
         <div style={{ display: 'flex' }}>
-          <FiltersActivities />
+          <FiltersActivities key={updateFiltersKey} />
           <>
             {/* Ce filtre gère les différents village monde VMList */}
             <Filters labels={activitiesLabel} placeholder="VM" />
@@ -92,7 +70,7 @@ const Mediatheque = () => {
             <Filters labels={activitiesLabel} placeholder="Classes" />
           </>
 
-          <CheckboxAdmin />
+          <CheckboxAdmin isChecked={isChecked} onCheckboxChange={setIsChecked} />
           <IconButton aria-label="delete" color="primary" onClick={handleResetFilters}>
             <RefreshIcon />
           </IconButton>
