@@ -18,7 +18,7 @@ export const NavigationWrapper = (): JSX.Element => {
   The keys tab and shift are excluded so the user can focus between
   the elements with the keys
   */
-  const toggleDrawer = (open) => (event) => {
+  const toggleDrawer = (open: boolean) => (event: { type?: string; key?: string }) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
@@ -37,9 +37,8 @@ export const NavigationWrapper = (): JSX.Element => {
         xl={2}
         sx={{
           top: '96px',
-          height: 'fitContent',
+          height: 'fit-content',
           display: {
-            // TODO: Second phase of responsive: uncomment the 2 next lines.
             xs: 'none',
             sm: 'block',
           },
@@ -78,11 +77,12 @@ export const NavigationWrapper = (): JSX.Element => {
           </IconButton>
           <VillageSelect />
         </div>
-        <Drawer anchor="left" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+        <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
           <Box
             sx={{
               p: 2,
               height: 1,
+              width: '320px',
             }}
           >
             <IconButton sx={{ mb: 2 }}>
