@@ -29,10 +29,10 @@ export const NavigationWrapper = (): JSX.Element => {
     <>
       {/* Desktop view */}
       <Grid
-        className="sticky"
+        className="fixed"
         item
         xs={12}
-        sm={4}
+        md={4}
         lg={3}
         xl={2}
         sx={{
@@ -40,26 +40,38 @@ export const NavigationWrapper = (): JSX.Element => {
           height: 'fit-content',
           display: {
             xs: 'none',
-            sm: 'block',
+            md: 'block',
+          },
+          width: {
+            md: 'calc(33.333333% - 20px)',
+            lg: 'calc(25% - 20px)',
+            xl: 'calc(16.666667% - 20px)',
           },
         }}
       >
-        <Navigation />
+        <div
+          style={{
+            position: 'fixed',
+            width: 'inherit',
+          }}
+        >
+          <Navigation />
+        </div>
       </Grid>
       {/* Mobile view */}
       <Grid
-        className="sticky with-shadow"
+        className="with-shadow"
         item
         xs={12}
         sx={{
           display: {
+            position: 'sticky',
+            top: '70px',
             xs: 'block',
-            sm: 'none',
+            md: 'none',
             zIndex: '99',
-            top: '60px',
             width: '100%',
             backgroundColor: 'white',
-            margin: '1rem 0',
             padding: '0.5rem',
           },
         }}

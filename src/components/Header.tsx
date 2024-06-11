@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -51,7 +51,14 @@ export const Header = () => {
         </Link>
         {user && (
           <div className="header__user">
-            <VillageSelect />
+            <Box
+              display={{
+                xs: 'none',
+                md: 'block',
+              }}
+            >
+              <VillageSelect />
+            </Box>
             {user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.MEDIATOR ? (
               <Link href="/admin/villages" passHref>
                 <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>

@@ -27,7 +27,7 @@ header {
 .header__container {
   background-color: white;
   height: $headerHeight;
-  margin: $verticalSpacing $horizontalSpacing 0 $horizontalSpacing;
+  margin: 10px 20px;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -54,8 +54,8 @@ header {
 
 // ---- LEFT NAVIGATION ----
 .navigation {
-  //position: fixed;
-  //top: $headerHeight + 2 * $verticalSpacing;
+  position: fixed;
+  top: $headerHeight + 2 * $verticalSpacing;
   left: 0;
   padding-bottom: 4px;
   height: calc(100vh - #{$headerHeight + 3 * $verticalSpacing});
@@ -63,7 +63,7 @@ header {
 }
 .navigation__content {
   background-color: white;
-  //width: $menuWidth;
+  width: $menuWidth;
   margin: 0 $horizontalSpacing $verticalSpacing $horizontalSpacing;
   border-radius: 10px;
 }
@@ -144,7 +144,7 @@ main {
 
 @include for-small-screen {
   .header__container {
-    margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
+    //margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
   }
 
   .navigation {

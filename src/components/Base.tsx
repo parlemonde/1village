@@ -19,8 +19,7 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
       xs={12}
       sx={{
         marginTop: {
-          xs: '60px',
-          sm: '96px',
+          md: '96px',
         },
         padding: '0 20px',
       }}
@@ -29,7 +28,7 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
       <Grid
         item
         xs={12}
-        sm={8}
+        md={8}
         lg={9}
         xl={10}
         sx={{
@@ -39,8 +38,8 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
             xs: rightNav ? '20px' : '0',
           },
           marginTop: {
-            xs: '20px',
-            sm: '0',
+            xs: '90px',
+            md: '0',
           },
         }}
       >
