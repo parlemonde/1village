@@ -16,7 +16,6 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
   return (
     <Grid
       container
-      xs={12}
       sx={{
         marginTop: {
           md: '96px',
@@ -33,7 +32,6 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
         xl={10}
         sx={{
           ...style,
-          position: 'relative',
           marginBottom: {
             xs: rightNav ? '20px' : '0',
           },

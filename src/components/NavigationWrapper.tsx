@@ -29,7 +29,6 @@ export const NavigationWrapper = (): JSX.Element => {
     <>
       {/* Desktop view */}
       <Grid
-        className="fixed"
         item
         xs={12}
         md={4}
@@ -60,12 +59,11 @@ export const NavigationWrapper = (): JSX.Element => {
       </Grid>
       {/* Mobile view */}
       <Grid
-        className="with-shadow"
+        className="with-shadow sticky"
         item
         xs={12}
         sx={{
           display: {
-            position: 'sticky',
             top: '70px',
             xs: 'block',
             md: 'none',
@@ -84,7 +82,7 @@ export const NavigationWrapper = (): JSX.Element => {
             justifyContent: 'space-between',
           }}
         >
-          <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={toggleDrawer(true)}>
+          <IconButton edge="start" color="inherit" aria-label="Ouvrir le menu" onClick={toggleDrawer(true)}>
             <MenuIcon fontSize="large" />
           </IconButton>
           <VillageSelect />

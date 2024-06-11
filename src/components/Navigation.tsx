@@ -244,7 +244,7 @@ export const Navigation = (): JSX.Element => {
 
   return (
     <nav>
-      <div style={{ width: 'inherit', marginRight: '1.5rem' }}>
+      <div style={{ marginRight: '1.5rem' }}>
         <div
           className="with-shadow"
           style={{
