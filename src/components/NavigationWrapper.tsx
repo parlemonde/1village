@@ -34,6 +34,7 @@ export const NavigationWrapper = (): JSX.Element => {
         md={4}
         lg={3}
         xl={2}
+        className="sticky"
         sx={{
           top: '96px',
           height: 'fit-content',
@@ -41,21 +42,9 @@ export const NavigationWrapper = (): JSX.Element => {
             xs: 'none',
             md: 'block',
           },
-          width: {
-            md: 'calc(33.333333% - 20px)',
-            lg: 'calc(25% - 20px)',
-            xl: 'calc(16.666667% - 20px)',
-          },
         }}
       >
-        <div
-          style={{
-            position: 'fixed',
-            width: 'inherit',
-          }}
-        >
-          <Navigation />
-        </div>
+        <Navigation />
       </Grid>
       {/* Mobile view */}
       <Grid
