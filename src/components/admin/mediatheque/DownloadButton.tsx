@@ -1,7 +1,7 @@
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { useSnackbar } from 'notistack';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import Box from '@mui/material/Box';
@@ -9,15 +9,18 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { subThemesMap, activityNumberMapper, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
-import MediathequeContext from 'src/contexts/mediathequeContext';
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 
-export default function DownloadButton(activities) {
+interface DownloadButtonProps {
+  data: Activity[];
+  isCard?: boolean;
+}
+
+export default function DownloadButton({ data: activities, isCard }: DownloadButtonProps) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const { allFiltered } = useContext(MediathequeContext);
 
   const onDownloadVideo = async (videoUrl: string) => {
     try {
@@ -74,7 +77,7 @@ export default function DownloadButton(activities) {
     const activityLabel = getActivityLabel(type);
     const subThemes = subThemesMap[activityLabel] || [];
     const subThemeEntry = Object.entries(subThemeNumberMapper).find(([label, number]) => number === subType && subThemes.includes(label));
-    return subThemeEntry ? subThemeEntry[0] : `UnknownSubType${subType}`;
+    return subThemeEntry ? subThemeEntry[0] : '';
   };
 
   const getFileExtension = (url: string) => {
@@ -84,14 +87,13 @@ export default function DownloadButton(activities) {
 
   const createZipFile = async (data: Activity[]) => {
     setLoading(true);
-    console.log('data', data[0].data);
 
     const zip = new JSZip();
     const imagePromises: Promise<void>[] = [];
     const videoPromises: Promise<void>[] = [];
     const soundPromises: Promise<void>[] = [];
 
-    data[0].data.forEach((item: Activity) => {
+    data.forEach((item: Activity) => {
       const activityLabel = getActivityLabel(item.type);
       const subThemeLabel = getSubThemeLabel(item.type, item.subType);
 
@@ -169,16 +171,14 @@ export default function DownloadButton(activities) {
   };
 
   const handleDownload = () => {
-    const activitiesArray = Array.of(activities);
-    console.log('activitiesArray', activitiesArray);
-    createZipFile(activitiesArray);
+    createZipFile(activities);
   };
 
   return (
     <>
-      <Button size="small" className="download-button" variant="outlined" onClick={handleDownload} disabled={loading}>
+      <Button size="small" className="download-button" variant={isCard ? 'text' : 'outlined'} onClick={handleDownload} disabled={loading}>
         <SaveAltIcon fontSize="small" />
-        Télécharger
+        {isCard ? null : 'Télécharger'}
         {loading && (
           <Box sx={{ display: 'flex', paddingLeft: '1rem' }}>
             <CircularProgress size="1rem" />
