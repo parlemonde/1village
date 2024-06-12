@@ -84,8 +84,8 @@ export const NavigationWrapper = (): JSX.Element => {
               width: '320px',
             }}
           >
-            <IconButton sx={{ mb: 2 }}>
-              <CloseIcon onClick={toggleDrawer(false)} />
+            <IconButton sx={{ mb: 2 }} onClick={toggleDrawer(false)}>
+              <CloseIcon />
             </IconButton>
 
             <Divider sx={{ mb: 2 }} />
