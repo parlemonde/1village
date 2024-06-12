@@ -54,7 +54,7 @@ const Mediatheque = () => {
     <>
       <div className="container-mediatheque">
         <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
-        <DownloadButton />
+        <DownloadButton data={allFiltered} />
       </div>
       <div className="desktop-view">
         <div style={{ display: 'flex' }}>

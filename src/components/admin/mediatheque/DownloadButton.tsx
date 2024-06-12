@@ -14,7 +14,7 @@ import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Activity } from 'types/activity.type';
 
-export default function DownloadButton() {
+export default function DownloadButton(activities) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const { allFiltered } = useContext(MediathequeContext);
@@ -84,13 +84,14 @@ export default function DownloadButton() {
 
   const createZipFile = async (data: Activity[]) => {
     setLoading(true);
+    console.log('data', data[0].data);
 
     const zip = new JSZip();
     const imagePromises: Promise<void>[] = [];
     const videoPromises: Promise<void>[] = [];
     const soundPromises: Promise<void>[] = [];
 
-    data.forEach((item: Activity) => {
+    data[0].data.forEach((item: Activity) => {
       const activityLabel = getActivityLabel(item.type);
       const subThemeLabel = getSubThemeLabel(item.type, item.subType);
 
@@ -168,7 +169,9 @@ export default function DownloadButton() {
   };
 
   const handleDownload = () => {
-    createZipFile(allFiltered);
+    const activitiesArray = Array.of(activities);
+    console.log('activitiesArray', activitiesArray);
+    createZipFile(activitiesArray);
   };
 
   return (
