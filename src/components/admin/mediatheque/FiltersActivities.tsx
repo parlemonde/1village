@@ -76,7 +76,7 @@ export default function FiltersActivities() {
             input={<OutlinedInput />}
             renderValue={(selected) => {
               if (selected.length === 0) {
-                return <em>Activités</em>;
+                return <>Activités</>;
               }
               return selected.join(', ');
             }}
@@ -101,7 +101,7 @@ export default function FiltersActivities() {
             input={<OutlinedInput />}
             renderValue={(selected) => {
               if (selected.length === 0) {
-                return <em>Thèmes</em>;
+                return <>Thèmes</>;
               }
               return selected.join(', ');
             }}

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 // Tout doit être responsive
 
@@ -35,9 +35,7 @@ const Mediatheque = () => {
   const { setFilters, allFiltered, setUseAdminData } = useContext(MediathequeContext);
   const [page, setPage] = useState<number>(0);
   const [updateFiltersKey, setUpdateFiltersKey] = useState(0);
-  const [isChecked, setIsChecked] = useState(false); // État de la case à cocher
-
-  // Explication : Dans React, lorsque la valeur de la clé (key) d'un composant change, React considère que ce composant est un composant différent de celui qui était rendu précédemment avec la même clé. En conséquence, React déclenche un rechargement complet du composant avec la nouvelle clé.
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleResetFilters = () => {
     setUseAdminData(false);

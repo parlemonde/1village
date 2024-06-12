@@ -54,7 +54,7 @@ const Filters = ({ labels, placeholder }: FilterProps) => {
             input={<OutlinedInput />}
             renderValue={(selected) => {
               if (selected.length === 0) {
-                return <em>{placeholder}</em>;
+                return <>{placeholder}</>;
               }
 
               return selected.join(', ');

@@ -17,8 +17,9 @@ import type { Activity } from 'types/activity.type';
 export default function DownloadButton() {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const { allFiltered } = useContext(MediathequeContext);
 
-  const onDownload = async (videoUrl: string) => {
+  const onDownloadVideo = async (videoUrl: string) => {
     try {
       const response = await axiosRequest({
         method: 'GET',
@@ -44,7 +45,24 @@ export default function DownloadButton() {
     }
   };
 
-  const { allFiltered } = useContext(MediathequeContext);
+  const onDownloadSound = async (soundUrl: string) => {
+    try {
+      const adjustedUrl = soundUrl.startsWith('/api') ? soundUrl.replace(/^\/api/, '') : soundUrl;
+
+      const response = await axiosRequest({
+        method: 'GET',
+        url: adjustedUrl,
+        responseType: 'blob',
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("Une erreur est survenue lors du téléchargement de l'audio...", {
+        variant: 'error',
+      });
+      throw error;
+    }
+  };
 
   const getActivityLabel = (type: number) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -70,6 +88,7 @@ export default function DownloadButton() {
     const zip = new JSZip();
     const imagePromises: Promise<void>[] = [];
     const videoPromises: Promise<void>[] = [];
+    const soundPromises: Promise<void>[] = [];
 
     data.forEach((item: Activity) => {
       const activityLabel = getActivityLabel(item.type);
@@ -100,11 +119,24 @@ export default function DownloadButton() {
             });
 
           imagePromises.push(imagePromise);
+        } else if (contentItem.type === 'sound') {
+          const soundUrl = contentItem.value;
+          const soundFileName = `${activityLabel} ${subThemeLabel} son activité id n°${item.id} ${contentIndex + 1}.mp3`;
+
+          const soundPromise = onDownloadSound(soundUrl)
+            .then((blob) => {
+              zip.file(soundFileName, blob);
+            })
+            .catch((err) => {
+              console.error(`Failed to fetch sound from ${soundUrl}:`, err);
+            });
+
+          soundPromises.push(soundPromise);
         } else if (contentItem.type === 'video') {
           const videoUrl = contentItem.value;
           const videoFileName = `${activityLabel} ${subThemeLabel} video activité id n°${item.id} ${contentIndex + 1}.mp4`;
 
-          const videoPromise = onDownload(videoUrl)
+          const videoPromise = onDownloadVideo(videoUrl)
             .then((downloadLink) => fetch(downloadLink))
             .then((response) => response.blob())
             .then((blob) => {
@@ -119,7 +151,7 @@ export default function DownloadButton() {
       });
     });
 
-    await Promise.all([...imagePromises, ...videoPromises]);
+    await Promise.all([...imagePromises, ...videoPromises, ...soundPromises]);
 
     const content = await zip.generateAsync({ type: 'blob' });
 
