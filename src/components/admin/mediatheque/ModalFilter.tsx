@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Box from '@mui/material/Box';
@@ -29,12 +29,16 @@ const ModalFilter = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [updateFiltersKey, setUpdateFiltersKey] = useState(0);
+  const [isChecked, setIsChecked] = useState(false);
 
-  const { setFilters, setOffset } = useContext(MediathequeContext);
+  const { setFilters, setUseAdminData } = useContext(MediathequeContext);
 
   const handleResetFilters = () => {
+    setUseAdminData(false);
     setFilters([[]]);
-    setOffset(0);
+    setUpdateFiltersKey((prevKey) => prevKey + 1);
+    setIsChecked(false);
   };
 
   return (
@@ -61,12 +65,12 @@ const ModalFilter = () => {
           >
             X
           </button>
-          <FiltersActivities />
+          <FiltersActivities key={updateFiltersKey} />
           <Filters labels={activitiesLabel} placeholder="VM" />
           <Filters labels={activitiesLabel} placeholder="Pays" />
           <Filters labels={activitiesLabel} placeholder="Classes" />
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <CheckboxAdmin />
+            <CheckboxAdmin isChecked={isChecked} onCheckboxChange={setIsChecked} />
             <IconButton aria-label="delete" color="primary" onClick={handleResetFilters}>
               <RefreshIcon />
             </IconButton>

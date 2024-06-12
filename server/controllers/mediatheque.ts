@@ -3,7 +3,6 @@ import { Brackets } from 'typeorm';
 
 import type { Filter } from '../../types/mediatheque.type';
 import { Activity } from '../entities/activity';
-import { User } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
@@ -40,7 +39,8 @@ mediathequeController.post({ path: '' }, async (req: Request, res: Response) => 
         }),
       );
     });
-    const activities = await subQueryBuilder.andWhere('activity.status = :status', { status: 0 }).getMany();
+    const activitiesToFilter = await subQueryBuilder.getMany();
+    const activities = activitiesToFilter.filter((status) => status.status === 0);
     res.send(activities);
   } catch (error) {
     console.error('Error fetching media data:', error);

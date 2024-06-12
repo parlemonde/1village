@@ -10,10 +10,33 @@ type MediathequeProviderProps = {
 type MediathequeContextType = {
   filters: Array<Filter[]>;
   setFilters: React.Dispatch<React.SetStateAction<Array<Filter[]>>>;
-  allFiltered: any[];
+  allFiltered: [];
   useAdminData: boolean;
   setUseAdminData: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+interface UserData {
+  id: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content: any;
+  subType: number;
+  type: number;
+  villageId: number;
+  userId: number;
+  user: { type: number; school: string };
+  village: { name: string };
+  data: {
+    mascotteImage?: string;
+    verseFinalMixUrl?: string;
+    verseMixUrl?: string;
+    verseMixWithIntroUrl?: string;
+    verseMixWithVocalsUrl?: string;
+    odd?: { imageStory?: string; imageUrl?: string };
+    object?: { imageStory?: string; imageUrl?: string };
+    place?: { imageStory?: string; imageUrl?: string };
+    tale?: { imageStory?: string; imageUrl?: string };
+  };
+}
 
 const MediathequeContext = createContext<MediathequeContextType>({
   filters: [],
@@ -28,80 +51,68 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
   const [useAdminData, setUseAdminData] = useState(false);
 
   const { data: usersData } = useGetMediatheque(filters);
-  const [dataToUse, setDataToUse] = useState<any[]>([]);
+  const [dataToUse, setDataToUse] = useState<[]>([]);
 
   useEffect(() => {
     const activitiesMediaFinder = usersData
       ?.filter(({ type }: { type: number }) => ![3, 5, 11].includes(type))
-      .map(
-        ({
-          id,
-          content,
-          subType,
-          type,
-          villageId,
-          userId,
-          user,
-          village,
-          data,
-        }: {
+      .map(({ id, content, subType, type, villageId, userId, user, village, data }: UserData) => {
+        const result: {
           id: number;
-          content: object;
           subType: number;
           type: number;
           villageId: number;
           userId: number;
-          user: object;
-          village: object;
-          data: object;
-        }) => {
-          const result = { id, subType, type, villageId, userId, content: [], user, village };
-          if (type === 8 || type === 12 || type === 13 || type === 14) {
-            if (type === 8) {
-              result.content.push({ type: 'image', value: data.mascotteImage });
-            }
-            if (type === 12) {
-              result.content.push({ type: 'sound', value: data.verseFinalMixUrl });
-              result.content.push({ type: 'sound', value: data.verseMixUrl });
-              result.content.push({ type: 'sound', value: data.verseMixWithIntroUrl });
-              result.content.push({ type: 'sound', value: data.verseMixWithVocalsUrl });
-            }
-            if (type === 13 || type === 14) {
-              const properties = ['odd', 'object', 'place', 'tale'];
-
-              properties.forEach((prop) => {
-                if (prop === 'tale') {
-                  result.content.push({ type: 'image', value: data[prop].imageStory });
-                } else {
-                  result.content.push({ type: 'image', value: data[prop].imageUrl });
-                }
-              });
-            }
+          content: Array<{ type: string; value: string | undefined }>;
+          user: { type: number; school: string };
+          village: { name: string };
+        } = { id, subType, type, villageId, userId, content: [], user, village };
+        if (type === 8 || type === 12 || type === 13 || type === 14) {
+          if (type === 8) {
+            result.content.push({ type: 'image', value: data.mascotteImage });
           }
-          if (content.game) {
-            content.game.map(({ inputs }) =>
-              inputs.map((input: { type: number; selectedValue: string }) => {
-                if (input.type === 3 || input.type === 4) {
-                  result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+          if (type === 12) {
+            result.content.push({ type: 'sound', value: data.verseFinalMixUrl });
+            // result.content.push({ type: 'sound', value: data.verseMixUrl });
+            // result.content.push({ type: 'sound', value: data.verseMixWithIntroUrl });
+            // result.content.push({ type: 'sound', value: data.verseMixWithVocalsUrl });
+          }
+          if (type === 13 || type === 14) {
+            const properties = ['odd', 'object', 'place', 'tale'];
+
+            properties.forEach((prop: string) => {
+              const propData = data[prop as keyof typeof data];
+              if (typeof propData === 'object' && propData !== null) {
+                if (prop === 'tale') {
+                  result.content.push({ type: 'image', value: propData.imageStory });
+                } else {
+                  result.content.push({ type: 'image', value: propData.imageUrl });
                 }
-              }),
-            );
-          } else {
-            content.map(({ type, value }: { type: string; value: string }) => {
-              const wantedTypes = ['image', 'video', 'sound'];
-              if (wantedTypes.includes(type)) {
-                result.content.push({ type, value });
               }
             });
           }
-          return result;
-        },
-      );
+        }
+        if (content.game) {
+          content.game.map(({ inputs }: { inputs: Array<{ type: number; selectedValue: string }> }) =>
+            inputs.map((input) => {
+              if (input.type === 3 || input.type === 4) {
+                result.content.push({ type: input.type === 3 ? 'image' : 'video', value: input.selectedValue });
+              }
+            }),
+          );
+        } else {
+          content.map(({ type, value }: { type: string; value: string }) => {
+            const wantedTypes = ['image', 'video', 'sound'];
+            if (wantedTypes.includes(type)) {
+              result.content.push({ type, value });
+            }
+          });
+        }
+        return result;
+      });
 
-    console.log('activitiesMediaFinder', activitiesMediaFinder);
-
-    const activitiesWithMediaOnly = activitiesMediaFinder?.filter((a) => a.content.length > 0);
-    const activitiesFromPelico = activitiesWithMediaOnly?.filter((a) => [0, 1, 2].includes(a.user.type));
+    const activitiesWithMediaOnly = activitiesMediaFinder?.filter((a: UserData) => a.content.length > 0);
+    const activitiesFromPelico = activitiesWithMediaOnly?.filter((a: UserData) => [0, 1, 2].includes(a.user.type));
 
     if (useAdminData) {
       setDataToUse(activitiesFromPelico || []);
@@ -120,8 +131,6 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
     }),
     [filters, dataToUse, useAdminData],
   );
-
-  console.log('data to use = ', dataToUse);
 
   return <MediathequeContext.Provider value={value}>{children}</MediathequeContext.Provider>;
 };
