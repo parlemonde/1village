@@ -9,7 +9,10 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 
 import { Navigation } from './Navigation';
+import ShowFor from './ShowFor';
+import { VillageMonde } from './VillageMonde';
 import { VillageSelect } from './VillageSelect';
+import { UserType } from 'types/user.type';
 
 export const NavigationWrapper = (): JSX.Element => {
   const [open, setState] = useState(false);
@@ -53,29 +56,27 @@ export const NavigationWrapper = (): JSX.Element => {
         xs={12}
         sx={{
           display: {
-            top: '70px',
-            xs: 'block',
+            xs: 'flex',
             md: 'none',
-            zIndex: '99',
-            width: '100%',
-            backgroundColor: 'white',
-            padding: '0.5rem',
           },
+          top: '70px',
+          zIndex: '99',
+          width: '100%',
+          backgroundColor: 'white',
+          padding: '0.5rem',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
         }}
       >
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <IconButton edge="start" color="inherit" aria-label="Ouvrir le menu" onClick={toggleDrawer(true)}>
-            <MenuIcon fontSize="large" />
-          </IconButton>
+        <IconButton edge="start" color="inherit" aria-label="Ouvrir le menu" onClick={toggleDrawer(true)}>
+          <MenuIcon fontSize="large" />
+        </IconButton>
+        <Box display="flex" width="100%" justifyContent="center" alignItems="center">
+          <ShowFor roles={[UserType.TEACHER, UserType.FAMILY, UserType.OBSERVATOR]}>
+            <VillageMonde />
+          </ShowFor>
           <VillageSelect />
-        </div>
+        </Box>
         <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
           <Box
             sx={{
