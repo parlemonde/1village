@@ -27,7 +27,7 @@ const CheckboxAdmin = ({ isChecked, onCheckboxChange }: CheckboxAdminProps) => {
   return (
     <div style={{ display: 'flex', width: '80px' }}>
       <Checkbox {...label} checked={isChecked} onChange={handleCheckboxChange} />
-      <PelicoNeutre style={{ margin: 'auto', height: '16px', width: 'auto', cursor: 'pointer' }} />
+      <PelicoNeutre style={{ margin: 'auto', height: '16px', width: 'auto' }} />
     </div>
   );
 };
