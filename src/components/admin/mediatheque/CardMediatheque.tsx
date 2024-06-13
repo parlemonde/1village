@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import { Grid, makeStyles } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -27,20 +28,21 @@ interface ExtendedActivity extends Activity {
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
 
-  const itemsPerPage = 6;
-
-  const slicedData: ExtendedActivity[] = allFiltered ? allFiltered.slice(page, page + itemsPerPage) : [];
-
-  const filledData = [
-    ...slicedData,
-    ...Array.from({ length: itemsPerPage - slicedData.length }).map((_, index) => ({ isEmpty: true, id: `empty-${index}` })),
-  ];
-
+  const slicedData: ExtendedActivity[] = allFiltered?.slice(page, page + 6);
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-      {filledData.map((item, index) =>
-        'content' in item ? (
-          <Card key={index} sx={{ width: '30%', marginBottom: '20px', maxHeight: '400px', overflow: 'auto' }}>
+    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+      {slicedData.map((item, index) => (
+        <Grid item xs={2} sm={4} md={4} key={index}>
+          <Card
+            sx={{
+              width: '100%',
+              height: '100%',
+              marginBottom: '10px',
+              overflow: 'auto',
+              maxWidth: 345,
+              minWidth: 100,
+            }}
+          >
             <CardMedia sx={{ height: 140 }} image={item.content[0].value} title="Media" />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
@@ -57,10 +59,8 @@ export default function MediaCard({ page }: { page: number }) {
               </div>
             </CardContent>
           </Card>
-        ) : (
-          <Card key={item.id} sx={{ width: '30%', marginBottom: '20px', visibility: 'hidden' }} />
-        ),
-      )}
-    </div>
+        </Grid>
+      ))}
+    </Grid>
   );
 }
