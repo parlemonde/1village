@@ -1,7 +1,8 @@
-import className from 'classnames';
 import React from 'react';
 
-import { Navigation } from 'src/components/Navigation';
+import { Grid } from '@mui/material';
+
+import { NavigationWrapper } from './NavigationWrapper';
 import { SubHeaders } from 'src/components/accueil/SubHeader';
 
 interface BaseProps {
@@ -13,23 +14,52 @@ interface BaseProps {
 
 export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = false, style }: React.PropsWithChildren<BaseProps>) => {
   return (
-    <>
-      {!hideLeftNav && <Navigation />}
-      <main
-        className={className({
-          'without-nav': hideLeftNav,
-        })}
+    <Grid
+      container
+      sx={{
+        marginTop: {
+          md: '96px',
+        },
+        padding: '0 20px',
+      }}
+    >
+      {!hideLeftNav && <NavigationWrapper />}
+      <Grid
+        item
+        xs={12}
+        md={8}
+        lg={9}
+        xl={10}
+        sx={{
+          ...style,
+          marginBottom: {
+            xs: rightNav ? '20px' : '0',
+          },
+          marginTop: {
+            xs: '90px',
+            md: '0',
+          },
+        }}
       >
-        <div className={className('app-content', { 'app-content--with-subheader': showSubHeader })} style={style}>
-          {showSubHeader && (
-            <div className="app-content__sub-header">
-              <SubHeaders />
-            </div>
-          )}
-          <div className="app-content__card with-shadow">{children}</div>
-        </div>
-        {rightNav && <aside className="right-navigation">{rightNav}</aside>}
-      </main>
-    </>
+        {showSubHeader && (
+          <div style={{ height: '40px', marginBottom: '20px' }}>
+            <SubHeaders />
+          </div>
+        )}
+        <div className="app-content__card with-shadow">{children}</div>
+      </Grid>
+      {rightNav && (
+        <Grid item xs={12} sm={4} lg={3} xl={2}>
+          <aside
+            style={{
+              marginLeft: '20px',
+              marginBottom: '20px',
+            }}
+          >
+            {rightNav}
+          </aside>
+        </Grid>
+      )}
+    </Grid>
   );
 };

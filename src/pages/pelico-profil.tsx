@@ -38,7 +38,7 @@ const PelicoProfil = () => {
   return (
     <>
       {user && (
-        <Base rightNav={<PelicoProfilNavigation />}>
+        <Base rightNav={<PelicoProfilNavigation />} hideLeftNav>
           <Box
             sx={{
               marginLeft: '2%',
