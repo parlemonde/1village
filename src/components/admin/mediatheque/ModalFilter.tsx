@@ -42,7 +42,7 @@ const ModalFilter = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '5px' }}>
+    <>
       <Button size="small" variant="outlined" onClick={handleOpen}>
         Filtres
       </Button>
@@ -77,7 +77,7 @@ const ModalFilter = () => {
           </div>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 };
 

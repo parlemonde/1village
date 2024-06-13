@@ -52,11 +52,12 @@ const Mediatheque = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <DownloadButton data={allFiltered} />
+      <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
+      <div className="container-filtre-download">
+        <div className="modal-view">
+          <ModalFilter />
         </div>
+        <DownloadButton data={allFiltered} />
       </div>
       <div className="desktop-view">
         <div style={{ display: 'flex' }}>
@@ -75,9 +76,6 @@ const Mediatheque = () => {
             <RefreshIcon />
           </IconButton>
         </div>
-      </div>
-      <div className="modal-view">
-        <ModalFilter />
       </div>
       <div>
         {allFiltered && allFiltered.length === 0 ? (

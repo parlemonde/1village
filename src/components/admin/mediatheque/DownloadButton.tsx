@@ -175,8 +175,8 @@ export default function DownloadButton({ data: activities, isCard }: DownloadBut
   };
 
   return (
-    <>
-      <Button size="small" className="download-button" variant={isCard ? 'text' : 'outlined'} onClick={handleDownload} disabled={loading}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end ' }}>
+      <Button size="small" variant={isCard ? 'text' : 'outlined'} onClick={handleDownload} disabled={loading}>
         <SaveAltIcon fontSize="small" />
         {isCard ? null : 'Télécharger'}
         {loading && (
@@ -185,6 +185,6 @@ export default function DownloadButton({ data: activities, isCard }: DownloadBut
           </Box>
         )}
       </Button>
-    </>
+    </div>
   );
 }
