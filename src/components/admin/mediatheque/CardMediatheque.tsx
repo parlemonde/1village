@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
+import { MediaCarousel } from 'src/components/admin/mediatheque/Carousel';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
 import { activityNameMapper } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
@@ -24,11 +25,13 @@ interface ExtendedActivity extends Activity {
   user: User;
   village: Village;
 }
+//CARROUSEL si item.content.length > 1 alors fais le caroussel sirnon affiche moi le classique celui auddessus
 
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
 
   const slicedData: ExtendedActivity[] = allFiltered?.slice(page, page + 6);
+
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {slicedData.map((item, index) => (
@@ -43,7 +46,13 @@ export default function MediaCard({ page }: { page: number }) {
               minWidth: 100,
             }}
           >
-            <CardMedia sx={{ height: 140 }} image={item.content[0].value} title="Media" />
+            {item.content.length > 1 ? (
+              <div>
+                <MediaCarousel items={item.content} />
+              </div>
+            ) : (
+              <CardMedia sx={{ height: 140 }} image={item.content[0].value} title="Media" />
+            )}
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {item.user.school}
