@@ -55,6 +55,7 @@ const RAW_RUNTIME_STATE =
           ["@types/earcut", "npm:2.1.1"],\
           ["@types/express", "npm:4.17.13"],\
           ["@types/express-useragent", "npm:1.0.2"],\
+          ["@types/file-saver", "npm:2.0.7"],\
           ["@types/fs-extra", "npm:9.0.13"],\
           ["@types/geojson", "npm:7946.0.8"],\
           ["@types/jest", "npm:28.1.3"],\
@@ -117,6 +118,7 @@ const RAW_RUNTIME_STATE =
           ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.7.0"],\
           ["express-useragent", "npm:1.0.15"],\
           ["ffmpeg-audio-mixer", "npm:1.5.0"],\
+          ["file-saver", "npm:2.0.5"],\
           ["fs-extra", "npm:10.1.0"],\
           ["geojson", "npm:0.5.0"],\
           ["helmet", "npm:5.1.1"],\
@@ -127,6 +129,7 @@ const RAW_RUNTIME_STATE =
           ["json-stable-stringify", "npm:1.0.2"],\
           ["jsonwebtoken", "npm:8.5.1"],\
           ["jspdf", "npm:2.5.1"],\
+          ["jszip", "npm:3.10.1"],\
           ["leaflet", "npm:1.9.3"],\
           ["leaflet.fullscreen", "npm:2.4.0"],\
           ["maplibre-gl", "npm:2.1.9"],\
@@ -207,6 +210,7 @@ const RAW_RUNTIME_STATE =
           ["@types/earcut", "npm:2.1.1"],\
           ["@types/express", "npm:4.17.13"],\
           ["@types/express-useragent", "npm:1.0.2"],\
+          ["@types/file-saver", "npm:2.0.7"],\
           ["@types/fs-extra", "npm:9.0.13"],\
           ["@types/geojson", "npm:7946.0.8"],\
           ["@types/jest", "npm:28.1.3"],\
@@ -269,6 +273,7 @@ const RAW_RUNTIME_STATE =
           ["express-rate-limit", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:6.7.0"],\
           ["express-useragent", "npm:1.0.15"],\
           ["ffmpeg-audio-mixer", "npm:1.5.0"],\
+          ["file-saver", "npm:2.0.5"],\
           ["fs-extra", "npm:10.1.0"],\
           ["geojson", "npm:0.5.0"],\
           ["helmet", "npm:5.1.1"],\
@@ -279,6 +284,7 @@ const RAW_RUNTIME_STATE =
           ["json-stable-stringify", "npm:1.0.2"],\
           ["jsonwebtoken", "npm:8.5.1"],\
           ["jspdf", "npm:2.5.1"],\
+          ["jszip", "npm:3.10.1"],\
           ["leaflet", "npm:1.9.3"],\
           ["leaflet.fullscreen", "npm:2.4.0"],\
           ["maplibre-gl", "npm:2.1.9"],\
@@ -4345,7 +4351,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@mui/utils", "virtual:2a0c5e7e269262e1c359bad9ba9d3a932d64bcdfd5387ebdf1100d5bcdc55e30c75548d943bc3a24b5b41c13fad550b67c6e3c071412194f49c2f31dc53558a8#npm:5.15.14"],\
           ["@babel/runtime", "npm:7.24.1"],\
-          ["@types/prop-types", "npm:15.7.12"],\
+          ["@types/prop-types", "npm:15.7.11"],\
           ["@types/react", "npm:17.0.47"],\
           ["prop-types", "npm:15.8.1"],\
           ["react", "npm:17.0.2"],\
@@ -5745,6 +5751,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/file-saver", [\
+      ["npm:2.0.7", {\
+        "packageLocation": "./.yarn/cache/@types-file-saver-npm-2.0.7-39f33a4b39-c3d1cd80ea.zip/node_modules/@types/file-saver/",\
+        "packageDependencies": [\
+          ["@types/file-saver", "npm:2.0.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/fs-extra", [\
       ["npm:9.0.13", {\
         "packageLocation": "./.yarn/cache/@types-fs-extra-npm-9.0.13-12fb7badd7-ac545e3772.zip/node_modules/@types/fs-extra/",\
@@ -6021,10 +6036,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/prop-types", [\
-      ["npm:15.7.12", {\
-        "packageLocation": "./.yarn/cache/@types-prop-types-npm-15.7.12-b093f43531-ac16cc3d0a.zip/node_modules/@types/prop-types/",\
+      ["npm:15.7.11", {\
+        "packageLocation": "./.yarn/cache/@types-prop-types-npm-15.7.11-a0a5a0025c-7519ff11d0.zip/node_modules/@types/prop-types/",\
         "packageDependencies": [\
-          ["@types/prop-types", "npm:15.7.12"]\
+          ["@types/prop-types", "npm:15.7.11"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -8016,7 +8031,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/browserslist-npm-4.21.5-e3b9e9d029-560ec095ab.zip/node_modules/browserslist/",\
         "packageDependencies": [\
           ["browserslist", "npm:4.21.5"],\
-          ["caniuse-lite", "npm:1.0.30001487"],\
+          ["caniuse-lite", "npm:1.0.30001599"],\
           ["electron-to-chromium", "npm:1.4.394"],\
           ["node-releases", "npm:2.0.10"],\
           ["update-browserslist-db", "virtual:e3b9e9d029ed690d72cbb29196ba0a23f15b398eeb926347678187be937db870a04cbf984eecc8e0ec9c290158a9cd8607d12f0188665abe039fa4a9051a22ac#npm:1.0.11"]\
@@ -8278,10 +8293,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["caniuse-lite", [\
-      ["npm:1.0.30001487", {\
-        "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001487-0bc8a63356-b64a706fe7.zip/node_modules/caniuse-lite/",\
+      ["npm:1.0.30001599", {\
+        "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001599-834cd4cb82-c9a5ad806f.zip/node_modules/caniuse-lite/",\
         "packageDependencies": [\
-          ["caniuse-lite", "npm:1.0.30001487"]\
+          ["caniuse-lite", "npm:1.0.30001599"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11031,6 +11046,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["file-saver", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/file-saver-npm-2.0.5-2c3bc40d53-fbba443d9b.zip/node_modules/file-saver/",\
+        "packageDependencies": [\
+          ["file-saver", "npm:2.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["file-type", [\
       ["npm:17.1.6", {\
         "packageLocation": "./.yarn/cache/file-type-npm-17.1.6-5b81491f99-47c69b4046.zip/node_modules/file-type/",\
@@ -12291,6 +12315,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["image-size", "npm:1.0.2"],\
           ["queue", "npm:6.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["immediate", [\
+      ["npm:3.0.6", {\
+        "packageLocation": "./.yarn/cache/immediate-npm-3.0.6-c27588a2d3-f9b3486477.zip/node_modules/immediate/",\
+        "packageDependencies": [\
+          ["immediate", "npm:3.0.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13862,6 +13895,19 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["jszip", [\
+      ["npm:3.10.1", {\
+        "packageLocation": "./.yarn/cache/jszip-npm-3.10.1-2862546cfb-bfbfbb9b0a.zip/node_modules/jszip/",\
+        "packageDependencies": [\
+          ["jszip", "npm:3.10.1"],\
+          ["lie", "npm:3.3.0"],\
+          ["pako", "npm:1.0.11"],\
+          ["readable-stream", "npm:2.3.8"],\
+          ["setimmediate", "npm:1.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["jwa", [\
       ["npm:1.4.1", {\
         "packageLocation": "./.yarn/cache/jwa-npm-1.4.1-4f19d6572c-0bc002b71d.zip/node_modules/jwa/",\
@@ -14015,6 +14061,16 @@ const RAW_RUNTIME_STATE =
           ["levn", "npm:0.4.1"],\
           ["prelude-ls", "npm:1.2.1"],\
           ["type-check", "npm:0.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lie", [\
+      ["npm:3.3.0", {\
+        "packageLocation": "./.yarn/cache/lie-npm-3.3.0-35ddd11a4d-f335ce67fe.zip/node_modules/lie/",\
+        "packageDependencies": [\
+          ["lie", "npm:3.3.0"],\
+          ["immediate", "npm:3.0.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15151,7 +15207,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:17.0.47"],\
           ["@types/react-dom", "npm:17.0.17"],\
           ["@types/sass", "npm:1.43.1"],\
-          ["caniuse-lite", "npm:1.0.30001487"],\
+          ["caniuse-lite", "npm:1.0.30001599"],\
           ["fibers", null],\
           ["node-sass", null],\
           ["postcss", "npm:8.4.14"],\
@@ -15829,6 +15885,15 @@ const RAW_RUNTIME_STATE =
           ["registry-auth-token", "npm:4.2.2"],\
           ["registry-url", "npm:5.1.0"],\
           ["semver", "npm:6.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["pako", [\
+      ["npm:1.0.11", {\
+        "packageLocation": "./.yarn/cache/pako-npm-1.0.11-b8f1b69d3e-1ad07210e8.zip/node_modules/pako/",\
+        "packageDependencies": [\
+          ["pako", "npm:1.0.11"]\
         ],\
         "linkType": "HARD"\
       }]\
