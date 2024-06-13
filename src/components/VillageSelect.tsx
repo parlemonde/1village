@@ -13,14 +13,7 @@ export const VillageSelect = () => {
   const isPelico = user && (user?.type === UserType.MEDIATOR || user?.type === UserType.ADMIN || user?.type === UserType.SUPER_ADMIN);
 
   return (
-    <Grid
-      sx={{
-        display: {
-          xs: 'block', //TODO: change to 'none' for small devices when implemented in the navbar.
-          sm: 'block',
-        },
-      }}
-    >
+    <Grid>
       {isPelico ? (
         <div style={{ display: 'flex', alignItems: 'center', border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
           <span className="text text--small" style={{ margin: '0 0.6rem' }}>

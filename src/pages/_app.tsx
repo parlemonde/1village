@@ -121,7 +121,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
     <CacheProvider value={emotionCache}>
       <Head>
         <title key="app-title">1Village{isOnAdmin ? ' - Admin' : ''}</title>
-        <meta key="app-viewport" name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <meta key="app-viewport" name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <ThemeProvider theme={theme}>
