@@ -29,7 +29,6 @@ export const VillageMonde = (): JSX.Element => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        //marginBottom: '1rem',
         backgroundColor: 'white',
         borderRadius: '10px',
         padding: '6px',
