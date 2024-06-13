@@ -42,8 +42,8 @@ const ModalFilter = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '5px' }}>
-      <Button variant="outlined" onClick={handleOpen}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '5px' }}>
+      <Button size="small" variant="outlined" onClick={handleOpen}>
         Filtres
       </Button>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">

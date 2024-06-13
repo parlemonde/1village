@@ -52,9 +52,11 @@ const Mediatheque = () => {
 
   return (
     <>
-      <div className="container-mediatheque">
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <h1 className="title-for-mediatheque">Médiathèque d&apos;1Village</h1>
-        <DownloadButton data={allFiltered} />
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <DownloadButton data={allFiltered} />
+        </div>
       </div>
       <div className="desktop-view">
         <div style={{ display: 'flex' }}>
@@ -101,6 +103,7 @@ const Mediatheque = () => {
       </div>
       <div className="pagination">
         <Stack spacing={2}>
+          {/* il y a la props page dans pagination. Peut être utiliser un page, setPage */}
           <Pagination size="small" siblingCount={1} count={howManyPages} variant="outlined" onChange={handleChangePage} />
         </Stack>
       </div>
