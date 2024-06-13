@@ -12,6 +12,7 @@ import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
 import { mediathequeController } from './mediatheque';
+import { pelicoController } from './pelicoPresentation';
 import { storyController } from './story';
 import { studentController } from './student';
 import { teacherController } from './teacher';
@@ -42,6 +43,7 @@ const controllers = [
   teacherController,
   studentController,
   featureFlagController,
+  pelicoController,
   mediathequeController,
 ];
 
