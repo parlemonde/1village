@@ -38,6 +38,7 @@ const SignInParent = () => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isEmailError, setIsEmailError] = React.useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = React.useState<boolean>(false);
+  const [isProgress, setIsProgress] = React.useState<boolean>(false);
 
   const { resendVerificationEmail } = useUserRequests();
 
@@ -55,6 +56,7 @@ const SignInParent = () => {
     e.preventDefault();
     if (emailRef.current === null || passwordRef.current === null || rememberRef.current === undefined) return; //This is for Typescript compiler but useless alone
     if (emailRef.current.value === '' || passwordRef.current.value === '') return; //This is to unabled submit if no data
+    setIsProgress(true);
     login(emailRef.current.value, passwordRef.current.value, rememberRef.current.checked)
       .then((response) => {
         if (response.success) {
@@ -64,9 +66,11 @@ const SignInParent = () => {
           setErrorCode(response.errorCode || 1);
           setIsError(true);
         }
+        setIsProgress(false);
       })
       .catch((error) => {
         console.error(error);
+        setIsProgress(false);
       });
   };
 
@@ -75,7 +79,7 @@ const SignInParent = () => {
       container
       sx={{
         height: '100vh',
-        '@media (max-width: 500px) and (max-height: 400px), (max-height: 600px)': {
+        '@media (max-width: 500px) and (max-height: 660px), (max-height: 620px)': {
           height: 'auto',
         },
       }}
@@ -143,131 +147,139 @@ const SignInParent = () => {
           <Grid xs={12} mb={4} textAlign="center" width="100%">
             <Typography variant="h2">Parent d&apos;élèves</Typography>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            spacing={2}
-            sx={{
-              borderRight: {
-                xs: 'none',
-                sm: '1px solid lightgray',
-              },
-            }}
-          >
-            <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
-              <Typography variant="h2">Se connecter</Typography>
-              <form onSubmit={handleSubmit} id="myForm" className="login__form">
-                <TextField
-                  variant="standard"
-                  label="Adresse email"
-                  placeholder="Entrez votre adresse email"
-                  name="username"
+
+          <Grid item xs={12} spacing={2} textAlign="center">
+            <Typography variant="h2">Se connecter</Typography>
+
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              id="myForm"
+              display="flex"
+              flexDirection="column"
+              alignItems="start"
+              width="90%"
+              maxWidth="350px"
+              mx="auto"
+            >
+              <TextField
+                variant="standard"
+                label="Adresse email"
+                placeholder="Entrez votre adresse email"
+                name="username"
+                error={isError}
+                InputLabelProps={{ shrink: true }}
+                inputRef={emailRef}
+                onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
+                sx={{
+                  width: '100%',
+                  mb: '1rem',
+                }}
+              />
+              <FormControl sx={{ width: '100%' }} variant="standard">
+                <InputLabel htmlFor="password" error={errorCode === 1}>
+                  Mot de passe
+                </InputLabel>
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  inputRef={passwordRef}
+                  placeholder="Entrez votre mot de passe"
                   error={isError}
-                  InputLabelProps={{ shrink: true }}
-                  inputRef={emailRef}
                   onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
-                  sx={{
-                    width: '30ch',
-                    mb: '1rem',
-                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
                 />
-                <FormControl sx={{ width: '30ch', mb: 1 }} variant="standard">
-                  <InputLabel htmlFor="password" error={errorCode === 1}>
-                    Mot de passe
-                  </InputLabel>
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    inputRef={passwordRef}
-                    placeholder="Entrez votre mot de passe"
-                    error={isError}
-                    onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <small style={{ color: 'tomato', fontWeight: 'bold' }}>{isError ? errorMessages[errorCode] : null}</small>
-                {errorCode === 3 && (
+              </FormControl>
+
+              <small style={{ color: 'tomato', fontWeight: 'bold', textAlign: 'left' }}>{isError ? errorMessages[errorCode] : null}</small>
+              {errorCode === 3 && (
+                <small
+                  onClick={() => {
+                    router.push('/reset-password');
+                  }}
+                  style={{ color: 'blue', textDecoration: 'underline' }}
+                >
+                  mot de passe oublié
+                </small>
+              )}
+              {errorCode === 1 ||
+                (errorCode === 2 && (
                   <small
                     onClick={() => {
                       router.push('/reset-password');
                     }}
-                    style={{ color: 'blue', textDecoration: 'underline' }}
+                    style={{ color: 'tomato', fontWeight: 'bold', textAlign: 'left' }}
                   >
-                    mot de passe oublié
+                    identifiants invalides
                   </small>
-                )}
-                {errorCode === 1 ||
-                  (errorCode === 2 && (
-                    <small
-                      onClick={() => {
-                        router.push('/reset-password');
-                      }}
-                      style={{ color: 'tomato', fontWeight: 'bold' }}
-                    >
-                      identifiants invalides
-                    </small>
-                  ))}
-                <small
-                  style={!isEmailSent ? { color: 'blue', textDecoration: 'underline' } : {}}
-                  onClick={async () => {
-                    if (emailRef?.current?.value) {
-                      try {
-                        await resendVerificationEmail(emailRef?.current?.value);
-                        setIsEmailSent(true);
-                      } catch (err) {
-                        setIsEmailError(true);
-                        setIsEmailSent(false);
-                      }
+                ))}
+              <small
+                style={!isEmailSent ? { color: 'blue', textDecoration: 'underline' } : {}}
+                onClick={async () => {
+                  if (emailRef?.current?.value) {
+                    try {
+                      await resendVerificationEmail(emailRef?.current?.value);
+                      setIsEmailSent(true);
+                    } catch (err) {
+                      setIsEmailError(true);
+                      setIsEmailSent(false);
                     }
-                  }}
-                >
-                  {errorCode === 20 && !isEmailSent ? `Je n'ai pas reçu d'email : cliquer ici` : null}
-                  {errorCode === 20 && isEmailSent ? `Email envoyé` : null}
-                </small>
+                  }
+                }}
+              >
+                {errorCode === 20 && !isEmailSent ? `Je n'ai pas reçu d'email : cliquer ici` : null}
+                {errorCode === 20 && isEmailSent ? `Email envoyé` : null}
+              </small>
 
-                {isEmailError && <small style={{ color: 'tomato', fontWeight: 'bold' }}>Email incorrect</small>}
-              </form>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <div style={{ margin: 'auto', display: 'grid', gridTemplateColumns: 'max-content 1fr', alignItems: 'center' }}>
-                  <FormControlLabel
-                    label="Se souvenir de moi"
-                    inputRef={rememberRef}
-                    sx={{
-                      cursor: 'pointer',
-                      '& .MuiTypography-root': {
-                        fontSize: '0.75rem',
-                        ml: '-7px',
-                      },
-                    }}
-                    control={<Checkbox color="primary" size="small" />}
-                  />
-                  <Link
-                    component="button"
-                    variant="caption"
-                    onClick={() => {
-                      router.push('/reset-password');
-                    }}
-                    sx={{
-                      display: 'inline-block',
-                      lineHeight: '1.5',
-                      justifySelf: 'end',
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    Mot de passe oublié ?
-                  </Link>
-                </div>
+              {isEmailError && <small style={{ color: 'tomato', fontWeight: 'bold' }}>Email incorrect</small>}
 
-                <Button form="myForm" type="submit" color="primary" variant="outlined" style={{ marginTop: '0.8rem', margin: 'auto' }}>
-                  Se connecter
-                </Button>
-              </div>
+              <FormControlLabel
+                label="Se souvenir de moi"
+                inputRef={rememberRef}
+                sx={{
+                  cursor: 'pointer',
+                  '& .MuiTypography-root': {
+                    fontSize: '0.75rem',
+                    ml: '-7px',
+                  },
+                }}
+                control={<Checkbox color="primary" size="small" />}
+              />
+
+              <Button
+                form="myForm"
+                type="submit"
+                color="primary"
+                variant="outlined"
+                style={{ width: '100%', margin: ' .5rem auto' }}
+                disabled={isProgress}
+              >
+                Se connecter
+              </Button>
+            </Box>
+
+            <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
+              <Link
+                component="button"
+                variant="caption"
+                onClick={() => {
+                  router.push('/reset-password');
+                }}
+                sx={{
+                  display: 'inline-block',
+                  lineHeight: '1.5',
+                  justifySelf: 'end',
+                  textDecoration: 'underline',
+                }}
+              >
+                Mot de passe oublié ?
+              </Link>
 
               <Link
                 component="button"
@@ -282,7 +294,7 @@ const SignInParent = () => {
               >
                 Créer un compte
               </Link>
-            </div>
+            </Box>
           </Grid>
         </Grid>
       </Box>
