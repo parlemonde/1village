@@ -93,6 +93,10 @@ const SignInTeacher = () => {
           }}
         >
           <Box
+            component={Link}
+            onClick={() => {
+              router.push('/');
+            }}
             sx={{
               width: 'fit-content',
               height: 'auto',

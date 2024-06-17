@@ -104,6 +104,10 @@ const SignInParent = () => {
           }}
         >
           <Box
+            component={Link}
+            onClick={() => {
+              router.push('/');
+            }}
             sx={{
               width: 'fit-content',
               height: 'auto',

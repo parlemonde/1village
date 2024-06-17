@@ -89,6 +89,10 @@ const ResetPassword: React.FunctionComponent = () => {
           }}
         >
           <Box
+            component={Link}
+            onClick={() => {
+              router.push('/');
+            }}
             sx={{
               width: 'fit-content',
               height: 'auto',
@@ -136,7 +140,7 @@ const ResetPassword: React.FunctionComponent = () => {
             }}
           >
             {!isSuccess ? (
-              <Box maxWidth="700px" margin="0 auto">
+              <Box maxWidth="500px" margin="0 auto">
                 <Typography width="90%" margin="0 auto" align="left">
                   Veuillez renseigner l&apos;email lié à votre compte.
                   <br />
