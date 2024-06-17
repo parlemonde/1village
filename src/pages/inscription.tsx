@@ -5,7 +5,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 
-import { KeepRatio } from '../components/KeepRatio';
 import LanguageFilter from 'src/components/LanguageFilter';
 import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
