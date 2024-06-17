@@ -140,8 +140,8 @@ const ResetPassword: React.FunctionComponent = () => {
             }}
           >
             {!isSuccess ? (
-              <Box maxWidth="500px" margin="0 auto">
-                <Typography width="90%" margin="0 auto" align="left">
+              <Box width="90%" maxWidth="350px" margin="0 auto">
+                <Typography margin="0 auto" align="left">
                   Veuillez renseigner l&apos;email lié à votre compte.
                   <br />
                   Nous vous enverrons un email avec un lien qui vous permettra de réinitialiser votre mot de passe.
@@ -155,7 +155,6 @@ const ResetPassword: React.FunctionComponent = () => {
                   display="flex"
                   alignItems="center"
                   flexDirection="column"
-                  width="90%"
                   margin="0 auto"
                 >
                   {errorCode === 0 && (
@@ -185,10 +184,7 @@ const ResetPassword: React.FunctionComponent = () => {
                       helperText={errorCode === 1 ? errorMessages[1] : null}
                       sx={{
                         flexGrow: '1',
-                        margin: {
-                          xs: '1rem 0',
-                          sm: '0 1rem 0 0',
-                        },
+                        margin: '1rem 0',
                       }}
                     />
                     <Button type="submit" color="primary" variant="outlined">

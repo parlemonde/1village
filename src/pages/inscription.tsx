@@ -280,7 +280,7 @@ const Inscription = () => {
           >
             {!isSubmitSuccessfull ? (
               <>
-                <Box component="form" width="90%" maxWidth="500px" mx="auto" alignItems="start" onSubmit={handleSubmit} className="login__form">
+                <Box component="form" width="90%" maxWidth="350px" mx="auto" alignItems="start" onSubmit={handleSubmit} className="login__form">
                   <TextField
                     variant="standard"
                     label="Adresse email"
@@ -381,16 +381,6 @@ const Inscription = () => {
                   />
 
                   <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '100%', mb: '1rem' }} />
-
-                  {/*<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: '0.5rem' }}>
-                    <Checkbox
-                      sx={{ margin: '0', padding: '0' }}
-                      onChange={() => {
-                        setHasAcceptedNewsletter(!hasAcceptedNewsletter);
-                      }}
-                    />
-                    <Typography>Accepter de recevoir des nouvelles du projet 1Village</Typography>
-                  </Box>*/}
 
                   <FormControlLabel
                     control={
