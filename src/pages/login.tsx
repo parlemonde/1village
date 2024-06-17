@@ -144,14 +144,18 @@ const SignInTeacher = () => {
             }}
           >
             <div className="text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <iframe
+              <Box
+                component="iframe"
                 src="https://player.vimeo.com/video/868665438"
                 width="100%"
-                height="360"
+                height={{
+                  xs: '100%',
+                  sm: '360px',
+                }}
                 frameBorder="0"
                 allow="autoplay; fullscreen"
                 allowFullScreen
-              ></iframe>
+              />
               {SSO_HOST.length && CLIENT_ID ? (
                 <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} onClick={onLoginSSO}>
                   Se connecter

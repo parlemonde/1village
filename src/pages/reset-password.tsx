@@ -163,14 +163,7 @@ const ResetPassword: React.FunctionComponent = () => {
                     </Typography>
                   )}
 
-                  <Box
-                    m={2}
-                    width="100%"
-                    display="flex"
-                    justifyContent="space-around"
-                    alignItems="stretch"
-                    flexDirection={{ xs: 'column', sm: 'row' }}
-                  >
+                  <Box m={2} width="100%" display="flex" justifyContent="space-around" alignItems="stretch" flexDirection="column">
                     <TextField
                       id="email"
                       name="email"
