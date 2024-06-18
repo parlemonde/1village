@@ -3,9 +3,22 @@ import React from 'react';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Button, Checkbox, FormControl, FormControlLabel, IconButton, Input, InputAdornment, InputLabel, Link, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 
-import { KeepRatio } from '../components/KeepRatio';
 import { isRedirectValid } from '../components/accueil/NewHome';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
@@ -25,6 +38,7 @@ const SignInParent = () => {
   const [isError, setIsError] = React.useState<boolean>(false);
   const [isEmailError, setIsEmailError] = React.useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = React.useState<boolean>(false);
+  const [isProgress, setIsProgress] = React.useState<boolean>(false);
 
   const { resendVerificationEmail } = useUserRequests();
 
@@ -42,6 +56,7 @@ const SignInParent = () => {
     e.preventDefault();
     if (emailRef.current === null || passwordRef.current === null || rememberRef.current === undefined) return; //This is for Typescript compiler but useless alone
     if (emailRef.current.value === '' || passwordRef.current.value === '') return; //This is to unabled submit if no data
+    setIsProgress(true);
     login(emailRef.current.value, passwordRef.current.value, rememberRef.current.checked)
       .then((response) => {
         if (response.success) {
@@ -51,61 +66,103 @@ const SignInParent = () => {
           setErrorCode(response.errorCode || 1);
           setIsError(true);
         }
+        setIsProgress(false);
       })
       .catch((error) => {
         console.error(error);
+        setIsProgress(false);
       });
   };
 
   return (
-    <>
-      <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
-            background: 'white',
-            width: '95%',
-            maxWidth: '1200px',
-            borderRadius: '10px',
-            marginBottom: '2rem',
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+        '@media (max-width: 500px) and (max-height: 660px), (max-height: 620px)': {
+          height: 'auto',
+        },
+      }}
+      className="bg-gradiant-only"
+      p="20px"
+      alignItems="center"
+      alignContent="center"
+      justifyContent="center"
+    >
+      <Box width="100%" maxWidth="1200px">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          bgcolor="white"
+          height="fit-content"
+          borderRadius="10px"
+          p=".6rem"
+          sx={{
+            flexDirection: {
+              xs: 'column',
+              sm: 'row',
+            },
           }}
         >
-          <Link
-            component="button"
-            variant="h3"
+          <Box
+            component={Link}
             onClick={() => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'flex-start',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
+              cursor: 'pointer',
+              width: 'fit-content',
+              height: 'auto',
+              margin: {
+                xs: '10px 0',
+                sm: '0 10px',
+              },
+              alignSelf: 'center',
             }}
           >
-            <Logo style={{ width: '11rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          </Link>
-          <h1 style={{ placeSelf: 'center' }}>Parent d&apos;élèves</h1>
-          <Link
-            component="button"
-            variant="h3"
-            onClick={() => {
-              router.push('/');
-            }}
-            sx={{
-              placeSelf: 'center end',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
-            }}
-          >
-            <ArrowBack /> Village en classe
-          </Link>
-        </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
-          <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
-            <h2>Se connecter</h2>
-            <form onSubmit={handleSubmit} id="myForm" className="login__form">
+            <Logo style={{ maxWidth: '260px' }} />
+          </Box>
+
+          <Box>
+            <Link
+              component="button"
+              variant="h3"
+              onClick={() => {
+                router.push('/');
+              }}
+              sx={{
+                placeSelf: 'center end',
+                marginRight: '1rem',
+                fontSize: '0.875rem',
+              }}
+            >
+              <ArrowBack /> Village en classe
+            </Link>
+          </Box>
+        </Grid>
+
+        <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
+          <Grid xs={12} mb={4} textAlign="center" width="100%">
+            <Typography variant="h2">Parent d&apos;élèves</Typography>
+          </Grid>
+
+          <Grid item xs={12} spacing={2} textAlign="center">
+            <Typography variant="h2">Se connecter</Typography>
+
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              id="myForm"
+              display="flex"
+              flexDirection="column"
+              alignItems="start"
+              width="90%"
+              maxWidth="350px"
+              mx="auto"
+            >
               <TextField
                 variant="standard"
                 label="Adresse email"
@@ -116,11 +173,11 @@ const SignInParent = () => {
                 inputRef={emailRef}
                 onChange={() => (errorCode !== -1 ? setErrorCode(-1) : null)} //reset error code
                 sx={{
-                  width: '30ch',
+                  width: '100%',
                   mb: '1rem',
                 }}
               />
-              <FormControl sx={{ width: '30ch', mb: 1 }} variant="standard">
+              <FormControl sx={{ width: '100%' }} variant="standard">
                 <InputLabel htmlFor="password" error={errorCode === 1}>
                   Mot de passe
                 </InputLabel>
@@ -140,7 +197,8 @@ const SignInParent = () => {
                   }
                 />
               </FormControl>
-              <small style={{ color: 'tomato', fontWeight: 'bold' }}>{isError ? errorMessages[errorCode] : null}</small>
+
+              <small style={{ color: 'tomato', fontWeight: 'bold', textAlign: 'left' }}>{isError ? errorMessages[errorCode] : null}</small>
               {errorCode === 3 && (
                 <small
                   onClick={() => {
@@ -157,7 +215,7 @@ const SignInParent = () => {
                     onClick={() => {
                       router.push('/reset-password');
                     }}
-                    style={{ color: 'tomato', fontWeight: 'bold' }}
+                    style={{ color: 'tomato', fontWeight: 'bold', textAlign: 'left' }}
                   >
                     identifiants invalides
                   </small>
@@ -181,60 +239,67 @@ const SignInParent = () => {
               </small>
 
               {isEmailError && <small style={{ color: 'tomato', fontWeight: 'bold' }}>Email incorrect</small>}
-            </form>
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <div style={{ margin: 'auto', display: 'grid', gridTemplateColumns: 'max-content 1fr', alignItems: 'center' }}>
-                <FormControlLabel
-                  label="Se souvenir de moi"
-                  inputRef={rememberRef}
-                  sx={{
-                    cursor: 'pointer',
-                    '& .MuiTypography-root': {
-                      fontSize: '0.75rem',
-                      ml: '-7px',
-                    },
-                  }}
-                  control={<Checkbox color="primary" size="small" />}
-                />
-                <Link
-                  component="button"
-                  variant="caption"
-                  onClick={() => {
-                    router.push('/reset-password');
-                  }}
-                  sx={{
-                    display: 'inline-block',
-                    lineHeight: '1.5',
-                    justifySelf: 'end',
-                    textDecoration: 'underline',
-                  }}
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
 
-              <Button form="myForm" type="submit" color="primary" variant="outlined" style={{ marginTop: '0.8rem', margin: 'auto' }}>
+              <FormControlLabel
+                label="Se souvenir de moi"
+                inputRef={rememberRef}
+                sx={{
+                  cursor: 'pointer',
+                  '& .MuiTypography-root': {
+                    fontSize: '0.75rem',
+                    ml: '-7px',
+                  },
+                }}
+                control={<Checkbox color="primary" size="small" />}
+              />
+
+              <Button
+                form="myForm"
+                type="submit"
+                color="primary"
+                variant="outlined"
+                style={{ width: '100%', margin: ' .5rem auto' }}
+                disabled={isProgress}
+              >
                 Se connecter
               </Button>
-            </div>
+            </Box>
 
-            <Link
-              component="button"
-              variant="h3"
-              onClick={() => {
-                router.push('/inscription');
-              }}
-              sx={{
-                fontSize: '0.875rem',
-                mt: 2,
-              }}
-            >
-              Créer un compte
-            </Link>
-          </div>
-        </KeepRatio>
-      </div>
-    </>
+            <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
+              <Link
+                component="button"
+                variant="caption"
+                onClick={() => {
+                  router.push('/reset-password');
+                }}
+                sx={{
+                  display: 'inline-block',
+                  lineHeight: '1.5',
+                  justifySelf: 'end',
+                  textDecoration: 'underline',
+                }}
+              >
+                Mot de passe oublié ?
+              </Link>
+
+              <Link
+                component="button"
+                variant="h3"
+                onClick={() => {
+                  router.push('/inscription');
+                }}
+                sx={{
+                  fontSize: '0.875rem',
+                  mt: 2,
+                }}
+              >
+                Créer un compte
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 

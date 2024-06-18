@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 
-import { KeepRatio } from '../KeepRatio';
 import Home from 'src/svg/home.svg';
 import Logo from 'src/svg/logo_1village.svg';
 import School from 'src/svg/school.svg';
@@ -19,62 +18,130 @@ export function isRedirectValid(redirect: string) {
     return false;
   }
 }
+interface LoginBoxProps {
+  title: string;
+  subTitle: string;
+  route: string;
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+}
 
-export const NewHome = () => {
+const LoginBox: React.FC<LoginBoxProps> = ({ title, subTitle, route, Icon }) => {
   const router = useRouter();
 
   return (
-    <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
-      <>
-        <div className="login__header">
-          <Logo style={{ width: '25%', height: 'auto', margin: '0 10px', alignSelf: 'center' }} />
-          <h1 style={{ placeSelf: 'center' }}>Vous êtes...</h1>
-        </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" height="fit-content" minHeight="400px" className="login__container">
-          <div className="flex-responsive text-center">
-            {/* Block Teacher */}
-            <div style={{ display: 'flex', flexDirection: 'column', height: '300px' }}>
-              <h2>Professeur des écoles</h2>
-              <School
-                style={{ width: '15rem', height: 'auto', margin: 'auto' }}
-                onClick={() => {
-                  router.push('/login');
-                }}
-              />
-              <Button
-                color="primary"
-                variant="outlined"
-                style={{ marginTop: '0.8rem' }}
-                onClick={() => {
-                  router.push('/login');
-                }}
-              >
-                1Village en classe
-              </Button>
-            </div>
-            {/* Block Parent */}
-            <div style={{ display: 'flex', flexDirection: 'column', height: '300px' }}>
-              <h2>Parent d&apos;élève</h2>
-              <Home
-                style={{ width: '15rem', height: 'auto', margin: '74px auto 4px' }}
-                onClick={() => {
-                  router.push('/connexion');
-                }}
-              />
-              <Button
-                color="primary"
-                variant="outlined"
-                style={{ marginTop: '0.8rem' }}
-                onClick={() => {
-                  router.push('/connexion');
-                }}
-              >
-                1Village en famille
-              </Button>
-            </div>
-          </div>
-        </KeepRatio>
-      </>
-    </div>
+    <Box borderRadius="10px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <Typography variant="h3" pb={2}>
+        {title}
+      </Typography>
+      <Box width="fit-content" height="auto">
+        <Icon
+          style={{ cursor: 'pointer', width: '12rem', height: 'auto', margin: 'auto' }}
+          onClick={() => {
+            router.push(`/${route}`);
+          }}
+        />
+      </Box>
+      <Button
+        color="primary"
+        variant="outlined"
+        style={{ margin: '10px 0' }}
+        onClick={() => {
+          router.push(`/${route}`);
+        }}
+      >
+        {subTitle}
+      </Button>
+    </Box>
+  );
+};
+
+export const NewHome = () => {
+  return (
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+        '@media (max-width: 600px) and (max-height: 900px), (max-height: 600px)': {
+          height: 'auto',
+        },
+      }}
+      className="bg-gradiant-only"
+      p="20px"
+      alignItems="center"
+      alignContent="center"
+      justifyContent="center"
+    >
+      <Box width="100%" maxWidth="1200px">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          justifyContent="start"
+          bgcolor="white"
+          height="fit-content"
+          borderRadius="10px"
+          p=".6rem"
+          sx={{
+            flexDirection: {
+              xs: 'column',
+              sm: 'row',
+            },
+          }}
+        >
+          <Box
+            sx={{
+              width: 'fit-content',
+              height: 'auto',
+              margin: {
+                xs: '10px 0',
+                sm: '0 10px',
+              },
+              alignSelf: 'center',
+            }}
+          >
+            <Logo style={{ maxWidth: '160px' }} />
+          </Box>
+        </Grid>
+
+        <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
+          <Grid xs={12} mb={4} textAlign="center" width="100%">
+            <Typography variant="h2">Vous êtes:</Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            spacing={2}
+            sx={{
+              borderRight: {
+                xs: 'none',
+                sm: '1px solid lightgray',
+              },
+            }}
+          >
+            <LoginBox title="Professeur des écoles" subTitle="1Village en classe" route="login" Icon={School} />
+          </Grid>
+
+          <Box
+            component="hr"
+            sx={{
+              width: '80%',
+              margin: ' 1rem auto',
+              background: 'lightgray',
+              opacity: '0.5',
+              display: {
+                xs: 'block',
+                sm: 'none',
+              },
+            }}
+          ></Box>
+
+          <Grid item xs={12} sm={6} spacing={2}>
+            <LoginBox title="Parent d'élève" subTitle="1Village en famille" route="connexion" Icon={Home} />
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };

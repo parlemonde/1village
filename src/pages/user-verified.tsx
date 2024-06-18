@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useRef } from 'react';
 
-import { Link } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 
-import { KeepRatio } from 'src/components/KeepRatio';
 import { UserContext } from 'src/contexts/userContext';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
@@ -38,72 +37,110 @@ const UserVerified: React.FunctionComponent = () => {
   }, [isLoggedIn, router]);
 
   return (
-    <>
-      <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
-            background: 'white',
-            width: '95%',
-            maxWidth: '1200px',
-            borderRadius: '10px',
-            marginBottom: '2rem',
-            alignItems: 'center',
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+        '@media (max-width: 430px) and (max-height: 580px), (max-height: 580px)': {
+          height: 'auto',
+        },
+      }}
+      className="bg-gradiant-only"
+      p="20px"
+      alignItems="center"
+      alignContent="center"
+      justifyContent="center"
+    >
+      <Box width="100%" maxWidth="1200px">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          bgcolor="white"
+          height="fit-content"
+          borderRadius="10px"
+          p=".6rem"
+          sx={{
+            flexDirection: {
+              xs: 'column',
+              sm: 'row',
+            },
           }}
         >
-          <Link
-            component="button"
-            variant="h3"
+          <Box
+            component={Link}
             onClick={() => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'flex-start',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
+              width: 'fit-content',
+              height: 'auto',
+              margin: {
+                xs: '10px 0',
+                sm: '0 10px',
+              },
+              alignSelf: 'center',
             }}
           >
-            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          </Link>
-          <h1 style={{ placeSelf: 'center' }}>Utilisateur vérifié</h1>
-          <Link
-            component="button"
-            variant="h3"
-            onClick={() => {
-              router.push('/');
-            }}
+            <Logo style={{ maxWidth: '260px' }} />
+          </Box>
+
+          <Box>
+            <Link
+              component="button"
+              variant="h3"
+              onClick={() => {
+                router.push('/');
+              }}
+              sx={{
+                placeSelf: 'center end',
+                marginRight: '1rem',
+                fontSize: '0.875rem',
+              }}
+            >
+              <ArrowBack /> Retour à la page de connexion
+            </Link>
+          </Box>
+        </Grid>
+
+        <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
+          <Grid xs={12} mb={4} textAlign="center" width="100%">
+            <Typography variant="h2">Utilisateur vérifié</Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            spacing={2}
             sx={{
-              marginRight: '1rem',
-              fontSize: '0.875rem',
-              textAlign: 'end',
+              borderRight: {
+                xs: 'none',
+                sm: '1px solid lightgray',
+              },
             }}
           >
-            <ArrowBack /> Retour à la page de connexion
-          </Link>
-        </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="register__container">
-          <div
-            className="text-center"
-            style={{
-              margin: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'left', // Add this property to align the text to the left
-            }}
-          >
-            <PelicoSouriant style={{ width: '25%', height: '60%', cursor: 'pointer' }} />
-            <div>Bienvenue à un 1Village</div>
-            <br />
-            <div>Vous pouvez dès à présent vous connecter à votre compte 1Village</div>
-            <br />
-            <div>Vous allez être redirigé(e) vers la page de connexion</div>
-          </div>
-        </KeepRatio>
-      </div>
-    </>
+            <div
+              className="text-center"
+              style={{
+                margin: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'left',
+              }}
+            >
+              <PelicoSouriant style={{ width: '25%', height: '60%', cursor: 'pointer' }} />
+              <div>Bienvenue à un 1Village</div>
+              <br />
+              <div>Vous pouvez dès à présent vous connecter à votre compte 1Village</div>
+              <br />
+              <div>Vous allez être redirigé(e) vers la page de connexion</div>
+            </div>
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 

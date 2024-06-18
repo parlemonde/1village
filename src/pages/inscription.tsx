@@ -3,9 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, Checkbox, IconButton, InputAdornment, Link, TextField } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 
-import { KeepRatio } from '../components/KeepRatio';
 import LanguageFilter from 'src/components/LanguageFilter';
 import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
@@ -44,6 +43,7 @@ const Inscription = () => {
   });
   const [isSubmitSuccessfull, setIsSubmitSuccessfull] = useState<boolean>(false);
   const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const { languages } = useLanguages();
 
   const { addUser, resendVerificationEmail } = useUserRequests();
@@ -166,10 +166,12 @@ const Inscription = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+      setIsPending(true);
       try {
         await addUser(newUser);
       } catch (err) {
         setIsEmailUsed(true);
+        setIsPending(false);
         return;
       }
 
@@ -192,57 +194,93 @@ const Inscription = () => {
   const passwordMessage = passwordMessageRef.current;
 
   return (
-    <>
-      <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
-            background: 'white',
-            width: '95%',
-            maxWidth: '1200px',
-            borderRadius: '10px',
-            marginBottom: '2rem',
-            alignItems: 'center',
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+        '@media (max-width: 400px) and (max-height: 860px), (max-height: 860px)': {
+          height: 'auto',
+        },
+      }}
+      className="bg-gradiant-only"
+      p="20px"
+      alignItems="center"
+      alignContent="center"
+      justifyContent="center"
+    >
+      <Box width="100%" maxWidth="1200px">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          bgcolor="white"
+          height="fit-content"
+          borderRadius="10px"
+          p=".6rem"
+          sx={{
+            flexDirection: {
+              xs: 'column',
+              sm: 'row',
+            },
           }}
         >
-          <Link
-            component="button"
-            variant="h3"
+          <Box
+            component={Link}
             onClick={() => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'flex-start',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
+              cursor: 'pointer',
+              width: 'fit-content',
+              height: 'auto',
+              alignSelf: 'center',
+              margin: {
+                xs: '10px 0',
+                sm: '0 10px',
+              },
             }}
           >
-            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          </Link>
-          <h1 style={{ placeSelf: 'center' }}>Créer un compte</h1>
-          <Link
-            component="button"
-            variant="h3"
-            onClick={() => {
-              router.push('/connexion');
-            }}
+            <Logo style={{ maxWidth: '260px' }} />
+          </Box>
+
+          <Box>
+            <Link
+              component="button"
+              variant="h3"
+              onClick={() => {
+                router.push('/connexion');
+              }}
+              sx={{
+                marginRight: '1rem',
+                fontSize: '0.875rem',
+                textAlign: 'end',
+              }}
+            >
+              <ArrowBack /> Retour à la page de connexion
+            </Link>
+          </Box>
+        </Grid>
+
+        <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
+          <Grid xs={12} mb={4} textAlign="center" width="100%">
+            <Typography variant="h2">Créer un compte</Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            spacing={2}
             sx={{
-              marginRight: '1rem',
-              fontSize: '0.875rem',
-              textAlign: 'end',
+              borderRight: {
+                xs: 'none',
+                sm: '1px solid lightgray',
+              },
             }}
           >
-            <ArrowBack /> Retour à la page de connexion
-          </Link>
-        </div>
-        <KeepRatio ratio={0.55} width="95%" maxWidth="1200px" minHeight="600px" className="register__container">
-          <div className="text-center" style={{ marginTop: '2rem', margin: 'auto' }}>
             {!isSubmitSuccessfull ? (
               <>
-                <h2>Créer un compte</h2>
-                <form onSubmit={handleSubmit} className="login__form">
+                <Box component="form" width="90%" maxWidth="350px" mx="auto" alignItems="start" onSubmit={handleSubmit} className="login__form">
                   <TextField
                     variant="standard"
                     label="Adresse email"
@@ -252,7 +290,7 @@ const Inscription = () => {
                     helperText={isEmailUsed && 'Email déjà utilisé'}
                     InputLabelProps={{ shrink: true }}
                     sx={{
-                      width: '30ch',
+                      width: '100%',
                       mb: '1rem',
                       '& .MuiAutocomplete-root': {
                         backgroundColor: 'white',
@@ -271,7 +309,7 @@ const Inscription = () => {
                     error={!isFirstnameValid}
                     InputLabelProps={{ shrink: true }}
                     sx={{
-                      width: '30ch',
+                      width: '100%',
                       mb: '1rem',
                       '& .MuiAutocomplete-root': {
                         backgroundColor: 'white',
@@ -288,10 +326,7 @@ const Inscription = () => {
                     name="lastname"
                     error={!isLastnameValid}
                     InputLabelProps={{ shrink: true }}
-                    sx={{
-                      width: '30ch',
-                      mb: '1rem',
-                    }}
+                    sx={{ width: '100%', mb: '1rem' }}
                     onChange={(event) => {
                       setLastname(event.target.value);
                     }}
@@ -302,6 +337,7 @@ const Inscription = () => {
                     placeholder="Entrez votre nom de passe"
                     name="password"
                     autoComplete="off"
+                    sx={{ width: '100%', mb: '1rem' }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -315,10 +351,6 @@ const Inscription = () => {
                     error={isPasswordValid === false}
                     helperText={isPasswordValid === true ? '8 lettres minimum, une majuscule et un chiffre' : passwordMessage}
                     InputLabelProps={{ shrink: true }}
-                    sx={{
-                      width: '30ch',
-                      mb: '1rem',
-                    }}
                     onChange={(event) => {
                       setPassword(event.target.value);
                     }}
@@ -329,6 +361,7 @@ const Inscription = () => {
                     placeholder="Confirmez votre mot de passe"
                     autoComplete="off"
                     name="confirmPassword"
+                    sx={{ width: '100%', mb: '1rem' }}
                     type={isConfirmationPasswordVisible === false ? 'password' : 'text'}
                     error={isPasswordMatch === false}
                     helperText={isPasswordMatch === false ? 'Les mots de passes doivent être identiques' : null}
@@ -342,76 +375,62 @@ const Inscription = () => {
                       ),
                     }}
                     InputLabelProps={{ shrink: true }}
-                    sx={{
-                      width: '30ch',
-                      mb: '1rem',
-                    }}
                     onChange={(event) => {
                       setConfirmPassword(event.target.value);
                     }}
                   />
 
-                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '30ch', mb: '1rem' }} />
+                  <LanguageFilter languages={languages} language={language} setLanguage={setLanguage} sx={{ width: '100%', mb: '1rem' }} />
 
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
-                    <Checkbox
-                      sx={{ margin: '0', padding: '0' }}
-                      onChange={() => {
-                        setHasAcceptedNewsletter(!hasAcceptedNewsletter);
-                      }}
-                    />
-                    <div
-                      style={{
-                        fontSize: 'small',
-                        margin: '0',
-                        padding: '0',
-                        textAlign: 'left',
-                        maxWidth: '100ch',
-                        flexShrink: 0,
-                      }}
-                    >
-                      Accepter de recevoir des nouvelles du projet 1Village
-                    </div>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '30ch', mb: '0.5rem' }}>
-                    <Checkbox
-                      sx={{ margin: '0', padding: '0' }}
-                      onChange={() => {
-                        setIsCGUread(!isCGUread);
-                      }}
-                    />
-                    <div
-                      style={{
-                        fontSize: 'small',
-                        margin: '0',
-                        padding: '0',
-                        textAlign: 'left',
-                        maxWidth: '100ch',
-                        flexShrink: 0,
-                      }}
-                    >
-                      Accepter les <u>conditions générales d&apos;utilisation **</u>
-                    </div>
-                  </Box>
-                  <div className="register__button">
-                    <Button sx={{ paddingX: '3rem' }} type="submit" color="primary" variant="outlined" disabled={!isRegisterDataValid}>
-                      S&apos;inscrire
-                    </Button>
-                  </div>
-                </form>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={() => {
+                          setHasAcceptedNewsletter(!hasAcceptedNewsletter);
+                        }}
+                      />
+                    }
+                    label={<Typography variant="body2">Accepter de recevoir des nouvelles du projet 1Village</Typography>}
+                  />
+
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={() => {
+                          setIsCGUread(!isCGUread);
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography variant="body2">
+                        Accepter les <u>conditions générales d&apos;utilisation **</u>
+                      </Typography>
+                    }
+                  />
+
+                  <Button
+                    sx={{ paddingX: '3rem', mt: '1rem', width: '100%' }}
+                    type="submit"
+                    color="primary"
+                    variant="outlined"
+                    disabled={!isRegisterDataValid || isPending}
+                  >
+                    S&apos;inscrire
+                  </Button>
+                </Box>
               </>
             ) : (
-              <>
+              <Box p={2} minHeight="280px">
                 <h3>Bienvenu(e) dans un Village </h3>
                 <div>Un email de confirmation viens de vous être envoyé à l&apos;adresse email indiquée.</div>
                 <br />
-                <div>Vous allez être redirigée vers la page de connexion.</div>
-              </>
+                <div>Vous allez être redirigée vers la page de connexion...</div>
+              </Box>
             )}
-          </div>
-        </KeepRatio>
-      </div>
-    </>
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 
