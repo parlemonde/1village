@@ -51,7 +51,7 @@ export const NavigationWrapper = (): JSX.Element => {
       </Grid>
       {/* Mobile view */}
       <Grid
-        className="with-shadow sticky"
+        className="sticky"
         item
         xs={12}
         sx={{
@@ -62,10 +62,12 @@ export const NavigationWrapper = (): JSX.Element => {
           top: '70px',
           zIndex: '99',
           width: '100%',
+          height: '50px',
           backgroundColor: 'white',
           padding: '0.5rem',
           alignItems: 'center',
           justifyContent: 'flex-end',
+          borderBottom: '1px solid lightgray',
         }}
       >
         <IconButton edge="start" color="inherit" aria-label="Ouvrir le menu" onClick={toggleDrawer(true)}>

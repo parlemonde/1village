@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,6 +18,9 @@ export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const hasAccessToOldAdmin = user?.type === UserType.ADMIN || user?.type === UserType.SUPER_ADMIN || user?.type === UserType.MEDIATOR;
+  const hasAccessToNewAdmin = hasAccessToOldAdmin || user?.type === UserType.MEDIATOR;
 
   const open = Boolean(anchorEl);
 
@@ -39,8 +42,44 @@ export const Header = () => {
   };
 
   return (
-    <header>
-      <div className="header__container with-shadow">
+    <Box
+      component="header"
+      sx={{
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        backgroundColor: 'background.default',
+        zIndex: '100',
+      }}
+    >
+      <Box
+        sx={(theme) => ({
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          height: '60px',
+          margin: {
+            xs: '10px 20px 0',
+            md: '10px 20px',
+          },
+          padding: '0 1rem',
+          backgroundColor: 'white',
+          borderRadius: {
+            xs: '0',
+            md: '10px',
+          },
+          overflow: 'hidden',
+          [theme.breakpoints.down('md')]: {
+            boxShadow: 'none',
+            borderBottom: '1px solid',
+            borderColor: 'background.default',
+          },
+        })}
+        className="with-shadow"
+      >
         <Link href="/">
           <a style={{ display: 'flex', alignItems: 'center' }}>
             <Logo style={{ width: '40px', height: 'auto' }} />
@@ -59,13 +98,6 @@ export const Header = () => {
             >
               <VillageSelect />
             </Box>
-            {user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.MEDIATOR ? (
-              <Link href="/admin/villages" passHref>
-                <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {"Aller à l'interface Admin"}
-                </Button>
-              </Link>
-            ) : null}
             <div>
               <IconButton
                 style={{ width: '40px', height: '40px', margin: '0 1rem' }}
@@ -91,6 +123,9 @@ export const Header = () => {
                 open={open}
                 onClose={handleClose}
               >
+                {hasAccessToOldAdmin && <MenuItem onClick={() => goToPage('/admin/newportal/create')}>Portail admin</MenuItem>}
+                {hasAccessToNewAdmin && <MenuItem onClick={() => goToPage('/admin/villages')}>Admin (old)</MenuItem>}
+
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
                 <AccessControl featureName="id-family" key={user?.id || 'default'}>
@@ -103,21 +138,7 @@ export const Header = () => {
             </div>
           </div>
         )}
-        {user && (
-          <div className="header__user">
-            {user.type === UserType.ADMIN ||
-            user.type === UserType.SUPER_ADMIN ||
-            user.type === UserType.MEDIATOR ||
-            user.type === UserType.OBSERVATOR ? (
-              <Link href="/admin/newportal/create" passHref>
-                <Button component="a" href="/admin/newportal/create" variant="contained" color="primary" size="small">
-                  {'Aller à la nouvelle interface admin'}
-                </Button>
-              </Link>
-            ) : null}
-          </div>
-        )}
-      </div>
-    </header>
+      </Box>
+    </Box>
   );
 };

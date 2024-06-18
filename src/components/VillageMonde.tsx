@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { Typography } from '@mui/material';
+
 import { Flag } from 'src/components/Flag';
 import { ClassroomContext } from 'src/contexts/classroomContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -34,7 +36,9 @@ export const VillageMonde = (): JSX.Element => {
         padding: '6px',
       }}
     >
-      <h2 style={{ margin: '0 0.55rem 0 0.8rem' }}>Village-monde </h2>
+      <Typography fontWeight="bold" sx={{ margin: '0 0.55rem 0 0.8rem' }}>
+        Village-monde
+      </Typography>
       {village &&
         village.countries.map((country: Country) => {
           if (user.type === UserType.FAMILY) {
