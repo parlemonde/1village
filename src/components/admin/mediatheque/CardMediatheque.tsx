@@ -25,13 +25,40 @@ interface ExtendedActivity extends Activity {
   user: User;
   village: Village;
 }
+interface MediaItem {
+  value: string;
+  type: 'audio' | 'video' | 'image';
+}
+interface ActivityContent {
+  value: string;
+  type: 'audio' | 'video' | 'image';
+}
+interface Item {
+  content: MediaItem[] | ActivityContent[]; // Assurez-vous que le type est correct ici
+}
+
 //CARROUSEL si item.content.length > 1 alors fais le caroussel sirnon affiche moi le classique celui auddessus
 
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
+  console.log(allFiltered);
 
   const slicedData: ExtendedActivity[] = allFiltered?.slice(page, page + 6);
 
+  const getDefaultImage = (item: MediaItem): string => {
+    const mediaTypes = [
+      { type: 'video', url: 'https://pirem.org/wp-content/uploads/2021/05/Video-Icon-crop.png' },
+      { type: 'audio', url: 'https://www.shutterstock.com/image-vector/sound-vector-icon-black-speaker-260nw-1660384750.jpg' },
+    ];
+
+    const media = mediaTypes.find((media) => media.type === item.type);
+    // eslint-disable-next-line no-console
+    if (media) console.log(item.type);
+
+    return item.type === 'image'
+      ? item.value
+      : media?.url || 'https://www.techsmith.de/blog/wp-content/uploads/2023/03/how-to-make-a-youtube-video.png';
+  };
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {slicedData.map((item, index) => (
@@ -46,13 +73,21 @@ export default function MediaCard({ page }: { page: number }) {
               minWidth: 100,
             }}
           >
-            {item.content.length > 1 ? (
-              <div>
-                <MediaCarousel items={item.content} />
-              </div>
-            ) : (
-              <CardMedia sx={{ height: 140 }} image={item.content[0].value} title="Media" />
-            )}
+            <div>
+              {item.content.length > 1 ? (
+                <div>
+                  <MediaCarousel
+                    items={item.content.map((mediaItem) => ({
+                      ...mediaItem,
+                      value: getDefaultImage(mediaItem),
+                    }))}
+                  />
+                </div>
+              ) : (
+                <CardMedia sx={{ height: 140 }} image={getDefaultImage(item.content[0])} title="Media" />
+              )}
+            </div>
+
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {item.user.school}
