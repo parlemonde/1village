@@ -232,6 +232,7 @@ const Inscription = () => {
               router.push('/');
             }}
             sx={{
+              cursor: 'pointer',
               width: 'fit-content',
               height: 'auto',
               alignSelf: 'center',

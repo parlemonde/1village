@@ -35,7 +35,7 @@ const LoginBox: React.FC<LoginBoxProps> = ({ title, subTitle, route, Icon }) => 
       </Typography>
       <Box width="fit-content" height="auto">
         <Icon
-          style={{ width: '12rem', height: 'auto', margin: 'auto' }}
+          style={{ cursor: 'pointer', width: '12rem', height: 'auto', margin: 'auto' }}
           onClick={() => {
             router.push(`/${route}`);
           }}

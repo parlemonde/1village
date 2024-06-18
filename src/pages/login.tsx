@@ -98,6 +98,7 @@ const SignInTeacher = () => {
               router.push('/');
             }}
             sx={{
+              cursor: 'pointer',
               width: 'fit-content',
               height: 'auto',
               margin: {

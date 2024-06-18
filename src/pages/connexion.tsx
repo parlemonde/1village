@@ -113,6 +113,7 @@ const SignInParent = () => {
               router.push('/');
             }}
             sx={{
+              cursor: 'pointer',
               width: 'fit-content',
               height: 'auto',
               margin: {
