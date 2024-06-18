@@ -43,7 +43,7 @@ const Inscription = () => {
   });
   const [isSubmitSuccessfull, setIsSubmitSuccessfull] = useState<boolean>(false);
   const [isRegisterDataValid, setIsRegisterDataValid] = useState<boolean>(false);
-  const [isPending, setIsPending] = useState<boolena>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const { languages } = useLanguages();
 
   const { addUser, resendVerificationEmail } = useUserRequests();
