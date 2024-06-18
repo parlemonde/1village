@@ -48,7 +48,7 @@ export default function MediaCard({ page }: { page: number }) {
   const getDefaultImage = (item: MediaItem): string => {
     const mediaTypes = [
       { type: 'video', url: 'https://pirem.org/wp-content/uploads/2021/05/Video-Icon-crop.png' },
-      { type: 'audio', url: 'https://www.shutterstock.com/image-vector/sound-vector-icon-black-speaker-260nw-1660384750.jpg' },
+      { type: 'sound', url: 'https://www.shutterstock.com/image-vector/sound-vector-icon-black-speaker-260nw-1660384750.jpg' },
     ];
 
     const media = mediaTypes.find((media) => media.type === item.type);
