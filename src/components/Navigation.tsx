@@ -241,7 +241,7 @@ export const Navigation = (): JSX.Element => {
   return (
     <nav>
       <div style={{ marginRight: '1.5rem' }}>
-        <Box mb={2}>
+        <Box mb={{ xs: '0', md: '20px' }}>
           <VillageMonde />
         </Box>
         {[fixedTabs, phaseTabs].map((tabs, index) => (

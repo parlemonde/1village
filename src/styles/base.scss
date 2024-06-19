@@ -15,6 +15,14 @@ $horizontalSpacing: 25px;
 }
 
 // ---- HEADER ----
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: $bg-page;
+  z-index: 100;
+}
 .header__user {
   margin: auto 0;
   display: flex;

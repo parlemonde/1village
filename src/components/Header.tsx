@@ -42,17 +42,7 @@ export const Header = () => {
   };
 
   return (
-    <Box
-      component="header"
-      sx={{
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        width: '100%',
-        backgroundColor: 'background.default',
-        zIndex: '100',
-      }}
-    >
+    <Box component="header">
       <Box
         sx={(theme) => ({
           position: 'relative',
@@ -62,7 +52,7 @@ export const Header = () => {
           alignItems: 'center',
           height: '60px',
           margin: {
-            xs: '10px 20px 0',
+            xs: '0',
             md: '10px 20px',
           },
           padding: '0 1rem',
