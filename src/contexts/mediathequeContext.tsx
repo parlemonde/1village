@@ -13,6 +13,10 @@ type MediathequeContextType = {
   allFiltered: [];
   useAdminData: boolean;
   setUseAdminData: React.Dispatch<React.SetStateAction<boolean>>;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  updatePageKey: number;
+  setUpdatePageKey: React.Dispatch<React.SetStateAction<number>>;
 };
 
 interface UserData {
@@ -44,6 +48,10 @@ const MediathequeContext = createContext<MediathequeContextType>({
   allFiltered: [],
   useAdminData: false,
   setUseAdminData: () => {},
+  page: 0,
+  setPage: () => {},
+  updatePageKey: 0,
+  setUpdatePageKey: () => {},
 });
 
 export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ children }) => {
@@ -52,6 +60,9 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
 
   const { data: usersData } = useGetMediatheque(filters);
   const [dataToUse, setDataToUse] = useState<[]>([]);
+
+  const [page, setPage] = useState<number>(0);
+  const [updatePageKey, setUpdatePageKey] = useState(0);
 
   useEffect(() => {
     const activitiesMediaFinder = usersData
@@ -128,8 +139,12 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
       allFiltered: dataToUse,
       useAdminData,
       setUseAdminData,
+      page,
+      setPage,
+      updatePageKey,
+      setUpdatePageKey,
     }),
-    [filters, dataToUse, useAdminData],
+    [filters, dataToUse, useAdminData, page, updatePageKey],
   );
 
   return <MediathequeContext.Provider value={value}>{children}</MediathequeContext.Provider>;

@@ -10,7 +10,7 @@ import { MediaCarousel } from 'src/components/admin/mediatheque/Carousel';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
 import { activityNameMapper } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
-import type { Activity } from 'types/activity.type';
+import type { Activity, ActivityContent } from 'types/activity.type';
 
 interface User {
   school: string;
@@ -25,40 +25,29 @@ interface ExtendedActivity extends Activity {
   user: User;
   village: Village;
 }
-interface MediaItem {
-  value: string;
-  type: 'audio' | 'video' | 'image';
-}
-interface ActivityContent {
-  value: string;
-  type: 'audio' | 'video' | 'image';
-}
-interface Item {
-  content: MediaItem[] | ActivityContent[]; // Assurez-vous que le type est correct ici
-}
-
 //CARROUSEL si item.content.length > 1 alors fais le caroussel sirnon affiche moi le classique celui auddessus
 
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);
-  console.log(allFiltered);
 
   const slicedData: ExtendedActivity[] = allFiltered?.slice(page, page + 6);
 
-  const getDefaultImage = (item: MediaItem): string => {
+  const getDefaultImage = (item: ActivityContent): string => {
     const mediaTypes = [
-      { type: 'video', url: 'https://pirem.org/wp-content/uploads/2021/05/Video-Icon-crop.png' },
-      { type: 'sound', url: 'https://www.shutterstock.com/image-vector/sound-vector-icon-black-speaker-260nw-1660384750.jpg' },
+      { type: 'video', value: 'https://pirem.org/wp-content/uploads/2021/05/Video-Icon-crop.png' },
+      { type: 'sound', value: 'https://www.shutterstock.com/image-vector/sound-vector-icon-black-speaker-260nw-1660384750.jpg' },
     ];
 
     const media = mediaTypes.find((media) => media.type === item.type);
-    // eslint-disable-next-line no-console
-    if (media) console.log(item.type);
 
+    if (item.type === 'text') {
+      return 'default-image-for-text-type.png';
+    }
     return item.type === 'image'
       ? item.value
-      : media?.url || 'https://www.techsmith.de/blog/wp-content/uploads/2023/03/how-to-make-a-youtube-video.png';
+      : media?.value || 'https://www.techsmith.de/blog/wp-content/uploads/2023/03/how-to-make-a-youtube-video.png';
   };
+
   return (
     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {slicedData.map((item, index) => (

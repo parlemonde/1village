@@ -32,11 +32,14 @@ export default function FiltersActivities() {
   const theme = useTheme();
   const [labelNameActivity, setLabelNameActivity] = useState<string[]>([]);
   const [labelNameSubTheme, setLabelNameSubTheme] = useState<string[]>([]);
-  const { setFilters } = useContext(MediathequeContext);
+  const { setFilters, setUpdatePageKey, setPage } = useContext(MediathequeContext);
 
   const updateFilters = useCallback(() => {
     const updatedActivityNumbers = labelNameActivity.map((activity) => activityNumberMapper[activity]).filter(Boolean);
-    const updatedSubThemeNumbers = labelNameSubTheme.map((subTheme) => subThemeNumberMapper[subTheme]).filter(Boolean);
+    // const updatedSubThemeNumbers = labelNameSubTheme.map((subTheme) => subThemeNumberMapper[subTheme]).filter(Boolean);
+    const updatedSubThemeNumbers = labelNameSubTheme
+      .map((subTheme) => subThemeNumberMapper[subTheme])
+      .filter((value) => value !== null && value !== undefined);
 
     const newFilters = [];
     if (updatedActivityNumbers.length > 0) {
@@ -48,8 +51,10 @@ export default function FiltersActivities() {
         newFilters[0].push(subThemeFilter);
       }
     }
+    setUpdatePageKey((prevKey) => prevKey + 1);
+    setPage(0);
     setFilters(newFilters);
-  }, [labelNameActivity, labelNameSubTheme, setFilters]);
+  }, [labelNameActivity, labelNameSubTheme, setFilters, setPage, setUpdatePageKey]);
 
   useEffect(() => {
     updateFilters();

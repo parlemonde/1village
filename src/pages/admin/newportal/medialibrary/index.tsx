@@ -32,8 +32,7 @@ import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
 const Mediatheque = () => {
-  const { setFilters, allFiltered, setUseAdminData } = useContext(MediathequeContext);
-  const [page, setPage] = useState<number>(0);
+  const { setFilters, allFiltered, setUseAdminData, page, setPage, updatePageKey, setUpdatePageKey } = useContext(MediathequeContext);
   const [updateFiltersKey, setUpdateFiltersKey] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -41,11 +40,15 @@ const Mediatheque = () => {
     setUseAdminData(false);
     setFilters([[]]);
     setUpdateFiltersKey((prevKey) => prevKey + 1);
+    setUpdatePageKey((prevKey) => prevKey + 1);
     setIsChecked(false);
+    handleChangePage(undefined, 1);
   };
 
-  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage((value - 1) * 6);
+  const handleChangePage = (_event?: React.ChangeEvent<unknown>, value?: number) => {
+    if (value !== undefined) {
+      setPage((value - 1) * 6);
+    }
   };
 
   const howManyPages = Math.ceil(allFiltered?.length / 6);
@@ -101,8 +104,7 @@ const Mediatheque = () => {
       </div>
       <div className="pagination">
         <Stack spacing={2}>
-          {/* il y a la props page dans pagination. Peut être utiliser un page, setPage */}
-          <Pagination size="small" siblingCount={1} count={howManyPages} variant="outlined" onChange={handleChangePage} />
+          <Pagination key={updatePageKey} size="small" siblingCount={1} count={howManyPages} variant="outlined" onChange={handleChangePage} />
         </Stack>
       </div>
     </>
