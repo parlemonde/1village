@@ -30,7 +30,7 @@ export const NavigationMobile = (): JSX.Element => {
 
   return (
     <Grid
-      className="sticky"
+      className="with-shadow sticky"
       item
       xs={12}
       sx={{

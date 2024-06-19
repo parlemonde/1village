@@ -63,7 +63,7 @@ export const Header = () => {
           },
           overflow: 'hidden',
           [theme.breakpoints.down('md')]: {
-            boxShadow: 'none',
+            boxShadow: 'none !important',
             borderBottom: '1px solid',
             borderColor: 'background.default',
           },
