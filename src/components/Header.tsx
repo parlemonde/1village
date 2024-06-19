@@ -90,7 +90,7 @@ export const Header = () => {
             </Box>
             <div>
               <IconButton
-                style={{ width: '40px', height: '40px', margin: '0 1rem' }}
+                style={{ width: '40px', height: '40px', marginLeft: '20px' }}
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
