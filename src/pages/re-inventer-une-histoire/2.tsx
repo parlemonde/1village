@@ -76,11 +76,12 @@ const ReInventStoryStep2 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un objet magique</h1>
+          <h1>Inventez un objet magique</h1>
           <p className="text">
-            Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à leurs pouvoirs, le village idéal va atteindre
+            Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à son pouvoir, le village idéal va atteindre
             l’objectif du développement durable que vous avez choisi à l’étape précédente.
           </p>
+          <p className="text">Imaginez votre objet en repartant de l’image de vos pélicopains !</p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>

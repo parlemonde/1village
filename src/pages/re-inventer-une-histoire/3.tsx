@@ -83,11 +83,12 @@ const ReInventStoryStep3 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un lieu extraordinaire</h1>
+          <h1>Inventez un lieu extraordinaire</h1>
           <p className="text">
-            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal va
+            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraordinaire ! Grâce à son pouvoir, le village idéal va
             atteindre l’objectif de développement durable que vous avez choisi.
           </p>
+          <p className="text">Imaginez votre lieu en repartant de l’image de vos pélicopains !</p>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
