@@ -19,9 +19,10 @@ import { UserType } from 'types/user.type';
 
 interface LayoutProps {
   children: ReactNode;
+  isPelico?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => (
+const Layout: React.FC<LayoutProps> = ({ children, isPelico = false }) => (
   <Box
     component="aside"
     sx={{
@@ -32,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => (
       },
       flexDirection: {
         xs: 'column',
-        sm: 'row',
+        sm: isPelico ? 'column' : 'row',
         md: 'column',
       },
     }}
@@ -77,8 +78,8 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
 
   if (isPelico) {
     return (
-      <Layout>
-        <Link href="/pelico-profil" underline="none" color="inherit">
+      <Layout isPelico>
+        <Link href="/pelico-profil" underline="none" color="inherit" mb="10px">
           <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: 0, cursor: 'pointer' }}>
             <span style={{ marginRight: '0.3rem', display: 'flex' }}>
               <AvatarImg user={activityUser} size="extra-small" noLink displayAsUser={displayAsUser} onClick={onclick} />
