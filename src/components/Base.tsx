@@ -34,15 +34,17 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
           {children}
         </Box>
         {rightNav && (
-          <Grid item xs={12} sm={4} lg={3} xl={2}>
-            <aside
-              style={{
-                marginLeft: '20px',
-                marginBottom: '20px',
-              }}
-            >
-              {rightNav}
-            </aside>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{
+              marginTop: '20px',
+            }}
+          >
+            {rightNav}
           </Grid>
         )}
       </Grid>
@@ -94,15 +96,16 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
         </Grid>
 
         {rightNav && (
-          <Grid item md={4} lg={3} xl={2}>
-            <aside
-              style={{
-                marginLeft: '20px',
-                marginBottom: '20px',
-              }}
-            >
-              {rightNav}
-            </aside>
+          <Grid
+            item
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{
+              paddingLeft: '20px',
+            }}
+          >
+            {rightNav}
           </Grid>
         )}
       </Grid>
