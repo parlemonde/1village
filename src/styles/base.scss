@@ -23,22 +23,6 @@ header {
   background: $bg-page;
   z-index: 100;
 }
-.header__container {
-  background-color: white;
-  height: $headerHeight;
-  margin: 10px 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 1rem;
-  position: relative;
-  justify-content: space-between;
-  & a:first-child {
-    flex-grow: 1;
-  }
-}
 .header__user {
   margin: auto 0;
   display: flex;
@@ -142,10 +126,6 @@ main {
 }
 
 @include for-small-screen {
-  .header__container {
-    //margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
-  }
-
   .navigation {
     top: $headerHeight + $verticalSpacing;
     height: calc(100vh - #{$headerHeight + math.div(3, 2) * $verticalSpacing});

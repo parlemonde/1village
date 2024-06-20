@@ -96,9 +96,20 @@ export const SubHeader = ({ number, info }: Props): React.ReactElement => {
 };
 
 export const SubHeaders = () => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '100%' }}>
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+      height: '100%',
+      px: {
+        xs: '5px',
+        sm: '0',
+      },
+    }}
+  >
     <SubHeader number={1} info="Découvrir" />
     <SubHeader number={2} info="Échanger" />
     <SubHeader number={3} info="Imaginer" />
-  </div>
+  </Box>
 );
