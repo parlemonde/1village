@@ -20,7 +20,7 @@ export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const hasAccessToOldAdmin = user?.type === UserType.ADMIN || user?.type === UserType.SUPER_ADMIN || user?.type === UserType.MEDIATOR;
-  const hasAccessToNewAdmin = hasAccessToOldAdmin || user?.type === UserType.MEDIATOR;
+  const hasAccessToNewAdmin = hasAccessToOldAdmin || user?.type === UserType.OBSERVATOR;
 
   const open = Boolean(anchorEl);
 
@@ -113,8 +113,8 @@ export const Header = () => {
                 open={open}
                 onClose={handleClose}
               >
-                {hasAccessToOldAdmin && <MenuItem onClick={() => goToPage('/admin/newportal/create')}>Portail admin</MenuItem>}
-                {hasAccessToNewAdmin && <MenuItem onClick={() => goToPage('/admin/villages')}>Admin (old)</MenuItem>}
+                {hasAccessToNewAdmin && <MenuItem onClick={() => goToPage('/admin/newportal/create')}>Portail admin</MenuItem>}
+                {hasAccessToOldAdmin && <MenuItem onClick={() => goToPage('/admin/villages')}>Admin (old)</MenuItem>}
 
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
