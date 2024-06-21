@@ -29,7 +29,10 @@ export const useFullScreen = () => {
       <Button
         color="inherit"
         variant="outlined"
-        sx={{
+        sx={(theme) => ({
+          [theme.breakpoints.only('xs')]: {
+            borderRadius: '12px !important',
+          },
           color: (theme) => theme.palette.text.primary,
           border: '1px solid #c5c5c5',
           marginTop: '0.5rem',
@@ -39,7 +42,7 @@ export const useFullScreen = () => {
           '&:hover': {
             backgroundColor: '#f5f5f5',
           },
-        }}
+        })}
         onClick={toggleFullScreen}
       >
         {isFullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
