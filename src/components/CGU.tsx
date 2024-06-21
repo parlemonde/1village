@@ -34,8 +34,8 @@ export const CGU = () => {
       <h3 className="text--orange-background">3. Adhésion à l’association Par Le Monde</h3>
       <p>
         Je prends connaissance des statuts et du règlement intérieur de l’association Par Le Monde et consens, conformément aux dispositions
-        statutaires (articles 5 et 11 des statuts, articles 1 et 2 du règlement intérieur), à devenir membre de droit de l’association pour l’année en
-        cours.
+        statutaires (articles 5 et 11 des statuts, articles 1 et 2 du règlement intérieur), à devenir membre de droit de l’association l’année suivant
+        leur participation à l’un des programmes porté par l’association.
       </p>
       <p>Ce statut me donne un droit de vote aux assemblées générales de l’association Par Le Monde.</p>
       <p>
