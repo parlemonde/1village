@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
 import { bgPage } from 'src/styles/variables.const';
@@ -10,7 +10,15 @@ import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 const IndiceSuccess = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
+      <Box
+        sx={{
+          width: '100%',
+          padding: {
+            xs: '0',
+            md: '0.5rem 1rem 1rem 1rem',
+          },
+        }}
+      >
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text">Votre indice culturel a bien été publié !</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
@@ -22,7 +30,7 @@ const IndiceSuccess = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </Box>
     </Base>
   );
 };
