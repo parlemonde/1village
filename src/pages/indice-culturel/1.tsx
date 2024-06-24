@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 import { getIndice } from 'src/activity-types/indice.constants';
 import type { IndiceData } from 'src/activity-types/indice.types';
@@ -60,7 +60,15 @@ const IndiceStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <Box
+        sx={{
+          width: '100%',
+          padding: {
+            xs: '0',
+            md: '0.5rem 1rem 1rem 1rem',
+          },
+        }}
+      >
         {!isEdit && <BackButton href="/indice-culturel" />}
         <Steps
           steps={[getIndice(activity.subType, data).step1 || 'Indice', "Créer l'indice", 'Prévisualiser']}
@@ -109,7 +117,7 @@ const IndiceStep1 = () => {
             </div>
           )}
         </div>
-      </div>
+      </Box>
     </Base>
   );
 };
