@@ -272,7 +272,10 @@ const WorldMap = () => {
             <>
               <Button
                 color="inherit"
-                sx={{
+                sx={(theme) => ({
+                  [theme.breakpoints.only('xs')]: {
+                    display: 'none',
+                  },
                   color: (theme) => theme.palette.text.primary,
                   border: '1px solid #c5c5c5',
                   padding: '5px',
@@ -281,7 +284,7 @@ const WorldMap = () => {
                   '&:hover': {
                     backgroundColor: '#f5f5f5',
                   },
-                }}
+                })}
                 onClick={() => {
                   world.onZoom(-20);
                 }}
@@ -290,16 +293,20 @@ const WorldMap = () => {
               </Button>
               <Button
                 color="inherit"
-                sx={{
+                sx={(theme) => ({
+                  [theme.breakpoints.only('xs')]: {
+                    display: 'none',
+                  },
                   color: (theme) => theme.palette.text.primary,
                   border: '1px solid #c5c5c5',
+                  borderRadius: '0',
                   padding: '5px',
                   minWidth: 0,
                   backgroundColor: 'white',
                   '&:hover': {
                     backgroundColor: '#f5f5f5',
                   },
-                }}
+                })}
                 onClick={() => {
                   world.onZoom(20);
                 }}
