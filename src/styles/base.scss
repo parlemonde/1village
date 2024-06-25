@@ -12,7 +12,6 @@ $horizontalSpacing: 25px;
 // ---- APP CONTAINER ----
 .app-container {
   width: 100vw;
-  min-height: 100vh;
 }
 
 // ---- HEADER ----
@@ -23,22 +22,6 @@ header {
   width: 100%;
   background: $bg-page;
   z-index: 100;
-}
-.header__container {
-  background-color: white;
-  height: $headerHeight;
-  margin: $verticalSpacing $horizontalSpacing 0 $horizontalSpacing;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 1rem;
-  position: relative;
-  justify-content: space-between;
-  & a:first-child {
-    flex-grow: 1;
-  }
 }
 .header__user {
   margin: auto 0;
@@ -107,7 +90,7 @@ main {
   &__card {
     background-color: white;
     width: 100%;
-    height: 100%;
+    height: auto;
     margin: 0;
     padding: 0.5rem 1.2rem;
     overflow: visible;
@@ -143,10 +126,6 @@ main {
 }
 
 @include for-small-screen {
-  .header__container {
-    margin: math.div($verticalSpacing, 2) math.div($horizontalSpacing, 2) 0 math.div($horizontalSpacing, 2);
-  }
-
   .navigation {
     top: $headerHeight + $verticalSpacing;
     height: calc(100vh - #{$headerHeight + math.div(3, 2) * $verticalSpacing});
@@ -220,4 +199,9 @@ main {
 
 .linkAnnotation {
   opacity: 0;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
 }

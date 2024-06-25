@@ -3,30 +3,26 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Button } from '@mui/material';
+import { Box } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import AccessControl from './AccessControl';
+import { VillageSelect } from './VillageSelect';
 import { UserContext } from 'src/contexts/userContext';
-import { VillageContext } from 'src/contexts/villageContext';
-import { secondaryColor } from 'src/styles/variables.const';
 import Logo from 'src/svg/logo.svg';
 import { UserType } from 'types/user.type';
 
 export const Header = () => {
   const router = useRouter();
   const { user, logout } = React.useContext(UserContext);
-
-  const { village, showSelectVillageModal } = React.useContext(VillageContext);
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const open = Boolean(anchorEl);
+  const hasAccessToOldAdmin = user?.type === UserType.ADMIN || user?.type === UserType.SUPER_ADMIN || user?.type === UserType.MEDIATOR;
+  const hasAccessToNewAdmin = hasAccessToOldAdmin || user?.type === UserType.OBSERVATOR;
 
-  //* NOTE: might be interesting to make a hook for this below
-  const isPelico = user?.type === UserType.MEDIATOR || user?.type === UserType.ADMIN || user?.type === UserType.SUPER_ADMIN;
+  const open = Boolean(anchorEl);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (open) {
@@ -46,8 +42,34 @@ export const Header = () => {
   };
 
   return (
-    <header>
-      <div className="header__container with-shadow">
+    <Box component="header">
+      <Box
+        sx={(theme) => ({
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          height: '60px',
+          margin: {
+            xs: '0',
+            md: '10px 20px',
+          },
+          padding: '0 1rem',
+          backgroundColor: 'white',
+          borderRadius: {
+            xs: '0',
+            md: '10px',
+          },
+          overflow: 'hidden',
+          [theme.breakpoints.down('md')]: {
+            boxShadow: 'none !important',
+            borderBottom: '1px solid',
+            borderColor: 'background.default',
+          },
+        })}
+        className="with-shadow"
+      >
         <Link href="/">
           <a style={{ display: 'flex', alignItems: 'center' }}>
             <Logo style={{ width: '40px', height: 'auto' }} />
@@ -58,26 +80,17 @@ export const Header = () => {
         </Link>
         {user && (
           <div className="header__user">
-            {isPelico ? (
-              <div style={{ border: `1px solid ${secondaryColor}`, borderRadius: '12px' }}>
-                <span className="text text--small" style={{ margin: '0 0.6rem' }}>
-                  {village ? village.name : 'Village non choisi !'}
-                </span>
-                <Button variant="contained" color="secondary" size="small" style={{ margin: '-1px -1px 0 0' }} onClick={showSelectVillageModal}>
-                  {village ? 'Changer' : 'Choisir un village'}
-                </Button>
-              </div>
-            ) : null}
-            {user.type === UserType.ADMIN || user.type === UserType.SUPER_ADMIN || user.type === UserType.MEDIATOR ? (
-              <Link href="/admin/villages" passHref>
-                <Button component="a" href="/admin/villages" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {"Aller à l'interface Admin"}
-                </Button>
-              </Link>
-            ) : null}
+            <Box
+              display={{
+                xs: 'none',
+                md: 'block',
+              }}
+            >
+              <VillageSelect />
+            </Box>
             <div>
               <IconButton
-                style={{ width: '40px', height: '40px', margin: '0 0.2rem' }}
+                style={{ width: '40px', height: '40px', marginLeft: '20px' }}
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -100,6 +113,9 @@ export const Header = () => {
                 open={open}
                 onClose={handleClose}
               >
+                {hasAccessToNewAdmin && <MenuItem onClick={() => goToPage('/admin/newportal/create')}>Portail admin</MenuItem>}
+                {hasAccessToOldAdmin && <MenuItem onClick={() => goToPage('/admin/villages')}>Admin (old)</MenuItem>}
+
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
                 <AccessControl featureName="id-family" key={user?.id || 'default'}>
@@ -112,21 +128,7 @@ export const Header = () => {
             </div>
           </div>
         )}
-        {user && (
-          <div className="header__user">
-            {user.type === UserType.ADMIN ||
-            user.type === UserType.SUPER_ADMIN ||
-            user.type === UserType.MEDIATOR ||
-            user.type === UserType.OBSERVATOR ? (
-              <Link href="/admin/newportal/create" passHref>
-                <Button component="a" href="/admin/newportal/create" variant="contained" color="primary" size="small" style={{ marginLeft: '1rem' }}>
-                  {'Aller à la nouvelle interface admin'}
-                </Button>
-              </Link>
-            ) : null}
-          </div>
-        )}
-      </div>
-    </header>
+      </Box>
+    </Box>
   );
 };

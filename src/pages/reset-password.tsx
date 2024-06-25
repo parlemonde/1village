@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Button, Link, TextField, Typography, Backdrop, CircularProgress } from '@mui/material';
+import { Button, Link, TextField, Typography, Backdrop, CircularProgress, Grid, Box } from '@mui/material';
 
-import { KeepRatio } from 'src/components/KeepRatio';
 import ArrowBack from 'src/svg/arrow_back.svg';
 import Logo from 'src/svg/logo_1village_famille.svg';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
@@ -57,86 +56,115 @@ const ResetPassword: React.FunctionComponent = () => {
   };
 
   return (
-    <>
-      <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
-            background: 'white',
-            width: '95%',
-            maxWidth: '1200px',
-            borderRadius: '10px',
-            marginBottom: '2rem',
-            alignItems: 'center',
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+        '@media (max-width: 380px) and (max-height: 760px), (max-height: 600px)': {
+          height: 'auto',
+        },
+      }}
+      className="bg-gradiant-only"
+      p="20px"
+      alignItems="center"
+      alignContent="center"
+      justifyContent="center"
+    >
+      <Box width="100%" maxWidth="1200px">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          bgcolor="white"
+          height="fit-content"
+          borderRadius="10px"
+          p=".6rem"
+          sx={{
+            flexDirection: {
+              xs: 'column',
+              sm: 'row',
+            },
           }}
         >
-          <Link
-            component="button"
-            variant="h3"
+          <Box
+            component={Link}
             onClick={() => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'flex-start',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
+              cursor: 'pointer',
+              width: 'fit-content',
+              height: 'auto',
+              alignSelf: 'center',
+              margin: {
+                xs: '10px 0',
+                sm: '0 10px',
+              },
             }}
           >
-            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          </Link>
-          <h1 style={{ placeSelf: 'center' }}>Mot de passe oublié</h1>
-          <Link
-            component="button"
-            variant="h3"
-            onClick={() => {
-              router.push('/connexion');
-            }}
+            <Logo style={{ maxWidth: '260px' }} />
+          </Box>
+
+          <Box>
+            <Link
+              component="button"
+              variant="h3"
+              onClick={() => {
+                router.push('/connexion');
+              }}
+              sx={{
+                marginRight: '1rem',
+                fontSize: '0.875rem',
+                textAlign: 'end',
+              }}
+            >
+              <ArrowBack /> Retour à la page de connexion
+            </Link>
+          </Box>
+        </Grid>
+
+        <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
+          <Grid xs={12} mb={4} textAlign="center" width="100%">
+            <Typography variant="h2">Réinitialisation du mot de passe</Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            spacing={2}
             sx={{
-              marginRight: '1rem',
-              fontSize: '0.875rem',
-              textAlign: 'end',
-            }}
-          >
-            <ArrowBack /> Retour à la page de connexion
-          </Link>
-        </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="register__container">
-          <div
-            className="text-center"
-            style={{
-              margin: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'left', // Add this property to align the text to the left
+              borderRight: {
+                xs: 'none',
+                sm: '1px solid lightgray',
+              },
             }}
           >
             {!isSuccess ? (
-              <>
-                <h2 style={{ paddingBottom: '2rem' }}>Réinitialisation du mot de passe</h2>
-
-                <div className="text-left" style={{ width: '40%' }}>
+              <Box width="90%" maxWidth="350px" margin="0 auto">
+                <Typography margin="0 auto" align="left">
                   Veuillez renseigner l&apos;email lié à votre compte.
                   <br />
                   Nous vous enverrons un email avec un lien qui vous permettra de réinitialiser votre mot de passe.
-                </div>
+                </Typography>
 
-                <form
+                <Box
+                  component="form"
                   noValidate
                   autoComplete="off"
                   onSubmit={submit}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '40%' }}
+                  display="flex"
+                  alignItems="center"
+                  flexDirection="column"
+                  margin="0 auto"
                 >
                   {errorCode === 0 && (
                     <Typography variant="caption" color="error">
                       {errorMessages[0]}
                     </Typography>
                   )}
-                  <br />
-                  <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-                    <div>Email : </div>
+
+                  <Box m={2} width="100%" display="flex" justifyContent="space-around" alignItems="stretch" flexDirection="column">
                     <TextField
                       id="email"
                       name="email"
@@ -146,37 +174,42 @@ const ResetPassword: React.FunctionComponent = () => {
                       value={email}
                       onChange={handleEmailInputChange}
                       variant="outlined"
-                      sx={{ flexGrow: 1, marginLeft: '1rem' }}
                       error={errorCode === 1}
                       helperText={errorCode === 1 ? errorMessages[1] : null}
+                      sx={{
+                        flexGrow: '1',
+                        margin: '1rem 0',
+                      }}
                     />
-                    <Button type="submit" color="primary" variant="outlined" style={{ marginLeft: '1rem' }}>
+                    <Button type="submit" color="primary" variant="outlined">
                       Envoyer
                     </Button>
-                  </div>
+                  </Box>
+
                   <br />
                   <div style={{ marginBottom: '4rem' }} className="text-center">
                     <Link href="/connexion" onClick={handleLinkClick('/connexion')}>
                       Retourner à la connexion
                     </Link>
                   </div>
-                </form>
+                </Box>
+
                 <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, color: '#fff' }} open={loading}>
                   <CircularProgress color="inherit" />
                 </Backdrop>
-              </>
+              </Box>
             ) : (
-              <>
-                <PelicoSouriant style={{ width: '25%', height: '60%', cursor: 'pointer' }} />
+              <Box textAlign="center" display="block" height="fit-content">
+                <PelicoSouriant style={{ width: '100%', maxWidth: '250px', maxHeight: '250px', cursor: 'pointer' }} />
                 <div>Un email vient de vous être envoyé à l&apos;adresse donnée</div>
                 <br />
-                <div>Vous allez être redirigé(e) vers la page de connexion</div>
-              </>
+                <div>Vous allez être redirigé(e) vers la page de connexion...</div>
+              </Box>
             )}
-          </div>
-        </KeepRatio>
-      </div>
-    </>
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 

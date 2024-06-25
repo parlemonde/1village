@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Box } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 
 import { FilterSelect } from './FilterSelect';
@@ -78,8 +79,10 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
   }, [onChange, countries]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 0', flexWrap: 'wrap' }}>
-      <span className="text text--bold">Filtres :</span>
+    <Box display="flex" alignItems="center" my={1} flexWrap="wrap">
+      <Box component="span" className="text text--bold" mr={1}>
+        Filtres :
+      </Box>
       {isMesFamilles && (
         <FilterSelect
           name="Phases"
@@ -104,24 +107,12 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
         }}
       />
 
-      {/* <FilterSelect
-        name="Status"
-        options={[
-          { key: 0, label: 'Tous' },
-          { key: 1, label: 'En cours' },
-          { key: 2, label: 'Terminées' },
-        ]}
-        value={filters.status}
-        onChange={(newStatus) => {
-          onChange({ ...filters, status: newStatus.key });
-        }}
-      /> */}
-      <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
+      <Box display="flex" alignItems="center" flexWrap="wrap" mt={1}>
         {countries.map((c) => (
-          <label key={c} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
+          <Box key={c} component="label" display="inline-flex" alignItems="center" mr={1} mb={1}>
             <Checkbox
               color="success"
-              style={{ padding: '0' }}
+              sx={{ padding: '0' }}
               checked={filters.countries[c] || false}
               onChange={(event) => {
                 onChange({
@@ -134,12 +125,12 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
               }}
             />
             <Flag country={c} />
-          </label>
+          </Box>
         ))}
-        <label style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer', margin: '0 0.5rem 0 0.2rem' }}>
+        <Box component="label" display="inline-flex" alignItems="center" mr={1} mb={1}>
           <Checkbox
             color="success"
-            style={{ padding: '0' }}
+            sx={{ padding: '0' }}
             checked={filters.pelico}
             onChange={(event) => {
               onChange({
@@ -148,15 +139,15 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
               });
             }}
           />
-          <PelicoReflechit style={{ position: 'relative', zIndex: 10, height: '28px', width: 'auto', marginTop: '-10px', marginLeft: '-5px' }} />
-        </label>
-      </div>
-      <div>
+          <PelicoReflechit style={{ position: 'relative', zIndex: 10, height: '28px', width: 'auto', mt: '-10px', ml: '-5px' }} />
+        </Box>
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
         <input
           type="text"
           value={filters.searchTerm}
           placeholder=" Rechercher"
-          style={{ margin: '0 0.5rem', border: `1px solid ${primaryColor}`, borderRadius: '5px', height: '26px' }}
+          style={{ border: `1px solid ${primaryColor}`, borderRadius: '5px', height: '26px' }}
           onChange={(event) => {
             onChange({
               ...filters,
@@ -164,7 +155,7 @@ export const Filters = ({ filters, onChange, countries = [], phase, isMesFamille
             });
           }}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
