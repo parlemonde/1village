@@ -6,6 +6,7 @@ import { TextField } from '@mui/material';
 import { getSymbol } from 'src/activity-types/symbol.constants';
 import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Activities } from 'src/components/activities/List';
@@ -60,7 +61,7 @@ const SymbolStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/symbole" />}
         <Steps
           steps={[getSymbol(activity.subType, data).step1 || 'Symbole', 'Créer le symbole', 'Prévisualiser']}
@@ -109,7 +110,7 @@ const SymbolStep1 = () => {
             </div>
           )}
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };
