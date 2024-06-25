@@ -4,6 +4,7 @@ import { useQueryClient } from 'react-query';
 import { isMascotte } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
 import { MascotteTemplate } from 'src/components/activities/content/MascotteTemplate';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -91,7 +92,7 @@ const MaClasse = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>Notre mascotte</h1>
           {mascotteActivity && user ? (
@@ -147,7 +148,7 @@ const MaClasse = () => {
             )
           )}
         </div>
-      </div>
+      </PageLayout>
       <Modal
         open={deleteIndex.index !== -1}
         error
