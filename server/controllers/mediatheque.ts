@@ -21,8 +21,10 @@ mediathequeController.post({ path: '' }, async (req: Request, res: Response) => 
       .leftJoin('activity.user', 'user')
       .addSelect('user.school')
       .addSelect('user.type')
+      .addSelect('user.countryCode')
       .leftJoin('activity.village', 'village')
-      .addSelect('village.name');
+      .addSelect('village.name')
+      .addSelect('village.countryCodes');
 
     filters.map((filter, index) => {
       subQueryBuilder = subQueryBuilder[index === 0 ? 'where' : 'orWhere'](

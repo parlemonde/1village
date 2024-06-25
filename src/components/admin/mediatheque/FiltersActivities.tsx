@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
@@ -32,33 +32,65 @@ export default function FiltersActivities() {
   const theme = useTheme();
   const [labelNameActivity, setLabelNameActivity] = useState<string[]>([]);
   const [labelNameSubTheme, setLabelNameSubTheme] = useState<string[]>([]);
-  const { setFilters, setUpdatePageKey, setPage } = useContext(MediathequeContext);
+  const [selectedVillages, setSelectedVillages] = useState<number[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [filter, setFilter] = useState({});
+  const { setFilters, setUpdatePageKey, setPage, allFiltered, allActivities, setAllFiltered } = useContext(MediathequeContext);
 
-  const updateFilters = useCallback(() => {
-    const updatedActivityNumbers = labelNameActivity.map((activity) => activityNumberMapper[activity]).filter(Boolean);
-    // const updatedSubThemeNumbers = labelNameSubTheme.map((subTheme) => subThemeNumberMapper[subTheme]).filter(Boolean);
-    const updatedSubThemeNumbers = labelNameSubTheme
-      .map((subTheme) => subThemeNumberMapper[subTheme])
-      .filter((value) => value !== null && value !== undefined);
+  const updateAllFiltered = useCallback(
+    (currentFilter) => {
+      const newState = allActivities.filter((activity) => {
+        let isValid = true;
+        Object.keys(currentFilter).forEach((filterKey) => {
+          if (filterKey === 'countries' && currentFilter.countries.length > 0) {
+            console.log('coucou');
+            const {
+              user: {
+                country: { isoCode },
+              },
+            } = activity;
+            console.log(isoCode);
+            if (currentFilter.countries.findIndex((c) => c === isoCode) < 0) {
+              if (isoCode === 'CH') {
+                console.log('ça passe pas');
+                console.log(isoCode);
+                console.log(currentFilter.countries);
+              }
 
-    const newFilters = [];
-    if (updatedActivityNumbers.length > 0) {
-      const activityFilter = { table: 'activity', column: 'type', values: updatedActivityNumbers };
-      newFilters.push([activityFilter]);
-
-      if (updatedSubThemeNumbers.length > 0) {
-        const subThemeFilter = { table: 'activity', column: 'subType', values: updatedSubThemeNumbers };
-        newFilters[0].push(subThemeFilter);
-      }
-    }
-    setUpdatePageKey((prevKey) => prevKey + 1);
-    setPage(0);
-    setFilters(newFilters);
-  }, [labelNameActivity, labelNameSubTheme, setFilters, setPage, setUpdatePageKey]);
+              isValid = false;
+              return;
+            } else {
+              if (isoCode === 'CH') {
+                console.log('ça passe pas mais dans le else oui');
+                console.log(isoCode);
+                console.log(currentFilter.countries);
+              }
+            }
+          } else if (Array.isArray(currentFilter[filterKey])) {
+            if (currentFilter[filterKey].length > 0 && currentFilter[filterKey].indexOf(activity[filterKey]) < 0) {
+              isValid = false;
+              return;
+            }
+          } else {
+            if (activity[filterKey] !== currentFilter[filterKey]) {
+              isValid = false;
+              return;
+            }
+          }
+        });
+        return isValid;
+      });
+      console.log(currentFilter);
+      console.log(newState);
+      return newState;
+    },
+    [allActivities, setAllFiltered],
+  );
 
   useEffect(() => {
-    updateFilters();
-  }, [labelNameActivity, labelNameSubTheme, updateFilters]);
+    const newFiltered = updateAllFiltered(filter);
+    setAllFiltered(newFiltered);
+  }, [filter, setAllFiltered, updateAllFiltered]);
 
   const handleChangeLabelActivity = (event: SelectChangeEvent<typeof labelNameActivity>) => {
     const {
@@ -66,14 +98,72 @@ export default function FiltersActivities() {
     } = event;
     setLabelNameActivity(typeof value === 'string' ? value.split(',') : value);
     setLabelNameSubTheme([]);
+    setSelectedVillages([]);
+
+    setFilter({
+      type: activityNumberMapper[value],
+    });
   };
 
+  const handleSubtypesChange = (event: SelectChangeEvent<typeof labelNameSubTheme>) => {
+    const {
+      target: { value },
+    } = event;
+    setLabelNameSubTheme(value);
+    setSelectedVillages([]);
+
+    const selectedSubtypes = value.map((v) => subThemeNumberMapper[v]);
+    setFilter((prev) => ({ ...prev, villageId: [], countries: [], subType: selectedSubtypes }));
+  };
+
+  const handleVMChange = (event: SelectChangeEvent<number>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedVillages(value);
+    setFilter((prev) => ({ ...prev, countries: [], villageId: value }));
+  };
+
+  const labelNameVillageMondeSelect = useMemo(() => {
+    const result: Array<{ villageId: number; name: string }> = [];
+    const filteredNoWm = updateAllFiltered({ ...filter, villageId: [] });
+    filteredNoWm.forEach(({ villageId, name }) => {
+      if (result.findIndex((vm) => vm.villageId === villageId) < 0) {
+        result.push({ villageId, name });
+      }
+    });
+    return result.sort((a, b) => (a.name < b.name ? -1 : 1));
+  }, [filter, updateAllFiltered]);
+
   const subThemes = labelNameActivity.flatMap((activity) => subThemesMap[activity] || []);
+
+  const countryList = useMemo(() => {
+    const result: Array<{ isoCode: string; name: string }> = [];
+    const filteredNoWm = updateAllFiltered({ ...filter, countries: [] });
+
+    filteredNoWm.forEach(({ countries }) => {
+      countries?.forEach(({ isoCode, name }) => {
+        if (result.findIndex((r) => r.isoCode === isoCode) < 0) {
+          result.push({ isoCode, name });
+        }
+      });
+    });
+    return result.sort((a, b) => (a.name < b.name ? -1 : 1));
+  }, [filter, updateAllFiltered]);
+
+  const handleCountryChange = (event: SelectChangeEvent<string>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedCountries(value);
+
+    setFilter((prev) => ({ ...prev, countries: value }));
+  };
 
   return (
     <>
       <div>
-        <FormControl sx={{ m: 1, minWidth: 140 }} size="small">
+        <FormControl sx={{ m: 1, width: 140 }} size="small">
           <Select
             displayEmpty
             value={labelNameActivity.length > 0 ? labelNameActivity : ''}
@@ -95,14 +185,14 @@ export default function FiltersActivities() {
             ))}
           </Select>
         </FormControl>
-      </div>
-      <div>
+
         <FormControl sx={{ m: 1, width: 140 }} size="small">
           <Select
             multiple
             displayEmpty
             value={labelNameSubTheme}
-            onChange={(event) => setLabelNameSubTheme(event.target.value as string[])}
+            // onChange={(event) => setLabelNameSubTheme(event.target.value as string[])}
+            onChange={handleSubtypesChange}
             input={<OutlinedInput />}
             renderValue={(selected) => {
               if (selected.length === 0) {
@@ -119,6 +209,72 @@ export default function FiltersActivities() {
             {subThemes.map((label, index) => (
               <MenuItem key={index} value={label} style={getStyles(label, labelNameSubTheme, theme)}>
                 {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, width: 140 }} size="small">
+          <Select
+            multiple
+            displayEmpty
+            value={selectedVillages}
+            onChange={handleVMChange}
+            input={<OutlinedInput />}
+            renderValue={(selected) => {
+              if (selected.length === 0) {
+                return <>VM</>;
+              }
+              const names = (selected as unknown as number[]).map((v) => labelNameVillageMondeSelect.find((v1) => v1.villageId === v)?.name);
+
+              return names.join(', ');
+            }}
+            MenuProps={MenuProps}
+            inputProps={{ 'aria-label': 'Label' }}
+          >
+            {labelNameVillageMondeSelect?.map(({ name, villageId }) => (
+              <MenuItem
+                key={villageId}
+                value={villageId}
+                style={getStyles(
+                  name,
+                  labelNameVillageMondeSelect.map((t) => t.name),
+                  theme,
+                )}
+              >
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, width: 140 }} size="small">
+          <Select
+            multiple
+            displayEmpty
+            value={selectedCountries}
+            onChange={handleCountryChange}
+            input={<OutlinedInput />}
+            // renderValue={(selected) => {
+            //   if (selected.length === 0) {
+            //     return <>VM</>;
+            //   }
+            //   const names = (selected as unknown as number[]).map((v) => labelNameVillageMondeSelect.find((v1) => v1.villageId === v)?.name);
+
+            //   return names.join(', ');
+            // }}
+            MenuProps={MenuProps}
+            inputProps={{ 'aria-label': 'Label' }}
+          >
+            {countryList?.map(({ name, isoCode }) => (
+              <MenuItem
+                key={isoCode}
+                value={isoCode}
+                style={getStyles(
+                  name,
+                  labelNameVillageMondeSelect.map((t) => t.name),
+                  theme,
+                )}
+              >
+                {name}
               </MenuItem>
             ))}
           </Select>

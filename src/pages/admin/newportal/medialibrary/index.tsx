@@ -25,6 +25,7 @@ import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
 import Filters from 'src/components/admin/mediatheque/Filter';
 import FiltersActivities from 'src/components/admin/mediatheque/FiltersActivities';
+import FiltersUsers from 'src/components/admin/mediatheque/FiltersUsers';
 import ModalFilter from 'src/components/admin/mediatheque/ModalFilter';
 import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
@@ -32,7 +33,8 @@ import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
 const Mediatheque = () => {
-  const { setFilters, allFiltered, setUseAdminData, page, setPage, updatePageKey, setUpdatePageKey } = useContext(MediathequeContext);
+  const { setFilters, setAllFiltered, allFiltered, allActivities, setUseAdminData, page, setPage, updatePageKey, setUpdatePageKey } =
+    useContext(MediathequeContext);
   const [updateFiltersKey, setUpdateFiltersKey] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -43,6 +45,7 @@ const Mediatheque = () => {
     setUpdatePageKey((prevKey) => prevKey + 1);
     setIsChecked(false);
     handleChangePage(undefined, 1);
+    setAllFiltered(allActivities);
   };
 
   const handleChangePage = (_event?: React.ChangeEvent<unknown>, value?: number) => {
@@ -64,14 +67,16 @@ const Mediatheque = () => {
       </div>
       <div className="desktop-view">
         <div style={{ display: 'flex' }}>
-          <FiltersActivities key={updateFiltersKey} />
+          <div style={{ display: 'flex' }} key={updateFiltersKey}>
+            <FiltersActivities />
+          </div>
           <>
             {/* Ce filtre gère les différents village monde VMList */}
-            <Filters labels={activitiesLabel} placeholder="VM" />
+            {/* <Filters labels={activitiesLabel} placeholder="VM" /> */}
             {/* Ce filtre dépend du village monde choisi countryList */}
-            <Filters labels={activitiesLabel} placeholder="Pays" />
+            {/* <Filters labels={activitiesLabel} placeholder="Pays" /> */}
             {/* Ce filtre dépend du pays choisi et du village monde classList */}
-            <Filters labels={activitiesLabel} placeholder="Classes" />
+            {/* <Filters labels={activitiesLabel} placeholder="Classes" /> */}
           </>
 
           <CheckboxAdmin isChecked={isChecked} onCheckboxChange={setIsChecked} />

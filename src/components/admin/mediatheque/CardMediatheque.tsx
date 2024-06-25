@@ -82,7 +82,7 @@ export default function MediaCard({ page }: { page: number }) {
                 {item.user.school}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {item.village.name}
+                {item.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {activityNameMapper[item.type]}
