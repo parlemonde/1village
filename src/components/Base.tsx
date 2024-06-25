@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
-import { NavigationWrapper } from './NavigationWrapper';
+import { Navigation } from './Navigation';
+import { NavigationMobile } from './NavigationMobile';
 import { SubHeaders } from 'src/components/accueil/SubHeader';
 
 interface BaseProps {
@@ -14,52 +15,100 @@ interface BaseProps {
 
 export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = false, style }: React.PropsWithChildren<BaseProps>) => {
   return (
-    <Grid
-      container
-      sx={{
-        marginTop: {
-          md: '96px',
-        },
-        padding: '0 20px',
-      }}
-    >
-      {!hideLeftNav && <NavigationWrapper />}
+    <>
+      {/*mobile*/}
       <Grid
-        item
-        xs={12}
-        md={8}
-        lg={9}
-        xl={10}
-        sx={{
-          ...style,
-          marginBottom: {
-            xs: rightNav ? '20px' : '0',
-          },
-          marginTop: {
-            xs: '90px',
-            md: '0',
-          },
+        container
+        display={{
+          xs: 'block',
+          md: 'none',
         }}
       >
+        {!hideLeftNav && <NavigationMobile />}
         {showSubHeader && (
-          <div style={{ height: '40px', marginBottom: '20px' }}>
+          <Box sx={{ height: '40px', marginBottom: '10px', marginTop: '70px' }}>
             <SubHeaders />
-          </div>
+          </Box>
         )}
-        <div className="app-content__card with-shadow">{children}</div>
-      </Grid>
-      {rightNav && (
-        <Grid item xs={12} sm={4} lg={3} xl={2}>
-          <aside
-            style={{
-              marginLeft: '20px',
-              marginBottom: '20px',
+        <Box sx={{ marginTop: showSubHeader ? '0' : '70px', padding: { xs: '0.25rem', sm: '0.5rem' } }} className="app-content__card with-shadow">
+          {children}
+        </Box>
+        {rightNav && (
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{
+              marginTop: '20px',
             }}
           >
             {rightNav}
-          </aside>
+          </Grid>
+        )}
+      </Grid>
+
+      {/**Desktop*/}
+      <Grid
+        container
+        sx={{
+          marginTop: '96px',
+          padding: '0 20px',
+          display: {
+            xs: 'none',
+            md: 'flex',
+          },
+        }}
+      >
+        {!hideLeftNav && (
+          <Grid
+            item
+            md={4}
+            lg={3}
+            xl={2}
+            className="sticky"
+            sx={{
+              top: '96px',
+              height: 'fit-content',
+            }}
+          >
+            <Navigation />
+          </Grid>
+        )}
+
+        <Grid
+          item
+          md={8}
+          lg={9}
+          xl={10}
+          sx={{
+            ...style,
+            marginBottom: rightNav ? '20px' : '0',
+          }}
+        >
+          {showSubHeader && (
+            <div style={{ height: '40px', marginBottom: '20px' }}>
+              <SubHeaders />
+            </div>
+          )}
+          <div className="app-content__card with-shadow">{children}</div>
         </Grid>
-      )}
-    </Grid>
+
+        {rightNav && (
+          <Grid
+            item
+            md={4}
+            lg={3}
+            xl={2}
+            sx={{
+              paddingLeft: '20px',
+            }}
+          >
+            {rightNav}
+          </Grid>
+        )}
+      </Grid>
+    </>
   );
 };

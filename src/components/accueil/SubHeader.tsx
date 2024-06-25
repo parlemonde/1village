@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Box, Typography } from '@mui/material';
+
 import { VillageContext } from 'src/contexts/villageContext';
 import { primaryColor } from 'src/styles/variables.const';
 import JumellesLight from 'src/svg/jumelles-light.svg';
@@ -15,23 +17,24 @@ interface Props {
   info: string;
 }
 const svgsLight = [
-  <JumellesLight key={1} style={{ marginRight: '0.5rem' }} />,
-  <Step2Light key={2} style={{ marginRight: '0.5rem' }} />,
-  <PuzzleLight key={3} style={{ marginRight: '0.5rem' }} />,
+  { component: JumellesLight, key: 1 },
+  { component: Step2Light, key: 2 },
+  { component: PuzzleLight, key: 3 },
 ];
 
 const svgsPrimary = [
-  <Jumelles key={4} style={{ marginRight: '0.5rem' }} />,
-  <Step2Primary key={5} style={{ marginRight: '0.5rem' }} />,
-  <PuzzlePrimary key={6} style={{ marginRight: '0.5rem' }} />,
+  { component: Jumelles, key: 4 },
+  { component: Step2Primary, key: 5 },
+  { component: PuzzlePrimary, key: 6 },
 ];
 
 export const SubHeader = ({ number, info }: Props): React.ReactElement => {
   const { selectedPhase, setSelectedPhase } = React.useContext(VillageContext);
   const router = useRouter();
+  const icon = selectedPhase === number ? svgsLight[number - 1] : svgsPrimary[number - 1];
 
   return (
-    <div
+    <Box
       style={{
         display: 'flex',
         width: '32%',
@@ -45,37 +48,68 @@ export const SubHeader = ({ number, info }: Props): React.ReactElement => {
         }
       }}
     >
-      <div
+      <Box
         className="with-shadow"
-        style={{
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: selectedPhase === number ? primaryColor : 'white',
+          color: selectedPhase === number ? 'white' : primaryColor,
           borderTopLeftRadius: '10px',
           borderBottomLeftRadius: '10px',
-          color: selectedPhase === number ? 'white' : primaryColor,
-          display: 'flex',
           flex: 1,
           minWidth: 0,
-          padding: '0.25rem 0.5rem 0.25rem 1rem',
         }}
       >
-        {selectedPhase === number ? svgsLight[number - 1] : svgsPrimary[number - 1]}
-        <h2 style={{ fontSize: '0.9rem', marginLeft: '1rem' }}>
-          Phase {number} - {info}
-        </h2>
-      </div>
+        <Box
+          component={icon.component}
+          key={icon.key}
+          sx={{
+            margin: '0 0.5rem',
+            display: {
+              xs: 'none',
+              sm: 'block',
+              md: 'block',
+            },
+          }}
+        />
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: '.9rem',
+          }}
+        >
+          Phase {number}
+          <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+            {' '}
+            - {info}
+          </Box>
+        </Typography>
+      </Box>
       {/* Arrow shape for subheader */}
       <svg className="shadow-svg" viewBox="0 0 32 46" fill="none" style={{ height: '100%', width: 'auto' }}>
         <path d="M32 23L0 46L0 0L32 23Z" fill={selectedPhase === number ? primaryColor : 'white'} />
       </svg>
-    </div>
+    </Box>
   );
 };
 
 export const SubHeaders = () => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '100%' }}>
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+      height: '100%',
+      px: {
+        xs: '5px',
+        sm: '0',
+      },
+    }}
+  >
     <SubHeader number={1} info="Découvrir" />
     <SubHeader number={2} info="Échanger" />
     <SubHeader number={3} info="Imaginer" />
-  </div>
+  </Box>
 );

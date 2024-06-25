@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Tooltip } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -64,7 +64,15 @@ const IndiceStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <Box
+        sx={{
+          width: '100%',
+          padding: {
+            xs: '0',
+            md: '0.5rem 1rem 1rem 1rem',
+          },
+        }}
+      >
         <Steps
           steps={[getIndice(activity.subType, data).step1, "Créer l'indice", 'Prévisualiser']}
           urls={['/indice-culturel/1?edit', '/indice-culturel/2', '/indice-culturel/3']}
@@ -141,7 +149,7 @@ const IndiceStep3 = () => {
 
           <StepsButton prev="/indice-culturel/2" />
         </div>
-      </div>
+      </Box>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

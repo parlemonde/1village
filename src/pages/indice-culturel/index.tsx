@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Box } from '@mui/material';
+
 import { Base } from 'src/components/Base';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ArtIcon from 'src/svg/indice-culturel/art.svg';
@@ -80,7 +82,15 @@ const indices = [
 const Indice = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <Box
+        sx={{
+          width: '100%',
+          padding: {
+            xs: '0',
+            md: '0.5rem 1rem 1rem 1rem',
+          },
+        }}
+      >
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Quel aspect de culture allez-vous présenter ?</h1>
           <p className="text">
@@ -93,7 +103,7 @@ const Indice = () => {
           </p>
           <ActivityChoice activities={indices} />
         </div>
-      </div>
+      </Box>
     </Base>
   );
 };
