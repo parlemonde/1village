@@ -52,7 +52,8 @@
     }
   },
   "resolutions": {
-    "react-is": "^17.0.1"
+    "react-is": "^17.0.1",
+    "@types/react": "18.3.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.6",
