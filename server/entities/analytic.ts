@@ -13,8 +13,9 @@ export class AnalyticSession implements AnalyticSessionInterface {
   @PrimaryColumn({ type: 'varchar', length: 36 })
   public id: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
-  public uniqueId: string; // accross multiple sessions
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  public user: User;
 
   @Column({ type: 'datetime' })
   public date: Date;
