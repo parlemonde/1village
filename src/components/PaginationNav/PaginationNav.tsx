@@ -20,7 +20,7 @@ const PaginationNav = ({ page, itemsPerPage, totalItems, handlePage, handleItems
         alignItems: 'center',
       }}
     >
-      <Box alignSelf="start">
+      <Box alignSelf="start" mb="1rem">
         <InputLabel id="activities-per-page-label" sx={{ fontSize: '.9rem', marginRight: '18px', display: 'inline' }}>
           Activités par page
         </InputLabel>
