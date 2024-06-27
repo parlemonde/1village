@@ -16,11 +16,11 @@ const PaginationNav = ({ page, itemsPerPage, totalItems, handlePage, handleItems
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'column-reverse',
+        flexDirection: 'column',
         alignItems: 'center',
       }}
     >
-      <Box mt="10px">
+      <Box alignSelf="start">
         <InputLabel id="activities-per-page-label" sx={{ fontSize: '.9rem', marginRight: '18px', display: 'inline' }}>
           Activités par page
         </InputLabel>
