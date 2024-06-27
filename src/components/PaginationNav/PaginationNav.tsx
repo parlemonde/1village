@@ -1,9 +1,7 @@
 import React from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { InputLabel, MenuItem, Pagination, Select } from '@mui/material';
-
-import styles from './PaginationNav.module.css';
+import { Box, InputLabel, MenuItem, Pagination, Select } from '@mui/material';
 
 interface PaginationNavProps {
   page: number;
@@ -15,8 +13,14 @@ interface PaginationNavProps {
 
 const PaginationNav = ({ page, itemsPerPage, totalItems, handlePage, handleItemsPerPage }: PaginationNavProps) => {
   return (
-    <div className={styles.paginationContainer}>
-      <div className={styles.itemsPerPageContainer}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        alignItems: 'center',
+      }}
+    >
+      <Box mt="10px">
         <InputLabel id="activities-per-page-label" sx={{ fontSize: '.9rem', marginRight: '18px', display: 'inline' }}>
           Activités par page
         </InputLabel>
@@ -32,17 +36,9 @@ const PaginationNav = ({ page, itemsPerPage, totalItems, handlePage, handleItems
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
         </Select>
-      </div>
-      {totalItems > itemsPerPage && (
-        <Pagination
-          count={Math.ceil(totalItems / itemsPerPage)}
-          page={page}
-          onChange={handlePage}
-          variant="outlined"
-          sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: '0' }}
-        />
-      )}
-    </div>
+      </Box>
+      {totalItems > itemsPerPage && <Pagination count={Math.ceil(totalItems / itemsPerPage)} page={page} onChange={handlePage} variant="outlined" />}
+    </Box>
   );
 };
 export default PaginationNav;
