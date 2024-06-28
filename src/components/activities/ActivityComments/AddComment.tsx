@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button, CircularProgress, Tooltip } from '@mui/material';
+import { Box, Button, CircularProgress, Tooltip } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { UserContext } from 'src/contexts/userContext';
@@ -50,12 +50,35 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
 
   return (
     <>
-      <div className="activity__comment-container">
+      <Box
+        sx={{
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+        }}
+        className="activity__comment-container"
+      >
         <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <span style={{ marginLeft: '2.5rem', fontWeight: 600 }}>Publiez directement un commentaire</span>
-          <div style={{ display: 'flex' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: {
+                xs: 'column',
+                sm: 'row',
+              },
+            }}
+          >
             <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} noLink />
-            <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0, maxWidth: 539 }}>
+            <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
+              <Box
+                component="span"
+                sx={{
+                  fontWeight: 600,
+                }}
+              >
+                Publiez directement un commentaire
+              </Box>
               <TextEditor
                 maxLen={400}
                 value={newComment}
@@ -72,13 +95,29 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 {isObservator ? (
                   <Tooltip title="Action non autorisée" arrow>
                     <span>
-                      <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
+                      <Button
+                        sx={{
+                          width: 'inherit',
+                        }}
+                        variant="outlined"
+                        color="primary"
+                        onClick={comment}
+                        disabled={isObservator}
+                      >
                         Commenter
                       </Button>
                     </span>
                   </Tooltip>
                 ) : (
-                  <Button variant="outlined" color="primary" onClick={comment} disabled={isObservator}>
+                  <Button
+                    sx={{
+                      width: 'inherit',
+                    }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={comment}
+                    disabled={isObservator}
+                  >
                     Commenter
                   </Button>
                 )}
@@ -89,10 +128,17 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 <CircularProgress color="primary" />
               </div>
             )}
-          </div>
+          </Box>
         </div>
         {activityPhase >= 2 && activityType !== ActivityType.REACTION && (
-          <div style={{ marginLeft: '1rem' }}>
+          <Box
+            sx={{
+              marginLeft: {
+                xs: '0',
+                md: '1rem',
+              },
+            }}
+          >
             {activityPhase >= 3 && (activityType === ActivityType.STORY || activityType === ActivityType.RE_INVENT_STORY) ? (
               <p style={{ fontWeight: 600 }}>Ou bien ré-écrivez l&apos;histoire !</p>
             ) : (
@@ -153,9 +199,9 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
                 )}
               </>
             )}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     </>
   );
 };
