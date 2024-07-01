@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-// import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
@@ -51,7 +50,6 @@ type AlreadyPlayerModalProps = {
 enum RadioBoxValues {
   NEW = 'Nouvelle',
   RANDOM = 'Aléatoire',
-  // MOSAIC = 'Mosaïque',
 }
 
 type RadioNextGameProps = {
@@ -66,7 +64,6 @@ type RadioNextGameProps = {
 const radioListComponentMapper = {
   [RadioBoxValues.NEW]: AccessTimeIcon,
   [RadioBoxValues.RANDOM]: ShuffleIcon,
-  //[RadioBoxValues.MOSAIC]: AppsIcon,
 };
 
 const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
@@ -105,8 +102,6 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleS
   );
 };
 /* FIN partie à déplacer et à centraliser avec les prochains jeux*/
-
-const POSITION = ['c', 'f', 'i'];
 
 const PlayMimic = () => {
   const { user } = useContext(UserContext);
@@ -164,10 +159,6 @@ const PlayMimic = () => {
       [RadioBoxValues.RANDOM]: async () => {
         return await getRandomGame(GameType.MIMIC);
       },
-      // [RadioBoxValues.MOSAIC]: () => {
-      //   console.error('Not implemented yet');
-      //   return undefined;
-      // },
     };
 
     const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
@@ -250,27 +241,6 @@ const PlayMimic = () => {
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
-
-  // tentative d'indexer les réponses, sans succès pour l'insant
-  // const responseMapping: {
-  //   [key: number]: GameResponseValue;
-  // } = {
-  //   0: GameResponseValue.SIGNIFICATION,
-  //   1: GameResponseValue.FAKE_SIGNIFICATION_1,
-  //   2: GameResponseValue.FAKE_SIGNIFICATION_2,
-  // };
-
-  // const choices = useMemo(() => {
-  //   if (game !== undefined) {
-  //     const shuffledIndices = shuffleArray([0, 1, 2]);
-  //     return shuffledIndices.map((index) => responseMapping[index] as unknown as number);
-  //   } else {
-  //     return [0, 1, 2];
-  //   }
-  //   // eslint-disable-next-line
-  // }, [game]);
-
-  // fin de tentative
 
   const handleRadioButtonChange = (event: React.SyntheticEvent) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
