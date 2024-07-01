@@ -10,15 +10,16 @@ type BarChartDataItem = {
 
 interface Props {
   barChartData: BarChartDataItem[];
+  title?: string;
 }
 
 //add isSelected to change colors #4339F2 or #DAD7FE
 
-const BarCharts: React.FC<Props> = ({ barChartData }) => {
+const BarCharts: React.FC<Props> = ({ barChartData, title }) => {
   const seriesData = barChartData.map((item) => ({ data: item.data }));
   return (
     <div className={styles.barContainer}>
-      <div className={styles.title}>Evolution des connexions</div>
+      {title && <div className={styles.title}>{title}</div>}
       <BarChart
         xAxis={[
           {
