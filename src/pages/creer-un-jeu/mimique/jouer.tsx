@@ -364,7 +364,7 @@ const PlayMimic = () => {
               })}
             </RadioGroup>
           </Grid>
-          <Grid container border={1} borderColor={primaryColor} boxSizing="border-box" alignItems="flex-start" justifyContent="flex-start">
+          <Grid container my="1rem" border={1} borderColor={primaryColor} boxSizing="border-box" alignItems="flex-start" justifyContent="flex-start">
             <Grid item xs={12} justifyContent="center" style={{ width: '100%' }}>
               {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
             </Grid>
@@ -450,12 +450,6 @@ const PlayMimic = () => {
         </Modal>
         <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
-          {/* Todo : modifier la logique du bouton pour qu'il récupère la mimique précédente */}
-          {/* <Grid item xs={3} display="flex" justifyContent="flex-start">
-            <Button variant="outlined" color="primary" onClick={getNextGame}>
-              mimique précédente
-            </Button>
-          </Grid> */}
           <Grid item xs={6} style={{ textAlign: 'center' }}>
             {(found || tryCount > 1) && (
               <div style={{ textAlign: 'center' }}>
@@ -472,7 +466,7 @@ const PlayMimic = () => {
               </div>
             )}
           </Grid>
-          <Grid item xs={3} display="flex" justifyContent="flex-end">
+          <Grid item xs={6} display="flex" justifyContent="flex-end">
             <Button variant="outlined" color="primary" onClick={getNextGame}>
               mimique suivante
             </Button>
