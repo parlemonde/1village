@@ -380,13 +380,13 @@ const PlayMimic = () => {
               }}
             >
               {choices &&
-                choices.map((val, index) => {
+                choices.map((val) => {
                   const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
                   const isCorrect = isSuccess && found;
                   const mimicOrigine = mimicContent?.origine || '';
                   const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
                   return (
-                    <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
+                    <div key={val} style={{ margin: '0 10px' }}>
                       <ResponseButton
                         value={value}
                         onClick={() => handleClick(value, isSuccess)}
@@ -450,12 +450,12 @@ const PlayMimic = () => {
         </Modal>
         <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
-          <Grid item xs={6} style={{ textAlign: 'center' }}>
+          <Grid item xs={6}>
             {(found || tryCount > 1) && (
-              <div style={{ textAlign: 'center' }}>
+              <div>
                 <p
                   style={{
-                    margin: '0.5rem 1rem',
+                    paddingRight: '10px',
                     textDecorationLine: 'underline',
                   }}
                 >
