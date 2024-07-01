@@ -24,6 +24,8 @@ const pieChartData = {
 };
 
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
+const EngagemtnBarChartTitle = 'Evolution des connexions';
+const ConstribionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const classroomExchanges = useGetClassroomExchanges();
@@ -63,7 +65,7 @@ const CountryStats = () => {
       </div>
       <div className={styles.engagementContainer}>
         <PieCharts pieChartData={pieChartData} />
-        <BarCharts barChartData={barChartData} />
+        <BarCharts barChartData={barChartData} title={EngagemtnBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
         <ClassesExchangesCard
@@ -72,7 +74,7 @@ const CountryStats = () => {
           totalVideos={classroomExchanges.data.totalVideos}
           className={styles.exchangesCard}
         />
-        <BarCharts barChartData={barChartData} className={styles.connectionsChart} />
+        <BarCharts barChartData={barChartData} title={ConstribionBarChartTitle} className={styles.connectionsChart} />
       </div>
     </>
   );
