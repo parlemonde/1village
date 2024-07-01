@@ -92,7 +92,9 @@ export const Base = ({ children, rightNav, hideLeftNav = false, showSubHeader = 
               <SubHeaders />
             </div>
           )}
-          <div className="app-content__card with-shadow">{children}</div>
+          <Box sx={{ padding: '0.5rem 1.2rem', margin: 0 }} className="app-content__card with-shadow">
+            {children}
+          </Box>
         </Grid>
 
         {rightNav && (
