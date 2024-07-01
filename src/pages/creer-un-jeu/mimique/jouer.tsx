@@ -364,19 +364,8 @@ const PlayMimic = () => {
               })}
             </RadioGroup>
           </Grid>
-          <Grid
-            container
-            border={1}
-            borderColor={primaryColor}
-            p={3}
-            my={1}
-            boxSizing="border-box"
-            style={{ flex: 1 }}
-            spacing={3}
-            alignItems="flex-start"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
+          <Grid container border={1} borderColor={primaryColor} boxSizing="border-box" alignItems="flex-start" justifyContent="flex-start">
+            <Grid item xs={12} justifyContent="center" style={{ width: '100%' }}>
               {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
             </Grid>
             <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
@@ -385,11 +374,9 @@ const PlayMimic = () => {
             <div
               className="display-ended-game"
               style={{
-                display: 'grid',
+                display: 'flex',
                 width: '100%',
-                gridTemplateColumns: '1fr 2fr 2fr',
-                gridTemplateRows: 'repeat(3,auto)',
-                gridTemplateAreas: '". a b " "c d e" "f g h" "i j k"',
+                flexDirection: 'column',
               }}
             >
               {choices &&
