@@ -6,6 +6,7 @@ import { ButtonBase, Card } from '@mui/material';
 import styles from '../../styles/parametrer-hymne.module.css';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/anthemChecks';
@@ -46,7 +47,7 @@ const AnthemStep3 = () => {
 
   return (
     <Base>
-      <div className={styles.mainContainer}>
+      <PageLayout>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
@@ -117,7 +118,7 @@ const AnthemStep3 = () => {
             <StepsButton prev="/parametrer-hymne/2" next={onNext} />
           </div>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };
