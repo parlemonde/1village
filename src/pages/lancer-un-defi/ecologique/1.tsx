@@ -5,6 +5,7 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { isEco, DEFI, ECO_ACTIONS } from 'src/activity-types/defi.constants';
 import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
@@ -49,7 +50,7 @@ const DefiEcoStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
           steps={['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation']}
@@ -64,7 +65,7 @@ const DefiEcoStep1 = () => {
             ))}
           </div>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

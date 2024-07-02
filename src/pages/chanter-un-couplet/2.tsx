@@ -3,6 +3,7 @@ import React from 'react';
 
 import styles from '../../styles/chanter-un-couplet.module.css';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
@@ -35,7 +36,7 @@ const SongStep2 = () => {
 
   return (
     <Base>
-      <div className={styles.mainContainer}>
+      <PageLayout>
         <Steps
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={1}
@@ -66,7 +67,7 @@ const SongStep2 = () => {
             <StepsButton prev="/chanter-un-couplet/1" next={onNext} />
           </div>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

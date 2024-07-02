@@ -7,6 +7,7 @@ import { Tooltip, Button, Backdrop, CircularProgress } from '@mui/material';
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { ImageStepContainer } from 'src/components/FinalStep/ImageStepContainer';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
@@ -102,7 +103,7 @@ const ReInventStoryStep5 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={[
@@ -125,7 +126,7 @@ const ReInventStoryStep5 = () => {
           </p>
 
           {isEdit ? (
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
+            <div style={{ width: '100%', maxWidth: '320px', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
               <Link href="/re-inventer-une-histoire/2" passHref>
                 <Button component="a" color="secondary" variant="contained" href="/re-inventer-une-histoire/2">
                   {"Modifier à l'étape précédente"}
@@ -197,7 +198,7 @@ const ReInventStoryStep5 = () => {
           />
         </div>
         <StepsButton prev="/re-inventer-une-histoire/4" />
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

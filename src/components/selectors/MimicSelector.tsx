@@ -76,7 +76,13 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
             {isFieldValid(MimicData.video as string | null) && (
               <div style={{ width: '100%', height: '100%', marginTop: '0.2rem' }}>
                 <ReactPlayer width="100%" height="70%" light url={MimicData.video || ''} controls />
-                <Button name="video" style={{ width: '100%', marginTop: '0.4rem' }} onClick={toggleModal} variant="outlined" color="primary">
+                <Button
+                  name="video"
+                  style={{ width: '100%', maxWidth: '320px', marginTop: '0.4rem' }}
+                  onClick={toggleModal}
+                  variant="outlined"
+                  color="primary"
+                >
                   Changer de vidéo
                 </Button>
               </div>
@@ -84,13 +90,19 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
             {!isFieldValid(MimicData.video as string | null) && (
               <div>
                 {!showError && (
-                  <Button name="video" style={{ width: '100%' }} onClick={toggleModal} variant="outlined" color="primary">
+                  <Button name="video" style={{ width: '100%', maxWidth: '320px' }} onClick={toggleModal} variant="outlined" color="primary">
                     {<UploadIcon style={{ fill: 'currentcolor', width: '3rem', height: '3rem', margin: '30px' }} />}
                   </Button>
                 )}
                 {showError && (
                   <div style={{ marginTop: '1.5rem' }}>
-                    <Button name="video" style={{ width: '100%', borderColor: '#d93939' }} onClick={toggleModal} variant="outlined" color="primary">
+                    <Button
+                      name="video"
+                      style={{ width: '100%', maxWidth: '320px', borderColor: '#d93939' }}
+                      onClick={toggleModal}
+                      variant="outlined"
+                      color="primary"
+                    >
                       {<UploadIcon style={{ color: '#d93939', width: '3rem', height: '3rem', margin: '30px' }} />}
                     </Button>
                     <span style={{ fontSize: '0.7rem', marginLeft: '1rem', color: '#d93939' }}>Ce champ est obligatoire</span>
@@ -114,7 +126,13 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               value={MimicData.signification || ''}
               label="Signification réelle"
               onChange={onDataChange('signification')}
-              style={{ width: '100%', margin: '10px' }}
+              sx={{
+                width: '100%',
+                margin: {
+                  xs: 0,
+                  md: '10px',
+                },
+              }}
               error={showError && !isFieldValid(MimicData.signification)}
               helperText={showError && !isFieldValid(MimicData.signification) ? 'Ce champ est obligatoire' : ''}
               inputProps={{
@@ -133,7 +151,14 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
               label="Origine"
               value={MimicData.origine || ''}
               onChange={onDataChange('origine')}
-              style={{ width: '100%', margin: '10px', fontStyle: 'italic' }}
+              sx={{
+                width: '100%',
+                margin: {
+                  xs: 0,
+                  md: '10px',
+                },
+                fontStyle: 'italic',
+              }}
               helperText={'Ce champ est optionnel'}
               inputProps={{
                 maxLength: 800,
@@ -155,7 +180,13 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
           label="Signification inventée 1"
           value={MimicData.fakeSignification1 || ''}
           onChange={onDataChange('fakeSignification1')}
-          style={{ width: '100%', margin: '10px' }}
+          sx={{
+            width: '100%',
+            margin: {
+              xs: 0,
+              md: '10px',
+            },
+          }}
           error={showError && !isFieldValid(MimicData.fakeSignification1)}
           helperText={showError && !isFieldValid(MimicData.fakeSignification1) ? 'Ce champ est obligatoire' : ''}
           inputProps={{
@@ -173,7 +204,13 @@ const MimicSelector = ({ MimicData, mimicNumber, onDataChange, onVideoChange, on
           label="Signification inventée 2"
           value={MimicData.fakeSignification2 || ''}
           onChange={onDataChange('fakeSignification2')}
-          style={{ width: '100%', margin: '10px' }}
+          sx={{
+            width: '100%',
+            margin: {
+              xs: 0,
+              md: '10px',
+            },
+          }}
           error={showError && !isFieldValid(MimicData.fakeSignification2)}
           helperText={showError && !isFieldValid(MimicData.fakeSignification2) ? 'Ce champ est obligatoire' : ''}
           inputProps={{

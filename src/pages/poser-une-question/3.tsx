@@ -12,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { isQuestion } from 'src/activity-types/anyActivity';
 import type { QuestionActivity } from 'src/activity-types/question.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getActivityPhase } from 'src/components/activities/utils';
@@ -108,7 +109,7 @@ const Question3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
           urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
@@ -191,7 +192,7 @@ const Question3 = () => {
 
           <StepsButton prev="/poser-une-question/2" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

@@ -7,6 +7,7 @@ import { Tooltip, Button, Backdrop, CircularProgress } from '@mui/material';
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { ImageStepContainer } from 'src/components/FinalStep/ImageStepContainer';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/storyChecks';
@@ -85,7 +86,7 @@ const StoryStep5 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
@@ -173,7 +174,7 @@ const StoryStep5 = () => {
           />
           <StepsButton prev="/creer-une-histoire/4" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

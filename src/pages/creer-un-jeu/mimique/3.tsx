@@ -4,6 +4,7 @@ import React from 'react';
 import { isGame } from 'src/activity-types/anyActivity';
 import { isMimic, isMimicValid } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import MimicSelector from 'src/components/selectors/MimicSelector';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -61,7 +62,7 @@ const MimiqueStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
           urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
@@ -77,7 +78,7 @@ const MimiqueStep3 = () => {
           onPrev={onPrev}
           onVideoChange={videoChange}
         />
-      </div>
+      </PageLayout>
     </Base>
   );
 };

@@ -12,6 +12,7 @@ import { isReportage } from 'src/activity-types/anyActivity';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
@@ -72,7 +73,7 @@ const ReportageStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[getReportage(activity.subType, data).step1, 'Le reportage', 'Prévisualiser']}
           urls={['/realiser-un-reportage/1?edit', '/realiser-un-reportage/2', '/realiser-un-reportage/3']}
@@ -149,7 +150,7 @@ const ReportageStep3 = () => {
 
           <StepsButton prev="/realiser-un-reportage/2" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

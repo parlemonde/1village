@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import EvenementIcon from 'src/svg/enigme/evenement-mystere.svg';
 import LocationIcon from 'src/svg/enigme/location.svg';
@@ -48,7 +49,7 @@ const activities = [
 const Enigme = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1>Qu&apos;allez vous faire deviner à vos Pélicopains ?</h1>
           <div className="width-900" style={{ margin: '2rem 0' }}>
@@ -57,7 +58,7 @@ const Enigme = () => {
 
           <ActivityChoice activities={activities} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

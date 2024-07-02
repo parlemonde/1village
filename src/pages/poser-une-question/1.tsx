@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -86,7 +87,7 @@ const Question1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <BackButton href="/" />
         <Steps
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
@@ -156,7 +157,7 @@ const Question1 = () => {
 
           <StepsButton next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

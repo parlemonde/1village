@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { Alert, TextField } from '@mui/material';
+import { Alert, Box, TextField } from '@mui/material';
 
 import type { DisplayableInstrumentsType } from '../../../../utils/instruments';
 import AudioEditor from '../../content/editors/AudioEditor/AudioEditor';
 import AnthemTrackIcon from '../AnthemTrackIcon/AnthemTrackIcon';
-import styles from './AnthemTrack.module.css';
 import AddAudioButton from 'src/components/buttons/AddAudioButton';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { EditButton } from 'src/components/buttons/EditButton';
@@ -29,41 +28,70 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
     handleTrackUpdate({ ...track, iconUrl });
   };
 
-  return (
-    <div className={styles.trackContainer}>
-      <div className={styles.trackContainer}>
-        <AnthemTrackIcon track={track} handleIconUpdate={handleIconUpdate} instruments={instruments} />
-      </div>
+  // track.sampleUrl = 'https://download.samplelib.com/mp3/sample-3s.mp3';
 
-      <div className={styles.trackLabel}>
-        {isEditingLabel ? (
-          <TextField
-            defaultValue={track.label}
-            onBlur={(e) => {
-              setIsEditingLabel(false);
-              if (e.target.value.length > 0) handleTrackUpdate({ ...track, label: e.target.value });
-            }}
-            autoFocus
-          ></TextField>
-        ) : (
-          <span onClick={() => setIsEditingLabel(true)}>{track.label}</span>
-        )}
-      </div>
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: {
+          xs: track.sampleUrl ? 'column' : 'row',
+          sm: 'row',
+        },
+        alignItems: {
+          xs: track.sampleUrl ? 'start' : 'center',
+          sm: 'center',
+        },
+        justifyContent: 'space-between',
+        marginBottom: '10px',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          marginBottom: {
+            xs: track.sampleUrl && '10px',
+            sm: '0',
+          },
+        }}
+      >
+        <AnthemTrackIcon track={track} handleIconUpdate={handleIconUpdate} instruments={instruments} />
+        <div style={{ marginLeft: '10px' }}>
+          {isEditingLabel ? (
+            <TextField
+              defaultValue={track.label}
+              onBlur={(e) => {
+                setIsEditingLabel(false);
+                if (e.target.value.length > 0) handleTrackUpdate({ ...track, label: e.target.value });
+              }}
+              autoFocus
+            ></TextField>
+          ) : (
+            <span onClick={() => setIsEditingLabel(true)}>{track.label}</span>
+          )}
+        </div>
+      </Box>
 
       {!track.sampleUrl ? (
         <AddAudioButton onClick={() => setIsAudioEditorOpen(true)} />
       ) : (
-        <div className={styles.sampleControlsContainer}>
-          <audio controls src={track.sampleUrl} className={styles.sampleAudioControl}>
-            <Alert severity="error">{'Erreur: impossible de charger le son.'}</Alert>
-          </audio>
+        <div style={{ display: 'flex' }}>
+          <Box component="audio" controls src={'track.sampleUrl'} sx={{ width: { xs: '220px', sm: '250px', md: '300px' }, height: '30px' }}>
+            <Alert sx={{ padding: '0 16px' }} severity="error">
+              {'Erreur: impossible de charger le son.'}
+            </Alert>
+          </Box>
           <EditButton //add edit condition ??
+            style={{ marginLeft: '6px' }}
             size="small"
             onClick={() => {
               setIsAudioEditorOpen(true);
             }}
           />
           <DeleteButton
+            style={{ marginLeft: '6px' }}
             color="red"
             confirmTitle="Supprimer ce son ?"
             confirmLabel="Voulez-vous vraiment supprimer ce son ?"
@@ -82,7 +110,7 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
           setIsAudioEditorOpen={setIsAudioEditorOpen}
         />
       )}
-    </div>
+    </Box>
   );
 };
 
