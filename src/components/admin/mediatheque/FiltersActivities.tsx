@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
+import { countries } from 'server/utils/iso-3166-countries-french';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
@@ -34,8 +35,7 @@ export default function FiltersActivities() {
   const [labelNameSubTheme, setLabelNameSubTheme] = useState<string[]>([]);
   const [selectedVillages, setSelectedVillages] = useState<number[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [filter, setFilter] = useState({});
-  const { setFilters, setUpdatePageKey, setPage, allFiltered, allActivities, setAllFiltered } = useContext(MediathequeContext);
+  const { allActivities, setAllFiltered, filters, setFilters } = useContext(MediathequeContext);
 
   const updateAllFiltered = useCallback(
     (currentFilter) => {
@@ -43,28 +43,14 @@ export default function FiltersActivities() {
         let isValid = true;
         Object.keys(currentFilter).forEach((filterKey) => {
           if (filterKey === 'countries' && currentFilter.countries.length > 0) {
-            console.log('coucou');
             const {
               user: {
                 country: { isoCode },
               },
             } = activity;
-            console.log(isoCode);
-            if (currentFilter.countries.findIndex((c) => c === isoCode) < 0) {
-              if (isoCode === 'CH') {
-                console.log('ça passe pas');
-                console.log(isoCode);
-                console.log(currentFilter.countries);
-              }
-
+            if (currentFilter.countries.findIndex((c: string) => c === isoCode) < 0) {
               isValid = false;
               return;
-            } else {
-              if (isoCode === 'CH') {
-                console.log('ça passe pas mais dans le else oui');
-                console.log(isoCode);
-                console.log(currentFilter.countries);
-              }
             }
           } else if (Array.isArray(currentFilter[filterKey])) {
             if (currentFilter[filterKey].length > 0 && currentFilter[filterKey].indexOf(activity[filterKey]) < 0) {
@@ -80,28 +66,27 @@ export default function FiltersActivities() {
         });
         return isValid;
       });
-      console.log(currentFilter);
-      console.log(newState);
       return newState;
     },
-    [allActivities, setAllFiltered],
+    [allActivities],
   );
 
   useEffect(() => {
-    const newFiltered = updateAllFiltered(filter);
+    const newFiltered = updateAllFiltered(filters);
     setAllFiltered(newFiltered);
-  }, [filter, setAllFiltered, updateAllFiltered]);
+  }, [filters, setAllFiltered, updateAllFiltered]);
 
   const handleChangeLabelActivity = (event: SelectChangeEvent<typeof labelNameActivity>) => {
     const {
       target: { value },
     } = event;
-    setLabelNameActivity(typeof value === 'string' ? value.split(',') : value);
+    const stringValue = typeof value === 'string' ? value : value.join(',');
+    setLabelNameActivity(stringValue.split(','));
     setLabelNameSubTheme([]);
     setSelectedVillages([]);
 
-    setFilter({
-      type: activityNumberMapper[value],
+    setFilters({
+      type: activityNumberMapper[stringValue],
     });
   };
 
@@ -109,37 +94,43 @@ export default function FiltersActivities() {
     const {
       target: { value },
     } = event;
-    setLabelNameSubTheme(value);
+
+    const valueArray = typeof value === 'string' ? [value] : value;
+    setLabelNameSubTheme(valueArray);
     setSelectedVillages([]);
 
-    const selectedSubtypes = value.map((v) => subThemeNumberMapper[v]);
-    setFilter((prev) => ({ ...prev, villageId: [], countries: [], subType: selectedSubtypes }));
+    const selectedSubtypes = valueArray.map((v: string) => subThemeNumberMapper[v]);
+    setFilters((prev) => ({ ...prev, villageId: [], countries: [], subType: selectedSubtypes }));
   };
 
-  const handleVMChange = (event: SelectChangeEvent<number>) => {
+  const handleVMChange = (event: SelectChangeEvent<number[]>) => {
     const {
       target: { value },
     } = event;
-    setSelectedVillages(value);
-    setFilter((prev) => ({ ...prev, countries: [], villageId: value }));
+    const numericValue = Array.isArray(value) ? value.map(Number) : [Number(value)];
+    setSelectedVillages(numericValue);
+    setSelectedCountries([]);
+    setFilters((prev) => ({ ...prev, countries: [], villageId: value }));
   };
 
   const labelNameVillageMondeSelect = useMemo(() => {
     const result: Array<{ villageId: number; name: string }> = [];
-    const filteredNoWm = updateAllFiltered({ ...filter, villageId: [] });
+    const filteredNoWm = updateAllFiltered({ ...filters, villageId: [] });
     filteredNoWm.forEach(({ villageId, name }) => {
       if (result.findIndex((vm) => vm.villageId === villageId) < 0) {
         result.push({ villageId, name });
       }
     });
     return result.sort((a, b) => (a.name < b.name ? -1 : 1));
-  }, [filter, updateAllFiltered]);
+  }, [filters, updateAllFiltered]);
 
   const subThemes = labelNameActivity.flatMap((activity) => subThemesMap[activity] || []);
 
   const countryList = useMemo(() => {
     const result: Array<{ isoCode: string; name: string }> = [];
-    const filteredNoWm = updateAllFiltered({ ...filter, countries: [] });
+    const filteredNoWm: Array<{ countries?: Array<{ isoCode: string; name: string }> }> = updateAllFiltered({ ...filters, countries: [] }) as Array<{
+      countries?: Array<{ isoCode: string; name: string }>;
+    }>;
 
     filteredNoWm.forEach(({ countries }) => {
       countries?.forEach(({ isoCode, name }) => {
@@ -149,15 +140,17 @@ export default function FiltersActivities() {
       });
     });
     return result.sort((a, b) => (a.name < b.name ? -1 : 1));
-  }, [filter, updateAllFiltered]);
+  }, [filters, updateAllFiltered]);
 
-  const handleCountryChange = (event: SelectChangeEvent<string>) => {
+  const handleCountryChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
     } = event;
-    setSelectedCountries(value);
+    const selectedValues = typeof value === 'string' ? value.split(',') : value;
 
-    setFilter((prev) => ({ ...prev, countries: value }));
+    setSelectedCountries(selectedValues);
+
+    setFilters((prev) => ({ ...prev, countries: value }));
   };
 
   return (
@@ -191,7 +184,6 @@ export default function FiltersActivities() {
             multiple
             displayEmpty
             value={labelNameSubTheme}
-            // onChange={(event) => setLabelNameSubTheme(event.target.value as string[])}
             onChange={handleSubtypesChange}
             input={<OutlinedInput />}
             renderValue={(selected) => {
@@ -253,14 +245,17 @@ export default function FiltersActivities() {
             value={selectedCountries}
             onChange={handleCountryChange}
             input={<OutlinedInput />}
-            // renderValue={(selected) => {
-            //   if (selected.length === 0) {
-            //     return <>VM</>;
-            //   }
-            //   const names = (selected as unknown as number[]).map((v) => labelNameVillageMondeSelect.find((v1) => v1.villageId === v)?.name);
+            renderValue={(selected) => {
+              if (selected.length === 0) {
+                return <>Pays</>;
+              }
 
-            //   return names.join(', ');
-            // }}
+              const names = selected.map((isoCode: string) => {
+                const country = countries.find((country) => country.isoCode === isoCode);
+                return country ? country.name : undefined;
+              });
+              return names.join(', ');
+            }}
             MenuProps={MenuProps}
             inputProps={{ 'aria-label': 'Label' }}
           >
@@ -270,7 +265,7 @@ export default function FiltersActivities() {
                 value={isoCode}
                 style={getStyles(
                   name,
-                  labelNameVillageMondeSelect.map((t) => t.name),
+                  countryList.map((t) => t.name),
                   theme,
                 )}
               >

@@ -23,11 +23,8 @@ import Stack from '@mui/material/Stack';
 import MediaCard from 'src/components/admin/mediatheque/CardMediatheque';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
-import Filters from 'src/components/admin/mediatheque/Filter';
 import FiltersActivities from 'src/components/admin/mediatheque/FiltersActivities';
-import FiltersUsers from 'src/components/admin/mediatheque/FiltersUsers';
 import ModalFilter from 'src/components/admin/mediatheque/ModalFilter';
-import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
@@ -40,7 +37,7 @@ const Mediatheque = () => {
 
   const handleResetFilters = () => {
     setUseAdminData(false);
-    setFilters([[]]);
+    setFilters({});
     setUpdateFiltersKey((prevKey) => prevKey + 1);
     setUpdatePageKey((prevKey) => prevKey + 1);
     setIsChecked(false);

@@ -6,8 +6,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-import { MediaCarousel } from 'src/components/admin/mediatheque/Carousel';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
+import { MediaCarousel } from 'src/components/admin/mediatheque/MediaCarousel';
 import { activityNameMapper } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 import type { Activity, ActivityContent } from 'types/activity.type';
@@ -24,6 +24,7 @@ interface Village {
 interface ExtendedActivity extends Activity {
   user: User;
   village: Village;
+  name: string;
 }
 //CARROUSEL si item.content.length > 1 alors fais le caroussel sirnon affiche moi le classique celui auddessus
 

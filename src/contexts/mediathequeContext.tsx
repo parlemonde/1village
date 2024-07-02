@@ -2,15 +2,15 @@ import React, { createContext, useState, useMemo, useEffect } from 'react';
 
 import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
 import { useGetVillages } from 'src/api/villages/villages.get';
-import type { Filter } from 'types/mediatheque.type';
 
 type MediathequeProviderProps = {
   children: React.ReactNode;
 };
 
 type MediathequeContextType = {
-  filters: Array<Filter[]>;
-  setFilters: React.Dispatch<React.SetStateAction<Array<Filter[]>>>;
+  filters: object;
+  setFilters: React.Dispatch<React.SetStateAction<object>>;
+  setAllFiltered: React.Dispatch<React.SetStateAction<[]>>;
   allFiltered: [];
   useAdminData: boolean;
   setUseAdminData: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,7 +18,8 @@ type MediathequeContextType = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   updatePageKey: number;
   setUpdatePageKey: React.Dispatch<React.SetStateAction<number>>;
-  villageMondes: string[];
+  villageMondes: string[] | undefined;
+  allActivities: [];
 };
 
 interface UserData {
@@ -48,6 +49,7 @@ const MediathequeContext = createContext<MediathequeContextType>({
   filters: [],
   setFilters: () => {},
   allFiltered: [],
+  setAllFiltered: () => {},
   useAdminData: false,
   setUseAdminData: () => {},
   page: 0,
@@ -55,14 +57,16 @@ const MediathequeContext = createContext<MediathequeContextType>({
   updatePageKey: 0,
   setUpdatePageKey: () => {},
   villageMondes: [],
+  allActivities: [],
 });
 
 export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ children }) => {
-  const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
+  // const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
+  const [filters, setFilters] = useState({});
   const [useAdminData, setUseAdminData] = useState(false);
   const [allFiltered, setAllFiltered] = useState<[]>([]);
 
-  const { data: usersData } = useGetMediatheque(filters);
+  const { data: usersData } = useGetMediatheque();
   const [dataToUse, setDataToUse] = useState<[]>([]);
 
   const [page, setPage] = useState<number>(0);
@@ -72,7 +76,7 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
   const [villageMondes, setvillageMondes] = useState<string[]>();
 
   useEffect(() => {
-    setvillageMondes(villages?.map(({ name, id }: { name: string; id: number }) => ({ name, id })) || []);
+    setvillageMondes(villages?.map(({ name }: { name: string }) => name) || []);
   }, [villages]);
 
   useEffect(() => {
@@ -87,7 +91,7 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
           userId: number;
           content: Array<{ type: string; value: string | undefined }>;
           user: { type: number; school: string };
-          village: { name: string; countryCodes: string };
+          village: { name: string; countryCodes?: string };
         } = { id, subType, type, villageId, userId, content: [], user, village };
         if (type === 8 || type === 12 || type === 13 || type === 14) {
           if (type === 8) {
@@ -166,9 +170,6 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
     }),
     [filters, allFiltered, dataToUse, useAdminData, page, updatePageKey, villageMondes],
   );
-
-  // console.log('filters', filters);
-  // console.log('dataToUse', dataToUse);
 
   return <MediathequeContext.Provider value={value}>{children}</MediathequeContext.Provider>;
 };
