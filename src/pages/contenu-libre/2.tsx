@@ -9,6 +9,7 @@ import { getImage } from 'src/activity-types/freeContent.constants';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
@@ -69,7 +70,7 @@ const ContenuLibre = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Contenu', 'Forme', 'Pré-visualiser']}
           urls={['/contenu-libre/1?edit', '/contenu-libre/2', '/contenu-libre/3']}
@@ -166,7 +167,7 @@ const ContenuLibre = () => {
           <ActivityCard activity={activity} user={user} noButtons />
           <StepsButton prev="/contenu-libre/1" next={onNext} />
         </div>
-      </div>
+      </PageLayout>
 
       {/* All Images modal */}
       <Modal

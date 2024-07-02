@@ -41,7 +41,7 @@ export const MascotteCard = ({ activity, isSelf, noButtons, isDraft, showEditBut
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>
           Notre mascotte <strong>{activity.data.mascotteName}</strong>
         </h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `4rem` }}>
             {firstText}
           </div>

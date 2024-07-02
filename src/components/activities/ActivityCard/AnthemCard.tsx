@@ -18,7 +18,7 @@ export const AnthemCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
   >
     <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
       <h3>Paramétrage de l&apos;hymne du village idéal</h3>
-      <div style={{ margin: '0 0.5rem 1rem', height: `4rem`, textAlign: 'justify' }}>
+      <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
         <div className="text multine-with-ellipsis" style={{ maxHeight: `4rem` }}>
           <p>
             {activity.data.chorusLyrics.map((syllable) =>
