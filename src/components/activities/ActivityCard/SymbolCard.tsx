@@ -53,7 +53,7 @@ export const SymbolCard = ({ activity, isSelf, noButtons, isDraft, showEditButto
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{symbolType.title}</h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}
           </div>
