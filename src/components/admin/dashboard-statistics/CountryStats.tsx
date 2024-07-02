@@ -69,12 +69,12 @@ const CountryStats = () => {
       </div>
       <div className={styles.exchangesConnectionsContainer}>
         <ClassesExchangesCard
+          className={styles.exchangesCard}
           totalPublications={classroomExchanges.data.totalActivities}
           totalComments={classroomExchanges.data.totalComments}
           totalVideos={classroomExchanges.data.totalVideos}
-          className={styles.exchangesCard}
         />
-        <BarCharts barChartData={barChartData} title={ConstribionBarChartTitle} className={styles.connectionsChart} />
+        <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ConstribionBarChartTitle} />
       </div>
     </>
   );
