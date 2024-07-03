@@ -28,8 +28,6 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
     handleTrackUpdate({ ...track, iconUrl });
   };
 
-  // track.sampleUrl = 'https://download.samplelib.com/mp3/sample-3s.mp3';
-
   return (
     <Box
       sx={{
