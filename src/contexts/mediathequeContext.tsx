@@ -61,7 +61,6 @@ const MediathequeContext = createContext<MediathequeContextType>({
 });
 
 export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ children }) => {
-  // const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
   const [filters, setFilters] = useState({});
   const [useAdminData, setUseAdminData] = useState(false);
   const [allFiltered, setAllFiltered] = useState<[]>([]);

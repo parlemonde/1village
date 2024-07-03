@@ -73,7 +73,7 @@ export default function FiltersActivities() {
 
   useEffect(() => {
     const newFiltered = updateAllFiltered(filters);
-    setAllFiltered(newFiltered);
+    setAllFiltered(newFiltered as unknown as []);
   }, [filters, setAllFiltered, updateAllFiltered]);
 
   const handleChangeLabelActivity = (event: SelectChangeEvent<typeof labelNameActivity>) => {
@@ -217,7 +217,6 @@ export default function FiltersActivities() {
                 return <>VM</>;
               }
               const names = (selected as unknown as number[]).map((v) => labelNameVillageMondeSelect.find((v1) => v1.villageId === v)?.name);
-
               return names.join(', ');
             }}
             MenuProps={MenuProps}
