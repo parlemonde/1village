@@ -139,12 +139,14 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
 
   return (
     <>
-      <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1} sx={{ position: 'relative', zIndex: '1' }}>
+      <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ position: 'relative', zIndex: '1' }}>
         <Grid
           container
-          spacing={1}
           item
-          xs={5}
+          xl={5}
+          lg={5}
+          md={9}
+          xs={12}
           sx={{
             boxSizing: 'border-box',
             width: 'inherit',
