@@ -1,43 +1,37 @@
-// import React, { useEffect } from 'react';
+import React from 'react';
+import { useDataContext, DataProvider } from './../../../contexts/statisticsContext';
 
-// import {
-//   useGetContributions,
-//   useGetClassroomExchanges,
-//   useGetStudentAccounts,
-//   useGetConnectionTimes,
-// } from './../../../api/statistics/statistics.get.ts';
+const LogRequests = () => {
+  const {
+    contributions,
+    contributionsLoading,
+    contributionsError,
+    classroomExchanges,
+    classroomExchangesLoading,
+    classroomExchangesError,
+    studentAccounts,
+    studentAccountsLoading,
+    studentAccountsError,
+    connectionTimes,
+    connectionTimesLoading,
+    connectionTimesError,
+  } = useDataContext();
 
-// const LogRequests = () => {
-//   const { data: contributions, error: contributionsError, isLoading: contributionsLoading } = useGetContributions();
-//   const { data: classroomExchanges, error: classroomExchangesError, isLoading: classroomExchangesLoading } = useGetClassroomExchanges();
-//   const { data: studentAccounts, error: studentAccountsError, isLoading: studentAccountsLoading } = useGetStudentAccounts();
-//   const { data: connectionTimes, error: connectionTimesError, isLoading: connectionTimesLoading } = useGetConnectionTimes();
+  return (
+    <div>
+      <h1>Requêtes</h1>
+      {!contributionsLoading && !contributionsError && <div>Contributions logged to console.</div>}
+      {!classroomExchangesLoading && !classroomExchangesError && <div>Classroom Exchanges logged to console.</div>}
+      {!studentAccountsLoading && !studentAccountsError && <div>Student Accounts logged to console.</div>}
+      {!connectionTimesLoading && !connectionTimesError && <div>Connection Times logged to console.</div>}
+    </div>
+  );
+};
 
-//   useEffect(() => {
-//     if (!contributionsLoading && !contributionsError) {
-//       console.log('Contributions:', contributions);
-//     }
-//   }, [contributions, contributionsLoading, contributionsError]);
+const LogRequests = () => (
+  <DataProvider>
+    <LogRequests />
+  </DataProvider>
+);
 
-//   useEffect(() => {
-//     if (!classroomExchangesLoading & !classroomExchangesError) {
-//       console.log('Exchanges:', classroomExchanges);
-//     }
-//   }, [classroomExchanges, classroomExchangesLoading, classroomExchangesError]);
-
-//   useEffect(() => {
-//     if (!studentAccountsLoading & !studentAccountsError) {
-//       console.log('student accounts:', studentAccounts);
-//     }
-//   }, [studentAccounts, studentAccountsLoading, studentAccountsError]);
-
-//   useEffect(() => {
-//     if (!connectionTimesLoading & !connectionTimesError) {
-//       console.log('connection times:', connectionTimes);
-//     }
-//   }, [connectionTimes, connectionTimesLoading, connectionTimesError]);
-
-//   return <h1>Requêtes</h1>;
-// };
-
-// export default LogRequests;
+export default LogRequests;

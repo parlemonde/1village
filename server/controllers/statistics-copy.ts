@@ -13,21 +13,19 @@ const commentRepository = AppDataSource.getRepository(Comment);
 const studentRepository = AppDataSource.getRepository(Student);
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
 
-statisticsController.get({ path: '/contributions' }, async (_req, res) => {
-  res.sendJSON(
-    await activityRepository
-      .createQueryBuilder('activity')
-      .select('activity.phase', 'phase')
-      .addSelect('COUNT(DISTINCT activity.userId)', 'activeClassrooms')
-      .addSelect('user.countryCode', 'countryCode')
-      .innerJoin('activity.user', 'user')
-      .where('user.type = :userType', { userType: UserType.TEACHER })
-      .groupBy('activity.phase, user.countryCode')
-      .getRawMany(),
-  );
-});
+statisticsController.get({ path: '/general' }, async (_req, res) => {
+  // contributions
+  const contributions = await activityRepository
+    .createQueryBuilder('activity')
+    .select('activity.phase', 'phase')
+    .addSelect('COUNT(DISTINCT activity.userId)', 'activeClassrooms')
+    .addSelect('user.countryCode', 'countryCode')
+    .innerJoin('activity.user', 'user')
+    .where('user.type = :userType', { userType: UserType.TEACHER })
+    .groupBy('activity.phase, user.countryCode')
+    .getRawMany();
 
-statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => {
+  // classroom exchanges
   const activitiesCount = await activityRepository
     .createQueryBuilder('activity')
     .select('user.countryCode', 'countryCode')
@@ -58,18 +56,11 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
     [UserType.TEACHER],
   );
 
-  const response = {};
-
-  // res.sendJSON({
-  //   totalActivities: activitiesCount,
-  //   totalVideos: parseInt(videosCount[0].total_videos),
-  //   totalComments: commentsCount,
-  // });
-
+  const classroomExchanges = {};
   activitiesCount.forEach((activity) => {
     const key = `${activity.countryCode}-${activity.phase}`;
-    if (!response[key]) {
-      response[key] = {
+    if (!classroomExchanges[key]) {
+      classroomExchanges[key] = {
         countryCode: activity.countryCode,
         phase: activity.phase,
         totalActivities: 0,
@@ -77,13 +68,13 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
         totalVideos: 0,
       };
     }
-    response[key].totalActivities = parseInt(activity.totalActivities);
+    classroomExchanges[key].totalActivities = parseInt(activity.totalActivities);
   });
 
   commentsCount.forEach((comment) => {
     const key = `${comment.countryCode}-${comment.phase}`;
-    if (!response[key]) {
-      response[key] = {
+    if (!classroomExchanges[key]) {
+      classroomExchanges[key] = {
         countryCode: comment.countryCode,
         phase: comment.phase,
         totalActivities: 0,
@@ -91,13 +82,13 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
         totalVideos: 0,
       };
     }
-    response[key].totalComments = parseInt(comment.totalComments);
+    classroomExchanges[key].totalComments = parseInt(comment.totalComments);
   });
 
   videosCount.forEach((video) => {
     const key = `${video.countryCode}-${video.phase}`;
-    if (!response[key]) {
-      response[key] = {
+    if (!classroomExchanges[key]) {
+      classroomExchanges[key] = {
         countryCode: video.countryCode,
         phase: video.phase,
         totalActivities: 0,
@@ -105,26 +96,19 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
         totalVideos: 0,
       };
     }
-    response[key].totalVideos = parseInt(video.total_videos);
+    classroomExchanges[key].totalVideos = parseInt(video.total_videos);
   });
 
-  res.sendJSON(Object.values(response));
-});
+  // accounts
+  const studentAccounts = await studentRepository
+    .createQueryBuilder('student')
+    .select('COUNT(*)', 'totalStudentAccounts')
+    .addSelect('COUNT(DISTINCT student.classroomId)', 'classWithStudentAccounts')
+    .addSelect('COUNT(DISTINCT userToStudent.userId)', 'connectedFamilies')
+    .leftJoin('user_to_student', 'userToStudent', 'userToStudent.studentId = student.id')
+    .getRawOne();
 
-statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
-  res.sendJSON(
-    await studentRepository
-      .createQueryBuilder('student')
-      .select('COUNT(*)', 'totalStudentAccounts')
-      .addSelect('COUNT(DISTINCT student.classroomId)', 'classWithStudentAccounts')
-      .addSelect('COUNT(DISTINCT userToStudent.userId)', 'connectedFamilies')
-      .leftJoin('user_to_student', 'userToStudent', 'userToStudent.studentId = student.id')
-      .getRawOne(),
-  );
-});
-
-//penser à ajouter une condition pour ne sélectionner que les durées supérieur à 60s pour le AVG
-statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
+  // connection time
   const durationThreshold = 60;
 
   const baseConnectionTimesStats = await analyticSessionRepository
@@ -140,10 +124,17 @@ statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
     [durationThreshold, durationThreshold],
   );
 
-  res.sendJSON({
+  const connectionTimes = {
     minDuration: baseConnectionTimesStats.minDuration,
     maxDuration: baseConnectionTimesStats.maxDuration,
     averageDuration: parseInt(baseConnectionTimesStats.averageDuration),
     medianDuration: parseInt(medianConnectionTimesStats[0].duration),
+  };
+
+  res.sendJSON({
+    contributions,
+    classroomExchanges: Object.values(classroomExchanges),
+    studentAccounts,
+    connectionTimes,
   });
 });
