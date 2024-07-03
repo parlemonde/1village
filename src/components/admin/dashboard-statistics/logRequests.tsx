@@ -3,16 +3,12 @@ import { useDataContext, DataProvider } from './../../../contexts/statisticsCont
 
 const LogRequests = () => {
   const {
-    contributions,
     contributionsLoading,
     contributionsError,
-    classroomExchanges,
     classroomExchangesLoading,
     classroomExchangesError,
-    studentAccounts,
     studentAccountsLoading,
     studentAccountsError,
-    connectionTimes,
     connectionTimesLoading,
     connectionTimesError,
   } = useDataContext();
@@ -27,11 +23,5 @@ const LogRequests = () => {
     </div>
   );
 };
-
-const LogRequests = () => (
-  <DataProvider>
-    <LogRequests />
-  </DataProvider>
-);
 
 export default LogRequests;

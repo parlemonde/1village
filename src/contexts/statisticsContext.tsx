@@ -14,7 +14,7 @@ export const DataProvider = ({ children }) => {
   const { data: studentAccounts, error: studentAccountsError, isLoading: studentAccountsLoading } = useGetStudentAccounts();
   const { data: connectionTimes, error: connectionTimesError, isLoading: connectionTimesLoading } = useGetConnectionTimes();
 
-  const value = useMemo(() => {
+  useMemo(() => {
     if (!contributionsLoading && !contributionsError) {
       console.log('Contributions:', contributions);
     }
@@ -27,21 +27,6 @@ export const DataProvider = ({ children }) => {
     if (!connectionTimesLoading && !connectionTimesError) {
       console.log('Connection times:', connectionTimes);
     }
-
-    return {
-      contributions,
-      contributionsError,
-      contributionsLoading,
-      classroomExchanges,
-      classroomExchangesError,
-      classroomExchangesLoading,
-      studentAccounts,
-      studentAccountsError,
-      studentAccountsLoading,
-      connectionTimes,
-      connectionTimesError,
-      connectionTimesLoading,
-    };
   }, [
     contributions,
     contributionsError,
@@ -56,6 +41,21 @@ export const DataProvider = ({ children }) => {
     connectionTimesError,
     connectionTimesLoading,
   ]);
+
+  const value = {
+    contributions,
+    contributionsError,
+    contributionsLoading,
+    classroomExchanges,
+    classroomExchangesError,
+    classroomExchangesLoading,
+    studentAccounts,
+    studentAccountsError,
+    studentAccountsLoading,
+    connectionTimes,
+    connectionTimesError,
+    connectionTimesLoading,
+  };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

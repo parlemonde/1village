@@ -12,6 +12,8 @@ import HorizontalChart from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
+import { LogRequests } from './logRequests';
+import { DataProvider } from './../../../contexts/statisticsContext';
 import styles from './styles/charts.module.css';
 import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
@@ -35,6 +37,8 @@ const CountryStats = () => {
 
   return (
     <>
+      <DataProvider>{/* <LogRequests /> */}</DataProvider>
+
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
           <PhaseDropdown />
