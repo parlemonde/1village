@@ -1,9 +1,3 @@
-.trackContainer {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 2rem;
-}
 .trackLabel input, .trackLabel > span {
     box-sizing: border-box;
     width: 180px;
@@ -16,14 +10,10 @@
 }
 
 .sampleControlsContainer {
-    display: flex;
 }
 
 .sampleAudioControl {
-    width: 250px;
-    height: 30px;
 }
 
 .sampleControlsContainer button {
-    margin-left: 6px;
 }

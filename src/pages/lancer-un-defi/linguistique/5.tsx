@@ -12,6 +12,7 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { isLanguage, getDefi, getLanguageTheme, DEFI, LANGUAGE_THEMES } from 'src/activity-types/defi.constants';
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
@@ -70,7 +71,7 @@ const DefiStep5 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[
             capitalize(data.language) || 'Langue',
@@ -188,7 +189,7 @@ const DefiStep5 = () => {
 
           <StepsButton prev="/lancer-un-defi/linguistique/4" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
