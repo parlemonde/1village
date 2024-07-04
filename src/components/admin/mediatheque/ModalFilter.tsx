@@ -8,8 +8,6 @@ import Modal from '@mui/material/Modal';
 
 import FiltersActivities from './FiltersActivities';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
-import Filters from 'src/components/admin/mediatheque/Filter';
-import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 
 const styleModal = {
@@ -66,9 +64,6 @@ const ModalFilter = () => {
             X
           </button>
           <FiltersActivities key={updateFiltersKey} />
-          <Filters labels={activitiesLabel} placeholder="VM" />
-          <Filters labels={activitiesLabel} placeholder="Pays" />
-          <Filters labels={activitiesLabel} placeholder="Classes" />
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <CheckboxAdmin isChecked={isChecked} onCheckboxChange={setIsChecked} />
             <IconButton aria-label="delete" color="primary" onClick={handleResetFilters}>

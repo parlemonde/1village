@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 
 import { activitiesLabel, activityNumberMapper, subThemesMap, subThemeNumberMapper } from 'src/config/mediatheque/dataFilters';
+import type { UserData } from 'src/contexts/mediathequeContext';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 
 const ITEM_HEIGHT = 48;
@@ -39,7 +40,7 @@ export default function FiltersActivities() {
 
   const updateAllFiltered = useCallback(
     (currentFilter) => {
-      const newState = allActivities.filter((activity) => {
+      const newState = allActivities.filter((activity: UserData) => {
         let isValid = true;
         Object.keys(currentFilter).forEach((filterKey) => {
           if (filterKey === 'countries' && currentFilter.countries.length > 0) {
@@ -52,13 +53,19 @@ export default function FiltersActivities() {
               isValid = false;
               return;
             }
+            currentFilter.countries.forEach((c: string) => {
+              if ((c === 'FR' && activity.user.type === 0) || activity.user.type === 1 || activity.user.type === 2) {
+                isValid = false;
+                return;
+              }
+            });
           } else if (Array.isArray(currentFilter[filterKey])) {
-            if (currentFilter[filterKey].length > 0 && currentFilter[filterKey].indexOf(activity[filterKey]) < 0) {
+            if (currentFilter[filterKey].length > 0 && currentFilter[filterKey].indexOf(activity[filterKey as keyof UserData]) < 0) {
               isValid = false;
               return;
             }
           } else {
-            if (activity[filterKey] !== currentFilter[filterKey]) {
+            if (activity[filterKey as keyof UserData] !== currentFilter[filterKey]) {
               isValid = false;
               return;
             }

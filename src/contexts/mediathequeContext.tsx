@@ -22,15 +22,16 @@ type MediathequeContextType = {
   allActivities: [];
 };
 
-interface UserData {
+export type UserData = {
   id: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any;
+  countries: { isoCode: string; name: string }[];
   subType: number;
   type: number;
   villageId: number;
   userId: number;
-  user: { type: number; school: string };
+  user: { type: number; school: string; country: { isoCode: string; name: string } };
   village: { name: string };
   data: {
     mascotteImage?: string;
@@ -43,7 +44,7 @@ interface UserData {
     place?: { imageStory?: string; imageUrl?: string };
     tale?: { imageStory?: string; imageUrl?: string };
   };
-}
+};
 
 const MediathequeContext = createContext<MediathequeContextType>({
   filters: [],
