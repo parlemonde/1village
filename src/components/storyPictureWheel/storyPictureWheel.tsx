@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import { Grid, Typography, CardMedia, Tooltip } from '@mui/material';
@@ -230,7 +231,9 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                       height: '10rem',
                       width: '10rem',
                     })}
-                    className="handle"
+                    className={classNames('handle', { 'handle--is-rotating': isRotating })}
+                    onClick={handleRotate}
+                    onAnimationEnd={() => setIsRotating(0)}
                   />
                 </div>
               )}
