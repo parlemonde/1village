@@ -2,13 +2,12 @@
 
 .SlotMachine {
   position: absolute;
-  margin-top: 7rem;
-  width: 365px;
+  margin-top: 1rem;
+  width: 420px;
 }
 
 .cards {
   display: flex;
-  justify-content: space-around;
 }
 
 .slot {
@@ -17,6 +16,7 @@
   display: inline-block;
   height: 100px;
   width: 80px;
+  margin-right: 3rem;
 }
 
 section {

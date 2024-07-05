@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React from 'react';
 
 import { Grid, Typography, CardMedia, Tooltip } from '@mui/material';
@@ -137,21 +136,48 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
     return randomOption;
   };
 
+  const MobileStyles = {
+    slotHandle: {
+      display: 'block',
+      marginLeft: '-14px',
+      height: '110px',
+      width: 'auto',
+    },
+    slotMachine: {
+      width: '280px',
+      marginTop: '1rem',
+    },
+    slot: {
+      width: '60px',
+      marginRight: '1rem',
+    },
+    section: {
+      width: '60px',
+      height: '60px',
+    },
+    cardText: {
+      fontSize: '0.8rem',
+      marginBottom: '2px',
+      padding: '5px',
+    },
+  };
+
   return (
     <>
       <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ position: 'relative', zIndex: '1' }}>
         <Grid
           container
           item
-          xl={5}
-          lg={5}
-          md={9}
           xs={12}
           sx={{
+            m: 0,
+            p: 0,
+            mt: '1rem',
             boxSizing: 'border-box',
             width: 'inherit',
             paddingRight: '8px',
             zIndex: '2',
+            justifyContent: 'center',
           }}
         >
           <Box
@@ -161,51 +187,73 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
             }}
           >
             <Paper elevation={0}>
-              <SlotMachine style={{ height: '25rem', width: '25rem' }} />
+              <Box
+                component={SlotMachine}
+                sx={{
+                  height: 'auto',
+                  width: {
+                    xs: '260px',
+                    sm: '25rem',
+                  },
+                }}
+              />
             </Paper>
             <div>
               {ableToRotate === false ? (
                 <Tooltip title="Créez au moins 2 histoires" followCursor>
                   <div>
-                    <SlotMachineHandle
-                      style={{
+                    <Box
+                      component={SlotMachineHandle}
+                      sx={(theme) => ({
+                        ...style,
+                        [theme.breakpoints.only('xs')]: MobileStyles.slotHandle,
                         display: 'block',
                         marginLeft: '-3rem',
-                        marginTop: '5rem',
+                        marginTop: '-2rem',
                         height: '10rem',
                         width: '10rem',
-                      }}
+                      })}
                       className="handle"
                     />
                   </div>
                 </Tooltip>
               ) : (
                 <div className={!rolling ? 'roll rolling' : 'roll'} onClick={!rolling ? roll : undefined}>
-                  <SlotMachineHandle
-                    style={{
+                  <Box
+                    component={SlotMachineHandle}
+                    sx={(theme) => ({
                       ...style,
+                      [theme.breakpoints.only('xs')]: MobileStyles.slotHandle,
                       display: 'block',
                       marginLeft: '-3rem',
-                      marginTop: '5rem',
+                      marginTop: '-2rem',
                       height: '10rem',
                       width: '10rem',
-                    }}
-                    className={classNames('handle', { 'handle--is-rotating': isRotating })}
-                    onClick={handleRotate}
-                    onAnimationEnd={() => setIsRotating(0)}
+                    })}
+                    className="handle"
                   />
                 </div>
               )}
             </div>
           </Box>
 
-          <div className="SlotMachine">
+          <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.slotMachine })} className="SlotMachine">
             <div className="cards">
-              <div className="slot">
-                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+              <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.slot })} className="slot">
+                <Typography
+                  sx={(theme) => ({
+                    mb: 1.5,
+                    p: 2,
+                    textAlign: 'center',
+                    borderRadius: '0.5rem',
+                    backgroundColor: '#DEDBDB',
+                    [theme.breakpoints.only('xs')]: MobileStyles.cardText,
+                  })}
+                  variant={'h3'}
+                >
                   ODD
                 </Typography>
-                <section>
+                <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.section })} component="section">
                   <div className="container" ref={slotRef1}>
                     {oddRandomImages &&
                       oddRandomImages.map((obj, i) => (
@@ -220,13 +268,23 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                         </div>
                       ))}
                   </div>
-                </section>
-              </div>
-              <div className="slot">
-                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                </Box>
+              </Box>
+              <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.slot })} className="slot">
+                <Typography
+                  sx={(theme) => ({
+                    mb: 1.5,
+                    p: 2,
+                    textAlign: 'center',
+                    borderRadius: '0.5rem',
+                    backgroundColor: '#DEDBDB',
+                    [theme.breakpoints.only('xs')]: MobileStyles.cardText,
+                  })}
+                  variant={'h3'}
+                >
                   Objet
                 </Typography>
-                <section>
+                <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.section })} component="section">
                   <div className="container" ref={slotRef2}>
                     {objectRandomImages &&
                       objectRandomImages.map((obj, i) => (
@@ -241,13 +299,23 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                         </div>
                       ))}
                   </div>
-                </section>
-              </div>
-              <div className="slot">
-                <Typography sx={{ mb: 1.5, p: 2, textAlign: 'center', borderRadius: '0.5rem', backgroundColor: '#DEDBDB' }} variant={'h3'}>
+                </Box>
+              </Box>
+              <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.slot })} className="slot">
+                <Typography
+                  sx={(theme) => ({
+                    mb: 1.5,
+                    p: 2,
+                    textAlign: 'center',
+                    borderRadius: '0.5rem',
+                    backgroundColor: '#DEDBDB',
+                    [theme.breakpoints.only('xs')]: MobileStyles.cardText,
+                  })}
+                  variant={'h3'}
+                >
                   Lieu
                 </Typography>
-                <section>
+                <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.section })} component="section">
                   <div className="container" ref={slotRef3}>
                     {placeRandomImages &&
                       placeRandomImages.map((obj, i) => (
@@ -262,10 +330,10 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                         </div>
                       ))}
                   </div>
-                </section>
-              </div>
+                </Box>
+              </Box>
             </div>
-          </div>
+          </Box>
         </Grid>
       </Grid>
     </>
