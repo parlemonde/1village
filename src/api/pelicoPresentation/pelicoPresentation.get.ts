@@ -18,21 +18,3 @@ export const usePelicoPresentatations = () => {
     return data;
   });
 };
-
-// async function getPelicoPresentation(id: number) {
-//   const { data } = await axios.get(`${BASE_URL}/${id}`);
-//     return data;
-// }
-
-// export const useGetPelicoPresentation = (id: number) => {
-//   return useQuery(['pelico-presentation'], getPelicoPresentation(id));
-// };
-
-// async function getPelicoPresentations() {
-//   const { data } = await axios.get(`${BASE_URL}`);
-//     return data;
-// }
-
-// export const useGetPelicoPresentations = () => {
-//   return useQuery(['pelico-presentation'], getPelicoPresentations);
-// };
