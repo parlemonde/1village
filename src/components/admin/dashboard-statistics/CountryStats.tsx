@@ -14,6 +14,7 @@ import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import { LogRequests } from './logRequests';
 import { DataProvider } from './../../../contexts/statisticsContext';
+import Box from '@mui/material/Box';
 import styles from './styles/charts.module.css';
 import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
@@ -51,6 +52,21 @@ const CountryStats = () => {
       <div className={styles.monitorTable}>
         <HorizontalChart />
       </div>
+      <Box
+        height={1}
+        width={1}
+        my={4}
+        display="flex"
+        alignItems="center"
+        justify-content="center"
+        font-weight="bold"
+        gap={4}
+        p={2}
+        py={3}
+        sx={{ border: '2px solid #4C3ED9', borderRadius: 4 }}
+      >
+        Ce pays participe dans les villages-monde suivants :
+      </Box>
       <div className={styles.monitorTable}>
         <DashboardTable />
       </div>
