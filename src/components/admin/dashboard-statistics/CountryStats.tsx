@@ -17,6 +17,7 @@ import { DataProvider } from './../../../contexts/statisticsContext';
 import Box from '@mui/material/Box';
 import styles from './styles/charts.module.css';
 import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
+import PhaseDetails from './menu/PhaseDetails';
 
 const pieChartData = {
   data: [
@@ -95,6 +96,33 @@ const CountryStats = () => {
           totalVideos={classroomExchanges.data.totalVideos}
         />
         <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ConstribionBarChartTitle} />
+      </div>
+      <div>
+        <PhaseDetails
+          phase={1}
+          data={[
+            { name: 'test', connections: 2 },
+            { name: 'test 2', connections: 12 },
+          ]}
+        />
+      </div>
+      <div>
+        <PhaseDetails
+          phase={2}
+          data={[
+            { name: 'test', connections: 2, allo: 'fds' },
+            { name: 'dest 2', connections: 12, allo: 'ads' },
+          ]}
+        />
+      </div>
+      <div>
+        <PhaseDetails
+          phase={3}
+          data={[
+            { name: 'test ff', connections: 15, allo: 'fdjjjjjjjs' },
+            { name: 'dest 2', connections: 1, allo: 'fdsfsqds' },
+          ]}
+        />
       </div>
     </>
   );
