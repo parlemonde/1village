@@ -33,7 +33,7 @@ async function listS3Folders(prefix: string): Promise<string[]> {
 
   // Paramètres pour la requête S3
   const params: AWS.S3.ListObjectsV2Request = {
-    Bucket: process.env.S3_BUCKET_NAME,
+    Bucket: process.env.S3_BUCKET_NAME || '',
     Prefix: prefix,
     Delimiter: '/', // Utiliser le délimiteur '/' pour obtenir uniquement les dossiers
   };
