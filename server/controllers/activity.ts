@@ -4,12 +4,9 @@ import { IsNull } from 'typeorm';
 
 import type { ActivityContent, AnyData } from '../../types/activity.type';
 import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
-import { TrackType } from '../../types/anthem.type';
-import type { Track } from '../../types/anthem.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
-import { buildAudioMix } from '../audioMix/buildAudioMix';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
@@ -313,41 +310,6 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
     next();
     return;
-  }
-
-  // Check if we need to build the audio mix for the anthem
-  if (activity.type === ActivityType.ANTHEM && data.data !== undefined && areAnthemTracksNew(data.data, activity.data)) {
-    const verseTracks = (data.data.tracks as Track[]).filter(
-      (t) => t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO && t.sampleUrl !== '',
-    );
-    data.data.mixUrl = verseTracks.length > 0 ? buildAudioMix(activity.userId, verseTracks) : ''; // without intro and outro
-
-    const intro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.INTRO_CHORUS && t.sampleUrl !== '');
-    const outro = (data.data.tracks as Track[]).find((t) => t.type === TrackType.OUTRO && t.sampleUrl !== '');
-    const fullTracks = [];
-    if (intro && intro.sampleUrl) {
-      fullTracks.push(intro);
-      fullTracks.push(...verseTracks.map((t) => ({ ...t, sampleStartTime: (t.sampleStartTime || 0) + (intro.sampleDuration || 0) })));
-    } else {
-      fullTracks.push(...verseTracks);
-    }
-    if (outro && outro.sampleUrl) {
-      fullTracks.push({ ...outro, sampleStartTime: Math.max(...fullTracks.map((t) => (t.sampleStartTime || 0) + (t.sampleDuration || 0))) });
-    }
-    data.data.fullMixUrl = fullTracks.length > 0 ? buildAudioMix(activity.userId, fullTracks) : ''; // with intro and outro
-  }
-
-  // Check if we need to build the audio mix for the class verse
-  if (activity.type === ActivityType.CLASS_ANTHEM && data.data !== undefined) {
-    const tracks = (data.data.anthemTracks as Track[]).filter((t) => t.sampleUrl !== '');
-
-    if ((data.data.classRecordTrack as Track).sampleUrl) {
-      const fullTracks = tracks.filter((t) => t.type !== TrackType.VOCALS && t.type !== TrackType.INTRO_CHORUS && t.type !== TrackType.OUTRO);
-      fullTracks.push(data.data.classRecordTrack as Track);
-
-      data.data.verseFinalMixUrl = buildAudioMix(activity.userId, fullTracks);
-      data.data.slicedRecordUrl = buildAudioMix(activity.userId, [data.data.classRecordTrack as Track, data.data.classRecordTrack as Track]);
-    }
   }
 
   if (activity.status !== ActivityStatus.PUBLISHED) {

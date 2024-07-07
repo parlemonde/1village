@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -10,11 +11,12 @@ interface ClassesExchangesCardProps {
   totalPublications: number;
   totalComments: number;
   totalVideos: number;
+  className?: string;
 }
 
-const ClassesExchangesCard = ({ totalPublications, totalComments, totalVideos }: ClassesExchangesCardProps) => {
+const ClassesExchangesCard = ({ totalPublications, totalComments, totalVideos, className }: ClassesExchangesCardProps) => {
   return (
-    <div className={styles.cardContainer}>
+    <div className={classNames(styles.cardContainer, className)}>
       <p>Résumé des échanges sur 1village</p>
       <div>
         <div className={styles.cardContainerExchange}>

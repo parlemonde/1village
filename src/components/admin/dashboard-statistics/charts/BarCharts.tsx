@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import { BarChart } from '@mui/x-charts/BarChart';
@@ -11,14 +12,15 @@ type BarChartDataItem = {
 interface Props {
   barChartData: BarChartDataItem[];
   title?: string;
+  className?: string;
 }
 
 //add isSelected to change colors #4339F2 or #DAD7FE
 
-const BarCharts: React.FC<Props> = ({ barChartData, title }) => {
+const BarCharts: React.FC<Props> = ({ barChartData, title, className }) => {
   const seriesData = barChartData.map((item) => ({ data: item.data }));
   return (
-    <div className={styles.barContainer}>
+    <div className={classNames(styles.barContainer, className)}>
       {title && <div className={styles.title}>{title}</div>}
       <BarChart
         xAxis={[
