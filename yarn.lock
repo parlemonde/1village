@@ -122,6 +122,7 @@ __metadata:
     multer: "npm:^1.4.5-lts.1"
     mysql2: "npm:^2.3.3"
     next: "npm:^12.1.6"
+    next-transpile-modules: "npm:^10.0.1"
     node-fetch: "npm:^3.2.6"
     nodemailer: "npm:^6.7.5"
     nodemon: "npm:2.0.18"
@@ -7478,7 +7479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.17.0, enhanced-resolve@npm:^5.9.3":
+"enhanced-resolve@npm:^5.10.0, enhanced-resolve@npm:^5.17.0, enhanced-resolve@npm:^5.9.3":
   version: 5.17.0
   resolution: "enhanced-resolve@npm:5.17.0"
   dependencies:
@@ -12121,6 +12122,15 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: 10/1a7948fea86f2b33ec766bc899c88796a51ba76a4afc9026764aedc6e7cde692a09067031e4a1bf6db4f978ccd99e7f5b6c03fe47ad9865c3d4f99050d67e002
+  languageName: node
+  linkType: hard
+
+"next-transpile-modules@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "next-transpile-modules@npm:10.0.1"
+  dependencies:
+    enhanced-resolve: "npm:^5.10.0"
+  checksum: 10/ba8f8baef3d5657e0cc097f7102cd7acd62e593cdeed5fe77772de75915e3e9e28074a285e2214c652ee025b50fd5592493f384d1fb7bc82523777174e06ce1c
   languageName: node
   linkType: hard
 
