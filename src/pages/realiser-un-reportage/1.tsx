@@ -6,6 +6,7 @@ import { TextField } from '@mui/material';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { Activities } from 'src/components/activities/List';
@@ -71,7 +72,7 @@ const ReportageStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/realiser-un-reportage" />}
         <Steps
           steps={[getReportage(activity.subType, data).step1 || 'Choix du thème', 'Le reportage', 'Prévisualiser']}
@@ -120,7 +121,7 @@ const ReportageStep1 = () => {
             </div>
           )}
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

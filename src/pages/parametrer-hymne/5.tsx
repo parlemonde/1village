@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/anthemChecks';
@@ -63,7 +64,7 @@ const AnthemStep5 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
@@ -168,7 +169,7 @@ const AnthemStep5 = () => {
 
           <StepsButton prev="/parametrer-hymne/4" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

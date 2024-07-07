@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 
 const Story = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <h1>Inventer l’histoire du village-idéal</h1>
         <p className="text">
           Comme vous le savez déjà, les Olympiades de Pélico ont commencé et elles ont lieu dans le village-idéal, l’endroit où tout est possible…
@@ -35,21 +36,14 @@ const Story = () => {
           Laissez libre court à votre imagination ! Souvenez-vous que si l’objectif du développement durable est bien réel, l’objet et lieu que vous
           choisissez pour l’atteindre sont magiques 🙂
         </p>
-      </div>
-      <Link href="/creer-une-histoire/1" passHref>
-        <Button
-          component="a"
-          href="/creer-une-histoire/1"
-          variant="outlined"
-          color="primary"
-          style={{
-            float: 'right',
-            marginBottom: '3rem',
-          }}
-        >
-          Commencer
-        </Button>
-      </Link>
+      </PageLayout>
+      <Box sx={{ display: 'flex', justifyContent: 'end', pr: '1rem', mb: '1rem' }}>
+        <Link href="/creer-une-histoire/1" passHref>
+          <Button component="a" href="/creer-une-histoire/1" variant="outlined" color="primary">
+            Commencer
+          </Button>
+        </Link>
+      </Box>
     </Base>
   );
 };
