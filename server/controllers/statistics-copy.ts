@@ -50,7 +50,7 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
     .getRawMany();
 
   const videosCount = await AppDataSource.createQueryRunner().manager.query(
-    `SELECT user.countryCode, activity.phase, COUNT(*) AS total_videos 
+    `SELECT user.countryCode, activity.phase, COUNT(*) AS total_videos
      FROM activity
      INNER JOIN user ON activity.userId = user.id
      WHERE JSON_EXTRACT(activity.content, '$[0].type') = 'video' AND user.type = ?
@@ -58,7 +58,9 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
     [UserType.TEACHER],
   );
 
-  const response = {};
+  // TODO: REMOVE THIS ANY TYPE
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const response: Record<string, any> = {};
 
   // res.sendJSON({
   //   totalActivities: activitiesCount,
@@ -94,7 +96,9 @@ statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => 
     response[key].totalComments = parseInt(comment.totalComments);
   });
 
-  videosCount.forEach((video) => {
+  // TODO: REMOVE THIS ANY TYPE
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  videosCount.forEach((video: any) => {
     const key = `${video.countryCode}-${video.phase}`;
     if (!response[key]) {
       response[key] = {

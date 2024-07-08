@@ -140,6 +140,7 @@ const RAW_RUNTIME_STATE =
           ["multer", "npm:1.4.5-lts.1"],\
           ["mysql2", "npm:2.3.3"],\
           ["next", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:12.3.4"],\
+          ["next-transpile-modules", "npm:10.0.1"],\
           ["node-fetch", "npm:3.3.2"],\
           ["nodemailer", "npm:6.9.14"],\
           ["nodemon", "npm:2.0.18"],\
@@ -295,6 +296,7 @@ const RAW_RUNTIME_STATE =
           ["multer", "npm:1.4.5-lts.1"],\
           ["mysql2", "npm:2.3.3"],\
           ["next", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:12.3.4"],\
+          ["next-transpile-modules", "npm:10.0.1"],\
           ["node-fetch", "npm:3.3.2"],\
           ["nodemailer", "npm:6.9.14"],\
           ["nodemon", "npm:2.0.18"],\
@@ -15653,6 +15655,16 @@ const RAW_RUNTIME_STATE =
           "react-dom",\
           "react",\
           "sass"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["next-transpile-modules", [\
+      ["npm:10.0.1", {\
+        "packageLocation": "./.yarn/cache/next-transpile-modules-npm-10.0.1-d9b1f9457a-ba8f8baef3.zip/node_modules/next-transpile-modules/",\
+        "packageDependencies": [\
+          ["next-transpile-modules", "npm:10.0.1"],\
+          ["enhanced-resolve", "npm:5.17.0"]\
         ],\
         "linkType": "HARD"\
       }]\

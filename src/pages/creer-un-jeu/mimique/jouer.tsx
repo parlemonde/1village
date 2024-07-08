@@ -12,6 +12,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
+import { PageLayout } from 'src/components/PageLayout';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import GameStats from 'src/components/activities/GameStats';
@@ -287,7 +288,7 @@ const PlayMimic = () => {
 
   return (
     <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
+      <PageLayout>
         <Box display="flex" flexDirection="column">
           <Box alignItems="flex-start">
             <h1>Jouer au jeu des mimiques !</h1>
@@ -442,7 +443,7 @@ const PlayMimic = () => {
             </Button>
           </Grid>
         </Grid>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

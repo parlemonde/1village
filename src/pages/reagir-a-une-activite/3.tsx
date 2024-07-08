@@ -10,6 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { isReaction } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import ActivityLink from 'src/components/activities/Link';
@@ -71,7 +72,7 @@ const ReactionStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Activité', 'Réaction', 'Prévisualisation']}
           urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite/3']}
@@ -155,7 +156,7 @@ const ReactionStep3 = () => {
 
           <StepsButton prev="/reagir-a-une-activite/2" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

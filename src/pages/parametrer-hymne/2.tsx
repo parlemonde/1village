@@ -8,6 +8,7 @@ import styles from '../../styles/parametrer-hymne.module.css';
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
@@ -96,7 +97,7 @@ const AnthemStep2 = () => {
 
   return (
     <Base>
-      <div className={styles.mainContainer}>
+      <PageLayout>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
@@ -157,7 +158,7 @@ const AnthemStep2 = () => {
             ></AnthemTrack>
           </div>
         </div>
-      </div>
+      </PageLayout>
       <StepsButton prev="/parametrer-hymne/1?edit" next={onNext} />
       <Backdrop className={styles.trackSelectionBackdrop} open={isLoading}>
         <CircularProgress color="inherit" />

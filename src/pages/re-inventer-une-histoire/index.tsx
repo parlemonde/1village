@@ -3,6 +3,7 @@ import React from 'react';
 
 import { DEFAULT_STORY_DATA } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { StepsButton } from 'src/components/StepsButtons';
 import StoryPictureWheel from 'src/components/storyPictureWheel/storyPictureWheel';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -60,7 +61,7 @@ const InspiredStory = () => {
   return (
     <>
       <Base>
-        <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+        <PageLayout>
           <h1>Ré-inventer l’histoire du village-idéal</h1>
           <p className="text">
             Comme vous le savez déjà, les Olympiades de Pélico ont commencé et elles ont lieu dans le village-idéal, l’endroit où tout est possible…
@@ -87,7 +88,7 @@ const InspiredStory = () => {
             Inspirez-vous de ce qu’ils ont dessiné et laissez libre court à votre imagination ! Souvenez-vous que si l’objectif du développement
             durable est bien réel, l’objet et lieu que vous choisissez pour l’atteindre sont magiques 🙂
           </p>
-        </div>
+        </PageLayout>
         {/* Roulette images */}
         <StoryPictureWheel
           initialOddImage={inspiredImages ? inspiredImages.odd : null}

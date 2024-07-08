@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ArtIcon from 'src/svg/indice-culturel/art.svg';
 import CuisineIcon from 'src/svg/indice-culturel/cuisine.svg';
@@ -80,7 +81,7 @@ const reportages = [
 const Reportage = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Sur quel thème souhaitez-vous réaliser votre reportage ?</h1>
           <p className="text">
@@ -90,7 +91,7 @@ const Reportage = () => {
           <p className="text">Commencez par choisir le thème de votre reportage.</p>
           <ActivityChoice activities={reportages} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

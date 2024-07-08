@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
@@ -24,7 +25,7 @@ const QuestionSuccess = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text">{questionsCount > 1 ? 'Vos questions ont bien été enregistrées !' : 'Votre question a bien été enregistrée !'}</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
@@ -36,7 +37,7 @@ const QuestionSuccess = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

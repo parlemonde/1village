@@ -1,5 +1,5 @@
 const VillageStats = () => {
-  return;
+  return null;
 };
 
 export default VillageStats;

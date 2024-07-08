@@ -9,7 +9,7 @@ import ActivityCardAdmin from './ActivityCardAdmin';
 type Props = {
   title: string;
   activities: Activity[];
-  svgNoData: unknown;
+  svgNoData: React.ReactNode;
   noDataText: string;
   buttonAction: () => void;
 };

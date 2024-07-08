@@ -3,6 +3,7 @@ import React from 'react';
 
 import { isReaction } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
@@ -48,7 +49,7 @@ const ReactionStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Activité', 'Réaction', 'Prévisualisation']}
           urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2', '/reagir-a-une-activite/3']}
@@ -60,7 +61,7 @@ const ReactionStep2 = () => {
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={url} next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };
