@@ -97,6 +97,8 @@ statisticsController.get({ path: '/connections' }, async (_req, res) => {
   );
 });
 
+//TODO
+
 statisticsController.get({ path: '/contributions' }, async (_req, res) => {
   res.sendJSON(
     await activityRepository
