@@ -205,7 +205,7 @@
     "web-vitals": "^2.1.4",
     "winston": "^3.8.0"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.3.1",
   "volta": {
     "node": "20.11.1"
   }
