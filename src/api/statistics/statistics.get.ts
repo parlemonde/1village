@@ -3,11 +3,26 @@ import { useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type {
   ClassroomExchangesStats,
+  ClassroomsStats,
   ConnectionCountsStats,
   ConnectionTimesStats,
   ContributionStats,
   StudentAccountsStats,
 } from 'types/statistics.type';
+
+async function getClassroomsStats(): Promise<ClassroomsStats[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: '/statistics/classrooms',
+    })
+  ).data;
+}
+
+export const useGetClassroomsStats = () => {
+  return useQuery(['classrooms-stats'], () => getClassroomsStats());
+};
 
 async function getContributions(): Promise<ContributionStats[]> {
   return (

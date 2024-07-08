@@ -1,5 +1,6 @@
 import { Activity } from '../entities/activity';
 import { AnalyticSession } from '../entities/analytic';
+import { Classroom } from '../entities/classroom';
 import { Comment } from '../entities/comment';
 import { Student } from '../entities/student';
 import { UserType } from '../entities/user';
@@ -11,7 +12,90 @@ export const statisticsController = new Controller('/statistics');
 const activityRepository = AppDataSource.getRepository(Activity);
 const commentRepository = AppDataSource.getRepository(Comment);
 const studentRepository = AppDataSource.getRepository(Student);
+const classroomRepository = AppDataSource.getRepository(Classroom);
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
+
+statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
+  const classroomsData = await classroomRepository
+    .createQueryBuilder('classroom')
+    .leftJoin('classroom.user', 'user')
+    .leftJoin('classroom.village', 'village')
+    .select([
+      'classroom.id AS classroomId',
+      'classroom.name AS classroomName',
+      'classroom.countryCode AS classroomCountryCode',
+      'classroom.villageId AS villageId',
+      'village.name AS viillageName',
+      'user.id AS userId',
+      'user.firstname AS userFirstname',
+      'user.lastname AS userLastname',
+    ])
+    .addSelect(
+      `(SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'phase', ac.phase,
+        'activities', ac.activities
+      )
+    )
+    FROM (
+      SELECT 
+        activity.phase,
+        JSON_OBJECTAGG(activity.type, activity.totalActivities) AS activities
+      FROM (
+        SELECT 
+          activity.phase,
+          activity.type,
+          COUNT(activity.id) AS totalActivities
+        FROM activity
+        WHERE activity.userId = user.id
+        GROUP BY activity.phase, activity.type
+      ) AS activity
+      GROUP BY activity.phase
+    ) AS ac
+  ) AS activitiesCount`,
+    )
+    .addSelect(
+      `(SELECT CONVERT(COUNT(comment.id), SIGNED)
+      FROM comment
+      WHERE comment.userId = user.id) AS commentsCount`,
+    )
+    .addSelect(
+      `(SELECT CONVERT(COUNT(video.id), SIGNED)
+      FROM video
+      WHERE video.userId = user.id) AS videosCount`,
+    )
+    .groupBy('classroom.id, user.id')
+    .getRawMany();
+
+  res.sendJSON(
+    classroomsData.map((classroom) => ({
+      ...classroom,
+      commentsCount: parseInt(classroom.commentsCount, 10),
+      videosCount: parseInt(classroom.videosCount, 10),
+    })),
+  );
+});
+
+statisticsController.get({ path: '/connections' }, async (_req, res) => {
+  const durationThreshold = 60;
+
+  res.sendJSON(
+    await analyticSessionRepository
+      .createQueryBuilder('analytic_session')
+      .select('MIN(DISTINCT(duration))', 'minConnectionTime')
+      .addSelect('MAX(DISTINCT(duration))', 'maxConnectionTime')
+      .addSelect('ROUND(AVG(duration), 0)', 'averageConnectionTime')
+      .addSelect(
+        'SELECT duration FROM (SELECT duration, ROW_NUMBER() OVER (ORDER BY duration) AS medianIdx FROM (SELECT DISTINCT duration FROM analytic_session WHERE duration IS NOT NULL AND duration >= ?) AS sub) AS d, (SELECT COUNT(DISTINCT duration) AS cnt FROM analytic_session WHERE duration IS NOT NULL AND duration >= ?) AS total_count WHERE d.medianIdx = (total_count.cnt DIV 2);',
+      )
+      .where('duration >= :minDuration', { minDuration: durationThreshold })
+      .addSelect('MIN(occurrence_count)', 'minConnectionsCount')
+      .addSelect('MAX(occurrence_count)', 'maxConnectionsCount')
+      .addSelect('AVG(occurrence_count)', 'averageConnectionsCount')
+      .addSelect('COUNT(*) FROM analtic_session GROUP BY uniqueId', 'occurrence_count')
+      .getRawOne(),
+  );
+});
 
 statisticsController.get({ path: '/contributions' }, async (_req, res) => {
   res.sendJSON(
@@ -25,6 +109,8 @@ statisticsController.get({ path: '/contributions' }, async (_req, res) => {
       .getRawMany(),
   );
 });
+
+// OLD
 
 statisticsController.get({ path: '/classroom-exchanges' }, async (_req, res) => {
   const activitiesCount = await activityRepository.count({ where: { user: { type: UserType.TEACHER } } });
@@ -52,30 +138,6 @@ statisticsController.get({ path: '/student-accounts' }, async (_req, res) => {
       .leftJoin('user_to_student', 'userToStudent', 'userToStudent.studentId = student.id')
       .getRawOne(),
   );
-});
-
-statisticsController.get({ path: '/connection-times' }, async (_req, res) => {
-  const durationThreshold = 60;
-
-  const baseConnectionTimesStats = await analyticSessionRepository
-    .createQueryBuilder('analytic_session')
-    .select('MIN(DISTINCT(duration)) AS minDuration')
-    .addSelect('MAX(DISTINCT(duration)) AS maxDuration')
-    .addSelect('ROUND(AVG(duration), 0) AS averageDuration')
-    .where('duration >= :minDuration', { minDuration: durationThreshold })
-    .getRawOne();
-
-  const medianConnectionTimesStats = await AppDataSource.createQueryRunner().manager.query(
-    `SELECT duration FROM (SELECT duration, ROW_NUMBER() OVER (ORDER BY duration) AS medianIdx FROM (SELECT DISTINCT duration FROM analytic_session WHERE duration IS NOT NULL AND duration >= ?) AS sub) AS d, (SELECT COUNT(DISTINCT duration) AS cnt FROM analytic_session WHERE duration IS NOT NULL AND duration >= ?) AS total_count WHERE d.medianIdx = (total_count.cnt DIV 2);`,
-    [durationThreshold, durationThreshold],
-  );
-
-  res.sendJSON({
-    minDuration: baseConnectionTimesStats.minDuration,
-    maxDuration: baseConnectionTimesStats.maxDuration,
-    averageDuration: parseInt(baseConnectionTimesStats.averageDuration),
-    medianDuration: parseInt(medianConnectionTimesStats[0].duration),
-  });
 });
 
 statisticsController.get({ path: '/connection-counts' }, async (_req, res) => {
