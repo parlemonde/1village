@@ -140,13 +140,14 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
   const MobileStyles = {
     slotHandle: {
       display: 'block',
-      marginLeft: '-14px',
+      marginLeft: '-5px',
       height: '110px',
       width: 'auto',
     },
     slotMachine: {
-      width: '280px',
+      width: 'auto',
       marginTop: '1rem',
+      marginRight: '5rem',
     },
     slot: {
       width: '60px',
@@ -304,7 +305,7 @@ const StoryPictureWheel = ({ initialObjectImage, initialPlaceImage, initialOddIm
                   </div>
                 </Box>
               </Box>
-              <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.slot })} className="slot">
+              <Box sx={(theme) => ({ [theme.breakpoints.only('xs')]: MobileStyles.slot, mr: '0 !important' })} className="slot">
                 <Typography
                   sx={(theme) => ({
                     mb: 1.5,

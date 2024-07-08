@@ -3,7 +3,8 @@
 .SlotMachine {
   position: absolute;
   margin-top: 1rem;
-  width: 420px;
+  width: auto;
+  margin-right: 5rem;
 }
 
 .cards {
@@ -11,7 +12,6 @@
 }
 
 .slot {
-  // position: relative;
   position: relative;
   display: inline-block;
   height: 100px;
