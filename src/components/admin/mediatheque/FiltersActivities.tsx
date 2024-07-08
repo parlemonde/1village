@@ -36,7 +36,10 @@ export default function FiltersActivities() {
   const [labelNameSubTheme, setLabelNameSubTheme] = useState<string[]>([]);
   const [selectedVillages, setSelectedVillages] = useState<number[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedSchool, setSelectedSchool] = useState<string[]>([]);
   const { allActivities, setAllFiltered, filters, setFilters } = useContext(MediathequeContext);
+
+  console.log('filters', filters);
 
   const updateAllFiltered = useCallback(
     (currentFilter) => {
@@ -149,6 +152,20 @@ export default function FiltersActivities() {
     return result.sort((a, b) => (a.name < b.name ? -1 : 1));
   }, [filters, updateAllFiltered]);
 
+  const schoolList = useMemo(() => {
+    const result: Array<{ schoolName: string; userId: number }> = [];
+    const filteredNoWm = updateAllFiltered({ ...filters, userId: [] });
+    filteredNoWm.forEach(({ user, userId }) => {
+      if (result.findIndex((r) => r === user.school) < 0) {
+        const schoolName = user.school;
+        result.push({ schoolName, userId });
+      }
+    });
+
+    return result.sort((a, b) => (a < b ? -1 : 1)).filter((v, i, a) => a.findIndex((t) => t.schoolName === v.schoolName) === i);
+    // return result.sort((a, b) => (a.schoolName < b.schoolName ? -1 : 1))
+  }, [filters, updateAllFiltered]);
+
   const handleCountryChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
@@ -158,6 +175,20 @@ export default function FiltersActivities() {
     setSelectedCountries(selectedValues);
 
     setFilters((prev) => ({ ...prev, countries: value }));
+  };
+
+  const handleSchoolChange = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+
+    console.log('value', value);
+    const selectedValues = typeof value === 'string' ? value.split(',') : value;
+    console.log('selectedValues', selectedValues);
+
+    setSelectedSchool(selectedValues);
+
+    setFilters((prev) => ({ ...prev, userId: value }));
   };
 
   return (
@@ -276,6 +307,48 @@ export default function FiltersActivities() {
                 )}
               >
                 {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, width: 140 }} size="small">
+          <Select
+            multiple
+            displayEmpty
+            value={selectedSchool}
+            onChange={handleSchoolChange}
+            input={<OutlinedInput />}
+            renderValue={(selected) => {
+              if (selected.length === 0) {
+                return <>Classes</>;
+              }
+              console.log('selected', selected);
+              console.log('allActivities', allActivities);
+              selected.forEach((s, index) => {
+                console.log('s', s);
+                if (s === allActivities.userId) console.log('allActivities.userId', allActivities.userId);
+              });
+
+              const names = selected.map((isoCode: string) => {
+                const country = countries.find((country) => country.isoCode === isoCode);
+                return country ? country.name : undefined;
+              });
+              return names.join(', ');
+            }}
+            MenuProps={MenuProps}
+            inputProps={{ 'aria-label': 'Label' }}
+          >
+            {schoolList?.map(({ schoolName, userId }) => (
+              <MenuItem
+                key={userId}
+                value={userId}
+                style={getStyles(
+                  schoolName,
+                  schoolList.map((t) => t.schoolName),
+                  theme,
+                )}
+              >
+                {schoolName}
               </MenuItem>
             ))}
           </Select>
