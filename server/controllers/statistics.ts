@@ -25,42 +25,49 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
       'classroom.name AS classroomName',
       'classroom.countryCode AS classroomCountryCode',
       'classroom.villageId AS villageId',
-      'village.name AS viillageName',
+      'village.name AS villageName',
       'user.id AS userId',
       'user.firstname AS userFirstname',
       'user.lastname AS userLastname',
     ])
     .addSelect(
       `(SELECT JSON_ARRAYAGG(
-      JSON_OBJECT(
-        'phase', ac.phase,
-        'activities', ac.activities
+        JSON_OBJECT(
+          'phase', ac.phase,
+          'activities', ac.activities
+        )
       )
-    )
-    FROM (
-      SELECT 
-        activity.phase,
-        JSON_OBJECTAGG(activity.type, activity.totalActivities) AS activities
       FROM (
         SELECT 
           activity.phase,
-          activity.type,
-          COUNT(activity.id) AS totalActivities
-        FROM activity
-        WHERE activity.userId = user.id
-        GROUP BY activity.phase, activity.type
-      ) AS activity
-      GROUP BY activity.phase
-    ) AS ac
-  ) AS activitiesCount`,
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'count', activity.totalActivities
+              'type', activity.type,
+            )
+          ) AS activities
+        FROM (
+          SELECT 
+            activity.phase,
+            activity.type,
+            COUNT(activity.id) AS totalActivities
+          FROM activity
+          WHERE activity.userId = user.id
+            AND activity.villageId = classroom.villageId
+            AND activity.deleteDate IS NULL
+          GROUP BY activity.phase, activity.type
+        ) AS activity
+        GROUP BY activity.phase
+      ) AS ac
+    ) AS activitiesCount`,
     )
     .addSelect(
-      `(SELECT CONVERT(COUNT(comment.id), SIGNED)
+      `(SELECT COUNT(comment.id)
       FROM comment
       WHERE comment.userId = user.id) AS commentsCount`,
     )
     .addSelect(
-      `(SELECT CONVERT(COUNT(video.id), SIGNED)
+      `(SELECT COUNT(video.id)
       FROM video
       WHERE video.userId = user.id) AS videosCount`,
     )
