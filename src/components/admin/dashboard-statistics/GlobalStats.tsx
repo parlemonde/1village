@@ -6,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
+import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import PhaseDetails from './menu/PhaseDetails';
 import { useGetClassroomExchanges, useGetConnectionTimes, useGetConnectionCounts } from 'src/api/statistics/statistics.get';
 
@@ -25,6 +26,7 @@ const GlobalStats = () => {
 
   return (
     <>
+      <DashboardWorldMap />
       <div>
         <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
         <StatsCard data={20}>Nombre de classes connectées</StatsCard>

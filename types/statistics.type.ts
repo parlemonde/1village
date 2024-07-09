@@ -3,6 +3,25 @@ export interface ContributionStats {
   activeClassrooms: string;
 }
 
+export interface ClassroomsStats {
+  classroomId: number;
+  classroomCountryCode: number;
+  villageId: number;
+  villageName: string;
+  commentsCount: number;
+  videosCount: number;
+  userFirstName: number;
+  userLastName: number;
+  activitiesCount: {
+    phase: number;
+    activities: Record<string, number>;
+  }[];
+}
+// TODO
+// {
+//   type: number;
+//   count: number;
+// }
 export interface ClassroomExchangesStats {
   totalActivities: number;
   totalVideos: number;
