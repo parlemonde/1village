@@ -4,7 +4,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 
-import { DataProvider } from './../../../contexts/statisticsContext';
+// import { DataProvider } from './../../../contexts/statisticsContext';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
@@ -38,8 +38,7 @@ const CountryStats = () => {
 
   return (
     <>
-      <DataProvider>{/* <LogRequests /> */}</DataProvider>
-
+      {/* <DataProvider></DataProvider> */}
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
           <PhaseDropdown />
