@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Button, CircularProgress } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 
 import { Activities } from './List';
 import { ThemeChoiceButton } from 'src/components/buttons/ThemeChoiceButton';
@@ -98,7 +98,17 @@ export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sél
               </div>
             </div>
           ) : (
-            <div style={{ minHeight: '50px', overflow: 'auto', overflowX: 'hidden' }}>
+            <Box
+              sx={{
+                minHeight: '50px',
+                overflow: 'auto',
+                overflowX: 'hidden',
+                paddingLeft: {
+                  xs: activities.length === 0 ? '1.4rem' : '0',
+                  sm: '0px',
+                },
+              }}
+            >
               <Activities
                 activities={activities}
                 noButtons
@@ -119,7 +129,7 @@ export const ActivitySelect = ({ value, onChange, onSelect, style, label = 'Sél
                   </div>
                 )
               )}
-            </div>
+            </Box>
           )
         }
       />

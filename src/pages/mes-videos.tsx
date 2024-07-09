@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { Base } from 'src/components/Base';
 import { Modal } from 'src/components/Modal';
+import { PageLayout } from 'src/components/PageLayout';
 import { VideoView } from 'src/components/activities/content/views/VideoView';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
 import { useVideos } from 'src/services/useVideos';
@@ -43,19 +44,30 @@ const MesVideos = () => {
     }
   };
 
+  const cellStyles = {
+    padding: '5px',
+    margin: 0,
+  };
+
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
-        <div className="width-900">
+      <PageLayout>
+        <div className="width-900" style={{ overflow: 'auto' }}>
           <h1>{'Mes vidéos'}</h1>
           {videos.length > 0 ? (
             <Table size="medium" style={{ marginTop: '1rem' }}>
               <TableHead style={{ borderBottom: '1px solid white' }}>
                 <TableRow>
-                  <TableCell style={{ fontWeight: 'bold' }}>#</TableCell>
-                  <TableCell style={{ fontWeight: 'bold' }}>Nom de la vidéo</TableCell>
-                  <TableCell style={{ fontWeight: 'bold' }}>Lien de la vidéo (URL)</TableCell>
-                  <TableCell style={{ fontWeight: 'bold' }} align="right">
+                  <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })} style={{ fontWeight: 'bold' }}>
+                    #
+                  </TableCell>
+                  <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })} style={{ fontWeight: 'bold' }}>
+                    Nom de la vidéo
+                  </TableCell>
+                  <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })} style={{ fontWeight: 'bold' }}>
+                    Lien de la vidéo (URL)
+                  </TableCell>
+                  <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })} style={{ fontWeight: 'bold' }} align="right">
                     Actions
                   </TableCell>
                 </TableRow>
@@ -74,10 +86,15 @@ const MesVideos = () => {
                       },
                     }}
                   >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{video.name}</TableCell>
-                    <TableCell>https://player.vimeo.com/video/{video.id}</TableCell>
-                    <TableCell align="right" padding="none" style={{ minWidth: '96px' }}>
+                    <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })}>{index + 1}</TableCell>
+                    <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })}>{video.name}</TableCell>
+                    <TableCell sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })}>https://player.vimeo.com/video/{video.id}</TableCell>
+                    <TableCell
+                      sx={(theme) => ({ [theme.breakpoints.only('xs')]: cellStyles })}
+                      align="right"
+                      padding="none"
+                      style={{ minWidth: '96px' }}
+                    >
                       <Tooltip title="Regarder">
                         <IconButton
                           aria-label="Voir"
@@ -123,7 +140,7 @@ const MesVideos = () => {
             {selectedVideo !== null && <VideoView id={selectedVideo.id} value={`https://player.vimeo.com/video/${selectedVideo.id}`}></VideoView>}
           </div>
         </Modal>
-      </div>
+      </PageLayout>
     </Base>
   );
 };
