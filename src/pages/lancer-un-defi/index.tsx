@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import CulinaireIcon from 'src/svg/defi/culinaire.svg';
 import EcologiqueIcon from 'src/svg/defi/ecologique.svg';
@@ -39,7 +40,7 @@ const activities = [
 const Defi = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1>Choisissez le défi que vous souhaitez réaliser</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
@@ -49,7 +50,7 @@ const Defi = () => {
           </p>
           <ActivityChoice activities={activities} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

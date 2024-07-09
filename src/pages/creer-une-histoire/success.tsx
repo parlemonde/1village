@@ -4,13 +4,14 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const StorySuccess = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text" style={{ margin: '1rem 1.5rem' }}>
             Votre histoire a bien été publiée !
@@ -24,7 +25,7 @@ const StorySuccess = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

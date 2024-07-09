@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 
 import PaginationNav from '../PaginationNav/PaginationNav';
 import { ActivityCard } from './ActivityCard';
@@ -59,6 +59,10 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
 
   const startIdx = (page - 1) * activitiesPerPage;
   const endIdx = startIdx + activitiesPerPage;
+
+  if (activities.length === 0) {
+    return <Typography>Aucune activité existante.</Typography>;
+  }
 
   return (
     <div>

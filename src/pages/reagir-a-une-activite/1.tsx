@@ -3,6 +3,7 @@ import React from 'react';
 
 import { isReaction } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { ActivitySelect } from 'src/components/activities/ActivitySelect';
 import { DESC } from 'src/components/activities/utils';
@@ -71,7 +72,7 @@ const ReactionStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Activité', 'Réaction', 'Prévisualisation']}
           urls={['/reagir-a-une-activite/1?edit', '/reagir-a-une-activite/2?edit', '/reagir-a-une-activite/3']}
@@ -94,7 +95,7 @@ const ReactionStep1 = () => {
             ))}
           </div>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };
