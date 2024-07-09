@@ -8,12 +8,13 @@ import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesC
 import StatsCard from './cards/StatsCard/StatsCard';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import PhaseDetails from './menu/PhaseDetails';
-import { useGetClassroomExchanges, useGetConnectionTimes, useGetConnectionCounts } from 'src/api/statistics/statistics.get';
+import { useGetClassroomExchanges, useGetConnectionTimes, useGetConnectionCounts, useGetClassroomsStats } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
   const classroomExchanges = useGetClassroomExchanges();
   const connectionTimes = useGetConnectionTimes();
   const connectionCounts = useGetConnectionCounts();
+  const newQuery = useGetClassroomsStats();
 
   if (classroomExchanges.isError) return <p>Error!</p>;
   if (classroomExchanges.isLoading || classroomExchanges.isIdle) return <p>Loading...</p>;
@@ -23,6 +24,11 @@ const GlobalStats = () => {
 
   if (connectionCounts.isError) return <p>Error!</p>;
   if (connectionCounts.isLoading || connectionCounts.isIdle) return <p>Loading...</p>;
+
+  if (newQuery.isError) return <p>Error!</p>;
+  if (newQuery.isLoading || newQuery.isIdle) return <p>Loading...</p>;
+
+  console.log(newQuery);
 
   return (
     <>
