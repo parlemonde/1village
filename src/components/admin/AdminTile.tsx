@@ -28,9 +28,10 @@ export const AdminTile = ({
           minHeight: 'unset',
           padding: '8px 8px 8px 16px',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
         }}
       >
-        <Typography variant="h2" id="themetabletitle" component="div" sx={{ flexBasis: 'auto', padding: '6px 0' }}>
+        <Typography variant="h2" id="themetabletitle" component="div" sx={{ flexBasis: '50%', padding: '6px 0' }}>
           {title} {selectLanguage}
         </Typography>
         {toolbarButton}
