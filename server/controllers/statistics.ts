@@ -42,8 +42,8 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
           activity.phase,
           JSON_ARRAYAGG(
             JSON_OBJECT(
-              'count', activity.totalActivities
               'type', activity.type,
+              'count', activity.totalActivities
             )
           ) AS activities
         FROM (
