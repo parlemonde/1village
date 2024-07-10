@@ -79,7 +79,7 @@ const Villages = () => {
   );
 
   return (
-    <div style={{ overflow: 'auto' }}>
+    <div>
       <Link href="/admin/newportal/manage">
         <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <BackArrow />

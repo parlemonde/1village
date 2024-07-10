@@ -97,7 +97,7 @@ const NewUser = () => {
   };
 
   return (
-    <div className="admin--container">
+    <div>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
         <Link href="/admin/newportal/manage/users" passHref>
           <MaterialLink href="/admin/newportal/manage/users">
@@ -220,7 +220,7 @@ const NewUser = () => {
           />
           <div className="text-center" style={{ margin: '2rem 0 1rem 0' }}>
             <Button color="primary" variant="contained" type="submit">
-              {"Ajouter l'utilisateur !"}
+              {'Ajouter!'}
             </Button>
           </div>
         </form>

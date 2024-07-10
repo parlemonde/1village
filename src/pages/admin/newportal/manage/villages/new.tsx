@@ -32,7 +32,7 @@ const NewVillage = () => {
   };
 
   return (
-    <div className="admin--container">
+    <div>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="large" color="primary" />} aria-label="breadcrumb" style={{ marginBottom: '1rem' }}>
         <Link href="/admin/newportal/manage/villages" passHref>
           <MaterialLink href="/admin/newportal/manage/villages">
