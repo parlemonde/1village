@@ -24,6 +24,20 @@ export const useGetClassroomsStats = () => {
   return useQuery(['classrooms-stats'], () => getClassroomsStats());
 };
 
+async function getConnectionsStats(): Promise<ClassroomsStats[]> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: '/statistics/connections',
+    })
+  ).data;
+}
+
+export const useGetConnectionsStats = () => {
+  return useQuery(['connections-stats'], () => getConnectionsStats());
+};
+
 async function getContributions(): Promise<ContributionStats[]> {
   return (
     await axiosRequest({
