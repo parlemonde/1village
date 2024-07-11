@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { StepsButton } from 'src/components/StepsButtons';
 import { AudioPlayer } from 'src/components/audio/AudioPlayer';
 import { ActivityContext } from 'src/contexts/activityContext';
@@ -85,7 +86,7 @@ const Anthem = () => {
   }
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1>Découvrez l&apos;hymne de votre village idéal</h1>
           <div style={{ height: '100%', width: '100%', objectFit: 'contain' }}>
@@ -110,7 +111,7 @@ const Anthem = () => {
             <p>À la fin de l&apos;année, vous pourrez écouter l&apos;hymne composé des couplets de tous les pélicopains !</p>
           </div>
         </div>
-      </div>
+      </PageLayout>
       <StepsButton next={onNext} />
     </Base>
   );

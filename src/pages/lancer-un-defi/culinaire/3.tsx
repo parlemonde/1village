@@ -7,6 +7,7 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { isCooking, COOKING_DEFIS } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { getErrorSteps } from 'src/components/activities/defiChecksCooking';
@@ -67,7 +68,7 @@ const DefiStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Votre plat', 'La recette', 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/culinaire/1?edit', '/lancer-un-defi/culinaire/2', '/lancer-un-defi/culinaire/3', '/lancer-un-defi/culinaire/4']}
@@ -113,7 +114,7 @@ const DefiStep3 = () => {
           </div>
           <StepsButton prev="/lancer-un-defi/culinaire/2" />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

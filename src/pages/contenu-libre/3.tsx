@@ -10,6 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import type { FreeContentData } from 'src/activity-types/freeContent.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityCard } from 'src/components/activities/ActivityCard';
@@ -65,7 +66,7 @@ const ContenuLibre = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Contenu', 'Forme', 'Prévisualiser']}
           urls={['/contenu-libre/1?edit', '/contenu-libre/2', '/contenu-libre/3']}
@@ -125,7 +126,7 @@ const ContenuLibre = () => {
 
           <StepsButton prev="/contenu-libre/2" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { UserContext } from 'src/contexts/userContext';
@@ -30,7 +31,7 @@ const ContenuLibre = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Publication de contenu libre</h1>
           <p className="text">
@@ -39,7 +40,7 @@ const ContenuLibre = () => {
           </p>
           <StepsButton next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

@@ -4,13 +4,14 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 
 const AnthemSuccess = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text">Votre hymne a bien été paramétré !</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
@@ -22,7 +23,7 @@ const AnthemSuccess = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

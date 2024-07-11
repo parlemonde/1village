@@ -2,21 +2,21 @@
 
 .SlotMachine {
   position: absolute;
-  margin-top: 7rem;
-  width: 365px;
+  margin-top: 1rem;
+  width: auto;
+  margin-right: 5rem;
 }
 
 .cards {
   display: flex;
-  justify-content: space-around;
 }
 
 .slot {
-  // position: relative;
   position: relative;
   display: inline-block;
   height: 100px;
   width: 80px;
+  margin-right: 3rem;
 }
 
 section {

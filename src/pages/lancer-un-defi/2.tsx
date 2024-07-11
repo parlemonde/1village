@@ -5,6 +5,7 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { isFree } from 'src/activity-types/defi.constants';
 import type { FreeDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
@@ -48,7 +49,7 @@ const FreeDefiStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[data.themeName || 'Théme', 'Action', 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/1?edit', '/lancer-un-defi/2', '/lancer-un-defi/3', '/lancer-un-defi/4']}
@@ -64,7 +65,7 @@ const FreeDefiStep2 = () => {
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev={`/lancer-un-defi/1?edit=${activity.id}`} next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

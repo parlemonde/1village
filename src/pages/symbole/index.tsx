@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import AnimalNationalIcon from 'src/svg/symbole/animal-national.svg';
 import DeviseIcon from 'src/svg/symbole/devise.svg';
@@ -80,7 +81,7 @@ const symbols = [
 const Symbol = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Quel symbole allez-vous présenter ?</h1>
           <p className="text">
@@ -92,7 +93,7 @@ const Symbol = () => {
           </p>
           <ActivityChoice activities={symbols} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

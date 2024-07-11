@@ -4,6 +4,7 @@ import React from 'react';
 import { isGame } from 'src/activity-types/anyActivity';
 import { DEFAULT_MIMIC_DATA, isMimic } from 'src/activity-types/game.constants';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { BackButton } from 'src/components/buttons/BackButton';
 import MimicSelector from 'src/components/selectors/MimicSelector';
@@ -77,7 +78,7 @@ const MimiqueStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/creer-un-jeu/mimique" />}
         <Steps
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
@@ -93,7 +94,7 @@ const MimiqueStep1 = () => {
           onPrev={null}
           onVideoChange={videoChange}
         />
-      </div>
+      </PageLayout>
     </Base>
   );
 };

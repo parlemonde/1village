@@ -5,6 +5,7 @@ import { isEnigme } from 'src/activity-types/anyActivity';
 import { getSubcategoryName } from 'src/activity-types/enigme.constants';
 import type { EnigmeData } from 'src/activity-types/enigme.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
@@ -61,7 +62,7 @@ const EnigmeStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[getSubcategoryName(activity.data.theme, data, activity.subType), 'Énigme', 'Réponse', 'Prévisualisation']}
           urls={['/creer-une-enigme/1?edit', '/creer-une-enigme/2', '/creer-une-enigme/3', '/creer-une-enigme/4']}
@@ -83,7 +84,7 @@ const EnigmeStep3 = () => {
           />
           <StepsButton prev={`/creer-une-enigme/2`} next="/creer-une-enigme/4" />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

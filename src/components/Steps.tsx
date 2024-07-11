@@ -58,10 +58,26 @@ export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [], onBeforeLe
             }}
           />
         }
-        sx={{ zIndex: 1, position: 'relative', background: 'none', p: 3 }}
+        sx={{
+          zIndex: 1,
+          position: 'relative',
+          background: 'none',
+          p: {
+            xs: '24px 0',
+            md: 3,
+          },
+        }}
       >
         {steps.map((label, index) => (
-          <Step key={label}>
+          <Step
+            sx={{
+              px: {
+                xs: 0,
+                md: 1,
+              },
+            }}
+            key={label}
+          >
             <StepLabel
               StepIconComponent={StepIcon}
               StepIconProps={{

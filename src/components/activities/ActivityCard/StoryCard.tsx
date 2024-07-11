@@ -49,7 +49,7 @@ export const StoryCard = ({ activity, isSelf, noButtons, isDraft, showEditButton
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <h3>Une histoire du village idéal</h3>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 2 : 1}rem` }}>
             {firstText}

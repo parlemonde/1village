@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ButtonBase } from '@mui/material';
+import { Box, ButtonBase } from '@mui/material';
 
 import ArrowRight from 'src/svg/arrow-right.svg';
 
@@ -41,9 +41,17 @@ export const ThemeChoiceButton = ({ label, isOpen, description, additionalConten
         </div>
       </ButtonBase>
       {showAdd && additionalContent && (
-        <div className="bg-grey" style={{ padding: '0.8rem 1.4rem' }}>
+        <Box
+          className="bg-grey"
+          sx={{
+            padding: {
+              sx: '5px',
+              sm: '0.8rem 1.4rem',
+            },
+          }}
+        >
           {additionalContent}
-        </div>
+        </Box>
       )}
     </div>
   );

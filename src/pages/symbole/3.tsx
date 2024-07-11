@@ -12,6 +12,7 @@ import { isSymbol } from 'src/activity-types/anyActivity';
 import { getSymbol } from 'src/activity-types/symbol.constants';
 import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
@@ -65,7 +66,7 @@ const SymbolStep3 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']}
           urls={['/symbole/1?edit', '/symbole/2', '/symbole/3']}
@@ -142,7 +143,7 @@ const SymbolStep3 = () => {
 
           <StepsButton prev="/symbole/2" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

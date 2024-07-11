@@ -6,6 +6,7 @@ import { ButtonBase, TextField, Card } from '@mui/material';
 
 import { isQuestion } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { DeleteButton } from 'src/components/buttons/DeleteButton';
@@ -62,7 +63,7 @@ const Question2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Les questions', 'Poser ses questions', 'Prévisualiser']}
           urls={['/poser-une-question/1?edit', '/poser-une-question/2', '/poser-une-question/3']}
@@ -120,7 +121,7 @@ const Question2 = () => {
 
           <StepsButton prev={activity.id === 0 ? '/poser-une-question/1?edit=true' : undefined} next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

@@ -5,6 +5,7 @@ import { isSymbol } from 'src/activity-types/anyActivity';
 import { getSymbol } from 'src/activity-types/symbol.constants';
 import type { SymbolData } from 'src/activity-types/symbol.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
@@ -45,7 +46,7 @@ const SymbolStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[getSymbol(activity.subType, data).step1, 'Créer le symbole', 'Prévisualiser']}
           urls={['/symbole/1?edit', '/symbole/2', '/symbole/3']}
@@ -63,7 +64,7 @@ const SymbolStep2 = () => {
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/symbole/1?edit" next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

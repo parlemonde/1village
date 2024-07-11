@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 
 import { isGame } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityContext } from 'src/contexts/activityContext';
 import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
@@ -30,7 +31,7 @@ const PresentationSuccess = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '1rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
           <p className="text">{'Vos mimiques ont bien été publiées !'}</p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
@@ -59,7 +60,7 @@ const PresentationSuccess = () => {
             </Link>
           )}
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

@@ -47,7 +47,7 @@ export const FreeContentCard = ({ activity, isSelf, noButtons, isDraft, showEdit
         </div>
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
-        <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {activity.data.title}
           </div>

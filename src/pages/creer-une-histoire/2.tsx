@@ -8,6 +8,7 @@ import { TextField, Grid, ButtonBase } from '@mui/material';
 import { isStory } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
@@ -64,7 +65,7 @@ const StoryStep2 = () => {
   }
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
           urls={['/creer-une-histoire/1?edit', '/creer-une-histoire/2', '/creer-une-histoire/3', '/creer-une-histoire/4', '/creer-une-histoire/5']}
@@ -77,10 +78,10 @@ const StoryStep2 = () => {
             Cet objet, tout comme le lieu que vous choisirez à l’étape suivante, est magique ! Grâce à leurs pouvoirs, le village idéal va atteindre
             l’objectif du développement durable que vous avez choisi à l’étape précédente.
           </p>
-          <Grid container spacing={3}>
+          <Grid container>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
-                <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
+                <div style={{ width: '100%', maxWidth: '320px', marginTop: '1rem', position: 'relative' }}>
                   <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${primaryColor}` }}>
                     <KeepRatio ratio={2 / 3} width="100%">
                       <div
@@ -151,7 +152,7 @@ const StoryStep2 = () => {
           </Grid>
         </div>
         <StepsButton prev={`/creer-une-histoire/1?edit=${activity.id}`} next={onNext} />
-      </div>
+      </PageLayout>
     </Base>
   );
 };

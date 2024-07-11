@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 
-import { Button, CircularProgress, Paper } from '@mui/material';
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
 
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
@@ -57,7 +57,15 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
   };
 
   return (
-    <div className="activity__comment-container">
+    <Box
+      sx={{
+        flexDirection: {
+          xs: 'column',
+          sm: 'row',
+        },
+      }}
+      className="activity__comment-container"
+    >
       <AvatarImg user={user} size="small" style={{ margin: '0.25rem' }} />
       {displayEditor && isSelf ? (
         <div style={{ flex: 1, marginLeft: '0.25rem', position: 'relative', minWidth: 0 }}>
@@ -130,6 +138,6 @@ export const CommentCard = ({ activity, comment, user }: CommentCardProps) => {
           )}
         </Paper>
       )}
-    </div>
+    </Box>
   );
 };

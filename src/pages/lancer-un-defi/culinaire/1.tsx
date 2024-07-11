@@ -10,6 +10,7 @@ import { DEFI, isCooking } from 'src/activity-types/defi.constants';
 import type { CookingDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
@@ -84,7 +85,7 @@ const DefiStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
           steps={['Votre plat', 'La recette', 'Le défi', 'Prévisualisation']}
@@ -96,7 +97,7 @@ const DefiStep1 = () => {
           <div>
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
-                <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
+                <div style={{ width: '100%', maxWidth: '320px', margin: '1rem auto', position: 'relative' }}>
                   <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%' }}>
                     <KeepRatio ratio={2 / 3} width="100%">
                       <div
@@ -104,6 +105,7 @@ const DefiStep1 = () => {
                           backgroundColor: bgPage,
                           height: '100%',
                           width: '100%',
+                          maxWidth: '320px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -201,7 +203,7 @@ const DefiStep1 = () => {
           </div>
           {<StepsButton next={onNext} />}
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

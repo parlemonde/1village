@@ -53,7 +53,7 @@ export const PresentationCard = ({ activity, isSelf, noButtons, isDraft, showEdi
         {activity.data.theme !== undefined && (
           <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{PRESENTATION_THEMATIQUE[activity.data.theme as number].cardTitle}</h3>
         )}
-        <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {firstText}
           </div>

@@ -7,6 +7,7 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { DEFI, isFree } from 'src/activity-types/defi.constants';
 import type { FreeDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -67,7 +68,7 @@ const FreeDefiStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
           steps={[theme, 'Action', 'Le défi', 'Prévisualisation']}
@@ -97,7 +98,7 @@ const FreeDefiStep1 = () => {
           />
           {<StepsButton next={onNext} />}
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };
