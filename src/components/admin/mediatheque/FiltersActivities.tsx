@@ -39,8 +39,6 @@ export default function FiltersActivities() {
   const [selectedSchool, setSelectedSchool] = useState<string[]>([]);
   const { allActivities, setAllFiltered, filters, setFilters } = useContext(MediathequeContext);
 
-  console.log('filters', filters);
-
   const updateAllFiltered = useCallback(
     (currentFilter) => {
       const newState = allActivities.filter((activity: UserData) => {
@@ -155,15 +153,14 @@ export default function FiltersActivities() {
   const schoolList = useMemo(() => {
     const result: Array<{ schoolName: string; userId: number }> = [];
     const filteredNoWm = updateAllFiltered({ ...filters, userId: [] });
-    filteredNoWm.forEach(({ user, userId }) => {
-      if (result.findIndex((r) => r === user.school) < 0) {
+    filteredNoWm.forEach(({ user, userId }: { user: { school: string }; userId: number }) => {
+      if (result.findIndex((r) => r.schoolName === user.school) < 0) {
         const schoolName = user.school;
         result.push({ schoolName, userId });
       }
     });
 
     return result.sort((a, b) => (a < b ? -1 : 1)).filter((v, i, a) => a.findIndex((t) => t.schoolName === v.schoolName) === i);
-    // return result.sort((a, b) => (a.schoolName < b.schoolName ? -1 : 1))
   }, [filters, updateAllFiltered]);
 
   const handleCountryChange = (event: SelectChangeEvent<string[]>) => {
@@ -182,9 +179,7 @@ export default function FiltersActivities() {
       target: { value },
     } = event;
 
-    console.log('value', value);
     const selectedValues = typeof value === 'string' ? value.split(',') : value;
-    console.log('selectedValues', selectedValues);
 
     setSelectedSchool(selectedValues);
 
@@ -322,17 +317,11 @@ export default function FiltersActivities() {
               if (selected.length === 0) {
                 return <>Classes</>;
               }
-              console.log('selected', selected);
-              console.log('allActivities', allActivities);
-              selected.forEach((s, index) => {
-                console.log('s', s);
-                if (s === allActivities.userId) console.log('allActivities.userId', allActivities.userId);
+              const names = selected.map((userId: string) => {
+                const school = schoolList.find((school) => school.userId === Number(userId));
+                return school ? school.schoolName : undefined;
               });
 
-              const names = selected.map((isoCode: string) => {
-                const country = countries.find((country) => country.isoCode === isoCode);
-                return country ? country.name : undefined;
-              });
               return names.join(', ');
             }}
             MenuProps={MenuProps}
