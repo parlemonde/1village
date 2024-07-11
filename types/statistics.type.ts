@@ -1,8 +1,3 @@
-export interface ContributionStats {
-  phase: number;
-  activeClassrooms: string;
-}
-
 export interface ClassroomsStats {
   classroomId: number;
   classroomCountryCode: number;
@@ -14,36 +9,21 @@ export interface ClassroomsStats {
   userLastName: number;
   activitiesCount: {
     phase: number;
-    activities: Record<string, number>;
+    activities: { count: number; type: number }[];
   }[];
 }
-// TODO
-// {
-//   type: number;
-//   count: number;
-// }
-export interface ClassroomExchangesStats {
-  totalActivities: number;
-  totalVideos: number;
-  totalComments: number;
-}
 
-export interface StudentAccountsStats {
-  totalStudentAccounts: number;
-  classWithStudentAccounts: number;
-  connectedFamilies: number;
-}
-
-export interface ConnectionTimesStats {
+export interface ConnectionsStats {
   minDuration: number;
   maxDuration: number;
-  averageDuration: number;
   medianDuration: number;
-}
+  averageDuration: number;
 
-export interface ConnectionCountsStats {
   minConnections: number;
   maxConnections: number;
-  averageConnections: number;
   medianConnections: number;
+  averageConnections: number;
+
+  registredClassroomsCount: number;
+  connectedClassroomsCount: number;
 }
