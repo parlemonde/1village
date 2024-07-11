@@ -26,6 +26,7 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
+import { NotifCheckbox } from 'src/components/mon-compte/NotifCheckbox';
 
 const Presentation = () => {
   const { user, setUser, logout } = React.useContext(UserContext);
@@ -412,6 +413,7 @@ const Presentation = () => {
           </>
         )}
       </div>
+      <NotifCheckbox />
       {user.type === UserType.FAMILY ? (
         <div className="account__panel">
           <h2>Préférence de communication</h2>
