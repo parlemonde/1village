@@ -37,7 +37,7 @@ export default function FiltersActivities() {
   const [selectedVillages, setSelectedVillages] = useState<number[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedSchool, setSelectedSchool] = useState<string[]>([]);
-  const { allActivities, setAllFiltered, filters, setFilters } = useContext(MediathequeContext);
+  const { allActivities, setAllFiltered, filters, setFilters, useAdminData } = useContext(MediathequeContext);
 
   const updateAllFiltered = useCallback(
     (currentFilter) => {
@@ -240,6 +240,7 @@ export default function FiltersActivities() {
         </FormControl>
         <FormControl sx={{ m: 1, width: 140 }} size="small">
           <Select
+            disabled={useAdminData === true}
             multiple
             displayEmpty
             value={selectedVillages}
@@ -272,6 +273,7 @@ export default function FiltersActivities() {
         </FormControl>
         <FormControl sx={{ m: 1, width: 140 }} size="small">
           <Select
+            disabled={useAdminData === true}
             multiple
             displayEmpty
             value={selectedCountries}
@@ -308,6 +310,7 @@ export default function FiltersActivities() {
         </FormControl>
         <FormControl sx={{ m: 1, width: 140 }} size="small">
           <Select
+            disabled={useAdminData === true}
             multiple
             displayEmpty
             value={selectedSchool}
