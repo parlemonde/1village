@@ -55,7 +55,7 @@ const H5pList = () => {
       <Link href="/admin/newportal/create">
         <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <BackArrow />
-          <h1 style={{ marginLeft: '10px' }}>Villages-mondes</h1>
+          <h1 style={{ marginLeft: '10px' }}>H5P</h1>
         </div>
       </Link>
       <AdminTile
@@ -79,7 +79,7 @@ const H5pList = () => {
           emptyPlaceholder={
             <>
               {"Vous n'avez pas encore de contenu H5P ! "}
-              <Link href="/admin/newportal/new" passHref>
+              <Link href="/admin/newportal/h5p/new" passHref>
                 <a className="text text--primary text--small">En créer un ?</a>
               </Link>
             </>
