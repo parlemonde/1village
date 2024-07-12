@@ -224,7 +224,7 @@ const Users = () => {
         <Box sx={{ overflow: 'auto' }}>
           <AdminTable
             emptyPlaceholder={isLoading ? 'Chargement...' : "Vous n'avez pas encore d'utilisateur !"}
-            data={tableData}
+            data={tableData.map((data) => ({ ...data, position: null }))} // remove position attribute from data
             columns={[
               { key: 'firstname', label: 'Prénom', sortable: true },
               { key: 'lastname', label: 'Nom', sortable: true },

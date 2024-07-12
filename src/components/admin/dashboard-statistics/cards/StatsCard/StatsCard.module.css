@@ -1,0 +1,24 @@
+.cardContainer {
+    background: linear-gradient(0deg, #6065FC, #6065FC),
+        radial-gradient(69.64% 69.64% at 51.53% 21.25%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+    text-align: center;
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 240px;
+    flex-wrap: wrap;
+    color: #FFF;
+}
+
+.cardContainer>p {
+    margin: 0;
+    padding: 0;
+}
+
+.cardContainer>p:first-child {
+    font-size: 1.25rem;
+}
+
+.cardContainer>p:last-child {
+    font-size: 2rem;
+    font-weight: 600;
+}

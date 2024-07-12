@@ -1,0 +1,30 @@
+.cardContainer {
+    background-color: #F5F5F5;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    font-weight: 600;
+}
+
+.cardContainer>div {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.cardContainerExchange>div {
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    color: #DAD7FE;
+}
+
+.cardContainerExchange>div>p {
+    align-items: center;
+    color: #4C3ED9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
