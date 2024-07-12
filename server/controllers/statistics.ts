@@ -80,8 +80,9 @@ statisticsController.get({ path: '/connections' }, async (_req, res) => {
   const connectionsStats = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('MIN(DISTINCT(analytic_session.duration))', 'minDuration')
-    .addSelect('COUNT(DISTINCT uniqueId)', 'connectedClassesCount')
-    .addSelect('(SELECT COUNT(DISTINCT id) FROM classroom)', 'registeredClassesCount')
+    .addSelect('COUNT(DISTINCT uniqueId)', 'connectedClassroomsCount')
+    .addSelect('(SELECT COUNT(DISTINCT id) FROM classroom)', 'registeredClassroomsCount')
+    .addSelect('(SELECT COUNT(DISTINCT userId) FROM activity)', 'contributedClassroomsCount')
     .addSelect('MAX(DISTINCT(analytic_session.duration))', 'maxDuration')
     .addSelect('ROUND(AVG(CASE WHEN analytic_session.duration >= :minDuration THEN analytic_session.duration ELSE NULL END), 0)', 'averageDuration')
     .addSelect(
@@ -102,7 +103,7 @@ statisticsController.get({ path: '/connections' }, async (_req, res) => {
     .getRawOne();
 
   for (const property in connectionsStats) {
-    connectionsStats[property] = parseInt(connectionsStats[property]);
+    connectionsStats[property] = typeof connectionsStats[property] === 'string' ? parseInt(connectionsStats[property]) : connectionsStats[property];
   }
 
   res.sendJSON(connectionsStats);

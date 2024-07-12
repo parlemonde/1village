@@ -24,6 +24,7 @@ export interface ConnectionsStats {
   medianConnections: number;
   averageConnections: number;
 
-  registredClassroomsCount: number;
+  registeredClassroomsCount: number;
   connectedClassroomsCount: number;
+  contributedClassroomsCount: number;
 }

@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 
 // import { DataProvider } from './../../../contexts/statisticsContext';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
-import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
+// import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
@@ -16,7 +16,6 @@ import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import styles from './styles/charts.module.css';
-import { useGetClassroomExchanges } from 'src/api/statistics/statistics.get';
 
 const pieChartData = {
   data: [
@@ -31,11 +30,6 @@ const EngagemtnBarChartTitle = 'Evolution des connexions';
 const ConstribionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
-  const classroomExchanges = useGetClassroomExchanges();
-
-  if (classroomExchanges.isError) return <p>Error!</p>;
-  if (classroomExchanges.isLoading || classroomExchanges.isIdle) return <p>Loading...</p>;
-
   return (
     <>
       {/* <DataProvider></DataProvider> */}
@@ -87,12 +81,15 @@ const CountryStats = () => {
         <BarCharts barChartData={barChartData} title={EngagemtnBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
+        {/* 
+        TODO -> remplacer les données de classroomExchanges par celles des nouvelles requetes
+
         <ClassesExchangesCard
           className={styles.exchangesCard}
           totalPublications={classroomExchanges.data.totalActivities}
           totalComments={classroomExchanges.data.totalComments}
           totalVideos={classroomExchanges.data.totalVideos}
-        />
+        /> */}
         <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ConstribionBarChartTitle} />
       </div>
       <div>

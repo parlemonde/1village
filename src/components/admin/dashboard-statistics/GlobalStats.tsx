@@ -8,29 +8,11 @@ import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesC
 import StatsCard from './cards/StatsCard/StatsCard';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import PhaseDetails from './menu/PhaseDetails';
-import {
-  useGetClassroomExchanges,
-  useGetConnectionTimes,
-  useGetConnectionCounts,
-  useGetClassroomsStats,
-  useGetConnectionsStats,
-} from 'src/api/statistics/statistics.get';
+import { useGetClassroomsStats, useGetConnectionsStats } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
-  const classroomExchanges = useGetClassroomExchanges();
-  const connectionTimes = useGetConnectionTimes();
-  const connectionCounts = useGetConnectionCounts();
   const classroomsStats = useGetClassroomsStats();
   const connectionsStats = useGetConnectionsStats();
-
-  if (classroomExchanges.isError) return <p>Error!</p>;
-  if (classroomExchanges.isLoading || classroomExchanges.isIdle) return <p>Loading...</p>;
-
-  if (connectionTimes.isError) return <p>Error!</p>;
-  if (connectionTimes.isLoading || connectionTimes.isIdle) return <p>Loading...</p>;
-
-  if (connectionCounts.isError) return <p>Error!</p>;
-  if (connectionCounts.isLoading || connectionCounts.isIdle) return <p>Loading...</p>;
 
   if (classroomsStats.isError) return <p>Error!</p>;
   if (classroomsStats.isLoading || classroomsStats.isIdle) return <p>Loading...</p>;
@@ -38,24 +20,21 @@ const GlobalStats = () => {
   if (connectionsStats.isError) return <p>Error!</p>;
   if (connectionsStats.isLoading || connectionsStats.isIdle) return <p>Loading...</p>;
 
-  console.log(classroomsStats);
-  console.log(connectionsStats);
-
   return (
     <>
       <DashboardWorldMap />
       <div>
-        <StatsCard data={15}>Nombre de classes inscrites</StatsCard>
-        <StatsCard data={20}>Nombre de classes connectées</StatsCard>
-        <StatsCard data={24}>Nombre de classes contributrices</StatsCard>
+        <StatsCard data={connectionsStats.data.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>
+        <StatsCard data={connectionsStats.data.connectedClassroomsCount}>Nombre de classes connectées</StatsCard>
+        <StatsCard data={connectionsStats.data.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
       </div>
       <div>
         <AverageStatsCard
           data={{
-            min: Math.floor(connectionTimes.data.minDuration / 60),
-            max: Math.floor(connectionTimes.data.maxDuration / 60),
-            average: Math.floor(connectionTimes.data.averageDuration / 60),
-            median: Math.floor(connectionTimes.data.medianDuration / 60),
+            min: Math.floor(connectionsStats.data.minDuration / 60),
+            max: Math.floor(connectionsStats.data.maxDuration / 60),
+            average: Math.floor(connectionsStats.data.averageDuration / 60),
+            median: Math.floor(connectionsStats.data.medianDuration / 60),
           }}
           unit="min"
           icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
@@ -64,10 +43,10 @@ const GlobalStats = () => {
         </AverageStatsCard>
         <AverageStatsCard
           data={{
-            min: connectionCounts.data.minConnections,
-            max: connectionCounts.data.maxConnections,
-            average: connectionCounts.data.averageConnections,
-            median: connectionCounts.data.medianConnections,
+            min: connectionsStats.data.minConnections,
+            max: connectionsStats.data.maxConnections,
+            average: connectionsStats.data.averageConnections,
+            median: connectionsStats.data.medianConnections,
           }}
           icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
         >
@@ -75,11 +54,7 @@ const GlobalStats = () => {
         </AverageStatsCard>
       </div>
       <div>
-        <ClassesExchangesCard
-          totalPublications={classroomExchanges.data.totalActivities}
-          totalComments={classroomExchanges.data.totalComments}
-          totalVideos={classroomExchanges.data.totalVideos}
-        />
+        <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
       </div>
       <div>
         <PhaseDetails
