@@ -140,7 +140,7 @@ const RAW_RUNTIME_STATE =
           ["mysql2", "npm:2.3.3"],\
           ["next", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:12.3.4"],\
           ["node-fetch", "npm:3.3.1"],\
-          ["nodemailer", "npm:6.9.2"],\
+          ["nodemailer", "npm:6.9.14"],\
           ["nodemon", "npm:2.0.18"],\
           ["notistack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.0.8"],\
           ["nprogress", "npm:0.2.0"],\
@@ -295,7 +295,7 @@ const RAW_RUNTIME_STATE =
           ["mysql2", "npm:2.3.3"],\
           ["next", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:12.3.4"],\
           ["node-fetch", "npm:3.3.1"],\
-          ["nodemailer", "npm:6.9.2"],\
+          ["nodemailer", "npm:6.9.14"],\
           ["nodemon", "npm:2.0.18"],\
           ["notistack", "virtual:f84dba857fa10247bbb4af28a825f1d91a188c858b2b2b1b4a2d3cfedf850e14647ec99dabfb1535752c99ec0ff164e2ec4fb4c32c822be66b30b3cfa4630990#npm:2.0.8"],\
           ["nprogress", "npm:0.2.0"],\
@@ -15367,10 +15367,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["nodemailer", [\
-      ["npm:6.9.2", {\
-        "packageLocation": "./.yarn/cache/nodemailer-npm-6.9.2-f3ece472c2-ffe11dcab6.zip/node_modules/nodemailer/",\
+      ["npm:6.9.14", {\
+        "packageLocation": "./.yarn/cache/nodemailer-npm-6.9.14-907ddc0136-749d1a3ef4.zip/node_modules/nodemailer/",\
         "packageDependencies": [\
-          ["nodemailer", "npm:6.9.2"]\
+          ["nodemailer", "npm:6.9.14"]\
         ],\
         "linkType": "HARD"\
       }]\

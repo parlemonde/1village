@@ -1,6 +1,9 @@
 import React from 'react';
 
+import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import Stack from '@mui/material/Stack';
 
 export const NotifCheckbox = () => {
   const [commentChecked, setCommentChecked] = React.useState(true);
@@ -12,26 +15,68 @@ export const NotifCheckbox = () => {
 
   const handleCommentChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentChecked(event.target.checked);
-  }
+  };
+
+  const handleReactionChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReactionChecked(event.target.checked);
+  };
+
+  const handlePublicationFromAClassChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPublicationFromAClassChecked(event.target.checked);
+  };
+
+  const handlePublicationFromAdminChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPublicationFromAdminChecked(event.target.checked);
+  };
+
+  const handleCreationAccountFamilyChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCreationAccountFamilyChecked(event.target.checked);
+  };
+
+  const handlePhaseOpeningChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPhaseOpeningChecked(event.target.checked);
+  };
 
   const mappingCheckbox = [
     { label: 'Commentaire sur une de vos publications', checked: commentChecked, handle: handleCommentChecked },
-    { label: 'Réaction à une de vos publications', checked: reactionChecked, handle: setReactionChecked },
-    { label: 'Publication d’une classe', checked: publicationFromAClassChecked, handle: setPublicationFromAClassChecked },
-    { label: 'Publication de Pelico', checked: publicationFromAdminChecked, handle: setPublicationFromAdminChecked },
-    { label: 'Création de compte famille', checked: creationAccountFamilyChecked, handle: setCreationAccountFamilyChecked },
-    { label: 'Ouverture de phase', checked: phaseOpeningChecked, handle: setPhaseOpeningChecked },
+    // { label: 'Réaction à une de vos publications', checked: reactionChecked, handle: handleReactionChecked },
+    // { label: 'Publication d’une classe', checked: publicationFromAClassChecked, handle: handlePublicationFromAClassChecked },
+    // { label: 'Publication de Pelico', checked: publicationFromAdminChecked, handle: handlePublicationFromAdminChecked },
+    // { label: 'Création de compte famille', checked: creationAccountFamilyChecked, handle: handleCreationAccountFamilyChecked },
+    // { label: 'Ouverture de phase', checked: phaseOpeningChecked, handle: handlePhaseOpeningChecked },
   ];
+
+  const handleChoice = () => {
+    console.log(
+      commentChecked,
+      reactionChecked,
+      publicationFromAClassChecked,
+      publicationFromAdminChecked,
+      creationAccountFamilyChecked,
+      phaseOpeningChecked,
+    );
+    console.log('Enregistrer');
+  };
 
   return (
     <div className="account__panel">
       <h2>Notifications</h2>
-      {mappingCheckbox.map((notif) => {
-        <div className="account__panel__checkbox">
+      {mappingCheckbox.map((notif, index) => (
+        <div key={index} className="account__panel__checkbox" style={{ display: 'flex', alignItems: 'center' }}>
           <Checkbox checked={notif.checked} onChange={notif.handle} inputProps={{ 'aria-label': 'controlled' }} />
-          <p>{notif.label}</p>
-        </div>;
-      })}
+          <p style={{ marginLeft: '8px' }}>{notif.label}</p>
+        </div>
+      ))}
+
+      <Button
+        size="small"
+        variant="contained"
+        onClick={handleChoice}
+        style={{ marginBottom: '1rem', marginTop: '1rem', marginLeft: '0.2rem' }}
+        endIcon={<SendIcon />}
+      >
+        Enregister mes choix
+      </Button>
     </div>
   );
 };

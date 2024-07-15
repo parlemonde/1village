@@ -1,6 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { sendEmailNotifications } from '../emails/emailService';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -51,6 +52,7 @@ const ADD_DATA_SCHEMA: JSONSchemaType<AddCommentData> = {
   additionalProperties: false,
 };
 const addCommentDataValidator = ajv.compile(ADD_DATA_SCHEMA);
+
 commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!addCommentDataValidator(data)) {
@@ -59,15 +61,28 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   }
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
+  console.log('activity', activity);
   if (activity === null || (req.user && req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId)) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
+
+  // Ici on vient mettre notre listener pour envoyer une notif
+  // à l'utilisateur qui a publié l'activité
+  // dans activity il y a userId donc on connait le user qui a publié l'activité
+  // on peut donc envoyer une notif à cet utilisateur en disant que c'est req.userId qui a commenté
 
   const newComment = new Comment();
   newComment.activityId = activityId;
   newComment.userId = req.user?.id ?? 0;
   newComment.text = data.text;
   await AppDataSource.getRepository(Comment).save(newComment);
+
+  const fromEmail = process.env.EMAIL_USER ?? '';
+  const toEmail = 'guillaume.pages@parlemonde.org'; // Remplacez par l'email de l'utilisateur qui a publié l'activité
+  const subject = 'Nouveau commentaire sur votre activité';
+  const text = `Vous avez un nouveau commentaire de l'utilisateur ${req.user?.id ?? 0}: "${newComment.text}"`;
+
+  await sendEmailNotifications(toEmail, fromEmail, subject, text);
   res.sendJSON(newComment);
 });
 

@@ -179,7 +179,7 @@
     "mysql2": "^2.3.3",
     "next": "^12.1.6",
     "node-fetch": "^3.2.6",
-    "nodemailer": "^6.7.5",
+    "nodemailer": "^6.9.14",
     "notistack": "^2.0.5",
     "nprogress": "^0.2.0",
     "query-string": "^7.1.1",

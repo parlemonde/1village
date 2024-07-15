@@ -123,7 +123,7 @@ __metadata:
     mysql2: "npm:^2.3.3"
     next: "npm:^12.1.6"
     node-fetch: "npm:^3.2.6"
-    nodemailer: "npm:^6.7.5"
+    nodemailer: "npm:^6.9.14"
     nodemon: "npm:2.0.18"
     notistack: "npm:^2.0.5"
     nprogress: "npm:^0.2.0"
@@ -11952,10 +11952,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:^6.7.5":
-  version: 6.9.2
-  resolution: "nodemailer@npm:6.9.2"
-  checksum: 10/ffe11dcab6f044a100835c336584ed5852dfe2446927f5e7df5637701213be8087c7f6f88ad301cc089294c046f2b8ab500b1726dcd0d197403e775cd634a4e5
+"nodemailer@npm:^6.9.14":
+  version: 6.9.14
+  resolution: "nodemailer@npm:6.9.14"
+  checksum: 10/749d1a3ef440d6147c37ad850f5be065d55d87cd46a4470372d4e443593838a5ddd78c69623817a804ddede3212fa28ac069b5b8266e892b27e1dcff75103def
   languageName: node
   linkType: hard
 

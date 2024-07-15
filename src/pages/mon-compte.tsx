@@ -16,6 +16,7 @@ import { AvatarEditor } from 'src/components/activities/content/editors/ImageEdi
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
+import { NotifCheckbox } from 'src/components/mon-compte/NotifCheckbox';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { useLanguages } from 'src/services/useLanguages';
@@ -26,7 +27,6 @@ import { axiosRequest } from 'src/utils/axiosRequest';
 import { SSO_HOSTNAME } from 'src/utils/sso';
 import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
-import { NotifCheckbox } from 'src/components/mon-compte/NotifCheckbox';
 
 const Presentation = () => {
   const { user, setUser, logout } = React.useContext(UserContext);
