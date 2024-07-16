@@ -23,29 +23,32 @@ import Stack from '@mui/material/Stack';
 import MediaCard from 'src/components/admin/mediatheque/CardMediatheque';
 import CheckboxAdmin from 'src/components/admin/mediatheque/CheckboxAdmin';
 import DownloadButton from 'src/components/admin/mediatheque/DownloadButton';
-import Filters from 'src/components/admin/mediatheque/Filter';
 import FiltersActivities from 'src/components/admin/mediatheque/FiltersActivities';
 import ModalFilter from 'src/components/admin/mediatheque/ModalFilter';
-import { activitiesLabel } from 'src/config/mediatheque/dataFilters';
 import MediathequeContext from 'src/contexts/mediathequeContext';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSearch from 'src/svg/pelico/pelico-search.svg';
 
 const Mediatheque = () => {
-  const { setFilters, allFiltered, setUseAdminData } = useContext(MediathequeContext);
-  const [page, setPage] = useState<number>(0);
+  const { setFilters, setAllFiltered, allFiltered, allActivities, setUseAdminData, page, setPage, updatePageKey, setUpdatePageKey } =
+    useContext(MediathequeContext);
   const [updateFiltersKey, setUpdateFiltersKey] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
 
   const handleResetFilters = () => {
     setUseAdminData(false);
-    setFilters([[]]);
+    setFilters({});
     setUpdateFiltersKey((prevKey) => prevKey + 1);
+    setUpdatePageKey((prevKey) => prevKey + 1);
     setIsChecked(false);
+    handleChangePage(undefined, 1);
+    setAllFiltered(allActivities);
   };
 
-  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage((value - 1) * 6);
+  const handleChangePage = (_event?: React.ChangeEvent<unknown>, value?: number) => {
+    if (value !== undefined) {
+      setPage((value - 1) * 6);
+    }
   };
 
   const howManyPages = Math.ceil(allFiltered?.length / 6);
@@ -61,14 +64,16 @@ const Mediatheque = () => {
       </div>
       <div className="desktop-view">
         <div style={{ display: 'flex' }}>
-          <FiltersActivities key={updateFiltersKey} />
+          <div style={{ display: 'flex' }} key={updateFiltersKey}>
+            <FiltersActivities />
+          </div>
           <>
             {/* Ce filtre gère les différents village monde VMList */}
-            <Filters labels={activitiesLabel} placeholder="VM" />
+            {/* <Filters labels={activitiesLabel} placeholder="VM" /> */}
             {/* Ce filtre dépend du village monde choisi countryList */}
-            <Filters labels={activitiesLabel} placeholder="Pays" />
+            {/* <Filters labels={activitiesLabel} placeholder="Pays" /> */}
             {/* Ce filtre dépend du pays choisi et du village monde classList */}
-            <Filters labels={activitiesLabel} placeholder="Classes" />
+            {/* <Filters labels={activitiesLabel} placeholder="Classes" /> */}
           </>
 
           <CheckboxAdmin isChecked={isChecked} onCheckboxChange={setIsChecked} />
@@ -101,8 +106,7 @@ const Mediatheque = () => {
       </div>
       <div className="pagination">
         <Stack spacing={2}>
-          {/* il y a la props page dans pagination. Peut être utiliser un page, setPage */}
-          <Pagination size="small" siblingCount={1} count={howManyPages} variant="outlined" onChange={handleChangePage} />
+          <Pagination key={updatePageKey} size="small" siblingCount={1} count={howManyPages} variant="outlined" onChange={handleChangePage} />
         </Stack>
       </div>
     </>

@@ -1,23 +1,17 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { Filter } from 'types/mediatheque.type';
 
-async function getMediatheque(params: { filters: Array<Filter[]> }) {
-  const { filters } = params;
-
+async function getMediatheque() {
   return (
     await axiosRequest({
-      method: 'POST',
+      method: 'GET',
       baseURL: '/api',
       url: '/mediatheque',
-      data: {
-        filters: filters,
-      },
     })
   ).data;
 }
 
-export const useGetMediatheque = (filters: Array<Filter[]>) => {
-  return useQuery(['Mediatheque', filters], () => getMediatheque({ filters }));
+export const useGetMediatheque = () => {
+  return useQuery(['Mediatheque'], () => getMediatheque());
 };
