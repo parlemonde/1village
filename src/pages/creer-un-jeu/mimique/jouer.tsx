@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-// import AppsIcon from '@mui/icons-material/Apps';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import type { SvgIconTypeMap } from '@mui/material';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
@@ -13,6 +12,7 @@ import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
 import { Flag } from 'src/components/Flag';
 import { Modal } from 'src/components/Modal';
+import { PageLayout } from 'src/components/PageLayout';
 import { UserDisplayName } from 'src/components/UserDisplayName';
 import { RightNavigation } from 'src/components/accueil/RightNavigation';
 import GameStats from 'src/components/activities/GameStats';
@@ -51,7 +51,6 @@ type AlreadyPlayerModalProps = {
 enum RadioBoxValues {
   NEW = 'Nouvelle',
   RANDOM = 'Aléatoire',
-  // MOSAIC = 'Mosaïque',
 }
 
 type RadioNextGameProps = {
@@ -66,7 +65,6 @@ type RadioNextGameProps = {
 const radioListComponentMapper = {
   [RadioBoxValues.NEW]: AccessTimeIcon,
   [RadioBoxValues.RANDOM]: ShuffleIcon,
-  //[RadioBoxValues.MOSAIC]: AppsIcon,
 };
 
 const RadioNextGame: React.FC<RadioNextGameProps> = ({ value, Icon, onChange, checked }) => (
@@ -105,8 +103,6 @@ const AlreadyPlayerModal: React.FC<AlreadyPlayerModalProps> = ({ isOpen, handleS
   );
 };
 /* FIN partie à déplacer et à centraliser avec les prochains jeux*/
-
-const POSITION = ['c', 'f', 'i'];
 
 const PlayMimic = () => {
   const { user } = useContext(UserContext);
@@ -164,10 +160,6 @@ const PlayMimic = () => {
       [RadioBoxValues.RANDOM]: async () => {
         return await getRandomGame(GameType.MIMIC);
       },
-      // [RadioBoxValues.MOSAIC]: () => {
-      //   console.error('Not implemented yet');
-      //   return undefined;
-      // },
     };
 
     const nextGame = isLastGame ? undefined : await NEXT_GAME_MAPPER[selectedValue]();
@@ -251,27 +243,6 @@ const PlayMimic = () => {
 
   const choices = React.useMemo(() => (game !== undefined ? shuffleArray([0, 1, 2]) : [0, 1, 2]), [game]);
 
-  // tentative d'indexer les réponses, sans succès pour l'insant
-  // const responseMapping: {
-  //   [key: number]: GameResponseValue;
-  // } = {
-  //   0: GameResponseValue.SIGNIFICATION,
-  //   1: GameResponseValue.FAKE_SIGNIFICATION_1,
-  //   2: GameResponseValue.FAKE_SIGNIFICATION_2,
-  // };
-
-  // const choices = useMemo(() => {
-  //   if (game !== undefined) {
-  //     const shuffledIndices = shuffleArray([0, 1, 2]);
-  //     return shuffledIndices.map((index) => responseMapping[index] as unknown as number);
-  //   } else {
-  //     return [0, 1, 2];
-  //   }
-  //   // eslint-disable-next-line
-  // }, [game]);
-
-  // fin de tentative
-
   const handleRadioButtonChange = (event: React.SyntheticEvent) => {
     const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
     setSelectedValue(selected as RadioBoxValues);
@@ -317,7 +288,7 @@ const PlayMimic = () => {
 
   return (
     <Base rightNav={<RightNavigation activityUser={gameCreator} displayAsUser={false} />} hideLeftNav showSubHeader>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginBottom: '3rem' }}>
+      <PageLayout>
         <Box display="flex" flexDirection="column">
           <Box alignItems="flex-start">
             <h1>Jouer au jeu des mimiques !</h1>
@@ -364,19 +335,8 @@ const PlayMimic = () => {
               })}
             </RadioGroup>
           </Grid>
-          <Grid
-            container
-            border={1}
-            borderColor={primaryColor}
-            p={3}
-            my={1}
-            boxSizing="border-box"
-            style={{ flex: 1 }}
-            spacing={3}
-            alignItems="flex-start"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} md={12} justifyContent="center" style={{ width: '100%' }}>
+          <Grid container my="1rem" border={1} borderColor={primaryColor} boxSizing="border-box" alignItems="flex-start" justifyContent="flex-start">
+            <Grid item xs={12} justifyContent="center" style={{ width: '100%' }}>
               {mimicContent !== undefined && mimicContent.video !== null && <VideoView id={0} value={mimicContent.video}></VideoView>}
             </Grid>
             <Grid container xs={12} spacing={0} pb={1} mx={1} mb={2} alignItems="center" justifyContent="center">
@@ -385,21 +345,19 @@ const PlayMimic = () => {
             <div
               className="display-ended-game"
               style={{
-                display: 'grid',
+                display: 'flex',
                 width: '100%',
-                gridTemplateColumns: '1fr 2fr 2fr',
-                gridTemplateRows: 'repeat(3,auto)',
-                gridTemplateAreas: '". a b " "c d e" "f g h" "i j k"',
+                flexDirection: 'column',
               }}
             >
               {choices &&
-                choices.map((val, index) => {
+                choices.map((val) => {
                   const { value, isSuccess, signification } = ResponseButtonDataMapper[val];
                   const isCorrect = isSuccess && found;
                   const mimicOrigine = mimicContent?.origine || '';
                   const isDisabled = (isSuccess && tryCount > 1) || (!isSuccess && found);
                   return (
-                    <div key={val} style={{ display: 'grid', gridArea: POSITION[index] }}>
+                    <div key={val} style={{ margin: '0 10px' }}>
                       <ResponseButton
                         value={value}
                         onClick={() => handleClick(value, isSuccess)}
@@ -463,18 +421,12 @@ const PlayMimic = () => {
         </Modal>
         <AlreadyPlayerModal handleSuccessClick={handleConfirmModal} isOpen={isLastMimicModalOpen} gameId={game?.id || 0} />
         <Grid container justifyContent="space-between">
-          {/* Todo : modifier la logique du bouton pour qu'il récupère la mimique précédente */}
-          {/* <Grid item xs={3} display="flex" justifyContent="flex-start">
-            <Button variant="outlined" color="primary" onClick={getNextGame}>
-              mimique précédente
-            </Button>
-          </Grid> */}
-          <Grid item xs={6} style={{ textAlign: 'center' }}>
+          <Grid item xs={6}>
             {(found || tryCount > 1) && (
-              <div style={{ textAlign: 'center' }}>
+              <div>
                 <p
                   style={{
-                    margin: '0.5rem 1rem',
+                    paddingRight: '10px',
                     textDecorationLine: 'underline',
                   }}
                 >
@@ -485,13 +437,13 @@ const PlayMimic = () => {
               </div>
             )}
           </Grid>
-          <Grid item xs={3} display="flex" justifyContent="flex-end">
+          <Grid item xs={6} display="flex" justifyContent="flex-end">
             <Button variant="outlined" color="primary" onClick={getNextGame}>
               mimique suivante
             </Button>
           </Grid>
         </Grid>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

@@ -3,6 +3,7 @@ import React from 'react';
 
 import { isFreeContent } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
@@ -43,7 +44,7 @@ const ContenuLibre = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/contenu-libre" />}
         <Steps
           steps={['Contenu', 'Forme', 'Pré-visualiser']}
@@ -59,7 +60,7 @@ const ContenuLibre = () => {
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

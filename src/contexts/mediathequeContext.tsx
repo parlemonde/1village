@@ -81,7 +81,7 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
 
   useEffect(() => {
     const activitiesMediaFinder = usersData
-      ?.filter(({ type }: { type: number }) => ![3, 5, 11].includes(type))
+      ?.filter?.(({ type }: { type: number }) => ![3, 5, 11].includes(type))
       .map(({ id, content, subType, type, villageId, userId, user, village, data }: UserData) => {
         const result: {
           id: number;

@@ -69,7 +69,7 @@ export const DefiCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
             ? getLanguageTheme(activity.data)
             : null}
         </h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `${firstImage ? 4 : 2}rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${firstImage ? 4 : 2}rem` }}>
             {isCooking(activity)
               ? `${activity.data.history}. ${activity.data.explanation}`

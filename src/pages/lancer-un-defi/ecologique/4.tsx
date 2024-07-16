@@ -12,6 +12,7 @@ import { isDefi } from 'src/activity-types/anyActivity';
 import { isEco, getDefi, ECO_ACTIONS, DEFI } from 'src/activity-types/defi.constants';
 import type { EcoDefiData } from 'src/activity-types/defi.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentView } from 'src/components/activities/content/ContentView';
@@ -67,7 +68,7 @@ const DefiEcoStep4 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Votre geste pour la planète', "Description de l'action", 'Le défi', 'Prévisualisation']}
           urls={['/lancer-un-defi/ecologique/1?edit', '/lancer-un-defi/ecologique/2', '/lancer-un-defi/ecologique/3', '/lancer-un-defi/ecologique/4']}
@@ -162,7 +163,7 @@ const DefiEcoStep4 = () => {
 
           <StepsButton prev="/lancer-un-defi/ecologique/3" />
         </div>
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

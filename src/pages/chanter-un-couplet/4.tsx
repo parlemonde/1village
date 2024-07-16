@@ -10,6 +10,7 @@ import styles from '../../styles/chanter-un-couplet.module.css';
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AudioEditor from 'src/components/activities/content/editors/AudioEditor/AudioEditor';
@@ -215,7 +216,7 @@ const SongStep4 = () => {
 
   return (
     <Base>
-      <div className={styles.mainContainer}>
+      <PageLayout>
         <Steps
           steps={['Mixer', 'Écrire', 'Enregistrer', 'Synchroniser', 'Prévisualiser']}
           activeStep={3}
@@ -344,7 +345,7 @@ const SongStep4 = () => {
             <CircularProgress color="inherit" />
           </Backdrop>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

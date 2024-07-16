@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Box } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -10,6 +11,7 @@ import { isAnthem } from 'src/activity-types/anyActivity';
 import { postMixAudio } from 'src/api/audio/audio-mix.post';
 import { deleteAudio } from 'src/api/audio/audio.delete';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import AnthemTrack from 'src/components/activities/anthem/AnthemTrack/AnthemTrack';
@@ -113,14 +115,14 @@ const AnthemStep1 = () => {
     </Base>
   ) : (
     <Base>
-      <div className={styles.mainContainer}>
+      <PageLayout>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           activeStep={0}
           urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
           onBeforeLeavePage={buildVerseUrl}
         />
-        <div className={styles.contentContainer}>
+        <Box className={styles.contentContainer}>
           <h1>Mettre en ligne les pistes sonores du couplet</h1>
           <p> Commencez le paramétrage en mettant en ligne les différentes pistes sonores du couplet : </p>
           <div>
@@ -139,8 +141,8 @@ const AnthemStep1 = () => {
                   ),
                 )}
           </div>
-        </div>
-      </div>
+        </Box>
+      </PageLayout>
       <StepsButton next={onNext} />
       <Backdrop className={styles.trackSelectionBackdrop} open={isLoading}>
         <CircularProgress color="inherit" />

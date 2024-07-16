@@ -79,7 +79,7 @@ export const ReportageCard = ({ activity, isSelf, noButtons, isDraft, showEditBu
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <h3 style={{ margin: '0 0.5rem 0.5rem' }}>{reportageType.title}</h3>
-        <div style={{ margin: '0 0.5rem 1rem', height: `${hasPreview ? 4 : 2}rem`, textAlign: 'justify' }}>
+        <div style={{ margin: '0 0.5rem 1rem', textAlign: 'justify' }}>
           <div className="text multine-with-ellipsis break-long-words" style={{ maxHeight: `${hasPreview ? 4 : 2}rem` }}>
             {firstText}
           </div>

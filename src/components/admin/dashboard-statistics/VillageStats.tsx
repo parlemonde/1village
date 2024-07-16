@@ -1,7 +1,5 @@
-import React from 'react';
-
 const VillageStats = () => {
-  return <h1>Village-monde</h1>;
+  return null;
 };
 
 export default VillageStats;

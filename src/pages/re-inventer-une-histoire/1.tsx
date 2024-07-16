@@ -9,6 +9,7 @@ import { isStory } from 'src/activity-types/anyActivity';
 import { ODD_CHOICE } from 'src/activity-types/story.constants';
 import { Base } from 'src/components/Base';
 import { KeepRatio } from 'src/components/KeepRatio';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ImageModal } from 'src/components/activities/content/editors/ImageEditor/ImageModal';
@@ -61,7 +62,7 @@ const ReInventStoryStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/re-inventer-une-histoire" />}
         <Steps
           steps={['ODD', 'Objet', 'Lieu', 'Histoire', 'Prévisualisation']}
@@ -78,10 +79,10 @@ const ReInventStoryStep1 = () => {
           <h1>Choisissez et dessinez l’objectif du développement durable à atteindre</h1>
           <p className="text">Pour atteindre votre objectif de développement durable, vous choisirez un objet et un lieu aux étapes précédentes.</p>
           <p className="text">Choisissez votre objectif et dessinez-le.</p>
-          <Grid container spacing={3}>
+          <Grid container>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>
-                <div style={{ width: '100%', marginTop: '1rem', position: 'relative' }}>
+                <div style={{ width: '100%', maxWidth: '320px', marginTop: '1rem', position: 'relative' }}>
                   <ButtonBase onClick={() => setIsImageModalOpen(true)} style={{ width: '100%', color: `${isError ? errorColor : primaryColor}` }}>
                     <KeepRatio ratio={2 / 3} width="100%">
                       <div
@@ -156,7 +157,7 @@ const ReInventStoryStep1 = () => {
           </Grid>
         </div>
         <StepsButton next={onNext} />
-      </div>
+      </PageLayout>
     </Base>
   );
 };
