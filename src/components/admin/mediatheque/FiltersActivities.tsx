@@ -40,7 +40,8 @@ export default function FiltersActivities() {
   const { allActivities, setAllFiltered, filters, setFilters, useAdminData } = useContext(MediathequeContext);
 
   const updateAllFiltered = useCallback(
-    (currentFilter) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (currentFilter: { [x: string]: any; countries?: any }) => {
       const newState = allActivities.filter((activity: UserData) => {
         let isValid = true;
         Object.keys(currentFilter).forEach((filterKey) => {
