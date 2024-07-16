@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { sendEmailNotifications } from '../emails/emailService';
+import { sendMail, Email } from '../emails/index';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -61,7 +61,6 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   }
   const activityId = parseInt(req.params.id, 10) ?? 0;
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
-  console.log('activity', activity);
   if (activity === null || (req.user && req.user.type === UserType.TEACHER && req.user.villageId !== activity.villageId)) {
     throw new AppError('Forbidden', ErrorCode.UNKNOWN);
   }
@@ -77,12 +76,6 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   newComment.text = data.text;
   await AppDataSource.getRepository(Comment).save(newComment);
 
-  const fromEmail = process.env.EMAIL_USER ?? '';
-  const toEmail = 'guillaume.pages@parlemonde.org'; // Remplacez par l'email de l'utilisateur qui a publié l'activité
-  const subject = 'Nouveau commentaire sur votre activité';
-  const text = `Vous avez un nouveau commentaire de l'utilisateur ${req.user?.id ?? 0}: "${newComment.text}"`;
-
-  await sendEmailNotifications(toEmail, fromEmail, subject, text);
   res.sendJSON(newComment);
 });
 
@@ -119,6 +112,20 @@ commentController.delete({ path: '/:commentId', userType: UserType.TEACHER }, as
     await AppDataSource.getRepository(Comment).delete({ id, activityId, userId: req.user?.id ?? 0 });
   }
   res.status(204).send();
+});
+
+// --- Test email sending ---
+
+commentController.post({ path: '/mail' }, async (req: Request, res: Response) => {
+  const data = req.body;
+  console.log('================================================', data);
+
+  try {
+    await sendMail(Email.TEST, data.email, { text: 'This is a test email.' });
+    res.send('Test email sent successfully!');
+  } catch (error) {
+    res.status(500).send(`Error sending test email: ${error.message}`);
+  }
 });
 
 export { commentController };

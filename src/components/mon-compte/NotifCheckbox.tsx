@@ -3,39 +3,38 @@ import React from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import Stack from '@mui/material/Stack';
 
 export const NotifCheckbox = () => {
   const [commentChecked, setCommentChecked] = React.useState(true);
-  const [reactionChecked, setReactionChecked] = React.useState(true);
-  const [publicationFromAClassChecked, setPublicationFromAClassChecked] = React.useState(true);
-  const [publicationFromAdminChecked, setPublicationFromAdminChecked] = React.useState(true);
-  const [creationAccountFamilyChecked, setCreationAccountFamilyChecked] = React.useState(true);
-  const [phaseOpeningChecked, setPhaseOpeningChecked] = React.useState(true);
+  // const [reactionChecked, setReactionChecked] = React.useState(true);
+  // const [publicationFromAClassChecked, setPublicationFromAClassChecked] = React.useState(true);
+  // const [publicationFromAdminChecked, setPublicationFromAdminChecked] = React.useState(true);
+  // const [creationAccountFamilyChecked, setCreationAccountFamilyChecked] = React.useState(true);
+  // const [phaseOpeningChecked, setPhaseOpeningChecked] = React.useState(true);
 
   const handleCommentChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommentChecked(event.target.checked);
   };
 
-  const handleReactionChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setReactionChecked(event.target.checked);
-  };
+  // const handleReactionChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setReactionChecked(event.target.checked);
+  // };
 
-  const handlePublicationFromAClassChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPublicationFromAClassChecked(event.target.checked);
-  };
+  // const handlePublicationFromAClassChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPublicationFromAClassChecked(event.target.checked);
+  // };
 
-  const handlePublicationFromAdminChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPublicationFromAdminChecked(event.target.checked);
-  };
+  // const handlePublicationFromAdminChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPublicationFromAdminChecked(event.target.checked);
+  // };
 
-  const handleCreationAccountFamilyChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCreationAccountFamilyChecked(event.target.checked);
-  };
+  // const handleCreationAccountFamilyChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCreationAccountFamilyChecked(event.target.checked);
+  // };
 
-  const handlePhaseOpeningChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPhaseOpeningChecked(event.target.checked);
-  };
+  // const handlePhaseOpeningChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPhaseOpeningChecked(event.target.checked);
+  // };
 
   const mappingCheckbox = [
     { label: 'Commentaire sur une de vos publications', checked: commentChecked, handle: handleCommentChecked },
@@ -47,14 +46,7 @@ export const NotifCheckbox = () => {
   ];
 
   const handleChoice = () => {
-    console.log(
-      commentChecked,
-      reactionChecked,
-      publicationFromAClassChecked,
-      publicationFromAdminChecked,
-      creationAccountFamilyChecked,
-      phaseOpeningChecked,
-    );
+    console.log(commentChecked);
     console.log('Enregistrer');
   };
 
@@ -68,13 +60,7 @@ export const NotifCheckbox = () => {
         </div>
       ))}
 
-      <Button
-        size="small"
-        variant="contained"
-        onClick={handleChoice}
-        style={{ marginBottom: '1rem', marginTop: '1rem', marginLeft: '0.2rem' }}
-        endIcon={<SendIcon />}
-      >
+      <Button size="small" variant="contained" onClick={handleChoice} style={{ margin: '1rem 0.5rem' }} endIcon={<SendIcon />}>
         Enregister mes choix
       </Button>
     </div>

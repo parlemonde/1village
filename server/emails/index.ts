@@ -21,12 +21,14 @@ export enum Email {
   INVALID_COUNTRY,
   CONFIRMATION_EMAIL,
   RESET_PASSWORD_EMAIL,
+  TEST,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
+  [Email.TEST]: { text: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
@@ -71,6 +73,15 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
     return {
       filenameText: 'reset-password-email.html',
       subject: 'Mot de passe oublié - 1Village',
+      args: {
+        ...options,
+      },
+    };
+  }
+  if (email === Email.TEST) {
+    return {
+      filenameText: 'test.html',
+      subject: 'Test',
       args: {
         ...options,
       },
