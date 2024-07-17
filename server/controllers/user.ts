@@ -10,6 +10,7 @@ import { Email, sendMail } from '../emails';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
 import { FeatureFlag } from '../entities/featureFlag';
+import { Notifications } from '../entities/notifications';
 import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
@@ -282,6 +283,11 @@ userController.post({ path: '' }, async (req: Request, res: Response) => {
   await AppDataSource.getRepository(User).save(user);
   delete user.passwordHash;
   delete user.verificationHash;
+  const notificationRepo = AppDataSource.getRepository(Notifications);
+  const notification = new Notifications();
+  notification.userId = user.id;
+  // Sauvegarder la notification dans la base de données
+  await notificationRepo.save(notification);
   res.sendJSON(user);
 });
 
@@ -418,7 +424,6 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
   user.hasStudentLinked = valueOrDefault(data.hasStudentLinked, user.hasStudentLinked);
-  await AppDataSource.getRepository(User).save(user);
   res.sendJSON(user);
 });
 
@@ -520,6 +525,8 @@ userController.delete({ path: '/:id', userType: UserType.OBSERVATOR }, async (re
   }
 
   await AppDataSource.getRepository(User).delete({ id });
+  const notificationRepository = AppDataSource.getRepository(Notifications);
+  await notificationRepository.delete({ userId: id });
 
   // Update the hasStudentLinked field for affected users
   await updateHasStudentLinkedForAffectedUsers(affectedUserIds);
