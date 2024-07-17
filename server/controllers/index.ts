@@ -12,6 +12,7 @@ import { gameController } from './game';
 import { imageController } from './image';
 import { languageController } from './languages';
 import { mediathequeController } from './mediatheque';
+import { notificationsController } from './notifications';
 import { pelicoController } from './pelicoPresentation';
 import { storyController } from './story';
 import { studentController } from './student';
@@ -45,6 +46,7 @@ const controllers = [
   featureFlagController,
   pelicoController,
   mediathequeController,
+  notificationsController,
 ];
 
 for (let i = 0, n = controllers.length; i < n; i++) {
