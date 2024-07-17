@@ -2,7 +2,6 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
 import { hasSubscribed } from '../emails/checkSubscribe';
-import { sendMail, Email } from '../emails/index';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -125,14 +124,6 @@ commentController.delete({ path: '/:commentId', userType: UserType.TEACHER }, as
 
 commentController.post({ path: '/mail' }, async (req: Request, res: Response) => {
   const data = req.body;
-  console.log('================================================', data);
-
-  try {
-    await sendMail(Email.TEST, data.email, { text: 'This is a test email.' });
-    res.send('Test email sent successfully!');
-  } catch (error) {
-    res.status(500).send(`Error sending test email: ${error.message}`);
-  }
 });
 
 export { commentController };

@@ -21,14 +21,14 @@ export enum Email {
   INVALID_COUNTRY,
   CONFIRMATION_EMAIL,
   RESET_PASSWORD_EMAIL,
-  TEST,
+  COMMENT_NOTIFICATION,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
-  [Email.TEST]: { text: string };
+  [Email.COMMENT_NOTIFICATION]: { text: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
@@ -78,9 +78,9 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
       },
     };
   }
-  if (email === Email.TEST) {
+  if (email === Email.COMMENT_NOTIFICATION) {
     return {
-      filenameText: 'test.html',
+      filenameText: 'comment_notification.html',
       subject: 'Test',
       args: {
         ...options,

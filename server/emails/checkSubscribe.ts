@@ -1,3 +1,4 @@
+import { sendMail, Email } from '../emails/index';
 import { Activity } from '../entities/activity';
 import { Notifications } from '../entities/notifications';
 import { User } from '../entities/user';
@@ -30,6 +31,7 @@ export const hasSubscribed = async (activityId, userId, column) => {
   if (whichNotification?.[tableMapping[column]] === true) {
     console.log('=====================================================');
     console.log('c est vrai');
+    await sendMail(Email.COMMENT_NOTIFICATION, userWhoCreateActivity?.email, { text: 'This is a test email.' });
   } else {
     console.log('=====================================================');
     console.log('non c est faux');
