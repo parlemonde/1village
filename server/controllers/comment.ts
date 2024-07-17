@@ -77,7 +77,7 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     const { activityId, userId } = savedComment;
     console.log('==================================================');
     console.log('Comment saved:', activityId, userId);
-    hasSubscribed(activityId, userId);
+    hasSubscribed(activityId, userId, 'commentary');
 
     res.sendJSON(savedComment);
   } catch (error) {
