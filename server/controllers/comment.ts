@@ -74,8 +74,6 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     const savedComment = await AppDataSource.getRepository(Comment).save(newComment);
 
     const { activityId, userId } = savedComment;
-    console.log('==================================================');
-    console.log('Comment saved:', activityId, userId);
     hasSubscribed(activityId, userId, 'commentary');
 
     res.sendJSON(savedComment);
@@ -118,12 +116,6 @@ commentController.delete({ path: '/:commentId', userType: UserType.TEACHER }, as
     await AppDataSource.getRepository(Comment).delete({ id, activityId, userId: req.user?.id ?? 0 });
   }
   res.status(204).send();
-});
-
-// --- Test email sending ---
-
-commentController.post({ path: '/mail' }, async (req: Request, res: Response) => {
-  const data = req.body;
 });
 
 export { commentController };

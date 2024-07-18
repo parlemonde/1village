@@ -13,35 +13,48 @@ const tableMapping = {
   openingVillageStep: 'openingVillageStep',
 };
 
+const emailMapping = {
+  commentary: Email.COMMENT_NOTIFICATION,
+  reaction: Email.REACTION_NOTIFICATION,
+};
+
 export const hasSubscribed = async (activityId, userId, column) => {
   const userWhoComment = await AppDataSource.getRepository(User).findOne({ where: { id: userId } });
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
-  const userIdWhoCreateActivity = activity?.userId;
-  const userWhoCreateActivity = await AppDataSource.getRepository(User).findOne({ where: { id: userIdWhoCreateActivity } });
+  let userIdWhoCreateActivity = activity?.userId;
+  let userWhoCreateActivity = await AppDataSource.getRepository(User).findOne({ where: { id: userIdWhoCreateActivity } });
+  console.log('==========================');
+  console.log('userWhoCreateActivity', userWhoCreateActivity);
+  console.log('userIdWhoCreateActivity', userIdWhoCreateActivity);
+  console.log('activity', activity);
+  console.log('==========================');
 
-  // const whichNotification = await AppDataSource.getRepository(Notifications).findOne({ where: { userId: userIdWhoCreateActivity } });
+  if (column === 'reaction') {
+    const newActivity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activity?.responseActivityId } });
+    userWhoCreateActivity = await AppDataSource.getRepository(User).findOne({ where: { id: newActivity?.userId } });
+    userIdWhoCreateActivity = userWhoCreateActivity?.id;
+    console.log('==========================');
+    console.log('userWhoCreateActivity', userWhoCreateActivity);
+    console.log('userIdWhoCreateActivity', userIdWhoCreateActivity);
+    console.log('==========================');
+  }
+  console.log('==========================');
+  console.log('userIdWhoCreateActivity', userIdWhoCreateActivity);
+  console.log('==========================');
+
   const whichNotification = await AppDataSource.createQueryBuilder()
     .select(`notifications.${column}`)
     .from(Notifications, 'notifications')
     .where('notifications.userId = :userIdWhoCreateActivity', { userIdWhoCreateActivity })
     .getOne();
 
-  console.log('=====================================================');
-  console.log('`${whichNotification}.${column}`', whichNotification?.[tableMapping[column]]);
-  if (whichNotification?.[tableMapping[column]] === true) {
-    console.log('=====================================================');
-    console.log('c est vrai');
-    await sendMail(Email.COMMENT_NOTIFICATION, userWhoCreateActivity?.email, { text: 'This is a test email.' });
-  } else {
-    console.log('=====================================================');
-    console.log('non c est faux');
-  }
-
-  console.log('=====================================================');
-  console.log('nom de la colonne', column);
-  console.log('userWhoComment', userWhoComment);
-  console.log('userWhoCreateActivity', userWhoCreateActivity);
-  console.log('activity', activity);
+  console.log('==========================');
   console.log('whichNotification', whichNotification);
-  console.log('=====================================================');
+  console.log('userIdWhoCreateActivity', userIdWhoCreateActivity);
+  console.log('==========================');
+
+  if (whichNotification?.[tableMapping[column]] === true && userWhoCreateActivity?.email) {
+    const emailType = emailMapping[column];
+    await sendMail(emailType, userWhoCreateActivity.email, { text: 'This is a test email.' });
+  }
 };

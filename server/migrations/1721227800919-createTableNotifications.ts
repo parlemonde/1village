@@ -63,12 +63,18 @@ export class CreateNotificationsTable1628353976535 implements MigrationInterface
       }),
     );
 
-    const users = await queryRunner.query(`SELECT id FROM user`);
+    const users = await queryRunner.query(`SELECT id, type FROM user`);
 
     for (const user of users) {
-      await queryRunner.query(
-        `INSERT INTO notifications (userId, commentary, reaction, publicationFromSchool, publicationFromAdmin, creationAccountFamily, openingVillageStep) VALUES (${user.id}, true, true, true, true, true, true)`,
-      );
+      if (user.type === 3) {
+        await queryRunner.query(
+          `INSERT INTO notifications (userId, commentary, reaction, publicationFromSchool, publicationFromAdmin, creationAccountFamily, openingVillageStep) VALUES (${user.id}, true, true, true, true, true, true)`,
+        );
+      } else {
+        await queryRunner.query(
+          `INSERT INTO notifications (userId, commentary, reaction, publicationFromSchool, publicationFromAdmin, creationAccountFamily, openingVillageStep) VALUES (${user.id}, false, false, false, false, false, false)`,
+        );
+      }
     }
   }
 
