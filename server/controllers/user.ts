@@ -22,7 +22,7 @@ import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
 import { Controller } from './controller';
-import { EditNotificationPreferences, notificationsController } from './notifications';
+import { EditNotificationPreferences } from './notifications';
 
 const userController = new Controller('/users');
 // --- Get all users. ---

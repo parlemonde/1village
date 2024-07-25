@@ -70,10 +70,6 @@ const ReactionStep3 = () => {
     return <div></div>;
   }
 
-  console.log('activity', activity);
-  console.log('responseActivity', responseActivity);
-  console.log('data', data);
-
   return (
     <Base>
       <PageLayout>

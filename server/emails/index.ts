@@ -29,7 +29,7 @@ interface EmailMapping {
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
-  [Email.COMMENT_NOTIFICATION]: { text: string };
+  [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string };
   [Email.REACTION_NOTIFICATION]: { text: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
@@ -83,7 +83,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   if (email === Email.COMMENT_NOTIFICATION) {
     return {
       filenameText: 'comment_notification.html',
-      subject: 'Test',
+      subject: "Commentaire d'une classe à votre activité",
       args: {
         ...options,
       },
