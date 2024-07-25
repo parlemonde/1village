@@ -76,7 +76,7 @@ const AnthemTrack = ({ track, instruments, handleTrackUpdate }: AnthemTrackProps
         <AddAudioButton onClick={() => setIsAudioEditorOpen(true)} />
       ) : (
         <div style={{ display: 'flex' }}>
-          <Box component="audio" controls src={'track.sampleUrl'} sx={{ width: { xs: '220px', sm: '250px', md: '300px' }, height: '30px' }}>
+          <Box component="audio" controls src={track.sampleUrl} sx={{ width: { xs: '220px', sm: '250px', md: '300px' }, height: '30px' }}>
             <Alert sx={{ padding: '0 16px' }} severity="error">
               {'Erreur: impossible de charger le son.'}
             </Alert>
