@@ -22,6 +22,7 @@ import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
 import { logger } from '../utils/logger';
 import updateHasStudentLinkedForAffectedUsers from '../utils/updateHasStudentLinkedForAffectedUsers';
 import { Controller } from './controller';
+import { EditNotificationPreferences, notificationsController } from './notifications';
 
 const userController = new Controller('/users');
 // --- Get all users. ---
@@ -582,6 +583,18 @@ userController.post({ path: '/verify-email' }, async (req: Request, res: Respons
   user.accountRegistration = 0;
   user.verificationHash = '';
   user.isVerified = true;
+  if (user.type === UserType.TEACHER) {
+    const notificationPreferences = new Notifications();
+    notificationPreferences.commentary = true;
+    notificationPreferences.creationAccountFamily = true;
+    notificationPreferences.openingVillageStep = true;
+    notificationPreferences.publicationFromAdmin = true;
+    notificationPreferences.publicationFromSchool = true;
+    notificationPreferences.reaction = true;
+
+    EditNotificationPreferences({ ...notificationPreferences, userId: user.id });
+  }
+
   await AppDataSource.getRepository(User).save(user);
 
   // login user

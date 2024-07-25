@@ -13,9 +13,14 @@ const tableMapping = {
   openingVillageStep: 'openingVillageStep',
 };
 
+export enum EnumMailType {
+  COMMENTARY = 'commentary',
+  REACTION = 'reaction',
+}
+
 const emailMapping = {
-  commentary: Email.COMMENT_NOTIFICATION,
-  reaction: Email.REACTION_NOTIFICATION,
+  [EnumMailType.COMMENTARY]: Email.COMMENT_NOTIFICATION,
+  [EnumMailType.REACTION]: Email.REACTION_NOTIFICATION,
 };
 
 export const hasSubscribed = async (activityId, userId, column) => {

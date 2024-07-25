@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { hasSubscribed } from '../emails/checkSubscribe';
+import { EnumMailType, hasSubscribed } from '../emails/checkSubscribe';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -74,7 +74,7 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     const savedComment = await AppDataSource.getRepository(Comment).save(newComment);
 
     const { activityId, userId } = savedComment;
-    hasSubscribed(activityId, userId, 'commentary');
+    hasSubscribed(activityId, userId, EnumMailType.COMMENTARY);
 
     res.sendJSON(savedComment);
   } catch (error) {

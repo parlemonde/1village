@@ -70,10 +70,6 @@ export class CreateNotificationsTable1628353976535 implements MigrationInterface
         await queryRunner.query(
           `INSERT INTO notifications (userId, commentary, reaction, publicationFromSchool, publicationFromAdmin, creationAccountFamily, openingVillageStep) VALUES (${user.id}, true, true, true, true, true, true)`,
         );
-      } else {
-        await queryRunner.query(
-          `INSERT INTO notifications (userId, commentary, reaction, publicationFromSchool, publicationFromAdmin, creationAccountFamily, openingVillageStep) VALUES (${user.id}, false, false, false, false, false, false)`,
-        );
       }
     }
   }

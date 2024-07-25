@@ -2,38 +2,28 @@ import { useMutation } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 
-// async function putNotifications(params: { userId: number; data: any }) {
-//   const { userId, data } = params;
+type NotificationChoice = {
+  commentary: boolean;
+  reaction: boolean;
+  publicationFromSchool: boolean;
+  publicationFromAdmin: boolean;
+  creationAccountFamily: boolean;
+  openingVillageStep: boolean;
+};
 
-//   return (
-//     await axiosRequest({
-//       method: 'PUT',
-//       baseURL: '/api',
-//       url: '/notifications/' + userId,
-//       data: {
-//         dataNotif: data,
-//       },
-//     })
-//   ).data;
-// }
-
-// export const usePutNotifications = () => {
-//   return useQuery(['Notifications'], () => putNotifications({ userId, data }));
-// };
-
-async function putNotifications(params: { userId: number; data: any }) {
+async function putNotifications(params: { userId: number; data: NotificationChoice }) {
   const { userId, data } = params;
   return await axiosRequest({
     method: 'PUT',
     baseURL: '/api',
-    url: `/notifications/${userId}`,
+    url: `/notifications/suscribe/${userId}`,
     data: {
-      dataNotif: data,
+      data,
     },
   });
 }
 
-export const usePutNotifications = (args: { userId: number; data: any }) => {
+export const usePutNotifications = (args: { userId: number; data: NotificationChoice }) => {
   const { userId, data } = args;
 
   return useMutation({

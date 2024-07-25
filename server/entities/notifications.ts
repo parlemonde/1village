@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('notifications')
 export class Notifications {
-  static findOne(arg0: { userId: string; }) {
-      throw new Error('Method not implemented.');
+  static findOne(arg0: { userId: string }) {
+    throw new Error('Method not implemented.');
   }
   @PrimaryGeneratedColumn()
   id: number;

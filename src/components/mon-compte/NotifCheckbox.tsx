@@ -24,7 +24,7 @@ export const NotifCheckbox = () => {
       publicationFromSchool: publicationFromAClassChecked,
       publicationFromAdmin: publicationFromAdminChecked,
       creationAccountFamily: creationAccountFamilyChecked,
-      OpeningVillageStep: phaseOpeningChecked,
+      openingVillageStep: phaseOpeningChecked,
     },
   });
 
