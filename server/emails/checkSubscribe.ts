@@ -55,16 +55,6 @@ export const hasSubscribed = async (activityId: number, userId: number, column: 
   const userIdWhoCreateActivity = activity?.userId;
   const userWhoCreateActivity = await AppDataSource.getRepository(User).findOne({ where: { id: userIdWhoCreateActivity } });
 
-  // if (column === 'reaction') {
-  //   const newActivity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activity?.responseActivityId } });
-  //   userWhoCreateActivity = await AppDataSource.getRepository(User).findOne({ where: { id: newActivity?.userId } });
-  //   userIdWhoCreateActivity = userWhoCreateActivity?.id;
-  //   console.log('==========================');
-  //   console.log('userWhoCreateActivity', userWhoCreateActivity);
-  //   console.log('userIdWhoCreateActivity', userIdWhoCreateActivity);
-  //   console.log('==========================');
-  // }
-
   const whichNotification = await AppDataSource.createQueryBuilder()
     .select(`notifications.${column}`)
     .from(Notifications, 'notifications')
@@ -73,7 +63,7 @@ export const hasSubscribed = async (activityId: number, userId: number, column: 
 
   if (whichNotification && whichNotification[tableMapping[column] as keyof Notifications] === true && userWhoCreateActivity?.email) {
     const emailType = emailMapping[column];
-    if (emailType === 4) {
+    if (emailType === 1) {
       const activityType = activity?.type || 0;
       const activityName: string = activityNameMapper[activityType];
       const userName = userWhoComment?.school || '';

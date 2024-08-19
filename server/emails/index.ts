@@ -18,11 +18,11 @@ getNodeMailer()
 
 export enum Email {
   INVALID_VILLAGE,
+  COMMENT_NOTIFICATION,
+  REACTION_NOTIFICATION,
   INVALID_COUNTRY,
   CONFIRMATION_EMAIL,
   RESET_PASSWORD_EMAIL,
-  COMMENT_NOTIFICATION,
-  REACTION_NOTIFICATION,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
@@ -36,6 +36,7 @@ type EmailOptions<E extends Email> = EmailMapping[E];
 
 type emailData = {
   // filename?: string; // todo add when using html
+  filenameHtml?: string | undefined;
   filenameText: string;
   subject: string;
   args: { [key: string]: string };
@@ -82,8 +83,9 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   }
   if (email === Email.COMMENT_NOTIFICATION) {
     return {
-      filenameText: 'comment_notification.html',
-      subject: "Commentaire d'une classe à votre activité",
+      filenameHtml: 'comment_notification.html',
+      filenameText: 'comment_notification.txt',
+      subject: 'Du nouveau sur 1Village ! 🦜',
       args: {
         ...options,
       },
@@ -92,7 +94,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   if (email === Email.REACTION_NOTIFICATION) {
     return {
       filenameText: 'comment_notification.html',
-      subject: 'Reaction',
+      subject: ' Du nouveau sur 1Village ! 🦜',
       args: {
         ...options,
       },
@@ -127,7 +129,11 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
   };
 
   try {
-    const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
+    if (!templateData.filenameHtml || !templateData.filenameText || !templateData.subject) {
+      throw new Error('Template data is missing required fields.');
+    }
+
+    const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameHtml), renderOptions);
     const text = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     // send mail with defined transport object
     const info = await transporter.sendMail({
