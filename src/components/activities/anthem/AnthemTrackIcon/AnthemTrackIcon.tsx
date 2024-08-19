@@ -40,7 +40,7 @@ const AnthemTrackIcon = ({ track, handleIconUpdate, instruments }: AnthemTrackPr
                   onClose={() => setOpen(false)}
                   PopperComponent={({ children, ...popperProps }) => (
                     <div {...popperProps} style={{ position: 'absolute', top: '100%', left: 0, width: '100%', zIndex: 1 }}>
-                      {children}
+                      {typeof children !== 'function' && children}
                     </div>
                   )}
                   PaperComponent={({ children, ...paperProps }) => (

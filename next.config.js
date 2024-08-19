@@ -1,7 +1,11 @@
-/* eslint-disable */
+// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+const withTM = require('next-transpile-modules')(['@mui/x-charts']);
+
+// eslint-disable-next-line no-undef
 const BUILD_VERSION = process.env.BUILD_VERSION;
 
-module.exports = {
+// eslint-disable-next-line no-undef
+module.exports = withTM({
   distDir: './dist/next',
   poweredByHeader: false,
   webpack: (config) => {
@@ -19,4 +23,4 @@ module.exports = {
     ignoreDuringBuilds: true,
   },
   generateBuildId: BUILD_VERSION ? async () => BUILD_VERSION : undefined,
-};
+});

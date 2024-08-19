@@ -15,6 +15,7 @@ type Link = {
   name: string;
   link: string;
   action?: () => void;
+  rights?: number[];
 };
 interface NavItemProps {
   key?: number;
@@ -62,8 +63,12 @@ const Creer = () => {
 
   const links: Link[] = [
     { name: 'Créer du contenu libre', link: '/admin/newportal/contenulibre/1', action: handleNewActivity },
-    { name: 'Créer une activité H5P', link: 'https://' },
-    { name: 'Paramétrer l’hymne', link: 'https://' },
+    { name: 'Créer une activité H5P', link: '/admin/newportal/h5p' },
+    {
+      name: 'Paramétrer l’hymne',
+      link: '/admin/newportal/create/parametrer-hymne',
+      rights: [UserType.MEDIATOR, UserType.ADMIN, UserType.SUPER_ADMIN],
+    },
     { name: 'Mixer l’hymne', link: 'https://' },
   ];
   useEffect(() => {

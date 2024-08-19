@@ -1,0 +1,16 @@
+.mapContainer {
+    display: flex;
+    gap: 2rem;
+}
+
+.legendContainer {
+    flex: 1;
+}
+
+.legendContainer>ul {
+    list-style-type: none;
+}
+
+.legendContainer span {
+    text-decoration: underline;
+}

@@ -1,29 +1,37 @@
 import React, { createContext, useState, useMemo, useEffect } from 'react';
 
 import { useGetMediatheque } from 'src/api/mediatheque/mediatheque.get';
-import type { Filter } from 'types/mediatheque.type';
+import { useGetVillages } from 'src/api/villages/villages.get';
 
 type MediathequeProviderProps = {
   children: React.ReactNode;
 };
 
 type MediathequeContextType = {
-  filters: Array<Filter[]>;
-  setFilters: React.Dispatch<React.SetStateAction<Array<Filter[]>>>;
+  filters: object;
+  setFilters: React.Dispatch<React.SetStateAction<object>>;
+  setAllFiltered: React.Dispatch<React.SetStateAction<[]>>;
   allFiltered: [];
   useAdminData: boolean;
   setUseAdminData: React.Dispatch<React.SetStateAction<boolean>>;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  updatePageKey: number;
+  setUpdatePageKey: React.Dispatch<React.SetStateAction<number>>;
+  villageMondes: string[] | undefined;
+  allActivities: [];
 };
 
-interface UserData {
+export type UserData = {
   id: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any;
+  countries: { isoCode: string; name: string }[];
   subType: number;
   type: number;
   villageId: number;
   userId: number;
-  user: { type: number; school: string };
+  user: { type: number; school: string; country: { isoCode: string; name: string } };
   village: { name: string };
   data: {
     mascotteImage?: string;
@@ -36,26 +44,44 @@ interface UserData {
     place?: { imageStory?: string; imageUrl?: string };
     tale?: { imageStory?: string; imageUrl?: string };
   };
-}
+};
 
 const MediathequeContext = createContext<MediathequeContextType>({
   filters: [],
   setFilters: () => {},
   allFiltered: [],
+  setAllFiltered: () => {},
   useAdminData: false,
   setUseAdminData: () => {},
+  page: 0,
+  setPage: () => {},
+  updatePageKey: 0,
+  setUpdatePageKey: () => {},
+  villageMondes: [],
+  allActivities: [],
 });
 
 export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ children }) => {
-  const [filters, setFilters] = useState<Array<Filter[]>>([[]]);
+  const [filters, setFilters] = useState({});
   const [useAdminData, setUseAdminData] = useState(false);
+  const [allFiltered, setAllFiltered] = useState<[]>([]);
 
-  const { data: usersData } = useGetMediatheque(filters);
+  const { data: usersData } = useGetMediatheque();
   const [dataToUse, setDataToUse] = useState<[]>([]);
+
+  const [page, setPage] = useState<number>(0);
+  const [updatePageKey, setUpdatePageKey] = useState(0);
+
+  const { data: villages } = useGetVillages();
+  const [villageMondes, setvillageMondes] = useState<string[]>();
+
+  useEffect(() => {
+    setvillageMondes(villages?.map(({ name }: { name: string }) => name) || []);
+  }, [villages]);
 
   useEffect(() => {
     const activitiesMediaFinder = usersData
-      ?.filter(({ type }: { type: number }) => ![3, 5, 11].includes(type))
+      ?.filter?.(({ type }: { type: number }) => ![3, 5, 11].includes(type))
       .map(({ id, content, subType, type, villageId, userId, user, village, data }: UserData) => {
         const result: {
           id: number;
@@ -65,7 +91,7 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
           userId: number;
           content: Array<{ type: string; value: string | undefined }>;
           user: { type: number; school: string };
-          village: { name: string };
+          village: { name: string; countryCodes?: string };
         } = { id, subType, type, villageId, userId, content: [], user, village };
         if (type === 8 || type === 12 || type === 13 || type === 14) {
           if (type === 8) {
@@ -73,9 +99,6 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
           }
           if (type === 12) {
             result.content.push({ type: 'sound', value: data.verseFinalMixUrl });
-            // result.content.push({ type: 'sound', value: data.verseMixUrl });
-            // result.content.push({ type: 'sound', value: data.verseMixWithIntroUrl });
-            // result.content.push({ type: 'sound', value: data.verseMixWithVocalsUrl });
           }
           if (type === 13 || type === 14) {
             const properties = ['odd', 'object', 'place', 'tale'];
@@ -111,13 +134,22 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
         return result;
       });
 
+    activitiesMediaFinder?.forEach((_a: { village: object }, index: number) => {
+      if (activitiesMediaFinder[index].village) {
+        Object.keys(activitiesMediaFinder[index].village).forEach((k) => (activitiesMediaFinder[index][k] = activitiesMediaFinder[index].village[k]));
+        delete activitiesMediaFinder[index].village;
+      }
+    });
+
     const activitiesWithMediaOnly = activitiesMediaFinder?.filter((a: UserData) => a.content.length > 0);
     const activitiesFromPelico = activitiesWithMediaOnly?.filter((a: UserData) => [0, 1, 2].includes(a.user.type));
 
     if (useAdminData) {
       setDataToUse(activitiesFromPelico || []);
+      setAllFiltered(activitiesFromPelico || []);
     } else {
       setDataToUse(activitiesWithMediaOnly || []);
+      setAllFiltered(activitiesWithMediaOnly || []);
     }
   }, [usersData, useAdminData]);
 
@@ -125,11 +157,18 @@ export const MediathequeProvider: React.FC<MediathequeProviderProps> = ({ childr
     () => ({
       filters,
       setFilters,
-      allFiltered: dataToUse,
+      allFiltered,
+      allActivities: dataToUse,
+      setAllFiltered,
       useAdminData,
       setUseAdminData,
+      page,
+      setPage,
+      updatePageKey,
+      setUpdatePageKey,
+      villageMondes,
     }),
-    [filters, dataToUse, useAdminData],
+    [filters, allFiltered, dataToUse, useAdminData, page, updatePageKey, villageMondes],
   );
 
   return <MediathequeContext.Provider value={value}>{children}</MediathequeContext.Provider>;

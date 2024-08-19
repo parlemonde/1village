@@ -52,7 +52,8 @@
     }
   },
   "resolutions": {
-    "react-is": "^17.0.1"
+    "react-is": "^17.0.1",
+    "@types/react": "18.3.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.6",
@@ -87,8 +88,10 @@
     "@types/nodemailer": "6.4.4",
     "@types/nprogress": "0.2.0",
     "@types/prettier": "2.6.3",
+    "@types/prop-types": "^15",
     "@types/react": "17.0.47",
     "@types/react-dom": "17.0.17",
+    "@types/react-simple-maps": "^3",
     "@types/sass": "1.43.1",
     "@types/sharp": "0.30.4",
     "@types/sortablejs": "1.13.0",
@@ -178,16 +181,19 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
     "next": "^12.1.6",
+    "next-transpile-modules": "^10.0.1",
     "node-fetch": "^3.2.6",
     "nodemailer": "^6.9.14",
     "notistack": "^2.0.5",
     "nprogress": "^0.2.0",
+    "prop-types": "^15.8.1",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-pdf": "^8.0.0",
     "react-player": "^2.10.1",
     "react-query": "^3.39.2",
+    "react-simple-maps": "^3.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "safe-buffer": "^5.2.1",
     "sass": "^1.53.0",
@@ -204,7 +210,7 @@
     "web-vitals": "^2.1.4",
     "winston": "^3.8.0"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "yarn@4.3.1",
   "volta": {
     "node": "20.11.1"
   }
