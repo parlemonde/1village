@@ -18,7 +18,7 @@ interface Props {
 
 //add isSelected to change colors #4339F2 or #DAD7FE
 
-const BarCharts: React.FC<Props> = ({ barChartData, title, className }) => {
+const BarCharts: React.FC<Props> = ({ title, className }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const seriesData = barChartData.map((item) => ({ data: item.data }));
   return (
