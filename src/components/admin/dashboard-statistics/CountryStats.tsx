@@ -32,7 +32,6 @@ const ConstribionBarChartTitle = 'Contribution des classes';
 const CountryStats = () => {
   return (
     <>
-      {/* <DataProvider></DataProvider> */}
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
           <PhaseDropdown />

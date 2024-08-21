@@ -1,6 +1,6 @@
 export interface ClassroomsStats {
   classroomId: number;
-  classroomCountryCode: number;
+  classroomCountryCode: string;
   villageId: number;
   villageName: string;
   commentsCount: number;
