@@ -1,3 +1,4 @@
+import { getConnectedClassroomsCount, getContributedClassroomsCount, getRegisteredClassroomsCount } from '../stats/classroomStats';
 import { getMinConnections, getMaxConnections, getAverageConnections, getMedianConnections } from '../stats/connectionStats';
 import { getAverageDuration, getMaxDuration, getMedianDuration, getMinDuration } from '../stats/durationStats';
 import { Controller } from './controller';
@@ -14,20 +15,24 @@ statisticsController.get({ path: '/sessions' }, async (_req, res) => {
     maxConnections: await getMaxConnections(),
     averageConnections: await getAverageConnections(),
     medianConnections: await getMedianConnections(),
+    registeredClassroomsCount: await getRegisteredClassroomsCount(),
+    connectedClassroomsCount: await getConnectedClassroomsCount(),
+    contributedClassroomsCount: await getContributedClassroomsCount(),
   });
 });
+
 //   const classroomsData = await classroomRepository
-//     .createQueryBuilder('classroom')
-//     .leftJoin('classroom.village', 'village')
-//     .leftJoin('classroom.user', 'user')
-//     .addSelect('classroom.id', 'classroomId')
-//     .addSelect('classroom.name', 'classroomName')
-//     .addSelect('classroom.countryCode', 'classroomCountryCode')
-//     .addSelect('village.id', 'villageId')
-//     .addSelect('village.name', 'villageName')
-//     .addSelect('user.id', 'userId')
-//     .addSelect('user.firstname', 'userFirstname')
-//     .addSelect('user.lastname', 'userLastname')
+// .createQueryBuilder('classroom')
+// .leftJoin('classroom.village', 'village')
+// .leftJoin('classroom.user', 'user')
+// .addSelect('classroom.id', 'classroomId')
+// .addSelect('classroom.name', 'classroomName')
+// .addSelect('classroom.countryCode', 'classroomCountryCode')
+// .addSelect('village.id', 'villageId')
+// .addSelect('village.name', 'villageName')
+// .addSelect('user.id', 'userId')
+// .addSelect('user.firstname', 'userFirstname')
+// .addSelect('user.lastname', 'userLastname')
 //     .addSelect(
 //       `(SELECT COUNT(comment.id)
 //       FROM comment

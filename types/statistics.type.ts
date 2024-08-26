@@ -12,13 +12,13 @@ export interface SessionsStats {
 
 export interface ClassroomsStats {
   classroomId: number;
-  classroomCountryCode: number;
+  classroomCountryCode: string;
   villageId: number;
   villageName: string;
-  commentsCount: number;
-  videosCount: number;
   userFirstName: number;
   userLastName: number;
+  commentsCount: number;
+  videosCount: number;
   activitiesCount: {
     phase: number;
     activities: { count: number; type: number }[];
