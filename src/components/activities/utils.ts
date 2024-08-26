@@ -118,7 +118,7 @@ export const specificActivityPhase = {
   [ActivityType.REACTION]: [PhaseType.TWO],
   [ActivityType.ANTHEM]: [],
   [ActivityType.CLASS_ANTHEM]: [PhaseType.THREE],
-  [ActivityType.STORY]: [PhaseType.THREE],
+  [ActivityType.STORY]: [PhaseType.TWO],
   [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
 };
 export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {
