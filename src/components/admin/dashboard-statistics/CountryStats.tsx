@@ -8,7 +8,7 @@ import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
-import HorizontalBars from './charts/HorizontalChart'; // Correction ici, utilisation de HorizontalBars
+import HorizontalBars from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
@@ -51,7 +51,7 @@ const CountryStats = () => {
       </div>
       <h1>Statut: Observateur</h1>
       <div className={styles.monitorTable}>
-        <HorizontalBars /> {/* Passer selectedCountry */}
+        <HorizontalBars />
       </div>
       <Box
         height={1}
