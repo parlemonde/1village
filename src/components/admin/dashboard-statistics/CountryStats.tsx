@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 
-// import { DataProvider } from './../../../contexts/statisticsContext';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
-// import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
-import HorizontalChart from './charts/HorizontalChart';
+import HorizontalBars from './charts/HorizontalChart'; // Correction ici, utilisation de HorizontalBars
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
+import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import styles from './styles/charts.module.css';
 
 const pieChartData = {
@@ -26,10 +25,20 @@ const pieChartData = {
 };
 
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
-const EngagemtnBarChartTitle = 'Evolution des connexions';
-const ConstribionBarChartTitle = 'Contribution des classes';
+const EngagementBarChartTitle = 'Évolution des connexions';
+const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
+
+  const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
+  const countries = [...new Set(countriesMap)]; // avoid duplicates
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+  };
+
+  const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
+
   return (
     <>
       <div className={styles.filtersContainer}>
@@ -37,12 +46,12 @@ const CountryStats = () => {
           <PhaseDropdown />
         </div>
         <div className={styles.countryFilter}>
-          <CountriesDropdown />
+          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
       </div>
       <h1>Statut: Observateur</h1>
       <div className={styles.monitorTable}>
-        <HorizontalChart />
+        <HorizontalBars /> {/* Passer selectedCountry */}
       </div>
       <Box
         height={1}
@@ -58,6 +67,11 @@ const CountryStats = () => {
         sx={{ border: '2px solid #4C3ED9', borderRadius: 4 }}
       >
         Ce pays participe dans les villages-monde suivants :
+        <ul>
+          {filteredVillage.map((village, index) => (
+            <li key={index}>{village.villageName}</li>
+          ))}
+        </ul>
       </Box>
       <div className={styles.monitorTable}>
         <DashboardTable />
@@ -77,19 +91,10 @@ const CountryStats = () => {
       </div>
       <div className={styles.engagementContainer}>
         <PieCharts pieChartData={pieChartData} />
-        <BarCharts barChartData={barChartData} title={EngagemtnBarChartTitle} />
+        <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
-        {/* 
-        TODO -> remplacer les données de classroomExchanges par celles des nouvelles requetes
-
-        <ClassesExchangesCard
-          className={styles.exchangesCard}
-          totalPublications={classroomExchanges.data.totalActivities}
-          totalComments={classroomExchanges.data.totalComments}
-          totalVideos={classroomExchanges.data.totalVideos}
-        /> */}
-        <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ConstribionBarChartTitle} />
+        <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
       </div>
       <div>
         <PhaseDetails

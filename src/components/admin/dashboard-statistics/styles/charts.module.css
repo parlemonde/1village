@@ -103,3 +103,8 @@
 .connectionsChart {
   width: 30%;
 }
+
+.customLegend {
+  display: flex;
+  flex-direction: row-reverse;
+}

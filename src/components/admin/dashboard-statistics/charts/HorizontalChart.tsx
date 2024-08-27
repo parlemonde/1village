@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
@@ -6,13 +6,11 @@ import { mockClassroomsStats } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 
 interface SumData {
-  [key: string]: string | number | null;
   country: string;
   total: number;
 }
 
 const sumData: { [country: string]: SumData } = {};
-
 mockClassroomsStats.forEach((country) => {
   const { classroomCountryCode, commentsCount, activitiesCount } = country;
 
@@ -32,14 +30,9 @@ mockClassroomsStats.forEach((country) => {
   });
 });
 
-const dataset: SumData[] = Object.values(sumData);
+const dataset: { country: string; total: number }[] = Object.values(sumData);
 
 const chartSetting = {
-  xAxis: [
-    {
-      label: 'Publications et commentaires',
-    },
-  ],
   width: 500,
   height: 400,
 };
@@ -52,7 +45,13 @@ export default function HorizontalBars() {
       <BarChart
         dataset={dataset}
         yAxis={[{ scaleType: 'band', dataKey: 'country' }]}
-        series={[{ dataKey: 'total', valueFormatter, color: '#DAD7FE' }]}
+        series={[
+          {
+            dataKey: 'total',
+            valueFormatter,
+            color: '#DAD7FE', // if country selected with filer : #4C3ED9
+          },
+        ]}
         layout="horizontal"
         slotProps={{
           bar: {
