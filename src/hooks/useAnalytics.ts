@@ -15,7 +15,7 @@ interface EventOptions {
 const sessionId = uuidv4();
 const startTime = new Date().getTime();
 
-export const useAnalytics = (): void => {
+export const useAnalytics = (userId: number | null): void => {
   const router = useRouter();
   const [location, setLocation] = React.useState<Location | null>(null);
   const [document, setDocument] = React.useState<Document | null>(null);
@@ -57,6 +57,7 @@ export const useAnalytics = (): void => {
       const data = {
         event: eventName,
         sessionId,
+        userId,
         location: location.pathname,
         referrer,
         width: window.innerWidth,
@@ -74,7 +75,7 @@ export const useAnalytics = (): void => {
         }).catch(console.error);
       }
     },
-    [location, document],
+    [location, document, userId],
   );
 
   const page = React.useCallback(() => {
@@ -167,7 +168,7 @@ export const useAnalytics = (): void => {
         document.removeEventListener('visibilitychange', handleUnload);
       };
     } else {
-      return () => {};
+      return () => { };
     }
   }, [handleUnload, document]);
 

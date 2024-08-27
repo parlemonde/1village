@@ -32,6 +32,7 @@ export interface AnalyticSession {
   browserVersion: string;
   width: number;
   initialPage: string;
+  userId: number;
   duration: number | null;
 }
 
