@@ -13,7 +13,7 @@ import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
-import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
+import { mockClassroomsStats } from './mocks/mocks';
 import styles from './styles/charts.module.css';
 
 const pieChartData = {
