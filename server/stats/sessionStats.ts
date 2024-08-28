@@ -5,7 +5,8 @@ import { AppDataSource } from '../utils/data-source';
 const analyticSessionRepository = AppDataSource.getRepository(AnalyticSession);
 const durationThreshold = 60;
 
-export const getMinDuration = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getMinDuration = async () => {
   const result = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('MIN(DISTINCT(analytic_session.duration))', 'minDuration')
@@ -17,7 +18,8 @@ export const getMinDuration = async (phase: number | null) => {
   return parseInt(result.minDuration);
 };
 
-export const getMaxDuration = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getMaxDuration = async () => {
   const result = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('MAX(DISTINCT(analytic_session.duration))', 'maxDuration')
@@ -28,7 +30,8 @@ export const getMaxDuration = async (phase: number | null) => {
   return parseInt(result.maxDuration);
 };
 
-export const getAverageDuration = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getAverageDuration = async () => {
   const result = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('ROUND(AVG(analytic_session.duration), 0)', 'averageDuration')
@@ -40,7 +43,8 @@ export const getAverageDuration = async (phase: number | null) => {
   return parseInt(result.averageDuration);
 };
 
-export const getMedianDuration = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getMedianDuration = async () => {
   const durations = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('duration')
@@ -61,7 +65,8 @@ export const getMedianDuration = async (phase: number | null) => {
   return median;
 };
 
-export const getMinConnections = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getMinConnections = async () => {
   const result = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('MIN(occurrences)', 'minConnections')
@@ -73,7 +78,8 @@ export const getMinConnections = async (phase: number | null) => {
   return result.minConnections;
 };
 
-export const getMaxConnections = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getMaxConnections = async () => {
   const result = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('MAX(occurrences)', 'maxConnections')
@@ -85,7 +91,8 @@ export const getMaxConnections = async (phase: number | null) => {
   return result.maxConnections;
 };
 
-export const getAverageConnections = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getAverageConnections = async () => {
   const result = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('ROUND(AVG(occurrences), 0)', 'averageConnections')
@@ -97,7 +104,8 @@ export const getAverageConnections = async (phase: number | null) => {
   return result.averageConnections;
 };
 
-export const getMedianConnections = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getMedianConnections = async () => {
   const occurrences = await analyticSessionRepository
     .createQueryBuilder('analytic_session')
     .select('COUNT(*)', 'occurrences')

@@ -168,7 +168,7 @@ export const useAnalytics = (userId: number | null): void => {
         document.removeEventListener('visibilitychange', handleUnload);
       };
     } else {
-      return () => { };
+      return () => {};
     }
   }, [handleUnload, document]);
 

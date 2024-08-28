@@ -46,7 +46,8 @@ export const getRegisteredClassroomsCount = async () => {
   return parseInt(result.classroomsCount);
 };
 
-export const getConnectedClassroomsCount = async (phase: number | null) => {
+// TODO - add phase: number | null
+export const getConnectedClassroomsCount = async () => {
   const result = await classroomRepository
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')

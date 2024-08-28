@@ -12,7 +12,6 @@ import { useGetSessionsStats } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
   const sessionsStats = useGetSessionsStats();
-  console.log('SESSIONS STATS :', sessionsStats);
 
   if (sessionsStats.isError) return <p>Error!</p>;
   if (sessionsStats.isLoading || sessionsStats.isIdle) return <p>Loading...</p>;
