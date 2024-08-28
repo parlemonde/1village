@@ -5,6 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
@@ -13,7 +14,7 @@ import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
-import { mockClassroomsStats } from './mocks/mocks';
+import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import styles from './styles/charts.module.css';
 
 const pieChartData = {
@@ -38,6 +39,23 @@ const CountryStats = () => {
   };
 
   const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
+
+  const classStats = mockConnectionsStats.map((classroom) => ({
+    registered: classroom.registeredClassroomsCount,
+    connected: classroom.connectedClassroomsCount,
+    contributed: classroom.contributedClassroomsCount,
+  }));
+
+  const connectStats = mockConnectionsStats.map((connect) => ({
+    averageConnection: connect.averageConnections,
+    averageDuration: connect.averageDuration,
+    minDuration: connect.minDuration,
+    maxDuration: connect.maxDuration,
+    medianDuration: connect.medianDuration,
+    minConnections: connect.minConnections,
+    maxConnections: connect.maxConnections,
+    medianConnections: connect.medianConnections,
+  }));
 
   return (
     <>
@@ -77,15 +95,32 @@ const CountryStats = () => {
         <DashboardTable />
       </div>
       <div className={styles.classroomStats}>
-        <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
-        <StatsCard data={10}>Nombre de classes connectées</StatsCard>
-        <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
+        <StatsCard data={classStats[0].registered}>Nombre de classes inscrites</StatsCard>
+        <StatsCard data={classStats[0].connected}>Nombre de classes connectées</StatsCard>
+        <StatsCard data={classStats[0].contributed}>Nombre de classes contributrices</StatsCard>
       </div>
       <div className={styles.averageStatsContainer}>
-        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} unit="min" icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}>
+        <AverageStatsCard
+          data={{
+            min: connectStats[0].minConnections,
+            max: connectStats[0].maxConnections,
+            average: connectStats[0].averageConnection,
+            median: connectStats[0].medianConnections,
+          }}
+          unit="min"
+          icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+        >
           Temps de connexion moyen par classe
         </AverageStatsCard>
-        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}>
+        <AverageStatsCard
+          data={{
+            min: connectStats[0].minDuration,
+            max: connectStats[0].maxDuration,
+            average: connectStats[0].averageDuration,
+            median: connectStats[0].medianDuration,
+          }}
+          icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
+        >
           Nombre de connexions moyen par classe
         </AverageStatsCard>
       </div>
@@ -94,6 +129,7 @@ const CountryStats = () => {
         <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
+        <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
         <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
       </div>
       <div>

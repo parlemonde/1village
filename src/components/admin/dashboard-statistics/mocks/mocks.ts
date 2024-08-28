@@ -100,18 +100,20 @@ export const mockClassroomsStats: ClassroomsStats[] = [
   },
 ];
 
-export const mockConnectionsStats: ConnectionsStats = {
-  minDuration: 30,
-  maxDuration: 120,
-  medianDuration: 60,
-  averageDuration: 75,
+export const mockConnectionsStats: ConnectionsStats[] = [
+  {
+    minDuration: 30,
+    maxDuration: 120,
+    medianDuration: 60,
+    averageDuration: 75,
 
-  minConnections: 5,
-  maxConnections: 20,
-  medianConnections: 10,
-  averageConnections: 12,
+    minConnections: 5,
+    maxConnections: 20,
+    medianConnections: 10,
+    averageConnections: 12,
 
-  registeredClassroomsCount: 100,
-  connectedClassroomsCount: 80,
-  contributedClassroomsCount: 50,
-};
+    registeredClassroomsCount: 100,
+    connectedClassroomsCount: 80,
+    contributedClassroomsCount: 50,
+  },
+];
