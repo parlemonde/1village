@@ -179,6 +179,7 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
 
 type AddAnalytic = {
   sessionId: string;
+  userId?: number;
   event: string;
   location: string;
   referrer?: string | null;
@@ -195,6 +196,10 @@ const ADD_ANALYTIC_SCHEMA: JSONSchemaType<AddAnalytic> = {
     sessionId: {
       type: 'string',
       nullable: false,
+    },
+    userId: {
+      type: 'number',
+      nullable: true,
     },
     event: {
       type: 'string',
@@ -245,6 +250,7 @@ analyticController.router.post(
   useragent.express(),
   handleErrors(async (req, res) => {
     const data = req.body;
+
     if (!addAnalyticValidator(data)) {
       sendInvalidDataError(addAnalyticValidator);
       return;
@@ -278,6 +284,7 @@ analyticController.router.post(
         session.width = data.width || 0;
         session.duration = null;
         session.initialPage = data.location;
+        session.userId = data?.userId ?? null;
         await AppDataSource.getRepository(AnalyticSession).save(session);
         sessionCount = 1;
       }
