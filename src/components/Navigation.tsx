@@ -134,20 +134,22 @@ export const Navigation = (): JSX.Element => {
         phase: 1,
         disabled: !isTeacher,
       },
-      {
-        label: 'Présenter un indice culturel',
-        path: '/indice-culturel',
-        icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-        disabled: isParent,
-      },
-      {
-        label: 'Présenter un symbole',
-        path: '/symbole',
-        icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-        disabled: isParent,
-      },
+      // ---- Commenté pour l'année 2024 - 2025 d'1Village ----
+
+      // {
+      //   label: 'Présenter un indice culturel',
+      //   path: '/indice-culturel',
+      //   icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      //   phase: 1,
+      //   disabled: isParent,
+      // },
+      // {
+      //   label: 'Présenter un symbole',
+      //   path: '/symbole',
+      //   icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      //   phase: 1,
+      //   disabled: isParent,
+      // },
       // ---- PHASE 2 ----
       {
         label: 'Réaliser un reportage',
