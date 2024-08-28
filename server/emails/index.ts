@@ -19,7 +19,12 @@ getNodeMailer()
 export enum Email {
   INVALID_VILLAGE,
   COMMENT_NOTIFICATION,
-  REACTION_NOTIFICATION,
+  // Ces notitications seront implémentées dans une prochaine itération
+  // REACTION_NOTIFICATION,
+  // PUBLICATION_FROM_SCHOOL,
+  // PUBLICATION_FROM_ADMIN,
+  // CREATION_ACCOUNT_FAMILY,
+  // OPENING_VILLAGE_STEP,
   INVALID_COUNTRY,
   CONFIRMATION_EMAIL,
   RESET_PASSWORD_EMAIL,
@@ -30,7 +35,6 @@ interface EmailMapping {
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
   [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string };
-  [Email.REACTION_NOTIFICATION]: { text: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
@@ -86,15 +90,6 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
       filenameHtml: 'comment_notification.html',
       filenameText: 'comment_notification.txt',
       subject: 'Du nouveau sur 1Village ! 🦜',
-      args: {
-        ...options,
-      },
-    };
-  }
-  if (email === Email.REACTION_NOTIFICATION) {
-    return {
-      filenameText: 'comment_notification.html',
-      subject: ' Du nouveau sur 1Village ! 🦜',
       args: {
         ...options,
       },
