@@ -23,7 +23,15 @@ export const getClassroomsInfos = async () => {
       'user.firstname AS userFirstname',
       'user.lastname AS userLastname',
     ])
+    .addSelect((subQuery) => {
+      return subQuery
+        .select(['COUNT(activity.id) AS count', 'activity.phase AS phase', 'activity.type AS type'])
+        .from('activity', 'activity')
+        .where('activity.userId = user.id')
+        .groupBy('activity.phase, activity.type');
+    }, 'userActivities')
     .where('user.type = :teacherType', { teacherType })
+    .andWhere('user.id IS NOT NULL')
     .getRawMany();
 };
 
@@ -38,7 +46,7 @@ export const getRegisteredClassroomsCount = async () => {
   return parseInt(result.classroomsCount);
 };
 
-export const getConnectedClassroomsCount = async () => {
+export const getConnectedClassroomsCount = async (phase: number | null) => {
   const result = await classroomRepository
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
@@ -50,13 +58,17 @@ export const getConnectedClassroomsCount = async () => {
   return parseInt(result.classroomsCount);
 };
 
-export const getContributedClassroomsCount = async () => {
-  const activitySubQuery = AppDataSource.createQueryBuilder()
+export const getContributedClassroomsCount = async (phase: number | null) => {
+  const query = AppDataSource.createQueryBuilder()
     .select('userId')
     .from(Activity, 'activity')
     .groupBy('userId')
-    .having(`COUNT(DISTINCT activity.phase) = :nbPhases`, { nbPhases: 3 })
-    .getQuery();
+    .where('user.type = :teacherType', { teacherType });
+
+  if (phase) query.andWhere('activity.phase = :phase', { phase });
+  else query.having(`COUNT(DISTINCT activity.phase) === :nbPhases`, { nbPhases: 3 });
+
+  const activitySubQuery = query.getQuery();
 
   const commentSubQuery = AppDataSource.createQueryBuilder()
     .subQuery()

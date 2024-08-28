@@ -1,15 +1,3 @@
-export interface SessionsStats {
-  minDuration: number;
-  maxDuration: number;
-  averageDuration: number;
-  medianDuration: number;
-
-  minConnections: number;
-  maxConnections: number;
-  averageConnections: number;
-  medianConnections: number;
-}
-
 export interface ClassroomsStats {
   classroomId: number;
   classroomCountryCode: string;
@@ -19,13 +7,10 @@ export interface ClassroomsStats {
   userLastName: number;
   commentsCount: number;
   videosCount: number;
-  activitiesCount: {
-    phase: number;
-    activities: { count: number; type: number }[];
-  }[];
+  activities: { count: number; type: number; phase: number }[];
 }
 
-export interface ConnectionsStats {
+export interface SessionsStats {
   minDuration: number;
   maxDuration: number;
   medianDuration: number;
