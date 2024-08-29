@@ -6,6 +6,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material';
 
 import LanguageFilter from 'src/components/LanguageFilter';
+import { Modal } from 'src/components/Modal';
+import { ParentsCGU } from 'src/components/ParentsCGU';
 import { useLanguages } from 'src/services/useLanguages';
 import { useUserRequests } from 'src/services/useUsers';
 import ArrowBack from 'src/svg/arrow_back.svg';
@@ -28,7 +30,8 @@ const Inscription = () => {
   const [isConfirmationPasswordVisible, setIsConfirmationPasswordVisible] = useState<boolean>(false);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [isEmailUsed, setIsEmailUsed] = useState<boolean>(false);
-  const [isCGUread, setIsCGUread] = useState<boolean>(false);
+  const [isCGURead, setIsCGURead] = useState<boolean>(false);
+  const [isCGUModalOpen, setIsCGUModalOpen] = useState<boolean>(false);
   const [hasAcceptedNewsletter, setHasAcceptedNewsletter] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>('français');
   const [newUser, setNewUser] = useState<UserForm>({
@@ -123,7 +126,7 @@ const Inscription = () => {
     });
 
     if (
-      isCGUread &&
+      isCGURead &&
       isEmailValid &&
       isFirstnameValid &&
       isPasswordMatch &&
@@ -135,7 +138,7 @@ const Inscription = () => {
       setIsRegisterDataValid(true);
     }
     if (
-      !isCGUread ||
+      !isCGURead ||
       !isEmailValid ||
       !isFirstnameValid ||
       !isPasswordMatch ||
@@ -150,7 +153,7 @@ const Inscription = () => {
     confirmPassword,
     email,
     firstname,
-    isCGUread,
+    isCGURead,
     isEmailValid,
     isFirstnameValid,
     isLastnameValid,
@@ -165,7 +168,7 @@ const Inscription = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isCGUread && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
+    if (isCGURead && isEmailValid && isFirstnameValid && isPasswordMatch && isPasswordValid && isLastnameValid) {
       setIsPending(true);
       try {
         await addUser(newUser);
@@ -396,14 +399,18 @@ const Inscription = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
+                        checked={isCGURead}
                         onChange={() => {
-                          setIsCGUread(!isCGUread);
+                          setIsCGURead(!isCGURead);
                         }}
                       />
                     }
                     label={
                       <Typography variant="body2">
-                        Accepter les <u>conditions générales d&apos;utilisation **</u>
+                        Accepter les{' '}
+                        <a href="#" style={{ textDecoration: 'underline' }} onClick={() => setIsCGUModalOpen(true)}>
+                          conditions générales d&apos;utilisation
+                        </a>
                       </Typography>
                     }
                   />
@@ -418,6 +425,25 @@ const Inscription = () => {
                     S&apos;inscrire
                   </Button>
                 </Box>
+                <Modal
+                  open={isCGUModalOpen}
+                  maxWidth="sm"
+                  fullWidth
+                  title="Conditions dénérales d'utilisation"
+                  confirmLabel="Accepter"
+                  onConfirm={() => {
+                    setIsCGUModalOpen(false);
+                    setIsCGURead(true);
+                  }}
+                  onClose={() => {
+                    setIsCGUModalOpen(false);
+                  }}
+                  noCancelButton
+                  ariaDescribedBy="cgu-desc"
+                  ariaLabelledBy="cgu-title"
+                >
+                  <ParentsCGU />
+                </Modal>
               </>
             ) : (
               <Box p={2} minHeight="280px">
