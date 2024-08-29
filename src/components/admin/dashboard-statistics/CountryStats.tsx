@@ -16,6 +16,7 @@ import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import styles from './styles/charts.module.css';
+import { sumData } from './utils/sumData';
 
 const pieChartData = {
   data: [
@@ -39,6 +40,8 @@ const CountryStats = () => {
   };
 
   const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
+  const sumDataCountry = sumData.filter((country) => country.country === selectedCountry);
+  const filteredCountry = sumDataCountry.map((total) => total.total);
 
   const classStats = mockConnectionsStats.map((classroom) => ({
     registered: classroom.registeredClassroomsCount,
@@ -129,7 +132,7 @@ const CountryStats = () => {
         <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
-        <ClassesExchangesCard totalPublications={100} totalComments={100} totalVideos={100} />
+        <ClassesExchangesCard totalPublications={filteredCountry[0]} totalComments={2} totalVideos={100} />
         <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
       </div>
       <div>
