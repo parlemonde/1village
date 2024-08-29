@@ -12,7 +12,7 @@ interface SumData {
 
 const sumData: { [country: string]: SumData } = {};
 mockClassroomsStats.forEach((country) => {
-  const { classroomCountryCode, commentsCount, activitiesCount } = country;
+  const { classroomCountryCode, commentsCount, activities } = country;
 
   if (!sumData[classroomCountryCode]) {
     sumData[classroomCountryCode] = {
@@ -23,10 +23,8 @@ mockClassroomsStats.forEach((country) => {
 
   sumData[classroomCountryCode].total += commentsCount;
 
-  activitiesCount.forEach((phase) => {
-    phase.activities.forEach((activity) => {
-      sumData[classroomCountryCode].total += activity.count;
-    });
+  activities.forEach((activity) => {
+    sumData[classroomCountryCode].total += activity.count;
   });
 });
 
