@@ -1,4 +1,4 @@
-import type { ClassroomsStats, ConnectionsStats } from 'types/statistics.type';
+import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
 
 export const mockClassroomsStats: ClassroomsStats[] = [
   {
@@ -10,21 +10,11 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     videosCount: 2,
     userFirstName: 5,
     userLastName: 5,
-    activitiesCount: [
-      {
-        phase: 1,
-        activities: [
-          { count: 10, type: 1 },
-          { count: 15, type: 2 },
-        ],
-      },
-      {
-        phase: 2,
-        activities: [
-          { count: 5, type: 3 },
-          { count: 7, type: 4 },
-        ],
-      },
+    activities: [
+      { count: 10, type: 1, phase: 1 },
+      { count: 15, type: 2, phase: 1 },
+      { count: 5, type: 3, phase: 2 },
+      { count: 7, type: 4, phase: 2 },
     ],
   },
   {
@@ -36,14 +26,11 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     videosCount: 3,
     userFirstName: 3,
     userLastName: 4,
-    activitiesCount: [
-      {
-        phase: 1,
-        activities: [
-          { count: 12, type: 1 },
-          { count: 20, type: 2 },
-        ],
-      },
+    activities: [
+      { count: 22, type: 1, phase: 1 },
+      { count: 15, type: 2, phase: 1 },
+      { count: 10, type: 3, phase: 2 },
+      { count: 2, type: 4, phase: 3 },
     ],
   },
   {
@@ -55,21 +42,11 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     videosCount: 2,
     userFirstName: 5,
     userLastName: 5,
-    activitiesCount: [
-      {
-        phase: 1,
-        activities: [
-          { count: 10, type: 1 },
-          { count: 15, type: 2 },
-        ],
-      },
-      {
-        phase: 2,
-        activities: [
-          { count: 5, type: 3 },
-          { count: 7, type: 4 },
-        ],
-      },
+    activities: [
+      { count: 5, type: 1, phase: 1 },
+      { count: 25, type: 2, phase: 2 },
+      { count: 3, type: 3, phase: 2 },
+      { count: 8, type: 4, phase: 3 },
     ],
   },
   {
@@ -81,26 +58,16 @@ export const mockClassroomsStats: ClassroomsStats[] = [
     videosCount: 2,
     userFirstName: 5,
     userLastName: 5,
-    activitiesCount: [
-      {
-        phase: 1,
-        activities: [
-          { count: 10, type: 1 },
-          { count: 15, type: 2 },
-        ],
-      },
-      {
-        phase: 2,
-        activities: [
-          { count: 5, type: 3 },
-          { count: 7, type: 4 },
-        ],
-      },
+    activities: [
+      { count: 9, type: 1, phase: 1 },
+      { count: 15, type: 2, phase: 1 },
+      { count: 15, type: 3, phase: 3 },
+      { count: 4, type: 4, phase: 3 },
     ],
   },
 ];
 
-export const mockConnectionsStats: ConnectionsStats[] = [
+export const mockConnectionsStats: SessionsStats[] = [
   {
     minDuration: 30,
     maxDuration: 120,
