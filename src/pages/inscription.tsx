@@ -402,7 +402,7 @@ const Inscription = () => {
                         checked={isCGURead}
                         onChange={() => {
                           if (!isCGURead) setIsCGUModalOpen(true);
-                          setIsCGURead(!isCGURead);
+                          else setIsCGURead(!isCGURead);
                         }}
                       />
                     }
