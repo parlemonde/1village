@@ -8,33 +8,29 @@ import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesC
 import StatsCard from './cards/StatsCard/StatsCard';
 import DashboardWorldMap from './map/DashboardWorldMap/DashboardWorldMap';
 import PhaseDetails from './menu/PhaseDetails';
-import { useGetClassroomsStats, useGetConnectionsStats } from 'src/api/statistics/statistics.get';
+import { useGetSessionsStats } from 'src/api/statistics/statistics.get';
 
 const GlobalStats = () => {
-  const classroomsStats = useGetClassroomsStats();
-  const connectionsStats = useGetConnectionsStats();
+  const sessionsStats = useGetSessionsStats();
 
-  if (classroomsStats.isError) return <p>Error!</p>;
-  if (classroomsStats.isLoading || classroomsStats.isIdle) return <p>Loading...</p>;
-
-  if (connectionsStats.isError) return <p>Error!</p>;
-  if (connectionsStats.isLoading || connectionsStats.isIdle) return <p>Loading...</p>;
+  if (sessionsStats.isError) return <p>Error!</p>;
+  if (sessionsStats.isLoading || sessionsStats.isIdle) return <p>Loading...</p>;
 
   return (
     <>
       <DashboardWorldMap />
       <div>
-        <StatsCard data={connectionsStats.data.registeredClassroomsCount}>Nombre de classes inscrites</StatsCard>
-        <StatsCard data={connectionsStats.data.connectedClassroomsCount}>Nombre de classes connectées</StatsCard>
-        <StatsCard data={connectionsStats.data.contributedClassroomsCount}>Nombre de classes contributrices</StatsCard>
+        <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
+        <StatsCard data={10}>Nombre de classes connectées</StatsCard>
+        <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
       </div>
       <div>
         <AverageStatsCard
           data={{
-            min: Math.floor(connectionsStats.data.minDuration / 60),
-            max: Math.floor(connectionsStats.data.maxDuration / 60),
-            average: Math.floor(connectionsStats.data.averageDuration / 60),
-            median: Math.floor(connectionsStats.data.medianDuration / 60),
+            min: Math.floor(sessionsStats.data.minDuration / 60),
+            max: Math.floor(sessionsStats.data.maxDuration / 60),
+            average: Math.floor(sessionsStats.data.averageDuration / 60),
+            median: Math.floor(sessionsStats.data.medianDuration / 60),
           }}
           unit="min"
           icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
@@ -43,10 +39,10 @@ const GlobalStats = () => {
         </AverageStatsCard>
         <AverageStatsCard
           data={{
-            min: connectionsStats.data.minConnections,
-            max: connectionsStats.data.maxConnections,
-            average: connectionsStats.data.averageConnections,
-            median: connectionsStats.data.medianConnections,
+            min: sessionsStats.data.minConnections,
+            max: sessionsStats.data.maxConnections,
+            average: sessionsStats.data.averageConnections,
+            median: sessionsStats.data.medianConnections,
           }}
           icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
         >

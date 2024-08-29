@@ -7,6 +7,7 @@ import type {
   NavigationPerf,
   BrowserPerf,
 } from '../../types/analytics.type';
+import { User } from './user';
 
 @Entity()
 export class AnalyticSession implements AnalyticSessionInterface {
@@ -39,6 +40,13 @@ export class AnalyticSession implements AnalyticSessionInterface {
 
   @Column({ type: 'varchar', length: 255 })
   initialPage: string;
+
+  @ManyToOne(() => User, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'userId' })
+  public user: User;
+
+  @Column({ type: 'integer', nullable: true })
+  public userId: number | null;
 }
 
 @Entity()
