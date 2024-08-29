@@ -401,6 +401,7 @@ const Inscription = () => {
                       <Checkbox
                         checked={isCGURead}
                         onChange={() => {
+                          if (!isCGURead) setIsCGUModalOpen(true);
                           setIsCGURead(!isCGURead);
                         }}
                       />
