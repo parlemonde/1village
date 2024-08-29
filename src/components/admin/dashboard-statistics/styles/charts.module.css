@@ -93,6 +93,7 @@
 .exchangesConnectionsContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   padding-top: 5%;
 }
 
@@ -102,4 +103,9 @@
 
 .connectionsChart {
   width: 30%;
+}
+
+.customLegend {
+  display: flex;
+  flex-direction: row-reverse;
 }
