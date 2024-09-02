@@ -30,7 +30,7 @@ const MimiqueStep2 = () => {
           <CreateGame stepNumber={1} />
         </div>
         <div className="width-900">{<StepsButton prev={onPrev} next={onNext} />}</div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

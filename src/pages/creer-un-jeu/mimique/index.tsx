@@ -6,9 +6,9 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { GameContext } from 'src/contexts/gameContext';
 import { GameType } from 'types/game.type';
-import { PageLayout } from 'src/components/PageLayout';
 
 const Mimique = () => {
   const router = useRouter();
