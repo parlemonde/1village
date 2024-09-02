@@ -49,7 +49,11 @@ jobs:
       - name: Extract Public IP
         id: get_server_ip
         #run: echo "::set-output name=server_public_ip::$(cd terraform; terraform output -raw server_public_ip)"
-        run: echo "{server_public_ip}={$(cd terraform; terraform output -raw server_public_ip)}" >> $GITHUB_OUTPUT
+        #run: echo "server_public_ip={$(cd terraform; terraform output -raw server_public_ip)}" >> $GITHUB_OUTPUT
+        run: |
+          cd terraform
+          echo "::set-output name=server_public_ip::$(terraform output -raw server_public_ip)"
+          #echo "server_public_ip=$(terraform output -raw server_public_ip)" >> $GITHUB_OUTPUT
         if: success()
 
       - name: Create .env file

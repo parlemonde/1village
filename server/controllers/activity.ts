@@ -2,16 +2,17 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 import { IsNull } from 'typeorm';
 
+import type { ActivityContent, AnyData } from '../../types/activity.type';
+import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps } from '../../types/activity.type';
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
-import type { AnyData, ActivityContent } from '../entities/activity';
-import { Activity, ActivityType, ActivityStatus } from '../entities/activity';
-import { Comment } from '../entities/comment';
+import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
 import { UserType } from '../entities/user';
 import { VillagePhase } from '../entities/village';
+import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
@@ -20,153 +21,6 @@ import { commentController } from './comment';
 import { Controller } from './controller';
 
 const activityController = new Controller('/activities');
-
-type ActivityGetter = {
-  limit?: number;
-  page?: number;
-  phase?: number | null;
-  villageId?: number;
-  type?: string[];
-  subType?: number | null;
-  countries?: string[];
-  pelico?: boolean;
-  userId?: number;
-  status?: number;
-  responseActivityId?: number;
-  delayedDays?: number;
-  hasVisibilitySetToClass?: boolean;
-  teacherId?: number;
-  visibleToParent: boolean;
-};
-
-const getActivitiesCommentCount = async (ids: number[]): Promise<{ [key: number]: number }> => {
-  if (ids.length === 0) {
-    return {};
-  }
-  const queryBuilder = await AppDataSource.getRepository(Activity)
-    .createQueryBuilder('activity')
-    .select('activity.id')
-    .addSelect('IFNULL(`commentCount`, 0) + IFNULL(`activityCount`, 0)', 'comments')
-    .leftJoin(
-      (qb) => {
-        qb.select('comment.activityId', 'cid').addSelect('COUNT(comment.id)', 'commentCount').from(Comment, 'comment').groupBy('comment.activityId');
-        return qb;
-      },
-      'comments',
-      '`comments`.`cid` = activity.id',
-    )
-    .leftJoin(
-      (qb) => {
-        qb.select('activity.responseActivityId', 'aid')
-          .addSelect('COUNT(activity.id)', 'activityCount')
-          .from(Activity, 'activity')
-          .where('activity.status != :status', { status: `${ActivityStatus.DRAFT}` })
-          .groupBy('activity.responseActivityId');
-        return qb;
-      },
-      'activities',
-      '`activities`.`aid` = activity.id',
-    )
-    .where('activity.id in (:ids)', { ids })
-    .getRawMany();
-  return queryBuilder.reduce((acc, row) => {
-    acc[row.activity_id] = parseInt(row.comments, 10) || 0;
-    return acc;
-  }, {});
-};
-
-const getActivities = async ({
-  limit = 200,
-  page = 0,
-  villageId,
-  type = [],
-  subType = null,
-  countries,
-  phase = null,
-  pelico = true,
-  status = 0,
-  userId,
-  responseActivityId,
-  delayedDays,
-  hasVisibilitySetToClass,
-  teacherId,
-  visibleToParent,
-}: ActivityGetter) => {
-  // get ids
-  let subQueryBuilder = AppDataSource.getRepository(Activity).createQueryBuilder('activity').where('activity.status = :status', { status });
-  if (villageId !== undefined) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.villageId = :villageId', { villageId });
-  }
-  if (type.length > 0) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.type IN (:type)', { type });
-  }
-  if (subType !== null) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.subType = :subType', { subType });
-  }
-  if (phase !== null) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.phase = :phase', { phase });
-  }
-  if (delayedDays !== undefined) {
-    // * Memo: we only select activity with updateDate + delayedDays lesser than current date
-    subQueryBuilder = subQueryBuilder.andWhere(`DATE_ADD(activity.updateDate, INTERVAL :delayedDays DAY) <= CURDATE()`, { delayedDays: delayedDays });
-  }
-  if (visibleToParent) {
-    // * Here if user is a parent, we only select activities with the attribute is set to true
-    subQueryBuilder = subQueryBuilder.andWhere('activity.isVisibleToParent = :visibleToParent', { visibleToParent });
-  }
-  if (hasVisibilitySetToClass !== undefined && teacherId !== undefined) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.user = :teacherId', { teacherId: teacherId });
-  }
-
-  if (responseActivityId !== undefined) {
-    subQueryBuilder = subQueryBuilder.andWhere('activity.responseActivityId = :responseActivityId', { responseActivityId });
-  } else if (userId !== undefined) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.id = :userId', {
-      userId,
-    });
-  } else if (pelico && countries !== undefined && countries.length > 0) {
-    subQueryBuilder = subQueryBuilder
-      .innerJoin('activity.user', 'user')
-      .andWhere('((user.countryCode IN (:countries) AND user.type >= :userType) OR user.type <= :userType2)', {
-        countries,
-        userType: UserType.TEACHER,
-        userType2: UserType.MEDIATOR,
-      });
-  } else if (pelico && countries !== undefined && countries.length === 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.type <= :userType2', {
-      userType2: UserType.MEDIATOR,
-    });
-  } else if (!pelico && countries !== undefined && countries.length > 0) {
-    subQueryBuilder = subQueryBuilder.innerJoin('activity.user', 'user').andWhere('user.countryCode IN (:countries) AND user.type >= :userType', {
-      countries,
-      userType: UserType.TEACHER,
-    });
-  } else if (!pelico && countries !== undefined) {
-    return [];
-  }
-
-  const activities = await subQueryBuilder
-    .orderBy('activity.isPinned', 'DESC')
-    .addOrderBy('activity.updateDate', 'DESC')
-    .limit(limit)
-    .offset(page * limit)
-    .getMany();
-
-  const ids = activities.map((a) => a.id);
-  if (ids.length === 0) {
-    return [];
-  }
-
-  const comments = await getActivitiesCommentCount(ids);
-  for (const activity of activities) {
-    if (comments[activity.id] !== undefined) {
-      activity.commentCount = comments[activity.id];
-    } else {
-      activity.commentCount = 0;
-    }
-  }
-  return activities;
-};
 
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
@@ -186,6 +40,7 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
     type: req.query.type ? (getQueryString(req.query.type) || '').split(',') : undefined,
     subType: req.query.subType ? Number(getQueryString(req.query.subType)) || 0 : undefined,
     phase: req.query.phase ? Number(getQueryString(req.query.phase)) || 0 : undefined,
+    phaseStep: req.query.phaseStep ? String(req.query.phaseStep) : undefined,
     status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined,
     userId: req.query.userId ? Number(getQueryString(req.query.userId)) || 0 : undefined,
     responseActivityId: req.query.responseActivityId ? Number(getQueryString(req.query.responseActivityId)) || 0 : undefined,
@@ -305,7 +160,7 @@ const CREATE_SCHEMA: JSONSchemaType<CreateActivityData> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -377,13 +232,14 @@ activityController.post({ path: '', userType: UserType.TEACHER }, async (req: Re
 // --- Update activity ---
 type UpdateActivity = {
   status?: number;
-  phase?: number;
+  phase?: 1 | 2 | 3;
   responseActivityId?: number;
   responseType?: number;
   isPinned?: boolean;
   displayAsUser?: boolean;
   data?: AnyData;
   content?: ActivityContent[];
+  phaseStep?: string;
 };
 
 const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
@@ -395,6 +251,10 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
     },
     phase: {
       type: 'number',
+      nullable: true,
+    },
+    phaseStep: {
+      type: 'string',
       nullable: true,
     },
     responseActivityId: { type: 'number', nullable: true },
@@ -415,7 +275,7 @@ const UPDATE_A_SCHEMA: JSONSchemaType<UpdateActivity> = {
         type: 'object',
         properties: {
           id: { type: 'number', nullable: false },
-          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound'] },
+          type: { type: 'string', nullable: false, enum: ['text', 'video', 'image', 'h5p', 'sound', 'document'] },
           value: { type: 'string', nullable: false },
         },
         required: ['type', 'value'],
@@ -431,6 +291,7 @@ const updateActivityValidator = ajv.compile(UPDATE_A_SCHEMA);
 
 activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
+
   if (!updateActivityValidator(data)) {
     sendInvalidDataError(updateActivityValidator);
     return;
@@ -452,9 +313,33 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   if (activity.status !== ActivityStatus.PUBLISHED) {
-    activity.phase = data.phase || activity.phase;
+    if (data.phase) activity.phase = data.phase;
+    if (data.phaseStep) {
+      switch (activity.phase) {
+        case 1: {
+          if (Object.values(EPhase1Steps).includes(data.phaseStep as EPhase1Steps)) activity.phaseStep = data.phaseStep;
+          else throw new AppError(`Phase step: ${data.phaseStep} isn't part of phase 1`, ErrorCode.INVALID_DATA);
+          break;
+        }
+        case 2: {
+          if (Object.values(EPhase2Steps).includes(data.phaseStep as EPhase2Steps)) activity.phaseStep = data.phaseStep;
+          else throw new AppError(`Phase step: ${data.phaseStep} isn't part of phase 2`, ErrorCode.INVALID_DATA);
+          break;
+        }
+        case 3: {
+          if (Object.values(EPhase3Steps).includes(data.phaseStep as EPhase3Steps)) activity.phaseStep = data.phaseStep;
+          else throw new AppError(`Phase step: ${data.phaseStep} isn't part of phase 3`, ErrorCode.INVALID_DATA);
+          break;
+        }
+        default:
+          break;
+      }
+    }
   }
-  activity.status = data.status ?? activity.status;
+  if (data.status === 0 && activity.status !== 0) {
+    activity.status = data.status;
+    activity.publishDate = new Date();
+  }
   activity.responseActivityId = data.responseActivityId !== undefined ? data.responseActivityId : activity.responseActivityId ?? null;
   activity.responseType = data.responseType !== undefined ? data.responseType : activity.responseType ?? null;
   activity.isPinned = data.isPinned !== undefined ? data.isPinned : activity.isPinned;

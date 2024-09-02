@@ -3,7 +3,7 @@ import React from 'react';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 export interface StepsButtonProps {
   prev?: string | (() => void);
@@ -11,18 +11,37 @@ export interface StepsButtonProps {
 }
 
 export const StepsButton = ({ prev, next }: StepsButtonProps) => {
+  const justifyContent = prev && next ? 'space-between' : prev ? 'start' : 'end';
   return (
-    <div style={{ width: '100%', margin: '3rem 0', minHeight: '2rem' }}>
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: justifyContent,
+        gap: {
+          xs: '0.2rem',
+          sm: '1rem',
+        },
+        margin: '1rem 0',
+        minHeight: '2rem',
+      }}
+    >
       {prev !== undefined &&
         (typeof prev === 'string' ? (
           <Link href={prev} passHref>
-            <Button component="a" href={prev} variant="outlined" color="primary">
+            <Button
+              component="a"
+              style={{ maxWidth: '200px', flexBasis: '50%', alignItems: 'center' }}
+              href={prev}
+              variant="outlined"
+              color="primary"
+            >
               <ChevronLeftIcon />
               Étape précédente
             </Button>
           </Link>
         ) : (
-          <Button onClick={prev} variant="outlined" color="primary">
+          <Button style={{ maxWidth: '200px', flexBasis: '50%', alignItems: 'center' }} onClick={prev} variant="outlined" color="primary">
             <ChevronLeftIcon />
             Étape précédente
           </Button>
@@ -30,17 +49,23 @@ export const StepsButton = ({ prev, next }: StepsButtonProps) => {
       {next !== undefined &&
         (typeof next === 'string' ? (
           <Link href={next} passHref>
-            <Button component="a" href={next} variant="outlined" style={{ float: 'right' }} color="primary">
+            <Button
+              component="a"
+              href={next}
+              variant="outlined"
+              style={{ maxWidth: '200px', flexBasis: '50%', alignItems: 'center' }}
+              color="primary"
+            >
               Étape suivante
               <ChevronRightIcon />
             </Button>
           </Link>
         ) : (
-          <Button onClick={next} variant="outlined" style={{ float: 'right' }} color="primary">
+          <Button onClick={next} variant="outlined" style={{ maxWidth: '200px', flexBasis: '50%', alignItems: 'center' }} color="primary">
             Étape suivante
             <ChevronRightIcon />
           </Button>
         ))}
-    </div>
+    </Box>
   );
 };

@@ -18,6 +18,7 @@ import { handleErrors } from './middlewares/handleErrors';
 import { jsonify } from './middlewares/jsonify';
 import { setVillage } from './middlewares/setVillage';
 import { removeTrailingSlash } from './middlewares/trailingSlash';
+import { filesRouter } from './routes/filesRouter';
 import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
 import { getDefaultDirectives } from './utils/server';
@@ -90,11 +91,11 @@ export async function getApp() {
     res.status(200).send('Hello World 1Village!');
   });
   backRouter.use(controllerRouter);
+  backRouter.use('/files', filesRouter);
   backRouter.use((_, res: Response) => {
     res.status(404).send('Error 404 - Not found.');
   });
   app.use('/api', backRouter);
-
   // [4-bis] --- Add h5p ---
   if (process.env.DYNAMODB_REGION) {
     try {

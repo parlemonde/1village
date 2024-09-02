@@ -1,5 +1,5 @@
+import type { AnthemActivity } from '../../types/anthem.type';
 import type { GameActivity } from '../../types/game.type';
-import type { AnthemActivity } from './anthem.types';
 import type { DefiActivity } from './defi.types';
 import type { EnigmeActivity } from './enigme.types';
 import type { FreeContentActivity } from './freeContent.types';
@@ -10,9 +10,9 @@ import type { QuestionActivity } from './question.types';
 import type { ReactionActivity } from './reaction.types';
 import type { ReportageActivity } from './reportage.types';
 import type { SymbolActivity } from './symbol.types';
-import type { VerseRecordActivity } from './verseRecord.types';
 import { ActivityType } from 'types/activity.type';
 import type { Activity } from 'types/activity.type';
+import type { ClassAnthemActivity } from 'types/classAnthem.types';
 import type { StoryActivity } from 'types/story.type';
 
 export const isPresentation = (activity: Activity): activity is PresentationActivity => {
@@ -54,6 +54,6 @@ export const isStory = (activity: Activity): activity is StoryActivity => {
 export const isAnthem = (activity: Activity): activity is AnthemActivity => {
   return activity.type === ActivityType.ANTHEM;
 };
-export const isVerseRecord = (activity: Activity): activity is VerseRecordActivity => {
-  return activity.type === ActivityType.VERSE_RECORD;
+export const isClassAnthem = (activity: Activity): activity is ClassAnthemActivity => {
+  return activity.type === ActivityType.CLASS_ANTHEM;
 };

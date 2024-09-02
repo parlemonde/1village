@@ -3,33 +3,29 @@ import React from 'react';
 
 import { ButtonBase, Card } from '@mui/material';
 
-import type { AnthemData, Syllable } from 'src/activity-types/anthem.types';
+import styles from '../../styles/parametrer-hymne.module.css';
 import { isAnthem } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
+import { getErrorSteps } from 'src/components/activities/anthemChecks';
 import { SyllableEditor } from 'src/components/activities/content/editors/SyllableEditor';
 import { ActivityContext } from 'src/contexts/activityContext';
 import SyllableBackline from 'src/svg/anthem/syllable-backline.svg';
 import SyllableIcon from 'src/svg/anthem/syllable.svg';
+import type { AnthemData, Syllable } from 'types/anthem.type';
 
 const AnthemStep4 = () => {
   const router = useRouter();
   const { activity, updateActivity, save } = React.useContext(ActivityContext);
   const data = (activity?.data as AnthemData) || null;
-  const errorSteps = React.useMemo(() => {
-    const errors: number[] = [];
-    if (data !== null && data.verseAudios.filter((c) => !!c.value).length !== 7) {
-      errors.push(0);
-    }
-    if (data !== null && data.introOutro.filter((c) => !!c.value).length !== 2) {
-      errors.push(1);
-    }
-    if (data !== null && data.verseLyrics.filter((c) => !!c.value).length === 0) {
-      errors.push(2);
-    }
 
-    return errors;
+  const errorSteps = React.useMemo(() => {
+    if (data !== null) {
+      return getErrorSteps(data, 3);
+    }
+    return [];
   }, [data]);
 
   React.useEffect(() => {
@@ -44,8 +40,8 @@ const AnthemStep4 = () => {
     return <div></div>;
   }
 
-  const updateChorus = (chorus: Syllable[]) => {
-    updateActivity({ data: { ...data, chorus } });
+  const updateChorus = (chorusLyrics: Syllable[]) => {
+    updateActivity({ data: { ...data, chorusLyrics } });
   };
 
   const onNext = () => {
@@ -59,88 +55,84 @@ const AnthemStep4 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['Mix Couplet', 'Intro Outro', 'Couplet', 'Refrain', 'Prévisualiser']}
           errorSteps={errorSteps}
           activeStep={3}
-          urls={['/parametrer-hymne/1', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
+          urls={['/parametrer-hymne/1?edit', '/parametrer-hymne/2', '/parametrer-hymne/3', '/parametrer-hymne/4', '/parametrer-hymne/5']}
         />
-        <h1>Paramétrer le refrain</h1>
-        <p>
-          Rajouter des syllabes au refrain, soit sur la même ligne, soit en passant à la ligne. Puis remplacez les &quot;La&quot; par les syllabes du
-          refrain.
-        </p>
-        <div className="width-900">
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data.chorus.map((el, index) => (
-              <SyllableEditor
-                key={`syllableEditor--chorus--${index}`}
-                value={el}
-                onChange={(newValue) => {
-                  const newChorus = [...data.chorus];
-                  newChorus[index] = newValue;
-                  updateChorus(newChorus);
-                }}
-                onDelete={() => {
-                  const newChorus = [...data.chorus];
-                  const deleted = newChorus.splice(index, 1);
-                  if (deleted.length > 0 && deleted[0].back && newChorus.length > index) {
-                    newChorus[index] = { ...newChorus[index], back: true };
-                  }
-                  updateChorus(newChorus);
-                }}
-              />
-            ))}
-          </div>
-          <Card style={{ display: 'inline-block' }}>
-            <div style={{ display: 'inline-flex', padding: '0.2rem 1rem', alignItems: 'center' }}>
-              <span className="text text--bold" style={{ margin: '0 0.5rem' }}>
-                Ajouter à votre couplet :
-              </span>
-              <ButtonBase
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  margin: '0 0.5rem',
-                  padding: '0.2rem',
-                  borderRadius: '5px',
-                }}
-                onClick={() => {
-                  data?.chorus.push({ value: 'LA', back: false });
-                  updateActivity({ data: { ...data } });
-                }}
-              >
-                <SyllableIcon height="1.25rem" />
-                <span className="text text--small" style={{ marginTop: '0.1rem' }}>
-                  Syllabe
-                </span>
-              </ButtonBase>
-              <ButtonBase
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  margin: '0 0.5rem',
-                  padding: '0.2rem',
-                  borderRadius: '5px',
-                }}
-                onClick={() => {
-                  data?.chorus.push({ value: 'LA', back: true });
-                  updateActivity({ data: { ...data } });
-                }}
-              >
-                <SyllableBackline height="1.55rem" />
-                <span className="text text--small" style={{ marginTop: '0.1rem' }}>
-                  Syllabe à la ligne
-                </span>
-              </ButtonBase>
+        <div className={styles.contentContainer}>
+          <h1>Paramétrer le refrain</h1>
+          <p>
+            Rajouter des syllabes au refrain, soit sur la même ligne, soit en passant à la ligne. Puis remplacez les &quot;La&quot; par les syllabes
+            du refrain.
+          </p>
+          <div className="width-900">
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {data.chorusLyrics.map((el, index) => (
+                <SyllableEditor
+                  key={`syllableEditor--chorus--${index}`}
+                  value={el}
+                  onChange={(newValue) => {
+                    const newChorus = [...data.chorusLyrics];
+                    newChorus[index] = newValue;
+                    updateChorus(newChorus);
+                  }}
+                  onDelete={() => {
+                    const newChorus = [...data.chorusLyrics];
+                    const deleted = newChorus.splice(index, 1);
+                    if (deleted.length > 0 && deleted[0].back && newChorus.length > index) {
+                      newChorus[index] = { ...newChorus[index], back: true };
+                    }
+                    updateChorus(newChorus);
+                  }}
+                />
+              ))}
             </div>
-          </Card>
-          <StepsButton prev="/parametrer-hymne/3" next={onNext} />
+            <Card className={styles.anthemLyricsControlsContainer}>
+              <div className={styles.anthemLyricsControls}>
+                <span className="text text--bold">Ajouter à votre couplet :</span>
+                <ButtonBase
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    margin: '0 0.5rem',
+                    padding: '0.2rem',
+                    borderRadius: '5px',
+                  }}
+                  onClick={() => {
+                    data?.chorusLyrics.push({ value: 'LA', back: false });
+                    updateActivity({ data: { ...data } });
+                  }}
+                >
+                  <SyllableIcon height="1.25rem" />
+                  <span className="text text--small">Syllabe</span>
+                </ButtonBase>
+                <ButtonBase
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    margin: '0 0.5rem',
+                    padding: '0.2rem',
+                    borderRadius: '5px',
+                  }}
+                  onClick={() => {
+                    data?.chorusLyrics.push({ value: 'LA', back: true });
+                    updateActivity({ data: { ...data } });
+                  }}
+                >
+                  <SyllableBackline height="1.55rem" />
+                  <span className="text text--small">Syllabe à la ligne</span>
+                </ButtonBase>
+              </div>
+            </Card>
+            <StepsButton prev="/parametrer-hymne/3" next={onNext} />
+          </div>
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

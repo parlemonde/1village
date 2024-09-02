@@ -2,9 +2,8 @@ import { useRouter } from 'next/router';
 import qs from 'query-string';
 import React from 'react';
 
-import { Backdrop, Button, CircularProgress, Link, Tooltip } from '@mui/material';
+import { Backdrop, Box, Button, CircularProgress, Grid, Link, Tooltip, Typography } from '@mui/material';
 
-import { KeepRatio } from '../components/KeepRatio';
 import { isRedirectValid } from '../components/accueil/NewHome';
 import { UserContext } from 'src/contexts/userContext';
 import ArrowBack from 'src/svg/arrow_back.svg';
@@ -61,101 +60,143 @@ const SignInTeacher = () => {
   }, []);
 
   return (
-    <>
-      <div className="bg-gradiant" style={{ display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
-            background: 'white',
-            width: '95%',
-            height: '50px',
-            maxWidth: '1200px',
-            borderRadius: '10px',
-            marginBottom: '2rem',
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+        '@media (max-width: 500px) and (max-height: 750px), (max-height: 750px)': {
+          height: 'auto',
+        },
+      }}
+      className="bg-gradiant-only"
+      p="20px"
+      alignItems="center"
+      alignContent="center"
+      justifyContent="center"
+    >
+      <Box width="100%" maxWidth="1200px">
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          bgcolor="white"
+          height="fit-content"
+          borderRadius="10px"
+          p=".6rem"
+          sx={{
+            flexDirection: {
+              xs: 'column',
+              sm: 'row',
+            },
           }}
         >
-          {' '}
-          <Link
-            component="button"
-            variant="h3"
+          <Box
+            component={Link}
             onClick={() => {
               router.push('/');
             }}
             sx={{
-              placeSelf: 'flex-start',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
+              cursor: 'pointer',
+              width: 'fit-content',
+              height: 'auto',
+              margin: {
+                xs: '10px 0',
+                sm: '0 10px',
+              },
+              alignSelf: 'center',
             }}
           >
-            <Logo style={{ width: '10.563rem', height: 'auto', margin: '10px 0 5px 10px' }} />
-          </Link>
-          <h1 style={{ placeSelf: 'center' }}>Professeurs des écoles</h1>
-          <Link
-            component="button"
-            variant="h3"
-            onClick={() => {
-              router.push('/');
-            }}
-            sx={{
-              placeSelf: 'center end',
-              marginRight: '1rem',
-              fontSize: '0.875rem',
-            }}
-          >
-            <ArrowBack /> Village en famille
-          </Link>
-        </div>
-        <KeepRatio ratio={0.45} width="95%" maxWidth="1200px" minHeight="400px" className="login__container">
-          <div className="text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem' }}>
-            <iframe
-              src="https://player.vimeo.com/video/868665438"
-              width="640"
-              height="360"
-              frameBorder="0"
-              allow="autoplay; fullscreen"
-              allowFullScreen
-              style={{ height: '65%', width: '80%' }}
-            ></iframe>
-            {SSO_HOST.length && CLIENT_ID ? (
-              <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} onClick={onLoginSSO}>
-                Se connecter
-              </Button>
-            ) : (
-              <Tooltip title="Vous devez posséder un compte enseignant pour vous connecter" arrow>
-                <span>
-                  <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} disabled>
-                    Se connecter
-                  </Button>
-                </span>
-              </Tooltip>
-            )}
+            <Logo style={{ maxWidth: '260px' }} />
+          </Box>
+
+          <Box>
             <Link
-              href="https://prof.parlemonde.org/1village/"
-              rel="noreferrer"
-              target="_blank"
-              underline="none"
+              component="button"
+              variant="h3"
+              onClick={() => {
+                router.push('/');
+              }}
               sx={{
+                placeSelf: 'center end',
+                marginRight: '1rem',
                 fontSize: '0.875rem',
-                mt: 2,
-                fontWeight: 'bold',
               }}
             >
-              S&apos;inscrire
+              <ArrowBack /> Village en famille
             </Link>
+          </Box>
+        </Grid>
 
-            {/* Bloc error text */}
-            <small style={{ color: 'tomato', fontWeight: 'bold' }}>
-              {errorCode !== -1 ? errorMessages[errorCode as 0] || errorMessages[0] : null}
-            </small>
-          </div>
-        </KeepRatio>
-        <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </div>
-    </>
+        <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
+          <Grid xs={12} mb={4} textAlign="center" width="100%">
+            <Typography variant="h2">Professeurs des écoles</Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            spacing={2}
+            sx={{
+              borderRight: {
+                xs: 'none',
+                sm: '1px solid lightgray',
+              },
+            }}
+          >
+            <div className="text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Box
+                component="iframe"
+                src="https://player.vimeo.com/video/868665438"
+                width="100%"
+                height={{
+                  xs: '100%',
+                  sm: '360px',
+                }}
+                frameBorder="0"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+              />
+              {SSO_HOST.length && CLIENT_ID ? (
+                <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} onClick={onLoginSSO}>
+                  Se connecter
+                </Button>
+              ) : (
+                <Tooltip title="Vous devez posséder un compte enseignant pour vous connecter" arrow>
+                  <span>
+                    <Button color="primary" variant="outlined" style={{ marginTop: '0.8rem' }} disabled>
+                      Se connecter
+                    </Button>
+                  </span>
+                </Tooltip>
+              )}
+              <Link
+                href="https://prof.parlemonde.org/1village/"
+                rel="noreferrer"
+                target="_blank"
+                underline="none"
+                sx={{
+                  fontSize: '0.875rem',
+                  mt: 2,
+                  fontWeight: 'bold',
+                }}
+              >
+                S&apos;inscrire
+              </Link>
+
+              {/* Bloc error text */}
+              <small style={{ color: 'tomato', fontWeight: 'bold' }}>
+                {errorCode !== -1 ? errorMessages[errorCode as 0] || errorMessages[0] : null}
+              </small>
+            </div>
+
+            <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </Grid>
+        </Grid>
+      </Box>
+    </Grid>
   );
 };
 

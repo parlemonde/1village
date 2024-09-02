@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
+import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 import { titles, icons, REACTIONS } from '../utils';
@@ -47,7 +48,7 @@ const CardTypeMapper = {
   [ActivityType.REACTION]: ReactionCard,
   [ActivityType.STORY]: StoryCard,
   [ActivityType.ANTHEM]: AnthemCard,
-  [ActivityType.VERSE_RECORD]: VerseRecordCard,
+  [ActivityType.CLASS_ANTHEM]: VerseRecordCard,
   [ActivityType.RE_INVENT_STORY]: StoryCard,
 };
 
@@ -120,7 +121,7 @@ export const ActivityCard = ({
             )}
           </p>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p className="text text--small">Publié le {toDate(activity.createDate as string)} </p>
+            <p className="text text--small">Publié le {toDate(activity.publishDate as string)} </p>
             {userIsPelico ? (
               <Link href={`/pelico-profil`}>
                 <PelicoNeutre style={{ marginLeft: '0.6rem', height: '16px', width: 'auto', cursor: 'pointer' }} />
@@ -146,6 +147,20 @@ export const ActivityCard = ({
           />
         )}
       </div>
+      {!showEditButtons && isEnigme(activity) && (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'end',
+          }}
+        >
+          <Timer style={{ alignSelf: 'center', height: '1.2rem', width: 'auto', marginRight: '0.25rem' }} />
+          <div style={{ alignSelf: 'center', marginRight: '0.5rem', lineHeight: '0.875rem' }}>
+            <span className="text text--small text--error">{timeLeft > 0 ? `Temps restant: ${timeLeft}j` : 'La réponse est disponible !'}</span>
+          </div>
+        </Box>
+      )}
       <div className="activity-card__content">
         <UsedCard
           // eslint-disable-next-line

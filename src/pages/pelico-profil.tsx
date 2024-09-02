@@ -1,20 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 
+import { usePelicoPresentation } from 'src/api/pelicoPresentation/pelicoPresentation.get';
 import { Base } from 'src/components/Base';
 import { PelicoProfilNavigation } from 'src/components/accueil/PelicoProfilNavigation';
+import { ContentView } from 'src/components/activities/content/ContentView';
 import { UserContext } from 'src/contexts/userContext';
 import { primaryColor } from 'src/styles/variables.const';
+import type { PelicoPresentation } from 'types/pelicoPresentation.type';
 
-//
 const PelicoProfil = () => {
   const { user } = React.useContext(UserContext);
+  const [presentation, setPresentation] = useState<PelicoPresentation>({ content: [], id: 1 });
+  const {
+    data: presentationData,
+    isLoading: presentationLoading,
+    isError: presentationError,
+    isSuccess: presentationSuccess,
+  } = usePelicoPresentation(1); // Récupère la présentation avec l'id 1
+
+  useEffect(() => {
+    if (presentationSuccess) {
+      if (presentationData !== null) {
+        setPresentation(presentationData);
+      }
+    }
+  }, [presentationSuccess, presentationData]);
+
+  if (presentationLoading) {
+    return <div>Loading...</div>;
+  }
+  if (presentationError) {
+    return <p>Error!</p>;
+  }
 
   return (
     <>
       {user && (
-        <Base rightNav={<PelicoProfilNavigation />}>
+        <Base rightNav={<PelicoProfilNavigation />} hideLeftNav>
           <Box
             sx={{
               marginLeft: '2%',
@@ -22,31 +46,7 @@ const PelicoProfil = () => {
             }}
           >
             <h1 style={{ marginTop: '0.5rem', color: primaryColor }}>Pelico, la mascotte d&apos;1Village, se présente</h1>
-            <div style={{ display: 'inline-block', textAlign: 'justify' }}>
-              <p className="text">
-                Bonjour les Pélicopains,
-                <br />
-                <br />
-                Je suis Pélico, un toucan qui adore voyager ! Cette année, nous allons échanger tous ensemble sur 1Village. Mes amies et moi serons là
-                toute l’année pour vous guider dans ce voyage.
-                <br />
-                <br />
-                Vous vous demandez certainement pourquoi je m’appelle Pélico… alors que je ne suis pas un pélican ?
-                <br />
-                <br />
-                Mon nom vient du mot espagnol “perico”, qui est une espèce de perroquet d’Amérique du Sud. Lorsque l’on voyage et que l’on tente
-                d’apprendre une langue comme moi, on peut vite se transformer en perroquet qui répète tout ce qu’il entend. Des amis m’ont donc nommé
-                ainsi au cours de l’un de mes voyages en Amérique du Sud.. Et comme le R de “perico” se prononce comme un L, voilà pourquoi on
-                m’appelle ainsi !
-                <br />
-                <br />
-                Vous voyez, en se questionnant, on découvre de drôles d’anecdotes.
-                <br />
-                <br />
-                Adoptez la même posture avec vos amis, vos correspondants, votre famille et vous verrez que vous apprendrez plein de choses sur le
-                monde qui vous entoure !
-              </p>
-            </div>
+            <ContentView content={presentation.content} activityId={presentation.id} />
           </Box>
         </Base>
       )}

@@ -23,7 +23,9 @@
     "migration:create": "cd server && mkdir -p migrations && cd migrations && yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d dist/server/utils/data-source.js",
     "migration:run-dev": "rm -rf dist && yarn build:server && yarn typeorm migration:run -d dist/server/utils/data-source.js || true",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "migration:revert-dev": "rm -rf dist && yarn build:server && npx typeorm migration:revert -d dist/server/utils/data-source.js || true",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "prepare": "husky"
   },
   "jest": {
     "testEnvironment": "node",
@@ -50,10 +52,12 @@
     }
   },
   "resolutions": {
-    "react-is": "^17.0.1"
+    "react-is": "^17.0.1",
+    "@types/react": "18.3.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.6",
+    "@react-pdf/types": "^2.5.0",
     "@svgr/webpack": "6.2.1",
     "@swc/cli": "^0.1.57",
     "@swc/core": "1.2.205",
@@ -68,6 +72,7 @@
     "@types/earcut": "2.1.1",
     "@types/express": "4.17.13",
     "@types/express-useragent": "1.0.2",
+    "@types/file-saver": "^2.0.7",
     "@types/fs-extra": "9.0.13",
     "@types/geojson": "7946.0.8",
     "@types/jest": "28.1.3",
@@ -83,8 +88,10 @@
     "@types/nodemailer": "6.4.4",
     "@types/nprogress": "0.2.0",
     "@types/prettier": "2.6.3",
+    "@types/prop-types": "^15",
     "@types/react": "17.0.47",
     "@types/react-dom": "17.0.17",
+    "@types/react-simple-maps": "^3",
     "@types/sass": "1.43.1",
     "@types/sharp": "0.30.4",
     "@types/sortablejs": "1.13.0",
@@ -108,6 +115,7 @@
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "geojson": "0.5.0",
+    "husky": "^9.0.11",
     "jest": "28.1.1",
     "nodemon": "2.0.18",
     "prettier": "2.7.1",
@@ -120,16 +128,18 @@
   },
   "dependencies": {
     "@emotion/cache": "^11.9.3",
-    "@emotion/react": "^11.9.3",
+    "@emotion/react": "^11.11.4",
     "@emotion/server": "^11.4.0",
-    "@emotion/styled": "^11.9.3",
+    "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^2.9.10",
     "@lumieducation/h5p-express": "^9.3.2",
     "@lumieducation/h5p-react": "^9.3.2",
     "@lumieducation/h5p-server": "^9.3.2",
     "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.5",
+    "@mui/material": "^5.15.14",
     "@mui/system": "^5.8.5",
+    "@mui/x-charts": "^7.1.1",
+    "@mui/x-data-grid": "^6.19.6",
     "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",
     "argon2": "^0.28.7",
@@ -152,6 +162,8 @@
     "express": "^4.18.1",
     "express-rate-limit": "^6.4.0",
     "express-useragent": "^1.0.15",
+    "ffmpeg-audio-mixer": "^1.5.0",
+    "file-saver": "^2.0.5",
     "fs-extra": "^10.1.0",
     "helmet": "^5.1.0",
     "html-to-draftjs": "^1.5.0",
@@ -159,6 +171,7 @@
     "json-stable-stringify": "^1.0.1",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^2.5.1",
+    "jszip": "^3.10.1",
     "leaflet": "^1.8.0",
     "leaflet.fullscreen": "^2.4.0",
     "maplibre-gl": "2.1.9",
@@ -168,15 +181,19 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
     "next": "^12.1.6",
+    "next-transpile-modules": "^10.0.1",
     "node-fetch": "^3.2.6",
     "nodemailer": "^6.7.5",
     "notistack": "^2.0.5",
     "nprogress": "^0.2.0",
+    "prop-types": "^15.8.1",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-pdf": "^8.0.0",
     "react-player": "^2.10.1",
     "react-query": "^3.39.2",
+    "react-simple-maps": "^3.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "safe-buffer": "^5.2.1",
     "sass": "^1.53.0",
@@ -193,5 +210,8 @@
     "web-vitals": "^2.1.4",
     "winston": "^3.8.0"
   },
-  "packageManager": "yarn@3.4.1"
+  "packageManager": "yarn@4.3.1",
+  "volta": {
+    "node": "20.11.1"
+  }
 }

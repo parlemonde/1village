@@ -39,7 +39,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "types/**/*.ts"
-  ],
+, "src/components/admin/dashboard-statistics/map/TooltipMouseTracker"  ],
   "exclude": [
     "node_modules"
   ]

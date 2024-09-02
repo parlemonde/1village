@@ -47,12 +47,17 @@ label:hover {
 
 // NProgress bar
 body {
+  height: 100%;
+  #__next {
+    height: 100%;
+  }
   #nprogress .bar {
     z-index: 2000 !important;
     background-color: $primary-color !important;
     height: 1px;
   }
   &.admin {
+    background-color: #d9dbfe91;
     #nprogress .bar {
       background-color: white !important;
     }
@@ -72,11 +77,10 @@ body {
       }
     }
     .container-admin-portal {
-      background-color: #d9dbfe91;
-      padding: 0 50px !important;
-      height: 100vh;
+      padding: 0 20px !important;
+      min-height: 100vh;
       @media screen and (min-width: 1600px) {
-        padding: 0 15% !important;
+        padding: 0 10% !important;
       }
       .container-admin-nav {
         .MuiListItemText-root span {
@@ -86,7 +90,7 @@ body {
           width: 100%;
           height: auto;
           margin-bottom: 20px;
-          padding: 0;
+          padding: 15px !important;
           .like-button.blue {
             margin-left: auto;
             margin-right: auto;
@@ -98,7 +102,7 @@ body {
             margin: 0 !important;
           }
           ul {
-            padding: 0 25px;
+            padding: 0;
           }
         }
       }
@@ -246,6 +250,12 @@ a.text--success:hover {
   justify-content: center;
   align-items: center;
 }
+.bg-gradiant-only {
+  background: rgb(224, 195, 252);
+  background: -o-linear-gradient(315deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
+  background: linear-gradient(135deg, rgba(224, 195, 252, 1) 0%, rgba(142, 197, 252, 1) 100%);
+  background-attachment: fixed;
+}
 .bg-grey {
   background-color: $bg-page;
 }
@@ -343,6 +353,10 @@ a.text--success:hover {
     color: $warning-color !important;
     font-weight: 500;
   }
+  & div:first-child {
+    left: 0 !important;
+    right: 0 !important;
+  }
 }
 
 .width-900 {
@@ -394,4 +408,84 @@ a.text--success:hover {
 .leaflet-retina .fullscreen-icon {
   background-image: url('/icon-fullscreen-2x.png');
   background-size: 26px 26px;
+}
+
+// ----- AFFICHAGE MEDIATHEQUE
+.desktop-view {
+  display: flex;
+  padding-top: 15px;
+}
+
+.modal-view {
+  display: none;
+}
+
+h1.title-for-mediatheque {
+  font-size: 1.4rem;
+  font-family: 'Roboto', 'Times New Roman', Times, serif;
+  font-weight: 600;
+}
+
+.container-mediatheque {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.download-button {
+  margin-left: auto;
+}
+.container-filtre-download {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Style pour mobile */
+// AUtre strat pour responsive de la bar mettre le media query a 980
+@media (max-width: 1000px) {
+  .desktop-view {
+    display: none;
+  }
+
+  .modal-view {
+    display: block;
+  }
+
+  h1.title-for-mediatheque {
+    font-size: 1.4rem;
+    font-family: 'Roboto', 'Times New Roman', Times, serif;
+    font-weight: 600;
+  }
+
+  .download-button {
+    margin-left: 0;
+  }
+  .container-filtre-download {
+    padding-top: 15px;
+
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  .MuiPagination-ul {
+    display: flex;
+    justify-content: center;
+    .MuiPaginationItem-root {
+      color: $font-color;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0 0.2rem;
+      &:hover {
+        color: $primary-color;
+      }
+      &.Mui-selected {
+        color: $primary-color;
+      }
+    }
+  }
 }

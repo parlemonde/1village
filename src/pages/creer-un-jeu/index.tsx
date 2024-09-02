@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { ActivityChoice } from 'src/components/activities/ActivityChoice';
 import ExpressionIcon from 'src/svg/jeu/expression.svg';
 import MimiqueIcon from 'src/svg/jeu/mimique.svg';
@@ -37,7 +38,7 @@ const activities = [
 const Jeu = () => {
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <div className="width-900">
           <h1>Choisissez le jeu auquel vous souhaitez jouer</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
@@ -45,7 +46,7 @@ const Jeu = () => {
           </p>
           <ActivityChoice activities={activities} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

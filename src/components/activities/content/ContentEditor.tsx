@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { AddContentCard } from './AddContentCard';
+import { DocumentEditor } from './editors/DocumentEditor/DocumentEditor';
 import { H5pEditor } from './editors/H5pEditor';
 import { ImageEditor } from './editors/ImageEditor/ImageEditor';
 import { SoundEditor } from './editors/SoundEditor';
@@ -75,6 +76,19 @@ const ContentEditor = ({ content, updateContent, addContent, deleteContent }: Co
                 value={p.value}
                 onChange={onChangeContent(index)}
                 onDelete={() => {
+                  deleteContent(index);
+                }}
+              />
+            );
+          }
+          if (p.type === 'document') {
+            return (
+              <DocumentEditor
+                key={p.id}
+                id={p.id}
+                value={p.value}
+                onChange={onChangeContent(index)}
+                onDeleteEditor={() => {
                   deleteContent(index);
                 }}
               />

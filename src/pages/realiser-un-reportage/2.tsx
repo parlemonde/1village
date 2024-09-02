@@ -5,6 +5,7 @@ import { isReportage } from 'src/activity-types/anyActivity';
 import { getReportage } from 'src/activity-types/reportage.constants';
 import type { ReportageData } from 'src/activity-types/reportage.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { ContentEditor } from 'src/components/activities/content';
@@ -50,7 +51,7 @@ const ReportageStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={[getReportage(activity.subType, data).step1, 'Le reportage', 'Prévisualiser']}
           urls={['/realiser-un-reportage/1?edit', '/realiser-un-reportage/2', '/realiser-un-reportage/3']}
@@ -69,7 +70,7 @@ const ReportageStep2 = () => {
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/realiser-un-reportage/1?edit" next={onNext} />
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

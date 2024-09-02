@@ -122,7 +122,7 @@ export class AwsS3 {
       sslEnabled: process.env.S3_USE_SSL === 'true',
     };
     if (process.env.USE_MINIO) {
-      s3config.endpoint = 'http://minio:9000';
+      s3config.endpoint = process.env.MINIO_HOST || 'http://minio:9000';
     }
     this.s3 = new AWS.S3(s3config);
     this.initialized = true;
@@ -180,7 +180,6 @@ export class AwsS3 {
     // local dir
     const fileStream = fs.createReadStream(path.join(__dirname, filename));
     let key = '';
-
     // upload image on stockage server
     try {
       key = await this.uploadS3File(filename, fileStream, contentType);

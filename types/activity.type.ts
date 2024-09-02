@@ -1,4 +1,4 @@
-export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound';
+export type ActivityContentType = 'text' | 'video' | 'image' | 'h5p' | 'sound' | 'document';
 export interface ActivityContent {
   id: number; // needed to sort content.
   type: ActivityContentType;
@@ -12,7 +12,7 @@ export const ActivityType = {
   ENIGME: 1,
   DEFI: 2,
   QUESTION: 3,
-  GAME: 4,
+  GAME: 4, // mimic 0, monnaie 1 expression 2
   CONTENU_LIBRE: 5,
   INDICE: 6,
   SYMBOL: 7,
@@ -20,7 +20,7 @@ export const ActivityType = {
   REPORTAGE: 9,
   REACTION: 10,
   ANTHEM: 11,
-  VERSE_RECORD: 12,
+  CLASS_ANTHEM: 12,
   STORY: 13,
   RE_INVENT_STORY: 14,
 };
@@ -39,6 +39,7 @@ export interface Activity<T extends AnyData = AnyData> {
 
   createDate?: Date | string;
   updateDate?: Date | string;
+  publishDate?: Date | string;
   deleteDate?: Date | string;
 
   // activity data
@@ -67,3 +68,24 @@ export interface Activity<T extends AnyData = AnyData> {
 export const LinkNotAllowedInPath = {
   REACTION: '/reagir-a-une-activite/',
 };
+
+export enum EPhase1Steps {
+  MESSAGE_LANCEMENT_PHASE_1 = 'message-de-lancement-phase-1',
+  RELANCE_PHASE_1 = 'relance-phase-1',
+  ENIGME_PAYS_1 = 'enigme-pays-1',
+}
+export enum EPhase2Steps {
+  ENIGME_PAYS_2 = 'enigme-pays-2',
+  MESSAGE_LANCEMENT_PHASE_2 = 'message-de-lancement-phase-2',
+  RELANCE_PHASE_2 = 'relance-phase-2',
+  ACTIVITE_8_MARS = 'activité-8-mars',
+  ACTIVITE_EMI = 'activite-EMI',
+  MESSAGE_CLOTURE_PHASE_2 = 'message-de-cloture-phase-2',
+}
+export enum EPhase3Steps {
+  MESSAGE_LANCEMENT_PHASE_3 = 'message-de-lancement-phase-3',
+  RELANCE_PHASE_3 = 'relance-phase-3',
+  PARAMETRAGE_DE_L_HYMNE = 'parametrage-de-lhymne',
+  MIXAGE_DE_L_HYMNE = 'mixage-de-lhymne',
+  MESSAGE_CLOTURE_PHASE_3 = 'message-de-clôture-phase-3',
+}

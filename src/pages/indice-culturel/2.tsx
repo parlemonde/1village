@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import { Box } from '@mui/material';
+
 import { isIndice } from 'src/activity-types/anyActivity';
 import { getIndice } from 'src/activity-types/indice.constants';
 import type { IndiceData } from 'src/activity-types/indice.types';
@@ -45,7 +47,15 @@ const IndiceStep2 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <Box
+        sx={{
+          width: '100%',
+          padding: {
+            xs: '0',
+            md: '0.5rem 1rem 1rem 1rem',
+          },
+        }}
+      >
         <Steps
           steps={[getIndice(activity.subType, data).step1, "Créer l'indice", 'Prévisualiser']}
           urls={['/indice-culturel/1?edit', '/indice-culturel/2', '/indice-culturel/3']}
@@ -63,7 +73,7 @@ const IndiceStep2 = () => {
           <ContentEditor content={activity.content} updateContent={updateContent} addContent={addContent} deleteContent={deleteContent} />
           <StepsButton prev="/indice-culturel/1?edit" next={onNext} />
         </div>
-      </div>
+      </Box>
     </Base>
   );
 };

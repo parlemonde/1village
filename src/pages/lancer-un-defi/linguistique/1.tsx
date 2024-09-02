@@ -9,6 +9,7 @@ import { DEFI, isLanguage, LANGUAGE_SCHOOL } from 'src/activity-types/defi.const
 import type { LanguageDefiData } from 'src/activity-types/defi.types';
 import type { MascotteData } from 'src/activity-types/mascotte.types';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
@@ -127,7 +128,7 @@ const DefiStep1 = () => {
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         {!isEdit && <BackButton href="/lancer-un-defi" />}
         <Steps
           steps={[capitalize(data.language) || 'Langue', 'Thème', 'Présentation', 'Défi', 'Prévisualisation']}
@@ -198,7 +199,7 @@ const DefiStep1 = () => {
 
           {<StepsButton next={onNext} />}
         </div>
-      </div>
+      </PageLayout>
     </Base>
   );
 };

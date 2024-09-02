@@ -34,7 +34,6 @@ export const getUserVisibilityFamilyParams = async (user: User) => {
       url: `/users/${user.id}/visibility-params`,
     });
     if (response.error) return null;
-    // console.log('User visibility params: ', response.data);
     return response.data;
   }
   return [];

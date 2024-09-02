@@ -29,7 +29,7 @@ export const titles = {
   [ActivityType.STORY]: 'inventé une histoire',
   [ActivityType.RE_INVENT_STORY]: 'ré-inventé une histoire',
   [ActivityType.ANTHEM]: 'créé un hymne',
-  [ActivityType.VERSE_RECORD]: 'chanté un couplet',
+  [ActivityType.CLASS_ANTHEM]: 'chanté un couplet',
 };
 
 export const icons = {
@@ -47,7 +47,7 @@ export const icons = {
   [ActivityType.STORY]: StoryIcon,
   [ActivityType.RE_INVENT_STORY]: RouletteIcon,
   [ActivityType.ANTHEM]: AnthemIcon,
-  [ActivityType.VERSE_RECORD]: MusicIcon,
+  [ActivityType.CLASS_ANTHEM]: MusicIcon,
 };
 
 export const DESC = {
@@ -65,7 +65,7 @@ export const DESC = {
   [ActivityType.STORY]: 'une histoire',
   [ActivityType.RE_INVENT_STORY]: 'une histoire ré-inventée',
   [ActivityType.ANTHEM]: 'un hymne',
-  [ActivityType.VERSE_RECORD]: 'un couplet',
+  [ActivityType.CLASS_ANTHEM]: 'un couplet',
 };
 
 export const REACTIONS = {
@@ -83,7 +83,7 @@ export const REACTIONS = {
   [ActivityType.STORY]: 'cette histoire',
   [ActivityType.RE_INVENT_STORY]: 'cette histoire ré-inventée',
   [ActivityType.ANTHEM]: 'cet hymne',
-  [ActivityType.VERSE_RECORD]: 'ce couplet',
+  [ActivityType.CLASS_ANTHEM]: 'ce couplet',
 };
 
 export const labels = {
@@ -101,7 +101,7 @@ export const labels = {
   [ActivityType.STORY]: 'Répondre à cette histoire par :',
   [ActivityType.RE_INVENT_STORY]: 'Répondre à cette histoire ré-inventée par :',
   [ActivityType.ANTHEM]: 'Répondre à cet hymne par :',
-  [ActivityType.VERSE_RECORD]: 'Répondre à ce couplet par :',
+  [ActivityType.CLASS_ANTHEM]: 'Répondre à ce couplet par :',
 };
 
 export const specificActivityPhase = {
@@ -117,8 +117,8 @@ export const specificActivityPhase = {
   [ActivityType.REPORTAGE]: [PhaseType.TWO],
   [ActivityType.REACTION]: [PhaseType.TWO],
   [ActivityType.ANTHEM]: [],
-  [ActivityType.VERSE_RECORD]: [PhaseType.THREE],
-  [ActivityType.STORY]: [PhaseType.THREE],
+  [ActivityType.CLASS_ANTHEM]: [PhaseType.THREE],
+  [ActivityType.STORY]: [PhaseType.TWO],
   [ActivityType.RE_INVENT_STORY]: [PhaseType.THREE],
 };
 export const getActivityPhase = (activityType: number, activePhase: number, selectedPhase: number) => {

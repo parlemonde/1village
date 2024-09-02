@@ -19,7 +19,7 @@ export const AdminTile = ({
   style = {},
 }: React.PropsWithChildren<AdminTileProps>) => {
   return (
-    <Paper style={{ ...style, overflow: 'hidden' }}>
+    <Paper style={{ ...style }}>
       <Toolbar
         sx={{
           backgroundColor: (theme) => theme.palette.secondary.main,
@@ -27,9 +27,11 @@ export const AdminTile = ({
           fontWeight: 'bold',
           minHeight: 'unset',
           padding: '8px 8px 8px 16px',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
         }}
       >
-        <Typography variant="h2" id="themetabletitle" component="div" sx={{ flex: '1 1 100%', padding: '6px 0' }}>
+        <Typography variant="h2" id="themetabletitle" component="div" sx={{ flexBasis: '50%', padding: '6px 0' }}>
           {title} {selectLanguage}
         </Typography>
         {toolbarButton}

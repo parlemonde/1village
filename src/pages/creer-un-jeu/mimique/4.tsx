@@ -5,6 +5,7 @@ import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
 import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
@@ -81,7 +82,7 @@ const MimiqueStep4 = () => {
   const isValidGame = validateGameConfig(gameConfig);
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem' }}>
+      <PageLayout>
         <Steps
           steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualisation']}
           urls={['/creer-un-jeu/mimique/1', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
@@ -109,7 +110,7 @@ const MimiqueStep4 = () => {
           </div>
         </div>
         <Previsualisation baseUrl={'/creer-un-jeu/mimique/'} />
-      </div>
+      </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>

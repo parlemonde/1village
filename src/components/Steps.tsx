@@ -2,11 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
-import Step from '@mui/material/Step';
-import StepConnector from '@mui/material/StepConnector';
+import { Step, StepConnector, StepLabel, Stepper } from '@mui/material/';
 import type { StepIconProps } from '@mui/material/StepIcon';
-import StepLabel from '@mui/material/StepLabel';
-import Stepper from '@mui/material/Stepper';
 
 import { ActivityContext } from 'src/contexts/activityContext';
 import { primaryColor, primaryColorLight2, successColor, warningColor } from 'src/styles/variables.const';
@@ -38,9 +35,10 @@ interface StepsProps {
   urls?: string[];
   activeStep?: number;
   errorSteps?: number[];
+  onBeforeLeavePage?: () => Promise<void>;
 }
 
-export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsProps) => {
+export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [], onBeforeLeavePage }: StepsProps) => {
   const router = useRouter();
   const { save } = React.useContext(ActivityContext);
 
@@ -60,16 +58,35 @@ export const Steps = ({ steps, urls, activeStep = 0, errorSteps = [] }: StepsPro
             }}
           />
         }
-        sx={{ zIndex: 1, position: 'relative', background: 'none', p: 3 }}
+        sx={{
+          zIndex: 1,
+          position: 'relative',
+          background: 'none',
+          p: {
+            xs: '24px 0',
+            md: 3,
+          },
+        }}
       >
         {steps.map((label, index) => (
-          <Step key={label}>
+          <Step
+            sx={{
+              px: {
+                xs: 0,
+                md: 1,
+              },
+            }}
+            key={label}
+          >
             <StepLabel
               StepIconComponent={StepIcon}
               StepIconProps={{
                 onClick:
                   urls !== undefined && urls.length > index
-                    ? () => {
+                    ? async () => {
+                        if (onBeforeLeavePage !== undefined) {
+                          await onBeforeLeavePage();
+                        }
                         save().catch(console.error);
                         router.push(urls[index]);
                       }

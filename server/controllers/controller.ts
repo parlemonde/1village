@@ -3,11 +3,11 @@ import { Router } from 'express';
 import fs from 'fs-extra';
 import multer from 'multer';
 import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 
 import type { UserType } from '../entities/user';
 import { authenticate } from '../middlewares/authenticate';
 import { handleErrors } from '../middlewares/handleErrors';
+import { diskStorage } from '../middlewares/multer';
 
 type RouteOptions = {
   path: string;
@@ -15,16 +15,6 @@ type RouteOptions = {
 };
 
 fs.ensureDir(path.join(__dirname, '../fileUpload/videos')).catch();
-const diskStorage = multer.diskStorage({
-  destination: function (_req, _file, cb) {
-    cb(null, path.join(__dirname, '../fileUpload/videos/'));
-  },
-  filename: function (_req, file, cb) {
-    const uuid = uuidv4();
-    cb(null, `${uuid}${path.extname(file.originalname)}`);
-  },
-});
-
 export class Controller {
   private uploadMiddleware = multer({ storage: multer.memoryStorage() });
   private uploadVideoMiddleware = multer({ storage: diskStorage });
@@ -38,6 +28,10 @@ export class Controller {
 
   public get(options: RouteOptions, handler: RequestHandler): void {
     this.router.get(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
+  }
+
+  public head(options: RouteOptions, handler: RequestHandler): void {
+    this.router.head(options.path, handleErrors(authenticate(options.userType)), handleErrors(handler));
   }
 
   public post(options: RouteOptions, handler: RequestHandler): void {
