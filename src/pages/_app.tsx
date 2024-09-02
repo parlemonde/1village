@@ -39,7 +39,6 @@ import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
 import { GameProvider } from 'src/contexts/gameContext';
 import { MediathequeProvider } from 'src/contexts/mediathequeContext';
-import { GameProvider } from 'src/contexts/gameContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
 import { useAnalytics } from 'src/hooks/useAnalytics';
