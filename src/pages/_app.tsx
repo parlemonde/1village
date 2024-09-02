@@ -37,6 +37,7 @@ import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
+import { GameProvider } from 'src/contexts/gameContext';
 import { MediathequeProvider } from 'src/contexts/mediathequeContext';
 import { GameProvider } from 'src/contexts/gameContext';
 import { UserContextProvider } from 'src/contexts/userContext';
@@ -142,22 +143,22 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                     <GameProvider>
                       {isOnAdmin ? (
                         router.pathname.startsWith('/admin/newportal') ? (
-                        <MediathequeProvider>
-                          <div className="container-admin-portal">
-                            <NewAdminHeader />
-                            <div className="content" style={{ display: 'flex', width: '100%', margin: '70px 0 70px 0' }}>
-                              <NewAdminNavigation />
-                              <Container
-                                className="container-admin-nav child-container"
-                                sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
-                              >
-                                <Component {...pageProps} />
-                              </Container>
+                          <MediathequeProvider>
+                            <div className="container-admin-portal">
+                              <NewAdminHeader />
+                              <div className="content" style={{ display: 'flex', width: '100%', margin: '70px 0 70px 0' }}>
+                                <NewAdminNavigation />
+                                <Container
+                                  className="container-admin-nav child-container"
+                                  sx={{ background: 'white', margin: '0 0 0 50px !important', padding: '50px !important', borderRadius: '10px' }}
+                                >
+                                  <Component {...pageProps} />
+                                </Container>
+                              </div>
                             </div>
-                          </div>
-                        </MediathequeProvider>
-                      ) : (
-                        <div>
+                          </MediathequeProvider>
+                        ) : (
+                          <div>
                             <AdminHeader />
                             <div style={{ display: 'flex', width: '100%' }}>
                               <AdminNavigation />
@@ -167,7 +168,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                             </div>
                           </div>
                         )
-                    ) : user !== null &&
+                      ) : user !== null &&
                         router.pathname !== '/inscription' &&
                         router.pathname !== '/connexion' &&
                         router.pathname !== '/login' &&
