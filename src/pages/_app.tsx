@@ -37,6 +37,7 @@ import { NewAdminHeader } from 'src/components/admin/NewAdminHeader';
 import { NewAdminNavigation } from 'src/components/admin/NewAdminNavigation';
 import { ActivityContextProvider } from 'src/contexts/activityContext';
 import { ClassroomContextProvider } from 'src/contexts/classroomContext';
+import { GameProvider } from 'src/contexts/gameContext';
 import { MediathequeProvider } from 'src/contexts/mediathequeContext';
 import { UserContextProvider } from 'src/contexts/userContext';
 import { VillageContextProvider } from 'src/contexts/villageContext';
@@ -138,8 +139,9 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
               <VillageContextProvider initialVillage={initialVillage}>
                 <ClassroomContextProvider>
                   <ActivityContextProvider>
-                    {isOnAdmin ? (
-                      router.pathname.startsWith('/admin/newportal') ? (
+                    <GameProvider>
+                      {isOnAdmin ? (
+                        router.pathname.startsWith('/admin/newportal') ? (
                         <MediathequeProvider>
                           <div className="container-admin-portal">
                             <NewAdminHeader />
@@ -156,31 +158,32 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
                         </MediathequeProvider>
                       ) : (
                         <div>
-                          <AdminHeader />
-                          <div style={{ display: 'flex', width: '100%' }}>
-                            <AdminNavigation />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <Component {...pageProps} />
+                            <AdminHeader />
+                            <div style={{ display: 'flex', width: '100%' }}>
+                              <AdminNavigation />
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <Component {...pageProps} />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )
+                        )
                     ) : user !== null &&
-                      router.pathname !== '/inscription' &&
-                      router.pathname !== '/connexion' &&
-                      router.pathname !== '/login' &&
-                      router.pathname !== '/user-verified' &&
-                      router.pathname !== '/reset-password' &&
-                      router.pathname !== '/update-password' &&
-                      router.pathname !== '/404' ? (
-                      <div className="app-container">
-                        <Header />
+                        router.pathname !== '/inscription' &&
+                        router.pathname !== '/connexion' &&
+                        router.pathname !== '/login' &&
+                        router.pathname !== '/user-verified' &&
+                        router.pathname !== '/reset-password' &&
+                        router.pathname !== '/update-password' &&
+                        router.pathname !== '/404' ? (
+                        <div className="app-container">
+                          <Header />
+                          <Component {...pageProps} />
+                          <WelcomeModal />
+                        </div>
+                      ) : (
                         <Component {...pageProps} />
-                        <WelcomeModal />
-                      </div>
-                    ) : (
-                      <Component {...pageProps} />
-                    )}
+                      )}
+                    </GameProvider>
                   </ActivityContextProvider>
                 </ClassroomContextProvider>
               </VillageContextProvider>

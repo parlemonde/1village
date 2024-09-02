@@ -1,34 +1,12 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+/* eslint-disable @next/next/no-html-link-for-pages */
 import React from 'react';
 
-import Button from '@mui/material/Button';
-
-import { isGame } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
-import { GameType } from 'types/game.type';
 
 const PresentationSuccess = () => {
-  const router = useRouter();
-  const { activity } = React.useContext(ActivityContext);
-  const { getAvailableGamesCount } = useGameRequests();
-  const [hasMimicsAvailable, setHasMimicsAvailable] = React.useState<boolean>(false);
-
-  if (!activity || !isGame(activity)) {
-    router.push('/creer-un-jeu/mimique');
-  }
-
-  React.useEffect(() => {
-    getAvailableGamesCount(GameType.MIMIC).then((count) => {
-      setHasMimicsAvailable(count > 0);
-    });
-  }, [getAvailableGamesCount]);
-
   return (
     <Base>
       <PageLayout>
