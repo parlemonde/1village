@@ -4,7 +4,7 @@ import { Between } from 'typeorm';
 
 import type { AnalyticData, NavigationPerf, BrowserPerf } from '../../types/analytics.type';
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
-import { UserType } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
 import { generateTemporaryToken, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
@@ -272,7 +272,14 @@ analyticController.router.post(
 
       // Retrieve current user session or save the new one.
       let sessionCount = await AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } });
+      const userPhase = await AppDataSource.getRepository(User)
+        .createQueryBuilder('user')
+        .select('user.firstlogin')
+        .where({ id: data?.userId })
+        .getRawOne();
+
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
+        // phase ??
         const session = new AnalyticSession();
         session.id = data.sessionId;
         session.uniqueId = uniqueSessionId;
@@ -285,6 +292,10 @@ analyticController.router.post(
         session.duration = null;
         session.initialPage = data.location;
         session.userId = data?.userId ?? null;
+        session.phase = userPhase ? parseInt(userPhase) : 0;
+
+        // FIND PHASE OF USER VILLAGE session.phase = ;
+
         await AppDataSource.getRepository(AnalyticSession).save(session);
         sessionCount = 1;
       }
