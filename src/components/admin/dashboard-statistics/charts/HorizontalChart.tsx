@@ -4,7 +4,7 @@ import { BarChart } from '@mui/x-charts/BarChart';
 
 // import { mockClassroomsStats } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
-import { sumData } from '../utils/sumData';
+import { sumAllData } from '../utils/sumData';
 
 // interface SumData {
 //   country: string;
@@ -42,7 +42,7 @@ export default function HorizontalBars() {
   return (
     <div className={styles.horizontalBars}>
       <BarChart
-        dataset={sumData}
+        dataset={sumAllData}
         yAxis={[{ scaleType: 'band', dataKey: 'country' }]}
         series={[
           {
