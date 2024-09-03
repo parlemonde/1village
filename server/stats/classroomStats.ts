@@ -30,8 +30,8 @@ export const getClassroomsInfos = async () => {
         .where('activity.userId = user.id')
         .groupBy('activity.phase, activity.type');
     }, 'userActivities')
-    .where('user.type = :teacherType', { teacherType })
-    .andWhere('user.id IS NOT NULL')
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .getRawMany();
 };
 
@@ -40,7 +40,8 @@ export const getRegisteredClassroomsCount = async () => {
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .getRawOne();
 
   return parseInt(result.classroomsCount);
@@ -52,7 +53,8 @@ export const getConnectedClassroomsCount = async () => {
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .andWhere('user.accountRegistration = :accountRegistration', { accountRegistration: 10 })
     .getRawOne();
 
@@ -64,7 +66,8 @@ export const getContributedClassroomsCount = async (phase: number | null) => {
     .select('userId')
     .from(Activity, 'activity')
     .groupBy('userId')
-    .where('user.type = :teacherType', { teacherType });
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType });
 
   if (phase) query.andWhere('activity.phase = :phase', { phase });
   else query.having(`COUNT(DISTINCT activity.phase) === :nbPhases`, { nbPhases: 3 });
@@ -75,14 +78,16 @@ export const getContributedClassroomsCount = async (phase: number | null) => {
     .subQuery()
     .select('userId')
     .from(Comment, 'comment')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .getQuery();
 
   const videoSubQuery = AppDataSource.createQueryBuilder()
     .subQuery()
     .select('userId')
     .from(Video, 'video')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .getQuery();
 
   const result = await AppDataSource.createQueryBuilder()

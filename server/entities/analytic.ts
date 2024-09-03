@@ -48,6 +48,7 @@ export class AnalyticSession implements AnalyticSessionInterface {
   @Column({ type: 'integer', nullable: true })
   public userId: number | null;
 
+  @Column({ type: 'integer', nullable: true })
   public phase: number | null;
 }
 
