@@ -31,7 +31,8 @@ export const getClassroomsInfos = async () => {
         .where('activity.userId = user.id')
         .groupBy('activity.phase, activity.type');
     }, 'userActivities')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .getRawMany();
 };
 
@@ -40,7 +41,8 @@ export const getRegisteredClassroomsCount = async () => {
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .getRawOne();
 
   return parseInt(result.classroomsCount);
@@ -51,7 +53,8 @@ export const getConnectedClassroomsCount = async () => {
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user.type = :teacherType', { teacherType })
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
     .andWhere('user.accountRegistration = :accountRegistration', { accountRegistration: 10 })
     .getRawOne();
 
@@ -60,34 +63,12 @@ export const getConnectedClassroomsCount = async () => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getContributedClassroomsCount = async (phase: number | null) => {
-  // TO DEBUG
-  // const activitySubQuery = AppDataSource.createQueryBuilder()
-  //   .select('activity.userId AS userId')
-  //   .from(Activity, 'activity')
-  //   .innerJoin('activity.user', 'user') // Ensure we join user
-  //   .where('user.type = :teacherType', { teacherType })
-  //   .groupBy('activity.userId')
-  //   .having(phase ? 'COUNT(DISTINCT activity.phase) = :phase' : 'COUNT(DISTINCT activity.phase) = :nbPhases', phase ? { phase } : { nbPhases: 3 })
-  //   .getQuery();
-  // const commentSubQuery = AppDataSource.createQueryBuilder()
-  //   .select('comment.userId AS userId')
-  //   .from(Comment, 'comment')
-  //   .innerJoin('comment.user', 'user') // Ensure we join user
-  //   .where('user.type = :teacherType', { teacherType })
-  //   .getQuery();
-  // const videoSubQuery = AppDataSource.createQueryBuilder()
-  //   .select('video.userId AS userId')
-  //   .from(Video, 'video')
-  //   .innerJoin('video.user', 'user') // Ensure we join user
-  //   .where('user.type = :teacherType', { teacherType })
-  //   .getQuery();
-  // const result = await AppDataSource.createQueryBuilder()
-  //   .select('COUNT(DISTINCT userId)', 'contributedUsersCount')
-  //   .from(`(${activitySubQuery} INTERSECT ${commentSubQuery} INTERSECT ${videoSubQuery})`, 'subquery')
-  //   .getRawOne();
-  // return parseInt(result.contributedUsersCount);
-  return 10;
-};
+  const query = AppDataSource.createQueryBuilder()
+    .select('userId')
+    .from(Activity, 'activity')
+    .groupBy('userId')
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType });
 
 export const getChildrenCodesCountForClassroom = async (classroomId: number, phase: VillagePhase) => {
   const classroom = await classroomRepository
@@ -98,19 +79,21 @@ export const getChildrenCodesCountForClassroom = async (classroomId: number, pha
 
   const villageId = classroom?.villageId;
 
-  if (!classroomId || !villageId) return 0;
-  let filterParams = generateEmptyFilterParams();
-  filterParams = { ...filterParams, villageId, classroomId, phase };
-  const whereClause = { clause: 'classroom.id = :classroomId', value: { classroomId } };
-  return await getChildrenCodesCount(filterParams, whereClause);
-};
+  const commentSubQuery = AppDataSource.createQueryBuilder()
+    .subQuery()
+    .select('userId')
+    .from(Comment, 'comment')
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
+    .getQuery();
 
-export const getConnectedFamiliesCountForClassroom = async (classroomId: number, phase: VillagePhase) => {
-  const classroom = await classroomRepository
-    .createQueryBuilder('classroom')
-    .innerJoin('classroom.village', 'village')
-    .where('classroom.id = :classroomId', { classroomId })
-    .getOne();
+  const videoSubQuery = AppDataSource.createQueryBuilder()
+    .subQuery()
+    .select('userId')
+    .from(Video, 'video')
+    .where('user IS NOT NULL')
+    .andWhere('user.type = :teacherType', { teacherType })
+    .getQuery();
 
   const villageId = classroom?.villageId;
   let filterParams = generateEmptyFilterParams();

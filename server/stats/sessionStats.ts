@@ -14,7 +14,8 @@ export const getMinDuration = async () => {
     .innerJoin('analytic_session.user', 'user')
     .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
     .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
-    .andWhere('user.type = :teacherType', { teacherType })
+    .andWhere('user.type === :teacherType', { teacherType })
+    .andWhere('user IS NOT NULL')
     .getRawOne();
 
   return parseInt(result.minDuration);
@@ -26,9 +27,8 @@ export const getMaxDuration = async () => {
     .createQueryBuilder('analytic_session')
     .select('MAX(DISTINCT(analytic_session.duration))', 'maxDuration')
     .innerJoin('analytic_session.user', 'user')
-    .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
-    .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
-    .andWhere('user.type = :teacherType', { teacherType })
+    .where('user.type === :teacherType', { teacherType })
+    .andWhere('user IS NOT NULL')
     .getRawOne();
 
   return parseInt(result.maxDuration);
@@ -42,7 +42,8 @@ export const getAverageDuration = async () => {
     .innerJoin('analytic_session.user', 'user')
     .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
     .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
-    .andWhere('user.type = :teacherType', { teacherType })
+    .andWhere('user IS NOT NULL')
+    .andWhere('user.type === :teacherType', { teacherType })
     .getRawOne();
   return parseInt(result.averageDuration);
 };
@@ -55,8 +56,10 @@ export const getMedianDuration = async () => {
     .innerJoin('analytic_session.user', 'user')
     .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
     .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
-    .andWhere('user.type = :teacherType', { teacherType })
-    .orderBy('analytic_session.duration', 'ASC') // Utilisez l'alias correct pour `duration`
+    .andWhere('user IS NOT NULL')
+    .andWhere('user.type === :teacherType', { teacherType })
+    .groupBy('as.userId')
+    .orderBy('duration', 'ASC')
     .getRawMany();
 
   const formatedToIntDurations = durations.map((row) => parseInt(row.duration, 10));
@@ -77,10 +80,9 @@ export const getMinConnections = async () => {
       return subQuery
         .select('COUNT(*)', 'occurrences')
         .from('analytic_session', 'as')
-        .innerJoin('as.user', 'user')
-        .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
-        .where('as.duration >= :durationThreshold', { durationThreshold })
-        .andWhere('user.type = :teacherType', { teacherType })
+        .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
+        .andWhere('user IS NOT NULL')
+        .andWhere('user.type === :teacherType', { teacherType })
         .groupBy('as.userId');
     }, 'subquery')
     .getRawOne();
@@ -96,10 +98,9 @@ export const getMaxConnections = async () => {
       return subQuery
         .select('COUNT(*)', 'occurrences')
         .from('analytic_session', 'as')
-        .innerJoin('as.user', 'user')
-        .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
-        .where('as.duration >= :durationThreshold', { durationThreshold })
-        .andWhere('user.type = :teacherType', { teacherType })
+        .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
+        .andWhere('user IS NOT NULL')
+        .andWhere('user.type === :teacherType', { teacherType })
         .groupBy('as.userId');
     }, 'subquery')
     .getRawOne();
@@ -115,10 +116,9 @@ export const getAverageConnections = async () => {
       return subQuery
         .select('COUNT(*)', 'occurrences')
         .from('analytic_session', 'as')
-        .innerJoin('as.user', 'user')
-        .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
-        .where('as.duration >= :durationThreshold', { durationThreshold })
-        .andWhere('user.type = :teacherType', { teacherType })
+        .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
+        .andWhere('user IS NOT NULL')
+        .andWhere('user.type === :teacherType', { teacherType })
         .groupBy('as.userId');
     }, 'subquery')
     .getRawOne();
@@ -131,10 +131,9 @@ export const getMedianConnections = async () => {
     .createQueryBuilder('analytic_session')
     .select('COUNT(*)', 'occurrences')
     .from('analytic_session', 'as')
-    .innerJoin('as.user', 'user')
-    .innerJoin('Classroom', 'classroom', 'classroom.userId = user.id')
-    .where('as.duration >= :durationThreshold', { durationThreshold })
-    .andWhere('user.type = :teacherType', { teacherType })
+    .where('analytic_session.duration >= :durationThreshold', { durationThreshold })
+    .andWhere('user IS NOT NULL')
+    .andWhere('user.type === :teacherType', { teacherType })
     .groupBy('as.userId')
     .orderBy('occurrences', 'ASC')
     .getRawMany();
