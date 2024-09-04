@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import type { SelectChangeEvent } from '@mui/material';
-import { Typography, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
 import PaginationNav from '../PaginationNav/PaginationNav';
 import { ActivityCard } from './ActivityCard';
@@ -12,7 +12,8 @@ import { useVillageUsers } from 'src/services/useVillageUsers';
 import { defaultTextButtonStyle, primaryColor } from 'src/styles/variables.const';
 import ArrowRight from 'src/svg/arrow-right.svg';
 import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
-import type { Activity } from 'types/activity.type';
+import type { Activity, AnyData } from 'types/activity.type';
+import type { User } from 'types/user.type';
 
 interface ActivitiesProps {
   activities: Activity[];
@@ -21,6 +22,33 @@ interface ActivitiesProps {
   noButtons?: boolean;
   onSelect?: (index: number) => void;
 }
+
+type CardProps = {
+  activity: Activity<AnyData>;
+  user: User | null;
+  users: User[];
+  userMap: { [key: number]: number };
+  noButtons: boolean;
+  onSelect?: (index: number) => void;
+  index: number;
+};
+
+const Card = ({ activity, user, users, userMap, noButtons, index, onSelect = undefined }: CardProps) => (
+  <ActivityCard
+    activity={activity}
+    isSelf={user !== null && activity.userId === user.id}
+    user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
+    key={activity.id}
+    noButtons={noButtons}
+    onSelect={
+      onSelect
+        ? () => {
+            onSelect(index);
+          }
+        : undefined
+    }
+  />
+);
 
 export const Activities = ({ activities, noButtons = false, withLinks = false, withPagination = false, onSelect }: ActivitiesProps) => {
   const [{ selectedActivityId, responseActivityId }, setResponseActivityId] = React.useState<{
@@ -60,111 +88,98 @@ export const Activities = ({ activities, noButtons = false, withLinks = false, w
   const startIdx = (page - 1) * activitiesPerPage;
   const endIdx = startIdx + activitiesPerPage;
 
-  if (activities.length === 0) {
-    return <Typography>Aucune activité existante.</Typography>;
-  }
+  const cardProps = {
+    user,
+    users,
+    userMap,
+    noButtons,
+    onSelect,
+  };
+
+  const currentPageActivities = activities.filter((activity) => !isAnthem(activity)).slice(startIdx, endIdx);
 
   return (
     <div>
-      {activities
-        .filter((activity) => !isAnthem(activity))
-        .slice(startIdx, endIdx)
-        .map((activity, index) => {
-          const card = (
-            <ActivityCard
-              activity={activity}
-              isSelf={user !== null && activity.userId === user.id}
-              user={userMap[activity.userId] !== undefined ? users[userMap[activity.userId]] : undefined}
-              key={activity.id}
-              noButtons={noButtons}
-              onSelect={
-                onSelect
-                  ? () => {
-                      onSelect(index);
-                    }
-                  : undefined
-              }
-            />
-          );
-          if (withLinks && activity.responseActivityId !== null) {
-            const translated = selectedActivityId === activity.id;
-            return (
-              <div style={{ width: '100%', overflow: 'hidden' }} key={`container_${activity.id}`}>
+      {currentPageActivities.map((activity, index) =>
+        withLinks && activity.responseActivityId !== null ? (
+          <div style={{ width: '100%', overflow: 'hidden' }} key={`container_${activity.id}`}>
+            <div
+              style={{
+                width: '200%',
+                display: 'flex',
+                transition: 'transform 250ms ease-in-out',
+                alignItems: 'center',
+                transform: selectedActivityId === activity.id ? 'translateX(-50%)' : 'none',
+              }}
+            >
+              <div style={{ display: 'inline-flex', width: '50%', flex: 1, minWidth: 0 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <Card {...cardProps} activity={activity} index={index} />
+                </div>
                 <div
                   style={{
-                    width: '200%',
                     display: 'flex',
-                    transition: 'transform 250ms ease-in-out',
+                    flexDirection: 'column',
+                    width: '6.4rem',
+                    padding: '0.2rem',
                     alignItems: 'center',
-                    transform: translated ? 'translateX(-50%)' : 'none',
+                    justifyContent: 'center',
                   }}
                 >
-                  <div style={{ display: 'inline-flex', width: '50%', flex: 1, minWidth: 0 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>{card}</div>
-                    <div
+                  <Button
+                    color="inherit"
+                    sx={defaultTextButtonStyle}
+                    onClick={() => {
+                      setResponseActivityId({ selectedActivityId: activity.id, responseActivityId: activity.responseActivityId });
+                    }}
+                    style={{ display: 'block', lineHeight: '0.8rem', padding: '0.4rem 0 0 0', margin: '0' }}
+                  >
+                    <span className="text text--small text--primary" style={{ fontSize: '0.8rem' }}>
+                      En réaction à
+                    </span>
+                    <ReactionIcon
                       style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '6.4rem',
-                        padding: '0.2rem',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        fill: primaryColor,
+                        width: '4rem',
+                        height: '4rem',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        display: 'inline-block',
                       }}
-                    >
-                      <Button
-                        color="inherit"
-                        sx={defaultTextButtonStyle}
-                        onClick={() => {
-                          setResponseActivityId({ selectedActivityId: activity.id, responseActivityId: activity.responseActivityId });
-                        }}
-                        style={{ display: 'block', lineHeight: '0.8rem', padding: '0.4rem 0 0 0', margin: '0' }}
-                      >
-                        <span className="text text--small text--primary" style={{ fontSize: '0.8rem' }}>
-                          En réaction à
-                        </span>
-                        <ReactionIcon
-                          style={{
-                            fill: primaryColor,
-                            width: '4rem',
-                            height: '4rem',
-                            cursor: 'pointer',
-                            position: 'relative',
-                            display: 'inline-block',
-                          }}
-                        />
-                      </Button>
-                    </div>
-                  </div>
-                  <div style={{ display: 'inline-flex', width: '50%', flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '6rem', alignItems: 'center', justifyContent: 'center' }}>
-                      <Button
-                        color="inherit"
-                        sx={defaultTextButtonStyle}
-                        onClick={() => {
-                          setResponseActivityId({ selectedActivityId: null, responseActivityId: null });
-                        }}
-                        style={{ display: 'block', lineHeight: '0.8rem', padding: '0.6rem 0', margin: '0' }}
-                      >
-                        <ArrowRight style={{ width: '2rem', height: 'auto', cursor: 'pointer', fill: primaryColor }} />
-                      </Button>
-                    </div>
-
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      {responseActivity !== null && (
-                        <ActivityCard
-                          activity={responseActivity}
-                          isSelf={user !== null && responseActivity.userId === user.id}
-                          user={userMap[responseActivity.userId] !== undefined ? users[userMap[responseActivity.userId]] : undefined}
-                        />
-                      )}
-                    </div>
-                  </div>
+                    />
+                  </Button>
                 </div>
               </div>
-            );
-          }
-          return card;
-        })}
+              <div style={{ display: 'inline-flex', width: '50%', flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '6rem', alignItems: 'center', justifyContent: 'center' }}>
+                  <Button
+                    color="inherit"
+                    sx={defaultTextButtonStyle}
+                    onClick={() => {
+                      setResponseActivityId({ selectedActivityId: null, responseActivityId: null });
+                    }}
+                    style={{ display: 'block', lineHeight: '0.8rem', padding: '0.6rem 0', margin: '0' }}
+                  >
+                    <ArrowRight style={{ width: '2rem', height: 'auto', cursor: 'pointer', fill: primaryColor }} />
+                  </Button>
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  {responseActivity !== null && (
+                    <ActivityCard
+                      activity={responseActivity}
+                      isSelf={user !== null && responseActivity.userId === user.id}
+                      user={userMap[responseActivity.userId] !== undefined ? users[userMap[responseActivity.userId]] : undefined}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Card key={index} activity={activity} index={index} {...cardProps} />
+        ),
+      )}
       {withPagination && (
         <PaginationNav
           page={page}
