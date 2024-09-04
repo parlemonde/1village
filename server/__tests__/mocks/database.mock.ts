@@ -7,6 +7,7 @@ import { AppDataSource } from '../../utils/data-source';
 
 async function initDatabase() {
   const fakeUser = new User();
+  fakeUser.id = 1;
   fakeUser.email = 'teacher1@mail.io';
   fakeUser.pseudo = 'teacher1';
   fakeUser.firstname = '';
