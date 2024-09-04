@@ -1,7 +1,7 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 import { TableColumn, TableForeignKey } from 'typeorm';
 
-export class AlterAnalyticSessionsByAddPhaseAndUser1725348767523 implements MigrationInterface {
+export class AlterAnalyticSessionWithUserAndPhase1725362341071 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
       'analytic_session',
@@ -17,7 +17,7 @@ export class AlterAnalyticSessionsByAddPhaseAndUser1725348767523 implements Migr
       new TableColumn({
         name: 'phase',
         type: 'int',
-        isNullable: true,
+        isNullable: false,
       }),
     );
 
