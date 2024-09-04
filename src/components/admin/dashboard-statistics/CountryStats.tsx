@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 
-// import { DataProvider } from './../../../contexts/statisticsContext';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
-// import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
+import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
 import DashboardTable from './charts/DashboardTable';
-import HorizontalChart from './charts/HorizontalChart';
+import HorizontalBars from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
+import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import styles from './styles/charts.module.css';
+import { sumContribution } from './utils/sumData';
 
 const pieChartData = {
   data: [
@@ -26,24 +27,53 @@ const pieChartData = {
 };
 
 const barChartData = [{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }];
-const EngagemtnBarChartTitle = 'Evolution des connexions';
-const ConstribionBarChartTitle = 'Contribution des classes';
+const EngagementBarChartTitle = 'Évolution des connexions';
+const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
+
+  const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
+  const countries = [...new Set(countriesMap)]; // avoid duplicates
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+  };
+
+  const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
+  const countryData = sumContribution[selectedCountry];
+
+  const { totalActivities = 0, totalComments = 0, totalVideos = 0 } = countryData || {};
+
+  const classStats = mockConnectionsStats.map((classroom) => ({
+    registered: classroom.registeredClassroomsCount,
+    connected: classroom.connectedClassroomsCount,
+    contributed: classroom.contributedClassroomsCount,
+  }));
+
+  const connectStats = mockConnectionsStats.map((connect) => ({
+    averageConnection: connect.averageConnections,
+    averageDuration: connect.averageDuration,
+    minDuration: connect.minDuration,
+    maxDuration: connect.maxDuration,
+    medianDuration: connect.medianDuration,
+    minConnections: connect.minConnections,
+    maxConnections: connect.maxConnections,
+    medianConnections: connect.medianConnections,
+  }));
+
   return (
     <>
-      {/* <DataProvider></DataProvider> */}
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
           <PhaseDropdown />
         </div>
         <div className={styles.countryFilter}>
-          <CountriesDropdown />
+          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
       </div>
       <h1>Statut: Observateur</h1>
       <div className={styles.monitorTable}>
-        <HorizontalChart />
+        <HorizontalBars />
       </div>
       <Box
         height={1}
@@ -59,38 +89,52 @@ const CountryStats = () => {
         sx={{ border: '2px solid #4C3ED9', borderRadius: 4 }}
       >
         Ce pays participe dans les villages-monde suivants :
+        <ul>
+          {filteredVillage.map((village, index) => (
+            <li key={index}>{village.villageName}</li>
+          ))}
+        </ul>
       </Box>
       <div className={styles.monitorTable}>
         <DashboardTable />
       </div>
       <div className={styles.classroomStats}>
-        <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
-        <StatsCard data={10}>Nombre de classes connectées</StatsCard>
-        <StatsCard data={10}>Nombre de classes contributrices</StatsCard>
+        <StatsCard data={classStats[0].registered}>Nombre de classes inscrites</StatsCard>
+        <StatsCard data={classStats[0].connected}>Nombre de classes connectées</StatsCard>
+        <StatsCard data={classStats[0].contributed}>Nombre de classes contributrices</StatsCard>
       </div>
       <div className={styles.averageStatsContainer}>
-        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} unit="min" icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}>
+        <AverageStatsCard
+          data={{
+            min: connectStats[0].minConnections,
+            max: connectStats[0].maxConnections,
+            average: connectStats[0].averageConnection,
+            median: connectStats[0].medianConnections,
+          }}
+          unit="min"
+          icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+        >
           Temps de connexion moyen par classe
         </AverageStatsCard>
-        <AverageStatsCard data={{ min: 1, max: 20, average: 15, median: 5 }} icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}>
+        <AverageStatsCard
+          data={{
+            min: connectStats[0].minDuration,
+            max: connectStats[0].maxDuration,
+            average: connectStats[0].averageDuration,
+            median: connectStats[0].medianDuration,
+          }}
+          icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
+        >
           Nombre de connexions moyen par classe
         </AverageStatsCard>
       </div>
       <div className={styles.engagementContainer}>
         <PieCharts pieChartData={pieChartData} />
-        <BarCharts barChartData={barChartData} title={EngagemtnBarChartTitle} />
+        <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
-        {/* 
-        TODO -> remplacer les données de classroomExchanges par celles des nouvelles requetes
-
-        <ClassesExchangesCard
-          className={styles.exchangesCard}
-          totalPublications={classroomExchanges.data.totalActivities}
-          totalComments={classroomExchanges.data.totalComments}
-          totalVideos={classroomExchanges.data.totalVideos}
-        /> */}
-        <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ConstribionBarChartTitle} />
+        <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
+        <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
       </div>
       <div>
         <PhaseDetails
