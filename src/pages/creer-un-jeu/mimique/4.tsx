@@ -1,91 +1,95 @@
-import classNames from 'classnames';
 import { useRouter } from 'next/router';
-import React from 'react';
-import ReactPlayer from 'react-player';
-import type { SourceProps } from 'react-player/base';
+import React, { useContext } from 'react';
 
-import { Grid, Button, Radio, RadioGroup, FormControlLabel, Backdrop, CircularProgress, Tooltip } from '@mui/material';
+import { Button, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 
-import { isGame } from 'src/activity-types/anyActivity';
-import { isMimic, isMimicValid } from 'src/activity-types/game.constants';
+import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
-import { CustomRadio } from 'src/components/buttons/CustomRadio';
-import { EditButton } from 'src/components/buttons/EditButton';
-import { ActivityContext } from 'src/contexts/activityContext';
+import CreateGame from 'src/components/game/CreateGame';
+import Previsualisation from 'src/components/game/Previsualisation';
+import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
-import type { MimicsData } from 'types/game.type';
+import { VillageContext } from 'src/contexts/villageContext';
+import { getUserDisplayName } from 'src/utils';
+import { ActivityType } from 'types/activity.type';
+import type { StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
+import { GameType } from 'types/game.type';
 import { UserType } from 'types/user.type';
 
 const MimiqueStep4 = () => {
   const router = useRouter();
-  const { activity, save } = React.useContext(ActivityContext);
   const { user } = React.useContext(UserContext);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const data = (activity?.data as MimicsData) || null;
+  const { village } = React.useContext(VillageContext);
   const isObservator = user?.type === UserType.OBSERVATOR;
+  const { selectedPhase } = React.useContext(VillageContext);
+  const labelPresentation = user ? getUserDisplayName(user, false) : '';
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const errorSteps = React.useMemo(() => {
-    const errors: number[] = [];
-    if (data === undefined || data === null) return; //when you came from ma-classe.tsx
-    if (!isMimicValid(data.game1)) errors.push(0); // step of mimic 1
-    if (!isMimicValid(data.game2)) errors.push(1); // step of mimic 2
-    if (!isMimicValid(data.game3)) errors.push(2); // step of mimic 3
-    return errors;
-  }, [data]);
-
-  const isValid = errorSteps?.length === 0;
-
-  React.useEffect(() => {
-    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/creer-un-jeu');
-    } else if (activity && (!isGame(activity) || !isMimic(activity))) {
-      router.push('/creer-un-jeu');
-    }
-  }, [activity, router]);
+  const { gameConfig } = useContext(GameContext);
 
   const onPublish = async () => {
-    //Reset error in step to not show error in next mimic creation
-    window.sessionStorage.removeItem(`mimic-step-1ère-next`);
-    window.sessionStorage.removeItem(`mimic-step-2ème-next`);
-    window.sessionStorage.removeItem(`mimic-step-3ème-next`);
+    const data: GameDataMonneyOrExpression = {
+      userId: user?.id || 0,
+      villageId: village?.id || 0,
+      type: ActivityType.GAME,
+      subType: GameType.MIMIC,
+      game1: {
+        game: gameConfig[0],
+        labelPresentation: labelPresentation,
+      },
+      game2: {
+        game: gameConfig[1],
+        labelPresentation: labelPresentation,
+      },
+      game3: {
+        game: gameConfig[2],
+        labelPresentation: labelPresentation,
+      },
+      selectedPhase: selectedPhase,
+    };
+
     setIsLoading(true);
-    const { success } = await save(true);
-    if (success) {
-      router.push('/creer-un-jeu/mimique/success');
-    }
+    await postGameDataMonneyOrExpression(data);
+    localStorage.removeItem('gameConfig');
+    router.push('/creer-un-jeu/mimique/success');
     setIsLoading(false);
   };
 
-  if (!activity) {
-    return (
-      <Base>
-        <div></div>
-      </Base>
-    );
+  function validateGameConfig(gameConfig: StepsTypes[][]) {
+    let isValidGame = true;
+
+    function isEmptyOrSpaces(str: string | undefined) {
+      return str === null || str === undefined || str.match(/^ *$/) !== null;
+    }
+
+    gameConfig.forEach((group) => {
+      group.forEach((item) => {
+        if (item.inputs) {
+          item.inputs.forEach((input) => {
+            if (input.required && (isEmptyOrSpaces(input.selectedValue) || !input.selectedValue)) {
+              isValidGame = false;
+            }
+          });
+        }
+      });
+    });
+
+    return isValidGame;
   }
 
+  const isValidGame = validateGameConfig(gameConfig);
   return (
     <Base>
       <PageLayout>
         <Steps
-          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualiser']}
-          urls={['/creer-un-jeu/mimique/1?edit', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
-          activeStep={3}
-          errorSteps={errorSteps}
+          steps={['1ère mimique', '2ème mimique', '3ème mimique', 'Prévisualisation']}
+          urls={['/creer-un-jeu/mimique/1', '/creer-un-jeu/mimique/2', '/creer-un-jeu/mimique/3', '/creer-un-jeu/mimique/4']}
+          activeStep={4}
         />
-
         <div className="width-900">
-          <h1>Pré-visualisez vos mimiques et publiez les !</h1>
-          <p style={{ width: '100%', textAlign: 'left', margin: '1rem 0' }}>
-            Vous pouvez modifier chaque mimique si vous le souhaitez. Quand vous êtes prêts :
-          </p>
-          {!isValid && (
-            <p>
-              <b>Avant de publier votre présentation, il faut corriger les étapes incomplètes, marquées en orange.</b>
-            </p>
-          )}
+          <CreateGame stepNumber={3} />
           <div style={{ width: '100%', textAlign: 'right', margin: '1rem 0' }}>
             {isObservator ? (
               <Tooltip title="Action non autorisée" arrow>
@@ -96,144 +100,16 @@ const MimiqueStep4 = () => {
                 </span>
               </Tooltip>
             ) : (
-              <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValid}>
-                Publier
-              </Button>
+              <>
+                <Button variant="outlined" color="primary" onClick={onPublish} disabled={!isValidGame}>
+                  Publier
+                </Button>
+                {!isValidGame ? <p style={{ color: 'red' }}>Vérifiez tous vos champs s&apos;il vous plaît.</p> : null}
+              </>
             )}
           </div>
-          {/* Mimique 1 */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(0) })}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
-                <ReactPlayer
-                  width="100%"
-                  height="100%"
-                  light
-                  url={errorSteps?.includes(0) ? ' ' : (data.game1.video as string | string[] | SourceProps[] | MediaStream | undefined)}
-                  controls
-                />
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel
-                    value={1}
-                    control={<CustomRadio isChecked isSuccess />}
-                    label={errorSteps?.includes(0) ? '' : data.game1.signification || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                  <FormControlLabel
-                    control={<Radio />}
-                    label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification1 || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                  <FormControlLabel
-                    control={<Radio />}
-                    label={errorSteps?.includes(0) ? '' : data.game1.fakeSignification2 || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={12}>
-                <EditButton
-                  onClick={() => {
-                    router.push(`/creer-un-jeu/mimique/1?edit=${activity.id}`);
-                  }}
-                  status={errorSteps?.includes(0) ? 'warning' : 'success'}
-                  style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-                />
-              </Grid>
-            </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game1.origine} </p>
-          </div>
-          {/* Mimique 2 */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(1) })}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
-                <ReactPlayer
-                  width="100%"
-                  height="100%"
-                  light
-                  url={errorSteps?.includes(1) ? ' ' : (data.game2.video as string | string[] | SourceProps[] | MediaStream | undefined)}
-                  controls
-                />
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel
-                    value={1}
-                    control={<CustomRadio isChecked isSuccess />}
-                    label={errorSteps?.includes(1) ? '' : data.game2.signification || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                  <FormControlLabel
-                    control={<Radio />}
-                    label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification1 || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                  <FormControlLabel
-                    control={<Radio />}
-                    label={errorSteps?.includes(1) ? '' : data.game2.fakeSignification2 || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <EditButton
-                  onClick={() => {
-                    router.push('/creer-un-jeu/mimique/2');
-                  }}
-                  status={errorSteps?.includes(1) ? 'warning' : 'success'}
-                  style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-                />
-              </Grid>
-            </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game2.origine} </p>
-          </div>
-          {/* Mimique 3 */}
-          <div className={classNames('preview-block', { 'preview-block--warning': errorSteps?.includes(2) })}>
-            <Grid container spacing={3} style={{ boxSizing: 'border-box' }}>
-              <Grid item xs={12} md={4}>
-                <ReactPlayer
-                  width="100%"
-                  height="100%"
-                  light
-                  url={errorSteps?.includes(2) ? ' ' : (data.game3.video as string | string[] | SourceProps[] | MediaStream | undefined)}
-                  controls
-                />
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <RadioGroup aria-label="signification" name="signification1" value={1}>
-                  <FormControlLabel
-                    value={1}
-                    control={<CustomRadio isChecked isSuccess />}
-                    label={errorSteps?.includes(2) ? '' : data.game3.signification || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                  <FormControlLabel
-                    control={<Radio />}
-                    label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification1 || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                  <FormControlLabel
-                    control={<Radio />}
-                    label={errorSteps?.includes(2) ? '' : data.game3.fakeSignification2 || ''}
-                    style={{ maxWidth: '100%' }}
-                  />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <EditButton
-                  onClick={() => {
-                    router.push('/creer-un-jeu/mimique/3');
-                  }}
-                  status={errorSteps?.includes(2) ? 'warning' : 'success'}
-                  style={{ position: 'absolute', top: '40%', right: '0.5rem' }}
-                />
-              </Grid>
-            </Grid>
-            <p style={{ width: '100%', textAlign: 'left', margin: '0.3rem 1rem' }}>{data.game3.origine} </p>
-          </div>
         </div>
+        <Previsualisation baseUrl={'/creer-un-jeu/mimique/'} />
       </PageLayout>
       <Backdrop style={{ zIndex: 2000, color: 'white' }} open={isLoading}>
         <CircularProgress color="inherit" />

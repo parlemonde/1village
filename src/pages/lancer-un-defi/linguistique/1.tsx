@@ -181,6 +181,7 @@ const DefiStep1 = () => {
                 </FormControl>
               </Grid>
             </Grid>
+
             {data.languageCode && (
               <div style={{ margin: '1rem 0' }}>
                 <p className="text">
@@ -195,6 +196,7 @@ const DefiStep1 = () => {
               </div>
             )}
           </div>
+
           {<StepsButton next={onNext} />}
         </div>
       </PageLayout>

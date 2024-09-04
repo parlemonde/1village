@@ -48,36 +48,32 @@ const GameStats = ({ gameResponses, choices, country, userMap, users, position }
 
       {responseCount > 0 &&
         choices &&
-        choices.map((choice, index) => (
-          <>
-            {responsesByChoice[choice] ? (
-              <div
-                style={{
-                  alignContent: 'center',
-                  display: 'flex',
-                  width: '100%',
-                  gap: '10px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gridArea: POSITION[index][position],
-                }}
-              >
-                {responsesByChoice[choice]?.map((response) => {
-                  const user = users[userMap[response.userId]];
-                  const renderAvatar =
-                    user.type >= UserType.MEDIATOR ? (
-                      <div key={response.id}>
-                        <AvatarImg user={user} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />
-                      </div>
-                    ) : null;
-                  return renderAvatar;
-                })}
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridArea: POSITION[index][position] }} />
-            )}
-          </>
-        ))}
+        choices.map((choice, index) =>
+          responsesByChoice[choice] ? (
+            <div
+              key={index}
+              style={{
+                alignContent: 'center',
+                display: 'flex',
+                width: '100%',
+                gap: '10px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gridArea: POSITION[index][position],
+              }}
+            >
+              {responsesByChoice[choice]?.map((response) =>
+                users[userMap[response.userId]].type >= UserType.MEDIATOR ? (
+                  <div key={response.id}>
+                    <AvatarImg user={users[userMap[response.userId]]} style={{ width: '24px', height: '24px', margin: '10px 5px' }} />
+                  </div>
+                ) : null,
+              )}
+            </div>
+          ) : (
+            <div key={index} style={{ display: 'grid', gridArea: POSITION[index][position] }} />
+          ),
+        )}
     </>
   );
 };
