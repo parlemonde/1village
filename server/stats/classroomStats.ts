@@ -8,6 +8,8 @@ const classroomRepository = AppDataSource.getRepository(Classroom);
 
 const teacherType = UserType.TEACHER;
 
+// const classroomStatusQuery = ;
+
 export const getClassroomsInfos = async () => {
   return await classroomRepository
     .createQueryBuilder('classroom')

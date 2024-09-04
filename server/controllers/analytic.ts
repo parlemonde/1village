@@ -180,6 +180,7 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
 type AddAnalytic = {
   sessionId: string;
   userId?: number;
+  phase: number;
   event: string;
   location: string;
   referrer?: string | null;
@@ -200,6 +201,10 @@ const ADD_ANALYTIC_SCHEMA: JSONSchemaType<AddAnalytic> = {
     userId: {
       type: 'number',
       nullable: true,
+    },
+    phase: {
+      type: 'number',
+      nullable: false,
     },
     event: {
       type: 'string',
@@ -271,15 +276,17 @@ analyticController.router.post(
       }
 
       // Retrieve current user session or save the new one.
-      let sessionCount = await AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } });
-      const userPhase = await AppDataSource.getRepository(User)
-        .createQueryBuilder('user')
-        .select('user.firstlogin')
-        .where({ id: data?.userId })
-        .getRawOne();
+      // Retrieve current user session or save the new one.
+      // eslint-disable-next-line prefer-const
+      let [sessionCount, userPhase] = await Promise.all([
+        AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } }),
+        AppDataSource.getRepository(User).createQueryBuilder('user').select('user.firstlogin').where({ id: data.userId }).getRawOne(),
+      ]);
+
+      console.log('USER IN CONTROLLER %!!!!!', data.userId);
+      console.log('USER PHASE IN CONTROLLER %!!!!!', userPhase);
 
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
-        // phase ??
         const session = new AnalyticSession();
         session.id = data.sessionId;
         session.uniqueId = uniqueSessionId;
@@ -291,10 +298,27 @@ analyticController.router.post(
         session.width = data.width || 0;
         session.duration = null;
         session.initialPage = data.location;
-        session.userId = data?.userId ?? null;
-        session.phase = userPhase ? parseInt(userPhase) : 0;
+        session.userId = data.userId ?? 1;
+        session.phase = userPhase ? userPhase.firstlogin : 0;
 
-        // FIND PHASE OF USER VILLAGE session.phase = ;
+        await AppDataSource.getRepository(AnalyticSession).save(session);
+        sessionCount = 1;
+      }
+
+      if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
+        const session = new AnalyticSession();
+        session.id = data.sessionId;
+        session.uniqueId = uniqueSessionId;
+        session.date = new Date();
+        session.browserName = req.useragent?.browser ?? '';
+        session.browserVersion = req.useragent?.version ?? '';
+        session.os = req.useragent?.os ?? '';
+        session.type = req.useragent?.isDesktop ? 'desktop' : req.useragent?.isTablet ? 'tablet' : req.useragent?.isMobile ? 'mobile' : 'other';
+        session.width = data.width || 0;
+        session.duration = null;
+        session.initialPage = data.location;
+        session.userId = data.userId ?? 1;
+        session.phase = userPhase ? userPhase.firstlogin : 0;
 
         await AppDataSource.getRepository(AnalyticSession).save(session);
         sessionCount = 1;
