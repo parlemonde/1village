@@ -141,7 +141,7 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
       )}
       <div style={{ margin: '0.25rem', flex: 1, minWidth: 0 }}>
         <p style={{ marginBottom: '2rem' }}>
-          {labelPresentation} {displayPhrasesByType.phrase}.
+          {labelPresentation} {displayPhrasesByType.phrase}
         </p>
         <p>
           Il y a actuellement {`${totalGamesCount} ${typeOfGame}${totalGamesCount > 1 ? 's' : ''} disponible${totalGamesCount > 1 ? 's' : ''}`}.<br />

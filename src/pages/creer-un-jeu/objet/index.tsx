@@ -3,15 +3,17 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Button from '@mui/material/Button';
+import { Box } from '@mui/system';
 
 import { Base } from 'src/components/Base';
+import { PageLayout } from 'src/components/PageLayout';
 
 const Monnaie = () => {
   const router = useRouter();
 
   return (
     <Base>
-      <div style={{ width: '100%', padding: '0.5rem 1rem 1rem 1rem', marginTop: '2rem' }}>
+      <PageLayout>
         <h1>Jeu de la monnaie </h1>
         <p style={{ marginBottom: '2rem' }}>
           Savez-vous qu’il existe beaucoup de types de monnaies différentes selon les pays où vous vous rendez ? En fonction du type de monnaie les
@@ -26,25 +28,27 @@ const Monnaie = () => {
             deviner combien coûte des objets du quotidien dans chaque pays qu’il visite. C’est le jeu qu’il vous propose de faire aujourd’hui !
           </p>
         </div>
-        <Link href="/creer-un-jeu/objet/1" passHref>
-          <Button
-            component="a"
-            onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-              event.preventDefault();
-              router.push('/creer-un-jeu/objet/1');
-            }}
-            href="/creer-un-jeu/objet/1"
-            color="primary"
-            variant="outlined"
-            style={{
-              float: 'right',
-            }}
-            disableElevation
-          >
-            Faire découvrir 3 objets
-          </Button>
-        </Link>
-      </div>
+        <Box display="flex" justifyContent="end">
+          <Link href="/creer-un-jeu/objet/1" passHref>
+            <Button
+              component="a"
+              onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                event.preventDefault();
+                router.push('/creer-un-jeu/objet/1');
+              }}
+              href="/creer-un-jeu/objet/1"
+              color="primary"
+              variant="outlined"
+              style={{
+                float: 'right',
+              }}
+              disableElevation
+            >
+              Faire découvrir 3 objets
+            </Button>
+          </Link>
+        </Box>
+      </PageLayout>
     </Base>
   );
 };

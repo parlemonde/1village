@@ -305,6 +305,7 @@ async function createGame(data: ActivityContent[], userId: number, villageId: nu
   activity.responseType = null;
   activity.isPinned = false;
   activity.displayAsUser = false;
+  activity.publishDate = new Date();
 
   await AppDataSource.getRepository(Activity).save(activity);
 }
