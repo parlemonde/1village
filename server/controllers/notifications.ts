@@ -36,7 +36,7 @@ notificationsController.put({ path: '/suscribe/:userId' }, async (req: Request, 
   } catch (e) {
     res.status(500).send('erreur de sauvegarde de la notification');
   }
-  res.status(200).send('notification mise à jour');
+  res.status(200).json({ message: 'Notifications à jour' });
 });
 
 export { notificationsController };
