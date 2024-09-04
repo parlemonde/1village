@@ -128,8 +128,8 @@ export const Navigation = (): JSX.Element => {
           mascotteActivity && mascotteActivity.id !== 0 && mascotteActivity.status === ActivityStatus.PUBLISHED
             ? `/mascotte/5?activity-id=${mascotteActivity?.id}`
             : mascotteActivity && mascotteActivity.status === ActivityStatus.DRAFT
-              ? `${mascotteActivity.data.draftUrl}?activity-id=${mascotteActivity.id}`
-              : '/mascotte/1',
+            ? `${mascotteActivity.data.draftUrl}?activity-id=${mascotteActivity.id}`
+            : '/mascotte/1',
         icon: <UserIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 1,
         disabled: !isTeacher,
@@ -315,8 +315,9 @@ export const Navigation = (): JSX.Element => {
         noCloseOutsideModal={loading}
         ariaDescribedBy={'activate-phase-desc'}
         ariaLabelledBy={'activate-phase'}
-        title={`Êtes vous sûr de vouloir ${(village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
-          } la phase numéro ${selectedPhase} ?`}
+        title={`Êtes vous sûr de vouloir ${
+          (village?.activePhase || 0) >= selectedPhase ? 'désactiver' : 'activer'
+        } la phase numéro ${selectedPhase} ?`}
         cancelLabel="Annuler"
         confirmLabel="Confirmer"
         loading={loading}
