@@ -16,7 +16,7 @@ import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import styles from './styles/charts.module.css';
-import { sumAllComments, sumAllActivities, sumAllVideos } from './utils/sumData';
+import { sumContribution } from './utils/sumData';
 
 const pieChartData = {
   data: [
@@ -39,16 +39,10 @@ const CountryStats = () => {
     setSelectedCountry(country);
   };
 
-  // voir pour exporter déjà filtré par pays ?
   const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
-  // const sumDataCountry = sumAllData.filter((country) => country.country === selectedCountry);
-  // const filteredCountry = sumDataCountry.map((total) => total.total);
-  const sumCommentsCountry = sumAllComments.filter((country) => country.country === selectedCountry);
-  const filteredComments = sumCommentsCountry.map((totalComments) => totalComments.totalComments);
-  const sumActivitiesCountry = sumAllActivities.filter((country) => country.country === selectedCountry);
-  const filteredActivities = sumActivitiesCountry.map((totalActivities) => totalActivities.totalactivities);
-  const sumVideosCountry = sumAllVideos.filter((country) => country.country === selectedCountry);
-  const filteredVideos = sumVideosCountry.map((totalVideos) => totalVideos.totalVideos);
+  const countryData = sumContribution[selectedCountry];
+
+  const { totalActivities = 0, totalComments = 0, totalVideos = 0 } = countryData || {};
 
   const classStats = mockConnectionsStats.map((classroom) => ({
     registered: classroom.registeredClassroomsCount,
@@ -139,7 +133,7 @@ const CountryStats = () => {
         <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
       </div>
       <div className={styles.exchangesConnectionsContainer}>
-        <ClassesExchangesCard totalPublications={filteredActivities[0]} totalComments={filteredComments[0]} totalVideos={filteredVideos[0]} />
+        <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
         <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
       </div>
       <div>

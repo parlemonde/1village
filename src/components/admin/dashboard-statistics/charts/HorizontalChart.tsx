@@ -2,34 +2,8 @@ import React from 'react';
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
-// import { mockClassroomsStats } from '../mocks/mocks';
 import styles from '../styles/charts.module.css';
 import { sumAllData } from '../utils/sumData';
-
-// interface SumData {
-//   country: string;
-//   total: number;
-// }
-
-// const sumData: { [country: string]: SumData } = {};
-// mockClassroomsStats.forEach((country) => {
-//   const { classroomCountryCode, commentsCount, activities } = country;
-
-//   if (!sumData[classroomCountryCode]) {
-//     sumData[classroomCountryCode] = {
-//       country: classroomCountryCode,
-//       total: 0,
-//     };
-//   }
-
-//   sumData[classroomCountryCode].total += commentsCount;
-
-//   activities.forEach((activity) => {
-//     sumData[classroomCountryCode].total += activity.count;
-//   });
-// });
-
-// const dataset: { country: string; total: number }[] = Object.values(sumData);
 
 const chartSetting = {
   width: 500,
