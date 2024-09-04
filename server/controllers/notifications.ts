@@ -34,9 +34,9 @@ notificationsController.put({ path: '/suscribe/:userId' }, async (req: Request, 
   try {
     await EditNotificationPreferences(newNotification);
   } catch (e) {
-    res.status(500).send('erreur de sauvegarde de la notification');
+    res.status(500).json({ message: 'erreur de sauvegarde de vos choix, veuillez réessayer ultérieurement' });
   }
-  res.status(200).json({ message: 'Notifications à jour' });
+  res.status(200).json({ message: 'Notifications mises à jour' });
 });
 
 export { notificationsController };

@@ -3,12 +3,23 @@ import './mocks';
 import supertest from 'supertest';
 
 import { getApp } from '../app';
+import { Notifications } from '../entities/notifications';
+import { User } from '../entities/user';
+import { AppDataSource } from '../utils/data-source';
+import { seedDatabase } from './seed';
 
 let accessToken = '';
 
 describe('Notification api test', () => {
   beforeAll(async () => {
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
+
+    await seedDatabase();
+
     const app = await getApp();
+
     const response = await supertest(app)
       .post('/login')
       .set('Accept', 'application/json')
@@ -17,13 +28,48 @@ describe('Notification api test', () => {
         password: 'helloWorld*',
       })
       .expect(200);
+
     accessToken = response.body.accessToken;
+
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOneBy({ email: 'teacher1@mail.io' });
+    expect(user).not.toBeNull();
   });
 
-  it('should return notifications à jour', async () => {
-    const id = '1';
+  it("should return notification's user update", async () => {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOneBy({ email: 'teacher1@mail.io' });
+
+    const id = user?.id;
     const app = await getApp();
-    const response = await supertest(app).put(`/api/notifications/suscribe/${id}`).set('authorization', `Bearer ${accessToken}`).expect(200);
-    expect(response.body).toEqual({ message: 'Notifications à jour' });
+
+    const updateData = {
+      commentary: false,
+      reaction: false,
+      publicationFromSchool: false,
+      publicationFromAdmin: false,
+      creationAccountFamily: false,
+      openingVillageStep: false,
+    };
+
+    const response = await supertest(app)
+      .put(`/api/notifications/suscribe/${id}`)
+      .set('authorization', `Bearer ${accessToken}`)
+      .send({ data: updateData })
+      .expect(200);
+
+    expect(response.body).toEqual({ message: 'Notifications mises à jour' });
+
+    const notificationsRepository = AppDataSource.getRepository(Notifications);
+    const updatedNotifications = await notificationsRepository.findOneBy({ userId: Number(id) });
+
+    expect(updatedNotifications).toMatchObject(updateData);
   });
+
+  // TODO: Add put request and verify the notification's user update
+  // example of put request: commentary set to 'true' to 'false'
+
+  // TODO: Add a request with a user with commentary to true and expect received a mail
+
+  // TODO: Add a request with a user with commentary to false and expect not received a mail
 });
