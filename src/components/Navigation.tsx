@@ -200,18 +200,18 @@ export const Navigation = (): JSX.Element => {
       },
       // ---- PHASE 3 ----
       {
-        label: 'Ré-inventer une histoire',
-        path: '/re-inventer-une-histoire',
-        icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 3,
-        disabled: firstStoryCreated === false || isParent,
-      },
-      {
         label: 'Chanter un couplet',
         path: '/chanter-un-couplet',
         icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
         disabled: !village?.anthemId || isParent,
+      },
+      {
+        label: 'Ré-inventer une histoire',
+        path: '/re-inventer-une-histoire',
+        icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+        disabled: firstStoryCreated === false || isParent,
       },
     ],
     [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],
