@@ -15,6 +15,7 @@ import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
+import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { sumContribution } from './utils/sumData';
 
@@ -32,6 +33,7 @@ const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
 
   const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
   const countries = [...new Set(countriesMap)]; // avoid duplicates
@@ -72,97 +74,103 @@ const CountryStats = () => {
         </div>
       </div>
       <h1>Statut: Observateur</h1>
-      <div className={styles.monitorTable}>
-        <HorizontalBars />
-      </div>
-      <Box
-        height={1}
-        width={1}
-        my={4}
-        display="flex"
-        alignItems="center"
-        justify-content="center"
-        font-weight="bold"
-        gap={4}
-        p={2}
-        py={3}
-        sx={{ border: '2px solid #4C3ED9', borderRadius: 4 }}
-      >
-        Ce pays participe dans les villages-monde suivants :
-        <ul>
-          {filteredVillage.map((village, index) => (
-            <li key={index}>{village.villageName}</li>
-          ))}
-        </ul>
-      </Box>
-      <div className={styles.monitorTable}>
-        <DashboardTable />
-      </div>
-      <div className={styles.classroomStats}>
-        <StatsCard data={classStats[0].registered}>Nombre de classes inscrites</StatsCard>
-        <StatsCard data={classStats[0].connected}>Nombre de classes connectées</StatsCard>
-        <StatsCard data={classStats[0].contributed}>Nombre de classes contributrices</StatsCard>
-      </div>
-      <div className={styles.averageStatsContainer}>
-        <AverageStatsCard
-          data={{
-            min: connectStats[0].minConnections,
-            max: connectStats[0].maxConnections,
-            average: connectStats[0].averageConnection,
-            median: connectStats[0].medianConnections,
-          }}
-          unit="min"
-          icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
-        >
-          Temps de connexion moyen par classe
-        </AverageStatsCard>
-        <AverageStatsCard
-          data={{
-            min: connectStats[0].minDuration,
-            max: connectStats[0].maxDuration,
-            average: connectStats[0].averageDuration,
-            median: connectStats[0].medianDuration,
-          }}
-          icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
-        >
-          Nombre de connexions moyen par classe
-        </AverageStatsCard>
-      </div>
-      <div className={styles.engagementContainer}>
-        <PieCharts pieChartData={pieChartData} />
-        <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
-      </div>
-      <div className={styles.exchangesConnectionsContainer}>
-        <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
-        <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
-      </div>
-      <div>
-        <PhaseDetails
-          phase={1}
-          data={[
-            { name: 'test', connections: 2 },
-            { name: 'test 2', connections: 12 },
-          ]}
-        />
-      </div>
-      <div>
-        <PhaseDetails
-          phase={2}
-          data={[
-            { name: 'test', connections: 2, allo: 'fds' },
-            { name: 'dest 2', connections: 12, allo: 'ads' },
-          ]}
-        />
-      </div>
-      <div>
-        <PhaseDetails
-          phase={3}
-          data={[
-            { name: 'test ff', connections: 15, allo: 'fdjjjjjjjs' },
-            { name: 'dest 2', connections: 1, allo: 'fdsfsqds' },
-          ]}
-        />
-      </div>
+      {!selectedCountry ? (
+        <PelicoCard message={pelicoMessage} />
+      ) : (
+        <>
+          <div className={styles.monitorTable}>
+            <HorizontalBars />
+          </div>
+          <Box
+            height={1}
+            width={1}
+            my={4}
+            display="flex"
+            alignItems="center"
+            justify-content="center"
+            font-weight="bold"
+            gap={4}
+            p={2}
+            py={3}
+            sx={{ border: '2px solid #4C3ED9', borderRadius: 4 }}
+          >
+            Ce pays participe dans les villages-monde suivants :
+            <ul>
+              {filteredVillage.map((village, index) => (
+                <li key={index}>{village.villageName}</li>
+              ))}
+            </ul>
+          </Box>
+          <div className={styles.monitorTable}>
+            <DashboardTable />
+          </div>
+          <div className={styles.classroomStats}>
+            <StatsCard data={classStats[0].registered}>Nombre de classes inscrites</StatsCard>
+            <StatsCard data={classStats[0].connected}>Nombre de classes connectées</StatsCard>
+            <StatsCard data={classStats[0].contributed}>Nombre de classes contributrices</StatsCard>
+          </div>
+          <div className={styles.averageStatsContainer}>
+            <AverageStatsCard
+              data={{
+                min: connectStats[0].minConnections,
+                max: connectStats[0].maxConnections,
+                average: connectStats[0].averageConnection,
+                median: connectStats[0].medianConnections,
+              }}
+              unit="min"
+              icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+            >
+              Temps de connexion moyen par classe
+            </AverageStatsCard>
+            <AverageStatsCard
+              data={{
+                min: connectStats[0].minDuration,
+                max: connectStats[0].maxDuration,
+                average: connectStats[0].averageDuration,
+                median: connectStats[0].medianDuration,
+              }}
+              icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
+            >
+              Nombre de connexions moyen par classe
+            </AverageStatsCard>
+          </div>
+          <div className={styles.engagementContainer}>
+            <PieCharts pieChartData={pieChartData} />
+            <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
+          </div>
+          <div className={styles.exchangesConnectionsContainer}>
+            <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
+            <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
+          </div>
+          <div>
+            <PhaseDetails
+              phase={1}
+              data={[
+                { name: 'test', connections: 2 },
+                { name: 'test 2', connections: 12 },
+              ]}
+            />
+          </div>
+          <div>
+            <PhaseDetails
+              phase={2}
+              data={[
+                { name: 'test', connections: 2, allo: 'fds' },
+                { name: 'dest 2', connections: 12, allo: 'ads' },
+              ]}
+            />
+          </div>
+          <div>
+            <PhaseDetails
+              phase={3}
+              data={[
+                { name: 'test ff', connections: 15, allo: 'fdjjjjjjjs' },
+                { name: 'dest 2', connections: 1, allo: 'fdsfsqds' },
+              ]}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
