@@ -3,12 +3,17 @@ import './mocks';
 import supertest from 'supertest';
 
 import { getApp } from '../app';
+import { Activity } from '../entities/activity';
 import { Notifications } from '../entities/notifications';
 import { User } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { seedDatabase } from './seed';
 
 let accessToken = '';
+
+jest.mock('../emails/index', () => ({
+  sendMail: jest.fn(),
+}));
 
 describe('Notification api test', () => {
   beforeAll(async () => {
@@ -66,10 +71,20 @@ describe('Notification api test', () => {
     expect(updatedNotifications).toMatchObject(updateData);
   });
 
-  // TODO: Add put request and verify the notification's user update
-  // example of put request: commentary set to 'true' to 'false'
-
   // TODO: Add a request with a user with commentary to true and expect received a mail
 
-  // TODO: Add a request with a user with commentary to false and expect not received a mail
+  it("Should not send a mail if the user's commentary is false", async () => {
+    const userRepository = AppDataSource.getRepository(User);
+    // Using teacher2 because he has commentary set to false
+    const user = await userRepository.findOneBy({ email: 'teacher2@mail.io' });
+    const { id } = user;
+    console.log('user : ', user);
+    const notificationsRepository = AppDataSource.getRepository(Notifications);
+    const notifications = await notificationsRepository.findOneBy({ userId: id });
+    console.log('notifications : ', notifications);
+    const activityRepository = AppDataSource.getRepository(Activity);
+    const activity = await activityRepository.findOneBy({ userId: id });
+    console.log('activity : ', activity);
+    const app = await getApp();
+  });
 });
