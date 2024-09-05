@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import { Tooltip } from '@mui/material';
 
 import { ActivityChoiceButton } from './ActivityChoiceButton';
+import { GameContext } from 'src/contexts/gameContext';
+import type { GameType } from 'types/game.type';
 
 interface ActivityChoiceProps {
   activities: Array<{
@@ -11,10 +13,20 @@ interface ActivityChoiceProps {
     icon?: React.FunctionComponent<React.SVGAttributes<SVGElement>> | null;
     disabled: boolean;
     disabledText: string;
+    gameType?: GameType;
   }>;
 }
 
 export const ActivityChoice = ({ activities }: ActivityChoiceProps) => {
+  const { setGameType } = useContext(GameContext);
+
+  const handleChoiceClick = useCallback(
+    (gameType: GameType) => {
+      localStorage.setItem('gameTypeInLocalStorage', JSON.stringify(gameType));
+      setGameType(gameType);
+    },
+    [setGameType],
+  );
   return (
     <div style={{ width: '100%' }}>
       <div
@@ -44,6 +56,7 @@ export const ActivityChoice = ({ activities }: ActivityChoiceProps) => {
               href={activity.href}
               icon={activity.icon}
               disabled={activity.disabled}
+              onClick={() => activity.gameType && handleChoiceClick(activity.gameType)}
             />
           );
         })}
