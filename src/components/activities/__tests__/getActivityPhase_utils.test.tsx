@@ -203,7 +203,7 @@ describe('Test function getActivityPhase', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
       it.each(activitiesArray)(
-        'should return phase 2 for Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction ',
+        'should return phase 2 for Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction, Story ',
         (type) => {
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
@@ -215,6 +215,7 @@ describe('Test function getActivityPhase', () => {
             case ActivityType.MASCOTTE:
             case ActivityType.REPORTAGE:
             case ActivityType.REACTION:
+            case ActivityType.STORY:
               expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
               break;
           }
@@ -228,7 +229,6 @@ describe('Test function getActivityPhase', () => {
             case ActivityType.INDICE:
             case ActivityType.SYMBOL:
             case ActivityType.CLASS_ANTHEM:
-            case ActivityType.STORY:
             case ActivityType.RE_INVENT_STORY:
               expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
               break;
@@ -240,7 +240,6 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.INDICE:
           case ActivityType.SYMBOL:
           case ActivityType.CLASS_ANTHEM:
-          case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
               getActivityPhase(Number(type), activePhase, selectedPhase);
@@ -354,7 +353,7 @@ describe('Test function getActivityPhase', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
       it.each(activitiesArray)(
-        'should return phase 2 for Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction ',
+        'should return phase 2 for Mascotte, Presentation, Contenu Libre, Enigme, Defi, Question, Game, Reportage, Reaction, Story ',
         (type) => {
           switch (Number(type)) {
             case ActivityType.PRESENTATION:
@@ -366,6 +365,7 @@ describe('Test function getActivityPhase', () => {
             case ActivityType.MASCOTTE:
             case ActivityType.REPORTAGE:
             case ActivityType.REACTION:
+            case ActivityType.STORY:
               expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
               break;
           }
@@ -379,7 +379,6 @@ describe('Test function getActivityPhase', () => {
             case ActivityType.INDICE:
             case ActivityType.SYMBOL:
             case ActivityType.CLASS_ANTHEM:
-            case ActivityType.STORY:
             case ActivityType.RE_INVENT_STORY:
               expect(phases).not.toEqual(expect.arrayContaining([selectedPhase]));
               break;
@@ -391,7 +390,6 @@ describe('Test function getActivityPhase', () => {
           case ActivityType.INDICE:
           case ActivityType.SYMBOL:
           case ActivityType.CLASS_ANTHEM:
-          case ActivityType.STORY:
           case ActivityType.RE_INVENT_STORY:
             expect(() => {
               getActivityPhase(Number(type), activePhase, selectedPhase);
@@ -405,22 +403,18 @@ describe('Test function getActivityPhase', () => {
       it('should return activePhase for ANTHEM', () => {
         expect(getActivityPhase(ActivityType.ANTHEM, activePhase, selectedPhase)).toEqual(activePhase);
       });
-      it.each(activitiesArray)(
-        'should return phase 3 for Mascotte, Presentation, Contenu Libre, Question, Story, Reinvent story, Vers record ',
-        (type) => {
-          switch (Number(type)) {
-            case ActivityType.PRESENTATION:
-            case ActivityType.QUESTION:
-            case ActivityType.CONTENU_LIBRE:
-            case ActivityType.MASCOTTE:
-            case ActivityType.STORY:
-            case ActivityType.RE_INVENT_STORY:
-            case ActivityType.CLASS_ANTHEM:
-              expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
-              break;
-          }
-        },
-      );
+      it.each(activitiesArray)('should return phase 3 for Mascotte, Presentation, Contenu Libre, Question, Reinvent story, Vers record ', (type) => {
+        switch (Number(type)) {
+          case ActivityType.PRESENTATION:
+          case ActivityType.QUESTION:
+          case ActivityType.CONTENU_LIBRE:
+          case ActivityType.MASCOTTE:
+          case ActivityType.RE_INVENT_STORY:
+          case ActivityType.CLASS_ANTHEM:
+            expect(getActivityPhase(Number(type), activePhase, selectedPhase)).toEqual(selectedPhase);
+            break;
+        }
+      });
       it.each(activitiesArray)(
         'Mascotte, Presentation, Contenu Libre, Question, Story, Reinvent story, Vers record should have selectedPhase in specificActivityPhase',
         (type, ...phaseArray) => {
