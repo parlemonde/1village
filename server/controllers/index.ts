@@ -17,6 +17,7 @@ import { statisticsController } from './statistics';
 import { storyController } from './story';
 import { studentController } from './student';
 import { teacherController } from './teacher';
+import { teamCommentController } from './teamComment';
 import { userController } from './user';
 import { videoController } from './video';
 import { villageController } from './village';
@@ -45,6 +46,7 @@ const controllers = [
   studentController,
   featureFlagController,
   statisticsController,
+  teamCommentController,
   pelicoController,
   mediathequeController,
 ];
