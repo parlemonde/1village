@@ -1,36 +1,29 @@
-import { sendMail } from '../emails/index';
 import { Activity } from '../entities/activity';
 import { Notifications } from '../entities/notifications';
 import { User } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 
-type NotificationColumns =
-  | 'commentary'
-  | 'reaction'
-  | 'publicationFromSchool'
-  | 'publicationFromAdmin'
-  | 'creationAccountFamily'
-  | 'openingVillageStep';
-
-const tableMapping: Record<NotificationColumns, string> = {
+const tableMapping = {
   commentary: 'commentary',
   reaction: 'reaction',
   publicationFromSchool: 'publicationFromSchool',
   publicationFromAdmin: 'publicationFromAdmin',
   creationAccountFamily: 'creationAccountFamily',
   openingVillageStep: 'openingVillageStep',
+} as const;
+
+type NotificationColumns = typeof tableMapping[keyof typeof tableMapping];
+
+export const emailMapping: Record<NotificationColumns, number> = {
+  [tableMapping.commentary]: 1,
+  [tableMapping.reaction]: 2,
+  [tableMapping.publicationFromSchool]: 3,
+  [tableMapping.publicationFromAdmin]: 4,
+  [tableMapping.creationAccountFamily]: 5,
+  [tableMapping.openingVillageStep]: 6,
 };
 
-const emailMapping: Record<NotificationColumns, number> = {
-  commentary: 1,
-  reaction: 2,
-  publicationFromSchool: 3,
-  publicationFromAdmin: 4,
-  creationAccountFamily: 5,
-  openingVillageStep: 6,
-};
-
-const activityNameMapper: Record<number, string> = {
+export const activityNameMapper: Record<number, string> = {
   1: 'Enigme',
   2: 'Défis',
   4: 'Jeux',
@@ -49,29 +42,36 @@ export enum EnumMailType {
   REACTION = 'reaction',
 }
 
-export const hasSubscribed = async (activityId: number, userId: number, column: NotificationColumns) => {
-  const userWhoComment = await AppDataSource.getRepository(User).findOne({ where: { id: userId } });
+export const getEmailInformation = async (activityId: number, userId: number, column: NotificationColumns) => {
+  const commentAuthor = await AppDataSource.getRepository(User).findOne({ where: { id: userId } });
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
-  const userIdWhoCreateActivity = activity?.userId;
-  const userWhoCreateActivity = await AppDataSource.getRepository(User).findOne({ where: { id: userIdWhoCreateActivity } });
+  const activityCreatorId = activity?.userId;
+  const activityCreator = await AppDataSource.getRepository(User).findOne({ where: { id: activityCreatorId } });
 
-  const whichNotification = await AppDataSource.createQueryBuilder()
+  const notificationRules = await AppDataSource.createQueryBuilder()
     .select(`notifications.${column}`)
     .from(Notifications, 'notifications')
-    .where('notifications.userId = :userIdWhoCreateActivity', { userIdWhoCreateActivity })
+    .where('notifications.userId = :activityCreatorId', { activityCreatorId })
     .getOne();
 
-  if (whichNotification && whichNotification[tableMapping[column] as keyof Notifications] === true && userWhoCreateActivity?.email) {
-    const emailType = emailMapping[column];
-    if (emailType === 1) {
-      const activityType = activity?.type || 0;
-      const activityName: string = activityNameMapper[activityType];
-      const userName = userWhoComment?.school || '';
-      await sendMail(emailType, userWhoCreateActivity.email, {
-        userWhoComment: userName,
-        activityType: activityName,
-        url: `https://1v.parlemonde.org/activite/${activity?.id}`,
-      });
-    }
+  return { commentAuthor, notificationRules, activityCreator, activity, column };
+};
+
+type HasSuscribeProps = {
+  emailType: number;
+  notificationRules: Notifications | null;
+  activityCreator: User | null;
+  column: NotificationColumns;
+};
+
+export const hasSubscribed = ({ emailType, notificationRules, activityCreator, column }: HasSuscribeProps) => {
+  if (
+    emailType === emailMapping.commentary &&
+    notificationRules &&
+    notificationRules[tableMapping[column] as keyof Notifications] === true &&
+    activityCreator?.email
+  ) {
+    return true;
   }
+  return false;
 };

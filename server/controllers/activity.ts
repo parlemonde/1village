@@ -7,7 +7,7 @@ import { EPhase1Steps, ActivityStatus, ActivityType, EPhase2Steps, EPhase3Steps 
 import type { GameData, GamesData } from '../../types/game.type';
 import type { StoriesData, StoryElement } from '../../types/story.type';
 import { ImageType } from '../../types/story.type';
-import { hasSubscribed } from '../emails/checkSubscribe';
+// import { hasSubscribed } from '../emails/checkSubscribe';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
@@ -376,9 +376,9 @@ activityController.put({ path: '/:id', userType: UserType.TEACHER }, async (req:
   }
 
   // check and send an email notification to the user who created the activity
-  const { userId } = activity;
-  const activityId = activity.id;
-  hasSubscribed(activityId, userId, 'reaction');
+  // const { userId } = activity;
+  // const activityId = activity.id;
+  // hasSubscribed(activityId, userId, 'reaction');
 
   await AppDataSource.getRepository(Activity).save(activity);
   res.sendJSON(activity);

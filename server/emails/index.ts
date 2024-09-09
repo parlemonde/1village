@@ -18,6 +18,9 @@ getNodeMailer()
 
 export enum Email {
   INVALID_VILLAGE,
+  INVALID_COUNTRY,
+  CONFIRMATION_EMAIL,
+  RESET_PASSWORD_EMAIL,
   COMMENT_NOTIFICATION,
   // Ces notitications seront implémentées dans une prochaine itération
   // REACTION_NOTIFICATION,
@@ -25,9 +28,6 @@ export enum Email {
   // PUBLICATION_FROM_ADMIN,
   // CREATION_ACCOUNT_FAMILY,
   // OPENING_VILLAGE_STEP,
-  INVALID_COUNTRY,
-  CONFIRMATION_EMAIL,
-  RESET_PASSWORD_EMAIL,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };

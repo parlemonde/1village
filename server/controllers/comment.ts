@@ -1,7 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
-import { EnumMailType, hasSubscribed } from '../emails/checkSubscribe';
+import { Email, sendMail } from '../emails';
+import { EnumMailType, hasSubscribed, getEmailInformation, activityNameMapper, emailMapping } from '../emails/checkSubscribe';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -74,7 +75,19 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     const savedComment = await AppDataSource.getRepository(Comment).save(newComment);
 
     const { activityId, userId } = savedComment;
-    hasSubscribed(activityId, userId, EnumMailType.COMMENTARY);
+    const emailInformation = await getEmailInformation(activityId, userId, EnumMailType.COMMENTARY);
+    const emailType = emailMapping[emailInformation.column];
+    const shouldSendMail = hasSubscribed({ ...emailInformation, emailType });
+    if (shouldSendMail) {
+      const activityType = emailInformation?.activity?.type || 0;
+      const activityName: string = activityNameMapper[activityType];
+      const userName = emailInformation.commentAuthor?.school || '';
+      await sendMail(Email.COMMENT_NOTIFICATION, emailInformation?.activityCreator?.email || '', {
+        userWhoComment: userName,
+        activityType: activityName,
+        url: `https://1v.parlemonde.org/activite/${activityId}`,
+      });
+    }
 
     res.sendJSON(savedComment);
   } catch (error) {
