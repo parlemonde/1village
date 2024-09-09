@@ -12,6 +12,15 @@ export class AlterAnalyticSessionTable1720537502381 implements MigrationInterfac
       }),
     );
 
+    await queryRunner.addColumn(
+      'analytic_session',
+      new TableColumn({
+        name: 'phase',
+        type: 'int',
+        isNullable: false,
+      }),
+    );
+
     await queryRunner.createForeignKey(
       'analytic_session',
       new TableForeignKey({
@@ -24,13 +33,18 @@ export class AlterAnalyticSessionTable1720537502381 implements MigrationInterfac
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const table = await queryRunner.getTable('analytic_session');
-    const isColumnExists = table?.findColumnByName('userId');
+    const isUserIdColumnExists = table?.findColumnByName('userId');
+    const isUserPhaseColumnExists = table?.findColumnByName('phase');
 
-    if (table && isColumnExists) {
-      const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('userId') !== -1);
-
-      if (foreignKey) await queryRunner.dropForeignKey('analytic_session', foreignKey);
-      await queryRunner.dropColumn('analytic_session', 'userId');
+    if (table) {
+      if (isUserIdColumnExists) {
+        const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('userId') !== -1);
+        if (foreignKey) await queryRunner.dropForeignKey('analytic_session', foreignKey);
+        await queryRunner.dropColumn('analytic_session', 'userId');
+      }
+      if (isUserPhaseColumnExists) {
+        await queryRunner.dropColumn('analytic_session', 'phase');
+      }
     }
   }
 }
