@@ -1,21 +1,20 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { Comment } from '../entities/comment';
 import { TeamComment } from '../entities/teamComment';
 import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
-const commentController = new Controller('/team-comments');
+const teamCommentController = new Controller('/team-comments');
 
 // --- Get all comments. ---
-commentController.get({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
+teamCommentController.get({ path: '', userType: UserType.ADMIN }, async (req: Request, res: Response) => {
   const teamComments = await AppDataSource.getRepository(TeamComment).find();
   res.sendJSON(teamComments);
 });
 
 // --- Edit one comment. ---
-commentController.put({ path: '/:commentId', userType: UserType.ADMIN }, async (req: Request, res: Response, next: NextFunction) => {
+teamCommentController.put({ path: '/:commentId', userType: UserType.ADMIN }, async (req: Request, res: Response, next: NextFunction) => {
   const data = req.body;
   const id = parseInt(req.params.commentId, 10) ?? 0;
   const teamComment = await AppDataSource.getRepository(TeamComment).findOne({ where: { id } });
@@ -31,4 +30,4 @@ commentController.put({ path: '/:commentId', userType: UserType.ADMIN }, async (
   res.sendJSON(updatedTeamComment);
 });
 
-export { commentController };
+export { teamCommentController };
