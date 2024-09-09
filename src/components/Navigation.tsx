@@ -15,7 +15,7 @@ import AnthemIcon from 'src/svg/navigation/anthem-icon.svg';
 import FreeContentIcon from 'src/svg/navigation/free-content-icon.svg';
 import GameIcon from 'src/svg/navigation/game-icon.svg';
 import HomeIcon from 'src/svg/navigation/home-icon.svg';
-import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
+// import IndiceIcon from 'src/svg/navigation/indice-culturel.svg';
 import KeyIcon from 'src/svg/navigation/key-icon.svg';
 import MusicIcon from 'src/svg/navigation/music-icon.svg';
 import QuestionIcon from 'src/svg/navigation/question-icon.svg';
@@ -23,7 +23,7 @@ import ReactionIcon from 'src/svg/navigation/reaction-icon.svg';
 import ReportageIcon from 'src/svg/navigation/reportage-icon.svg';
 import RouletteIcon from 'src/svg/navigation/roulette-icon.svg';
 import StoryIcon from 'src/svg/navigation/story-icon.svg';
-import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
+// import SymbolIcon from 'src/svg/navigation/symbol-icon.svg';
 import TargetIcon from 'src/svg/navigation/target-icon.svg';
 import UserIcon from 'src/svg/navigation/user-icon.svg';
 import { serializeToQueryUrl } from 'src/utils';
@@ -134,20 +134,22 @@ export const Navigation = (): JSX.Element => {
         phase: 1,
         disabled: !isTeacher,
       },
-      {
-        label: 'Présenter un indice culturel',
-        path: '/indice-culturel',
-        icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-        disabled: isParent,
-      },
-      {
-        label: 'Présenter un symbole',
-        path: '/symbole',
-        icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 1,
-        disabled: isParent,
-      },
+      // ---- Commenté pour l'année 2024 - 2025 d'1Village ----
+
+      // {
+      //   label: 'Présenter un indice culturel',
+      //   path: '/indice-culturel',
+      //   icon: <IndiceIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      //   phase: 1,
+      //   disabled: isParent,
+      // },
+      // {
+      //   label: 'Présenter un symbole',
+      //   path: '/symbole',
+      //   icon: <SymbolIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+      //   phase: 1,
+      //   disabled: isParent,
+      // },
       // ---- PHASE 2 ----
       {
         label: 'Réaliser un reportage',
@@ -200,18 +202,18 @@ export const Navigation = (): JSX.Element => {
       },
       // ---- PHASE 3 ----
       {
-        label: 'Ré-inventer une histoire',
-        path: '/re-inventer-une-histoire',
-        icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
-        phase: 3,
-        disabled: firstStoryCreated === false || isParent,
-      },
-      {
         label: 'Chanter un couplet',
         path: '/chanter-un-couplet',
         icon: <MusicIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
         phase: 3,
         disabled: !village?.anthemId || isParent,
+      },
+      {
+        label: 'Ré-inventer une histoire',
+        path: '/re-inventer-une-histoire',
+        icon: <RouletteIcon style={{ fill: 'currentcolor' }} width="1.4rem" />,
+        phase: 3,
+        disabled: firstStoryCreated === false || isParent,
       },
     ],
     [firstStoryCreated, mascotteActivity, village, isTeacher, isParent],

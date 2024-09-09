@@ -3,6 +3,7 @@ import React from 'react';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+import TeamComments from './TeamComments';
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
@@ -18,6 +19,7 @@ const GlobalStats = () => {
 
   return (
     <>
+      <TeamComments />
       <DashboardWorldMap />
       <div>
         <StatsCard data={10}>Nombre de classes inscrites</StatsCard>
