@@ -8,7 +8,7 @@ export class TeamComment implements TeamCommentInterface {
   public id: number;
 
   @Column({ type: 'tinyint' })
-  type: TeamCommentType;
+  public type: TeamCommentType;
 
   @CreateDateColumn()
   public createDate: Date;
