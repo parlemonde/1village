@@ -1,65 +1,27 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+/* eslint-disable @next/next/no-html-link-for-pages */
 import React from 'react';
 
-import Button from '@mui/material/Button';
-
-import { isGame } from 'src/activity-types/anyActivity';
 import { Base } from 'src/components/Base';
 import { PageLayout } from 'src/components/PageLayout';
-import { ActivityContext } from 'src/contexts/activityContext';
-import { useGameRequests } from 'src/services/useGames';
 import { bgPage } from 'src/styles/variables.const';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
-import { GameType } from 'types/game.type';
 
 const PresentationSuccess = () => {
-  const router = useRouter();
-  const { activity } = React.useContext(ActivityContext);
-  const { getAvailableGamesCount } = useGameRequests();
-  const [hasMimicsAvailable, setHasMimicsAvailable] = React.useState<boolean>(false);
-
-  if (!activity || !isGame(activity)) {
-    router.push('/creer-un-jeu/mimique');
-  }
-
-  React.useEffect(() => {
-    getAvailableGamesCount(GameType.MIMIC).then((count) => {
-      setHasMimicsAvailable(count > 0);
-    });
-  }, [getAvailableGamesCount]);
-
   return (
     <Base>
       <PageLayout>
         <div style={{ width: '100%', maxWidth: '20rem', margin: '4rem auto', backgroundColor: bgPage, padding: '1rem', borderRadius: '10px' }}>
-          <p className="text">{'Vos mimiques ont bien été publiées !'}</p>
+          <p style={{ paddingLeft: '20px' }} className="text">
+            {'Vos mimiques ont bien été publiées !'}
+          </p>
           <PelicoSouriant style={{ width: '60%', height: 'auto', margin: '0 20%' }} />
-          {hasMimicsAvailable ? (
-            <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}>
-              <Link href="/" passHref>
-                {"Revenir à l'accueil"}
-              </Link>
-            </p>
-          ) : (
-            <p className="text">{''}</p>
-          )}
+          <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}>
+            <a href="/">{"Revenir à l'accueil"}</a>
+          </p>
         </div>
-        <div className="text-center">
-          {hasMimicsAvailable ? (
-            <Link href="/creer-un-jeu/mimique/jouer" passHref>
-              <Button component="a" href="/creer-un-jeu/mimique/jouer" variant="outlined" color="primary">
-                Découvrir les mimiques de vos Pélicopains !
-              </Button>
-            </Link>
-          ) : (
-            <Link href="/" passHref>
-              <Button component="a" href="/" variant="outlined" color="primary">
-                Revenir à l&apos;accueil
-              </Button>
-            </Link>
-          )}
-        </div>
+        <p className="text" style={{ display: 'flex', justifyContent: 'center', textDecorationLine: 'underline' }}>
+          <a href="/creer-un-jeu/mimique/displayList">{'Ou découvrez les jeux des autres Pélicopains !'}</a>
+        </p>
       </PageLayout>
     </Base>
   );

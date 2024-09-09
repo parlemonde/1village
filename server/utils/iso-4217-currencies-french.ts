@@ -56,7 +56,7 @@ export const currencies: Currency[] = [
   { name: 'Dollars du Zimbabwe', code: 'ZWL', iso: '932' },
   { name: 'Dong', code: 'VND', iso: '704' },
   { name: 'Dram Armenien', code: 'AMD', iso: '51' },
-  { name: 'Euro', code: 'EUR', iso: '978' },
+  { name: 'Euros', code: 'EUR', iso: '978' },
   { name: 'Florin des Antilles néerlandaises', code: 'ANG', iso: '532' },
   { name: 'Forint', code: 'HUF', iso: '348' },
   { name: 'Franc Burundi', code: 'BIF', iso: '108' },
