@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Button, Stack, TextField } from '@mui/material';
 
 import { EditButton } from 'src/components/buttons/EditButton';
-import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 
 const TeamComments = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -13,7 +12,7 @@ const TeamComments = () => {
   return (
     <div className="account__panel">
       <Stack flexDirection="row" justifyContent="space-between" alignItems="center" p={2}>
-        <h2>Commentaires de l'équipe :</h2>
+        <h2>Commentaires de l&apos;équipe :</h2>
         {isEditMode ? (
           <div>
             <Button
