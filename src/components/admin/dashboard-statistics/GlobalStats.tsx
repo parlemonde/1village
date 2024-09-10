@@ -17,6 +17,7 @@ const GlobalStats = () => {
   if (sessionsStats.isError) return <p>Error!</p>;
   if (sessionsStats.isLoading || sessionsStats.isIdle) return <p>Loading...</p>;
 
+  // eslint-disable-next-line no-console
   console.log('Sessions stats', sessionsStats.data);
 
   return (
