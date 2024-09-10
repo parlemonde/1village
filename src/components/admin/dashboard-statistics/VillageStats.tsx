@@ -15,11 +15,14 @@ const VillageStats = () => {
 
   const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
   const countries = [...new Set(countriesMap)]; // avoid duplicates
+
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
   };
-  const villagesMap = mockClassroomsStats.map((village) => village.villageName);
+
+  const villagesMap = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry).map((village) => village.villageName);
   const villages = [...new Set(villagesMap)];
+
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);
   };
@@ -33,7 +36,7 @@ const VillageStats = () => {
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
-        <div className={'styles.countryFilter'}>
+        <div className={styles.countryFilter}>
           <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
         </div>
       </div>

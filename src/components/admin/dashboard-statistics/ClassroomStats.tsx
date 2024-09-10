@@ -16,17 +16,27 @@ const ClassroomStats = () => {
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
 
   const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
-  const countries = [...new Set(countriesMap)]; // avoid duplicates
+  const countries = [...new Set(countriesMap)];
+
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
+    setSelectedVillage('');
+    setSelectedClassroom('');
   };
-  const villagesMap = mockClassroomsStats.map((village) => village.villageName);
+
+  const villagesMap = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry).map((village) => village.villageName);
   const villages = [...new Set(villagesMap)];
+
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);
+    setSelectedClassroom('');
   };
-  const classroomsMap = mockClassroomsStats.map((classroom) => classroom.classroomId);
+
+  const classroomsMap = mockClassroomsStats
+    .filter((classroom) => classroom.villageName === selectedVillage)
+    .map((classroom) => classroom.classroomId);
   const classrooms = [...new Set(classroomsMap)];
+
   const handleClassroomChange = (classroom: string) => {
     setSelectedClassroom(classroom);
   };
@@ -40,10 +50,10 @@ const ClassroomStats = () => {
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
-        <div className={'styles.countryFilter'}>
+        <div className={styles.countryFilter}>
           <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
         </div>
-        <div className={'styles.countryFilter'}>
+        <div className={styles.countryFilter}>
           <ClassroomDropdown classrooms={classrooms} onClassroomChange={handleClassroomChange} />
         </div>
       </div>
