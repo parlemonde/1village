@@ -9,15 +9,9 @@
 
 .filtersContainer {
   display: flex;
+  justify-content: flex-start;
+  gap: 20px;
   padding-bottom: 5%;
-}
-
-.phaseFilter {
-  flex: 1;
-}
-
-.countryFilter {
-  flex: 2;
 }
 
 .horizontalBars {
