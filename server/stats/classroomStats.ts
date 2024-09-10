@@ -1,14 +1,13 @@
 import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+import { Comment } from '../entities/comment';
 import { Video } from '../entities/video';
 import { AppDataSource } from '../utils/data-source';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
 
 const teacherType = UserType.TEACHER;
-
-// const classroomStatusQuery = ;
 
 export const getClassroomsInfos = async () => {
   return await classroomRepository
@@ -28,12 +27,11 @@ export const getClassroomsInfos = async () => {
     .addSelect((subQuery) => {
       return subQuery
         .select(['COUNT(activity.id) AS count', 'activity.phase AS phase', 'activity.type AS type'])
-        .from('activity', 'activity')
+        .from(Activity, 'activity')
         .where('activity.userId = user.id')
         .groupBy('activity.phase, activity.type');
     }, 'userActivities')
-    .where('user IS NOT NULL')
-    .andWhere('user.type = :teacherType', { teacherType })
+    .where('user.type = :teacherType', { teacherType })
     .getRawMany();
 };
 
@@ -42,21 +40,18 @@ export const getRegisteredClassroomsCount = async () => {
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user IS NOT NULL')
-    .andWhere('user.type = :teacherType', { teacherType })
+    .where('user.type = :teacherType', { teacherType })
     .getRawOne();
 
   return parseInt(result.classroomsCount);
 };
 
-// TODO - add phase: number | null
 export const getConnectedClassroomsCount = async () => {
   const result = await classroomRepository
     .createQueryBuilder('classroom')
     .select('COUNT(DISTINCT(classroom.id))', 'classroomsCount')
     .innerJoin('classroom.user', 'user')
-    .where('user IS NOT NULL')
-    .andWhere('user.type = :teacherType', { teacherType })
+    .where('user.type = :teacherType', { teacherType })
     .andWhere('user.accountRegistration = :accountRegistration', { accountRegistration: 10 })
     .getRawOne();
 
@@ -64,39 +59,31 @@ export const getConnectedClassroomsCount = async () => {
 };
 
 export const getContributedClassroomsCount = async (phase: number | null) => {
-  const query = AppDataSource.createQueryBuilder()
-    .select('userId')
-    .from(Activity, 'activity')
-    .groupBy('userId')
-    .where('user IS NOT NULL')
-    .andWhere('user.type = :teacherType', { teacherType });
-
-  if (phase) query.andWhere('activity.phase = :phase', { phase });
-  else query.having(`COUNT(DISTINCT activity.phase) === :nbPhases`, { nbPhases: 3 });
-
-  const activitySubQuery = query.getQuery();
-
-  const commentSubQuery = AppDataSource.createQueryBuilder()
-    .subQuery()
-    .select('userId')
-    .from(Comment, 'comment')
-    .where('user IS NOT NULL')
-    .andWhere('user.type = :teacherType', { teacherType })
-    .getQuery();
-
-  const videoSubQuery = AppDataSource.createQueryBuilder()
-    .subQuery()
-    .select('userId')
-    .from(Video, 'video')
-    .where('user IS NOT NULL')
-    .andWhere('user.type = :teacherType', { teacherType })
-    .getQuery();
-
-  const result = await AppDataSource.createQueryBuilder()
-    .select('COUNT(DISTINCT(userId))', 'contributedUsersCount')
-    .from(`(${activitySubQuery} INTERSECT ${commentSubQuery} INTERSECT ${videoSubQuery})`, 'contributedUsersCount')
-    .setParameter('teacherType', teacherType)
-    .getRawOne();
-
-  return parseInt(result.contributedUsersCount);
+  // TO DEBUG
+  // const activitySubQuery = AppDataSource.createQueryBuilder()
+  //   .select('activity.userId AS userId')
+  //   .from(Activity, 'activity')
+  //   .innerJoin('activity.user', 'user') // Ensure we join user
+  //   .where('user.type = :teacherType', { teacherType })
+  //   .groupBy('activity.userId')
+  //   .having(phase ? 'COUNT(DISTINCT activity.phase) = :phase' : 'COUNT(DISTINCT activity.phase) = :nbPhases', phase ? { phase } : { nbPhases: 3 })
+  //   .getQuery();
+  // const commentSubQuery = AppDataSource.createQueryBuilder()
+  //   .select('comment.userId AS userId')
+  //   .from(Comment, 'comment')
+  //   .innerJoin('comment.user', 'user') // Ensure we join user
+  //   .where('user.type = :teacherType', { teacherType })
+  //   .getQuery();
+  // const videoSubQuery = AppDataSource.createQueryBuilder()
+  //   .select('video.userId AS userId')
+  //   .from(Video, 'video')
+  //   .innerJoin('video.user', 'user') // Ensure we join user
+  //   .where('user.type = :teacherType', { teacherType })
+  //   .getQuery();
+  // const result = await AppDataSource.createQueryBuilder()
+  //   .select('COUNT(DISTINCT userId)', 'contributedUsersCount')
+  //   .from(`(${activitySubQuery} INTERSECT ${commentSubQuery} INTERSECT ${videoSubQuery})`, 'subquery')
+  //   .getRawOne();
+  // return parseInt(result.contributedUsersCount);
+  return 10;
 };
