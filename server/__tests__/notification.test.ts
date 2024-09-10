@@ -4,16 +4,12 @@ import supertest from 'supertest';
 
 import { seedDatabase } from '../__tests__/seed';
 import { getApp } from '../app';
-// import { Activity } from '../entities/activity';
+import { hasSubscribed } from '../emails/checkSubscribe';
 import { Notifications } from '../entities/notifications';
 import { User } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 
 let accessToken = '';
-
-jest.mock('../emails/index', () => ({
-  sendMail: jest.fn(),
-}));
 
 describe('Notification api test', () => {
   beforeAll(async () => {
@@ -73,16 +69,63 @@ describe('Notification api test', () => {
 
   // TODO: Add a request with a user with commentary to true and expect received a mail
 
-  it("Should not send a mail if the user's commentary is false", async () => {
-    // vérifie si hasSubscribed retorune true ou false en fonvtion de si l'utilisateur a souscrit ou non
-    // const userRepository = AppDataSource.getRepository(User);
-    // Using teacher2 because he has commentary set to false
-    // const user = await userRepository.findOneBy({ email: 'teacher2@mail.io' });
-    // const id = user?.id;
-    // const notificationsRepository = AppDataSource.getRepository(Notifications);
-    // const notifications = await notificationsRepository.findOneBy({ userId: id });
-    // const activityRepository = AppDataSource.getRepository(Activity);
-    // const activity = await activityRepository.findOneBy({ userId: id });
-    // const app = await getApp();
+  it("hasSubscribed should send false if the user's commentary is false", async () => {
+    const userRepository = AppDataSource.getRepository(User);
+    const notificationsRepository = AppDataSource.getRepository(Notifications);
+
+    // Récupération de l'utilisateur teacher2 qui a commentary à false
+    const user = await userRepository.findOneBy({ email: 'teacher2@mail.io' });
+    expect(user).toBeDefined();
+
+    const id = user?.id;
+
+    // Récupération des règles de notifications pour cet utilisateur
+    const notificationRules = await notificationsRepository.findOneBy({ userId: id });
+    expect(notificationRules).toBeDefined();
+
+    expect(notificationRules?.commentary).toBe(false);
+
+    const emailType = 1;
+    const activityCreator = user;
+    const column = 'commentary';
+
+    const result = hasSubscribed({
+      emailType,
+      notificationRules,
+      activityCreator,
+      column,
+    });
+
+    expect(result).toBe(false);
+  });
+
+  it("hasSubscribed should send true if the user's commentary is false", async () => {
+    const userRepository = AppDataSource.getRepository(User);
+    const notificationsRepository = AppDataSource.getRepository(Notifications);
+
+    // Récupération de l'utilisateur teacher3 qui a commentary à true
+    const user = await userRepository.findOneBy({ email: 'teacher3@mail.io' });
+    expect(user).toBeDefined();
+
+    const id = user?.id;
+
+    // Récupération des règles de notifications pour cet utilisateur
+    const notificationRules = await notificationsRepository.findOneBy({ userId: id });
+    expect(notificationRules).toBeDefined();
+
+    expect(notificationRules?.commentary).toBe(true);
+
+    const emailType = 1;
+    const activityCreator = user;
+    const column = 'commentary';
+
+    const result = hasSubscribed({
+      emailType,
+      notificationRules,
+      activityCreator,
+      column,
+    });
+
+    expect(result).toBe(true);
   });
 });
