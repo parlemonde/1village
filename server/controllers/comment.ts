@@ -81,7 +81,7 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
     if (shouldSendMail) {
       const activityType = emailInformation?.activity?.type || 0;
       const activityName: string = activityNameMapper[activityType];
-      const userName = emailInformation.commentAuthor?.school || '';
+      const userName = emailInformation.classInformation || '';
       await sendMail(Email.COMMENT_NOTIFICATION, emailInformation?.activityCreator?.email || '', {
         userWhoComment: userName,
         activityType: activityName,

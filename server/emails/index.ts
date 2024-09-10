@@ -50,6 +50,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   if (email === Email.INVALID_VILLAGE) {
     return {
       filenameText: 'invalid_village.txt',
+      filenameHtml: 'invalid_village.txt',
       subject: "Une classe 1Village n'est pas dans son village !",
       args: {
         ...options,
@@ -59,6 +60,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   if (email === Email.INVALID_COUNTRY) {
     return {
       filenameText: 'invalid_country.txt',
+      filenameHtml: 'invalid_country.txt',
       subject: "Une classe 1Village n'est pas dans son pays !",
       args: {
         ...options,
@@ -68,7 +70,8 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
 
   if (email === Email.CONFIRMATION_EMAIL) {
     return {
-      filenameText: 'confirmation_email.html',
+      filenameHtml: 'confirmation_email.html',
+      filenameText: 'confirmation_email.txt',
       subject: 'Email de confirmation de votre compte 1Village',
       args: {
         ...options,
@@ -78,7 +81,8 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
 
   if (email === Email.RESET_PASSWORD_EMAIL) {
     return {
-      filenameText: 'reset-password-email.html',
+      filenameHtml: 'reset_password_email.html',
+      filenameText: 'reset_password_email.txt',
       subject: 'Mot de passe oublié - 1Village',
       args: {
         ...options,
@@ -107,7 +111,6 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
     logger.error('Could not send mail, receiver is null or undefined!');
     return;
   }
-
   // Get email template data
   const templateData = getTemplateData<E>(email, receiverEmail, options);
   if (templateData === undefined) {

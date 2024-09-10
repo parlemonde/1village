@@ -47,6 +47,7 @@ export const getEmailInformation = async (activityId: number, userId: number, co
   const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id: activityId } });
   const activityCreatorId = activity?.userId;
   const activityCreator = await AppDataSource.getRepository(User).findOne({ where: { id: activityCreatorId } });
+  const classInformation = `La classe de ${commentAuthor?.level} à ${commentAuthor?.city}`;
 
   const notificationRules = await AppDataSource.createQueryBuilder()
     .select(`notifications.${column}`)
@@ -54,7 +55,7 @@ export const getEmailInformation = async (activityId: number, userId: number, co
     .where('notifications.userId = :activityCreatorId', { activityCreatorId })
     .getOne();
 
-  return { commentAuthor, notificationRules, activityCreator, activity, column };
+  return { commentAuthor, notificationRules, activityCreator, activity, column, classInformation };
 };
 
 type HasSuscribeProps = {
