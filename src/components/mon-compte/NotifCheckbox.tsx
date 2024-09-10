@@ -1,7 +1,6 @@
 import { useSnackbar } from 'notistack';
 import React, { useContext } from 'react';
 
-import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 
@@ -58,7 +57,7 @@ export const NotifCheckbox = () => {
   // };
 
   const mappingCheckbox = [
-    { label: 'Commentaire sur une de vos publications', checked: commentChecked, handle: handleCommentChecked },
+    { label: 'Commentaire d’une classe sur une de vos publications', checked: commentChecked, handle: handleCommentChecked },
     // ---------- Uncomment the following lines to add more checkboxes ----------
     // { label: 'Réaction à une de vos publications', checked: reactionChecked, handle: handleReactionChecked },
     // { label: 'Publication d’une classe', checked: publicationFromAClassChecked, handle: handlePublicationFromAClassChecked },
@@ -91,7 +90,7 @@ export const NotifCheckbox = () => {
         </div>
       ))}
 
-      <Button size="small" variant="contained" onClick={handleChoice} style={{ margin: '1rem 0.5rem' }} endIcon={<SendIcon />}>
+      <Button size="small" variant="contained" onClick={handleChoice} style={{ margin: '1rem 0.5rem' }}>
         Enregister mes choix
       </Button>
     </div>
