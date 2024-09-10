@@ -282,8 +282,6 @@ analyticController.router.post(
         AppDataSource.getRepository(User).createQueryBuilder('user').select('user.firstlogin').where({ id: data.userId }).getRawOne(),
       ]);
 
-      console.log('User Phase in analytics', userPhase);
-
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
         const session = new AnalyticSession();
         session.id = data.sessionId;
