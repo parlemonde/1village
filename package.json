@@ -201,6 +201,8 @@
     "sortablejs": "^1.15.0",
     "stream-buffers": "^3.0.2",
     "string-similarity": "^4.0.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "three": "0.150.1",
     "three-conic-polygon-geometry": "^1.6.1",
     "troika-three-text": "^0.47.1",

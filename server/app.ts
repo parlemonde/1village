@@ -22,6 +22,7 @@ import { filesRouter } from './routes/filesRouter';
 import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
 import { getDefaultDirectives } from './utils/server';
+import { swaggerSpec, swaggerUi } from './swagger';
 
 const isDevENV = process.env.NODE_ENV !== 'production';
 const frontendHandler = next({ dev: isDevENV });
@@ -48,6 +49,9 @@ export async function getApp() {
   // [1] --- Init express ---
   const app = express();
   app.enable('strict routing');
+
+  // --- Swagger Documentation ---
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   // [2] --- Add the middlewares ---
   const directives = getDefaultDirectives();

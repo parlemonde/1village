@@ -22,6 +22,90 @@ import { Controller } from './controller';
 
 const activityController = new Controller('/activities');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Activities
+ *   description: API pour la gestion des activités
+ */
+
+/**
+ * @swagger
+ * /activities:
+ *   get:
+ *     summary: Récupère toutes les activités
+ *     tags: [Activities]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Limite du nombre de résultats
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Numéro de la page
+ *       - in: query
+ *         name: villageId
+ *         schema:
+ *           type: integer
+ *         description: Filtre par ID de village
+ *       - in: query
+ *         name: countries
+ *         schema:
+ *           type: string
+ *         description: Liste des pays, séparés par des virgules
+ *       - in: query
+ *         name: pelico
+ *         schema:
+ *           type: boolean
+ *         description: Filtre par pelico
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: Type de l'activité, séparés par des virgules
+ *       - in: query
+ *         name: subType
+ *         schema:
+ *           type: integer
+ *         description: Filtre par sous-type d'activité
+ *       - in: query
+ *         name: phase
+ *         schema:
+ *           type: integer
+ *         description: Filtre par phase
+ *       - in: query
+ *         name: phaseStep
+ *         schema:
+ *           type: string
+ *         description: Filtre par étape de phase
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: integer
+ *         description: Filtre par statut d'activité
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         description: Filtre par ID d'utilisateur
+ *     responses:
+ *       200:
+ *         description: Liste des activités récupérées avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       401:
+ *         description: Utilisateur non autorisé
+ *       500:
+ *         description: Erreur du serveur
+ */
+
 // --- Get all activities. ---
 activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: Request, res: Response) => {
   if (!req.user) throw new AppError('Forbidden', ErrorCode.UNKNOWN);
@@ -52,6 +136,32 @@ activityController.get({ path: '', userType: UserType.OBSERVATOR }, async (req: 
   res.sendJSON(activities);
 });
 
+/**
+ * @swagger
+ * /activities/{id}:
+ *   get:
+ *     summary: Récupère une activité par ID
+ *     tags: [Activities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de l'activité
+ *     responses:
+ *       200:
+ *         description: Activité récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: Activité non trouvée
+ *       500:
+ *         description: Erreur du serveur
+ */
+
 // --- Get one activity. ---
 activityController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;
@@ -70,6 +180,43 @@ activityController.get({ path: '/:id', userType: UserType.OBSERVATOR }, async (r
   activity.commentCount = commentCount[activity.id] || 0;
   res.sendJSON(activity);
 });
+
+/**
+ * @swagger
+ * /activities/draft:
+ *   get:
+ *     summary: Récupère l'activité brouillon pour un type et un sous-type donnés
+ *     tags: [Activities]
+ *     parameters:
+ *       - in: query
+ *         name: villageId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID du village
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Type de l'activité
+ *       - in: query
+ *         name: subType
+ *         schema:
+ *           type: integer
+ *         description: Sous-type de l'activité
+ *     responses:
+ *       200:
+ *         description: Activité brouillon récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: Activité brouillon non trouvée
+ *       500:
+ *         description: Erreur du serveur
+ */
 
 // --- Get draft activity for type and subtype  ---
 activityController.get({ path: '/draft', userType: UserType.OBSERVATOR }, async (req: Request, res: Response, next: NextFunction) => {
