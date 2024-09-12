@@ -67,7 +67,27 @@ describe('Notification api test', () => {
     expect(updatedNotifications).toMatchObject(updateData);
   });
 
-  // TODO: Add a request with a user with commentary to true and expect received a mail
+  it('should handle error during notification preferences update', async () => {
+    const app = await getApp();
+
+    const updateData = {
+      commentary: true,
+      reaction: true,
+    };
+
+    // Simuler une erreur sur la fonction `EditNotificationPreferences`
+    jest.spyOn(AppDataSource.getRepository(Notifications), 'save').mockImplementationOnce(() => {
+      throw new Error('Database error');
+    });
+
+    const response = await supertest(app)
+      .put('/api/notifications/suscribe/1')
+      .set('authorization', `Bearer ${accessToken}`)
+      .send({ data: updateData })
+      .expect(500);
+
+    expect(response.body.message).toEqual('erreur de sauvegarde de vos choix, veuillez réessayer ultérieurement');
+  });
 
   it("hasSubscribed should send false if the user's commentary is false", async () => {
     const userRepository = AppDataSource.getRepository(User);
