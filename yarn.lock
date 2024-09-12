@@ -64,6 +64,8 @@ __metadata:
     "@types/stream-buffers": "npm:^3.0.7"
     "@types/string-similarity": "npm:4.0.0"
     "@types/supertest": "npm:2.0.12"
+    "@types/swagger-jsdoc": "npm:^6.0.4"
+    "@types/swagger-ui-express": "npm:^4.1.6"
     "@types/three": "npm:0.149.0"
     "@types/uuid": "npm:8.3.4"
     "@types/vimeo": "npm:2.1.4"
@@ -4163,6 +4165,23 @@ __metadata:
   dependencies:
     "@types/superagent": "npm:*"
   checksum: 10/f0e2b44f86bec2f708d6a3d0cb209055b487922040773049b0f8c6b557af52d4b5fa904e17dfaa4ce6e610172206bbec7b62420d158fa57b6ffc2de37b1730d3
+  languageName: node
+  linkType: hard
+
+"@types/swagger-jsdoc@npm:^6.0.4":
+  version: 6.0.4
+  resolution: "@types/swagger-jsdoc@npm:6.0.4"
+  checksum: 10/736a1ec10b38d624d11845e715be85cf4829bb5ab89f2401abfc164b369e2644d297fd75a0c5ede8a8eab3d7bee564d4fd2bef2c26519cb87ff01b1cc7d28fb9
+  languageName: node
+  linkType: hard
+
+"@types/swagger-ui-express@npm:^4.1.6":
+  version: 4.1.6
+  resolution: "@types/swagger-ui-express@npm:4.1.6"
+  dependencies:
+    "@types/express": "npm:*"
+    "@types/serve-static": "npm:*"
+  checksum: 10/c1c4b58b12f9261af70b6a7e6420649b4f0a0343071ae8b98483c5885cd596f4c25015991f91f3f7c7a0baa461e2d76029d64de79108a89d03f3f83abbe6bc58
   languageName: node
   linkType: hard
 
