@@ -19,10 +19,10 @@ import { jsonify } from './middlewares/jsonify';
 import { setVillage } from './middlewares/setVillage';
 import { removeTrailingSlash } from './middlewares/trailingSlash';
 import { filesRouter } from './routes/filesRouter';
+import { swaggerSpec, swaggerUi } from './swagger';
 import { connectToDatabase } from './utils/database';
 import { logger } from './utils/logger';
 import { getDefaultDirectives } from './utils/server';
-import { swaggerSpec, swaggerUi } from './swagger';
 
 const isDevENV = process.env.NODE_ENV !== 'production';
 const frontendHandler = next({ dev: isDevENV });

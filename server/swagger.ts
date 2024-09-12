@@ -2,16 +2,12 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-import { authenticationDocs } from './swagger/authentification';
 import { activitiesDocs } from './swagger/activities';
 import { analyticsDocs } from './swagger/analytics';
 import { archivesDocs } from './swagger/archives';
 import { audiosDocs } from './swagger/audios';
+import { authenticationDocs } from './swagger/authentification';
 import { classroomDocs } from './swagger/classroom';
-import { mediathequeDocs } from './swagger/mediatheque';
-import { statisticsDocs } from './swagger/statistics';
-import { usersDocs } from './swagger/users';
-import { villagesDocs } from './swagger/villages';
 import { commentDocs } from './swagger/comment';
 import { countriesDocs } from './swagger/countries';
 import { currenciesDocs } from './swagger/currencies';
@@ -19,11 +15,15 @@ import { featureFlagDocs } from './swagger/featureFlag';
 import { gamesDocs } from './swagger/games';
 import { imagesDocs } from './swagger/images';
 import { languagesDocs } from './swagger/languages';
+import { mediathequeDocs } from './swagger/mediatheque';
 import { pelicoPresentationDocs } from './swagger/pelicoPresentation';
+import { statisticsDocs } from './swagger/statistics';
 import { storyDocs } from './swagger/story';
 import { studentsDocs } from './swagger/students';
 import { teachersDocs } from './swagger/teachers';
 import { teamCommentDocs } from './swagger/teamComment';
+import { usersDocs } from './swagger/users';
+import { villagesDocs } from './swagger/villages';
 import { weatherDocs } from './swagger/weather';
 import { xApiDocs } from './swagger/xApi';
 
