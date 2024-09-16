@@ -285,6 +285,8 @@ analyticController.router.post(
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
         const session = new AnalyticSession();
         session.id = data.sessionId;
+        // TODO à améliorer
+        // session.uniqueId = data.userId ? `${uniqueSessionId}-${data.userId}` : uniqueSessionId;
         session.uniqueId = uniqueSessionId;
         session.date = new Date();
         session.browserName = req.useragent?.browser ?? '';
@@ -295,6 +297,7 @@ analyticController.router.post(
         session.duration = null;
         session.initialPage = data.location;
         session.userId = data.userId ?? null;
+        // TODO debug phase
         session.phase = userPhase ? userPhase.firstlogin : 0;
 
         await AppDataSource.getRepository(AnalyticSession).save(session);
