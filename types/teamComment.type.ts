@@ -1,6 +1,6 @@
 export interface TeamCommentInterface {
   id: number;
-  type: number;
+  type: TeamCommentType;
   createDate?: Date | string;
   updateDate?: Date | string;
   text: string;

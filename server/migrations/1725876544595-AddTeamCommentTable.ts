@@ -19,6 +19,10 @@ export class AddTeamCommentTable1725876544595 implements MigrationInterface {
             type: 'text',
           },
           {
+            name: 'type',
+            type: 'int',
+          },
+          {
             name: 'createdAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
