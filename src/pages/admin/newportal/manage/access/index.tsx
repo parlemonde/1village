@@ -93,14 +93,11 @@ const FeatureFlagsTest: React.FC = () => {
 
   const handleNewFeatureFlagChange = async (event: SelectChangeEvent<string>) => {
     const featureFlagName = event.target.value;
-    console.log('FEATURE FLAG NAME !!!', featureFlagName);
 
     // Find the feature flag object from the featureFlags state using the selected feature flag name
     const selectedFeatureFlag = (featureFlags || []).find((flag) => flag.name === featureFlagName);
 
     if (selectedFeatureFlag) {
-      console.log('SELECTED FETAURE FLAG OK !!');
-      console.log('FATURE FLAG IF OK', featureFlags);
       // Update the newFeatureFlag and addedUsers states with the selected feature flag data
       setNewFeatureFlag({
         name: selectedFeatureFlag.name,
@@ -108,8 +105,6 @@ const FeatureFlagsTest: React.FC = () => {
       });
       setAddedUsers(selectedFeatureFlag.users || []);
     } else {
-      console.log('SELECTED FETAURE FLAG NOT OK !!');
-      console.log('FATURE FLAG IF NOT OK', featureFlags);
       // Reset the newFeatureFlag and addedUsers states if the selected feature flag is not found
       setNewFeatureFlag({ name: '', isEnabled: false });
       setAddedUsers([]);
