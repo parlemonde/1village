@@ -4,7 +4,7 @@ import { Between } from 'typeorm';
 
 import type { AnalyticData, NavigationPerf, BrowserPerf } from '../../types/analytics.type';
 import { AnalyticSession, AnalyticPageView, AnalyticPerformance } from '../entities/analytic';
-import { UserType } from '../entities/user';
+import { User, UserType } from '../entities/user';
 import { AppError, ErrorCode, handleErrors } from '../middlewares/handleErrors';
 import { generateTemporaryToken, getQueryString } from '../utils';
 import { AppDataSource } from '../utils/data-source';
@@ -179,6 +179,8 @@ analyticController.get({ path: '', userType: UserType.ADMIN }, async (req, res) 
 
 type AddAnalytic = {
   sessionId: string;
+  userId?: number;
+  phase: number;
   event: string;
   location: string;
   referrer?: string | null;
@@ -194,6 +196,14 @@ const ADD_ANALYTIC_SCHEMA: JSONSchemaType<AddAnalytic> = {
   properties: {
     sessionId: {
       type: 'string',
+      nullable: false,
+    },
+    userId: {
+      type: 'number',
+      nullable: true,
+    },
+    phase: {
+      type: 'number',
       nullable: false,
     },
     event: {
@@ -245,6 +255,7 @@ analyticController.router.post(
   useragent.express(),
   handleErrors(async (req, res) => {
     const data = req.body;
+
     if (!addAnalyticValidator(data)) {
       sendInvalidDataError(addAnalyticValidator);
       return;
@@ -265,10 +276,17 @@ analyticController.router.post(
       }
 
       // Retrieve current user session or save the new one.
-      let sessionCount = await AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } });
+      // eslint-disable-next-line prefer-const
+      let [sessionCount, userPhase] = await Promise.all([
+        AppDataSource.getRepository(AnalyticSession).count({ where: { id: data.sessionId } }),
+        AppDataSource.getRepository(User).createQueryBuilder('user').select('user.firstlogin').where({ id: data.userId }).getRawOne(),
+      ]);
+
       if (sessionCount === 0 && data.event === 'pageview' && data.params?.isInitial) {
         const session = new AnalyticSession();
         session.id = data.sessionId;
+        // TODO à améliorer
+        // session.uniqueId = data.userId ? `${uniqueSessionId}-${data.userId}` : uniqueSessionId;
         session.uniqueId = uniqueSessionId;
         session.date = new Date();
         session.browserName = req.useragent?.browser ?? '';
@@ -278,6 +296,10 @@ analyticController.router.post(
         session.width = data.width || 0;
         session.duration = null;
         session.initialPage = data.location;
+        session.userId = data.userId ?? null;
+        // TODO debug phase
+        session.phase = userPhase ? userPhase.firstlogin : 0;
+
         await AppDataSource.getRepository(AnalyticSession).save(session);
         sessionCount = 1;
       }

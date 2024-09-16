@@ -116,7 +116,7 @@ const MyApp: React.FunctionComponent<MyAppProps> & {
     }
   }, [isOnAdmin]);
 
-  useAnalytics();
+  useAnalytics(user?.id ?? null);
 
   return (
     <CacheProvider value={emotionCache}>
