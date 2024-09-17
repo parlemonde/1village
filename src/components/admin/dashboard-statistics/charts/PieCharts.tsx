@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Stack } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 
 import styles from '../styles/charts.module.css';
@@ -23,15 +24,22 @@ const PieCharts: React.FC<Props> = ({ pieChartData }) => {
 
   return (
     <div className={styles.pieContainer}>
-      <div className={styles.title}>Niveau engagement</div>
-      <PieChart series={[{ data: pieChartData.data }]} width={400} height={200} />
-      <div className={`${styles.legend}`}>
-        {labels.map((label, index) => (
-          <div key={index} className={styles.legendItem}>
-            {label}
-          </div>
-        ))}
-      </div>
+      <p style={{ fontWeight: 600 }}>Niveau engagement</p>
+      <Stack justifyContent="center" alignItems="center">
+        <PieChart
+          margin={{ bottom: 70, left: 50, right: 50 }}
+          p={0}
+          series={[{ data: pieChartData.data }]}
+          width={250}
+          height={250}
+          slotProps={{
+            legend: {
+              direction: 'row',
+              position: { vertical: 'bottom', horizontal: 'middle' },
+            },
+          }}
+        />
+      </Stack>
     </div>
   );
 };

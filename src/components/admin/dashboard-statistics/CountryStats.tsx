@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Grid, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
@@ -104,44 +105,72 @@ const CountryStats = () => {
           <div className={styles.monitorTable}>
             <DashboardTable />
           </div>
-          <div className={styles.classroomStats}>
-            <StatsCard data={classStats[0].registered}>Nombre de classes inscrites</StatsCard>
-            <StatsCard data={classStats[0].connected}>Nombre de classes connectées</StatsCard>
-            <StatsCard data={classStats[0].contributed}>Nombre de classes contributrices</StatsCard>
-          </div>
-          <div className={styles.averageStatsContainer}>
-            <AverageStatsCard
-              data={{
-                min: connectStats[0].minConnections,
-                max: connectStats[0].maxConnections,
-                average: connectStats[0].averageConnection,
-                median: connectStats[0].medianConnections,
-              }}
-              unit="min"
-              icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
-            >
-              Temps de connexion moyen par classe
-            </AverageStatsCard>
-            <AverageStatsCard
-              data={{
-                min: connectStats[0].minDuration,
-                max: connectStats[0].maxDuration,
-                average: connectStats[0].averageDuration,
-                median: connectStats[0].medianDuration,
-              }}
-              icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
-            >
-              Nombre de connexions moyen par classe
-            </AverageStatsCard>
-          </div>
-          <div className={styles.engagementContainer}>
-            <PieCharts pieChartData={pieChartData} />
-            <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
-          </div>
-          <div className={styles.exchangesConnectionsContainer}>
-            <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
-            <BarCharts className={styles.connectionsChart} barChartData={barChartData} title={ContributionBarChartTitle} />
-          </div>
+          <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }} py={4}>
+            <Grid item xs={12} lg={4}>
+              <StatsCard data={classStats[0].registered}>
+                Nombre de classes <br /> inscrites
+              </StatsCard>
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <StatsCard data={classStats[0].connected}>
+                Nombre de classes <br />
+                connectées
+              </StatsCard>
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <StatsCard data={classStats[0].contributed}>
+                Nombre de classes <br />
+                contributrices
+              </StatsCard>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <AverageStatsCard
+                data={{
+                  min: connectStats[0].minConnections,
+                  max: connectStats[0].maxConnections,
+                  average: connectStats[0].averageConnection,
+                  median: connectStats[0].medianConnections,
+                }}
+                unit="min"
+                icon={<AccessTimeIcon sx={{ fontSize: 'inherit' }} />}
+              >
+                Temps de connexion moyen par classe
+              </AverageStatsCard>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <AverageStatsCard
+                data={{
+                  min: connectStats[0].minDuration,
+                  max: connectStats[0].maxDuration,
+                  average: connectStats[0].averageDuration,
+                  median: connectStats[0].medianDuration,
+                }}
+                icon={<VisibilityIcon sx={{ fontSize: 'inherit' }} />}
+              >
+                Nombre de connexions moyen par classe
+              </AverageStatsCard>
+            </Grid>
+          </Grid>
+
+          <Grid container>
+            <Grid item xs={12} lg={4}>
+              <PieCharts pieChartData={pieChartData} />
+            </Grid>
+            <Grid item xs={12} lg={8}>
+              <div className={styles.engagementContainer}>
+                <BarCharts barChartData={barChartData} title={EngagementBarChartTitle} />
+              </div>
+            </Grid>
+            <Grid item xs={12} lg={8}>
+              <ClassesExchangesCard totalPublications={totalActivities} totalComments={totalComments} totalVideos={totalVideos} />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <div className={styles.engagementContainer}>
+                <BarCharts barChartData={barChartData} title={ContributionBarChartTitle} />
+              </div>
+            </Grid>
+          </Grid>
+
           <div>
             <PhaseDetails
               phase={1}

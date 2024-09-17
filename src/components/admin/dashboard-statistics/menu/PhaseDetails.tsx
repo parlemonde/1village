@@ -40,7 +40,7 @@ const PhaseDetails = ({ phase, data }: PhaseDetailsProps) => {
   });
 
   return (
-    <Accordion sx={{ boxShadow: 'none' }}>
+    <Accordion sx={{ boxShadow: 'none', mb: 4 }}>
       <AccordionSummary
         expandIcon={<ArrowRight style={{ transform: 'rotate(90deg)' }} />}
         sx={{
