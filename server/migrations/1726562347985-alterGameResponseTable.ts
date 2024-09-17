@@ -1,6 +1,6 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AlterGameResponseTable1710427662589 implements MigrationInterface {
+export class AlterGameResponseTable1726562347985 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE game_response DROP FOREIGN KEY FK_3a0c737a217bbd6bbd268203fb8`);
     await queryRunner.query(`ALTER TABLE game_response DROP COLUMN gameId`);
