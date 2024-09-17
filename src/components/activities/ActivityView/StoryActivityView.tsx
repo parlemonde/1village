@@ -57,7 +57,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       position: 'relative',
                     }}
                   >
-                    <LightBox url={activity.data.tale.imageStory}>
+                    <LightBox url={activity.data.tale.imageStory} isImage={true} >
                       <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} />
                     </LightBox>
                   </div>
@@ -112,7 +112,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           >
                             {activity.data.odd.description}
                           </Typography>
-                          <LightBox url={activity.data.odd.imageUrl}>
+                          <LightBox url={activity.data.odd.imageUrl} isImage={true}>
                             <CardMedia
                               sx={{ borderRadius: '0.5rem', mt: 1 }}
                               component="img"
@@ -144,7 +144,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           >
                             {activity.data.object.description}
                           </Typography>
-                          <LightBox url={activity.data.object.imageUrl}>
+                          <LightBox url={activity.data.object.imageUrl} isImage={true}>
                             <CardMedia
                               sx={{ borderRadius: '0.5rem', mt: 1 }}
                               component="img"
@@ -176,7 +176,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                           >
                             {activity.data.place.description}
                           </Typography>{' '}
-                          <LightBox url={activity.data.place.imageUrl}>
+                          <LightBox url={activity.data.place.imageUrl} isImage={true}>
                             <CardMedia
                               sx={{ borderRadius: '0.5rem', mt: 1 }}
                               component="img"

@@ -32,7 +32,7 @@ export const ImageModal = ({
   imageUrl,
   setImageUrl,
   useCrop = false,
-  onDeleteEditor = () => {},
+  onDeleteEditor = () => { },
 }: ImageModalProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const [tempImageUrl, setTempImageUrl] = React.useState(imageUrl);
@@ -264,7 +264,7 @@ export const ImageModal = ({
                   position: 'relative',
                 }}
               >
-                <LightBox url={preview.url}>
+                <LightBox url={preview.url} isImage={true}>
                   <Image layout="fill" objectFit="contain" src={preview.url} unoptimized />
                 </LightBox>
               </div>
