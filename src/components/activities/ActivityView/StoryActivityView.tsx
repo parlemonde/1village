@@ -1,11 +1,12 @@
-import Image from 'next/image';
-import React from 'react';
 import { Container } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
+import Image from 'next/image';
+import React from 'react';
+
 import StoriesDataCardView from './StoriesDataCardView';
 import type { ActivityViewProps } from './activity-view.types';
 import { isStory } from 'src/activity-types/anyActivity';

@@ -1,6 +1,7 @@
-import React from 'react';
-import Image from 'next/image';
 import { Grid } from '@mui/material';
+import Image from 'next/image';
+import React from 'react';
+
 import type { ActivityViewProps } from './activity-view.types';
 import { ECO_ACTIONS, getDefi, isCooking, isEco, isLanguage, getLanguageTheme } from 'src/activity-types/defi.constants';
 import type { DefiActivity } from 'src/activity-types/defi.types';
@@ -17,10 +18,10 @@ export const DefiActivityView = ({ activity }: ActivityViewProps<DefiActivity>) 
             {isCooking(activity)
               ? activity.data.name
               : isEco(activity)
-                ? ECO_ACTIONS[activity.data.type]
-                : isLanguage(activity)
-                  ? getLanguageTheme(activity.data)
-                  : null}
+              ? ECO_ACTIONS[activity.data.type]
+              : isLanguage(activity)
+              ? getLanguageTheme(activity.data)
+              : null}
           </h3>
         </div>
         {isCooking(activity) && (
