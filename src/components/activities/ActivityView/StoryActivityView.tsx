@@ -1,12 +1,11 @@
-import Image from 'next/image';
-import React from 'react';
-
 import { Container } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
+import Image from 'next/image';
+import React from 'react';
 
 import StoriesDataCardView from './StoriesDataCardView';
 import type { ActivityViewProps } from './activity-view.types';
@@ -57,7 +56,7 @@ export const StoryActivityView = ({ activity }: ActivityViewProps<StoryActivity>
                       position: 'relative',
                     }}
                   >
-                    <LightBox url={activity.data.tale.imageStory} isImage={true} >
+                    <LightBox url={activity.data.tale.imageStory} isImage={true}>
                       <Image layout="fill" objectFit="contain" alt="image du plat" unoptimized src={activity.data.tale.imageStory} />
                     </LightBox>
                   </div>

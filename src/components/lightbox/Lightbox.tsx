@@ -1,12 +1,13 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+
 import { Modal } from '../Modal';
 
 type LightBoxProps = {
   url: string;
   children: JSX.Element;
-  isImage: boolean
+  isImage: boolean;
 };
 
 export const LightBox = ({ url, children, isImage }: LightBoxProps) => {
@@ -37,7 +38,7 @@ export const LightBox = ({ url, children, isImage }: LightBoxProps) => {
         ariaDescribedBy="lightBox-modal-description"
       >
         {isImage == false && (
-          <Document options={options} file={url} onLoadSuccess={onDocumentLoadSuccess} >
+          <Document options={options} file={url} onLoadSuccess={onDocumentLoadSuccess}>
             {Array.from(Array(numPages).keys()).map((v) => (
               <div
                 key={v}
@@ -49,8 +50,9 @@ export const LightBox = ({ url, children, isImage }: LightBoxProps) => {
                 <Page width={380} scale={2.0} pageNumber={v + 1} />
               </div>
             ))}
-          </Document>)}
-        {isImage == true && (<Image layout="responsive" objectFit="contain" width="100%" height="70%" alt="" unoptimized src={url} />)}
+          </Document>
+        )}
+        {isImage == true && <Image layout="responsive" objectFit="contain" width="100%" height="70%" alt="" unoptimized src={url} />}
       </Modal>
     </>
   );
