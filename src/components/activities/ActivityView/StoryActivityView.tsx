@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+
 import { Container } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';

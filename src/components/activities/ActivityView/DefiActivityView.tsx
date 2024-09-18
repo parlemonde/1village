@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+
 import { Grid } from '@mui/material';
 
 import type { ActivityViewProps } from './activity-view.types';
