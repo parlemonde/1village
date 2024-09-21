@@ -1,19 +1,16 @@
 export interface ClassroomsStats {
   classroomId: number;
-  classroomCountryCode: number;
+  classroomCountryCode: string;
   villageId: number;
   villageName: string;
-  commentsCount: number;
-  videosCount: number;
   userFirstName: number;
   userLastName: number;
-  activitiesCount: {
-    phase: number;
-    activities: { count: number; type: number }[];
-  }[];
+  commentsCount: number;
+  videosCount: number;
+  activities: { count: number; type: number; phase: number }[];
 }
 
-export interface ConnectionsStats {
+export interface SessionsStats {
   minDuration: number;
   maxDuration: number;
   medianDuration: number;
