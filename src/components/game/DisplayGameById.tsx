@@ -127,21 +127,30 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const router = useRouter();
   const { id } = router.query;
 
+
   const gameId = parseInt(String(id));
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
   console.log('getOneGameById', getOneGameById);
 
-  const activityComment = useMemo(() => {
-    if (!getOneGameById) {
-      return undefined;
-    }
-    return {
-      activityId: getOneGameById.id,
-      activityPhase: getOneGameById.phase,
-      activityType: getOneGameById.type,
-    };
-  }, [getOneGameById]);
-  console.log('activityComment', activityComment);
+  // const activityComment = useMemo(() => {
+  //   if (!getOneGameById) {
+  //     return undefined;
+  //   }
+  //   return {
+  //     activityId: getOneGameById.id,
+  //     activityPhase: getOneGameById.phase,
+  //     activityType: getOneGameById.type,
+  //   };
+  // }, [getOneGameById]);
+  // console.log('activityComment', activityComment);
+
+  const usersMap = React.useMemo(() => {
+    return users.reduce<{ [key: number]: User }>((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {});
+  }, [users]);
+
 
   const TYPE_OF_GAME = {
     [GameType.MIMIC]: 'mimique',
@@ -490,7 +499,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               {found && <p>C’est exact ! Vous avez trouvé {displayPhrasesByType.phraseDelamodal}.</p>}
             </Grid>
           </Grid>
-          <Grid>{activityComment ? <ActivityComments activity={activityComment} usersMap={{}} /> : null}</Grid>
+          <Grid>{getOneGameById ? <ActivityComments activity={getOneGameById} usersMap={usersMap} /> : null}</Grid>
         </Box>
         <Modal
           open={errorModalOpen}
