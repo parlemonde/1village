@@ -365,6 +365,15 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   const user = await AppDataSource.getRepository(User).findOne({ where: { id } });
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
+
+  console.log('=============================');
+  console.log("c'est par la que tu passes ?");
+  console.log('user', user);
+  console.log('isSelfProfile', isSelfProfile);
+  console.log('isAdmin', isAdmin);
+  console.log('req.user', req.user);
+  console.log('id', id);
+  console.log('=============================');
   if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -374,6 +383,10 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     sendInvalidDataError(editUserValidator);
     return;
   }
+
+  console.log('+++++++++++++++++++++++++');
+  console.log('data', data);
+  console.log('+++++++++++++++++++++++++');
 
   if (user.accountRegistration !== 10) {
     user.email = valueOrDefault(data.email, user.email);
@@ -396,6 +409,10 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.position = data.position;
   }
   if (data.villageId) {
+    console.log('------------------------');
+    console.log('"tu passe ici ?"');
+    console.log('data.villageId', data.villageId);
+    console.log('------------------------');
     if (user.type === UserType.TEACHER) {
       const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
 

@@ -2,10 +2,9 @@
     background: linear-gradient(0deg, #6065FC, #6065FC),
         radial-gradient(69.64% 69.64% at 51.53% 21.25%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
     text-align: center;
-    padding: 1rem;
+    padding: 16px;
     border-radius: 1rem;
-    width: 240px;
-    flex-wrap: wrap;
+    width: auto;
     color: #FFF;
 }
 
