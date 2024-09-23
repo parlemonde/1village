@@ -28,6 +28,9 @@ export const AddComment = ({ activityId, activityType, activityPhase }: AddComme
   const [newComment, setNewComment] = React.useState('');
   const [newCommentLength, setNewCommentLength] = React.useState(0);
   const [loading, setIsLoading] = React.useState(false);
+  console.log('user', user);
+  console.log('newComment', newComment);
+  console.log('props', activityId, activityType, activityPhase);
 
   if (!user) {
     return null;

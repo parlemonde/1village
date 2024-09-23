@@ -9,6 +9,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid } from '@mui/material';
 
 import { KeepRatio } from '../KeepRatio';
+import { ActivityComments } from '../activities/ActivityComments';
 import { useOneGameById } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
 import { Base } from 'src/components/Base';
@@ -128,6 +129,19 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
 
   const gameId = parseInt(String(id));
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
+  console.log('getOneGameById', getOneGameById);
+
+  const activityComment = useMemo(() => {
+    if (!getOneGameById) {
+      return undefined;
+    }
+    return {
+      activityId: getOneGameById.id,
+      activityPhase: getOneGameById.phase,
+      activityType: getOneGameById.type,
+    };
+  }, [getOneGameById]);
+  console.log('activityComment', activityComment);
 
   const TYPE_OF_GAME = {
     [GameType.MIMIC]: 'mimique',
@@ -286,14 +300,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const userIsPelico = user !== null && user.type <= UserType.MEDIATOR;
 
   const choices = React.useMemo(() => (playContent.responses.length > 0 ? shuffleArray(playContent.responses.length) : []), [playContent.responses]);
-
-  // const handleRadioButtonChange = (event: React.SyntheticEvent) => {
-  //   const selected = (event as React.ChangeEvent<HTMLInputElement>).target.value;
-  //   setSelectedValue(selected as RadioBoxValues);
-  //   if (selected === RadioBoxValues.RANDOM) {
-  //     getNextGame();
-  //   }
-  // };
 
   const handleClick = useCallback(
     async (selection: string, isSuccess: boolean = false) => {
@@ -484,7 +490,7 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               {found && <p>C’est exact ! Vous avez trouvé {displayPhrasesByType.phraseDelamodal}.</p>}
             </Grid>
           </Grid>
-          <Grid>{/* <ActivityComments activity={activityComment} usersMap={{}} /> */}</Grid>
+          <Grid>{activityComment ? <ActivityComments activity={activityComment} usersMap={{}} /> : null}</Grid>
         </Box>
         <Modal
           open={errorModalOpen}

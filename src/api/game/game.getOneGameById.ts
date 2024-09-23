@@ -23,6 +23,8 @@ type Data = {
 };
 
 type DataUse = {
+  phase: number;
+  type: number;
   content: Data;
   createDate: string;
   id: number;
