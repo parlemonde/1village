@@ -39,7 +39,6 @@ interface EmailMapping {
 type EmailOptions<E extends Email> = EmailMapping[E];
 
 type emailData = {
-  // filename?: string; // todo add when using html
   filenameHtml?: string | undefined;
   filenameText: string;
   subject: string;
