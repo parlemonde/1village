@@ -402,6 +402,7 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
   user.hasStudentLinked = valueOrDefault(data.hasStudentLinked, user.hasStudentLinked);
+  await AppDataSource.getRepository(User).save(user);
   res.sendJSON(user);
 });
 
