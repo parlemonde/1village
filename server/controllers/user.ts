@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import * as argon2 from 'argon2';
 import type { NextFunction, Request, Response } from 'express';
 import type { FindOperator } from 'typeorm';
-import { In, IsNull, LessThan } from 'typeorm';
+import { IsNull, LessThan } from 'typeorm';
 
 import { ActivityStatus, ActivityType } from '../../types/activity.type';
 import { getAccessToken } from '../authentication/lib/tokens';
@@ -15,7 +15,7 @@ import { Student } from '../entities/student';
 import { User, UserType } from '../entities/user';
 import { UserToStudent } from '../entities/userToStudent';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
-import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString } from '../utils';
+import { generateTemporaryToken, valueOrDefault, isPasswordValid, getQueryString, updateVillageData } from '../utils';
 import { AppDataSource } from '../utils/data-source';
 import { getPosition, setUserPosition } from '../utils/get-pos';
 import { ajv, sendInvalidDataError } from '../utils/jsonSchemaValidator';
@@ -366,14 +366,6 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
   const isSelfProfile = req.user && req.user.id === id;
   const isAdmin = req.user && req.user.type <= UserType.ADMIN;
 
-  console.log('=============================');
-  console.log("c'est par la que tu passes ?");
-  console.log('user', user);
-  console.log('isSelfProfile', isSelfProfile);
-  console.log('isAdmin', isAdmin);
-  console.log('req.user', req.user);
-  console.log('id', id);
-  console.log('=============================');
   if (user === null || (!isSelfProfile && !isAdmin)) {
     next();
     return;
@@ -383,10 +375,6 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     sendInvalidDataError(editUserValidator);
     return;
   }
-
-  console.log('+++++++++++++++++++++++++');
-  console.log('data', data);
-  console.log('+++++++++++++++++++++++++');
 
   if (user.accountRegistration !== 10) {
     user.email = valueOrDefault(data.email, user.email);
@@ -409,35 +397,7 @@ userController.put({ path: '/:id', userType: UserType.OBSERVATOR }, async (req: 
     user.position = data.position;
   }
   if (data.villageId) {
-    console.log('------------------------');
-    console.log('"tu passe ici ?"');
-    console.log('data.villageId', data.villageId);
-    console.log('------------------------');
-    if (user.type === UserType.TEACHER) {
-      const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
-
-      if (!classroom) return;
-
-      const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom.id } } });
-      const studentsId = students.map((student) => student.id);
-
-      const families = await AppDataSource.getRepository(UserToStudent).find({
-        where: { student: { id: In(studentsId) } },
-        relations: ['user', 'student'],
-      });
-
-      const familiesId = families.map((family) => family.user.id);
-
-      const promises = [];
-
-      promises.push(
-        AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
-        AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
-        AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
-      );
-
-      await Promise.all(promises);
-    }
+    await updateVillageData(user, { villageId: data.villageId });
   }
   user.hasAcceptedNewsletter = valueOrDefault(data.hasAcceptedNewsletter, user.hasAcceptedNewsletter);
   user.language = valueOrDefault(data.language, user.language);
