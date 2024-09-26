@@ -22,7 +22,7 @@ type Data = {
   radio: string;
 };
 
-type DataUse = {
+export type DataUse = {
   phase: number;
   type: number;
   content: Data;

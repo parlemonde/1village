@@ -3,8 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useCallback, useMemo, useContext } from 'react';
 
-// import AccessTimeIcon from '@mui/icons-material/AccessTime';
-// import ShuffleIcon from '@mui/icons-material/Shuffle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid } from '@mui/material';
 
@@ -29,6 +27,7 @@ import PelicoNeutre from 'src/svg/pelico/pelico_neutre.svg';
 import { GameType } from 'types/game.type';
 import type { Game } from 'types/game.type';
 import type { GameResponse } from 'types/gameResponse.type';
+import type { User } from 'types/user.type';
 import { UserType } from 'types/user.type';
 
 function shuffleArray(size: number) {
@@ -127,22 +126,8 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   const router = useRouter();
   const { id } = router.query;
 
-
   const gameId = parseInt(String(id));
   const { data: getOneGameById } = useOneGameById(subType, gameId || 0);
-  console.log('getOneGameById', getOneGameById);
-
-  // const activityComment = useMemo(() => {
-  //   if (!getOneGameById) {
-  //     return undefined;
-  //   }
-  //   return {
-  //     activityId: getOneGameById.id,
-  //     activityPhase: getOneGameById.phase,
-  //     activityType: getOneGameById.type,
-  //   };
-  // }, [getOneGameById]);
-  // console.log('activityComment', activityComment);
 
   const usersMap = React.useMemo(() => {
     return users.reduce<{ [key: number]: User }>((acc, user) => {
@@ -150,7 +135,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       return acc;
     }, {});
   }, [users]);
-
 
   const TYPE_OF_GAME = {
     [GameType.MIMIC]: 'mimique',

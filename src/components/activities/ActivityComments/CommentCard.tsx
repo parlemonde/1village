@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Box, Button, CircularProgress, Paper } from '@mui/material';
 
+import type { DataUse } from 'src/api/game/game.getOneGameById';
 import { AvatarImg } from 'src/components/Avatar';
 import { Flag } from 'src/components/Flag';
 import { UserDisplayName } from 'src/components/UserDisplayName';
@@ -21,7 +22,7 @@ import { UserType } from 'types/user.type';
 const TextEditor = dynamic(() => import('src/components/activities/content/editors/TextEditor'), { ssr: false });
 
 interface CommentCardProps {
-  activity: Activity<AnyData>;
+  activity: Activity<AnyData> | DataUse;
   comment: Comment;
   user: User | null;
 }
