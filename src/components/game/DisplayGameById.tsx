@@ -187,7 +187,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
   };
 
   const getNextGame = useCallback(async () => {
-    // [1] Reset game.
     setFound(false);
     setGameResponses([]);
     setTryCount(0);
@@ -257,7 +256,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
       inputs.map((input) => {
         if (input.response || input.response === false) {
           if (getOneGameById.subType === GameType.MONEY) {
-            // Utilisation des templates de chaînes de caractères
             const significationWithEuro = `${input.selectedValue} ${euro}`;
             responses.push({ isSuccess: input.response, signification: significationWithEuro, value: input.response ? 0 : fakeSignificationIndex });
           } else {
@@ -376,21 +374,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
               )}
             </div>
           </div>
-          <Grid container spacing={1} style={{ flex: 1, justifyContent: 'space-around' }}>
-            {/* <RadioGroup row defaultValue={RadioBoxValues.NEW}>
-              {Object.keys(radioListComponentMapper).map((value: string, index: number) => {
-                return (
-                  <RadioNextGame
-                    key={index}
-                    value={value as RadioBoxValues}
-                    Icon={radioListComponentMapper[value as RadioBoxValues]}
-                    onChange={handleRadioButtonChange}
-                    checked={selectedValue === value}
-                  />
-                );
-              })}
-            </RadioGroup> */}
-          </Grid>
           <Grid
             container
             border={1}
@@ -446,7 +429,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
                         signification={signification}
                         disabled={isDisabled}
                         isCorrect={isCorrect || (tryCount > 1 && isSuccess)}
-                        // mimicOrigine={mimicOrigine}
                       />
                     </div>
                   );
@@ -520,7 +502,6 @@ const DisplayGameById = ({ subType }: SubTypeProps) => {
           </Grid>
           <Grid item xs={3} display="flex" justifyContent="flex-end">
             <Button variant="outlined" color="primary" onClick={getNextGame}>
-              {/* <Button variant="outlined" color="primary"> */}
               Jeu suivant
             </Button>
           </Grid>
