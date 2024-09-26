@@ -1,6 +1,8 @@
 import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
+import { Email, sendMail } from '../emails';
+import { EnumMailType, hasSubscribed, getEmailInformation, activityNameMapper, emailMapping } from '../emails/checkSubscribe';
 import { Activity } from '../entities/activity';
 import { Comment } from '../entities/comment';
 import { UserType } from '../entities/user';
@@ -51,6 +53,7 @@ const ADD_DATA_SCHEMA: JSONSchemaType<AddCommentData> = {
   additionalProperties: false,
 };
 const addCommentDataValidator = ajv.compile(ADD_DATA_SCHEMA);
+
 commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
   const data = req.body;
   if (!addCommentDataValidator(data)) {
@@ -67,8 +70,30 @@ commentController.post({ path: '', userType: UserType.TEACHER }, async (req: Req
   newComment.activityId = activityId;
   newComment.userId = req.user?.id ?? 0;
   newComment.text = data.text;
-  await AppDataSource.getRepository(Comment).save(newComment);
-  res.sendJSON(newComment);
+
+  try {
+    const savedComment = await AppDataSource.getRepository(Comment).save(newComment);
+
+    const { activityId, userId } = savedComment;
+    const emailInformation = await getEmailInformation(activityId, userId, EnumMailType.COMMENTARY);
+    const emailType = emailMapping[emailInformation.column];
+    const shouldSendMail = hasSubscribed({ ...emailInformation, emailType });
+    if (shouldSendMail) {
+      const activityType = emailInformation?.activity?.type || 0;
+      const activityName: string = activityNameMapper[activityType];
+      const userName = emailInformation.classInformation || '';
+      await sendMail(Email.COMMENT_NOTIFICATION, emailInformation?.activityCreator?.email || '', {
+        userWhoComment: userName,
+        activityType: activityName,
+        url: `https://1v.parlemonde.org/activite/${activityId}`,
+      });
+    }
+
+    res.sendJSON(savedComment);
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement du commentaire:", error);
+    res.status(500).send("Erreur lors de l'enregistrement du commentaire");
+  }
 });
 
 // --- Edit one comment. ---

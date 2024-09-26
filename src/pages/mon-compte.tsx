@@ -16,6 +16,7 @@ import { AvatarEditor } from 'src/components/activities/content/editors/ImageEdi
 import { EditButton } from 'src/components/buttons/EditButton';
 import { QuestionButton } from 'src/components/buttons/QuestionButton';
 import { RedButton } from 'src/components/buttons/RedButton';
+import { NotifCheckbox } from 'src/components/mon-compte/NotifCheckbox';
 import { PanelInput } from 'src/components/mon-compte/PanelInput';
 import { UserContext } from 'src/contexts/userContext';
 import { useLanguages } from 'src/services/useLanguages';
@@ -412,6 +413,7 @@ const Presentation = () => {
           </>
         )}
       </div>
+      <NotifCheckbox />
       {user.type === UserType.FAMILY ? (
         <div className="account__panel">
           <h2>Préférence de communication</h2>

@@ -1,0 +1,17 @@
+1Village - Par Le Monde
+--------------------------------------
+
+"{{userWhoComment}}" a commenté votre activité "{{activityType}}"
+
+Retrouvez-le juste ici : {{url}}
+
+Rendez-vous sur 1Village : https://1v.parlemonde.org pour y répondre !
+
+--------------------------------------
+
+© 2024 1Village. Tous droits réservés.
+
+--------------------------------------
+
+Pour ne plus recevoir ces e-mails, mettez à jour vos paramètres de notification dans
+votre compte (https://1v.parlemonde.org/mon-compte) pour cette notification.

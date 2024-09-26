@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import classNames from 'classnames';
 import React from 'react';
 
-import { BarChart } from '@mui/x-charts/BarChart';
+// import { BarChart } from '@mui/x-charts/BarChart';
 
 import styles from '../styles/charts.module.css';
 
@@ -17,12 +18,13 @@ interface Props {
 
 //add isSelected to change colors #4339F2 or #DAD7FE
 
-const BarCharts: React.FC<Props> = ({ barChartData, title, className }) => {
-  const seriesData = barChartData.map((item) => ({ data: item.data }));
+const BarCharts: React.FC<Props> = ({ title, className }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const seriesData = barChartData.map((item) => ({ data: item.data }));
   return (
     <div className={classNames(styles.barContainer, className)}>
       {title && <div className={styles.title}>{title}</div>}
-      <BarChart
+      {/* <BarChart
         xAxis={[
           {
             scaleType: 'band',
@@ -40,7 +42,7 @@ const BarCharts: React.FC<Props> = ({ barChartData, title, className }) => {
             clipPath: `inset(0px round 40px)`,
           },
         }}
-      />
+      /> */}
     </div>
   );
 };

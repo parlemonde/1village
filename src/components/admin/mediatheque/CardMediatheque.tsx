@@ -26,7 +26,6 @@ interface ExtendedActivity extends Activity {
   village: Village;
   name: string;
 }
-//CARROUSEL si item.content.length > 1 alors fais le caroussel sirnon affiche moi le classique celui auddessus
 
 export default function MediaCard({ page }: { page: number }) {
   const { allFiltered } = useContext(MediathequeContext);

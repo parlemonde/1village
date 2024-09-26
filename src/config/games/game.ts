@@ -244,7 +244,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 3,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est son prix moyen ? (Écrire la valeur en nombre)',
               selectedValue: '',
               response: true,
               isDisplayedInRecap: true,
@@ -308,7 +308,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 9,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est son prix moyen ? (Écrire la valeur en nombre)',
               selectedValue: '',
               response: true,
               isDisplayedInRecap: true,
@@ -372,7 +372,7 @@ export const GAME_FIELDS_CONFIG: GameFieldConfigType = {
             {
               id: 15,
               type: InputTypeEnum.INPUT,
-              label: 'Quel est son prix moyen en euro ? (Écrire la valeur en nombre)',
+              label: 'Quel est son prix moyen ? (Écrire la valeur en nombre)',
               selectedValue: '',
               response: true,
               isDisplayedInRecap: true,

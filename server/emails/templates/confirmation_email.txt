@@ -1,0 +1,25 @@
+1Village - Association Par Le Monde
+--------------------------------------
+
+Bonjour {{firstname}},
+
+Confirmation d'email
+
+Pour activer votre compte, merci de cliquer sur ce lien :
+valider mon email : {{url}}/user-verified?email={{email}}&verificationHash={{verificationHash}}
+Une fois votre compte activé, vous pourrez renseigner l’identifiant de votre enfant transmis par son professeur, et accéder aux échanges en ligne sur 1Village.
+À bientôt,
+
+Hello {{firstname}},
+To activate your account, please click on the following link:
+approve my email : {{url}}/user-verified?email={{email}}&verificationHash={{verificationHash}}
+Once activated, you will need to input the child id provided by the teacher, in order to access the 1Village website.
+Best,
+
+Vous recevez cette notification e-mail envoyée automatiquement dans le cadre du projet 1Village.
+
+--------------------------------------
+
+© 2024 1Village. Tous droits réservés.
+
+--------------------------------------
