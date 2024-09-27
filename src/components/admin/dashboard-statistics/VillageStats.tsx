@@ -32,10 +32,12 @@ const VillageStats = () => {
     setSelectedVillage(village);
   };
   // eslint-disable-next-line no-console
-  console.log('Villages stats', villagesStats.data?.teacherCreatedAccountsNumber);
+  console.log('Villages stats', villagesStats.data);
+  console.log('Villages stats', villagesStats.data?.childrenCodesCount);
+  console.log('Villages stats', villagesStats.data?.familyAccountsCount);
+  console.log('Village Stats', villagesStats.data?.connectedFamiliesCount);
   return (
     <>
-      <p>{selectedVillage?.id}</p>
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
           <PhaseDropdown />
@@ -51,9 +53,9 @@ const VillageStats = () => {
         <PelicoCard message={pelicoMessage} />
       ) : (
         <div className={styles.classroomStats}>
-          <StatsCard data={128}>Nombre de profs ayant créé des comptes famille</StatsCard>
-          <StatsCard data={212}>Nombre de codes enfant créés</StatsCard>
-          <StatsCard data={128}>Nombre de familles connectées</StatsCard>
+          <StatsCard data={villagesStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+          <StatsCard data={villagesStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+          <StatsCard data={villagesStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
         </div>
       )}
     </>

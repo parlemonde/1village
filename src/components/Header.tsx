@@ -117,7 +117,9 @@ export const Header = () => {
                 {hasAccessToOldAdmin && <MenuItem onClick={() => goToPage('/admin/villages')}>Admin (old)</MenuItem>}
                 <MenuItem onClick={() => goToPage('/mon-compte')}>Mon compte</MenuItem>
                 {user.type !== UserType.FAMILY && <MenuItem onClick={() => goToPage('/mes-videos')}>Mes vidéos</MenuItem>}
-                {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                <AccessControl featureName="id-family" key={user?.id || 'default'}>
+                  {user.type === UserType.TEACHER ? <MenuItem onClick={() => goToPage('/familles/1')}>Mes familles</MenuItem> : null}{' '}
+                </AccessControl>
                 <MenuItem onClick={logout}>
                   <span className="text text--alert">Se déconnecter</span>
                 </MenuItem>

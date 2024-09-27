@@ -16,7 +16,7 @@ import {
   getMinConnections,
   getMinDuration,
 } from '../stats/sessionStats';
-import { getTeacherCreatedAccountsNumber } from '../stats/villageStats';
+import { getChildrenCodesCount, getFamilyAccountsCount, getConnectedFamiliesCount } from '../stats/villageStats';
 import { Controller } from './controller';
 
 export const statisticsController = new Controller('/statistics');
@@ -48,6 +48,8 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
 statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => {
   const villageId = parseInt(_req.params.villageId);
   res.sendJSON({
-    teacherCreatedAccountsNumber: await getTeacherCreatedAccountsNumber(villageId),
+    familyAccountsCount: await getFamilyAccountsCount(villageId),
+    childrenCodesCount: await getChildrenCodesCount(villageId),
+    connectedFamiliesCount: await getConnectedFamiliesCount(villageId),
   });
 });

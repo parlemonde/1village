@@ -27,5 +27,7 @@ export interface SessionsStats {
 }
 
 export interface VillageStats {
-  teacherCreatedAccountsNumber: number;
+  childrenCodesCount: number;
+  familyAccountsCount: number;
+  connectedFamiliesCount: number;
 }

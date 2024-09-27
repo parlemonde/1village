@@ -93,7 +93,6 @@ const FeatureFlagsTest: React.FC = () => {
 
   const handleNewFeatureFlagChange = async (event: SelectChangeEvent<string>) => {
     const featureFlagName = event.target.value;
-
     // Find the feature flag object from the featureFlags state using the selected feature flag name
     const selectedFeatureFlag = (featureFlags || []).find((flag) => flag.name === featureFlagName);
 
