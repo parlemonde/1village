@@ -14,26 +14,25 @@ import styles from './styles/charts.module.css';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
-import type { Country } from 'types/country.type';
 
 const VillageStats = () => {
-  const [selectedCountry, setSelectedCountry] = useState<string>(''); // Default to 'FR' initially
-  const [selectedVillage, setSelectedVillage] = useState<number | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [selectedVillage, setSelectedVillage] = useState<string>('');
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
 
   const { countries } = useCountries();
 
-  const { villages } = useVillages(selectedCountry); // Dynamically pass the selected country
-  const villagesStats = useGetVillagesStats(selectedVillage);
+  const { villages } = useVillages(selectedCountry);
+  const villagesStats = useGetVillagesStats(+selectedVillage);
 
-  const handleCountryChange = (country: Country) => {
-    setSelectedCountry(country.isoCode);
-    setSelectedVillage(null);
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+    setSelectedVillage('');
   };
 
-  const handleVillageChange = (village: { name: string; id: number }) => {
-    setSelectedVillage(village.id);
+  const handleVillageChange = (village: string) => {
+    setSelectedVillage(village);
   };
 
   interface TabPanelProps {

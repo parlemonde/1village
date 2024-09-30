@@ -7,6 +7,8 @@ import VillageDropdown from './filters/VillageDropdown';
 import { mockClassroomsStats } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
+import { useCountries } from 'src/services/useCountries';
+import { useVillages } from 'src/services/useVillages';
 
 const ClassroomStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
@@ -15,17 +17,14 @@ const ClassroomStats = () => {
 
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
 
-  const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
-  const countries = [...new Set(countriesMap)];
+  const { countries } = useCountries();
+  const { villages } = useVillages(selectedCountry);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setSelectedVillage('');
     setSelectedClassroom('');
   };
-
-  const villagesMap = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry).map((village) => village.villageName);
-  const villages = [...new Set(villagesMap)];
 
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);

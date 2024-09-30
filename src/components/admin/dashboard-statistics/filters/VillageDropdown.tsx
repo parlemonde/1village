@@ -9,26 +9,23 @@ import Select from '@mui/material/Select';
 
 interface VillageDropdownProps {
   villages: { name: string; id: number }[];
-  onVillageChange: (vm: { name: string; id: number }) => void;
+  onVillageChange: (vm: string) => void;
 }
 
 export default function VillageDropdown({ villages, onVillageChange }: VillageDropdownProps) {
-  const [village, setVillage] = React.useState<{ name: string; id: number }>({ name: '', id: 0 });
+  const [village, setVillage] = React.useState<string>('');
 
   const handleChange = (event: SelectChangeEvent) => {
-    const selectedVillage = event.target.value;
-    const currentSelection = villages.find((vil) => vil.id === +selectedVillage);
-    if (currentSelection) {
-      setVillage(currentSelection);
-      onVillageChange(currentSelection);
-    }
+    const selectedVillage = event.target.value as string;
+    setVillage(selectedVillage);
+    onVillageChange(selectedVillage);
   };
 
   return (
     <Box sx={{ minWidth: 150, maxWidth: 200 }}>
       <FormControl fullWidth size="small">
         <InputLabel id="village-menu-select">Village-monde</InputLabel>
-        <Select labelId="village-menu-select" id="village-select" value={`${village?.id}`} label="Village" onChange={handleChange}>
+        <Select labelId="village-menu-select" id="village-select" value={`${village}`} label="Village" onChange={handleChange}>
           {villages.map((v) => (
             <MenuItem key={v.id} value={v.id}>
               {v.name}
