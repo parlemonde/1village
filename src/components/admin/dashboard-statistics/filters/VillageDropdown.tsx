@@ -13,7 +13,7 @@ interface VillageDropdownProps {
 }
 
 export default function VillageDropdown({ villages, onVillageChange }: VillageDropdownProps) {
-  const [village, setVillage] = React.useState<{ name: string; id: number }>();
+  const [village, setVillage] = React.useState<{ name: string; id: number }>({ name: '', id: 0 });
 
   const handleChange = (event: SelectChangeEvent) => {
     const selectedVillage = event.target.value;
@@ -28,10 +28,10 @@ export default function VillageDropdown({ villages, onVillageChange }: VillageDr
     <Box sx={{ minWidth: 150, maxWidth: 200 }}>
       <FormControl fullWidth size="small">
         <InputLabel id="village-menu-select">Village-monde</InputLabel>
-        <Select labelId="village-menu-select" id="village-select" value={village?.name} label="Village" onChange={handleChange}>
-          {villages.map((village) => (
-            <MenuItem key={village.id} value={village.id}>
-              {village.name}
+        <Select labelId="village-menu-select" id="village-select" value={`${village?.id}`} label="Village" onChange={handleChange}>
+          {villages.map((v) => (
+            <MenuItem key={v.id} value={v.id}>
+              {v.name}
             </MenuItem>
           ))}
         </Select>
