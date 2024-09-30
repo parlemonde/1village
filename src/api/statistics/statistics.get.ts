@@ -28,7 +28,9 @@ export const useGetSessionsStats = (phase: number | null) => {
 };
 
 export const useGetVillagesStats = (villageId: number | null) => {
-  return useQuery(['villages-stats'], () => getVillagesStats(villageId));
+  return useQuery(['villages-stats', villageId], () => getVillagesStats(villageId), {
+    enabled: villageId !== null,
+  });
 };
 
 async function getClassroomsStats(): Promise<ClassroomsStats[]> {

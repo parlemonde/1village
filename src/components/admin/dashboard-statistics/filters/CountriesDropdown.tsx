@@ -7,8 +7,10 @@ import MenuItem from '@mui/material/MenuItem';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select';
 
+import type { Country } from 'types/country.type';
+
 interface CountriesDropdownProps {
-  countries: string[];
+  countries: Country[];
   onCountryChange: (country: string) => void;
 }
 
@@ -27,8 +29,8 @@ export default function CountriesDropdown({ countries, onCountryChange }: Countr
         <InputLabel id="country-menu-select">Pays</InputLabel>
         <Select labelId="country-menu-select" id="country-select" value={country} label="Pays" onChange={handleChange}>
           {countries.map((country) => (
-            <MenuItem key={country} value={country}>
-              {country}
+            <MenuItem key={country.isoCode} value={country.isoCode}>
+              {country.name}
             </MenuItem>
           ))}
         </Select>

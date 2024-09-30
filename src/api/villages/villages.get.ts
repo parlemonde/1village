@@ -3,16 +3,19 @@ import type { Village } from 'server/entities/village';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 
-async function getVillages(): Promise<Village[]> {
+async function getVillages(countryIsoCode?: string): Promise<Village[]> {
+  const url = countryIsoCode ? `/villages?countryIsoCode=${countryIsoCode}` : '/villages';
   return (
     await axiosRequest({
       method: 'GET',
       baseURL: '/api',
-      url: '/villages',
+      url: url,
     })
   ).data;
 }
 
-export const useGetVillages = () => {
-  return useQuery(['villages'], getVillages);
+export const useGetVillages = (countryIsoCode?: string) => {
+  return useQuery(['villages', countryIsoCode], () => getVillages(countryIsoCode), {
+    enabled: !!countryIsoCode || countryIsoCode === undefined,
+  });
 };

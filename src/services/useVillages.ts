@@ -6,26 +6,32 @@ import { useQueryClient, useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Village } from 'types/village.type';
 
-export const useVillages = (): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
+export const useVillages = (countryIsoCode?: string): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const queryClient = useQueryClient();
 
+  // The query function for fetching villages, memoized with useCallback
   const getVillages: QueryFunction<Village[]> = React.useCallback(async () => {
     const response = await axiosRequest({
       method: 'GET',
-      url: '/villages',
+      url: countryIsoCode ? `/villages?countryIsoCode=${countryIsoCode}` : '/villages',
     });
     if (response.error) {
       return [];
     }
     return response.data;
-  }, []);
-  const { data, isLoading, error } = useQuery<Village[], unknown>(['villages'], getVillages);
+  }, [countryIsoCode]);
+
+  // Notice that we include `countryIsoCode` in the query key so that the query is refetched
+  const { data, isLoading, error } = useQuery<Village[], unknown>(
+    ['villages', countryIsoCode], // Include countryIsoCode in the query key to trigger refetching
+    getVillages,
+  );
 
   const setVillages = React.useCallback(
     (newVillages: Village[]) => {
-      queryClient.setQueryData(['villages'], newVillages);
+      queryClient.setQueryData(['villages', countryIsoCode], newVillages); // Ensure that the query key includes countryIsoCode
     },
-    [queryClient],
+    [queryClient, countryIsoCode],
   );
 
   return {

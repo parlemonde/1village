@@ -4,38 +4,32 @@ import StatsCard from './cards/StatsCard/StatsCard';
 import CountriesDropdown from './filters/CountriesDropdown';
 import PhaseDropdown from './filters/PhaseDropdown';
 import VillageDropdown from './filters/VillageDropdown';
-import { mockClassroomsStats } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
+import { useCountries } from 'src/services/useCountries';
+import { useVillages } from 'src/services/useVillages';
 
 const VillageStats = () => {
-  const villagesStats = useGetVillagesStats(1);
-  const [selectedCountry, setSelectedCountry] = useState<string>('');
-  const [selectedVillage, setSelectedVillage] = useState<{ name: string; id: number }>();
+  const [selectedCountry, setSelectedCountry] = useState<string>(''); // Default to 'FR' initially
+  const [selectedVillage, setSelectedVillage] = useState<number | null>(null);
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
 
-  const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
-  const countries = [...new Set(countriesMap)]; // avoid duplicates
+  const { countries } = useCountries();
+
+  const { villages } = useVillages(selectedCountry); // Dynamically pass the selected country
+  const villagesStats = useGetVillagesStats(selectedVillage);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
+    setSelectedVillage(null);
   };
-
-  const villagesMap = mockClassroomsStats
-    .filter((village) => village.classroomCountryCode === selectedCountry)
-    .map((village) => ({ name: village.villageName, id: village.villageId }));
-  const villages = [...new Set(villagesMap)];
 
   const handleVillageChange = (village: { name: string; id: number }) => {
-    setSelectedVillage(village);
+    setSelectedVillage(village.id);
   };
-  // eslint-disable-next-line no-console
-  console.log('Villages stats', villagesStats.data);
-  console.log('Villages stats', villagesStats.data?.childrenCodesCount);
-  console.log('Villages stats', villagesStats.data?.familyAccountsCount);
-  console.log('Village Stats', villagesStats.data?.connectedFamiliesCount);
+
   return (
     <>
       <div className={styles.filtersContainer}>
