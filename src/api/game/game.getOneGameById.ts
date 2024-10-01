@@ -2,7 +2,6 @@ import { useQuery } from 'react-query';
 
 import { serializeToQueryUrl } from 'src/utils';
 import { axiosRequest } from 'src/utils/axiosRequest';
-// import { GameType } from 'types/game.type';
 
 type Input = {
   selectedValue: string;
@@ -22,7 +21,9 @@ type Data = {
   radio: string;
 };
 
-type DataUse = {
+export type DataUse = {
+  phase: number;
+  type: number;
   content: Data;
   createDate: string;
   id: number;
@@ -35,7 +36,7 @@ type GetOneGameByIdProps = {
   subType: number;
   id: number;
 };
-// TODO : remove specific mimic management after mimic is standard
+
 export async function getOneGameById({ subType, id }: GetOneGameByIdProps) {
   const path = `/standardGame/${id}${serializeToQueryUrl({
     subType,
