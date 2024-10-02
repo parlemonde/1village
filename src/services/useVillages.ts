@@ -6,32 +6,42 @@ import { useQueryClient, useQuery } from 'react-query';
 import { axiosRequest } from 'src/utils/axiosRequest';
 import type { Village } from 'types/village.type';
 
-export const useVillages = (countryIsoCode?: string): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
+export const useVillages = (countryIsoCode: string, phase: string): { villages: Village[]; setVillages(newVillages: Village[]): void } => {
   const queryClient = useQueryClient();
+  const buildUrl = () => {
+    if (!countryIsoCode && !phase) return '/villages';
+    const queryParams = [];
 
+    if (countryIsoCode) queryParams.push(`countryIsoCode=${countryIsoCode}`);
+    if (phase) queryParams.push(`phase=${phase}`);
+
+    return queryParams.length ? `/villages?${queryParams.join('&')}` : '/villages';
+  };
+
+  const url = buildUrl();
   // The query function for fetching villages, memoized with useCallback
   const getVillages: QueryFunction<Village[]> = React.useCallback(async () => {
     const response = await axiosRequest({
       method: 'GET',
-      url: countryIsoCode ? `/villages?countryIsoCode=${countryIsoCode}` : '/villages',
+      url,
     });
     if (response.error) {
       return [];
     }
     return response.data;
-  }, [countryIsoCode]);
+  }, [url]);
 
   // Notice that we include `countryIsoCode` in the query key so that the query is refetched
   const { data, isLoading, error } = useQuery<Village[], unknown>(
-    ['villages', countryIsoCode], // Include countryIsoCode in the query key to trigger refetching
+    ['villages', countryIsoCode, phase], // Include countryIsoCode in the query key to trigger refetching
     getVillages,
   );
 
   const setVillages = React.useCallback(
     (newVillages: Village[]) => {
-      queryClient.setQueryData(['villages', countryIsoCode], newVillages); // Ensure that the query key includes countryIsoCode
+      queryClient.setQueryData(['villages', countryIsoCode, phase], newVillages); // Ensure that the query key includes countryIsoCode
     },
-    [queryClient, countryIsoCode],
+    [queryClient, countryIsoCode, phase],
   );
 
   return {

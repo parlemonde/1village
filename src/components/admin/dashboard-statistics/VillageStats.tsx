@@ -18,12 +18,13 @@ import { useVillages } from 'src/services/useVillages';
 const VillageStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
+  const [selectedPhase, setSelectedPhase] = useState<string>('4');
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
 
   const { countries } = useCountries();
 
-  const { villages } = useVillages(selectedCountry);
+  const { villages } = useVillages(selectedCountry, selectedPhase);
   const villagesStats = useGetVillagesStats(+selectedVillage);
 
   const handleCountryChange = (country: string) => {
@@ -33,6 +34,10 @@ const VillageStats = () => {
 
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);
+  };
+
+  const handlePhaseChange = (phase: string) => {
+    setSelectedPhase(phase);
   };
 
   interface TabPanelProps {
@@ -70,7 +75,7 @@ const VillageStats = () => {
     <>
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
-          <PhaseDropdown />
+          <PhaseDropdown onPhaseChange={handlePhaseChange} />
         </div>
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
