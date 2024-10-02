@@ -14,3 +14,8 @@ export interface Village {
   anthemId: number | null;
   plmId: number | null;
 }
+
+export interface VillageFilter {
+  countryIsoCode: string;
+  phase: string;
+}

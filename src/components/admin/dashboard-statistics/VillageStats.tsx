@@ -14,18 +14,27 @@ import styles from './styles/charts.module.css';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
+import type { VillageFilter } from 'types/village.type';
 
 const VillageStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
   const [selectedPhase, setSelectedPhase] = useState<string>('4');
+  const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '', phase: '' });
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
 
   const { countries } = useCountries();
 
-  const { villages } = useVillages(selectedCountry, selectedPhase);
+  const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage);
+
+  React.useEffect(() => {
+    setOptions({
+      countryIsoCode: selectedCountry,
+      phase: selectedPhase,
+    });
+  }, [selectedCountry, selectedPhase]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);

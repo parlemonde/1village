@@ -12,7 +12,6 @@ import DashboardTable from './charts/DashboardTable';
 import HorizontalBars from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
-import PhaseDropdown from './filters/PhaseDropdown';
 import PhaseDetails from './menu/PhaseDetails';
 import { mockClassroomsStats, mockConnectionsStats } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
@@ -34,15 +33,10 @@ const ContributionBarChartTitle = 'Contribution des classes';
 
 const CountryStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
-  const [selectedPhase, setSelectedPhase] = useState<string>('4');
   const pelicoMessage = 'Merci de sélectionner un pays pour analyser ses statistiques ';
   const { countries } = useCountries();
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
-  };
-
-  const handlePhaseChange = (phase: string) => {
-    setSelectedPhase(phase);
   };
 
   const filteredVillage = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry);
@@ -70,9 +64,9 @@ const CountryStats = () => {
   return (
     <>
       <div className={styles.filtersContainer}>
-        <div className={styles.phaseFilter}>
-          <PhaseDropdown onPhaseChange={handlePhaseChange} />
-        </div>
+        {/* <div className={styles.phaseFilter}>
+          <PhaseDropdown />
+        </div> */}
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
