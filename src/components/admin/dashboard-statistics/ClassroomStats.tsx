@@ -14,11 +14,12 @@ const ClassroomStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
   const [selectedClassroom, setSelectedClassroom] = useState<string>();
+  const [selectedPhase, setSelectedPhase] = useState<string>('4');
 
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
 
   const { countries } = useCountries();
-  const { villages } = useVillages(selectedCountry);
+  const { villages } = useVillages(selectedCountry, selectedPhase);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -40,11 +41,15 @@ const ClassroomStats = () => {
     setSelectedClassroom(classroom);
   };
 
+  const handlePhaseChange = (phase: string) => {
+    setSelectedPhase(phase);
+  };
+
   return (
     <>
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
-          <PhaseDropdown />
+          <PhaseDropdown onPhaseChange={handlePhaseChange} />
         </div>
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
