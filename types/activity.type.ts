@@ -39,7 +39,7 @@ export interface Activity<T extends AnyData = AnyData> {
 
   createDate?: Date | string;
   updateDate?: Date | string;
-  publishDate?: Date | string;
+  publishDate?: Date | string | null;
   deleteDate?: Date | string;
 
   // activity data
