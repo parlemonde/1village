@@ -1,19 +1,19 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { useGetActivities } from 'src/api/activities/activities.get';
+import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
 import SearchField from 'src/components/SearchField';
 import AllActivitiesAdmin from 'src/components/activities/ActivityCard/activity-admin/AllActivitiesAdmin';
 import BackArrow from 'src/svg/back-arrow.svg';
 
-const AllDaft = () => {
+const AllDraft = () => {
   const [search, setSearch] = useState('');
-  const { data, isError, isIdle, isLoading } = useGetActivities({ limit: null, isDraft: true, isPelico: true });
+  const { data, isError, isIdle, isLoading } = useGetActivitiesAdminDraft({ limit: null, isDraft: true });
   if (isError) return <p>Error!</p>;
   if (isLoading || isIdle) return <p>Loading...</p>;
   return (
     <div>
-      <Link href="/admin/newportal/publish">
+      <Link href="/admin/newportal/publier">
         <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
           <BackArrow />
           <h1 style={{ marginLeft: 10 }}>Activités non publiées</h1>
@@ -27,4 +27,4 @@ const AllDaft = () => {
   );
 };
 
-export default AllDaft;
+export default AllDraft;

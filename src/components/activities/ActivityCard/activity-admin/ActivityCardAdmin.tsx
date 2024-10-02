@@ -1,9 +1,10 @@
+import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, CircularProgress, Menu, MenuItem } from '@mui/material';
+import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem } from '@mui/material';
 
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
@@ -102,9 +103,11 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
       {/* display publish button only if activity is not published yet (status = 1) */}
       {activity.status !== 0 && (
         <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button size="small" sx={{ border: 1 }} onClick={() => publishActivity.mutate()} disabled={publishActivity.isLoading}>
-            {publishActivity.isLoading ? <CircularProgress /> : 'Publier'}
-          </Button>
+          <Link href={`/admin/newportal/publier/prepublish/${activity.id}`}>
+            <Button size="small" sx={{ border: 1, marginRight: 1 }}>
+              Publier
+            </Button>
+          </Link>
         </CardActions>
       )}
     </Card>

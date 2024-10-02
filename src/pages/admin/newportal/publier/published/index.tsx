@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import type { Activity } from 'server/entities/activity';
 
-import { useGetActivities } from 'src/api/activities/activities.get';
+import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
 import { useGetVillages } from 'src/api/villages/villages.get';
 import SearchField from 'src/components/SearchField';
 import type { Option } from 'src/components/accueil/Filters/FilterSelect';
@@ -13,7 +13,7 @@ import BackArrow from 'src/svg/back-arrow.svg';
 const Published = () => {
   const [search, setSearch] = useState('');
   const [selectedVillage, setSelectedVillage] = useState<Option<number> | null>(null);
-  const { data, isError, isIdle, isLoading } = useGetActivities({ limit: null, isDraft: false, isPelico: true });
+  const { data, isError, isIdle, isLoading } = useGetActivitiesAdminDraft({ limit: null, isDraft: false });
   const villages = useGetVillages();
   function filterActivitiesByVillage(selectedVillage: Option<number> | null, activities: Activity[]) {
     if (selectedVillage && selectedVillage.label !== 'Tous') {
@@ -26,7 +26,7 @@ const Published = () => {
   if (isLoading || isIdle || villages.isLoading || villages.isIdle) return <p>Loading...</p>;
   return (
     <div>
-      <Link href="/admin/newportal/publish">
+      <Link href="/admin/newportal/publier">
         <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
           <BackArrow />
           <h1 style={{ marginLeft: 10 }}>Activités publiées</h1>

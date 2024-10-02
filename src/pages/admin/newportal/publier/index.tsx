@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { useGetActivities } from 'src/api/activities/activities.get';
+import { useGetActivitiesAdminDraft } from 'src/api/activities/activities.admin.get';
 import ActivityCardAdminList from 'src/components/activities/ActivityCard/activity-admin/ActivityCardAdminList';
 import { UserContext } from 'src/contexts/userContext';
 import PelicoStar from 'src/svg/pelico/pelico_star.svg';
@@ -19,8 +19,9 @@ const columns: GridColDef[] = [];
 
 const Publier = () => {
   const { user } = React.useContext(UserContext);
-  const draftActivities = useGetActivities({ limit: 2, isDraft: true, isPelico: true });
-  const publishedActivities = useGetActivities({ limit: 2, isDraft: false, isPelico: true });
+  const draftActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: true });
+  const publishedActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: false });
+
   const router = useRouter();
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const Publier = () => {
           activities={draftActivities.data}
           noDataText="Il n'y a aucune activitées non publiée"
           svgNoData={<PelicoStar style={{ height: '6rem', width: '6rem' }} />}
-          buttonAction={() => router.push('/admin/newportal/publish/draft')}
+          buttonAction={() => router.push('/admin/newportal/publier/draft')}
         />
       </div>
       <div style={{ margin: 10 }}>
@@ -56,7 +57,7 @@ const Publier = () => {
           activities={publishedActivities.data ?? []}
           noDataText="Aucune activitées n'a été publiée pour le moment"
           svgNoData={<PelicoVacances style={{ height: '6rem', width: '6rem' }} />}
-          buttonAction={() => router.push('/admin/newportal/publish/published')}
+          buttonAction={() => router.push('/admin/newportal/publier/published')}
         />
       </div>
       <h1

@@ -58,7 +58,7 @@ export const NewAdminNavigation = () => {
 
   const tabs: Tab[] = [
     { path: '/admin/newportal/create', label: 'Créer', Icon: CreerIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN, UserType.MEDIATOR] },
-    { path: '/admin/newportal/publish', label: 'Publier', Icon: PublierIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
+    { path: '/admin/newportal/publier', label: 'Publier', Icon: PublierIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     { path: '/admin/newportal/manage', label: 'Gérer', Icon: GererIcon, rights: [UserType.ADMIN, UserType.SUPER_ADMIN] },
     {
       path: '/admin/newportal/analyze',

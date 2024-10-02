@@ -11,7 +11,7 @@ import { ImageType } from '../../types/story.type';
 import { Activity } from '../entities/activity';
 import { Game } from '../entities/game';
 import { Image } from '../entities/image';
-import { UserType } from '../entities/user';
+import { UserType, User } from '../entities/user';
 import { VillagePhase } from '../entities/village';
 import { getActivities, getActivitiesCommentCount } from '../manager/activity';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
@@ -114,6 +114,24 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
   } else {
     next();
   }
+});
+
+activityController.get({ path: '/admin/draft', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR }, async (req, res) => {
+  const adminUsers = await AppDataSource.getRepository(User)
+    .createQueryBuilder('User')
+    .select('User.id')
+    .where('user.type IN (:...types)', { types: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR] })
+    .getMany();
+
+  const draftActivities = await AppDataSource.getRepository(Activity)
+    .createQueryBuilder('Activity')
+    .where('Activity.status = :status', { status: req.query.status ? Number(getQueryString(req.query.status)) || 0 : undefined })
+    .andWhere('Activity.userId IN (:...userIds)', { userIds: adminUsers.map((u) => u.id) })
+    .orderBy('Activity.updateDate', 'DESC')
+    .limit(req.query.limit ? Number(getQueryString(req.query.limit)) || 200 : undefined)
+    .getMany();
+
+  res.sendJSON(draftActivities);
 });
 
 // --- Create an activity ---
