@@ -68,6 +68,18 @@ const VillageStats = () => {
 
   return (
     <>
+      <div className={styles.filtersContainer}>
+        <div className={styles.phaseFilter}>
+          <PhaseDropdown />
+        </div>
+        <div className={styles.countryFilter}>
+          <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
+        </div>
+        <div className={styles.countryFilter}>
+          <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
+        </div>
+      </div>
+      <p>Tableau à venir</p>
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" {...a11yProps(0)} />
         <Tab label="En famille" {...a11yProps(1)} />
@@ -76,17 +88,6 @@ const VillageStats = () => {
         <p>Statistiques - En classe</p>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <div className={styles.filtersContainer}>
-          <div className={styles.phaseFilter}>
-            <PhaseDropdown />
-          </div>
-          <div className={styles.countryFilter}>
-            <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
-          </div>
-          <div className={styles.countryFilter}>
-            <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
-          </div>
-        </div>
         {!selectedVillage ? (
           <PelicoCard message={pelicoMessage} />
         ) : (
