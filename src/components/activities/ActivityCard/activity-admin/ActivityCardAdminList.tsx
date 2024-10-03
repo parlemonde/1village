@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Activity } from 'server/entities/activity';
 
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 import ActivityCardAdmin from './ActivityCardAdmin';
@@ -15,6 +15,8 @@ type Props = {
 };
 
 export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction }: Props) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   return (
     <Paper
       sx={{
@@ -40,9 +42,9 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
           </Button>
         </div>
         {activities.length ? (
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
             {activities.map((activity) => (
-              <div key={activity.id} style={{ width: '50%' }}>
+              <div key={activity.id} style={{ width: isMobile ? '100%' : '50%' }}>
                 <ActivityCardAdmin {...activity} />
               </div>
             ))}

@@ -1,9 +1,8 @@
 import { useQuery } from 'react-query';
-import type { Activity } from 'server/entities/activity';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
 
-async function getOneActivityById(params: { id: number }): Promise<Activity[]> {
+async function getOneActivityById(params: { id: number }) {
   const { id } = params;
   return (
     await axiosRequest({

@@ -37,7 +37,7 @@ const Publier = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: '60vw',
+        maxWidth: '80vw',
       }}
     >
       <h1>Publier</h1>
