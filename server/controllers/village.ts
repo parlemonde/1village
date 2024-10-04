@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv';
 import type { NextFunction, Request, Response } from 'express';
 
 import { UserType } from '../entities/user';
-import { Village, VillagePhase } from '../entities/village';
+import { Village } from '../entities/village';
 import { createVillagesFromPLM } from '../legacy-plm/api';
 import { AppError, ErrorCode } from '../middlewares/handleErrors';
 import { valueOrDefault } from '../utils';
@@ -15,22 +15,17 @@ const villageController = new Controller('/villages');
 //--- Get all villages ---
 villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
   const countryIsoCode = _req.query.countryIsoCode as string;
-  const phase = _req.query.phase as string;
   try {
     const villageRepository = AppDataSource.getRepository(Village);
-    let query;
-    if (countryIsoCode && phase) {
-      query = villageRepository.createQueryBuilder('village');
+    let villages;
+    if (countryIsoCode) {
+      const query = villageRepository.createQueryBuilder('village');
       query.where('village.countryCodes LIKE :countryIsoCode', { countryIsoCode: `%${countryIsoCode.toUpperCase()}%` });
 
-      if (Object.values(VillagePhase).includes(+phase)) {
-        query.andWhere('village.activePhase = :phase', { phase });
-      }
+      villages = await query.getMany();
     } else {
-      query = villageRepository.createQueryBuilder('student');
+      villages = await villageRepository.find();
     }
-
-    const villages = await query.getMany();
     res.sendJSON(villages);
   } catch (e) {
     console.error(e);

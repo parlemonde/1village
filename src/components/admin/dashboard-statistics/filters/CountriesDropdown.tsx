@@ -24,7 +24,18 @@ export default function CountriesDropdown({ countries, onCountryChange }: Countr
   };
 
   return (
-    <Box sx={{ minWidth: 150, maxWidth: 200 }}>
+    <Box
+      sx={{
+        minWidth: {
+          xs: 'none',
+          md: 150,
+        },
+        maxWidth: {
+          xs: 'none',
+          md: 200,
+        },
+      }}
+    >
       <FormControl fullWidth size="small">
         <InputLabel id="country-menu-select">Pays</InputLabel>
         <Select labelId="country-menu-select" id="country-select" value={country} label="Pays" onChange={handleChange}>

@@ -22,7 +22,18 @@ export default function VillageDropdown({ villages, onVillageChange }: VillageDr
   };
 
   return (
-    <Box sx={{ minWidth: 150, maxWidth: 200 }}>
+    <Box
+      sx={{
+        minWidth: {
+          xs: 'none',
+          md: 150,
+        },
+        maxWidth: {
+          xs: 'none',
+          md: 200,
+        },
+      }}
+    >
       <FormControl fullWidth size="small">
         <InputLabel
           id="village-menu-select"

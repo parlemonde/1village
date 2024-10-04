@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Box from '@mui/material/Box';
+
 import styles from './StatsCard.module.css';
 
 interface StatsCardProps {
@@ -8,10 +10,18 @@ interface StatsCardProps {
 }
 const StatsCard = ({ children, data }: StatsCardProps) => {
   return (
-    <div className={styles.cardContainer}>
+    <Box
+      className={styles.cardContainer}
+      sx={{
+        margin: {
+          xs: '0',
+          md: '0 1rem',
+        },
+      }}
+    >
       <p>{children}</p>
       <p>{data}</p>
-    </div>
+    </Box>
   );
 };
 

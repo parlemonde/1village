@@ -10,11 +10,10 @@ export const useVillages = (options?: VillageFilter): { villages: Village[]; set
   const queryClient = useQueryClient();
   const buildUrl = () => {
     if (!options) return '/villages';
-    const { countryIsoCode, phase } = options;
+    const { countryIsoCode } = options;
     const queryParams = [];
 
     if (countryIsoCode) queryParams.push(`countryIsoCode=${countryIsoCode}`);
-    if (phase) queryParams.push(`phase=${phase}`);
 
     return queryParams.length ? `/villages?${queryParams.join('&')}` : '/villages';
   };

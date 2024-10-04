@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 
 import StatsCard from './cards/StatsCard/StatsCard';
 import CountriesDropdown from './filters/CountriesDropdown';
-import PhaseDropdown from './filters/PhaseDropdown';
 import VillageDropdown from './filters/VillageDropdown';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
@@ -19,8 +18,7 @@ import type { VillageFilter } from 'types/village.type';
 const VillageStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
-  const [selectedPhase, setSelectedPhase] = useState<string>('4');
-  const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '', phase: '' });
+  const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
 
@@ -32,9 +30,8 @@ const VillageStats = () => {
   React.useEffect(() => {
     setOptions({
       countryIsoCode: selectedCountry,
-      phase: selectedPhase,
     });
-  }, [selectedCountry, selectedPhase]);
+  }, [selectedCountry]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -43,10 +40,6 @@ const VillageStats = () => {
 
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);
-  };
-
-  const handlePhaseChange = (phase: string) => {
-    setSelectedPhase(phase);
   };
 
   interface TabPanelProps {
@@ -82,18 +75,27 @@ const VillageStats = () => {
 
   return (
     <>
-      <div className={styles.filtersContainer}>
-        <div className={styles.phaseFilter}>
-          <PhaseDropdown onPhaseChange={handlePhaseChange} />
-        </div>
+      <Box
+        className={styles.filtersContainer}
+        sx={{
+          display: 'flex',
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+          gap: 2,
+        }}
+      >
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />
         </div>
         <div className={styles.countryFilter}>
           <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
         </div>
+      </Box>
+      <div>
+        <p>Tableau à venir</p>
       </div>
-      <p>Tableau à venir</p>
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" {...a11yProps(0)} />
         <Tab label="En famille" {...a11yProps(1)} />
@@ -105,11 +107,21 @@ const VillageStats = () => {
         {!selectedVillage ? (
           <PelicoCard message={pelicoMessage} />
         ) : (
-          <div className={styles.classroomStats}>
+          <Box
+            className={styles.classroomStats}
+            sx={{
+              display: 'flex',
+              flexDirection: {
+                xs: 'column', // Column direction for small devices
+                md: 'row', // Row direction for medium and larger devices
+              },
+              gap: 2, // Adds spacing between the child elements
+            }}
+          >
             <StatsCard data={villagesStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
             <StatsCard data={villagesStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
             <StatsCard data={villagesStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
-          </div>
+          </Box>
         )}
       </CustomTabPanel>
     </>

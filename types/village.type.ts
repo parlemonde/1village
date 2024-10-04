@@ -17,5 +17,4 @@ export interface Village {
 
 export interface VillageFilter {
   countryIsoCode: string;
-  phase: string;
 }
