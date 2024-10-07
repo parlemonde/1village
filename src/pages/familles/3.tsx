@@ -133,7 +133,7 @@ const ClassroomParamStep3 = () => {
               le laisser sous ce format.{' '}
             </p>
             <p>
-              Ainsi, vous pourrez générer autant de textes de présentation que d’élèves dans votre classe : à vous ensuite de les imprimer et les
+              Ainsi, vous pourrez générer autant de textes de présentation que d’enfants dans votre classe : à vous ensuite de les imprimer et les
               transmettre aux familles. Dans chaque texte, le mot-variable <span style={{ fontWeight: 'bold' }}>%identifiant</span> aura été remplacé
               automatiquement par l’identifiant unique généré à l’étape précédente.
             </p>

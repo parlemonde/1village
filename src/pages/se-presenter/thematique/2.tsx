@@ -42,7 +42,7 @@ const PresentationStep2 = () => {
         <div className="width-900">
           <h1>Choisissez le thème de votre présentation</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Dans cette activité, nous vous proposons de faire une présentation générale aux Pélicopains sur le thème de votre choix.
+            Dans cette activité, nous vous proposons de faire une présentation générale aux pélicopains sur le thème de votre choix.
           </p>
           <div>
             {PRESENTATION_THEMATIQUE.map((t, index) => (

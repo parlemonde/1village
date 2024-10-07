@@ -87,7 +87,7 @@ const DefiStep4 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Quel défi voulez-vous lancer aux Pelicopains ?</h1>
+          <h1>Quel défi voulez-vous lancer aux pélicopains ?</h1>
           <div style={{ marginTop: '1rem' }}>
             {LANGUAGE_DEFIS.map((t, index) => (
               <ThemeChoiceButton
@@ -130,7 +130,7 @@ const DefiStep4 = () => {
                 </div>
               }
               label="Un autre défi"
-              description={`Rédigez vous même le défi pour vos Pelicopains !`}
+              description={`Rédigez vous même le défi pour vos pélicopains !`}
             />
           </div>
           <StepsButton prev="/lancer-un-defi/linguistique/3" />

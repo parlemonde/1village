@@ -17,7 +17,7 @@ const Custom404 = () => {
               <PelicoSearch width="100%" height="100%" />
             </div>
           </h1>
-          <h2>{"Oups ! Pelico n'a pas trouvé la page."}</h2>
+          <h2>{"Oups ! Pélico n'a pas trouvé la page."}</h2>
           <p>La page que vous cherchez est introuvable ou temporairement inaccessible.</p>
           <Link href="/" passHref>
             <Button component="a" href="/" color="primary" variant="outlined" style={{ marginTop: '3rem' }}>

@@ -103,7 +103,7 @@ const ReportageStep1 = () => {
             </>
           ) : (
             <p className="text">
-              Vous trouvez ici les reportages qui ont déjà été déjà présentés par les Pélicopains sur le thème &quot;
+              Vous trouvez ici les reportages qui ont déjà été déjà présentés par les pélicopains sur le thème &quot;
               {getReportage(activity.subType, data).step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de réaliser votre
               reportage ! Vous pouvez également choisir de réaliser un autre reportage, en revenant à l&apos;étape précédente.
             </p>

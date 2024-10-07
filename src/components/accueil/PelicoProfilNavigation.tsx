@@ -33,7 +33,7 @@ export const PelicoProfilNavigation = () => {
             </Avatar>
           </span>
           <span className="text">
-            <strong>Pelico</strong>
+            <strong>Pélico</strong>
           </span>
         </div>
       </div>
@@ -42,7 +42,7 @@ export const PelicoProfilNavigation = () => {
         style={{ padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
       >
         <h3>
-          <b>Dernières activités de Pelico</b>
+          <b>Dernières activités de Pélico</b>
         </h3>
         {activities.slice(0, 3).map((activity, index) => {
           const ActivityIcon = icons[activity.type] || null;

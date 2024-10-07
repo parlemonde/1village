@@ -351,10 +351,10 @@ const Presentation = () => {
         </div>
       ) : null}
       <div className="account__panel">
-        <h2>Identifiants de connection</h2>
+        <h2>Identifiants de connexion</h2>
         <div className="account__panel-edit-button">
           {user.accountRegistration === 10 ? (
-            <QuestionButton helpMessage={`Vos identifiants de connection sont gérés par ${SSO_HOSTNAME}`} />
+            <QuestionButton helpMessage={`Vos identifiants de connexion sont gérés par ${SSO_HOSTNAME}`} />
           ) : (
             editMode !== 1 && <EditButton onClick={updateEditMode(1)} />
           )}
@@ -362,14 +362,14 @@ const Presentation = () => {
         {editMode === 1 && (
           <Alert severity="warning" style={{ margin: '0.5rem 0', backgroundColor: 'white', border: `1px solid ${helpColor}` }}>
             <AlertTitle>Attention !</AlertTitle>
-            Votre <strong>pseudo</strong> et votre <strong>email</strong> sont vos identifiants de connection.
+            Votre <strong>email</strong> est votre identifiant de connexion.
           </Alert>
         )}
         {user.type === UserType.TEACHER ? (
           <PanelInput
             value={newUser.pseudo}
             defaultValue={''}
-            label="Pseudo de la classe :"
+            label="Nom et prénom :"
             placeholder="Pseudo de la classe"
             isEditMode={editMode === 1}
             onChange={(pseudo) => {
@@ -383,7 +383,7 @@ const Presentation = () => {
         <PanelInput
           value={newUser.email}
           defaultValue={''}
-          label="Email:"
+          label="Email :"
           placeholder="Adresse Email"
           isEditMode={editMode === 1}
           onChange={(email) => {

@@ -48,7 +48,7 @@ const MascotteStep3 = () => {
             'Votre classe',
             `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
             'Langues et monnaies',
-            'Le web de Pelico',
+            'Le web de Pélico',
             'Prévisualiser',
           ]}
           urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
@@ -61,7 +61,7 @@ const MascotteStep3 = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles sont les langues parlées couramment par <b>tous les élèves</b> de votre classe ?
+                  Quelles sont les langues parlées couramment par <b>tous les enfants</b> de votre classe ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"
@@ -70,7 +70,7 @@ const MascotteStep3 = () => {
                   onChange={dataChange('fluentLanguages')}
                 />
                 <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                  Quelles sont les langues parlées couramment par <b>au moins un élève</b> de votre classe ?
+                  Quelles sont les langues parlées couramment par <b>au moins un enfant</b> de votre classe ?
                 </p>
                 <MultipleLanguageSelector
                   label="Langues"
@@ -90,7 +90,7 @@ const MascotteStep3 = () => {
               </Grid>
             </Grid>
             <h2>Monnaies utilisées dans votre classe</h2>
-            <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>Quelles sont les monnaies utilisées par les élèves de votre classe ?</p>
+            <p style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>Quelles sont les monnaies utilisées par les enfants de votre classe ?</p>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <MultipleCurrencySelector

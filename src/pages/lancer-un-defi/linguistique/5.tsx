@@ -174,7 +174,7 @@ const DefiStep5 = () => {
           </div>
 
           <span className={classNames('text text--small text--success', { 'text text--small text--warning': !isValid && errorSteps.includes(3) })}>
-            Le défi lancé aux Pélicopains
+            Le défi lancé aux pélicopains
           </span>
           <div className={classNames('preview-block', { 'preview-block--warning': !isValid && errorSteps.includes(3) })}>
             <EditButton

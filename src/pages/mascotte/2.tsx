@@ -83,7 +83,7 @@ const MascotteStep2 = () => {
             'Votre classe',
             `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
             'Langues et monnaies',
-            'Le web de Pelico',
+            'Le web de Pélico',
             'Prévisualiser',
           ]}
           urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
@@ -116,12 +116,12 @@ const MascotteStep2 = () => {
                   onChange={dataChange('mascotteName')}
                   label="Nom"
                   variant="outlined"
-                  placeholder="Pelico"
+                  placeholder="Pélico"
                   InputLabelProps={{
                     shrink: true,
                   }}
                 />
-                <p>Quel animal est votre mascotte et pourquoi l&apos;avoir choisi ?</p>
+                <p>Que représente votre mascotte et pourquoi l&apos;avoir choisi ?</p>
                 <TextField
                   error={showError && data.mascotteDescription === ''}
                   helperText={showError && data.mascotteDescription === '' && 'Écrivez la description de votre mascotte !'}
@@ -141,7 +141,7 @@ const MascotteStep2 = () => {
                     <span className="text text--small">{data.mascotteDescription.length}/400</span>
                   </div>
                 )}
-                <p>3 traits de personnalité de votre mascotte (et donc des élèves !)</p>
+                <p>3 traits de personnalité de votre mascotte (et donc des enfants !)</p>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
                     <TextField

@@ -125,7 +125,7 @@ const EnigmeStep1 = () => {
               <h1>Créer une énigme sur un autre thème</h1>
               <p className="text">
                 Indiquez le thème de l&apos;énigme que vous souhaitez créer. N&apos;indiquez pas la réponse à votre énigme ici, car ce thème sera
-                utilisé comme indice supplémentaire par les Pélicopains.
+                utilisé comme indice supplémentaire par les pélicopains.
               </p>
               <TextField
                 value={data.themeName || ''}

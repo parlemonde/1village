@@ -61,7 +61,7 @@ export const NotifCheckbox = () => {
     // ---------- Uncomment the following lines to add more checkboxes ----------
     // { label: 'Réaction à une de vos publications', checked: reactionChecked, handle: handleReactionChecked },
     // { label: 'Publication d’une classe', checked: publicationFromAClassChecked, handle: handlePublicationFromAClassChecked },
-    // { label: 'Publication de Pelico', checked: publicationFromAdminChecked, handle: handlePublicationFromAdminChecked },
+    // { label: 'Publication de Pélico', checked: publicationFromAdminChecked, handle: handlePublicationFromAdminChecked },
     // { label: 'Création de compte famille', checked: creationAccountFamilyChecked, handle: handleCreationAccountFamilyChecked },
     // { label: 'Ouverture de phase', checked: phaseOpeningChecked, handle: handlePhaseOpeningChecked },
   ];

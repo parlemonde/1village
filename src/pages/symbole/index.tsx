@@ -85,7 +85,7 @@ const Symbol = () => {
         <div className="width-900">
           <h1 style={{ marginTop: '0.5rem' }}>Quel symbole allez-vous présenter ?</h1>
           <p className="text">
-            Dans cette activité, nous vous proposons de présenter à vos Pélicopains une fleur, un emblème, un hymne, un drapeau... un symbole, qui
+            Dans cette activité, nous vous proposons de présenter à vos pélicopains une fleur, un emblème, un hymne, un drapeau... un symbole, qui
             représente le pays ou la région dans lequel vous habitez.
           </p>
           <p className="text">

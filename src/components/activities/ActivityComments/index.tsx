@@ -59,7 +59,7 @@ export const ActivityComments = ({ activity, usersMap }: ActivityCommentsProps) 
     <div>
       <div className="activity__divider">
         <div className="activity__divider--text">
-          <h2>Réaction des Pélicopains</h2>
+          <h2>Réaction des pélicopains</h2>
         </div>
       </div>
       {/* Stories space */}
