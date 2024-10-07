@@ -1,7 +1,6 @@
 import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
-
 import { AppDataSource } from '../utils/data-source';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
