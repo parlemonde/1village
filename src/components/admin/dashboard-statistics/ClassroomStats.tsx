@@ -7,16 +7,21 @@ import VillageDropdown from './filters/VillageDropdown';
 import { mockClassroomsStats } from './mocks/mocks';
 import { PelicoCard } from './pelico-card';
 import styles from './styles/charts.module.css';
+import { useCountries } from 'src/services/useCountries';
+import { useVillages } from 'src/services/useVillages';
+import type { VillageFilter } from 'types/village.type';
 
 const ClassroomStats = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedVillage, setSelectedVillage] = useState<string>('');
   const [selectedClassroom, setSelectedClassroom] = useState<string>();
+  const [selectedPhase, setSelectedPhase] = useState<string>('4');
+  const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
 
   const pelicoMessage = 'Merci de sélectionner une classe pour analyser ses statistiques ';
 
-  const countriesMap = mockClassroomsStats.map((country) => country.classroomCountryCode);
-  const countries = [...new Set(countriesMap)];
+  const { countries } = useCountries();
+  const { villages } = useVillages(options);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -24,8 +29,11 @@ const ClassroomStats = () => {
     setSelectedClassroom('');
   };
 
-  const villagesMap = mockClassroomsStats.filter((village) => village.classroomCountryCode === selectedCountry).map((village) => village.villageName);
-  const villages = [...new Set(villagesMap)];
+  React.useEffect(() => {
+    setOptions({
+      countryIsoCode: selectedCountry,
+    });
+  }, [selectedCountry, selectedPhase]);
 
   const handleVillageChange = (village: string) => {
     setSelectedVillage(village);
@@ -41,11 +49,15 @@ const ClassroomStats = () => {
     setSelectedClassroom(classroom);
   };
 
+  const handlePhaseChange = (phase: string) => {
+    setSelectedPhase(phase);
+  };
+
   return (
     <>
       <div className={styles.filtersContainer}>
         <div className={styles.phaseFilter}>
-          <PhaseDropdown />
+          <PhaseDropdown onPhaseChange={handlePhaseChange} />
         </div>
         <div className={styles.countryFilter}>
           <CountriesDropdown countries={countries} onCountryChange={handleCountryChange} />

@@ -36,7 +36,7 @@ export const mockClassroomsStats: ClassroomsStats[] = [
   {
     classroomId: 3,
     classroomCountryCode: 'FR',
-    villageId: 1,
+    villageId: 456,
     villageName: 'Village C',
     commentsCount: 40,
     videosCount: 2,

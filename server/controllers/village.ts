@@ -14,8 +14,23 @@ const villageController = new Controller('/villages');
 
 //--- Get all villages ---
 villageController.get({ path: '', userType: UserType.OBSERVATOR }, async (_req: Request, res: Response) => {
-  const villages = await AppDataSource.getRepository(Village).find();
-  res.sendJSON(villages);
+  const countryIsoCode = _req.query.countryIsoCode as string;
+  try {
+    const villageRepository = AppDataSource.getRepository(Village);
+    let villages;
+    if (countryIsoCode) {
+      const query = villageRepository.createQueryBuilder('village');
+      query.where('village.countryCodes LIKE :countryIsoCode', { countryIsoCode: `%${countryIsoCode.toUpperCase()}%` });
+
+      villages = await query.getMany();
+    } else {
+      villages = await villageRepository.find();
+    }
+    res.sendJSON(villages);
+  } catch (e) {
+    console.error(e);
+    res.status(500).sendJSON({ message: 'An error occurred while fetching villages' });
+  }
 });
 
 //--- Get one village ---

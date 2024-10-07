@@ -25,3 +25,9 @@ export interface SessionsStats {
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
 }
+
+export interface VillageStats {
+  childrenCodesCount: number;
+  familyAccountsCount: number;
+  connectedFamiliesCount: number;
+}
