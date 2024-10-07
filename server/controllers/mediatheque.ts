@@ -1,12 +1,13 @@
 import type { Request, Response } from 'express';
 
 import { Activity } from '../entities/activity';
+import { UserType } from '../entities/user';
 import { AppDataSource } from '../utils/data-source';
 import { Controller } from './controller';
 
 const mediathequeController = new Controller('/mediatheque');
 
-mediathequeController.get({ path: '' }, async (req: Request, res: Response) => {
+mediathequeController.get({ path: '', userType: UserType.ADMIN || UserType.SUPER_ADMIN }, async (req: Request, res: Response) => {
   try {
     const subQueryBuilder = AppDataSource.getRepository(Activity)
       .createQueryBuilder('activity')

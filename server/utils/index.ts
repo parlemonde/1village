@@ -2,6 +2,14 @@ import base64url from 'base64url';
 import crypto from 'crypto';
 import type { Request } from 'express';
 import fs from 'fs';
+import { In } from 'typeorm';
+
+import { Activity } from '../entities/activity';
+import { Classroom } from '../entities/classroom';
+import { Student } from '../entities/student';
+import { User, UserType } from '../entities/user';
+import { UserToStudent } from '../entities/userToStudent';
+import { AppDataSource } from './data-source';
 
 /**
  * Pause the program for x milliseconds.
@@ -76,4 +84,31 @@ export function getQueryString(q: unknown | unknown[] | undefined): string | und
     return q;
   }
   return undefined;
+}
+
+export async function updateVillageData(user: User, data: { villageId: number }): Promise<void> {
+  if (user.type === UserType.TEACHER) {
+    const classroom = await AppDataSource.getRepository(Classroom).findOne({ where: { user: { id: user.id } } });
+
+    const students = await AppDataSource.getRepository(Student).find({ where: { classroom: { id: classroom?.id } } });
+    const studentsId = students.map((student) => student.id);
+
+    const families = await AppDataSource.getRepository(UserToStudent).find({
+      where: { student: { id: In(studentsId) } },
+      relations: ['user', 'student'],
+    });
+
+    const familiesId = families.map((family) => family.user.id);
+
+    const promises = [];
+
+    promises.push(
+      AppDataSource.getRepository(Classroom).update({ user: { id: user.id } }, { villageId: data.villageId }),
+      AppDataSource.getRepository(Activity).update({ userId: user.id }, { villageId: data.villageId }),
+      AppDataSource.getRepository(User).update({ id: In(familiesId) }, { villageId: data.villageId }),
+      AppDataSource.getRepository(User).update({ id: user.id }, { villageId: data.villageId }),
+    );
+
+    await Promise.all(promises);
+  }
 }

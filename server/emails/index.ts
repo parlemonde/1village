@@ -21,17 +21,25 @@ export enum Email {
   INVALID_COUNTRY,
   CONFIRMATION_EMAIL,
   RESET_PASSWORD_EMAIL,
+  COMMENT_NOTIFICATION,
+  // Ces notitications seront implémentées dans une prochaine itération
+  // REACTION_NOTIFICATION,
+  // PUBLICATION_FROM_SCHOOL,
+  // PUBLICATION_FROM_ADMIN,
+  // CREATION_ACCOUNT_FAMILY,
+  // OPENING_VILLAGE_STEP,
 }
 interface EmailMapping {
   [Email.INVALID_VILLAGE]: { userName: string; userEmail: string };
   [Email.INVALID_COUNTRY]: { userName: string; userEmail: string };
   [Email.CONFIRMATION_EMAIL]: { url: string; firstname: string; email: string; verificationHash: string };
   [Email.RESET_PASSWORD_EMAIL]: { url: string; email: string; verificationHash: string };
+  [Email.COMMENT_NOTIFICATION]: { userWhoComment: string; activityType: string; url: string };
 }
 type EmailOptions<E extends Email> = EmailMapping[E];
 
 type emailData = {
-  // filename?: string; // todo add when using html
+  filenameHtml?: string | undefined;
   filenameText: string;
   subject: string;
   args: { [key: string]: string };
@@ -41,6 +49,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   if (email === Email.INVALID_VILLAGE) {
     return {
       filenameText: 'invalid_village.txt',
+      filenameHtml: 'invalid_village.txt',
       subject: "Une classe 1Village n'est pas dans son village !",
       args: {
         ...options,
@@ -50,6 +59,7 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
   if (email === Email.INVALID_COUNTRY) {
     return {
       filenameText: 'invalid_country.txt',
+      filenameHtml: 'invalid_country.txt',
       subject: "Une classe 1Village n'est pas dans son pays !",
       args: {
         ...options,
@@ -59,7 +69,8 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
 
   if (email === Email.CONFIRMATION_EMAIL) {
     return {
-      filenameText: 'confirmation_email.html',
+      filenameHtml: 'confirmation_email.html',
+      filenameText: 'confirmation_email.txt',
       subject: 'Email de confirmation de votre compte 1Village',
       args: {
         ...options,
@@ -69,8 +80,19 @@ function getTemplateData<E extends Email>(email: E, receiverEmail: string, optio
 
   if (email === Email.RESET_PASSWORD_EMAIL) {
     return {
-      filenameText: 'reset-password-email.html',
+      filenameHtml: 'reset_password_email.html',
+      filenameText: 'reset_password_email.txt',
       subject: 'Mot de passe oublié - 1Village',
+      args: {
+        ...options,
+      },
+    };
+  }
+  if (email === Email.COMMENT_NOTIFICATION) {
+    return {
+      filenameHtml: 'comment_notification.html',
+      filenameText: 'comment_notification.txt',
+      subject: 'Du nouveau sur 1Village ! 🦜',
       args: {
         ...options,
       },
@@ -88,7 +110,6 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
     logger.error('Could not send mail, receiver is null or undefined!');
     return;
   }
-
   // Get email template data
   const templateData = getTemplateData<E>(email, receiverEmail, options);
   if (templateData === undefined) {
@@ -105,7 +126,11 @@ export async function sendMail<E extends Email>(email: E, receiverEmail: string,
   };
 
   try {
-    const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
+    if (!templateData.filenameHtml || !templateData.filenameText || !templateData.subject) {
+      throw new Error('Template data is missing required fields.');
+    }
+
+    const html = await renderFile(path.join(__dirname, 'templates', templateData.filenameHtml), renderOptions);
     const text = await renderFile(path.join(__dirname, 'templates', templateData.filenameText), renderOptions);
     // send mail with defined transport object
     const info = await transporter.sendMail({

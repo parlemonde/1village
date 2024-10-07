@@ -1,6 +1,7 @@
 import { UserType } from '../../types/user.type';
 import { Activity } from '../entities/activity';
 import { Classroom } from '../entities/classroom';
+
 import { AppDataSource } from '../utils/data-source';
 
 const classroomRepository = AppDataSource.getRepository(Classroom);
@@ -56,6 +57,7 @@ export const getConnectedClassroomsCount = async () => {
   return parseInt(result.classroomsCount);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getContributedClassroomsCount = async (phase: number | null) => {
   // TO DEBUG
   // const activitySubQuery = AppDataSource.createQueryBuilder()
