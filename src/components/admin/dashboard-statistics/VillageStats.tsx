@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
 import StatsCard from './cards/StatsCard/StatsCard';
+import DashboardTable from './charts/DashboardTable';
 import CountriesDropdown from './filters/CountriesDropdown';
 import VillageDropdown from './filters/VillageDropdown';
 import { PelicoCard } from './pelico-card';
@@ -26,7 +27,6 @@ const VillageStats = () => {
 
   const { villages } = useVillages(options);
   const villagesStats = useGetVillagesStats(+selectedVillage);
-
   React.useEffect(() => {
     setOptions({
       countryIsoCode: selectedCountry,
@@ -72,7 +72,6 @@ const VillageStats = () => {
       </div>
     );
   }
-
   return (
     <>
       <Box
@@ -93,9 +92,13 @@ const VillageStats = () => {
           <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
         </div>
       </Box>
-      <div>
-        <p>Tableau à venir</p>
-      </div>
+      {villagesStats.data?.familiesWithoutAccount.length ? (
+        <div className={styles.monitorTable}>
+          <DashboardTable data={villagesStats.data?.familiesWithoutAccount} />
+        </div>
+      ) : (
+        <p>Merci de sélectionner un village-monde pour analyser ses statistiques.</p>
+      )}
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" {...a11yProps(0)} />
         <Tab label="En famille" {...a11yProps(1)} />
@@ -112,10 +115,10 @@ const VillageStats = () => {
             sx={{
               display: 'flex',
               flexDirection: {
-                xs: 'column', // Column direction for small devices
-                md: 'row', // Row direction for medium and larger devices
+                xs: 'column',
+                md: 'row',
               },
-              gap: 2, // Adds spacing between the child elements
+              gap: 2,
             }}
           >
             <StatsCard data={villagesStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>

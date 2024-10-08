@@ -16,7 +16,7 @@ import {
   getMinConnections,
   getMinDuration,
 } from '../stats/sessionStats';
-import { getChildrenCodesCount, getFamilyAccountsCount, getConnectedFamiliesCount } from '../stats/villageStats';
+import { getChildrenCodesCount, getFamilyAccountsCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from '../stats/villageStats';
 import { Controller } from './controller';
 
 export const statisticsController = new Controller('/statistics');
@@ -51,5 +51,6 @@ statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => 
     familyAccountsCount: await getFamilyAccountsCount(villageId),
     childrenCodesCount: await getChildrenCodesCount(villageId),
     connectedFamiliesCount: await getConnectedFamiliesCount(villageId),
+    familiesWithoutAccount: await getFamiliesWithoutAccount(villageId),
   });
 });
