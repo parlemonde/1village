@@ -85,11 +85,11 @@ export const RightNavigation = ({ activityUser, displayAsUser = false }: { activ
               <AvatarImg user={activityUser} size="extra-small" noLink displayAsUser={displayAsUser} onClick={onclick} />
             </span>
             <span className="text">
-              <strong>Pelico</strong>
+              <strong>Pélico</strong>
             </span>
           </div>
         </Link>
-        <LastActivities title="Dernières activités de Pelico" activityUser={activityUser} />
+        <LastActivities title="Dernières activités de Pélico" activityUser={activityUser} />
       </Layout>
     );
   }

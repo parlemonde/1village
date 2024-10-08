@@ -154,8 +154,8 @@ const SongStep1 = () => {
         <div className={styles.contentContainer}>
           <h1>Mixez votre couplet</h1>
           <p>
-            Avant de composer votre couplet et de l&apos;enregistrer, je vous propose de moduler la musique de notre hymne, en jouant avec cette table
-            de montage simplifiée.
+            Avant de composer votre couplet et de l&apos;enregistrer, je vous propose de modifier le volume de certains instruments en jouant avec
+            cette table de mixage simplifiée.
           </p>
           <p>
             Placez les curseurs là où vous le souhaitez, puis écoutez votre mix avant de passer à la prochaine étape d&apos;écriture de votre couplet.

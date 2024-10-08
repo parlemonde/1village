@@ -308,7 +308,7 @@ const ClassroomParamStep1 = () => {
           <div className="width-900">
             <h1>Choisissez ce que voient les familles</h1>
             <p className="text">
-              Vous allez inviter les familles de vos élèves à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en
+              Vous allez inviter les familles des enfants à se connecter à 1Village. Ainsi, elles pourront observer les échanges qui ont lieu en
               ligne. Vous avez la possibilité de définir ce que les familles voient sur la plateforme. Choisissez parmi ces 2 options :
             </p>
             <FormControl>

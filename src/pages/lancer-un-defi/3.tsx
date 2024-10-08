@@ -115,7 +115,7 @@ const FreeDefiStep3 = () => {
                 </div>
               }
               label="Un autre défi"
-              description={`Rédigez vous même le défi pour vos Pelicopains !`}
+              description={`Rédigez vous même le défi pour vos pélicopains !`}
             />
           </div>
           <StepsButton prev="/lancer-un-defi/2" />

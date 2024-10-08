@@ -80,7 +80,7 @@ const ReactionStep1 = () => {
         />
         <div className="width-900">
           <h1>Réagir à une activité</h1>
-          <p>Quand un simple texte ne suffit plus, vous pouvez réagir à une activité déjà publiée par vos Pélicopains.</p>
+          <p>Quand un simple texte ne suffit plus, vous pouvez réagir à une activité déjà publiée par vos pélicopains.</p>
           <div ref={selectRef}>
             {activitiesTypes.map((type, idx) => (
               <ActivitySelect

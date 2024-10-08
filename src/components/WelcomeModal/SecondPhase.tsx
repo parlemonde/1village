@@ -38,7 +38,7 @@ export const SecondPhase = () => {
     <div style={{ width: '100%' }}>
       <Modal
         open={isModalOpen}
-        title="La phase 2 est active, et l'identité de vos Pélicopains est dévoilée !"
+        title="La phase 2 est active, et l'identité de vos pélicopains est dévoilée !"
         maxWidth="md"
         fullWidth
         onClose={() => {}}
@@ -74,7 +74,7 @@ export const SecondPhase = () => {
                   </Button>
                 </div>
                 <div>
-                  <p>Si vous souhaitez débuter les échanges avec vos Pélicopains, poursuivez sur la phase 2.</p>
+                  <p>Si vous souhaitez débuter les échanges avec vos pélicopains, poursuivez sur la phase 2.</p>
                   <Button
                     component="a"
                     onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {

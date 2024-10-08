@@ -96,7 +96,7 @@ const ContenuLibre = () => {
             <Switch checked={activity.isPinned} onChange={handlePinnedChange} value={activity.isPinned} color="primary" />
           </div>
           <div>
-            Publier sous votre nom la publication ? (Pas Pelico)
+            Publier sous votre nom la publication ? (Pas Pélico)
             <Switch checked={activity.displayAsUser} onChange={handleUserChange} value={activity.displayAsUser} color="primary" />
           </div>
           <p className="text">Image à la une :</p>

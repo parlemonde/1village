@@ -84,10 +84,10 @@ const ReInventStoryStep3 = () => {
           errorSteps={errorSteps}
         />
         <div className="width-900">
-          <h1>Inventez et dessinez un lieu extraordinaire</h1>
+          <h1>Inventez et décrivez votre lieu extraordinaire selon l’image</h1>
           <p className="text">
-            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à leurs pouvoirs, le village idéal va
-            atteindre l’objectif de développement durable que vous avez choisi.
+            Ce lieu, tout comme l’objet que vous avez choisi à l’étape précédente, est extraodinaire ! Grâce à ses pouvoirs, votre village-monde idéal
+            va atteindre l’objectif de développement durable que vous avez choisi.
           </p>
           <Grid container>
             <Grid item xs={12} md={6}>

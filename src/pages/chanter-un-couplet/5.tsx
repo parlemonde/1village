@@ -62,8 +62,8 @@ const SongStep5 = () => {
           <p className="text" style={{ fontSize: '1.1rem' }}>
             Voici la pré-visualisation de votre couplet.
             {isEdit
-              ? " Vous pouvez la modifier à l'étape précédente, et enregistrer vos changements ici."
-              : ' Vous pouvez la modifier, et quand vous êtes prêts : publiez-la dans votre village-monde !'}
+              ? " Vous pouvez le modifier à l'étape précédente, et enregistrer vos changements ici."
+              : ' Vous pouvez le modifier et quand vous êtes prêts : publiez-le dans votre village-monde !'}
           </p>
           {isEdit ? (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
@@ -140,7 +140,7 @@ const SongStep5 = () => {
               style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
             />
 
-            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé à la mélodie</p>
+            <p style={{ margin: '0.5rem 0' }}>Écoutez votre couplet superposé aux instruments</p>
             <AudioPlayer src={data.verseFinalMixUrl} isBuildingAudio style={{ width: '350px', height: '60px' }} />
           </div>
 
