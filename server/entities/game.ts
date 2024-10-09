@@ -10,7 +10,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import type { Game as GameInterface } from '../../types/game.type';
+import { GameStatus, type Game as GameInterface } from '../../types/game.type';
 import { Activity } from './activity';
 import { GameResponse } from './gameResponse';
 import { User } from './user';
@@ -67,4 +67,11 @@ export class Game implements GameInterface {
 
   @Column({ type: 'text' })
   public video: string;
+
+  @Column({
+    type: 'tinyint',
+    nullable: false,
+    default: GameStatus.VALIDATED,
+  })
+  public status: number;
 }

@@ -51,6 +51,11 @@ export enum methodType {
   CURRENCY = 'currency',
 }
 
+export const GameStatus = {
+  DRAFT: 0,
+  VALIDATED: 1,
+};
+
 // export interface Game
 export interface Game {
   id: number;
@@ -66,6 +71,7 @@ export interface Game {
   origine?: string;
   signification: string;
   video: string;
+  status: number;
 }
 
 export type GamesData = {
