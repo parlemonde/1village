@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import type { Activity } from 'server/entities/activity';
@@ -6,6 +7,7 @@ import type { Activity } from 'server/entities/activity';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Card, CardHeader, Avatar, CardMedia, CardContent, Typography, Button, CardActions, Menu, MenuItem } from '@mui/material';
 
+import { deleteActivity } from 'src/api/activities/activities.admin.delete';
 import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
@@ -13,6 +15,7 @@ import { htmlToText } from 'src/utils';
 export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();
+  const router = useRouter();
   const title: string = activity?.data?.title ? (activity.data.title as string) : '';
   const isImageUrl = activity.content.find((e) => e.type === 'image')?.value;
   const imageUrl: string = isImageUrl ? isImageUrl : 'https://placehold.co/600x400?text=No Picture';
@@ -27,6 +30,20 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleDelete = () => {
+    deleteActivity(activity.id);
+    queryClient.invalidateQueries({ queryKey: ['activities'] });
+    router.reload();
+    setAnchorEl(null);
+  };
+  const handleModified = () => {
+    if (activity.status === 0) {
+      router.push(`/admin/newportal/publier/prepublish/${activity.id}`);
+    } else {
+      router.push(`/admin/newportal/contenulibre/edit/1/${activity.id}`);
+    }
+    setAnchorEl(null);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -74,8 +91,8 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}>Modifier</MenuItem>
-              <MenuItem onClick={handleClose}>Supprimer</MenuItem>
+              <MenuItem onClick={handleModified}>Modifier</MenuItem>
+              <MenuItem onClick={handleDelete}>Supprimer</MenuItem>
             </Menu>
           </>
         }

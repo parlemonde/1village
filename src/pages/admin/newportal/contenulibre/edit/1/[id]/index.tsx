@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import Layout from '../layout';
-import { isFreeContent } from 'src/activity-types/anyActivity';
+import Layout from '../../../layout';
+import { useGetOneActivityById } from 'src/api/activities/activities.getOneById';
 import { Base } from 'src/components/Base';
 import { StepsButton } from 'src/components/StepsButtons';
 import StepsNavigation from 'src/components/activities/StepsNavigation';
@@ -11,16 +11,13 @@ import { ActivityContext } from 'src/contexts/activityContext';
 import type { ActivityContent } from 'types/activity.type';
 
 const ContenuLibreStep1: React.FC = () => {
-  const { activity, updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
+  const { updateActivity, addContent, deleteContent, save } = React.useContext(ActivityContext);
   const router = useRouter();
+  const { id } = router.query;
 
-  useEffect(() => {
-    if (activity === null && !('activity-id' in router.query) && !sessionStorage.getItem('activity')) {
-      router.push('/admin/newportal/contenulibre/1');
-    } else if (activity && !isFreeContent(activity)) {
-      router.push('/admin/newportal/contenulibre/1');
-    }
-  }, [activity, router]);
+  const { data: activity } = useGetOneActivityById({ id: Number(id) });
+
+  // useEffect(() => {}, [activity, router]);
 
   const updateContent = (content: ActivityContent[]): void => {
     if (!activity) return;
@@ -31,7 +28,7 @@ const ContenuLibreStep1: React.FC = () => {
   const onNext = async (): Promise<void> => {
     const success = await save();
     if (success) {
-      router.push('/admin/newportal/contenulibre/2');
+      router.push(`/admin/newportal/contenulibre/edit/2/` + id);
     }
   };
 
@@ -41,7 +38,7 @@ const ContenuLibreStep1: React.FC = () => {
 
   return (
     <Layout>
-      <StepsNavigation currentStep={0} />
+      <StepsNavigation currentStep={0} isEdit={true} id={id as unknown as number} />
       <h1>Ecrivez le contenu de votre publication</h1>
       <p>
         Utilisez l&apos;éditeur de bloc pour définir le contenu de votre publication. Dans l&apos;étape 2 vous pourrez définir l&apos;aspect de la

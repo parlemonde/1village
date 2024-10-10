@@ -13,7 +13,7 @@ import BackArrow from 'src/svg/back-arrow.svg';
 const Published = () => {
   const [search, setSearch] = useState('');
   const [selectedVillage, setSelectedVillage] = useState<Option<number> | null>(null);
-  const { data, isError, isIdle, isLoading } = useGetActivitiesAdminDraft({ limit: null, isDraft: false });
+  const { data, isError, isIdle, isLoading } = useGetActivitiesAdminDraft({ limit: null, isDraft: false, isDisplayed: false });
   const villages = useGetVillages();
   function filterActivitiesByVillage(selectedVillage: Option<number> | null, activities: Activity[]) {
     if (selectedVillage && selectedVillage.label !== 'Tous') {

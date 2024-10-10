@@ -20,7 +20,7 @@ const columns: GridColDef[] = [];
 const Publier = () => {
   const { user } = React.useContext(UserContext);
   const draftActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: true });
-  const publishedActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: false });
+  const publishedActivities = useGetActivitiesAdminDraft({ limit: 2, isDraft: false, isDisplayed: false });
 
   const router = useRouter();
 

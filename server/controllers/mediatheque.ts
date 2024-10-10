@@ -11,6 +11,7 @@ mediathequeController.get({ path: '', userType: UserType.ADMIN || UserType.SUPER
   try {
     const subQueryBuilder = AppDataSource.getRepository(Activity)
       .createQueryBuilder('activity')
+      .where('activity.villageId IS NOT NULL')
       .leftJoin('activity.user', 'user')
       .addSelect('user.school')
       .addSelect('user.type')
@@ -18,7 +19,6 @@ mediathequeController.get({ path: '', userType: UserType.ADMIN || UserType.SUPER
       .leftJoin('activity.village', 'village')
       .addSelect('village.name')
       .addSelect('village.countryCodes');
-
     const activitiesToFilter = await subQueryBuilder.getMany();
     const activities = activitiesToFilter.filter((status) => status.status === 0);
     res.send(activities);

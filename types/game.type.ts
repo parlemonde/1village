@@ -59,7 +59,7 @@ export interface Game {
   updateDate?: Date | string;
   deleteDate?: Date | string;
   userId: number;
-  villageId: number;
+  villageId: number | undefined;
   activityId: number;
   fakeSignification1: string;
   fakeSignification2: string;

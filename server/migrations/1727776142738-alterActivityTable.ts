@@ -31,6 +31,17 @@ export class AlterActivityTable1727776142738 implements MigrationInterface {
         isNullable: true,
       }),
     );
+
+    // Add isDisplayed column for exclude a parent activity to be
+    // displayed in the list of activities
+    await queryRunner.addColumn(
+      'activity',
+      new TableColumn({
+        name: 'isDisplayed',
+        type: 'boolean',
+        isNullable: true,
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -55,5 +66,6 @@ export class AlterActivityTable1727776142738 implements MigrationInterface {
     );
 
     await queryRunner.dropColumn('activity', 'parentActivityId');
+    await queryRunner.dropColumn('activity', 'isDisplayed');
   }
 }
