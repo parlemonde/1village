@@ -65,6 +65,73 @@ statisticsController.get({ path: '/sessions' }, async (req: Request, res) => {
 });
 
 statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
+  const classroomsData = await classroomRepository
+    .createQueryBuilder('classroom')
+    .leftJoin('classroom.village', 'village')
+    .leftJoin('classroom.user', 'user')
+    .addSelect('classroom.id', 'classroomId')
+    .addSelect('classroom.name', 'classroomName')
+    .addSelect('classroom.countryCode', 'classroomCountryCode')
+    .addSelect('village.id', 'villageId')
+    .addSelect('village.name', 'villageName')
+    .addSelect('user.id', 'userId')
+    .addSelect('user.firstname', 'userFirstname')
+    .addSelect('user.lastname', 'userLastname')
+    .addSelect(
+      `(SELECT COUNT(comment.id)
+      FROM comment
+      WHERE comment.userId = user.id) AS commentsCount`,
+    )
+    .addSelect(
+      `(SELECT COUNT(video.id)
+      FROM video
+      WHERE video.userId = user.id) AS videosCount`,
+    )
+    .addSelect(
+      `(SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'phase', ac.phase,
+          'activities', ac.activities
+        )
+      )
+      FROM (
+        SELECT 
+          activity.phase,
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'type', activity.type,
+              'count', activity.totalActivities
+            )
+          ) AS activities
+        FROM (
+          SELECT 
+            activity.phase,
+            activity.type,
+            COUNT(activity.id) AS totalActivities
+          FROM activity
+          WHERE activity.userId = user.id
+            AND activity.villageId = classroom.villageId
+            AND activity.deleteDate IS NULL
+          GROUP BY activity.phase, activity.type
+        ) AS activity
+        GROUP BY activity.phase
+      ) AS ac
+    ) AS activitiesCount`,
+    )
+    .groupBy('classroom.id')
+    .addGroupBy('user.id')
+    .getRawMany();
+
+  res.sendJSON(
+    classroomsData.map((classroom) => ({
+      ...classroom,
+      commentsCount: parseInt(classroom.commentsCount, 10),
+      videosCount: parseInt(classroom.videosCount, 10),
+    })),
+  );
+});
+
+statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
   res.sendJSON({
     classrooms: await getClassroomsInfos(),
   });
