@@ -18,6 +18,23 @@ export const classroomController = new Controller('/classrooms');
  * @param {object} res Express response object
  * @return {object} Route API JSON response
  */
+classroomController.get({ path: '/', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const classrooms = await AppDataSource.getRepository(Classroom).find({
+      relations: {
+        user: true,
+      },
+    });
+
+    if (!classrooms) {
+      return res.status(404).json({ message: 'No classrooms found' });
+    }
+
+    res.json(classrooms);
+  } catch (error) {
+    next(error);
+  }
+});
 
 classroomController.get({ path: '/:id', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10) || 0;

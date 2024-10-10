@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable, OneToOne } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import { UserType } from '../../types/user.type';
 import type { User as UserInterface } from '../../types/user.type';
 import { countriesMap } from '../utils/countries-map';
 import { Activity } from './activity';
+import { Classroom } from './classroom';
 import { FeatureFlag } from './featureFlag';
 import { Game } from './game';
 import { GameResponse } from './gameResponse';
@@ -125,6 +126,9 @@ export class User implements UserInterface {
   @ManyToOne(() => Village, (village: Village) => village.users, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'villageId' })
   public village: Village | null;
+
+  @OneToOne(() => Classroom, (classroom: Classroom) => classroom.user)
+  public classroom: Classroom | null;
 
   @OneToMany(() => Activity, (activity: Activity) => activity.user)
   public activities: Activity[];
