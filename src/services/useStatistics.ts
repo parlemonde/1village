@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+import type { ClassroomsStats, ConnectionsStats } from 'types/statistics.type';
 
 export const useStatisticsClassrooms = () => {
   const getStatisticsClassrooms = useCallback(async () => {
@@ -33,7 +33,7 @@ export const useStatisticsSessions = (villageId: number) => {
     return response.data;
   }, [villageId]);
 
-  const { data, isLoading, error } = useQuery<SessionsStats[], unknown>(['session'], getStatisticsSessions, { enabled: !!villageId });
+  const { data, isLoading, error } = useQuery<ConnectionsStats[], unknown>(['session'], getStatisticsSessions, { enabled: !!villageId });
 
   return isLoading || error ? {} : data || {};
 };
