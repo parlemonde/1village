@@ -13,8 +13,8 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
 import { Modal } from 'src/components/Modal';
-import { AdminTable } from 'src/components/admin/AdminTable';
 import { AdminTile } from 'src/components/admin/AdminTile';
+import { OneVillageTable } from 'src/components/admin/OneVillageTable';
 import { useVillages, useVillageRequests } from 'src/services/useVillages';
 import { defaultContainedButtonStyle } from 'src/styles/variables.const';
 import BackArrow from 'src/svg/back-arrow.svg';
@@ -138,7 +138,8 @@ const Villages = () => {
           />
         </Box>
         <Box sx={{ overflow: 'auto' }}>
-          <AdminTable
+          <OneVillageTable
+            admin
             emptyPlaceholder={
               <>
                 {"Vous n'avez pas encore de villages ! "}

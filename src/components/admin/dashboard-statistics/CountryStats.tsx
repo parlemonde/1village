@@ -8,7 +8,6 @@ import AverageStatsCard from './cards/AverageStatsCard/AverageStatsCard';
 import ClassesExchangesCard from './cards/ClassesExchangesCard/ClassesExchangesCard';
 import StatsCard from './cards/StatsCard/StatsCard';
 import BarCharts from './charts/BarCharts';
-import DashboardTable from './charts/DashboardTable';
 import HorizontalBars from './charts/HorizontalChart';
 import PieCharts from './charts/PieCharts';
 import CountriesDropdown from './filters/CountriesDropdown';
@@ -99,9 +98,9 @@ const CountryStats = () => {
               ))}
             </ul>
           </Box>
-          <div className={styles.monitorTable}>
+          {/* <div className={styles.monitorTable}>
             <DashboardTable />
-          </div>
+          </div> */}
           <div className={styles.classroomStats}>
             <StatsCard data={classStats[0].registered}>Nombre de classes inscrites</StatsCard>
             <StatsCard data={classStats[0].connected}>Nombre de classes connectées</StatsCard>

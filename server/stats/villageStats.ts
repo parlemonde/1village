@@ -37,3 +37,24 @@ export const getConnectedFamiliesCount = async (villageId: number) => {
 
   return connectedFamiliesCount;
 };
+
+export const getFamiliesWithoutAccount = async (villageId: number) => {
+  const familiesWithoutAccount = await studentRepository
+    .createQueryBuilder('student')
+    .innerJoin('student.classroom', 'classroom')
+    .innerJoin('classroom.user', 'user')
+    .innerJoin('user.village', 'village')
+    .where('classroom.villageId = :villageId', { villageId })
+    .andWhere('student.numLinkedAccount < 1')
+    .select([
+      'classroom.name AS classroom_name',
+      'classroom.countryCode as classroom_country',
+      'student.firstname AS student_firstname',
+      'student.lastname AS student_lastname',
+      'student.id AS student_id',
+      'village.name AS village_name',
+    ])
+    .getRawMany();
+
+  return familiesWithoutAccount;
+};
