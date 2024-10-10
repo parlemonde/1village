@@ -1,5 +1,44 @@
 export const classroomDocs = {
   '/api/classrooms': {
+    get: {
+      summary: 'Récupère toutes les classes',
+      tags: ['Classroom'],
+      responses: {
+        '200': {
+          description: 'Liste de toutes les classes récupérée avec succès',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'integer' },
+                    name: { type: 'string' },
+                    avatar: { type: 'string' },
+                    delayedDays: { type: 'number' },
+                    countryCode: { type: 'string' },
+                    user: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'integer' },
+                        type: { type: 'string' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        '404': {
+          description: 'Aucune classe trouvée',
+        },
+        '500': {
+          description: 'Erreur du serveur',
+        },
+      },
+    },
     post: {
       summary: 'Crée une nouvelle classe pour un enseignant',
       tags: ['Classroom'],
