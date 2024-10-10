@@ -47,9 +47,8 @@ export const getFamiliesWithoutAccount = async (villageId: number) => {
     .where('classroom.villageId = :villageId', { villageId })
     .andWhere('student.numLinkedAccount < 1')
     .select([
-      'user.firstname AS user_firstname',
-      'user.lastname AS user_lastname',
-      'user.email AS user_email',
+      'classroom.name AS classroom_name',
+      'classroom.countryCode as classroom_country',
       'student.firstname AS student_firstname',
       'student.lastname AS student_lastname',
       'student.id AS student_id',

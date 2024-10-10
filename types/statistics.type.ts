@@ -38,7 +38,6 @@ export interface FamiliesWithoutAccount {
   student_firstname: string;
   student_lastname: string;
   village_name: string;
-  user_firstname: string;
-  user_lastname: string;
-  user_email: string;
+  classroom_name: string;
+  classroom_country: string;
 }

@@ -5,8 +5,8 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
+import { OneVillageTable } from '../OneVillageTable';
 import StatsCard from './cards/StatsCard/StatsCard';
-import DashboardTable from './charts/DashboardTable';
 import CountriesDropdown from './filters/CountriesDropdown';
 import VillageDropdown from './filters/VillageDropdown';
 import { PelicoCard } from './pelico-card';
@@ -33,6 +33,14 @@ const VillageStats = () => {
     });
   }, [selectedCountry]);
 
+  const [rows, setRows] = React.useState<Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }>>([]);
+  React.useEffect(() => {
+    if (villagesStats.data?.familiesWithoutAccount) {
+      setRows([]);
+      setRows(createRows(villagesStats.data?.familiesWithoutAccount));
+    }
+  }, [villagesStats.data?.familiesWithoutAccount]);
+
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
     setSelectedVillage('');
@@ -58,7 +66,13 @@ const VillageStats = () => {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
+  const FamiliesWithoutAccountHeaders = [
+    { key: 'student', label: 'Nom Prénom Enfant', sortable: true },
+    { key: 'vm', label: 'Village-Monde', sortable: true },
+    { key: 'classroom', label: 'Classe', sortable: true },
+    { key: 'country', label: 'Pays', sortable: true },
+    { key: 'creationDate', label: 'Date de création identifiant', sortable: true },
+  ];
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -71,6 +85,27 @@ const VillageStats = () => {
         )}
       </div>
     );
+  }
+  function createRows(
+    data: Array<{
+      student_id: string | number;
+      student_firstname: string;
+      student_lastname: string;
+      village_name: string;
+      classroom_name: string;
+      classroom_country: string;
+    }>,
+  ): Array<{ id: string | number; [key: string]: string | boolean | number | React.ReactNode }> {
+    return data.map((row) => {
+      return {
+        id: row.student_id, // id is string | number
+        student: `${row.student_firstname} ${row.student_lastname}`, // string
+        vm: row.village_name, // string
+        classroom: row.classroom_name, // string
+        country: row.classroom_country, // string
+        creationDate: 'À venir', // string
+      };
+    });
   }
   return (
     <>
@@ -92,13 +127,6 @@ const VillageStats = () => {
           <VillageDropdown villages={villages} onVillageChange={handleVillageChange} />
         </div>
       </Box>
-      {villagesStats.data?.familiesWithoutAccount.length ? (
-        <div className={styles.monitorTable}>
-          <DashboardTable data={villagesStats.data?.familiesWithoutAccount} />
-        </div>
-      ) : (
-        <p>Merci de sélectionner un village-monde pour analyser ses statistiques.</p>
-      )}
       <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example" sx={{ py: 3 }}>
         <Tab label="En classe" {...a11yProps(0)} />
         <Tab label="En famille" {...a11yProps(1)} />
@@ -110,21 +138,30 @@ const VillageStats = () => {
         {!selectedVillage ? (
           <PelicoCard message={pelicoMessage} />
         ) : (
-          <Box
-            className={styles.classroomStats}
-            sx={{
-              display: 'flex',
-              flexDirection: {
-                xs: 'column',
-                md: 'row',
-              },
-              gap: 2,
-            }}
-          >
-            <StatsCard data={villagesStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
-            <StatsCard data={villagesStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
-            <StatsCard data={villagesStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
-          </Box>
+          <>
+            <OneVillageTable
+              admin={false}
+              emptyPlaceholder={<p>{pelicoMessage}</p>}
+              data={rows}
+              columns={FamiliesWithoutAccountHeaders}
+              titleContent={`À surveiller : comptes non créés (${rows.length})`}
+            />
+            <Box
+              className={styles.classroomStats}
+              sx={{
+                display: 'flex',
+                flexDirection: {
+                  xs: 'column',
+                  md: 'row',
+                },
+                gap: 2,
+              }}
+            >
+              <StatsCard data={villagesStats.data?.familyAccountsCount}>Nombre de profs ayant créé des comptes famille</StatsCard>
+              <StatsCard data={villagesStats.data?.childrenCodesCount}>Nombre de codes enfant créés</StatsCard>
+              <StatsCard data={villagesStats.data?.connectedFamiliesCount}>Nombre de familles connectées</StatsCard>
+            </Box>
+          </>
         )}
       </CustomTabPanel>
     </>
