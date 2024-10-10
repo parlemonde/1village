@@ -14,6 +14,7 @@ import {
 import type { Activity as ActivityInterface, AnyData, ActivityContent } from '../../types/activity.type';
 import { ActivityType, ActivityStatus } from '../../types/activity.type';
 import { VillagePhase } from '../../types/village.type';
+import { Classroom } from './classroom';
 import { Game } from './game';
 import { Image } from './image';
 import { User } from './user';
@@ -121,4 +122,11 @@ export class Activity implements ActivityInterface<AnyData> {
 
   @OneToMany(() => Image, (image: Image) => image.activity)
   public images: Image[];
+
+  @ManyToOne(() => Classroom, (classroom) => classroom.activities)
+  @JoinColumn({ name: 'classroomId' })
+  public classroom: Classroom;
+
+  @Column({ nullable: false })
+  public classroomId: number;
 }
