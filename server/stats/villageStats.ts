@@ -58,3 +58,13 @@ export const getFamiliesWithoutAccount = async (villageId: number) => {
 
   return familiesWithoutAccount;
 };
+
+export const getFloatingAccounts = async (villageId: number) => {
+  const floatingAccounts = await userRepository
+    .createQueryBuilder('user')
+    .where('user.villageId = :villageId', { villageId })
+    .andWhere('user.hasStudentLinked = 0')
+    .select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email'])
+    .getMany();
+  return floatingAccounts;
+};

@@ -31,6 +31,7 @@ export interface VillageStats {
   familyAccountsCount: number;
   connectedFamiliesCount: number;
   familiesWithoutAccount: FamiliesWithoutAccount[];
+  floatingAccounts: FloatingAccount[];
 }
 
 export interface FamiliesWithoutAccount {
@@ -40,4 +41,17 @@ export interface FamiliesWithoutAccount {
   village_name: string;
   classroom_name: string;
   classroom_country: string;
+}
+
+export interface FloatingAccount {
+  id: number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  language: string;
+}
+
+export interface OneVillageTableRow {
+  id: string | number;
+  [key: string]: string | boolean | number | React.ReactNode;
 }
