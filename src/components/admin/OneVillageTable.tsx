@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Paper, TableContainer } from '@mui/material';
+import { Box, Paper, TableContainer, TableSortLabel, useTheme } from '@mui/material';
 import NoSsr from '@mui/material/NoSsr';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,8 +9,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { useTheme } from '@mui/material/styles';
+
+import { primaryColorLight } from 'src/styles/variables.const';
 
 function paginate<T>(array: T[], pageSize: number, pageNumber: number): T[] {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
@@ -37,7 +37,7 @@ interface OneVillageTableProps {
 export const OneVillageTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, admin, data, columns, actions, titleContent }: OneVillageTableProps) => {
   const theme = useTheme();
   const color = admin ? 'white' : 'black';
-  const backgroundColor = admin ? theme.palette.secondary.main : 'white';
+  const backgroundColor = admin ? theme.palette.secondary.main : primaryColorLight;
   const [options, setTableOptions] = React.useState<TableOptions>({
     page: 1,
     limit: 10,
@@ -70,7 +70,12 @@ export const OneVillageTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, adm
 
   return (
     <NoSsr>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ mb: '1rem' }}>
+        {titleContent && (
+          <Box sx={{ fontWeight: 'bold', display: 'flex', border: 'none', backgroundColor, p: '8px' }}>
+            <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
+          </Box>
+        )}
         <Table size="medium" aria-label={ariaLabel}>
           {data.length === 0 ? (
             <TableBody>
@@ -84,15 +89,14 @@ export const OneVillageTable = ({ 'aria-label': ariaLabel, emptyPlaceholder, adm
             <>
               <TableHead
                 style={{ borderBottom: '1px solid white' }}
-                sx={{ fontWeight: 'bold', minHeight: 'unset', padding: '8px 8px 8px 16px', color, backgroundColor }}
+                sx={{
+                  fontWeight: 'bold',
+                  minHeight: 'unset',
+                  padding: '8px 8px 8px 16px',
+                  color,
+                  backgroundColor: admin ? backgroundColor : 'white',
+                }}
               >
-                {titleContent && (
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold', display: 'flex', border: 'none' }}>
-                      <RemoveRedEyeIcon sx={{ mr: '6px' }} /> {titleContent}
-                    </TableCell>
-                  </TableRow>
-                )}
                 <TableRow>
                   {columns.map((c) => (
                     <TableCell key={c.key} style={{ color, fontWeight: 'bold' }}>
