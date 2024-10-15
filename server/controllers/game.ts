@@ -49,6 +49,23 @@ const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: Game
 
   return games;
 };
+const updateGameDraftIfExists = async(data: any, content: ActivityContent, activityId: number) => {
+
+  const responses = await AppDataSource.getRepository(Activity).find({ where: { id: activityId} });
+  if(responses){
+    await AppDataSource.createQueryBuilder().update(Activity).set({ data: data, content: content }).where('id = :activityId', { activityId }).execute();
+  }
+}
+
+const updateStatusToPublished = async(userId: number , villageId: number , type: number, subType: number)=>{
+  await AppDataSource.createQueryBuilder().update(Activity).set({ status: ActivityStatus.PUBLISHED}).where({
+    userId: userId,
+    villageId: villageId,
+    type: type,
+    subType: subType
+  }).execute();
+
+}
 
 //--- Get all games ---
 gameController.get({ path: '', userType: UserType.TEACHER }, async (req: Request, res: Response, next: NextFunction) => {
@@ -279,22 +296,50 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   }
 
   const data = req.body;
-  const game1 = data.game1;
-  const game2 = data.game2;
-  const game3 = data.game3;
+  const { game1, game2, game3, userId, villageId, type, subType, selectedPhase, status, activityId} = data;
 
-  createGame(game1, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-  createGame(game2, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
-  createGame(game3, data.userId, data.villageId, data.type, data.subType, data.selectedPhase);
+  //save draft game each step 
+  if(status && status === ActivityStatus.DRAFT){ 
+       if(game1){
+        if(activityId){
+          updateGameDraftIfExists(activityId, game1.data, game1.content)
+          return;
+        }
+        createGame(game1, userId, villageId, type, subType, selectedPhase, status);
+        res.sendStatus(200);
+        return;
+      }
+      else if(game2){
+        if(activityId){
+          updateGameDraftIfExists(activityId, game1.data, game1.content)
+          return;
+        }
+        createGame(game2, userId, villageId, type, subType, selectedPhase, status);
+        res.sendStatus(200);
+        return;
+      }
+      else if(game3){
+        if(activityId){
+          updateGameDraftIfExists(activityId, game1.data, game1.content);
+          return;
+        }
+        createGame(game3, userId, villageId, type, subType, selectedPhase, status);
+        res.sendStatus(200);
+        return;
+      }
+
+  }
+  //save published games if status is published
+  await updateStatusToPublished(userId, villageId, type, subType);
 
   res.sendStatus(200);
 });
 
-async function createGame(data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number) {
+async function createGame(data: ActivityContent[], userId: number, villageId: number, type: number, subType: number, selectedPhase: number, status : number) {
   const activity = new Activity();
   activity.type = type;
   activity.subType = subType;
-  activity.status = ActivityStatus.PUBLISHED;
+  activity.status = status;
   // TODO: Travailler sur le type de data
   activity.data = data as unknown as AnyData;
   activity.phase = selectedPhase;

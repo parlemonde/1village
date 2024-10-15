@@ -6,12 +6,38 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
 import { GameContext } from 'src/contexts/gameContext';
-
+import { UserContext } from 'src/contexts/userContext';
+import { VillageContext } from 'src/contexts/villageContext';
+import { getUserDisplayName } from 'src/utils';
+import { ActivityStatus, ActivityType } from 'types/activity.type';
+import type { GameDataMonneyOrExpression } from 'types/game.type';
+import { GameType } from 'types/game.type';
 const MonnaieStep3 = () => {
   const router = useRouter();
-  const { inputSelectedValue } = useContext(GameContext);
+  const { inputSelectedValue, saveDraftGrame } = useContext(GameContext);
+  const { user } = React.useContext(UserContext);
+  const { village } = React.useContext(VillageContext);
+  const { selectedPhase } = React.useContext(VillageContext);
+  const labelPresentation = user ? getUserDisplayName(user, false) : '';
+  const { gameConfig } = useContext(GameContext);
 
   const onNext = () => {
+    const data: GameDataMonneyOrExpression = {
+      userId: user?.id || 0,
+      villageId: village?.id || 0,
+      type: ActivityType.GAME,
+      subType: GameType.MONEY,
+      game2: {
+        game: gameConfig[2],
+        monney: inputSelectedValue,
+        labelPresentation: labelPresentation,
+        radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
+      },
+      selectedPhase: selectedPhase,
+      status: ActivityStatus.DRAFT
+
+    };
+    saveDraftGrame(data);
     router.push('/creer-un-jeu/objet/4');
   };
 

@@ -156,10 +156,11 @@ export type GameDataMonneyOrExpression = {
   villageId: number;
   type: number;
   subType: number;
-  game1: GameDataStep;
-  game2: GameDataStep;
-  game3: GameDataStep;
+  game1?: GameDataStep;
+  game2?: GameDataStep;
+  game3?: GameDataStep;
   selectedPhase: number;
+  status?: number;
 };
 export type DataForPlayed = {
   game: StepsTypes;
