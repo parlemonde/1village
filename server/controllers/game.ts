@@ -302,7 +302,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   }
 
   const data = req.body;
-  const { game1, game2, game3, userId, villageId, type, subType, selectedPhase, status, activityId } = data;
+  const { game1, game2, game3, userId, villageId, type, subType, selectedPhase, status, activityId, draftUrl } = data;
 
   //save draft game each step
   if (status && status === ActivityStatus.DRAFT) {
@@ -311,7 +311,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
         updateGameDraftIfExists(activityId, game1.data, game1.content);
         return;
       }
-      createGame(game1, userId, villageId, type, subType, selectedPhase, status);
+      createGame(game1, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       res.sendStatus(200);
       return;
     } else if (game2) {
@@ -319,7 +319,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
         updateGameDraftIfExists(activityId, game1.data, game1.content);
         return;
       }
-      createGame(game2, userId, villageId, type, subType, selectedPhase, status);
+      createGame(game2, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       res.sendStatus(200);
       return;
     } else if (game3) {
@@ -327,7 +327,7 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
         updateGameDraftIfExists(activityId, game1.data, game1.content);
         return;
       }
-      createGame(game3, userId, villageId, type, subType, selectedPhase, status);
+      createGame(game3, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       res.sendStatus(200);
       return;
     }
@@ -346,6 +346,7 @@ async function createGame(
   subType: number,
   selectedPhase: number,
   status: number,
+  draftUrl: string,
 ) {
   const activity = new Activity();
   activity.type = type;
@@ -353,6 +354,7 @@ async function createGame(
   activity.status = status;
   // TODO: Travailler sur le type de data
   activity.data = data as unknown as AnyData;
+  activity.data.draftUrl = draftUrl;
   activity.phase = selectedPhase;
   activity.content = data;
   activity.userId = userId;

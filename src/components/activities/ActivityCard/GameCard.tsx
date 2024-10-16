@@ -1,10 +1,9 @@
+import { Button } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-
-import { Button } from '@mui/material';
 
 import { CommentIcon } from './CommentIcon';
 import type { ActivityCardProps } from './activity-card.types';
@@ -169,8 +168,8 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
                     <Link
                       href={
                         isDraft && activity.data.draftUrl
-                          ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                          : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
+                          ? `${activity.data.draftUrl}?activity_id=${activity.id}`
+                          : `/creer-un-jeu/mimique/4?activity_id=${activity.id}`
                       }
                       passHref
                     >
@@ -178,8 +177,8 @@ export const GameCard = ({ activity, isSelf, noButtons, isDraft, showEditButtons
                         component="a"
                         href={
                           isDraft && activity.data.draftUrl
-                            ? `${activity.data.draftUrl}?activity-id=${activity.id}`
-                            : `/creer-un-jeu/mimique/4?activity-id=${activity.id}`
+                            ? `${activity.data.draftUrl}?activity_id=${activity.id}`
+                            : `/creer-un-jeu/mimique/4?activity_id=${activity.id}`
                         }
                         color="secondary"
                         variant="contained"

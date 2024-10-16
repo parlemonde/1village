@@ -1,11 +1,10 @@
+import { Card } from '@mui/material';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
-import { Card } from '@mui/material';
 
 import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
 import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
 import { primaryColor } from 'src/styles/variables.const';
-
 import type { inputType, StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
 

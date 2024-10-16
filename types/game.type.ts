@@ -161,6 +161,7 @@ export type GameDataMonneyOrExpression = {
   game3?: GameDataStep;
   selectedPhase: number;
   status?: number;
+  draftUrl?: string;
 };
 export type DataForPlayed = {
   game: StepsTypes;

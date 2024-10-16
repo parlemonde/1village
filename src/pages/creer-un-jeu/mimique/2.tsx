@@ -33,6 +33,7 @@ const MimiqueStep2 = () => {
       },
       selectedPhase: selectedPhase,
       status: ActivityStatus.DRAFT,
+      draftUrl: window.location.pathname,
     };
     saveDraftGrame(data);
     router.push('/creer-un-jeu/mimique/3');
