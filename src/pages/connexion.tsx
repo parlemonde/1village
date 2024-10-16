@@ -146,7 +146,7 @@ const SignInParent = () => {
 
         <Grid container mt={2} py={6} bgcolor="white" borderRadius="10px">
           <Grid xs={12} mb={4} textAlign="center" width="100%">
-            <Typography variant="h2">Parent d&apos;élèves</Typography>
+            <Typography variant="h2">Famille</Typography>
           </Grid>
 
           <Grid item xs={12} spacing={2} textAlign="center">

@@ -76,9 +76,8 @@ const ReInventStoryStep1 = () => {
           activeStep={0}
         />
         <div className="width-900">
-          <h1>Choisissez et dessinez l’objectif du développement durable à atteindre</h1>
-          <p className="text">Pour atteindre votre objectif de développement durable, vous choisirez un objet et un lieu aux étapes précédentes.</p>
-          <p className="text">Choisissez votre objectif et dessinez-le.</p>
+          <h1>Choisissez un Objectif du Développement Durable selon l’image</h1>
+          <p className="text">Pour atteindre votre odd, vous imaginerez un objet et un lieu aux étapes suivantes.</p>
           <Grid container>
             <Grid item xs={12} md={6}>
               <div style={{ marginTop: '1.5rem' }}>

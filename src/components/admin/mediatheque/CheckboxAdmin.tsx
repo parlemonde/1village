@@ -11,7 +11,7 @@ interface CheckboxAdminProps {
 }
 
 const CheckboxAdmin = ({ isChecked, onCheckboxChange }: CheckboxAdminProps) => {
-  const label = { inputProps: { 'aria-label': 'Pelico' } };
+  const label = { inputProps: { 'aria-label': 'Pélico' } };
   const { setFilters, setUseAdminData } = useContext(MediathequeContext);
 
   const handleCheckboxChange = (event: { target: { checked: unknown } }) => {

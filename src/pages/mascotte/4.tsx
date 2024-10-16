@@ -37,7 +37,7 @@ const MascotteStep4 = () => {
               'Votre classe',
               `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
               'Langues et monnaies',
-              'Le web de Pelico',
+              'Le web de Pélico',
               'Prévisualiser',
             ]}
             urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
@@ -45,7 +45,7 @@ const MascotteStep4 = () => {
             errorSteps={errorSteps}
           />
           <div className="width-900" style={{ textAlign: 'justify' }}>
-            <h1>Le web de Pelico, et ses règles</h1>
+            <h1>Le web de Pélico, et ses règles</h1>
             <p>Bonjour {data?.mascotteName}, bienvenue sur 1Village !</p>
 
             <p>
@@ -53,11 +53,11 @@ const MascotteStep4 = () => {
               classes vous reconnaîtront sur 1Village, notre espace d’échange sécurisé en ligne.
             </p>
 
-            <p>{data?.mascotteName ?? 'Votre mascotte'}, tout comme moi Pelico, est désormais un citoyen numérique.</p>
+            <p>{data?.mascotteName ?? 'Votre mascotte'}, tout comme moi Pélico, est désormais un citoyen numérique.</p>
 
             <p>
               C&apos;est-à-dire ? Un citoyen numérique est une personne qui interagit avec d’autres personnes en ligne. Sur 1Village, ces personnes
-              sont tes Pélicopains, des enfants comme toi qui ont soif de découvertes !
+              sont tes pélicopains, des enfants comme toi qui ont soif de découvertes !
             </p>
 
             <p>
@@ -81,7 +81,7 @@ const MascotteStep4 = () => {
 
               <li data-emoji="📸">Peut-on filmer et publier du contenu sur lequel apparaissent nos camarades sans leur permission ?</li>
 
-              <li data-emoji="🕶">Avons-nous le droit de partager les photos, vidéos et textes publiés par nos Pélicopains en dehors d’1Village ?</li>
+              <li data-emoji="🕶">Avons-nous le droit de partager les photos, vidéos et textes publiés par nos pélicopains en dehors d’1Village ?</li>
             </ul>
 
             <p>
@@ -89,7 +89,7 @@ const MascotteStep4 = () => {
               mondial, commun à tous les pays ?
             </p>
 
-            <p>Êtes-vous d’accord pour réfléchir à ces questions avec votre classe et tous vos nouveaux Pélicopains ?</p>
+            <p>Êtes-vous d’accord pour réfléchir à ces questions avec votre classe et tous vos nouveaux pélicopains ?</p>
             <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', textAlign: 'right' }}>
               <label style={{ cursor: 'pointer' }}>
                 <Checkbox

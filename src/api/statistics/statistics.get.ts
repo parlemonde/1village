@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { axiosRequest } from 'src/utils/axiosRequest';
-import type { ClassroomsStats, SessionsStats } from 'types/statistics.type';
+import type { ClassroomsStats, SessionsStats, VillageStats } from 'types/statistics.type';
 
 async function getSessionsStats(phase: number | null): Promise<SessionsStats> {
   return (
@@ -13,8 +13,24 @@ async function getSessionsStats(phase: number | null): Promise<SessionsStats> {
   ).data;
 }
 
+async function getVillagesStats(villageId: number | null): Promise<VillageStats> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/villages/${villageId}`,
+    })
+  ).data;
+}
+
 export const useGetSessionsStats = (phase: number | null) => {
   return useQuery(['sessions-stats'], () => getSessionsStats(phase));
+};
+
+export const useGetVillagesStats = (villageId: number | null) => {
+  return useQuery(['villages-stats', villageId], () => getVillagesStats(villageId), {
+    enabled: villageId !== null,
+  });
 };
 
 async function getClassroomsStats(): Promise<ClassroomsStats[]> {

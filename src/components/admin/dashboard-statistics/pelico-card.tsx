@@ -15,7 +15,7 @@ export const PelicoCard = ({ message }: Message) => {
       </p>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '33%', position: 'relative' }}>
-          <Image src="/static-images/pelico-question.png" alt="Pelico question" layout="responsive" width={300} height={300} objectFit="contain" />
+          <Image src="/static-images/pelico-question.png" alt="Pélico question" layout="responsive" width={300} height={300} objectFit="contain" />
         </div>
       </div>
       <p className="text" style={{ textDecorationLine: 'underline', margin: '0 25%' }}></p>

@@ -99,7 +99,7 @@ const IndiceStep1 = () => {
             </>
           ) : (
             <p className="text">
-              Vous trouvez ici les indices culturels qui ont déjà été présentés par les Pélicopains sur l&apos;aspect &quot;
+              Vous trouvez ici les indices culturels qui ont déjà été présentés par les pélicopains sur l&apos;aspect &quot;
               {getIndice(activity.subType, data).step1}&quot;. N&apos;hésitez pas à y puiser de l&apos;inspiration, avant de proposer votre indice !
               Vous pouvez également choisir de présenter un autre aspect culturel, en revenant à l&apos;étape précédente.
             </p>

@@ -16,6 +16,7 @@ import {
   getMinConnections,
   getMinDuration,
 } from '../stats/sessionStats';
+import { getChildrenCodesCount, getFamilyAccountsCount, getConnectedFamiliesCount, getFamiliesWithoutAccount } from '../stats/villageStats';
 import { Controller } from './controller';
 
 export const statisticsController = new Controller('/statistics');
@@ -41,5 +42,15 @@ statisticsController.get({ path: '/sessions/:phase' }, async (req: Request, res)
 statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
   res.sendJSON({
     classrooms: await getClassroomsInfos(),
+  });
+});
+
+statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => {
+  const villageId = parseInt(_req.params.villageId);
+  res.sendJSON({
+    familyAccountsCount: await getFamilyAccountsCount(villageId),
+    childrenCodesCount: await getChildrenCodesCount(villageId),
+    connectedFamiliesCount: await getConnectedFamiliesCount(villageId),
+    familiesWithoutAccount: await getFamiliesWithoutAccount(villageId),
   });
 });

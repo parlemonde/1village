@@ -72,7 +72,7 @@ const EnigmeStep2 = () => {
         <div className="width-900">
           <h1>Créez l’énigme, pour faire deviner votre objet</h1>
           <p className="text" style={{ fontSize: '1.1rem' }}>
-            Faites deviner votre {enigmeType.titleStep2Short} à vos Pélicopains en donnant des indices en vidéos, images, sons et texte !<br></br> À
+            Faites deviner votre {enigmeType.titleStep2Short} à vos pélicopains en donnant des indices en vidéos, images, sons et texte !<br></br> À
             l’étape suivante, vous écrirez la réponse à l’énigme.
           </p>
           <ContentEditor

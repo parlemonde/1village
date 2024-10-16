@@ -18,7 +18,7 @@ const PresentationSuccess = () => {
         </p>
       </div>
       <p className="text" style={{ display: 'flex', justifyContent: 'center', textDecorationLine: 'underline' }}>
-        <a href="/creer-un-jeu/objet/displayList">{'Ou découvrez les jeux des autres Pélicopains !'}</a>
+        <a href="/creer-un-jeu/objet/displayList">{'Ou découvrez les jeux des autres pélicopains !'}</a>
       </p>
     </Base>
   );

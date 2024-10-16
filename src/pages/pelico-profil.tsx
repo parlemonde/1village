@@ -45,7 +45,7 @@ const PelicoProfil = () => {
               marginRight: '2%',
             }}
           >
-            <h1 style={{ marginTop: '0.5rem', color: primaryColor }}>Pelico, la mascotte d&apos;1Village, se présente</h1>
+            <h1 style={{ marginTop: '0.5rem', color: primaryColor }}>Pélico, la mascotte d&apos;1Village, se présente</h1>
             <ContentView content={presentation.content} activityId={presentation.id} />
           </Box>
         </Base>

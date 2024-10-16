@@ -25,7 +25,7 @@ export const UserDisplayName = ({ user, activity, className, style, noLink = fal
     return (
       <Link href="/pelico-profil" style={{ cursor: 'pointer' }}>
         <span className={className} style={style}>
-          Pelico
+          Pélico
         </span>
       </Link>
     );

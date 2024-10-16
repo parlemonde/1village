@@ -285,9 +285,9 @@ export default function CollapsibleTable() {
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell>Prénom et nom de l&apos;élève</TableCell>
+              <TableCell>Prénom et nom de l&apos;enfant</TableCell>
               <TableCell align="right">Accès familles</TableCell>
-              <TableCell align="right">Code élève</TableCell>
+              <TableCell align="right">Code enfant</TableCell>
               <TableCell align="right" sx={{ paddingRight: 10 }}>
                 Actions
               </TableCell>

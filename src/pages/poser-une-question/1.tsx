@@ -97,7 +97,7 @@ const Question1 = () => {
         <div className="width-900">
           <h1>Les questions déjà posées</h1>
           <p className="text">
-            Vous avez ici les questions qui ont été posées par les Pélicopains, si vous vous posez la même question, vous pouvez cliquer sur “Je me
+            Vous avez ici les questions qui ont été posées par les pélicopains, si vous vous posez la même question, vous pouvez cliquer sur “Je me
             pose la même question”. Après avoir pris connaissance des questions des autres vous pourrez proposer vos propres questions.
           </p>
 

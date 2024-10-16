@@ -10,31 +10,28 @@ const Story = () => {
   return (
     <Base>
       <PageLayout>
-        <h1>Inventer l’histoire du village-idéal</h1>
+        <h1>Inventer l’histoire du village-monde idéal</h1>
         <p className="text">
-          Comme vous le savez déjà, les Olympiades de Pélico ont commencé et elles ont lieu dans le village-idéal, l’endroit où tout est possible…
-          C’est en parcourant le ciel à la quête d’un lieu pour les OP qu’un nuage mystérieux m’a attiré vers cet endroit magique !
+          1, 2, 3 fermez les yeux... Vous voilà arrivés dans votre village-monde ! Eh oui, en plus de pouvoir aller dans votre village-monde avec un
+          ordinateur, vous pouvez vous y rendre avec votre imagination !
         </p>
         <p className="text">
-          1, 2, 3 fermez les yeux... Et <strong>vous voilà arrivés dans notre village idéal !</strong> Même si les OP en ce moment ont lieu, il faut
-          tout de même travailler à rendre cet endroit idéal... et pour cela, pourquoi ne pas se saisir des 17 objectifs du développement durable ?
-          Ces objectifs, les ODDs, ont été définis par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.
+          Ce que je vous propose pour cette activité, c’est de rendre votre village-monde idéal ! Et pour cela, pourquoi ne pas se saisir des 17
+          Objectifs du Développement Durable ? Ces objectifs, les ODDs, ont été définis par toute l’humanité pour rendre le monde plus juste,
+          solidaire et plus durable.
         </p>
         <p className="text">
-          Pour raconter l’histoire du village-idéal, je vous propose donc de choisir un objectif du développement durable, un objet magique et
-          d’imaginer à quoi ressemble le village-idéal, ce lieu extraordinaire.
-          <strong>
-            Vous devrez décrire l’objet magique ainsi que le village-idéal, puis expliquer comment cet objet nous permet d’atteindre l’objectif du
-            développement durable que vous avez choisi !
-          </strong>
+          Pour raconter comment est votre village-monde, je vous propose donc de choisir un objectif du développement durable, un objet magique et un
+          lieu extraordinaire.Vous devrez décrire l’objet et le lieu de votre village-monde puis expliquer comment cet objet vous permet d’atteindre
+          l’objectif du développement durable que vous avez choisi !
         </p>
         <p className="text">
           N’hésitez pas à dessiner chacun des éléments dont vous parlez dans votre histoire afin que les pélicopains et moi puissions mieux comprendre
-          comment fonctionne le village-idéal.
+          comment fonctionne le village-monde.
         </p>
         <p className="text">
           Laissez libre court à votre imagination ! Souvenez-vous que si l’objectif du développement durable est bien réel, l’objet et lieu que vous
-          choisissez pour l’atteindre sont magiques 🙂
+          choisissez peuvent être magiques 🙂
         </p>
       </PageLayout>
       <Box sx={{ display: 'flex', justifyContent: 'end', pr: '1rem', mb: '1rem' }}>

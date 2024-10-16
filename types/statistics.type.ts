@@ -25,3 +25,19 @@ export interface SessionsStats {
   connectedClassroomsCount: number;
   contributedClassroomsCount: number;
 }
+
+export interface VillageStats {
+  childrenCodesCount: number;
+  familyAccountsCount: number;
+  connectedFamiliesCount: number;
+  familiesWithoutAccount: FamiliesWithoutAccount[];
+}
+
+export interface FamiliesWithoutAccount {
+  student_id: number;
+  student_firstname: string;
+  student_lastname: string;
+  village_name: string;
+  classroom_name: string;
+  classroom_country: string;
+}

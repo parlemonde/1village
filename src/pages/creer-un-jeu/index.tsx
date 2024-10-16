@@ -42,7 +42,7 @@ const Jeu = () => {
         <div className="width-900">
           <h1>Choisissez le jeu auquel vous souhaitez jouer</h1>
           <p className="text" style={{ fontSize: '1rem' }}>
-            Jouez avec vos Pélicopains, pour découvrir et faire découvrir certains aspects de votre vie !
+            Jouez avec vos pélicopains, pour découvrir et faire découvrir certains aspects de votre vie !
           </p>
           <ActivityChoice activities={activities} />
         </div>

@@ -138,7 +138,7 @@ const MascotteStep5 = () => {
               'Votre classe',
               `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
               'Langues et monnaies',
-              'Le web de Pelico',
+              'Le web de Pélico',
               'Prévisualiser',
             ]}
             urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}

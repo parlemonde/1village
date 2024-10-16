@@ -56,7 +56,7 @@ export const VideoPresentation = () => {
                       fullWidth
                       id="outlined-helperText"
                       value={value}
-                      placeholder="Un indice : un proverbe français dit que c’est un défaut, mais pour Pelico il s’agit d’une qualité"
+                      placeholder="Un indice : un proverbe français dit que c’est un défaut, mais pour Pélico il s’agit d’une qualité"
                       label="Votre réponse"
                       InputLabelProps={{
                         shrink: true,

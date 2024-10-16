@@ -62,32 +62,30 @@ const InspiredStory = () => {
     <>
       <Base>
         <PageLayout>
-          <h1>Ré-inventer l’histoire du village-idéal</h1>
+          <h1>Ré-inventer l’histoire du village-monde idéal !</h1>
           <p className="text">
-            Comme vous le savez déjà, les Olympiades de Pélico ont commencé et elles ont lieu dans le village-idéal, l’endroit où tout est possible…
-            C’est en parcourant le ciel à la quête d’un lieu pour les OP qu’un nuage mystérieux m’a attiré vers cet endroit magique !
+            Si vous vous souvenez bien, en phase 2 vous avez peut-être inventé l’histoire du village-monde idéal… Et bien j’ai tellement adoré cette
+            activité que je voulais vous proposer de la réécrire. Mais bien sûr, un peu différemment !{' '}
           </p>
           <p className="text">
-            1, 2, 3 fermez les yeux... Et <strong>vous voilà arrivés dans notre village-idéal !</strong> Même si les OP en ce moment ont lieu, il faut
-            tout de même travailler à rendre cet endroit idéal... et pour cela, pourquoi ne pas se saisir des 17 objectifs du développement durable ?
-            Ces objectifs, les ODDs, ont été définis par toute l’humanité pour rendre le monde plus juste, solidaire et plus durable.
+            Cette fois, je vous propose de l’écrire en puisant votre inspiration parmi les éléments déjà imaginés par vos pélicopains.{' '}
           </p>
           <p className="text">
-            Normalement, vous avez déjà raconté votre histoire du village-idéal ! Je vous propose donc de la réécrire en puisant votre inspiration
-            parmi les éléments déjà imaginés par vos pélicopains.{' '}
+            Pour rappel, votre histoire doit décrire comment votre objet magique et votre lieu extraordinaire permettent d’atteindre un des 17
+            Objectifs du Développement Durable pour que votre village-monde soit idéal.{' '}
             <strong>
-              Actionnez la manette autant de fois que vous le souhaitez pour choisir différentes parties d’histoires inventées par les autres classes
-              !
+              Actionner la manette autant de fois que vous le souhaitez pour choisir différentes parties d’histoire inventées par les pélicopains !
+              Puis inspirez-vous de ce qu’ils ont dessiné et laissez libre court à votre imagination pour écrire l’histoire…
             </strong>
           </p>
-          <p className="text">
+          {/* <p className="text">
             Une fois que vous aurez sélectionné les images des histoires écrites par les pélicopains, vous pourrez de nouveau choisir un objectif du
             développement durable et imaginer l’objet magique ainsi que le lieu idéal.
           </p>
           <p className="text">
             Inspirez-vous de ce qu’ils ont dessiné et laissez libre court à votre imagination ! Souvenez-vous que si l’objectif du développement
             durable est bien réel, l’objet et lieu que vous choisissez pour l’atteindre sont magiques 🙂
-          </p>
+          </p> */}
         </PageLayout>
         {/* Roulette images */}
         <StoryPictureWheel

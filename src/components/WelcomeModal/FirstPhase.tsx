@@ -136,7 +136,7 @@ export const FirstPhase = () => {
   return (
     <Modal
       open={true}
-      title="Bienvenue à 1Village !"
+      title="Bienvenue sur 1Village !"
       cancelLabel="Continuer"
       maxWidth="lg"
       fullWidth
@@ -263,8 +263,8 @@ export const FirstPhase = () => {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
               <PelicoSearch style={{ width: '4rem', height: 'auto', marginRight: '1rem' }} />
               <span className="text text--bold">
-                Suite à votre première connection, Pelico a récupéré les informations suivantes sur votre classe. Pouvez les mettre à jour si
-                nécessaire ?
+                Comme c’est votre première connexion, Pélico a besoin de récupérer certaines informations sur votre classe. Pouvez-vous les compléter
+                ?
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'stretch' }}>
@@ -345,7 +345,7 @@ export const FirstPhase = () => {
                 />
               </div>
               <div style={{ flex: 1, backgroundColor: bgPage, padding: '0.5rem 1rem', minWidth: 0 }}>
-                <span className="text text--bold">Une activité de votre classe apparaîtra comme suit:</span>
+                <span className="text text--bold">Les activités de votre classe apparaîtront comme ci-dessous :</span>
                 <ActivityCard
                   activity={{
                     id: 0,

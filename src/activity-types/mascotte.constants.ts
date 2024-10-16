@@ -39,7 +39,7 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
       data.girlStudent ?? 0
     } fille${pluralS(data.girlStudent || 0)} et ${data.boyStudent ?? 0} garçon${pluralS(
       data.boyStudent || 0,
-    )}.\nEn moyenne, l’âge des élèves de notre classe est ${data.meanAge ?? 0} an${pluralS(data.meanAge || 0)}.\nNous avons ${
+    )}.\nEn moyenne, l’âge des enfants de notre classe est ${data.meanAge ?? 0} an${pluralS(data.meanAge || 0)}.\nNous avons ${
       data.totalTeacher ?? 0
     } professeur${pluralS(data.totalTeacher || 0)}, dont ${data.womanTeacher ?? 0} femme${pluralS(data.womanTeacher || 0)} et ${
       data.manTeacher ?? 0
@@ -66,13 +66,13 @@ export const getMascotteContent = (data: MascotteData, countries: Country[], cur
   content.push(
     `${
       displayFluentLanguages.length > 0
-        ? 'Tous les élèves de notre classe parlent : ' + naturalJoin(displayFluentLanguages) + '.'
-        : 'Les élèves de notre classe ne parlent aucune langue !'
+        ? 'Tous les enfants de notre classe parlent : ' + naturalJoin(displayFluentLanguages) + '.'
+        : 'Les enfants de notre classe ne parlent aucune langue !'
     }\n${
       displayMinorLanguages.length > 0
-        ? 'Au moins un élève de notre classe parle: ' + naturalJoin(displayMinorLanguages) + '.'
-        : 'Aucun élève de notre classe ne parle de langue supplémentaire.'
-    }\n${capitalize(data.mascotteName)}, comme tous les élèves de notre classe, ${
+        ? 'Au moins un enfant de notre classe parle: ' + naturalJoin(displayMinorLanguages) + '.'
+        : 'Aucun enfant de notre classe ne parle de langue supplémentaire.'
+    }\n${capitalize(data.mascotteName)}, comme tous les enfants de notre classe, ${
       displayWantedLanguages.length > 0 ? ' apprend : ' + naturalJoin(displayWantedLanguages) + '.' : " n'apprend aucune langue."
     }\nNous ${displayCurrencies.length > 0 ? ' utilisons comme monnaie : ' + naturalJoin(displayCurrencies) + '.' : " n'utilisons aucune monnaie."}`,
   );

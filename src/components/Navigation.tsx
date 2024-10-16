@@ -223,7 +223,7 @@ export const Navigation = (): JSX.Element => {
     () => [
       ACCUEIL,
       {
-        label: 'Notre classe',
+        label: 'Notre classe et nos activités',
         path: '/ma-classe',
         icon: user && <AvatarImg user={user} size="extra-small" noLink noToolTip />,
         disabled: isParent,

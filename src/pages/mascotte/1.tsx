@@ -111,7 +111,7 @@ const MascotteStep1 = () => {
             'Votre classe',
             `${data.mascotteName ? data.mascotteName : 'Votre mascotte'}`,
             'Langues et monnaies',
-            'Le web de Pelico',
+            'Le web de Pélico',
             'Prévisualiser',
           ]}
           urls={['/mascotte/1?edit', '/mascotte/2', '/mascotte/3', '/mascotte/4', '/mascotte/5']}
@@ -178,7 +178,7 @@ const MascotteStep1 = () => {
               <span> garçon{pluralS(data.boyStudent || 0)}.</span>
             </div>
             <div className="se-presenter-step-one__line">
-              <span>En moyenne, l’âge des élèves de notre classe est </span>{' '}
+              <span>En moyenne, l’âge des enfants de notre classe est </span>{' '}
               <TextField
                 className="se-presenter-step-one__textfield"
                 variant="standard"
@@ -268,7 +268,7 @@ const MascotteStep1 = () => {
           </div>
           <h1 style={{ marginTop: '5rem' }}>À quoi ressemble votre classe ?</h1>
           <p>
-            Pour donner à vos Pélicopains un aperçu de votre classe, nous vous invitons à mettre en ligne{' '}
+            Pour donner à vos pélicopains un aperçu de votre classe, nous vous invitons à mettre en ligne{' '}
             <b>une photo d&apos;une affiche ou d&apos;une décoration accrochée</b> sur un des murs de votre classe ! Par exemple, une carte du monde
             ou une liste de règles.
           </p>

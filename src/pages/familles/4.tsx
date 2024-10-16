@@ -25,17 +25,18 @@ const ClassroomParamStep4 = () => {
           <div className="width-900">
             <h1> Gérer les identifiants des familles </h1>
             <span>
-              Chaque ligne de ce tableau correspond à un élève de votre classe.
+              Chaque ligne de ce tableau correspond à un enfant de votre classe.
               <br />
               <br />
-              Pour chaque élève, vous pouvez télécharger à nouveau le texte de présentation contenant son identifiant unique, si l’élève l’a égaré.{' '}
+              Pour chacun d&apos;eux, vous pouvez télécharger à nouveau le texte de présentation contenant son identifiant unique. Cela peut-être
+              utile si un enfant l’a égaré par exemple !
               <br />
               <br />
-              Si un élève a quitté votre classe, vous pouvez supprimer la ligne correspondante.
+              Et si un enfant a quitté votre classe, vous pouvez supprimer la ligne correspondante.
               <br />
               <br />
-              Vous pouvez visualiser combien d’accès ont été créés pour chaque élève, et révoquer certains accès s’ils vous semblent suspicieux. Pour
-              rajouter un élève en cours d’année, rendez-vous à l’étape “Identifiants”.
+              Vous pouvez visualiser combien d’accès ont été créés pour chaque enfant, et révoquer certains accès s’ils vous semblent suspicieux. Pour
+              rajouter un enfant en cours d’année, rendez-vous à l’étape “Identifiants”.
             </span>
 
             <CollapsibleTable />
