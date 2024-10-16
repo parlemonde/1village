@@ -46,6 +46,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:8.5.8"
     "@types/leaflet": "npm:1.7.11"
     "@types/leaflet.fullscreen": "npm:1.6.1"
+    "@types/lodash": "npm:^4"
     "@types/md5": "npm:2.3.2"
     "@types/mime-types": "npm:2.1.1"
     "@types/morgan": "npm:1.9.3"
@@ -117,6 +118,7 @@ __metadata:
     jszip: "npm:^3.10.1"
     leaflet: "npm:^1.8.0"
     leaflet.fullscreen: "npm:^2.4.0"
+    lodash: "npm:^4.17.21"
     maplibre-gl: "npm:2.1.9"
     md5: "npm:^2.3.0"
     mime-types: "npm:^2.1.35"
@@ -4135,6 +4137,13 @@ __metadata:
   dependencies:
     "@types/geojson": "npm:*"
   checksum: 10/c0442ebf98e1bfc7136c91f29791771fe42444571178419e65d577abd00de7b51c5382a6e2ca0853dbbc22651a2c52d6af4a8c7a436ce38db2e2cae0b8637b4e
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4":
+  version: 4.17.10
+  resolution: "@types/lodash@npm:4.17.10"
+  checksum: 10/10fe24a93adc6048cb23e4135c1ed1d52cc39033682e6513f4f51b74a9af6d7a24fbea92203c22dc4e01e35f1ab3aa0fd0a2b487e8a4a2bbdf1fc05970094066
   languageName: node
   linkType: hard
 
@@ -12083,7 +12092,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.4":
+"lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10/c08619c038846ea6ac754abd6dd29d2568aa705feb69339e836dfa8d8b09abbb2f859371e86863eda41848221f9af43714491467b5b0299122431e202bb0c532

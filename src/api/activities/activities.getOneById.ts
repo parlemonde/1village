@@ -15,5 +15,5 @@ async function getOneActivityById(params: { id: number }) {
 
 export const useGetOneActivityById = (args: { id: number }) => {
   const { id } = args;
-  return useQuery(['activities', id], () => getOneActivityById({ id }));
+  return useQuery(['activityById', id], () => getOneActivityById({ id }));
 };

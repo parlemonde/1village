@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { QueryClient } from 'react-query';
 
 import { TextField, Switch, Button } from '@mui/material';
 
@@ -28,6 +29,7 @@ const ContenuLibre = () => {
   const [selectedImageUrl, setSelectedImageUrl] = React.useState<string | undefined>(undefined);
   const [isAllImagesModalOpen, setIsAllImagesModalOpen] = React.useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
+  const queryClient = new QueryClient();
 
   const data = (activity?.data as FreeContentData) || null;
 
@@ -35,7 +37,6 @@ const ContenuLibre = () => {
   const imageUrl = React.useMemo(() => getImage(activity?.content ?? [], data), [activity, data]);
   const [localData, setLocalData] = React.useState<FreeContentData | null>(null);
 
-  // Utilise useEffect pour synchroniser l'état local avec l'activité quand elle est disponible
   React.useEffect(() => {
     if (activity && activity.data) {
       setLocalData(activity.data as FreeContentData);
@@ -43,18 +44,12 @@ const ContenuLibre = () => {
   }, [activity]);
 
   const dataChange = (key: keyof FreeContentData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.slice(0, 400); // Toujours limiter à 400 caractères
-    console.log('value', value);
+    const value = event.target.value.slice(0, 400);
 
-    // Mises à jour sur l'état local
     setLocalData((prevData) => {
       const newData = { ...prevData, [key]: value } as FreeContentData;
-      console.log('new', newData);
       return newData;
     });
-
-    // Mettre à jour l'activité avec les nouvelles données
-    updateActivity({ data: { ...localData, [key]: value } });
   };
 
   if (!activity || !user) {
@@ -69,7 +64,7 @@ const ContenuLibre = () => {
     updateActivity({ displayAsUser: !activity.displayAsUser });
   };
 
-  const onNext = () => {
+  const onNext = async () => {
     save().catch(console.error);
     router.push(`/admin/newportal/contenulibre/edit/3/${id}`);
   };
@@ -96,7 +91,7 @@ const ContenuLibre = () => {
           />
 
           <TextField
-            value={data.resume}
+            value={localData?.resume || ''}
             onChange={dataChange('resume')}
             label="Extrait votre publication"
             variant="outlined"

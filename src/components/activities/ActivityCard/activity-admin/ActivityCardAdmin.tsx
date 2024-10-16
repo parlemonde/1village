@@ -12,7 +12,13 @@ import { usePublishActivity } from 'src/api/activities/activities.put';
 import PelicoSouriant from 'src/svg/pelico/pelico-souriant.svg';
 import { htmlToText } from 'src/utils';
 
-export default function ActivityCard(activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>) {
+export default function ActivityCard({
+  activity,
+  modifiedDisabled,
+}: {
+  activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>;
+  modifiedDisabled: boolean;
+}) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -39,7 +45,7 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
   };
   const handleModified = () => {
     if (activity.status === 0) {
-      router.push(`/admin/newportal/publier/prepublish/${activity.id}`);
+      router.push(`/admin/newportal/publier/prepublish/edit/${activity.id}`);
     } else {
       router.push(`/admin/newportal/contenulibre/edit/1/${activity.id}`);
     }
@@ -91,7 +97,9 @@ export default function ActivityCard(activity: Pick<Activity, 'images' | 'conten
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleModified}>Modifier</MenuItem>
+              <MenuItem onClick={handleModified} disabled={modifiedDisabled}>
+                Modifier
+              </MenuItem>
               <MenuItem onClick={handleDelete}>Supprimer</MenuItem>
             </Menu>
           </>

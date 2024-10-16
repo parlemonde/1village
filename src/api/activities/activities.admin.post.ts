@@ -18,7 +18,7 @@ export async function postAdminActivity({ activityParentId, phase, villages }: P
     },
   });
   if (response.error) {
-    throw new Error('La publication a échoué');
+    throw new Error('La publication a échouée');
   }
   return response.data;
 }

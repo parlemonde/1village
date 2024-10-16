@@ -12,9 +12,10 @@ type Props = {
   svgNoData: React.ReactNode;
   noDataText: string;
   buttonAction: () => void;
+  modifiedDisabled?: boolean;
 };
 
-export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction }: Props) {
+export default function ActivityCardAdminList({ title, activities, svgNoData, noDataText, buttonAction, modifiedDisabled }: Props) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
@@ -45,7 +46,9 @@ export default function ActivityCardAdminList({ title, activities, svgNoData, no
           <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
             {activities.map((activity) => (
               <div key={activity.id} style={{ width: isMobile ? '100%' : '50%' }}>
-                <ActivityCardAdmin {...activity} />
+                {/* eslint-disable-next-line */}
+                {/* @ts-ignore */}
+                <ActivityCardAdmin activity={activity} modifiedDisabled={modifiedDisabled} />
               </div>
             ))}
           </div>

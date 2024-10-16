@@ -536,27 +536,70 @@ activityController.delete({ path: '/:id', userType: UserType.TEACHER }, async (r
   res.status(204).send();
 });
 
-activityController.delete({ path: '/admin/:id', userType: UserType.TEACHER }, async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id, 10) || 0;
-  const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
-  if (activity === null || req.user === undefined) {
-    res.status(204).send();
-    return;
-  }
-  if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
-    res.status(204).send();
-    return;
-  }
+activityController.delete(
+  { path: '/admin/:id', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR },
+  async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10) || 0;
+    const activity = await AppDataSource.getRepository(Activity).findOne({ where: { id } });
+    if (activity === null || req.user === undefined) {
+      res.status(204).send();
+      return;
+    }
+    if (activity.userId !== req.user.id && req.user.type > UserType.ADMIN) {
+      res.status(204).send();
+      return;
+    }
 
-  if (activity.status === ActivityStatus.DRAFT) {
-    // No soft delete for drafts.
-    await AppDataSource.getRepository(Activity).delete({ id });
-  } else {
-    await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
-    await AppDataSource.getRepository(Activity).softDelete({ id });
-  }
-  res.status(204).send();
-});
+    if (activity.status === ActivityStatus.DRAFT) {
+      // No soft delete for drafts.
+      await AppDataSource.getRepository(Activity).delete({ id });
+    } else {
+      await AppDataSource.createQueryBuilder().delete().from(Activity).where('parentActivityId = :id', { id: activity.id }).execute();
+      await AppDataSource.getRepository(Activity).softDelete({ id });
+    }
+    res.status(204).send();
+  },
+);
+
+activityController.get(
+  { path: '/children', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR },
+  async (req: Request, res: Response) => {
+    const id = req.query.id;
+    const activities = await AppDataSource.getRepository(Activity)
+      .createQueryBuilder('Activity')
+      .where('Activity.parentActivityId = :id', { id })
+      .getMany();
+    res.sendJSON(activities);
+  },
+);
+
+activityController.put(
+  {
+    path: '/admin/:id',
+    userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR,
+  },
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { phase } = req.body;
+
+    try {
+      const activityRepository = AppDataSource.getRepository(Activity);
+      const activity = await activityRepository.findOneBy({ id: Number(id) });
+
+      if (!activity) {
+        return res.status(404).sendJSON({ message: 'Activité non existante' });
+      }
+
+      activity.phase = phase;
+      await activityRepository.save(activity);
+
+      return res.sendJSON({ message: 'Phase updated successfully', activity });
+    } catch (error) {
+      console.error('Error updating phase:', error);
+      return res.status(500).sendJSON({ message: 'Internal Server Error' });
+    }
+  },
+);
 
 // --- Add comment controllers
 activityController.router.use(`/:id${commentController.name}`, commentController.router);
