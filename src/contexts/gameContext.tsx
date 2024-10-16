@@ -1,13 +1,12 @@
+import { Card } from '@mui/material';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useState } from 'react';
 
-import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
-import type { inputType, StepsTypes , GameDataMonneyOrExpression } from 'types/game.type';
-import { GameType } from 'types/game.type';
-import { Card } from '@mui/material';
-import { primaryColor } from 'src/styles/variables.const';
 import { postGameDataMonneyOrExpression } from 'src/api/game/game.post';
-
+import { GAME_FIELDS_CONFIG } from 'src/config/games/game';
+import { primaryColor } from 'src/styles/variables.const';
+import type { inputType, StepsTypes, GameDataMonneyOrExpression } from 'types/game.type';
+import { GameType } from 'types/game.type';
 
 type GameContextType = {
   gameConfig: Array<StepsTypes[]>;
@@ -17,8 +16,7 @@ type GameContextType = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateGameConfig: (value: any, input: inputType) => void;
   inputSelectedValue?: string;
-  saveDraftGrame: (data: GameDataMonneyOrExpression)=> void;
-
+  saveDraftGrame: (data: GameDataMonneyOrExpression) => void;
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -30,7 +28,7 @@ export const GameContext = createContext<GameContextType>({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
   updateGameConfig: (_value: any, _input: inputType) => {},
   inputSelectedValue: '',
-  saveDraftGrame: (_data: GameDataMonneyOrExpression)=>{},
+  saveDraftGrame: (_data: GameDataMonneyOrExpression) => {},
 });
 
 export const useGame = () => {
@@ -55,7 +53,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [gameConfig, setGameConfig] = useState<Array<StepsTypes[]>>(GAME_FIELDS_CONFIG[gameType].steps);
   const [isGameDraftSaved, setIsGameDraftSaved] = useState(false);
   const inputSelectedValue = gameConfig[0]?.[0]?.inputs?.[0]?.selectedValue;
- 
+
   const updateGameType = (type: GameType) => {
     setGameType(type);
     setGameConfig(GAME_FIELDS_CONFIG[type].steps);
@@ -79,23 +77,24 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     setGameConfig(configCopy);
     saveGameResponseInSessionStorage(configCopy);
   };
-  const saveDraftGrame = async (data: GameDataMonneyOrExpression ) =>{
-        await postGameDataMonneyOrExpression(data);
-        setIsGameDraftSaved(true)
-           // Hide the popup after a timeout
-        setTimeout(() => {
-          setIsGameDraftSaved(false); // Hide the popup
-        }, 2000); // Adjust the duration as needed
-
+  const saveDraftGrame = async (data: GameDataMonneyOrExpression) => {
+    await postGameDataMonneyOrExpression(data);
+    setIsGameDraftSaved(true);
+    // Hide the popup after a timeout
+    setTimeout(() => {
+      setIsGameDraftSaved(false); // Hide the popup
+    }, 2000); // Adjust the duration as needed
   };
-  
+
   return (
-    <GameContext.Provider value={{ saveDraftGrame, updateGameConfig, gameType, setGameType: updateGameType, gameConfig, setGameConfig, inputSelectedValue }}>
+    <GameContext.Provider
+      value={{ saveDraftGrame, updateGameConfig, gameType, setGameType: updateGameType, gameConfig, setGameConfig, inputSelectedValue }}
+    >
       {children}
       {isGameDraftSaved && (
         <div style={{ position: 'fixed', bottom: '1rem', right: '4.5rem' }}>
           <Card style={{ backgroundColor: primaryColor, color: 'white', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center' }}>
-          <p className="text text--small">Brouillon enregistré</p>
+            <p className="text text--small">Brouillon enregistré</p>
           </Card>
         </div>
       )}

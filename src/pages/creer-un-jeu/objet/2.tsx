@@ -12,6 +12,7 @@ import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
 import type { GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
+
 const MonnaieStep2 = () => {
   const router = useRouter();
   const { inputSelectedValue, saveDraftGrame } = useContext(GameContext);
@@ -33,8 +34,7 @@ const MonnaieStep2 = () => {
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       selectedPhase: selectedPhase,
-      status: ActivityStatus.DRAFT
-
+      status: ActivityStatus.DRAFT,
     };
     saveDraftGrame(data);
     router.push('/creer-un-jeu/objet/3');

@@ -7,11 +7,11 @@ import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
-import { ActivityType , ActivityStatus} from 'types/activity.type';
 import { VillageContext } from 'src/contexts/villageContext';
+import { getUserDisplayName } from 'src/utils';
+import { ActivityType, ActivityStatus } from 'types/activity.type';
 import type { GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
-import { getUserDisplayName } from 'src/utils';
 
 const ExpressionStep2 = () => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const ExpressionStep2 = () => {
     const data: GameDataMonneyOrExpression = {
       userId: user?.id || 0,
       villageId: village?.id || 0,
-      type: ActivityType.GAME,   
+      type: ActivityType.GAME,
       subType: GameType.EXPRESSION,
       game1: {
         game: gameConfig[1],

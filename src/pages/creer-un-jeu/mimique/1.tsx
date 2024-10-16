@@ -12,7 +12,7 @@ import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type {GameDataMonneyOrExpression } from 'types/game.type';
+import type { GameDataMonneyOrExpression } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 const MimiqueStep1 = () => {
@@ -20,7 +20,7 @@ const MimiqueStep1 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
   const { user } = React.useContext(UserContext);
   const { village } = React.useContext(VillageContext);
-  const { gameConfig , saveDraftGrame} = React.useContext(GameContext);
+  const { gameConfig, saveDraftGrame } = React.useContext(GameContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
 
   const onNext = () => {
@@ -34,7 +34,7 @@ const MimiqueStep1 = () => {
         labelPresentation: labelPresentation,
       },
       selectedPhase: selectedPhase,
-      status: ActivityStatus.DRAFT
+      status: ActivityStatus.DRAFT,
     };
     saveDraftGrame(data);
     router.push('/creer-un-jeu/mimique/2');
