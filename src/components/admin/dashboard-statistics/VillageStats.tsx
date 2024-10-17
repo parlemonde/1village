@@ -23,6 +23,7 @@ const VillageStats = () => {
   const [options, setOptions] = useState<VillageFilter>({ countryIsoCode: '' });
 
   const pelicoMessage = 'Merci de sélectionner un village-monde pour analyser ses statistiques ';
+  const noDataFoundMessage = 'Pas de données pour le Village-Monde sélectionné';
 
   const { countries } = useCountries();
 
@@ -153,14 +154,14 @@ const VillageStats = () => {
           <>
             <OneVillageTable
               admin={false}
-              emptyPlaceholder={<p>{pelicoMessage}</p>}
+              emptyPlaceholder={<p>{noDataFoundMessage}</p>}
               data={familiesWithoutAccountRows}
               columns={FamiliesWithoutAccountHeaders}
               titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
             />
             <OneVillageTable
               admin={false}
-              emptyPlaceholder={<p>{pelicoMessage}</p>}
+              emptyPlaceholder={<p>{noDataFoundMessage}</p>}
               data={floatingAccountsRows}
               columns={FloatingAccountsHeaders}
               titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}

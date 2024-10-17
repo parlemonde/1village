@@ -64,6 +64,7 @@ export const getFloatingAccounts = async (villageId: number) => {
     .createQueryBuilder('user')
     .where('user.villageId = :villageId', { villageId })
     .andWhere('user.hasStudentLinked = 0')
+    .andWhere('user.type = 4')
     .select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email'])
     .getMany();
   return floatingAccounts;
