@@ -14,6 +14,7 @@ import styles from './styles/charts.module.css';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
+import { formatDate } from 'src/utils';
 import type { FamiliesWithoutAccount, OneVillageTableRow } from 'types/statistics.type';
 import type { VillageFilter } from 'types/village.type';
 
@@ -96,7 +97,7 @@ const VillageStats = () => {
         vm: row.village_name,
         classroom: row.classroom_name,
         country: row.classroom_country,
-        creationDate: 'À venir',
+        creationDate: row.student_creation_date ? formatDate(row.student_creation_date) : 'Donnée non disponible',
       };
     });
   }

@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn, CreateDateColumn } from 'typeorm';
 
 import { Classroom } from './classroom';
 import { UserToStudent } from './userToStudent';
@@ -7,6 +7,9 @@ import { UserToStudent } from './userToStudent';
 export class Student {
   @PrimaryGeneratedColumn()
   public id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   public firstname: string;
