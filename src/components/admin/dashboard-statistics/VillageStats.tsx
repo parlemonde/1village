@@ -14,7 +14,7 @@ import styles from './styles/charts.module.css';
 import { useGetVillagesStats } from 'src/api/statistics/statistics.get';
 import { useCountries } from 'src/services/useCountries';
 import { useVillages } from 'src/services/useVillages';
-import type { FamiliesWithoutAccount, FloatingAccount, OneVillageTableRow } from 'types/statistics.type';
+import type { FamiliesWithoutAccount, OneVillageTableRow } from 'types/statistics.type';
 import type { VillageFilter } from 'types/village.type';
 
 const VillageStats = () => {
@@ -36,13 +36,10 @@ const VillageStats = () => {
   }, [selectedCountry]);
 
   const [familiesWithoutAccountRows, setFamiliesWithoutAccountRows] = React.useState<Array<OneVillageTableRow>>([]);
-  const [floatingAccountsRows, setFloatingAccountsRows] = React.useState<Array<OneVillageTableRow>>([]);
   React.useEffect(() => {
     if (villagesStats.data?.familiesWithoutAccount) {
       setFamiliesWithoutAccountRows([]);
-      setFloatingAccountsRows([]);
       setFamiliesWithoutAccountRows(createFamiliesWithoutAccountRows(villagesStats.data?.familiesWithoutAccount));
-      setFloatingAccountsRows(createFloatingAccountsRows(villagesStats.data?.floatingAccounts));
     }
   }, [villagesStats.data?.familiesWithoutAccount, villagesStats.data?.floatingAccounts]);
 
@@ -78,12 +75,6 @@ const VillageStats = () => {
     { key: 'country', label: 'Pays', sortable: true },
     { key: 'creationDate', label: 'Date de création identifiant', sortable: true },
   ];
-  const FloatingAccountsHeaders = [
-    { key: 'family', label: 'Nom Prénom Famille', sortable: true },
-    { key: 'language', label: 'Langue', sortable: true },
-    { key: 'email', label: 'Mail', sortable: true },
-    { key: 'creationDate', label: 'Date de création compte', sortable: true },
-  ];
   function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
@@ -105,17 +96,6 @@ const VillageStats = () => {
         vm: row.village_name,
         classroom: row.classroom_name,
         country: row.classroom_country,
-        creationDate: 'À venir',
-      };
-    });
-  }
-  function createFloatingAccountsRows(data: Array<FloatingAccount>): Array<OneVillageTableRow> {
-    return data.map((row) => {
-      return {
-        id: row.id,
-        family: `${row.firstname} ${row.lastname}`,
-        language: row.language,
-        email: row.email,
         creationDate: 'À venir',
       };
     });
@@ -158,13 +138,6 @@ const VillageStats = () => {
               data={familiesWithoutAccountRows}
               columns={FamiliesWithoutAccountHeaders}
               titleContent={`À surveiller : comptes non créés (${familiesWithoutAccountRows.length})`}
-            />
-            <OneVillageTable
-              admin={false}
-              emptyPlaceholder={<p>{noDataFoundMessage}</p>}
-              data={floatingAccountsRows}
-              columns={FloatingAccountsHeaders}
-              titleContent={`À surveiller : comptes flottants (${floatingAccountsRows.length})`}
             />
             <Box
               className={styles.classroomStats}
