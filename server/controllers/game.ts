@@ -49,14 +49,10 @@ const getGames = async ({ limit = 200, page = 0, villageId, type, userId }: Game
 
   return games;
 };
-const updateGameDraftIfExists = async (data: any, content: ActivityContent, activityId: number) => {
-  const responses = await AppDataSource.getRepository(Activity).find({ where: { id: activityId } });
+const updateGameDraftIfExists = async (game: any, activityId: number) => {
+  const responses = await AppDataSource.getRepository(Activity).findBy({ id: activityId });
   if (responses) {
-    await AppDataSource.createQueryBuilder()
-      .update(Activity)
-      .set({ data: data, content: content })
-      .where('id = :activityId', { activityId })
-      .execute();
+    await AppDataSource.createQueryBuilder().update(Activity).set({ data: game, content: game }).where('id = :activityId', { activityId }).execute();
   }
 };
 
@@ -308,26 +304,27 @@ gameController.post({ path: '/standardGame', userType: UserType.TEACHER }, async
   if (status && status === ActivityStatus.DRAFT) {
     if (game1) {
       if (activityId) {
-        updateGameDraftIfExists(activityId, game1.data, game1.content);
-        return;
+        updateGameDraftIfExists(game1, activityId);
+      } else {
+        createGame(game1, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       }
-      createGame(game1, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       res.sendStatus(200);
       return;
     } else if (game2) {
       if (activityId) {
-        updateGameDraftIfExists(activityId, game1.data, game1.content);
-        return;
+        updateGameDraftIfExists(game2, activityId);
+      } else {
+        createGame(game2, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       }
-      createGame(game2, userId, villageId, type, subType, selectedPhase, status, draftUrl);
+
       res.sendStatus(200);
       return;
     } else if (game3) {
       if (activityId) {
-        updateGameDraftIfExists(activityId, game1.data, game1.content);
-        return;
+        updateGameDraftIfExists(game3, activityId);
+      } else {
+        createGame(game3, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       }
-      createGame(game3, userId, villageId, type, subType, selectedPhase, status, draftUrl);
       res.sendStatus(200);
       return;
     }

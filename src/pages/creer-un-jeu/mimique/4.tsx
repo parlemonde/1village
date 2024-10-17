@@ -8,6 +8,7 @@ import { PageLayout } from 'src/components/PageLayout';
 import { Steps } from 'src/components/Steps';
 import CreateGame from 'src/components/game/CreateGame';
 import Previsualisation from 'src/components/game/Previsualisation';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
@@ -25,6 +26,10 @@ const MimiqueStep4 = () => {
   const { selectedPhase } = React.useContext(VillageContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
   const [isLoading, setIsLoading] = React.useState(false);
+  const { activity } = React.useContext(ActivityContext);
+  const { query } = router;
+  const activityStepGame = activity?.data.game as StepsTypes[];
+  const activityId = query?.activity_id as string | null;
 
   const { gameConfig } = useContext(GameContext);
 
@@ -35,18 +40,19 @@ const MimiqueStep4 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game1: {
-        game: gameConfig[0],
+        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[0],
         labelPresentation: labelPresentation,
       },
       game2: {
-        game: gameConfig[1],
+        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[1],
         labelPresentation: labelPresentation,
       },
       game3: {
-        game: gameConfig[2],
+        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[2],
         labelPresentation: labelPresentation,
       },
       selectedPhase: selectedPhase,
+      activityId: query?.activity_id ? activityId : null,
     };
 
     setIsLoading(true);

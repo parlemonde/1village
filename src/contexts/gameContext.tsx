@@ -17,6 +17,7 @@ type GameContextType = {
   updateGameConfig: (value: any, input: inputType) => void;
   inputSelectedValue?: string;
   saveDraftGrame: (data: GameDataMonneyOrExpression) => void;
+  setStepsGame: (stepNumer: number, data: StepsTypes[]) => void;
 };
 
 export const GameContext = createContext<GameContextType>({
@@ -29,6 +30,7 @@ export const GameContext = createContext<GameContextType>({
   updateGameConfig: (_value: any, _input: inputType) => {},
   inputSelectedValue: '',
   saveDraftGrame: (_data: GameDataMonneyOrExpression) => {},
+  setStepsGame: (_stepNumer: number, _data: StepsTypes[]) => {},
 });
 
 export const useGame = () => {
@@ -57,6 +59,10 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const updateGameType = (type: GameType) => {
     setGameType(type);
     setGameConfig(GAME_FIELDS_CONFIG[type].steps);
+  };
+
+  const setStepsGame = (stepNumber: number, data: StepsTypes[]) => {
+    gameConfig[stepNumber] = data;
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,7 +94,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
   return (
     <GameContext.Provider
-      value={{ saveDraftGrame, updateGameConfig, gameType, setGameType: updateGameType, gameConfig, setGameConfig, inputSelectedValue }}
+      value={{ saveDraftGrame, updateGameConfig, gameType, setGameType: updateGameType, gameConfig, setGameConfig, inputSelectedValue, setStepsGame }}
     >
       {children}
       {isGameDraftSaved && (

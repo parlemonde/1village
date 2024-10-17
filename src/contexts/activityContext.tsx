@@ -99,8 +99,8 @@ export const ActivityContextProvider = ({ children }: React.PropsWithChildren<Re
   );
 
   React.useEffect(() => {
-    if ('activity-id' in router.query) {
-      const newActivityId = parseInt(getQueryString(router.query['activity-id']), 10);
+    if ('activity_id' in router.query) {
+      const newActivityId = parseInt(getQueryString(router.query['activity_id']), 10);
       if (currentActivityId === null || currentActivityId !== newActivityId) {
         setActivity(null);
         getActivity(newActivityId).catch();

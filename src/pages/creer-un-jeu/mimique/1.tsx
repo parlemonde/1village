@@ -7,12 +7,13 @@ import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import { BackButton } from 'src/components/buttons/BackButton';
 import CreateGame from 'src/components/game/CreateGame';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityStatus, ActivityType } from 'types/activity.type';
-import type { GameDataMonneyOrExpression } from 'types/game.type';
+import type { GameDataMonneyOrExpression, StepsTypes } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 const MimiqueStep1 = () => {
@@ -22,6 +23,10 @@ const MimiqueStep1 = () => {
   const { village } = React.useContext(VillageContext);
   const { gameConfig, saveDraftGrame } = React.useContext(GameContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
+  const { activity } = React.useContext(ActivityContext);
+  const { query } = router;
+  const activityStepGame = activity?.data.game as StepsTypes[];
+  const activityId = query?.activity_id as string | null;
 
   const onNext = () => {
     const data: GameDataMonneyOrExpression = {
@@ -30,12 +35,13 @@ const MimiqueStep1 = () => {
       type: ActivityType.GAME,
       subType: GameType.MIMIC,
       game1: {
-        game: gameConfig[0],
+        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[0],
         labelPresentation: labelPresentation,
       },
       selectedPhase: selectedPhase,
       status: ActivityStatus.DRAFT,
       draftUrl: window.location.pathname,
+      activityId: query?.activity_id ? activityId : null,
     };
     saveDraftGrame(data);
     router.push('/creer-un-jeu/mimique/2');
