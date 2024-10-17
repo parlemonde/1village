@@ -38,6 +38,7 @@ export interface FamiliesWithoutAccount {
   student_id: number;
   student_firstname: string;
   student_lastname: string;
+  student_creation_date: string | null;
   village_name: string;
   classroom_name: string;
   classroom_country: string;
@@ -49,6 +50,7 @@ export interface FloatingAccount {
   firstname: string;
   lastname: string;
   language: string;
+  createdAt: string | null;
 }
 
 export interface OneVillageTableRow {

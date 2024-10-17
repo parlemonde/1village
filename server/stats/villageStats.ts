@@ -52,6 +52,7 @@ export const getFamiliesWithoutAccount = async (villageId: number) => {
       'student.firstname AS student_firstname',
       'student.lastname AS student_lastname',
       'student.id AS student_id',
+      'student.createdAt as student_creation_date',
       'village.name AS village_name',
     ])
     .getRawMany();
@@ -65,7 +66,7 @@ export const getFloatingAccounts = async (villageId: number) => {
     .where('user.villageId = :villageId', { villageId })
     .andWhere('user.hasStudentLinked = 0')
     .andWhere('user.type = 4')
-    .select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email'])
+    .select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email', 'user.createdAt'])
     .getMany();
   return floatingAccounts;
 };

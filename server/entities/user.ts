@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany, JoinTable, CreateDateColumn } from 'typeorm';
 
 import type { Country } from '../../types/country.type';
 import { UserType } from '../../types/user.type';
@@ -18,6 +18,9 @@ export { UserType };
 export class User implements UserInterface {
   @PrimaryGeneratedColumn()
   public id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   public email: string;
