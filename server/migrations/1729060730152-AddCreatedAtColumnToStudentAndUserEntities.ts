@@ -1,7 +1,7 @@
 import { TableColumn } from 'typeorm';
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddCreatedAtColumnToStudentAndUserEntities implements MigrationInterface {
+export class AddCreatedAtColumnToStudentAndUserEntities1729060730152 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
       'student',
