@@ -5,12 +5,13 @@ import { Base } from 'src/components/Base';
 import { Steps } from 'src/components/Steps';
 import { StepsButton } from 'src/components/StepsButtons';
 import CreateGame from 'src/components/game/CreateGame';
+import { ActivityContext } from 'src/contexts/activityContext';
 import { GameContext } from 'src/contexts/gameContext';
 import { UserContext } from 'src/contexts/userContext';
 import { VillageContext } from 'src/contexts/villageContext';
 import { getUserDisplayName } from 'src/utils';
 import { ActivityType, ActivityStatus } from 'types/activity.type';
-import type { GameDataMonneyOrExpression } from 'types/game.type';
+import type { GameDataMonneyOrExpression, StepsTypes } from 'types/game.type';
 import { GameType } from 'types/game.type';
 
 const ExpressionStep2 = () => {
@@ -21,6 +22,10 @@ const ExpressionStep2 = () => {
   const { gameConfig } = useContext(GameContext);
   const { selectedPhase } = React.useContext(VillageContext);
   const labelPresentation = user ? getUserDisplayName(user, false) : '';
+  const { activity } = React.useContext(ActivityContext);
+  const { query } = router;
+  const activityStepGame = activity?.data.game as StepsTypes[];
+  const activityId = query?.activity_id as string | null;
 
   const onNext = () => {
     const data: GameDataMonneyOrExpression = {
@@ -29,13 +34,15 @@ const ExpressionStep2 = () => {
       type: ActivityType.GAME,
       subType: GameType.EXPRESSION,
       game1: {
-        game: gameConfig[1],
+        game: query?.activity_id && activityStepGame ? activityStepGame : gameConfig[1],
         language: inputSelectedValue,
         labelPresentation: labelPresentation,
         radio: gameConfig?.[0]?.[1]?.inputs?.[0]?.selectedValue,
       },
       selectedPhase: selectedPhase,
       status: ActivityStatus.DRAFT,
+      draftUrl: window.location.pathname,
+      activityId: query?.activity_id ? activityId : null,
     };
     saveDraftGrame(data);
     router.push('/creer-un-jeu/expression/3');
