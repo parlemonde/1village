@@ -117,14 +117,16 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
 });
 
 activityController.get({ path: '/admin/draft' }, async (req, res) => {
-  const adminUsers = await AppDataSource.getRepository(User)
-    .createQueryBuilder('User')
-    .select('User.id')
-    .where('User.type IN (:...types)', { types: [0, 1, 2] })
-    .getMany();
-
-  const userColumns = await AppDataSource.getRepository(User).query('SHOW COLUMNS FROM User');
-  console.log(userColumns);
+  // const adminUsers = await AppDataSource.getRepository(User)
+  //   .createQueryBuilder('User')
+  //   .select('User.id')
+  //   .where('user.type IN (:...type)', { type: 0 })
+  //   .getMany();
+  const adminUsers = await AppDataSource.query(`
+    SELECT User.id
+    FROM User
+    WHERE User.type IN (0, 1, 2)
+  `);
 
   if (!req.query.isDisplayed) {
     const draftActivities = await AppDataSource.getRepository(Activity)
