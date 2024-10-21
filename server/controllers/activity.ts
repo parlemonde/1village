@@ -120,8 +120,11 @@ activityController.get({ path: '/admin/draft' }, async (req, res) => {
   const adminUsers = await AppDataSource.getRepository(User)
     .createQueryBuilder('User')
     .select('User.id')
-    .where('user.type IN (:...types)', { types: [0, 1, 2] })
+    .where('User.type IN (:...types)', { types: [0, 1, 2] })
     .getMany();
+
+  const userColumns = await AppDataSource.getRepository(User).query('SHOW COLUMNS FROM User');
+  console.log(userColumns);
 
   if (!req.query.isDisplayed) {
     const draftActivities = await AppDataSource.getRepository(Activity)
