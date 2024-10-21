@@ -13,6 +13,16 @@ async function getSessionsStats(phase: number | null): Promise<SessionsStats> {
   ).data;
 }
 
+async function getOneVillageStats(): Promise<VillageStats> {
+  return (
+    await axiosRequest({
+      method: 'GET',
+      baseURL: '/api',
+      url: `/statistics/onevillage`,
+    })
+  ).data;
+}
+
 async function getVillagesStats(villageId: number | null): Promise<VillageStats> {
   return (
     await axiosRequest({
@@ -25,6 +35,9 @@ async function getVillagesStats(villageId: number | null): Promise<VillageStats>
 
 export const useGetSessionsStats = (phase: number | null) => {
   return useQuery(['sessions-stats'], () => getSessionsStats(phase));
+};
+export const useGetOneVillageStats = () => {
+  return useQuery(['1v-stats'], () => getOneVillageStats());
 };
 
 export const useGetVillagesStats = (villageId: number | null) => {

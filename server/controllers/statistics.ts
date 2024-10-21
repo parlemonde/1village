@@ -51,6 +51,16 @@ statisticsController.get({ path: '/classrooms' }, async (_req, res) => {
   });
 });
 
+statisticsController.get({ path: '/onevillage' }, async (_req, res) => {
+  res.sendJSON({
+    familyAccountsCount: await getFamilyAccountsCount(),
+    childrenCodesCount: await getChildrenCodesCount(),
+    connectedFamiliesCount: await getConnectedFamiliesCount(),
+    familiesWithoutAccount: await getFamiliesWithoutAccount(),
+    floatingAccounts: await getFloatingAccounts(),
+  });
+});
+
 statisticsController.get({ path: '/villages/:villageId' }, async (_req, res) => {
   const villageId = parseInt(_req.params.villageId);
   res.sendJSON({
