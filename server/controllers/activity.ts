@@ -116,11 +116,11 @@ activityController.get({ path: '/mascotte', userType: UserType.OBSERVATOR }, asy
   }
 });
 
-activityController.get({ path: '/admin/draft', userType: UserType.SUPER_ADMIN | UserType.ADMIN | UserType.MEDIATOR }, async (req, res) => {
+activityController.get({ path: '/admin/draft' }, async (req, res) => {
   const adminUsers = await AppDataSource.getRepository(User)
     .createQueryBuilder('User')
     .select('User.id')
-    .where('user.type IN (:...types)', { types: [UserType.SUPER_ADMIN, UserType.ADMIN, UserType.MEDIATOR] })
+    .where('user.type IN (:...types)', { types: [0, 1, 2] })
     .getMany();
 
   if (!req.query.isDisplayed) {
