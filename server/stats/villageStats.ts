@@ -5,68 +5,69 @@ import { AppDataSource } from '../utils/data-source';
 const userRepository = AppDataSource.getRepository(User);
 const studentRepository = AppDataSource.getRepository(Student);
 
-export const getChildrenCodesCount = async (villageId: number) => {
-  const childrenCodeCount = await studentRepository
-    .createQueryBuilder('student')
-    .innerJoin('student.classroom', 'classroom')
-    .innerJoin('classroom.village', 'village')
-    .where('classroom.villageId = :villageId', { villageId })
-    .getCount();
+export const getChildrenCodesCount = async (villageId?: number) => {
+  const query = studentRepository.createQueryBuilder('student').innerJoin('student.classroom', 'classroom').innerJoin('classroom.village', 'village');
+
+  if (villageId) query.where('classroom.villageId = :villageId', { villageId });
+  const childrenCodeCount = await query.getCount();
   return childrenCodeCount;
 };
 
-export const getFamilyAccountsCount = async (villageId: number) => {
-  const familyAccountsCount = await userRepository
+export const getFamilyAccountsCount = async (villageId?: number) => {
+  const query = userRepository
     .createQueryBuilder('user')
     .innerJoin('user.village', 'village')
     .innerJoin('classroom', 'classroom', 'classroom.villageId = village.id')
-    .innerJoin('student', 'student', 'student.classroomId = classroom.id')
-    .where('classroom.villageId = :villageId', { villageId })
-    .groupBy('user.id')
-    .getCount();
+    .innerJoin('student', 'student', 'student.classroomId = classroom.id');
+
+  if (villageId) query.where('classroom.villageId = :villageId', { villageId });
+
+  query.groupBy('user.id');
+  const familyAccountsCount = await query.getCount();
   return familyAccountsCount;
 };
 
-export const getConnectedFamiliesCount = async (villageId: number) => {
-  const connectedFamiliesCount = await studentRepository
+export const getConnectedFamiliesCount = async (villageId?: number) => {
+  const query = studentRepository
     .createQueryBuilder('student')
     .innerJoin('classroom', 'classroom', 'classroom.id = student.classroomId')
-    .where('classroom.villageId = :villageId', { villageId })
-    .andWhere('student.numLinkedAccount >= 1')
-    .getCount();
+    .where('student.numLinkedAccount >= 1');
+  if (villageId) query.andWhere('classroom.villageId = :villageId', { villageId });
+
+  const connectedFamiliesCount = await query.getCount();
 
   return connectedFamiliesCount;
 };
 
-export const getFamiliesWithoutAccount = async (villageId: number) => {
-  const familiesWithoutAccount = await studentRepository
+export const getFamiliesWithoutAccount = async (villageId?: number) => {
+  const query = studentRepository
     .createQueryBuilder('student')
     .innerJoin('student.classroom', 'classroom')
     .innerJoin('classroom.user', 'user')
     .innerJoin('user.village', 'village')
-    .where('classroom.villageId = :villageId', { villageId })
-    .andWhere('student.numLinkedAccount < 1')
-    .select([
-      'classroom.name AS classroom_name',
-      'classroom.countryCode as classroom_country',
-      'student.firstname AS student_firstname',
-      'student.lastname AS student_lastname',
-      'student.id AS student_id',
-      'student.createdAt as student_creation_date',
-      'village.name AS village_name',
-    ])
-    .getRawMany();
+    .where('student.numLinkedAccount < 1');
+  if (villageId) query.andWhere('classroom.villageId = :villageId', { villageId });
 
+  query.select([
+    'classroom.name AS classroom_name',
+    'classroom.countryCode as classroom_country',
+    'student.firstname AS student_firstname',
+    'student.lastname AS student_lastname',
+    'student.id AS student_id',
+    'student.createdAt as student_creation_date',
+    'village.name AS village_name',
+  ]);
+
+  const familiesWithoutAccount = query.getRawMany();
   return familiesWithoutAccount;
 };
 
-export const getFloatingAccounts = async (villageId: number) => {
-  const floatingAccounts = await userRepository
-    .createQueryBuilder('user')
-    .where('user.villageId = :villageId', { villageId })
-    .andWhere('user.hasStudentLinked = 0')
-    .andWhere('user.type = 4')
-    .select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email', 'user.createdAt'])
-    .getMany();
+export const getFloatingAccounts = async (villageId?: number) => {
+  const query = userRepository.createQueryBuilder('user').where('user.hasStudentLinked = 0').andWhere('user.type = 4');
+
+  if (villageId) query.andWhere('user.villageId = :villageId', { villageId });
+
+  query.select(['user.id', 'user.firstname', 'user.lastname', 'user.language', 'user.email', 'user.createdAt']);
+  const floatingAccounts = query.getMany();
   return floatingAccounts;
 };
