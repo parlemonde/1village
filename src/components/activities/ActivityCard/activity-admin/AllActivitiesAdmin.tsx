@@ -66,7 +66,7 @@ const AllActivitiesAdmin = ({ activities, search }: Props) => {
       >
         {filteredActivities().map((activity) => (
           <div key={activity.id} style={{ width: isMobile ? '100%' : '50%' }}>
-            <ActivityCardAdmin {...activity} />
+            <ActivityCardAdmin activity={activity} />
           </div>
         ))}
       </div>

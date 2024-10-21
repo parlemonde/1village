@@ -17,7 +17,7 @@ export default function ActivityCard({
   modifiedDisabled,
 }: {
   activity: Pick<Activity, 'images' | 'content' | 'phase' | 'data' | 'id' | 'status'>;
-  modifiedDisabled: boolean;
+  modifiedDisabled?: boolean;
 }) {
   const publishActivity = usePublishActivity({ activityId: activity.id });
   const queryClient = useQueryClient();

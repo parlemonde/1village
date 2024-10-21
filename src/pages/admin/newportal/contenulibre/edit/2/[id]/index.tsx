@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { QueryClient } from 'react-query';
 
 import { TextField, Switch, Button } from '@mui/material';
 
@@ -29,7 +28,6 @@ const ContenuLibre = () => {
   const [selectedImageUrl, setSelectedImageUrl] = React.useState<string | undefined>(undefined);
   const [isAllImagesModalOpen, setIsAllImagesModalOpen] = React.useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = React.useState(false);
-  const queryClient = new QueryClient();
 
   const data = (activity?.data as FreeContentData) || null;
 
