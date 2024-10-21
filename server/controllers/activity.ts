@@ -123,9 +123,9 @@ activityController.get({ path: '/admin/draft' }, async (req, res) => {
   //   .where('user.type IN (:...type)', { type: 0 })
   //   .getMany();
   const adminUsers = await AppDataSource.query(`
-    SELECT User.id
-    FROM User
-    WHERE User.type IN (0, 1, 2)
+    SELECT user.id
+    FROM user
+    WHERE user.type IN (0, 1, 2)
   `);
 
   if (!req.query.isDisplayed) {
